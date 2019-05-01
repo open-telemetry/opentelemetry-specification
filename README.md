@@ -1,1 +1,3 @@
-# opentelemetry-specification
+# OpenTelemetry Specification
+
+TODO
