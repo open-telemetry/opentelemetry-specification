@@ -13,15 +13,15 @@
 
 ## Layout
 
-### [Terminology](./terminology.md)
+### Terminology
 
 [terminology.md](./terminology.md) provides a glossary for languages commonly used throughout the OpenTelemetry project.
 
-### [Specification](./specification.md)
+### Specification
 
 [specification.md](./specification.md) is the versioned OpenTelemetry standard, explaining the cross-language requirements and expectations for implementations.
 
-### [Semantic Conventions](./semantic-conventions.md)
+### Semantic Conventions
 
 [semantic-conventions.md](./semantic-conventions.md) describes conventional tags, log keys, etc. that should be used for common scenarios to ensure a consistent usage experience.
 
