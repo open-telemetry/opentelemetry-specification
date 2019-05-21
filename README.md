@@ -19,7 +19,7 @@
 
 ### Specification
 
-[specification.md](./specification.md) is the versioned OpenTelemetry standard, explaining the cross-language requirements and expectations for implementations.
+The [specification directory](./specification/README.md) is the versioned OpenTelemetry standard, explaining the cross-language requirements and expectations for implementations.
 
 ### Semantic Conventions
 
