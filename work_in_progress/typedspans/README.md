@@ -1,278 +1,180 @@
 
-# Typed Spans
+# Typed Spans (Draft Proposal)
 
-## Rationale
+In OpenCensus and OpenTracing spans can be created freely and it’s up to the
+implementor to annotate them with attributes specific to the represented operation.
+This document proposes to add type information to spans and to define and reserve
+mandatory and optional attributes depending on the span type.
 
-Spans represent different _canonical_ _types _of operations. Examples are
+## Motivation
 
-* Local operations like method invocations
-* HTTP requests (inbound and outbound)
-* Database requests
-* eneric RPC requests like GRPC
+Spans represent specific operations in and between systems.
 
-A span consists of a number of mandatory and optional attributes that add information
-about the represented operation to it.
+Examples for such operations are
 
-Depending on the _canonical type_ of an operation some attributes might be needed
-to represent and analyze a span correctly.
+- Local operations like method invocations
+- HTTP requests (inbound and outbound)
+- Database operations
+- Queue/Message publish and consume
+- gRPC calls
+- Generic RPC operations
 
-**Example:** A HTTP request needs a status code to distinguish successful or
-unsuccessful operations.
+Depending on the type of an operation, additional information is needed to
+represent and analyze a span correctly in monitoring systems.
 
-Right now, spans can be created freely and it’s up to the implementor to set all
-the attributes needed to represent the given type.
-
-## Existing work
-
-* There is already a _Type_ field that describes if a span is a parent or child span
-* There is already a _SpanKind_ field that describes if a span is a server or
-  client span - this distinguishes inbound and outbound requests.
-* There should be already a TypedSpanBuilder for Java
-
-## Proposal
-
-* Implement a **TypedSpanBuilder** for all platforms that ensures that all
-  needed attributes and the type is set.
-* Add a field **CanonicalType** that contains the type of span.
+While both OpenCensus and OpenTracing define conventions that define some reserved
+attributes that can be used to add operation-specific information, there is no
+mechanism to specify the type of an operation and to ensure that all needed
+attributes are set.
 
 ### Proposed types
 
-(derived from [this doc](https://docs.google.com/spreadsheets/d/1H0S0BROOgX7zndWF_WL8jb9IW1PN7j3IeryekhX5sKU/edit#gid=0) by @discostu)
+Below is a list of types and attributes per type.
+This document does not include the final naming of attributes and types.
+It is assumed that there will be naming conventions that will be applied eventually.
 
-The following canonical types should be implemented.
-The attributes are taken from the OC spec first with a fallback to the OT spec if
-there is no equivalent in OC. Additionally, some attributes that may enrich the
-span further are proposed.
+There is also no distinction between mandatory and optional attributes as it is assumed
+that there will be a dedicated discussion and document for each type linked in this document.
 
-**Bold** = mandatory.
+See [this document by @discostu105](https://docs.google.com/spreadsheets/d/1H0S0BROOgX7zndWF_WL8jb9IW1PN7j3IeryekhX5sKU/edit#gid=0) for type and attribute mappings that exist in OpenCensus and OpenTracing today.
 
-#### HttpClient
+#### HTTP Client
+Represents an outbound HTTP request.
 
-<table>
-  <tr>
-   <td><strong>CanonicalType = HTTP</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>SpanKind = CLIENT</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>http.method</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>http.host</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>http.path</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>http.status_code
-   </td>
-  </tr>
-  <tr>
-   <td>http.route
-   </td>
-  </tr>
-  <tr>
-   <td>http.user_agent
-   </td>
-  </tr>
-  <tr>
-   <td>Proposed additions:
-parameters, requestHeaders, responseHeaders
-   </td>
-  </tr>
-</table>
+##### Attributes
 
-#### HttpServer
+- Method
+- Host
+- Path
+- Status Code
+- Route
+- User Agent
+- Parameters
+- Request Headers
+- Response Headers
 
-<table>
-  <tr>
-   <td><strong>CanonicalType = HTTP</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>SpanKind = SERVER</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>http.method</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>http.host</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>http.path</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>http.status_code
-   </td>
-  </tr>
-  <tr>
-   <td>http.route
-   </td>
-  </tr>
-  <tr>
-   <td>http.user_agent
-   </td>
-  </tr>
-  <tr>
-   <td>Proposed additions:
-webServerName, remoteAddress, parameters, requestHeaders, responseHeaders
-   </td>
-  </tr>
-</table>
+#### HTTP Server
+Represents an inbound HTTP request.
 
-#### DbClient
-
-<table>
-  <tr>
-   <td><strong>CanonicalType = DB</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>SpanKind = CLIENT</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>db.instance</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>component</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>peer.*</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>db.statement</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>db.type
-   </td>
-  </tr>
-  <tr>
-   <td>db.user
-   </td>
-  </tr>
-  <tr>
-   <td>Proposed additions:
-channelType, rowsReturned, roundTrips
-   </td>
-  </tr>
-</table>
-
-#### RemotingClient
+##### Attributes
+- Method
+- Host
+- Path
+- Status Code
+- Route
+- User Agent
+- Webserver Name
+- Remote Address
+- Parameters
+- Request Headers
+- Response Headers
 
 
-<table>
-  <tr>
-   <td><strong>CanonicalType = RPC</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>SpanKind = CLIENT</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>peer.*</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Proposed additions:
-<strong>channelType, serviceMethod, serviceName, channelEndpoint</strong>
-   </td>
-  </tr>
-</table>
+#### Database Client
+Represents a database call.
 
-#### RemotingServer
+##### Attributes
+- Database Name
+- Database Vendor
+- Database Type
+- Database User
+- Endpoint
+- Statement
+- Channel Type (e.g. TCP)
+- Rows Returned
+- Roundtrips
+
+#### gRPC Client
+Represents an outbound gRPC request.
+
+##### Attributes
+- Service Endpoint
+- Channel Type (e.g. TCP)
+- Channel Endpoint
+- Service Name
+- Service Method
 
 
-<table>
-  <tr>
-   <td><strong>CanonicalType = RPC</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>SpanKind = SERVER</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>peer.* (exists in OC)</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Proposed additions:
-<strong>serviceMethod, serviceName, channelEndpoint</strong>
-   </td>
-  </tr>
-</table>
+#### gRPC Server
+Represents an inbound gRPC request.
 
-#### MessagingConsumer
+##### Detail Document
+https://github.com/open-telemetry/opentelemetry-specification/blob/master/work_in_progress/gRPC/gRPC.md
 
-<table>
-  <tr>
-   <td><strong>CanonicalType = MSG</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>SpanKind = CLIENT</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>message_bus.destination</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>peer.*</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Proposed additions:
-<strong>vendorName. channelType, operationType, messageDestination</strong>
-   </td>
-  </tr>
-</table>
+##### Attributes
+- Message Id
+- Message Compressed Size
+- Message Uncompressed Size
 
-#### MessagingProducer
+#### gRPC Client
+Represents an inbound gRPC request.
 
-<table>
-  <tr>
-   <td><strong>CanonicalType = MSG</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>SpanKind = SERVER</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>message_bus.destination</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>peer.*</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Proposed additions:
-<strong>vendorName. channelType</strong>
-   </td>
-  </tr>
-</table>
+##### Detail Document
+https://github.com/open-telemetry/opentelemetry-specification/blob/master/work_in_progress/gRPC/gRPC.md
+
+##### Attributes
+- Message Id
+- Message Compressed Size
+- Message Uncompressed Size
+
+#### Remoting Client
+Represents an outbound RPC request.
+
+##### Attributes
+- Service Endpoint
+- Channel Type (e.g. TCP)
+- Channel Endpoint
+- Service Name
+- Service Method
+
+
+#### Remoting Server
+Represents an inbound RPC request.
+
+##### Attributes
+- Service Method
+- Service Name
+- Service Endpoint
+- Protocol Name
+
+
+#### Messaging Consumer
+Represents an inbound message.
+
+##### Attributes
+- Vendor Name
+- Destination Name
+- Destination Type
+- Channel Type
+- Channel Endpoint
+- Operation Type
+- Message Id
+- Correlation Id
+
+#### Messaging Producer
+Represents an outbound message.
+
+##### Attributes
+- Vendor Name
+- Destination Name
+- Channel Type
+- Channel Endpoint
+- Message Id
+- Correlation Id
+
+## Proposal
+* Add a field `CanonicalType` that contains the type of span
+* Define mandatory and optional attributes per span type
+* Provide an API that supports creating typed spans and ensures that at least all
+  mandatory attributes for this `CanonicalType` are present
 
 ## Challenges and Objections
-
-* Some mandatory attributes for a given type may not be available at the time of creation
+- Some mandatory attributes for a given type may not be available at the time of creation
 
 ### POC
-Here is [a POC for HTTP Client Spans for Node.js and OC](https://github.com/danielkhan/opencensus-node-typed-span-sample)
+Here is [a POC for HTTP Client Spans for Node.js and OpenCensus](https://github.com/danielkhan/opencensus-node-typed-span-sample)
+
+## Action Items
+- Define all types
+- Agree on type and attribute naming conventions
+- Specify each type and agree on mandatory and optional attributes per type
