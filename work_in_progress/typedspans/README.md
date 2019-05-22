@@ -69,17 +69,13 @@ Represents an inbound HTTP request.
 - Request Headers
 - Response Headers
 
-
 #### Database Client
 Represents a database call.
 
 ##### Attributes
-- Database Name
-- Database Vendor
-- Database Type
-- Database User
-- Endpoint
-- Statement
+
+These attributes are not covered in [main spec](../semantic-conventions.md):
+
 - Channel Type (e.g. TCP)
 - Rows Returned
 - Roundtrips
