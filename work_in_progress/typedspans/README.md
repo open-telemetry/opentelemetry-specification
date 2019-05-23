@@ -79,6 +79,7 @@ These attributes are not covered in [main spec](../semantic-conventions.md):
 - Channel Type (e.g. TCP)
 - Rows Returned
 - Roundtrips
+- Arguments of db.statement
 
 #### gRPC Client
 Represents an outbound gRPC request.
