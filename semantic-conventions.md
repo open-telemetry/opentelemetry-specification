@@ -36,7 +36,7 @@ attribute names.
 | `db.user`      | Username for accessing database. E.g., `"readonly_user"` or `"reporting_user"` | No        |
 
 For database client calls, peer information can be populated and interpreted as
-following:
+follows:
 
 | Attribute name  | Notes and examples                                           | Required |
 | :-------------- | :----------------------------------------------------------- | -------- |
