@@ -74,7 +74,7 @@ Represents a database call.
 
 ##### Attributes
 
-These attributes are not covered in [main spec](../semantic-conventions.md):
+These attributes are not covered in the [main spec](../semantic-conventions.md):
 
 - Channel Type (e.g. TCP)
 - Rows Returned
