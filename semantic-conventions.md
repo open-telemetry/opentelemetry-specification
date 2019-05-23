@@ -19,7 +19,7 @@ correlated and cross-analyzed.
 For database client call the `SpanKind` MUST be `Client`.
 
 Span `name` should be set to low cardinality value representing the statement
-executed on database. It may be stored procedure name (without argument), sql
+executed on the database. It may be stored procedure name (without argument), sql
 statement without variable arguments, etc. When it's impossible to get any
 meaningful representation of the span `name`, it can be populated using the same
 value as `db.instance`.
