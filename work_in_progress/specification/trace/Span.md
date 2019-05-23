@@ -1,9 +1,7 @@
 # Span
 
-Span represents a single operation within a trace. Spans can be nested to form a trace tree. 
-Often, a trace contains a root span that describes the end-to-end latency and, optionally, one or
-more sub-spans for its sub-operations.
- 
+... parts of this document moved to [terminology.md](../terminology.md) ...
+
 A span contains a SpanContext and allows users to record tracing events based on the data model 
 defined [here][SpanDataModel].
 
@@ -58,4 +56,3 @@ propagation.
 [goContext]: https://golang.org/pkg/context
 [javaContext]: https://github.com/grpc/grpc-java/blob/master/context/src/main/java/io/grpc/Context.java
 [SpanDataModel]: https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace.proto   
-[TracestateLink]: https://w3c.github.io/trace-context/#tracestate-field
