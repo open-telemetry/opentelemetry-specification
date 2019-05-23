@@ -10,7 +10,7 @@ represents calls that use well-known protocols like HTTP or database calls.
 Depending on the protocol and the type of an operation, additional information
 is needed to represent and analyze a span correctly in monitoring systems. It is
 also important to unify how this attribution is made in different languages.
-This way the operator will not need to learn specifics of a language and
+This way, the operator will not need to learn specifics of a language and
 telemetry collected from multi-language micro-service can still be easily
 correlated and cross-analyzed.
 
