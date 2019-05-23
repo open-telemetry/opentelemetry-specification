@@ -6,7 +6,7 @@ protocol specific information.
 In OpenTelemetry spans can be created freely and it’s up to the implementor to
 annotate them with attributes specific to the represented operation. Spans
 represent specific operations in and between systems. Some of these operations
-represents calls that use well-known protocols like HTTP or database calls.
+represent calls that use well-known protocols like HTTP or database calls.
 Depending on the protocol and the type of operation, additional information
 is needed to represent and analyze a span correctly in monitoring systems. It is
 also important to unify how this attribution is made in different languages.
