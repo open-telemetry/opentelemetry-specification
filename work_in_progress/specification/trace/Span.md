@@ -1,8 +1,4 @@
 # Span
-
-Span represents a single operation within a trace. Spans can be nested to form a trace tree. 
-Often, a trace contains a root span that describes the end-to-end latency and, optionally, one or
-more sub-spans for its sub-operations.
  
 A span contains a SpanContext and allows users to record tracing events based on the data model 
 defined [here][SpanDataModel].
@@ -67,12 +63,6 @@ When an explicit propagated Context is used, the implementation MUST create a ne
 Span is attached (immutable Context):
 * When attach/detach an already created Span the API MAY be called `WithSpan`.
 * When attach/detach at the creation time the API MAY be called `StartSpan` or `StartScopedSpan`.
-
-### What is Span lifetime?
-Span lifetime represents the process of recording the start and the end timestamps to the Span 
-object:
-* The start time is recorded when the Span is created.
-* The end time needs to be recorded when the operation is ended.
 
 ### Why support Spans that are not attached to the Context?
 * Allow users to use the OpenCensus library without using a Context.
