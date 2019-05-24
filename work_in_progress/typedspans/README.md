@@ -77,42 +77,24 @@ Represents a database call.
 These attributes are not covered in the [main spec](../semantic-conventions.md):
 
 - Channel Type (e.g. TCP)
-- Rows Returned
-- Roundtrips
-- Arguments of db.statement
 
 #### gRPC Client
 Represents an outbound gRPC request.
 
 ##### Attributes
-- Service Endpoint
-- Channel Type (e.g. TCP)
-- Channel Endpoint
-- Service Name
-- Service Method
 
+These attributes are not covered in the [main spec](../semantic-conventions.md):
+
+- Channel Type (e.g. TCP)
 
 #### gRPC Server
 Represents an inbound gRPC request.
 
-##### Detail Document
-https://github.com/open-telemetry/opentelemetry-specification/blob/master/work_in_progress/gRPC/gRPC.md
-
 ##### Attributes
-- Message Id
-- Message Compressed Size
-- Message Uncompressed Size
 
-#### gRPC Client
-Represents an inbound gRPC request.
+These attributes are not covered in the [main spec](../semantic-conventions.md):
 
-##### Detail Document
-https://github.com/open-telemetry/opentelemetry-specification/blob/master/work_in_progress/gRPC/gRPC.md
-
-##### Attributes
-- Message Id
-- Message Compressed Size
-- Message Uncompressed Size
+- Channel Type (e.g. TCP)
 
 #### Remoting Client
 Represents an outbound RPC request.

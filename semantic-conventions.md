@@ -47,3 +47,60 @@ follows:
 | `peer.port`     | Remote port. E.g., `80` (integer)                            | No       |
 | `peer.service`  | Remote service name. Can be database friendly name or `db.instance` | No       |
 
+## gRPC
+
+Implementations MUST create a span, when the gRPC call starts, one for
+client-side and one for server-side. Outgoing requests should be a span `kind`
+of `CLIENT` and incoming requests should be a span `kind` of `SERVER`.
+
+Span `name` MUST be full gRPC method name formatted as:
+
+```
+$package.$service/$method
+```
+
+Examples of span name: `grpc.test.EchoService/Echo`.
+
+## Attributes
+
+| Attribute name            | Description                    | Type   |Example value |
+|---------------------------|--------------------------------|--------|--------------|
+| `component`               | Type of the client/server span | string | `grpc`       |
+
+`peer.*` attributes MUST define service name as `peer.service`, host as
+`peer.hostname` and uri as `peer.address`.
+
+## Status
+
+Implementations MUST set status which MUST be the same as the gRPC client/server
+status. The mapping between gRPC canonical codes and OpenCensus status codes can
+be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
+
+## Events
+
+In the lifetime of a gRPC stream, an event for each message sent/received on
+client and server spans SHOULD be created with the following attributes:
+
+```
+-> [time],
+    "name" = "message",
+    "message.type" = "SENT",
+    "message.id" = id
+    "message.compressed_size" = <compressed size in bytes>,
+    "message.uncompressed_size" = <uncompressed size in bytes>
+```
+
+```
+-> [time],
+    "name" = "message",
+    "message.type" = "RECEIVED",
+    "message.id" = id
+    "message.compressed_size" = <compressed size in bytes>,
+    "message.uncompressed_size" = <uncompressed size in bytes>
+```
+
+The `message.id` MUST be calculated as two different counters starting from `1`
+one for sent messages and one for received message. This way we guarantee that
+the values will be consistent between different implementations. In case of
+unary calls only one sent and one received message will be recorded for both
+client and server spans.
