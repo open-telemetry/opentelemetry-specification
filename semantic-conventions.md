@@ -63,9 +63,9 @@ Examples of span name: `grpc.test.EchoService/Echo`.
 
 ## Attributes
 
-| Attribute name            | Description                    | Type   |Example value |
-|---------------------------|--------------------------------|--------|--------------|
-| `component`               | Type of the client/server span | string | `grpc`       |
+| Attribute name | Notes and examples                                           | Required? |
+| -------------- | ------------------------------------------------------------ | --------- |
+| `component`    | Declares that this is a grace component. Value MUST be `grpc` | Yes       |
 
 `peer.*` attributes MUST define service name as `peer.service`, host as
 `peer.hostname` and uri as `peer.address`.
