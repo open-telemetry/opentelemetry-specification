@@ -78,7 +78,7 @@ keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 ### `AddLink`: add a `Link` from this `Span` to another
 
 Adds a link to another `Span` from this `Span`. Linked `Span` can be from the
-same or different trace. See [Links description](../terminology.md#Links).
+same or different trace. See [Links description](../terminology.md#links-between-spans).
 
 Required parameters
 
