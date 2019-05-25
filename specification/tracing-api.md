@@ -24,14 +24,21 @@ Span represents a single operation within a trace. Spans can be nested to form a
 trace tree. Often, a trace contains a root span that describes the end-to-end
 latency and, optionally, one or more sub-spans for its sub-operations.
 
+Once Span [is created](#span-creation) - Span operations can be used to add
+additional properties to it like attributes, links, events, name and resulting
+status. Span cannot be used to retrieve these properties. This prevents the
+mis-use of spans as an in-process information propagation mechanism.
+
+The only two getters on span returns `SpanContext` and recording status.
+
 ### Span creation
 
 TBD
 
 ### Span operations
 
-With the exception of the method to retrieve the `Span`'s `SpanContext`, none of
-the below may be called after the `Span` is finished.
+With the exception of the method to retrieve the `Span`'s `SpanContext` and
+recording status, none of the below may be called after the `Span` is finished.
 
 #### `GetContext`: retrieve the `Span`s `SpanContext`
 
@@ -40,7 +47,12 @@ There should be no parameters.
 **Returns** the `SpanContext` for the given `Span`. The returned value may be
 used even after the `Span` is finished.
 
-isRecordingEvents
+#### `IsRecordingEvents`: check the recording status
+
+There should be no parameters.
+
+Returns true if this `Span` is active and is recording events with the `AddEvent`
+operation. 
 
 ### `SetAttribute`: set the `Span`'s attribute
 
@@ -65,11 +77,29 @@ keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 
 ### `AddLink`: add a `Link` from this `Span` to another
 
-TBD
+Adds a link to another `Span` from this `Span`. Linked `Span` can be from the
+same or different trace. See [Links description](../terminology.md#Links).
+
+Required parameters
+
+- `SpanContext` of the `Span` to link to
+
+Optional parameters
+
+- Map of attributes associated with this link. Attributes are key:value pairs
+  where hey is a string and value is one of string, boolean and numeric.
 
 ### `SetStatus`: set the span result status
 
-TBD
+Sets the `Status` to the `Span`. If used, this will override the default `Span`
+status. Default is `OK`.
+
+Only the value of the last call will be recorded, and implementations are free
+to ignore previous calls.
+
+Required parameters
+
+- New status for the span.
 
 #### `UpdateName`: overwrite the operation name
 
