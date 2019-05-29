@@ -61,7 +61,7 @@ $package.$service/$method
 
 Examples of span name: `grpc.test.EchoService/Echo`.
 
-## Attributes
+### Attributes
 
 | Attribute name | Notes and examples                                           | Required? |
 | -------------- | ------------------------------------------------------------ | --------- |
@@ -70,13 +70,13 @@ Examples of span name: `grpc.test.EchoService/Echo`.
 `peer.*` attributes MUST define service name as `peer.service`, host as
 `peer.hostname` and uri as `peer.address`.
 
-## Status
+### Status
 
 Implementations MUST set status which MUST be the same as the gRPC client/server
-status. The mapping between gRPC canonical codes and OpenCensus status codes can
-be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
+status. The mapping between gRPC canonical codes and OpenTelemetry status codes
+can be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
 
-## Events
+### Events
 
 In the lifetime of a gRPC stream, an event for each message sent/received on
 client and server spans SHOULD be created with the following attributes:
