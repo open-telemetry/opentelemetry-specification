@@ -1,5 +1,15 @@
-# Code owners file.
-# This file controls who is tagged for review for any given pull request.
+#####################################################
+#
+# List of approvers for OpenTelemetry Specifications repository
+#
+#####################################################
+#
+# Learn about membership in OpenTelemetry community:
+#  https://github.com/open-telemetry/community/blob/master/community-membership.md
+# 
+#
+# Learn about CODEOWNERS file format: 
+#  https://help.github.com/en/articles/about-code-owners
+#
 
-# For anything not explicitly taken by someone else:
 *  @bogdandrutu @carlosalberto @SergeyKanzhelev @yurishkuro
