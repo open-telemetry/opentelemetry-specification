@@ -67,9 +67,12 @@ attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
 
 ### `AddEvent`: add an `Event` to `Span`
 
-Required parameters
+Required parameters:
 
 - Name of the event.
+
+Optional parameters:
+
 - One or more key:value pairs, where the keys must be strings and the values may
   be string, booleans or numeric type.
 
@@ -113,8 +116,6 @@ Required parameters:
   `Span` was started
 
 #### `End`: finish the `Span`
-
-Optional parameters
 
 There should be no parameters.
 
