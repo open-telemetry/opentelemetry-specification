@@ -61,6 +61,7 @@ Each **Span** encapsulates the following state:
 - A set of zero or more **Events**, each of which is itself a key:value map
   paired with a timestamp. The keys must be strings, though the values may be of
   the same types as Span **Attributes**.
+- Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
   (via the **SpanContext** of those related **Spans**).
 - **SpanContext** identification of a Span. See below.
@@ -103,10 +104,20 @@ Trace instead of trusting incoming Trace context.
 
 ## Metrics
 
+TODO: Describe metrics terminology https://github.com/open-telemetry/opentelemetry-specification/issues/45
+
 ## Tags
+
+TODO: Describe tags terminology https://github.com/open-telemetry/opentelemetry-specification/issues/46
 
 ## Resources
 
+TODO: Describe resources terminology https://github.com/open-telemetry/opentelemetry-specification/issues/47
+
 ## Agent/Collector
 
-## Plug-ins, auto-collectors
+TODO: Describe agent/collector terminology https://github.com/open-telemetry/opentelemetry-specification/issues/48
+
+## Adaptors
+
+TODO: Describe adaptors terminology https://github.com/open-telemetry/opentelemetry-specification/issues/49
