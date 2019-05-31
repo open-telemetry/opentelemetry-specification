@@ -29,7 +29,8 @@ additional properties to it like attributes, links, events, name and resulting
 status. Span cannot be used to retrieve these properties. This prevents the
 mis-use of spans as an in-process information propagation mechanism.
 
-The only two getters on span returns `SpanContext` and recording status.
+The only two getters on span returns `SpanContext` and the flag on whether span
+will be recorded.
 
 ### Span creation
 
@@ -47,7 +48,7 @@ There should be no parameters.
 **Returns** the `SpanContext` for the given `Span`. The returned value may be
 used even after the `Span` is finished.
 
-#### `IsRecordingEvents`: check the recording status
+#### `IsRecordingEvents`: returns the flag whether this span will be recorded
 
 There should be no parameters.
 
