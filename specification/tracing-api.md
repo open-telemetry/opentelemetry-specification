@@ -5,18 +5,18 @@ Tracing API consist of a few main classes:
 - `Tracer` is used for all operations. See [Tracer](#tracer) section.
 - `Span` is a mutable object storing information about the current operation
    execution. See [Span](#span) section.
-- `SpanData` is an immutable object that is used to report completed spans. See
-  [SpanData](#spandata) section.
+- `SpanData` is an immutable object that is used to report out-of-band completed
+  spans. See [SpanData](#spandata) section.
 
 ## Tracer
 
 ### Obtaining a tracer
 
-TBD
+TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelemetry-specification/issues/39
 
 ### Tracer operations
 
-TBD
+TODO: Tracing operations. https://github.com/open-telemetry/opentelemetry-specification/issues/38
 
 ## Span
 
@@ -33,7 +33,7 @@ The only two getters on span returns `SpanContext` and recording status.
 
 ### Span creation
 
-TBD
+TODO: SpanBuilder API https://github.com/open-telemetry/opentelemetry-specification/issues/37
 
 ### Span operations
 
@@ -51,8 +51,8 @@ used even after the `Span` is finished.
 
 There should be no parameters.
 
-Returns true if this `Span` is active and is recording events with the `AddEvent`
-operation. 
+Returns true if this `Span` is active and recording information like events with
+the `AddEvent` operation and attributes using `SetAttributes`.
 
 ### `SetAttribute`: set the `Span`'s attribute
 
@@ -69,10 +69,11 @@ attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
 
 Required parameters
 
+- Name of the event.
 - One or more key:value pairs, where the keys must be strings and the values may
   be string, booleans or numeric type.
 
-Note that the OpenTelemetry project documents certain ["standard event
+Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 
 ### `AddLink`: add a `Link` from this `Span` to another
@@ -131,4 +132,4 @@ record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
 
 ## SpanData
 
-TBD
+TODO: SpanData operations https://github.com/open-telemetry/opentelemetry-specification/issues/35
