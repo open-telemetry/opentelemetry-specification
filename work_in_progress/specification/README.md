@@ -139,48 +139,7 @@ Both injection and extraction rely on an extensible **format** parameter that di
 
 ### `Span`
 
-With the exception of the method to retrieve the `Span`'s `SpanContext`, none of the below may be called after the `Span` is finished.
-
-#### Retrieve the `Span`s `SpanContext`
-
-There should be no parameters.
-
-**Returns** the `SpanContext` for the given `Span`. The returned value may be used even after the `Span` is finished.
-
-#### Overwrite the operation name
-
-Required parameters
-
-- The new **operation name**, which supersedes whatever was passed in when the `Span` was started
-
-#### Finish the `Span`
-
-Optional parameters
-
-- An explicit **finish timestamp** for the `Span`; if omitted, the current walltime is used implicitly.
-
-With the exception of the method to retrieve a `Span`'s `SpanContext`, no method may be called on a `Span` instance after it's finished.
-
-#### Set a `Span` tag
-
-Required parameters
-
-- The tag key, which must be a string
-- The tag value, which must be either a string, a boolean value, or a numeric type
-
-Note that the OpenTracing project documents certain **["standard tags"](./semantic_conventions.md#span-tags-table)** that have prescribed semantic meanings.
-
-#### Log structured data
-
-Required parameters
-
-- One or more key:value pairs, where the keys must be strings and the values may have any type at all. Some OpenTracing implementations may handle more (or more of) certain log values than others.
-
-Optional parameters
-
-- An explicit timestamp. If specified, it must fall between the local start and finish time for the span.
-
-Note that the OpenTracing project documents certain **["standard log keys"](./semantic_conventions.md#log-fields-table)** which have prescribed semantic meanings.
+... moved to [specs](../../specification/tracing-api.md)...
 
 #### Set a **baggage** item
 
