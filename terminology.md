@@ -112,7 +112,22 @@ TODO: Describe tags terminology https://github.com/open-telemetry/opentelemetry-
 
 ## Resources
 
-TODO: Describe resources terminology https://github.com/open-telemetry/opentelemetry-specification/issues/47
+`Resource` captures information about the entity for which telemetry is
+recorded. For example, metrics exposed by a Kubernetes container can be linked
+to a resource that specifies the cluster, namespace, pod, and container name.
+
+`Resource` may capture an entire hierarchy of entity identification. It may
+describe the host in the cloud and specific container or an application running
+in the process.
+
+Note, that some of the process identification information can be associated with
+telemetry automatically by OpenTelemetry SDK or specific exporter. See
+OpenTelemetry
+[proto](https://github.com/open-telemetry/opentelemetry-proto/blob/a46c815aa5e85a52deb6cb35b8bc182fb3ca86a0/src/opentelemetry/proto/agent/common/v1/common.proto#L28-L96)
+for an example.
+
+**TODO**: Better describe the difference between the resource and a Node
+https://github.com/open-telemetry/opentelemetry-proto/issues/17
 
 ## Agent/Collector
 
