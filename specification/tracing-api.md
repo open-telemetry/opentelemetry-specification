@@ -116,7 +116,15 @@ Required parameters:
 - The new **operation name**, which supersedes whatever was passed in when the
   `Span` was started
 
-#### `End`: finish the `Span`
+#### End
+
+Finish the `Span`. This call will take the current timestamp to set as `Span`'s
+end time. Implementations MUST ignore all subsequent calls to `End` (there might
+be exceptions when Tracer is streaming event and has no mutable state associated
+with the `Span`).
+
+Call to `End` of a `Span` MUST not have any effects on child spans. Those may
+still be running and can be ended later.
 
 There should be no parameters.
 
