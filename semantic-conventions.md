@@ -65,15 +65,16 @@ Examples of span name: `grpc.test.EchoService/Echo`.
 
 | Attribute name | Notes and examples                                           | Required? |
 | -------------- | ------------------------------------------------------------ | --------- |
-| `component`    | Declares that this is a grace component. Value MUST be `grpc` | Yes       |
+| `component`    | Declares that this is a grpc component. Value MUST be `grpc` | Yes       |
 
 `peer.*` attributes MUST define service name as `peer.service`, host as
-`peer.hostname` and uri as `peer.address`.
+`peer.hostname` and port as `peer.port`.
 
 ### Status
 
 Implementations MUST set status which MUST be the same as the gRPC client/server
 status. The mapping between gRPC canonical codes and OpenTelemetry status codes
+is 1:1 as OpenTelemetry canonical codes is just a snapshot of grpc codes which
 can be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
 
 ### Events
