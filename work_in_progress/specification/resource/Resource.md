@@ -58,12 +58,6 @@ Auto-detection of resource information in specific environments, e.g. specific c
 vendors, MUST be implemented outside of the core libraries in third party or
 [census-ecosystem][census-ecosystem] repositories.
 
-### Merging
-As different mechanisms are run to gain information about a resource, their information
-has to be merged into a single resulting resource.
-Already set labels or type fields MUST NOT be overwritten unless they are empty string. Label key
-namespacing SHOULD be used to prevent collisions across different resource detection steps.
-
 ### Detectors
 To make auto-detection implementations easy to use, the core resource package SHOULD define
 an interface to retrieve resource information. Additionally, helper functionality MAY be
