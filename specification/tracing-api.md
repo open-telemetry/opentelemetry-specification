@@ -158,14 +158,15 @@ arguments:
 - Name of this `SpanData`.
 - `Kind` of this `SpanData`.
 - Start and End timestamps
-- Set of attributed with the string key and the value, which must be either a
+- Set of attributes with the string key and the value, which must be either a
   string, a boolean value, or a numeric type.
 - Set of `Events`.
 - Set of `Links`.
 - `Status` of `SpanData` execution.
 
-All collections passes as an argument MUST be copied so the change of the
-collection will not mutate the `SpanData`.
+All collections passes as an argument MUST be either immutable if language
+allows it or copied so the change of the collection will not mutate the
+`SpanData`.
 
 ## GetResource
 
