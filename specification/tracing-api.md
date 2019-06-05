@@ -142,4 +142,34 @@ record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
 
 ## SpanData
 
-TODO: SpanData operations https://github.com/open-telemetry/opentelemetry-specification/issues/35
+TODO: SpanData operations
+https://github.com/open-telemetry/opentelemetry-specification/issues/35
+
+## Constructing SpanData
+
+`SpanData` is an immutable object that can be constructed using the following
+arguments:
+
+- `SpanContext` identifying this `SpanData`.
+- Parent's `SpanId`.
+- `Resource` this SpanData is recorded for. If not specified - `Tracer`'s
+  `Resource` will be used instead when the `RecordSpanData` called on the
+  `Tracer`.
+- Name of this `SpanData`.
+- `Kind` of this `SpanData`.
+- Start and End timestamps
+- Set of attributes with the string key and the value, which must be either a
+  string, a boolean value, or a numeric type.
+- Set of `Events`.
+- Set of `Links`.
+- `Status` of `SpanData` execution.
+
+All collections passes as an argument MUST be either immutable if language
+allows it or copied so the change of the collection will not mutate the
+`SpanData`.
+
+## GetResource
+
+Returns the `Resource` associated with this `SpanData`. When `null` is returned
+the assumption is that `Resource` will be taken from the `Tracer` that is used
+to record this `SpanData`.
