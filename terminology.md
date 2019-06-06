@@ -122,15 +122,15 @@ application, that defines both causal relationships, between
 
 Abstractly, **Context Propagation** is the mechanism for conveying the
 current **SpanContext** and **Context Tags** throughout an application
-as across machines when starting remote **Spans**.  OpenTelemetry
+and across machines when starting remote **Spans**.  OpenTelemetry
 specifies that **Context Propagation** should be done in the way
 prescribed by the language, when possible.  Some languages will use
 thread-local state, while other languages will use explicit context
 objects for context propagation.
 
 More importantly, OpenTelemetry shall prefer to use an existing,
-established context support package, where the language and community
-support it, provided that support is extensible.
+established context package, where the language and community support
+it, provided that support is extensible.
 
 ## Resources
 
