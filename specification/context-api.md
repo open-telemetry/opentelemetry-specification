@@ -1,4 +1,4 @@
-# Context API
+# Context and Tags API
 
 The Context API consist of a few main classes:
 

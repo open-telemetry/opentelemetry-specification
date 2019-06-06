@@ -106,7 +106,7 @@ Trace instead of trusting incoming Trace context.
 
 TODO: Describe metrics terminology https://github.com/open-telemetry/opentelemetry-specification/issues/45
 
-## Tags
+## Context and Tags
 
 **Tags** are key:value attributes, which are associated with **Spans**,
 **Events**, and **Stats** data, that propagate alongside **SpanContext**
