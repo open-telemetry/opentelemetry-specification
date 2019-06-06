@@ -108,7 +108,29 @@ TODO: Describe metrics terminology https://github.com/open-telemetry/opentelemet
 
 ## Tags
 
-TODO: Describe tags terminology https://github.com/open-telemetry/opentelemetry-specification/issues/46
+**Tags** are key:value attributes, which are associated with **Spans**,
+**Events**, and **Stats** data, that propagate alongside **SpanContext**
+across causal relationships in a **Trace** through a device known as
+**Context Propagation**.
+
+The term **Context** is specifically used to describe a
+language-dependent feature or construct, which encapsulates the notion
+that there is an "active" or "current" diagnostic state, ever-present
+in the application and dictated by the control-flow of the
+application, that defines both causal relationships, between
+**SpanContexts**, and the associated **Context Tags**.
+
+Abstractly, **Context Propagation** is the mechanism for conveying the
+current **SpanContext** and **Context Tags** throughout an application
+as across machines when starting remote **Spans**.  OpenTelemetry
+specifies that **Context Propagation** should be done in the way
+prescribed by the language, when possible.  Some languages will use
+thread-local state, while other languages will use explicit context
+objects for context propagation.
+
+More importantly, OpenTelemetry shall prefer to use an existing,
+established context support package, where the language and community
+support it, provided that support is extensible.
 
 ## Resources
 
