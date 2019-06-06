@@ -1,55 +1,55 @@
 # Context and Tags API
 
-The Context API consist of a few main classes:
+The Context API consists of a few main classes:
 
-- `Context` is the implicit or explicit context handle, specific to each language.
-- `TagMap` is an immutable object storing the key:value assignments.  See [Span](#span).
+- `Context` is the implicit or explicit context handle, specific to each language
+- `TagMap` is an immutable object storing the key:value assignments.
 
 ## `Context`
 
-Whether the current Context is an explicit or implicit construct in the target language, the API provides accessors to retrieve the current Span and the current TagMap.
+Whether the current `Context` is an explicit or implicit construct in the target language, the API provides accessors to retrieve the current `Span` and the current `TagMap`.
 
-### Context constructors
+### `Context` constructors
 
-#### `Context.Empty()`: returns context with no SpanContext and an empty TagMap
+#### `Context.Empty()`: returns context with no `SpanContext` and an empty `TagMap`
 
-The Context API provides a way to obtain an empty Context, which has no associated SpanContext and an empty TagMap.
+The `Context` API provides a way to obtain an empty `Context`, which has no associated `SpanContext` and an empty `TagMap`.
 
 #### `Context.WithMap(replacement)`: support binding a new TagMap to a Context
 
-The Context API provides a way to replace the current TagMap with a new one.  Returns a new Context with the provided TagMap.
+The `Context` API provides a way to replace the current `TagMap` with a new one.  Returns a new `Context` with the provided `TagMap`.
 
-#### `Context.NewContext(mutators...)`: support extending from an existing TagMap
+#### `Context.NewContext(mutators...)`: support extending from an existing `TagMap`
 
-The Context API provides a way to derive the a new Context by modifying the existing Context's TagMap, using one of the provided mutators:
+The `Context` API provides a way to derive a new `Context` by modifying the existing `Context`'s `TagMap`, using one of the provided mutators:
 
 The defined mutators are:
 - `Insert(key, value)`: Enter a new key:value only if the key is not already defined
 - `Upsert(key, value)`: Enter a new key:value or update the existing key:value unconditionally
 - `Delete(key, value)`: Remove a key:value from the map, if it exists.
 
-This is defined as `Context.WithMap(TagMap.FromContext().Apply(mutators))`.  Returns a new Context with the derived TagMap.  The incoming context is not modified.
+This is defined as `Context.WithMap(TagMap.FromContext().Apply(mutators))`.  Returns a new `Context` with the derived `TagMap`.  The incoming context is not modified.
 
 ### `Context` manipulation
 
-#### `Context.Enter()/Exit()`: methods to switch the active Context
+#### `Context.Enter()/Exit()`: methods to switch the active `Context`
 
-The Context API provides a way to execute code scoped to a new
+The `Context` API provides a way to execute code scoped to a new
 context.  Depending on language features, the SDK should provide APIs
 that ensure execution automatically switches out of the Context after
 the scoped activity finishes.  In practice, this usually means the
-Context API relies on try/finally statements, defered callbacks, or
-automatic destructors to modify the active Context.
+`Context` API relies on try/finally statements, defered callbacks, or
+automatic destructors to modify the active `Context`.
 
 ### `Context` accessors
 
 #### `Context.Active()`: Get the current Span
 
-This may be use to get the current SpanContext as well.  Use `Trace.Start` to update the active span.
+This may be use to get the current `SpanContext` as well.  Use `Trace.Start` to update the active span.
 
 #### `TagMap.FromContext()`: Get the current map
 
-This returns the `TagMap` belonging to the active Context.
+This returns the `TagMap` belonging to the active `Context`.
 
 ## `TagMap` 
 
@@ -59,15 +59,15 @@ This returns the `TagMap` belonging to the active Context.
 
 Construct a new map by giving an explicit key:value list.
 
-#### `TagMap.Apply(mutators...)`: New map from list of mutators (see Context.NewContext)
+#### `TagMap.Apply(mutators...)`: New map from list of mutators (see `Context.NewContext`)
 
 Construct a new map by giving a sequence of key:value mutators.
 
-### TagMap MaxHops
+### `TagMap.MaxHops`
 
-TagMap is an immutable map of key:value assignments with metadata about how each key:value assignment (i.e., tag) should propagate.  Keys are individually assigned a "Max Hops" value which determines the number of remote processes it will propagate into.  Values for Max Hops:
+`TagMap` is an immutable map of key:value assignments with metadata about how each key:value assignment (i.e., tag) should propagate.  Keys are individually assigned a "Max Hops" value which determines the number of remote processes it will propagate into.  Values for Max Hops:
 
-- `0`: The tag will propagate to internal Contexts belonging to the same trace, within the local process, but will not propagate to a remote host
+- `0`: The tag will propagate to internal `Contexts` belonging to the same trace, within the local process, but will not propagate to a remote host
 - `>=1`: The tag will propagate to a depth of (up to) 1 or more remote hosts from the current node in the trace
 - `-1`: The tag will propagate indefinitely (default).
 
