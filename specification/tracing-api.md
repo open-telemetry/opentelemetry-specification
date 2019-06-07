@@ -143,12 +143,14 @@ record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
 ## SpanData
 
 `SpanData` MUST be an abstract class or interface. As `SpanData` is used for the
-code instrumentation, it is not expected that vendors will supply alternative
-implementations of a `SpanData`. Typical use case for alternative
-implementations is to implement lazy calculation of properties and minimize the
-number of allocation required at instrumentation point. For instance,
-alternative implementation of `SpanData` may hold a reference on an object. And
-all getters will be implemented by lazily calculating the required properties.
+code instrumentation, it is NOT expected alternative implementations of a
+`SpanData` will be supplied by consumer or telemetry. Typical use case for
+alternative implementations is to implement lazy calculation of properties and
+minimize the number of allocation required at instrumentation point. So it will
+be done by instrumentation code. For instance, alternative implementation of
+`SpanData` may hold a reference on an object. And all getters will be
+implemented by lazily calculating the required properties at a moment that
+`SpanData` is passed to one of exporters.
 
 Implementations of `SpanData` MUST return the same value in getters when that
 getter was called multiple times. It is also discouraged to throw exceptions
@@ -223,17 +225,18 @@ to record this `SpanData`.
 Returns the `Attributes` collection associated with this `SpanData`. The order
 of attributes in collection is not significant. The typical use of attributes
 collection is enumeration so the fast access to the label value by it's key is
-not a requirement.
+not a requirement. This collection MUST be immutable.
 
 ### GetTimedEvents
 
 Return the collection of `Events` with the timestamps associated with this
-`SpanData`. The order of events in collection is not guaranteed.
+`SpanData`. The order of events in collection is not guaranteed. This collection
+MUST be immutable.
 
 ### GetLinks
 
 Returns the `Links` collection associated with this `SpanData`. The order
-of links in collection is not significant.
+of links in collection is not significant. This collection MUST be immutable.
 
 ### GetStatus
 
