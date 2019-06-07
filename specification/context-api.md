@@ -67,8 +67,8 @@ Construct a new map by giving a sequence of key:value mutators.
 
 `TagMap` is an immutable map of key:value assignments with metadata about how each key:value assignment (i.e., tag) should propagate.  Keys are individually assigned a "Max Hops" value which determines the number of remote processes it will propagate into.  Values for Max Hops:
 
-- `0`: The tag will propagate to internal `Contexts` belonging to the same trace, within the local process, but will not propagate to a remote host
-- `>=1`: The tag will propagate to a depth of (up to) 1 or more remote hosts from the current node in the trace
+- `0`: The tag will propagate to internal `Contexts` belonging to the same trace, within the local process, but will not propagate to a remote process
+- `>=1`: The tag will propagate to a depth of (up to) 1 or more remote processes from the current node in the trace
 - `-1`: The tag will propagate indefinitely (default).
 
 The default behavior is to propagate tags indefinitely.
