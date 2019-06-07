@@ -45,6 +45,7 @@ Represents an outbound HTTP request.
 These attributes are not covered in the [main spec](../semantic-conventions.md):
 
 - Route
+- User Agent
 - Parameters
 - Request Headers
 - Response Headers
@@ -53,11 +54,9 @@ These attributes are not covered in the [main spec](../semantic-conventions.md):
 Represents an inbound HTTP request.
 
 ##### Attributes
-- Method
-- Host
-- Path
-- Status Code
-- Route
+
+These attributes are not covered in the [main spec](../semantic-conventions.md):
+
 - User Agent
 - Webserver Name
 - Remote Address

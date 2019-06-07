@@ -16,39 +16,38 @@ correlated and cross-analyzed.
 
 ## HTTP client
 
-This type represents an outbound HTTP request.
+This span type represents an outbound HTTP request.
 
 For a HTTP client span, `SpanKind` MUST be `Client`.
 
 Given an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) compliant URI of the form
-`scheme:[//authority]path[?query][#fragment]`, the `name` attribute of the span should
-be set to to the URI path component.
+`scheme:[//authority]path[?query][#fragment]`, the `name` attribute of the span SHOULD
+be set to to the URI path value.
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `http.request.method` | HTTP request method. E.g. `"GET"`. | Yes |
-| `http.request.host` | HTTP host. E.g. `"example.com:779"`. | Yes |
-| `http.request.path` | HTTP URI path. E.g. `"/my/document"` | Yes |
+| `http.request.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
 | `http.response.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
-| `http.user.agent` | E.g. `"Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)"` | No |
 
 ## HTTP server
 
-This type represents an outbound HTTP request.
+This span type represents an inbound HTTP request.
 
-For a HTTP client span, `SpanKind` MUST be `Client`.
+For a HTTP server span, `SpanKind` MUST be `Server`.
 
-Given an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) compliant URI of the form
-`scheme:[//authority]path[?query][#fragment]`, the `name` attribute of the span should
-be set to to the URI path component.
+Given an inbound request for a route (e.g. `"/users/:userID?"` the `name`
+attribute of the span SHOULD be set to this route.
+
+If the route can not be determined, the `name` attribute CAN be set to the [RFC 3986 URI](https://www.ietf.org/rfc/rfc3986.txt) path value.
+
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `http.request.method` | HTTP request method. E.g. `"GET"`. | Yes |
-| `http.request.host` | HTTP host. E.g. `"example.com:779"`. | Yes |
-| `http.request.path` | HTTP URI path. E.g. `"/my/document"` | Yes |
+| `http.request.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
+| `http.request.route` | The matched route. E.g. `"/users/:userID?"`. | No |
 | `http.response.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
-| `http.user.agent` | E.g. `"Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)"` | No |
 
 ## Databases client calls
 
