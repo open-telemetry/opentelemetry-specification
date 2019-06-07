@@ -6,7 +6,7 @@ describes the key types and the overall behavior.
 Main APIs:
 
 - [Tracing API](tracing-api.md).
-- [Sampling API](sampling-api.md).
+  - [Sampling API](sampling-api.md).
 - [Resources API](resources-api.md).
 
 ## Language Libraries
