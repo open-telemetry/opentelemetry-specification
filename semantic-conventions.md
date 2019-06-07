@@ -14,6 +14,42 @@ This way, the operator will not need to learn specifics of a language and
 telemetry collected from multi-language micro-service can still be easily
 correlated and cross-analyzed.
 
+## HTTP client
+
+This type represents an outbound HTTP request.
+
+For a HTTP client span, `SpanKind` MUST be `Client`.
+
+Given an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) compliant URI of the form
+`scheme:[//authority]path[?query][#fragment]`, the `name` attribute of the span should
+be set to to the URI path component.
+
+| Attribute name | Notes and examples                                           | Required? |
+| :------------- | :----------------------------------------------------------- | --------- |
+| `http.request.method` | HTTP request method. E.g. `"GET"`. | Yes |
+| `http.request.host` | HTTP host. E.g. `"example.com:779"`. | Yes |
+| `http.request.path` | HTTP URI path. E.g. `"/my/document"` | Yes |
+| `http.response.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
+| `http.user.agent` | E.g. `"Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)"` | No |
+
+## HTTP server
+
+This type represents an outbound HTTP request.
+
+For a HTTP client span, `SpanKind` MUST be `Client`.
+
+Given an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) compliant URI of the form
+`scheme:[//authority]path[?query][#fragment]`, the `name` attribute of the span should
+be set to to the URI path component.
+
+| Attribute name | Notes and examples                                           | Required? |
+| :------------- | :----------------------------------------------------------- | --------- |
+| `http.request.method` | HTTP request method. E.g. `"GET"`. | Yes |
+| `http.request.host` | HTTP host. E.g. `"example.com:779"`. | Yes |
+| `http.request.path` | HTTP URI path. E.g. `"/my/document"` | Yes |
+| `http.response.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
+| `http.user.agent` | E.g. `"Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)"` | No |
+
 ## Databases client calls
 
 For database client call the `SpanKind` MUST be `Client`.
