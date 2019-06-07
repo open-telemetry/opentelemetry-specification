@@ -142,8 +142,6 @@ record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
 
 ## SpanData
 
-https://github.com/open-telemetry/opentelemetry-specification/issues/35
-
 `SpanData` MUST be an abstract class or interface. As `SpanData` is used for the
 code instrumentation, it is not expected that vendors will supply alternative
 implementations of a `SpanData`. Typical use case for alternative
