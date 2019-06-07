@@ -106,9 +106,23 @@ Trace instead of trusting incoming Trace context.
 
 TODO: Describe metrics terminology https://github.com/open-telemetry/opentelemetry-specification/issues/45
 
-## Tags
+## DistributedContext
 
-TODO: Describe tags terminology https://github.com/open-telemetry/opentelemetry-specification/issues/46
+### Entry
+
+An **Entry** is used to label anything that is associated  with a specific operation, 
+such as an HTTP request. It consists of **EntryKey**, **EntryValue** and **EntryMetadata**.
+
+- **EntryKey** is the name of the **Entry**. **EntryKey** along with **EntryValue**
+can be used to aggregate and group stats, annotate traces and logs, etc. **EntryKey** is
+a string that contains only printable ASCII (codes between 32 and 126 inclusive) and with
+a length greater than zero and less than 256.
+- **EntryValue** is a string that contains only printable ASCII (codes between 32 and 126).
+- **EntryMetadata** contains properties associated with an **Entry**.
+For now only the property **EntryTTL** is defined.
+- **EntryTTL** is an integer that represents number of hops an entry can propagate.
+Anytime a sender serializes an entry, sends it over the wire and receiver unserializes
+the entry then the entry is considered to have travelled one hop.
 
 ## Resources
 
