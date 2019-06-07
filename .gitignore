@@ -1,7 +1,6 @@
 # IntelliJ IDEA
 .idea
 *.iml
-.editorconfig
 
 # Eclipse
 .classpath
