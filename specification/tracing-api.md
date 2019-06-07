@@ -142,8 +142,12 @@ record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
 
 ## SpanData
 
-TODO: SpanData operations
 https://github.com/open-telemetry/opentelemetry-specification/issues/35
+
+`SpanData` MUST be an abstract class or interface so vendors MAY implement
+alternative implementations of a `SpanData`. `API` MUST provide a way of
+[constructing `SpanData`](#constructing-spandata) that can be recorded using
+`Tracer` method `RecordSpanData`.
 
 ## Constructing SpanData
 
@@ -151,13 +155,14 @@ https://github.com/open-telemetry/opentelemetry-specification/issues/35
 arguments:
 
 - `SpanContext` identifying this `SpanData`.
-- Parent's `SpanId`.
+- Parent's `SpanId`. All-zeroes `SpanId` or `null` MUST be assumed and
+  interchangeable if `SpanData` has no parent.
 - `Resource` this SpanData is recorded for. If not specified - `Tracer`'s
   `Resource` will be used instead when the `RecordSpanData` called on the
   `Tracer`.
 - Name of this `SpanData`.
-- `Kind` of this `SpanData`.
-- Start and End timestamps
+- `Kind` of this `SpanData`. `SpanKind.Internal` MUST be assumed as a default.
+- Start and End timestamps.
 - Set of attributes with the string key and the value, which must be either a
   string, a boolean value, or a numeric type.
 - Set of `Events`.
@@ -167,6 +172,30 @@ arguments:
 All collections passes as an argument MUST be either immutable if language
 allows it or copied so the change of the collection will not mutate the
 `SpanData`.
+
+## GetName
+
+Returns the name of this `SpanData`.
+
+## GetKind
+
+Returns the `SpanKind` of this `SpanData`.
+
+## GetStartTimestamp
+
+Returns the start timestamp of this `SpanData`.
+
+## GetEndTimestamp
+
+Returns the end timestamp of this `SpanData`.
+
+## GetContext
+
+Returns the `SpanContext` associated with this `SpanData`.
+
+## GetParentSpanId
+
+Returns the `SpanId` of the parent of this `SpanData`.
 
 ## GetResource
 
