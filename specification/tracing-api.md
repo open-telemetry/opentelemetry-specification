@@ -144,10 +144,21 @@ record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
 
 https://github.com/open-telemetry/opentelemetry-specification/issues/35
 
-`SpanData` MUST be an abstract class or interface so vendors MAY implement
-alternative implementations of a `SpanData`. `API` MUST provide a way of
-[constructing `SpanData`](#constructing-spandata) that can be recorded using
-`Tracer` method `RecordSpanData`.
+`SpanData` MUST be an abstract class or interface. As `SpanData` is used for the
+code instrumentation, it is not expected that vendors will supply alternative
+implementations of a `SpanData`. Typical use case for alternative
+implementations is to implement lazy calculation of properties and minimize the
+number of allocation required at instrumentation point. For instance,
+alternative implementation of `SpanData` may hold a reference on an object. And
+all getters will be implemented by lazily calculating the required properties.
+
+Implementations of `SpanData` MUST return the same value in getters when that
+getter was called multiple times. It is also discouraged to throw exceptions
+from getters. Default value or value indicating an error SHOULD be returned
+instead if possible.
+
+`API` MUST provide a way of [constructing `SpanData`](#constructing-spandata)
+that can be recorded using `Tracer` method `RecordSpanData`.
 
 ## Constructing SpanData
 
@@ -173,32 +184,59 @@ All collections passes as an argument MUST be either immutable if language
 allows it or copied so the change of the collection will not mutate the
 `SpanData`.
 
-## GetName
+## Getters
+
+Getters will be called by exporters in SDK. Implementation MUST not assume that
+getters will be called only once or at all. There also MUST be no expectations
+on how soon getters will be called after object creation.
+
+### GetName
 
 Returns the name of this `SpanData`.
 
-## GetKind
+### GetKind
 
 Returns the `SpanKind` of this `SpanData`.
 
-## GetStartTimestamp
+### GetStartTimestamp
 
 Returns the start timestamp of this `SpanData`.
 
-## GetEndTimestamp
+### GetEndTimestamp
 
 Returns the end timestamp of this `SpanData`.
 
-## GetContext
+### GetContext
 
 Returns the `SpanContext` associated with this `SpanData`.
 
-## GetParentSpanId
+### GetParentSpanId
 
 Returns the `SpanId` of the parent of this `SpanData`.
 
-## GetResource
+### GetResource
 
 Returns the `Resource` associated with this `SpanData`. When `null` is returned
 the assumption is that `Resource` will be taken from the `Tracer` that is used
 to record this `SpanData`.
+
+### GetAttributes
+
+Returns the `Attributes` collection associated with this `SpanData`. The order
+of attributes in collection is not significant. The typical use of attributes
+collection is enumeration so the fast access to the label value by it's key is
+not a requirement.
+
+### GetTimedEvents
+
+Return the collection of `Events` with the timestamps associated with this
+`SpanData`. The order of events in collection is not guaranteed.
+
+### GetLinks
+
+Returns the `Links` collection associated with this `SpanData`. The order
+of links in collection is not significant.
+
+### GetStatus
+
+Returns the `Status` of this `SpanData`.
