@@ -2,11 +2,11 @@
 This documentation serves to document the "look and feel" of a basic layout for OpenTelemetry projects. This package layout is intentionally generic and it doesn't try to impose a language specific package structure.
 
 ## API Package
-Here is a proposed generic package structure for Public API package.
+Here is a proposed generic package structure for OpenTelemetry API package.
 
 ### `/metrics`
 
-This directory describes the Metrics API that can be used to record application Metrics.
+This directory describes the Metrics API that can be used to record application metrics.
 
 ### `/resources`
 
@@ -16,7 +16,7 @@ The resource directory primarily defines a type [Resource](../terminology.md#res
 
 ### `/distributedcontext`
 
-This directory describes the DistributedContext API that can be used to manage metrics-related labeling.
+This directory describes the DistributedContext API that can be used to manage context propagation and metrics-related labeling.
 
 This API consists of a few main classes:
 
@@ -36,8 +36,8 @@ This API consist of a few main classes:
 ### `/internal` (_Optional_)
 Private application and library code.
 
-### `/log` (_In the future_)
-> TODO: log operations
+### `/logs` (_In the future_)
+> TODO: logs operations
 
 
 A typical top-level directory layout:
@@ -46,11 +46,10 @@ api
    ├── metrics
    ├── resources
    ├── trace
-   │   ├── propagation # headers that are the public API for trace propagation, using different encodings.
    │   └── samplers    # is used to make decisions on `Span` sampling.
    ├── distributedcontext
    │   └── propagation
    ├── internal
-   └── log
+   └── logs
 ```
-> Use lowercase or CamelCase or Snake Case (stylized as snake_case) depends on the language.
+> Use lowercase or CamelCase or Snake Case (stylized as snake_case) names depends on the language.
