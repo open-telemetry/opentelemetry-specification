@@ -15,10 +15,34 @@ aggregate and group stats, annotate traces and logs, etc.
 - Must have length greater than zero and less than 256.
 - Must not be empty.
 
+### Create
+
+Creates a new `EntryKey` with the given name in string. This is a static method.
+
+Required parameter:
+
+Name of the `EntryKey`.
+
+### GetName
+
+Returns the name of the `EntryKey`.
+
 ## EntryValue
 
 `EntryValue` is a string. It MUST contain only printable ASCII (codes between
 32 and 126)
+
+### Create
+
+Creates a new `EntryValue` with the given value in string. This is a static method.
+
+Required parameter:
+
+String value of the `EntryValue`.
+
+### AsString
+
+Returns the string value of the `EntryValue`.
 
 ## EntryMetadata
 
@@ -26,6 +50,18 @@ aggregate and group stats, annotate traces and logs, etc.
 is defined. In future, additional properties may be added to address specific situations.
 
 The creator of entries determines metadata of an entry it creates.
+
+### Create
+
+Creates a new `EntryMetadata` with the `EntryTTL`. This is a static method.
+
+Required parameter:
+
+`EntryTTL` that represents number of hops an entry can propagate.
+
+### GetEntryTTL
+
+Returns the `EntryTTL`.
 
 ### EntryTTL
 
