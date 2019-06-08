@@ -24,6 +24,9 @@ Given an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) compliant URI of the f
 `scheme:[//authority]path[?query][#fragment]`, the span name of the span SHOULD
 be set to to the URI path value.
 
+If a framework can identify a value that represents the identity of the request
+and has a lower cardinality than the URI path, this value MUST be used for the span name instead.
+
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
@@ -41,6 +44,8 @@ attribute of the span SHOULD be set to this route.
 
 If the route can not be determined, the `name` attribute CAN be set to the [RFC 3986 URI](https://www.ietf.org/rfc/rfc3986.txt) path value.
 
+If a framework can identify a value that represents the identity of the request
+and has a lower cardinality than the URI path or route, this value MUST be used for the span name instead.
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
