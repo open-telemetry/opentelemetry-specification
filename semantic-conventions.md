@@ -26,9 +26,9 @@ be set to to the URI path value.
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
-| `http.request.method` | HTTP request method. E.g. `"GET"`. | Yes |
-| `http.request.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
-| `http.response.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
+| `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
+| `http.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
+| `http.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
 
 ## HTTP server
 
@@ -44,10 +44,10 @@ If the route can not be determined, the `name` attribute CAN be set to the [RFC 
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
-| `http.request.method` | HTTP request method. E.g. `"GET"`. | Yes |
-| `http.request.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
-| `http.request.route` | The matched route. E.g. `"/users/:userID?"`. | No |
-| `http.response.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
+| `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
+| `http.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
+| `http.route` | The matched route. E.g. `"/users/:userID?"`. | No |
+| `http.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
 
 ## Databases client calls
 
