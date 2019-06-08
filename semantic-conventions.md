@@ -21,7 +21,7 @@ This span type represents an outbound HTTP request.
 For a HTTP client span, `SpanKind` MUST be `Client`.
 
 Given an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) compliant URI of the form
-`scheme:[//authority]path[?query][#fragment]`, the `name` attribute of the span SHOULD
+`scheme:[//authority]path[?query][#fragment]`, the span name of the span SHOULD
 be set to to the URI path value.
 
 | Attribute name | Notes and examples                                           | Required? |
