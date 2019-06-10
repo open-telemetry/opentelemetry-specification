@@ -4,8 +4,7 @@ with a specific operation, such as an HTTP request.
 
 `DistributedContext` is an abstract data type that represents collection of entries.
 i.e., each key is associated with exactly one value. `DistributedContext` is serializable,
-and it represents all of the information that could be propagated inside the process 
-and across process boundaries. 
+and it represents entries that could be propagated inside the process and across process boundaries. 
 
 `DistributedContext` is a recommended name but languages can have more language-specific names.
 
