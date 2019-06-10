@@ -180,8 +180,23 @@ Order of attributes is not significant.
 
 ## SpanData
 
-TODO: SpanData operations
-https://github.com/open-telemetry/opentelemetry-specification/issues/35
+`SpanData` MUST be an abstract class or interface. As `SpanData` is used for the
+code instrumentation, it is NOT expected alternative implementations of a
+`SpanData` will be supplied by consumer of telemetry (i.e. telemetry vendor).
+Typical use case for alternative implementations is to implement lazy
+calculation of properties and minimize the number of allocation required at
+instrumentation point. So it will be done by instrumentation code. For instance,
+alternative implementation of `SpanData` may hold a reference on an object. And
+all getters will be implemented by lazily calculating the required properties at
+a moment that `SpanData` is passed to one of exporters.
+
+Implementations of `SpanData` MUST return the same value in getters when that
+getter was called multiple times. It is also discouraged to throw exceptions
+from getters. Default value or value indicating an error SHOULD be returned
+instead if possible.
+
+`API` MUST provide a way of [constructing `SpanData`](#constructing-spandata)
+that can be recorded using `Tracer` method `RecordSpanData`.
 
 ## Constructing SpanData
 
@@ -189,13 +204,14 @@ https://github.com/open-telemetry/opentelemetry-specification/issues/35
 arguments:
 
 - `SpanContext` identifying this `SpanData`.
-- Parent's `SpanId`.
+- Parent's `SpanId`. All-zeroes `SpanId` or `null` MUST be assumed and
+  interchangeable if `SpanData` has no parent.
 - `Resource` this SpanData is recorded for. If not specified - `Tracer`'s
   `Resource` will be used instead when the `RecordSpanData` called on the
   `Tracer`.
 - Name of this `SpanData`.
-- `Kind` of this `SpanData`.
-- Start and End timestamps
+- `Kind` of this `SpanData`. `SpanKind.Internal` MUST be assumed as a default.
+- Start and End timestamps.
 - Set of attributes with the string key and the value, which must be either a
   string, a boolean value, or a numeric type.
 - Set of `Events`.
@@ -206,8 +222,60 @@ All collections passes as an argument MUST be either immutable if language
 allows it or copied so the change of the collection will not mutate the
 `SpanData`.
 
-## GetResource
+## Getters
+
+Getters will be called by exporters in SDK. Implementation MUST not assume that
+getters will be called only once or at all. There also MUST be no expectations
+on how soon getters will be called after object creation.
+
+### GetName
+
+Returns the name of this `SpanData`.
+
+### GetKind
+
+Returns the `SpanKind` of this `SpanData`.
+
+### GetStartTimestamp
+
+Returns the start timestamp of this `SpanData`.
+
+### GetEndTimestamp
+
+Returns the end timestamp of this `SpanData`.
+
+### GetContext
+
+Returns the `SpanContext` associated with this `SpanData`.
+
+### GetParentSpanId
+
+Returns the `SpanId` of the parent of this `SpanData`.
+
+### GetResource
 
 Returns the `Resource` associated with this `SpanData`. When `null` is returned
 the assumption is that `Resource` will be taken from the `Tracer` that is used
 to record this `SpanData`.
+
+### GetAttributes
+
+Returns the `Attributes` collection associated with this `SpanData`. The order
+of attributes in collection is not significant. The typical use of attributes
+collection is enumeration so the fast access to the label value by it's key is
+not a requirement. This collection MUST be immutable.
+
+### GetTimedEvents
+
+Return the collection of `Events` with the timestamps associated with this
+`SpanData`. The order of events in collection is not guaranteed. This collection
+MUST be immutable.
+
+### GetLinks
+
+Returns the `Links` collection associated with this `SpanData`. The order
+of links in collection is not significant. This collection MUST be immutable.
+
+### GetStatus
+
+Returns the `Status` of this `SpanData`.
