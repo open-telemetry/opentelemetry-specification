@@ -164,7 +164,7 @@ reasons. For example, one may propagate 'project-id' Entry across all micro-serv
 by 'project-id'. Not all entries in a `DistributedContext` should be propagated and not all entries in a `DistributedContext`
 should be accepted from a remote peer. Hence, `DistributedContext` propagator must allow specifying an optional
 list of ordered `EntryPropagationFilter`s for receiving entries or for forwarding entries or for both. 
-An `EntryPropagationFilter` list for receiving MAY be different then that for forwarding.
+An `EntryPropagationFilter` list for receiving MAY be different than that for forwarding.
 
 If no filter is specified for receiving then all entries are received. 
 If no filter is specified for forwarding then all entries are forwarded except those that have `EntryTTL` of 0.
@@ -203,5 +203,5 @@ MUST be included.
 
 #### EntryPropagationFilterMatchString
 It is a string to compare against EntryKey using `EntryPropagationFilterMatchOperator` in order to 
-include or exclude a `Entry`. 
+include or exclude an `Entry`.
  
