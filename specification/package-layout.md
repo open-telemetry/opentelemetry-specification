@@ -4,6 +4,10 @@ This documentation serves to document the "look and feel" of a basic layout for 
 ## API Package
 Here is a proposed generic package structure for OpenTelemetry API package.
 
+### `/context`
+
+This directory describes the API that provides in-process context propagation.
+
 ### `/metrics`
 
 This directory describes the Metrics API that can be used to record application metrics.
@@ -43,6 +47,8 @@ Private application and library code.
 A typical top-level directory layout:
 ```
 api
+   ├── context
+   │   └── propagation
    ├── metrics
    ├── resources
    ├── trace
