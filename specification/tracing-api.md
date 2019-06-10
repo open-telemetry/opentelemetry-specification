@@ -160,7 +160,7 @@ Required parameters
 Optional parameters
 
 - Map of attributes associated with this link. Attributes are key:value pairs
-  where hey is a string and value is one of string, boolean and numeric.
+  where key is a string and value is one of string, boolean and numeric.
 
 ### GetContext
 
