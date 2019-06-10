@@ -145,6 +145,23 @@ running daemon) and Collector (a standalone running service).
 Read more at OpenTelemetry Service [Long-term
 Vision](https://github.com/open-telemetry/opentelemetry-service/blob/master/docs/VISION.md).
 
-## Adaptors
+## Instrumentation adapters
 
-TODO: Describe adaptors terminology https://github.com/open-telemetry/opentelemetry-specification/issues/49
+The inspiration of the project is to make every library and application
+manageable out of the box by instrumenting it with OpenTelemery. However on the
+way to this goal there will be a need to enable instrumentation by plugging
+instrumentation adapters into the library of choice. These adapters can be
+wrapping library APIs, subscribing to the library-specific callbacks or
+translating telemetry exposed in other formats into OpenTelemetry model.
+
+Instrumentation adapters may be called different names. It is often referred as
+plugin, collector or auto-collector, telemetry module, bridge, etc. It is always
+recommended to follow the library and language standards. For instance, if
+instrumentation adapter is implemented as "log appender" - it will probably be
+called an `appender`, not an instrumentation adapter. However if there is no
+established name - the recommendation is to call packages "Instrumentation
+Adapter" or simply "Adapter".
+
+## Code injecting adapters
+
+TODO: fill out as a result of SIG discussion.
