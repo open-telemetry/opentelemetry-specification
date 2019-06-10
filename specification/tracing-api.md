@@ -32,6 +32,13 @@ mis-use of spans as an in-process information propagation mechanism.
 The only two getters on span returns `SpanContext` and the flag on whether span
 will be recorded.
 
+`Span` interface can have alternative implementations. It is expected that
+alternative implementations will be implementing vendor-specific logic. However,
+implementation MUST NOT allow to directly create a `Span`. Alternative
+implementation of `Span` can only be returned from alternative implementation of
+`SpanBuilder`, which in turn is only available from the `Tracer`. See [Span
+creation](#span-creation).
+
 ### Span creation
 
 TODO: SpanBuilder API https://github.com/open-telemetry/opentelemetry-specification/issues/37
