@@ -94,6 +94,9 @@ Optional parameters
 - Map of attributes associated with this link. Attributes are key:value pairs
   where hey is a string and value is one of string, boolean and numeric.
 
+API MUST also provide an overload that accepts a [`Link` interface](#link). This
+overload allows instrumentation to supply a lazily calculated `Link`.
+
 ### `SetStatus`: set the span result status
 
 Sets the `Status` to the `Span`. If used, this will override the default `Span`
@@ -139,6 +142,34 @@ timestamps to the Span object:
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API and MUST not be passed as an argument. In order to
 record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
+
+## Link
+
+`Link` interface represents the [link between
+spans](../terminology.md#links-between-spans). Interface only expose two
+getters. API also MUST provide a way to create a Link.
+
+### Link creation
+
+API MUST provide a way to create a new `Link`.
+
+Required parameters
+
+- `SpanContext` of the `Span` to link to
+
+Optional parameters
+
+- Map of attributes associated with this link. Attributes are key:value pairs
+  where key is a string and value is one of string, boolean and numeric.
+
+### GetContext
+
+Returns the `SpanContext` of a linked span.
+
+### GetAttributes
+
+Returns the immutable collection of attributes associated with this `Link`.
+Order of attributes is not significant.
 
 ## SpanData
 
