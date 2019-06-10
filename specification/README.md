@@ -8,3 +8,7 @@ Main APIs:
 - [Tracing API](tracing-api.md).
   - [Sampling API](sampling-api.md).
 - [Resources API](resources-api.md).
+
+## Language Libraries
+
+See [Language Library Design Principles](library-guidelines.md) for language library authors.
