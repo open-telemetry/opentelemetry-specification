@@ -32,7 +32,7 @@ mis-use of spans as an in-process information propagation mechanism.
 The only two getters on span returns `SpanContext` and the flag on whether span
 will be recorded.
 
-`Span` interface can have an alternative implementations. It is expected that
+`Span` interface can have alternative implementations. It is expected that
 alternative implementations will be implementing vendor-specific logic. However,
 implementation MUST NOT allow to directly create a `Span`. Alternative
 implementation of `Span` can only be returned from alternative implementation of
