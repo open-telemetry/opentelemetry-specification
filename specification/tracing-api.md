@@ -20,7 +20,7 @@ TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelem
 
 There should be no parameters.
 
-Returns the a default `Span` that does nothing and has an invalid `SpanContext` if no
+Returns the default `Span` that does nothing and has an invalid `SpanContext` if no
 `Span` is associated with the current context, otherwise the current `Span` from the context.
 
 #### `WithSpan`: enters the scope of code where the given `Span` is in the current context.
@@ -48,7 +48,7 @@ Required parameters:
 - `SpanData` to be reported to all exporters.
 
 This API allows to send a pre-populated span object to the exporter.
-Sampling and recording decisions as well as other collection optimizations is a
+Sampling and recording decisions as well as other collection optimizations are a
 responsibility of a caller.
 
 Note, the `SpanContext` object on the span population with
