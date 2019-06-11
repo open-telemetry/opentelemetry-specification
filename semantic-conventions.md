@@ -31,7 +31,7 @@ and has a lower cardinality than the URI path, this value MUST be used for the s
 | :------------- | :----------------------------------------------------------- | --------- |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
 | `http.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
-| `http.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
+| `http.status_code` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
 
 ## HTTP server
 
