@@ -42,7 +42,7 @@ For a HTTP server span, `SpanKind` MUST be `Server`.
 Given an inbound request for a route (e.g. `"/users/:userID?"` the `name`
 attribute of the span SHOULD be set to this route.
 
-If the route can not be determined, the `name` attribute CAN be set to the [RFC 3986 URI](https://www.ietf.org/rfc/rfc3986.txt) path value.
+If the route can not be determined, the `name` attribute MUST be set to the [RFC 3986 URI](https://www.ietf.org/rfc/rfc3986.txt) path value.
 
 If a framework can identify a value that represents the identity of the request
 and has a lower cardinality than the URI path or route, this value MUST be used for the span name instead.
