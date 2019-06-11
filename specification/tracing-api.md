@@ -54,6 +54,8 @@ responsibility of a caller.
 Note, the `SpanContext` object on the span population with
 the values that will allow correlation of telemetry is also a caller responsibility.
 
+This API should be non-blocking.
+
 #### `GetBinaryFormat`: returns the binary format of `Span`s.
 
 There should be no parameters.
