@@ -18,6 +18,25 @@ TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelem
 
 TODO: Tracing operations. https://github.com/open-telemetry/opentelemetry-specification/issues/38
 
+## SpanContext
+A SpanContext represents the portion of a Span which must be serialized and propagated along side of a distributed context. 
+
+The OpenTelemetry SpanContext representation conforms to the [w3c TraceContext specification](https://w3c.github.io/trace-context). It contains two identifiers - a`TraceId` and a `SpanId` - along with a set of `TraceOptions` and `TraceState`.
+
+SpanContext is represented as an interface, in order to be compatible with a wider variety of trace context wire formats.
+
+`TraceId` A valid trace identifier is a 16-byte array with at least one non-zero byte.
+
+`SpanId` A valid span identifier is an 8-byte array with at least one non-zero byte.
+
+`TraceOptions` contain details about the trace. Unlike TraceState values, TraceOptions are present in all traces. Currently, the only TraceOption is a boolean `IsSampled` value.
+
+`TraceState` carries system-specific configuration data, represented as a list of key-value pairs. TraceState allows multiple tracing systems to participate in the same trace. 
+
+TraceState keys are opaque strings up to 256 characters. They MUST begin with a lowercase letter, and can only contain lowercase letters `a-z`, digits `0-9`, underscores `_`, dashes `-`, asterisks `*`, and forward slashes `/`.
+
+TraceState values are opaque strings up to 256 characters, in the ASCII RFC0020 format (i.e., the range `0x20` to `0x7E`) except for `,` and `=`.
+
 ## Span
 
 Span represents a single operation within a trace. Spans can be nested to form a
