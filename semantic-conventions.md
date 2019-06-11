@@ -29,6 +29,7 @@ and has a lower cardinality than the URI path, this value MUST be used for the s
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
+| `component`    | Denotes the type of the span and needs to be `http`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
 | `http.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
 | `http.status_code` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
@@ -49,6 +50,7 @@ and has a lower cardinality than the URI path or route, this value MUST be used 
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
+| `component`    | Denotes the type of the span and needs to be `http`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
 | `http.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
 | `http.route` | The matched route. E.g. `"/users/:userID?"`. | No |
