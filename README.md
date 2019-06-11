@@ -15,7 +15,7 @@
 
 ### Terminology
 
-[terminology.md](./terminology.md) provides a glossary for languages commonly used throughout the OpenTelemetry project.
+[terminology.md](./terminology.md) provides a glossary for language commonly used throughout the OpenTelemetry project.
 
 ### Specification
 
