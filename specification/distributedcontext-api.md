@@ -66,7 +66,7 @@ Returns the `EntryTTL`.
 ### EntryTTL
 
 `EntryTTL` is an integer that represents number of hops an entry can propagate. Anytime a sender serializes an entry,
-sends it over the wire and receiver unserializes the entry then the entry is considered to have travelled one hop. 
+sends it over the wire and receiver deserializes the entry then the entry is considered to have travelled one hop.
 There could be one or more proxy(ies) between sender and receiver. Proxies are treated as transparent
 entities and they may not create additional hops. Every propagation implementation should support an option 
 `decrementTTL` (default set to true) that allows proxies to set it to false.
@@ -121,11 +121,11 @@ V# - Entry Values
 M# - Entry Metadata
 
 Enter Scope 1
-   Current Entrys E1=V1/M1, E2=V2/M2
+   Current Entries E1=V1/M1, E2=V2/M2
     Enter Scope 2
-      Add Entrys E3=V3/M3, E2=v4/M4
-      Current Entrys E1=V1/M1, E2=V4/M4, E3=V3/M3 <== Value/Metadata of E2 is replaced by V4/M4.
+      Add Entries E3=V3/M3, E2=V4/M4
+      Current Entries E1=V1/M1, E2=V4/M4, E3=V3/M3 <== Value/Metadata of E2 is replaced by V4/M4.
     Close Scope 2
-   Current Entrys E1=V1/M1, E2=V2/M2  <== E2 is restored.
+   Current Entries E1=V1/M1, E2=V2/M2  <== E2 is restored.
 Close Scope 1
 ``` 
