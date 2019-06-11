@@ -16,7 +16,60 @@ TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelem
 
 ### Tracer operations
 
-TODO: Tracing operations. https://github.com/open-telemetry/opentelemetry-specification/issues/38
+#### `GetCurrentSpan`: returns the current Span from the current context.
+
+There should be no parameters.
+
+Returns the a default `Span` that does nothing and has an invalid `SpanContext` if no
+`Span` is associated with the current context, otherwise the current `Span` from the context.
+
+#### `WithSpan`: enters the scope of code where the given `Span` is in the current context.
+
+Required parameters:
+
+- The `Span` to be set to the current context.
+
+Returns an object that defines a scope where the given `Span` will be set to the current context.
+
+The scope is exited when the returned object is closed.
+
+#### `SpanBuilder`: returns a `SpanBuilder` to create and start a new `Span`.
+
+Required parameters:
+
+- Name of the span.
+
+Returns a `SpanBuilder` to create and start a new `Span`.
+
+#### `RecordSpanData`: records a `SpanData`.
+
+Required parameters:
+
+- `SpanData` to be reported to all exporters.
+
+This API allows to send a pre-populated span object to the exporter.
+Sampling and recording decisions as well as other collection optimizations is a
+responsibility of a caller.
+
+Note, the `SpanContext` object on the span population with
+the values that will allow correlation of telemetry is also a caller responsibility.
+
+#### `GetBinaryFormat`: returns the binary format of `Span`s.
+
+There should be no parameters.
+
+Returns the binary format for this implementation. If no implementation is provided
+then no-op implementation will be used.
+
+#### `GetHttpTextFormat`: returns the HTTP text format of `Span`s.
+
+There should be no parameters.
+
+Returns the HTTP text format for this implementation. If no implementation is provided
+then no-op implementation will be used.
+
+Usually this will be the W3C Trace Context as the HTTP text format. For more details, see
+[trace-context](https://github.com/w3c/trace-context).
 
 ## Span
 
