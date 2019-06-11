@@ -136,7 +136,9 @@ with the `Span`).
 Call to `End` of a `Span` MUST not have any effects on child spans. Those may
 still be running and can be ended later.
 
-There should be no parameters.
+There MUST be no parameters.
+
+This API MUST be non-blocking.
 
 ### Span lifetime
 
