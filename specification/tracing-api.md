@@ -180,20 +180,8 @@ Order of attributes is not significant.
 
 ## SpanData
 
-`SpanData` MUST be an abstract class or interface. As `SpanData` is used for the
-code instrumentation, it is NOT expected alternative implementations of a
-`SpanData` will be supplied by consumer of telemetry (i.e. telemetry vendor).
-Typical use case for alternative implementations is to implement lazy
-calculation of properties and minimize the number of allocation required at
-instrumentation point. So it will be done by instrumentation code. For instance,
-alternative implementation of `SpanData` may hold a reference on an object. And
-all getters will be implemented by lazily calculating the required properties at
-a moment that `SpanData` is passed to one of exporters.
-
-Implementations of `SpanData` MUST return the same value in getters when that
-getter was called multiple times. It is also discouraged to throw exceptions
-from getters. Default value or value indicating an error SHOULD be returned
-instead if possible.
+`SpanData` is an immutable and final class. All getters of `SpanData` are thread
+safe and can be called any number of times.
 
 `API` MUST provide a way of [constructing `SpanData`](#constructing-spandata)
 that can be recorded using `Tracer` method `RecordSpanData`.
