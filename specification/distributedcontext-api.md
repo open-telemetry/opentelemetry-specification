@@ -161,8 +161,9 @@ The size restriction applies to the deserialized entries so that the set of deco
  `DistributedContext`s is independent of the encoding format.
 
 ## DistributedContext Propagation
-`DistributedContext` may be propagated across process boundaries or across any arbitrary boundaries for various 
-reasons. For example, one may propagate 'project-id' Entry across all micro-services to break down metrics
+`DistributedContext` may be propagated across process boundaries or across any arbitrary boundaries
+(process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
+For example, one may propagate 'project-id' Entry across all micro-services to break down metrics
 by 'project-id'. Not all entries in a `DistributedContext` should be propagated and not all entries in a `DistributedContext`
 should be accepted from a remote peer. Hence, `DistributedContext` propagator must allow specifying an optional
 list of ordered `EntryPropagationFilter`s for receiving entries or for forwarding entries or for both. 
