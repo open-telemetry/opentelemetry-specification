@@ -36,6 +36,8 @@ Changes to the [specification](./specification) are versioned according to [Sema
 
 Changes to the change process itself are not currently versioned but may be independently versioned in the future.
 
+Read more about [API and SDK compatibility](specification/compatibility.md).
+
 ## Contributions
 
 The change process is still evolving. For the short term, please use [issues](https://github.com/open-telemetry/specification/issues) to suggest changes and [pull requests](https://github.com/open-telemetry/specification/pulls) to suggest implementations of changes that have been discussed in a relevant issue.

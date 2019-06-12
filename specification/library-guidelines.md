@@ -93,3 +93,7 @@ guidelines on the performance expectations that API implementations should meet,
 See the [Concurrency and Thread-Safety](concurrency.md) specification for
 guidelines on what concurrency safeties should API implementations provide
 and how they should be documented.
+
+## API and SDK Compatibility
+
+Read about [API and SDK compatibility](specification/compatibility.md) guarantees that the language library must adhere to.
