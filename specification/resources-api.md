@@ -12,7 +12,8 @@ When used with distributed tracing resource can be associated with the
 [SpanData](tracing-api.md#spandata). When associated with `Tracer`, all `Span`s
 produced by this `Tracer` will automatically be associated with this `Resource`.
 When associated with the `SpanData` explicitly for out-of-band spans -
-`Resource` that is set on `Tracer` MUST be ignored.
+`Resource` that is set on `Tracer` MUST be ignored. Note, that association
+of `Tracer` with the `Resource` will be done in SDK, not as API call.
 
 **TODO**: explain how resource is associated with metrics.
 

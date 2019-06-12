@@ -106,9 +106,32 @@ Trace instead of trusting incoming Trace context.
 
 TODO: Describe metrics terminology https://github.com/open-telemetry/opentelemetry-specification/issues/45
 
-## Tags
+## DistributedContext
 
-TODO: Describe tags terminology https://github.com/open-telemetry/opentelemetry-specification/issues/46
+**DistributedContext** is an abstract data type that represents collection of entries.
+Each key of **DistributedContext** is associated with exactly one value. **DistributedContext** is serializable,
+to facilitate propagating it not only inside the process but also across process boundaries.
+
+**DistributedContext** is used to annotate telemetry with the name:value pair **Entry**.
+Those values can be used to add dimension to the metric or additional contest properties to logs and traces.
+
+**DistributedContext** is a recommended name but languages can have more language-specific names like **dctx**.
+
+### Entry
+
+An **Entry** is used to label anything that is associated  with a specific operation, 
+such as an HTTP request. It consists of **EntryKey**, **EntryValue** and **EntryMetadata**.
+
+- **EntryKey** is the name of the **Entry**. **EntryKey** along with **EntryValue**
+can be used to aggregate and group stats, annotate traces and logs, etc. **EntryKey** is
+a string that contains only printable ASCII (codes between 32 and 126 inclusive) and with
+a length greater than zero and less than 256.
+- **EntryValue** is a string that contains only printable ASCII (codes between 32 and 126).
+- **EntryMetadata** contains properties associated with an **Entry**.
+For now only the property **EntryTTL** is defined.
+- **EntryTTL** is an integer that represents number of hops an entry can propagate.
+Anytime a sender serializes an entry, sends it over the wire and receiver unserializes
+the entry then the entry is considered to have travelled one hop.
 
 ## Resources
 
@@ -145,6 +168,23 @@ running daemon) and Collector (a standalone running service).
 Read more at OpenTelemetry Service [Long-term
 Vision](https://github.com/open-telemetry/opentelemetry-service/blob/master/docs/VISION.md).
 
-## Adaptors
+## Instrumentation adapters
 
-TODO: Describe adaptors terminology https://github.com/open-telemetry/opentelemetry-specification/issues/49
+The inspiration of the project is to make every library and application
+manageable out of the box by instrumenting it with OpenTelemery. However on the
+way to this goal there will be a need to enable instrumentation by plugging
+instrumentation adapters into the library of choice. These adapters can be
+wrapping library APIs, subscribing to the library-specific callbacks or
+translating telemetry exposed in other formats into OpenTelemetry model.
+
+Instrumentation adapters may be called different names. It is often referred as
+plugin, collector or auto-collector, telemetry module, bridge, etc. It is always
+recommended to follow the library and language standards. For instance, if
+instrumentation adapter is implemented as "log appender" - it will probably be
+called an `appender`, not an instrumentation adapter. However if there is no
+established name - the recommendation is to call packages "Instrumentation
+Adapter" or simply "Adapter".
+
+## Code injecting adapters
+
+TODO: fill out as a result of SIG discussion.
