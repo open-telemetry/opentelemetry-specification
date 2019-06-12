@@ -26,12 +26,6 @@ A duration is the elapsed time between two events.
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
-##### Examples:
-* Given a Unix timestamp of `1560345793106ms`, the resulting tuple would be
-`[1560345793, 106000000]`.
-* Given a duration of `500,000376ms`, the resulting tuple would be `[0, 500000376]`.
-
-
 ## Tracer
 
 ### Obtaining a tracer
