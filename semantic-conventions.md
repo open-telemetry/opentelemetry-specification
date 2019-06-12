@@ -54,7 +54,7 @@ and has a lower cardinality than the URI path or route, this value MUST be used 
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
 | `http.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
 | `http.route` | The matched route. E.g. `"/users/:userID?"`. | No |
-| `http.status` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
+| `http.status_code` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
 
 ## Databases client calls
 
