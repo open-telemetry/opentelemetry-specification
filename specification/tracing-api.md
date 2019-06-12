@@ -51,7 +51,7 @@ This API allows to send a pre-populated span object to the exporter.
 Sampling and recording decisions as well as other collection optimizations are a
 responsibility of a caller.
 
-Note, the `SpanContext` object on the span population with
+Note, the `SpanContext` object in the span population with
 the values that will allow correlation of telemetry is also a caller responsibility.
 
 This API should be non-blocking.
