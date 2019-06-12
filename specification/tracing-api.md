@@ -18,7 +18,7 @@ TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelem
 
 #### `GetCurrentSpan`: returns the current Span from the current context.
 
-There should be no parameters.
+There should be no parameter.
 
 Returns the default `Span` that does nothing and has an invalid `SpanContext` if no
 `Span` is associated with the current context, otherwise the current `Span` from the context.
@@ -31,7 +31,7 @@ Required parameters:
 
 Returns an object that defines a scope where the given `Span` will be set to the current context.
 
-The scope is exited when the returned object is closed.
+The scope is exited and previous state should be restored when the returned object is closed.
 
 #### `SpanBuilder`: returns a `SpanBuilder` to create and start a new `Span`.
 
@@ -56,16 +56,16 @@ the values that will allow correlation of telemetry is also a caller responsibil
 
 This API should be non-blocking.
 
-#### `GetBinaryFormat`: returns the binary format of `Span`s.
+#### `GetBinaryFormat`: returns the binary format interface which can serialize/deserialize `Span`s.
 
-There should be no parameters.
+There should be no parameter.
 
 Returns the binary format for this implementation. If no implementation is provided
 then no-op implementation will be used.
 
-#### `GetHttpTextFormat`: returns the HTTP text format of `Span`s.
+#### `GetHttpTextFormat`: returns the HTTP text format interface which can inject/extract `Span`s.
 
-There should be no parameters.
+There should be no parameter.
 
 Returns the HTTP text format for this implementation. If no implementation is provided
 then no-op implementation will be used.
@@ -105,14 +105,14 @@ recording status, none of the below may be called after the `Span` is finished.
 
 #### `GetContext`: retrieve the `Span`s `SpanContext`
 
-There should be no parameters.
+There should be no parameter.
 
 **Returns** the `SpanContext` for the given `Span`. The returned value may be
 used even after the `Span` is finished.
 
 #### `IsRecordingEvents`: returns the flag whether this span will be recorded
 
-There should be no parameters.
+There should be no parameter.
 
 Returns true if this `Span` is active and recording information like events with
 the `AddEvent` operation and attributes using `SetAttributes`.
@@ -191,7 +191,7 @@ with the `Span`).
 Call to `End` of a `Span` MUST not have any effects on child spans. Those may
 still be running and can be ended later.
 
-There MUST be no parameters.
+There MUST be no parameter.
 
 This API MUST be non-blocking.
 
