@@ -13,10 +13,8 @@ While languages and platforms have different ways of representing data,
 this section defines some generic requirements for this API.
 
 ### Time
-OpenTelemetry stores time values using nanosecond (ns) precision.
-To overcome platform limitations, this data is represented as a tuple
-[<long> seconds, <int> nanoseconds], where nanoseconds is the remainder that can
-not be represented in seconds.
+OpenTelemetry can operate on time values up to nanosecond (ns) precision.
+The representation of those values is language specific.
 
 #### Timestamp
 A timestamp is the time elapsed since the Unix epoch.
