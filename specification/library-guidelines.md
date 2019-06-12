@@ -73,3 +73,9 @@ An example use case for alternate implementations is automated testing. A mock i
 Note that mocking is also possible by using the SDK and a Mock Exporter without needed to swap out the entire SDK. 
 
 The mocking approach chosen will depend on the testing goals and at which point exactly it is desirable to intercept the telemetry data path during the test.
+
+## Concurrency and Thread-Safety
+
+See [Concurrency and Thread-Safety](concurrency.md) specification for
+guidelines on what concurrency safeties should API implementations provide
+and how they should be documented.
