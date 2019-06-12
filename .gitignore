@@ -1,0 +1,23 @@
+# IntelliJ IDEA
+.idea
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings
+bin
+
+# NetBeans
+/.nb-gradle
+/.nb-gradle-properties
+
+# OS X
+.DS_Store
+
+# Emacs
+*~
+\#*\#
+
+# Vim
+.swp
