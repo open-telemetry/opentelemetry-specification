@@ -8,6 +8,24 @@ Tracing API consist of a few main classes:
 - `SpanData` is an immutable object that is used to report out-of-band completed
   spans. See [SpanData](#spandata) section.
 
+## Data types
+While languages and platforms have different ways of representing data,
+this section defines some generic requirements for this API.
+
+### Time
+OpenTelemetry can operate on time values up to nanosecond (ns) precision.
+The representation of those values is language specific.
+
+#### Timestamp
+A timestamp is the time elapsed since the Unix epoch.
+* The minimal precision is milliseconds.
+* The maximal precision is nanoseconds.
+
+#### Duration
+A duration is the elapsed time between two events.
+* The minimal precision is milliseconds.
+* The maximal precision is nanoseconds.
+
 ## Tracer
 
 ### Obtaining a tracer
