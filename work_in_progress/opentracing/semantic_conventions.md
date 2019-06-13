@@ -14,12 +14,10 @@ Changes to this file affect the OpenTracing specification version. Additions sho
 
 Span tags apply to **the entire Span**; as such, they apply to the entire timerange of the Span, not a particular moment with a particular timestamp: those sorts of events are best modelled as Span log fields (per the table in the next subsection of this document).
 
+> Work in progress! Please note, that the list below only contains attributes that aren't contained in the [OpenTelemetry main spec](../semantic-conventions.md) (yet):
+
 | Span tag name | Type | Notes and examples |
 |:--------------|:-----|:-------------------|
-| `component` | string  | The software package, framework, library, or module that generated the associated Span. E.g., `"grpc"`, `"django"`, `"JDBI"`. |
-| `http.method` | string | HTTP method of the request for the associated Span. E.g., `"GET"`, `"POST"` |
-| `http.status_code` | integer | HTTP response status code for the associated Span. E.g., 200, 503, 404 |
-| `http.url` | string | URL of the request being handled in this segment of the trace, in standard URI format. E.g., `"https://domain.net/path/to?resource=here"` |
 | `message_bus.destination` | string | An address at which messages can be exchanged. E.g. A Kafka record has an associated `"topic name"` that can be extracted by the instrumented producer or consumer and stored using this tag. |
 | `peer.address` | string | Remote "address", suitable for use in a networking client library. This may be a `"ip:port"`, a bare `"hostname"`, a FQDN or various connection strings |
 | `peer.hostname` | string | Remote hostname. E.g., `"opentracing.io"`, `"internal.dns.name"` |
