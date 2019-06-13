@@ -104,7 +104,53 @@ Trace instead of trusting incoming Trace context.
 
 ## Metrics
 
-TODO: Describe metrics terminology https://github.com/open-telemetry/opentelemetry-specification/issues/45
+OpenTelemetry allows to record raw measurements or already aggregated metrics
+with predefined aggregation and labels. 
+
+Recording raw measurements using OpenTelemetry API allows to defer defining the
+aggregation and the labels for the exported Metric. This should be used in
+client libraries like gRPC to record raw measurements like "server_latency" or
+"received_bytes". So end user will decide what type of aggregated values should
+be collected out of these raw measurements.
+
+Recording of pre-aggregated data using OpenTelemtry API is not less important.
+It allows to collect metrics like cpu and memory usage, or simple metrics like
+"queue length".
+
+### Recording raw measurements
+
+The main classes used to record raw measurements are `Measure` and
+`Measurmenet`. `Measure` describes the type of the individual values recorded by
+an application. It also defines the name, description and a unit of those
+values. `Measurement` describes a data point to be collected for a `Measure`. In
+other words, `Measure` is just a way to define what kind of values would be
+recorded once and produce recording of those values in a form of `Measurement`s.
+
+List of `Measurement`s alongside the additional context can be recorded using
+OpenTelemetry API. So user may define to aggregate those `Measurement`s and use
+the context passed alongside to deinfe additional dimensions of the resulting
+metric.
+
+### Recording pre-aggregated metrics
+
+The base class for all types of pre-aggregated metrics is called `Metric`. It
+defines 
+
+Metrics data model is defined in SDK and is based on
+[metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/src/opentelemetry/proto/metrics/v1/metrics.proto).
+This data model is used by all the OpenTracing exporters as an input. Different
+exporters have different capabilities (e.g. which data types are supported) and
+different constraints (e.g. which characters are allowed in label keys). Metrics
+is intended to be a superset of what's possible, not a lowest common denominator
+that's supported everywhere. All exporters consume data from Metrics Data Model
+via a Metric Producer interface.
+
+Because of this, Metrics puts minimal constraints on the data (e.g. which
+characters are allowed in keys), and code dealing with Metrics should avoid
+validation and sanitization of the Metrics data. Instead, pass the data to the
+backend, rely on the backend to perform validation, and pass back any errors
+from the backend.
+
 
 ## DistributedContext
 
