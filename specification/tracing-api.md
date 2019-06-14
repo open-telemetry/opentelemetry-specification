@@ -1,10 +1,9 @@
-# Table of Content
+# Tracing API
+
 <details>
 <summary>
-show
+Show Table of Content
 </summary>
-
-
    * [Tracing API](#tracing-api)
       * [Data types](#data-types)
          * [Time](#time)
@@ -50,8 +49,6 @@ show
             * [GetLinks](#getlinks)
             * [GetStatus](#getstatus)
 </details>
-
-# Tracing API
 
 Tracing API consist of a few main classes:
 
