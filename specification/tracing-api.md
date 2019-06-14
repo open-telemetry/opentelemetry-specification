@@ -213,8 +213,9 @@ Optional parameters (or corresponding setters on `Builder` if using a `Builder` 
 - The option to become a root `Span` for a new trace.
   If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan) at `StartSpan`
   time will be used as parent.
-- `Sampler` to the newly created `Span`. If not set, the implementation should provide a default.
-- `Link` to the newly created `Span`.
+- `Sampler` to the newly created `Span`. If not set, the implementation should provide a
+  default sampler used by Tracer.
+- Collection of `Link`s that will be associated with the newly created Span
 - The override value for [a flag indicating whether events should be recorded](#isrecordingevents)
   for the newly created `Span`. If not set, the implementation will provide a default.
 - `SpanKind` for the newly created `Span`. If not set, the implementation will
@@ -224,7 +225,7 @@ Optional parameters (or corresponding setters on `Builder` if using a `Builder` 
 
 Starts a new `Span`.
 
-This MUST not be called multiple times with `Builder` pattern.
+If called multiple times with `Builder` pattern, the same `Span` will be returned.
 
 There should be no parameter if using a `Builder` pattern. Otherwise, `StartSpan`
 should accept all the optional parameters described in [Span creation](#span-creation).
