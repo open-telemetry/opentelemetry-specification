@@ -89,7 +89,7 @@ TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelem
 
 #### GetCurrentSpan
 
-returns the current Span from the current context.
+Returns the current Span from the current context.
 
 There should be no parameter.
 
@@ -97,7 +97,7 @@ Returns the default `Span` that does nothing and has an invalid `SpanContext` if
 `Span` is associated with the current context, otherwise the current `Span` from the context.
 
 #### WithSpan
-enters the scope of code where the given `Span` is in the current context.
+Enters the scope of code where the given `Span` is in the current context.
 
 Required parameters:
 
@@ -108,7 +108,7 @@ Returns an object that defines a scope where the given `Span` will be set to the
 The scope is exited and previous state should be restored when the returned object is closed.
 
 #### SpanBuilder
-returns a `SpanBuilder` to create and start a new `Span`.
+Returns a `SpanBuilder` to create and start a new `Span`.
 
 Required parameters:
 
@@ -118,7 +118,7 @@ Returns a `SpanBuilder` to create and start a new `Span`.
 
 #### RecordSpanData
 
-records a `SpanData`.
+Records a `SpanData`.
 
 Required parameters:
 
@@ -134,7 +134,7 @@ the values that will allow correlation of telemetry is also a caller responsibil
 This API should be non-blocking.
 
 #### GetBinaryFormat
-returns the binary format interface which can serialize/deserialize `Span`s.
+Returns the binary format interface which can serialize/deserialize `Span`s.
 
 There should be no parameter.
 
@@ -142,7 +142,7 @@ Returns the binary format for this implementation. If no implementation is provi
 then no-op implementation will be used.
 
 #### GetHttpTextFormat
-returns the HTTP text format interface which can inject/extract `Span`s.
+Returns the HTTP text format interface which can inject/extract `Span`s.
 
 There should be no parameter.
 
