@@ -18,6 +18,7 @@ Table of Content
     * [RecordSpanData](#recordspandata)
     * [GetBinaryFormat](#getbinaryformat)
     * [GetHttpTextFormat](#gethttptextformat)
+* [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
   * [Span operations](#span-operations)
