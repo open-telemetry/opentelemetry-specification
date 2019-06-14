@@ -140,7 +140,7 @@ the `Metric` define their aggregation type as well as a structure of individual
 measurements or Points. API defines the following types of pre-aggregated
 metrics:
 
-- Counter metric to report instantaneous measurement. Cumulative values can go
+- Counter metric to report instantaneous measurement. Counter values can go
   up or stay the same, but can never go down. Cumulative values cannot be
   negative. There are two types of counter metric values - `double` and `long`.
 - Gauge metric to report instantaneous measurement of a double value. Gauges can
