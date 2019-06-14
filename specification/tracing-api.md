@@ -270,8 +270,7 @@ Required parameters:
 
 #### End
 
-Finish the `Span`. This call will take the current timestamp to set as `Span`'s
-end time. Implementations MUST ignore all subsequent calls to `End` (there might
+Finish the `Span`. Implementations MUST ignore all subsequent calls to `End` (there might
 be exceptions when Tracer is streaming event and has no mutable state associated
 with the `Span`).
 
@@ -280,7 +279,8 @@ still be running and can be ended later.
 
 Optional parameters
 
-- `endTime`, the timestamp to set as Span's end time.
+- `endTime`, the timestamp to set as Span's end time. If not provided, implementation MUST
+take the current timestamp to set as `Span`'s end time.
 
 This API MUST be non-blocking.
 
