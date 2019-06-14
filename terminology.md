@@ -151,7 +151,7 @@ metrics:
 
 Metrics data model is defined in SDK and is based on
 [metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/src/opentelemetry/proto/metrics/v1/metrics.proto).
-This data model is used by all the OpenTracing exporters as an input. Different
+This data model is used by all the OpenTelemetry exporters as an input. Different
 exporters have different capabilities (e.g. which data types are supported) and
 different constraints (e.g. which characters are allowed in label keys). Metrics
 is intended to be a superset of what's possible, not a lowest common denominator
