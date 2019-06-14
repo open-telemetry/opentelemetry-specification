@@ -151,7 +151,7 @@ Usually this will be the W3C Trace Context as the HTTP text format. For more det
 [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
-A SpanContext represents the portion of a Span which must be serialized and propagated along side of a distributed context. SpanContexts are immutable.
+A `SpanContext` represents the portion of a `Span` which must be serialized and propagated along side of a distributed context. `SpanContext`s are immutable. `SpanContext` MUST be a final (sealed) class.
 
 The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext specification](https://www.w3.org/TR/trace-context/). It contains two identifiers - a `TraceId` and a `SpanId` - along with a set of common `TraceOptions` and system-specific `TraceState` values. `SpanContext` is represented as an interface, in order to be serializable into a wider variety of trace context wire formats. 
 
