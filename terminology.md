@@ -105,13 +105,14 @@ Trace instead of trusting incoming Trace context.
 ## Metrics
 
 OpenTelemetry allows to record raw measurements or already aggregated metrics
-with predefined aggregation and labels. 
+with predefined aggregation and labels.
 
-Recording raw measurements using OpenTelemetry API allows to defer defining the
-aggregation and the labels for the exported Metric. This should be used in
-client libraries like gRPC to record raw measurements like "server_latency" or
-"received_bytes". So end user will decide what type of aggregated values should
-be collected out of these raw measurements.
+Recording raw measurements using OpenTelemetry API allows to defer to end-user
+the decision on what aggregation algorithm should be applied for this metric as
+well as defining labels (dimensions). It will be used in client libraries like
+gRPC to record raw measurements "server_latency" or "received_bytes". So end
+user will decide what type of aggregated values should be collected out of these
+raw measurements. It may be simple average or elaborate histogram calculation.
 
 Recording of pre-aggregated data using OpenTelemtry API is not less important.
 It allows to collect metrics like cpu and memory usage, or simple metrics like
@@ -128,13 +129,25 @@ recorded once and produce recording of those values in a form of `Measurement`s.
 
 List of `Measurement`s alongside the additional context can be recorded using
 OpenTelemetry API. So user may define to aggregate those `Measurement`s and use
-the context passed alongside to deinfe additional dimensions of the resulting
+the context passed alongside to define additional dimensions of the resulting
 metric.
 
 ### Recording pre-aggregated metrics
 
 The base class for all types of pre-aggregated metrics is called `Metric`. It
-defines 
+defines basic metric properties like a name and labels. Classes inheriting from
+the `Metric` define their aggregation type as well as a structure of individual
+measurements or Points. API defines the following types of pre-aggregated
+metrics:
+
+- Counter metric to report instantaneous measurement. Cumulative values can go
+  up or stay the same, but can never go down. Cumulative values cannot be
+  negative. There are two types of counter metric values - `double` and `long`.
+- Gauge metric to report instantaneous measurement of a double value. Gauges can
+  go both up and down. The gauges values can be negative. There are two types of
+  gauge metric values - `double` and `long`.
+
+### Metrics data model and SDK
 
 Metrics data model is defined in SDK and is based on
 [metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/src/opentelemetry/proto/metrics/v1/metrics.proto).
@@ -150,7 +163,6 @@ characters are allowed in keys), and code dealing with Metrics should avoid
 validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
-
 
 ## DistributedContext
 
