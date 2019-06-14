@@ -195,7 +195,7 @@ creation](#span-creation).
 
 API MUST provide a way to create a new `Span`. Each language implementation should
 follow its own convention on `Span` creation, for example `Builder` in Java,
-`Options` in Go, etc.
+`Options` in Go, etc. `Span` creation method MUST be defined on `Tracer`.
 
 Required parameters:
 
@@ -204,21 +204,21 @@ Required parameters:
 Optional parameters (or corresponding setters on `Builder` if using a `Builder` pattern):
 
 - Parent `Span`. If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan)
-at `StartSpan` time will be used as parent. MUST be used to create a `Span`
-when manual Context propagation is used OR when creating a root `Span` with 
-a parent with an invalid `SpanContext`.
+  at `StartSpan` time will be used as parent. MUST be used to create a `Span`
+  when manual Context propagation is used OR when creating a root `Span` with
+  a parent with an invalid `SpanContext`.
 - Parent `SpanContext`. If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan)
-at `StartSpan` time will be used as parent. MUST be used to create a `Span` 
-when the parent is in a different process.
+  at `StartSpan` time will be used as parent. MUST be used to create a `Span`
+  when the parent is in a different process.
 - The option to become a root `Span` for a new trace.
-If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan) at `StartSpan` 
-time will be used as parent.
+  If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan) at `StartSpan`
+  time will be used as parent.
 - `Sampler` to the newly created `Span`. If not set, the implementation should provide a default.
 - `Link` to the newly created `Span`.
 - The option to record events even if not sampled for the newly created `Span`. If
-not called, the implementation will provide a default.
+  not set, the implementation will provide a default.
 - `SpanKind` for the newly created `Span`. If not set, the implementation will
-provide a default value `INTERNAL`.
+  provide a default value `INTERNAL`.
 
 #### StartSpan
 
