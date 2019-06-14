@@ -217,7 +217,7 @@ time will be used as parent.
 - `Link` to the newly created `Span`.
 - The option to record events even if not sampled for the newly created `Span`. If
 not called, the implementation will provide a default.
-- `SpanKind` for the newly created `Span`. If not called, the implementation will
+- `SpanKind` for the newly created `Span`. If not set, the implementation will
 provide a default value `INTERNAL`.
 
 #### StartSpan
