@@ -18,6 +18,7 @@ Table of Content
     * [RecordSpanData](#recordspandata)
     * [GetBinaryFormat](#getbinaryformat)
     * [GetHttpTextFormat](#gethttptextformat)
+* [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
   * [Span operations](#span-operations)
@@ -149,6 +150,23 @@ then no-op implementation will be used.
 
 Usually this will be the W3C Trace Context as the HTTP text format. For more details, see
 [trace-context](https://github.com/w3c/trace-context).
+
+## SpanContext
+A `SpanContext` represents the portion of a `Span` which must be serialized and propagated along side of a distributed context. `SpanContext`s are immutable. `SpanContext` MUST be a final (sealed) class.
+
+The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext specification](https://www.w3.org/TR/trace-context/). It contains two identifiers - a `TraceId` and a `SpanId` - along with a set of common `TraceOptions` and system-specific `TraceState` values. `SpanContext` is represented as an interface, in order to be serializable into a wider variety of trace context wire formats. 
+
+`TraceId` A valid trace identifier is a 16-byte array with at least one non-zero byte.
+
+`SpanId` A valid span identifier is an 8-byte array with at least one non-zero byte.
+
+`TraceOptions` contain details about the trace. Unlike Tracestate values, TraceOptions are present in all traces. Currently, the only TraceOption is a boolean `recorded` [flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001).
+
+`Tracestate` carries system-specific configuration data, represented as a list of key-value pairs. TraceState allows multiple tracing systems to participate in the same trace. 
+
+`IsValid` is a boolean flag which returns true if the SpanContext has a non-zero TraceID and a non-zero SpanID.
+
+Please review the W3C specification for detials on the [Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
 ## Span
 
