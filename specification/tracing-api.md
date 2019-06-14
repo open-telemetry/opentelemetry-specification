@@ -2,7 +2,7 @@
 
 <details>
 <summary>
-Show Table of Content
+Table of Content
 </summary>
 
 - [Data types](#data-types)
