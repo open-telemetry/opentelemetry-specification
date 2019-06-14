@@ -19,11 +19,9 @@ TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelem
 TODO: Tracing operations. https://github.com/open-telemetry/opentelemetry-specification/issues/38
 
 ## SpanContext
-A SpanContext represents the portion of a Span which must be serialized and propagated along side of a distributed context. 
+A SpanContext represents the portion of a Span which must be serialized and propagated along side of a distributed context. SpanContexts are immutable.
 
-The OpenTelemetry SpanContext representation conforms to the [w3c TraceContext specification](https://www.w3.org/TR/trace-context/). It contains two identifiers - a`TraceId` and a `SpanId` - along with a set of common `TraceOptions` and system-specific `TraceState` values.
-
-SpanContext is represented as an interface, in order to be compatible with a wider variety of trace context wire formats.
+The OpenTelemetry SpanContext representation conforms to the [w3c TraceContext specification](https://www.w3.org/TR/trace-context/). It contains two identifiers - a`TraceId` and a `SpanId` - along with a set of common `TraceOptions` and system-specific `TraceState` values. SpanContext is represented as an interface, in order to be serializable into a wider variety of trace context wire formats. 
 
 `TraceId` A valid trace identifier is a 16-byte array with at least one non-zero byte.
 
