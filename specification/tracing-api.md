@@ -215,14 +215,16 @@ Optional parameters (or corresponding setters on `Builder` if using a `Builder` 
   time will be used as parent.
 - `Sampler` to the newly created `Span`. If not set, the implementation should provide a default.
 - `Link` to the newly created `Span`.
-- The option to record events even if not sampled for the newly created `Span`. If
-  not set, the implementation will provide a default.
+- The override value for [a flag indicating whether events should be recorded](#isrecordingevents)
+  for the newly created `Span`. If not set, the implementation will provide a default.
 - `SpanKind` for the newly created `Span`. If not set, the implementation will
   provide a default value `INTERNAL`.
 
 #### StartSpan
 
 Starts a new `Span`.
+
+This MUST not be called multiple times with `Builder` pattern.
 
 There should be no parameter if using a `Builder` pattern. Otherwise, `StartSpan`
 should accept all the optional parameters described in [Span creation](#span-creation).
