@@ -14,6 +14,7 @@ Table of Content
   * [Tracer operations](#tracer-operations)
     * [GetCurrentSpan](#getcurrentspan)
     * [WithSpan](#withspan)
+    * [SpanBuilder](#spanbuilder)
     * [RecordSpanData](#recordspandata)
     * [GetBinaryFormat](#getbinaryformat)
     * [GetHttpTextFormat](#gethttptextformat)
@@ -105,6 +106,16 @@ Required parameters:
 Returns an object that defines a scope where the given `Span` will be set to the current context.
 
 The scope is exited and previous state should be restored when the returned object is closed.
+
+#### SpanBuilder
+Returns a `SpanBuilder` to create and start a new `Span`
+if a `Builder` pattern for [Span creation](#span-creation) is used.
+
+Required parameters:
+
+- Name of the span.
+
+Returns a `SpanBuilder` to create and start a new `Span`.
 
 #### RecordSpanData
 
