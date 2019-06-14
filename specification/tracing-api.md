@@ -31,6 +31,8 @@ The OpenTelemetry SpanContext representation conforms to the [w3c TraceContext s
 
 `Tracestate` carries system-specific configuration data, represented as a list of key-value pairs. TraceState allows multiple tracing systems to participate in the same trace. 
 
+`IsValid` is a boolean flag which returns true if the SpanContext has a non-zero TraceID and a non-zero SpanID.
+
 Please review the W3C specification for detials on the [Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
 ## Span
