@@ -14,6 +14,50 @@ This way, the operator will not need to learn specifics of a language and
 telemetry collected from multi-language micro-service can still be easily
 correlated and cross-analyzed.
 
+## HTTP client
+
+This span type represents an outbound HTTP request.
+
+For a HTTP client span, `SpanKind` MUST be `Client`.
+
+Given an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) compliant URI of the form
+`scheme:[//authority]path[?query][#fragment]`, the span name of the span SHOULD
+be set to to the URI path value.
+
+If a framework can identify a value that represents the identity of the request
+and has a lower cardinality than the URI path, this value MUST be used for the span name instead.
+
+| Attribute name | Notes and examples                                           | Required? |
+| :------------- | :----------------------------------------------------------- | --------- |
+| `component`    | Denotes the type of the span and needs to be `http`. | Yes |
+| `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
+| `http.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
+| `http.status_code` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
+| `http.status_text` | [HTTP reason phrase](https://www.ietf.org/rfc/rfc2616.txt). E.g. `OK` | No |
+
+## HTTP server
+
+This span type represents an inbound HTTP request.
+
+For a HTTP server span, `SpanKind` MUST be `Server`.
+
+Given an inbound request for a route (e.g. `"/users/:userID?"` the `name`
+attribute of the span SHOULD be set to this route.
+
+If the route can not be determined, the `name` attribute MUST be set to the [RFC 3986 URI](https://www.ietf.org/rfc/rfc3986.txt) path value.
+
+If a framework can identify a value that represents the identity of the request
+and has a lower cardinality than the URI path or route, this value MUST be used for the span name instead.
+
+| Attribute name | Notes and examples                                           | Required? |
+| :------------- | :----------------------------------------------------------- | --------- |
+| `component`    | Denotes the type of the span and needs to be `http`. | Yes |
+| `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
+| `http.url` | HTTP host. E.g. `"https://example.com:779/users/187a34"`. | Yes |
+| `http.route` | The matched route. E.g. `"/users/:userID?"`. | No |
+| `http.status_code` | [HTTP response status code](https://tools.ietf.org/html/rfc7231). E.g. `200` | No |
+| `http.status_text` | [HTTP reason phrase](https://www.ietf.org/rfc/rfc2616.txt). E.g. `OK` | No |
+
 ## Databases client calls
 
 For database client call the `SpanKind` MUST be `Client`.

@@ -42,11 +42,8 @@ See [this document by @discostu105](https://docs.google.com/spreadsheets/d/1H0S0
 Represents an outbound HTTP request.
 
 ##### Attributes
+These attributes are not covered in the [main spec](../semantic-conventions.md):
 
-- Method
-- Host
-- Path
-- Status Code
 - Route
 - User Agent
 - Parameters
@@ -57,11 +54,9 @@ Represents an outbound HTTP request.
 Represents an inbound HTTP request.
 
 ##### Attributes
-- Method
-- Host
-- Path
-- Status Code
-- Route
+
+These attributes are not covered in the [main spec](../semantic-conventions.md):
+
 - User Agent
 - Webserver Name
 - Remote Address

@@ -1,3 +1,56 @@
+# Table of Content
+<details>
+<summary>
+show
+</summary>
+
+
+   * [Tracing API](#tracing-api)
+      * [Data types](#data-types)
+         * [Time](#time)
+            * [Timestamp](#timestamp)
+            * [Duration](#duration)
+      * [Tracer](#tracer)
+         * [Obtaining a tracer](#obtaining-a-tracer)
+         * [Tracer operations](#tracer-operations)
+            * [GetCurrentSpan](#getcurrentspan)
+            * [WithSpan](#withspan)
+            * [SpanBuilder](#spanbuilder)
+            * [RecordSpanData](#recordspandata)
+            * [GetBinaryFormat](#getbinaryformat)
+            * [GetHttpTextFormat](#gethttptextformat)
+      * [Span](#span)
+         * [Span creation](#span-creation)
+         * [Span operations](#span-operations)
+            * [GetContext](#getcontext)
+            * [IsRecordingEvents](#isrecordingevents)
+            * [SetAttribute](#setattribute)
+            * [AddEvent](#addevent)
+            * [AddLink](#addlink)
+            * [SetStatus](#setstatus)
+            * [UpdateName](#updatename)
+            * [End](#end)
+         * [Span lifetime](#span-lifetime)
+      * [Link](#link)
+         * [Link creation](#link-creation)
+         * [GetContext](#getcontext-1)
+         * [GetAttributes](#getattributes)
+      * [SpanData](#spandata)
+         * [Constructing SpanData](#constructing-spandata)
+         * [Getters](#getters)
+            * [GetName](#getname)
+            * [GetKind](#getkind)
+            * [GetStartTimestamp](#getstarttimestamp)
+            * [GetEndTimestamp](#getendtimestamp)
+            * [GetContext](#getcontext-2)
+            * [GetParentSpanId](#getparentspanid)
+            * [GetResource](#getresource)
+            * [GetAttributes](#getattributes-1)
+            * [GetTimedEvents](#gettimedevents)
+            * [GetLinks](#getlinks)
+            * [GetStatus](#getstatus)
+</details>
+
 # Tracing API
 
 Tracing API consist of a few main classes:
@@ -8,6 +61,24 @@ Tracing API consist of a few main classes:
 - `SpanData` is an immutable object that is used to report out-of-band completed
   spans. See [SpanData](#spandata) section.
 
+## Data types
+While languages and platforms have different ways of representing data,
+this section defines some generic requirements for this API.
+
+### Time
+OpenTelemetry can operate on time values up to nanosecond (ns) precision.
+The representation of those values is language specific.
+
+#### Timestamp
+A timestamp is the time elapsed since the Unix epoch.
+* The minimal precision is milliseconds.
+* The maximal precision is nanoseconds.
+
+#### Duration
+A duration is the elapsed time between two events.
+* The minimal precision is milliseconds.
+* The maximal precision is nanoseconds.
+
 ## Tracer
 
 ### Obtaining a tracer
@@ -16,7 +87,70 @@ TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelem
 
 ### Tracer operations
 
-TODO: Tracing operations. https://github.com/open-telemetry/opentelemetry-specification/issues/38
+#### GetCurrentSpan
+
+Returns the current Span from the current context.
+
+There should be no parameter.
+
+Returns the default `Span` that does nothing and has an invalid `SpanContext` if no
+`Span` is associated with the current context, otherwise the current `Span` from the context.
+
+#### WithSpan
+Enters the scope of code where the given `Span` is in the current context.
+
+Required parameters:
+
+- The `Span` to be set to the current context.
+
+Returns an object that defines a scope where the given `Span` will be set to the current context.
+
+The scope is exited and previous state should be restored when the returned object is closed.
+
+#### SpanBuilder
+Returns a `SpanBuilder` to create and start a new `Span`.
+
+Required parameters:
+
+- Name of the span.
+
+Returns a `SpanBuilder` to create and start a new `Span`.
+
+#### RecordSpanData
+
+Records a `SpanData`.
+
+Required parameters:
+
+- `SpanData` to be reported to all exporters.
+
+This API allows to send a pre-populated span object to the exporter.
+Sampling and recording decisions as well as other collection optimizations are a
+responsibility of a caller.
+
+Note, the `SpanContext` object in the span population with
+the values that will allow correlation of telemetry is also a caller responsibility.
+
+This API should be non-blocking.
+
+#### GetBinaryFormat
+Returns the binary format interface which can serialize/deserialize `Span`s.
+
+There should be no parameter.
+
+Returns the binary format for this implementation. If no implementation is provided
+then no-op implementation will be used.
+
+#### GetHttpTextFormat
+Returns the HTTP text format interface which can inject/extract `Span`s.
+
+There should be no parameter.
+
+Returns the HTTP text format for this implementation. If no implementation is provided
+then no-op implementation will be used.
+
+Usually this will be the W3C Trace Context as the HTTP text format. For more details, see
+[trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
 A SpanContext represents the portion of a Span which must be serialized and propagated along side of a distributed context. SpanContexts are immutable.
@@ -65,21 +199,27 @@ TODO: SpanBuilder API https://github.com/open-telemetry/opentelemetry-specificat
 With the exception of the method to retrieve the `Span`'s `SpanContext` and
 recording status, none of the below may be called after the `Span` is finished.
 
-#### `GetContext`: retrieve the `Span`s `SpanContext`
+#### GetContext
 
-There should be no parameters.
+Retrieve the `Span`s `SpanContext`
 
-**Returns** the `SpanContext` for the given `Span`. The returned value may be
+There should be no parameter.
+
+Returns the `SpanContext` for the given `Span`. The returned value may be
 used even after the `Span` is finished.
 
-#### `IsRecordingEvents`: returns the flag whether this span will be recorded
+#### IsRecordingEvents
 
-There should be no parameters.
+Returns the flag whether this span will be recorded.
+
+There should be no parameter.
 
 Returns true if this `Span` is active and recording information like events with
 the `AddEvent` operation and attributes using `SetAttributes`.
 
-### `SetAttribute`: set the `Span`'s attribute
+#### SetAttribute
+
+Set the `Span`'s attribute.
 
 Required parameters
 
@@ -90,7 +230,9 @@ Required parameters
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
 
-### `AddEvent`: add an `Event` to `Span`
+#### AddEvent
+
+Add an `Event` to `Span`.
 
 Required parameters:
 
@@ -104,7 +246,7 @@ Optional parameters:
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 
-### `AddLink`: add a `Link` from this `Span` to another
+#### AddLink
 
 Adds a link to another `Span` from this `Span`. Linked `Span` can be from the
 same or different trace. See [Links description](../terminology.md#links-between-spans).
@@ -121,7 +263,7 @@ Optional parameters
 API MUST also provide an overload that accepts a [`Link` interface](#link). This
 overload allows instrumentation to supply a lazily calculated `Link`.
 
-### `SetStatus`: set the span result status
+#### SetStatus
 
 Sets the `Status` to the `Span`. If used, this will override the default `Span`
 status. Default is `OK`.
@@ -133,7 +275,7 @@ Required parameters
 
 - New status for the span.
 
-#### `UpdateName`: overwrite the operation name
+#### UpdateName
 
 Updates the `Span` name. Upon this update, any sampling behavior based on
 `Span` name will depend on the implementation.
@@ -153,7 +295,9 @@ with the `Span`).
 Call to `End` of a `Span` MUST not have any effects on child spans. Those may
 still be running and can be ended later.
 
-There should be no parameters.
+There MUST be no parameter.
+
+This API MUST be non-blocking.
 
 ### Span lifetime
 
@@ -197,25 +341,13 @@ Order of attributes is not significant.
 
 ## SpanData
 
-`SpanData` MUST be an abstract class or interface. As `SpanData` is used for the
-code instrumentation, it is NOT expected alternative implementations of a
-`SpanData` will be supplied by consumer of telemetry (i.e. telemetry vendor).
-Typical use case for alternative implementations is to implement lazy
-calculation of properties and minimize the number of allocation required at
-instrumentation point. So it will be done by instrumentation code. For instance,
-alternative implementation of `SpanData` may hold a reference on an object. And
-all getters will be implemented by lazily calculating the required properties at
-a moment that `SpanData` is passed to one of exporters.
-
-Implementations of `SpanData` MUST return the same value in getters when that
-getter was called multiple times. It is also discouraged to throw exceptions
-from getters. Default value or value indicating an error SHOULD be returned
-instead if possible.
+`SpanData` is an immutable and final class. All getters of `SpanData` are thread
+safe and can be called any number of times.
 
 `API` MUST provide a way of [constructing `SpanData`](#constructing-spandata)
 that can be recorded using `Tracer` method `RecordSpanData`.
 
-## Constructing SpanData
+### Constructing SpanData
 
 `SpanData` is an immutable object that can be constructed using the following
 arguments:
@@ -239,60 +371,60 @@ All collections passes as an argument MUST be either immutable if language
 allows it or copied so the change of the collection will not mutate the
 `SpanData`.
 
-## Getters
+### Getters
 
 Getters will be called by exporters in SDK. Implementation MUST not assume that
 getters will be called only once or at all. There also MUST be no expectations
 on how soon getters will be called after object creation.
 
-### GetName
+#### GetName
 
 Returns the name of this `SpanData`.
 
-### GetKind
+#### GetKind
 
 Returns the `SpanKind` of this `SpanData`.
 
-### GetStartTimestamp
+#### GetStartTimestamp
 
 Returns the start timestamp of this `SpanData`.
 
-### GetEndTimestamp
+#### GetEndTimestamp
 
 Returns the end timestamp of this `SpanData`.
 
-### GetContext
+#### GetContext
 
 Returns the `SpanContext` associated with this `SpanData`.
 
-### GetParentSpanId
+#### GetParentSpanId
 
 Returns the `SpanId` of the parent of this `SpanData`.
 
-### GetResource
+#### GetResource
 
 Returns the `Resource` associated with this `SpanData`. When `null` is returned
 the assumption is that `Resource` will be taken from the `Tracer` that is used
 to record this `SpanData`.
 
-### GetAttributes
+#### GetAttributes
 
 Returns the `Attributes` collection associated with this `SpanData`. The order
 of attributes in collection is not significant. The typical use of attributes
 collection is enumeration so the fast access to the label value by it's key is
 not a requirement. This collection MUST be immutable.
 
-### GetTimedEvents
+#### GetTimedEvents
 
 Return the collection of `Events` with the timestamps associated with this
 `SpanData`. The order of events in collection is not guaranteed. This collection
 MUST be immutable.
 
-### GetLinks
+#### GetLinks
 
 Returns the `Links` collection associated with this `SpanData`. The order
 of links in collection is not significant. This collection MUST be immutable.
 
-### GetStatus
+#### GetStatus
 
 Returns the `Status` of this `SpanData`.
