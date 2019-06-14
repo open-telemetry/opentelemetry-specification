@@ -241,7 +241,7 @@ Required parameters
 Optional parameters
 
 - Map of attributes associated with this link. Attributes are key:value pairs
-  where hey is a string and value is one of string, boolean and numeric.
+  where key is a string and value is one of string, boolean and numeric.
 
 API MUST also provide an overload that accepts a [`Link` interface](#link). This
 overload allows instrumentation to supply a lazily calculated `Link`.
@@ -278,7 +278,9 @@ with the `Span`).
 Call to `End` of a `Span` MUST not have any effects on child spans. Those may
 still be running and can be ended later.
 
-There MUST be no parameter.
+Optional parameters
+
+- `endTime`, the timestamp to set as Span's end time.
 
 This API MUST be non-blocking.
 
