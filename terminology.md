@@ -121,7 +121,7 @@ It allows to collect metrics like cpu and memory usage, or simple metrics like
 ### Recording raw measurements
 
 The main classes used to record raw measurements are `Measure` and
-`Measurmenet`. `Measure` describes the type of the individual values recorded by
+`Measurement`. `Measure` describes the type of the individual values recorded by
 an application. It also defines the name, description and a unit of those
 values. `Measurement` describes a data point to be collected for a `Measure`. In
 other words, `Measure` is just a way to define what kind of values would be
