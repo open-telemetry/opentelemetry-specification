@@ -21,7 +21,7 @@ TODO: Tracing operations. https://github.com/open-telemetry/opentelemetry-specif
 ## SpanContext
 A SpanContext represents the portion of a Span which must be serialized and propagated along side of a distributed context. 
 
-The OpenTelemetry SpanContext representation conforms to the [w3c TraceContext specification](https://w3c.github.io/trace-context). It contains two identifiers - a`TraceId` and a `SpanId` - along with a set of `TraceOptions` and `TraceState`.
+The OpenTelemetry SpanContext representation conforms to the [w3c TraceContext specification](https://www.w3.org/TR/trace-context/). It contains two identifiers - a`TraceId` and a `SpanId` - along with a set of common `TraceOptions` and system-specific `TraceState` values.
 
 SpanContext is represented as an interface, in order to be compatible with a wider variety of trace context wire formats.
 
@@ -29,13 +29,11 @@ SpanContext is represented as an interface, in order to be compatible with a wid
 
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero byte.
 
-`TraceOptions` contain details about the trace. Unlike TraceState values, TraceOptions are present in all traces. Currently, the only TraceOption is a boolean `IsSampled` value.
+`TraceOptions` contain details about the trace. Unlike Tracestate values, TraceOptions are present in all traces. Currently, the only TraceOption is a boolean `recorded` [flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001).
 
-`TraceState` carries system-specific configuration data, represented as a list of key-value pairs. TraceState allows multiple tracing systems to participate in the same trace. 
+`Tracestate` carries system-specific configuration data, represented as a list of key-value pairs. TraceState allows multiple tracing systems to participate in the same trace. 
 
-TraceState keys are opaque strings up to 256 characters. They MUST begin with a lowercase letter, and can only contain lowercase letters `a-z`, digits `0-9`, underscores `_`, dashes `-`, asterisks `*`, and forward slashes `/`.
-
-TraceState values are opaque strings up to 256 characters, in the ASCII RFC0020 format (i.e., the range `0x20` to `0x7E`) except for `,` and `=`.
+Please review the W3C specification for detials on the [Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
 ## Span
 
