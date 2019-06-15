@@ -36,3 +36,7 @@ For example: the application code is instrumented using OpenTelemetry API v2 and
 ## Compatibility with OpenTracing and OpenCensus
 
 TBD: https://github.com/open-telemetry/opentelemetry-specification/issues/114
+
+## Vendor API Compatibility
+
+TBD: https://github.com/open-telemetry/opentelemetry-specification/issues/128
