@@ -10,7 +10,7 @@ The first OpenTelemetry API release will be version 1.0.0.
 
 ## Compatibility of SDK Implementations
 
-Any application or third party library that uses OpenTelemetry API of a particular version can safely be packaged with OpenTelemetry SDK implementation provided that these 2 conditions are met:
+Any application or third party library that uses OpenTelemetry API of a particular version can safely be packaged with OpenTelemetry SDK implementation provided that these conditions are met:
 
 1. The full version number of the SDK is not lower than the full version number of API used by application or third party library.
 2. The major version number of the SDK is the same as major version number of API or major version number of the SDK is higher by 1.
