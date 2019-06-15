@@ -166,7 +166,7 @@ The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext
 
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero TraceID and a non-zero SpanID.
 
-Please review the W3C specification for detials on the [Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field).
+Please review the W3C specification for details on the [Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
 ## Span
 
