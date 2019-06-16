@@ -27,9 +27,9 @@ Backwards compatibility of SDK implementations is achieved via namespacing of AP
 
 ## API Namespacing
 
-The OpenTelemetry API version 1.x.x is defined in io.opentelemetry namespace. The second major version of the API will be in io.opentelemetry.v2 namespace.
+The OpenTelemetry API versions 0.x.x and 1.x.x are defined in io.opentelemetry namespace. The second major version of the API will be in io.opentelemetry.v2 namespace.
 
-The above is specified using Java's convention of reverse domain name notation. Other languages will use their equivalent convention for namespaces, e.g. for Go the package name for version 1.x.x of the API will be go.opencensus.io, for version 2.x.x of the API it will be go.opencensus.io/v2.
+The above is specified using Java's convention of reverse domain name notation. Other languages will use their equivalent convention for namespaces, e.g. for Go the package name for version 0.x.x and 1.x.x of the API will be go.opencensus.io, for version 2.x.x of the API it will be go.opencensus.io/v2.
 
 ## Interoperability of Mixed-version Code
 
