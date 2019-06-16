@@ -1,12 +1,18 @@
 # OpenTelemetry API Compatibility Guarantees
 
+## Compatibility in 0.x.x versions
+
+OpenTelemetry API starts at version 0.0.1.
+
+To allow quick iteration during the initial design period we will allow breaking changes in API 0.x versions. Backward compatible changes and patches will increment the third version number (y in 0.x.y).
+
+Version 1.0.0 will the first to provide stronger compatibility guarantees.
+
 ## Semantic Versioning of API
 
-OpenTelemetry API follows [semantic versioning convention](https://semver.org/spec/v2.0.0.html). Patch number in API version is incremented for bug fixes, minor version number is incremented when new, backwards compatible functionality is added, major version number is incremented when breaking, non-backwards compatible changes are done.
+Starting from 1.0.0 version OpenTelemetry API follows [semantic versioning convention](https://semver.org/spec/v2.0.0.html). Patch number in API version is incremented for bug fixes, minor version number is incremented when new, backwards compatible functionality is added, major version number is incremented when breaking, non-backwards compatible changes are done.
 
 New functionality in minor version increases may be added in the form of new classes, methods or functions in a way that does not affect existing functionality.
-
-The first OpenTelemetry API release will be version 1.0.0.
 
 ## Compatibility of SDK Implementations
 
