@@ -74,6 +74,11 @@ Note that mocking is also possible by using the SDK and a Mock Exporter without 
 
 The mocking approach chosen will depend on the testing goals and at which point exactly it is desirable to intercept the telemetry data path during the test.
 
+## Performance and Blocking
+
+See [Performance and Blocking](performance.md) specification for
+guidelines on what performance expectation should API implementations meet and how they should be documented.
+
 ## Concurrency and Thread-Safety
 
 See [Concurrency and Thread-Safety](concurrency.md) specification for
