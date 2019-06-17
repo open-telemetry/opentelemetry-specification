@@ -214,13 +214,13 @@ Optional parameters (or corresponding setters on `Builder` if using a `Builder` 
   If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan) at `StartSpan`
   time will be used as parent.
 
-Note: The three parameters above (parent `Span`, parent `SpanContext` and `root`) are
+- **Note**: The three parameters above (parent `Span`, parent `SpanContext` and `root`) are
 mutually exclusive. If multiple parameters are specified or corresponding `Setter`s are
 called multiple times, only the last specified value will be used. For example:
-1. `builder.setParent(parentSpan).setNoParent().startSpan()` will generate a new root span and
-`parentSpan` will be ignored;
-2. `tracer.StartSpan(options.WithNoParent(), options.WithParentContext(parentCtx))`
-will generate a new child span with remote parent `parentCtx`, and `WithNoParent` will be ignored.
+  1. `builder.setParent(parentSpan).setNoParent().startSpan()` will generate a new root span
+  and `parentSpan` will be ignored;
+  2. `tracer.StartSpan(options.WithNoParent(), options.WithParentContext(parentCtx))`
+  will generate a new child span with remote parent `parentCtx`, and `WithNoParent` will be ignored.
 
 - `Sampler` to the newly created `Span`. If not set, the implementation should provide a
   default sampler used by Tracer.
