@@ -5,10 +5,10 @@ describes the key types and the overall behavior.
 
 Main APIs:
 
+- [DistributedContext API](distributedcontext-api.md).
+- [Resources API](resources-api.md).
 - [Tracing API](tracing-api.md).
   - [Sampling API](sampling-api.md).
-- [Resources API](resources-api.md).
-- [DistributedContext API](distributedcontext-api.md).
 
 ## Language Libraries
 
