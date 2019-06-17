@@ -8,6 +8,7 @@ Main APIs:
 - [Tracing API](tracing-api.md).
   - [Sampling API](sampling-api.md).
 - [Resources API](resources-api.md).
+- [DistributedContext API](distributedcontext-api.md).
 
 ## Language Libraries
 
