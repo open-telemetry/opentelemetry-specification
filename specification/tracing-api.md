@@ -21,6 +21,7 @@ Table of Content
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [StartSpan](#startspan)
   * [Span operations](#span-operations)
     * [GetContext](#getcontext)
     * [IsRecordingEvents](#isrecordingevents)
@@ -107,7 +108,8 @@ Returns an object that defines a scope where the given `Span` will be set to the
 The scope is exited and previous state should be restored when the returned object is closed.
 
 #### SpanBuilder
-Returns a `SpanBuilder` to create and start a new `Span`.
+Returns a `SpanBuilder` to create and start a new `Span`
+if a `Builder` pattern for [Span creation](#span-creation) is used.
 
 Required parameters:
 
@@ -191,7 +193,44 @@ creation](#span-creation).
 
 ### Span creation
 
-TODO: SpanBuilder API https://github.com/open-telemetry/opentelemetry-specification/issues/37
+API MUST provide a way to create a new `Span`. Each language implementation should
+follow its own convention on `Span` creation, for example `Builder` in Java,
+`Options` in Go, etc. `Span` creation method MUST be defined on `Tracer`.
+
+Required parameters:
+
+- Name of the span.
+
+Optional parameters (or corresponding setters on `Builder` if using a `Builder` pattern):
+
+- Parent `Span`. If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan)
+  at `StartSpan` time will be used as parent. MUST be used to create a `Span`
+  when manual Context propagation is used OR when creating a root `Span` with
+  a parent with an invalid `SpanContext`.
+- Parent `SpanContext`. If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan)
+  at `StartSpan` time will be used as parent. MUST be used to create a `Span`
+  when the parent is in a different process.
+- The option to become a root `Span` for a new trace.
+  If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan) at `StartSpan`
+  time will be used as parent.
+- `Sampler` to the newly created `Span`. If not set, the implementation should provide a
+  default sampler used by Tracer.
+- Collection of `Link`s that will be associated with the newly created Span
+- The override value for [a flag indicating whether events should be recorded](#isrecordingevents)
+  for the newly created `Span`. If not set, the implementation will provide a default.
+- `SpanKind` for the newly created `Span`. If not set, the implementation will
+  provide a default value `INTERNAL`.
+
+#### StartSpan
+
+Starts a new `Span`.
+
+If called multiple times with `Builder` pattern, the same `Span` will be returned.
+
+There should be no parameter if using a `Builder` pattern. Otherwise, `StartSpan`
+should accept all the optional parameters described in [Span creation](#span-creation).
+
+Returns the newly created `Span`.
 
 ### Span operations
 
