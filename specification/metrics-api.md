@@ -10,7 +10,7 @@ to construct `Measure`s and `Metric`s.
 
 ### Meter creation
 
-TODO: follow the spec for the Tracer
+TODO: follow the spec for the Tracer. See work in progress: https://github.com/open-telemetry/opentelemetry-specification/issues/39
 
 ### Create Metric
 
@@ -45,7 +45,9 @@ Optional arguments:
 recording raw `Measurements`.
 
 Depending on the language - builder pattern (C#, Java) or options (Go) SHOULD be
-used.
+used. When multiple `Measure`s with the same arguments were created,
+implementation may decide to return the same or distinct object. Users of API
+MUST NOT set any expectations about `Measure`s being unique objects.
 
 `Measure` creation exposes the following arguments.
 
@@ -68,12 +70,55 @@ multiple `Measurement`s at once. Thus API accepts the collection of
 `Measurement` so library can batch all the `Measurement`s that needs to be
 recorded.  
 
+Required argument:
 
+- Set of `Measurement` to record.
+
+Optional parameters:
+
+- Explicit `DistributedContext` to use instead of the current context. Context
+  is used to add dimensions for the resulting `Metric` calculated out of
+  `Measurements`.
+- Exemplar of the measurement in a form of `SpanContext`. This exemplar may be
+  used to provide an example of Spans in specific buckets when histogram
+  aggregation is used.
 
 ## Measure
 
-Measure is a 
+`Measure` is a contract between the library exposing the raw measurement and SDK
+aggregating these values into the `Metric`. Measure is constructed from the
+Meter class, see [Create Measure](#create-measure) section, by providing set of
+`Measure` identifiers.
 
-### Creating of Measure
+### CreateDoubleMeasurement
 
-`Measure` can be created
+Creates a `Measurement` with the value passes as an argument. It MUST only be
+called on `Measure` of a type `double`. Implementation may return no-op
+`Measurement` when there are no subscribers on this `Measure`. So `Measurement`
+cannot be reused and MUST be re-created.
+
+Arguments:
+
+Double value representing the `Measurement`.
+
+### CreateLongeMeasurement
+
+Creates a `Measurement` with the value passes as an argument. It MUST only be
+called on `Measure` of a type `long`. Implementation may return no-op
+`Measurement` when there are no subscribers on this `Measure`. So `Measurement`
+cannot be reused and MUST be re-created.
+
+Arguments:
+
+Long value representing the `Measurement`.
+
+## Measurement
+
+`Measurement` is an empty interface that represents a single value recorded for
+the `Measure`. `Measurement` MUST be treated as immutable short lived object.
+Instrumentation logic MUST NOT hold on to the object and MUST only record it
+once.
+
+## Metric
+
+Work in progress...
