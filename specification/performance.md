@@ -6,28 +6,44 @@ This document defines common principles that will help designers create language
 
 Here are the key principles:
 
-- **Library should not block end-user application.**
-- **Library should not consume infinite memory resource.**
+- **Library should not block end-user application by default.**
+- **Library should not consume unbounded memory resource.**
 
-Tracer should not degrade the end-user application. So that it should not block the end-user application nor consume too much memory resource.
+API should not degrade the end-user application. So that it should not block the end-user application nor consume too much memory resource.
 
 Especially, most telemetry exporters need to call API of servers to export traces. API call operations should be performed in asynchronous I/O or background thread to prevent blocking end-user applications.
 
-See also [Concurrency and Thread-Safety](concurrency.md) if implementation supports concurrency.
+See also [Concurrency and Thread-Safety](concurrency.md) if the implementation supports concurrency.
 
-### Trade-off between non-blocking and memory consumption
+### Tradeoff between non-blocking and memory consumption
 
-Any incomplete asynchronous I/O tasks or background tasks may consume memory to preserve its state. In such a case, there is a trade-off between dropping some tasks to prevent memory starvation and keeping all tasks to prevent information loss.
+Incomplete asynchronous I/O tasks or background tasks may consume memory to preserve their state. In such a case, there is a tradeoff between dropping some tasks to prevent memory starvation and keeping all tasks to prevent information loss.
 
-If there is such trade-off in language library, it should provide the following options to end-user:
+If there is such tradeoff in language library, it should provide the following options to end-user:
 
 - **Prevent blocking**: Dropping some information under overwhelming load and show warning log to inform when information loss starts and when recovered
-  - Should be a default option
+  - Should be a default option for Tracing and Metrics
   - Should provide option to change threshold of the dropping
   - Better to provide metric that represents effective sampling ratio
-- **Prevent information loss**: Preserve all information but possible to consume unlimited resource
-  - Should be supported as an alternative option
+  - Language library might provide this option for Logging
+- **Prevent information loss**: Preserve all information but possible to consume many resources
+  - Should be a default option for Logging
+  - Language library might provide this option also for Tracing and Metrics
+
+### End-user application should aware of the size of logs
+
+Logging could consume much memory by default if the end-user application emits too many logs. This default behavior is intended to preserve logs rather than dropping it. To make resource usage bounded, the end-user should consider reducing logs that are passed to the exporters.
+
+Therefore, the language library should provide a way to filter logs to capture by OpenTelemetry. End-user applications may want to log so much into log file or stdout (or somewhere else) but not want to send all of the logs to OpenTelemetry exporters.
+
+In a documentation of the language library, it is a good idea to point out that too many logs consume many resources by default then guide how to filter logs.
+
+### Shutdown and explicit flushing could block
+
+The language library could block the end-user application when it shut down. On shutdown, it has to flush data to prevent information loss.
+
+If the language library supports an explicit flush operation, it could block also.
 
 ## Documentation
 
-If language specific implementation has any special characteristics that are not described in this document, such characteristics should be documented.
+If language specific implementation has special characteristics that are not described in this document, such characteristics should be documented.

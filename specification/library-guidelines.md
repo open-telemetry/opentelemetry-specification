@@ -76,11 +76,11 @@ The mocking approach chosen will depend on the testing goals and at which point 
 
 ## Performance and Blocking
 
-See [Performance and Blocking](performance.md) specification for
-guidelines on what performance expectation should API implementations meet and how they should be documented.
+See the [Performance and Blocking](performance.md) specification for
+guidelines on the performance expectations that API implementations should meet, strategies for meeting these expectations, and a description of how implementations should document their behavior under load.
 
 ## Concurrency and Thread-Safety
 
-See [Concurrency and Thread-Safety](concurrency.md) specification for
+See the [Concurrency and Thread-Safety](concurrency.md) specification for
 guidelines on what concurrency safeties should API implementations provide
 and how they should be documented.
