@@ -4,4 +4,7 @@
     "markdownlint.config": {
         "MD013": true
     },
+    "cSpell.words": [
+        "convension"
+    ],
 }
