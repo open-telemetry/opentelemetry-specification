@@ -87,7 +87,7 @@ A tracer SHOULD be obtained from a global registry, for example `OpenTelemetry.g
 
 The registration to the registry depends on the language. In some languages the tracer is explicitly 
 created and registered from user code and other languages the tracer implementation is resolved
-from linked dependencies. Provider mechanism is used if a tracer is resolved from the linked dependencies.
+from linked dependencies using provider pattern.
 
 The tracer object construction depends on the implementation. Various implementations might require
 to specify different configuration properties at creation time. In languages where provider pattern
@@ -99,11 +99,11 @@ Tracer provider is an internal class used by the global registry (`OpenTelemetry
 The global registry delegates calls to the provider every time a tracer instance is requested.
 This is necessary for use-cases when a single instrumentation code runs for multiple deployments.
 
-The tracer provider is registered to API usually via language-specific mechanism, for instance in Java `ServiceLoader`.
+The tracer provider is registered to API usually via language-specific mechanism, for instance `ServiceLoader` in Java .
 
 ##### Runtime with multiple deployments/applications
 
-Application runtimes which support multiple deployments/application might need to provide a different
+Application runtimes which support multiple deployments/applications might need to provide a different
 tracer instance to each deployment. In this case the runtime provides its own implementation of provider
 which returns a different tracer for each deployment.
 
