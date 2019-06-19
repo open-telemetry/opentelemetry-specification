@@ -1,5 +1,30 @@
 # Metrics API
 
+<details>
+<summary>
+Table of Content
+</summary>
+
+- [Meter](#meater)
+  - [Meter Creation](#meter-creation)
+  - [Create Metric](#create-metric)
+  - [Create Measure](#create-measure)
+  - [Record](#record)
+- [Measure](#measure)
+  - [CreateDoubleMeasurement](#createdoublemeasurement)
+  - [CreateLongMeasurement](#createlongmeasurement)
+- [Measurement](#measurement)
+- [Metric](#metric)
+  - [GetOrCreateTimeSeries](#getorcreatetimeseries)
+  - [GetDefaultTimeSeries](#getdefaulttimeseries)
+  - [SetCallback](#setcallback)
+  - [RemoveTimeSeries](#removetimeseries)
+  - [Clear](#clear)
+  - [Type: Counter](#type--counter)
+  - [Type: Gauge](#type--gauge)
+
+</details>
+
 Metrics API allows to report raw measurements as well as metrics with the known
 aggregation and labels.
 
@@ -86,9 +111,9 @@ Optional parameters:
 ## Measure
 
 `Measure` is a contract between the library exposing the raw measurement and SDK
-aggregating these values into the `Metric`. Measure is constructed from the
-Meter class, see [Create Measure](#create-measure) section, by providing set of
-`Measure` identifiers.
+aggregating these values into the `Metric`. `Measure` is constructed from the
+`Meter` class, see [Create Measure](#create-measure) section, by providing set
+of `Measure` identifiers.
 
 ### CreateDoubleMeasurement
 
@@ -121,4 +146,62 @@ once.
 
 ## Metric
 
-Work in progress...
+`Metric` is a base class for various types of metrics. `Metric` is specialized
+with the type of a time series that `Metric` holds. `Metric` is constructed from
+the `Meter` class, see [Create Metric](#create-metric) section, by providing set
+of `Metric` identifiers like name and set of label keys.
+
+### GetOrCreateTimeSeries
+
+Creates a `TimeSeries` and returns a `TimeSeries` if the specified label values
+is not already associated with this gauge, else returns an existing
+`TimeSeries`.
+
+It is recommended to keep a reference to the `TimeSeries` instead of always
+calling this method for every operations.
+
+Arguments:
+
+- List of label values. The order and number of labels MUST match the order and
+  number of label keys used when `Metric` was created.
+
+### GetDefaultTimeSeries
+
+Returns a `TimeSeries` for a metric with all labels not set (default label
+value).
+
+Method takes no arguments.
+
+### SetCallback
+
+Sets a callback that gets executed every time before exporting this metric. It
+MUST be used to provide polling of a `Metric`. Callback implementation MUST set
+the value of a `Metric` to the value that will be exported.
+
+### RemoveTimeSeries
+
+Removes the `TimeSeries` from the `Metric`, if it is present.
+
+### Clear
+
+Removes all `TimeSeries` from the `Metric`.
+
+### Type: Counter
+
+`Counter` metric is used to report instantaneous measurement. Cumulative values
+can go up or stay the same, but can never go down. Cumulative values cannot be
+negative. `TimeSeries` for the `Counter` has two methods - `add` and `set`.
+
+- `add` adds the given value to the current value. The values cannot be negative.
+- `set` sets the given value. The value must be larger than the current recorded
+  value. In general should be used in combination with `SetCallback` where the
+  recorded value is guaranteed to be monotonically increasing.
+
+### Type: Gauge
+
+`Gauge` metric is used to report instantaneous measurement. `Gauge` values
+can go both up and down. `Gauge` values can be
+negative. `TimeSeries` for the `Counter` has two methods - `add` and `set`.
+
+- `add` adds the given value to the current value. The values can be negative.
+- `set` sets the given value.
