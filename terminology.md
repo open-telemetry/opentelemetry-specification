@@ -105,7 +105,7 @@ Trace instead of trusting incoming Trace context.
 ## Metrics
 
 OpenTelemetry allows to record raw measurements or metrics with predefined
-aggregation and labels.
+aggregation and set of labels.
 
 Recording raw measurements using OpenTelemetry API allows to defer to end-user
 the decision on what aggregation algorithm should be applied for this metric as
@@ -177,7 +177,7 @@ validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
-OpenTelemetry defines the naming convension for metric names as well as a
+OpenTelemetry defines the naming convention for metric names as well as a
 well-known metric names in [Semantic Conventions](semantic-conventions.md)
 document.
 
