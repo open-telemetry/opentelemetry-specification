@@ -101,7 +101,7 @@ Arguments:
 
 Double value representing the `Measurement`.
 
-### CreateLongeMeasurement
+### CreateLongMeasurement
 
 Creates a `Measurement` with the value passes as an argument. It MUST only be
 called on `Measure` of a type `long`. Implementation may return no-op
