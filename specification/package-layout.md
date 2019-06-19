@@ -52,7 +52,6 @@ api
    ├── metrics
    ├── resources
    ├── trace
-   │   └── util    # is used to group default implementations from `trace` package. For example sampler implementations.
    ├── distributedcontext
    │   └── propagation
    ├── internal
