@@ -201,7 +201,7 @@ negative. `TimeSeries` for the `Counter` has two methods - `add` and `set`.
 
 `Gauge` metric is used to report instantaneous measurement. `Gauge` values
 can go both up and down. `Gauge` values can be
-negative. `TimeSeries` for the `Counter` has two methods - `add` and `set`.
+negative. `TimeSeries` for the `Gauge` has two methods - `add` and `set`.
 
 - `add` adds the given value to the current value. The values can be negative.
 - `set` sets the given value.
