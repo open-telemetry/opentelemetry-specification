@@ -99,7 +99,7 @@ Tracer provider is an internal class used by the global registry (`OpenTelemetry
 The global registry delegates calls to the provider every time a tracer instance is requested.
 This is necessary for use-cases when a single instrumentation code runs for multiple deployments.
 
-The tracer provider is registered to API usually via language-specific mechanism, for instance `ServiceLoader` in Java .
+The tracer provider is registered to API usually via language-specific mechanism, for instance `ServiceLoader` in Java.
 
 ##### Runtime with multiple deployments/applications
 
