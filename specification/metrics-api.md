@@ -35,7 +35,8 @@ to construct `Measure`s and `Metric`s.
 
 ### Meter creation
 
-TODO: follow the spec for the Tracer. See work in progress: https://github.com/open-telemetry/opentelemetry-specification/issues/39
+TODO: follow the spec for the Tracer. See work in progress:
+https://github.com/open-telemetry/opentelemetry-specification/issues/39
 
 ### Create Metric
 
@@ -188,20 +189,21 @@ Removes all `TimeSeries` from the `Metric`.
 
 ### Type: Counter
 
-`Counter` metric is used to report instantaneous measurement. Cumulative values
-can go up or stay the same, but can never go down. Cumulative values cannot be
-negative. `TimeSeries` for the `Counter` has two methods - `add` and `set`.
+`Counter` metric aggregates instantaneous values. Cumulative values can go up or
+stay the same, but can never go down. Cumulative values cannot be negative.
+`TimeSeries` for the `Counter` has two methods - `add` and `set`.
 
-- `add` adds the given value to the current value. The values cannot be negative.
+- `add` adds the given value to the current value. The values cannot be
+  negative.
 - `set` sets the given value. The value must be larger than the current recorded
   value. In general should be used in combination with `SetCallback` where the
   recorded value is guaranteed to be monotonically increasing.
 
 ### Type: Gauge
 
-`Gauge` metric is used to report instantaneous measurement. `Gauge` values
-can go both up and down. `Gauge` values can be
-negative. `TimeSeries` for the `Gauge` has two methods - `add` and `set`.
+`Gauge` metric aggregates instantaneous values. Cummulative value can go both up
+and down. `Gauge` values can be negative. `TimeSeries` for the `Gauge` has two
+methods - `add` and `set`.
 
 - `add` adds the given value to the current value. The values can be negative.
 - `set` sets the given value.
