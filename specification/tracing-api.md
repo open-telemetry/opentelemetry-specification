@@ -222,6 +222,13 @@ Optional parameters (or corresponding setters on `Builder` if using a `Builder` 
     and `parentSpan` will be ignored;
     2. `tracer.StartSpan(options.WithNoParent(), options.WithParentContext(parentCtx))`
     will generate a new child span with remote parent `parentCtx`, and `WithNoParent` will be ignored.
+  
+  In languages that need to take all the three parameters at the same time when creating a `Span`,
+  parent `Span` should take precedence, then remote parent `SpanContext`, and `root` comes last.
+  For example:
+    3. `tracer.start_span(name='span', parent_span=span1, parent_span_context=ctx, root=true)`
+    will generate a new child span with parent `span1`, while `parent_span_context` and `root`
+    will be ignored. 
 
 - `Sampler` to the newly created `Span`. If not set, the implementation should provide a
   default sampler used by Tracer.
