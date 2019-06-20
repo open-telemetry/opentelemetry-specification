@@ -52,10 +52,9 @@ api
    ├── metrics
    ├── resources
    ├── trace
-   │   └── samplers    # is used to make decisions on `Span` sampling.
    ├── distributedcontext
    │   └── propagation
    ├── internal
    └── logs
 ```
-> Use lowercase or CamelCase or Snake Case (stylized as snake_case) names depends on the language.
+> Use of lowercase, CamelCase or Snake Case (stylized as snake_case) names depends on the language.
