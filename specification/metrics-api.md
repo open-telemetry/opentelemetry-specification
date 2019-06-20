@@ -29,7 +29,10 @@ Metrics API allows to report raw measurements as well as metrics with the known
 aggregation and labels.
 
 Main class that is used to work with Metrics API is called `Meter`. It is used
-to construct `Measure`s and `Metric`s.
+to construct `Measure`s to record individual [not-aggregated
+values](../terminology.md#recording-raw-measurements) and `Metric`s to record
+metrics with [predefined
+aggregation](../terminology.md#recording-metrics-with-predefined-aggregation).
 
 ## Meter
 
