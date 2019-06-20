@@ -9,6 +9,7 @@ Main APIs:
 - [Resources API](resources-api.md).
 - [Tracing API](tracing-api.md).
   - [Sampling API](sampling-api.md).
+- [Metrics API](metrics-api.md).
 
 ## Language Libraries
 
