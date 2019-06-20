@@ -11,7 +11,7 @@ Here are the key principles:
 
 Although there are inevitable overhead to achieve monitoring, API should not degrade the end-user application as possible. So that it should not block the end-user application nor consume too much memory resource.
 
-Especially, most telemetry exporters need to call API of servers to export traces. API call operations should be performed in asynchronous I/O or background thread to prevent blocking end-user applications.
+Especially, most telemetry exporters need to call API of servers to export telemetry data. API call operations should be performed in asynchronous I/O or background thread to prevent blocking end-user applications.
 
 See also [Concurrency and Thread-Safety](concurrency.md) if the implementation supports concurrency.
 
@@ -30,7 +30,7 @@ If there is such tradeoff in language library, it should provide the following o
   - Should be a default option for Logging
   - Language library might provide this option also for Tracing and Metrics
 
-### End-user application should aware of the size of logs
+### End-user application should be aware of the size of logs
 
 Logging could consume much memory by default if the end-user application emits too many logs. This default behavior is intended to preserve logs rather than dropping it. To make resource usage bounded, the end-user should consider reducing logs that are passed to the exporters.
 
