@@ -34,15 +34,37 @@ specifications and cross-language test cases.
 As OpenTracing and OpenCensus projects converge we write specifications the same
 time as we develop libraries.
 
+### TL;DR;
+
+Milestones for Java and cross-language specification:
+
+- End of June:
+  - basic SDK implemented in Java.
+  - API feedback issues triage done.
+- Mid June:
+  - exporters implemented in Java.
+  - basic SDK specs complete.
+  - first API revision documented.
+- Mid August
+  - extended SDK documented.
+  - second API revision documented.
+- End of August
+  - extended SDK implemented and stabilized in Java.
+  - Java SDK is production ready
+- Mid September (or after end-user validation)
+  - API is revised
+- End of September (or after end-user validation)
+  - Version 1.0 is declared.
+
 ### Current status
 
-**API proposal** milestones
+**API proposal**:
 
 - [Done in Java](https://github.com/open-telemetry/opentelemetry-java/milestone/1)
 - Will finish [this Friday](https://github.com/open-telemetry/opentelemetry-specification/milestone/1)
   in specs
 
-**SDK proposal** 
+**SDK proposal**:
 
 - Basic telemetry pipeline for traces complete
 - On track to finish by the **end of the month** in limited scope
@@ -50,7 +72,7 @@ time as we develop libraries.
 
 ### Finish SDK proposal
 
-We are limiting scope for SDK proposal work to the following areas:
+We are limiting scope for SDK proposal work (roughly) to the following areas:
 
 - Spans pipeline:
   - SpanBuilder interceptors interface
