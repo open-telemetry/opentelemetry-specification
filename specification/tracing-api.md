@@ -89,7 +89,29 @@ A duration is the elapsed time between two events.
 
 ### Obtaining a tracer
 
-TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelemetry-specification/issues/39
+A tracer SHOULD be obtained from a global registry, for example `OpenTelemetry.getTracer()`.
+
+The registration to the registry depends on the language. In some languages the tracer is explicitly 
+created and registered from user code and other languages the tracer implementation is resolved
+from linked dependencies using provider pattern.
+
+The tracer object construction depends on the implementation. Various implementations might require
+to specify different configuration properties at creation time. In languages where provider pattern
+is used the configuration is provided externally.
+
+#### Tracer provider
+
+Tracer provider is an internal class used by the global registry (`OpenTelemetry`) to get a tracer instance.
+The global registry delegates calls to the provider every time a tracer instance is requested.
+This is necessary for use-cases when a single instrumentation code runs for multiple deployments.
+
+The tracer provider is registered to API usually via language-specific mechanism, for instance `ServiceLoader` in Java.
+
+##### Runtime with multiple deployments/applications
+
+Application runtimes which support multiple deployments/applications might need to provide a different
+tracer instance to each deployment. In this case the runtime provides its own implementation of provider
+which returns a different tracer for each deployment.
 
 ### Tracer operations
 
