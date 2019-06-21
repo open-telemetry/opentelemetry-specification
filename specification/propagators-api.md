@@ -122,7 +122,7 @@ Returns the non-null extracted value.
 
 ### Getter
 
-`Getter` allows a {@code HttpTextFormat} to read propagated fields from a carrier.
+`Getter` allows a `HttpTextFormat` to read propagated fields from a carrier.
 
 `Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
 
