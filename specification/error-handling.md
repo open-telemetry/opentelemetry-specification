@@ -35,6 +35,17 @@ OpenTelemetry SDK must not throw or leak unhandled or user unhandled exceptions.
 4. Beware of any call to external callbacks or override-able interface. Expect
    them to throw.
 
+## SDK self-diagnostics
+
+All OpenTelemetry libraries - API, SDK, exporters, instrumentation adapters,
+etc. are encouraged to expose self-troubleshooting metrics, spans and other
+telemetry that can be easily enabled and filtered out by default.
+
+Good example of such telemetry is a `Span` Zipkin exporter that indicates how
+much time exporter spent on uploading telemetry. Another example may be a metric
+exposed by SpanProcessor exposing the current queue size of telemetry to be
+uploaded.
+
 ## Exceptions from the rule
 
 There are situations when end-user wants to know whether API/SDK are used
