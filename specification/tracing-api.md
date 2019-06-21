@@ -407,7 +407,7 @@ a canonical code in conjuction with an optional descriptive message.
 
 ### StatusCanonicalCode
 
-`StatusCanonicalCode` represents the canonical set of status codes of a finished `Span`.
+`StatusCanonicalCode` represents the canonical set of status codes of a finished `Span`, following the [Standard GRPC codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
 
 #### Ok
 
