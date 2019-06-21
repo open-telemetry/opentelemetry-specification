@@ -227,6 +227,15 @@ for an example.
 **TODO**: Better describe the difference between the resource and a Node
 https://github.com/open-telemetry/opentelemetry-proto/issues/17
 
+## Propagators
+
+OpenTelemetry uses `Propagators` to serialize and deserialize `SpanContext` and `DistributedContext`
+into a binary or text format. Currently there are two types of propagators:
+
+- `BinaryFormat` which is used to serialize and deserialize a value into a binary representation.
+- `HTTPTextFormat` which is used to inject and extract a value as text into carriers that travel
+in-band across process boundaries.
+
 ## Agent/Collector
 
 The OpenTelemetry service is a set of components that can collect traces,
