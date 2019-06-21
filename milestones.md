@@ -61,7 +61,7 @@ Milestones for Java and cross-language specification:
 **API proposal**:
 
 - [Done in Java](https://github.com/open-telemetry/opentelemetry-java/milestone/1)
-- Will finish [this Friday](https://github.com/open-telemetry/opentelemetry-specification/milestone/1)
+- API proposal [documented](https://github.com/open-telemetry/opentelemetry-specification/milestone/1)
   in specs
 
 **SDK proposal**:
