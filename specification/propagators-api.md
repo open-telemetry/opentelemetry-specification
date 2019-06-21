@@ -5,10 +5,10 @@
 Table of Content
 </summary>
 
-- [BinaryFormat](#binary-format)
+- [Binary Format](#binary-format)
   - [ToBytes](#tobytes)
   - [FromBytes](#frombytes)
-- [HTTPTextFormat](#http-text-format)
+- [HTTP Text Format](#http-text-format)
   - [Fields](#fields)
   - [Inject](#inject)
   - [Setter](#setter)
