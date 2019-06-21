@@ -1,15 +1,16 @@
 # OpenTelemetry: A Roadmap to Convergence
 
-This document covers the initial milestones for the project and how these
-milestones can be applied to specific repository in OpenTelemetry project. For
-each language, we want to quickly achieve parity with existing OpenTracing and
-OpenCensus implementations.
+This document covers the initial milestones for the project. Each repository in
+OpenTelemetry project need to adjust milestones to this plan based on
+project-specific estimations.
+
+For each language, we want to quickly achieve parity with existing OpenTracing
+and OpenCensus implementations. For languages which have both an OpenTracing and
+OpenCensus implementation, we would like to achieve parity in OpenTelemetry by
+**September, 2019**, and sunset the existing OpenTracing and OpenCensus projects
+by **November, 2019**.
 
 ## Switching to OpenTelemetry
-
-For languages which have both an OpenTracing and OpenCensus implementation, we
-would like to achieve parity in OpenTelemetry by **September, 2019**, and sunset
-the existing OpenTracing and OpenCensus projects by **November, 2019**.
 
 Parity can be defined as the following features:
 
