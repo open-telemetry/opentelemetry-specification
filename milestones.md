@@ -41,7 +41,7 @@ Milestones for Java and cross-language specification:
 - End of June:
   - basic SDK implemented in Java.
   - API feedback issues triage done.
-- Mid June:
+- Mid July:
   - exporters implemented in Java.
   - basic SDK specs complete.
   - first API revision documented.
