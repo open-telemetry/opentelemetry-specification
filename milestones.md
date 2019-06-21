@@ -39,17 +39,23 @@ time as we develop libraries.
 Milestones for Java and cross-language specification:
 
 - End of June:
-  - basic SDK implemented in Java.
+  - [basic SDK implemented](https://github.com/open-telemetry/opentelemetry-java/milestone/2)
+    in Java.
   - API feedback issues triage done.
 - Mid July:
-  - exporters implemented in Java.
-  - basic SDK specs complete.
-  - first API revision documented.
+  - [exporters implemented](https://github.com/open-telemetry/opentelemetry-java/milestone/3)
+    in Java.
+  - [basic SDK specs](https://github.com/open-telemetry/opentelemetry-specification/milestone/3)
+    complete.
+  - [first API revision](https://github.com/open-telemetry/opentelemetry-specification/milestone/2)
+    documented.
 - Mid August:
-  - extended SDK documented.
-  - second API revision documented.
+  - [extended SDK documented](https://github.com/open-telemetry/opentelemetry-specification/milestone/4).
+  - [second API revision](https://github.com/open-telemetry/opentelemetry-specification/milestone/5)
+    documented.
 - End of August:
-  - extended SDK implemented and stabilized in Java.
+  - [extended SDK implemented](https://github.com/open-telemetry/opentelemetry-java/milestone/4)
+    and stabilized in Java.
   - Java SDK is production ready
 - Mid September (or after end-user validation):
   - API is revised
