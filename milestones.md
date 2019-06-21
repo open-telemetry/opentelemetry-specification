@@ -45,15 +45,15 @@ Milestones for Java and cross-language specification:
   - exporters implemented in Java.
   - basic SDK specs complete.
   - first API revision documented.
-- Mid August
+- Mid August:
   - extended SDK documented.
   - second API revision documented.
-- End of August
+- End of August:
   - extended SDK implemented and stabilized in Java.
   - Java SDK is production ready
-- Mid September (or after end-user validation)
+- Mid September (or after end-user validation):
   - API is revised
-- End of September (or after end-user validation)
+- End of September (or after end-user validation):
   - Version 1.0 is declared.
 
 ### Current status
