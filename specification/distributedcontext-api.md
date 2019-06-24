@@ -140,11 +140,10 @@ Close Scope 1
 
 # DistributedContext
 
-## GetIterator
+## GetEntries
 
-Returns an iterator over the entries in this `DistributedContext`.
-The order of entries is not significant. The iterator MUST not modify the underlying collection of
-entries in this `DistributedContext`.
+Returns the entries in this `DistributedContext`.
+The order of entries is not significant. The returned collection MUST be immutable.
 
 ## GetEntryValue
 
