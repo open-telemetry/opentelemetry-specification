@@ -7,6 +7,8 @@ the release.
 
 ## Unreleased
 
-## 0.1 (API proposal complete) - 06-21-2019
+## 0.1.0 (API proposal complete) - 06-21-2019
+
+### Added
 
 - API proposal for the converged OpenTracing/OpenCensus project is complete.
