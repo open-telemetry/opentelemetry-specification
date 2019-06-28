@@ -7,6 +7,8 @@ the release.
 
 ## Unreleased
 
+- Replace DistributedContext.GetIterator with GetEntries.
+
 ## 0.1.0 (API proposal complete) - 06-21-2019
 
 ### Added
