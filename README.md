@@ -33,7 +33,7 @@ Check out [current milestones](milestones.md).
 
 ## Versioning
 
-Changes to the content of the [specification](./specification.md) itself, including changes to [terminology](./terminology.md) and [semantic conventions](./semantic-conventions.md), are versioned according to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and described in [CHANGELOG.md](./changelog.md). Layout changes are not versioned. Specific implementations of the specification should specify which version they implement.
+Changes to the content of the [specification](./specification) itself, including changes to [terminology](./terminology.md) and [semantic conventions](./semantic-conventions.md), are versioned according to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and described in [CHANGELOG.md](./changelog.md). Layout changes are not versioned. Specific implementations of the specification should specify which version they implement.
 
 Changes to the change process itself are not currently versioned but may be independently versioned in the future.
 
