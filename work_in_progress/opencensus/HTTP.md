@@ -113,7 +113,7 @@ request represents the incoming request. For a client, request represents the ou
 All attributes are optional, but collector should make the best effort to
 collect those.
 
-> Work in progress! Please note, that the list below only contains attributes that aren't contained in the [OpenTelemetry main spec](../semantic-conventions.md) (yet):
+> Work in progress! Please note, that the list below only contains attributes that aren't contained in the [OpenTelemetry main spec](../../semantic-conventions.md) (yet):
 
 | Attribute name            | Description                 | Type   |Example value              |
 |---------------------------|-----------------------------|--------|---------------------------|
