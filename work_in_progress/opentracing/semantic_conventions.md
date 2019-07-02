@@ -1,6 +1,6 @@
 # Semantic Conventions
 
-The [OpenTracing Specification](./specification.md) describes the overarching language-neutral data model and API guidelines for OpenTracing. That data model includes the related concepts of **Span Tags** and **(structured) Log Fields**; though these terms are defined in the specification, there is no guidance there about standard Span tags or logging keys.
+The [OpenTracing Specification](https://github.com/opentracing/specification/blob/master/specification.md) describes the overarching language-neutral data model and API guidelines for OpenTracing. That data model includes the related concepts of **Span Tags** and **(structured) Log Fields**; though these terms are defined in the specification, there is no guidance there about standard Span tags or logging keys.
 
 Those semantic conventions are described by this document. The document is divided into two sections: first, tables listing all standard Span tags and logging keys; then guidance about how to combine these to model certain important semantic concepts.
 
@@ -14,7 +14,7 @@ Changes to this file affect the OpenTracing specification version. Additions sho
 
 Span tags apply to **the entire Span**; as such, they apply to the entire timerange of the Span, not a particular moment with a particular timestamp: those sorts of events are best modelled as Span log fields (per the table in the next subsection of this document).
 
-> Work in progress! Please note, that the list below only contains attributes that aren't contained in the [OpenTelemetry main spec](../semantic-conventions.md) (yet):
+> Work in progress! Please note, that the list below only contains attributes that aren't contained in the [OpenTelemetry main spec](../../semantic-conventions.md) (yet):
 
 | Span tag name | Type | Notes and examples |
 |:--------------|:-----|:-------------------|
@@ -50,7 +50,7 @@ The following Span tags combine to model RPCs:
 
 ### Message Bus
 
-A message bus is asynchronous, and therefore the relationship type used to link a Consumer Span and a Producer Span would be **Follows From** (see [References between Spans](./specification.md#references-between-spans) for more information on relationship types).
+A message bus is asynchronous, and therefore the relationship type used to link a Consumer Span and a Producer Span would be **Follows From** (see [References between Spans](https://github.com/opentracing/specification/blob/master/specification.md#references-between-spans) for more information on relationship types).
 
 The following Span tags combine to model message bus based communications:
 
