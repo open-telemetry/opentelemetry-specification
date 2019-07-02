@@ -50,7 +50,7 @@ The following Span tags combine to model RPCs:
 
 ### Message Bus
 
-A message bus is asynchronous, and therefore the relationship type used to link a Consumer Span and a Producer Span would be **Follows From** (see [References between Spans](./specification.md#references-between-spans) for more information on relationship types).
+A message bus is asynchronous, and therefore the relationship type used to link a Consumer Span and a Producer Span would be **Follows From** (see [References between Spans](https://github.com/opentracing/specification/blob/master/specification.md#references-between-spans) for more information on relationship types).
 
 The following Span tags combine to model message bus based communications:
 
