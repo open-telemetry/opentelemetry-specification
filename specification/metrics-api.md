@@ -63,7 +63,7 @@ Optional arguments:
   for these labels.
 - set of name/value pairs for the labels with the constant values.
 - component name that reports this `Metric`. See [semantic
-  convention](..\semantic-conventions.md) for the examples of well-known
+  convention](../semantic-conventions.md) for the examples of well-known
   components.
 - resource this `Metric` is associated with.
 
