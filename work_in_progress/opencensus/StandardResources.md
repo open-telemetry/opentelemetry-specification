@@ -1,7 +1,7 @@
 # Standard Resources
 
 This page lists the standard resource types in OpenCensus. For more details on how resources can 
-be combined see [this](Resource.md).
+be combined see [this](../specification/resource/Resource.md).
 
 OpenCensus defines these fields.
  * [Compute Unit](#compute-unit)
@@ -28,7 +28,7 @@ Resources defining a compute unit (e.g. Container, Process, Lambda Function).
 ### Container
 **type:** `container`
 
-**Description:** A container instance. This resource can be [merged](Resource.md#Merging) with a
+**Description:** A container instance. This resource can be [merged](../specification/resource/Resource.md#Merging) with a
 deployment service resource, a compute instance resource, and an environment resource.
 
 | Label  | Description  | Example  |
@@ -43,7 +43,7 @@ Resources defining a deployment service (e.g. Kubernetes).
 ### Kubernetes
 **type:** `k8s`
 
-**Description:** A Kubernetes resource. This resource can be [merged](Resource.md#Merging) with
+**Description:** A Kubernetes resource. This resource can be [merged](../specification/resource/Resource.md#Merging) with
 a compute instance resource, and/or an environment resource.
 
 | Label  | Description  | Example  |
@@ -59,7 +59,7 @@ Resources defining a computing instance (e.g. host).
 **type:** `host`
 
 **Description:** A host is defined as a general computing instance. This resource should be
-[merged](Resource.md#Merging) with an environment resource.
+[merged](../specification/resource/Resource.md#Merging) with an environment resource.
 
 
 | Label  | Description  | Example  |
