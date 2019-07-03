@@ -12,7 +12,7 @@ The OpenTracing specification uses a `Major.Minor` version number but has no `.P
 
 ## The OpenTracing Data Model
 
-... moved to [terminology.md](../terminology.md) ...
+... moved to [terminology.md](../../terminology.md) ...
 
 Each **Span** encapsulates the following state:
 
@@ -37,7 +37,7 @@ Each **SpanContext** encapsulates the following state:
 ### References between Spans
 
 OpenTelemetry doesn't support references. Links are described in
-[terminology.md](../terminology.md)
+[terminology.md](../../terminology.md)
 
 > A Span may reference zero or more other **SpanContexts** that are causally related. OpenTracing presently defines two types of references: `ChildOf` and `FollowsFrom`. **Both reference types specifically model direct causal relationships between a child Span and a parent Span.** In the future, OpenTracing may also support reference types for Spans with non-causal relationships (e.g., Spans that are batched together, Spans that are stuck in the same queue, etc).
 >
