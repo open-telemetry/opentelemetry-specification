@@ -114,7 +114,7 @@ gRPC to record raw measurements "server_latency" or "received_bytes". So end
 user will decide what type of aggregated values should be collected out of these
 raw measurements. It may be simple average or elaborate histogram calculation.
 
-Recording of metrics with the pre-defined aggregation using OpenTelemtry API is
+Recording of metrics with the pre-defined aggregation using OpenTelemetry API is
 not less important. It allows to collect values like cpu and memory usage, or
 simple metrics like "queue length".
 
@@ -244,7 +244,7 @@ instrumented by OpenTelementry or other monitoring/tracing libraries (Jaeger,
 Prometheus, etc.), do aggregation and smart sampling, and export traces and
 metrics to one or more monitoring/tracing backends. The service will allow to
 enrich and transform collected telemetry (e.g. add additional attributes or
-scrab personal information).
+scrub personal information).
 
 The OpenTelemetry service has two primary modes of operation: Agent (a locally
 running daemon) and Collector (a standalone running service).
