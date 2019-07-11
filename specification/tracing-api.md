@@ -190,7 +190,7 @@ The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext
 
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero byte.
 
-`TraceOptions` contain details about the trace. Unlike Tracestate values, TraceOptions are present in all traces. Currently, the only TraceOption is a boolean `recorded` [flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001).
+`TraceOptions` contain details about the trace. Unlike Tracestate values, TraceOptions are present in all traces. Currently, TraceOption includes a boolean `recorded` [flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001) and the `sampleWeight`, which is the approximate number of potentially unsampled events a recorded span represents.
 
 `Tracestate` carries system-specific configuration data, represented as a list of key-value pairs. TraceState allows multiple tracing systems to participate in the same trace. 
 
