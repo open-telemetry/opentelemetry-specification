@@ -55,6 +55,14 @@ be displayed on debug pages or in the logs. Example:
 
 Return sampling decision whether span should be sampled or not.
 
+### GetSampleWeight
+
+Return the a floating point `weight` value approximating the number of similar spans that were seen by the Sampler.
+
+Downstream systems can use this value for numerical calculations/aggregations, statistically approximating the distribution of values found in the unsampled trace span set based on the observed weights and spans sent after sampling. With this feature, unsampled metrics can be utilized directly alongside weighted aggregations calculated from spans.
+
+For instance, its value should be `1 / samplingProbability` for a ProbabilitySampler, or `observedQps / targetQps` for a `RateLimitingSampler`.  With a sampling probability of `0.01`, `COUNT(spans) WHERE service=foo` will return `49*100=4900` rather than the unweighted value `49` and `sum(request_count{service=foo})` will return an exact number like `4930`.
+
 ### GetAttributes
 
 Return attributes to be attached to the `Span`. These attributes should be added
