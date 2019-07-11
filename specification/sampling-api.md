@@ -63,6 +63,8 @@ Downstream systems can use this value for numerical calculations/aggregations, s
 
 For instance, its value should be `1 / samplingProbability` for a ProbabilitySampler, or `observedQps / targetQps` for a `RateLimitingSampler`.  With a sampling probability of `0.01`, `COUNT(spans) WHERE service=foo` will return `49*100=4900` rather than the unweighted value `49` and `sum(request_count{service=foo})` will return an exact number like `4930`.
 
+This value should be passed along on the wire between different OpenTelemetry-using applications as part of the trace header, along with the `recorded` bit that `IsSampled()` might influence.
+
 ### GetAttributes
 
 Return attributes to be attached to the `Span`. These attributes should be added
