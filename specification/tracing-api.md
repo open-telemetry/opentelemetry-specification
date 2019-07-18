@@ -299,7 +299,7 @@ the `AddEvent` operation and attributes using `SetAttributes`.
 
 #### Set Attributes
 
-A `Span` should have the ability to set attribute associated with it.
+A `Span` MUST have the ability to set attributes associated with it.
 
 An `Attribute` is defined by the following properties:
 - (Required) The attribute key, which must be a string.
