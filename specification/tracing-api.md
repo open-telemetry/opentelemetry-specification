@@ -360,7 +360,7 @@ the language supports overloads then this SHOULD be called `AddLink` otherwise
 
 #### Set Status
 
-Set the [`Status`](#status) to the `Span`. If used, this will override the
+Sets the [`Status`](#status) of the `Span`. If used, this will override the
 default `Span` status, which is `OK`.
 
 Only the value of the last call will be recorded, and implementations are free
