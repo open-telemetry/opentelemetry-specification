@@ -339,7 +339,7 @@ keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 
 #### Add Links
 
-A `Span` should have the ability to add a link to another `Span`. Linked `Span`
+A `Span` MUST have the ability to add links to other `Span`s. Linked `Span`s
 can be from the same or a different trace. See [Links
 description](../terminology.md#links-between-spans).
 
