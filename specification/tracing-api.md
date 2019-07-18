@@ -332,7 +332,7 @@ This SHOULD be called `AddEvent`.
 - An API to record lazy initialized events. This can be implemented by providing
 an `Event` interface or a concrete `Event` definition and a `EventFormatter`. If
 the language supports overloads then this SHOULD be called `AddEvent` otherwise
-`AddLazyEvent` may be consider.
+`AddLazyEvent` may be considered.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](../semantic-conventions.md) which have prescribed semantic meanings.
