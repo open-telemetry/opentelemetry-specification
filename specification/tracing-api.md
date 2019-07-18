@@ -23,19 +23,15 @@ Table of Content
   * [Span creation](#span-creation)
     * [StartSpan](#startspan)
   * [Span operations](#span-operations)
-    * [GetContext](#getcontext)
+    * [Get Context](#get-context)
     * [IsRecordingEvents](#isrecordingevents)
-    * [SetAttribute](#setattribute)
-    * [AddEvent](#addevent)
-    * [AddLink](#addlink)
-    * [SetStatus](#setstatus)
+    * [Set Attributes](#set-attributes)
+    * [Add Events](#add-events)
+    * [Add Links](#add-links)
+    * [Set Status](#set-status)
     * [UpdateName](#updatename)
     * [End](#end)
   * [Span lifetime](#span-lifetime)
-* [Link](#link)
-  * [Link creation](#link-creation)
-  * [GetContext](#getcontext-1)
-  * [GetAttributes](#getattributes)
 * [Status](#status)
   * [StatusCanonicalCode](#statuscanonicalcode)
   * [Status creation](#status-creation)
@@ -49,7 +45,7 @@ Table of Content
     * [GetKind](#getkind)
     * [GetStartTimestamp](#getstarttimestamp)
     * [GetEndTimestamp](#getendtimestamp)
-    * [GetContext](#getcontext-2)
+    * [GetContext](#getcontext)
     * [GetParentSpanId](#getparentspanid)
     * [GetResource](#getresource)
     * [GetAttributes](#getattributes-1)
@@ -282,14 +278,15 @@ Returns the newly created `Span`.
 With the exception of the method to retrieve the `Span`'s `SpanContext` and
 recording status, none of the below may be called after the `Span` is finished.
 
-#### GetContext
+#### Get Context
 
-Retrieve the `Span`s `SpanContext`
+A `Span` should have the ability to return the `SpanContext` associated with it.
+The returned value MUST be the same for the entire Span lifetime.
 
-There should be no parameter.
-
-Returns the `SpanContext` for the given `Span`. The returned value may be
-used even after the `Span` is finished.
+The Span interface MUST provide:
+- An API that returns the `SpanContext` for the given `Span`. The returned value
+may be used even after the `Span` is finished. This SHOULD be called
+`GetContext`.
 
 #### IsRecordingEvents
 
@@ -300,63 +297,78 @@ There should be no parameter.
 Returns true if this `Span` is active and recording information like events with
 the `AddEvent` operation and attributes using `SetAttributes`.
 
-#### SetAttribute
+#### Set Attributes
 
-Set the `Span`'s attribute.
+A `Span` should have the ability to set attribute associated with it.
 
-Required parameters
+An `Attribute` is defined by the following properties:
+- (Required) The attribute key, which must be a string.
+- (Required) The attribute value, which must be either a string, a boolean
+value, or a numeric type.
 
-- The attribute key, which must be a string.
-- The attribute value, which must be either a string, a boolean value, or a
-  numeric type.
+The Span interface MUST provide:
+- An API to set attributes where the attribute properties are passed as
+arguments. This SHOULD be called `SetAttribute`. To avoid extra allocations some
+implementations may decided to offer on API for every possible value types.
 
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
 
-#### AddEvent
+#### Add Events
 
-Add an `Event` to `Span`.
+A `Span` should have the ability to add events. Events have a time associated
+with the moment when they are added to the `Span.
 
-Required parameters:
+An `Event` is defined by the following properties:
+- (Required) Name of the event.
+- (Optional) One or more key:value pairs, where the keys must be strings and
+the values must be either a string, a boolean value, or a numeric type.
 
-- Name of the event.
+The `Event` should be an immutable type.
 
-Optional parameters:
-
-- One or more key:value pairs, where the keys must be strings and the values may
-  be string, booleans or numeric type.
+The Span interface MUST provide:
+- An API to record events where the `Event` properties are passed as arguments.
+This SHOULD be called `AddEvent`.
+- An API to record lazy initialized events. This can be implemented by providing
+an `Event` interface or a concrete `Event` definition and a `EventFormatter`. If
+the language supports overloads then this SHOULD be called `AddEvent` otherwise
+`AddLazyEvent` may be consider.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 
-#### AddLink
+#### Add Links
 
-Adds a link to another `Span` from this `Span`. Linked `Span` can be from the
-same or different trace. See [Links description](../terminology.md#links-between-spans).
+A `Span` should have the ability to add a link to another `Span`. Linked `Span`
+can be from the same or different trace. See [Links
+description](../terminology.md#links-between-spans).
 
-Required parameters
+An `Link` is defined by the following properties:
+- (Required) `SpanContext` of the `Span` to link to.
+- (Optional) One or more key:value pairs, where the keys must be strings and
+the values must be either a string, a boolean value, or a numeric type.
 
-- `SpanContext` of the `Span` to link to
+The `Link` should be an immutable type.
 
-Optional parameters
+The Span interface MUST provide:
+- An API to record links where the `Link` properties are passed as arguments.
+This SHOULD be called `AddLink`.
+- An API to record lazy initialized links. This can be implemented by providing
+an `Link` interface or a concrete `Link` definition and a `LinkFormatter`. If
+the language supports overloads then this SHOULD be called `AddLink` otherwise
+`AddLazyLink` may be consider.
 
-- Map of attributes associated with this link. Attributes are key:value pairs
-  where hey is a string and value is one of string, boolean and numeric.
+#### Set Status
 
-API MUST also provide an overload that accepts a [`Link` interface](#link). This
-overload allows instrumentation to supply a lazily calculated `Link`.
-
-#### SetStatus
-
-Sets the `Status` to the `Span`. If used, this will override the default `Span`
-status. Default is `OK`.
+Set the [`Status`](#status) to the `Span`. If used, this will override the
+default `Span` status. Default is `OK`.
 
 Only the value of the last call will be recorded, and implementations are free
 to ignore previous calls.
 
-Required parameters
-
-- New status for the span.
+The Span interface MUST provide:
+- An API to set the `Status` where the new status is the only argument. This
+SHOULD be called `SetStatus`.
 
 #### UpdateName
 
@@ -393,34 +405,6 @@ timestamps to the Span object:
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API and MUST not be passed as an argument. In order to
 record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
-
-## Link
-
-`Link` interface represents the [link between
-spans](../terminology.md#links-between-spans). Interface only expose two
-getters. API also MUST provide a way to create a Link.
-
-### Link creation
-
-API MUST provide a way to create a new `Link`.
-
-Required parameters
-
-- `SpanContext` of the `Span` to link to
-
-Optional parameters
-
-- Map of attributes associated with this link. Attributes are key:value pairs
-  where key is a string and value is one of string, boolean and numeric.
-
-### GetContext
-
-Returns the `SpanContext` of a linked span.
-
-### GetAttributes
-
-Returns the immutable collection of attributes associated with this `Link`.
-Order of attributes is not significant.
 
 ## Status
 
