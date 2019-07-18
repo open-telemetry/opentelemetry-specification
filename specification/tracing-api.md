@@ -316,7 +316,7 @@ attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
 
 #### Add Events
 
-A `Span` should have the ability to add events. Events have a time associated
+A `Span` MUST have the ability to add events. Events have a time associated
 with the moment when they are added to the `Span.
 
 An `Event` is defined by the following properties:
