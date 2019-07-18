@@ -354,7 +354,7 @@ The Span interface MUST provide:
 - An API to record links where the `Link` properties are passed as arguments.
 This SHOULD be called `AddLink`.
 - An API to record lazy initialized links. This can be implemented by providing
-an `Link` interface or a concrete `Link` definition and a `LinkFormatter`. If
+a `Link` interface or a concrete `Link` definition and a `LinkFormatter`. If
 the language supports overloads then this SHOULD be called `AddLink` otherwise
 `AddLazyLink` may be consider.
 
