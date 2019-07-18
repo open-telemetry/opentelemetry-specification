@@ -309,7 +309,7 @@ value, or a numeric type.
 The Span interface MUST provide:
 - An API to set attributes where the attribute properties are passed as
 arguments. This SHOULD be called `SetAttribute`. To avoid extra allocations some
-implementations may decided to offer on API for every possible value types.
+implementations may offer a separate API for each of the possible value types.
 
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
