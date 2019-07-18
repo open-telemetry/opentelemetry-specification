@@ -280,7 +280,7 @@ recording status, none of the below may be called after the `Span` is finished.
 
 #### Get Context
 
-A `Span` should have the ability to return the `SpanContext` associated with it.
+A `Span` MUST have the ability to return the `SpanContext` associated with it.
 The returned value MUST be the same for the entire Span lifetime.
 
 The Span interface MUST provide:
