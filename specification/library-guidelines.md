@@ -50,9 +50,9 @@ It is also important that minimal implementation incurs as little performance pe
 
 ## SDK Implementation
 
-The SDK implementation is a separate (optional) dependency. When it is plugged in it substitutes the minimal implementation that is included in the API package (exact substitution mechanism is language dependent).
+SDK implementation is a separate (optional) dependency. When it is plugged in it substitutes the minimal implementation that is included in the API package (exact substitution mechanism is language dependent).
 
-SDK implements core functionality that is required for translating API calls into telemetry data that is ready for exporting. Here is how OpenTelemetry components look like when the SDK is enabled:
+SDK implements core functionality that is required for translating API calls into telemetry data that is ready for exporting. Here is how OpenTelemetry components look like when SDK is enabled:
 
 ![Full Operation Diagram](img/library-full.png)
 
@@ -60,30 +60,29 @@ SDK defines an [Exporter interface](sdk-exporter.md). Protocol-specific exporter
 
 SDK also includes optional helper exporters that can be composed for additional functionality if needed.
 
-Library designers need to define the language-specific Exporter interface based on [this generic specification](sdk-exporter.md). 
+Library designers need to define the language-specific `Exporter` interface based on [this generic specification](sdk-exporter.md). 
 
 ### Protocol Exporters
 
 Telemetry backend vendors are expected to implement [Exporter interface](sdk-exporter.md). Data received via Export() function should be serialized and sent to the backend in a vendor-specific way.
 
-Vendors are encouraged to keep protocol-specific exporters as simple as possible and achieve desirable additional functionality such as queuing, retrying using helpers provided by SDK.
+Vendors are encouraged to keep protocol-specific exporters as simple as possible and achieve desirable additional functionality such as queuing and retrying using helpers provided by SDK.
 
-End users should be given the flexibility of making many of the decisions regarding the queuing, retrying, tagging, batching functionality that make the most sense for their application. For example, if an application is deployed with a locally running Agent daemon, the end user may prefer to not have a Retrier since local daemon is highly available. As opposed to that an application may require a reliable delivery of telemetry data to a remote backend that has no guaranteed availability. The end user may choose to use a persistent local queue and a Retrier in this case.
+End users should be given the flexibility of making many of the decisions regarding the queuing, retrying, tagging, batching functionality that make the most sense for their application. For example, if an application's telemetry data must be delivered to a remote backend that has no guaranteed availability the end user may choose to use a persistent local queue and an `Exporter` to retry sending on failures. As opposed to that for an application that sends telemetry to a locally running Agent daemon, the end user may prefer to have a simpler exporting configuration without retrying or queueing. 
 
 
 ## Alternative Implementations
 
 The end-user application may decide to take a dependency on alternative implementation. 
 
-The SDK provides flexibility and extensibility that may be used by many implementations. Before developing an alternative implementation, please, review extensibility points provided by OpenTelemetry.
+SDK provides flexibility and extensibility that may be used by many implementations. Before developing an alternative implementation, please, review extensibility points provided by OpenTelemetry.
 
 An example use case for alternate implementations is automated testing. A mock implementation can be plugged in during automated tests. For example it can store all generated telemetry data in memory and provide a capability to inspect this stored data. This will allow the tests to verify that the telemetry is generated correctly. Language Library authors are encouraged to provide such mock implementation.
 
-Note that mocking is also possible by using the SDK and a Mock Exporter without needed to swap out the entire SDK. 
+Note that mocking is also possible by using SDK and a Mock `Exporter` without needed to swap out the entire SDK. 
 
 The mocking approach chosen will depend on the testing goals and at which point exactly it is desirable to intercept the telemetry data path during the test.
 
 ## Concurrency and Thread-Safety
 
-See [Concurrency and Thread-Safety](concurrency.md) specification for
-guidelines on what concurrency safeties should API implementations provide and how they should be documented.
+See [Concurrency and Thread-Safety](concurrency.md) specification for guidelines on what concurrency safeties should API implementations provide and how they should be documented.
