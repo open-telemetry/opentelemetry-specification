@@ -304,8 +304,8 @@ An `Attribute` is defined by the following properties:
 value, or a numeric type.
 
 The Span interface MUST provide:
-- An API to set attributes where the attribute properties are passed as
-arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
+- An API to set a single `Attribute` where the attribute properties are passed
+as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
 implementations may offer a separate API for each of the possible value types.
 
 Note that the OpenTelemetry project documents certain ["standard
@@ -323,10 +323,10 @@ An `Event` is defined by the following properties:
 The `Event` SHOULD be an immutable type.
 
 The Span interface MUST provide:
-- An API to record events where the `Event` properties are passed as arguments.
-This MAY be called `AddEvent`.
-- An API to record lazily initialized events. This can be implemented by
-providing an `Event` interface or a concrete `Event` definition and an
+- An API to record a single `Event` where the `Event` properties are passed as
+arguments. This MAY be called `AddEvent`.
+- An API to record a single lazily initialized `Event`. This can be implemented
+by providing an `Event` interface or a concrete `Event` definition and an
 `EventFormatter`. If the language supports overloads then this SHOULD be called
 `AddEvent` otherwise `AddLazyEvent` may be considered.
 
@@ -346,12 +346,12 @@ A `Link` is defined by the following properties:
 The `Link` SHOULD be an immutable type.
 
 The Span interface MUST provide:
-- An API to record links where the `Link` properties are passed as arguments.
-This MAY be called `AddLink`.
-- An API to record lazy initialized links. This can be implemented by providing
-a `Link` interface or a concrete `Link` definition and a `LinkFormatter`. If
-the language supports overloads then this MAY be called `AddLink` otherwise
-`AddLazyLink` MAY be consider.
+- An API to record a single `Link` where the `Link` properties are passed as
+arguments. This MAY be called `AddLink`.
+- An API to record a single lazily initialized `Link`. This can be implemented
+by providing a `Link` interface or a concrete `Link` definition and a
+`LinkFormatter`. If the language supports overloads then this MAY be called
+`AddLink` otherwise `AddLazyLink` MAY be consider.
 
 #### Set Status
 
