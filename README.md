@@ -23,7 +23,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
 - About the Project
   - [Timeline](#project-timeline)
   - [Versioning](#versioning)
-  - [Contributions](#change-process)
+  - [Contributions](#contributions)
   - [License](#license)
 
 ## Project Timeline
