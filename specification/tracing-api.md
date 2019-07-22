@@ -200,9 +200,9 @@ Please review the W3C specification for details on the [Tracestate field](https:
 
 ## Span
 
-Span represents a single operation within a trace. Spans can be nested to form a
-trace tree. Often, a trace contains a root span that describes the end-to-end
-latency and, optionally, one or more sub-spans for its sub-operations.
+A `Span` represents a single operation within a trace.
+Spans can be nested to form a trace tree.
+Each trace contains a root span, which typically describes the end-to-end latency and, optionally, one or more sub-spans for its sub-operations.
 
 Once Span [is created](#span-creation) - Span operations can be used to add
 additional properties to it like attributes, links, events, name and resulting
