@@ -329,7 +329,7 @@ The `Event` should be an immutable type.
 The Span interface MUST provide:
 - An API to record events where the `Event` properties are passed as arguments.
 This SHOULD be called `AddEvent`.
-- An API to record lazy initialized events. This can be implemented by providing
+- An API to record lazily initialized events. This can be implemented by providing
 an `Event` interface or a concrete `Event` definition and an `EventFormatter`. If
 the language supports overloads then this SHOULD be called `AddEvent` otherwise
 `AddLazyEvent` may be considered.
