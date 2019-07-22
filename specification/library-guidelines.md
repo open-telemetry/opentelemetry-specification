@@ -21,7 +21,7 @@ The document does not attempt to describe a language library API. For API specs 
 
 Here is a generic design for a language library (arrows indicate calls):
 
-![Language Library Design Diagram](language-library-design.png)
+![Language Library Design Diagram](img/library-design.png)
 
 ### Expected Usage
 
@@ -42,7 +42,7 @@ This self-sufficiency is achieved the following way.
 
 The API dependency will contain a minimal implementation of the API. When no other implementation is explicitly included in the application no telemetry data will be collected. Here is what active components will look like in this case:
 
-![Minimal Operation Diagram](language-library-minimal.png)
+![Minimal Operation Diagram](img/library-minimal.png)
 
 It is important that values returned from this minimal implementation of API are valid and do not require the caller to perform extra checks (e.g. createSpan() method should not fail and should return a valid non-null Span object). The caller should not need to know and worry about the fact that minimal implementation is in effect. This minimizes the boilerplate and error handling in the instrumented code.
 
@@ -52,7 +52,7 @@ It is also important that minimal implementation incurs as little performance pe
 
 The SDK implementation is a separate (optional) dependency. When it is plugged in it substitutes the minimal implementation that is included in the API package (exact substitution mechanism is language dependent). Here is what active components will look like in this case:
 
-![Full Operation Diagram](language-library-full.png)
+![Full Operation Diagram](img/library-full.png)
 
 It is recommended to decouple common parts of the implementation from protocol-specific Telemetry Exporters. Library designers are encouraged to specify an internal Telemetry Exporter API that defines how protocol-independent and protocol-dependant parts interact. The boundary and design goals for such API will be:
 
