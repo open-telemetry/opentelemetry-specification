@@ -343,7 +343,7 @@ A `Span` MUST have the ability to add links to other `Span`s. Linked `Span`s
 can be from the same or a different trace. See [Links
 description](../terminology.md#links-between-spans).
 
-An `Link` is defined by the following properties:
+A `Link` is defined by the following properties:
 - (Required) `SpanContext` of the `Span` to link to.
 - (Optional) One or more key:value pairs, where the keys must be strings and
 the values must be either a string, a boolean value, or a numeric type.
