@@ -280,13 +280,10 @@ recording status, none of the below may be called after the `Span` is finished.
 
 #### Get Context
 
-A `Span` MUST have the ability to return the `SpanContext` associated with it.
-The returned value MUST be the same for the entire Span lifetime.
-
 The Span interface MUST provide:
 - An API that returns the `SpanContext` for the given `Span`. The returned value
-may be used even after the `Span` is finished. This SHOULD be called
-`GetContext`.
+may be used even after the `Span` is finished. The returned value MUST be the
+same for the entire Span lifetime. This MAY be called `GetContext`.
 
 #### IsRecordingEvents
 
@@ -308,7 +305,7 @@ value, or a numeric type.
 
 The Span interface MUST provide:
 - An API to set attributes where the attribute properties are passed as
-arguments. This SHOULD be called `SetAttribute`. To avoid extra allocations some
+arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
 implementations may offer a separate API for each of the possible value types.
 
 Note that the OpenTelemetry project documents certain ["standard
@@ -317,46 +314,44 @@ attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
 #### Add Events
 
 A `Span` MUST have the ability to add events. Events have a time associated
-with the moment when they are added to the `Span.
+with the moment when they are added to the `Span`.
 
 An `Event` is defined by the following properties:
 - (Required) Name of the event.
-- (Optional) One or more key:value pairs, where the keys must be strings and
-the values must be either a string, a boolean value, or a numeric type.
+- (Optional) One or more `Attribute`.
 
-The `Event` should be an immutable type.
+The `Event` SHOULD be an immutable type.
 
 The Span interface MUST provide:
 - An API to record events where the `Event` properties are passed as arguments.
-This SHOULD be called `AddEvent`.
-- An API to record lazily initialized events. This can be implemented by providing
-an `Event` interface or a concrete `Event` definition and an `EventFormatter`. If
-the language supports overloads then this SHOULD be called `AddEvent` otherwise
-`AddLazyEvent` may be considered.
+This MAY be called `AddEvent`.
+- An API to record lazily initialized events. This can be implemented by
+providing an `Event` interface or a concrete `Event` definition and an
+`EventFormatter`. If the language supports overloads then this SHOULD be called
+`AddEvent` otherwise `AddLazyEvent` may be considered.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 
 #### Add Links
 
-A `Span` MUST have the ability to add links to other `Span`s. Linked `Span`s
+A `Span` MUST have the ability to record links to other `Span`s. Linked `Span`s
 can be from the same or a different trace. See [Links
 description](../terminology.md#links-between-spans).
 
 A `Link` is defined by the following properties:
 - (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more key:value pairs, where the keys must be strings and
-the values must be either a string, a boolean value, or a numeric type.
+- (Optional) One or more `Attribute`.
 
-The `Link` should be an immutable type.
+The `Link` SHOULD be an immutable type.
 
 The Span interface MUST provide:
 - An API to record links where the `Link` properties are passed as arguments.
-This SHOULD be called `AddLink`.
+This MAY be called `AddLink`.
 - An API to record lazy initialized links. This can be implemented by providing
 a `Link` interface or a concrete `Link` definition and a `LinkFormatter`. If
-the language supports overloads then this SHOULD be called `AddLink` otherwise
-`AddLazyLink` may be consider.
+the language supports overloads then this MAY be called `AddLink` otherwise
+`AddLazyLink` MAY be consider.
 
 #### Set Status
 
