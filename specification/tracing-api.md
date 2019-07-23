@@ -204,54 +204,47 @@ A `Span` represents a single operation within a trace.
 Spans can be nested to form a trace tree.
 Each trace contains a root span, which typically describes the end-to-end latency and, optionally, one or more sub-spans for its sub-operations.
 
-Once Span [is created](#span-creation) - Span operations can be used to add
-additional properties to it like attributes, links, events, name and resulting
-status. Span cannot be used to retrieve these properties. This prevents the
-mis-use of spans as an in-process information propagation mechanism.
-
-The only two getters on span returns `SpanContext` and the flag on whether span
-will be recorded.
-
-`Span` interface can have alternative implementations. It is expected that
-alternative implementations will be implementing vendor-specific logic. However,
-implementation MUST NOT allow to directly create a `Span`. Alternative
-implementation of `Span` can only be returned from alternative implementation of
-`SpanBuilder`, which in turn is only available from the `Tracer`. See [Span
-creation](#span-creation).
-
 `Span`s encapsulate:
 
 - The operation name
-- A `SpanContext`
-- A parent `Span` or `SpanContext`
+- A [`SpanContext`](#SpanContext)
+- A parent [`Span`](#Span) or [`SpanContext`](#SpanContext)
 - A start timestamp
 - An end timestamp
-- A set of Attributes
-- A set of Events
-- A set of Links
+- A set of [`Attribute`s](#SetAttribute)
+- A set of [`Link`s](#AddLink)
+- A set of [`Event`s](#AddEvent)
 
-The `Span`'s start and end timestamps describe the starting and ending time of the operation that the span represents.
-Implementations MUST NOT attach new attributes, links, or events to a `Span` after its end time has been set.
+The `Span`'s start and end timestamps reflect the elapsed real time of the operation.
+A `Span`'s start time SHOULD be set to the current time on [span creation](#span-creation).
+After the `Span` is created, it SHOULD be possible to change the its name, set its `Attribute`s, and add `Link`s and `Event`s.
+These MUST NOT be changed after the `Span`'s end time has been set.
+
+`Span`s are not meant to be used to propagate information within a process.
+To prevent misuse, implementations SHOULD NOT provide access to a `Span`'s attributes besides its `SpanContext`.
+
+
+Vendors may implement the `Span` interface to effect vendor-specific logic.
+However, alternative implementations MUST NOT allow callers to create `Span`s directly.
+All `Span`s MUST be created via a `Tracer`.
 
 ### Span Creation
 
-Implementations MUST provide a way to create `Span`s via a `Tracer`, which is responsible for tracking the currently active span and MAY provide default options for newly created spans.
+Implementations MUST provide a way to create `Span`s via a `Tracer`, which is responsible for tracking the currently active `Span` and MAY provide default options for newly created `Span`s.
 
-The tracer SHOULD create each new span as a child of its active span, and should set the newly created span as active.
-The Tracer MUST allow the caller to specify the parent span in the form of a `Span` or `SpanContext`.
-If the caller does explicitly set the span's parent, the Tracer's currently active span SHOULD NOT change.
-
-Implementations MAY provide helper methods to manage the lifetime of spans.
+The `Tracer` SHOULD create each new `Span` as a child of its active `Span`, and should set the newly created `Span` as active.
+The `Tracer` MUST allow the caller to specify the new `Span`'s parent in the form of a `Span` or `SpanContext`.
+If the caller does explicitly set the `Span`'s parent, the `Tracer`'s currently active `Span` SHOULD NOT change.
 
 Each span has zero or one parent spans and zero or more child spans, which represent causally related operations.
 A tree of related spans comprises a trace.
 A span is said to be a _root span_ if it does not have a parent.
 Each trace includes a single root span, which is the shared ancestor of all other spans in the trace.
-Implementations MUST provide an option to create a span as a root span, and MUST generate a new `TraceId` for each root span created.
+Implementations MUST provide an option to create a `Span` as a root span, and MUST generate a new `TraceId` for each root span created.
 
-A span's parent is said to be _remote_ if it was created in another process.
-Since the [`SpanContext`](#SpanContext) is the only component of a `Span` that is propagated between processes, a `Span`'s parent SHOULD be a `SpanContext` if it is remote.
-Otherwise, the Span's parent may be a `Span` or `SpanContext`.
+A `Span` is said to have a _remote parent_ if it is the child of a `Span` created in another process.
+Since the `SpanContext` is the only component of a `Span` that is propagated between processes, a `Span`'s parent SHOULD be a `SpanContext` if it is remote.
+Otherwise, it may be a `Span` or `SpanContext`.
 
 
 #### StartSpan
