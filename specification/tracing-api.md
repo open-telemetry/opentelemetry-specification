@@ -236,7 +236,7 @@ The `Tracer` SHOULD create each new `Span` as a child of its active `Span`, and 
 The `Tracer` MUST allow the caller to specify the new `Span`'s parent in the form of a `Span` or `SpanContext`.
 If the caller does explicitly set the `Span`'s parent, the `Tracer`'s currently active `Span` SHOULD NOT change.
 
-Each span has zero or one parent spans and zero or more child spans, which represent causally related operations.
+Each span has zero or one parent span and zero or more child spans, which represent causally related operations.
 A tree of related spans comprises a trace.
 A span is said to be a _root span_ if it does not have a parent.
 Each trace includes a single root span, which is the shared ancestor of all other spans in the trace.
