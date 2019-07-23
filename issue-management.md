@@ -28,10 +28,69 @@ allow us to track work across all projects in a similar manner.
   - Person whose Approval is needed to merge the PR.
 
 
-## Writing specs
+## Opening an Issue
 
-Specification is written in markdown format. Please make sure files are rendered
-OK on GitHub.
+- An issue is filed by OP.
+- A Maintainer responds and asks clarifying questions within 1-2 business days.
+- The Maintainer processes the issue and lables it as:
+  - `bug`
+  - `enhancement`
+  - `need-discussion`
+  - `documentation` or
+  - `will-not-fix` (thereby closing the issue with explicit reasons)
+- The Maintainer can also label the issue as
+  - `URGENT` (for critical issues)
+  - `help-wanted` for issues which require work and have no one assigned
+- Once a Collaborator is assigned, please remove `help-wanted` and add `wip` to 
+  the issue.
+
+
+## Closing an Issue
+
+- Review criteria:
+  - For interface and design changes: 2 approvals - which must be from reviewers 
+    who work at different companies than the Collaborator.
+  - For smaller or internal changes: 1 approval from a different company.
+- For `URGENT` issues:
+  - Collaborator: please provide initial assessment of the issues to OP ASAP or 
+    within 1 business day, whichever is earlier.
+  - Reviewer: please review and provide feedback ASAP or within 1 business day, 
+    whichever is earlier.
+  - Collaborator: please provide update and/or responses to review comments ASAP
+    or within 1 business day, whichever is sooner. Merge should happen as soon as
+    review criteria are met.
+- For non-`URGENT` issues
+  - Collaborator: please provide initial response or assessment of the issue to 
+    OP within 3 business days.
+  - Reviewer: please review and provide feedback within 3 business days.
+  - Collaborator: please provide update and/or responses to review comments
+    within 3 business days. Once all review comments are resolved, please allow 
+    1-2 business days for others to raise additional comments/questions, unless
+    the changes are fixing typos, bugs, documentation, test enhancements, or 
+    implementing already discussed design.
+
+When closing an issue that we `will-not-fix` or we believe need no further 
+action, please provide the rationale for closing, and indicate that OP can 
+re-open for discussion if there are additional info, justification and 
+questions.
+
+
+## When Issues Get Stuck
+
+Some issues are not directly related to a particular code change. If an 
+issue is worth considering in the issue backlog, but not scoped clearly 
+enough for work to begin, then please label it `needs-discussion`.
+
+- When possible, move the disucssion forward by using tests and code examples.
+- If discussion happens elsewhere, record relevant meeting notes into the
+  issue.
+- When an agreement is made, clearly summarize the decision, and list any 
+  resulting action items which need to be addressed.
+  
+If an issue is stuck because someone is not responding, please add the `stale` 
+label. It is possible to automate this. E.g. https://github.com/apps/stale 
+The minimum time elapsed before the `stale` label is applied is proposed to be 
+one week.
 
 We highly encourage to use line breaks in markdown files at `80` characters
 wide. There are tools that can do it for you effectively. Please submit proposal
