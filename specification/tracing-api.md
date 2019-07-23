@@ -233,13 +233,15 @@ sub-operations.
 `Span`s encapsulate:
 
 - The operation name
-- A [`SpanContext`](#SpanContext)
-- A parent [`Span`](#Span) or [`SpanContext`](#SpanContext)
+- An immutable [`SpanContext`](#SpanContext) that uniquely identifies the
+  `Span`
+- A parent span in the form of a [`Span`](#Span), [`SpanContext`](#SpanContext),
+  or null
 - A start timestamp
 - An end timestamp
 - An ordered mapping of [`Attribute`s](#SetAttribute)
-- A list of [`Link`s](#AddLink)
-- A list of [`Event`s](#AddEvent)
+- A list of [`Link`s](#AddLink) to other `Span`s
+- A list of timestamped [`Event`s](#AddEvent)
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
@@ -260,6 +262,13 @@ directly. All `Span`s MUST be created via a `Tracer`.
 Implementations MUST provide a way to create `Span`s via a `Tracer`, which is
 responsible for tracking the currently active `Span` and MAY provide default
 options for newly created `Span`s.
+
+The API MUST allow users to provide the following properties:
+- The operation name
+- The parent span, and whether the new `Span` should be a root `Span`.
+- `Attribute`s
+- `Link`s
+- `Event`s
 
 The `Tracer` MUST allow the caller to specify the new `Span`'s parent in the
 form of a `Span` or `SpanContext`. The `Tracer` SHOULD create each new `Span` as
