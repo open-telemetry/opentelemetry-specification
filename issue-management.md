@@ -91,8 +91,3 @@ If an issue is stuck because someone is not responding, please add the `stale`
 label. It is possible to automate this. E.g. https://github.com/apps/stale 
 The minimum time elapsed before the `stale` label is applied is proposed to be 
 one week.
-
-We highly encourage to use line breaks in markdown files at `80` characters
-wide. There are tools that can do it for you effectively. Please submit proposal
-to include your editor settings required to enable this behavior so the out of
-the box settings for this repository will be consistent.
