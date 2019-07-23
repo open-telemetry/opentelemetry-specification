@@ -81,7 +81,7 @@ Some issues are not directly related to a particular code change. If an
 issue is worth considering in the issue backlog, but not scoped clearly 
 enough for work to begin, then please label it `need-discussion`.
 
-- When possible, move the disucssion forward by using tests and code examples.
+- When possible, move the discussion forward by using tests and code examples.
 - If discussion happens elsewhere, record relevant meeting notes into the
   issue.
 - When an agreement is made, clearly summarize the decision, and list any 
