@@ -16,8 +16,8 @@ allow us to track work across all projects in a similar manner.
   - Original Poster. This is the person who has opened or posted the issue.
 - Maintainer (aka Triager, or anyone performing that role):
   - Person who is triaging the issue by determining its workability. This person is 
-    responsible for getting the tickets to one of two stages - 1) help-wanted 
-    2) will-not-fix. They are responsible for triaging by working with the OP to get 
+    responsible for getting the tickets to one of two stages - 1) `help-wanted` 
+    2) `will-not-fix`. They are responsible for triaging by working with the OP to get 
     additional information as needed and analyzing the issue and adding relevant 
     details/information/guidance that would be helpful to the resolution of the issue.
 - Collaborator:
