@@ -32,7 +32,7 @@ allow us to track work across all projects in a similar manner.
 
 - An issue is filed by OP.
 - A Maintainer responds and asks clarifying questions within 1-2 business days.
-- The Maintainer processes the issue and lables it as:
+- The Maintainer processes the issue and labels it as:
   - `bug`
   - `enhancement`
   - `need-discussion`
