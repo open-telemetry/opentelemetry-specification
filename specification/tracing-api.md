@@ -247,17 +247,6 @@ Since the `SpanContext` is the only component of a `Span` that is propagated bet
 Otherwise, it may be a `Span` or `SpanContext`.
 
 
-#### StartSpan
-
-Starts a new `Span`.
-
-If called multiple times with `Builder` pattern, the same `Span` will be returned.
-
-There should be no parameter if using a `Builder` pattern. Otherwise, `StartSpan`
-should accept all the optional parameters described in [Span creation](#span-creation).
-
-Returns the newly created `Span`.
-
 ### Span operations
 
 With the exception of the method to retrieve the `Span`'s `SpanContext` and
