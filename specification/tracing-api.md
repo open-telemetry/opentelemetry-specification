@@ -89,29 +89,35 @@ A duration is the elapsed time between two events.
 
 ### Obtaining a tracer
 
-A tracer SHOULD be obtained from a global registry, for example `OpenTelemetry.getTracer()`.
+A tracer SHOULD be obtained from a global registry, for example
+`OpenTelemetry.getTracer()`.
 
-The registration to the registry depends on the language. In some languages the tracer is explicitly 
-created and registered from user code and other languages the tracer implementation is resolved
-from linked dependencies using provider pattern.
+The registration to the registry depends on the language. In some languages the
+tracer is explicitly created and registered from user code and other languages
+the tracer implementation is resolved from linked dependencies using provider
+pattern.
 
-The tracer object construction depends on the implementation. Various implementations might require
-to specify different configuration properties at creation time. In languages where provider pattern
-is used the configuration is provided externally.
+The tracer object construction depends on the implementation. Various
+implementations might require to specify different configuration properties at
+creation time. In languages where provider pattern is used the configuration is
+provided externally.
 
 #### Tracer provider
 
-Tracer provider is an internal class used by the global registry (`OpenTelemetry`) to get a tracer instance.
-The global registry delegates calls to the provider every time a tracer instance is requested.
-This is necessary for use-cases when a single instrumentation code runs for multiple deployments.
+Tracer provider is an internal class used by the global registry
+(`OpenTelemetry`) to get a tracer instance. The global registry delegates calls
+> to the provider every time a tracer instance is requested. This is necessary
+for use-cases when a single instrumentation code runs for multiple deployments.
 
-The tracer provider is registered to API usually via language-specific mechanism, for instance `ServiceLoader` in Java.
+The tracer provider is registered to API usually via language-specific
+mechanism, for instance `ServiceLoader` in Java.
 
 ##### Runtime with multiple deployments/applications
 
-Application runtimes which support multiple deployments/applications might need to provide a different
-tracer instance to each deployment. In this case the runtime provides its own implementation of provider
-which returns a different tracer for each deployment.
+Application runtimes which support multiple deployments/applications might need
+to provide a different tracer instance to each deployment. In this case the
+runtime provides its own implementation of provider which returns a different
+tracer for each deployment.
 
 ### Tracer operations
 
@@ -121,8 +127,9 @@ Returns the current Span from the current context.
 
 There should be no parameter.
 
-Returns the default `Span` that does nothing and has an invalid `SpanContext` if no
-`Span` is associated with the current context, otherwise the current `Span` from the context.
+Returns the default `Span` that does nothing and has an invalid `SpanContext` if
+no `Span` is associated with the current context, otherwise the current `Span`
+from the context.
 
 #### WithSpan
 Enters the scope of code where the given `Span` is in the current context.
@@ -131,13 +138,15 @@ Required parameters:
 
 - The `Span` to be set to the current context.
 
-Returns an object that defines a scope where the given `Span` will be set to the current context.
+Returns an object that defines a scope where the given `Span` will be set to the
+current context.
 
-The scope is exited and previous state should be restored when the returned object is closed.
+The scope is exited and previous state should be restored when the returned
+object is closed.
 
 #### SpanBuilder
-Returns a `SpanBuilder` to create and start a new `Span`
-if a `Builder` pattern for [Span creation](#span-creation) is used.
+Returns a `SpanBuilder` to create and start a new `Span` if a `Builder` pattern
+for [Span creation](#span-creation) is used.
 
 Required parameters:
 
@@ -153,12 +162,12 @@ Required parameters:
 
 - `SpanData` to be reported to all exporters.
 
-This API allows to send a pre-populated span object to the exporter.
-Sampling and recording decisions as well as other collection optimizations are a
+This API allows to send a pre-populated span object to the exporter. Sampling
+and recording decisions as well as other collection optimizations are a
 responsibility of a caller.
 
-Note, the `SpanContext` object in the span population with
-the values that will allow correlation of telemetry is also a caller responsibility.
+Note, the `SpanContext` object in the span population with the values that will
+allow correlation of telemetry is also a caller responsibility.
 
 This API should be non-blocking.
 
@@ -167,36 +176,52 @@ Returns the binary format interface which can serialize/deserialize `Span`s.
 
 There should be no parameter.
 
-Returns the binary format for this implementation. If no implementation is provided
-then no-op implementation will be used.
+Returns the binary format for this implementation. If no implementation is
+provided then no-op implementation will be used.
 
 #### GetHttpTextFormat
 Returns the HTTP text format interface which can inject/extract `Span`s.
 
 There should be no parameter.
 
-Returns the HTTP text format for this implementation. If no implementation is provided
-then no-op implementation will be used.
+Returns the HTTP text format for this implementation. If no implementation is
+provided then no-op implementation will be used.
 
-Usually this will be the W3C Trace Context as the HTTP text format. For more details, see
-[trace-context](https://github.com/w3c/trace-context).
+Usually this will be the W3C Trace Context as the HTTP text format. For more
+details, see [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
-A `SpanContext` represents the portion of a `Span` which must be serialized and propagated along side of a distributed context. `SpanContext`s are immutable. `SpanContext` MUST be a final (sealed) class.
+A `SpanContext` represents the portion of a `Span` which must be serialized and
+propagated along side of a distributed context. `SpanContext`s are immutable.
+`SpanContext` MUST be a final (sealed) class.
 
-The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext specification](https://www.w3.org/TR/trace-context/). It contains two identifiers - a `TraceId` and a `SpanId` - along with a set of common `TraceOptions` and system-specific `TraceState` values. `SpanContext` is represented as an interface, in order to be serializable into a wider variety of trace context wire formats. 
+The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext
+specification](https://www.w3.org/TR/trace-context/). It contains two
+identifiers - a `TraceId` and a `SpanId` - along with a set of common
+`TraceOptions` and system-specific `TraceState` values. `SpanContext` is
+represented as an interface, in order to be serializable into a wider variety of
+trace context wire formats. 
 
-`TraceId` A valid trace identifier is a 16-byte array with at least one non-zero byte.
+`TraceId` A valid trace identifier is a 16-byte array with at least one
+non-zero byte.
 
-`SpanId` A valid span identifier is an 8-byte array with at least one non-zero byte.
+`SpanId` A valid span identifier is an 8-byte array with at least one non-zero
+byte.
 
-`TraceOptions` contain details about the trace. Unlike Tracestate values, TraceOptions are present in all traces. Currently, the only TraceOption is a boolean `recorded` [flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001).
+`TraceOptions` contain details about the trace. Unlike Tracestate values,
+TraceOptions are present in all traces. Currently, the only TraceOption is a
+boolean `recorded`
+[flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001).
 
-`Tracestate` carries system-specific configuration data, represented as a list of key-value pairs. TraceState allows multiple tracing systems to participate in the same trace. 
+`Tracestate` carries system-specific configuration data, represented as a list
+of key-value pairs. TraceState allows multiple tracing systems to participate in
+the same trace. 
 
-`IsValid` is a boolean flag which returns true if the SpanContext has a non-zero TraceID and a non-zero SpanID.
+`IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
+TraceID and a non-zero SpanID.
 
-Please review the W3C specification for details on the [Tracestate field](https://www.w3.org/TR/trace-context/#tracestate-field).
+Please review the W3C specification for details on the [Tracestate
+field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
 ## Span
 
@@ -218,9 +243,9 @@ sub-operations.
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
-creation](#span-creation). After the `Span` is created, it SHOULD be possible
-to change the its name, set its `Attribute`s, and add `Link`s and `Event`s.
-These MUST NOT be changed after the `Span`'s end time has been set.
+creation](#span-creation). After the `Span` is created, it SHOULD be possible to
+change the its name, set its `Attribute`s, and add `Link`s and `Event`s. These
+MUST NOT be changed after the `Span`'s end time has been set.
 
 `Span`s are not meant to be used to propagate information within a process. To
 prevent misuse, implementations SHOULD NOT provide access to a `Span`'s
@@ -246,8 +271,8 @@ Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
 trace. A span is said to be a _root span_ if it does not have a parent. Each
 trace includes a single root span, which is the shared ancestor of all other
-spans in the trace. Implementations MUST provide an option to create a `Span`
-as a root span, and MUST generate a new `TraceId` for each root span created.
+spans in the trace. Implementations MUST provide an option to create a `Span` as
+a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process.Since the `SpanContext` is the only component of a
@@ -266,8 +291,8 @@ Retrieve the `Span`s `SpanContext`
 
 There should be no parameter.
 
-Returns the `SpanContext` for the given `Span`. The returned value may be
-used even after the `Span` is finished.
+Returns the `SpanContext` for the given `Span`. The returned value may be used
+even after the `Span` is finished.
 
 #### IsRecordingEvents
 
@@ -310,7 +335,8 @@ keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 #### AddLink
 
 Adds a link to another `Span` from this `Span`. Linked `Span` can be from the
-same or different trace. See [Links description](../terminology.md#links-between-spans).
+same or different trace. See [Links
+description](../terminology.md#links-between-spans).
 
 Required parameters
 
@@ -338,8 +364,8 @@ Required parameters
 
 #### UpdateName
 
-Updates the `Span` name. Upon this update, any sampling behavior based on
-`Span` name will depend on the implementation.
+Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
+name will depend on the implementation.
 
 Required parameters:
 
@@ -407,7 +433,9 @@ a canonical code in conjuction with an optional descriptive message.
 
 ### StatusCanonicalCode
 
-`StatusCanonicalCode` represents the canonical set of status codes of a finished `Span`, following the [Standard GRPC codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
+`StatusCanonicalCode` represents the canonical set of status codes of a finished
+`Span`, following the [Standard GRPC
+codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
 
 #### Ok
 
@@ -423,14 +451,15 @@ An unknown error.
 
 #### InvalidArgument
 
-Client specified an invalid argument. Note that this differs from `FailedPrecondition`.
-`InvalidArgument` indicates arguments that are problematic regardless of the state of the
-system.
+Client specified an invalid argument. Note that this differs from
+`FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
+regardless of the state of the system.
 
 #### DeadlineExceeded
 
-Deadline expired before operation could complete. For operations that change the state
-of the system, this error may be returned even if the operation has completed successfully.
+Deadline expired before operation could complete. For operations that change the
+state of the system, this error may be returned even if the operation has
+completed successfully.
 
 #### NotFound
 
@@ -438,34 +467,35 @@ Some requested entity (e.g., file or directory) was not found.
 
 #### AlreadyExists
 
-Some entity that we attempted to create (e.g., file or directory) already exists.
+Some entity that we attempted to create (e.g., file or directory) already
+exists.
 
 #### PermissionDenied
 
 The caller does not have permission to execute the specified operation.
-`PermissionDenied` must not be used if the caller cannot be
-identified (use `Unauthenticated1` instead for those errors).
+`PermissionDenied` must not be used if the caller cannot be identified (use
+`Unauthenticated1` instead for those errors).
 
 #### ResourceExhausted
 
-Some resource has been exhausted, perhaps a per-user quota, or perhaps
-the entire file system is out of space.
+Some resource has been exhausted, perhaps a per-user quota, or perhaps the
+entire file system is out of space.
 
 #### FailedPrecondition
 
-Operation was rejected because the system is not in a state required for the operation's
-execution.
+Operation was rejected because the system is not in a state required for the
+operation's execution.
 
 #### Aborted
 
-The operation was aborted, typically due to a concurrency issue like sequencer check
-failures, transaction aborts, etc.
+The operation was aborted, typically due to a concurrency issue like sequencer
+check failures, transaction aborts, etc.
 
 #### OutOfRange
 
-Operation was attempted past the valid range. E.g., seeking or reading past end of file.
-Unlike `InvalidArgument`, this error indicates a problem that may be fixed if the system
-state changes.
+Operation was attempted past the valid range. E.g., seeking or reading past end
+of file. Unlike `InvalidArgument`, this error indicates a problem that may be
+fixed if the system state changes.
 
 #### Unimplemented
 
@@ -473,12 +503,13 @@ Operation is not implemented or not supported/enabled in this service.
 
 #### InternalError
 
-Internal errors. Means some invariants expected by underlying system has been broken.
+Internal errors. Means some invariants expected by underlying system has been
+broken.
 
 #### Unavailable
 
-The service is currently unavailable. This is a most likely a transient condition
-and may be corrected by retrying with a backoff.
+The service is currently unavailable. This is a most likely a transient
+condition and may be corrected by retrying with a backoff.
 
 #### DataLoss
 
@@ -595,8 +626,8 @@ MUST be immutable.
 
 #### GetLinks
 
-Returns the `Links` collection associated with this `SpanData`. The order
-of links in collection is not significant. This collection MUST be immutable.
+Returns the `Links` collection associated with this `SpanData`. The order of
+links in collection is not significant. This collection MUST be immutable.
 
 #### GetStatus
 
