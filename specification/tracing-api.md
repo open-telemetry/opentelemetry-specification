@@ -237,9 +237,9 @@ sub-operations.
 - A parent [`Span`](#Span) or [`SpanContext`](#SpanContext)
 - A start timestamp
 - An end timestamp
-- A set of [`Attribute`s](#SetAttribute)
-- A set of [`Link`s](#AddLink)
-- A set of [`Event`s](#AddEvent)
+- An ordered mapping of [`Attribute`s](#SetAttribute)
+- A list of [`Link`s](#AddLink)
+- A list of [`Event`s](#AddEvent)
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
