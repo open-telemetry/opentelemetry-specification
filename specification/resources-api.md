@@ -42,7 +42,7 @@ labels"](../semantic-conventions.md) that have prescribed semantic meanings.
 ### Create
 
 Creates a new `Resource` out of the collection of labels. This is a static
-method.
+method. For object-oriented languages, a constructor is also valid.
 
 Required parameter:
 
