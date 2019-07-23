@@ -261,11 +261,13 @@ Implementations MUST provide a way to create `Span`s via a `Tracer`, which is
 responsible for tracking the currently active `Span` and MAY provide default
 options for newly created `Span`s.
 
-The `Tracer` SHOULD create each new `Span` as a child of its active `Span`, and
-should set the newly created `Span` as active. The `Tracer` MUST allow the
-caller to specify the new `Span`'s parent in the form of a `Span` or
-`SpanContext`. If the caller does explicitly set the `Span`'s parent, the
-`Tracer`'s currently active `Span` SHOULD NOT change.
+The `Tracer` MUST allow the caller to specify the new `Span`'s parent in the
+form of a `Span` or `SpanContext`. The `Tracer` SHOULD create each new `Span` as
+a child of its active `Span` unless an explicit parent is provided.
+
+The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
+convenience methods to manage a `Span`'s lifetime of and the scope in which a
+`Span` is active.
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
