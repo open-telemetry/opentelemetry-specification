@@ -106,7 +106,7 @@ provided externally.
 
 Tracer provider is an internal class used by the global registry
 (`OpenTelemetry`) to get a tracer instance. The global registry delegates calls
-> to the provider every time a tracer instance is requested. This is necessary
+to the provider every time a tracer instance is requested. This is necessary
 for use-cases when a single instrumentation code runs for multiple deployments.
 
 The tracer provider is registered to API usually via language-specific
@@ -272,7 +272,8 @@ The API MUST allow users to provide the following properties:
 
 The `Tracer` MUST allow the caller to specify the new `Span`'s parent in the
 form of a `Span` or `SpanContext`. The `Tracer` SHOULD create each new `Span` as
-a child of its active `Span` unless an explicit parent is provided.
+a child of its active `Span` unless an explicit parent is provided or the
+option to create a span without a parent is selected.```
 
 The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
 convenience methods to manage a `Span`'s lifetime of and the scope in which a
@@ -286,9 +287,9 @@ spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
-created in another process.Since the `SpanContext` is the only component of a
+created in another process. Since the `SpanContext` is the only component of a
 `Span` that is propagated between processes, a `Span`'s parent SHOULD be a
-`SpanContext` if it is remote.Otherwise, it may be a `Span` or `SpanContext`.
+`SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
 
 
 ### Span operations
