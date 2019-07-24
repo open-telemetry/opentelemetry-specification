@@ -1,4 +1,4 @@
-# Terminology
+# Overview
 
 ## Distributed Tracing
 
