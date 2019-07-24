@@ -35,7 +35,7 @@ allow us to track work across all projects in a similar manner.
 - The Maintainer processes the issue and labels it as:
   - `bug`
   - `enhancement`
-  - `need-discussion`
+  - `needs-discussion`
   - `documentation` or
   - `will-not-fix` (thereby closing the issue with explicit reasons)
 - The Maintainer can also label the issue as
@@ -79,7 +79,7 @@ questions.
 
 Some issues are not directly related to a particular code change. If an 
 issue is worth considering in the issue backlog, but not scoped clearly 
-enough for work to begin, then please label it `need-discussion`.
+enough for work to begin, then please label it `needs-discussion`.
 
 - When possible, move the discussion forward by using tests and code examples.
 - If discussion happens elsewhere, record relevant meeting notes into the
