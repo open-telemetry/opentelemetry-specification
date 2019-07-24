@@ -323,6 +323,10 @@ The Span interface MUST provide:
 as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
 implementations may offer a separate API for each of the possible value types.
 
+Attributes SHOULD preserve the order in which they're set. Setting an attribute
+with the same key as an existing attribute SHOULD overwrite the existing
+attribute's value, but not affect its ordering.
+
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
 
@@ -344,6 +348,9 @@ arguments. This MAY be called `AddEvent`.
 by providing an `Event` interface or a concrete `Event` definition and an
 `EventFormatter`. If the language supports overloads then this SHOULD be called
 `AddEvent` otherwise `AddLazyEvent` may be considered.
+
+Events SHOULD preserve the order in which they're set. This will typically match
+the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](../semantic-conventions.md) which have prescribed semantic meanings.
@@ -367,6 +374,8 @@ arguments. This MAY be called `AddLink`.
 by providing a `Link` interface or a concrete `Link` definition and a
 `LinkFormatter`. If the language supports overloads then this MAY be called
 `AddLink` otherwise `AddLazyLink` MAY be consider.
+
+Links SHOULD preserve the order in which they're set.
 
 #### Set Status
 
