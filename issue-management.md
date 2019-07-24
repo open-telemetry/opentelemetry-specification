@@ -52,18 +52,18 @@ allow us to track work across all projects in a similar manner.
     who work at different companies than the Collaborator.
   - For smaller or internal changes: 1 approval from a different company.
 - For `URGENT` issues:
-  - Collaborator: please provide initial assessment of the issues to OP ASAP or 
+  - Collaborator: please provide an initial assessment of the issues to OP ASAP or 
     within 1 business day, whichever is earlier.
   - Reviewer: please review and provide feedback ASAP or within 1 business day, 
     whichever is earlier.
-  - Collaborator: please provide an update and/or responses to review comments ASAP
+  - Collaborator: please provide an update and/or response to each review comment ASAP
     or within 1 business day, whichever is sooner. Merge should happen as soon as
     review criteria are met.
 - For non-`URGENT` issues
-  - Collaborator: please provide initial response or assessment of the issue to 
+  - Collaborator: please provide an initial response or assessment of the issue to 
     OP within 3 business days.
   - Reviewer: please review and provide feedback within 3 business days.
-  - Collaborator: please provide update and/or responses to review comments
+  - Collaborator: please provide an update and/or response to each review comment
     within 3 business days. Once all review comments are resolved, please allow 
     1-2 business days for others to raise additional comments/questions, unless
     the changes are fixing typos, bugs, documentation, test enhancements, or 
