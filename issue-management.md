@@ -56,7 +56,7 @@ allow us to track work across all projects in a similar manner.
     within 1 business day, whichever is earlier.
   - Reviewer: please review and provide feedback ASAP or within 1 business day, 
     whichever is earlier.
-  - Collaborator: please provide update and/or responses to review comments ASAP
+  - Collaborator: please provide an update and/or responses to review comments ASAP
     or within 1 business day, whichever is sooner. Merge should happen as soon as
     review criteria are met.
 - For non-`URGENT` issues
