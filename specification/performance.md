@@ -11,8 +11,6 @@ Here are the key principles:
 
 Although there are inevitable overhead to achieve monitoring, API should not degrade the end-user application as possible. So that it should not block the end-user application nor consume too much memory resource.
 
-Especially, most telemetry exporters need to call API of servers to export traces. API call operations should be performed in asynchronous I/O or background thread to prevent blocking end-user applications.
-
 See also [Concurrency and Thread-Safety](concurrency.md) if the implementation supports concurrency.
 
 ### Tradeoff between non-blocking and memory consumption
@@ -42,7 +40,7 @@ In a documentation of the language library, it is a good idea to point out that 
 
 The language library could block the end-user application when it shut down. On shutdown, it has to flush data to prevent information loss. The language library should support user-configurable timeout if it blocks on shut down.
 
-If the language library supports an explicit flush operation, it could block also.
+If the language library supports an explicit flush operation, it could block also. But should support a configurable timeout.
 
 ## Documentation
 
