@@ -328,7 +328,7 @@ implementations may offer a separate API for each of the possible value types.
 
 Attributes SHOULD preserve the order in which they're set. Setting an attribute
 with the same key as an existing attribute SHOULD overwrite the existing
-attribute's value, but not affect its ordering.
+attribute's value.
 
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
