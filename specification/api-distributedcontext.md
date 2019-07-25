@@ -1,4 +1,4 @@
-# Summary
+# DistributedContext API
 An `Entry` is used to label anything that is associated
 with a specific operation, such as an HTTP request.
 
