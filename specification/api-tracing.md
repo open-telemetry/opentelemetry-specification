@@ -259,9 +259,12 @@ Implementations MUST provide a way to create `Span`s via a `Tracer`, which is
 responsible for tracking the currently active `Span` and MAY provide default
 options for newly created `Span`s.
 
-The API MUST allow users to provide the following properties:
+The API SHOULD require the caller to provide:
 - The operation name
 - The parent span, and whether the new `Span` should be a root `Span`.
+
+The API MUST allow users to provide the following properties, which SHOULD be
+empty by default:
 - `Attribute`s
 - `Link`s
 - `Event`s
