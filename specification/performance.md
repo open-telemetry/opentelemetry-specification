@@ -19,14 +19,11 @@ Incomplete asynchronous I/O tasks or background tasks may consume memory to pres
 
 If there is such tradeoff in language library, it should provide the following options to end-user:
 
+- **Prevent information loss**: Preserve all information but possible to consume many resources
 - **Prevent blocking**: Dropping some information under overwhelming load and show warning log to inform when information loss starts and when recovered
-  - Should be a default option other than Logging
   - Should provide option to change threshold of the dropping
   - Better to provide metric that represents effective sampling ratio
   - Language library might provide this option for Logging
-- **Prevent information loss**: Preserve all information but possible to consume many resources
-  - Should be a default option for Logging
-  - Language library might provide this option also for Tracing and Metrics
 
 ### End-user application should aware of the size of logs
 
