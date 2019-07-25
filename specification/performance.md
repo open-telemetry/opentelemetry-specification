@@ -25,7 +25,7 @@ If there is such tradeoff in language library, it should provide the following o
   - Better to provide metric that represents effective sampling ratio
   - Language library might provide this option for Logging
 
-### End-user application should aware of the size of logs
+### End-user application should be aware of the size of logs
 
 Logging could consume much memory by default if the end-user application emits too many logs. This default behavior is intended to preserve logs rather than dropping it. To make resource usage bounded, the end-user should consider reducing logs that are passed to the exporters.
 

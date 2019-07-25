@@ -21,6 +21,7 @@ Table of Content
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [StartSpan](#startspan)
   * [Span operations](#span-operations)
     * [GetContext](#getcontext)
     * [IsRecordingEvents](#isrecordingevents)
@@ -35,6 +36,12 @@ Table of Content
   * [Link creation](#link-creation)
   * [GetContext](#getcontext-1)
   * [GetAttributes](#getattributes)
+* [Status](#status)
+  * [StatusCanonicalCode](#statuscanonicalcode)
+  * [Status creation](#status-creation)
+  * [GetCanonicalCode](#getcanonicalcode)
+  * [GetDescription](#getdescription)
+  * [GetIsOk](#getisok)
 * [SpanData](#spandata)
   * [Constructing SpanData](#constructing-spandata)
   * [Getters](#getters)
@@ -82,7 +89,29 @@ A duration is the elapsed time between two events.
 
 ### Obtaining a tracer
 
-TODO: How tracer can be constructed? https://github.com/open-telemetry/opentelemetry-specification/issues/39
+A tracer SHOULD be obtained from a global registry, for example `OpenTelemetry.getTracer()`.
+
+The registration to the registry depends on the language. In some languages the tracer is explicitly 
+created and registered from user code and other languages the tracer implementation is resolved
+from linked dependencies using provider pattern.
+
+The tracer object construction depends on the implementation. Various implementations might require
+to specify different configuration properties at creation time. In languages where provider pattern
+is used the configuration is provided externally.
+
+#### Tracer provider
+
+Tracer provider is an internal class used by the global registry (`OpenTelemetry`) to get a tracer instance.
+The global registry delegates calls to the provider every time a tracer instance is requested.
+This is necessary for use-cases when a single instrumentation code runs for multiple deployments.
+
+The tracer provider is registered to API usually via language-specific mechanism, for instance `ServiceLoader` in Java.
+
+##### Runtime with multiple deployments/applications
+
+Application runtimes which support multiple deployments/applications might need to provide a different
+tracer instance to each deployment. In this case the runtime provides its own implementation of provider
+which returns a different tracer for each deployment.
 
 ### Tracer operations
 
@@ -107,7 +136,8 @@ Returns an object that defines a scope where the given `Span` will be set to the
 The scope is exited and previous state should be restored when the returned object is closed.
 
 #### SpanBuilder
-Returns a `SpanBuilder` to create and start a new `Span`.
+Returns a `SpanBuilder` to create and start a new `Span`
+if a `Builder` pattern for [Span creation](#span-creation) is used.
 
 Required parameters:
 
@@ -191,7 +221,61 @@ creation](#span-creation).
 
 ### Span creation
 
-TODO: SpanBuilder API https://github.com/open-telemetry/opentelemetry-specification/issues/37
+API MUST provide a way to create a new `Span`. Each language implementation should
+follow its own convention on `Span` creation, for example `Builder` in Java,
+`Options` in Go, etc. `Span` creation method MUST be defined on `Tracer`.
+
+Required parameters:
+
+- Name of the span.
+
+Optional parameters (or corresponding setters on `Builder` if using a `Builder` pattern):
+
+- Parent `Span`. If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan)
+  at `StartSpan` time will be used as parent. MUST be used to create a `Span`
+  when manual Context propagation is used OR when creating a root `Span` with
+  a parent with an invalid `SpanContext`.
+- Parent `SpanContext`. If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan)
+  at `StartSpan` time will be used as parent. MUST be used to create a `Span`
+  when the parent is in a different process.
+- The option to become a root `Span` for a new trace.
+  If not set, the value of [Tracer.getCurrentSpan](#getcurrentspan) at `StartSpan`
+  time will be used as parent.
+
+- **Note**: The three parameters above (parent `Span`, parent `SpanContext` and `root`) are
+  mutually exclusive. Based on language implementation, if multiple parameters are specified
+  or corresponding `Setter`s are called multiple times, only the last specified value will be used.
+  For example:
+    1. `builder.setParent(parentSpan).setNoParent().startSpan()` will generate a new root span
+    and `parentSpan` will be ignored;
+    2. `tracer.StartSpan(options.WithNoParent(), options.WithParentContext(parentCtx))`
+    will generate a new child span with remote parent `parentCtx`, and `WithNoParent` will be ignored.
+  
+  In languages that need to take all the three parameters at the same time when creating a `Span`,
+  parent `Span` should take precedence, then remote parent `SpanContext`, and `root` comes last.
+  For example:
+    3. `tracer.start_span(name='span', parent_span=span1, parent_span_context=ctx, root=true)`
+    will generate a new child span with parent `span1`, while `parent_span_context` and `root`
+    will be ignored. 
+
+- `Sampler` to the newly created `Span`. If not set, the implementation should provide a
+  default sampler used by Tracer.
+- Collection of `Link`s that will be associated with the newly created Span
+- The override value for [a flag indicating whether events should be recorded](#isrecordingevents)
+  for the newly created `Span`. If not set, the implementation will provide a default.
+- `SpanKind` for the newly created `Span`. If not set, the implementation will
+  provide a default value `INTERNAL`.
+
+#### StartSpan
+
+Starts a new `Span`.
+
+If called multiple times with `Builder` pattern, the same `Span` will be returned.
+
+There should be no parameter if using a `Builder` pattern. Otherwise, `StartSpan`
+should accept all the optional parameters described in [Span creation](#span-creation).
+
+Returns the newly created `Span`.
 
 ### Span operations
 
@@ -337,6 +421,118 @@ Returns the `SpanContext` of a linked span.
 
 Returns the immutable collection of attributes associated with this `Link`.
 Order of attributes is not significant.
+
+## Status
+
+`Status` interface represents the status of a finished `Span`. It's composed of
+a canonical code in conjuction with an optional descriptive message.
+
+### StatusCanonicalCode
+
+`StatusCanonicalCode` represents the canonical set of status codes of a finished `Span`, following the [Standard GRPC codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
+
+#### Ok
+
+The operation completed successfully.
+
+#### Cancelled
+
+The operation was cancelled (typically by the caller).
+
+#### UnknownError
+
+An unknown error.
+
+#### InvalidArgument
+
+Client specified an invalid argument. Note that this differs from `FailedPrecondition`.
+`InvalidArgument` indicates arguments that are problematic regardless of the state of the
+system.
+
+#### DeadlineExceeded
+
+Deadline expired before operation could complete. For operations that change the state
+of the system, this error may be returned even if the operation has completed successfully.
+
+#### NotFound
+
+Some requested entity (e.g., file or directory) was not found.
+
+#### AlreadyExists
+
+Some entity that we attempted to create (e.g., file or directory) already exists.
+
+#### PermissionDenied
+
+The caller does not have permission to execute the specified operation.
+`PermissionDenied` must not be used if the caller cannot be
+identified (use `Unauthenticated1` instead for those errors).
+
+#### ResourceExhausted
+
+Some resource has been exhausted, perhaps a per-user quota, or perhaps
+the entire file system is out of space.
+
+#### FailedPrecondition
+
+Operation was rejected because the system is not in a state required for the operation's
+execution.
+
+#### Aborted
+
+The operation was aborted, typically due to a concurrency issue like sequencer check
+failures, transaction aborts, etc.
+
+#### OutOfRange
+
+Operation was attempted past the valid range. E.g., seeking or reading past end of file.
+Unlike `InvalidArgument`, this error indicates a problem that may be fixed if the system
+state changes.
+
+#### Unimplemented
+
+Operation is not implemented or not supported/enabled in this service.
+
+#### InternalError
+
+Internal errors. Means some invariants expected by underlying system has been broken.
+
+#### Unavailable
+
+The service is currently unavailable. This is a most likely a transient condition
+and may be corrected by retrying with a backoff.
+
+#### DataLoss
+
+Unrecoverable data loss or corruption.
+
+#### Unauthenticated
+
+The request does not have valid authentication credentials for the operation.
+
+### Status creation
+
+API MUST provide a way to create a new `Status`.
+
+Required parameters
+
+- `StatusCanonicalCode` of this `Status`.
+
+Optional parameters
+
+- Description of this `Status`.
+
+### GetCanonicalCode
+
+Returns the `StatusCanonicalCode` of this `Status`.
+
+### GetDescription
+
+Returns the description of this `Status`.
+
+### GetIsOk
+
+Returns false if this `Status` represents an error, else returns true.
 
 ## SpanData
 
