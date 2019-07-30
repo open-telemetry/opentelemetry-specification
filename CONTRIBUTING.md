@@ -8,7 +8,7 @@ requirements and recommendations.
 
 ## Proposing a change
 
-TODO: describe the RFC process https://github.com/open-telemetry/community/issues/56
+Significant changes should go through the [RFC process](https://github.com/open-telemetry/rfcs).
 
 ## Writing specs
 
