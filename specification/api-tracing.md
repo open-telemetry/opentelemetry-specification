@@ -194,9 +194,8 @@ propagated along side of a distributed context. `SpanContext`s are immutable.
 The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext
 specification](https://www.w3.org/TR/trace-context/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
-`TraceOptions` and system-specific `TraceState` values. `SpanContext` is
-represented as an interface, in order to be serializable into a wider variety of
-trace context wire formats. 
+`TraceOptions`. `SpanContext` is represented as an interface, in order to be
+serializable into a wider variety of trace context wire formats.
 
 `TraceId` A valid trace identifier is a 16-byte array with at least one
 non-zero byte.
@@ -208,16 +207,8 @@ byte.
 TraceOptions are present in all traces. Currently, the only TraceOption is a
 boolean `recorded`
 [flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001).
-
-`Tracestate` carries system-specific configuration data, represented as a list
-of key-value pairs. TraceState allows multiple tracing systems to participate in
-the same trace. 
-
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
-
-Please review the W3C specification for details on the [Tracestate
-field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
 ## Span
 

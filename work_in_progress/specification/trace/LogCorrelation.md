@@ -36,9 +36,6 @@ The sampling bit of the current span, as a boolean.  See
 
 TODO(sebright): Include "samplingScore" once that field is added to the SpanContext.
 
-TODO(sebright): Add a section on fields from the Tracestate. Users should be able to add
-vendor-specific fields from the Tracestate to logs, using a callback mechanism.
-
 TODO(sebright): Consider adding parent span ID, to allow recreating the trace structure from logs.
 
 ## String format for tracing data

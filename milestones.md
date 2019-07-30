@@ -162,8 +162,7 @@ Example of scope for extended SDK:
 3. Discussions like
    1. Native (POJO) object vs. Proto-generated object with proto dependency in
       SDK
-4. Tracestate manipulation callbacks
-5. Other
+4. Other
 
 First iteration of SDK feedback – **mid August** we have specs, **End of
 August** – first iteration of Java SDK complete.
