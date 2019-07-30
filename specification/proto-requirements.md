@@ -93,3 +93,7 @@ The protocol must allow Level 7 load balancers such as Envoy to re-balance the t
 #### Backwards Compatibility
 
 The protocol should be possible to evolve over time. It should be possible for nodes that implement different versions of OpenTelemetry protocol to interoperate (while possibly regressing to the lowest common denominator from functional perspective).
+
+#### General Requirements
+
+The protocol must use well-known, mature encoding and transport mechanisms with ubiquitous availability of implementations in wide selection of languages that are supported by OpenTelemetry.
