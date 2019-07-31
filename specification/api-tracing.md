@@ -404,7 +404,7 @@ record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
 ## Status
 
 `Status` interface represents the status of a finished `Span`. It's composed of
-a canonical code in conjuction with an optional descriptive message.
+a canonical code in conjunction with an optional descriptive message.
 
 ### StatusCanonicalCode
 
