@@ -38,12 +38,12 @@ an agent attaches further labels about the underlying VM, the cluster, or geo-lo
 
 ### From environment variables
 Population of resource information from environment variables MUST be provided by the
-core library. It provides the user with an ubiquitious way to manually provide information
+core library. It provides the user with an ubiquitous way to manually provide information
 that may not be detectable automatically through available integration libraries.
 
 Two environment variables are used:
 * `OC_RESOURCE_TYPE`: defines the resource type. Leading and trailing whitespaces are trimmed.
-* `OC_RESOURCE_LABELS`: defines resource labels as a comma-seperated list of key/value pairs
+* `OC_RESOURCE_LABELS`: defines resource labels as a comma-separated list of key/value pairs
 (`[ <key>="value" [ ,<key>="<value>" ... ] ]`). `"` characters in values MUST be escaped with `\`.
 
 For example:
