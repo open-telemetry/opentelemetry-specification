@@ -1,7 +1,7 @@
 # All documents to be used in spell check.
 ALL_DOC := $(shell find . -name '*.md' -type f | sort)
 
-MISSPELL=misspell
+MISSPELL=misspell -error
 MISSPELL_CORRECTION=misspell -w
 
 .PHONY: travis-ci
@@ -9,14 +9,7 @@ travis-ci: misspell
 
 .PHONY: misspell
 misspell:
-	@MISSPELLOUT=`$(MISSPELL) $(ALL_DOC) 2>&1`; \
-	if [ "$$MISSPELLOUT" ]; then \
-		echo "$(MISSPELL) FAILED => clean the following typos: (make misspell-correction)\n"; \
-		echo "$$MISSPELLOUT\n"; \
-		exit 1; \
-	else \
-	    echo "Misspell finished successfully"; \
-	fi
+	$(MISSPELL) $(ALL_DOC)
 
 .PHONY: misspell-correction
 misspell-correction:
