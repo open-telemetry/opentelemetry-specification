@@ -1,13 +1,13 @@
 # Resources API
 
-[Resource](../terminology.md#resources) represents the entity producing
+A [Resource](../terminology.md#resources) represents the entity producing
 telemetry. The primary purpose of resources as a first-class concept in the API
 is decoupling of discovery of resource information from exporters. This allows
 for independent development and easy customization for users that need to
-integrate with closed source environments. API MUST allow creation of
-`Resources` and associating them with telemetry.
+integrate with closed source environments. API MUST allow for creation of
+`Resources` and for associating them with telemetry.
 
-When used with distributed tracing resource can be associated with the
+When used with distributed tracing, a resource can be associated with the
 [Tracer](tracing-api.md#tracer) or individual
 [SpanData](tracing-api.md#spandata). When associated with `Tracer`, all `Span`s
 produced by this `Tracer` will automatically be associated with this `Resource`.
@@ -23,54 +23,61 @@ TODO: notes how Resources API is extended when using `SDK`. https://github.com/o
 
 ## Resource creation
 
-API defines two ways to instantiate an instance of `Resource`. First, by
-providing a collection of labels - method [Create](#create). The typical use of
-this method is by creating resource from the list of labels taken from
-environment variables, metadata API call response, or other sources.
+The API interface must support two ways to instantiate new resources. Those
+are:
 
-Second, by merging two `Resource`s into a new one. The method [Merge](#merge) is
-used when a `Resource` is constructed from multiple sources - metadata API call
-for the host and environment variables for the container. So a single `Resource`
-will contain labels for both.
+### Create
 
-Lastly, it is a good practice for API to allow easy creation of a default or
-empty `Resource`.
+The interface MUST provide a way to create a new resource, from a collection 
+of labels. Examples include a factory method or a constructor for 
+a resource object. A factory method is recommended to enable support for 
+cached objects.
+
+Required parameters:
+
+- a collection of name/value labels, where name and value are both strings.
+
+### Merge
+
+The interface MUST provide a way for a primary resource to merge with a 
+secondary resource, resulting in the creation of a brand new resource. The 
+original resources should be unmodified.
+
+This is utilized for merging of resources whose labels come from different
+sources, such as environment variables, or metadata extracted from the host or 
+container.
+
+Already set labels MUST NOT be overwritten unless they are the empty string. 
+
+Label key namespacing SHOULD be used to prevent collisions across different 
+resource detection steps.
+
+Required parameters:
+
+- the primary resource whose labels takes precedence.
+- the secondary resource whose labels will be merged.
+
+### The empty resource
+
+It is recommended, but not required, to provide a way to quickly create an empty 
+resource.
 
 Note that the OpenTelemetry project documents certain ["standard
 labels"](../semantic-conventions.md) that have prescribed semantic meanings.
 
-### Create
-
-Creates a new `Resource` out of the collection of labels. This is a static
-method.
-
-Required parameter:
-
-Collection of name/value labels where both name and value are strings.
-
-### Merge
-
-Creates a new `Resource` that is a combination of labels of two `Resource`s. For
-example, from two `Resource`s - one representing the host and one representing a
-container, resulting `Resource` will describe both.
-
-Already set labels MUST NOT be overwritten unless they are empty string. Label
-key namespacing SHOULD be used to prevent collisions across different resource
-detection steps.
-
-
-Required parameter:
-
-`Resource` to merge into the one, on which the method was called.
-
 ## Resource operations
 
-API defines a resource class with a single getter for the list of labels
-associated with this resource. `Resource` object should be assumed immutable.
+In addition to resource creation, the following operations should be provided:
 
-### GetLabels
+### Retrieve labels
 
-Returns the read only collection of labels associated with this resource. Each
-label is a string to string name value pair. The order of labels in collection
-is not significant. The typical use of labels collection is enumeration so the
-fast access to the label value by it's key is not a requirement.
+The API should provide a way to retrieve a read only collection of labels
+associated with a resource. The labels should consist of the name and values, 
+both of which should be strings.
+
+There is no need to guarantee the order of the labels.
+
+The most common operation when retrieving labels is to enumerate over them.
+As such, it is recommended to optimize the resulting collection for fast 
+enumeration over other considerations such as a way to quickly retrieve a
+value for a label with a specific key.
