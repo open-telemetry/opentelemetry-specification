@@ -8,6 +8,10 @@
 .settings
 bin
 
+# Go module
+go.mod
+go.sum
+
 # NetBeans
 /.nb-gradle
 /.nb-gradle-properties
