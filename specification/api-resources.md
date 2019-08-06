@@ -63,7 +63,7 @@ It is recommended, but not required, to provide a way to quickly create an empty
 resource.
 
 Note that the OpenTelemetry project documents certain ["standard
-labels"](../semantic-conventions.md) that have prescribed semantic meanings.
+labels"](data-semantic-conventions.md) that have prescribed semantic meanings.
 
 ## Resource operations
 
