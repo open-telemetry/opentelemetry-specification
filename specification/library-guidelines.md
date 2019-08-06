@@ -83,6 +83,13 @@ Note that mocking is also possible by using SDK and a Mock `Exporter` without ne
 
 The mocking approach chosen will depend on the testing goals and at which point exactly it is desirable to intercept the telemetry data path during the test.
 
+## Performance and Blocking
+
+See the [Performance and Blocking](performance.md) specification for
+guidelines on the performance expectations that API implementations should meet, strategies for meeting these expectations, and a description of how implementations should document their behavior under load.
+
 ## Concurrency and Thread-Safety
 
-See [Concurrency and Thread-Safety](concurrency.md) specification for guidelines on what concurrency safeties should API implementations provide and how they should be documented.
+See the [Concurrency and Thread-Safety](concurrency.md) specification for
+guidelines on what concurrency safeties should API implementations provide
+and how they should be documented.

@@ -46,7 +46,7 @@ Shuts down the exporter. Called when SDK is shut down. This is an opportunity fo
 
 ## Further Language Specialization
 
-Based on the generic interface definition layed out above library authors must define the exact interface for the particular language. 
+Based on the generic interface definition laid out above library authors must define the exact interface for the particular language. 
 
 Authors are encouraged to use efficient data structures on the interface boundary that are well suited for fast serialization to wire formats by protocol exporters and minimize the pressure on memory managers. The latter typically requires understanding of how to optimize the rapidly-generated, short-lived telemetry data structures to make life easier for the memory manager of the specific language. General recommendation is to minimize the number of allocations and use allocation arenas where possible, thus avoiding explosion of allocation/deallocation/collection operations in the presence of high rate of telemetry data generation.
 
