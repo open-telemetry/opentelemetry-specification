@@ -16,7 +16,7 @@ This directory describes the Metrics API that can be used to record application 
 
 This API for resource information population.
 
-The resource directory primarily defines a type [Resource](../terminology.md#resources) that captures information about the entity for which stats or traces are recorded. For example, metrics exposed by a Kubernetes container can be linked to a resource that specifies the cluster, namespace, pod, and container name.
+The resource directory primarily defines a type [Resource](overview.md#resources) that captures information about the entity for which stats or traces are recorded. For example, metrics exposed by a Kubernetes container can be linked to a resource that specifies the cluster, namespace, pod, and container name.
 
 ### `/distributedcontext`
 
@@ -31,11 +31,11 @@ This API consists of a few main classes:
 
 This API consist of a few main classes:
 
-- `Tracer` is used for all operations. See [Tracer](./tracing-api.md#tracer) section.
+- `Tracer` is used for all operations. See [Tracer](api-tracing.md#tracer) section.
 - `Span` is a mutable object storing information about the current operation
-   execution. See [Span](./tracing-api.md#span) section.
+   execution. See [Span](api-tracing.md#span) section.
 - `SpanData` is an immutable object that is used to report out-of-band completed
-  spans. See [SpanData](./tracing-api.md#spandata) section.
+  spans. See [SpanData](api-tracing.md#spandata) section.
 
 ### `/internal` (_Optional_)
 Private application and library code.
