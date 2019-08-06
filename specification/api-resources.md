@@ -1,19 +1,19 @@
 # Resources API
 
-A [Resource](../terminology.md#resources) represents the entity producing
-telemetry. The primary purpose of resources as a first-class concept in the API
-is decoupling of discovery of resource information from exporters. This allows
-for independent development and easy customization for users that need to
-integrate with closed source environments. API MUST allow for creation of
-`Resources` and for associating them with telemetry.
+A [Resource](overview.md#resources) represents the entity producing telemetry.
+The primary purpose of resources as a first-class concept in the API is
+decoupling of discovery of resource information from exporters. This allows for
+independent development and easy customization for users that need to integrate
+with closed source environments. API MUST allow for creation of `Resources` and
+for associating them with telemetry.
 
 When used with distributed tracing, a resource can be associated with the
-[Tracer](tracing-api.md#tracer) or individual
-[SpanData](tracing-api.md#spandata). When associated with `Tracer`, all `Span`s
+[Tracer](api-tracing.md#tracer) or individual
+[SpanData](api-tracing.md#spandata). When associated with `Tracer`, all `Span`s
 produced by this `Tracer` will automatically be associated with this `Resource`.
 When associated with the `SpanData` explicitly for out-of-band spans -
-`Resource` that is set on `Tracer` MUST be ignored. Note, that association
-of `Tracer` with the `Resource` will be done in SDK, not as API call.
+`Resource` that is set on `Tracer` MUST be ignored. Note, that association of
+`Tracer` with the `Resource` will be done in SDK, not as API call.
 
 **TODO**: explain how resource is associated with metrics.
 

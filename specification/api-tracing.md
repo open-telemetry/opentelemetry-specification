@@ -362,7 +362,7 @@ keys"](../semantic-conventions.md) which have prescribed semantic meanings.
 
 A `Span` MUST have the ability to record links to other `Span`s. Linked `Span`s
 can be from the same or a different trace. See [Links
-description](../terminology.md#links-between-spans).
+description](overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
 - (Required) `SpanContext` of the `Span` to link to.
