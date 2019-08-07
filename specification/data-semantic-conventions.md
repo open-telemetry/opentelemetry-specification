@@ -109,7 +109,7 @@ Examples of span name: `grpc.test.EchoService/Echo`.
 
 | Attribute name | Notes and examples                                           | Required? |
 | -------------- | ------------------------------------------------------------ | --------- |
-| `component`    | Declares that this is a grpc component. Value MUST be `grpc` | Yes       |
+| `component`    | Declares that this is a grpc component. Value MUST be `"grpc"` | Yes       |
 
 `peer.*` attributes MUST define service name as `peer.service`, host as
 `peer.hostname` and port as `peer.port`.
