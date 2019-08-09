@@ -109,20 +109,17 @@ Implementations might require the user to specify configuration properties at
 `Tracer` creation time, or rely on external configuration, e.g. in the case of
 the provider pattern.
 
-Tracer provider is an internal class used by the global registry
-(`OpenTelemetry`) to get a tracer instance. The global registry delegates calls
-to the provider every time a tracer instance is requested. This is necessary
-for use-cases when a single instrumentation code runs for multiple deployments.
+##### Runtimes with multiple deployments/applications
 
-The tracer provider is registered to API usually via language-specific
-mechanism, for instance `ServiceLoader` in Java.
+Runtimes that support multiple deployments or applications might need to
+provide a different `Tracer` instance to each deployment. To support this,
 
-##### Runtime with multiple deployments/applications
+the global `Tracer` registry may delegate calls to create new `Tracer`s to a
+separate `Provider` component, and the runtime may include its own `Provider`
+implementation which returns a different `Tracer` for each deployment.
 
-Application runtimes which support multiple deployments/applications might need
-to provide a different tracer instance to each deployment. In this case the
-runtime provides its own implementation of provider which returns a different
-tracer for each deployment.
+`Provider`s are registered with the API via some language-specific mechanism,
+for instance the `ServiceLoader` class in Java.
 
 ### Tracer operations
 
