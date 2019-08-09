@@ -83,22 +83,31 @@ A duration is the elapsed time between two events.
 
 ## Tracer
 
+The OpenTelemetry library achieves in-process context propagation of `Span`s by
+way of the `Tracer`.
+
+The `Tracer` is responsible for tracking the currently active `Span`, and
+exposes methods for creating and activating new `Span`s. The `Tracer` is
+configured with `Propagator`s which support transferring context across process
+boundaries, and `Exporter`s and `SpanProcessor`s which control how spans are
+exported to APMs.
+
+`Tracer`s are generally expected to be used as singletons. Implementations
+SHOULD provide a single global default `Tracer`.
+
+Some applications may require multiple `Tracer` instances, e.g. to create
+`Span`s on behalf of other applications. Implementations MAY provide a global
+registry of `Tracer`s for such applications.
+
 ### Obtaining a tracer
 
-A tracer SHOULD be obtained from a global registry, for example
-`OpenTelemetry.getTracer()`.
+`Tracer` object construction and registration will vary by implementation.
+`Tracer`s may be explicitly created and registered from user code, or resolved
+from linked dependencies using the provider pattern.
 
-The registration to the registry depends on the language. In some languages the
-tracer is explicitly created and registered from user code and other languages
-the tracer implementation is resolved from linked dependencies using provider
-pattern.
-
-The tracer object construction depends on the implementation. Various
-implementations might require to specify different configuration properties at
-creation time. In languages where provider pattern is used the configuration is
-provided externally.
-
-#### Tracer provider
+Implementations might require the user to specify configuration properties at
+`Tracer` creation time, or rely on external configuration, e.g. in the case of
+the provider pattern.
 
 Tracer provider is an internal class used by the global registry
 (`OpenTelemetry`) to get a tracer instance. The global registry delegates calls
@@ -117,76 +126,44 @@ tracer for each deployment.
 
 ### Tracer operations
 
-#### GetCurrentSpan
+The `Tracer` MUST provide methods to:
 
-Returns the current Span from the current context.
+- Get the currently active `Span`
+- Create a new `Span`
+- Set a given `Span` as active
 
-There should be no parameter.
+The `Tracer` SHOULD allow end users to configure other tracing components that
+control how spans are serialized and exported:
 
-Returns the default `Span` that does nothing and has an invalid `SpanContext` if
-no `Span` is associated with the current context, otherwise the current `Span`
-from the context.
+- the binary and text format `Propagator`s used to serialize `Spans` created by the `Tracer`
+- the `SpanProcessor`s and `Exporter`s used to export `Spans` created by the `Tracer`
 
-#### WithSpan
-Enters the scope of code where the given `Span` is in the current context.
+When getting the current span, the `Tracer` MUST return a placeholder `Span`
+with an invalid `SpanContext` if there is no currently active `Span`.
 
-Required parameters:
+When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
+new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
+SHOULD create each new `Span` as a child of its active `Span` unless an
+explicit parent is provided or the option to create a span without a parent is
+selected.
 
-- The `Span` to be set to the current context.
+The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
+convenience methods to manage a `Span`'s lifetime and the scope in which a
+`Span` is active. When an active span is finished, the previously-active span
+SHOULD be made active.
 
-Returns an object that defines a scope where the given `Span` will be set to the
-current context.
+The `Tracer` MUST support recording spans that were created _out of band_, i.e.
+not by the tracer itself. For this reason, implementations MUST NOT require
+that a `Span`'s start and end timestamps match the wall time when it is
+created, made active, or finished.
 
-The scope is exited and previous state should be restored when the returned
-object is closed.
-
-#### SpanBuilder
-Returns a `SpanBuilder` to create and start a new `Span` if a `Builder` pattern
-for [Span creation](#span-creation) is used.
-
-Required parameters:
-
-- Name of the span.
-
-Returns a `SpanBuilder` to create and start a new `Span`.
-
-#### RecordSpanData
-
-Records a `SpanData`.
-
-Required parameters:
-
-- `SpanData` to be reported to all exporters.
-
-This API allows to send a pre-populated span object to the exporter. Sampling
-and recording decisions as well as other collection optimizations are a
-responsibility of a caller.
-
-Note, the `SpanContext` object in the span population with the values that will
-allow correlation of telemetry is also a caller responsibility.
-
-This API should be non-blocking.
-
-#### GetBinaryFormat
-Returns the binary format interface which can serialize/deserialize `Span`s.
-
-There should be no parameter.
-
-Returns the binary format for this implementation. If no implementation is
-provided then no-op implementation will be used.
-
-#### GetHttpTextFormat
-Returns the HTTP text format interface which can inject/extract `Span`s.
-
-There should be no parameter.
-
-Returns the HTTP text format for this implementation. If no implementation is
-provided then no-op implementation will be used.
-
-Usually this will be the W3C Trace Context as the HTTP text format. For more
+The implementation MUST provide no-op binary and text `Propagator`s, which the
+`Tracer` SHOULD use by default if other propagators are not configured. SDKs
+SHOULD use the W3C HTTP Trace Context as the default text format. For more
 details, see [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
+
 A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
 `SpanContext` MUST be a final (sealed) class.
@@ -268,15 +245,6 @@ empty by default:
 - `Attribute`s
 - `Link`s
 - `Event`s
-
-The `Tracer` MUST allow the caller to specify the new `Span`'s parent in the
-form of a `Span` or `SpanContext`. The `Tracer` SHOULD create each new `Span` as
-a child of its active `Span` unless an explicit parent is provided or the
-option to create a span without a parent is selected.
-
-The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
-convenience methods to manage a `Span`'s lifetime of and the scope in which a
-`Span` is active.
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
