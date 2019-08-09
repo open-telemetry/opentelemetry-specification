@@ -106,8 +106,8 @@ registry of `Tracer`s for such applications.
 from linked dependencies using the provider pattern.
 
 Implementations might require the user to specify configuration properties at
-`Tracer` creation time, or rely on external configuration, e.g. in the case of
-the provider pattern.
+`Tracer` creation time, or rely on external configuration, e.g. when using the
+provider pattern.
 
 ##### Runtimes with multiple deployments/applications
 
