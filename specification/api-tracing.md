@@ -130,10 +130,10 @@ The `Tracer` MUST provide methods to:
 - Set a given `Span` as active
 
 The `Tracer` SHOULD allow end users to configure other tracing components that
-control how spans are serialized and exported:
+control how `Span`s are serialized and exported:
 
-- the binary and text format `Propagator`s used to serialize `Spans` created by the `Tracer`
-- the `SpanProcessor`s and `Exporter`s used to export `Spans` created by the `Tracer`
+- the binary and text format `Propagator`s used to serialize `Span`s created by the `Tracer`
+- the `SpanProcessor`s and `Exporter`s used to export `Span`s created by the `Tracer`
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
@@ -146,12 +146,12 @@ selected.
 
 The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
 convenience methods to manage a `Span`'s lifetime and the scope in which a
-`Span` is active. When an active span is finished, the previously-active span
-SHOULD be made active.
+`Span` is active. When an active `Span` is finished, the previously-active
+`Span` SHOULD be made active.
 
-The `Tracer` MUST support recording spans that were created _out of band_, i.e.
-not by the tracer itself. For this reason, implementations MUST NOT require
-that a `Span`'s start and end timestamps match the wall time when it is
+The `Tracer` MUST support recording `Span`s that were created _out of band_,
+i.e.  not by the tracer itself. For this reason, implementations MUST NOT
+require that a `Span`'s start and end timestamps match the wall time when it is
 created, made active, or finished.
 
 The implementation MUST provide no-op binary and text `Propagator`s, which the
