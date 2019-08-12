@@ -21,7 +21,6 @@ Table of Content
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
-    * [StartSpan](#startspan)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecordingEvents](#isrecordingevents)
@@ -48,7 +47,7 @@ Table of Content
     * [GetContext](#getcontext)
     * [GetParentSpanId](#getparentspanid)
     * [GetResource](#getresource)
-    * [GetAttributes](#getattributes-1)
+    * [GetAttributes](#getattributes)
     * [GetTimedEvents](#gettimedevents)
     * [GetLinks](#getlinks)
     * [GetStatus](#getstatus)
@@ -235,9 +234,9 @@ sub-operations.
   or null
 - A start timestamp
 - An end timestamp
-- An ordered mapping of [`Attribute`s](#SetAttribute)
-- A list of [`Link`s](#AddLink) to other `Span`s
-- A list of timestamped [`Event`s](#AddEvent)
+- An ordered mapping of [`Attribute`s](#Set-Attributes)
+- A list of [`Link`s](#add-Links) to other `Span`s
+- A list of timestamped [`Event`s](#add-events)
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
@@ -331,7 +330,7 @@ with the same key as an existing attribute SHOULD overwrite the existing
 attribute's value.
 
 Note that the OpenTelemetry project documents certain ["standard
-attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
+attributes"](data-semantic-conventions.md) that have prescribed semantic meanings.
 
 #### Add Events
 
@@ -356,7 +355,7 @@ Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
-keys"](../semantic-conventions.md) which have prescribed semantic meanings.
+keys"](data-semantic-conventions.md) which have prescribed semantic meanings.
 
 #### Add Links
 

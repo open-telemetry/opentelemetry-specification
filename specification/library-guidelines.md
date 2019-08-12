@@ -4,7 +4,7 @@ This document defines common principles that will help designers create language
 
 The language libraries are expected to provide full features out of the box and allow for innovation and experimentation through extensibility points.
 
-The document does not attempt to describe a language library API. For API specs see [specification](README.md).
+The document does not attempt to describe a language library API. For API specs see [specification](../README.md).
 
 ## Requirements
 
