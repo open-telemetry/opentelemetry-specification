@@ -32,7 +32,7 @@ The span ID of the current span. See [SpanContext](../overview.md#spancontext).
 ### Sampling Decision
 
 The sampling bit of the current span, as a boolean.  See
-[Span.md](Span.md).
+[SpanContext](../overview.md#spancontext).
 
 TODO(sebright): Include "samplingScore" once that field is added to the SpanContext.
 
