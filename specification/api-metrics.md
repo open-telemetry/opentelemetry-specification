@@ -5,7 +5,7 @@
 Table of Content
 </summary>
 
-- [Meter](#meater)
+- [Meter](#meter)
   - [Meter Creation](#meter-creation)
   - [Create Metric](#create-metric)
   - [Create Measure](#create-measure)
@@ -20,8 +20,8 @@ Table of Content
   - [SetCallback](#setcallback)
   - [RemoveTimeSeries](#removetimeseries)
   - [Clear](#clear)
-  - [Type: Counter](#type--counter)
-  - [Type: Gauge](#type--gauge)
+  - [Type: Counter](#type-counter)
+  - [Type: Gauge](#type-gauge)
 
 </details>
 
@@ -63,7 +63,7 @@ Optional arguments:
   for these labels.
 - set of name/value pairs for the labels with the constant values.
 - component name that reports this `Metric`. See [semantic
-  convention](../semantic-conventions.md) for the examples of well-known
+  convention](data-semantic-conventions.md) for the examples of well-known
   components.
 - resource this `Metric` is associated with.
 
