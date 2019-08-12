@@ -23,7 +23,7 @@ span context available in each log entry:
 
 ### Trace ID
 
-The trace ID of the current span.  See [Span.md#traceid](Span.md).
+The trace ID of the current span. See [SpanContext](../overview.md#spancontext).
 
 ### Span ID
 
