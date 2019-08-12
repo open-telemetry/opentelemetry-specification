@@ -27,7 +27,7 @@ The trace ID of the current span. See [SpanContext](../overview.md#spancontext).
 
 ### Span ID
 
-The span ID of the current span.  See [Span.md#spanid](Span.md).
+The span ID of the current span. See [SpanContext](../overview.md#spancontext).
 
 ### Sampling Decision
 
