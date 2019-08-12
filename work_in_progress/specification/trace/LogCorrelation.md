@@ -23,16 +23,16 @@ span context available in each log entry:
 
 ### Trace ID
 
-The trace ID of the current span.  See [Span.md#traceid](Span.md#traceid).
+The trace ID of the current span. See [SpanContext](../overview.md#spancontext).
 
 ### Span ID
 
-The span ID of the current span.  See [Span.md#spanid](Span.md#spanid).
+The span ID of the current span. See [SpanContext](../overview.md#spancontext).
 
 ### Sampling Decision
 
 The sampling bit of the current span, as a boolean.  See
-[Span.md#supported-bits](Span.md#supported-bits).
+[SpanContext](../overview.md#spancontext).
 
 TODO(sebright): Include "samplingScore" once that field is added to the SpanContext.
 

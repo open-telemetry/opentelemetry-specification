@@ -178,7 +178,7 @@ backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
 OpenTelemetry defines the naming convention for metric names as well as a
-well-known metric names in [Semantic Conventions](semantic-conventions.md)
+well-known metric names in [Semantic Conventions](data-semantic-conventions.md)
 document.
 
 ## DistributedContext

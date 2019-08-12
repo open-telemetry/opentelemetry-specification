@@ -19,7 +19,7 @@ Parity can be defined as the following features:
 - An SDK implementing OpenTelemetry specification.
 - Backwards compatibility with OpenTracing and OpenCensus.
 - Metadata helpers for recording common operations defined in the OpenTelemetry
-  [semantic conventions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/semantic-conventions.md).
+  [semantic conventions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/data-semantic-conventions.md).
 - Tests which provide evidence of interoperability.
 - Benchmarks which provide evidence of expected resource utilization.
 - Documentation and getting started guide.
