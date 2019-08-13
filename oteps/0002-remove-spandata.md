@@ -1,5 +1,7 @@
 # Remove SpanData
 
+**Status:** `proposed`
+
 Remove and replace SpanData by adding span start and end options.
 
 ## Motivation
