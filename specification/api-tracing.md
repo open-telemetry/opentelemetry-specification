@@ -16,8 +16,6 @@ Table of Content
     * [WithSpan](#withspan)
     * [SpanBuilder](#spanbuilder)
     * [RecordSpanData](#recordspandata)
-    * [GetBinaryFormat](#getbinaryformat)
-    * [GetHttpTextFormat](#gethttptextformat)
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
@@ -165,25 +163,6 @@ Note, the `SpanContext` object in the span population with the values that will
 allow correlation of telemetry is also a caller responsibility.
 
 This API should be non-blocking.
-
-#### GetBinaryFormat
-Returns the binary format interface which can serialize/deserialize `Span`s.
-
-There should be no parameter.
-
-Returns the binary format for this implementation. If no implementation is
-provided then no-op implementation will be used.
-
-#### GetHttpTextFormat
-Returns the HTTP text format interface which can inject/extract `Span`s.
-
-There should be no parameter.
-
-Returns the HTTP text format for this implementation. If no implementation is
-provided then no-op implementation will be used.
-
-Usually this will be the W3C Trace Context as the HTTP text format. For more
-details, see [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
 A `SpanContext` represents the portion of a `Span` which must be serialized and
