@@ -1,4 +1,4 @@
-# Let Metrics support configrable, recommended aggregations
+# Let Metrics support configurable, recommended aggregations
 
 **Status:** `proposed`
 
