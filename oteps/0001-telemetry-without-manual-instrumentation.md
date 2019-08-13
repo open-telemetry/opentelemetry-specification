@@ -1,5 +1,7 @@
 # (Open) Telemetry Without Manual Instrumentation
 
+**Status:** `proposed`
+
 _Cross-language requirements for automated approaches to extracting portable telemetry data with zero source code modification._
 
 ## Motivation
