@@ -88,9 +88,9 @@ way of the `Tracer`.
 
 The `Tracer` is responsible for tracking the currently active `Span`, and
 exposes methods for creating and activating new `Span`s. The `Tracer` is
-configured with `Propagator`s which support transferring context across process
+configured with `Propagator`s which support transferring span context across process
 boundaries, and `Exporter`s and `SpanProcessor`s which control how spans are
-exported to APMs.
+exported to APMs and Z pages.
 
 `Tracer`s are generally expected to be used as singletons. Implementations
 SHOULD provide a single global default `Tracer`.
@@ -142,7 +142,7 @@ When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
 new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
 SHOULD create each new `Span` as a child of its active `Span` unless an
 explicit parent is provided or the option to create a span without a parent is
-selected.
+selected, or the current active `Span` is invalid.
 
 The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
 convenience methods to manage a `Span`'s lifetime and the scope in which a
