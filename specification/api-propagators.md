@@ -24,6 +24,10 @@ Propagators API consists of two main formats:
 - `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
 in-band across process boundaries.
 
+Each language SHOULD provide a way to differentiate `SpanContext` and `DistributedContext`
+formats. This can be done with providing two sets of APIs (e.g `TracingPropagator` vs.
+`DistributedContextPropagator`), using generics, etc.
+
 ## Binary Format
 
 `BinaryFormat` is a formatter to serialize and deserialize a value into a binary format.
@@ -54,7 +58,7 @@ Returns a value deserialized from bytes.
 
 ## HTTP Text Format
 
-`HTTPTextFormat` is a formatter that injects and extracts a value as text into carriers that 
+`HTTPTextFormat` is a formatter that injects and extracts a value as text into carriers that
 travel in-band across process boundaries.
 
 Encoding is expected to conform to the HTTP Header Field semantics. Values are often encoded as
