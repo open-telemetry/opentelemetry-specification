@@ -88,9 +88,10 @@ way of the `Tracer`.
 
 The `Tracer` is responsible for tracking the currently active `Span`, and
 exposes methods for creating and activating new `Span`s. The `Tracer` is
-configured with `Propagator`s which support transferring span context across process
-boundaries, and `Exporter`s and `SpanProcessor`s which control how spans are
-exported to APMs and Z pages.
+configured with `Propagator`s which support transferring span context across
+process boundaries, `Exporter`s responsible for exporting span data to APMs and
+Z pages, and `SpanProcessor`s which affect how spans are exported and allow end
+users to extend the export pipeline with custom behavior.
 
 `Tracer`s are generally expected to be used as singletons. Implementations
 SHOULD provide a single global default `Tracer`.
