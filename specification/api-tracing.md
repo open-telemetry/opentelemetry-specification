@@ -238,6 +238,7 @@ empty by default:
 // there's perfomance.now() and Date.now(), do we say "use performance.now() for
 // highest resolution timestamps" in the docs? Maybe there's a tracer.timenow()
 // function? I'm not quite sure what the solution is here.
+// Original comment: https://github.com/open-telemetry/rfcs/pull/8#discussion_r306412584
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -302,6 +303,7 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 - (Required) Name of the event.
 - (Optional) One or more `Attribute`.
+- (Optional) Timestamp for the event.
 
 The `Event` SHOULD be an immutable type.
 
