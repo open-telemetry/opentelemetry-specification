@@ -152,7 +152,7 @@ specification](https://www.w3.org/TR/trace-context/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
 `TraceOptions` and system-specific `TraceState` values. `SpanContext` is
 represented as an interface, in order to be serializable into a wider variety of
-trace context wire formats.
+trace context wire formats. 
 
 `TraceId` A valid trace identifier is a 16-byte array with at least one
 non-zero byte.
@@ -167,7 +167,7 @@ boolean `recorded`
 
 `Tracestate` carries system-specific configuration data, represented as a list
 of key-value pairs. TraceState allows multiple tracing systems to participate in
-the same trace.
+the same trace. 
 
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
@@ -375,7 +375,7 @@ with the `Span`).
 Call to `End` of a `Span` MUST not have any effects on child spans. Those may
 still be running and can be ended later.
 
-Parameters
+Parameters:
 - (Optional) Timestamp to explicitly set the end timestamp
 
 This API MUST be non-blocking.
