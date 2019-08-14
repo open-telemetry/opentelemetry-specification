@@ -389,7 +389,7 @@ timestamps to the Span object:
 - The end time needs to be recorded when the operation is ended.
 
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
-calling of corresponding API and MAY as an argument.
+calling of corresponding API and MAY be used as an argument.
 
 ## Status
 
