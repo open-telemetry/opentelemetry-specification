@@ -128,7 +128,7 @@ The `Tracer` MUST provide methods to:
 
 - Get the currently active `Span`
 - Create a new `Span`
-- Set a given `Span` as active
+- Make a given `Span` as active
 
 The `Tracer` SHOULD allow end users to configure other tracing components that
 control how `Span`s are passed across process boundaries and exported:
