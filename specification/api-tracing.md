@@ -144,8 +144,10 @@ selected, or the current active `Span` is invalid.
 
 The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
 convenience methods to manage a `Span`'s lifetime and the scope in which a
-`Span` is active. When an active `Span` is finished, the previously-active
-`Span` SHOULD be made active.
+`Span` is active. When an active `Span` is made inactive, the previously-active
+`Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
+time) but stil active. A `Span` may be active on one thread after it has been
+made inactive on another.
 
 The `Tracer` MUST support recording `Span`s that were created _out of band_,
 i.e.  not by the tracer itself. For this reason, implementations MUST NOT
