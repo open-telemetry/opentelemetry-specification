@@ -42,7 +42,7 @@ See [this document by @discostu105](https://docs.google.com/spreadsheets/d/1H0S0
 Represents an outbound HTTP request.
 
 ##### Attributes
-These attributes are not covered in the [main spec](../../semantic-conventions.md):
+These attributes are not covered in the [main spec](../../specification/data-semantic-conventions.md):
 
 - Route
 - User Agent
@@ -55,7 +55,7 @@ Represents an inbound HTTP request.
 
 ##### Attributes
 
-These attributes are not covered in the [main spec](../../semantic-conventions.md):
+These attributes are not covered in the [main spec](../../specification/data-semantic-conventions.md):
 
 - User Agent
 - Webserver Name
@@ -69,7 +69,7 @@ Represents a database call.
 
 ##### Attributes
 
-These attributes are not covered in the [main spec](../../semantic-conventions.md):
+These attributes are not covered in the [main spec](../../specification/data-semantic-conventions.md):
 
 - Channel Type (e.g. TCP)
 
@@ -78,7 +78,7 @@ Represents an outbound gRPC request.
 
 ##### Attributes
 
-These attributes are not covered in the [main spec](../../semantic-conventions.md):
+These attributes are not covered in the [main spec](../../specification/data-semantic-conventions.md):
 
 - Channel Type (e.g. TCP)
 
@@ -87,7 +87,7 @@ Represents an inbound gRPC request.
 
 ##### Attributes
 
-These attributes are not covered in the [main spec](../../semantic-conventions.md):
+These attributes are not covered in the [main spec](../../specification/data-semantic-conventions.md):
 
 - Channel Type (e.g. TCP)
 

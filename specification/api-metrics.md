@@ -5,7 +5,7 @@
 Table of Content
 </summary>
 
-- [Meter](#meater)
+- [Meter](#meter)
   - [Meter Creation](#meter-creation)
   - [Create Metric](#create-metric)
   - [Create Measure](#create-measure)
@@ -20,8 +20,8 @@ Table of Content
   - [SetCallback](#setcallback)
   - [RemoveTimeSeries](#removetimeseries)
   - [Clear](#clear)
-  - [Type: Counter](#type--counter)
-  - [Type: Gauge](#type--gauge)
+  - [Type: Counter](#type-counter)
+  - [Type: Gauge](#type-gauge)
 
 </details>
 
@@ -29,9 +29,9 @@ Metrics API allows to report raw measurements as well as metrics with the known
 aggregation and labels.
 
 Main class that is used to work with Metrics API is called `Meter`. It is used
-to construct [`Measure`s](../terminology.md#measure) to record raw measurements
+to construct [`Measure`s](overview.md#measure) to record raw measurements
 and `Metric`s to record metrics with [predefined
-aggregation](../terminology.md#recording-metrics-with-predefined-aggregation).
+aggregation](overview.md#recording-metrics-with-predefined-aggregation).
 
 ## Meter
 
@@ -63,7 +63,7 @@ Optional arguments:
   for these labels.
 - set of name/value pairs for the labels with the constant values.
 - component name that reports this `Metric`. See [semantic
-  convention](../semantic-conventions.md) for the examples of well-known
+  convention](data-semantic-conventions.md) for the examples of well-known
   components.
 - resource this `Metric` is associated with.
 
