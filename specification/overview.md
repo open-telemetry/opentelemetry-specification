@@ -17,7 +17,7 @@ particular, a **Trace** can be thought of as a directed acyclic graph (DAG) of
 **Spans**, where the edges between **Spans** are defined as parent/child
 relationship.
 
-For example, the following is an example **Trace** made up of 8 **Spans**:
+For example, the following is an example **Trace** made up of 6 **Spans**:
 
 ```
 Causal relationships between Spans in a single Trace
