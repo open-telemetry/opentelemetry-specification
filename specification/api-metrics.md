@@ -2,7 +2,7 @@
 
 <details>
 <summary>
-Table of Content
+Table of Contents
 </summary>
 
 - [Meter](#meter)
