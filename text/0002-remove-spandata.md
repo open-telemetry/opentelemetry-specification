@@ -1,6 +1,6 @@
 # Remove SpanData
 
-**Status:** `proposed`
+**Status:** `approved`
 
 Remove and replace SpanData by adding span start and end options.
 
