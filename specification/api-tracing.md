@@ -401,89 +401,55 @@ a canonical code in conjunction with an optional descriptive message.
 
 `StatusCanonicalCode` represents the canonical set of status codes of a finished
 `Span`, following the [Standard GRPC
-codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
+codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
 
-#### Ok
-
-The operation completed successfully.
-
-#### Cancelled
-
-The operation was cancelled (typically by the caller).
-
-#### UnknownError
-
-An unknown error.
-
-#### InvalidArgument
-
-Client specified an invalid argument. Note that this differs from
-`FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
-regardless of the state of the system.
-
-#### DeadlineExceeded
-
-Deadline expired before operation could complete. For operations that change the
-state of the system, this error may be returned even if the operation has
-completed successfully.
-
-#### NotFound
-
-Some requested entity (e.g., file or directory) was not found.
-
-#### AlreadyExists
-
-Some entity that we attempted to create (e.g., file or directory) already
-exists.
-
-#### PermissionDenied
-
-The caller does not have permission to execute the specified operation.
-`PermissionDenied` must not be used if the caller cannot be identified (use
-`Unauthenticated1` instead for those errors).
-
-#### ResourceExhausted
-
-Some resource has been exhausted, perhaps a per-user quota, or perhaps the
-entire file system is out of space.
-
-#### FailedPrecondition
-
-Operation was rejected because the system is not in a state required for the
-operation's execution.
-
-#### Aborted
-
-The operation was aborted, typically due to a concurrency issue like sequencer
-check failures, transaction aborts, etc.
-
-#### OutOfRange
-
-Operation was attempted past the valid range. E.g., seeking or reading past end
-of file. Unlike `InvalidArgument`, this error indicates a problem that may be
-fixed if the system state changes.
-
-#### Unimplemented
-
-Operation is not implemented or not supported/enabled in this service.
-
-#### InternalError
-
-Internal errors. Means some invariants expected by underlying system has been
-broken.
-
-#### Unavailable
-
-The service is currently unavailable. This is a most likely a transient
-condition and may be corrected by retrying with a backoff.
-
-#### DataLoss
-
-Unrecoverable data loss or corruption.
-
-#### Unauthenticated
-
-The request does not have valid authentication credentials for the operation.
+- `Ok`
+  - The operation completed successfully.
+- `Cancelled`
+  - The operation was cancelled (typically by the caller).
+- `UnknownError`
+  - An unknown error.
+- `InvalidArgument`
+  - Client specified an invalid argument. Note that this differs from
+  `FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
+  regardless of the state of the system.
+- `DeadlineExceeded`
+  - Deadline expired before operation could complete. For operations that change the
+  state of the system, this error may be returned even if the operation has
+  completed successfully.
+- `NotFound`
+  - Some requested entity (e.g., file or directory) was not found.
+- `AlreadyExists`
+  - Some entity that we attempted to create (e.g., file or directory) already exists.
+- `PermissionDenied`
+  - The caller does not have permission to execute the specified operation.
+  `PermissionDenied` must not be used if the caller cannot be identified (use
+  `Unauthenticated1` instead for those errors).
+- `ResourceExhausted`
+  - Some resource has been exhausted, perhaps a per-user quota, or perhaps the
+  entire file system is out of space.
+- `FailedPrecondition`
+  - Operation was rejected because the system is not in a state required for the
+  operation's execution.
+- `Aborted`
+  - The operation was aborted, typically due to a concurrency issue like sequencer
+  check failures, transaction aborts, etc.
+- `OutOfRange`
+  - Operation was attempted past the valid range. E.g., seeking or reading past end
+  of file. Unlike `InvalidArgument`, this error indicates a problem that may be
+  fixed if the system state changes.
+- `Unimplemented`
+  - Operation is not implemented or not supported/enabled in this service.
+- `InternalError`
+  - Internal errors. Means some invariants expected by underlying system has been
+  broken.
+- `Unavailable`
+  - The service is currently unavailable. This is a most likely a transient
+  condition and may be corrected by retrying with a backoff.
+- `DataLoss`
+  - Unrecoverable data loss or corruption.
+- `Unauthenticated`
+  - The request does not have valid authentication credentials for the operation.
 
 ### Status creation
 
