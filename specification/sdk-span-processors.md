@@ -1,7 +1,7 @@
 # Span processor
 
 Span processor is an interface which allows hooks for span start and end method invocations.
-The span processors are invoked only on sampled spans. This interface can be used as a helper for span exporter to batch and convert spans see [sdk-exporter-spec](sdk-exporter.md).
+This interface can be used as a helper for span exporter to batch and convert spans see [sdk-exporter-spec](sdk-exporter.md).
 
 Span processors can be registered directly on SDK Tracer and they are invoked in the same order as they were registered.
 
