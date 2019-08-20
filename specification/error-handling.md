@@ -12,30 +12,29 @@ This makes for some unique requirements with respect to error handling.
 
 OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
 
-1. API methods must not throw unhandled exceptions when used incorrectly by end users.
+1. API methods MUST NOT throw unhandled exceptions when used incorrectly by end users.
    The API and SDK SHOULD provide safe defaults for missing or invalid arguments.
    For instance, a name like `empty` may be used if the user passes in `null` as the span name argument during `Span` construction.
-
 2. The API or SDK may _fail fast_ and cause the application to fail on initialization, e.g. because of bad user config or a environment, but MUST NOT cause the application to fail at run time, e.g. due to dynamic config settings received from the Agent.
-
 3. The SDK MUST NOT throw unhandled exceptions for errors in their own operations.
    For example, an exporter should not throw an exception when it cannot reach the endpoint to which it sends telemetry data.
 
 ## Guidance
 
 1. API methods that accept external callbacks MUST handle all errors.
-2. Background tasks (e.g. threads, asynchronous tasks, spawned processes) should run in the context of a global error handler to ensure that exceptions do not affect the end user application.
+2. Background tasks (e.g. threads, asynchronous tasks, and spawned processes) should run in the context of a global error handler to ensure that exceptions do not affect the end user application.
 3. Long-running background tasks should not fail permanently in response to internal errors.
    In general, internal exceptions should only affect the execution context of the request that caused the exception.
 4. Internal error handling should follow language-specific conventions.
-   In general, developers should minimize the scope of handled errors and add special processing for expected errors.
+   In general, developers should minimize the scope of error handlers and add special processing for expected exceptions.
 5. Beware external callbacks and overrideable interfaces: Expect them to throw.
 
 ## Self-diagnostics
 
-All OpenTelemetry libraries -- API, SDK, exporters, instrumentation adapters, etc. -- are encouraged to expose self-troubleshooting metrics, spans, and other telemetry that can be easily enabled and filtered out by default.
+All OpenTelemetry libraries -- the API, SDK, exporters, instrumentation adapters, etc. -- are encouraged to expose self-troubleshooting metrics, spans, and other telemetry that can be easily enabled and filtered out by default.
 
-One good example of such telemetry is a `Span` exporter that indicates how much time exporters spend uploading telemetry. Another example may be a metric exposed by a `SpanProcessor` that describes the current queue size of telemetry data to be uploaded.
+One good example of such telemetry is a `Span` exporter that indicates how much time exporters spend uploading telemetry.
+Another example may be a metric exposed by a `SpanProcessor` that describes the current queue size of telemetry data to be uploaded.
 
 Whenever the library suppresses an error that would otherwise have been exposed to the user, the library SHOULD log the error using language-specific conventions.
 SDKs MAY expose callbacks to allow end users to handle self-diagnostics separately from application code.
@@ -43,5 +42,5 @@ SDKs MAY expose callbacks to allow end users to handle self-diagnostics separate
 
 ## Exceptions to the rule
 
-SDK authors may supply settings that will allow end users to change the library's default error handling behavior.
+SDK authors MAY supply settings that allow end users to change the library's default error handling behavior.
 Application developers may want to run with strict error handling in a staging environment to catch invalid uses of the API, or malformed config.
