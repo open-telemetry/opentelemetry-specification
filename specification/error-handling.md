@@ -37,12 +37,7 @@ All OpenTelemetry libraries -- API, SDK, exporters, instrumentation adapters, et
 
 One good example of such telemetry is a `Span` exporter that indicates how much time exporters spend uploading telemetry. Another example may be a metric exposed by a `SpanProcessor` that describes the current queue size of telemetry data to be uploaded.
 
-## Exceptions from the rule
+## Exceptions to the rule
 
-There are situations when end-user wants to know whether API/SDK are used
-correctly. For instance, it may be desirable to not deploy an app with the
-malformed monitoring configuration. Or catch an invalid use of OpenTelemetry
-API.
-
-SDK authors may supply the setting that will allow to change the default
-error handling behavior.
+SDK authors may supply settings that will allow end users to change the library's default error handling behavior.
+Application developers may want to run with strict error handling in a staging environment to catch invalid uses of the API, or malformed config.
