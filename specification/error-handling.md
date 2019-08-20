@@ -1,27 +1,25 @@
 # Error handling in OpenTelemetry
 
-OpenTelemetry is a library that will in many cases run in a context of customer
-app performing non-essential from app business logic perspective operations.
-OpenTelemetry SDK also can be enabled via platform extensibility mechanisms and
-potentially only enabled in runtime. Which makes the use of SDK non-obvious for
-the end user and sometimes even outside of the application developer control.
+OpenTelemetry generates telemetry data to help users monitor application code.
+In most cases, the work that the library performs is not essential from the perspective of application business logic.
+We assume that users would prefer to lose telemetry data rather than have the library significantly change the behavior of the instrumented application.
 
-This makes some unique requirements for OpenTelemetry error handling practices.
+OpenTelemetry may be enabled via platform extensibility mechanisms, or dynamically loaded at runtime.
+This makes the use of the library non-obvious for end users, and may even be outside of the application developer's control.
+This makes for some unique requirements with respect to error handling.
 
 ## Basic error handling principles
 
-OpenTelemetry SDK must not throw or leak unhandled or user unhandled exceptions.
+OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
 
-1. APIs must not throw unhandled exceptions when the API is used incorrectly by
-   the end user. Smart defaults should be used so that the SDK generally works.
-   For instance, name like `empty` MUST be used when `null` value was passed as
-   a span name. Instead of throwing `NullReferenceException`.
-2. SDK must not throw unhandled exceptions for configuration errors. Wrong
-   configuration file, environment variables or config settings received from
-   Agent MUST NOT bring the entire process down.
-3. SDK must not throw unhandled exceptions for errors in their own operations.
-   For examples, SDK MUST NOT crash process by throwing exception or causing
-   `OutOfMemoryException` when telemetry receiving endpoint cannot be reached.
+1. API methods must not throw unhandled exceptions when used incorrectly by end users.
+   The API and SDK SHOULD provide safe defaults for missing or invalid arguments.
+   For instance, a name like `empty` may be used if the user passes in `null` as the span name argument during `Span` construction.
+
+2. The API or SDK may _fail fast_ and cause the application to fail on initialization, e.g. because of bad user config or a environment, but MUST NOT cause the application to fail at run time, e.g. due to dynamic config settings received from the Agent.
+
+3. The SDK MUST NOT throw unhandled exceptions for errors in their own operations.
+   For example, an exporter should not throw an exception when it cannot reach the endpoint to which it sends telemetry data.
 
 ## Guidance
 
