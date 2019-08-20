@@ -37,6 +37,10 @@ All OpenTelemetry libraries -- API, SDK, exporters, instrumentation adapters, et
 
 One good example of such telemetry is a `Span` exporter that indicates how much time exporters spend uploading telemetry. Another example may be a metric exposed by a `SpanProcessor` that describes the current queue size of telemetry data to be uploaded.
 
+Whenever the library suppresses an error that would otherwise have been exposed to the user, the library SHOULD log the error using language-specific conventions.
+SDKs MAY expose callbacks to allow end users to handle self-diagnostics separately from application code.
+
+
 ## Exceptions to the rule
 
 SDK authors may supply settings that will allow end users to change the library's default error handling behavior.
