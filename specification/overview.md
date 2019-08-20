@@ -1,4 +1,4 @@
-# Terminology
+# Overview
 
 ## Distributed Tracing
 
@@ -17,7 +17,7 @@ particular, a **Trace** can be thought of as a directed acyclic graph (DAG) of
 **Spans**, where the edges between **Spans** are defined as parent/child
 relationship.
 
-For example, the following is an example **Trace** made up of 8 **Spans**:
+For example, the following is an example **Trace** made up of 6 **Spans**:
 
 ```
 Causal relationships between Spans in a single Trace
@@ -88,7 +88,7 @@ propagated from parent to child **Spans**.
 - **Tracestate** carries tracing-system specific context in a list of key value
   pairs. **Tracestate** allows different vendors propagate additional
   information and inter-operate with their legacy Id formats. For more details
-  see [this][https://w3c.github.io/trace-context/#tracestate-field].
+  see [this](https://w3c.github.io/trace-context/#tracestate-field).
 
 ### Links between spans
 
@@ -114,7 +114,7 @@ gRPC to record raw measurements "server_latency" or "received_bytes". So end
 user will decide what type of aggregated values should be collected out of these
 raw measurements. It may be simple average or elaborate histogram calculation.
 
-Recording of metrics with the pre-defined aggregation using OpenTelemtry API is
+Recording of metrics with the pre-defined aggregation using OpenTelemetry API is
 not less important. It allows to collect values like cpu and memory usage, or
 simple metrics like "queue length".
 
@@ -178,7 +178,7 @@ backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
 OpenTelemetry defines the naming convention for metric names as well as a
-well-known metric names in [Semantic Conventions](semantic-conventions.md)
+well-known metric names in [Semantic Conventions](data-semantic-conventions.md)
 document.
 
 ## DistributedContext
@@ -244,7 +244,7 @@ instrumented by OpenTelementry or other monitoring/tracing libraries (Jaeger,
 Prometheus, etc.), do aggregation and smart sampling, and export traces and
 metrics to one or more monitoring/tracing backends. The service will allow to
 enrich and transform collected telemetry (e.g. add additional attributes or
-scrab personal information).
+scrub personal information).
 
 The OpenTelemetry service has two primary modes of operation: Agent (a locally
 running daemon) and Collector (a standalone running service).
