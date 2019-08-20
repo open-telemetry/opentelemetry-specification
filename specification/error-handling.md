@@ -23,15 +23,13 @@ OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
 
 ## Guidance
 
-1. Every API call that may call external callback MUST handle all errors.
-2. Every background operation callback, Task or Thread method should have a
-   global error handling set up (like `try{}catch` statement) to ensure
-   that exception from this asynchronous operation will not affect end-user app.
-3. Error handling in other cases MUST follow standard language practice. Which
-   is typically - reduce the scope of the error handler and add special
-   processing for the expected errors.
-4. Beware of any call to external callbacks or override-able interface. Expect
-   them to throw.
+1. API methods that accept external callbacks MUST handle all errors.
+2. Background tasks (e.g. threads, asynchronous tasks, spawned processes) should run in the context of a global error handler to ensure that exceptions do not affect the end user application.
+3. Long-running background tasks should not fail permanently in response to internal errors.
+   In general, internal exceptions should only affect the execution context of the request that caused the exception.
+4. Internal error handling should follow language-specific conventions.
+   In general, developers should minimize the scope of handled errors and add special processing for expected errors.
+5. Beware external callbacks and overrideable interfaces: Expect them to throw.
 
 ## SDK self-diagnostics
 
