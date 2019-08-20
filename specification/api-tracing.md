@@ -37,6 +37,7 @@ Table of Contents
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
   * [GetIsOk](#getisok)
+* [SpanKind](#spankind)
 * [SpanData](#spandata)
   * [Constructing SpanData](#constructing-spandata)
   * [Getters](#getters)
@@ -234,10 +235,11 @@ options for newly created `Span`s.
 
 The API SHOULD require the caller to provide:
 - The operation name
-- The parent span, and whether the new `Span` should be a root `Span`.
+- The parent span, and whether the new `Span` should be a root `Span`
 
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
+- [`SpanKind`](#spankind)
 - `Attribute`s
 - `Link`s
 - `Event`s
@@ -509,6 +511,26 @@ Returns the description of this `Status`.
 
 Returns false if this `Status` represents an error, else returns true.
 
+## SpanKind
+Type of span. Can be used to specify additional relationships between spans in addition to a
+parent/child relationship.
+
+There are multiple defined SpanKinds:
+- `INTERNAL`
+  - Default value. Indicates that the span is used internally in the application.
+- `SERVER`
+  - Indicates that the span covers server-side handling of an RPC or other remote request.
+- `CLIENT`
+  - Indicates that the span covers the client-side wrapper around an RPC or other remote request.
+- `PRODUCER`
+  - Indicates that the span describes producer sending a message to a broker. Unlike client and
+   server, there is no direct critical path latency relationship between producer and consumer
+   spans.
+- `CONSUMER`
+  - Indicates that the span describes consumer receiving a message from a broker. Unlike client
+   and server, there is no direct critical path latency relationship between producer and
+   consumer spans.
+ 
 ## SpanData
 
 `SpanData` is an immutable and final class. All getters of `SpanData` are thread
