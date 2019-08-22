@@ -128,7 +128,7 @@ The `Tracer` MUST provide methods to:
 - Make a given `Span` as active
 
 The `Tracer` SHOULD allow end users to configure other tracing components that
-control how `Span`s are passed across process boundaries, inclucding the binary
+control how `Span`s are passed across process boundaries, including the binary
 and text format `Propagator`s used to serialize `Span`s created by the
 `Tracer`.
 
