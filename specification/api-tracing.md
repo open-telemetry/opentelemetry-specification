@@ -228,6 +228,7 @@ empty by default:
 - `Resource`
 - `SpanID`
 - `Start timestamp`
+- `OutOfBand` to specify the span originated from out of band
 
 // TODO: There's a question about clock resolution when a user supplies a ts
 // compared to clock the tracer uses internally. For a case where the span is
