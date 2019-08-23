@@ -211,6 +211,7 @@ sub-operations.
 - An ordered mapping of [`Attribute`s](#Set-Attributes)
 - A list of [`Link`s](#add-Links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
+- A [`Status`](#set-status).
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
