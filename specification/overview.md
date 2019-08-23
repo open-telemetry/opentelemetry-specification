@@ -81,7 +81,7 @@ propagated from parent to child **Spans**.
   practically sufficient probability by being made as 8 randomly generated
   bytes. When passed to a child Span this identifier becomes the parent span id
   for the child **Span**.
-- **TraceOptions** represents the options for a trace. It is represented as 1
+- **TraceFlags** represents the options for a trace. It is represented as 1
   byte (bitmap).
   - Sampling bit -  Bit to represent whether trace is sampled or not (mask
     `0x1`).
