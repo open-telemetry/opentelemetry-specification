@@ -14,7 +14,7 @@ Changes to this file affect the OpenTracing specification version. Additions sho
 
 Span tags apply to **the entire Span**; as such, they apply to the entire timerange of the Span, not a particular moment with a particular timestamp: those sorts of events are best modelled as Span log fields (per the table in the next subsection of this document).
 
-> Work in progress! Please note, that the list below only contains attributes that aren't contained in the [OpenTelemetry main spec](../../semantic-conventions.md) (yet):
+> Work in progress! Please note, that the list below only contains attributes that aren't contained in the [OpenTelemetry main spec](../../specification/data-semantic-conventions.md) (yet):
 
 | Span tag name | Type | Notes and examples |
 |:--------------|:-----|:-------------------|

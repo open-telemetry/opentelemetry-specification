@@ -1,7 +1,7 @@
 # Span
  
 
-... parts of this document moved to [terminology.md](../../../terminology.md) ...
+... parts of this document moved to [overview.md](../../../specification/overview.md) ...
 
 A span contains a SpanContext and allows users to record tracing events based on the data model 
 defined [here][SpanDataModel].

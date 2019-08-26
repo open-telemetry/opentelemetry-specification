@@ -1,21 +1,20 @@
 # All documents to be used in spell check.
 ALL_DOC := $(shell find . -name '*.md' -type f | sort)
 
-MISSPELL=misspell -error
-MISSPELL_CORRECTION=misspell -w
+TOOLS_DIR := ./.tools
+MISSPELL_BINARY=$(TOOLS_DIR)/misspell
 
-.PHONY: travis-ci
-travis-ci: misspell
+.PHONY: precommit
+precommit: install-misspell misspell
 
-.PHONY: misspell
+ .PHONY: install-misspell
+install-misspell: go.mod go.sum internal/tools.go
+	go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
+
+ .PHONY: misspell
 misspell:
-	$(MISSPELL) $(ALL_DOC)
+	$(MISSPELL_BINARY) -error $(ALL_DOCS)
 
-.PHONY: misspell-correction
+ .PHONY: misspell-correction
 misspell-correction:
-	$(MISSPELL_CORRECTION) $(ALL_DOC)
-
-.PHONY: install-tools
-install-tools:
-	GO111MODULE=on go install \
-	  github.com/client9/misspell/cmd/misspell
+	$(MISSPELL_BINARY) -w $(ALL_DOCS)

@@ -2,7 +2,7 @@
 
 <details>
 <summary>
-Table of Content
+Table of Contents
 </summary>
 
 * [Data types](#data-types)
@@ -21,7 +21,6 @@ Table of Content
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
-    * [StartSpan](#startspan)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecordingEvents](#isrecordingevents)
@@ -48,7 +47,7 @@ Table of Content
     * [GetContext](#getcontext)
     * [GetParentSpanId](#getparentspanid)
     * [GetResource](#getresource)
-    * [GetAttributes](#getattributes-1)
+    * [GetAttributes](#getattributes)
     * [GetTimedEvents](#gettimedevents)
     * [GetLinks](#getlinks)
     * [GetStatus](#getstatus)
@@ -83,110 +82,84 @@ A duration is the elapsed time between two events.
 
 ## Tracer
 
+The OpenTelemetry library achieves in-process context propagation of `Span`s by
+way of the `Tracer`.
+
+The `Tracer` is responsible for tracking the currently active `Span`, and
+exposes methods for creating and activating new `Span`s. The `Tracer` is
+configured with `Propagator`s which support transferring span context across
+process boundaries.
+
+`Tracer`s are generally expected to be used as singletons. Implementations
+SHOULD provide a single global default `Tracer`.
+
+Some applications may require multiple `Tracer` instances, e.g. to create
+`Span`s on behalf of other applications. Implementations MAY provide a global
+registry of `Tracer`s for such applications.
+
 ### Obtaining a tracer
 
-A tracer SHOULD be obtained from a global registry, for example
-`OpenTelemetry.getTracer()`.
+`Tracer` object construction and registration will vary by implementation.
+`Tracer`s may be explicitly created and registered from user code, or resolved
+from linked dependencies using the provider pattern.
 
-The registration to the registry depends on the language. In some languages the
-tracer is explicitly created and registered from user code and other languages
-the tracer implementation is resolved from linked dependencies using provider
-pattern.
+Implementations might require the user to specify configuration properties at
+`Tracer` creation time, or rely on external configuration, e.g. when using the
+provider pattern.
 
-The tracer object construction depends on the implementation. Various
-implementations might require to specify different configuration properties at
-creation time. In languages where provider pattern is used the configuration is
-provided externally.
+##### Runtimes with multiple deployments/applications
 
-#### Tracer provider
+Runtimes that support multiple deployments or applications might need to
+provide a different `Tracer` instance to each deployment. To support this,
 
-Tracer provider is an internal class used by the global registry
-(`OpenTelemetry`) to get a tracer instance. The global registry delegates calls
-to the provider every time a tracer instance is requested. This is necessary
-for use-cases when a single instrumentation code runs for multiple deployments.
+the global `Tracer` registry may delegate calls to create new `Tracer`s to a
+separate `Provider` component, and the runtime may include its own `Provider`
+implementation which returns a different `Tracer` for each deployment.
 
-The tracer provider is registered to API usually via language-specific
-mechanism, for instance `ServiceLoader` in Java.
-
-##### Runtime with multiple deployments/applications
-
-Application runtimes which support multiple deployments/applications might need
-to provide a different tracer instance to each deployment. In this case the
-runtime provides its own implementation of provider which returns a different
-tracer for each deployment.
+`Provider`s are registered with the API via some language-specific mechanism,
+for instance the `ServiceLoader` class in Java.
 
 ### Tracer operations
 
-#### GetCurrentSpan
+The `Tracer` MUST provide methods to:
 
-Returns the current Span from the current context.
+- Get the currently active `Span`
+- Create a new `Span`
+- Make a given `Span` as active
 
-There should be no parameter.
+The `Tracer` SHOULD allow end users to configure other tracing components that
+control how `Span`s are passed across process boundaries, including the binary
+and text format `Propagator`s used to serialize `Span`s created by the
+`Tracer`.
 
-Returns the default `Span` that does nothing and has an invalid `SpanContext` if
-no `Span` is associated with the current context, otherwise the current `Span`
-from the context.
+When getting the current span, the `Tracer` MUST return a placeholder `Span`
+with an invalid `SpanContext` if there is no currently active `Span`.
 
-#### WithSpan
-Enters the scope of code where the given `Span` is in the current context.
+When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
+new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
+SHOULD create each new `Span` as a child of its active `Span` unless an
+explicit parent is provided or the option to create a span without a parent is
+selected, or the current active `Span` is invalid.
 
-Required parameters:
+The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
+convenience methods to manage a `Span`'s lifetime and the scope in which a
+`Span` is active. When an active `Span` is made inactive, the previously-active
+`Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
+time) but stil active. A `Span` may be active on one thread after it has been
+made inactive on another.
 
-- The `Span` to be set to the current context.
+The `Tracer` MUST support recording `Span`s that were created _out of band_,
+i.e.  not by the tracer itself. For this reason, implementations MUST NOT
+require that a `Span`'s start and end timestamps match the wall time when it is
+created, made active, or finished.
 
-Returns an object that defines a scope where the given `Span` will be set to the
-current context.
-
-The scope is exited and previous state should be restored when the returned
-object is closed.
-
-#### SpanBuilder
-Returns a `SpanBuilder` to create and start a new `Span` if a `Builder` pattern
-for [Span creation](#span-creation) is used.
-
-Required parameters:
-
-- Name of the span.
-
-Returns a `SpanBuilder` to create and start a new `Span`.
-
-#### RecordSpanData
-
-Records a `SpanData`.
-
-Required parameters:
-
-- `SpanData` to be reported to all exporters.
-
-This API allows to send a pre-populated span object to the exporter. Sampling
-and recording decisions as well as other collection optimizations are a
-responsibility of a caller.
-
-Note, the `SpanContext` object in the span population with the values that will
-allow correlation of telemetry is also a caller responsibility.
-
-This API should be non-blocking.
-
-#### GetBinaryFormat
-Returns the binary format interface which can serialize/deserialize `Span`s.
-
-There should be no parameter.
-
-Returns the binary format for this implementation. If no implementation is
-provided then no-op implementation will be used.
-
-#### GetHttpTextFormat
-Returns the HTTP text format interface which can inject/extract `Span`s.
-
-There should be no parameter.
-
-Returns the HTTP text format for this implementation. If no implementation is
-provided then no-op implementation will be used.
-
-Usually this will be the W3C Trace Context as the HTTP text format. For more
+The implementation MUST provide no-op binary and text `Propagator`s, which the
+`Tracer` SHOULD use by default if other propagators are not configured. SDKs
+SHOULD use the W3C HTTP Trace Context as the default text format. For more
 details, see [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
+
 A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
 `SpanContext` MUST be a final (sealed) class.
@@ -226,9 +199,10 @@ sub-operations.
   or null
 - A start timestamp
 - An end timestamp
-- An ordered mapping of [`Attribute`s](#SetAttribute)
-- A list of [`Link`s](#AddLink) to other `Span`s
-- A list of timestamped [`Event`s](#AddEvent)
+- An ordered mapping of [`Attribute`s](#Set-Attributes)
+- A list of [`Link`s](#add-Links) to other `Span`s
+- A list of timestamped [`Event`s](#add-events)
+- A [`Status`](#set-status).
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
@@ -259,15 +233,6 @@ empty by default:
 - `Attribute`s
 - `Link`s
 - `Event`s
-
-The `Tracer` MUST allow the caller to specify the new `Span`'s parent in the
-form of a `Span` or `SpanContext`. The `Tracer` SHOULD create each new `Span` as
-a child of its active `Span` unless an explicit parent is provided or the
-option to create a span without a parent is selected.```
-
-The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
-convenience methods to manage a `Span`'s lifetime of and the scope in which a
-`Span` is active.
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -322,7 +287,7 @@ with the same key as an existing attribute SHOULD overwrite the existing
 attribute's value.
 
 Note that the OpenTelemetry project documents certain ["standard
-attributes"](../semantic-conventions.md) that have prescribed semantic meanings.
+attributes"](data-semantic-conventions.md) that have prescribed semantic meanings.
 
 #### Add Events
 
@@ -347,7 +312,7 @@ Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
-keys"](../semantic-conventions.md) which have prescribed semantic meanings.
+keys"](data-semantic-conventions.md) which have prescribed semantic meanings.
 
 #### Add Links
 
@@ -428,89 +393,55 @@ a canonical code in conjunction with an optional descriptive message.
 
 `StatusCanonicalCode` represents the canonical set of status codes of a finished
 `Span`, following the [Standard GRPC
-codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
+codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
 
-#### Ok
-
-The operation completed successfully.
-
-#### Cancelled
-
-The operation was cancelled (typically by the caller).
-
-#### UnknownError
-
-An unknown error.
-
-#### InvalidArgument
-
-Client specified an invalid argument. Note that this differs from
-`FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
-regardless of the state of the system.
-
-#### DeadlineExceeded
-
-Deadline expired before operation could complete. For operations that change the
-state of the system, this error may be returned even if the operation has
-completed successfully.
-
-#### NotFound
-
-Some requested entity (e.g., file or directory) was not found.
-
-#### AlreadyExists
-
-Some entity that we attempted to create (e.g., file or directory) already
-exists.
-
-#### PermissionDenied
-
-The caller does not have permission to execute the specified operation.
-`PermissionDenied` must not be used if the caller cannot be identified (use
-`Unauthenticated1` instead for those errors).
-
-#### ResourceExhausted
-
-Some resource has been exhausted, perhaps a per-user quota, or perhaps the
-entire file system is out of space.
-
-#### FailedPrecondition
-
-Operation was rejected because the system is not in a state required for the
-operation's execution.
-
-#### Aborted
-
-The operation was aborted, typically due to a concurrency issue like sequencer
-check failures, transaction aborts, etc.
-
-#### OutOfRange
-
-Operation was attempted past the valid range. E.g., seeking or reading past end
-of file. Unlike `InvalidArgument`, this error indicates a problem that may be
-fixed if the system state changes.
-
-#### Unimplemented
-
-Operation is not implemented or not supported/enabled in this service.
-
-#### InternalError
-
-Internal errors. Means some invariants expected by underlying system has been
-broken.
-
-#### Unavailable
-
-The service is currently unavailable. This is a most likely a transient
-condition and may be corrected by retrying with a backoff.
-
-#### DataLoss
-
-Unrecoverable data loss or corruption.
-
-#### Unauthenticated
-
-The request does not have valid authentication credentials for the operation.
+- `Ok`
+  - The operation completed successfully.
+- `Cancelled`
+  - The operation was cancelled (typically by the caller).
+- `UnknownError`
+  - An unknown error.
+- `InvalidArgument`
+  - Client specified an invalid argument. Note that this differs from
+  `FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
+  regardless of the state of the system.
+- `DeadlineExceeded`
+  - Deadline expired before operation could complete. For operations that change the
+  state of the system, this error may be returned even if the operation has
+  completed successfully.
+- `NotFound`
+  - Some requested entity (e.g., file or directory) was not found.
+- `AlreadyExists`
+  - Some entity that we attempted to create (e.g., file or directory) already exists.
+- `PermissionDenied`
+  - The caller does not have permission to execute the specified operation.
+  `PermissionDenied` must not be used if the caller cannot be identified (use
+  `Unauthenticated1` instead for those errors).
+- `ResourceExhausted`
+  - Some resource has been exhausted, perhaps a per-user quota, or perhaps the
+  entire file system is out of space.
+- `FailedPrecondition`
+  - Operation was rejected because the system is not in a state required for the
+  operation's execution.
+- `Aborted`
+  - The operation was aborted, typically due to a concurrency issue like sequencer
+  check failures, transaction aborts, etc.
+- `OutOfRange`
+  - Operation was attempted past the valid range. E.g., seeking or reading past end
+  of file. Unlike `InvalidArgument`, this error indicates a problem that may be
+  fixed if the system state changes.
+- `Unimplemented`
+  - Operation is not implemented or not supported/enabled in this service.
+- `InternalError`
+  - Internal errors. Means some invariants expected by underlying system has been
+  broken.
+- `Unavailable`
+  - The service is currently unavailable. This is a most likely a transient
+  condition and may be corrected by retrying with a backoff.
+- `DataLoss`
+  - Unrecoverable data loss or corruption.
+- `Unauthenticated`
+  - The request does not have valid authentication credentials for the operation.
 
 ### Status creation
 

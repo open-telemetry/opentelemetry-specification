@@ -26,7 +26,7 @@ To check for typos, use
 
 ```bash
 # Golang is needed for the misspell tool.
-make install-tools
+make install-misspell
 make misspell
 ```
 
