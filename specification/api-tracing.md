@@ -225,6 +225,10 @@ empty by default:
 - `Attribute`s
 - `Link`s
 - `Event`s
+
+N.B.: There is an active RFC to remove [out of band span reporting](https://github.com/open-telemetry/oteps/pull/26)
+so the following items below may be removed soon.
+
 - `Resource`
 - `SpanID`
 - `Start timestamp`
