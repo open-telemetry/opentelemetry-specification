@@ -312,13 +312,13 @@ The `Event` SHOULD be an immutable type.
 The Span interface MUST provide:
 - An API to record a single `Event` where the `Event` properties are passed as
 arguments. This MAY be called `AddEvent`.
-- An API to record a single `Event` whose attributes are lazily accessed. If the
-language supports overloads then this SHOULD be called `AddEvent` otherwise
-`AddLazyEvent` MAY be considered. A lazy `Event` SHOULD be implemented in a way
-that is as memory efficient as possible for a given language. Possible
-implementations include providing an `Event` interface, a concrete `Event`
-definition, or a function that returns an `Event` instance. When providing a
-function that returns an `Event` it SHOULD be named `EventFormatter`.
+- An API to record a single `Event` whose attributes or attribute values are
+lazily constructed, with the intention of avoiding unnecessary work if an event
+is unused. If the language supports overloads then this SHOULD be called
+`AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
+might be easier to defer `Event` or attribute creation entirely by providing a
+wrapping class or function that returns an `Event` or formatted attributes. When
+providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
@@ -341,13 +341,13 @@ The `Link` SHOULD be an immutable type.
 The Span interface MUST provide:
 - An API to record a single `Link` where the `Link` properties are passed as
 arguments. This MAY be called `AddLink`.
-- An API to record a single `Link` whose attributes are lazily accessed. If the
-language supports overloads then this SHOULD be called `AddLink` otherwise
-`AddLazyLink` MAY be considered. A lazy `Link` SHOULD be implemented in a way
-that is as memory efficient as possible for a given language. Possible
-implementations include providing a `Link` interface, a concrete `Link`
-definition, or a function that returns a `Link` instance. When providing a
-function that returns a `Link` it SHOULD be named `LinkFormatter`.
+- An API to record a single `Link` whose attributes or attribute values are
+lazily constructed, with the intention of avoiding unnecessary work if a link
+is unused. If the language supports overloads then this SHOULD be called
+`AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
+be easier to defer `Link` or attribute creation entirely by providing a wrapping
+class or function that returns a `Link` or formatted attributes. When providing
+a wrapping class or function it SHOULD be named `LinkFormatter`.
 
 Links SHOULD preserve the order in which they're set.
 
