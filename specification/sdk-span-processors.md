@@ -5,6 +5,23 @@ The span processors are invoked only when [`IsRecordingEvents`](api-tracing.md#i
 
 Span processors can be registered directly on SDK Tracer and they are invoked in the same order as they were registered.
 
+The following diagram shows `SpanProcessor` relationship to other components in the SDK:
+
+```
+  +-----+---------------+   +---------------------+   +-------------------+
+  |     |               |   |                     |   |                   |
+  |     |               |   | BatchProcessor      |   |    SpanExporter   | 
+  |     |               +---> SimpleProcessor     +--->  (JaegerExporter) |
+  | SDK | SpanProcessor |   |                     |   |                   |
+  |     |               |   +---------------------+   +-------------------+ 
+  |     |               |
+  |     |               |   +---------------------+
+  |     |               |   |                     |
+  |     |               +---> ZPagesProcessor     |
+  |     |               |   |                     |
+  +-----+---------------+   +---------------------+
+```
+
 ## Interface definition
 
 ### OnStart(Span)
