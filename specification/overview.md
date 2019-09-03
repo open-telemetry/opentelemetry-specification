@@ -183,7 +183,7 @@ document.
 
 ## DistributedContext
 
-The **DistributedContext** exists to store labels that describe the context of an operation an application performs. It is intended to enable context that are custom to the application or integrations in contrast to other contexts, such as `SpanContext`. For a specific operation, there should not be multiple **DistributedContext** instances.
+The **DistributedContext** exists to store labels that describe the context of an operation an application performs. It is intended to enable context that are custom to the application or integrations in contrast to other contexts, such as `SpanContext`. Only one **DistributedContext** should be associated with any particular operation.
 
 For example, a web service can benefit from including context around what service has sent the request. Or a SaaS provider can include context about the API user or token that is responsible for that request. These values can be consumed from **DistributedContext** and used as an additional dimension for a metric, or additional context for logs and traces.
 
@@ -204,7 +204,7 @@ a length greater than zero and less than 256.
 - **EntryMetadata** contains properties associated with an **Entry**.
 For now only the property **EntryTTL** is defined.
 - **EntryTTL** is an integer that represents number of hops an entry can propagate.
-Anytime a sender serializes an entry, sends it over the wire and receiver deserializes
+Anytime a sender serializes an entry, sends it over the wire and a receiver deserializes
 the entry then the entry is considered to have travelled one hop.
 
 ## Resources
