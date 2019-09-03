@@ -178,9 +178,9 @@ non-zero byte.
 byte.
 
 `TraceFlags` contain details about the trace. Unlike Tracestate values,
-TraceFlags are present in all traces. Currently, the only TraceOption is a
-boolean `recorded`
-[flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001).
+TraceFlags are present in all traces. Currently, the only `TraceFlags` is a
+boolean `sampled`
+[flag](https://www.w3.org/TR/trace-context/#trace-flags).
 
 `Tracestate` carries system-specific configuration data, represented as a list
 of key-value pairs. TraceState allows multiple tracing systems to participate in
