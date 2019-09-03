@@ -234,17 +234,6 @@ so the following items below may be removed soon.
 - `Start timestamp`
 - `OutOfBand` to specify the span originated from out of band
 
-// TODO: There's a question about clock resolution when a user supplies a ts
-// compared to clock the tracer uses internally. For a case where the span is
-// out of band, e.g. logs to traces, there's nothing that can really be done
-// about this. However, imagine a scenario where at the start of an RPC call, we
-// do start = time.now(), parse the headers, then create a span with that
-// `start` timestamp. Is this a language specific thing, like in javascript
-// there's perfomance.now() and Date.now(), do we say "use performance.now() for
-// highest resolution timestamps" in the docs? Maybe there's a tracer.timenow()
-// function? I'm not quite sure what the solution is here.
-// Original comment: https://github.com/open-telemetry/rfcs/pull/8#discussion_r306412584
-
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
 trace. A span is said to be a _root span_ if it does not have a parent. Each
