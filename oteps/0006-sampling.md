@@ -1,6 +1,6 @@
 # Sampling API
 
-*Status: proposed*
+*Status: approved*
 
 ## TL;DR
 This section tries to summarize all the changes proposed in this RFC:
