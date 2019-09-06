@@ -225,13 +225,13 @@ empty by default:
 - `Attribute`s
 - `Link`s
 - `Event`s
+- `Start timestamp`
 
 N.B.: There is an active RFC to remove [out of band span reporting](https://github.com/open-telemetry/oteps/pull/26)
 so the following items below may be removed soon.
 
 - `Resource`
 - `SpanID`
-- `Start timestamp`
 - `OutOfBand` to specify the span originated from out of band
 
 Each span has zero or one parent span and zero or more child spans, which
