@@ -1,11 +1,11 @@
 # Span processor
 
 Span processor is an interface which allows hooks for span start and end method invocations.
-The span processors are invoked only when [`IsRecordingEvents`](api-tracing.md#isrecordingevents) is true. This interface can be used as a helper for [span exporter](sdk-exporter.md) to batch and convert spans.
+The span processors are invoked only when [`IsRecordingEvents`](api-tracing.md#isrecordingevents) is true. This interface can be used to implement [span exporter](sdk-exporter.md) to batch and convert spans.
 
 Span processors can be registered directly on SDK Tracer and they are invoked in the same order as they were registered.
 
-The following diagram shows `SpanProcessor` relationship to other components in the SDK:
+The following diagram shows `SpanProcessor`'s relationship to other components in the SDK:
 
 ```
   +-----+---------------+   +---------------------+   +-------------------+
@@ -27,7 +27,7 @@ The following diagram shows `SpanProcessor` relationship to other components in 
 ### OnStart(Span)
 
 `OnStart` is called when a span is started.
-This method is called synchronously on the execution thread, therefore it should not block or throw an exception.
+This method is called synchronously on the thread that started the span, therefore it should not block or throw exceptions.
 
 **Parameters:**
 
