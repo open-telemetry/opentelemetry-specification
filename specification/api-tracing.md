@@ -15,7 +15,6 @@ Table of Contents
     * [GetCurrentSpan](#getcurrentspan)
     * [WithSpan](#withspan)
     * [SpanBuilder](#spanbuilder)
-    * [RecordSpanData](#recordspandata)
     * [GetBinaryFormat](#getbinaryformat)
     * [GetHttpTextFormat](#gethttptextformat)
 * [SpanContext](#spancontext)
@@ -37,20 +36,6 @@ Table of Contents
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
   * [GetIsOk](#getisok)
-* [SpanData](#spandata)
-  * [Constructing SpanData](#constructing-spandata)
-  * [Getters](#getters)
-    * [GetName](#getname)
-    * [GetKind](#getkind)
-    * [GetStartTimestamp](#getstarttimestamp)
-    * [GetEndTimestamp](#getendtimestamp)
-    * [GetContext](#getcontext)
-    * [GetParentSpanId](#getparentspanid)
-    * [GetResource](#getresource)
-    * [GetAttributes](#getattributes)
-    * [GetTimedEvents](#gettimedevents)
-    * [GetLinks](#getlinks)
-    * [GetStatus](#getstatus)
 
 </details>
 
@@ -59,8 +44,6 @@ Tracing API consist of a few main classes:
 - `Tracer` is used for all operations. See [Tracer](#tracer) section.
 - `Span` is a mutable object storing information about the current operation
    execution. See [Span](#span) section.
-- `SpanData` is an immutable object that is used to report out-of-band completed
-  spans. See [SpanData](#spandata) section.
 
 ## Data types
 While languages and platforms have different ways of representing data,
@@ -240,6 +223,14 @@ empty by default:
 - `Attribute`s
 - `Link`s
 - `Event`s
+- `Start timestamp`
+
+N.B.: There is an active RFC to remove [out of band span reporting](https://github.com/open-telemetry/oteps/pull/26)
+so the following items below may be removed soon.
+
+- `Resource`
+- `SpanID`
+- `OutOfBand` to specify the span originated from out of band
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -304,6 +295,7 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 - (Required) Name of the event.
 - (Optional) One or more `Attribute`.
+- (Optional) Timestamp for the event.
 
 The `Event` SHOULD be an immutable type.
 
@@ -375,7 +367,8 @@ with the `Span`).
 Call to `End` of a `Span` MUST not have any effects on child spans. Those may
 still be running and can be ended later.
 
-There MUST be no parameter.
+Parameters:
+- (Optional) Timestamp to explicitly set the end timestamp
 
 This API MUST be non-blocking.
 
@@ -388,8 +381,7 @@ timestamps to the Span object:
 - The end time needs to be recorded when the operation is ended.
 
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
-calling of corresponding API and MUST not be passed as an argument. In order to
-record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
+calling of corresponding API.
 
 ## Status
 
@@ -473,93 +465,3 @@ Returns the description of this `Status`.
 ### GetIsOk
 
 Returns false if this `Status` represents an error, else returns true.
-
-## SpanData
-
-`SpanData` is an immutable and final class. All getters of `SpanData` are thread
-safe and can be called any number of times.
-
-`API` MUST provide a way of [constructing `SpanData`](#constructing-spandata)
-that can be recorded using `Tracer` method `RecordSpanData`.
-
-### Constructing SpanData
-
-`SpanData` is an immutable object that can be constructed using the following
-arguments:
-
-- `SpanContext` identifying this `SpanData`.
-- Parent's `SpanId`. All-zeroes `SpanId` or `null` MUST be assumed and
-  interchangeable if `SpanData` has no parent.
-- `Resource` this SpanData is recorded for. If not specified - `Tracer`'s
-  `Resource` will be used instead when the `RecordSpanData` called on the
-  `Tracer`.
-- Name of this `SpanData`.
-- `Kind` of this `SpanData`. `SpanKind.Internal` MUST be assumed as a default.
-- Start and End timestamps.
-- Set of attributes with the string key and the value, which must be either a
-  string, a boolean value, or a numeric type.
-- Set of `Events`.
-- Set of `Links`.
-- `Status` of `SpanData` execution.
-
-All collections passes as an argument MUST be either immutable if language
-allows it or copied so the change of the collection will not mutate the
-`SpanData`.
-
-### Getters
-
-Getters will be called by exporters in SDK. Implementation MUST not assume that
-getters will be called only once or at all. There also MUST be no expectations
-on how soon getters will be called after object creation.
-
-#### GetName
-
-Returns the name of this `SpanData`.
-
-#### GetKind
-
-Returns the `SpanKind` of this `SpanData`.
-
-#### GetStartTimestamp
-
-Returns the start timestamp of this `SpanData`.
-
-#### GetEndTimestamp
-
-Returns the end timestamp of this `SpanData`.
-
-#### GetContext
-
-Returns the `SpanContext` associated with this `SpanData`.
-
-#### GetParentSpanId
-
-Returns the `SpanId` of the parent of this `SpanData`.
-
-#### GetResource
-
-Returns the `Resource` associated with this `SpanData`. When `null` is returned
-the assumption is that `Resource` will be taken from the `Tracer` that is used
-to record this `SpanData`.
-
-#### GetAttributes
-
-Returns the `Attributes` collection associated with this `SpanData`. The order
-of attributes in collection is not significant. The typical use of attributes
-collection is enumeration so the fast access to the label value by it's key is
-not a requirement. This collection MUST be immutable.
-
-#### GetTimedEvents
-
-Return the collection of `Events` with the timestamps associated with this
-`SpanData`. The order of events in collection is not guaranteed. This collection
-MUST be immutable.
-
-#### GetLinks
-
-Returns the `Links` collection associated with this `SpanData`. The order of
-links in collection is not significant. This collection MUST be immutable.
-
-#### GetStatus
-
-Returns the `Status` of this `SpanData`.
