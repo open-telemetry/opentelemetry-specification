@@ -1,6 +1,6 @@
 # Remove support to report out-of-band telemetry from the API
 
-*Status: proposed*
+*Status: approved*
 
 ## TL;DR
 This section tries to summarize all the changes proposed in this RFC:
