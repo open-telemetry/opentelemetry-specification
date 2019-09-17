@@ -32,7 +32,7 @@ ExportResult is one of:
 
 - Success - batch is successfully exported. For protocol exporters this typically means that the data is sent over the wire and delivered to the destination server.
 
-- FailedNoneRetryable - exporting failed. The caller must not retry exporting the same batch. The batch must be dropped. This for example can happen when the batch contains bad data and cannot be serialized.
+- FailedNotRetryable - exporting failed. The caller must not retry exporting the same batch. The batch must be dropped. This for example can happen when the batch contains bad data and cannot be serialized.
 
 - FailedRetryable - cannot export to the destination. The caller should record the error and may retry exporting the same batch after some time. This for example can happen when the destination is unavailable, there is a network error or endpoint does not exist. 
 
@@ -40,7 +40,7 @@ ExportResult is one of:
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity for exporter to do any cleanup required.
 
-`Shutdown` should be called only once for each `Exporter` instance. After the call to `Shutdown` subsequent calls to `Export` are not allowed and should return FailedNoneRetryable error.
+`Shutdown` should be called only once for each `Exporter` instance. After the call to `Shutdown` subsequent calls to `Export` are not allowed and should return FailedNotRetryable error.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data and the destination is unavailable). Language library authors can decide if they want to make the shutdown timeout to be configurable.
 
@@ -71,7 +71,7 @@ type ExportResultCode int
 
 const (
     Success ExportResultCode = iota
-    FailedNoneRetryable
+    FailedNotRetryable
     FailedRetryable
 )
 ```
@@ -81,7 +81,7 @@ const (
 ```java
 public interface SpanExporter {
  public enum ResultCode {
-   Success, FailedNoneRetryable, FailedRetryable
+   Success, FailedNotRetryable, FailedRetryable
  }
 
  ResultCode export(Collection<ExportableSpan> batch);

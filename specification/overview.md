@@ -17,7 +17,7 @@ particular, a **Trace** can be thought of as a directed acyclic graph (DAG) of
 **Spans**, where the edges between **Spans** are defined as parent/child
 relationship.
 
-For example, the following is an example **Trace** made up of 8 **Spans**:
+For example, the following is an example **Trace** made up of 6 **Spans**:
 
 ```
 Causal relationships between Spans in a single Trace
@@ -81,7 +81,7 @@ propagated from parent to child **Spans**.
   practically sufficient probability by being made as 8 randomly generated
   bytes. When passed to a child Span this identifier becomes the parent span id
   for the child **Span**.
-- **TraceOptions** represents the options for a trace. It is represented as 1
+- **TraceFlags** represents the options for a trace. It is represented as 1
   byte (bitmap).
   - Sampling bit -  Bit to represent whether trace is sampled or not (mask
     `0x1`).

@@ -26,7 +26,7 @@ To check for typos, use
 
 ```bash
 # Golang is needed for the misspell tool.
-make install-tools
+make install-misspell
 make misspell
 ```
 
@@ -35,3 +35,8 @@ To quickly fix typos, use
 ```bash
 make misspell-correction
 ```
+
+## Sign the CLA
+
+Before you can contribute, you will need to sign the [Contributor License
+Agreement](https://identity.linuxfoundation.org/projects/cncf).
