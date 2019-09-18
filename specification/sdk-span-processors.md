@@ -76,5 +76,5 @@ This processor can cause high contention in a very high traffic service.
 
 * `exporter` - the exporter where the spans are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached spans are dropped. The default value is `2048`.
-* `scheduledDelayMilllis` - the delay interval in milliseconds between two consecutive exports. The default value is `5000`.
+* `scheduledDelayMillis` - the delay interval in milliseconds between two consecutive exports. The default value is `5000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be smaller or equal to `maxQueueSize`. The default value is `512`.
