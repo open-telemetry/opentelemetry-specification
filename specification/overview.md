@@ -81,7 +81,7 @@ propagated from parent to child **Spans**.
   practically sufficient probability by being made as 8 randomly generated
   bytes. When passed to a child Span this identifier becomes the parent span id
   for the child **Span**.
-- **TraceOptions** represents the options for a trace. It is represented as 1
+- **TraceFlags** represents the options for a trace. It is represented as 1
   byte (bitmap).
   - Sampling bit -  Bit to represent whether trace is sampled or not (mask
     `0x1`).
@@ -163,7 +163,7 @@ supports both - push and pull model of setting the `Metric` value.
 ### Metrics data model and SDK
 
 Metrics data model is defined in SDK and is based on
-[metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/src/opentelemetry/proto/metrics/v1/metrics.proto).
+[metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
 This data model is used by all the OpenTelemetry exporters as an input.
 Different exporters have different capabilities (e.g. which data types are
 supported) and different constraints (e.g. which characters are allowed in label
@@ -250,7 +250,7 @@ The OpenTelemetry service has two primary modes of operation: Agent (a locally
 running daemon) and Collector (a standalone running service).
 
 Read more at OpenTelemetry Service [Long-term
-Vision](https://github.com/open-telemetry/opentelemetry-service/blob/master/docs/VISION.md).
+Vision](https://github.com/open-telemetry/opentelemetry-service/blob/master/docs/vision.md).
 
 ## Instrumentation adapters
 
