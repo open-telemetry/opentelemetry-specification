@@ -222,7 +222,6 @@ The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
 - `Attribute`s
 - `Link`s
-- `Event`s
 - `Start timestamp`
 
 N.B.: There is an active RFC to remove [out of band span reporting](https://github.com/open-telemetry/oteps/pull/26)
