@@ -14,7 +14,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
 - API Specification
   - [DistributedContext](specification/api-distributedcontext.md)
     - [Propagators](specification/api-propagators.md)
-  - [Resources](specification/api-resources.md)
+  - [Resources](specification/sdk-resource.md)
   - [Tracing](specification/api-tracing.md)
     - [Sampling](specification/api-sampling.md)
   - [Metrics](specification/api-metrics.md)

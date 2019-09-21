@@ -1,4 +1,4 @@
-# Resources API
+# Resource SDK
 
 A [Resource](overview.md#resources) represents the entity producing telemetry.
 The primary purpose of resources as a first-class concept in the API is
@@ -8,17 +8,12 @@ with closed source environments. API MUST allow for creation of `Resources` and
 for associating them with telemetry.
 
 When used with distributed tracing, a resource can be associated with the
-[Tracer](api-tracing.md#tracer). When associated with `Tracer`, all `Span`s
+[Tracer](sdk-tracing.md#tracer-sdk). When associated with `Tracer`, all `Span`s
 produced by this `Tracer` will automatically be associated with this `Resource`.
-When associated with a `Span` explicitly for out-of-band spans -
-`Resource` that is set on `Tracer` MUST be ignored. Note, that association of
-`Tracer` with the `Resource` will be done in SDK, not as API call.
 
-**TODO**: explain how resource is associated with metrics.
-
-## Resources SDK
-
-TODO: notes how Resources API is extended when using `SDK`. https://github.com/open-telemetry/opentelemetry-specification/issues/61 
+When used with distributed tracing, a resource can be associated with the
+[Meter](sdk-metrics.md#meter-sdk). When associated with `Meter`, all `Metrics`
+produced by this `Meter` will automatically be associated with this `Resource`.
 
 ## Resource creation
 
