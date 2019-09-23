@@ -277,24 +277,27 @@ of use, a label set may contain more or fewer than the required set of
 labels, in which case the additional labels may be used (e.g.,
 sampled) or reported by the SDK.
 
-### `NewRecorder(Instrument, LabelSet) -> Recorder`
+### `NewHandle(Instrument, LabelSet) -> language-specific`
 
-`RecorderFor` returns a `Recorder` interface, which supports a
-`Record(value)` method to support instrument handles.  The API wraps
-`Recorder` objects and exposes them via `Add(value)`, `Set(value)`,
-and `Record(value)` method on handles for the respective instruments.
+`NewHandle` returns a language-specific interface to support
+instrument handles.  The user calls `Instrument.GetHandle(LabelSet)`
+directly, which calls through to `NewHandle(Instrument, LabelSet)`.
+The `NewHandle` method is not a user-facing API and the return type
+will vary depending on the language.
 
-The `Recorder` interface is embedded in the instrument handle and its
-lifetime is controlled by the application.  Applications should delete
-handles when they are are no longer in use, to release the underlying
-`Recorder` reference.
+User-level method calls on the handle, `Add(value)`, `Set(value)`, and
+`Record(value)`, interact with the result of `NewHandle` in a
+language- and API-specific way.  SDKs are expected to hold resources
+corresponding to each handle, so users are encouraged to delete
+handles when they are no longer in use.
 
-### `DeleteRecorder(Recorder)`
+### `DeleteHandle(language-speciric)`
 
 After the application is finished with an instrument handle, deleting
-the handle will result in `DeleteRecorder()` on the underlying
-recorder interface.  The SDK may release any pre-aggregation state
-associated with the handle after exporting a final update.
+the handle will result in `DeleteHandle()` on the underlying,
+language- and API-specific type.  The SDK may release any
+pre-aggregation state associated with the handle after exporting a
+final update.
 
 ### `RecordBatch(LabelSet, measurements...)`
 
@@ -407,7 +410,7 @@ instrument in the standard OpenTelemetry SDK.
 
 After the application finishes with the handle, it should be
 explicitly deleted in a language-appropriate way, which must call
-`Meter.DeleteRecorder`.
+`Meter.DeleteHandle`.
 
 ### `RecordBatch` operation
 
