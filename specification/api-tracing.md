@@ -225,13 +225,6 @@ empty by default:
 - `Event`s
 - `Start timestamp`
 
-N.B.: There is an active RFC to remove [out of band span reporting](https://github.com/open-telemetry/oteps/pull/26)
-so the following items below may be removed soon.
-
-- `Resource`
-- `SpanID`
-- `OutOfBand` to specify the span originated from out of band
-
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
 trace. A span is said to be a _root span_ if it does not have a parent. Each
@@ -243,7 +236,6 @@ A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Since the `SpanContext` is the only component of a
 `Span` that is propagated between processes, a `Span`'s parent SHOULD be a
 `SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
-
 
 ### Span operations
 
