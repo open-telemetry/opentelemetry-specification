@@ -157,14 +157,21 @@ implicitly, through the current OpenTelemetry context and resources.
 A metric `Descriptor` is a structural description of the instrument
 itself, including its name and various options.  Instruments may be
 annotated with with specific `Units` and a description, for the
-purpose of self-documentation.  Instruments support an option to be
-disabled by default, which implies to the SDK that a particular metric
-should be explicitly enabled, otherwise these instruments are turned
-"off" by the default configuration).
+purpose of self-documentation.
 
 Metric instruments are constructed independently of the SDK.  They are
 "pure" API objects, in this sense, able to be used by more than one
 active `Meter` implementation.
+
+#### Disabled option
+
+Instruments support a `Disabled` option.  Metric instruments
+configured with `Disabled: True` are considered "off" unless
+explicitly requested via SDK configuration.  Unless the SDK is
+otherwise configured to enable a disabled metric, operations on these
+instruments will be treated as no-ops.
+
+Metric instruments are enabled by default (i.e., have `Disabled: False`).
 
 ### Handles and LabelSets
 
@@ -203,15 +210,18 @@ metrics data exporter that sends the data (somehow).
 ### Required label keys
 
 Metric instruments list an optional set of _required label keys_ to
-support potential optimizations in the metric export pipeline.  There
-is an important relationship between metric Instruments, their
-required label keys, and LabelSets.  To support efficient
-pre-aggregation in the metrics export pipeline, we must be able to
-infer the value of the required label keys from the `LabelSet`, which
-implies that they are not dependent on dynamic context. All this means
-that the value of a required label key is explicitly unspecified
-unless it is provided in the `LabelSet`, by definition, and not to be
-taken from other context.
+support potential optimizations in the metric export pipeline.  This
+is an option in the sense that the empty set (of required label keys)
+is a valid setting.  If required label keys are provided, it implies
+that the SDK can infer a value for the required label from the
+`LabelSet`.
+
+To support efficient pre-aggregation in the metrics export pipeline,
+we must be able to infer the label value from the `LabelSet`, which
+implies that they are not dependent on dynamic context.  Required
+label keys address this relationship.  The value of a required label
+key is explicitly unspecified unless it is provided in the `LabelSet`,
+by definition, and not to be taken from other context.
 
 ### Input methods
 
