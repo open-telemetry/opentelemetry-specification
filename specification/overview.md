@@ -150,7 +150,7 @@ metrics:
 - Counter metric to report instantaneous measurement. Counter values can go
   up or stay the same, but can never go down. Counter values cannot be
   negative. There are two types of counter metric values - `double` and `long`.
-- Gauge metric to report instantaneous measurement of a double value. Gauges can
+- Gauge metric to report instantaneous measurement of a numeric value. Gauges can
   go both up and down. The gauges values can be negative. There are two types of
   gauge metric values - `double` and `long`.
 
@@ -255,7 +255,7 @@ Vision](https://github.com/open-telemetry/opentelemetry-service/blob/master/docs
 ## Instrumentation adapters
 
 The inspiration of the project is to make every library and application
-manageable out of the box by instrumenting it with OpenTelemery. However on the
+manageable out of the box by instrumenting it with OpenTelemetry. However on the
 way to this goal there will be a need to enable instrumentation by plugging
 instrumentation adapters into the library of choice. These adapters can be
 wrapping library APIs, subscribing to the library-specific callbacks or
