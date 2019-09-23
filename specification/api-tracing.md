@@ -461,22 +461,25 @@ Returns the description of this `Status`.
 Returns false if this `Status` represents an error, else returns true.
 
 ## SpanKind
-Type of span. Can be used to specify additional relationships between spans in addition to a
-parent/child relationship.
+
+Depending on the `Span` position in a `Trace` and application components
+boundaries, it can play a different role. This role often defines how `Span`
+will be processed and visualized by various backends. So it is important to
+record this "hint" whenever possible to the best of the caller's knowledge.
 
 There are multiple defined SpanKinds:
-- `INTERNAL`
-  - Default value. Indicates that the span is used internally in the application.
-- `SERVER`
-  - Indicates that the span covers server-side handling of an RPC or other remote request.
-- `CLIENT`
-  - Indicates that the span covers the client-side wrapper around an RPC or other remote request.
-- `PRODUCER`
-  - Indicates that the span describes producer sending a message to a broker. Unlike client and
-   server, there is no direct critical path latency relationship between producer and consumer
-   spans.
-- `CONSUMER`
-  - Indicates that the span describes consumer receiving a message from a broker. Unlike client
-   and server, there is no direct critical path latency relationship between producer and
-   consumer spans.
- 
+
+* `INTERNAL` Default value. Indicates that represents an internal operational
+  within an application, as opposed to operations happening at the boundaries.
+* `SERVER` Indicates that the span covers server-side handling of an RPC or
+  other remote request.
+* `CLIENT` Indicates that the span covers the client-side wrapper around an RPC
+  or other remote request.
+* `PRODUCER` Indicates that the span describes producer sending a message to a
+  broker. Unlike client and server, there is often no direct critical path
+  latency relationship between producer and consumer spans. `Producer` span ends
+  when the message was accepted by the broker. While logical operation of the
+  message processing might span for much longer time.
+* `CONSUMER` Indicates that the span describes consumer receiving a message from
+  a broker. As described for `PRODUCER` kind, there is often no direct critical
+  path latency relationship between producer and consumer spans.
