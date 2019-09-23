@@ -416,7 +416,7 @@ explicitly deleted in a language-appropriate way, which must call
 
 Using a `LabelSet` obtained via `Meter.DefineLabels()` call
 `RecordBatch(LabelSet, measurements)`, where `measurements` is a list
-of (`Instrument, `Value`) pairs.  `RecordBatch` applies to the `Meter`
+of (`Instrument`, `Value`) pairs.  `RecordBatch` applies to the `Meter`
 bound to the `LabelSet`.
 
 For example, to record two metrics simultaneously:
