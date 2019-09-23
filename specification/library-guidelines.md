@@ -58,15 +58,15 @@ SDK implements core functionality that is required for translating API calls int
 
 ![Full Operation Diagram](img/library-full.png)
 
-SDK defines an [Exporter interface](sdk-exporter.md). Protocol-specific exporters that are responsible for sending telemetry data to backends must implement this interface.
+SDK defines an [Exporter interface](sdk-tracing.md#span-exporter). Protocol-specific exporters that are responsible for sending telemetry data to backends must implement this interface.
 
 SDK also includes optional helper exporters that can be composed for additional functionality if needed.
 
-Library designers need to define the language-specific `Exporter` interface based on [this generic specification](sdk-exporter.md). 
+Library designers need to define the language-specific `Exporter` interface based on [this generic specification](sdk-tracing.md#span-exporter). 
 
 ### Protocol Exporters
 
-Telemetry backend vendors are expected to implement [Exporter interface](sdk-exporter.md). Data received via Export() function should be serialized and sent to the backend in a vendor-specific way.
+Telemetry backend vendors are expected to implement [Exporter interface](sdk-tracing.md#span-exporter). Data received via Export() function should be serialized and sent to the backend in a vendor-specific way.
 
 Vendors are encouraged to keep protocol-specific exporters as simple as possible and achieve desirable additional functionality such as queuing and retrying using helpers provided by SDK.
 
