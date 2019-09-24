@@ -3,10 +3,14 @@
 ## Overview
 
 The _Metrics API_ supports reporting diagnostic measurements using
-three basic kinds of instrument, commonly known as Counters, Gauges,
-and Measures.  Instruments are code-level objects, handled by
-programmers, used to gain visibility into operational metrics about
-the application, its components, and the system as a whole.
+three basic kinds of instrument.  "Metrics" are the thing being
+produced--mathematical, statistical summaries of certain observable
+behavior in the program.  "Instruments" are the devices used by the
+program to record observations about their behavior.  Therefore, we
+use "metric instrument" to refer to a program object, allocated
+through the API, used for recording metrics.  There are three distinct
+instruments in the Metrics API, commonly known as Counters, Gauges,
+and Measures.
 
 Monitoring and alerting are the common use-case for the data provided
 through metric instruments, after various collection and aggregation
