@@ -190,7 +190,7 @@ sub-operations.
 - A start timestamp
 - An end timestamp
 - An ordered mapping of [`Attribute`s](#set-attributes)
-- A list of [`Link`s](#span-creation) to other `Span`s
+- A list of [`Link`s](#add-Links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
