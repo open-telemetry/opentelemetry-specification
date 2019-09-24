@@ -255,7 +255,7 @@ arguments. This MAY be called `AddLink`.
 - An API to record a single lazily initialized `Link`. This can be implemented
 by providing a `Link` interface or a concrete `Link` definition and a
 `LinkFormatter`. If the language supports overloads then this MAY be called
-`AddLink` otherwise `AddLazyLink` MAY be consider.
+`AddLink` otherwise `AddLazyLink` MAY be considered.
 
 Links SHOULD preserve the order in which they're set.
 
