@@ -190,7 +190,7 @@ sub-operations.
 - A start timestamp
 - An end timestamp
 - An ordered mapping of [`Attribute`s](#set-attributes)
-- A list of [`Link`s](#add-Links) to other `Span`s
+- A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
@@ -221,7 +221,7 @@ The API SHOULD require the caller to provide:
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
 - `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
-- `Link`s - see API definition [here](#links)
+- `Link`s - see API definition [here](#add-links)
 - `Event`s
 - `Start timestamp`
 
