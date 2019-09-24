@@ -5,6 +5,7 @@
 Table of Contents
 </summary>
 
+* [Sampling](#sampling)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
