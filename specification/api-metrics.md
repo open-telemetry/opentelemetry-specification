@@ -149,7 +149,7 @@ for positive and negative values.
 Metric instruments are named.  Regardless of the instrument kind,
 metric events include the instrument name, a numerical value, and an
 optional set of labels.  Labels are key:value pairs associated with
-events describing various dimensions or categories that describe thee
+events describing various dimensions or categories that describe the
 event.  The Metrics API supports applying explicit labels through the
 API itself, while labels can also be applied to metric events
 implicitly, through the current OpenTelemetry context and resources.
