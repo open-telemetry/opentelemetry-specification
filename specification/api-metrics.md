@@ -156,7 +156,11 @@ Metric instruments are named.  Regardless of the instrument kind,
 metric events include the instrument name, a numerical value, and an
 optional set of labels.  Labels are key:value pairs associated with
 events describing various dimensions or categories that describe the
-event.  The Metrics API supports applying explicit labels through the
+event.  A "label key" refers to the key component while "label value"
+refers to the correlated value component of a label.  Label refers to
+the pair of label key and value.
+
+The Metrics API supports applying explicit labels through the
 API itself, while labels can also be applied to metric events
 implicitly, through the current OpenTelemetry context and resources.
 
@@ -187,11 +191,11 @@ labels, allowing for efficient repeated measurements.  The use of
 pre-defined labels is so important for performance that we make it a
 first-class concept in the API.
 
-A `LabelSet` is an API object, returned by the SDK through
-`Meter.DefineLabels(labels)`, that represents a set of "witnessed"
-labels.  Applications cannot read the labels belonging to a `LabelSet`
-object, they are simply a reference to a specific
-`Meter.DefineLabels()` event.
+A `LabelSet` represents a set of labels, i.e., a set of key:value
+assignments.  `LabelSets` are returned by the SDK through a call to
+`Meter.DefineLabels(labels)`.  Applications cannot read the labels
+belonging to a `LabelSet` object, they are simply a reference to a
+specific `Meter.DefineLabels()` event.
 
 Handles and LabelSets support different ways to achieve the same kind
 of optimization.  Generally, there is a high cost associated with
