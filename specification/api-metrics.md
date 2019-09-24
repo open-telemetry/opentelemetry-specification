@@ -22,12 +22,14 @@ separation of the API from the SDK.
 
 ### Meter
 
-The OpenTelemetry API that provides the metrics SDK is named `Meter`.
-According to the specification, the `Meter` implementation ultimately
-determines how metrics events are handled.  The specification's task
-is to define the semantics of the event and describe standard
-interpretation in high-level terms.  How the `Meter` accomplishes its
-goals and the export capabilities it supports are not specified.
+The user-facing OpenTelemetry API consists of an SDK-independent part
+for defining metric instruments and a part named `Meter` that is
+implemented by the SDK.  According to the specification, the `Meter`
+implementation ultimately determines how metrics events are handled.
+The specification's task is to define the semantics of the event and
+describe standard interpretation in high-level terms.  How the `Meter`
+accomplishes its goals and the export capabilities it supports are not
+specified.
 
 The standard interpretation for `Meter` implementations to follow is
 specified so that users understand the intended use for each kind of
@@ -305,7 +307,7 @@ language- and API-specific way.  SDKs are expected to hold resources
 corresponding to each handle, so users are encouraged to delete
 handles when they are no longer in use.
 
-### `DeleteHandle(language-speciric)`
+### `DeleteHandle(language-specific)`
 
 After the application is finished with an instrument handle, deleting
 the handle will result in `DeleteHandle()` on the underlying,
@@ -315,8 +317,8 @@ final update.
 
 ### `RecordBatch(LabelSet, measurements...)`
 
-`RecordBatch` is a primitive way to enter multiple simultaneous
-measurements.  The `Measurement` struct contains:
+`RecordBatch` offers primitive support for entering multiple
+simultaneous measurements.  The `Measurement` struct contains:
 
 - *Instrument*: the instrument `Descriptor`
 - *Value*: the numerical value of the measurement event.
@@ -343,7 +345,7 @@ complete contents of a metric `Descriptor` are:
 - **Keys** The required label keys.
 - **ID** A unique identifier associated with new instrument object.
 - **Description** A string describing the meaning and use of this instrument.
-- **Unit** The unit of measurement, not required.
+- **Unit** The unit of measurement, optional.
 - **Disabled** True value tells the SDK not to report by default.
 - _Kind-specific options_
   - **NonMonotonic** (Counter): add positive and negative values
@@ -364,6 +366,9 @@ value depend on the choice of (`Counter`, `Gauge`, or `Measure`).
 by the API.  The other fields (Description, Keys, Unit, Disabled,
 Kind-specific) are options to the various constructors in a
 language-appropriate style.
+
+Metric units are defined according to the
+[UCUM](http://unitsofmeasure.org/ucum.html) specification.
 
 Metric instruments are not associated with an SDK. They can be used
 with multiple `Meter` instances in the same process.
