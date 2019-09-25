@@ -71,25 +71,26 @@ structures and public methods for the first time.
 In scope of SDK Alpha release are:
 
 - Basic telemetry pipeline for traces complete
-  - SpanBuilder interceptors interface
   - Built-in samplers (percentage sampler).
   - SpanProcessor interface and implementations:
   - Default and built-in processors
-    - Simple processor
-    - Batching processors
-    - Block when the queue is full processor
+    - Batching processors with the options to block when the queue is full
+      processor
   - Exporter interface
 - Distributed context
   - Basic implementation
 - Metrics
-  - Metrics aggregation implementation
+  - Metrics processor
   - Metrics exporting interface
+  - Default and built-in processors
+    - Aggregation processor
+  - Metrics aggregation implementation
 
 Also in scope:
 
 - Jaeger and/or Zipkin exporter
 - Prometheus exporter
-- Proto definition and optionally - OpenTelemetry Collector exporter
+- Proto definition and optionally - OpenTelemetry collector exporter
 
 **Proposed deadline:** SDK specs complete by 10/4
 
@@ -111,13 +112,13 @@ After the beta release of language SDKs we do expect that languages public
 surface may change, but we do not expect any major changes in conceptual level
 in specifications.
 
-**Proposed deadline**: Specification complete by Nov 15th.
+**Porposed deadline**: Specification complete by Nov 15th.
 
 **Details of this release to be added later.**
 
 ### Getting to release
 
-By end of year the basic language SDKs will be complete and we will begin
+By end of year mid August the Java basic SDK will be complete and we will begin
 stabilization work. Also OpenCensus can be switched to the OpenTelemetry SDK. As
 well as instrumentation adapters can be implemented. So we will have early
 adopters.
