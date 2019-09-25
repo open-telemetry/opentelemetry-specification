@@ -4,6 +4,9 @@ This document covers the milestones for the project. Each repository in
 OpenTelemetry project need to adjust milestones to this plan based on
 project-specific estimates.
 
+It is recommended to align language versions to the spec versions they
+implement.
+
 For each language, we want to quickly achieve parity with existing OpenTracing
 and OpenCensus implementations. For languages which have both an OpenTracing and
 OpenCensus implementation, we would like to achieve parity in OpenTelemetry by
@@ -39,7 +42,11 @@ specifications and cross-language test cases.
 As OpenTracing and OpenCensus projects converge we write specifications the same
 time as we develop libraries.
 
-### Alpha release
+We will refer to [API
+Proposal](https://github.com/open-telemetry/opentelemetry-specification/milestone/1)
+Alpha v0.1 release.
+
+### Alpha v0.2
 
 The spirit of this release is to have a demo-able product that anybody can start
 playing with and start implementing instrumentation adaptors and data collectors
@@ -49,21 +56,20 @@ As part of this release we ask to implement Tracing and Metrics exporters so it
 will be easy to visualize the scenarios. For Tracing - either Jaeger or Zipkin
 can be selected, for Metrics - Prometheus.
 
-#### API specs for Alpha release
+**Proposed deadline:** Alpha v0.2 specs complete by 10/4
 
-OpenTelemetry [API
-Proposal](https://github.com/open-telemetry/opentelemetry-specification/milestone/1)
-received a lot of feedback. As part of an Alpha release there will be a few
-major areas of improvement - change for out of band span reporting API and
+#### API specs for Alpha v0.2
+
+Alpha v0.1 received a lot of feedback. As part of an Alpha release there will be
+a few major areas of improvement - change for out of band span reporting API and
 the merged pre-aggregated and non-aggregated metrics API. There are other
 changes as well.
 
-API is expected to be changed for the Beta milestone. The big improvements in
-works are initialization and configuring logic.
+We already plan for the next iteraion and we know that API is expected to be
+changed for the Alpha v0.3 milestone. The big improvements in works are
+initialization and configuring logic as well as context propagation detachment.
 
-**Proposed deadline:** API specs complete by 9/27
-
-#### SDK specs for Alpha release
+#### SDK specs for Alpha v0.2
 
 There were no formal SDK proposal. So this milestone will define SDK data
 structures and public methods for the first time.
@@ -92,18 +98,16 @@ Also in scope:
 - Prometheus exporter
 - Proto definition and optionally - OpenTelemetry collector exporter
 
-**Proposed deadline:** SDK specs complete by 10/4
-
-### Alpha release validation
+### Alpha v0.2 release validation
 
 Languages will ship alpha releases shortly after specification will be complete.
 The main purpose of this release is to start implementing data collectors and
 use API and SDK for the user scenarios. This will ensure validation of concepts
 and public surface.
 
-Note, we DO expect changes in APIs for the beta release.
+Note, we DO expect changes in APIs for the Alpha v0.3 release.
 
-### Beta release
+### Alpha v0.3 release
 
 The spirit of beta release is to deliver a product with the stable, almost the
 release candidate level of APIs and interfaces.
@@ -114,7 +118,15 @@ in specifications.
 
 **Porposed deadline**: Specification complete by Nov 15th.
 
-**Details of this release to be added later.**
+In scope of SDK Alpha v0.2 release are:
+
+-	Collector support for Otel protocol
+-	Otel exporters
+Required Spec RFCs for Alpha v0.2:
+-	Global Init
+-	Context (separate baggage, renaming, etc)
+-	Protocol
+-	Semantic Conventions
 
 ### Getting to release
 
