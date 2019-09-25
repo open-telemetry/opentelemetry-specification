@@ -89,7 +89,7 @@ Also in scope:
 
 - Jaeger and/or Zipkin exporter
 - Prometheus exporter
-- Proto definition and optionally - OpenTelemetry Agent exporter
+- Proto definition and optionally - OpenTelemetry Collector exporter
 
 **Proposed deadline:** SDK specs complete by 10/4
 
