@@ -111,7 +111,7 @@ After the beta release of language SDKs we do expect that languages public
 surface may change, but we do not expect any major changes in conceptual level
 in specifications.
 
-**Porposed deadline**: Specification complete by Nov 15th.
+**Proposed deadline**: Specification complete by Nov 15th.
 
 **Details of this release to be added later.**
 
