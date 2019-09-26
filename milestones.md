@@ -130,7 +130,7 @@ Required Spec RFCs for Alpha v0.3:
 
 ### Getting to release
 
-By end of year mid August the Java basic SDK will be complete and we will begin
+By end of year the basic language SDKs will be complete and we will begin
 stabilization work. Also OpenCensus can be switched to the OpenTelemetry SDK. As
 well as instrumentation adapters can be implemented. So we will have early
 adopters.
