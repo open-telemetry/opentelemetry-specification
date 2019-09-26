@@ -222,7 +222,6 @@ The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
 - `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
 - `Link`s - see API definition [here](#add-links)
-- `Event`s
 - `Start timestamp`
 
 Each span has zero or one parent span and zero or more child spans, which
