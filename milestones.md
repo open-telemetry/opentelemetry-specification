@@ -118,7 +118,7 @@ in specifications.
 
 **Proposed deadline**: Specification complete by Nov 15th.
 
-In scope of SDK Alpha v0.2 release are:
+In scope of SDK Alpha v0.3 release are:
 
 -	Collector support for Otel protocol
 -	Otel exporters
