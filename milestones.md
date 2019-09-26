@@ -122,7 +122,7 @@ In scope of SDK Alpha v0.3 release are:
 
 -	Collector support for Otel protocol
 -	Otel exporters
-Required Spec RFCs for Alpha v0.2:
+Required Spec RFCs for Alpha v0.3:
 -	Global Init
 -	Context (separate baggage, renaming, etc)
 -	Protocol
