@@ -115,14 +115,14 @@ After the beta release of language SDKs we do expect that languages public
 surface may change, but we do not expect any major changes in conceptual level
 in specifications.
 
-**Porposed deadline**: Specification complete by Nov 15th.
+**Proposed deadline**: Specification complete by Nov 15th.
 
-In scope of SDK Alpha v0.2 release are:
+In scope of SDK Alpha v0.3 release are:
 
 - Collector support for OpenTelemetry protocol
 - OpenTelemetry exporters
 
-Required Spec RFCs for Alpha v0.2:
+Required Spec RFCs for Alpha v0.3:
 
 - Global Init
 - Context (separate baggage, renaming, etc)
@@ -131,7 +131,7 @@ Required Spec RFCs for Alpha v0.2:
 
 ### Getting to release
 
-By end of year mid August the Java basic SDK will be complete and we will begin
+By end of year the basic language SDKs will be complete and we will begin
 stabilization work. Also OpenCensus can be switched to the OpenTelemetry SDK. As
 well as instrumentation adapters can be implemented. So we will have early
 adopters.
