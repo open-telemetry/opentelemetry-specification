@@ -37,8 +37,14 @@ aggregation](overview.md#recording-metrics-with-predefined-aggregation).
 
 ### Meter creation
 
-TODO: follow the spec for the Tracer. See work in progress:
-https://github.com/open-telemetry/opentelemetry-specification/issues/39
+New `Meter` instances can be created via a `MeterFactory` and its `getMeter`
+method. This method expects two string arguments:
+* `name`: This name must identify the instrumentation library (also referred
+to as integration) and *not* the instrumented library (e.g. `io.opentelemetry.contrib.mongodb`)
+If no name (null or empty string) is specified, a default Meter implementation
+is returned.
+* `version` (optional): Specifies the version of the instrumentation library
+(e.g. `semver:1.0.0`).
 
 ### Create Metric
 

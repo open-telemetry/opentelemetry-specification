@@ -80,27 +80,16 @@ Some applications may require multiple `Tracer` instances, e.g. to create
 `Span`s on behalf of other applications. Implementations MAY provide a global
 registry of `Tracer`s for such applications.
 
-### Obtaining a tracer
+### Obtaining a Tracer
 
-`Tracer` object construction and registration will vary by implementation.
-`Tracer`s may be explicitly created and registered from user code, or resolved
-from linked dependencies using the provider pattern.
-
-Implementations might require the user to specify configuration properties at
-`Tracer` creation time, or rely on external configuration, e.g. when using the
-provider pattern.
-
-##### Runtimes with multiple deployments/applications
-
-Runtimes that support multiple deployments or applications might need to
-provide a different `Tracer` instance to each deployment. To support this,
-
-the global `Tracer` registry may delegate calls to create new `Tracer`s to a
-separate `Provider` component, and the runtime may include its own `Provider`
-implementation which returns a different `Tracer` for each deployment.
-
-`Provider`s are registered with the API via some language-specific mechanism,
-for instance the `ServiceLoader` class in Java.
+New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
+method. This method expects two string arguments:
+* `name`: This name must identify the instrumentation library (also referred
+to as integration) and *not* the instrumented library (e.g. `io.opentelemetry.contrib.mongodb`)
+If no name (null or empty string) is specified, a default Tracer implementation
+is returned.
+* `version` (optional): Specifies the version of the instrumentation library
+(e.g. `semver:1.0.0`).
 
 ### Tracer operations
 
