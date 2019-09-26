@@ -96,7 +96,6 @@ Also in scope:
 
 - Jaeger and/or Zipkin exporter
 - Prometheus exporter
-- Proto definition and optionally - OpenTelemetry collector exporter
 
 ### Alpha v0.2 release validation
 
@@ -120,13 +119,15 @@ in specifications.
 
 In scope of SDK Alpha v0.2 release are:
 
--	Collector support for Otel protocol
--	Otel exporters
+- Collector support for OpenTelemetry protocol
+- OpenTelemetry exporters
+
 Required Spec RFCs for Alpha v0.2:
--	Global Init
--	Context (separate baggage, renaming, etc)
--	Protocol
--	Semantic Conventions
+
+- Global Init
+- Context (separate baggage, renaming, etc)
+- Protocol
+- Semantic Conventions
 
 ### Getting to release
 
