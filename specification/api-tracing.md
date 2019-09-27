@@ -84,10 +84,11 @@ registry of `Tracer`s for such applications.
 
 New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
 method. This method expects two string arguments:
+
 * `name`: This name must identify the instrumentation library (also referred
-to as integration) and *not* the instrumented library (e.g. `io.opentelemetry.contrib.mongodb`)
-If no name (null or empty string) is specified, a default Tracer implementation
-is returned.
+to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not* the
+instrumented library. If no name (null or empty string) is specified, a default
+Tracer implementation is returned.
 * `version` (optional): Specifies the version of the instrumentation library
 (e.g. `semver:1.0.0`).
 
