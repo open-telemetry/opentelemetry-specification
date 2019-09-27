@@ -131,11 +131,6 @@ convenience methods to manage a `Span`'s lifetime and the scope in which a
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
 
-The `Tracer` MUST support recording `Span`s that were created _out of band_,
-i.e.  not by the tracer itself. For this reason, implementations MUST NOT
-require that a `Span`'s start and end timestamps match the wall time when it is
-created, made active, or finished.
-
 The implementation MUST provide no-op binary and text `Propagator`s, which the
 `Tracer` SHOULD use by default if other propagators are not configured. SDKs
 SHOULD use the W3C HTTP Trace Context as the default text format. For more
