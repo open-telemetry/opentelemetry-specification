@@ -85,7 +85,8 @@ Namely, one of the following sets is required (in order of preference, all strin
 * `http.scheme`, `host.name`, `host.port`, `http.target`
 * `http.url`
 
-Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones. For example, `http.server_name` shown great value in practice, as bogus HTTP Host headers occur often in the wild.
+Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones.
+For example, `http.server_name` has shown great value in practice, as bogus HTTP Host headers occur often in the wild.
 
 It is strongly recommended to set at least one of `http.app` or `http.server_name` to allow associating requests with some logical app or server entity.
 
