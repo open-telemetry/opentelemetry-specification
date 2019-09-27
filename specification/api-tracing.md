@@ -15,18 +15,17 @@ Table of Contents
     * [GetCurrentSpan](#getcurrentspan)
     * [WithSpan](#withspan)
     * [SpanBuilder](#spanbuilder)
-    * [RecordSpanData](#recordspandata)
     * [GetBinaryFormat](#getbinaryformat)
     * [GetHttpTextFormat](#gethttptextformat)
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecordingEvents](#isrecordingevents)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
-    * [Add Links](#add-links)
     * [Set Status](#set-status)
     * [UpdateName](#updatename)
     * [End](#end)
@@ -37,20 +36,6 @@ Table of Contents
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
   * [GetIsOk](#getisok)
-* [SpanData](#spandata)
-  * [Constructing SpanData](#constructing-spandata)
-  * [Getters](#getters)
-    * [GetName](#getname)
-    * [GetKind](#getkind)
-    * [GetStartTimestamp](#getstarttimestamp)
-    * [GetEndTimestamp](#getendtimestamp)
-    * [GetContext](#getcontext)
-    * [GetParentSpanId](#getparentspanid)
-    * [GetResource](#getresource)
-    * [GetAttributes](#getattributes)
-    * [GetTimedEvents](#gettimedevents)
-    * [GetLinks](#getlinks)
-    * [GetStatus](#getstatus)
 
 </details>
 
@@ -59,8 +44,6 @@ Tracing API consist of a few main classes:
 - `Tracer` is used for all operations. See [Tracer](#tracer) section.
 - `Span` is a mutable object storing information about the current operation
    execution. See [Span](#span) section.
-- `SpanData` is an immutable object that is used to report out-of-band completed
-  spans. See [SpanData](#spandata) section.
 
 ## Data types
 While languages and platforms have different ways of representing data,
@@ -167,9 +150,7 @@ propagated along side of a distributed context. `SpanContext`s are immutable.
 The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext
 specification](https://www.w3.org/TR/trace-context/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
-`TraceOptions` and system-specific `TraceState` values. `SpanContext` is
-represented as an interface, in order to be serializable into a wider variety of
-trace context wire formats. 
+`TraceFlags` and system-specific `TraceState` values.
 
 `TraceId` A valid trace identifier is a 16-byte array with at least one
 non-zero byte.
@@ -177,10 +158,10 @@ non-zero byte.
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero
 byte.
 
-`TraceOptions` contain details about the trace. Unlike Tracestate values,
-TraceOptions are present in all traces. Currently, the only TraceOption is a
-boolean `recorded`
-[flag](https://www.w3.org/TR/trace-context/#recorded-flag-00000001).
+`TraceFlags` contain details about the trace. Unlike Tracestate values,
+TraceFlags are present in all traces. Currently, the only `TraceFlags` is a
+boolean `sampled`
+[flag](https://www.w3.org/TR/trace-context/#trace-flags).
 
 `Tracestate` carries system-specific configuration data, represented as a list
 of key-value pairs. TraceState allows multiple tracing systems to participate in
@@ -202,14 +183,14 @@ sub-operations.
 `Span`s encapsulate:
 
 - The operation name
-- An immutable [`SpanContext`](#SpanContext) that uniquely identifies the
+- An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
-- A parent span in the form of a [`Span`](#Span), [`SpanContext`](#SpanContext),
+- A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
   or null
 - A start timestamp
 - An end timestamp
-- An ordered mapping of [`Attribute`s](#Set-Attributes)
-- A list of [`Link`s](#add-Links) to other `Span`s
+- An ordered mapping of [`Attribute`s](#set-attributes)
+- A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
@@ -239,9 +220,9 @@ The API SHOULD require the caller to provide:
 
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
-- `Attribute`s
-- `Link`s
-- `Event`s
+- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
+- `Link`s - see API definition [here](#add-links)
+- `Start timestamp`
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -255,6 +236,27 @@ created in another process. Since the `SpanContext` is the only component of a
 `Span` that is propagated between processes, a `Span`'s parent SHOULD be a
 `SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
 
+#### Add Links
+
+During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
+`Span`s can be from the same or a different trace. See [Links
+description](overview.md#links-between-spans).
+
+A `Link` is defined by the following properties:
+- (Required) `SpanContext` of the `Span` to link to.
+- (Optional) One or more `Attribute`.
+
+The `Link` SHOULD be an immutable type.
+
+The Span creation API should provide:
+- An API to record a single `Link` where the `Link` properties are passed as
+arguments. This MAY be called `AddLink`.
+- An API to record a single lazily initialized `Link`. This can be implemented
+by providing a `Link` interface or a concrete `Link` definition and a
+`LinkFormatter`. If the language supports overloads then this MAY be called
+`AddLink` otherwise `AddLazyLink` MAY be considered.
+
+Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
@@ -306,6 +308,7 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 - (Required) Name of the event.
 - (Optional) One or more `Attribute`.
+- (Optional) Timestamp for the event.
 
 The `Event` SHOULD be an immutable type.
 
@@ -322,28 +325,6 @@ the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](data-semantic-conventions.md) which have prescribed semantic meanings.
-
-#### Add Links
-
-A `Span` MUST have the ability to record links to other `Span`s. Linked `Span`s
-can be from the same or a different trace. See [Links
-description](overview.md#links-between-spans).
-
-A `Link` is defined by the following properties:
-- (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`.
-
-The `Link` SHOULD be an immutable type.
-
-The Span interface MUST provide:
-- An API to record a single `Link` where the `Link` properties are passed as
-arguments. This MAY be called `AddLink`.
-- An API to record a single lazily initialized `Link`. This can be implemented
-by providing a `Link` interface or a concrete `Link` definition and a
-`LinkFormatter`. If the language supports overloads then this MAY be called
-`AddLink` otherwise `AddLazyLink` MAY be consider.
-
-Links SHOULD preserve the order in which they're set.
 
 #### Set Status
 
@@ -377,7 +358,8 @@ with the `Span`).
 Call to `End` of a `Span` MUST not have any effects on child spans. Those may
 still be running and can be ended later.
 
-There MUST be no parameter.
+Parameters:
+- (Optional) Timestamp to explicitly set the end timestamp
 
 This API MUST be non-blocking.
 
@@ -390,8 +372,7 @@ timestamps to the Span object:
 - The end time needs to be recorded when the operation is ended.
 
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
-calling of corresponding API and MUST not be passed as an argument. In order to
-record already completed span - [`SpanData`](#spandata) API HAVE TO be used.
+calling of corresponding API.
 
 ## Status
 
@@ -475,93 +456,3 @@ Returns the description of this `Status`.
 ### GetIsOk
 
 Returns false if this `Status` represents an error, else returns true.
-
-## SpanData
-
-`SpanData` is an immutable and final class. All getters of `SpanData` are thread
-safe and can be called any number of times.
-
-`API` MUST provide a way of [constructing `SpanData`](#constructing-spandata)
-that can be recorded using `Tracer` method `RecordSpanData`.
-
-### Constructing SpanData
-
-`SpanData` is an immutable object that can be constructed using the following
-arguments:
-
-- `SpanContext` identifying this `SpanData`.
-- Parent's `SpanId`. All-zeroes `SpanId` or `null` MUST be assumed and
-  interchangeable if `SpanData` has no parent.
-- `Resource` this SpanData is recorded for. If not specified - `Tracer`'s
-  `Resource` will be used instead when the `RecordSpanData` called on the
-  `Tracer`.
-- Name of this `SpanData`.
-- `Kind` of this `SpanData`. `SpanKind.Internal` MUST be assumed as a default.
-- Start and End timestamps.
-- Set of attributes with the string key and the value, which must be either a
-  string, a boolean value, or a numeric type.
-- Set of `Events`.
-- Set of `Links`.
-- `Status` of `SpanData` execution.
-
-All collections passes as an argument MUST be either immutable if language
-allows it or copied so the change of the collection will not mutate the
-`SpanData`.
-
-### Getters
-
-Getters will be called by exporters in SDK. Implementation MUST not assume that
-getters will be called only once or at all. There also MUST be no expectations
-on how soon getters will be called after object creation.
-
-#### GetName
-
-Returns the name of this `SpanData`.
-
-#### GetKind
-
-Returns the `SpanKind` of this `SpanData`.
-
-#### GetStartTimestamp
-
-Returns the start timestamp of this `SpanData`.
-
-#### GetEndTimestamp
-
-Returns the end timestamp of this `SpanData`.
-
-#### GetContext
-
-Returns the `SpanContext` associated with this `SpanData`.
-
-#### GetParentSpanId
-
-Returns the `SpanId` of the parent of this `SpanData`.
-
-#### GetResource
-
-Returns the `Resource` associated with this `SpanData`. When `null` is returned
-the assumption is that `Resource` will be taken from the `Tracer` that is used
-to record this `SpanData`.
-
-#### GetAttributes
-
-Returns the `Attributes` collection associated with this `SpanData`. The order
-of attributes in collection is not significant. The typical use of attributes
-collection is enumeration so the fast access to the label value by it's key is
-not a requirement. This collection MUST be immutable.
-
-#### GetTimedEvents
-
-Return the collection of `Events` with the timestamps associated with this
-`SpanData`. The order of events in collection is not guaranteed. This collection
-MUST be immutable.
-
-#### GetLinks
-
-Returns the `Links` collection associated with this `SpanData`. The order of
-links in collection is not significant. This collection MUST be immutable.
-
-#### GetStatus
-
-Returns the `Status` of this `SpanData`.

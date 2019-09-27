@@ -34,8 +34,6 @@ This API consist of a few main classes:
 - `Tracer` is used for all operations. See [Tracer](api-tracing.md#tracer) section.
 - `Span` is a mutable object storing information about the current operation
    execution. See [Span](api-tracing.md#span) section.
-- `SpanData` is an immutable object that is used to report out-of-band completed
-  spans. See [SpanData](api-tracing.md#spandata) section.
 
 ### `/internal` (_Optional_)
 Private application and library code.
