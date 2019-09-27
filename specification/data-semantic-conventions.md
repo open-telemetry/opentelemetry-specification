@@ -62,7 +62,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `/path/12314/?q=ddds#123"`. | [1] |
 | `http.host` | The value of the [HTTP host header][]. Note that this might be empty or not present. | [1] |
 | `http.scheme` | The URI scheme identifying the used protocol: `"http"` or `"https"` | [1] |
-| `http.server_name` | The (primary) server name (usually not including a port). This should be obtained via configuration, e.g. the Apache [`ServerName`][ap-sn] directive or NGINX [server_name][nx-sn] . If no such configuration can be obtained, this attribute MUST NOT be set ( `host.name` should be used instead). | [1] |
+| `http.server_name` | The (primary) server name (usually not including a port). This should be obtained via configuration, e.g. the Apache [`ServerName`][ap-sn] directive or NGINX [`server_name`][nx-sn] . If no such configuration can be obtained, this attribute MUST NOT be set ( `host.name` should be used instead). | [1] |
 | `host.name` |  Analogous to `peer.hostname` but for the host instead of the peer. | [1] |
 | `http.route` | The matched route (path template). E.g. `"/users/:userID?"`. | No |
 | `http.app` | An identifier for the whole HTTP application. E.g. Flask app name, `spring.application.name`, etc. | No |
@@ -74,7 +74,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
 [X-Forwarded-For]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For
 [ap-sn]: https://httpd.apache.org/docs/2.4/mod/core.html#servername
-[nx-xn]: http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name
+[nx-sn]: http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name
 
 **[1]**: `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. <https://github.com/open-telemetry/opentelemetry-python/pull/148>).
 It is thus preferred to supply the raw data that *is* available.
