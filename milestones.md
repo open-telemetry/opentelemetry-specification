@@ -65,7 +65,7 @@ a few major areas of improvement - change for out of band span reporting API and
 the merged pre-aggregated and non-aggregated metrics API. There are other
 changes as well.
 
-We already plan for the next iteraion and we know that API is expected to be
+We already plan for the next iteration and we know that API is expected to be
 changed for the Alpha v0.3 milestone. The big improvements in works are
 initialization and configuring logic as well as context propagation detachment.
 
@@ -76,22 +76,22 @@ structures and public methods for the first time.
 
 In scope of SDK Alpha release are:
 
-- Basic telemetry pipeline for traces complete
+- Tracing
   - Built-in samplers (percentage sampler).
-  - SpanProcessor interface and implementations:
-  - Default and built-in processors
-    - Batching processors with the options to block when the queue is full
-      processor
+  - SpanProcessor interface
+  - Batching SpanProcessor
   - Exporter interface
-- Distributed context
-  - Basic implementation
+  - Jaeger and/or Zipkin exporter
+- Context Propagation
+  - In-process propagation
+  - Inject and Extract 
+  - DistributedContext
 - Metrics
-  - Metrics processor
-  - Metrics exporting interface
-  - Default and built-in processors
-    - Aggregation processor
-  - Metrics aggregation implementation
-
+  - MetricsProcessor interface
+  - Aggregation MetricsProcessor
+  - Exporter interface
+  - Prometheus Exporter
+  
 Also in scope:
 
 - Jaeger and/or Zipkin exporter
@@ -108,10 +108,10 @@ Note, we DO expect changes in APIs for the Alpha v0.3 release.
 
 ### Alpha v0.3 release
 
-The spirit of beta release is to deliver a product with the stable, almost the
+The spirit of v0.3 release is to deliver a product with the stable, almost the
 release candidate level of APIs and interfaces.
 
-After the beta release of language SDKs we do expect that languages public
+After the v0.3 release of language SDKs we do expect that languages public
 surface may change, but we do not expect any major changes in conceptual level
 in specifications.
 
@@ -119,8 +119,7 @@ in specifications.
 
 In scope of SDK Alpha v0.3 release are:
 
-- Collector support for OpenTelemetry protocol
-- OpenTelemetry exporters
+- Finalize the OpenTelemetry protocol
 
 Required Spec RFCs for Alpha v0.3:
 
@@ -128,6 +127,13 @@ Required Spec RFCs for Alpha v0.3:
 - Context (separate baggage, renaming, etc)
 - Protocol
 - Semantic Conventions
+
+### Alpha v0.4 release
+
+Collector support for OpenTelemetry protocol will be implemented by this time
+and languages SDKs will implement OpenTelemetry collector exporter.
+
+**Proposed deadline**: end of year 2019
 
 ### Getting to release
 
