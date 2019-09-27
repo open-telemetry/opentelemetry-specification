@@ -1,6 +1,6 @@
 # Named Tracers and Meters
 
-**Status:** `proposed`
+**Status:** `approved`
 
 _Creating Tracers and Meters using a factory mechanism and naming those Tracers / Meters in accordance with the library that provides the instrumentation for those components._
 
