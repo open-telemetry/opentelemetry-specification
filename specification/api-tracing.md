@@ -469,12 +469,12 @@ record this "hint" whenever possible to the best of the caller's knowledge.
 
 These are the possible SpanKinds:
 
-* `INTERNAL` Default value. Indicates that the Span represents an internal operation
-  within an application, as opposed to operations happening at the boundaries.
+* `INTERNAL` Default value. Indicates that the span represents an internal
+  operation within an application, as opposed to an operations happening at the
+  boundaries.
 * `SERVER` Indicates that the span covers server-side handling of an RPC or
   other remote request.
-* `CLIENT` Indicates that the span covers the client-side wrapper around an RPC
-  or other remote request.
+* `CLIENT` Indicates that the span describes a request to some remote service.
 * `PRODUCER` Indicates that the span describes a producer sending a message to a
   broker. Unlike client and server, there is often no direct critical path
   latency relationship between producer and consumer spans. A `Producer` span ends
