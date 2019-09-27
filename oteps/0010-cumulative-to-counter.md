@@ -1,6 +1,6 @@
 # Rename "Cumulative" to "Counter" in the metrics API
 
-**Status:** `proposed`
+**Status:** `approved`
 
 Prefer the name "Counter" as opposed to "Cumulative".
 
