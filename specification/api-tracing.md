@@ -222,9 +222,6 @@ The API SHOULD require the caller to provide:
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
 - [`SpanKind`](#spankind)
-- `Attribute`s
-- `Link`s
-- `Event`s
 - `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
 - `Link`s - see API definition [here](#add-links)
 - `Start timestamp`
