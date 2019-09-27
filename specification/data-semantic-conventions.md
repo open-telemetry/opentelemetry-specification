@@ -62,13 +62,13 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `/path/12314/?q=ddds#123"`. | [1] |
 | `http.host` | The value of the [HTTP host header][]. Note that this might be empty or not present. | [1] |
 | `http.scheme` | The URI scheme identifying the used protocol: `"http"` or `"https"` | [1] |
-| `http.server_name` | The (primary) server name (usually not including a port). This should be obtained via configuration, e.g. the Apache [`ServerName`][ap-sn] directive or NGINX [`server_name`][nx-sn] . If no such configuration can be obtained, this attribute MUST NOT be set ( `host.name` should be used instead). | [1] |
+| `http.server_name` | The (primary) server name (usually not including a port). This should be obtained via configuration, e.g. the Apache [`ServerName`][ap-sn] or NGINX [`server_name`][nx-sn] directive. If no such configuration can be obtained, this attribute MUST NOT be set ( `host.name` should be used instead). | [1] |
 | `host.name` |  Analogous to `peer.hostname` but for the host instead of the peer. | [1] |
+| `host.port` | Local port. E.g., `80` (integer). Analogous to `peer.port`. | [1] |
 | `http.route` | The matched route (path template). E.g. `"/users/:userID?"`. | No |
 | `http.app` | An identifier for the whole HTTP application. E.g. Flask app name, `spring.application.name`, etc. | No |
 | `http.app_root` |The path prefix of the URL that identifies this `http.app`. Also known as "context root". If multiple roots exist, the one that was matched for this request should be used. | No |
 | `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). | No |
-| `host.port` | Local port. E.g., `80` (integer). Analogous to `peer.port`. | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
