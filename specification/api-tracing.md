@@ -86,10 +86,26 @@ New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
 method. This method expects two string arguments:
 * `name`: This name must identify the instrumentation library (also referred
 to as integration) and *not* the instrumented library (e.g. `io.opentelemetry.contrib.mongodb`)
-If no name (null or empty string) is specified, a default Tracer implementation
+If no name (null or empty string) is specified, a working default Tracer instance
 is returned.
 * `version` (optional): Specifies the version of the instrumentation library
 (e.g. `semver:1.0.0`).
+
+Implementations might require the user to specify configuration properties at
+`TracerFactory` creation time, or rely on external configuration, e.g. when using the
+provider pattern.
+
+##### Runtimes with multiple deployments/applications
+
+Runtimes that support multiple deployments or applications might need to
+provide a different `TracerFactory` instance to each deployment. To support this,
+the global `TracerFactory` registry may delegate calls to create new instances of
+`TracerFactory` to a separate `Provider` component, and the runtime may include
+its own `Provider` implementation which returns a different `TracerFactory` for
+each deployment.
+
+`Provider` instances are registered with the API via some language-specific
+mechanism, for instance the `ServiceLoader` class in Java.
 
 ### Tracer operations
 

@@ -16,8 +16,9 @@ Table of Contents
 New `Tracer` instances are always created through a `TracerFactory` (see [API](api-tracing.md#obtaining-a-tracer)).
 The `name` and `version` arguments supplied to the `TracerFactory` must be used
 to create a `Resource` instance which is stored on the created `Tracer`.
-All `Span` instances created by a `Tracer` must provide a `getLibraryResource`
-method that returns this `Resource` information held by the `Tracer`.
+The readable representations of all `Span` instances created by a `Tracer` must
+provide a `getLibraryResource` method that returns this `Resource` information
+held by the `Tracer`.
 
 # Span processor
 
