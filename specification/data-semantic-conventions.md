@@ -21,7 +21,7 @@ This span types represents HTTP requests. They can be used for http and https
 schemes and various HTTP versions like 1.1, 2 and SPDY.
 
 Given an [RFC 3986](https://tools.ietf.org/html/rfc3986) compliant URI of the form
-`scheme:[//authority]path[?query][#fragment]`, the span name of the span SHOULD
+`scheme:[//host[:port]]path[?query][#fragment]`, the span name of the span SHOULD
 be set to to the URI path value.
 
 If a value that represents the identity of the request
@@ -32,15 +32,15 @@ be used for the span name instead.
 | :------------- | :----------------------------------------------------------- | --------- |
 | `component`    | Denotes the type of the span and needs to be `"http"`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
-| `http.url` | Full HTTP request URL in the form `scheme://host:port/path?query#fragment`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | Defined later. |
+| `http.url` | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | Defined later. |
 | `http.status_code` | [HTTP response status code][]. E.g. `200` (integer) | No |
 | `http.status_text` | [HTTP reason phrase][]. E.g. `"OK"` | No |
 | `http.flavor` | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |  If not TCP-based (`QUIC`). |
 
+It is recommended to also use the `peer.*` attributes, especially `peer.ip*`.
+
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
-
-It is recommended to also use the general [network attributes][], especially `peer.ip`. If `sock.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 ### HTTP client
 
@@ -65,11 +65,11 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `/path/12314/?q=ddds#123"`. | [1] |
 | `http.host` | The value of the [HTTP host header][]. Note that this might be empty or not present. | [1] |
 | `http.scheme` | The URI scheme identifying the used protocol: `"http"` or `"https"` | [1] |
-| `http.server_name` | The server name (not including port). This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set (`host.name` from the [network attributes][] should be used instead). | [1] |
+| `http.server_name` | The server name (not including port). This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set (a `host.name` attribute that is analogous to `peer.hostname` but for the host instead of the peer should be used instead). | [1] |
 | `http.route` | The matched route (path template). E.g. `"/users/:userID?"`. | No |
 | `http.app` | An identifier for the whole HTTP application. E.g. Flask app name, `spring.application.name`, etc. | No |
 | `http.app_root` |The path prefix of the URL that identifies this `http.app`. Also known as "context root". If multiple roots exist, the one that was matched for this request should be used. | No |
-| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). For syntax, see `peer.ip`. | No |
+| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
@@ -84,9 +84,9 @@ Namely, one of the following sets is required (in order of preference, all strin
 * `http.scheme`, `host.name`, `host.port`, `http.target`
 * `http.url`
 
-Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones. For example, `http.server_name` might be valuable in a scenario where multiple "virtual" hosts are served by a server under the same IP.
+Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones. For example, `http.server_name` shown great value in practice, as bogus HTTP Host headers occur often in the wild.
 
-It is recommended to also use the `code.ns` and `code.func` [code attributes][] to name the logical handler method (`code.ns` + `code.func` will have a lower cardinality than `http.route`).
+It is strongly recommended to set at least one of `http.app` or `http.server_name` to allow associating requests with some logical app or server entity.
 
 As an example, if a browser request for `https://example.com:8080/webshop/articles/4?s=1` is invoked, we may have:
 
@@ -99,7 +99,7 @@ Span name: `/webshop/articles/:article_id` (`app_root` + `route`).
 | `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"` (or not set)                  |
 | `http.target`      | `"/webshop/articles/4?s=1"`                                                       |
 | `http.host`        | `"example.com:8080"`                                                              |
-| `http.server_name` | `"example.org"` (in that case, the canonical server name does not match the host) |
+| `http.server_name` | `"example.com"`                                                                   |
 | `host.port`        | `8080`                                                                            |
 | `http.scheme`      | `"https"`                                                                         |
 | `http.route`       | `"/articles/:article_id"` (note that the `app_root` part is missing in this case) |
@@ -108,12 +108,7 @@ Span name: `/webshop/articles/:article_id` (`app_root` + `route`).
 | `http.app`         | E.g., `"My cool WebShop"` or `"com.example.webshop"`                              |
 | `http.app_root`    | `"/webshop"`                                                                      |
 | `http.client_ip`   | `"192.0.2.4"`                                                                     |
-| `peer.ip`          | `"192.0.2.5"` (the client goes through a proxy)                                   |
-| `code.ns`          | `"com.example.webshop.ArticleService"`                                            |
-| `code.func`        | `"showArticleDetails"`                                                            |
-
-Note that a naive implementation might set `code.ns` = `com.example.mywebframework.HttpDispatcherServlet` and `code.func` = `service`.
-If possible, this should be avoided and the logically responsible more specific handler method should be used, even if the span is actually started and ended in the web framework (integration).
+| `peer.ip4`         | `"192.0.2.5"` (the client goes through a proxy)                                   |
 
 ## Databases client calls
 
