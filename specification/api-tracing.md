@@ -475,7 +475,7 @@ These are the possible SpanKinds:
   other remote request.
 * `CLIENT` Indicates that the span covers the client-side wrapper around an RPC
   or other remote request.
-* `PRODUCER` Indicates that the span describes producer sending a message to a
+* `PRODUCER` Indicates that the span describes a producer sending a message to a
   broker. Unlike client and server, there is often no direct critical path
   latency relationship between producer and consumer spans. A `Producer` span ends
   when the message was accepted by the broker. While logical operation of the
