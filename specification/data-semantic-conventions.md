@@ -43,7 +43,7 @@ It is recommended to also use the `peer.*` attributes, especially `peer.ip*`.
 
 This span type represents an outbound HTTP request.
 
-For a HTTP client span, `SpanKind` MUST be `Client`.
+For an HTTP client span, `SpanKind` MUST be `Client`.
 
 `http.url` is required and represents the HTTP URL used to (initially) make this request.
 
@@ -51,7 +51,7 @@ For a HTTP client span, `SpanKind` MUST be `Client`.
 
 This span type represents an inbound HTTP request.
 
-For a HTTP server span, `SpanKind` MUST be `Server`.
+For an HTTP server span, `SpanKind` MUST be `Server`.
 
 Given an inbound request for a route (e.g. `"/users/:userID?"` the `name` attribute of the span SHOULD be set to this route. If the route does not include the application root path, it SHOULD be prepended to the span name.
 
