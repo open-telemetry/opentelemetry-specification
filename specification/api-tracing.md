@@ -467,7 +467,7 @@ boundaries, it can play a different role. This role often defines how `Span`
 will be processed and visualized by various backends. So it is important to
 record this "hint" whenever possible to the best of the caller's knowledge.
 
-There are multiple defined SpanKinds:
+These are the possible SpanKinds:
 
 * `INTERNAL` Default value. Indicates that the Span represents an internal operation
   within an application, as opposed to operations happening at the boundaries.
