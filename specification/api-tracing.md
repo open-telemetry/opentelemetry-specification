@@ -469,7 +469,7 @@ record this "hint" whenever possible to the best of the caller's knowledge.
 
 There are multiple defined SpanKinds:
 
-* `INTERNAL` Default value. Indicates that represents an internal operational
+* `INTERNAL` Default value. Indicates that the Span represents an internal operation
   within an application, as opposed to operations happening at the boundaries.
 * `SERVER` Indicates that the span covers server-side handling of an RPC or
   other remote request.
