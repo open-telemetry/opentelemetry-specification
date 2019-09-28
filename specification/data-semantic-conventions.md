@@ -22,7 +22,7 @@ schemes and various HTTP versions like 1.1, 2 and SPDY.
 
 Given an [RFC 3986](https://tools.ietf.org/html/rfc3986) compliant URI of the form
 `scheme:[//host[:port]]path[?query][#fragment]`, the span name of the span SHOULD
-be set to to the URI path value, unless another value that represents the identity
+be set to the URI path value, unless another value that represents the identity
 of the request and has a lower cardinality can be identified.
 
 | Attribute name | Notes and examples                                           | Required? |
