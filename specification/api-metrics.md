@@ -200,38 +200,23 @@ specific `Meter.DefineLabels()` event.
 Handles and LabelSets support different ways to achieve the same kind
 of optimization.  Generally, there is a high cost associated with
 computing a canonicalized form of the label set that can be used as a
-map key, in order to look up a corresponding group entry for
-aggregation.  Handles offer the most optimization potential, but
-require the programmer to allocate and store one handle per metric.
-LabelSets offer most of the optimization potential without managing
-one handle per metric.
+map key, to group the entry for export.  Handles offer the most
+optimization potential, but require the programmer to allocate and
+store one handle per metric.  LabelSets offer most of the optimization
+potential without managing one handle per metric.
 
 Handles and LabelSets, unlike metric instruments themselves, are
 SDK-dependent objects.  LabelSets should only be used with the SDK
 that provided them, an unrecognized LabelSet error will result if used
 with a different SDK.
 
-### Export pipeline
+### Recommended label keys
 
-A metrics export pipeline consists of an SDK-provided `Meter`
-implementation that processes metrics events (somehow), paired with a
-metrics data exporter that sends the data (somehow).
-
-### Required label keys
-
-Metric instruments list an optional set of _required label keys_ to
-support potential optimizations in the metric export pipeline.  This
-is an option in the sense that the empty set (of required label keys)
-is a valid setting.  If required label keys are provided, it implies
-that the SDK can infer a value for the required label from the
-`LabelSet`.
-
-To support efficient pre-aggregation in the metrics export pipeline,
-we must be able to infer the label value from the `LabelSet`, which
-implies that they are not dependent on dynamic context.  Required
-label keys address this relationship.  The value of a required label
-key is explicitly unspecified unless it is provided in the `LabelSet`,
-by definition, and not to be taken from other context.
+Metric instruments list an optional set of _recommended label keys_,
+which are the default dimensions used for grouping metric data for
+export.  Unless the SDK is configured otherwise, the standard behavior
+will be to group metric events by the values of their recommended
+label keys.
 
 ### Input methods
 
@@ -315,9 +300,7 @@ handles when they are no longer in use.
 
 After the application is finished with an instrument handle, deleting
 the handle will result in `DeleteHandle()` on the underlying,
-language- and API-specific type.  The SDK may release any
-pre-aggregation state associated with the handle after exporting a
-final update.
+language- and API-specific type. 
 
 ### `RecordBatch(LabelSet, measurements...)`
 
