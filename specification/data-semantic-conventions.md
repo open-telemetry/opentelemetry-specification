@@ -17,8 +17,9 @@ correlated and cross-analyzed.
 
 ## HTTP
 
-These span types represent HTTP requests. They can be used for http and https
-schemes and various HTTP versions like 1.1, 2 and SPDY.
+This section defines semantic conventions for HTTP client and server Spans.
+They can be used for http and https schemes
+and various HTTP versions like 1.1, 2 and SPDY.
 
 Given an [RFC 3986](https://tools.ietf.org/html/rfc3986) compliant URI of the form
 `scheme:[//host[:port]]path[?query][#fragment]`, the span name of the span SHOULD
