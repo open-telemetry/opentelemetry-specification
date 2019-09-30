@@ -51,12 +51,40 @@ This must be the originally requested URL, before any HTTP-redirects that may wh
 
 ### HTTP server
 
+To understand the attributes defined in this section, it is helpful to read the "Definitions" subsection.
+
+#### Definitions
+
+In web server configuration and web app deployment, multiple more or less common concepts have evolved that.
+A short summary of the concepts relevant to tracing is given here.
+
+Usually, on a physical host, reachable by one or multiple IP addresses, a single HTTP listener process runs.
+If multiple processes are running, they must listen on distinct TCP/UDP ports so that the OS can route incoming TCP/UDP packets to the right one.
+
+Within a single server process, there can be multiple **virtual hosts**.
+The [HTTP host header][] (in combination with a port number) is normally used to determine to which of them to route incoming HTTP requests.
+The host header value that matches some virtual host is called the virtual hosts's **server name**. If there are multiple aliases for the virtual host, one of them (often the first one listed in the configuration) is called the **primary server name**. See for example, the Apache [`ServerName`][ap-sn] or NGINX [`server_name`][nx-sn] directive or the CGI specification on `SERVER_NAME` ([RFC 3875][rfc-servername]).
+In practice the HTTP host header is often ignored when just a single virtual host is configured for the IP.
+
+Within a single virtual host, some servers support the concepts of an **HTTP application** that can be "mounted" under some **application root** (also know as *[context root][]* *[context prefix][]*, or *[document base][]*) which is a fixed path prefix of the URL that determines to which application a request is routed
+(e.g., the server could be configured to route all requests that go to an URL path starting with `/webshop/` at a particular virtual host
+to the `com.example.webshop` web application).
+
+[context root]: https://docs.jboss.org/jbossas/guides/webguide/r2/en/html/ch06.html
+[context prefix]: https://marc.info/?l=apache-cvs&m=130928191414740
+[document base]: http://tomcat.apache.org/tomcat-5.5-doc/config/context.html
+[rfc-servername]: https://tools.ietf.org/html/rfc3875#section-4.1.14
+[ap-sn]: https://httpd.apache.org/docs/2.4/mod/core.html#servername
+[nx-sn]: http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name
+
+#### Semantic conventions
+
 This span type represents an inbound HTTP request.
 
 For an HTTP server span, `SpanKind` MUST be `Server`.
 
-Given an inbound request for a route (e.g. `"/users/:userID?"` the `name` attribute of the span SHOULD be set to this route.
-If the route does not include the application root path (see `http.app_root` below), it SHOULD be prepended to the span name.
+Given an inbound request for a route (e.g. `"/users/:userID?"`) the `name` attribute of the span SHOULD be set to this route.
+If the route does not include the application root, it SHOULD be prepended to the span name.
 
 If the route cannot be determined, the `name` attribute MUST be set as defined in the general semantic conventions for HTTP.
 
@@ -65,19 +93,17 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `/path/12314/?q=ddds#123"`. | [1] |
 | `http.host` | The value of the [HTTP host header][]. Note that this might be empty or not present. | [1] |
 | `http.scheme` | The URI scheme identifying the used protocol: `"http"` or `"https"` | [1] |
-| `http.server_name` | The (primary) server name (usually not including a port). This should be obtained via configuration, e.g. the Apache [`ServerName`][ap-sn] or NGINX [`server_name`][nx-sn] directive. If no such configuration can be obtained, this attribute MUST NOT be set ( `host.name` should be used instead). | [1] |
-| `host.name` |  Analogous to `peer.hostname` but for the host instead of the peer. | [1] |
+| `http.server_name` | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `host.name` should be used instead). | [1] |
+| `host.name` | Analogous to `peer.hostname` but for the host instead of the peer. | [1] |
 | `host.port` | Local port. E.g., `80` (integer). Analogous to `peer.port`. | [1] |
 | `http.route` | The matched route (path template). E.g. `"/users/:userID?"`. | No |
 | `http.app` | An identifier for the whole HTTP application. E.g. Flask app name, `spring.application.name`, etc. | No |
-| `http.app_root` |The path prefix of the URL that identifies this `http.app`. Also known as "context root". If multiple roots exist, the one that was matched for this request should be used. | No |
-| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). | No |
+| `http.app_root` |The path prefix of the URL that identifies this `http.app`. If multiple roots exist, the one that was matched for this request should be used. | No |
+| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `peer.ip*`, which would identify the nework-level peer, which may be a proxy. | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
 [X-Forwarded-For]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For
-[ap-sn]: https://httpd.apache.org/docs/2.4/mod/core.html#servername
-[nx-sn]: http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name
 
 **[1]**: `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. <https://github.com/open-telemetry/opentelemetry-python/pull/148>).
 It is thus preferred to supply the raw data that *is* available.
