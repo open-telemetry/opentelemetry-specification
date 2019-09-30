@@ -40,10 +40,15 @@ aggregation](overview.md#recording-metrics-with-predefined-aggregation).
 New `Meter` instances can be created via a `MeterFactory` and its `getMeter`
 method. This method expects two string arguments:
 
-- `name`: This name must identify the instrumentation library (also referred
-to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not* the
-instrumented library. If no name (null or empty string) is specified, a default
-Meter implementation is returned.
+- `name` (required): This name must identify the instrumentation library (also
+referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
+the instrumented library.  
+In case an invalid name (null or empty string) is specified, a working
+default Meter implementation as a fallback is returned rather than returning
+null or throwing an exception.  
+An instrumentation library *may* also ignore this name and return a default
+instance for all calls, if it does not support "named" functionality (e.g. an
+implementation which is not even observability-related).
 - `version` (optional): Specifies the version of the instrumentation library
 (e.g. `semver:1.0.0`).
 
