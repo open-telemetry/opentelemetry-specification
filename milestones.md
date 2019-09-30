@@ -1,14 +1,22 @@
 # OpenTelemetry: A Roadmap to Convergence
 
-This document covers the initial milestones for the project. Each repository in
+This document covers the milestones for the project. Each repository in
 OpenTelemetry project need to adjust milestones to this plan based on
-project-specific estimations.
+project-specific estimates.
+
+It is recommended to align language versions to the spec versions they
+implement.
 
 For each language, we want to quickly achieve parity with existing OpenTracing
 and OpenCensus implementations. For languages which have both an OpenTracing and
 OpenCensus implementation, we would like to achieve parity in OpenTelemetry by
-**September, 2019**, and sunset the existing OpenTracing and OpenCensus projects
-by **November, 2019**.
+**first quarter of 2020**, and sunset the existing OpenTracing and OpenCensus
+projects in the **second quarter of 2020**.
+
+Original plans of sunsetting older SDKs in **November, 2019** was changed as we
+discovered a lot of unaccounted work and production testing will be delayed by
+holidays season. We are still committed to deliver high quality previews of
+languages SDKs in **2019**.
 
 ## Switching to OpenTelemetry
 
@@ -17,9 +25,9 @@ Parity can be defined as the following features:
 - A set of interfaces which implement the OpenTelemetry specification in a given
   programming language.
 - An SDK implementing OpenTelemetry specification.
-- Backwards compatibility with OpenTracing and OpenCensus.
-- Metadata helpers for recording common operations defined in the OpenTelemetry
-  [semantic conventions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/data-semantic-conventions.md).
+- Backwards compatibility with OpenTracing and OpenCensus via bridges.
+- Metadata helpers or other means for recording common operations defined in the
+  OpenTelemetry [semantic conventions](specification/data-semantic-conventions.md).
 - Tests which provide evidence of interoperability.
 - Benchmarks which provide evidence of expected resource utilization.
 - Documentation and getting started guide.
@@ -34,143 +42,102 @@ specifications and cross-language test cases.
 As OpenTracing and OpenCensus projects converge we write specifications the same
 time as we develop libraries.
 
-### TL;DR;
+We will refer to [API
+Proposal](https://github.com/open-telemetry/opentelemetry-specification/milestone/1)
+Alpha v0.1 release.
 
-Milestones for Java and cross-language specification:
+### Alpha v0.2
 
-- End of June:
-  - [basic SDK implemented](https://github.com/open-telemetry/opentelemetry-java/milestone/2)
-    in Java.
-  - API feedback issues triage done.
-- Mid July:
-  - [exporters implemented](https://github.com/open-telemetry/opentelemetry-java/milestone/3)
-    in Java.
-  - [basic SDK specs](https://github.com/open-telemetry/opentelemetry-specification/milestone/3)
-    complete.
-  - [first API revision](https://github.com/open-telemetry/opentelemetry-specification/milestone/2)
-    documented.
-- Mid August:
-  - [extended SDK documented](https://github.com/open-telemetry/opentelemetry-specification/milestone/4).
-  - [second API revision](https://github.com/open-telemetry/opentelemetry-specification/milestone/5)
-    documented.
-- End of August:
-  - [extended SDK implemented](https://github.com/open-telemetry/opentelemetry-java/milestone/4)
-    and stabilized in Java.
-  - Java SDK is production ready
-- Mid September (or after end-user validation):
-  - API is revised
-- End of September (or after end-user validation):
-  - Version 1.0 is declared.
+The spirit of this release is to have a demo-able product that anybody can start
+playing with and start implementing instrumentation adaptors and data collectors
+for various scenarios.
 
-### Current status
+As part of this release we ask to implement Tracing and Metrics exporters so it
+will be easy to visualize the scenarios. For Tracing - either Jaeger or Zipkin
+can be selected, for Metrics - Prometheus.
 
-**API proposal**:
+**Proposed deadline:** Alpha v0.2 specs complete by 10/4
 
-- [Done in Java](https://github.com/open-telemetry/opentelemetry-java/milestone/1)
-- API proposal [documented](https://github.com/open-telemetry/opentelemetry-specification/milestone/1)
-  in specs
+#### API specs for Alpha v0.2
 
-**SDK proposal**:
+Alpha v0.1 received a lot of feedback. As part of an Alpha release there will be
+a few major areas of improvement - change for out of band span reporting API and
+the merged pre-aggregated and non-aggregated metrics API. There are other
+changes as well.
 
-- Basic telemetry pipeline for traces complete
-- On track to finish by the **end of the month** in limited scope
-- Specification work for SDK hasn’t been started
+We already plan for the next iteration and we know that API is expected to be
+changed for the Alpha v0.3 milestone. The big improvements in works are
+initialization and configuring logic as well as context propagation detachment.
 
-### Finish SDK proposal
+#### SDK specs for Alpha v0.2
 
-We are limiting scope for SDK proposal work (roughly) to the following areas:
+There were no formal SDK proposal. So this milestone will define SDK data
+structures and public methods for the first time.
 
-- Spans pipeline:
-  - SpanBuilder interceptors interface
+In scope of SDK Alpha release are:
+
+- Tracing
   - Built-in samplers (percentage sampler).
-  - SpanProcessor interface and implementations:
-  - Default and built-in processors
-    - Simple processor
-    - Batching processors
-    - Block when the queue is full processor
+  - SpanProcessor interface
+  - Batching SpanProcessor
   - Exporter interface
-  - Reporting raw SpanData
-- Distributed context
-  - Basic implementation
+  - Jaeger and/or Zipkin exporter
+- Context Propagation
+  - In-process propagation
+  - Inject and Extract 
+  - DistributedContext
 - Metrics
-  - Metrics aggregation implementation
-  - MetricProducer interface
+  - MetricsProcessor interface
+  - Aggregation MetricsProcessor
+  - Exporter interface
+  - Prometheus Exporter
+  
+Also in scope:
 
-[**Java
-implementation**](https://github.com/open-telemetry/opentelemetry-java/milestone/2).
-In the limited scope we are working towards completing the SDK proposal in Java
-by end of this month.
+- Jaeger and/or Zipkin exporter
+- Prometheus exporter
 
-[**Specifications
-writing**](https://github.com/open-telemetry/opentelemetry-specification/milestone/3).
-We can start writing specs for SDK now. Realistically we need two weeks after
-java implementation complete to document all aspects of SDK.
+### Alpha v0.2 release validation
 
-### Basic exporters
+Languages will ship alpha releases shortly after specification will be complete.
+The main purpose of this release is to start implementing data collectors and
+use API and SDK for the user scenarios. This will ensure validation of concepts
+and public surface.
 
-As part of OpenTelemetry we committed to deliver three basic exporters - Zipkin,
-Jaeger and Prometheus.
+Note, we DO expect changes in APIs for the Alpha v0.3 release.
 
-Both - documentation and java implementation of those exporters is planned to be
-completed in two weeks after SDK proposal in Java is done - **12th of July.**
+### Alpha v0.3 release
 
-Tracking this work in
-[Java](https://github.com/open-telemetry/opentelemetry-java/milestone/3).
+The spirit of v0.3 release is to deliver a product with the stable, almost the
+release candidate level of APIs and interfaces.
 
-### Iterating on API
+After the v0.3 release of language SDKs we do expect that languages public
+surface may change, but we do not expect any major changes in conceptual level
+in specifications.
 
-As proposed API was released we start getting feedback on it. The plan is to
-triage feedback in three milestones:
+**Proposed deadline**: Specification complete by Nov 15th.
 
-[**API revision
-07-2019**](https://github.com/open-telemetry/opentelemetry-specification/milestone/2)
-**(target - mid July). Proposed API cleanup.**
+In scope of SDK Alpha v0.3 release are:
 
-- Easy fixes - renamings, polishing, removing unnecessary API surface
-- Add missing features - adding histograms and forgotten getters
-- Issues that quickly getting agreement. For example, adding component for tracer
+- Finalize the OpenTelemetry protocol
 
-This milestone is for the fast clean up of a proposed API.
+Required Spec RFCs for Alpha v0.3:
 
-**API revision 08-2019 (target - mid August). API Complete.**
+- Global Init
+- Context (separate baggage, renaming, etc)
+- Protocol
+- Semantic Conventions
 
-- All issues not included into the first milestone
+### Alpha v0.4 release
 
-**API revision 09-2019 (target - mid September). API v1.0.**
+Collector support for OpenTelemetry protocol will be implemented by this time
+and languages SDKs will implement OpenTelemetry collector exporter.
 
-- Reserved for the issues received as a result of an end user feedback
-
-**Future:**
-
-- Feature requests that we can postpone to after stable version
-- New telemetry sources support
-
-### Extending the SDK
-
-Once basic SDK is complete in Java we will switch to the specs first approach on
-advancing its feature set.
-
-Example of scope for extended SDK:
-
-1. OTSvc protocol and implementation
-2. Add missing features
-   1. More SpanProcessors. Example: non blocking queue processor with telemetry drop
-   2. More samplers. Example - rate limiting sampler, etc.
-   3. Histograms – API and SDK
-   4. Metrics filters and processors
-   5. etc.
-3. Discussions like
-   1. Native (POJO) object vs. Proto-generated object with proto dependency in
-      SDK
-4. Tracestate manipulation callbacks
-5. Other
-
-First iteration of SDK feedback – **mid August** we have specs, **End of
-August** – first iteration of Java SDK complete.
+**Proposed deadline**: end of year 2019
 
 ### Getting to release
 
-By mid August the Java basic SDK will be complete and we will begin
+By end of year the basic language SDKs will be complete and we will begin
 stabilization work. Also OpenCensus can be switched to the OpenTelemetry SDK. As
 well as instrumentation adapters can be implemented. So we will have early
 adopters.

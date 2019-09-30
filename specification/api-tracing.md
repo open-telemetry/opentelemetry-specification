@@ -20,12 +20,12 @@ Table of Contents
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecordingEvents](#isrecordingevents)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
-    * [Add Links](#add-links)
     * [Set Status](#set-status)
     * [UpdateName](#updatename)
     * [End](#end)
@@ -131,11 +131,6 @@ convenience methods to manage a `Span`'s lifetime and the scope in which a
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
 
-The `Tracer` MUST support recording `Span`s that were created _out of band_,
-i.e.  not by the tracer itself. For this reason, implementations MUST NOT
-require that a `Span`'s start and end timestamps match the wall time when it is
-created, made active, or finished.
-
 The implementation MUST provide no-op binary and text `Propagator`s, which the
 `Tracer` SHOULD use by default if other propagators are not configured. SDKs
 SHOULD use the W3C HTTP Trace Context as the default text format. For more
@@ -183,14 +178,14 @@ sub-operations.
 `Span`s encapsulate:
 
 - The operation name
-- An immutable [`SpanContext`](#SpanContext) that uniquely identifies the
+- An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
-- A parent span in the form of a [`Span`](#Span), [`SpanContext`](#SpanContext),
+- A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
   or null
 - A start timestamp
 - An end timestamp
-- An ordered mapping of [`Attribute`s](#Set-Attributes)
-- A list of [`Link`s](#add-Links) to other `Span`s
+- An ordered mapping of [`Attribute`s](#set-attributes)
+- A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
@@ -220,17 +215,9 @@ The API SHOULD require the caller to provide:
 
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
-- `Attribute`s
-- `Link`s
-- `Event`s
+- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
+- `Link`s - see API definition [here](#add-links)
 - `Start timestamp`
-
-N.B.: There is an active RFC to remove [out of band span reporting](https://github.com/open-telemetry/oteps/pull/26)
-so the following items below may be removed soon.
-
-- `Resource`
-- `SpanID`
-- `OutOfBand` to specify the span originated from out of band
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -244,6 +231,27 @@ created in another process. Since the `SpanContext` is the only component of a
 `Span` that is propagated between processes, a `Span`'s parent SHOULD be a
 `SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
 
+#### Add Links
+
+During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
+`Span`s can be from the same or a different trace. See [Links
+description](overview.md#links-between-spans).
+
+A `Link` is defined by the following properties:
+- (Required) `SpanContext` of the `Span` to link to.
+- (Optional) One or more `Attribute`.
+
+The `Link` SHOULD be an immutable type.
+
+The Span creation API should provide:
+- An API to record a single `Link` where the `Link` properties are passed as
+arguments. This MAY be called `AddLink`.
+- An API to record a single lazily initialized `Link`. This can be implemented
+by providing a `Link` interface or a concrete `Link` definition and a
+`LinkFormatter`. If the language supports overloads then this MAY be called
+`AddLink` otherwise `AddLazyLink` MAY be considered.
+
+Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
@@ -312,28 +320,6 @@ the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](data-semantic-conventions.md) which have prescribed semantic meanings.
-
-#### Add Links
-
-A `Span` MUST have the ability to record links to other `Span`s. Linked `Span`s
-can be from the same or a different trace. See [Links
-description](overview.md#links-between-spans).
-
-A `Link` is defined by the following properties:
-- (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`.
-
-The `Link` SHOULD be an immutable type.
-
-The Span interface MUST provide:
-- An API to record a single `Link` where the `Link` properties are passed as
-arguments. This MAY be called `AddLink`.
-- An API to record a single lazily initialized `Link`. This can be implemented
-by providing a `Link` interface or a concrete `Link` definition and a
-`LinkFormatter`. If the language supports overloads then this MAY be called
-`AddLink` otherwise `AddLazyLink` MAY be consider.
-
-Links SHOULD preserve the order in which they're set.
 
 #### Set Status
 
