@@ -46,7 +46,8 @@ This span type represents an outbound HTTP request.
 
 For an HTTP client span, `SpanKind` MUST be `Client`.
 
-`http.url` is required and represents the HTTP URL used to (initially) make this request.
+`http.url` is required and represents the HTTP URL used to make this request.
+This must be the originally requested URL, before any HTTP-redirects that may when executing the request.
 
 ### HTTP server
 
