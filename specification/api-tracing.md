@@ -97,6 +97,22 @@ implementation which is not even observability-related).
 - `version` (optional): Specifies the version of the instrumentation library
 (e.g. `semver:1.0.0`).
 
+Implementations might require the user to specify configuration properties at
+`TracerFactory` creation time, or rely on external configuration, e.g. when using the
+provider pattern.
+
+##### Runtimes with multiple deployments/applications
+
+Runtimes that support multiple deployments or applications might need to
+provide a different `TracerFactory` instance to each deployment. To support this,
+the global `TracerFactory` registry may delegate calls to create new instances of
+`TracerFactory` to a separate `Provider` component, and the runtime may include
+its own `Provider` implementation which returns a different `TracerFactory` for
+each deployment.
+
+`Provider` instances are registered with the API via some language-specific
+mechanism, for instance the `ServiceLoader` class in Java.
+
 ### Tracer operations
 
 The `Tracer` MUST provide methods to:
