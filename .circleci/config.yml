@@ -12,15 +12,15 @@ jobs:
           command: make precommit
   markdownlint:
     docker:
-      - image: node
+      - image: circleci/ruby:latest
     steps:
       - checkout
       - run:
-          name: Install markdownlint-cli.
-          command: npm install -g markdownlint-cli
+          name: Install markdownlint
+          command: gem install mdl
       - run:
           name: Check markdownlint
-          command: markdownlint .
+          command: mdl .
 
 workflows:
   version: 2
