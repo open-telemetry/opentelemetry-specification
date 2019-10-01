@@ -45,6 +45,11 @@ OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
    object may be badly implemented and lead to stack overflow. It is common that
    the application never calls this method and this bad implementation would
    never be caught by an application owner.
+7. Whenever API call returns values that is expected to be non-`null` value - in
+   case of error in processing logic - SDK MUST return a "no-op" or any other
+   "default" object that was (_ideally_) pre-allocated and readily available.
+   This way API call sites will not crash on attempts to access methods and
+   properties of a `null` objects.
 
 ## Error handling and performance
 
