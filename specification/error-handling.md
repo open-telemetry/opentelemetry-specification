@@ -46,6 +46,18 @@ OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
    the application never calls this method and this bad implementation would
    never be caught by an application owner.
 
+## Error handling and performance
+
+Error handling and extensive input validation may cause performance degradation,
+especially on dynamic languages where the input object types are not guaranteed
+in compile time. Runtime type checks will impact performance and are error
+prone, exceptions may occur despite the best effort.
+
+It is recommended to have a global exception handling logic that will guarantee
+that exceptions are not leaking to the user code. And make a reasonable trade
+off of the SDK performance and fullness of type checks that will provide a
+better on-error behavior and SDK errors troubleshooting.
+
 ## Self-diagnostics
 
 All OpenTelemetry libraries -- the API, SDK, exporters, instrumentation
