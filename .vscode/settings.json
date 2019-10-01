@@ -2,6 +2,7 @@
     "rewrap.wrappingColumn": 80,
     "editor.rulers": [80],
     "markdownlint.config": {
-        "MD013": false
+        "MD013": false,
+        "MD029": false
     },
 }

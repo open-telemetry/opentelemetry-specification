@@ -20,7 +20,7 @@ jobs:
           command: gem install mdl
       - run:
           name: Check markdownlint
-          command: mdl -r ~MD013 .
+          command: mdl -r ~MD013,~MD029 .
 
 workflows:
   version: 2
