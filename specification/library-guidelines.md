@@ -86,6 +86,16 @@ Note that mocking is also possible by using SDK and a Mock `Exporter` without ne
 
 The mocking approach chosen will depend on the testing goals and at which point exactly it is desirable to intercept the telemetry data path during the test.
 
+## Version Labeling
+
+SDK must use semantic version numbering. SDK version number and version number of API that SDK implements can be different. SDK MUST be labeled with its own version number with one limitation: major version number of the SDK must be the same as the major version number of the API that the SDK implements.
+
+For example SDKs 0.1.0, 0.2.3 or 0.7.0 can all implement API 0.1.0, but SDK 1.0.0 cannot implement API 0.1.0.
+
+This weak coupling of version numbers allows language library authors to make patch and minor version SDK releases independently without the need to coordinate and match version numbers with API specification. The requirement to use the same major version number is aimed to avoid spilling over SDK version numbers into next major version in case we decide to change this policy starting from certain major version in the future.
+
+Because API and SDK version numbers are not strictly coupled every SDK release MUST clearly specify API version number that it implements. Language library authors MUST include this information in SDK release notes. For example the release notes may say: "SDK 0.3.4, implements API 0.1.0".
+
 ## Performance and Blocking
 
 See the [Performance and Blocking](performance.md) specification for
