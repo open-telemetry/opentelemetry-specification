@@ -81,7 +81,7 @@ propagated from parent to child **Spans**.
   practically sufficient probability by being made as 8 randomly generated
   bytes. When passed to a child Span this identifier becomes the parent span id
   for the child **Span**.
-- **TraceOptions** represents the options for a trace. It is represented as 1
+- **TraceFlags** represents the options for a trace. It is represented as 1
   byte (bitmap).
   - Sampling bit -  Bit to represent whether trace is sampled or not (mask
     `0x1`).
@@ -150,7 +150,7 @@ metrics:
 - Counter metric to report instantaneous measurement. Counter values can go
   up or stay the same, but can never go down. Counter values cannot be
   negative. There are two types of counter metric values - `double` and `long`.
-- Gauge metric to report instantaneous measurement of a double value. Gauges can
+- Gauge metric to report instantaneous measurement of a numeric value. Gauges can
   go both up and down. The gauges values can be negative. There are two types of
   gauge metric values - `double` and `long`.
 
@@ -163,7 +163,7 @@ supports both - push and pull model of setting the `Metric` value.
 ### Metrics data model and SDK
 
 Metrics data model is defined in SDK and is based on
-[metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/src/opentelemetry/proto/metrics/v1/metrics.proto).
+[metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
 This data model is used by all the OpenTelemetry exporters as an input.
 Different exporters have different capabilities (e.g. which data types are
 supported) and different constraints (e.g. which characters are allowed in label
@@ -249,12 +249,12 @@ The OpenTelemetry service has two primary modes of operation: Agent (a locally
 running daemon) and Collector (a standalone running service).
 
 Read more at OpenTelemetry Service [Long-term
-Vision](https://github.com/open-telemetry/opentelemetry-service/blob/master/docs/VISION.md).
+Vision](https://github.com/open-telemetry/opentelemetry-service/blob/master/docs/vision.md).
 
 ## Instrumentation adapters
 
 The inspiration of the project is to make every library and application
-manageable out of the box by instrumenting it with OpenTelemery. However on the
+manageable out of the box by instrumenting it with OpenTelemetry. However on the
 way to this goal there will be a need to enable instrumentation by plugging
 instrumentation adapters into the library of choice. These adapters can be
 wrapping library APIs, subscribing to the library-specific callbacks or
