@@ -36,6 +36,7 @@ Table of Contents
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
   * [GetIsOk](#getisok)
+* [SpanKind](#spankind)
 
 </details>
 
@@ -211,10 +212,11 @@ options for newly created `Span`s.
 
 The API SHOULD require the caller to provide:
 - The operation name
-- The parent span, and whether the new `Span` should be a root `Span`.
+- The parent span, and whether the new `Span` should be a root `Span`
 
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
+- [`SpanKind`](#spankind)
 - `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
 - `Link`s - see API definition [here](#add-links)
 - `Start timestamp`
@@ -451,3 +453,27 @@ Returns the description of this `Status`.
 ### GetIsOk
 
 Returns false if this `Status` represents an error, else returns true.
+
+## SpanKind
+
+Depending on the `Span` position in a `Trace` and application components
+boundaries, it can play a different role. This role often defines how `Span`
+will be processed and visualized by various backends. So it is important to
+record this "hint" whenever possible to the best of the caller's knowledge.
+
+These are the possible SpanKinds:
+
+* `INTERNAL` Default value. Indicates that the span represents an internal
+  operation within an application, as opposed to an operations happening at the
+  boundaries.
+* `SERVER` Indicates that the span covers server-side handling of an RPC or
+  other remote request.
+* `CLIENT` Indicates that the span describes a request to some remote service.
+* `PRODUCER` Indicates that the span describes a producer sending a message to a
+  broker. Unlike client and server, there is often no direct critical path
+  latency relationship between producer and consumer spans. A `Producer` span ends
+  when the message was accepted by the broker while the logical processing of the
+  message might span a much longer time.
+* `CONSUMER` Indicates that the span describes a consumer receiving a message from
+  a broker. As for the `PRODUCER` kind, there is often no direct critical
+  path latency relationship between producer and consumer spans.
