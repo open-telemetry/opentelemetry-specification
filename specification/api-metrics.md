@@ -65,7 +65,7 @@ Nevertheless, it is common to apply restrictions on metric values, the
 inputs to `Add()`, `Set()`, and `Record()`, in order to refine their
 standard interpretation.  Generally, there is a question of whether
 the instrument can be used to compute a rate, because that is usually
-a desireable analysis.  Each metric instrument offers an optional
+a desirable analysis.  Each metric instrument offers an optional
 declaration, specifying restrictions on values input to the metric.
 For example, Measures are declared as non-negative by default,
 appropriate for reporting sizes and durations; a Measure option is
@@ -160,28 +160,21 @@ event.  A "label key" refers to the key component while "label value"
 refers to the correlated value component of a label.  Label refers to
 the pair of label key and value.
 
-The Metrics API supports applying explicit labels through the
-API itself, while labels can also be applied to metric events
-implicitly, through the current OpenTelemetry context and resources.
+The Metrics API supports applying explicit labels through the API
+itself using `LabelSet` objects, while labels can also be applied to
+metric events implicitly, through the current OpenTelemetry context.
+System-level properties (a.k.a. "resources") are not detailed in the
+API, but are also implicitly associated with metric events via the
+SDK.
 
 A metric `Descriptor` is a structural description of the instrument
 itself, including its name and various options.  Instruments may be
-annotated with with specific `Units` and a description, for the
+annotated with specific `Units` and a description, for the
 purpose of self-documentation.
 
 Metric instruments are constructed independently of the SDK.  They are
 "pure" API objects, in this sense, able to be used by more than one
 active `Meter` implementation.
-
-#### Disabled option
-
-Instruments support a `Disabled` option.  Metric instruments
-configured with `Disabled: True` are considered "off" unless
-explicitly requested via SDK configuration.  Unless the SDK is
-otherwise configured to enable a disabled metric, operations on these
-instruments will be treated as no-ops.
-
-Metric instruments are enabled by default (i.e., have `Disabled: False`).
 
 ### Handles and LabelSets
 
@@ -333,7 +326,6 @@ complete contents of a metric `Descriptor` are:
 - **ID** A unique identifier associated with new instrument object.
 - **Description** A string describing the meaning and use of this instrument.
 - **Unit** The unit of measurement, optional.
-- **Disabled** True value tells the SDK not to report by default.
 - _Kind-specific options_
   - **NonMonotonic** (Counter): add positive and negative values
   - **Monotonic** (Gauge): set a monotonic counter value
@@ -350,7 +342,7 @@ verb, `Add()`, `Set()`, or `Record()`.  These three are covered here.
 To construct a new instrument, the specific `Kind` and thus the return
 value depend on the choice of (`Counter`, `Gauge`, or `Measure`).
 `Name` is the only required parameter.  `ID` is automatically assigned
-by the API.  The other fields (Description, Keys, Unit, Disabled,
+by the API.  The other fields (Description, Keys, Unit, 
 Kind-specific) are options to the various constructors in a
 language-appropriate style.
 
