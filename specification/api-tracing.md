@@ -91,9 +91,11 @@ the instrumented library.
 In case an invalid name (null or empty string) is specified, a working
 default Tracer implementation as a fallback is returned rather than returning
 null or throwing an exception.  
-An instrumentation library *may* also ignore this name and return a default
-instance for all calls, if it does not support "named" functionality (e.g. an
-implementation which is not even observability-related).
+A library, implementing the OpenTelemetry API *may* also ignore this name and
+return a default instance for all calls, if it does not support "named"
+functionality (e.g. an implementation which is not even observability-related).
+A TracerFactory could also return a no-op Tracer here if application owners configure
+the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library
 (e.g. `semver:1.0.0`).
 
