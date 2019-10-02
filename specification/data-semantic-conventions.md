@@ -32,7 +32,7 @@ unless another value that represents the identity of the request and has a lower
 Implementations MUST set status if the HTTP communication failed
 or an HTTP error status code is returned (e.g. above 3xx).
 
-In the case of a HTTP redirect, request should normally be considered successful,
+In the case of an HTTP redirect, the request should normally be considered successful,
 unless the client aborts following redirects due to hitting some limit (redirect loop).
 If following a (chain of) redirect(s) successfully, the Status should be set according to the result of the final HTTP request.
 
@@ -41,7 +41,7 @@ Don't set a status message if the reason can be inferred from `http.status_code`
 | HTTP code               | Span status code  |
 |-------------------------|-------------------|
 | 100...299               | `Ok`              |
-| 3xx redirect codes      | `DeadlineExceeded` [1] in case of loop, otherwise Ok (see above) |
+| 3xx redirect codes      | `DeadlineExceeded` [1] in case of loop, otherwise `Ok` (see above) |
 | 401 Unauthorized ⚠      | `Unauthenticated` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
 | 403 Forbidden           | `PermissionDenied`  |
 | 404 Not Found           | `NotFound`          |
