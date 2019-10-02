@@ -43,7 +43,7 @@ https://github.com/open-telemetry/opentelemetry-specification/issues/39
 ### Create Metric
 
 `Meter` MUST expose the APIs to create a `Metric` of every supported type.
-Depending on the language - builder pattern (C#, Java) or options (Go) SHOULD be
+Depending on the language - builder pattern (Java) or options (Go) SHOULD be
 used.
 
 `Metric` creation API requires the following argument.
@@ -72,7 +72,7 @@ Optional arguments:
 `Meter` MUST expose the API to create a `Measure` that will be used for
 recording raw `Measurements`.
 
-Depending on the language - builder pattern (C#, Java) or options (Go) SHOULD be
+Depending on the language - builder pattern (Java) or options (Go) SHOULD be
 used. When multiple `Measure`s with the same arguments were created,
 implementation may decide to return the same or distinct object. Users of API
 MUST NOT set any expectations about `Measure`s being unique objects.

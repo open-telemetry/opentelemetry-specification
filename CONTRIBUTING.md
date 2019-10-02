@@ -35,3 +35,8 @@ To quickly fix typos, use
 ```bash
 make misspell-correction
 ```
+
+## Sign the CLA
+
+Before you can contribute, you will need to sign the [Contributor License
+Agreement](https://identity.linuxfoundation.org/projects/cncf).
