@@ -14,17 +14,51 @@ This way, the operator will not need to learn specifics of a language and
 telemetry collected from multi-language micro-service can still be easily
 correlated and cross-analyzed.
 
-
 ## HTTP
 
 This section defines semantic conventions for HTTP client and server Spans.
 They can be used for http and https schemes
 and various HTTP versions like 1.1, 2 and SPDY.
 
-Given an [RFC 3986](https://tools.ietf.org/html/rfc3986) compliant URI of the form
-`scheme:[//host[:port]]path[?query][#fragment]`, the span name of the span SHOULD
-be set to the URI path value, unless another value that represents the identity
-of the request and has a lower cardinality can be identified.
+### Name
+
+Given an [RFC 3986](https://tools.ietf.org/html/rfc3986) compliant URI of the form `scheme:[//host[:port]]path[?query][#fragment]`,
+the span name of the span SHOULD be set to the URI path value,
+unless another value that represents the identity of the request and has a lower cardinality can be identified
+(e.g. the route for server spans; see below).
+
+### Status
+
+Implementations MUST set status if the HTTP communication failed
+or an HTTP error status code is returned (e.g. above 3xx).
+
+In the case of a HTTP redirect, request should normally be considered successful,
+unless the client aborts following redirects due to hitting some limit (redirect loop).
+If following a (chain of) redirect(s) successfully, the Status should be set according to the result of the final HTTP request.
+
+Don't set a status message if the reason can be inferred from `http.status_code` and `http.status_text` already.
+
+| HTTP code               | Span status code  |
+|-------------------------|-------------------|
+| 100...299               | `Ok`              |
+| 3xx redirect codes      | `DeadlineExceeded` [1] in case of loop, otherwise Ok (see above) |
+| 401 Unauthorized ⚠      | `Unauthenticated` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
+| 403 Forbidden           | `PermissionDenied`  |
+| 404 Not Found           | `NotFound`          |
+| 429 Too Many Requests   | `ResourceExhausted` |
+| Other 4xx code          | `InvalidArgument` [1] |
+| 501 Not Implemented     | `Unimplemented`     |
+| 503 Service Unavailable | `Unavailable`       |
+| 504 Gateway Timeout     | `DeadlineExceeded`  |
+| Other 5xx code          | `InternalError`     |
+| Any status code the client fails to interpret (e.g., 093 or 573) | `UnknownError` |
+
+Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
+
+[oc-http-status]: https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#mapping-from-http-status-codes-to-trace-status-codes
+[rfc-unauthorized]: https://tools.ietf.org/html/rfc7235#section-3.1
+
+### Common Attributes
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
@@ -47,7 +81,21 @@ This span type represents an outbound HTTP request.
 For an HTTP client span, `SpanKind` MUST be `Client`.
 
 `http.url` is required and represents the HTTP URL used to make this request.
-This must be the originally requested URL, before any HTTP-redirects that may when executing the request.
+This must be the originally requested URL, before any HTTP-redirects that may happen when executing the request.
+
+For status, the following special cases have canonical error codes assigned:
+
+| Client error                | Trace status code  |
+|-----------------------------|--------------------|
+| DNS resolution failed       | `UnknownError`     |
+| Request cancelled by caller | `Cancelled`        |
+| URL cannot be parsed        | `InvalidArgument`  |
+| Request timed out           | `DeadlineExceeded` |
+
+This is not meant to be an exhaustive list
+but if there is no clear mapping for some error conditions,
+instrumentation developers are encouraged to use `UnknownError`
+and open a PR or issue in the specification repository.
 
 ### HTTP server
 
@@ -63,19 +111,33 @@ If multiple processes are running, they must listen on distinct TCP/UDP ports so
 
 Within a single server process, there can be multiple **virtual hosts**.
 The [HTTP host header][] (in combination with a port number) is normally used to determine to which of them to route incoming HTTP requests.
+
 The host header value that matches some virtual host is called the virtual hosts's **server name**. If there are multiple aliases for the virtual host, one of them (often the first one listed in the configuration) is called the **primary server name**. See for example, the Apache [`ServerName`][ap-sn] or NGINX [`server_name`][nx-sn] directive or the CGI specification on `SERVER_NAME` ([RFC 3875][rfc-servername]).
 In practice the HTTP host header is often ignored when just a single virtual host is configured for the IP.
 
-Within a single virtual host, some servers support the concepts of an **HTTP application** that can be "mounted" under some **application root** (also know as *[context root][]* *[context prefix][]*, or *[document base][]*) which is a fixed path prefix of the URL that determines to which application a request is routed
-(e.g., the server could be configured to route all requests that go to an URL path starting with `/webshop/` at a particular virtual host
+Within a single virtual host, some servers support the concepts of an **HTTP application**
+(for example in Java, the Servlet JSR defines an application as
+"a collection of servlets, HTML pages, classes, and other resources that make up a complete application on a Web server"
+-- SRV.9 in [JSR 53][];
+in a deployment of a Python application to Apache, the application would be the [PEP 3333][] conformant callable that is configured using the
+[`WSGIScriptAlias` directive][modwsgisetup] of `mod_wsgi`).
+
+An application can be "mounted" under some **application root**
+(also know as *[context root][]* *[context prefix][]*, or *[document base][]*)
+which is a fixed path prefix of the URL that determines to which application a request is routed
+(e.g., the server could be configured to route all requests that go to an URL path starting with `/webshop/`
+at a particular virtual host
 to the `com.example.webshop` web application).
 
+[PEP 3333]: https://www.python.org/dev/peps/pep-3333/
+[modwsgisetup]: https://modwsgi.readthedocs.io/en/develop/user-guides/quick-configuration-guide.html
 [context root]: https://docs.jboss.org/jbossas/guides/webguide/r2/en/html/ch06.html
 [context prefix]: https://marc.info/?l=apache-cvs&m=130928191414740
 [document base]: http://tomcat.apache.org/tomcat-5.5-doc/config/context.html
 [rfc-servername]: https://tools.ietf.org/html/rfc3875#section-4.1.14
 [ap-sn]: https://httpd.apache.org/docs/2.4/mod/core.html#servername
 [nx-sn]: http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name
+[JSR 53]: https://jcp.org/aboutJava/communityprocess/maintenance/jsr053/index2.html
 
 #### Semantic conventions
 
@@ -127,6 +189,7 @@ Span name: `/webshop/articles/:article_id` (`app_root` + `route`).
 | :----------------- | :-------------------------------------------------------------------------------- |
 | `component`        | `"http"`                                                                          |
 | `http.method`      | `"GET"`                                                                           |
+| `http.flavor`      | `"1.1"`                                                                           |
 | `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"` (or not set)                  |
 | `http.target`      | `"/webshop/articles/4?s=1"`                                                       |
 | `http.host`        | `"example.com:8080"`                                                              |
