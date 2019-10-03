@@ -36,6 +36,7 @@ Table of Contents
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
   * [GetIsOk](#getisok)
+* [SpanKind](#spankind)
 
 </details>
 
@@ -165,6 +166,9 @@ the same trace.
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
+`IsRemote` is a boolean flag which returns true if the SpanContext was propagated 
+from a remote parent.
+
 Please review the W3C specification for details on the [Tracestate
 field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
@@ -211,10 +215,11 @@ options for newly created `Span`s.
 
 The API SHOULD require the caller to provide:
 - The operation name
-- The parent span, and whether the new `Span` should be a root `Span`.
+- The parent span, and whether the new `Span` should be a root `Span`
 
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
+- [`SpanKind`](#spankind)
 - `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
 - `Link`s - see API definition [here](#add-links)
 - `Start timestamp`
@@ -227,9 +232,8 @@ spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
-created in another process. Since the `SpanContext` is the only component of a
-`Span` that is propagated between processes, a `Span`'s parent SHOULD be a
-`SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
+created in another process. Each propagators' deserialization must set 
+`IsRemote` to true so `Span` creation knows if the parent is remote.
 
 #### Add Links
 
@@ -246,10 +250,13 @@ The `Link` SHOULD be an immutable type.
 The Span creation API should provide:
 - An API to record a single `Link` where the `Link` properties are passed as
 arguments. This MAY be called `AddLink`.
-- An API to record a single lazily initialized `Link`. This can be implemented
-by providing a `Link` interface or a concrete `Link` definition and a
-`LinkFormatter`. If the language supports overloads then this MAY be called
-`AddLink` otherwise `AddLazyLink` MAY be considered.
+- An API to record a single `Link` whose attributes or attribute values are
+lazily constructed, with the intention of avoiding unnecessary work if a link
+is unused. If the language supports overloads then this SHOULD be called
+`AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
+be easier to defer `Link` or attribute creation entirely by providing a wrapping
+class or function that returns a `Link` or formatted attributes. When providing
+a wrapping class or function it SHOULD be named `LinkFormatter`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -310,10 +317,13 @@ The `Event` SHOULD be an immutable type.
 The Span interface MUST provide:
 - An API to record a single `Event` where the `Event` properties are passed as
 arguments. This MAY be called `AddEvent`.
-- An API to record a single lazily initialized `Event`. This can be implemented
-by providing an `Event` interface or a concrete `Event` definition and an
-`EventFormatter`. If the language supports overloads then this SHOULD be called
-`AddEvent` otherwise `AddLazyEvent` may be considered.
+- An API to record a single `Event` whose attributes or attribute values are
+lazily constructed, with the intention of avoiding unnecessary work if an event
+is unused. If the language supports overloads then this SHOULD be called
+`AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
+might be easier to defer `Event` or attribute creation entirely by providing a
+wrapping class or function that returns an `Event` or formatted attributes. When
+providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
@@ -451,3 +461,27 @@ Returns the description of this `Status`.
 ### GetIsOk
 
 Returns false if this `Status` represents an error, else returns true.
+
+## SpanKind
+
+Depending on the `Span` position in a `Trace` and application components
+boundaries, it can play a different role. This role often defines how `Span`
+will be processed and visualized by various backends. So it is important to
+record this "hint" whenever possible to the best of the caller's knowledge.
+
+These are the possible SpanKinds:
+
+* `INTERNAL` Default value. Indicates that the span represents an internal
+  operation within an application, as opposed to an operations happening at the
+  boundaries.
+* `SERVER` Indicates that the span covers server-side handling of an RPC or
+  other remote request.
+* `CLIENT` Indicates that the span describes a request to some remote service.
+* `PRODUCER` Indicates that the span describes a producer sending a message to a
+  broker. Unlike client and server, there is often no direct critical path
+  latency relationship between producer and consumer spans. A `Producer` span ends
+  when the message was accepted by the broker while the logical processing of the
+  message might span a much longer time.
+* `CONSUMER` Indicates that the span describes a consumer receiving a message from
+  a broker. As for the `PRODUCER` kind, there is often no direct critical
+  path latency relationship between producer and consumer spans.
