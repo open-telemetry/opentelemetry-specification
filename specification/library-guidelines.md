@@ -18,7 +18,15 @@ _Note to Language Library Authors:_ OpenTelemetry specification, API and SDK imp
 
 4. Language library implementation must be clearly separated into wire protocol-independent parts that implement common logic (e.g. batching, tag enrichment by process information, etc.) and protocol-dependent telemetry exporters. Telemetry exporters must contain minimal functionality, thus enabling vendors to easily add support for their specific protocol.
 
-5. Language library implementation should include an exporter for OpenTelemetry Protocol (when the protocol is specified and approved) and may include an exporter that writes to standard output (to use for debugging and testing). Vendor-specific exporters (exporters that implement vendor protocols) should not be included in language libraries and should be placed elsewhere (the exact approach for storing and maintaining vendor-specific exporters will be defined in the future).
+5. Language library implementation should include the following exporters:
+    - Jaeger.
+    - Zipkin.
+    - OpenCensus.
+    - Prometheus.
+    - OpenTelemetry Protocol (when the protocol is specified and approved).
+    - Standard output to use for debugging and testing.
+
+    Other vendor-specific exporters (exporters that implement vendor protocols) should not be included in language libraries and should be placed elsewhere (the exact approach for storing and maintaining vendor-specific exporters will be defined in the future).
 
 # Language Library Generic Design
 
