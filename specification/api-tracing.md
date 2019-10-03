@@ -166,6 +166,9 @@ the same trace.
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
+`IsRemote` is a boolean flag which returns true if the SpanContext was propagated 
+from a remote parent.
+
 Please review the W3C specification for details on the [Tracestate
 field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
@@ -229,9 +232,8 @@ spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
-created in another process. Since the `SpanContext` is the only component of a
-`Span` that is propagated between processes, a `Span`'s parent SHOULD be a
-`SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
+created in another process. Each propagators' deserialization must set 
+`IsRemote` to true so `Span` creation knows if the parent is remote.
 
 #### Add Links
 
