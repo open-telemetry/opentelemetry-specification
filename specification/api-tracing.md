@@ -20,12 +20,12 @@ Table of Contents
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecordingEvents](#isrecordingevents)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
-    * [Add Links](#add-links)
     * [Set Status](#set-status)
     * [UpdateName](#updatename)
     * [End](#end)
@@ -36,6 +36,7 @@ Table of Contents
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
   * [GetIsOk](#getisok)
+* [SpanKind](#spankind)
 
 </details>
 
@@ -80,27 +81,40 @@ Some applications may require multiple `Tracer` instances, e.g. to create
 `Span`s on behalf of other applications. Implementations MAY provide a global
 registry of `Tracer`s for such applications.
 
-### Obtaining a tracer
+### Obtaining a Tracer
 
-`Tracer` object construction and registration will vary by implementation.
-`Tracer`s may be explicitly created and registered from user code, or resolved
-from linked dependencies using the provider pattern.
+New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
+method. This method expects two string arguments:
+
+- `name` (required): This name must identify the instrumentation library (also
+referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
+the instrumented library.  
+In case an invalid name (null or empty string) is specified, a working
+default Tracer implementation as a fallback is returned rather than returning
+null or throwing an exception.  
+A library, implementing the OpenTelemetry API *may* also ignore this name and
+return a default instance for all calls, if it does not support "named"
+functionality (e.g. an implementation which is not even observability-related).
+A TracerFactory could also return a no-op Tracer here if application owners configure
+the SDK to suppress telemetry produced by this library.
+- `version` (optional): Specifies the version of the instrumentation library
+(e.g. `semver:1.0.0`).
 
 Implementations might require the user to specify configuration properties at
-`Tracer` creation time, or rely on external configuration, e.g. when using the
+`TracerFactory` creation time, or rely on external configuration, e.g. when using the
 provider pattern.
 
 ##### Runtimes with multiple deployments/applications
 
 Runtimes that support multiple deployments or applications might need to
-provide a different `Tracer` instance to each deployment. To support this,
+provide a different `TracerFactory` instance to each deployment. To support this,
+the global `TracerFactory` registry may delegate calls to create new instances of
+`TracerFactory` to a separate `Provider` component, and the runtime may include
+its own `Provider` implementation which returns a different `TracerFactory` for
+each deployment.
 
-the global `Tracer` registry may delegate calls to create new `Tracer`s to a
-separate `Provider` component, and the runtime may include its own `Provider`
-implementation which returns a different `Tracer` for each deployment.
-
-`Provider`s are registered with the API via some language-specific mechanism,
-for instance the `ServiceLoader` class in Java.
+`Provider` instances are registered with the API via some language-specific
+mechanism, for instance the `ServiceLoader` class in Java.
 
 ### Tracer operations
 
@@ -130,11 +144,6 @@ convenience methods to manage a `Span`'s lifetime and the scope in which a
 `Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
-
-The `Tracer` MUST support recording `Span`s that were created _out of band_,
-i.e.  not by the tracer itself. For this reason, implementations MUST NOT
-require that a `Span`'s start and end timestamps match the wall time when it is
-created, made active, or finished.
 
 The implementation MUST provide no-op binary and text `Propagator`s, which the
 `Tracer` SHOULD use by default if other propagators are not configured. SDKs
@@ -170,6 +179,9 @@ the same trace.
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
+`IsRemote` is a boolean flag which returns true if the SpanContext was propagated 
+from a remote parent.
+
 Please review the W3C specification for details on the [Tracestate
 field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
@@ -183,14 +195,14 @@ sub-operations.
 `Span`s encapsulate:
 
 - The operation name
-- An immutable [`SpanContext`](#SpanContext) that uniquely identifies the
+- An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
-- A parent span in the form of a [`Span`](#Span), [`SpanContext`](#SpanContext),
+- A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
   or null
 - A start timestamp
 - An end timestamp
-- An ordered mapping of [`Attribute`s](#Set-Attributes)
-- A list of [`Link`s](#add-Links) to other `Span`s
+- An ordered mapping of [`Attribute`s](#set-attributes)
+- A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
@@ -216,13 +228,13 @@ options for newly created `Span`s.
 
 The API SHOULD require the caller to provide:
 - The operation name
-- The parent span, and whether the new `Span` should be a root `Span`.
+- The parent span, and whether the new `Span` should be a root `Span`
 
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
-- `Attribute`s
-- `Link`s
-- `Event`s
+- [`SpanKind`](#spankind)
+- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
+- `Link`s - see API definition [here](#add-links)
 - `Start timestamp`
 
 Each span has zero or one parent span and zero or more child spans, which
@@ -233,9 +245,33 @@ spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
-created in another process. Since the `SpanContext` is the only component of a
-`Span` that is propagated between processes, a `Span`'s parent SHOULD be a
-`SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
+created in another process. Each propagators' deserialization must set 
+`IsRemote` to true so `Span` creation knows if the parent is remote.
+
+#### Add Links
+
+During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
+`Span`s can be from the same or a different trace. See [Links
+description](overview.md#links-between-spans).
+
+A `Link` is defined by the following properties:
+- (Required) `SpanContext` of the `Span` to link to.
+- (Optional) One or more `Attribute`.
+
+The `Link` SHOULD be an immutable type.
+
+The Span creation API should provide:
+- An API to record a single `Link` where the `Link` properties are passed as
+arguments. This MAY be called `AddLink`.
+- An API to record a single `Link` whose attributes or attribute values are
+lazily constructed, with the intention of avoiding unnecessary work if a link
+is unused. If the language supports overloads then this SHOULD be called
+`AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
+be easier to defer `Link` or attribute creation entirely by providing a wrapping
+class or function that returns a `Link` or formatted attributes. When providing
+a wrapping class or function it SHOULD be named `LinkFormatter`.
+
+Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
@@ -294,38 +330,19 @@ The `Event` SHOULD be an immutable type.
 The Span interface MUST provide:
 - An API to record a single `Event` where the `Event` properties are passed as
 arguments. This MAY be called `AddEvent`.
-- An API to record a single lazily initialized `Event`. This can be implemented
-by providing an `Event` interface or a concrete `Event` definition and an
-`EventFormatter`. If the language supports overloads then this SHOULD be called
-`AddEvent` otherwise `AddLazyEvent` may be considered.
+- An API to record a single `Event` whose attributes or attribute values are
+lazily constructed, with the intention of avoiding unnecessary work if an event
+is unused. If the language supports overloads then this SHOULD be called
+`AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
+might be easier to defer `Event` or attribute creation entirely by providing a
+wrapping class or function that returns an `Event` or formatted attributes. When
+providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](data-semantic-conventions.md) which have prescribed semantic meanings.
-
-#### Add Links
-
-A `Span` MUST have the ability to record links to other `Span`s. Linked `Span`s
-can be from the same or a different trace. See [Links
-description](overview.md#links-between-spans).
-
-A `Link` is defined by the following properties:
-- (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`.
-
-The `Link` SHOULD be an immutable type.
-
-The Span interface MUST provide:
-- An API to record a single `Link` where the `Link` properties are passed as
-arguments. This MAY be called `AddLink`.
-- An API to record a single lazily initialized `Link`. This can be implemented
-by providing a `Link` interface or a concrete `Link` definition and a
-`LinkFormatter`. If the language supports overloads then this MAY be called
-`AddLink` otherwise `AddLazyLink` MAY be consider.
-
-Links SHOULD preserve the order in which they're set.
 
 #### Set Status
 
@@ -457,3 +474,27 @@ Returns the description of this `Status`.
 ### GetIsOk
 
 Returns false if this `Status` represents an error, else returns true.
+
+## SpanKind
+
+Depending on the `Span` position in a `Trace` and application components
+boundaries, it can play a different role. This role often defines how `Span`
+will be processed and visualized by various backends. So it is important to
+record this "hint" whenever possible to the best of the caller's knowledge.
+
+These are the possible SpanKinds:
+
+* `INTERNAL` Default value. Indicates that the span represents an internal
+  operation within an application, as opposed to an operations happening at the
+  boundaries.
+* `SERVER` Indicates that the span covers server-side handling of an RPC or
+  other remote request.
+* `CLIENT` Indicates that the span describes a request to some remote service.
+* `PRODUCER` Indicates that the span describes a producer sending a message to a
+  broker. Unlike client and server, there is often no direct critical path
+  latency relationship between producer and consumer spans. A `Producer` span ends
+  when the message was accepted by the broker while the logical processing of the
+  message might span a much longer time.
+* `CONSUMER` Indicates that the span describes a consumer receiving a message from
+  a broker. As for the `PRODUCER` kind, there is often no direct critical
+  path latency relationship between producer and consumer spans.
