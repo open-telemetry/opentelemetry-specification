@@ -166,6 +166,9 @@ the same trace.
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
+`IsRemote` is a boolean flag which returns true if the SpanContext was propagated 
+from a remote parent.
+
 Please review the W3C specification for details on the [Tracestate
 field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
@@ -229,9 +232,8 @@ spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
-created in another process. Since the `SpanContext` is the only component of a
-`Span` that is propagated between processes, a `Span`'s parent SHOULD be a
-`SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
+created in another process. Each propagators' deserialization must set 
+`IsRemote` to true so `Span` creation knows if the parent is remote.
 
 #### Add Links
 
@@ -248,10 +250,13 @@ The `Link` SHOULD be an immutable type.
 The Span creation API should provide:
 - An API to record a single `Link` where the `Link` properties are passed as
 arguments. This MAY be called `AddLink`.
-- An API to record a single lazily initialized `Link`. This can be implemented
-by providing a `Link` interface or a concrete `Link` definition and a
-`LinkFormatter`. If the language supports overloads then this MAY be called
-`AddLink` otherwise `AddLazyLink` MAY be considered.
+- An API to record a single `Link` whose attributes or attribute values are
+lazily constructed, with the intention of avoiding unnecessary work if a link
+is unused. If the language supports overloads then this SHOULD be called
+`AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
+be easier to defer `Link` or attribute creation entirely by providing a wrapping
+class or function that returns a `Link` or formatted attributes. When providing
+a wrapping class or function it SHOULD be named `LinkFormatter`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -312,10 +317,13 @@ The `Event` SHOULD be an immutable type.
 The Span interface MUST provide:
 - An API to record a single `Event` where the `Event` properties are passed as
 arguments. This MAY be called `AddEvent`.
-- An API to record a single lazily initialized `Event`. This can be implemented
-by providing an `Event` interface or a concrete `Event` definition and an
-`EventFormatter`. If the language supports overloads then this SHOULD be called
-`AddEvent` otherwise `AddLazyEvent` may be considered.
+- An API to record a single `Event` whose attributes or attribute values are
+lazily constructed, with the intention of avoiding unnecessary work if an event
+is unused. If the language supports overloads then this SHOULD be called
+`AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
+might be easier to defer `Event` or attribute creation entirely by providing a
+wrapping class or function that returns an `Event` or formatted attributes. When
+providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.

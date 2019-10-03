@@ -183,19 +183,18 @@ document.
 
 ## DistributedContext
 
-**DistributedContext** is an abstract data type that represents collection of entries.
-Each key of **DistributedContext** is associated with exactly one value. **DistributedContext** is serializable,
-to facilitate propagating it not only inside the process but also across process boundaries.
+The **DistributedContext** exists to store labels that describe the context of an operation an application performs. It is intended to enable context that are custom to the application or integrations in contrast to other contexts, such as `SpanContext`. Only one **DistributedContext** should be associated with any particular operation.
 
-**DistributedContext** is used to annotate telemetry with the name:value pair **Entry**.
-Those values can be used to add dimension to the metric or additional contest properties to logs and traces.
+For example, a web service can benefit from including context around what service has sent the request. Or a SaaS provider can include context about the API user or token that is responsible for that request. These values can be consumed from **DistributedContext** and used as an additional dimension for a metric, or additional context for logs and traces.
+
+**DistributedContext** is a collection of key-value `Entry` pairs, with each key of associated with exactly one value. **DistributedContext** is serializable,
+to facilitate propagating it not only inside the process but also across process boundaries.
 
 **DistributedContext** is a recommended name but languages can have more language-specific names like **dctx**.
 
 ### Entry
 
-An **Entry** is used to label anything that is associated  with a specific operation, 
-such as an HTTP request. It consists of **EntryKey**, **EntryValue** and **EntryMetadata**.
+An **Entry** is used to represent the labels that are contained inside the `DistributedContext`, representing values such as the service that originated the request, or vendor-specific data. It consists of an **EntryKey**, an **EntryValue** and an **EntryMetadata**.
 
 - **EntryKey** is the name of the **Entry**. **EntryKey** along with **EntryValue**
 can be used to aggregate and group stats, annotate traces and logs, etc. **EntryKey** is
@@ -205,7 +204,7 @@ a length greater than zero and less than 256.
 - **EntryMetadata** contains properties associated with an **Entry**.
 For now only the property **EntryTTL** is defined.
 - **EntryTTL** is an integer that represents number of hops an entry can propagate.
-Anytime a sender serializes an entry, sends it over the wire and receiver unserializes
+Anytime a sender serializes an entry, sends it over the wire and a receiver deserializes
 the entry then the entry is considered to have travelled one hop.
 
 ## Resources

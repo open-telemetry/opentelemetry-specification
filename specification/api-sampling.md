@@ -30,7 +30,7 @@ Returns the sampling Decision for a `Span` to be created.
 - `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
   `null`.
 - Boolean that indicates that `SpanContext` was extracted from the wire, i.e.
-  parent `Span` is from the different process.
+  parent `Span` is from the different process, meaning `IsRemote` is set to true.
 - `TraceId` of the `Span` to be created.
 - `SpanId` of the `Span` to be created.
 - Name of the `Span` to be created.
