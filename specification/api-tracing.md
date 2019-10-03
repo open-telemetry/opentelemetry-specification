@@ -224,7 +224,6 @@ empty by default:
 - `Link`s
 - `Event`s
 - `Start timestamp`
-- `SamplingHint`
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -237,28 +236,6 @@ A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Since the `SpanContext` is the only component of a
 `Span` that is propagated between processes, a `Span`'s parent SHOULD be a
 `SpanContext` if it is remote. Otherwise, it may be a `Span` or `SpanContext`.
-
-#### SamplingHint
-
-This is a new concept added in the OpenTelemetry API that allows API users to suggest sampling hints
-to the implementation of the API:
-
-* DO_NOT_RECORD
-  * Suggest to not record any data for this Span. (RecordEvents = false and SampledFlag = false).
-* RECORD
-  * Suggest to record data for this Span but not propagating the sampled flag in TraceFlags 
-  (RecordEvents = true and SampledFlag = false).
-* RECORD_AND_PROPAGATE
-  * Suggest to record data for this Span and propagate the sampled flag in TraceFlags
-  (RecordEvents = true and SampledFlag = true).
-
-The default option for the span creation is to not have any suggestion (or suggestion is not
-specified). This can be implemented by using null as the default option or any language specific
-mechanism to achieve the same result.
-
-Implementations are not required to respect the SamplingHint, but are encouraged to do so.
-Implementations that do not apply any sampling mechanism in the client library are free to
-completely ignore this.
 
 ### Span operations
 

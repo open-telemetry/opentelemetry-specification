@@ -42,9 +42,9 @@ Returns the sampling Decision for a `Span` to be created.
 
 - `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
   `null`.
-- Boolean that indicates that `SpanContext` was extracted from the wire, i.e.
-  parent `Span` is from the different process.
-- `TraceId` of the `Span` to be created.
+- `TraceId` of the `Span` to be created. It can be different from the `TraceId`
+  in the `SpanContext`. Typically in situations when the `Span` to be created
+  starts a new Trace.
 - `SpanId` of the `Span` to be created.
 - Name of the `Span` to be created.
 - Collection of links that will be associated with the `Span` to be created.
@@ -60,24 +60,30 @@ Returns the sampler name or short description with the configuration. This may
 be displayed on debug pages or in the logs. Example:
 `"ProbabilitySampler{0.000100}"`.
 
+Description MUST NOT change over time and caller can cache the returned value.
+
 ## Decision
 
 `Decision` is an interface with two getters describing the sampling decision.
 
 ### IsSampled
 
-Return sampling decision whether span should be sampled or not.
+Return sampling decision whether span should be sampled or not. `True` value of
+`IsSampled` flag means that Span information needs to be recorded.
 
 ### GetAttributes
 
 Return attributes to be attached to the `Span`. These attributes should be added
-to the span only for root span or when sampling decision `IsSampled` changes
+to the `Span` only for root span or when sampling decision `IsSampled` changes
 from false to true.
 
 Examples of attribute may be algorithm used to make a decision and sampling
 priority. Another example may be recording the reason trace was marked as
 "important" to sample in. For instance, when traces from specific user session
 should be collected, session identifier can be added to attributes.
+
+The list of attributes returned by `Decision` MUST be immutable. Caller may call
+this method any number of times and can safely cache the returned value.
 
 ## Built-in samplers
 
