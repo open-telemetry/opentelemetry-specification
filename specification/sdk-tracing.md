@@ -2,13 +2,97 @@
 
 <details><summary>Table of Contents</summary>
 
+* [Sampling](#sampling)
 * [Tracer Creation](#tracer-creation)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
 </details>
 
-# Tracer Creation
+## Sampling
+
+Sampling is a mechanism to control the noise and overhead introduced by
+OpenTelemetry by reducing the number of samples of traces collected and sent to
+the backend.
+
+Sampling may be implemented on different stages of a trace collection.
+OpenTelemetry API defines a `Sampler` interface that can be used at
+instrumentation points by libraries to check the sampling `Decision` early and
+optimize the amount of telemetry that needs to be collected.
+
+All other sampling algorithms may be implemented on SDK layer in exporters, or
+even out of process in Agent or Collector.
+
+API defines two interfaces - [`Sampler`](#sampler) and [`Decision`](#decision)
+as well as a set of [built-in samplers](#built-in-samplers).
+
+### Sampler
+
+`Sampler` interface allows to create custom samplers which will return a
+sampling `Decision` based on information that is typically available just before
+the `Span` was created.
+
+#### ShouldSample
+
+Returns the sampling Decision for a `Span` to be created.
+
+**Required arguments:**
+
+- `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
+  `null`.
+- `TraceId` of the `Span` to be created. It can be different from the `TraceId`
+  in the `SpanContext`. Typically in situations when the `Span` to be created
+  starts a new Trace.
+- `SpanId` of the `Span` to be created.
+- Name of the `Span` to be created.
+- Collection of links that will be associated with the `Span` to be created.
+  Typically useful for batch operations.
+
+**Return value:**
+
+Sampling `Decision` whether span should be sampled or not.
+
+#### GetDescription
+
+Returns the sampler name or short description with the configuration. This may
+be displayed on debug pages or in the logs. Example:
+`"ProbabilitySampler{0.000100}"`.
+
+Description MUST NOT change over time and caller can cache the returned value.
+
+### Decision
+
+`Decision` is an interface with two getters describing the sampling decision.
+
+#### IsSampled
+
+Return sampling decision whether span should be sampled or not. `True` value of
+`IsSampled` flag means that Span information needs to be recorded.
+
+#### GetAttributes
+
+Return attributes to be attached to the `Span`. These attributes should be added
+to the `Span` only for root span or when sampling decision `IsSampled` changes
+from false to true.
+
+Examples of attribute may be algorithm used to make a decision and sampling
+priority. Another example may be recording the reason trace was marked as
+"important" to sample in. For instance, when traces from specific user session
+should be collected, session identifier can be added to attributes.
+
+The list of attributes returned by `Decision` MUST be immutable. Caller may call
+this method any number of times and can safely cache the returned value.
+
+### Built-in samplers
+
+API MUST provide a way to create the following built-in samplers:
+
+- Always sample. `Sampler` returns `Decision` with `IsSampled=true` and empty
+  arguments collection. Description MUST be `AlwaysSampleSampler`.
+- Never sample. `Sampler` returns `Decision` with `IsSampled=false` and empty
+  arguments collection. Description MUST be `NeverSampleSampler`.
+
+## Tracer Creation
 
 New `Tracer` instances are always created through a `TracerFactory` (see [API](api-tracing.md#obtaining-a-tracer)).
 The `name` and `version` arguments supplied to the `TracerFactory` must be used
@@ -17,7 +101,7 @@ The readable representations of all `Span` instances created by a `Tracer` must
 provide a `getLibraryResource` method that returns this `Resource` information
 held by the `Tracer`.
 
-## Span processor
+### Span processor
 
 Span processor is an interface which allows hooks for span start and end method
 invocations. The span processors are invoked only when
@@ -46,9 +130,9 @@ in the SDK:
   +-----+---------------+   +---------------------+
 ```
 
-### Interface definition
+#### Interface definition
 
-#### OnStart(Span)
+##### OnStart(Span)
 
 `OnStart` is called when a span is started. This method is called synchronously
 on the thread that started the span, therefore it should not block or throw
@@ -60,7 +144,7 @@ exceptions.
 
 **Returns:** `Void`
 
-#### OnEnd(Span)
+##### OnEnd(Span)
 
 `OnEnd` is called when a span is ended. This method is called synchronously on
 the execution thread, therefore it should not block or throw an exception.
@@ -71,7 +155,7 @@ the execution thread, therefore it should not block or throw an exception.
 
 **Returns:** `Void`
 
-#### Shutdown()
+##### Shutdown()
 
 Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
@@ -82,9 +166,9 @@ call to shutdown subsequent calls to `onStart` or `onEnd` are not allowed.
 Shutdown should not block indefinitely. Language library authors can decide if
 they want to make the shutdown timeout to be configurable.
 
-### Built-in span processors
+#### Built-in span processors
 
-#### Simple processor
+##### Simple processor
 
 The implementation of `SpanProcessor` that passes ended span directly to the
 configured `SpanExporter`.
@@ -93,7 +177,7 @@ configured `SpanExporter`.
 
 * `exporter` - the exporter where the spans are pushed.
 
-#### Batching processor
+##### Batching processor
 
 The implementation of the `SpanProcessor` that batches ended spans and pushes
 them to the configured `SpanExporter`.
@@ -113,7 +197,7 @@ high contention in a very high traffic service.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
 
-## Span Exporter
+### Span Exporter
 
 `Span Exporter` defines the interface that protocol-specific exporters must
 implement so that they can be plugged into OpenTelemetry SDK and support sending
@@ -129,14 +213,14 @@ The goals of the interface are:
   functionality such as queuing, batching, tagging, etc. as helpers. This
   functionality will be applicable regardless of what protocol exporter is used.
 
-### Interface Definition
+#### Interface Definition
 
 The exporter must support two functions: **Export** and **Shutdown**. In
 strongly typed languages typically there will be 2 separate `Exporter`
 interfaces, one that accepts spans (SpanExporter) and one that accepts metrics
 (MetricsExporter).
 
-#### `Export(batch)`
+##### `Export(batch)`
 
 Exports a batch of telemetry data. Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
@@ -176,7 +260,7 @@ ExportResult is one of:
   example can happen when the destination is unavailable, there is a network
   error or endpoint does not exist.
 
-#### `Shutdown()`
+##### `Shutdown()`
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
@@ -189,7 +273,7 @@ return FailedNotRetryable error.
 and the destination is unavailable). Language library authors can decide if they
 want to make the shutdown timeout to be configurable.
 
-### Further Language Specialization
+#### Further Language Specialization
 
 Based on the generic interface definition laid out above library authors must
 define the exact interface for the particular language.
@@ -204,14 +288,14 @@ allocations and use allocation arenas where possible, thus avoiding explosion of
 allocation/deallocation/collection operations in the presence of high rate of
 telemetry data generation.
 
-#### Examples
+##### Examples
 
 These are examples on what the `Exporter` interface can look like in specific
 languages. Examples are for illustration purposes only. Language library authors
 are free to deviate from these provided that their design remain true to the
 spirit of `Exporter` concept.
 
-##### Go SpanExporter Interface
+###### Go SpanExporter Interface
 
 ```go
 type SpanExporter interface {
