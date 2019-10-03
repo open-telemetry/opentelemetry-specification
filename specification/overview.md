@@ -106,7 +106,7 @@ initiated by one of many fast incoming request.
 
 In case of scatter/gather pattern, when the root operation starts multiple
 downstream processing operations and all of them being aggregated back in a
-single **Span**, this last **Span** is linked to many parent operations it
+single **Span**, this last **Span** is linked to many operations it
 aggregates. All of them are the **Span**s from the same Trace. And similar to
 the Parent field of a **Span**. It is recommended, however, to not set parent of
 the **Span** in this scenario as semantically parent field represents a single
