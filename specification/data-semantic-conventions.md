@@ -86,7 +86,17 @@ For an HTTP client span, `SpanKind` MUST be `Client`.
 If set, `http.url` must be the originally requested URL,
 before any HTTP-redirects that may happen when executing the request.
 
-For an HTTP client, one
+One of the following sets of attributes is required (in order of usual preference unless for a particular web client/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
+
+* `http.url`
+* `http.scheme`, `http.host`, `peer.port`, `http.target`
+* `http.scheme`, `peer.hostname`, `peer.port`, `http.target`
+* `http.scheme`, `peer.ip`, `peer.port`, `http.target`
+
+Note that in some cases `http.host` might be different
+from the `peer.hostname`
+used to look up the `peer.ip` that is actually connected to.
+In that case it is strongly recommended to set the `peer.hostname` attribute in addition to `http.host`.
 
 For status, the following special cases have canonical error codes assigned:
 
@@ -101,18 +111,6 @@ This is not meant to be an exhaustive list
 but if there is no clear mapping for some error conditions,
 instrumentation developers are encouraged to use `UnknownError`
 and open a PR or issue in the specification repository.
-
-One of the following sets of attributes is required (in order of usual preference unless for a particular web client/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
-
-* `http.url`
-* `http.scheme`, `http.host`, `peer.port`, `http.target`
-* `http.scheme`, `peer.hostname`, `peer.port`, `http.target`
-* `http.scheme`, `peer.ip`, `peer.port`, `http.target`
-
-Note that in some cases `http.host` might be different
-from the `peer.hostname`
-used to look up the `peer.ip` that is actually connected to.
-In that case it is strongly recommended to set the `peer.hostname` attribute in addition to `http.host`.
 
 ### HTTP server
 
