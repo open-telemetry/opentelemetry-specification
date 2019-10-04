@@ -89,7 +89,7 @@ before any HTTP-redirects that may happen when executing the request.
 One of the following sets of attributes is required (in order of usual preference unless for a particular web client/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
 
 * `http.url`
-* `http.scheme`, `http.host`, `peer.port`, `http.target`
+* `http.scheme`, `http.host`, `http.target`
 * `http.scheme`, `peer.hostname`, `peer.port`, `http.target`
 * `http.scheme`, `peer.ip`, `peer.port`, `http.target`
 
