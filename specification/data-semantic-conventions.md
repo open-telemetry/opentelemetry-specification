@@ -65,7 +65,7 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `component`    | Denotes the type of the span and needs to be `"http"`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
 | `http.url` | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | Defined later. |
-| `http.status_code` | [HTTP response status code][]. E.g. `200` (integer) | No |
+| `http.status_code` | [HTTP response status code][]. E.g. `200` (integer) | If and only if one was received/sent. |
 | `http.status_text` | [HTTP reason phrase][]. E.g. `"OK"` | No |
 | `http.flavor` | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |  No |
 
