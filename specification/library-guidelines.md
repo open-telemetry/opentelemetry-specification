@@ -88,13 +88,13 @@ The mocking approach chosen will depend on the testing goals and at which point 
 
 ## Version Labeling
 
-SDK must use semantic version numbering. SDK version number and version number of API that SDK implements can be different. SDK MUST be labeled with its own version number with one limitation: major version number of the SDK must be the same as the major version number of the API that the SDK implements.
+API and SDK packages must use semantic version numbering. API package version number and SDK package version number are decoupled and can be different (and they both can be also different from the Specification version number that they implement). API and SDK packages MUST be labeled with their own version number.
 
-For example SDKs 0.1.0, 0.2.3 or 0.7.0 can all implement API 0.1.0, but SDK 1.0.0 cannot implement API 0.1.0.
+This decoupling of version numbers allows language library authors to make API and SDK package releases independently without the need to coordinate and match version numbers with Specification.
 
-This weak coupling of version numbers allows language library authors to make patch and minor version SDK releases independently without the need to coordinate and match version numbers with API specification. The requirement to use the same major version number is aimed to avoid spilling over SDK version numbers into next major version in case we decide to change this policy starting from certain major version in the future.
+Because API and SDK package version numbers are not coupled every API and SDK package release MUST clearly mention Specification version number that they implement. In addition if a particular version of SDK package is only compatible with a specific version of API package then this compatibility information must be also published by language library authors. Language library authors MUST include this information in the release notes. For example SDK package release notes may say: "SDK 0.3.4, use with API 0.1.0, implements OpenTelemetry Specification 0.1.0".
 
-Because API and SDK version numbers are not strictly coupled every SDK release MUST clearly specify API version number that it implements. Language library authors MUST include this information in SDK release notes. For example the release notes may say: "SDK 0.3.4, implements API 0.1.0".
+_TODO: how should third party library authors who use OpenTelemetry for instrumentation guide their end users to find the correct SDK package?_
 
 ## Performance and Blocking
 
