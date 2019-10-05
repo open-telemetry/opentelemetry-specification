@@ -16,9 +16,20 @@ _Note to Language Library Authors:_ OpenTelemetry specification, API and SDK imp
 
 3. The developers of the final application normally decide how to configure OpenTelemetry SDK and what extensions to use. They should be also free to choose to not use any OpenTelemetry implementation at all, even though the application and/or its libraries are already instrumented.  The rationale is that third-party libraries and frameworks which are instrumented with OpenTelemetry must still be fully usable in the applications which do not want to use OpenTelemetry (so this removes the need for framework developers to have "instrumented" and "non-instrumented" versions of their framework).
 
-4. Language library implementation must be clearly separated into wire protocol-independent parts that implement common logic (e.g. batching, tag enrichment by process information, etc.) and protocol-dependent telemetry exporters. Telemetry exporters must contain minimal functionality, thus enabling vendors to easily add support for their specific protocol.
+4. The SDK must be clearly separated into wire protocol-independent parts that implement common logic (e.g. batching, tag enrichment by process information, etc.) and protocol-dependent telemetry exporters. Telemetry exporters must contain minimal functionality, thus enabling vendors to easily add support for their specific protocol.
 
-5. Language library implementation should include an exporter for OpenTelemetry Protocol (when the protocol is specified and approved) and may include an exporter that writes to standard output (to use for debugging and testing). Vendor-specific exporters (exporters that implement vendor protocols) should not be included in language libraries and should be placed elsewhere (the exact approach for storing and maintaining vendor-specific exporters will be defined in the future).
+5. The SDK implementation should include the following exporters:
+    - Jaeger.
+    - Zipkin.
+    - OpenCensus.
+    - Prometheus.
+    - OpenTelemetry Protocol (when the protocol is specified and approved).
+    - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
+    - In-memory (mock) exporter that accumulates telemetry data in the local memory and allows to inspect it (useful for e.g. unit tests).
+
+    Note: some of these support multiple protocols (e.g. gRPC, Thrift, etc). The exact list of protocols to implement in the exporters is TBD.
+
+    Other vendor-specific exporters (exporters that implement vendor protocols) should not be included in language libraries and should be placed elsewhere (the exact approach for storing and maintaining vendor-specific exporters will be defined in the future).
 
 # Language Library Generic Design
 
@@ -85,6 +96,16 @@ An example use case for alternate implementations is automated testing. A mock i
 Note that mocking is also possible by using SDK and a Mock `Exporter` without needed to swap out the entire SDK. 
 
 The mocking approach chosen will depend on the testing goals and at which point exactly it is desirable to intercept the telemetry data path during the test.
+
+## Version Labeling
+
+API and SDK packages must use semantic version numbering. API package version number and SDK package version number are decoupled and can be different (and they both can be also different from the Specification version number that they implement). API and SDK packages MUST be labeled with their own version number.
+
+This decoupling of version numbers allows language library authors to make API and SDK package releases independently without the need to coordinate and match version numbers with Specification.
+
+Because API and SDK package version numbers are not coupled every API and SDK package release MUST clearly mention Specification version number that they implement. In addition if a particular version of SDK package is only compatible with a specific version of API package then this compatibility information must be also published by language library authors. Language library authors MUST include this information in the release notes. For example SDK package release notes may say: "SDK 0.3.4, use with API 0.1.0, implements OpenTelemetry Specification 0.1.0".
+
+_TODO: how should third party library authors who use OpenTelemetry for instrumentation guide their end users to find the correct SDK package?_
 
 ## Performance and Blocking
 
