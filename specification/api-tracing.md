@@ -364,7 +364,7 @@ name will depend on the implementation.
 It is highly discouraged to update the name of a `Span` after its creation.
 `Span` name is often used to group, filter and identify the logical groups of
 spans. And often, filtering logic will be implemented before the `Span` creation
-for the performance reasons. Thus the name update may interfere with this logic.
+for performance reasons. Thus the name update may interfere with this logic.
 
 The method name is called `UpdateName` to differentiate this method from the
 regular property setter. Emphasizing the fact that this operation signifies a
