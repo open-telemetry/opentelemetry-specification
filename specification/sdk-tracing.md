@@ -23,7 +23,32 @@ optimize the amount of telemetry that needs to be collected.
 All other sampling algorithms may be implemented on SDK layer in exporters, or
 even out of process in Agent or Collector.
 
-API defines two interfaces - [`Sampler`](#sampler) and [`Decision`](#decision)
+OpenTelemetry API has two properties responsible for the data collection:
+
+* `IsRecordEvents` field of a `Span`
+  * If `true` the current `Span` records tracing events (attributes, events,
+    status, etc.), otherwise all tracing events are dropped.
+  * Users can use this property to determine if expensive trace events can be
+    avoided.
+  * [Span Processor](#span-processor) will receive all spans with this flag set.
+    However, [Span Exporter](#span-exporter) will not receive them unless the
+    `Sampled` flag was set.
+* `Sampled` `TraceFlag` on `SpanContext`
+  * This flag is propagated via the `TraceFlag` to the child Spans. For more
+    details see the w3c definition [here][trace-flags].
+  * This flag indicates that `Span` is being `sampled` and exported.
+  * [Span Processor](#span-processor) and [Span Exporter](#span-exporter) will
+    receive spans with the `Sampled` flag set for processing.
+
+The flag combination `SampledFlag == false` and `IsRecordEvents == true` means
+that the current `Span` does record information, but most likely the child
+`Span` will not.
+
+The flag combination `SampledFlag == true` and `RecordEvents == false` can cause
+gaps in the distributed trace, and because of this OpenTelemetry API MUST NOT
+allow this combination.
+
+SDK defines two interfaces - [`Sampler`](#sampler) and [`Decision`](#decision)
 as well as a set of [built-in samplers](#built-in-samplers).
 
 ### Sampler

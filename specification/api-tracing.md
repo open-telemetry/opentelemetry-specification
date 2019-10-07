@@ -287,12 +287,27 @@ The Span interface MUST provide:
 
 #### IsRecordingEvents
 
-Returns the flag whether this span will be recorded.
+Returns true if this `Span` is recording information like events with the
+`AddEvent` operation, attributes using `SetAttributes`, status with `SetStatus`,
+etc.
 
 There should be no parameter.
 
-Returns true if this `Span` is active and recording information like events with
-the `AddEvent` operation and attributes using `SetAttributes`.
+This flag SHOULD be used to avoid expensive computations of a Span attributes or
+events in case when Span is definitely will not be recorded. Note, child spans
+recording is determined independently from the value of this flag. Typically
+based on `sampled` bit of a `TraceFlag` from [SpanContext](#spancontext).
+
+This flag value may be `true` despite the entire trace is sampled out. This
+allows to record and process information about the individual Span without
+sending it to the backend. The example of this scenario may be recording and
+processing of all incoming requests for the processing and building of an
+SLA/SLO latency charts while sending only subset - sampled spans - to the
+backend. See more in [sampling section of SDK design](sdk-tracing.md#sampling).
+
+Users of the API should only access the `IsRecordEvents` property when
+instrumenting code and never access `SampledFlag` unless used in context
+propagators.
 
 #### Set Attributes
 
