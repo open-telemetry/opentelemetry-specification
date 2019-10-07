@@ -38,19 +38,19 @@ If following a (chain of) redirect(s) successfully, the Status should be set acc
 
 Don't set a status message if the reason can be inferred from `http.status_code` and `http.status_text` already.
 
-| HTTP code               | Span status code  |
-|-------------------------|-------------------|
-| 100...299               | `Ok`              |
-| 3xx redirect codes      | `DeadlineExceeded` [1] in case of loop, otherwise `Ok` (see above) |
+| HTTP code               | Span status code      |
+|-------------------------|-----------------------|
+| 100...299               | `Ok`                  |
+| 3xx redirect codes      | `DeadlineExceeded` in case of loop (see above) [1], otherwise `Ok` |
 | 401 Unauthorized ⚠      | `Unauthenticated` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
-| 403 Forbidden           | `PermissionDenied`  |
-| 404 Not Found           | `NotFound`          |
-| 429 Too Many Requests   | `ResourceExhausted` |
+| 403 Forbidden           | `PermissionDenied`    |
+| 404 Not Found           | `NotFound`            |
+| 429 Too Many Requests   | `ResourceExhausted    |
 | Other 4xx code          | `InvalidArgument` [1] |
-| 501 Not Implemented     | `Unimplemented`     |
-| 503 Service Unavailable | `Unavailable`       |
-| 504 Gateway Timeout     | `DeadlineExceeded`  |
-| Other 5xx code          | `InternalError`     |
+| 501 Not Implemented     | `Unimplemented`       |
+| 503 Service Unavailable | `Unavailable`         |
+| 504 Gateway Timeout     | `DeadlineExceeded`    |
+| Other 5xx code          | `InternalError` [1]   |
 | Any status code the client fails to interpret (e.g., 093 or 573) | `UnknownError` |
 
 Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
