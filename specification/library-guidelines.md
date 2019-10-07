@@ -97,6 +97,16 @@ Note that mocking is also possible by using SDK and a Mock `Exporter` without ne
 
 The mocking approach chosen will depend on the testing goals and at which point exactly it is desirable to intercept the telemetry data path during the test.
 
+## Version Labeling
+
+API and SDK packages must use semantic version numbering. API package version number and SDK package version number are decoupled and can be different (and they both can be also different from the Specification version number that they implement). API and SDK packages MUST be labeled with their own version number.
+
+This decoupling of version numbers allows language library authors to make API and SDK package releases independently without the need to coordinate and match version numbers with Specification.
+
+Because API and SDK package version numbers are not coupled every API and SDK package release MUST clearly mention Specification version number that they implement. In addition if a particular version of SDK package is only compatible with a specific version of API package then this compatibility information must be also published by language library authors. Language library authors MUST include this information in the release notes. For example SDK package release notes may say: "SDK 0.3.4, use with API 0.1.0, implements OpenTelemetry Specification 0.1.0".
+
+_TODO: how should third party library authors who use OpenTelemetry for instrumentation guide their end users to find the correct SDK package?_
+
 ## Performance and Blocking
 
 See the [Performance and Blocking](performance.md) specification for
