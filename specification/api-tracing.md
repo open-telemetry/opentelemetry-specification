@@ -361,6 +361,21 @@ SHOULD be called `SetStatus`.
 Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
 name will depend on the implementation.
 
+It is highly discouraged to update the name of a `Span` after its creation.
+`Span` name is often used to group, filter and identify the logical groups of
+spans. And often, filtering logic will be implemented before the `Span` creation
+for performance reasons. Thus the name update may interfere with this logic.
+
+The method name is called `UpdateName` to differentiate this method from the
+regular property setter. It emphasizes that this operation signifies a
+major change for a `Span` and may lead to re-calculation of sampling or
+filtering decisions made previously depending on the implementation.
+
+Alternatives for the name update may be late `Span` creation, when Span is
+started with the explicit timestamp from the past at the moment where the final
+`Span` name is known, or reporting a `Span` with the desired name as a child
+`Span`.
+
 Required parameters:
 
 - The new **operation name**, which supersedes whatever was passed in when the
