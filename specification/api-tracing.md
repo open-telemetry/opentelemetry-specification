@@ -372,7 +372,7 @@ major change for a `Span` and may lead to re-calculation of sampling or
 filtering decisions made previously depending on the implementation.
 
 Alternatives for the name update may be late `Span` creation, when Span is
-Started with the explicit timestamp from the past at the moment where the final
+started with the explicit timestamp from the past at the moment where the final
 `Span` name is known. Or reporting a `Span` with the desired name as a child
 `Span`.
 
