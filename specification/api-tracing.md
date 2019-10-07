@@ -361,7 +361,7 @@ SHOULD be called `SetStatus`.
 Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
 name will depend on the implementation.
 
-It is highly discouraged to update the name of a `Span` after it's creation.
+It is highly discouraged to update the name of a `Span` after its creation.
 `Span` name is often used to group, filter and identify the logical groups of
 spans. And often, filtering logic will be implemented before the `Span` creation
 for the performance reasons. Thus the name update may interfere with this logic.
