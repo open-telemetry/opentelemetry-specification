@@ -367,7 +367,7 @@ spans. And often, filtering logic will be implemented before the `Span` creation
 for performance reasons. Thus the name update may interfere with this logic.
 
 The method name is called `UpdateName` to differentiate this method from the
-regular property setter. Emphasizing the fact that this operation signifies a
+regular property setter. It emphasizes that this operation signifies a
 major change for a `Span` and may lead to re-calculation of a sampling or
 filtering decisions made previously depending on the implementation.
 
