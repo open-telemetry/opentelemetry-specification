@@ -23,7 +23,7 @@ Table of Contents
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
-    * [IsRecordingEvents](#isrecordingevents)
+    * [IsRecording](#isrecording)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
     * [Set Status](#set-status)
@@ -285,7 +285,7 @@ The Span interface MUST provide:
   may be used even after the `Span` is finished. The returned value MUST be the
   same for the entire Span lifetime. This MAY be called `GetContext`.
 
-#### IsRecordingEvents
+#### IsRecording
 
 Returns the flag whether this span will be recorded.
 
