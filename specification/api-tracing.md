@@ -368,7 +368,7 @@ for performance reasons. Thus the name update may interfere with this logic.
 
 The method name is called `UpdateName` to differentiate this method from the
 regular property setter. It emphasizes that this operation signifies a
-major change for a `Span` and may lead to re-calculation of a sampling or
+major change for a `Span` and may lead to re-calculation of sampling or
 filtering decisions made previously depending on the implementation.
 
 Alternatives for the name update may be late `Span` creation, when Span is
