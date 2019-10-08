@@ -1,5 +1,7 @@
 # Metrics API
 
+TODO: Table of contents
+
 ## Overview
 
 The user-facing metrics API supports reporting diagnostic measurements
@@ -166,4 +168,3 @@ to record absolute values such as durations and sizes.
 
 As an option, measures can be declared as `Signed` to indicate support
 for positive and negative values.
-
