@@ -2,7 +2,7 @@
 An `Entry` is used to label anything that is associated
 with a specific operation, such as an HTTP request.
 
-`DistributedContext` is an abstract data type that represents collection of entries.
+`DistributedContext` is an abstract data type that represents a collection of entries.
 Each key of `DistributedContext` is associated with exactly one value. `DistributedContext` is serializable,
 to facilitate propagating it not only inside the process but also across process boundaries.
 `DistributedContext` is used to annotate telemetry with the name:value pair `Entry`.
