@@ -104,14 +104,14 @@ completeness, future processing requirement is also listed here. These requireme
 This processing is done as part of entry propagator.
 
 #### At Receiver
-Upon receiving an entry from remote entity an entry extractor
+Upon receiving an entry from a remote entity, an entry extractor:
 
 - MUST decrement the value of `EntryTTL` by one if it is greater than zero. **(future)**
 - MUST treat the value of `EntryTTL` as -1 if it is not present.
 - MUST discard the `Entry` for any other value of `EntryTTL`. **(future)**
 
 #### At Sender
-Upon preparing to send an entry to a remote entity an entry injector
+Upon preparing to send an entry to a remote entity, an entry injector:
 - MUST send the entry AND include `EntryTTL` if its value is greater than 0. **(future)**
 - MUST send the entry without `EntryTTL` if its value is -1. Absence of `EntryTTL` on the wire is treated as having `EntryTTL` of -1.
   This is to optimize on-the-wire representation of common case.
