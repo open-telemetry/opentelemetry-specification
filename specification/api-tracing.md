@@ -294,7 +294,7 @@ etc.
 There should be no parameter.
 
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
-events in case when Span is definitely will not be recorded. Note, child spans
+events in case when a Span is definitely not recorded. Note that any child span's
 recording is determined independently from the value of this flag. Typically
 based on `sampled` bit of a `TraceFlag` from [SpanContext](#spancontext).
 
