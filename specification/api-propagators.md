@@ -113,7 +113,7 @@ Required arguments:
 Extracts the value from upstream. For example, as http headers.
 
 If the value could not be parsed, the underlying implementation will decide to return an
-object representing either an empty value, an invalid value, or a valid value. Implementation
+object representing either an empty value, an invalid value, or a valid value. Implementations
 MUST not return null.
 
 Required arguments:
