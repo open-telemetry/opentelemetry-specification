@@ -40,7 +40,7 @@ OpenTelemetry API has two properties responsible for the data collection:
   * [Span Processor](#span-processor) and [Span Exporter](#span-exporter) will
     receive spans with the `Sampled` flag set for processing.
 
-The flag combination `SampledFlag == false` and `IsRecordEvents == true` means
+The flag combination `SampledFlag == false` and `IsRecording == true` means
 that the current `Span` does record information, but most likely the child
 `Span` will not.
 
