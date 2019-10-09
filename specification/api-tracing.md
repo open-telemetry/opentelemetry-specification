@@ -294,9 +294,10 @@ etc.
 There should be no parameter.
 
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
-events in case when a Span is definitely not recorded. Note that any child span's
-recording is determined independently from the value of this flag. Typically
-based on the `sampled` bit of a `TraceFlag` from [SpanContext](#spancontext)).
+events in case when a Span is definitely not recorded. Note that any child
+span's recording is determined independently from the value of this flag
+(typically based on the `sampled` flag of a `TraceFlag` on
+[SpanContext](#spancontext)).
 
 This flag may be `true` despite the entire trace being sampled out. This
 allows to record and process information about the individual Span without
@@ -305,7 +306,7 @@ processing of all incoming requests for the processing and building of
 SLA/SLO latency charts while sending only a subset - sampled spans - to the
 backend. See also the [sampling section of SDK design](sdk-tracing.md#sampling).
 
-Users of the API should only access the `IsRecordEvents` property when
+Users of the API should only access the `IsRecordingEvents` property when
 instrumenting code and never access `SampledFlag` unless used in context
 propagators.
 
