@@ -104,7 +104,7 @@ the originating and following trace. This can be used when a **Trace** enters tr
 boundaries of a service and service policy requires the generation of a new
 Trace rather than trusting the incoming Trace context. The new linked Trace may
 also represent a long running asynchronous data processing operation that was
-initiated by one of many fast incoming request.
+initiated by one of many fast incoming requests.
 
 When using the scatter/gather (also called fork/join) pattern, the root
 operation starts multiple downstream processing operations and all of them being
