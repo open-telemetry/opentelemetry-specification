@@ -99,7 +99,7 @@ A **Span** may be linked to zero or more other **Spans** (defined by
 initiated by multiple initiating **Span**s, each representing a single incoming
 item being processed in the batch.
 
-Another example of using a **Link** is to declare relationship between
+Another example of using a **Link** is to declare the relationship between
 originating and followed trace. This can be used when **Trace** enters trusted
 boundaries of a service and service policy requires the generation of a new
 Trace rather than trusting the incoming Trace context. The new linked Trace may
