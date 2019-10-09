@@ -23,7 +23,7 @@ optimize the amount of telemetry that needs to be collected.
 All other sampling algorithms may be implemented on SDK layer in exporters, or
 even out of process in Agent or Collector.
 
-OpenTelemetry API has two properties responsible for the data collection:
+The OpenTelemetry API has two properties responsible for the data collection:
 
 * `IsRecordingEvents` field of a `Span`
   * If `true` the current `Span` records tracing events (attributes, events,
