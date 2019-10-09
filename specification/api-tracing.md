@@ -303,7 +303,7 @@ allows to record and process information about the individual Span without
 sending it to the backend. An example of this scenario may be recording and
 processing of all incoming requests for the processing and building of
 SLA/SLO latency charts while sending only a subset - sampled spans - to the
-backend. See more in [sampling section of SDK design](sdk-tracing.md#sampling).
+backend. See also the [sampling section of SDK design](sdk-tracing.md#sampling).
 
 Users of the API should only access the `IsRecordEvents` property when
 instrumenting code and never access `SampledFlag` unless used in context
