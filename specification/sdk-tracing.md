@@ -30,7 +30,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
     status, etc.), otherwise all tracing events are dropped.
   * Users can use this property to determine if expensive trace events can be
     avoided.
-  * [Span Processor](#span-processor) will receive all spans with this flag set.
+  * [Span Processors](#span-processor) will receive all spans with this flag set.
     However, [Span Exporter](#span-exporter) will not receive them unless the
     `Sampled` flag was set.
 * `Sampled` `TraceFlag` on `SpanContext`
