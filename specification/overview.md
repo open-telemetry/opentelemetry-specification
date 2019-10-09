@@ -107,7 +107,7 @@ also represent a long running asynchronous data processing operation that was
 initiated by one of many fast incoming requests.
 
 When using the scatter/gather (also called fork/join) pattern, the root
-operation starts multiple downstream processing operations and all of them being
+operation starts multiple downstream processing operations and all of them are
 aggregated back in a single **Span**. This last **Span** is linked to many
 operations it aggregates. All of them are the **Span**s from the same Trace. And
 similar to the Parent field of a **Span**. It is recommended, however, to not
