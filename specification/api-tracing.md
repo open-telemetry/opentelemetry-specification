@@ -298,7 +298,7 @@ events in case when a Span is definitely not recorded. Note that any child span'
 recording is determined independently from the value of this flag. Typically
 based on the `sampled` bit of a `TraceFlag` from [SpanContext](#spancontext)).
 
-This flag value may be `true` despite the entire trace is sampled out. This
+This flag may be `true` despite the entire trace being sampled out. This
 allows to record and process information about the individual Span without
 sending it to the backend. An example of this scenario may be recording and
 processing of all incoming requests for the processing and building of
