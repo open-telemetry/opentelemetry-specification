@@ -48,7 +48,7 @@ The flag combination `SampledFlag == true` and `RecordEvents == false` can cause
 gaps in the distributed trace, and because of this OpenTelemetry API MUST NOT
 allow this combination.
 
-SDK defines two interfaces - [`Sampler`](#sampler) and [`Decision`](#decision)
+The SDK defines the two interfaces [`Sampler`](#sampler) and [`Decision`](#decision)
 as well as a set of [built-in samplers](#built-in-samplers).
 
 ### Sampler
