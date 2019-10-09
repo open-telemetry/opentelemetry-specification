@@ -113,7 +113,7 @@ operations it aggregates. All of them are the **Span**s from the same Trace. And
 similar to the Parent field of a **Span**. It is recommended, however, to not
 set parent of the **Span** in this scenario as semantically the parent field
 represents a single parent scenario, in many cases the parent **Span** fully
-encloses the child **Span**. Which is not the case in scatter/gather and batch
+encloses the child **Span**. This is not the case in scatter/gather and batch
 scenarios.
 
 ## Metrics
