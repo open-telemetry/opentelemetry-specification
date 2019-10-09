@@ -36,7 +36,7 @@ OpenTelemetry API has two properties responsible for the data collection:
 * `Sampled` `TraceFlag` on `SpanContext`
   * This flag is propagated via the `TraceFlag` to the child Spans. For more
     details see the w3c definition [here][trace-flags].
-  * This flag indicates that `Span` is being `sampled` and exported.
+  * This flag indicates that the `Span` has been `sampled` and will be exported.
   * [Span Processor](#span-processor) and [Span Exporter](#span-exporter) will
     receive spans with the `Sampled` flag set for processing.
 
