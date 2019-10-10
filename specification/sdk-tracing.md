@@ -29,8 +29,8 @@ as well as a set of [built-in samplers](#built-in-samplers).
 ### Sampler
 
 `Sampler` interface allows to create custom samplers which will return a
-sampling `Decision` based on information that is typically available just before
-the `Span` was created.
+sampling `SamplingResult` based on information that is typically available just
+before the `Span` was created.
 
 #### ShouldSample
 
@@ -38,20 +38,28 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-- `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
+* `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
   `null`.
-- `TraceId` of the `Span` to be created. It can be different from the `TraceId`
+* `TraceId` of the `Span` to be created. It can be different from the `TraceId`
   in the `SpanContext`. Typically in situations when the `Span` to be created
   starts a new Trace.
-- `SpanId` of the `Span` to be created.
-- Name of the `Span` to be created.
-- Collection of links that will be associated with the `Span` to be created.
-  Typically useful for batch operations, see [Links Between
-  Spans](overview.md#links-between-spans).
+* `SpanId` of the `Span` to be created.
+* Name of the `Span` to be created.
+* `SpanKind`
+* Initial set of `Attributes` for the `Span` being constructed
+* Collection of links that will be associated with the `Span` to be created.
+Typically useful for batch operations, see
+[Links Between Spans](overview.md#links-between-spans).
 
 **Return value:**
 
-Sampling `Decision` whether span should be sampled or not.
+It produces an output called `SamplingResult` which contains:
+
+* A `Decision` enum [`NOT_RECORD`, `RECORD`, `RECORD_AND_SAMPLED`].
+* A set of span Attributes that will also be added to the `Span`.
+  * These attributes will be added after the initial set of `Attributes`.
+  * The list of attributes returned by `Decision` MUST be immutable. Caller may
+  call this method any number of times and can safely cache the returned value.
 
 #### GetDescription
 
@@ -61,37 +69,21 @@ be displayed on debug pages or in the logs. Example:
 
 Description MUST NOT change over time and caller can cache the returned value.
 
-### Decision
-
-`Decision` is an interface with two getters describing the sampling decision.
-
-#### IsSampled
-
-Return sampling decision whether span should be sampled or not. `True` value of
-`IsSampled` flag means that Span information needs to be recorded.
-
-#### GetAttributes
-
-Return attributes to be attached to the `Span`. These attributes should be added
-to the `Span` only for root span or when sampling decision `IsSampled` changes
-from false to true.
-
-Examples of attribute may be algorithm used to make a decision and sampling
-priority. Another example may be recording the reason trace was marked as
-"important" to sample in. For instance, when traces from specific user session
-should be collected, session identifier can be added to attributes.
-
-The list of attributes returned by `Decision` MUST be immutable. Caller may call
-this method any number of times and can safely cache the returned value.
-
 ### Built-in samplers
 
-API MUST provide a way to create the following built-in samplers:
+These are the default samplers implemented in the OpenTelemetry SDK:
 
-- Always sample. `Sampler` returns `Decision` with `IsSampled=true` and empty
-  arguments collection. Description MUST be `AlwaysSampleSampler`.
-- Never sample. `Sampler` returns `Decision` with `IsSampled=false` and empty
-  arguments collection. Description MUST be `NeverSampleSampler`.
+* ALWAYS_ON
+* ALWAYS_OFF
+* ALWAYS_PARENT
+  * Trust parent sampling decision (trusting and propagating parent `SampledFlag`).
+  * For root Spans (no parent available) returns `NOT_RECORD`.
+* Probability
+  * Allows users to configure to ignore the parent `SampledFlag`.
+  * Allows users to configure if probability applies to "root spans",
+  "root spans and remote parent", or "all spans".
+    * Default is to apply only for "root spans and remote parent".
+  * Sample with 1/N probability
 
 ## Tracer Creation
 
