@@ -23,7 +23,7 @@ Table of Contents
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
-    * [IsRecordingEvents](#isrecordingevents)
+    * [IsRecording](#isrecording)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
     * [Set Status](#set-status)
@@ -222,9 +222,13 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 ### Span Creation
 
-Implementations MUST provide a way to create `Span`s via a `Tracer`, which is
-responsible for tracking the currently active `Span` and MAY provide default
-options for newly created `Span`s.
+Implementations MUST provide a way to create `Span`s via a `Tracer`. By default,
+the currently active `Span` is set as the new `Span`'s parent. The `Tracer`
+MAY provide other default options for newly created `Span`s.
+
+`Span` creation MUST NOT set the newly created `Span` as the currently
+active `Span` by default, but this functionality MAY be offered additionally
+as a separate operation.
 
 The API SHOULD require the caller to provide:
 - The operation name
@@ -285,7 +289,7 @@ The Span interface MUST provide:
   may be used even after the `Span` is finished. The returned value MUST be the
   same for the entire Span lifetime. This MAY be called `GetContext`.
 
-#### IsRecordingEvents
+#### IsRecording
 
 Returns the flag whether this span will be recorded.
 
