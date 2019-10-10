@@ -13,10 +13,10 @@ measures.
 Metric instruments have names, which are how we refer to them in
 external systems.  Metric names conform to the following syntax:
 
-1 They are non-empty strings
-1 They are case-insensitive
-1 The first character must be non-numeric, non-space, non-punctuation
-1 Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
+1. They are non-empty strings
+1. They are case-insensitive
+1. The first character must be non-numeric, non-space, non-punctuation
+1. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
 Metrics names belong to a namespace by virtue of a "Named" `Meter`
 instance.  A "Named" `Meter` refers to the requirement that every
@@ -73,9 +73,9 @@ conventions in that language.
 
 Binding instruments to a single `Meter` instance has two benefits:
 
-1 The instruments are exported even in the zero state, prior to first use
-1 The namespace provided by the named `Meter` satisfies a namespace requirement
-1 There is no explicit `Register` call
+1. The instruments are exported even in the zero state, prior to first use
+1. The namespace provided by the named `Meter` satisfies a namespace requirement
+1. There is no explicit `Register` call
 
 The recommended practice is to define structures to contain the
 instruments in use and keep references only to the instruments that
