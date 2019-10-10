@@ -306,7 +306,7 @@ processing of all incoming requests for the processing and building of
 SLA/SLO latency charts while sending only a subset - sampled spans - to the
 backend. See also the [sampling section of SDK design](sdk-tracing.md#sampling).
 
-Users of the API should only access the `IsRecordingEvents` property when
+Users of the API should only access the `IsRecording` property when
 instrumenting code and never access `SampledFlag` unless used in context
 propagators.
 
