@@ -1,4 +1,4 @@
-# Metric SDK-facing API
+# Metric User-facing API
 
 This document is a placeholder pending active discussion.  It will
 eventually contain portions that were removed from
