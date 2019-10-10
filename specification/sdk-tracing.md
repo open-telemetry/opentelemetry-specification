@@ -25,7 +25,7 @@ even out of process in Agent or Collector.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
-* `IsRecordingEvents` field of a `Span`. If `true` the current `Span` records
+* `IsRecording` field of a `Span`. If `true` the current `Span` records
   tracing events (attributes, events, status, etc.), otherwise all tracing
   events are dropped. Users can use this property to determine if expensive
   trace events can be avoided. [Span Processors](#span-processor) will receive
