@@ -135,7 +135,8 @@ func newInstruments(metric.Meter meter) *instruments {
     gauge3:   meter.NewGauge("gauge3", metric.WithUnit(unit.Bytes)).
     measure4: meter.NewMeasure("measure4", metric.WithDescription("Measure of ...")).
   }
-}```
+}
+```
 
 Code will be structured to call `newInstruments` somewhere in a
 constructor and keep the `instruments` reference for use at runtime.
