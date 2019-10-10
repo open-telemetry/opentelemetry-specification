@@ -135,8 +135,9 @@ measurement interval is arbitrary. Use this kind of metric when the
 measurement is not a quantity, and the sum and event count are not of
 interest.
 
-Gauges are defined as non-monotonic by default, meaning that any value
-(positive or negative) is allowed.
+Gauges are defined as non-monotonic by default, meaning that new
+values are permitted to make positive or negative changes to the
+gauge.  There is no restriction on the sign of the input for gauges.
 
 As an option, gauges can be declared as `Monotonic`, in which case
 successive values are expected to rise monotonically.  Monotonic
