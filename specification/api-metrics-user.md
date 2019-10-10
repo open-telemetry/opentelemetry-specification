@@ -1,6 +1,409 @@
 # Metric User-facing API
 
-This document is a placeholder pending active discussion.  It will
-eventually contain portions that were removed from
-https://github.com/open-telemetry/opentelemetry-specification/blob/3d2b8ecf410f62172a22a9fbff88304724d4cc78/specification/api-metrics.md
-after further discussion.
+TODO Table of contents.
+
+## Overview
+
+Metric instruments are the entry point for application and framework
+developers to instrument their code using counters, gauges, and
+measures.
+
+### Metric names
+
+Metric instruments have names, which are how we refer to them in
+external systems.  Metric names conform to the following syntax:
+
+1. They are non-empty strings
+1. They are case-insensitive
+1. The first character must be non-numeric, non-space, non-punctuation
+1. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
+
+Metrics names belong to a namespace by virtue of a "Named" `Meter`
+instance.  A "Named" `Meter` refers to the requirement that every
+`Meter` instance must have an associated `component` label, determined
+statically in the code.  The `component` label value of the associated
+`Meter` serves as its namespace, allowing the same metric name to be
+used in multiple libraries of code, unambiguously, within the same
+application.
+
+Metric instruments are defined using a `Meter` instance, using a
+variety of `New` methods specific to the kind of metric and type of
+input (integer or floating point).  The Meter will return an error
+when a metric name is already registered with a different kind for the
+same component name.  Metric systems are expected to automatically
+prefix exported metrics by the `component` namespace in a manner
+consistent with the target system.  For example, a Prometheus exporter
+SHOULD use the component followed by `_` as the [application
+prefix](https://prometheus.io/docs/practices/naming/#metric-names).
+
+### Format of a metric event
+
+Regardless of the instrument kind or method of input, metric events
+include the instrument descriptor, a numerical value, and an optional
+set of labels.  The descriptor, discussed in detail below, contains
+the metric name and various optional settings.
+
+Labels are key:value pairs associated with events describing various
+dimensions or categories that describe the event.  A "label key"
+refers to the key component while "label value" refers to the
+correlated value component of a label.  Label refers to the pair of
+label key and value.
+
+Metric events always have an associated `component` label, by virtue
+of the named `Meter` used in their definition.  Other labels are
+passed in to the metric event in the form of a `LabelSet` argument,
+using several input methods discussed below.
+
+### New constructors
+
+The `Meter` interface allows creating of a registered metric
+instrument using methods specific to each kind of metric.  There are
+six constructors representing the three kinds of instrument taking
+either floating point or integer inputs, see the detailed design below.
+
+Binding instruments to a single `Meter` instance has two benefits:
+
+1. Instruments can be exported freom the zero state, prior to first use, with no explicit `Register` call
+1. The component name provided by the named `Meter` satisfies a namespace requirement
+
+The recommended practice is to define structures to contain the
+instruments in use and keep references only to the instruments that
+are specifically needed.
+
+We recognize that many existing metric systems support allocating
+metric instruments statically and providing the `Meter` interface at
+the time-of-use.  In this example, typical of statsd clients, existing
+code may not be structured with a convenient place to store new metric
+instruments.  Where this becomes a burden, it may be acceptable to use
+the global `Meter` as a workaround.
+
+The situation is similar for users of Prometheus clients, where
+instruments are allocated statically and there is an implicit global.
+Such code may not have access to the appropriate `Meter` where
+instruments are defined.  Where this becomes a burden, it may be
+acceptable to use the global `Meter` as a workaround.
+
+#### Metric instrument descriptors
+
+An instrument `Descriptor` is a structure describing all the
+configurable aspects of an instrument that the user can elect.
+Although the API provides a common `Descriptor` type--not the
+SDK--users do not construct these directly.  Users pass all common
+configuration options to the appropriate `Meter.New` method, which
+itself will use a helper method provided by the API to build the new
+`Descriptor`.  Users can access the descriptor of the built
+instrument, in any case.
+
+Applications are expected to construct long-lived instruments.
+Instruments are considered permanent, there is no method to delete
+them forget the metrics they produce in the SDK.  The structure of the
+descriptor and various options are given in detail below.
+
+####  Metric instrument constructor example code
+
+In this Golang example, a struct holding four instruments is built
+using the provided `Meter`.  These calls give examples of the kind of
+configuration options available for descriptors as well.
+
+```golang
+type instruments struct {
+    counter1 metric.Int64Counter
+    counter2 metric.Float64Counter
+    gauge3   metric.Int64Gauge
+    measure4 metric.Float64Measure
+}
+
+func newInstruments(metric.Meter meter) *instruments {
+  return &instruments{
+    counter1: meter.NewCounter("counter1", metric.WithKeys("client.service"))
+    counter2: meter.NewCounter("counter2", metric.WithNonMonotonic(true))
+    gauge3:   meter.NewGauge("gauge3", metric.WithUnit(unit.Bytes)).
+    measure4: meter.NewMeasure("measure4", metric.WithDescription("Measure of ...")).
+  }
+}
+```
+
+Code will be structured to call `newInstruments` somewhere in a
+constructor and keep the `instruments` reference for use at runtime.
+Here's an example of building a server with configured instruments and
+a single metric operation.
+
+```golang
+type server struct {
+    meter        metric.Meter
+    instruments *instruments
+
+    // ... other fields
+}
+
+func newServer(meter metric.Meter) *server {
+     return &server{
+         meter:       meter,
+	 instruments: newInstruments(meter),
+
+	 // ... other fields
+     }
+}
+
+// ...
+
+func (s *server) operate(ctx context.Context) {
+     // ... other work
+
+     s.instruments.counter1.Add(ctx, 1, s.meter.Labels(
+     		label1.String("..."),
+		label2.String("...")))
+}
+```
+
+### Metric calling conventions
+
+This API is factored into three core concepts: instruments, handles,
+and label sets.  In doing so, we provide several ways of capturing
+measurements that are semantically equivalent and generate equivalent
+metric events, but offer varying degrees of performance and
+convenience.
+
+#### Metric handle calling convention
+
+As described above, metric events consist of an instrument, a set of
+labels, and a numerical value.  The performance of a metric API
+depends on the work done to enter a new measurement.  One approach to
+reduce cost is to pre-aggregate results, so that subsequent events in
+the same collection period for the same label set combine into the
+same working memory.
+
+This approach requires locating an entry for the instrument and label
+set in a table of some kind, finding the place where a group of metric
+events are being aggregated.  This lookup can be successfully
+precomputed, giving rise to the Handle calling convention.
+
+In situations where performance is a requirement and a metric is
+repeatedly used with the same set of labels, the developer may elect
+to use _instrument handles_ as an optimization.  For handles to be a
+benefit, it requires that a specific instrument will be re-used with
+specific labels.
+
+To obtain a handle given an instrument and label set, use the
+`GetHandle()` method to return an interface that supports the `Add()`,
+`Set()`, or `Record()` method of the instrument in question.
+
+A high-performace metrics SDK will take steps to ensure that
+operations on handles are very fast.  Application developers are
+required to delete handles when they are no-longer in use.
+
+```golang
+func (s *server) processStream(ctx context.Context) {
+
+  streamLabels = []core.KeyValue{
+      labelA.String("..."),
+      labelB.String("..."),
+  }
+  counter2Handle := s.instruments.counter2.GetHandle(streamLabels)
+
+  for _, item := <-s.channel {
+     // ... other work
+
+     // High-performance metric calling convention: use of handles.
+     counter2Handle.Add(ctx, item.size())
+  }
+
+  counter2Handle.Delete()
+}
+```
+
+#### Direct metric calling convention
+
+When convenience is more important than performance, or there is no
+re-use to potentially optimize, users may elect to operate directly on
+metric instruments, supplying a label set at the call site.
+
+For example, to update a single counter:
+
+```golang
+func (s *server) method(ctx context.Context) {
+    // ... other work
+
+    s.instruments.counter1.Add(ctx, 1, s.meter.Labels(...))
+}
+```
+
+This method offers the greatest convenience possible.  If performance
+becomes a problem, one option is to use handles as described above.
+Another performance option, in some cases, is to just re-use the
+labels.  In the example here, `meter.Labels(...)` constructs a
+re-usable label set which may be a useful performance optimization, as
+discussed next.
+
+#### Label set calling convention
+
+A significant factor in the cost of metrics export is that labels,
+which arrive as an unordered list of keys and values, must be
+canonicalized in some way before they can be used for lookup.
+Canonicalizing labels can be an expensive operation as it may require
+sorting or de-duplicating by some other means, possibly even
+serializing, the set of labels to produce a valid map key.
+
+The operation of converting an unordered set of labels into a
+canonicalized set of labels, useful for pre-aggregation, is expensive
+enough that we give it first-class treatment in the API.  The
+`meter.Labels(...)` API canonicalizes labels, returning an opaque
+`LabelSet` object, another form of pre-computation available to the
+user.
+
+Re-usable `LabelSet` objects provide a potential optimization for
+scenarios where handles might not be effective.  For example, if the
+label set will be re-used but only used once per metric, handles do
+not offer any optimization.  It may be best to pre-compute a
+canonicalized `LabelSet` once and re-use it with the direct calling
+convention.
+
+```golang
+func (s *server) method(ctx context.Context) {
+    // ... other work
+
+    labelSet := s.meter.Labels(...)
+
+    s.instruments.counter1.Add(ctx, 1, labelSet)
+
+    // ... more work
+
+    s.instruments.gauge1.Set(ctx, 10, labelSet)
+
+    // ... more work
+
+    s.instruments.measure1.Record(ctx, 100, labelSet)
+}
+```
+
+#### RecordBatch calling convention
+
+There is one final API for entering measurements, which is like the
+direct access calling convention but supports multiple simultaneous
+measurements.  The use of a RecordBatch API supports entering multiple
+measurements, implying a semantically atomic update to several
+instruments.
+
+The preceding example could be rewritten:
+
+```golang
+func (s *server) method(ctx context.Context) {
+    // ... other work
+
+    labelSet := s.meter.Labels(...)
+
+    // ... more work
+
+    s.meter.RecordBatch(ctx, labelSet, []metric.Measurement{
+    	{ s.instruments.counter1, 1 },
+	{ s.instruments.gauge1, 10 },
+	{ s.instruments.measure1, 100 },
+    })
+}
+```
+
+Using the RecordBatch calling convention is identical to the sequence
+of direct calls in the preceding example, only because the values are
+entered in a single call to the SDK, the SDK is able to ensure that
+a metrics exporter does not see a partial update.
+
+## Detailed specification
+
+See the [SDK-facing Metrics API](api-metrics-meter.md) specification
+for an in-depth summary of each method in the Metrics API.
+
+### Instrument construction
+
+Instruments are constructed using the appropriate `New` method for the
+kind of instrument (Counter, Gauge, Measure) and for the type of input
+(integer or floating point).
+
+| `Meter` method                      | Kind of instrument |
+|-------------------------------------|--------------------|
+| `NewIntCounter(name, options...)`   | An integer counter |
+| `NewFloatCounter(name, options...)` | A floating point counter |
+| `NewIntGauge(name, options...)`     | An integer gauge |
+| `NewFloatGauge(name, options...)`   | A floating point gauge |
+| `NewIntMeasure(name, options...)`   | An integer measure |
+| `NewFloatMeasure(name, options...)` | A floating point measure |
+| `NewIntObserver(name, callback, options...)`     | An integer observer |
+| `NewFloatObserver(name, callback, options...)`   | A floating point observer |
+
+As in all OpenTelemetry specifications, these names are examples.
+Each language committee will decide on the appropriate names based on
+conventions in that language.
+
+#### Recommended label keys
+
+Instruments may be defined with a recommended set of label keys.  This
+setting may be used by SDKs as a good default for grouping exported
+metrics.  Recommended label keys are usually selected by the developer
+for exhibiting low cardinality.
+
+SDKs should consider grouping exported metric data by the recommended
+label keys of each instrument, unless superceded by another form of
+configuration.
+
+#### Instrument options
+
+Instruments provide several optional settings, summarized here.  The
+kind of instrument and input value type are implied by the constructor
+that it used, and the metric name is the only required field.
+
+| Option                | Option name | Explanation |
+|-----------------------|--------------------|
+| Description  | WithDescription(string) | Descriptive text documenting the instrument. |
+| Unit         | WithUnit(string) | Units specified according to the [UCUM](http://unitsofmeasure.org/ucum.html). |
+| Recommended label keys | WithRecommendedKeys(list) | Recommended grouping keys for this instrument |
+| NonMonotonic   | WithNonMonotonic(boolean) | Configure a counter that accepts negative updates | 
+| Monotonic   | WithMonotonic(boolean) | Configure a gauge that accepts only monotonic increasing udpates |
+| Signed    | WithSigned(boolean) | Configure a measure that accepts positive and negative updates. |
+
+See the Metric API [specification overview](api-metrics.md) for more
+information about the kind-specific monotonic, non-monotonic, and
+signed options.
+
+### Metric Descriptor
+
+A metric instrument is completely described by its descriptor, through
+options passed to the constructor.  The complete contents of a metric
+`Descriptor` are:
+
+- **Name** The unique name of this metric
+- **Kind** An enumeration, one of `CounterKind`, `GaugeKind`, `ObserverKind`, or `MeasureKind`
+- **Keys** The recommended label keys
+- **Meter** A reference to its `Meter`, providing access to the `component` label for the instrument
+- **ID** A unique identifier associated with new instruments
+- **Description** A string describing the meaning and use of this instrument
+- **Unit** The unit of measurement, optional
+- _Kind-specific options_
+  - **NonMonotonic** (Counter): add positive and negative values
+  - **Monotonic** (Gauge): set a monotonic counter value
+  - **Signed** (Measure): record positive and negative values
+
+### Instrument handle calling convention
+
+Counter, gauge, and measure instruments each support allocating
+handles for the high-performance calling convention.  The
+`Instrument.GetHandle(LabelSet)` method returns an interface which
+implements the `Add()`, `Set()` or `Record()` method, respectively,
+for counter, gauge, and measure instruments.
+
+Instrument handles support a `Delete` method, allowing users to
+discard handles that are no longer used.
+
+### Instrument direct calling convention
+
+Counter, gauge, and measure instruments support the appropriate
+`Add()`, `Set()`, and `Record()` method for submitting individual
+metric events.
+
+### Observer metric
+
+Observer metrics do not support handles or direct calls.  The
+`Meter.NewFloatObseerver` and `Meter.NewIntObserver` methods take
+callbacks that generate measurements on demand, allowing the SDK to
+arrange to call them only as needed, periodically, for an exporter.
+
+Observer instruments are automatically registered on creation, since
+the corresponding `Meter` handles construction.
