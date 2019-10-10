@@ -106,7 +106,7 @@ held by the `Tracer`.
 
 Span processor is an interface which allows hooks for span start and end method
 invocations. The span processors are invoked only when
-[`IsRecordingEvents`](api-tracing.md#isrecordingevents) is true. This interface
+[`IsRecording`](api-tracing.md#isrecording) is true. This interface
 must be used to implement [span exporter](#span-exporter) to batch and convert
 spans.
 
