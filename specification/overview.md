@@ -97,21 +97,24 @@ A **Span** may be linked to zero or more other **Spans** (defined by
 **SpanContexts** inside a single **Trace** or across different **Traces**.
 **Links** can be used to represent batched operations where a **Span** was
 initiated by multiple initiating **Span**s, each representing a single incoming
-item being processed in the batch. Another example of using a **Link** is to
-declare relationship between originating and followed trace. This can be used
-when **Trace** enters trusted boundaries of a service and service policy
-requires to generate a new Trace instead of trusting incoming Trace context. Or
-when long running Trace representing asynchronous data processing operation was
-initiated by one of many fast incoming request.
+item being processed in the batch.
 
-In case of scatter/gather pattern, when the root operation starts multiple
-downstream processing operations and all of them being aggregated back in a
-single **Span**, this last **Span** is linked to many operations it
-aggregates. All of them are the **Span**s from the same Trace. And similar to
-the Parent field of a **Span**. It is recommended, however, to not set parent of
-the **Span** in this scenario as semantically parent field represents a single
-parent scenario, in many cases parent **Span** fully encloses the child
-**Span**. Which is not the case in scatter/gather and batch scenarios.
+Another example of using a **Link** is to declare the relationship between
+the originating and following trace. This can be used when a **Trace** enters trusted
+boundaries of a service and service policy requires the generation of a new
+Trace rather than trusting the incoming Trace context. The new linked Trace may
+also represent a long running asynchronous data processing operation that was
+initiated by one of many fast incoming requests.
+
+When using the scatter/gather (also called fork/join) pattern, the root
+operation starts multiple downstream processing operations and all of them are
+aggregated back in a single **Span**. This last **Span** is linked to many
+operations it aggregates. All of them are the **Span**s from the same Trace. And
+similar to the Parent field of a **Span**. It is recommended, however, to not
+set parent of the **Span** in this scenario as semantically the parent field
+represents a single parent scenario, in many cases the parent **Span** fully
+encloses the child **Span**. This is not the case in scatter/gather and batch
+scenarios.
 
 ## Metrics
 
