@@ -42,7 +42,7 @@ The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
 `Span` will not.
 
-The flag combination `SampledFlag == true` and `IsRecordingEvents == false`
+The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
 
