@@ -4,7 +4,7 @@ TODO: Table of contents
 
 ## Overview
 
-The user-facing metrics API supports reporting diagnostic measurements
+The user-facing metrics API supports producing diagnostic measurements
 using three basic kinds of instrument.  "Metrics" are the thing being
 produced--mathematical, statistical summaries of certain observable
 behavior in the program.  "Instruments" are the devices used by the
