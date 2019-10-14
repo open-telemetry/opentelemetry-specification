@@ -47,12 +47,14 @@ Labels are key:value pairs associated with events describing various
 dimensions or categories that describe the event.  A "label key"
 refers to the key component while "label value" refers to the
 correlated value component of a label.  Label refers to the pair of
-label key and value.
+label key and value.  Labels are passed in to the metric event in the
+form of a `LabelSet` argument, using several input methods discussed
+below.
 
-Metric events always have an associated `component` label, by virtue
-of the named `Meter` used in their definition.  Other labels are
-passed in to the metric event in the form of a `LabelSet` argument,
-using several input methods discussed below.
+Metric events always have an associated component name, the name
+passed when constructing the corresponding `Meter`.  Metric events are
+associated with the current (implicit or explicit) OpenTelemetry
+context, including distributed correlation context and span context.
 
 ### New constructors
 
@@ -63,7 +65,7 @@ either floating point or integer inputs, see the detailed design below.
 
 Binding instruments to a single `Meter` instance has two benefits:
 
-1. Instruments can be exported freom the zero state, prior to first use, with no explicit `Register` call
+1. Instruments can be exported from the zero state, prior to first use, with no explicit `Register` call
 1. The component name provided by the named `Meter` satisfies a namespace requirement
 
 The recommended practice is to define structures to contain the
@@ -74,14 +76,16 @@ We recognize that many existing metric systems support allocating
 metric instruments statically and providing the `Meter` interface at
 the time-of-use.  In this example, typical of statsd clients, existing
 code may not be structured with a convenient place to store new metric
-instruments.  Where this becomes a burden, it may be acceptable to use
-the global `Meter` as a workaround.
+instruments.  Where this becomes a burden, it is recommended to use
+the global meter factory to construct a static named `Meter` in order
+to construct metric instruments.
 
 The situation is similar for users of Prometheus clients, where
 instruments are allocated statically and there is an implicit global.
 Such code may not have access to the appropriate `Meter` where
-instruments are defined.  Where this becomes a burden, it may be
-acceptable to use the global `Meter` as a workaround.
+instruments are defined.  Where this becomes a burden, it is
+recommended to use the global meter factory to construct a static
+named `Meter` in order to construct metric instruments.
 
 #### Metric instrument descriptors
 
