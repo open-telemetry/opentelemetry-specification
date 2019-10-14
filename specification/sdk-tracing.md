@@ -110,8 +110,18 @@ invocations. The span processors are invoked only when
 must be used to implement [span exporter](#span-exporter) to batch and convert
 spans.
 
-Span processors can be registered directly on SDK Tracer and they are invoked in
-the same order as they were registered.
+Span processors can be registered directly on SDK `TracerFactory` and they are
+invoked in the same order as they were registered.
+
+All `Tracer` instances created by a `TracerFactory` share the same span processors.
+Changes to this collection reflect in all `Tracer` instances.
+Implementation-wise, this could mean that `Tracer` instances have a reference to
+their `TracerFactory` and can access span processor objects only via this
+reference.
+
+Manipulation of the span processors collection must only happen on `TracerFactory`
+instances. This means methods like `addSpanProcessor` must move from `Tracer`
+to `TracerFactory`.
 
 The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
