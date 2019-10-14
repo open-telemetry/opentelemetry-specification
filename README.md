@@ -19,6 +19,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
     - [User-Facing API](specification/api-metrics-user.md)
     - [Meter API](specification/api-metrics-meter.md)
 - SDK Specification
+  - [Tracing](specification/sdk-tracing.md)
   - [Resource](specification/sdk-resource.md)
 - Data Specification
   - [Semantic Conventions](specification/data-semantic-conventions.md)
