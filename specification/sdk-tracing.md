@@ -55,11 +55,15 @@ Typically useful for batch operations, see
 
 It produces an output called `SamplingResult` which contains:
 
-* A `Decision` enum [`NOT_RECORD`, `RECORD`, `RECORD_AND_SAMPLED`].
+* A `Decision` enum:
+  * `NOT_RECORD` - `IsRecording() == false` and all recorded trace events
+  will be dropped.
+  * `RECORD` - `IsRecording() == true` AND `SampledFlag` is not set.
+  * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `SampledFlag` is set.
 * A set of span Attributes that will also be added to the `Span`.
-  * These attributes will be added after the initial set of `Attributes`.
-  * The list of attributes returned by `Decision` MUST be immutable. Caller may
-  call this method any number of times and can safely cache the returned value.
+  * The list of attributes returned by `SamplingResult` MUST be immutable.
+  Caller may call this method any number of times and can safely cache the
+  returned value.
 
 #### GetDescription
 
@@ -74,16 +78,26 @@ Description MUST NOT change over time and caller can cache the returned value.
 These are the default samplers implemented in the OpenTelemetry SDK:
 
 * ALWAYS_ON
+  * This will be used as a default.
+  * Description MUST be `AlwaysOnSampler`.
 * ALWAYS_OFF
+  * Description MUST be `AlwaysOffSampler`.
 * ALWAYS_PARENT
-  * Trust parent sampling decision (trusting and propagating parent `SampledFlag`).
-  * For root Spans (no parent available) returns `NOT_RECORD`.
+  * `Returns RECORD_AND_SAMPLED` if `SampledFlag` is set to true on parent
+  SpanContext and `NOT_RECORD` otherwise.
+  * Description MUST be `AlwaysParentSampler`.
 * Probability
-  * Allows users to configure to ignore the parent `SampledFlag`.
-  * Allows users to configure if probability applies to "root spans",
-  "root spans and remote parent", or "all spans".
-    * Default is to apply only for "root spans and remote parent".
-  * Sample with 1/N probability
+  * The default behavior should be to trust the parent `SampledFlag`. However
+  there should be configuration to change this.
+  * The default behavior is to apply the sampling probability only for Spans
+  that are root spans (no parent) and Spans with remote parent. However there
+  should be configuration to change this to "root spans only", or "all spans".
+  * Description MUST be `ProbabilitySampler{0.000100}`.
+
+#### Probability Sampler algorithm
+
+TODO: Add details about how the probability sampler is implemented as a function
+of the `TraceID`.
 
 ## Tracer Creation
 
