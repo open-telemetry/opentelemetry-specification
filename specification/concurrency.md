@@ -2,8 +2,8 @@
 
 For languages which support concurrent execution the OpenTelemetry APIs provide
 specific guarantees and safeties. Not all of API functions are safe to
-be called concurrently. Function and method documentation must explicitly
-specify whether it is safe or no to make concurrent calls and in what
+be called concurrently. Function and method documentation MUST explicitly
+specify whether it is safe or not to make concurrent calls and in what
 situations.
 
 The following are general recommendations of concurrent call safety of

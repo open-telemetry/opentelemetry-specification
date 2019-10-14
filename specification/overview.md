@@ -56,10 +56,10 @@ Each **Span** encapsulates the following state:
 
 - An operation name
 - A start and finish timestamp
-- A set of zero or more key:value **Attributes**. The keys must be strings. The
-  values may be strings, bools, or numeric types.
+- A set of zero or more key:value **Attributes**. The keys MUST be strings. The
+  values MUST be strings, bools, or numeric types.
 - A set of zero or more **Events**, each of which is itself a key:value map
-  paired with a timestamp. The keys must be strings, though the values may be of
+  paired with a timestamp. The keys MUST be strings, though the values MAY be of
   the same types as Span **Attributes**.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
@@ -92,7 +92,7 @@ propagated from parent to child **Spans**.
 
 ### Links between spans
 
-A **Span** may be linked to zero or more other **Spans** (defined by
+A **Span** MAY be linked to zero or more other **Spans** (defined by
 **SpanContext**) that are causally related. **Links** can point to
 **SpanContexts** inside a single **Trace** or across different **Traces**.
 **Links** can be used to represent batched operations where a **Span** was
@@ -110,7 +110,7 @@ When using the scatter/gather (also called fork/join) pattern, the root
 operation starts multiple downstream processing operations and all of them are
 aggregated back in a single **Span**. This last **Span** is linked to many
 operations it aggregates. All of them are the **Span**s from the same Trace. And
-similar to the Parent field of a **Span**. It is recommended, however, to not
+similar to the Parent field of a **Span**. It is RECOMMENDED, however, to not
 set parent of the **Span** in this scenario as semantically the parent field
 represents a single parent scenario, in many cases the parent **Span** fully
 encloses the child **Span**. This is not the case in scatter/gather and batch
@@ -186,7 +186,7 @@ common denominator that's supported everywhere. All exporters consume data from
 Metrics Data Model via a Metric Producer interface defined in OpenTelemetry SDK.
 
 Because of this, Metrics puts minimal constraints on the data (e.g. which
-characters are allowed in keys), and code dealing with Metrics should avoid
+characters are allowed in keys), and code dealing with Metrics SHOULD avoid
 validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
@@ -197,14 +197,14 @@ document.
 
 ## DistributedContext
 
-The **DistributedContext** exists to store labels that describe the context of an operation an application performs. It is intended to enable context that are custom to the application or integrations in contrast to other contexts, such as `SpanContext`. Only one **DistributedContext** should be associated with any particular operation.
+The **DistributedContext** exists to store labels that describe the context of an operation an application performs. It is intended to enable context that are custom to the application or integrations in contrast to other contexts, such as `SpanContext`. Only one **DistributedContext** SHOULD be associated with any particular operation.
 
 For example, a web service can benefit from including context around what service has sent the request. Or a SaaS provider can include context about the API user or token that is responsible for that request. These values can be consumed from **DistributedContext** and used as an additional dimension for a metric, or additional context for logs and traces.
 
 **DistributedContext** is a collection of key-value `Entry` pairs, with each key of associated with exactly one value. **DistributedContext** is serializable,
 to facilitate propagating it not only inside the process but also across process boundaries.
 
-**DistributedContext** is a recommended name but languages can have more language-specific names like **dctx**.
+**DistributedContext** is a RECOMMENDED name but languages can have more language-specific names like **dctx**.
 
 ### Entry
 
@@ -227,7 +227,7 @@ the entry then the entry is considered to have travelled one hop.
 recorded. For example, metrics exposed by a Kubernetes container can be linked
 to a resource that specifies the cluster, namespace, pod, and container name.
 
-`Resource` may capture an entire hierarchy of entity identification. It may
+`Resource` MAY capture an entire hierarchy of entity identification. It MAY
 describe the host in the cloud and specific container or an application running
 in the process.
 
@@ -274,9 +274,9 @@ instrumentation adapters into the library of choice. These adapters can be
 wrapping library APIs, subscribing to the library-specific callbacks or
 translating telemetry exposed in other formats into OpenTelemetry model.
 
-Instrumentation adapters may be called different names. It is often referred as
+Instrumentation adapters MAY be called different names. It is often referred as
 plugin, collector or auto-collector, telemetry module, bridge, etc. It is always
-recommended to follow the library and language standards. For instance, if
+RECOMMENDED to follow the library and language standards. For instance, if
 instrumentation adapter is implemented as "log appender" - it will probably be
 called an `appender`, not an instrumentation adapter. However if there is no
 established name - the recommendation is to call packages "Instrumentation

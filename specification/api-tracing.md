@@ -77,7 +77,7 @@ process boundaries.
 `Tracer`s are generally expected to be used as singletons. Implementations
 SHOULD provide a single global default `Tracer`.
 
-Some applications may require multiple `Tracer` instances, e.g. to create
+Some applications MAY require multiple `Tracer` instances, e.g. to create
 `Span`s on behalf of other applications. Implementations MAY provide a global
 registry of `Tracer`s for such applications.
 
@@ -86,18 +86,18 @@ registry of `Tracer`s for such applications.
 New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
 method. This method expects two string arguments:
 
-- `name` (required): This name must identify the instrumentation library (also
-referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
-the instrumented library.  
+- `name` (REQUIRED): This name MUST identify the instrumentation library (also
+referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and MUST NOT
+identify the instrumented library.
 In case an invalid name (null or empty string) is specified, a working
 default Tracer implementation as a fallback is returned rather than returning
 null or throwing an exception.  
-A library, implementing the OpenTelemetry API *may* also ignore this name and
+A library, implementing the OpenTelemetry API MAY also ignore this name and
 return a default instance for all calls, if it does not support "named"
 functionality (e.g. an implementation which is not even observability-related).
 A TracerFactory could also return a no-op Tracer here if application owners configure
 the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library
+- `version` (OPTIONAL): Specifies the version of the instrumentation library
 (e.g. `semver:1.0.0`).
 
 Implementations might require the user to specify configuration properties at
@@ -108,8 +108,8 @@ provider pattern.
 
 Runtimes that support multiple deployments or applications might need to
 provide a different `TracerFactory` instance to each deployment. To support this,
-the global `TracerFactory` registry may delegate calls to create new instances of
-`TracerFactory` to a separate `Provider` component, and the runtime may include
+the global `TracerFactory` registry MAY delegate calls to create new instances of
+`TracerFactory` to a separate `Provider` component, and the runtime MAY include
 its own `Provider` implementation which returns a different `TracerFactory` for
 each deployment.
 
@@ -141,7 +141,7 @@ selected, or the current active `Span` is invalid.
 The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
 convenience methods to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
-`Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
+`Span` SHOULD be made active. A `Span` may be finished (i.e. have a non-null end
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
 
@@ -152,7 +152,7 @@ details, see [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
 
-A `SpanContext` represents the portion of a `Span` which must be serialized and
+A `SpanContext` represents the portion of a `Span` which MUST be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
 `SpanContext` MUST be a final (sealed) class.
 
@@ -216,7 +216,7 @@ MUST NOT be changed after the `Span`'s end time has been set.
 prevent misuse, implementations SHOULD NOT provide access to a `Span`'s
 attributes besides its `SpanContext`.
 
-Vendors may implement the `Span` interface to effect vendor-specific logic.
+Vendors MAY implement the `Span` interface to effect vendor-specific logic.
 However, alternative implementations MUST NOT allow callers to create `Span`s
 directly. All `Span`s MUST be created via a `Tracer`.
 
@@ -249,7 +249,7 @@ spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
-created in another process. Each propagators' deserialization must set 
+created in another process. Each propagators' deserialization MUST set
 `IsRemote` to true so `Span` creation knows if the parent is remote.
 
 #### Add Links
@@ -259,12 +259,12 @@ During the `Span` creation user MUST have the ability to record links to other `
 description](overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
-- (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`.
+- (REQUIRED) `SpanContext` of the `Span` to link to.
+- (OPTIONAL) One or more `Attribute`.
 
 The `Link` SHOULD be an immutable type.
 
-The Span creation API should provide:
+The Span creation API SHOULD provide:
 - An API to record a single `Link` where the `Link` properties are passed as
 arguments. This MAY be called `AddLink`.
 - An API to record a single `Link` whose attributes or attribute values are
@@ -280,20 +280,20 @@ Links SHOULD preserve the order in which they're set.
 ### Span operations
 
 With the exception of the method to retrieve the `Span`'s `SpanContext` and
-recording status, none of the below may be called after the `Span` is finished.
+recording status, the following operations MUST NOT be called after the `Span` is finished.
 
 #### Get Context
 
 The Span interface MUST provide:
 - An API that returns the `SpanContext` for the given `Span`. The returned value
-  may be used even after the `Span` is finished. The returned value MUST be the
+  MAY be used even after the `Span` is finished. The returned value MUST be the
   same for the entire Span lifetime. This MAY be called `GetContext`.
 
 #### IsRecording
 
 Returns the flag whether this span will be recorded.
 
-There should be no parameter.
+There SHOULD be no parameter.
 
 Returns true if this `Span` is active and recording information like events with
 the `AddEvent` operation and attributes using `SetAttributes`.
@@ -303,14 +303,14 @@ the `AddEvent` operation and attributes using `SetAttributes`.
 A `Span` MUST have the ability to set attributes associated with it.
 
 An `Attribute` is defined by the following properties:
-- (Required) The attribute key, which must be a string.
-- (Required) The attribute value, which must be either a string, a boolean
+- (REQUIRED) The attribute key, which MUST be a string.
+- (REQUIRED) The attribute value, which MUST be either a string, a boolean
 value, or a numeric type.
 
 The Span interface MUST provide:
 - An API to set a single `Attribute` where the attribute properties are passed
 as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
-implementations may offer a separate API for each of the possible value types.
+implementations MAY offer a separate API for each of the possible value types.
 
 Attributes SHOULD preserve the order in which they're set. Setting an attribute
 with the same key as an existing attribute SHOULD overwrite the existing
@@ -325,9 +325,9 @@ A `Span` MUST have the ability to add events. Events have a time associated
 with the moment when they are added to the `Span`.
 
 An `Event` is defined by the following properties:
-- (Required) Name of the event.
-- (Optional) One or more `Attribute`.
-- (Optional) Timestamp for the event.
+- (REQUIRED) Name of the event.
+- (OPTIONAL) One or more `Attribute`.
+- (OPTIONAL) Timestamp for the event.
 
 The `Event` SHOULD be an immutable type.
 
@@ -380,7 +380,7 @@ started with the explicit timestamp from the past at the moment where the final
 `Span` name is known, or reporting a `Span` with the desired name as a child
 `Span`.
 
-Required parameters:
+REQUIRED parameters:
 
 - The new **operation name**, which supersedes whatever was passed in when the
   `Span` was started
@@ -392,11 +392,11 @@ end time. Implementations MUST ignore all subsequent calls to `End` (there might
 be exceptions when Tracer is streaming event and has no mutable state associated
 with the `Span`).
 
-Call to `End` of a `Span` MUST not have any effects on child spans. Those may
+Call to `End` of a `Span` MUST NOT have any effects on child spans. Those may
 still be running and can be ended later.
 
 Parameters:
-- (Optional) Timestamp to explicitly set the end timestamp
+- (OPTIONAL) Timestamp to explicitly set the end timestamp
 
 This API MUST be non-blocking.
 
@@ -414,7 +414,7 @@ calling of corresponding API.
 ## Status
 
 `Status` interface represents the status of a finished `Span`. It's composed of
-a canonical code in conjunction with an optional descriptive message.
+a canonical code in conjunction with an OPTIONAL descriptive message.
 
 ### StatusCanonicalCode
 
@@ -434,7 +434,7 @@ codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
   regardless of the state of the system.
 - `DeadlineExceeded`
   - Deadline expired before operation could complete. For operations that change the
-  state of the system, this error may be returned even if the operation has
+  state of the system, this error MAY be returned even if the operation has
   completed successfully.
 - `NotFound`
   - Some requested entity (e.g., file or directory) was not found.
@@ -442,8 +442,8 @@ codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
   - Some entity that we attempted to create (e.g., file or directory) already exists.
 - `PermissionDenied`
   - The caller does not have permission to execute the specified operation.
-  `PermissionDenied` must not be used if the caller cannot be identified (use
-  `Unauthenticated1` instead for those errors).
+  `PermissionDenied` MUST NOT be used if the caller cannot be identified (use
+  `Unauthenticated` instead for those errors).
 - `ResourceExhausted`
   - Some resource has been exhausted, perhaps a per-user quota, or perhaps the
   entire file system is out of space.
@@ -474,11 +474,11 @@ codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
 
 API MUST provide a way to create a new `Status`.
 
-Required parameters
+REQUIRED parameters
 
 - `StatusCanonicalCode` of this `Status`.
 
-Optional parameters
+OPTIONAL parameters
 
 - Description of this `Status`.
 
