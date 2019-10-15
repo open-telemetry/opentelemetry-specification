@@ -489,10 +489,11 @@ Returns the `StatusCanonicalCode` of this `Status`.
 ### GetDescription
 
 Returns the description of this `Status`.
+Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
 
 ### GetIsOk
 
-Returns false if this `Status` represents an error, else returns true.
+Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 
 ## SpanKind
 
