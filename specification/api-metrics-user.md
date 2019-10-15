@@ -74,40 +74,27 @@ are specifically needed.
 
 We recognize that many existing metric systems support allocating
 metric instruments statically and providing the `Meter` interface at
-the time-of-use.  In this example, typical of statsd clients, existing
+the time of use.  In this example, typical of statsd clients, existing
 code may not be structured with a convenient place to store new metric
 instruments.  Where this becomes a burden, it is recommended to use
-the global meter factory to construct a static named `Meter` in order
-to construct metric instruments.
+the global meter factory to construct a static named `Meter`, to
+construct metric instruments.
 
 The situation is similar for users of Prometheus clients, where
 instruments are allocated statically and there is an implicit global.
 Such code may not have access to the appropriate `Meter` where
 instruments are defined.  Where this becomes a burden, it is
 recommended to use the global meter factory to construct a static
-named `Meter` in order to construct metric instruments.
-
-#### Metric instrument descriptors
-
-An instrument `Descriptor` is a structure describing all the
-configurable aspects of an instrument that the user can elect.
-Although the API provides a common `Descriptor` type--not the
-SDK--users do not construct these directly.  Users pass all common
-configuration options to the appropriate `Meter.New` method, which
-itself will use a helper method provided by the API to build the new
-`Descriptor`.  Users can access the descriptor of the built
-instrument, in any case.
+named `Meter`, to construct metric instruments.
 
 Applications are expected to construct long-lived instruments.
-Instruments are considered permanent, there is no method to delete
-them forget the metrics they produce in the SDK.  The structure of the
-descriptor and various options are given in detail below.
+Instruments are considered permanent for the lifetime of a SDK, there
+is no method to delete them.  SDKs should 
 
 ####  Metric instrument constructor example code
 
 In this Golang example, a struct holding four instruments is built
-using the provided `Meter`.  These calls give examples of the kind of
-configuration options available for descriptors as well.
+using the provided, non-global `Meter` instance.
 
 ```golang
 type instruments struct {
@@ -119,10 +106,10 @@ type instruments struct {
 
 func newInstruments(metric.Meter meter) *instruments {
   return &instruments{
-    counter1: meter.NewCounter("counter1", metric.WithKeys("client.service"))
-    counter2: meter.NewCounter("counter2", metric.WithNonMonotonic(true))
-    gauge3:   meter.NewGauge("gauge3", metric.WithUnit(unit.Bytes)).
-    measure4: meter.NewMeasure("measure4", metric.WithDescription("Measure of ...")).
+    counter1: meter.NewCounter("counter1", ...),  // Optional parameters
+    counter2: meter.NewCounter("counter2", ...),  // are discussed below.
+    gauge3:   meter.NewGauge("gauge3", ...),
+    measure4: meter.NewMeasure("measure4", ...),
   }
 }
 ```
@@ -168,14 +155,18 @@ measurements that are semantically equivalent and generate equivalent
 metric events, but offer varying degrees of performance and
 convenience.
 
+This section applies to calling conventions for counter, gauge, and
+measure instruments.  Observer instruments, a special class of gauge
+defined by callbacks, are discussed in a dedicated section below.
+
 #### Metric handle calling convention
 
 As described above, metric events consist of an instrument, a set of
-labels, and a numerical value.  The performance of a metric API
-depends on the work done to enter a new measurement.  One approach to
-reduce cost is to pre-aggregate results, so that subsequent events in
-the same collection period for the same label set combine into the
-same working memory.
+labels, and a numerical value, plus associated context.  The
+performance of a metric API depends on the work done to enter a new
+measurement.  One approach to reduce cost is to pre-aggregate results,
+so that subsequent events happening in the same collection period, for
+the same label set, combine into the same working memory.
 
 This approach requires locating an entry for the instrument and label
 set in a table of some kind, finding the place where a group of metric
@@ -186,23 +177,26 @@ In situations where performance is a requirement and a metric is
 repeatedly used with the same set of labels, the developer may elect
 to use _instrument handles_ as an optimization.  For handles to be a
 benefit, it requires that a specific instrument will be re-used with
-specific labels.
+specific labels.  If an instrument will be used with the same label
+set more than once, obtaining an instrument handle corresponding to
+the label set ensures the highest performance available.
 
 To obtain a handle given an instrument and label set, use the
 `GetHandle()` method to return an interface that supports the `Add()`,
 `Set()`, or `Record()` method of the instrument in question.
 
-A high-performace metrics SDK will take steps to ensure that
-operations on handles are very fast.  Application developers are
-required to delete handles when they are no-longer in use.
+Instrument handles may consume SDK resources indefinitely.  Handles
+support a `Delete` method that will allow these resources to be
+reclaimed after all the corresponding metric events have been
+collected.
 
 ```golang
 func (s *server) processStream(ctx context.Context) {
 
-  streamLabels = []core.KeyValue{
+  streamLabels := s.meter.Labels(
       labelA.String("..."),
       labelB.String("..."),
-  }
+  )
   counter2Handle := s.instruments.counter2.GetHandle(streamLabels)
 
   for _, item := <-s.channel {
@@ -219,8 +213,9 @@ func (s *server) processStream(ctx context.Context) {
 #### Direct metric calling convention
 
 When convenience is more important than performance, or there is no
-re-use to potentially optimize, users may elect to operate directly on
-metric instruments, supplying a label set at the call site.
+re-use to potentially optimize with instrument handles, users may
+elect to operate directly on metric instruments, supplying a label set
+at the call site.
 
 For example, to update a single counter:
 
@@ -236,8 +231,8 @@ This method offers the greatest convenience possible.  If performance
 becomes a problem, one option is to use handles as described above.
 Another performance option, in some cases, is to just re-use the
 labels.  In the example here, `meter.Labels(...)` constructs a
-re-usable label set which may be a useful performance optimization, as
-discussed next.
+re-usable label set which may be an important performance
+optimization, as discussed next.
 
 #### Label set calling convention
 
@@ -262,6 +257,11 @@ not offer any optimization.  It may be best to pre-compute a
 canonicalized `LabelSet` once and re-use it with the direct calling
 convention.
 
+Constructing an instrument handle is considered the higher-performance
+option, when the handle will be used more than once.  Still, consider
+re-using the result of `Meter.Labels(...)` when constructing more than
+one instrument handle.
+
 ```golang
 func (s *server) method(ctx context.Context) {
     // ... other work
@@ -279,6 +279,29 @@ func (s *server) method(ctx context.Context) {
     s.instruments.measure1.Record(ctx, 100, labelSet)
 }
 ```
+
+##### Option: Ordered LabelSet construction
+
+As a language-level decision, APIs may support _ordered_ LabelSet
+construction, in which a pre-defined set of ordered label keys is
+defined such that values can be supplied in order.  For example,
+
+```golang
+
+var rpcLabelKeys = meter.OrderedLabelKeys("a", "b", "c")
+
+for _, input := range stream {
+    labels := rpcLabelKeys.Values(1, 2, 3)  // a=1, b=2, c=3
+
+    // ...
+}
+```
+
+This is specified as a language-optional feature because its safety,
+and therefore its value as an input for monitoring, depends on the
+availability of type-checking in the source language.  Passing
+unordered labels (i.e., a list of bound keys and values) to the
+`Meter.Labels(...)` constructor is considered the safer alternative.
 
 #### RecordBatch calling convention
 
