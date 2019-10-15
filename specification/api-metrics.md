@@ -129,7 +129,7 @@ the number of bytes allocated and deallocated.
 
 Gauges support `Set(value)`.  Gauge metrics express a pre-calculated
 value that is either Set() by explicit instrumentation or observed
-through a callback.  Generally, this kind of metric SHOULD be used
+through a callback.  Generally, this kind of metric should be used
 when the metric cannot be expressed as a sum or because the
 measurement interval is arbitrary. Use this kind of metric when the
 measurement is not a quantity, and the sum and event count are not of
@@ -157,7 +157,7 @@ default and monotonic as an option, like ordinary gauges.
 ### Measure
 
 Measures support `Record(value)`, signifying that events report
-individual measurements.  This kind of metric SHOULD be used when the
+individual measurements.  This kind of metric should be used when the
 count or rate of events is meaningful and either:
 
 - The sum is of interest in addition to the count (rate)

@@ -27,7 +27,7 @@ be set to to the URI path value.
 If a framework can identify a value that represents the identity of the request
 and has a lower cardinality than the URI path, this value MUST be used for the span name instead.
 
-| Attribute name | Notes and examples                                           | REQUIRED? |
+| Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `component`    | Denotes the type of the span and needs to be `"http"`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
@@ -49,7 +49,7 @@ If the route can not be determined, the `name` attribute MUST be set to the [RFC
 If a framework can identify a value that represents the identity of the request
 and has a lower cardinality than the URI path or route, this value MUST be used for the span name instead.
 
-| Attribute name | Notes and examples                                           | REQUIRED? |
+| Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `component`    | Denotes the type of the span and needs to be `"http"`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
@@ -62,16 +62,16 @@ and has a lower cardinality than the URI path or route, this value MUST be used 
 
 For database client call the `SpanKind` MUST be `Client`.
 
-Span `name` SHOULD be set to low cardinality value representing the statement
-executed on the database. It MAY be a stored procedure name (without argument), sql
+Span `name` should be set to low cardinality value representing the statement
+executed on the database. It may be stored procedure name (without argument), sql
 statement without variable arguments, etc. When it's impossible to get any
-meaningful representation of the span `name`, it MAY be populated using the same
+meaningful representation of the span `name`, it can be populated using the same
 value as `db.instance`.
 
 Note, Redis, Cassandra, HBase and other storage systems may reuse the same
 attribute names.
 
-| Attribute name | Notes and examples                                           | REQUIRED? |
+| Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `component`    | Database driver name or database name (when known) `"JDBI"`, `"jdbc"`, `"odbc"`, `"postgreSQL"`. | Yes       |
 | `db.type`      | Database type. For any SQL database, `"sql"`. For others, the lower-case database category, e.g. `"cassandra"`, `"hbase"`, or `"redis"`. | Yes       |
@@ -82,7 +82,7 @@ attribute names.
 For database client calls, peer information can be populated and interpreted as
 follows:
 
-| Attribute name  | Notes and examples                                           | REQUIRED |
+| Attribute name  | Notes and examples                                           | Required |
 | :-------------- | :----------------------------------------------------------- | -------- |
 | `peer.address`  | JDBC substring like `"mysql://db.example.com:3306"`          | Yes      |
 | `peer.hostname` | Remote hostname. `"db.example.com"`                          | Yes      |
@@ -94,8 +94,8 @@ follows:
 ## gRPC
 
 Implementations MUST create a span, when the gRPC call starts, one for
-client-side and one for server-side. Outgoing requests SHOULD be a span `kind`
-of `CLIENT` and incoming requests SHOULD be a span `kind` of `SERVER`.
+client-side and one for server-side. Outgoing requests should be a span `kind`
+of `CLIENT` and incoming requests should be a span `kind` of `SERVER`.
 
 Span `name` MUST be full gRPC method name formatted as:
 
@@ -107,7 +107,7 @@ Examples of span name: `grpc.test.EchoService/Echo`.
 
 ### Attributes
 
-| Attribute name | Notes and examples                                           | REQUIRED? |
+| Attribute name | Notes and examples                                           | Required? |
 | -------------- | ------------------------------------------------------------ | --------- |
 | `component`    | Declares that this is a grpc component. Value MUST be `"grpc"` | Yes       |
 

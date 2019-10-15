@@ -24,7 +24,7 @@ Propagators API consists of two main formats:
 - `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
 in-band across process boundaries.
 
-Deserializing MUST set `IsRemote` to true on the returned `SpanContext`.
+Deserializing must set `IsRemote` to true on the returned `SpanContext`.
 
 ## Binary Format
 
@@ -37,7 +37,7 @@ and deserializes values from bytes.
 
 Serializes the given value into the on-the-wire representation.
 
-REQUIRED arguments:
+Required arguments:
 - the value to serialize, can be `SpanContext` or `DistributedContext`.
 
 Returns the on-the-wire byte representation of the value.
@@ -49,7 +49,7 @@ Creates a value from the given on-the-wire encoded representation.
 If the value could not be parsed, the underlying implementation SHOULD decide to return ether
 an empty value, an invalid value, or a valid value.
 
-REQUIRED arguments:
+Required arguments:
 - on-the-wire byte representation of the value.
 
 Returns a value deserialized from bytes.
@@ -71,7 +71,7 @@ and extracts values from carriers.
 
 ### Fields
 
-The propagation fields defined. If your carrier is reused, you SHOULD delete the fields here
+The propagation fields defined. If your carrier is reused, you should delete the fields here
 before calling [inject](#inject).
 
 For example, if the carrier is a single-use or immutable request object, you don't need to
@@ -88,7 +88,7 @@ Returns list of fields that will be used by this formatter.
 
 Injects the value downstream. For example, as http headers.
 
-REQUIRED arguments:
+Required arguments:
 - the value to be injected, can be `SpanContext` or `DistributedContext`.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the setter invoked for each propagation key to add or remove.
@@ -103,7 +103,7 @@ REQUIRED arguments:
 
 Replaces a propagated field with the given value.
 
-REQUIRED arguments:
+Required arguments:
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the key of the field.
 - the value of the field.
@@ -114,9 +114,9 @@ Extracts the value from upstream. For example, as http headers.
 
 If the value could not be parsed, the underlying implementation will decide to return an
 object representing either an empty value, an invalid value, or a valid value. Implementations
-MUST NOT return null.
+MUST not return null.
 
-REQUIRED arguments:
+Required arguments:
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the getter invoked for each propagation key to get.
 
@@ -132,7 +132,7 @@ Returns the non-null extracted value.
 
 Returns the first value of the given propagation key or returns null if the key doesn't exist.
 
-REQUIRED arguments:
+Required arguments:
 - the carrier of propagation fields, such as an http request.
 - the key of the field.
 
