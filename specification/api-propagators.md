@@ -20,9 +20,10 @@ Table of Contents
 </details>
 
 Propagators API consists of two main formats:
+
 - `BinaryFormat` is used to serialize and deserialize a value into a binary representation.
 - `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
-in-band across process boundaries.
+  in-band across process boundaries.
 
 Deserializing must set `IsRemote` to true on the returned `SpanContext`.
 
@@ -38,6 +39,7 @@ and deserializes values from bytes.
 Serializes the given value into the on-the-wire representation.
 
 Required arguments:
+
 - the value to serialize, can be `SpanContext` or `DistributedContext`.
 
 Returns the on-the-wire byte representation of the value.
@@ -50,13 +52,14 @@ If the value could not be parsed, the underlying implementation SHOULD decide to
 an empty value, an invalid value, or a valid value.
 
 Required arguments:
+
 - on-the-wire byte representation of the value.
 
 Returns a value deserialized from bytes.
 
 ## HTTP Text Format
 
-`HTTPTextFormat` is a formatter that injects and extracts a value as text into carriers that 
+`HTTPTextFormat` is a formatter that injects and extracts a value as text into carriers that
 travel in-band across process boundaries.
 
 Encoding is expected to conform to the HTTP Header Field semantics. Values are often encoded as
@@ -79,6 +82,7 @@ clear fields as they couldn't have been set before. If it is a mutable, retryabl
 successive calls should clear these fields first.
 
 The use cases of this are:
+
 - allow pre-allocation of fields, especially in systems like gRPC Metadata
 - allow a single-pass over an iterator
 
@@ -89,6 +93,7 @@ Returns list of fields that will be used by this formatter.
 Injects the value downstream. For example, as http headers.
 
 Required arguments:
+
 - the value to be injected, can be `SpanContext` or `DistributedContext`.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the setter invoked for each propagation key to add or remove.
@@ -104,6 +109,7 @@ Required arguments:
 Replaces a propagated field with the given value.
 
 Required arguments:
+
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the key of the field.
 - the value of the field.
@@ -117,6 +123,7 @@ object representing either an empty value, an invalid value, or a valid value. I
 MUST not return null.
 
 Required arguments:
+
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the getter invoked for each propagation key to get.
 
@@ -133,6 +140,7 @@ Returns the non-null extracted value.
 Returns the first value of the given propagation key or returns null if the key doesn't exist.
 
 Required arguments:
+
 - the carrier of propagation fields, such as an http request.
 - the key of the field.
 
