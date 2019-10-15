@@ -58,7 +58,7 @@ It produces an output called `SamplingResult` which contains:
 * A sampling `Decision`. One of the following enum values:
   * `NOT_RECORD` - `IsRecording() == false`, span will not be recorded and all events and attributes
   will be dropped.
-  * `RECORD` - `IsRecording() == true` AND `SampledFlag` is not set.
+  * `RECORD` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
   * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
 * A set of span Attributes that will also be added to the `Span`.
   * The list of attributes returned by `SamplingResult` MUST be immutable.
