@@ -98,6 +98,12 @@ API MUST provide a way to create the following built-in samplers:
 New `Tracer` instances are always created through a `TracerFactory` (see [API](api-tracing.md#obtaining-a-tracer)).
 The `name` and `version` arguments supplied to the `TracerFactory` must be used
 to create a `Resource` instance which is stored on the created `Tracer`.
+
+All configuration objects (SDK specific) and extension points (span processors,
+propagators) must be provided to the `TracerFactory`. `Tracer` instances must
+not duplicate this data (unless for read-only access) to avoid that different
+`Tracer` instances of a `TracerFactory` have different versions of these data.
+
 The readable representations of all `Span` instances created by a `Tracer` must
 provide a `getLibraryResource` method that returns this `Resource` information
 held by the `Tracer`.
@@ -120,8 +126,8 @@ their `TracerFactory` and can access span processor objects only via this
 reference.
 
 Manipulation of the span processors collection must only happen on `TracerFactory`
-instances. This means methods like `addSpanProcessor` must move from `Tracer`
-to `TracerFactory`.
+instances. This means methods like `addSpanProcessor` must be implemented on
+`TracerFactory`.
 
 The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
