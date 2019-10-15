@@ -56,7 +56,7 @@ Typically useful for batch operations, see
 It produces an output called `SamplingResult` which contains:
 
 * A sampling `Decision`. One of the following enum values:
-  * `NOT_RECORD` - `IsRecording() == false` and all recorded trace events
+  * `NOT_RECORD` - `IsRecording() == false`, span will not be recorded and all events and attributes
   will be dropped.
   * `RECORD` - `IsRecording() == true` AND `SampledFlag` is not set.
   * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `SampledFlag` is set.
