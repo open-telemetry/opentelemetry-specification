@@ -39,8 +39,8 @@ prefix](https://prometheus.io/docs/practices/naming/#metric-names).
 ### Format of a metric event
 
 Regardless of the instrument kind or method of input, metric events
-include the instrument descriptor, a numerical value, and an optional
-set of labels.  The descriptor, discussed in detail below, contains
+include the instrument, a numerical value, and an optional
+set of labels.  The instrument, discussed in detail below, contains
 the metric name and various optional settings.
 
 Labels are key:value pairs associated with events describing various
