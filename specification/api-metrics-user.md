@@ -280,6 +280,13 @@ func (s *server) method(ctx context.Context) {
 }
 ```
 
+##### Missing label keys
+
+When the SDK interprets a `LabelSet` in the context of aggregating
+values for an exporter, and where there are grouping keys that are
+missing, the SDK is required to consider these values _explicitly
+unspecified_, a distinct value type of the exported data model.
+
 ##### Option: Ordered LabelSet construction
 
 As a language-level decision, APIs may support _ordered_ LabelSet
@@ -335,7 +342,82 @@ addition of atomicity.  Because values are entered in a single call,
 the SDK is potentially able to implement an atomic update, from the
 point-of-view of the exporter.
 
-#### Interaction with distrubuted correlation context
+## Detailed specification
+
+See the [SDK-facing Metrics API](api-metrics-meter.md) specification
+for an in-depth summary of each method in the Metrics API.
+
+### Instrument construction
+
+Instruments are constructed using the appropriate `New` method for the
+kind of instrument (Counter, Gauge, Measure) and for the type of input
+(integer or floating point).
+
+| `Meter` method                      | Kind of instrument |
+|-------------------------------------|--------------------|
+| `NewIntCounter(name, options...)`   | An integer counter |
+| `NewFloatCounter(name, options...)` | A floating point counter |
+| `NewIntGauge(name, options...)`     | An integer gauge |
+| `NewFloatGauge(name, options...)`   | A floating point gauge |
+| `NewIntMeasure(name, options...)`   | An integer measure |
+| `NewFloatMeasure(name, options...)` | A floating point measure |
+| `NewIntObserver(name, callback, options...)`     | An integer observer |
+| `NewFloatObserver(name, callback, options...)`   | A floating point observer |
+
+As in all OpenTelemetry specifications, these names are examples.
+Each language committee will decide on the appropriate names based on
+conventions in that language.
+
+#### Recommended label keys
+
+Instruments may be defined with a recommended set of label keys.  This
+setting may be used by SDKs as a good default for grouping exported
+metrics, where used with pre-aggregation.  The recommended label keys
+are usually selected by the developer for exhibiting low cardinality,
+importance for monitoring purposes, and _an intention to provide these
+variables locally_.
+
+SDKs should consider grouping exported metric data by the recommended
+label keys of each instrument, unless superceded by another form of
+configuration.  Recommended keys that are missing will be considered
+explicitly unspecified, as for missing `LabelSet` keys in general.
+
+#### Instrument options
+
+Instruments provide several optional settings, summarized here.  The
+kind of instrument and input value type are implied by the constructor
+that it used, and the metric name is the only required field.
+
+| Option                | Option name | Explanation |
+|-----------------------|--------------------|
+| Description  | WithDescription(string) | Descriptive text documenting the instrument. |
+| Unit         | WithUnit(string) | Units specified according to the [UCUM](http://unitsofmeasure.org/ucum.html). |
+| Recommended label keys | WithRecommendedKeys(list) | Recommended grouping keys for this instrument. |
+| Monotonic   | WithMonotonic(boolean) | Configure a counter or gauge that accepts only monotonic/non-monotonic updates. |
+| Signed    | WithSigned(boolean) | Configure a measure that accepts positive and negative updates. |
+
+See the Metric API [specification overview](api-metrics.md) for more
+information about the kind-specific monotonic, non-monotonic, and
+signed options.
+
+### Instrument handle calling convention
+
+Counter, gauge, and measure instruments each support allocating
+handles for the high-performance calling convention.  The
+`Instrument.GetHandle(LabelSet)` method returns an interface which
+implements the `Add()`, `Set()` or `Record()` method, respectively,
+for counter, gauge, and measure instruments.
+
+Instrument handles support a `Delete` method, allowing users to
+discard handles that are no longer used.
+
+### Instrument direct calling convention
+
+Counter, gauge, and measure instruments support the appropriate
+`Add()`, `Set()`, and `Record()` method for submitting individual
+metric events.
+
+### Interaction with distrubuted correlation context
 
 The `LabelSet` type introduced above applies strictly to "local"
 labels, meaning provided in a call to `meter.Labels(...)`.  The
@@ -378,97 +460,6 @@ func (s *server) doThing(ctx context.Context) {
 }
 ```
 
-## Detailed specification
-
-See the [SDK-facing Metrics API](api-metrics-meter.md) specification
-for an in-depth summary of each method in the Metrics API.
-
-### Instrument construction
-
-Instruments are constructed using the appropriate `New` method for the
-kind of instrument (Counter, Gauge, Measure) and for the type of input
-(integer or floating point).
-
-| `Meter` method                      | Kind of instrument |
-|-------------------------------------|--------------------|
-| `NewIntCounter(name, options...)`   | An integer counter |
-| `NewFloatCounter(name, options...)` | A floating point counter |
-| `NewIntGauge(name, options...)`     | An integer gauge |
-| `NewFloatGauge(name, options...)`   | A floating point gauge |
-| `NewIntMeasure(name, options...)`   | An integer measure |
-| `NewFloatMeasure(name, options...)` | A floating point measure |
-| `NewIntObserver(name, callback, options...)`     | An integer observer |
-| `NewFloatObserver(name, callback, options...)`   | A floating point observer |
-
-As in all OpenTelemetry specifications, these names are examples.
-Each language committee will decide on the appropriate names based on
-conventions in that language.
-
-#### Recommended label keys
-
-Instruments may be defined with a recommended set of label keys.  This
-setting may be used by SDKs as a good default for grouping exported
-metrics.  Recommended label keys are usually selected by the developer
-for exhibiting low cardinality.
-
-SDKs should consider grouping exported metric data by the recommended
-label keys of each instrument, unless superceded by another form of
-configuration.
-
-#### Instrument options
-
-Instruments provide several optional settings, summarized here.  The
-kind of instrument and input value type are implied by the constructor
-that it used, and the metric name is the only required field.
-
-| Option                | Option name | Explanation |
-|-----------------------|--------------------|
-| Description  | WithDescription(string) | Descriptive text documenting the instrument. |
-| Unit         | WithUnit(string) | Units specified according to the [UCUM](http://unitsofmeasure.org/ucum.html). |
-| Recommended label keys | WithRecommendedKeys(list) | Recommended grouping keys for this instrument |
-| NonMonotonic   | WithNonMonotonic(boolean) | Configure a counter that accepts negative updates | 
-| Monotonic   | WithMonotonic(boolean) | Configure a gauge that accepts only monotonic increasing udpates |
-| Signed    | WithSigned(boolean) | Configure a measure that accepts positive and negative updates. |
-
-See the Metric API [specification overview](api-metrics.md) for more
-information about the kind-specific monotonic, non-monotonic, and
-signed options.
-
-### Metric Descriptor
-
-A metric instrument is completely described by its descriptor, through
-options passed to the constructor.  The complete contents of a metric
-`Descriptor` are:
-
-- **Name** The unique name of this metric
-- **Kind** An enumeration, one of `CounterKind`, `GaugeKind`, `ObserverKind`, or `MeasureKind`
-- **Keys** The recommended label keys
-- **Meter** A reference to its `Meter`, providing access to the `component` label for the instrument
-- **ID** A unique identifier associated with new instruments
-- **Description** A string describing the meaning and use of this instrument
-- **Unit** The unit of measurement, optional
-- _Kind-specific options_
-  - **NonMonotonic** (Counter): add positive and negative values
-  - **Monotonic** (Gauge): set a monotonic counter value
-  - **Signed** (Measure): record positive and negative values
-
-### Instrument handle calling convention
-
-Counter, gauge, and measure instruments each support allocating
-handles for the high-performance calling convention.  The
-`Instrument.GetHandle(LabelSet)` method returns an interface which
-implements the `Add()`, `Set()` or `Record()` method, respectively,
-for counter, gauge, and measure instruments.
-
-Instrument handles support a `Delete` method, allowing users to
-discard handles that are no longer used.
-
-### Instrument direct calling convention
-
-Counter, gauge, and measure instruments support the appropriate
-`Add()`, `Set()`, and `Record()` method for submitting individual
-metric events.
-
 ### Observer metric
 
 Observer metrics do not support handles or direct calls.  The
@@ -478,3 +469,5 @@ arrange to call them only as needed, periodically, for an exporter.
 
 Observer instruments are automatically registered on creation, since
 the corresponding `Meter` handles construction.
+
+TODO
