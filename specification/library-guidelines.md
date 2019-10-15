@@ -6,7 +6,7 @@ The language libraries are expected to provide full features out of the box and 
 
 The document does not attempt to describe a language library API. For API specs see [specification](../README.md).
 
-_Note to Language Library Authors:_ OpenTelemetry specification, API and SDK implementation guidelines are work in progress. If you notice incomplete or missing information, contradictions, inconsistent styling and other defects please let specification writers know by creating an issue in this repository or posting in [Gitter](https://gitter.im/open-telemetry/opentelemetry-specification). As implementors of the specification you will often have valuable insights into how the specification can be improved. The Specification SIG and members of Technical Committee highly value you opinion and welcome your feedback.
+_Note to Language Library Authors:_ OpenTelemetry specification, API and SDK implementation guidelines are work in progress. If you notice incomplete or missing information, contradictions, inconsistent styling and other defects please let specification writers know by creating an issue in this repository or posting in [Gitter](https://gitter.im/open-telemetry/opentelemetry-specification). As implementors of the specification you will often have valuable insights into how the specification can be improved. The Specification SIG and members of Technical Committee highly value your opinion and welcome your feedback.
 
 ## Requirements
 
@@ -101,11 +101,11 @@ The mocking approach chosen will depend on the testing goals and at which point 
 
 API and SDK packages must use semantic version numbering. API package version number and SDK package version number are decoupled and can be different (and they both can be also different from the Specification version number that they implement). API and SDK packages MUST be labeled with their own version number.
 
-This decoupling of version numbers allows language library authors to make API and SDK package releases independently without the need to coordinate and match version numbers with Specification.
+This decoupling of version numbers allows language library authors to make API and SDK package releases independently without the need to coordinate and match version numbers with the Specification.
 
-Because API and SDK package version numbers are not coupled every API and SDK package release MUST clearly mention Specification version number that they implement. In addition if a particular version of SDK package is only compatible with a specific version of API package then this compatibility information must be also published by language library authors. Language library authors MUST include this information in the release notes. For example SDK package release notes may say: "SDK 0.3.4, use with API 0.1.0, implements OpenTelemetry Specification 0.1.0".
+Because API and SDK package version numbers are not coupled, every API and SDK package release MUST clearly mention the Specification version number that they implement. In addition, if a particular version of SDK package is only compatible with a specific version of API package, then this compatibility information must be also published by language library authors. Language library authors MUST include this information in the release notes. For example, the SDK package release notes may say: "SDK 0.3.4, use with API 0.1.0, implements OpenTelemetry Specification 0.1.0".
 
-_TODO: how should third party library authors who use OpenTelemetry for instrumentation guide their end users to find the correct SDK package?_
+_TODO: How should third party library authors who use OpenTelemetry for instrumentation guide their end users to find the correct SDK package?_
 
 ## Performance and Blocking
 

@@ -23,7 +23,7 @@ Table of Contents
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
-    * [IsRecordingEvents](#isrecordingevents)
+    * [IsRecording](#isrecording)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
     * [Set Status](#set-status)
@@ -222,9 +222,13 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 ### Span Creation
 
-Implementations MUST provide a way to create `Span`s via a `Tracer`, which is
-responsible for tracking the currently active `Span` and MAY provide default
-options for newly created `Span`s.
+Implementations MUST provide a way to create `Span`s via a `Tracer`. By default,
+the currently active `Span` is set as the new `Span`'s parent. The `Tracer`
+MAY provide other default options for newly created `Span`s.
+
+`Span` creation MUST NOT set the newly created `Span` as the currently
+active `Span` by default, but this functionality MAY be offered additionally
+as a separate operation.
 
 The API SHOULD require the caller to provide:
 - The operation name
@@ -285,7 +289,7 @@ The Span interface MUST provide:
   may be used even after the `Span` is finished. The returned value MUST be the
   same for the entire Span lifetime. This MAY be called `GetContext`.
 
-#### IsRecordingEvents
+#### IsRecording
 
 Returns the flag whether this span will be recorded.
 
@@ -360,6 +364,21 @@ SHOULD be called `SetStatus`.
 
 Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
 name will depend on the implementation.
+
+It is highly discouraged to update the name of a `Span` after its creation.
+`Span` name is often used to group, filter and identify the logical groups of
+spans. And often, filtering logic will be implemented before the `Span` creation
+for performance reasons. Thus the name update may interfere with this logic.
+
+The method name is called `UpdateName` to differentiate this method from the
+regular property setter. It emphasizes that this operation signifies a
+major change for a `Span` and may lead to re-calculation of sampling or
+filtering decisions made previously depending on the implementation.
+
+Alternatives for the name update may be late `Span` creation, when Span is
+started with the explicit timestamp from the past at the moment where the final
+`Span` name is known, or reporting a `Span` with the desired name as a child
+`Span`.
 
 Required parameters:
 
@@ -470,10 +489,11 @@ Returns the `StatusCanonicalCode` of this `Status`.
 ### GetDescription
 
 Returns the description of this `Status`.
+Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
 
 ### GetIsOk
 
-Returns false if this `Status` represents an error, else returns true.
+Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 
 ## SpanKind
 
