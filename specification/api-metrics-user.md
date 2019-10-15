@@ -329,10 +329,54 @@ func (s *server) method(ctx context.Context) {
 }
 ```
 
-Using the RecordBatch calling convention is identical to the sequence
-of direct calls in the preceding example, only because the values are
-entered in a single call to the SDK, the SDK is able to ensure that
-a metrics exporter does not see a partial update.
+Using the RecordBatch calling convention is semantically identical to
+the sequence of direct calls in the preceding example, with the
+addition of atomicity.  Because values are entered in a single call,
+the SDK is potentially able to implement an atomic update, from the
+point-of-view of the exporter.
+
+#### Interaction with distrubuted correlation context
+
+The `LabelSet` type introduced above applies strictly to "local"
+labels, meaning provided in a call to `meter.Labels(...)`.  The
+application explicitly declares these labels, whereas distributed
+correlation context labels are implicitly associated with the event.
+
+There is a clear intention to pre-aggregate metrics within the SDK,
+using the contents of a `LabelSet` to derive grouping keys.  There are
+two available options for users to apply distributed correlation
+context to the local grouping function used for metrics
+pre-aggregation:
+
+1. The distributed context, whether implicit or explicit, is
+associated with every metric event.  The SDK could _automatically_
+project selected label keys from the distributed correlation into the
+metric event.  This would require some manner of dynamic mapping from
+`LabelSet` to grouping key during aggregation.
+1. The user can explicitly perform the same projection of distributed
+correlation into a `LabelSet` by extracting from the correlation
+context and including it in the call to `metric.Labels(...)`.
+
+An example of an explicit projection follows.
+
+```golang
+import "go.opentelemetry.io/api/distributedcontext"
+
+func (s *server) doThing(ctx context.Context) {
+    var doLabels []core.KeyValue{
+    	key1.String("..."),
+	key2.String("..."),
+    }
+
+    correlations := distributedcontext.FromContext()
+    if val, ok := correlations.Value(key3); ok {
+       	doLabels = append(doLabels, key3.Value(val))
+    }
+    labels := s.meter.Labels(doLabels)
+
+    // ...
+}
+```
 
 ## Detailed specification
 
