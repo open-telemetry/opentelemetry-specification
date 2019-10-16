@@ -415,11 +415,10 @@ that it used, and the metric name is the only required field.
 | Unit         | WithUnit(string) | Units specified according to the [UCUM](http://unitsofmeasure.org/ucum.html). |
 | Recommended label keys | WithRecommendedKeys(list) | Recommended grouping keys for this instrument. |
 | Monotonic   | WithMonotonic(boolean) | Configure a counter or gauge that accepts only monotonic/non-monotonic updates. |
-| Signed    | WithSigned(boolean) | Configure a measure that accepts positive and negative updates. |
+| Absolute    | WithAbsolute(boolean) | Configure a measure that does or does not accept negative updates. |
 
 See the Metric API [specification overview](api-metrics.md) for more
-information about the kind-specific monotonic, non-monotonic, and
-signed options.
+information about the kind-specific monotonic and absolute options.
 
 ### Instrument handle calling convention
 
