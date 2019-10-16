@@ -118,8 +118,9 @@ To understand the attributes defined in this section, it is helpful to read the 
 
 #### Definitions
 
-In web server configuration and web app deployment, multiple more or less common concepts have evolved that.
-A short summary of the concepts relevant to tracing is given here.
+This section gives a short summary of some concepts
+in web server configuration and web app deployment
+that are relevant to tracing.
 
 Usually, on a physical host, reachable by one or multiple IP addresses, a single HTTP listener process runs.
 If multiple processes are running, they must listen on distinct TCP/UDP ports so that the OS can route incoming TCP/UDP packets to the right one.
