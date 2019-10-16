@@ -45,7 +45,7 @@ Don't set a status message if the reason can be inferred from `http.status_code`
 | 401 Unauthorized ⚠      | `Unauthenticated` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
 | 403 Forbidden           | `PermissionDenied`    |
 | 404 Not Found           | `NotFound`            |
-| 429 Too Many Requests   | `ResourceExhausted    |
+| 429 Too Many Requests   | `ResourceExhausted`   |
 | Other 4xx code          | `InvalidArgument` [1] |
 | 501 Not Implemented     | `Unimplemented`       |
 | 503 Service Unavailable | `Unavailable`         |
