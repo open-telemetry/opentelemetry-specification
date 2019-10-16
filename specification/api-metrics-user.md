@@ -89,7 +89,7 @@ named `Meter`, to construct metric instruments.
 
 Applications are expected to construct long-lived instruments.
 Instruments are considered permanent for the lifetime of a SDK, there
-is no method to delete them.  SDKs should 
+is no method to delete them.
 
 ####  Metric instrument constructor example code
 
@@ -232,7 +232,7 @@ becomes a problem, one option is to use handles as described above.
 Another performance option, in some cases, is to just re-use the
 labels.  In the example here, `meter.Labels(...)` constructs a
 re-usable label set which may be an important performance
-optimization, as discussed next.
+optimization.
 
 #### Label set calling convention
 
@@ -286,6 +286,27 @@ When the SDK interprets a `LabelSet` in the context of aggregating
 values for an exporter, and where there are grouping keys that are
 missing, the SDK is required to consider these values _explicitly
 unspecified_, a distinct value type of the exported data model.
+
+##### Option: Convenience method to bypass `meter.Labels(...)`
+
+As a language-optional feature, the direct and handle calling
+convention APIs may support alternate convenience methods to pass raw
+labels at the call site.  These may be offered as overloaded methods
+for `Add()`, `Set()`, and `Record()` (direct calling convention) or
+`GetHandle()` (handle calling convention), in both cases bypassing a
+call to `meter.Labels(...)`.  For example:
+
+```java
+  public void method() {
+    // pass raw labels, no explicit `LabelSet` 
+    s.instruments.counter1.add(1, labelA.value(...), labelB.value(...))
+
+    // ... or
+
+    // pass raw labels, no explicit `LabelSet` 
+    handle := s.instruments.gauge1.getHandle(labelA.value(...), labelB.value(...))
+  }
+```
 
 ##### Option: Ordered LabelSet construction
 
@@ -417,7 +438,7 @@ Counter, gauge, and measure instruments support the appropriate
 `Add()`, `Set()`, and `Record()` method for submitting individual
 metric events.
 
-### Interaction with distrubuted correlation context
+### Interaction with distributed correlation context
 
 The `LabelSet` type introduced above applies strictly to "local"
 labels, meaning provided in a call to `meter.Labels(...)`.  The
