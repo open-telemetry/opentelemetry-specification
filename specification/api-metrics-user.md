@@ -1,6 +1,11 @@
 # Metric User-facing API
 
-TODO Table of contents.
+Note: This specification for the v0.2 OpenTelemetry milestone does not
+cover the Observer gauge instrument discussed in the
+[overview](api-metrics.md).  Observer instruments will be added in the
+v0.3 milestone.
+
+TODO: Add a table of contents.
 
 ## Overview
 
@@ -156,20 +161,27 @@ metric events, but offer varying degrees of performance and
 convenience.
 
 This section applies to calling conventions for counter, gauge, and
-measure instruments.  Observer instruments, a special class of gauge
-defined by callbacks, are discussed in a dedicated section below.
-
-#### Metric handle calling convention
+measure instruments.
 
 As described above, metric events consist of an instrument, a set of
 labels, and a numerical value, plus associated context.  The
 performance of a metric API depends on the work done to enter a new
-measurement.  One approach to reduce cost is to pre-aggregate results,
-so that subsequent events happening in the same collection period, for
-the same label set, combine into the same working memory.
+measurement.  One approach to reduce cost is to aggregate intermediate
+results in the SDK, so that subsequent events happening in the same
+collection period, for the same label set, combine into the same
+working memory.
+
+In this document, the term "aggregation" is used to describe the
+process of coalescing metric events for a complete set of labels,
+whereas "grouping" is used to describe further coalescing aggregate
+metric data into a reduced number of key dimensions.  SDKs may be
+designed to perform aggregation and/or grouping in the process, with
+various trade-offs in terms of complexity and performance.
+
+#### Metric handle calling convention
 
 This approach requires locating an entry for the instrument and label
-set in a table of some kind, finding the place where a group of metric
+set in a table of some kind, finding the location where a metric
 events are being aggregated.  This lookup can be successfully
 precomputed, giving rise to the Handle calling convention.
 
@@ -282,8 +294,8 @@ func (s *server) method(ctx context.Context) {
 
 ##### Missing label keys
 
-When the SDK interprets a `LabelSet` in the context of aggregating
-values for an exporter, and where there are grouping keys that are
+When the SDK interprets a `LabelSet` in the context of grouping
+aggregated values for an exporter, and where there are keys that are
 missing, the SDK is required to consider these values _explicitly
 unspecified_, a distinct value type of the exported data model.
 
@@ -349,11 +361,11 @@ func (s *server) method(ctx context.Context) {
 
     // ... more work
 
-    s.meter.RecordBatch(ctx, labelSet, []metric.Measurement{
-    	{ s.instruments.counter1, 1 },
-	{ s.instruments.gauge1, 10 },
-	{ s.instruments.measure1, 100 },
-    })
+    s.meter.RecordBatch(ctx, labelSet,
+    	s.instruments.counter1.Measurement(1),
+	s.instruments.gauge1.Measurement(10),
+	s.instruments.measure2.Measurement(123.45),
+    )
 }
 ```
 
@@ -361,7 +373,9 @@ Using the RecordBatch calling convention is semantically identical to
 the sequence of direct calls in the preceding example, with the
 addition of atomicity.  Because values are entered in a single call,
 the SDK is potentially able to implement an atomic update, from the
-point-of-view of the exporter.
+exporter's point of view.  Calls to `RecordBatch` may potentially
+reduce costs because the SDK can enqueue a single bulk update, or take
+a lock only once, for example.
 
 ## Detailed specification
 
@@ -382,8 +396,6 @@ kind of instrument (Counter, Gauge, Measure) and for the type of input
 | `NewFloatGauge(name, options...)`   | A floating point gauge |
 | `NewIntMeasure(name, options...)`   | An integer measure |
 | `NewFloatMeasure(name, options...)` | A floating point measure |
-| `NewIntObserver(name, callback, options...)`     | An integer observer |
-| `NewFloatObserver(name, callback, options...)`   | A floating point observer |
 
 As in all OpenTelemetry specifications, these names are examples.
 Each language committee will decide on the appropriate names based on
@@ -479,15 +491,3 @@ func (s *server) doThing(ctx context.Context) {
     // ...
 }
 ```
-
-### Observer metric
-
-Observer metrics do not support handles or direct calls.  The
-`Meter.NewFloatObseerver` and `Meter.NewIntObserver` methods take
-callbacks that generate measurements on demand, allowing the SDK to
-arrange to call them only as needed, periodically, for an exporter.
-
-Observer instruments are automatically registered on creation, since
-the corresponding `Meter` handles construction.
-
-TODO

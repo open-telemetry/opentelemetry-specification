@@ -1,6 +1,5 @@
 # Metric SDK-facing API
 
-This document is a placeholder pending active discussion.  It will
-eventually contain portions that were removed from
-https://github.com/open-telemetry/opentelemetry-specification/blob/3d2b8ecf410f62172a22a9fbff88304724d4cc78/specification/api-metrics.md
-after further discussion.
+This document will be updated as part of the v0.2 milestone with a
+detailed list of `Meter` API methods.  These methods will match the
+user-facing API specified [here](api-metrics-user.md).
