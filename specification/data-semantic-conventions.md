@@ -154,22 +154,23 @@ client and server spans.
 
 # Resource Conventions
 
-This section defines standard labels for [Resources](sdk-resource.md). The 
-majority of these labels are inherited from 
+This section defines standard labels for [Resources](sdk-resource.md). The
+majority of these labels are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
- * [Service](#service)
- * [Compute Unit](#compute-unit)
-   * [Container](#container)
- * [Deployment Service](#deployment-service)
-   * [Kubernetes](#kubernetes)
- * [Compute Instance](#compute-instance)
-   * [Host](#host)
- * [Environment](#environment)
-   * [Cloud](#cloud)
-   * [Cluster](#cluster)
+* [Service](#service)
+* [Compute Unit](#compute-unit)
+  * [Container](#container)
+* [Deployment Service](#deployment-service)
+  * [Kubernetes](#kubernetes)
+* [Compute Instance](#compute-instance)
+  * [Host](#host)
+* [Environment](#environment)
+  * [Cloud](#cloud)
+  * [Cluster](#cluster)
 
 ## TODOs
+
 * Add more compute units: Process, Lambda Function, AppEngine unit, etc.
 * Add Device (mobile) and Web Browser.
 * Decide if lower case strings only.
@@ -185,13 +186,15 @@ majority of these labels are inherited from
 | Label  | Description  | Example  | Required? |
 |---|---|---|---|
 | service.name | Logical name of the service. <br/> MUST be the same for all instances of horizontally scaled services. | `shoppingcart` | Yes |
-| service.instance.uuid | UUID of the service instance (RFC 4122, string representation). <br/>MUST be unique for each instance of the same service and SHOULD be globally unique. | `627cc493-f310-47de-96bd-71410b7dec09` | Yes |
-
+| service.namespace | A namespace for `service.name`.<br/>A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. The field is optional. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace. | `Shop` | No |
+| service.instance.uuid | UUID of the service instance (RFC 4122, string representation). <br/>MUST be unique for each instance of the same `service.name/service.namespace` pair and SHOULD be globally unique. Helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). | `627cc493-f310-47de-96bd-71410b7dec09` | Yes |
 
 ## Compute Unit
+
 Labels defining a compute unit (e.g. Container, Process, Lambda Function).
 
 ### Container
+
 **type:** `container`
 
 **Description:** A container instance.
@@ -203,9 +206,11 @@ Labels defining a compute unit (e.g. Container, Process, Lambda Function).
 | container.image.tag | Container image tag. | `0.1` |
 
 ## Deployment Service
+
 Labels defining a deployment service (e.g. Kubernetes).
 
 ### Kubernetes
+
 **type:** `k8s`
 
 **Description:** A Kubernetes resource.
@@ -218,9 +223,11 @@ Labels defining a deployment service (e.g. Kubernetes).
 | k8s.deployment.name | The name of the deployment. | `opentelemetry` |
 
 ## Compute Instance
+
 Labels defining a computing instance (e.g. host).
 
 ### Host
+
 **type:** `host`
 
 **Description:** A host is defined as a general computing instance.
@@ -233,9 +240,11 @@ Labels defining a computing instance (e.g. host).
 | host.type | Type of host.<br/> For Cloud this must be the machine type.| `n1-standard-1` |
 
 ## Environment
+
 Labels defining a running environment (e.g. Cloud, Data Center).
 
 ### Cloud
+
 **type:** `cloud`
 
 **Description:** A cloud infrastructure (e.g. GCP, Azure, AWS).
