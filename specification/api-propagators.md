@@ -11,11 +11,11 @@ Table of Contents
 - [HTTP Text Format](#http-text-format)
   - [Fields](#fields)
   - [Inject](#inject)
-  - [Setter](#setter)
-    - [Put](#put)
+    - [Setter](#setter)
+      - [Put](#put)
   - [Extract](#extract)
-  - [Getter](#getter)
-    - [Get](#get)
+    - [Getter](#getter)
+      - [Get](#get)
 
 </details>
 
@@ -91,15 +91,17 @@ Injects the value downstream. For example, as http headers.
 Required arguments:
 - the value to be injected, can be `SpanContext` or `DistributedContext`.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
-- the setter invoked for each propagation key to add or remove.
+- the instance of `Setter` invoked for each propagation key to add or remove.
 
-### Setter
+#### Setter
+
+Setter is an argument in `Inject` that puts value into given field
 
 `Setter` allows a `HTTPTextFormat` to set propagated fields into a carrier.
 
 `Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
 
-#### Put
+##### Put
 
 Replaces a propagated field with the given value.
 
@@ -118,17 +120,19 @@ MUST not return null.
 
 Required arguments:
 - the carrier holds propagation fields. For example, an outgoing message or http request.
-- the getter invoked for each propagation key to get.
+- the instance of `Getter` invoked for each propagation key to get.
 
 Returns the non-null extracted value.
 
-### Getter
+#### Getter
+
+Getter is an argument in `Extract` that get value from given field
 
 `Getter` allows a `HttpTextFormat` to read propagated fields from a carrier.
 
 `Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
 
-#### Get
+##### Get
 
 Returns the first value of the given propagation key or returns null if the key doesn't exist.
 
