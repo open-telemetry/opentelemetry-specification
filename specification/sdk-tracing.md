@@ -1,6 +1,8 @@
 # Tracing SDK
 
-<details><summary>Table of Contents</summary>
+<details>
+
+<summary>Table of Contents</summary>
 
 * [Sampling](#sampling)
 * [Tracer Creation](#tracer-creation)
@@ -72,8 +74,8 @@ Returns the sampling Decision for a `Span` to be created.
 * `SpanKind`
 * Initial set of `Attributes` for the `Span` being constructed
 * Collection of links that will be associated with the `Span` to be created.
-Typically useful for batch operations, see
-[Links Between Spans](overview.md#links-between-spans).
+  Typically useful for batch operations, see
+  [Links Between Spans](overview.md#links-between-spans).
 
 **Return value:**
 
@@ -149,10 +151,10 @@ in the SDK:
 ```
   +-----+---------------+   +---------------------+   +-------------------+
   |     |               |   |                     |   |                   |
-  |     |               |   | BatchProcessor      |   |    SpanExporter   | 
+  |     |               |   | BatchProcessor      |   |    SpanExporter   |
   |     |               +---> SimpleProcessor     +--->  (JaegerExporter) |
   | SDK | SpanProcessor |   |                     |   |                   |
-  |     |               |   +---------------------+   +-------------------+ 
+  |     |               |   +---------------------+   +-------------------+
   |     |               |
   |     |               |   +---------------------+
   |     |               |   |                     |
