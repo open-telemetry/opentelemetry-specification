@@ -197,10 +197,7 @@ To obtain a handle given an instrument and label set, use the
 `GetHandle()` method to return an interface that supports the `Add()`,
 `Set()`, or `Record()` method of the instrument in question.
 
-Instrument handles may consume SDK resources indefinitely.  Handles
-support a `Delete` method that will allow these resources to be
-reclaimed after all the corresponding metric events have been
-collected.
+Instrument handles may consume SDK resources indefinitely.
 
 ```golang
 func (s *server) processStream(ctx context.Context) {
@@ -217,8 +214,6 @@ func (s *server) processStream(ctx context.Context) {
      // High-performance metric calling convention: use of handles.
      counter2Handle.Add(ctx, item.size())
   }
-
-  counter2Handle.Delete()
 }
 ```
 
@@ -439,9 +434,6 @@ handles for the high-performance calling convention.  The
 `Instrument.GetHandle(LabelSet)` method returns an interface which
 implements the `Add()`, `Set()` or `Record()` method, respectively,
 for counter, gauge, and measure instruments.
-
-Instrument handles support a `Delete` method, allowing users to
-discard handles that are no longer used.
 
 ### Instrument direct calling convention
 
