@@ -1,6 +1,6 @@
 # Performance and Blocking of OpenTelemetry API
 
-This document defines common principles that will help designers create language libraries that are safe to use. 
+This document defines common principles that will help designers create language libraries that are safe to use.
 
 ## Key principles
 

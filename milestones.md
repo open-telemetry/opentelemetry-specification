@@ -84,14 +84,14 @@ In scope of SDK Alpha release are:
   - Jaeger and/or Zipkin exporter
 - Context Propagation
   - In-process propagation
-  - Inject and Extract 
+  - Inject and Extract
   - DistributedContext
 - Metrics
   - MetricsProcessor interface
   - Aggregation MetricsProcessor
   - Exporter interface
   - Prometheus Exporter
-  
+
 Also in scope:
 
 - Jaeger and/or Zipkin exporter

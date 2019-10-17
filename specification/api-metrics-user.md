@@ -19,9 +19,9 @@ Metric instruments have names, which are how we refer to them in
 external systems.  Metric names conform to the following syntax:
 
 1. They are non-empty strings
-1. They are case-insensitive
-1. The first character must be non-numeric, non-space, non-punctuation
-1. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
+2. They are case-insensitive
+3. The first character must be non-numeric, non-space, non-punctuation
+4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
 Metrics names belong to a namespace by virtue of a "Named" `Meter`
 instance.  A "Named" `Meter` refers to the requirement that every
@@ -71,7 +71,7 @@ either floating point or integer inputs, see the detailed design below.
 Binding instruments to a single `Meter` instance has two benefits:
 
 1. Instruments can be exported from the zero state, prior to first use, with no explicit `Register` call
-1. The component name provided by the named `Meter` satisfies a namespace requirement
+2. The component name provided by the named `Meter` satisfies a namespace requirement
 
 The recommended practice is to define structures to contain the
 instruments in use and keep references only to the instruments that
@@ -96,7 +96,7 @@ Applications are expected to construct long-lived instruments.
 Instruments are considered permanent for the lifetime of a SDK, there
 is no method to delete them.
 
-####  Metric instrument constructor example code
+#### Metric instrument constructor example code
 
 In this Golang example, a struct holding four instruments is built
 using the provided, non-global `Meter` instance.
@@ -135,9 +135,9 @@ type server struct {
 func newServer(meter metric.Meter) *server {
      return &server{
          meter:       meter,
-	 instruments: newInstruments(meter),
+  instruments: newInstruments(meter),
 
-	 // ... other fields
+  // ... other fields
      }
 }
 
@@ -147,8 +147,8 @@ func (s *server) operate(ctx context.Context) {
      // ... other work
 
      s.instruments.counter1.Add(ctx, 1, s.meter.Labels(
-     		label1.String("..."),
-		label2.String("...")))
+       label1.String("..."),
+  label2.String("...")))
 }
 ```
 
@@ -305,12 +305,12 @@ call to `meter.Labels(...)`.  For example:
 
 ```java
   public void method() {
-    // pass raw labels, no explicit `LabelSet` 
+    // pass raw labels, no explicit `LabelSet`
     s.instruments.counter1.add(1, labelA.value(...), labelB.value(...))
 
     // ... or
 
-    // pass raw labels, no explicit `LabelSet` 
+    // pass raw labels, no explicit `LabelSet`
     handle := s.instruments.gauge1.getHandle(labelA.value(...), labelB.value(...))
   }
 ```
@@ -357,9 +357,9 @@ func (s *server) method(ctx context.Context) {
     // ... more work
 
     s.meter.RecordBatch(ctx, labelSet,
-    	s.instruments.counter1.Measurement(1),
-	s.instruments.gauge1.Measurement(10),
-	s.instruments.measure2.Measurement(123.45),
+     s.instruments.counter1.Measurement(1),
+ s.instruments.gauge1.Measurement(10),
+ s.instruments.measure2.Measurement(123.45),
     )
 }
 ```
@@ -455,13 +455,13 @@ context to the local grouping function used for metrics
 pre-aggregation:
 
 1. The distributed context, whether implicit or explicit, is
-associated with every metric event.  The SDK could _automatically_
-project selected label keys from the distributed correlation into the
-metric event.  This would require some manner of dynamic mapping from
-`LabelSet` to grouping key during aggregation.
-1. The user can explicitly perform the same projection of distributed
-correlation into a `LabelSet` by extracting from the correlation
-context and including it in the call to `metric.Labels(...)`.
+  associated with every metric event.  The SDK could _automatically_
+  project selected label keys from the distributed correlation into the
+  metric event.  This would require some manner of dynamic mapping from
+  `LabelSet` to grouping key during aggregation.
+2. The user can explicitly perform the same projection of distributed
+  correlation into a `LabelSet` by extracting from the correlation
+  context and including it in the call to `metric.Labels(...)`.
 
 An example of an explicit projection follows.
 
@@ -470,13 +470,13 @@ import "go.opentelemetry.io/api/distributedcontext"
 
 func (s *server) doThing(ctx context.Context) {
     var doLabels []core.KeyValue{
-    	key1.String("..."),
-	key2.String("..."),
+     key1.String("..."),
+ key2.String("..."),
     }
 
     correlations := distributedcontext.FromContext()
     if val, ok := correlations.Value(key3); ok {
-       	doLabels = append(doLabels, key3.Value(val))
+        doLabels = append(doLabels, key3.Value(val))
     }
     labels := s.meter.Labels(doLabels)
 
