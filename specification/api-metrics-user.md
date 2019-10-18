@@ -416,13 +416,13 @@ Instruments provide several optional settings, summarized here.  The
 kind of instrument and input value type are implied by the constructor
 that it used, and the metric name is the only required field.
 
-| Option                | Option name | Explanation |
-|-----------------------|--------------------|
-| Description  | WithDescription(string) | Descriptive text documenting the instrument. |
-| Unit         | WithUnit(string) | Units specified according to the [UCUM](http://unitsofmeasure.org/ucum.html). |
+| Option                 | Option name               | Explanation |
+|------------------------|---------------------------|-------------|
+| Description            | WithDescription(string)   | Descriptive text documenting the instrument. |
+| Unit                   | WithUnit(string)          | Units specified according to the [UCUM](http://unitsofmeasure.org/ucum.html). |
 | Recommended label keys | WithRecommendedKeys(list) | Recommended grouping keys for this instrument. |
-| Monotonic   | WithMonotonic(boolean) | Configure a counter or gauge that accepts only monotonic/non-monotonic updates. |
-| Absolute    | WithAbsolute(boolean) | Configure a measure that does or does not accept negative updates. |
+| Monotonic              | WithMonotonic(boolean)    | Configure a counter or gauge that accepts only monotonic/non-monotonic updates. |
+| Absolute               | WithAbsolute(boolean)     | Configure a measure that does or does not accept negative updates. |
 
 See the Metric API [specification overview](api-metrics.md) for more
 information about the kind-specific monotonic and absolute options.
