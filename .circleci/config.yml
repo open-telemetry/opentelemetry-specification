@@ -2,11 +2,29 @@
 version: 2
 
 jobs:
-  build:
+  misspell:
     docker:
       - image: circleci/golang:1.12
     steps:
       - checkout
       - run:
-          name: Verify
+          name: Misspell check
           command: make precommit
+  markdownlint:
+    docker:
+      - image: circleci/ruby:latest
+    steps:
+      - checkout
+      - run:
+          name: Install markdownlint
+          command: gem install mdl
+      - run:
+          name: Check markdownlint
+          command: mdl -c .mdlrc .
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - misspell
+      - markdownlint

@@ -47,20 +47,26 @@ Tracing API consist of a few main classes:
    execution. See [Span](#span) section.
 
 ## Data types
+
 While languages and platforms have different ways of representing data,
 this section defines some generic requirements for this API.
 
 ### Time
+
 OpenTelemetry can operate on time values up to nanosecond (ns) precision.
 The representation of those values is language specific.
 
 #### Timestamp
+
 A timestamp is the time elapsed since the Unix epoch.
+
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
 #### Duration
+
 A duration is the elapsed time between two events.
+
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
@@ -87,24 +93,24 @@ New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
 method. This method expects two string arguments:
 
 - `name` (required): This name must identify the instrumentation library (also
-referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
-the instrumented library.  
-In case an invalid name (null or empty string) is specified, a working
-default Tracer implementation as a fallback is returned rather than returning
-null or throwing an exception.  
-A library, implementing the OpenTelemetry API *may* also ignore this name and
-return a default instance for all calls, if it does not support "named"
-functionality (e.g. an implementation which is not even observability-related).
-A TracerFactory could also return a no-op Tracer here if application owners configure
-the SDK to suppress telemetry produced by this library.
+  referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
+  the instrumented library.
+  In case an invalid name (null or empty string) is specified, a working
+  default Tracer implementation as a fallback is returned rather than returning
+  null or throwing an exception.
+  A library, implementing the OpenTelemetry API *may* also ignore this name and
+  return a default instance for all calls, if it does not support "named"
+  functionality (e.g. an implementation which is not even observability-related).
+  A TracerFactory could also return a no-op Tracer here if application owners configure
+  the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library
-(e.g. `semver:1.0.0`).
+  (e.g. `semver:1.0.0`).
 
 Implementations might require the user to specify configuration properties at
 `TracerFactory` creation time, or rely on external configuration, e.g. when using the
 provider pattern.
 
-##### Runtimes with multiple deployments/applications
+#### Runtimes with multiple deployments/applications
 
 Runtimes that support multiple deployments or applications might need to
 provide a different `TracerFactory` instance to each deployment. To support this,
@@ -174,12 +180,12 @@ boolean `sampled`
 
 `Tracestate` carries system-specific configuration data, represented as a list
 of key-value pairs. TraceState allows multiple tracing systems to participate in
-the same trace. 
+the same trace.
 
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
-`IsRemote` is a boolean flag which returns true if the SpanContext was propagated 
+`IsRemote` is a boolean flag which returns true if the SpanContext was propagated
 from a remote parent.
 
 Please review the W3C specification for details on the [Tracestate
@@ -231,11 +237,13 @@ active `Span` by default, but this functionality MAY be offered additionally
 as a separate operation.
 
 The API SHOULD require the caller to provide:
+
 - The operation name
 - The parent span, and whether the new `Span` should be a root `Span`
 
 The API MUST allow users to provide the following properties, which SHOULD be
 empty by default:
+
 - [`SpanKind`](#spankind)
 - `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
 - `Link`s - see API definition [here](#add-links)
@@ -249,7 +257,7 @@ spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
-created in another process. Each propagators' deserialization must set 
+created in another process. Each propagators' deserialization must set
 `IsRemote` to true so `Span` creation knows if the parent is remote.
 
 #### Add Links
@@ -259,21 +267,23 @@ During the `Span` creation user MUST have the ability to record links to other `
 description](overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
+
 - (Required) `SpanContext` of the `Span` to link to.
 - (Optional) One or more `Attribute`.
 
 The `Link` SHOULD be an immutable type.
 
 The Span creation API should provide:
+
 - An API to record a single `Link` where the `Link` properties are passed as
-arguments. This MAY be called `AddLink`.
+  arguments. This MAY be called `AddLink`.
 - An API to record a single `Link` whose attributes or attribute values are
-lazily constructed, with the intention of avoiding unnecessary work if a link
-is unused. If the language supports overloads then this SHOULD be called
-`AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
-be easier to defer `Link` or attribute creation entirely by providing a wrapping
-class or function that returns a `Link` or formatted attributes. When providing
-a wrapping class or function it SHOULD be named `LinkFormatter`.
+  lazily constructed, with the intention of avoiding unnecessary work if a link
+  is unused. If the language supports overloads then this SHOULD be called
+  `AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
+  be easier to defer `Link` or attribute creation entirely by providing a wrapping
+  class or function that returns a `Link` or formatted attributes. When providing
+  a wrapping class or function it SHOULD be named `LinkFormatter`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -285,6 +295,7 @@ recording status, none of the below may be called after the `Span` is finished.
 #### Get Context
 
 The Span interface MUST provide:
+
 - An API that returns the `SpanContext` for the given `Span`. The returned value
   may be used even after the `Span` is finished. The returned value MUST be the
   same for the entire Span lifetime. This MAY be called `GetContext`.
@@ -319,14 +330,16 @@ propagators.
 A `Span` MUST have the ability to set attributes associated with it.
 
 An `Attribute` is defined by the following properties:
+
 - (Required) The attribute key, which must be a string.
 - (Required) The attribute value, which must be either a string, a boolean
-value, or a numeric type.
+  value, or a numeric type.
 
 The Span interface MUST provide:
+
 - An API to set a single `Attribute` where the attribute properties are passed
-as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
-implementations may offer a separate API for each of the possible value types.
+  as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
+  implementations may offer a separate API for each of the possible value types.
 
 Attributes SHOULD preserve the order in which they're set. Setting an attribute
 with the same key as an existing attribute SHOULD overwrite the existing
@@ -341,6 +354,7 @@ A `Span` MUST have the ability to add events. Events have a time associated
 with the moment when they are added to the `Span`.
 
 An `Event` is defined by the following properties:
+
 - (Required) Name of the event.
 - (Optional) One or more `Attribute`.
 - (Optional) Timestamp for the event.
@@ -348,15 +362,16 @@ An `Event` is defined by the following properties:
 The `Event` SHOULD be an immutable type.
 
 The Span interface MUST provide:
+
 - An API to record a single `Event` where the `Event` properties are passed as
-arguments. This MAY be called `AddEvent`.
+  arguments. This MAY be called `AddEvent`.
 - An API to record a single `Event` whose attributes or attribute values are
-lazily constructed, with the intention of avoiding unnecessary work if an event
-is unused. If the language supports overloads then this SHOULD be called
-`AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
-might be easier to defer `Event` or attribute creation entirely by providing a
-wrapping class or function that returns an `Event` or formatted attributes. When
-providing a wrapping class or function it SHOULD be named `EventFormatter`.
+  lazily constructed, with the intention of avoiding unnecessary work if an event
+  is unused. If the language supports overloads then this SHOULD be called
+  `AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
+  might be easier to defer `Event` or attribute creation entirely by providing a
+  wrapping class or function that returns an `Event` or formatted attributes. When
+  providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
@@ -373,8 +388,9 @@ Only the value of the last call will be recorded, and implementations are free
 to ignore previous calls.
 
 The Span interface MUST provide:
+
 - An API to set the `Status` where the new status is the only argument. This
-SHOULD be called `SetStatus`.
+  SHOULD be called `SetStatus`.
 
 #### UpdateName
 
@@ -412,6 +428,7 @@ Call to `End` of a `Span` MUST not have any effects on child spans. Those may
 still be running and can be ended later.
 
 Parameters:
+
 - (Optional) Timestamp to explicitly set the end timestamp
 
 This API MUST be non-blocking.
@@ -446,41 +463,41 @@ codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
   - An unknown error.
 - `InvalidArgument`
   - Client specified an invalid argument. Note that this differs from
-  `FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
-  regardless of the state of the system.
+    `FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
+    regardless of the state of the system.
 - `DeadlineExceeded`
   - Deadline expired before operation could complete. For operations that change the
-  state of the system, this error may be returned even if the operation has
-  completed successfully.
+    state of the system, this error may be returned even if the operation has
+    completed successfully.
 - `NotFound`
   - Some requested entity (e.g., file or directory) was not found.
 - `AlreadyExists`
   - Some entity that we attempted to create (e.g., file or directory) already exists.
 - `PermissionDenied`
   - The caller does not have permission to execute the specified operation.
-  `PermissionDenied` must not be used if the caller cannot be identified (use
-  `Unauthenticated1` instead for those errors).
+    `PermissionDenied` must not be used if the caller cannot be identified (use
+    `Unauthenticated1` instead for those errors).
 - `ResourceExhausted`
   - Some resource has been exhausted, perhaps a per-user quota, or perhaps the
-  entire file system is out of space.
+    entire file system is out of space.
 - `FailedPrecondition`
   - Operation was rejected because the system is not in a state required for the
-  operation's execution.
+    operation's execution.
 - `Aborted`
   - The operation was aborted, typically due to a concurrency issue like sequencer
-  check failures, transaction aborts, etc.
+    check failures, transaction aborts, etc.
 - `OutOfRange`
   - Operation was attempted past the valid range. E.g., seeking or reading past end
-  of file. Unlike `InvalidArgument`, this error indicates a problem that may be
-  fixed if the system state changes.
+    of file. Unlike `InvalidArgument`, this error indicates a problem that may be
+    fixed if the system state changes.
 - `Unimplemented`
   - Operation is not implemented or not supported/enabled in this service.
 - `InternalError`
   - Internal errors. Means some invariants expected by underlying system has been
-  broken.
+    broken.
 - `Unavailable`
   - The service is currently unavailable. This is a most likely a transient
-  condition and may be corrected by retrying with a backoff.
+    condition and may be corrected by retrying with a backoff.
 - `DataLoss`
   - Unrecoverable data loss or corruption.
 - `Unauthenticated`
