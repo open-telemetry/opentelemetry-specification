@@ -22,7 +22,6 @@ For example, the following is an example **Trace** made up of 6 **Spans**:
 ```
 Causal relationships between Spans in a single Trace
 
-
         [Span A]  ←←←(the root span)
             |
      +------+------+
@@ -31,7 +30,7 @@ Causal relationships between Spans in a single Trace
      |             |
  [Span D]      +---+-------+
                |           |
-           [Span E]    [Span F] 
+           [Span E]    [Span F]
 ```
 
 Sometimes it's easier to visualize **Traces** with a time axis as in the diagram
@@ -39,7 +38,6 @@ below:
 
 ```
 Temporal relationships between Spans in a single Trace
-
 
 ––|–––––––|–––––––|–––––––|–––––––|–––––––|–––––––|–––––––|–> time
 
@@ -211,15 +209,15 @@ to facilitate propagating it not only inside the process but also across process
 An **Entry** is used to represent the labels that are contained inside the `DistributedContext`, representing values such as the service that originated the request, or vendor-specific data. It consists of an **EntryKey**, an **EntryValue** and an **EntryMetadata**.
 
 - **EntryKey** is the name of the **Entry**. **EntryKey** along with **EntryValue**
-can be used to aggregate and group stats, annotate traces and logs, etc. **EntryKey** is
-a string that contains only printable ASCII (codes between 32 and 126 inclusive) and with
-a length greater than zero and less than 256.
+  can be used to aggregate and group stats, annotate traces and logs, etc. **EntryKey** is
+  a string that contains only printable ASCII (codes between 32 and 126 inclusive) and with
+  a length greater than zero and less than 256.
 - **EntryValue** is a string that contains only printable ASCII (codes between 32 and 126).
 - **EntryMetadata** contains properties associated with an **Entry**.
-For now only the property **EntryTTL** is defined.
+  For now only the property **EntryTTL** is defined.
 - **EntryTTL** is an integer that represents number of hops an entry can propagate.
-Anytime a sender serializes an entry, sends it over the wire and a receiver deserializes
-the entry then the entry is considered to have travelled one hop.
+  Anytime a sender serializes an entry, sends it over the wire and a receiver deserializes
+  the entry then the entry is considered to have travelled one hop.
 
 ## Resources
 
@@ -238,7 +236,7 @@ OpenTelemetry
 for an example.
 
 **TODO**: Better describe the difference between the resource and a Node
-https://github.com/open-telemetry/opentelemetry-proto/issues/17
+<https://github.com/open-telemetry/opentelemetry-proto/issues/17>
 
 ## Propagators
 
@@ -247,7 +245,7 @@ into a binary or text format. Currently there are two types of propagators:
 
 - `BinaryFormat` which is used to serialize and deserialize a value into a binary representation.
 - `HTTPTextFormat` which is used to inject and extract a value as text into carriers that travel
-in-band across process boundaries.
+  in-band across process boundaries.
 
 ## Agent/Collector
 

@@ -28,17 +28,17 @@ Our goal is to avoid or mitigate these known issues in the new protocol.
 
 The following are OpenTelemetry protocol requirements.
 
-#### Supported Node Types
+### Supported Node Types
 
 The protocol must be suitable for use between all of the following node types: instrumented applications, telemetry backends, telemetry agents running as local daemons, stand-alone collector/forwarder services.
 
-#### Supported Data Types
+### Supported Data Types
 
 The protocol must support traces and metrics as data types.
 
-#### Reliability of Delivery
+### Reliability of Delivery
 
-The protocol must ensure reliable data delivery and clear visibility when the data cannot be delivered. This should be achieved by sending data acknowledgements from the Server to the Client. 
+The protocol must ensure reliable data delivery and clear visibility when the data cannot be delivered. This should be achieved by sending data acknowledgements from the Server to the Client.
 
 Note that acknowledgements alone are not sufficient to guarantee that: a) no data will be lost and b) no data will be duplicated. Acknowledgements can help to guarantee a) but not b). Guaranteeing both at the same is difficult. Because it is usually preferable for telemetry data to be duplicated than to lose it, we choose to guarantee that there are no data losses while potentially allowing duplicate data.
 
@@ -50,21 +50,21 @@ For this reason we have slightly relaxed requirements and consider duplicate dat
 
 Note: this protocol is concerned with reliability of delivery between one pair of client/server nodes and aims to ensure that no data is lost in-transit between the client and the server. Many telemetry collection systems have multiple nodes that the data must travel across until reaching the final destination (e.g. application -> agent -> collector -> backend). End-to-end delivery guarantees in such systems is outside of the scope for this document. The acknowledgements described in this protocol happen between a single client/server pair and do not span multiple nodes in multi-hop delivery paths.
 
-#### Throughput
+### Throughput
 
 The protocol must ensure high throughput in high latency networks when the client and the server are not in the same data center.
 
 This requirement may rule out half-duplex protocols. The throughput of half-duplex protocols is highly dependent on network roundtrip time and request size. To achieve good throughput request sizes may be too large to be practical.
 
-#### Compression
+### Compression
 
 The protocol must achieve high compression ratios for telemetry data. The protocol design must consider batching of telemetry data and grouping of similar data (both can help to achieve better compression using common compression algorithms).
 
-#### Encryption
+### Encryption
 
 Industry standard encryption (e.g. TLS/HTTPS) must be supported.
 
-#### Backpressure Signalling and Throttling
+### Backpressure Signalling and Throttling
 
 The protocol must allow backpressure signalling.
 
@@ -74,26 +74,26 @@ If the underlying transport is a stream that has its own flow control mechanism 
 
 The backpressure signal should include a hint to the client about desirable reduced rate of data.
 
-#### Serialization Performance
+### Serialization Performance
 
 The protocol must have fast data serialization and deserialization characteristics.
 
 Ideally it must also support very fast pass-through mode (when no modifications to the data are needed), fast “augmenting” or “tagging” of data and partial inspection of data (e.g. check for presence of specific tag). These requirements help to create fast Agents and Collectors.
 
-#### Memory Usage Profile
+### Memory Usage Profile
 
 The protocol must impose minimal pressure on memory manager, including pass-through scenarios, when deserialized data is short-lived and must be serialized as-is shortly after and when such short-lived data is created and discarded at high frequency (think telemetry data forwarders).
 
 The implementation of telemetry protocol must aim to minimize the number of memory allocations and dealocations performed during serialization and deserialization and aim to minimize the pressure on Garbage Collection (for GC languages).
 
-#### Level 7 Load Balancer Friendly
+### Level 7 Load Balancer Friendly
 
 The protocol must allow Level 7 load balancers such as Envoy to re-balance the traffic for each batch of telemetry data. The traffic should not get pinned by a load balancer to one server for the entire duration of telemetry data sending, thus potentially leading to imbalanced load of servers located behind the load balancer.
 
-#### Backwards Compatibility
+### Backwards Compatibility
 
 The protocol should be possible to evolve over time. It should be possible for nodes that implement different versions of OpenTelemetry protocol to interoperate (while possibly regressing to the lowest common denominator from functional perspective).
 
-#### General Requirements
+### General Requirements
 
 The protocol must use well-known, mature encoding and transport mechanisms with ubiquitous availability of implementations in wide selection of languages that are supported by OpenTelemetry.
