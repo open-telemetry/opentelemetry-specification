@@ -1,12 +1,15 @@
 # OpenTelemetry Project Package Layout
+
 This documentation serves to document the "look and feel" of a basic layout for OpenTelemetry
 projects. This package layout is intentionally generic and it doesn't try to impose a language
 specific package structure.
 
 ## API Package
+
 Here is a proposed generic package structure for OpenTelemetry API package.
 
 A typical top-level directory layout:
+
 ```
 api
    ├── context
@@ -19,6 +22,7 @@ api
    ├── internal
    └── logs
 ```
+
 > Use of lowercase, CamelCase or Snake Case (stylized as snake_case) names depends on the language.
 
 ### `/context`
@@ -48,15 +52,19 @@ This API consist of a few main classes:
    execution. See [Span](api-tracing.md#span) section.
 
 ### `/internal` (_Optional_)
+
 Private application and library code.
 
 ### `/logs` (_In the future_)
+
 > TODO: logs operations
 
 ## SDK Package
+
 Here is a proposed generic package structure for OpenTelemetry SDK package.
 
 A typical top-level directory layout:
+
 ```
 sdk
    ├── context
@@ -67,6 +75,7 @@ sdk
    ├── internal
    └── logs
 ```
+
 > Use of lowercase, CamelCase or Snake Case (stylized as snake_case) names depends on the language.
 
 ### `/sdk/context`
@@ -86,13 +95,14 @@ and container name.
 
 ### `/sdk/distributedcontext`
 
-
 ### [/sdk/trace](sdk-tracing.md)
 
 This directory describes the SDK implementation for api/metrics.
 
 ### `/sdk/internal` (_Optional_)
+
 Private application and library code.
 
 ### `/sdk/logs` (_In the future_)
+
 > TODO: logs operations

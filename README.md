@@ -7,6 +7,7 @@
 The OpenTelemetry specification describes the cross-language requirements and expectations for all OpenTelemetry implementations.
 
 ## Table of Contents
+
 - [Overview](specification/overview.md)
 - [Library Guidelines](specification/library-guidelines.md)
   - [Package/Library Layout](specification/library-layout.md)
