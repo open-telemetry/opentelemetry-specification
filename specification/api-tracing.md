@@ -236,18 +236,11 @@ MAY provide other default options for newly created `Span`s.
 active `Span` by default, but this functionality MAY be offered additionally
 as a separate operation.
 
-The API SHOULD require the caller to provide:
+The API MUST require the caller to provide:
 
-- The operation name
-- The parent span, and whether the new `Span` should be a root `Span`
-
-The API MUST allow users to provide the following properties, which SHOULD be
-empty by default:
-
-- [`SpanKind`](#spankind)
-- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
-- `Link`s - see API definition [here](#add-links)
-- `Start timestamp`
+- The operation name.
+- The parent Span or parent Span context, and whether the new `Span` should be a
+  root `Span`.
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -258,7 +251,19 @@ a root span, and MUST generate a new `TraceId` for each root span created.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
-`IsRemote` to true so `Span` creation knows if the parent is remote.
+`IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
+parent is remote.
+
+The API MUST allow users to provide the following properties:
+
+- [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
+- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes). These
+  attributes will be used to make a sampling decision as noted in [sampling
+  description](sdk-tracing.md#sampling).
+- `Link`s - see API definition [here](#add-links).
+- `Start timestamp`, default to current time. This argument SHOULD only be set
+  when span creation time has already passed. If API is called at a moment of
+  a Span logical start, API user must rely on SDK to take take the current time.
 
 #### Add Links
 
