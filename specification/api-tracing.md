@@ -242,12 +242,13 @@ The API SHOULD require the caller to provide:
 - The parent span, and whether the new `Span` should be a root `Span`
 
 The API MUST allow users to provide the following properties, which SHOULD be
-empty by default:
+empty by default, except for `Start timestamp` which defaults to the current time:
 
 - [`SpanKind`](#spankind)
 - `Attribute`s - similar API with [Span::SetAttributes](#set-attributes)
 - `Link`s - see API definition [here](#add-links)
 - `Start timestamp`
+- `End timestamp`
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
