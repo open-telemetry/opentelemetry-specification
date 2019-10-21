@@ -23,6 +23,8 @@ majority of these labels are inherited from
 * Consider to add optional/required for each label and combination of labels
   (e.g when supplying a k8s resource all k8s may be required).
 
+_Note: certain label groups in this document have a **Required** column. For these groups if any label from the particular group is present in the Resource then all labels that are marked as Required MUST be also present in the Resource. However it is valid that the entire label group is omitted (i.e. none of the labels from the particular group are present even though some of them are marked as Required in this document)._
+
 ## Service
 
 **type:** `service`
@@ -33,7 +35,7 @@ majority of these labels are inherited from
 |---|---|---|---|
 | service.name | Logical name of the service. <br/> MUST be the same for all instances of horizontally scaled services. | `shoppingcart` | Yes |
 | service.namespace | A namespace for `service.name`.<br/>A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. The field is optional. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace. | `Shop` | No |
-| service.instance.uuid | UUID of the service instance (RFC 4122, string representation). <br/>MUST be unique for each instance of the same `service.name/service.namespace` pair and SHOULD be globally unique. Helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). | `627cc493-f310-47de-96bd-71410b7dec09` | Yes |
+| service.instance.uuid | UUID of the service instance (RFC 4122, string representation). <br/>MUST be unique for each instance of the same `service.name/service.namespace` pair and SHOULD be globally unique. Helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). It is preferable for the UUID to be persistent and stay the same for the lifetime of the service instance, however it is acceptable that the UUID is ephemeral and changes during important lifetime events for the service (e.g. service restarts). If the service has no inherent unique UUID that can be used as the value of this label it is recommended to generate a random Version 1 or Version 4 UUID (service aiming for reproducible UUIDs may also use Version 5, see RFC 4122 for more recommendations). | `627cc493-f310-47de-96bd-71410b7dec09` | Yes |
 
 ## Compute Unit
 
