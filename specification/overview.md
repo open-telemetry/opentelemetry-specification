@@ -247,21 +247,22 @@ into a binary or text format. Currently there are two types of propagators:
 - `HTTPTextFormat` which is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
 
-## Agent/Collector
+## Collector
 
-The OpenTelemetry service is a set of components that can collect traces,
+The OpenTelemetry collector is a set of components that can collect traces,
 metrics and eventually other telemetry data (e.g. logs) from processes
 instrumented by OpenTelementry or other monitoring/tracing libraries (Jaeger,
 Prometheus, etc.), do aggregation and smart sampling, and export traces and
-metrics to one or more monitoring/tracing backends. The service will allow to
+metrics to one or more monitoring/tracing backends. The collector will allow to
 enrich and transform collected telemetry (e.g. add additional attributes or
 scrub personal information).
 
-The OpenTelemetry service has two primary modes of operation: Agent (a locally
-running daemon) and Collector (a standalone running service).
+The OpenTelemetry collector has two primary modes of operation: Agent (a daemon
+running locally with the application) and Collector (a standalone running
+service).
 
 Read more at OpenTelemetry Service [Long-term
-Vision](https://github.com/open-telemetry/opentelemetry-service/blob/master/docs/vision.md).
+Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/docs/vision.md).
 
 ## Instrumentation adapters
 
