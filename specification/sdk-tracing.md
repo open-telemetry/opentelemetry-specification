@@ -130,6 +130,12 @@ of the `TraceID`.
 New `Tracer` instances are always created through a `TracerFactory` (see [API](api-tracing.md#obtaining-a-tracer)).
 The `name` and `version` arguments supplied to the `TracerFactory` must be used
 to create a `Resource` instance which is stored on the created `Tracer`.
+
+All configuration objects (SDK specific) and extension points (span processors,
+propagators) must be provided to the `TracerFactory`. `Tracer` instances must
+not duplicate this data (unless for read-only access) to avoid that different
+`Tracer` instances of a `TracerFactory` have different versions of these data.
+
 The readable representations of all `Span` instances created by a `Tracer` must
 provide a `getLibraryResource` method that returns this `Resource` information
 held by the `Tracer`.
@@ -142,8 +148,18 @@ invocations. The span processors are invoked only when
 must be used to implement [span exporter](#span-exporter) to batch and convert
 spans.
 
-Span processors can be registered directly on SDK Tracer and they are invoked in
-the same order as they were registered.
+Span processors can be registered directly on SDK `TracerFactory` and they are
+invoked in the same order as they were registered.
+
+All `Tracer` instances created by a `TracerFactory` share the same span processors.
+Changes to this collection reflect in all `Tracer` instances.
+Implementation-wise, this could mean that `Tracer` instances have a reference to
+their `TracerFactory` and can access span processor objects only via this
+reference.
+
+Manipulation of the span processors collection must only happen on `TracerFactory`
+instances. This means methods like `addSpanProcessor` must be implemented on
+`TracerFactory`.
 
 The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
