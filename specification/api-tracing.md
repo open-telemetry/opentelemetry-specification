@@ -236,11 +236,22 @@ MAY provide other default options for newly created `Span`s.
 active `Span` by default, but this functionality MAY be offered additionally
 as a separate operation.
 
-The API MUST require the caller to provide:
+The API MUST accept the following parameters:
 
-- The operation name.
+- The operation name. This is a required parameter.
 - The parent Span or parent Span context, and whether the new `Span` should be a
-  root `Span`.
+  root `Span`. API MAY also have an option for implicit parent context
+  extraction from the current context as a default behavior.
+- [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
+- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes). These
+  attributes will be used to make a sampling decision as noted in [sampling
+  description](sdk-tracing.md#sampling). Empty list will be assumed if not
+  specified.
+- `Link`s - see API definition [here](#add-links). Empty list will be assumed if
+  not specified.
+- `Start timestamp`, default to current time. This argument SHOULD only be set
+  when span creation time has already passed. If API is called at a moment of
+  a Span logical start, API user MUST not explicitly set this argument.
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -253,17 +264,6 @@ A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
-
-The API MUST allow users to provide the following properties:
-
-- [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
-- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes). These
-  attributes will be used to make a sampling decision as noted in [sampling
-  description](sdk-tracing.md#sampling).
-- `Link`s - see API definition [here](#add-links).
-- `Start timestamp`, default to current time. This argument SHOULD only be set
-  when span creation time has already passed. If API is called at a moment of
-  a Span logical start, API user MUST not explicitly set this argument.
 
 #### Add Links
 
