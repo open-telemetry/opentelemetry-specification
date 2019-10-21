@@ -194,7 +194,23 @@ For example, `http.server_name` has shown great value in practice, as bogus HTTP
 
 It is strongly recommended to set at least one of `http.app` or `http.server_name` to allow associating requests with some logical app or server entity.
 
-As an example, if a browser request for `https://example.com:8080/webshop/articles/4?s=1` is invoked, we may have:
+### Example
+
+As an example, if a browser request for `https://example.com:8080/webshop/articles/4?s=1` is invoked from a host with IP 192.0.2.4, we may have the following Span on the client side:
+
+Span name: `/webshop/articles/4` (NOTE: This is subject to change, see https://github.com/open-telemetry/opentelemetry-specification/issues/270).
+
+|   Attribute name   |                                       Value             |
+| :----------------- | :-------------------------------------------------------|
+| `component`        | `"http"`                                                |
+| `http.method`      | `"GET"`                                                 |
+| `http.flavor`      | `"1.1"`                                                 |
+| `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"`     |
+| `peer.ip4`         | `"192.0.2.5"`                                           |
+| `http.status_code` | `200`                                                   |
+| `http.status_text` | `"OK"`                                                  |
+
+The corresponding server Span may look like this:
 
 Span name: `/webshop/articles/:article_id` (`app_root` + `route`).
 
@@ -203,7 +219,6 @@ Span name: `/webshop/articles/:article_id` (`app_root` + `route`).
 | `component`        | `"http"`                                                                          |
 | `http.method`      | `"GET"`                                                                           |
 | `http.flavor`      | `"1.1"`                                                                           |
-| `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"` (or not set)                  |
 | `http.target`      | `"/webshop/articles/4?s=1"`                                                       |
 | `http.host`        | `"example.com:8080"`                                                              |
 | `http.server_name` | `"example.com"`                                                                   |
@@ -216,6 +231,14 @@ Span name: `/webshop/articles/:article_id` (`app_root` + `route`).
 | `http.app_root`    | `"/webshop"`                                                                      |
 | `http.client_ip`   | `"192.0.2.4"`                                                                     |
 | `peer.ip4`         | `"192.0.2.5"` (the client goes through a proxy)                                   |
+
+Note that following the recommendations above, `http.url` is not set in the above example.
+If set, it would be
+`"https://example.com:8080/webshop/articles/4?s=1"`
+but due to `http.scheme`, `http.host` and `http.target` being set, it would be redundant.
+As explained above, these separate values are preferred but if for some reason the URL is available but the other values are not,
+URL can replace `http.scheme`, `http.host` and `http.target`.
+
 
 ## Databases client calls
 
