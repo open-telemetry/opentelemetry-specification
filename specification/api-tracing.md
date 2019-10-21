@@ -263,7 +263,7 @@ The API MUST allow users to provide the following properties:
 - `Link`s - see API definition [here](#add-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
   when span creation time has already passed. If API is called at a moment of
-  a Span logical start, API user must rely on SDK to take take the current time.
+  a Span logical start, API user MUST not explicitly set this argument.
 
 #### Add Links
 
