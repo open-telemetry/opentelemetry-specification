@@ -1,6 +1,6 @@
-**Semantic Conventions**
+# Semantic Conventions
 
-_TODO: change this document title on line 1 to top-level heading once Span Conventions are moved to a separate document. Our markdown linter does not allow to have 2 top-level headings._
+_TODO: Remove rule `exclude_rule 'MD025'` from `.mdlstyle.rb` once this document is split and we no longer need 2 top-level headers._
 
 These documents define standard names and values of Resource labels and
 Span attributes.
