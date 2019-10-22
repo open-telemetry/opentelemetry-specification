@@ -130,9 +130,8 @@ According to the [W3C Trace Context
 spec](https://www.w3.org/TR/trace-context/#trace-id), vendor-supplied trace IDs
 may include both random and non-random components. To avoid sampling based on
 the non-random component, the sampler should consider only the leftmost portion
-(i.e. some number of high-order bits) of the trace ID. Implementations MAY
-allow the user to configure the number of bits of the trace ID that the sampler
-considers.
+of the trace ID. Implementations MAY allow the user to configure the number of
+bits of the trace ID that the sampler considers.
 
 The `ProbabilitySampler` should generally only sample traces with trace IDs
 less than a certain value. This value can be computed from the sampling rate,
@@ -151,19 +150,20 @@ Where:
   big-endian byte order
 - `round(float f)`: is a function that rounds `f` to the nearest integer
 
-Note that the effective sampling rate is the number closest to `rate` than can
+Note that the effective sampling rate is the number closest to `rate` that can
 be expressed as a multiple of `2^-precision`. As a consequence, it's not
 possible to set arbitrarily low sampling rates, even on platforms that support
 arbitrary-precision arithmetic.
 
 A `ProbabilitySampler` with rate `0.0` MUST NOT choose to sample any traces,
-even if the leftmost precision-many bits of trace ID are all `0`. Similarly, a
-`ProbabilitySampler` with rate `1.0` MUST choose to sample all traces, even if
-the leftmost precision-many bits of trace ID trace ID are all `1`.
+even if the leftmost precision-many bits of the trace ID are all `0`.
+Similarly, a `ProbabilitySampler` with rate `1.0` MUST choose to sample all
+traces, even if the leftmost precision-many bits of the trace ID trace ID are
+all `1`.
 
 **Example:**
 
-Consider a ProbabilitySampler with rate `.25` and 16 bit precision.
+Consider a `ProbabilitySampler` with rate `.25` and 16 bit precision.
 
 First, find the lowest truncated trace ID that will not be sampled. This number
 represents the 25th percentile of the range of possible values:
