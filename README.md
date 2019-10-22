@@ -27,6 +27,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
   - [Protocol](specification/protocol.md)
 - About the Project
   - [Timeline](#project-timeline)
+  - [Notation Conventions and Compliance](#notation-conventions-and-compliance)
   - [Versioning](#versioning)
   - [Contributions](#contributions)
   - [License](#license)
@@ -34,6 +35,13 @@ The OpenTelemetry specification describes the cross-language requirements and ex
 ## Project Timeline
 
 OpenTelemetry is currently under development. Check out our [current milestones](milestones.md).
+
+## Notation Conventions and Compliance
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in the [specification](./specification) are to be interpreted as described in [BCP 14](https://tools.ietf.org/html/bcp14) [[RFC2119](https://tools.ietf.org/html/rfc2119)] [[RFC8174](https://tools.ietf.org/html/rfc8174)] when, and only when, they appear in all capitals, as shown here.
+
+An implementation of the [specification](./specification) is not compliant if it fails to satisfy one or more of the "MUST", "MUST NOT", "REQUIRED", "SHALL", or "SHALL NOT" requirements defined in the [specification](./specification).
+Conversely, an implementation of the [specification](./specification) is compliant if it satisfies all the "MUST", "MUST NOT", "REQUIRED", "SHALL", and "SHALL NOT" requirements defined in the [specification](./specification).
 
 ## Versioning
 
