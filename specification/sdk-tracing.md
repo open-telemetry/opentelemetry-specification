@@ -157,9 +157,9 @@ possible to set arbitrarily low sampling rates, even on platforms that support
 arbitrary-precision arithmetic.
 
 A `ProbabilitySampler` with rate `0.0` MUST NOT choose to sample any traces,
-even those with trace ID `0x0`. Similarly, a `ProbabilitySampler` with rate
-`1.0` MUST choose to sample all traces, even those with trace ID `2^precision -
-1`.
+even if the leftmost precision-many bits of trace ID are all `0`. Similarly, a
+`ProbabilitySampler` with rate `1.0` MUST choose to sample all traces, even if
+the leftmost precision-many bits of trace ID trace ID are all `1`.
 
 **Example:**
 
