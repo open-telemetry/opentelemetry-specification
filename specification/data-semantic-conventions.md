@@ -1,7 +1,14 @@
 # Semantic Conventions
 
-This document defines reserved attributes that can be used to add operation and
-protocol specific information.
+_TODO: Remove rule `exclude_rule 'MD025'` from `.mdlstyle.rb` once this document is split and we no longer need 2 top-level headers._
+
+These documents define standard names and values of Resource labels and
+Span attributes.
+
+* [Resource Conventions](data-resource-semantic-conventions.md)
+* [Span Conventions](#span-conventions)
+
+# Span Conventions
 
 In OpenTelemetry spans can be created freely and it’s up to the implementor to
 annotate them with attributes specific to the represented operation. Spans
@@ -22,7 +29,7 @@ For a HTTP client span, `SpanKind` MUST be `Client`.
 
 Given an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) compliant URI of the form
 `scheme:[//authority]path[?query][#fragment]`, the span name of the span SHOULD
-be set to to the URI path value.
+be set to the URI path value.
 
 If a framework can identify a value that represents the identity of the request
 and has a lower cardinality than the URI path, this value MUST be used for the span name instead.
