@@ -17,6 +17,3 @@ exclude_rule 'MD033'
 
 # Fenced code blocks should have a language specified
 exclude_rule 'MD040'
-
-# Allow multiple top level headers in the same document
-exclude_rule 'MD025'
