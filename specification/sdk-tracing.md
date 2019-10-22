@@ -122,8 +122,67 @@ These are the default samplers implemented in the OpenTelemetry SDK:
 
 #### Probability Sampler algorithm
 
-TODO: Add details about how the probability sampler is implemented as a function
-of the `TraceID`.
+The `ProbabilitySampler` makes a determistic sampling decision for each span
+based on the span's trace ID. It samples a fixed percentage of all spans
+following a user-supplied sampling rate.
+
+According to the [W3C Trace Context
+spec](https://www.w3.org/TR/trace-context/#trace-id), vendor-supplied trace IDs
+may include both random and non-random components. To avoid sampling based on
+the non-random component, the sampler should consider only the leftmost portion
+(i.e. some number of high-order bits) of the trace ID. Implementations MAY
+allow the user to configure the number of bits of the trace ID that the sampler
+considers.
+
+The `ProbabilitySampler` should generally only sample traces with trace IDs
+less than a certain value. This value can be computed from the sampling rate,
+and implementations may choose to cache it. The sampling decision should follow
+the formula:
+
+```
+to_sample = traceID >> (128 - precision) < round(rate * 2^precision)
+```
+
+Where:
+
+- `rate` is the sampling rate, in `[0.0, 1.0]`
+- `precision`: the number of bits of the trace ID to consider, in `[1, 128]`
+- `traceID`: is the integer trace ID of the span to be created, assuming
+  big-endian byte order
+- `round(float f)`: is a function that rounds `f` to the nearest integer
+
+Note that the effective sampling rate is the number closest to `rate` than can
+be expressed as a multiple of `2^-precision`. As a consequence, it's not
+possible to set arbitrarily low sampling rates, even on platforms that support
+arbitrary-precision arithmetic.
+
+A `ProbabilitySampler` with rate `0.0` MUST NOT choose to sample any traces,
+even those with trace ID `0x0`. Similarly, a `ProbabilitySampler` with rate
+`1.0` MUST choose to sample all traces, even those with trace ID `2^precision -
+1`.
+
+**Example:**
+
+Consider a ProbabilitySampler with rate `.25` and 16 bit precision.
+
+First, find the lowest truncated trace ID that will not be sampled. This number
+represents the 25th percentile of the range of possible values:
+
+```
+.25 * 2^16 = 0x4000
+```
+
+Make a sampling decision for a given trace by comparing this number to the
+leftmost 16 bits of its 128 bit trace ID:
+
+```
+x = traceID >> (128 - 16)
+to_sample = x < 0x4000
+```
+
+This sampler should sample traces with truncated trace ID in the range
+`[0x0000, 0x4000)`. Assuming `x` is uniformly distributed over `[0x0000,
+0xffff]`, this should account for 25% of all traces.
 
 ## Tracer Creation
 
