@@ -140,7 +140,7 @@ and implementations may choose to cache it. The sampling decision should follow
 the formula:
 
 ```
-to_sample = traceID >> (128 - precision) < round(rate * 2^precision)
+to_sample = traceID >> (128 - precision) < round(rate * pow(2, precision))
 ```
 
 Where:
