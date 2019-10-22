@@ -11,11 +11,11 @@ Table of Contents
 - [HTTP Text Format](#http-text-format)
   - [Fields](#fields)
   - [Inject](#inject)
-  - [Setter](#setter)
-    - [Put](#put)
+    - [Setter argument](#setter)
+      - [Put](#put)
   - [Extract](#extract)
-  - [Getter](#getter)
-    - [Get](#get)
+    - [Getter argument](#getter)
+      - [Get](#get)
 
 </details>
 
@@ -96,15 +96,17 @@ Required arguments:
 
 - the value to be injected, can be `SpanContext` or `DistributedContext`.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
-- the setter invoked for each propagation key to add or remove.
+- the `Setter` invoked for each propagation key to add or remove.
 
-### Setter
+#### Setter argument
+
+Setter is an argument in `Inject` that puts value into given field.
 
 `Setter` allows a `HTTPTextFormat` to set propagated fields into a carrier.
 
-`Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
+`Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Setter` class with `Put` method as described below.
 
-#### Put
+##### Put
 
 Replaces a propagated field with the given value.
 
@@ -125,17 +127,19 @@ MUST not return null.
 Required arguments:
 
 - the carrier holds propagation fields. For example, an outgoing message or http request.
-- the getter invoked for each propagation key to get.
+- the instance of `Getter` invoked for each propagation key to get.
 
 Returns the non-null extracted value.
 
-### Getter
+#### Getter argument
+
+Getter is an argument in `Extract` that get value from given field
 
 `Getter` allows a `HttpTextFormat` to read propagated fields from a carrier.
 
-`Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
+`Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Getter` class with `Get` method as described below.
 
-#### Get
+##### Get
 
 Returns the first value of the given propagation key or returns null if the key doesn't exist.
 
