@@ -131,24 +131,51 @@ spec](https://www.w3.org/TR/trace-context/#trace-id), vendor-supplied trace IDs
 may include both random and non-random components. To avoid sampling based on
 the non-random component, the sampler should consider only the leftmost portion
 of the trace ID. Implementations MAY allow the user to configure the number of
-bits of the trace ID that the sampler considers.
+bits of the trace ID that the sampler considers. We define this number as
+the sampler's *precision*.
 
-The `ProbabilitySampler` should generally only sample traces with trace IDs
-less than a certain value. This value can be computed from the sampling rate,
-and implementations may choose to cache it. The sampling decision should follow
-the formula:
+A trace ID is a 16-byte array. We define the *truncated trace ID* to be the
+leftmost precision-many bits of the trace ID:
 
 ```
-to_sample = traceID >> (128 - precision) < round(rate * pow(2, precision))
+truncated_trace_id = traceID[0:ceil(precision / 8))]
 ```
 
 Where:
 
+- `precision` is the number of bits of the trace ID to consider, in `[1, 128]`
+- `ceil(float f)` returns the smallest integer greater than `f`
+- `a[l:h]` is the slice operator: it returns the subsequence of `a` from index
+  `l` to `h` inclusive
+
+This is equivalent to converting the trace ID to an unsigned integer assuming
+big-endian byte order, and shifting to remove the unused bits:
+
+```
+truncated_trace_id = (int) traceID >> (128 - precision)
+```
+
+The `ProbabilitySampler` should only sample traces with truncated trace IDs
+less than a certain value. We define this value as the sampler's *bound*:
+
+```
+bound = round(rate * pow(2, precision))
+```
+
+Where:
+
+- `round(float f)` rounds `f` to the nearest integer
 - `rate` is the sampling rate, in `[0.0, 1.0]`
-- `precision`: the number of bits of the trace ID to consider, in `[1, 128]`
-- `traceID`: is the integer trace ID of the span to be created, assuming
-  big-endian byte order
-- `round(float f)`: is a function that rounds `f` to the nearest integer
+- `pow(a, b)` is the exponentiation operator: `a` to the power of `b`
+
+Note that this value doesn't depend on the trace to be sampled. Implementations
+should generally compute this once, not on every sampling decision.
+
+The sampling decision for a trace is given by:
+
+```
+to_sample = truncated_trace_id < bound
+```
 
 Note that the effective sampling rate is the number closest to `rate` that can
 be expressed as a multiple of `2^-precision`. As a consequence, it's not
@@ -156,10 +183,9 @@ possible to set arbitrarily low sampling rates, even on platforms that support
 arbitrary-precision arithmetic.
 
 A `ProbabilitySampler` with rate `0.0` MUST NOT choose to sample any traces,
-even if the leftmost precision-many bits of the trace ID are all `0`.
-Similarly, a `ProbabilitySampler` with rate `1.0` MUST choose to sample all
-traces, even if the leftmost precision-many bits of the trace ID trace ID are
-all `1`.
+even if every bit of the truncated trace ID is `0`. Similarly, a
+`ProbabilitySampler` with rate `1.0` MUST choose to sample all traces, even if
+every bit of the the truncated trace ID is `1`.
 
 **Example:**
 
@@ -176,8 +202,8 @@ Make a sampling decision for a given trace by comparing this number to the
 leftmost 16 bits of its 128 bit trace ID:
 
 ```
-x = traceID >> (128 - 16)
-to_sample = x < 0x4000
+trunc_tid = (int) traceID >> (128 - 16)
+to_sample = trunc_tid < 0x4000
 ```
 
 This sampler should sample traces with truncated trace ID in the range
