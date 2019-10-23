@@ -62,7 +62,6 @@ Don't set a status message if the reason can be inferred from `http.status_code`
 
 Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
 
-
 [oc-http-status]: https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#mapping-from-http-status-codes-to-trace-status-codes
 [rfc-unauthorized]: https://tools.ietf.org/html/rfc7235#section-3.1
 
@@ -206,7 +205,9 @@ It is strongly recommended to set at least one of `http.app` or `http.server_nam
 
 As an example, if a browser request for `https://example.com:8080/webshop/articles/4?s=1` is invoked from a host with IP 192.0.2.4, we may have the following Span on the client side:
 
-Span name: `/webshop/articles/4` (NOTE: This is subject to change, see https://github.com/open-telemetry/opentelemetry-specification/issues/270).
+Span name: `/webshop/articles/4` (NOTE: This is subject to change, see [open-telemetry/opentelemetry-specification#270][])
+
+[[open-telemetry/opentelemetry-specification#270]: https://github.com/open-telemetry/opentelemetry-specification/issues/270).
 
 |   Attribute name   |                                       Value             |
 | :----------------- | :-------------------------------------------------------|
@@ -246,7 +247,6 @@ If set, it would be
 but due to `http.scheme`, `http.host` and `http.target` being set, it would be redundant.
 As explained above, these separate values are preferred but if for some reason the URL is available but the other values are not,
 URL can replace `http.scheme`, `http.host` and `http.target`.
-
 
 ## Databases client calls
 
