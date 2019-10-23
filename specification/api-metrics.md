@@ -4,7 +4,7 @@ TODO: Table of contents
 
 ## Overview
 
-The user-facing metrics API supports reporting diagnostic measurements
+The user-facing metrics API supports producing diagnostic measurements
 using three basic kinds of instrument.  "Metrics" are the thing being
 produced--mathematical, statistical summaries of certain observable
 behavior in the program.  "Instruments" are the devices used by the
@@ -116,12 +116,13 @@ Counters support `Add(value)`.  Choose this kind of metric when the
 value is a quantity, the sum is of primary interest, and the event
 count and value distribution are not of primary interest.
 
-Counters are defined as monotonic by default, meaning that positive
-values are expected.  Monotonic counters are typically used because
-they can automatically be interpreted as a rate.
+Counters are defined as `Monotonic = true` by default, meaning that
+positive values are expected.  `Monotonic = true` counters are
+typically used because they can automatically be interpreted as a
+rate.
 
-As an option, counters can be declared as `NonMonotonic`, in which
-case they support positive and negative increments.  Non-monotonic
+As an option, counters can be declared as `Monotonic = false`, in which
+case they support positive and negative increments.  `Monotonic = false`
 counters are useful to report changes in an accounting scheme, such as
 the number of bytes allocated and deallocated.
 
@@ -135,12 +136,12 @@ measurement interval is arbitrary. Use this kind of metric when the
 measurement is not a quantity, and the sum and event count are not of
 interest.
 
-Gauges are defined as non-monotonic by default, meaning that new
+Gauges are defined as `Monotonic = false` by default, meaning that new
 values are permitted to make positive or negative changes to the
 gauge.  There is no restriction on the sign of the input for gauges.
 
-As an option, gauges can be declared as `Monotonic`, in which case
-successive values are expected to rise monotonically.  Monotonic
+As an option, gauges can be declared as `Monotonic = true`, in which case
+successive values are expected to rise monotonically.  `Monotonic = true`
 gauges are useful in reporting computed cumulative sums, allowing an
 application to compute a current value and report it, without
 remembering the last-reported value in order to report an increment.
@@ -163,9 +164,9 @@ count or rate of events is meaningful and either:
 - The sum is of interest in addition to the count (rate)
 - Quantile information is of interest.
 
-Measures are defined as `NonNegative` by default, meaning that
-negative values are invalid.  Non-negative measures are typically used
-to record absolute values such as durations and sizes.
+Measures are defined as `Absolute = true` by default, meaning that
+negative values are invalid.  `Absolute = true` measures are typically
+used to record absolute values such as durations and sizes.
 
-As an option, measures can be declared as `Signed` to indicate support
-for positive and negative values.
+As an option, measures can be declared as `Absolute = false` to
+indicate support for positive and negative values.

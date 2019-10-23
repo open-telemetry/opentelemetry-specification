@@ -1,6 +1,8 @@
 # Tracing SDK
 
-<details><summary>Table of Contents</summary>
+<details>
+
+<summary>Table of Contents</summary>
 
 * [Sampling](#sampling)
 * [Tracer Creation](#tracer-creation)
@@ -23,14 +25,38 @@ optimize the amount of telemetry that needs to be collected.
 All other sampling algorithms may be implemented on SDK layer in exporters, or
 even out of process in Agent or Collector.
 
-API defines two interfaces - [`Sampler`](#sampler) and [`Decision`](#decision)
-as well as a set of [built-in samplers](#built-in-samplers).
+The OpenTelemetry API has two properties responsible for the data collection:
+
+* `IsRecording` field of a `Span`. If `true` the current `Span` records
+  tracing events (attributes, events, status, etc.), otherwise all tracing
+  events are dropped. Users can use this property to determine if expensive
+  trace events can be avoided. [Span Processors](#span-processor) will receive
+  all spans with this flag set. However, [Span Exporter](#span-exporter) will
+  not receive them unless the `Sampled` flag was set.
+* `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
+  the `SpanContext` to child Spans. For more details see the [W3C
+  specification][trace-flags]. This flag indicates that the `Span` has been
+  `sampled` and will be exported. [Span Processor](#span-processor) and [Span
+  Exporter](#span-exporter) will receive spans with the `Sampled` flag set for
+  processing.
+
+The flag combination `SampledFlag == false` and `IsRecording == true`
+means that the current `Span` does record information, but most likely the child
+`Span` will not.
+
+The flag combination `SampledFlag == true` and `IsRecording == false`
+could cause gaps in the distributed trace, and because of this OpenTelemetry API
+MUST NOT allow this combination.
+
+The SDK defines the two interfaces [`Sampler`](#sampler) and
+[`Decision`](#decision) as well as a set of [built-in
+samplers](#built-in-samplers).
 
 ### Sampler
 
 `Sampler` interface allows to create custom samplers which will return a
-sampling `Decision` based on information that is typically available just before
-the `Span` was created.
+sampling `SamplingResult` based on information that is typically available just
+before the `Span` was created.
 
 #### ShouldSample
 
@@ -38,20 +64,32 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-- `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
+* `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
   `null`.
-- `TraceId` of the `Span` to be created. It can be different from the `TraceId`
+* `TraceId` of the `Span` to be created. It can be different from the `TraceId`
   in the `SpanContext`. Typically in situations when the `Span` to be created
   starts a new Trace.
-- `SpanId` of the `Span` to be created.
-- Name of the `Span` to be created.
-- Collection of links that will be associated with the `Span` to be created.
-  Typically useful for batch operations, see [Links Between
-  Spans](overview.md#links-between-spans).
+* `SpanId` of the `Span` to be created.
+* Name of the `Span` to be created.
+* `SpanKind`
+* Initial set of `Attributes` for the `Span` being constructed
+* Collection of links that will be associated with the `Span` to be created.
+  Typically useful for batch operations, see
+  [Links Between Spans](overview.md#links-between-spans).
 
 **Return value:**
 
-Sampling `Decision` whether span should be sampled or not.
+It produces an output called `SamplingResult` which contains:
+
+* A sampling `Decision`. One of the following enum values:
+  * `NOT_RECORD` - `IsRecording() == false`, span will not be recorded and all events and attributes
+  will be dropped.
+  * `RECORD` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
+  * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
+* A set of span Attributes that will also be added to the `Span`.
+  * The list of attributes returned by `SamplingResult` MUST be immutable.
+  Caller may call this method any number of times and can safely cache the
+  returned value.
 
 #### GetDescription
 
@@ -61,43 +99,43 @@ be displayed on debug pages or in the logs. Example:
 
 Description MUST NOT change over time and caller can cache the returned value.
 
-### Decision
-
-`Decision` is an interface with two getters describing the sampling decision.
-
-#### IsSampled
-
-Return sampling decision whether span should be sampled or not. `True` value of
-`IsSampled` flag means that Span information needs to be recorded.
-
-#### GetAttributes
-
-Return attributes to be attached to the `Span`. These attributes should be added
-to the `Span` only for root span or when sampling decision `IsSampled` changes
-from false to true.
-
-Examples of attribute may be algorithm used to make a decision and sampling
-priority. Another example may be recording the reason trace was marked as
-"important" to sample in. For instance, when traces from specific user session
-should be collected, session identifier can be added to attributes.
-
-The list of attributes returned by `Decision` MUST be immutable. Caller may call
-this method any number of times and can safely cache the returned value.
-
 ### Built-in samplers
 
-API MUST provide a way to create the following built-in samplers:
+These are the default samplers implemented in the OpenTelemetry SDK:
 
-- Always sample. `Sampler` returns `Decision` with `IsSampled=true` and empty
-  arguments collection. Description MUST be `AlwaysSampleSampler`.
-- Never sample. `Sampler` returns `Decision` with `IsSampled=false` and empty
-  arguments collection. Description MUST be `NeverSampleSampler`.
+* ALWAYS_ON
+  * This will be used as a default.
+  * Description MUST be `AlwaysOnSampler`.
+* ALWAYS_OFF
+  * Description MUST be `AlwaysOffSampler`.
+* ALWAYS_PARENT
+  * `Returns RECORD_AND_SAMPLED` if `SampledFlag` is set to true on parent
+  SpanContext and `NOT_RECORD` otherwise.
+  * Description MUST be `AlwaysParentSampler`.
+* Probability
+  * The default behavior should be to trust the parent `SampledFlag`. However
+  there should be configuration to change this.
+  * The default behavior is to apply the sampling probability only for Spans
+  that are root spans (no parent) and Spans with remote parent. However there
+  should be configuration to change this to "root spans only", or "all spans".
+  * Description MUST be `ProbabilitySampler{0.000100}`.
+
+#### Probability Sampler algorithm
+
+TODO: Add details about how the probability sampler is implemented as a function
+of the `TraceID`.
 
 ## Tracer Creation
 
 New `Tracer` instances are always created through a `TracerFactory` (see [API](api-tracing.md#obtaining-a-tracer)).
 The `name` and `version` arguments supplied to the `TracerFactory` must be used
 to create a `Resource` instance which is stored on the created `Tracer`.
+
+All configuration objects (SDK specific) and extension points (span processors,
+propagators) must be provided to the `TracerFactory`. `Tracer` instances must
+not duplicate this data (unless for read-only access) to avoid that different
+`Tracer` instances of a `TracerFactory` have different versions of these data.
+
 The readable representations of all `Span` instances created by a `Tracer` must
 provide a `getLibraryResource` method that returns this `Resource` information
 held by the `Tracer`.
@@ -110,8 +148,18 @@ invocations. The span processors are invoked only when
 must be used to implement [span exporter](#span-exporter) to batch and convert
 spans.
 
-Span processors can be registered directly on SDK Tracer and they are invoked in
-the same order as they were registered.
+Span processors can be registered directly on SDK `TracerFactory` and they are
+invoked in the same order as they were registered.
+
+All `Tracer` instances created by a `TracerFactory` share the same span processors.
+Changes to this collection reflect in all `Tracer` instances.
+Implementation-wise, this could mean that `Tracer` instances have a reference to
+their `TracerFactory` and can access span processor objects only via this
+reference.
+
+Manipulation of the span processors collection must only happen on `TracerFactory`
+instances. This means methods like `addSpanProcessor` must be implemented on
+`TracerFactory`.
 
 The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
@@ -119,10 +167,10 @@ in the SDK:
 ```
   +-----+---------------+   +---------------------+   +-------------------+
   |     |               |   |                     |   |                   |
-  |     |               |   | BatchProcessor      |   |    SpanExporter   | 
+  |     |               |   | BatchProcessor      |   |    SpanExporter   |
   |     |               +---> SimpleProcessor     +--->  (JaegerExporter) |
   | SDK | SpanProcessor |   |                     |   |                   |
-  |     |               |   +---------------------+   +-------------------+ 
+  |     |               |   +---------------------+   +-------------------+
   |     |               |
   |     |               |   +---------------------+
   |     |               |   |                     |

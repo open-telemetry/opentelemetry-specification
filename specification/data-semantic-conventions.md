@@ -1,7 +1,14 @@
 # Semantic Conventions
 
-This document defines reserved attributes that can be used to add operation and
-protocol specific information.
+_TODO: Remove rule `exclude_rule 'MD025'` from `.mdlstyle.rb` once this document is split and we no longer need 2 top-level headers._
+
+These documents define standard names and values of Resource labels and
+Span attributes.
+
+* [Resource Conventions](data-resource-semantic-conventions.md)
+* [Span Conventions](#span-conventions)
+
+# Span Conventions
 
 In OpenTelemetry spans can be created freely and it’s up to the implementor to
 annotate them with attributes specific to the represented operation. Spans
@@ -54,6 +61,7 @@ Don't set a status message if the reason can be inferred from `http.status_code`
 | Any status code the client fails to interpret (e.g., 093 or 573) | `UnknownError` |
 
 Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
+
 
 [oc-http-status]: https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#mapping-from-http-status-codes-to-trace-status-codes
 [rfc-unauthorized]: https://tools.ietf.org/html/rfc7235#section-3.1
