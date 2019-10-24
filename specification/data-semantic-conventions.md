@@ -152,7 +152,7 @@ which is a fixed path prefix of the URL that determines to which application a r
 at a particular virtual host
 to the `com.example.webshop` web application).
 
-_TODO: Find way to track HTTP application ([opentelemetry/opentelementry-specification#335][])_
+> TODO: Find way to track HTTP application ([opentelemetry/opentelementry-specification#335][])
 
 [PEP 3333]: https://www.python.org/dev/peps/pep-3333/
 [modwsgisetup]: https://modwsgi.readthedocs.io/en/develop/user-guides/quick-configuration-guide.html
