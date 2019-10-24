@@ -530,19 +530,13 @@ Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 
 ## SpanKind
 
-Depending on the `Span` position in a `Trace` and application components
-boundaries, it can play a different role. This role often defines how `Span`
-will be processed and visualized by various backends. So it is important to
-record this "hint" whenever possible to the best of the caller's knowledge.
+`SpanKind` describes the relationship bewteen the Span, its parents,
+and its children in a Trace as a hint to the system while rendering
+traces.  Several conventional SpanKind values are defined:
 
-These are the possible SpanKinds:
-
-* `INTERNAL` Default value. Indicates that the span represents an internal
-  operation within an application, as opposed to an operations happening at the
-  boundaries.
 * `SERVER` Indicates that the span covers server-side handling of an RPC or
-  other remote request.
-* `CLIENT` Indicates that the span describes a request to some remote service.
+  other request.
+* `CLIENT` Indicates that the span describes a request to some service.
 * `PRODUCER` Indicates that the span describes a producer sending a message to a
   broker. Unlike client and server, there is often no direct critical path
   latency relationship between producer and consumer spans. A `Producer` span ends
@@ -551,3 +545,31 @@ These are the possible SpanKinds:
 * `CONSUMER` Indicates that the span describes a consumer receiving a message from
   a broker. As for the `PRODUCER` kind, there is often no direct critical
   path latency relationship between producer and consumer spans.
+
+`SpanKind` serves as an additional annotation, where existing semantic
+conventions do not fully specify a relationship.  For example, we
+could infer from a change of `host.name` and `service.name` resources
+that a child has contacted a remote host and crossed a service
+boundary, but we cannot be sure whether it is a CLIENT-to-SERVER
+relationship or a PRODUCER-to-CONSUMER relationship.  Use the
+`SpanKind` attribute to specify this level of detail.
+
+`SpanKind` values are strings.  Implementations MUST accept any value
+of `SpanKind`, to accommodate future versions of this specification.
+
+Applications may use non-conventional values for `SpanKind` to provide
+additional description that could be useful for offline analysis.
+Tracing vendors SHOULD display the `SpanKind` as additional
+description while rendering traces, even for unconventional values.
+Depending on experience, future versions of this specification could
+include new conventional `SpanKind` values, so users and implementors
+are free to invent new kinds of span as appropriate (e.g.,
+SENDER/RECEIVER, INGRESS/EGRESS).
+
+`SpanKind` may be left empty, to indicate no description.
+
+`SpanKind` is associated with the activity that started the span,
+which helps resolve ambiguity.  For example, a server span that
+directly calls another server could be described as both a SERVER and
+a CLIENT.  In this case, it should use the SERVER `SpanKind` because
+it was started to service a RPC or other request.
