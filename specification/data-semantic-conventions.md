@@ -152,6 +152,8 @@ which is a fixed path prefix of the URL that determines to which application a r
 at a particular virtual host
 to the `com.example.webshop` web application).
 
+_TODO: Find way to track HTTP application ([opentelemetry/opentelementry-specification#335][])_
+
 [PEP 3333]: https://www.python.org/dev/peps/pep-3333/
 [modwsgisetup]: https://modwsgi.readthedocs.io/en/develop/user-guides/quick-configuration-guide.html
 [context root]: https://docs.jboss.org/jbossas/guides/webguide/r2/en/html/ch06.html
@@ -161,6 +163,7 @@ to the `com.example.webshop` web application).
 [ap-sn]: https://httpd.apache.org/docs/2.4/mod/core.html#servername
 [nx-sn]: http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name
 [JSR 53]: https://jcp.org/aboutJava/communityprocess/maintenance/jsr053/index2.html
+[opentelemetry/opentelementry-specification#335]: https://github.com/open-telemetry/opentelemetry-specification/issues/335
 
 #### Semantic conventions
 
@@ -179,8 +182,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `host.name` | Analogous to `peer.hostname` but for the host instead of the peer. | [1] |
 | `host.port` | Local port. E.g., `80` (integer). Analogous to `peer.port`. | [1] |
 | `http.route` | The matched route (path template). E.g. `"/users/:userID?"`. | No |
-| `http.app` | An identifier for the whole HTTP application. E.g. Flask app name, `spring.application.name`, etc. | No |
-| `http.app_root` |The path prefix of the URL that identifies this `http.app`. If multiple roots exist, the one that was matched for this request should be used. | No |
+| `http.app_root` |The path prefix of the URL that identifies this HTTP application. If multiple roots exist, the one that was matched for this request should be used. | No |
 | `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `peer.ip*`, which would identify the nework-level peer, which may be a proxy. | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
@@ -199,7 +201,7 @@ Namely, one of the following sets is required (in order of usual preference unle
 Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones.
 For example, `http.server_name` has shown great value in practice, as bogus HTTP Host headers occur often in the wild.
 
-It is strongly recommended to set at least one of `http.app` or `http.server_name` to allow associating requests with some logical app or server entity.
+It is strongly recommended to set `http.server_name` to allow associating requests with some logical server entity.
 
 ### Example
 
@@ -236,7 +238,6 @@ Span name: `/webshop/articles/:article_id` (`app_root` + `route`).
 | `http.route`       | `"/articles/:article_id"` (note that the `app_root` part is missing in this case) |
 | `http.status_code` | `200`                                                                             |
 | `http.status_text` | `"OK"`                                                                            |
-| `http.app`         | E.g., `"My cool WebShop"` or `"com.example.webshop"`                              |
 | `http.app_root`    | `"/webshop"`                                                                      |
 | `http.client_ip`   | `"192.0.2.4"`                                                                     |
 | `peer.ip4`         | `"192.0.2.5"` (the client goes through a proxy)                                   |
