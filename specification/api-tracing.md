@@ -574,10 +574,10 @@ These are the possible SpanKinds:
 
 To summarize the interpretation of these kinds:
 
-| `SpanKind` | Synchronous | Asynchronous | Incoming | Outgoing |
+| `SpanKind` | Synchronous | Asynchronous | Remote Incoming | Remote Outgoing |
 |--|--|--|--|--|
 | `CLIENT` | yes | | | yes |
 | `SERVER` | yes | | yes | |
-| `PRODUCER` | | yes | yes | |
-| `CONSUMER` | | yes | | yes |
+| `PRODUCER` | | yes | | yes|
+| `CONSUMER` | | yes | yes | |
 | `INTERNAL` | | | | |
