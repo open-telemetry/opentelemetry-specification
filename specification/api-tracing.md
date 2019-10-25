@@ -574,7 +574,6 @@ These are the possible SpanKinds:
 
 To summarize the interpretation of these kinds:
 
-|--|--|--|--|--|
 | `SpanKind` | Synchronous | Asynchronous | Incoming | Outgoing |
 |--|--|--|--|--|
 | `CLIENT` | yes | | | yes |
