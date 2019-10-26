@@ -161,6 +161,20 @@ Manipulation of the span processors collection must only happen on `TracerFactor
 instances. This means methods like `addSpanProcessor` must be implemented on
 `TracerFactory`.
 
+Each processor registered on `TracerFactory` is a start of the processing pipeline 
+that consist of other processors and exporters. Processors (or exporters) may implement 
+tagging, batching, filtering and other advanced scenarios. 
+
+SDK MUST allow to end each pipeline with individual exporter and do filtering
+or batching independently on each pipeline.      
+
+SDK MUST allow implementing helpers as composable components that use the same
+  chainable `SpanProcessor` interface. 
+
+SDK authors are encouraged to implement common functionality such as queuing, 
+batching, tagging, etc. as helpers. This functionality will be applicable 
+regardless of what protocol exporter is used.
+
 The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
 
@@ -260,10 +274,8 @@ The goals of the interface are:
   The protocol exporter is expected to be primarily a simple telemetry data
   encoder and transmitter.
 * Allow implementing helpers as composable components that use the same
-  chainable `Exporter` interface. SDK authors are encouraged to implement common
-  functionality such as queuing, batching, tagging, etc. as helpers. This
-  functionality will be applicable regardless of what protocol exporter is used.
-
+  chainable `Exporter` interface. 
+  
 #### Interface Definition
 
 The exporter must support two functions: **Export** and **Shutdown**. In
