@@ -161,18 +161,18 @@ Manipulation of the span processors collection must only happen on `TracerFactor
 instances. This means methods like `addSpanProcessor` must be implemented on
 `TracerFactory`.
 
-Each processor registered on `TracerFactory` is a start of the processing pipeline 
-that consist of other processors and exporters. Processors (or exporters) may implement 
-tagging, batching, filtering and other advanced scenarios. 
+Each processor registered on `TracerFactory` is a start of the processing pipeline
+that consist of other processors and exporters. Processors (or exporters) may implement
+tagging, batching, filtering and other advanced scenarios.
 
 SDK MUST allow to end each pipeline with individual exporter and do filtering
-or batching independently on each pipeline.      
+or batching independently on each pipeline.     
 
 SDK MUST allow implementing helpers as composable components that use the same
-  chainable `SpanProcessor` interface. 
+chainable `SpanProcessor` interface.
 
-SDK authors are encouraged to implement common functionality such as queuing, 
-batching, tagging, etc. as helpers. This functionality will be applicable 
+SDK authors are encouraged to implement common functionality such as queuing,
+batching, tagging, etc. as helpers. This functionality will be applicable
 regardless of what protocol exporter is used.
 
 The following diagram shows `SpanProcessor`'s relationship to other components
