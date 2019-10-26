@@ -166,7 +166,7 @@ that consist of other processors and exporters. Processors (or exporters) may im
 tagging, batching, filtering and other advanced scenarios.
 
 SDK MUST allow to end each pipeline with individual exporter and do filtering
-or batching independently on each pipeline.     
+or batching independently on each pipeline.
 
 SDK MUST allow implementing helpers as composable components that use the same
 chainable `SpanProcessor` interface.
@@ -274,8 +274,8 @@ The goals of the interface are:
   The protocol exporter is expected to be primarily a simple telemetry data
   encoder and transmitter.
 * Allow implementing helpers as composable components that use the same
-  chainable `Exporter` interface. 
-  
+  chainable `Exporter` interface.
+
 #### Interface Definition
 
 The exporter must support two functions: **Export** and **Shutdown**. In
