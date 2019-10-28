@@ -259,6 +259,8 @@ trace. A span is said to be a _root span_ if it does not have a parent. Each
 trace includes a single root span, which is the shared ancestor of all other
 spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
+For a Span with a parent, the `TraceId` MUST be the same as the parent.
+Also, the child span MUST inherit all `TraceState` values of its parent by default.
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
