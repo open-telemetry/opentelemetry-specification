@@ -154,7 +154,7 @@ to the `com.example.webshop` web application).
 
 Some servers allow to bind the same HTTP application to multiple `(virtual host, application root)` pairs.
 
-> TODO: Find way to track HTTP application ([opentelemetry/opentelementry-specification#335][])
+> TODO: Find way to trace HTTP application and application root ([opentelemetry/opentelementry-specification#335][])
 
 [PEP 3333]: https://www.python.org/dev/peps/pep-3333/
 [modwsgisetup]: https://modwsgi.readthedocs.io/en/develop/user-guides/quick-configuration-guide.html
@@ -183,8 +183,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.server_name` | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `host.name` should be used instead). | [1] |
 | `host.name` | Analogous to `peer.hostname` but for the host instead of the peer. | [1] |
 | `host.port` | Local port. E.g., `80` (integer). Analogous to `peer.port`. | [1] |
-| `http.route` | The matched route (path template). E.g. `"/users/:userID?"`. | No |
-| `http.app_root` |The path prefix of the URL that identifies this HTTP application. If multiple roots exist, the one that was matched for this request should be used. | No |
+| `http.route` | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. | No |
 | `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `peer.ip*`, which would identify the network-level peer, which may be a proxy. | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
@@ -225,24 +224,23 @@ Span name: `/webshop/articles/4` (NOTE: This is subject to change, see [open-tel
 
 The corresponding server Span may look like this:
 
-Span name: `/webshop/articles/:article_id` (`app_root` + `route`).
+Span name: `/webshop/articles/:article_id`.
 
-|   Attribute name   |                                       Value                                       |
-| :----------------- | :-------------------------------------------------------------------------------- |
-| `component`        | `"http"`                                                                          |
-| `http.method`      | `"GET"`                                                                           |
-| `http.flavor`      | `"1.1"`                                                                           |
-| `http.target`      | `"/webshop/articles/4?s=1"`                                                       |
-| `http.host`        | `"example.com:8080"`                                                              |
-| `http.server_name` | `"example.com"`                                                                   |
-| `host.port`        | `8080`                                                                            |
-| `http.scheme`      | `"https"`                                                                         |
-| `http.route`       | `"/articles/:article_id"` (note that the `app_root` part is missing in this case) |
-| `http.status_code` | `200`                                                                             |
-| `http.status_text` | `"OK"`                                                                            |
-| `http.app_root`    | `"/webshop"`                                                                      |
-| `http.client_ip`   | `"192.0.2.4"`                                                                     |
-| `peer.ip4`         | `"192.0.2.5"` (the client goes through a proxy)                                   |
+|   Attribute name   |                      Value                      |
+| :----------------- | :---------------------------------------------- |
+| `component`        | `"http"`                                        |
+| `http.method`      | `"GET"`                                         |
+| `http.flavor`      | `"1.1"`                                         |
+| `http.target`      | `"/webshop/articles/4?s=1"`                     |
+| `http.host`        | `"example.com:8080"`                            |
+| `http.server_name` | `"example.com"`                                 |
+| `host.port`        | `8080`                                          |
+| `http.scheme`      | `"https"`                                       |
+| `http.route`       | `"/webshop/articles/:article_id"`               |
+| `http.status_code` | `200`                                           |
+| `http.status_text` | `"OK"`                                          |
+| `http.client_ip`   | `"192.0.2.4"`                                   |
+| `peer.ip4`         | `"192.0.2.5"` (the client goes through a proxy) |
 
 Note that following the recommendations above, `http.url` is not set in the above example.
 If set, it would be
