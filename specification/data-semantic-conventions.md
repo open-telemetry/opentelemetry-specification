@@ -152,6 +152,8 @@ which is a fixed path prefix of the URL that determines to which application a r
 at a particular virtual host
 to the `com.example.webshop` web application).
 
+Some servers allow to bind the same HTTP application to multiple `(virtual host, application root)` pairs.
+
 > TODO: Find way to track HTTP application ([opentelemetry/opentelementry-specification#335][])
 
 [PEP 3333]: https://www.python.org/dev/peps/pep-3333/
