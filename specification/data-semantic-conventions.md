@@ -185,7 +185,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `host.port` | Local port. E.g., `80` (integer). Analogous to `peer.port`. | [1] |
 | `http.route` | The matched route (path template). E.g. `"/users/:userID?"`. | No |
 | `http.app_root` |The path prefix of the URL that identifies this HTTP application. If multiple roots exist, the one that was matched for this request should be used. | No |
-| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `peer.ip*`, which would identify the nework-level peer, which may be a proxy. | No |
+| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `peer.ip*`, which would identify the network-level peer, which may be a proxy. | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
