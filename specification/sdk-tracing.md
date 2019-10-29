@@ -162,8 +162,8 @@ instances. This means methods like `addSpanProcessor` must be implemented on
 `TracerFactory`.
 
 Each processor registered on `TracerFactory` is a start of the processing pipeline
-that consist of other processors and exporters. Processors (or exporters) may implement
-tagging, batching, filtering and other advanced scenarios.
+that consist of other processors and exporters. Processors (or exporters) may
+implement tagging, batching, filtering and other advanced scenarios.
 
 SDK MUST allow to end each pipeline with individual exporter and do filtering
 or batching independently on each pipeline.
@@ -179,19 +179,38 @@ The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
 
 ```
-  +-----+---------------+   +---------------------+   +-------------------+
-  |     |               |   |                     |   |                   |
-  |     |               |   | BatchProcessor      |   |    SpanExporter   |
-  |     |               +---> SimpleProcessor     +--->  (JaegerExporter) |
-  | SDK | SpanProcessor |   |                     |   |                   |
-  |     |               |   +---------------------+   +-------------------+
-  |     |               |
-  |     |               |   +---------------------+
-  |     |               |   |                     |
-  |     |               +---> ZPagesProcessor     |
-  |     |               |   |                     |
-  +-----+---------------+   +---------------------+
+  +-----+------------+   +---------------------+   +-------------------+
+  |     |            |   |                     |   |                   |
+  |     |            |   | BatchProcessor      |   |    SpanExporter   |
+  |     |            +---> SimpleProcessor     +--->  (JaegerExporter) |
+  | SDK | Span.end() |   |                     |   |                   |
+  |     |            |   +---------------------+   +-------------------+
+  |     |            |
+  |     |            |   +---------------------+
+  |     |            |   |                     |
+  |     |            +---> ZPagesProcessor     |
+  |     |            |   |                     |
+  +-----+------------+   +---------------------+
 ```
+
+Another example demonstrates more complicated configuration where spans sent
+to Jaeger are filtered somehow and tagged (e.g. with thread-id), ZPages receive unfiltered
+spans. Since span instances are shared between processors so any tagging done by one processor
+affects all futher processsors/exporters from all pipelines.
+
+```
+  +-----+------------+   +--------------+   +-----------------+   +----------------+   +-------------------+
+  |     |            |   |              |   |                 |   |                |   |                   |
+  |     |            |   |              |   |                 |   |                |   |    SpanExporter   |
+  |     |            +---> TagProcessor +---> FilterProcessor +---> BatchProcessor +--->  (JaegerExporter) |
+  | SDK | Span.end() |   |              |   |                 |   |                |   |                   |
+  |     |            |   +--------------+   +-----------------+   +----------------+   +-------------------+
+  |     |            |
+  |     |            |   +-----------------+
+  |     |            |   |                 |
+  |     |            +---> ZPagesProcessor |
+  |     |            |   |                 |
+  +-----+------------+   +-----------------+
 
 #### Interface definition
 
