@@ -211,6 +211,7 @@ affects all futher processsors/exporters from all pipelines.
   |     |            +---> ZPagesProcessor |
   |     |            |   |                 |
   +-----+------------+   +-----------------+
+```
 
 #### Interface definition
 
