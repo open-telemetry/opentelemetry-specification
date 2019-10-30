@@ -179,18 +179,18 @@ The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
 
 ```
-  +-----+------------+   +---------------------+   +-------------------+
-  |     |            |   |                     |   |                   |
-  |     |            |   | BatchProcessor      |   |    SpanExporter   |
-  |     |            +---> SimpleProcessor     +--->  (JaegerExporter) |
-  | SDK | Span.end() |   |                     |   |                   |
-  |     |            |   +---------------------+   +-------------------+
-  |     |            |
-  |     |            |   +---------------------+
-  |     |            |   |                     |
-  |     |            +---> ZPagesProcessor     |
-  |     |            |   |                     |
-  +-----+------------+   +---------------------+
+  +-----+----------------+   +---------------------+   +-------------------+
+  |     |                |   |                     |   |                   |
+  |     |                |   | BatchProcessor      |   |    SpanExporter   |
+  |     | Span.start() leProcessor     +--->  (JaegerExporter) |
+  | SDK | Span.end()   |   |                     |   |                   |
+  |     |              |   +---------------------+   +-------------------+
+  |     |              |
+  |     |              |   +---------------------+
+  |     |              |   |                     |
+  |     |              +---> ZPagesProcessor     |
+  |     |              |   |                     |
+  +-----+--------------+   +---------------------+
 ```
 
 Another example demonstrates more complicated configuration where spans sent
@@ -199,18 +199,18 @@ spans. Since span instances are shared between processors so any tagging done by
 affects all futher processsors/exporters from all pipelines.
 
 ```
-  +-----+------------+   +--------------+   +-----------------+   +----------------+   +-------------------+
-  |     |            |   |              |   |                 |   |                |   |                   |
-  |     |            |   |              |   |                 |   |                |   |    SpanExporter   |
-  |     |            +---> TagProcessor +---> FilterProcessor +---> BatchProcessor +--->  (JaegerExporter) |
-  | SDK | Span.end() |   |              |   |                 |   |                |   |                   |
-  |     |            |   +--------------+   +-----------------+   +----------------+   +-------------------+
-  |     |            |
-  |     |            |   +-----------------+
-  |     |            |   |                 |
-  |     |            +---> ZPagesProcessor |
-  |     |            |   |                 |
-  +-----+------------+   +-----------------+
+  +-----+--------------+   +--------------+   +-----------------+   +----------------+   +-------------------+
+  |     |              |   |              |   |                 |   |                |   |                   |
+  |     |              |   |              |   |                 |   |                |   |    SpanExporter   |
+  |     | Span.start() +---> TagProcessor +---> FilterProcessor +---> BatchProcessor +--->  (JaegerExporter) |
+  | SDK | Span.end()   |   |              |   |                 |   |                |   |                   |
+  |     |              |   +--------------+   +-----------------+   +----------------+   +-------------------+
+  |     |              |
+  |     |              |   +-----------------+
+  |     |              |   |                 |
+  |     |              +---> ZPagesProcessor |
+  |     |              |   |                 |
+  +-----+--------------+   +-----------------+
 ```
 
 #### Interface definition
@@ -223,7 +223,7 @@ exceptions.
 
 **Parameters:**
 
-* `Span` - a readable span object.
+* `Span` - a readable   span object    .       -- 
 
 **Returns:** `Void`
 
