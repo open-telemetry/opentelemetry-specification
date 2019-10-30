@@ -223,7 +223,7 @@ exceptions.
 
 **Parameters:**
 
-* `Span` - a readable span object
+* `Span` - a readable span object.
 
 **Returns:** `Void`
 
