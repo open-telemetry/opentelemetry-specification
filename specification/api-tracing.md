@@ -537,7 +537,7 @@ Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 
 ## SpanKind
 
-`SpanKind` describes the relationship bewteen the Span, its parents,
+`SpanKind` describes the relationship between the Span, its parents,
 and its children in a Trace.  `SpanKind` describes two independent
 properties that benefit tracing systems during analysis.
 
