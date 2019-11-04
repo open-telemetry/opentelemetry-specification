@@ -537,24 +537,54 @@ Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 
 ## SpanKind
 
-Depending on the `Span` position in a `Trace` and application components
-boundaries, it can play a different role. This role often defines how `Span`
-will be processed and visualized by various backends. So it is important to
-record this "hint" whenever possible to the best of the caller's knowledge.
+`SpanKind` describes the relationship between the Span, its parents,
+and its children in a Trace.  `SpanKind` describes two independent
+properties that benefit tracing systems during analysis.
+
+The first property described by `SpanKind` reflects whether the Span
+is a remote child or parent.  Spans with a remote parent are
+interesting because they are sources of external load.  Spans with a
+remote child are interesting because they reflect a non-local system
+dependency.
+
+The second property described by `SpanKind` reflects whether a child
+Span represents a synchronous call.  When a child span is synchronous,
+the parent is expected to wait for it to complete under ordinary
+circumstances.  It can be useful for tracing systems to know this
+property, since synchronous Spans may contribute to the overall trace
+latency.
+
+In order for `SpanKind` to be meaningful, callers should arrange that
+a single Span does not serve more than one purpose.  For example, a
+server-side span should not be used directly as the parent of another
+remote span.  As a simple guideline, instrumentation should create a
+new Span prior to extracting and serializing the span context for a
+remote call.
 
 These are the possible SpanKinds:
 
-* `INTERNAL` Default value. Indicates that the span represents an internal
-  operation within an application, as opposed to an operations happening at the
-  boundaries.
-* `SERVER` Indicates that the span covers server-side handling of an RPC or
-  other remote request.
-* `CLIENT` Indicates that the span describes a request to some remote service.
-* `PRODUCER` Indicates that the span describes a producer sending a message to a
-  broker. Unlike client and server, there is often no direct critical path
-  latency relationship between producer and consumer spans. A `Producer` span ends
-  when the message was accepted by the broker while the logical processing of the
-  message might span a much longer time.
-* `CONSUMER` Indicates that the span describes a consumer receiving a message from
-  a broker. As for the `PRODUCER` kind, there is often no direct critical
-  path latency relationship between producer and consumer spans.
+* `SERVER` Indicates that the span covers server-side handling of a
+  synchronous RPC or other remote request.  This span is the child of
+  a remote `CLIENT` span that was expected to wait for a response.
+* `CLIENT` Indicates that the span describes a synchronous request to
+  some remote service.  This span is the parent of a remote `SERVER`
+  span and waits for its response.
+* `PRODUCER` Indicates that the span describes the parent of an
+  asynchronous request.  This parent span is expected to end before
+  the corresponding child `CONSUMER` span, possibly even before the
+  child span starts.
+* `CONSUMER` Indicates that the span describes the child of an
+  asynchronous remote `PRODUCER` request.
+* `INTERNAL` Default value. Indicates that the span represents an
+  internal operation within an application, as opposed to an
+  operations with remote parents or children.
+
+To summarize the interpretation of these kinds:
+
+| `SpanKind` | Synchronous | Asynchronous | Remote Incoming | Remote Outgoing |
+|--|--|--|--|--|
+| `CLIENT` | yes | | | yes |
+| `SERVER` | yes | | yes | |
+| `PRODUCER` | | yes | | yes|
+| `CONSUMER` | | yes | yes | |
+| `INTERNAL` | | | | |
