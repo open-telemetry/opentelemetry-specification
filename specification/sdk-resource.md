@@ -24,12 +24,12 @@ The API interface must support two ways to instantiate new resources. Those are:
 ### Create
 
 The interface MUST provide a way to create a new resource, from a collection of
-labels. Examples include a factory method or a constructor for a resource
+attributes. Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
 
 Required parameters:
 
-- a collection of name/value labels, where name is a string and value can be one
+- a collection of name/value attributes, where name is a string and value can be one
   of: string, int64, double, bool.
 
 ### Merge
@@ -38,19 +38,19 @@ The interface MUST provide a way for a primary resource to merge with a
 secondary resource, resulting in the creation of a brand new resource. The
 original resources should be unmodified.
 
-This is utilized for merging of resources whose labels come from different
+This is utilized for merging of resources whose attributes come from different
 sources, such as environment variables, or metadata extracted from the host or
 container.
 
-Already set labels MUST NOT be overwritten unless they are the empty string.
+Already set attributes MUST NOT be overwritten unless they are the empty string.
 
-Label key namespacing SHOULD be used to prevent collisions across different
+Attribute key namespacing SHOULD be used to prevent collisions across different
 resource detection steps.
 
 Required parameters:
 
-- the primary resource whose labels takes precedence.
-- the secondary resource whose labels will be merged.
+- the primary resource whose attributes takes precedence.
+- the secondary resource whose attributes will be merged.
 
 ### The empty resource
 
@@ -58,21 +58,21 @@ It is recommended, but not required, to provide a way to quickly create an empty
 resource.
 
 Note that the OpenTelemetry project documents certain ["standard
-labels"](data-semantic-conventions.md) that have prescribed semantic meanings.
+attributes"](data-semantic-conventions.md) that have prescribed semantic meanings.
 
 ## Resource operations
 
 In addition to resource creation, the following operations should be provided:
 
-### Retrieve labels
+### Retrieve attributes
 
-The API should provide a way to retrieve a read only collection of labels
-associated with a resource. The labels should consist of the name and values,
+The API should provide a way to retrieve a read only collection of attributes
+associated with a resource. The attributes should consist of the name and values,
 both of which should be strings.
 
-There is no need to guarantee the order of the labels.
+There is no need to guarantee the order of the attributes.
 
-The most common operation when retrieving labels is to enumerate over them. As
+The most common operation when retrieving attributes is to enumerate over them. As
 such, it is recommended to optimize the resulting collection for fast
 enumeration over other considerations such as a way to quickly retrieve a value
-for a label with a specific key.
+for a attribute with a specific key.
