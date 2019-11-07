@@ -141,7 +141,6 @@ Getter is an argument in `Extract` that get value from given field
 
 `Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Getter` class with `Get` method as described below.
 
-
 ##### Get
 
 The Get function MUST return the first value of the given propagation key or return null if the key doesn't exist.
