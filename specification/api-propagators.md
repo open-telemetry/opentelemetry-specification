@@ -141,11 +141,14 @@ Getter is an argument in `Extract` that get value from given field
 
 `Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Getter` class with `Get` method as described below.
 
-It MUST return the first value of the given propagation key or return null if the key doesn't exist.
+
+##### Get
+
+The Get function MUST return the first value of the given propagation key or return null if the key doesn't exist.
 
 Required arguments:
 
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The user of the extract API is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text format implemenations MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text format implemenations MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
