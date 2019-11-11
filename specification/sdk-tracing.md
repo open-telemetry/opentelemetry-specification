@@ -167,7 +167,7 @@ of span processor and optional exporter. SDK MUST allow to end each pipeline wit
 individual exporter.
 
 SDK MUST allow users to implement and configure custom processors and decorate
-built-in processors for advanced scenarios such as tagging or filtering.
+built-in processors for advanced scenarios such as tagging or filtering. 
 
 The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
@@ -224,6 +224,10 @@ Shutdown should not block indefinitely. Language library authors can decide if
 they want to make the shutdown timeout to be configurable.
 
 #### Built-in span processors
+
+SDK MUST implement simple and batch processors described below. Other common
+processing scenarios should be first considered for implementation out-of-process
+in [OpenTelemetry Collector](overview.md#collector)
 
 ##### Simple processor
 
