@@ -10,9 +10,10 @@ the currently open PRs:_
 
 __Metric update__: The term _metric update_ refers to any single
 operation on a metric instrument; each handle-oriented and direct call
-imply a single metric update, whereas each RecordBatch imply a batch
-of metric updates.  See the user-facing API specification for
-definitions of the three [calling conventions](api-metrics-user.md).
+imply a single metric update, whereas each RecordBatch operation
+implies a batch of metric updates.  See the user-facing API
+specification for definitions of the three [calling
+conventions](api-metrics-user.md).
 
 __Aggregator__: The term _aggregator_ refers to an implementation that
 can combine multiple metric updates into a single, combined state.
@@ -57,9 +58,9 @@ Meter implementation is that be able to "forget" state about metric
 updates after they are collected.
 
 The Meter implementation SHOULD ensure that operations on instrument
-handles be fast, bypassing the map lookup described above.  Metric
-updates made via an instrument handle, where the aggregator is defined
-by simple atomic operations, should follow a very short code path.
+handles be fast.  Metric updates made via an instrument handle, when
+used with an aggregator defined by simple atomic operations, should
+follow a very short code path.
 
 The Meter implementation provides a `Collect()` method to initiate
 collection.  Batcher and Exporter implementations are written with the
