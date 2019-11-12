@@ -39,7 +39,6 @@ Additionally, the `net.peer.name` and `net.peer.port` [network attributes][] are
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
 
-
 ### Status
 
 Implementations MUST set status which MUST be the same as the gRPC client/server
