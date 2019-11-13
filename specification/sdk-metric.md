@@ -131,10 +131,10 @@ The Aggregator interface supports combining multiple metric events
 into a single aggregated state.  Different concrete aggregator types
 provide different functionality and levels of concurrent performance.
 
-Aggregators support `Update()`, `Checkpoint()`, and `Merge()`.
+Aggregators MUST support `Update()`, `Checkpoint()`, and `Merge()`.
 `Update()` is called directly from the Meter in response to a metric
 event, and may be called concurrently.  `Update()` is also passed the
-user's telemetry context, which allows is to access the current trace
+user's telemetry context, which allows it to access the current trace
 context and distributed correlations, however none of the built-in
 aggregators use this information.
 
@@ -326,7 +326,7 @@ This optimization applies for any Exporter that will internally
 compute a unique encoding for a set of labels, whether using a text or
 a binary encoding.  For example, a dogstatsd Exporter will benefit by
 providing its specific LabelEncoder implementation to the Meter
-implementation; consequently, the export records its sees will be
+implementation; consequently, the export records it sees will be
 accompanied by a pre-computed encoding of the export LabelSet.
 
 ## Metric descriptors
