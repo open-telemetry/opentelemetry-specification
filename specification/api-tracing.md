@@ -80,17 +80,17 @@ exposes methods for creating and activating new `Span`s. The `Tracer` is
 configured with `Propagator`s which support transferring span context across
 process boundaries.
 
-`Tracer`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `Tracer`.
-
-Some applications may require multiple `Tracer` instances, e.g. to create
-`Span`s on behalf of other applications. Implementations MAY provide a global
-registry of `Tracer`s for such applications.
-
 ### Obtaining a Tracer
 
 New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
 method. This method expects two string arguments:
+
+`TracerFactory`s are generally expected to be used as singletons. Implementations
+SHOULD provide a single global default `TracerFactory`.
+
+Some applications may use multiple `TracerFactory` instances, e.g. to provide
+different settings (e.g. `SpanProcessor`s) to each of those instances and -
+in further consequence - to the `Tracer` instances created by them.
 
 - `name` (required): This name must identify the instrumentation library (also
   referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
