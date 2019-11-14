@@ -74,26 +74,26 @@ A duration is the elapsed time between two events.
 ## Tracer
 
 A `Tracer` is the code responsible for how `Spans`s are started and ended, and
-it exposes the API which [library developers](#library-developer) use when
-instrumenting their code. The API MUST allow the [end user](#end-user) to
+it exposes the API which [library developers](glossary.md#library-developer) use when
+instrumenting their code. The API MUST allow the [end user](glossary.md#end-user) to
 configure or specify at runtime the implementation, the default full
 implementation is referred to as the SDK in this spec, which is used by all
 instrumented code within the program.
 
-If the [end user](#end-user) does not set a `Tracer` to be used and does not
+If the [end user](glossary.md#end-user) does not set a `Tracer` to be used and does not
 include the library which implements the `Tracer`, like the OpenTelemetry SDK,
 the API must include a default minimal implementation which acts as a no-op
-`Tracer`. The [library developers](#library-developer) *must* be able to depend
+`Tracer`. The [library developers](glossary.md#library-developer) *must* be able to depend
 on the API and instrument their code without thought to whether or not the final
 deployable application includes the SDK or any other implementation.
 
-To facilitate this, the [library developer](#library-developer) can *not*
+To facilitate this, the [library developer](glossary.md#library-developer) can *not*
 specify a `Tracer` implementation to use. The API *must* provide a way for the
 developer to access a `Tracer`, which at runtime may be the default minimal
 implementation from the API, the default full implementation known as the SDK or
 a third party implementation.
 
-However, even though the [library developer](#library-developer) cannot define
+However, even though the [library developer](glossary.md#library-developer) cannot define
 an implementation to use, they can, and should, give the `Tracer` a name and version:
 
 - `name` (optional): This name must identify the instrumentation library (also
@@ -109,7 +109,7 @@ that have been created.
 
 Since whether there is a cache that acts as a registry of name's to `Tracer`s is
 outside the scope of the API, the API *must* provide only one function for the
-[library developer](#library-developer) to access a `Tracer`. Meaning, there
+[library developer](glossary.md#library-developer) to access a `Tracer`. Meaning, there
 can not be `GetTracer` and `NewTracer` functions becuase the API is oblivious to
 the underlying implementation.
 
