@@ -73,55 +73,45 @@ A duration is the elapsed time between two events.
 
 ## Tracer
 
-The OpenTelemetry library achieves in-process context propagation of `Span`s by
-way of the `Tracer`.
+A `Tracer` is the code responsible for how `Spans`s are started and ended, and
+it exposes the API which [library developers](#library-developer) use when
+instrumenting their code. The API MUST allow the [end user](#end-user) to
+configure or specify at runtime the implementation, the default full
+implementation is referred to as the SDK in this spec, which is used by all
+instrumented code within the program.
 
-The `Tracer` is responsible for tracking the currently active `Span`, and
-exposes methods for creating and activating new `Span`s. The `Tracer` is
-configured with `Propagator`s which support transferring span context across
-process boundaries.
+If the [end user](#end-user) does not set a `Tracer` to be used and does not
+include the library which implements the `Tracer`, like the OpenTelemetry SDK,
+the API must include a default minimal implementation which acts as a no-op
+`Tracer`. The [library developers](#library-developer) *must* be able to depend
+on the API and instrument their code without thought to whether or not the final
+deployable application includes the SDK or any other implementation.
 
-### Obtaining a Tracer
+To facilitate this, the [library developer](#library-developer) can *not*
+specify a `Tracer` implementation to use. The API *must* provide a way for the
+developer to access a `Tracer`, which at runtime may be the default minimal
+implementation from the API, the default full implementation known as the SDK or
+a third party implementation.
 
-New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
-method. This method expects two string arguments:
+However, even though the [library developer](#library-developer) cannot define
+an implementation to use, they can, and should, give the `Tracer` a name and version:
 
-`TracerFactory`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `TracerFactory`.
-
-Some applications may use multiple `TracerFactory` instances, e.g. to provide
-different settings (e.g. `SpanProcessor`s) to each of those instances and -
-in further consequence - to the `Tracer` instances created by them.
-
-- `name` (required): This name must identify the instrumentation library (also
+- `name` (optional): This name must identify the instrumentation library (also
   referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
   the instrumented library.
-  In case an invalid name (null or empty string) is specified, a working
-  default Tracer implementation as a fallback is returned rather than returning
-  null or throwing an exception.
-  A library, implementing the OpenTelemetry API *may* also ignore this name and
-  return a default instance for all calls, if it does not support "named"
-  functionality (e.g. an implementation which is not even observability-related).
-  A TracerFactory could also return a no-op Tracer here if application owners configure
-  the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library
-  (e.g. `semver:1.0.0`).
+- `version` (optional and only allowed if a `name` is given): Specifies the
+  version of the instrumentation library (e.g. `semver:1.0.0`).
 
-Implementations might require the user to specify configuration properties at
-`TracerFactory` creation time, or rely on external configuration, e.g. when using the
-provider pattern.
+Because the `Tracer` can have a separate `name` and `version`, but shares
+everything else with all other `Tracer` references used by the other libraries
+within an application, the implementations can include a cache of the `Tracer`s
+that have been created.
 
-#### Runtimes with multiple deployments/applications
-
-Runtimes that support multiple deployments or applications might need to
-provide a different `TracerFactory` instance to each deployment. To support this,
-the global `TracerFactory` registry may delegate calls to create new instances of
-`TracerFactory` to a separate `Provider` component, and the runtime may include
-its own `Provider` implementation which returns a different `TracerFactory` for
-each deployment.
-
-`Provider` instances are registered with the API via some language-specific
-mechanism, for instance the `ServiceLoader` class in Java.
+Since whether there is a cache that acts as a registry of name's to `Tracer`s is
+outside the scope of the API, the API *must* provide only one function for the
+[library developer](#library-developer) to access a `Tracer`. Meaning, there
+can not be `GetTracer` and `NewTracer` functions becuase the API is oblivious to
+the underlying implementation.
 
 ### Tracer operations
 
