@@ -73,7 +73,7 @@ A duration is the elapsed time between two events.
 
 ## Tracer
 
-A `Tracer` is the code responsible for how `Spans`s are started and ended, and
+A `Tracer` is the code responsible for how `Spans`s are started and
 it exposes the API which [library developers](glossary.md#library-developer) use when
 instrumenting their code. The API MUST allow the [end user](glossary.md#end-user) to
 configure or specify at runtime the implementation, the default full
