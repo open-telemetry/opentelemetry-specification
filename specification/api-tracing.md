@@ -102,16 +102,11 @@ an implementation to use, they can, and should, give the `Tracer` a name and ver
 - `version` (optional and only allowed if a `name` is given): Specifies the
   version of the instrumentation library (e.g. `semver:1.0.0`).
 
-Because the `Tracer` can have a separate `name` and `version`, but shares
-everything else with all other `Tracer` references used by the other libraries
-within an application, the implementations can include a cache of the `Tracer`s
-that have been created.
-
-Since whether there is a cache that acts as a registry of name's to `Tracer`s is
-outside the scope of the API, the API *must* provide only one function for the
-[library developer](glossary.md#library-developer) to access a `Tracer`. Meaning, there
-can not be `GetTracer` and `NewTracer` functions becuase the API is oblivious to
-the underlying implementation.
+So the API *must* offer functionality for the library developer to pass the
+`name` and `version` to the implementation when retrieving the `Tracer`. The
+`name` and `version` are not attributes to be added to a retreived `Tracer`,
+they must be able to be passed at the time of retrieval to allow implementations
+to base the returned `Tracer` on that information.
 
 ### Tracer operations
 
