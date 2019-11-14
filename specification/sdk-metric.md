@@ -1,5 +1,12 @@
 # Metric SDK
 
+The purpose of this document is to define the _standard_ Metrics SDK
+provided with OpenTelemetry libraries in each language.
+
+Note: This document assumes you have read both the (Metrics API
+overview)[api-metrics.md] and the (Metrics User-Facing
+API)[api-metrics-user.md] specification documents.
+
 _This document is derived from the Golang Metrics SDK prototype.  See
 the currently open PRs:_
 1. [Pipeline and stdout exporter](https://github.com/open-telemetry/opentelemetry-go/pull/265)
@@ -43,6 +50,9 @@ __Metric descriptor__: A _metric descriptor_ is an in-memory
 representation of the metric instrument, including all the information
 provided in when it was defined.
 
+__Collection__: _Collection_ refers to the process of gathering the
+current state from all active metric instruments for the exporter.
+
 ## Meter implementation
 
 The Meter API provides methods to create metric instruments, metric
@@ -54,20 +64,23 @@ The Meter implementation stands at the start of the export pipeline,
 where it interfaces with the user-facing API and receives metric
 updates.  The Meter's primary job is to maintain active state about
 pending metric updates.  The most important requirement placed on the
-Meter implementation is that be able to "forget" state about metric
-updates after they are collected.
+Meter implementation is that it be able to "forget" state about metric
+updates after they are collected, so that the Meter implementation does
+not have unbounded memory growth.
 
 The Meter implementation SHOULD ensure that operations on instrument
-handles be fast.  Metric updates made via an instrument handle, when
-used with an aggregator defined by simple atomic operations, should
-follow a very short code path.
+handles be fast, because the API specification promises users that the
+handle-oriented calls are the fastest possible calling convention.
+Metric updates made via an instrument handle, when used with an
+aggregator defined by simple atomic operations, should follow a very
+short code path.
 
-The Meter implementation provides a `Collect()` method to initiate
-collection.  Batcher and Exporter implementations are written with the
-assumption that collection is single-threaded, therefore the Meter
-implementation MUST prevent concurrent `Collect()` calls.  During the
-collection pass, the Meter implementation checkpoints each active
-aggregator and passes it to the Batcher for processing.
+The Meter implementation MUST provide a `Collect()` method to initiate
+collection, which involves sweeping through metric instruments with
+un-exported metric updates, checkpointing their aggregators, and
+submitting them to the Batcher.  Batcher and Exporter MUST be called
+in a single-threaded context, therefore the Meter implementation MUST
+prevent concurrent `Collect()` calls.
 
 This document does not specify how to coordinate synchronization
 between user-facing metric updates and metric collection activity,
@@ -78,15 +91,30 @@ updates.
 
 ### Meter aggregation preserves LabelSet dimensions
 
-The Meter acts as a short-term store for aggregating metric updates
-within a collection period.  The Meter implementation maintains
-aggregators for active metric instruments according to the complete,
-original LabelSet.  This ensures a relatively simple code path for
+The Meter implementation MUST maintain aggregators for active metric
+instruments for each complete, distinct LabelSet.  This ensures that
+the Batcher has access to the complete set of labels when performing
+its task.
+
+In this design, reducing dimensions for export is the responsibility
+of the Batcher.  As a consequence, the cost and complexity of
+dimensionality reduction affect only the collection pass.  As a
+secondary benefit, this ensures a relatively simple code path for
 entering metric updates into the Meter implementation.
 
-Reducing dimensions for export is the responsibility of the Batcher.
-As a consequence, the cost and complexity of dimensionality reduction
-affects only the collection pass.
+#### Alternatives considered
+
+There is an alternative to maintaining aggregators for active metric
+instruments for each complete, distinct LabelSet.  Instead of
+aggregating by each distinct LabelSet in the Meter implementation and
+reducing dimensionality in the Batcher, the Meter implementation could
+reduce dimensionality "up front".  In this design, the Meter
+implementation would only maintain Aggregators for metric instruments
+with the reduced-for-export set of dimensions.
+
+This alternative was not selected because it puts a relatively
+complicated decision--and potentially additional synchronization--into
+the instrumentation code path.
 
 ### Recommended implementation
 
@@ -131,12 +159,12 @@ The Aggregator interface supports combining multiple metric events
 into a single aggregated state.  Different concrete aggregator types
 provide different functionality and levels of concurrent performance.
 
-Aggregators MUST support `Update()`, `Checkpoint()`, and `Merge()`.
-`Update()` is called directly from the Meter in response to a metric
-event, and may be called concurrently.  `Update()` is also passed the
-user's telemetry context, which allows it to access the current trace
-context and distributed correlations, however none of the built-in
-aggregators use this information.
+Aggregators MUST support `Update()`, `Checkpoint()`, and `Merge()`
+operations.  `Update()` is called directly from the Meter in response
+to a metric event, and may be called concurrently.  `Update()` is also
+passed the user's telemetry context, which allows it to access the
+current trace context and distributed correlations, however none of
+the built-in aggregators use this information.
 
 The `Checkpoint()` operation is called to atomically save a snapshot
 of the Aggregator, since `Checkpoint()` may be called concurrently
@@ -306,13 +334,16 @@ metric updates into the desired format and send them on their way.
 ## Multiple exporter support
 
 The metric export pipeline specified here does not include explicit
-support for multiple export pipelines.  In principle, any one of the
-interfaces here could be satisfied by a multiplexing implementation,
-but in practice, it will be costly to run multiple Batchers or
-aggregators in parallel.
+support for multiple export pipelines.  In principle, the Batcher and
+Exporter interfaces specified here could be satisfied by a
+multiplexing implementation, but in practice, it will be costly to run
+multiple Batchers in parallel, particularly if they do not share the
+same Aggregator selection logic.
 
 If multiple exporters are required, therefore, it is best if they can
-share a single Batcher configuration.
+share a single Batcher configuration.  The SDK is not required to
+provide multiplexing implementations of the Batcher or Exporter
+interfaces.
 
 ## LabelEncoder optimizations
 
