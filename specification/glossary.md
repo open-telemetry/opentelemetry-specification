@@ -2,6 +2,12 @@
 
 ## User Definitions
 
+- <a name="api-developer"></a>API Developer: A developer working on the API
+  library for a particular language.
+- <a name="sdk-developer"></a>SDK Developer: A developer working on implementing
+  the logic either defined in the official SDK specification or a third party
+  implementation. The implementation must be used only through the API by a
+  library developer or end user.
 - <a name="library-developer"></a>Library Developer: This is a developer working
   on code that will be used by others. They are not creating a final
   deployable artifact and must only rely on the OpenTelemetry API as a
