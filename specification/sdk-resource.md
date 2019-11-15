@@ -29,7 +29,8 @@ object. A factory method is recommended to enable support for cached objects.
 
 Required parameters:
 
-- a collection of name/value labels, where name and value are both strings.
+- a collection of name/value labels, where name is a string and value can be one
+  of: string, int64, double, bool.
 
 ### Merge
 
