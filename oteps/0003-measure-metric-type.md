@@ -1,6 +1,6 @@
 # Consolidate pre-aggregated and raw metrics APIs
 
-**Status:** `proposed`
+**Status:** `approved`
 
 # Foreword
 
@@ -16,6 +16,8 @@ This RFC changes how "Measure" is used in the OpenTelemetry metrics specificatio
 
 Since this document will be read in the future after the proposal has been written, uses of the word "current" lead to confusion.  For this document, the term "preceding" refers to the state that was current prior to these changes.
 
+The preceding specification used the term `TimeSeries` to describe an instrument bound with a set of pre-defined labels.  In this document, [the term "Handle" is used to describe an instrument with bound labels](0009-metric-handles.md).  In a future OTEP this will be again changed to "Bound instrument".  The term "Handle" is used throughout this document to refer to a bound instrument.
+
 # Motivation
 
 In the preceding `Metric.GetOrCreateTimeSeries` API for Gauges and Cumulatives, the caller obtains a `TimeSeries` handle for repeatedly recording metrics with certain pre-defined label values set.  This enables an important optimization for exporting pre-aggregated metrics, since the implementation is able to compute the aggregate summary "entry" using a pointer or fast table lookup. The efficiency gain requires that the aggregation keys be a subset of the pre-defined labels.
@@ -24,7 +26,7 @@ Application programs with long-lived objects and associated Metrics can take adv
 
 The preceding raw statistics API did not specify support for pre-defined labels.  This RFC replaces the raw statistics API by a new, general-purpose kind of metric, `MeasureMetric`, generally intended for recording individual measurements like the preceding raw statistics API, with explicit support for pre-defined labels.
 
-The preceding raw statistics API supported all-or-none recording for interdependent measurements.  This RFC introduces a `RecordBatch` API to support recording batches of measurements in a single API call, where a `Measurement` is now defined as a tuple of `MeasureMetric`, `Value` (integer or floating point), and `Labels`.
+The preceding raw statistics API supported all-or-none recording for interdependent measurements using a common label set.  This RFC introduces a `RecordBatch` API to support recording batches of measurements in a single API call, where a `Measurement` is now defined as a pair of `MeasureMetric` and `Value` (integer or floating point).
 
 # Explanation
 
@@ -51,19 +53,19 @@ The `Meter` interface represents the metrics portion of the OpenTelemetry API.
 
 There are three kinds of metric instrument, `CumulativeMetric`, `GaugeMetric`, and `MeasureMetric`.
 
-Metric instruments are constructed by the API, they are not constructed by any specific SDK.
+Metric instruments are constructed through the `Meter` API. Constructing an instrument automatically registers it with the SDK. The common attributes of a metric instrument are:
 
 | Field | Description |
 |------|-----------|
 | Name | A string. |
 | Kind | One of Cumulative, Gauge, or Measure. |
-| Required Keys | List of always-defined keys in handles for this metric. |
+| Recommended Keys | Default aggregation keys. |
 | Unit | The unit of measurement being recorded. |
 | Description | Information about this metric. |
 
-See the specification for more information on these fields, including formatting and uniqueness requirements.  To define a new metric, use one of the language-specific API methods (e.g., with names like `NewCumulativeMetric`, `NewGaugeMetric`, or `NewMeasureMetric`).
+See the specification for more information on these fields, including formatting and uniqueness requirements.  To define a new metric, use one of the `Meter` API methods (e.g., with names like `NewCumulativeMetric`, `NewGaugeMetric`, or `NewMeasureMetric`).
 
-Metric instrument Handles are SDK-provided objects that combine a metric instrument with a set of pre-defined labels.  Handles are obtained by calling a language-specific API method (e.g., `GetHandle`) on the metric instrument with certain label values.  Handles may be used to `Set()`, `Add()`, or `Record()` metrics according to their kind.
+Metric instrument Handles combine a metric instrument with a set of pre-defined labels.  Handles are obtained by calling a language-specific API method (e.g., `GetHandle`) on the metric instrument with certain label values.  Handles may be used to `Set()`, `Add()`, or `Record()` metrics according to their kind.
 
 ## Selecting Metric Kind
 
@@ -85,80 +87,76 @@ The specification will be updated with the following guidance.
 
 Likely to be the most common kind of metric, cumulative metric events express the computation of a sum.  Choose this kind of metric when the value is a quantity, the sum is of primary interest, and the event count and distribution are not of primary interest.  To raise (or lower) a cumulative metric, call the `Add()` method.
 
-If the quantity in question is always non-negative, it implies that the sum never descends.  This is the common case, where cumulative metrics only go up, and these _unidirectional_ cumulative metric instruments serve to compute a rate.  For this reason, cumulative metrics have a `Bidirectional` option to be declared as allowing negative inputs, the uncommon case.  The API will reject negative inputs to (default) unidirectional cumulative metrics, instead submitting an SDK error event, which helps ensure meaningful rate calculations.
+If the quantity in question is always non-negative, it implies that the sum is monotonic.  This is the common case, `Monotonic(true)`, where cumulative sums only rise, and these metric instruments serve to compute a rate.  For this reason, cumulative metrics have a `Monotonic(false)` option to be declared as allowing negative inputs, the uncommon case.  The SDK should reject negative inputs to monotonic cumulative metrics, but it is not required to.
 
 For cumulative metrics, the default OpenTelemetry implementation exports the sum of event values taken over an interval of time.
 
 ### Gauge metric
 
-Gauge metrics express a pre-calculated value that is either `Set()` by explicit instrumentation or observed through a callback.  Generally, this kind of metric should be used when the metric cannot be expressed as a sum or a rate because the measurement interval is arbitrary.  Use this kind of metric when the measurement is not a quantity, and the sum and event count are not of interest.
+Gauge metrics express a pre-calculated value that is either `Set()` by explicit instrumentation or observed through a callback.  Generally, this kind of metric should be used when the metric cannot be expressed as a sum or a rate because the measurement interval is arbitrary.  Use this kind of metric when the measurement is a computed value and the sum and event count are not of interest.
 
-Only the gauge kind of metric supports observing the metric via a gauge `Observer` callback (as an option, see `0008-metric-observer.md`).  Semantically, there is an important difference between explicitly setting a gauge and observing it through a callback.  In case of setting the gauge explicitly, the call happens inside of an implicit or explicit context.  The implementation is free to associate the explicit `Set()` event with a context, for example.  When observing gauge metrics via a callback, there is no context associated with the event.
+Only the gauge kind of metric supports observing the metric via a gauge `Observer` callback (as an option, see `0008-metric-observer.md`).  Semantically, there is an important difference between explicitly setting a gauge and observing it through a callback.  In case of setting the gauge explicitly, the `Set()` call happens inside of an implicit or explicit context.  The implementation is free to associate the explicit `Set()` event with a context, for example.  When observing gauge metrics via a callback, there is no context associated with the event.
 
-As a special case, to support existing metrics infrastructure and the `Observer` pattern, a gauge metric may be declared as a precomputed, unidirectional sum using the `Unidirectional` option, in which case it is may be used to define a rate.  The initial value is presumed to be zero.  The API will reject descending updates to non-descending gauges, instead submitting an SDK error event.  
+As a special case, to support existing metrics infrastructure and the `Observer` pattern, a gauge metric may be declared as a precomputed, monotonic sum using the `Monotonic(true)` option, in which case it is may be used to define a rate.  The initial value is presumed to be zero.  The SDK should reject descending updates to monotonic gauges, but it is not required to.  
 
 For gauge metrics, the default OpenTelemetry implementation exports the last value that was explicitly `Set()`, or if using a callback, the current value from the `Observer`.
 
 ### Measure metric
 
-Measure metrics express a distribution of values.  This kind of metric should be used when the count or rate of events is meaningful and either:
+Measure metrics express a distribution of measured values.  This kind of metric should be used when the count or rate of events is meaningful and either:
 
 1. The sum is of interest in addition to the count (rate)
 1. Quantile information is of interest.
 
 The key property of a measure metric event is that computing quantiles and/or summarizing a distribution (e.g., via a histogram) may be expensive.  Not only will implementations have various capabilities and algorithms for this task, users may wish to control the quality and cost of aggregating measure metrics.
 
-Like cumulative metrics, non-negative measures are an important case because they support rate calculations. As an option, measure metrics may be declared as `NonNegative`.  The API will reject negative metric events for non-negative measures, instead submitting an SDK error event.
-
-Because measure metrics have such wide application, implementations are likely to provide configurable behavior.  OpenTelemetry may provide such a facility in its standard SDK, but in case no configuration is provided by the application, a low-cost policy is specified as the default behavior, which is to export the sum, the count (rate), the minimum value, and the maximum value.
+Like cumulative metrics, non-negative measures are an important case because they support rate calculations.  Measure metrics are described as `Absolute(true)` when the inputs are non-negative.  As an option, measure metrics may be declared as `Absolute(false)` to support positive and negative values.  The SDK should reject negative measurements for Absolute measures, but it is not required to.
 
 ### Option to disable metrics by default
 
 Metric instruments are enabled by default, meaning that SDKs will export metric data for this instrument without configuration.  Metric instruments support a `Disabled` option, marking them as verbose sources of information that may be configured on an as-needed basis to control cost (e.g., using a "views" API).
 
-### Option summary
+### Kind-specific option summary
 
-The optional properties of a metric instrument are:
+The kind-specific optional properties of a metric instrument are:
 
 | Property | Description | Metric kind |
 |----------|-------------|-------------|
-| Required Keys | Determines labels that are always set on metric handles | All kinds |
-| Disabled | Indicates a verbose metric that does not report by default | All kinds |
-| Bidirectional | Indicates a cumulative metric instrument that goes up and down | Cumulative |
-| Unidirectional | Indicate a gauge that only ascends, for rate calculation | Gauge |
-| NonNegative | Indicates a measure that is never negative, for rate calculation | Measure |
+| Monotonic(true)  | Indicates a cumulative that accepts only non-negative values | Cumulative (default) |
+|                  | Indicate a gauge supports ascending value sequences starting at 0 | Gauge |
+| Monotonic(false) | Indicates a cumulative that accepts positive and negative values | Cumulative |
+|                  | Indicate a gauge that expresses a monotonic cumulative value | Gauge (default) |
+| Absolute(true)   | Indicates a measure that accepts non-negative values | Measure (default) |
+| Absolute(false)  | Indicates a measure that accepts positive and negative values | Measure |
 
 ### RecordBatch API
 
-Applications sometimes want to act upon multiple metric handles in a single API call, either because the values are inter-related to each other, or because it lowers overhead.  We agree that recording batch measurements will be restricted to measure metrics, although this support could be extended to all kinds of metric in the future.
+Applications sometimes want to act upon multiple metric instruments in a single API call, either because the values are inter-related to each other, or because it lowers overhead.  RecordBatch logically updates each instrument in the batch using the supplied value.  A single label set applies to the batch.
 
 A single measurement is defined as:
 
-- Handle: the measure instrument and pre-defined label values
+- Instrument: the measure instrument (not a Handle) 
 - Value: the recorded floating point or integer data
 
-The batch measurement API uses a language-specific method name (e.g., `RecordBatch`).  The entire batch of measurements takes place within some (implicit or explicit) context.
+The batch measurement API uses a language-specific method name (e.g., `RecordBatch`).  The entire batch of measurements takes place within a (implicit or explicit) context.
 
 ## Prior art and alternatives
 
 Prometheus supports the notion of vector metrics, which are those that support pre-defined labels for a specific set of required keys.  The vector-metric API supports a variety of methods like `WithLabelValues` to associate labels with a metric handle, similar to `GetHandle` in OpenTelemetry.  As in this proposal, Prometheus supports a vector API for all metric types.
 
-Statsd libraries generally report metric events individually.  To implement statsd reporting from the OpenTelemetry, a `Meter` SDK would be installed that converts metric events into statsd updates.
-
 ## Open questions
 
 ### `GetHandle` argument ordering
+
 Argument ordering has been proposed as the way to pass pre-defined label values in `GetHandle`.  The argument list must match the parameter list exactly, and if it doesn't we generally find out at runtime or not at all.  This model has more optimization potential, but is easier to misuse than the alternative.  The alternative approach is to always pass label:value pairs to `GetOrCreateTimeseries`, as opposed to an ordered list of values. 
 
 ### `RecordBatch` argument ordering
 
-The discussion above can be had for the proposed `RecordBatch` method.  It can be declared with an ordered list of metrics, then the `Record` API takes only an ordered list of numbers.  Alternatively, and less prone to misuse, the `MeasurementBatch.Record` API could be declared with a list of metric:number pairs.
+The discussion above can be had for the proposed `RecordBatch` method.  It can be declared with an ordered list of metrics, then the `Record` API takes only an ordered list of numbers.  Alternatively, and less prone to misuse, the `RecordBatch` API has been declared with a list of metric:number pairs.
 
 ### Eliminate `GetDefaultHandle()`
 
 Instead of a mechanism to obtain a default handle, some languages may prefer to simply operate on the metric instrument directly in this case.  Should OpenTelemetry eliminate `GetDefaultHandle` and instead specify that cumulative, gauge, and measure metric instruments implement `Add()`, `Set()`, and `Record()` with the same interpretation?
-
-The argument against this is that metric instruments are meant to be pure API objects, they are not constructed through an SDK. Therefore, the default Meter (SDK) will have to be located from the context, meaning there is a question about whether this is as efficient as storing a re-usable handle for the default case.  For metric instruments with no required keys, this will be a real question: what is the benefit of a handle of it specifies no information other than the SDK?
 
 If we eliminate `GetDefaultHandle()`, the SDK may keep a map of metric instrument to default handle on its own.
 
