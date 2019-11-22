@@ -4,6 +4,7 @@ This document defines standard attributes for resources. These attributes are ty
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
 * [Service](#service)
+* [Library](#library)
 * [Compute Unit](#compute-unit)
   * [Container](#container)
 * [Deployment Service](#deployment-service)
@@ -53,6 +54,27 @@ service.name = shoppingcart
 namespace = Company
 service.name = Shop.shoppingcart
 ```
+
+## Library
+
+**type:** `library`
+
+**Description:** Telemetry library information.
+
+| Attribute  | Description  | Example  | Required? |
+|---|---|---|---|
+| library.name | The name of the telemetry library. | `opentelemetry` | No |
+| library.language | The language of telemetry library and of the code instrumented with it. <br/> The following spelling SHOULD be used for language strings: "cpp", "dotnet", "erlang", "go", "java", "nodejs", "php", "python", "ruby", "webjs" | `java` | No |
+| library.version | The version string of the library as defined below. | `semver:1.2.3` | No |
+
+`library.version` is a `string`, with naming schemas hinting at the type of a version,
+as follows:
+
+- `semver:1.2.3` (a semantic version)
+- `git:8ae73a` (a git sha hash)
+- `0.0.4.2.20190921` (a untyped version)
+
+The type and version value MUST be separated by a colon character `:`.
 
 ## Compute Unit
 
