@@ -30,7 +30,7 @@ OpenTelementry API specification](api-metrics-user.md) for more detail
 about the variety of methods, options, and optimizations available for
 users of the instrumentation API.
 
-To capture measurements using an instruement, you need an SDK that
+To capture measurements using an instrument, you need an SDK that
 implements the `Meter` API.
 
 ### Meter API
@@ -56,9 +56,9 @@ to monitor a sum.
 ### Purpose of this document
 
 This document gives an overview of the specification, introduces the
-the three kinds of instrument, and discuss how end-users should think
-about various options at a high-level, without getting into detail
-about specific method calls.
+the three kinds of instrument, and discusses how end-users should
+think about various options at a high-level, without getting into
+detail about specific method calls.
 
 ## Metric kinds and inputs
 
