@@ -243,10 +243,15 @@ The API MUST accept the following parameters:
   root `Span`. API MAY also have an option for implicit parent context
   extraction from the current context as a default behavior.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
-- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes). These
-  attributes will be used to make a sampling decision as noted in [sampling
-  description](sdk-tracing.md#sampling). Empty list will be assumed if not
-  specified.
+- `Attribute`s - A collection of key-value pairs, with the same semantics as
+  the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
+  these attributes may be used to make a sampling decision as noted in [sampling
+  description](sdk-tracing.md#sampling). An empty collection will be assumed if
+  not specified.
+
+  Whenever possible, users SHOULD set any already known attributes at span creation
+  instead of calling `SetAttribute` later.
+
 - `Link`s - see API definition [here](#add-links). Empty list will be assumed if
   not specified.
 - `Start timestamp`, default to current time. This argument SHOULD only be set
