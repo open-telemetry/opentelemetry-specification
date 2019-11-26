@@ -15,6 +15,11 @@ Particular operations may refer to or require some of these attributes.
 ## General network connection attributes
 
 These attributes may be used for any network related operation.
+The `net.peer.*` attributes describe properties of the remote end of the network connection
+(usually the transport-layer peer, e.g. the node to which a TCP connection was established),
+while the `net.host.*` properties describe the local end.
+In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
+the `net.peer.*` properties of a client are equal to the `net.host.*` properties of the server and vice versa.
 
 |  Attribute name  |                                 Notes and examples                                |
 | :--------------- | :-------------------------------------------------------------------------------- |
@@ -24,7 +29,7 @@ These attributes may be used for any network related operation.
 | `net.peer.name` | Remote hostname or similar, see note below.                                        |
 | `net.host.ip`   | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.         |
 | `net.host.port` | Like `net.peer.port` but for the host port.                                        |
-| `net.host.name` | Like `net.peer.name` but for the host name. If known, the name that the peer used to connect should be preferred. For IP-based communication, an value otbained via an API like POSIX `gethostname` may be used as fallback. |
+| `net.host.name` | Like `net.peer.name` but for the host name. If known, the name that the peer used to refer to the host should be preferred. For IP-based communication, an value otbained via an API like POSIX `gethostname` may be used as fallback. |
 
 [RFC5952]: https://tools.ietf.org/html/rfc5952
 
