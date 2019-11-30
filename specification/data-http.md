@@ -196,6 +196,10 @@ For example, `http.server_name` has shown great value in practice, as bogus HTTP
 
 It is strongly recommended to set `http.server_name` to allow associating requests with some logical server entity.
 
+### New span ids should be generated for server spans
+
+Some span propagation specifications such as B3 dictate that the client and server spans share a span id. OpenTelemetry SDKs should create new span ids for all server spans, regardless of format.
+
 ## HTTP client-server example
 
 As an example, if a browser request for `https://example.com:8080/webshop/articles/4?s=1` is invoked from a host with IP 192.0.2.4, we may have the following Span on the client side:
