@@ -344,8 +344,10 @@ A `Span` MUST have the ability to set attributes associated with it.
 An `Attribute` is defined by the following properties:
 
 - (Required) The attribute key, which must be a string.
-- (Required) The attribute value, which must be either a string, a boolean
-  value, or a numeric type.
+- (Required) The attribute value, which is either:
+  - A primitive type: string, boolean or numeric.
+  - An array of primitive type values. The array MUST be homogeneous,
+    i.e. it MUST NOT contain values of different types.
 
 The Span interface MUST provide:
 
