@@ -1,6 +1,6 @@
 # Semantic Conventions
 
-These documents define standard names and values of Resource labels and
+These documents define standard names and values of Resource attributes and
 Span attributes.
 
 * [Resource Conventions](data-resource-semantic-conventions.md)
