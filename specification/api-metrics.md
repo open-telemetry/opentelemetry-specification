@@ -152,8 +152,8 @@ callback to report the current value.  Observer instruments are
 defined by a callback, instead of supporting `Set()`, but the
 semantics are the same.  The only difference between `Observer` and
 ordinary gauges is that their events do not have an associated
-OpenTelemetry context.  Observer instruments are non-monotonic by
-default and monotonic as an option, like ordinary gauges.
+OpenTelemetry context.  Observer instruments are `Monotonic = false` by
+default and `Monotonic = true` as an option, like ordinary gauges.
 
 ### Measure
 

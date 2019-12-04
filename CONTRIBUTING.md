@@ -24,7 +24,7 @@ Be sure to clearly define the specification requirements using the key words
 defined in [BCP 14](https://tools.ietf.org/html/bcp14)
 [[RFC2119](https://tools.ietf.org/html/rfc2119)]
 [[RFC8174](https://tools.ietf.org/html/rfc8174)] while making sure to heed the
-guidance layed out in [RFC2119](https://tools.ietf.org/html/rfc2119) about the
+guidance laid out in [RFC2119](https://tools.ietf.org/html/rfc2119) about the
 sparing use of imperatives:
 
 > Imperatives of the type defined in this memo must be used with care

@@ -80,17 +80,17 @@ exposes methods for creating and activating new `Span`s. The `Tracer` is
 configured with `Propagator`s which support transferring span context across
 process boundaries.
 
-`Tracer`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `Tracer`.
-
-Some applications may require multiple `Tracer` instances, e.g. to create
-`Span`s on behalf of other applications. Implementations MAY provide a global
-registry of `Tracer`s for such applications.
-
 ### Obtaining a Tracer
 
 New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
 method. This method expects two string arguments:
+
+`TracerFactory`s are generally expected to be used as singletons. Implementations
+SHOULD provide a single global default `TracerFactory`.
+
+Some applications may use multiple `TracerFactory` instances, e.g. to provide
+different settings (e.g. `SpanProcessor`s) to each of those instances and -
+in further consequence - to the `Tracer` instances created by them.
 
 - `name` (required): This name must identify the instrumentation library (also
   referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
@@ -243,10 +243,15 @@ The API MUST accept the following parameters:
   root `Span`. API MAY also have an option for implicit parent context
   extraction from the current context as a default behavior.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
-- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes). These
-  attributes will be used to make a sampling decision as noted in [sampling
-  description](sdk-tracing.md#sampling). Empty list will be assumed if not
-  specified.
+- `Attribute`s - A collection of key-value pairs, with the same semantics as
+  the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
+  these attributes may be used to make a sampling decision as noted in [sampling
+  description](sdk-tracing.md#sampling). An empty collection will be assumed if
+  not specified.
+
+  Whenever possible, users SHOULD set any already known attributes at span creation
+  instead of calling `SetAttribute` later.
+
 - `Link`s - see API definition [here](#add-links). Empty list will be assumed if
   not specified.
 - `Start timestamp`, default to current time. This argument SHOULD only be set
