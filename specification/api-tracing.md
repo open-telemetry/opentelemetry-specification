@@ -590,6 +590,6 @@ To summarize the interpretation of these kinds:
 |--|--|--|--|--|
 | `CLIENT` | yes | | | yes |
 | `SERVER` | yes | | yes | |
-| `PRODUCER` | | yes | | yes|
+| `PRODUCER` | | yes | | may be |
 | `CONSUMER` | | yes | yes | |
 | `INTERNAL` | | | | |
