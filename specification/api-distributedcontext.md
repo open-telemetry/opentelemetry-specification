@@ -30,7 +30,7 @@ aggregate and group stats, annotate traces and logs, etc.
 
 Creates a new `EntryKey` with the given name in string. This is a static method.
 
-Required parameter:
+Required parameter: ekkarat.w@gmail.com
 
 Name of the `EntryKey`.
 
