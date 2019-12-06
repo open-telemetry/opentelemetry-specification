@@ -577,9 +577,13 @@ These are the possible SpanKinds:
 * `PRODUCER` Indicates that the span describes the parent of an
   asynchronous request.  This parent span is expected to end before
   the corresponding child `CONSUMER` span, possibly even before the
-  child span starts.
+  child span starts. In messaging scenarios with batching, tracing
+  individual messages requires a new span per message to be created (with
+  `PRODUCER` kind), while publishing a batch is represented by another span
+  (with `CLIENT` kind).
 * `CONSUMER` Indicates that the span describes the child of an
-  asynchronous remote `PRODUCER` request.
+  asynchronous `PRODUCER` request. Asynchronous scenarios may
+  be remote or local.
 * `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
   operations with remote parents or children.
@@ -591,5 +595,5 @@ To summarize the interpretation of these kinds:
 | `CLIENT` | yes | | | yes |
 | `SERVER` | yes | | yes | |
 | `PRODUCER` | | yes | | may be |
-| `CONSUMER` | | yes | yes | |
+| `CONSUMER` | | yes | may be | |
 | `INTERNAL` | | | | |
