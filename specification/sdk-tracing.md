@@ -144,9 +144,10 @@ held by the `Tracer`.
 
 Span processor is an interface which allows hooks for span start and end method
 invocations. The span processors are invoked only when
-[`IsRecording`](api-tracing.md#isrecording) is true. This interface
-must be used to implement [span exporter](#span-exporter) to batch and convert
-spans.
+[`IsRecording`](api-tracing.md#isrecording) is true.
+
+Built-in span processors are responsible for batching and conversion of spans to
+exportable representation and passing batches to exporters.
 
 Span processors can be registered directly on SDK `TracerFactory` and they are
 invoked in the same order as they were registered.
@@ -161,22 +162,29 @@ Manipulation of the span processors collection must only happen on `TracerFactor
 instances. This means methods like `addSpanProcessor` must be implemented on
 `TracerFactory`.
 
+Each processor registered on `TracerFactory` is a start of pipeline that consist
+of span processor and optional exporter. SDK MUST allow to end each pipeline with
+individual exporter.
+
+SDK MUST allow users to implement and configure custom processors and decorate
+built-in processors for advanced scenarios such as tagging or filtering.
+
 The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
 
 ```
-  +-----+---------------+   +---------------------+   +-------------------+
-  |     |               |   |                     |   |                   |
-  |     |               |   | BatchProcessor      |   |    SpanExporter   |
-  |     |               +---> SimpleProcessor     +--->  (JaegerExporter) |
-  | SDK | SpanProcessor |   |                     |   |                   |
-  |     |               |   +---------------------+   +-------------------+
-  |     |               |
-  |     |               |   +---------------------+
-  |     |               |   |                     |
-  |     |               +---> ZPagesProcessor     |
-  |     |               |   |                     |
-  +-----+---------------+   +---------------------+
+  +-----+--------------+   +-------------------------+   +-------------------+
+  |     |              |   |                         |   |                   |
+  |     |              |   | BatchExporterProcessor  |   |    SpanExporter   |
+  |     |              +---> SimpleExporterProcessor +--->  (JaegerExporter) |
+  |     |              |   |                         |   |                   |
+  | SDK | Span.start() |   +-------------------------+   +-------------------+
+  |     | Span.end()   |
+  |     |              |   +---------------------+
+  |     |              |   |                     |
+  |     |              +---> ZPagesProcessor     |
+  |     |              |   |                     |
+  +-----+--------------+   +---------------------+
 ```
 
 #### Interface definition
@@ -217,6 +225,10 @@ they want to make the shutdown timeout to be configurable.
 
 #### Built-in span processors
 
+SDK MUST implement simple and batch processors described below. Other common
+processing scenarios should be first considered for implementation out-of-process
+in [OpenTelemetry Collector](overview.md#collector)
+
 ##### Simple processor
 
 The implementation of `SpanProcessor` that passes ended span directly to the
@@ -254,15 +266,9 @@ high contention in a very high traffic service.
 implement so that they can be plugged into OpenTelemetry SDK and support sending
 of telemetry data.
 
-The goals of the interface are:
-
-* Minimize burden of implementation for protocol-dependent telemetry exporters.
-  The protocol exporter is expected to be primarily a simple telemetry data
-  encoder and transmitter.
-* Allow implementing helpers as composable components that use the same
-  chainable `Exporter` interface. SDK authors are encouraged to implement common
-  functionality such as queuing, batching, tagging, etc. as helpers. This
-  functionality will be applicable regardless of what protocol exporter is used.
+The goal of the interface is to minimize burden of implementation for
+protocol-dependent telemetry exporters. The protocol exporter is expected to be
+primarily a simple telemetry data encoder and transmitter.
 
 #### Interface Definition
 

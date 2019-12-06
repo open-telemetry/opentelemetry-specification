@@ -116,6 +116,8 @@ Required arguments:
 - the key of the field.
 - the value of the field.
 
+The implemenation SHOULD preserve casing (e.g. it should not transform `Content-Type` to `content-type`) if the used protocol is case insensitive, otherwise it MUST preserve casing.
+
 ### Extract
 
 Extracts the value from upstream. For example, as http headers.
@@ -141,11 +143,11 @@ Getter is an argument in `Extract` that get value from given field
 
 ##### Get
 
-Returns the first value of the given propagation key or returns null if the key doesn't exist.
+The Get function MUST return the first value of the given propagation key or return null if the key doesn't exist.
 
 Required arguments:
 
-- the carrier of propagation fields, such as an http request.
+- the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-Returns the first value of the given propagation key or returns null if the key doesn't exist.
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text format implemenations MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
