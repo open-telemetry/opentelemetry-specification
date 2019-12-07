@@ -581,7 +581,7 @@ These are the possible SpanKinds:
   individual messages requires a new `PRODUCER` span per message to
   be created.
 * `CONSUMER` Indicates that the span describes the child of an
-  asynchronous `PRODUCER` request. 
+  asynchronous `PRODUCER` request.
 * `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
   operations with remote parents or children.
