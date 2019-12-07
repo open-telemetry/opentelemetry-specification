@@ -557,7 +557,7 @@ Span represents a synchronous call.  When a child span is synchronous,
 the parent is expected to wait for it to complete under ordinary
 circumstances.  It can be useful for tracing systems to know this
 property, since synchronous Spans may contribute to the overall trace
-latency.
+latency. Asynchronous scenarios can be remote or local.
 
 In order for `SpanKind` to be meaningful, callers should arrange that
 a single Span does not serve more than one purpose.  For example, a
@@ -578,12 +578,10 @@ These are the possible SpanKinds:
   asynchronous request.  This parent span is expected to end before
   the corresponding child `CONSUMER` span, possibly even before the
   child span starts. In messaging scenarios with batching, tracing
-  individual messages requires a new span per message to be created (with
-  `PRODUCER` kind), while publishing a batch is represented by another span
-  (with `CLIENT` kind).
+  individual messages requires a new `PRODUCER` span per message to
+  be created.
 * `CONSUMER` Indicates that the span describes the child of an
-  asynchronous `PRODUCER` request. Asynchronous scenarios may
-  be remote or local.
+  asynchronous `PRODUCER` request. 
 * `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
   operations with remote parents or children.
@@ -594,6 +592,6 @@ To summarize the interpretation of these kinds:
 |--|--|--|--|--|
 | `CLIENT` | yes | | | yes |
 | `SERVER` | yes | | yes | |
-| `PRODUCER` | | yes | | may be |
-| `CONSUMER` | | yes | may be | |
+| `PRODUCER` | | yes | | maybe |
+| `CONSUMER` | | yes | maybe | |
 | `INTERNAL` | | | | |
