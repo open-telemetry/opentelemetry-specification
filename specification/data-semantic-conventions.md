@@ -6,6 +6,11 @@ Span attributes.
 * [Resource Conventions](data-resource-semantic-conventions.md)
 * [Span Conventions](#span-conventions)
 
+The type of the attribute SHOULD be specified in the semantic convention
+for that attribute. Array values are allowed for attributes. For
+protocols that do not natively support array values such values MUST be
+represented as JSON strings.
+
 ## Span Conventions
 
 In OpenTelemetry spans can be created freely and it’s up to the implementor to
