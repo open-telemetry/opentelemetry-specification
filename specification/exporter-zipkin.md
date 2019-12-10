@@ -25,7 +25,10 @@ and Zipkin.
 | Span.Status              | Add to Span.Tags | See [Status](#status) for tag names to use.                  |
 | Span.LocalChildSpanCount | TODO             | TODO                                                         |
 
-TODO: mapping for OpenTelemetry:
+TODO: This is work in progress document and it is currently doesn't specify
+mapping for these fields:
+
+OpenTelemetry fields:
 
 - Resource attributes
 - Tracestate
@@ -35,7 +38,7 @@ TODO: mapping for OpenTelemetry:
 - dropped events count
 - dropped links count
 
-TODO: mapping for Zipkin:
+Zipkin fields:
 
 - Service name
 - Local_endpoint
