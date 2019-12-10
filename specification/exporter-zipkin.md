@@ -1,4 +1,3 @@
-
 # OpenTelemetry to Zipkin Transformation
 
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
