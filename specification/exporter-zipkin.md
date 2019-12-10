@@ -3,20 +3,46 @@
 
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
 Zipkin's v2 API is defined in the
-[zipkin2-api.yaml](https://github.com/openzipkin/zipkin-api/blob/master/zipkin2-api.yaml)
+[zipkin.proto](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto)
 
 ## Summary
 
 The following table summarizes the major transformations between OpenTelemetry
 and Zipkin.
 
-|OpenTelemetry|Zipkin
-|--|--|--|
-|`span.kind=INTERNAL`|`span.kind=SERVER`
-|`span.attributes` | `span.tags`
-|`span.status.code` | tag as `ot.status_code: OK`
-|`span.status.message` | optional tag as `ot.status_description: {msg}`
-|`span.events` | `span.annotations`, skip on event attributes
+| OpenTelemetry            | Zipkin           | Notes                                                        |
+| ------------------------ | ---------------- | ------------------------------------------------------------ |
+| Span.TraceID             | Span.TraceID     |                                                              |
+| Span.ParentID            | Span.ParentID    |                                                              |
+| Span.SpanID              | Span.ID          |                                                              |
+| Span.TraceState          | TODO             | TODO                                                         |
+| Span.Name                | Span.Name        |                                                              |
+| Span.Kind                | Span.Kind        | See [SpanKind](#span-kind) for values mapping                |
+| Span.StartTime           | Span.Timestamp   | See [Unit of time](#unit-of-time)                            |
+| Span.EndTime             | Span.Duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
+| Span.Attributes          | Span.Tags        | See [Attributes](#attributes) for data types for the mapping. |
+| Span.Events              | Span.Annotations | See [Events](#events) for the mapping format.                |
+| Span.Links               | TODO             | TODO                                                         |
+| Span.Status              | Add to Span.Tags | See [Status](#status) for tag names to use.                  |
+| Span.LocalChildSpanCount | TODO             | TODO                                                         |
+
+TODO: mapping for OpenTelemetry:
+
+- Resource attributes
+- Tracestate
+- Links
+- LocalChildSpanCount
+- dropped attributes count
+- dropped events count
+- dropped links count
+
+TODO: mapping for Zipkin:
+
+- Service name
+- Local_endpoint
+- Remote_endpoint
+- debug
+- Shared
 
 ## Mappings
 
@@ -25,48 +51,55 @@ and Zipkin.
 
 ### SpanKind
 
-Zipkin doesn't support OpenTelemetry's `SpanKind.INTERNAL`.
-`SpanKind.INTERNAL` type MUST be reported to Zipkin as `SERVER`.
-
 The following table lists all the `SpanKind` mappings between OpenTelemetry and
 Zipkin.
 
-|OpenTelemetry|Zipkin
-|--|--|
-`SpanKind.CLIENT`|`SpanKind.CLIENT`
-`SpanKind.SERVER`|`SpanKind.SERVER`
-`SpanKind.CONSUMER`|`SpanKind.CONSUMER`
-`SpanKind.PRODUCER`|`SpanKind.PRODUCER`
-`SpanKind.INTERNAL`|`SpanKind.SERVER`
+| OpenTelemetry | Zipkin | Note |
+| ------------- | ------ | ---- |
+| `SpanKind.CLIENT`|`SpanKind.CLIENT`||
+| `SpanKind.SERVER`|`SpanKind.SERVER`||
+| `SpanKind.CONSUMER`|`SpanKind.CONSUMER`||
+| `SpanKind.PRODUCER`|`SpanKind.PRODUCER` ||
+|`SpanKind.INTERNAL`|`null` |must be omitted (set to `null`)|
 
 ### Attribute
 
 OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to Zipkin.
+Primitive types MUST be converted to string using en-US culture settings.
+Boolean values must use lower case strings `"true"` and `"false"`.
+
+Array values MUST be serialized to string like a JSON list.
+
+TODO: add examples
 
 ### Status
 
-Span `Status` SHOULD be reported as a key-value pair in `tags` to Zipkin.
+Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin.
 
 The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
-Status|Tag Key| Tag Value
+| Status|Tag Key| Tag Value |
 |--|--|--|
-|Code | `ot.status_code` | Name of the code, for example: `OK`
-|Message *(optional)* | `ot.status_description` | `{message}`
+|Code | `ot.status_code` | Name of the code, for example: `OK` |
+|Message *(optional)* | `ot.status_description` | `{message}` |
 
 The `ot.status_code` tag value MUST follow the [Standard GRPC Code
 Names](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
 
-### Event
+### Events
 
 OpenTelemetry `Event` has an optional `Attribute`(s) which is not supported by
-Zipkin.
-These `Event` attributes are may be left out from the final Zipkin payload.
+Zipkin. Events MUST be converted to the Annotations with the names which will
+include attribute values like this:
 
-## Unit of Time
+```
+"my-event-name": { "key1" : "value1", "key2": "value2" }
+```
 
-Zipkin times like `timestamp`, `duration` and `event.timestamp` MUST be reported
-in microseconds with decimal accuracy.
+### Unit of Time
+
+Zipkin times like `timestamp`, `duration` and `annotation.timestamp` MUST be
+reported in microseconds with decimal accuracy.
 
 ## Request Payload
 
