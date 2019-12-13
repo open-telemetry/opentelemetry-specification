@@ -71,8 +71,9 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `http.status_text` | [HTTP reason phrase][]. E.g. `"OK"` | No |
 | `http.flavor` | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |  No |
 
-It is recommended to also use the `peer.*` attributes, especially `peer.ip*`.
+It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
+[network attributes]: data-span-general.md#general-network-connection-attributes
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
 
@@ -172,11 +173,9 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
-| `http.server_name` | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `host.name` should be used instead). | [1] |
-| `host.name` | Analogous to `peer.hostname` but for the host instead of the peer. | [1] |
-| `host.port` | Local port. E.g., `80` (integer). Analogous to `peer.port`. | [1] |
+| `http.server_name` | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). | [1] |
 | `http.route` | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. | No |
-| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `peer.ip*`, which would identify the network-level peer, which may be a proxy. | No |
+| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `net.peer.ip`, which would identify the network-level peer, which may be a proxy. | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
@@ -187,8 +186,8 @@ It is thus preferred to supply the raw data that *is* available.
 Namely, one of the following sets is required (in order of usual preference unless for a particular web server/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
 
 * `http.scheme`, `http.host`, `http.target`
-* `http.scheme`, `http.server_name`, `host.port`, `http.target`
-* `http.scheme`, `host.name`, `host.port`, `http.target`
+* `http.scheme`, `http.server_name`, `net.host.port`, `http.target`
+* `http.scheme`, `net.host.name`, `net.host.port`, `http.target`
 * `http.url`
 
 Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones.
@@ -232,7 +231,7 @@ Span name: `/webshop/articles/:article_id`.
 | `http.status_code` | `200`                                           |
 | `http.status_text` | `"OK"`                                          |
 | `http.client_ip`   | `"192.0.2.4"`                                   |
-| `peer.ip4`         | `"192.0.2.5"` (the client goes through a proxy) |
+| `net.peer.ip`      | `"192.0.2.5"` (the client goes through a proxy) |
 
 Note that following the recommendations above, `http.url` is not set in the above example.
 If set, it would be

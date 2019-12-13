@@ -344,8 +344,10 @@ A `Span` MUST have the ability to set attributes associated with it.
 An `Attribute` is defined by the following properties:
 
 - (Required) The attribute key, which must be a string.
-- (Required) The attribute value, which must be either a string, a boolean
-  value, or a numeric type.
+- (Required) The attribute value, which is either:
+  - A primitive type: string, boolean or numeric.
+  - An array of primitive type values. The array MUST be homogeneous,
+    i.e. it MUST NOT contain values of different types.
 
 The Span interface MUST provide:
 
@@ -557,7 +559,7 @@ Span represents a synchronous call.  When a child span is synchronous,
 the parent is expected to wait for it to complete under ordinary
 circumstances.  It can be useful for tracing systems to know this
 property, since synchronous Spans may contribute to the overall trace
-latency.
+latency. Asynchronous scenarios can be remote or local.
 
 In order for `SpanKind` to be meaningful, callers should arrange that
 a single Span does not serve more than one purpose.  For example, a
@@ -577,9 +579,11 @@ These are the possible SpanKinds:
 * `PRODUCER` Indicates that the span describes the parent of an
   asynchronous request.  This parent span is expected to end before
   the corresponding child `CONSUMER` span, possibly even before the
-  child span starts.
+  child span starts. In messaging scenarios with batching, tracing
+  individual messages requires a new `PRODUCER` span per message to
+  be created.
 * `CONSUMER` Indicates that the span describes the child of an
-  asynchronous remote `PRODUCER` request.
+  asynchronous `PRODUCER` request.
 * `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
   operations with remote parents or children.
@@ -590,6 +594,6 @@ To summarize the interpretation of these kinds:
 |--|--|--|--|--|
 | `CLIENT` | yes | | | yes |
 | `SERVER` | yes | | yes | |
-| `PRODUCER` | | yes | | yes|
-| `CONSUMER` | | yes | yes | |
+| `PRODUCER` | | yes | | maybe |
+| `CONSUMER` | | yes | maybe | |
 | `INTERNAL` | | | | |
