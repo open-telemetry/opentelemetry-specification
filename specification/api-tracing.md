@@ -80,17 +80,17 @@ exposes methods for creating and activating new `Span`s. The `Tracer` is
 configured with `Propagator`s which support transferring span context across
 process boundaries.
 
-`Tracer`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `Tracer`.
-
-Some applications may require multiple `Tracer` instances, e.g. to create
-`Span`s on behalf of other applications. Implementations MAY provide a global
-registry of `Tracer`s for such applications.
-
 ### Obtaining a Tracer
 
 New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
 method. This method expects two string arguments:
+
+`TracerFactory`s are generally expected to be used as singletons. Implementations
+SHOULD provide a single global default `TracerFactory`.
+
+Some applications may use multiple `TracerFactory` instances, e.g. to provide
+different settings (e.g. `SpanProcessor`s) to each of those instances and -
+in further consequence - to the `Tracer` instances created by them.
 
 - `name` (required): This name must identify the instrumentation library (also
   referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
@@ -243,10 +243,15 @@ The API MUST accept the following parameters:
   root `Span`. API MAY also have an option for implicit parent context
   extraction from the current context as a default behavior.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
-- `Attribute`s - similar API with [Span::SetAttributes](#set-attributes). These
-  attributes will be used to make a sampling decision as noted in [sampling
-  description](sdk-tracing.md#sampling). Empty list will be assumed if not
-  specified.
+- `Attribute`s - A collection of key-value pairs, with the same semantics as
+  the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
+  these attributes may be used to make a sampling decision as noted in [sampling
+  description](sdk-tracing.md#sampling). An empty collection will be assumed if
+  not specified.
+
+  Whenever possible, users SHOULD set any already known attributes at span creation
+  instead of calling `SetAttribute` later.
+
 - `Link`s - see API definition [here](#add-links). Empty list will be assumed if
   not specified.
 - `Start timestamp`, default to current time. This argument SHOULD only be set
@@ -339,8 +344,10 @@ A `Span` MUST have the ability to set attributes associated with it.
 An `Attribute` is defined by the following properties:
 
 - (Required) The attribute key, which must be a string.
-- (Required) The attribute value, which must be either a string, a boolean
-  value, or a numeric type.
+- (Required) The attribute value, which is either:
+  - A primitive type: string, boolean or numeric.
+  - An array of primitive type values. The array MUST be homogeneous,
+    i.e. it MUST NOT contain values of different types.
 
 The Span interface MUST provide:
 
@@ -552,7 +559,7 @@ Span represents a synchronous call.  When a child span is synchronous,
 the parent is expected to wait for it to complete under ordinary
 circumstances.  It can be useful for tracing systems to know this
 property, since synchronous Spans may contribute to the overall trace
-latency.
+latency. Asynchronous scenarios can be remote or local.
 
 In order for `SpanKind` to be meaningful, callers should arrange that
 a single Span does not serve more than one purpose.  For example, a
@@ -572,9 +579,11 @@ These are the possible SpanKinds:
 * `PRODUCER` Indicates that the span describes the parent of an
   asynchronous request.  This parent span is expected to end before
   the corresponding child `CONSUMER` span, possibly even before the
-  child span starts.
+  child span starts. In messaging scenarios with batching, tracing
+  individual messages requires a new `PRODUCER` span per message to
+  be created.
 * `CONSUMER` Indicates that the span describes the child of an
-  asynchronous remote `PRODUCER` request.
+  asynchronous `PRODUCER` request.
 * `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
   operations with remote parents or children.
@@ -585,6 +594,6 @@ To summarize the interpretation of these kinds:
 |--|--|--|--|--|
 | `CLIENT` | yes | | | yes |
 | `SERVER` | yes | | yes | |
-| `PRODUCER` | | yes | | yes|
-| `CONSUMER` | | yes | yes | |
+| `PRODUCER` | | yes | | maybe |
+| `CONSUMER` | | yes | maybe | |
 | `INTERNAL` | | | | |

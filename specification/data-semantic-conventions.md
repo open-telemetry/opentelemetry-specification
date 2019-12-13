@@ -1,10 +1,15 @@
 # Semantic Conventions
 
-These documents define standard names and values of Resource labels and
+These documents define standard names and values of Resource attributes and
 Span attributes.
 
 * [Resource Conventions](data-resource-semantic-conventions.md)
 * [Span Conventions](#span-conventions)
+
+The type of the attribute SHOULD be specified in the semantic convention
+for that attribute. Array values are allowed for attributes. For
+protocols that do not natively support array values such values MUST be
+represented as JSON strings.
 
 ## Span Conventions
 
@@ -24,3 +29,4 @@ The following semantic conventions for spans are defined:
 * [HTTP](data-http.md): Spans for HTTP client and server.
 * [Database](data-database.md): Spans for SQL and NoSQL client calls.
 * [RPC/RMI](data-rpc.md): Spans for remote procedure calls (e.g., gRPC).
+* [General](data-span-general.md): General semantic attributes that may be used in describing different kinds of operations.
