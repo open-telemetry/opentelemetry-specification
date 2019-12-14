@@ -7,7 +7,6 @@ For call retrieving a message from the bus, the `SpanKind` MUST be `Consumer`.
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
-| `component`    | Denotes the type of the span and needs to be `"bus"`. | Yes |
 | `message_bus.destination` | An address at which messages can be exchanged. E.g. A Kafka record has an associated "topic name" that can be extracted by the instrumented producer or consumer and stored using this tag. | Yes |
 | `message_bus.type` | The brand of message bus or client API library such as `"kafka"`, `"rabbitmq"` or `"jms"`. | Yes |
 | `message_bus.protocol` | The transport protocol such as `"AMQP"` or `"MQTT"`. | No |

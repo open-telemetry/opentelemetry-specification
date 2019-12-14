@@ -33,8 +33,6 @@ is highly useful during the early stages of developing a new application.
 
 Event `"name"` MUST be `"error"`.
 
-Error events MAY be associated with a tracing span or recorded independently.
-
 | Attribute name | Notes and examples                     | Required? |
 | :------------- | :------------------------------------- | --------- |
 | `error.kind`   | The type or "kind" of an error. E.g., `"Exception"`, `"OSError"` | Yes |
