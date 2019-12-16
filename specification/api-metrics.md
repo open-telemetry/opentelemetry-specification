@@ -40,7 +40,7 @@ various ways.  Review the [SDK-facing OpenTelemetry API
 specification](api-metrics-meter.md) known as `Meter`.
 
 Because of API-SDK separation, the `Meter` implementation ultimately
-determines how metrics events are handled, .  The specification's task
+determines how metrics events are handled.  The specification's task
 is to define the semantics of the event and describe standard
 interpretation in high-level terms.  How the `Meter` accomplishes its
 goals and the export capabilities it supports are not specified.
