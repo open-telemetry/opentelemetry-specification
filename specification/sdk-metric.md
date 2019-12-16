@@ -91,7 +91,7 @@ updates.
 
 ### Meter aggregation preserves LabelSet dimensions
 
-The Meter implementation MUST maintain aggregators for active metric
+The Meter implementation MUST maintain Aggregators for active metric
 instruments for each complete, distinct LabelSet.  This ensures that
 the Batcher has access to the complete set of labels when performing
 its task.
