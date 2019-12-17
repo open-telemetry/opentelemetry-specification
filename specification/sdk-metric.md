@@ -208,7 +208,7 @@ and a single word of memory for its checkpoint.
 timestamp.  In languages with support for atomic operations, this
 aggregator's update operation SHOULD be implemented by a single memory
 allocation--to store the value and timestamp--followed by an atomic
-pointer swap; if the gauge is defined as monotonic, the should use
+pointer swap; if the gauge is defined as monotonic, it should use
 atomic compare-and-swap to ensure monotonicity.
 
 Aggregators for [Measure metric instruments](api-metrics.md#measure)
