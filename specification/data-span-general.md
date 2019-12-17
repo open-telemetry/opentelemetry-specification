@@ -9,6 +9,7 @@ Particular operations may refer to or require some of these attributes.
 <!-- toc -->
 
 - [General network connection attributes](#general-network-connection-attributes)
+- [General identity attributes](#general-identity-attributes)
 
 <!-- tocstop -->
 
@@ -65,3 +66,19 @@ It will usually not make sense to use reverse-lookup to obtain `net.host.name`, 
 If `net.transport` is `"unix"` or `"pipe"`, the absolute path to the file representing it should be used as `net.peer.name` (`net.host.name` doesn't make sense in that context).
 If there is no such file (e.g., anonymous pipe),
 the name should explicitly be set to the empty string to distinguish it from the case where the name is just unknown or not covered by the instrumentation.
+
+## General identity attributes
+
+These attributes may be used for any operation with an authenticated and/or authorized enduser.
+
+|  Attribute name |                                 Notes and examples                                |
+| :-------------- | :-------------------------------------------------------------------------------- |
+| `auth.user`     | Username or client_id extracted from the access token or [Authorization] header.  |
+| `auth.role`     | Actual/assumed role the client is making the request under extracted from token or application security context. |
+| `auth.scope`    | Scopes or granted authorities the client currently possesses extracted from token or application security context. |
+
+[Authorization]: https://tools.ietf.org/html/rfc7235#section-4.2
+
+Given the sensitive nature of this information, SDKs and exporters may want to provide configurable
+functionality to drop these attributes for use cases where the information is not needed or would violate
+policies or regulations.
