@@ -7,48 +7,49 @@ Note: This document assumes you have read both the (Metrics API
 overview)[api-metrics.md] and the (Metrics User-Facing
 API)[api-metrics-user.md] specification documents.
 
-_This document is derived from the Golang Metrics SDK prototype.  See
-the currently open PRs:_
-1. [Pipeline and stdout exporter](https://github.com/open-telemetry/opentelemetry-go/pull/265)
-1. [Dogstatsd exporter](https://github.com/jmacd/opentelemetry-go/pull/7)
-1. [Prometheus exporter](https://github.com/open-telemetry/opentelemetry-go/pull/296)
+_This document is derived from the Golang Metrics SDK prototype._
 
 ## Glossary
 
 __Metric update__: The term _metric update_ refers to any single
-operation on a metric instrument; each handle-oriented and direct call
+operation on a metric instrument; each handle-oriented or direct call
 imply a single metric update, whereas each RecordBatch operation
 implies a batch of metric updates.  See the user-facing API
 specification for definitions of the three [calling
 conventions](api-metrics-user.md).
 
 __Aggregator__: The term _aggregator_ refers to an implementation that
-can combine multiple metric updates into a single, combined state.
-For example, a Sum aggregator combines multiple `Add()` updates into
-single sum.  Aggregators must support concurrent updates.  Aggregators
-support a `Checkpoint()` operation, which saves a snapshot of the
-current aggregate state for collection, and a `Merge()` operation,
-which combines state from two aggregators into one.
+can combine multiple metric updates into a single, combined state for
+a specific function.  For example, a Sum aggregator combines multiple
+`Add()` updates into single sum.  Aggregators must support concurrent
+updates.  Aggregators support a `Checkpoint()` operation, which saves
+a snapshot of the current aggregate state for collection, and a
+`Merge()` operation, which combines state from two aggregators into
+one.
 
-__Dimensionality reduction__: The user-facing metric API allows users
-to supply LabelSets containing an unlimited number of labels for any
-metric update.  Some metric exporters will reduce the set of labels
+__Incremental aggregation__: An _incremental aggregation_ computes an
+aggregation over a single collection interval.  The result of
+incremental aggregation describes the updates since the beginning of
+a collection interval, not since the beginning of the process.
+
+__Change of dimensions__: The user-facing metric API allows users to
+supply LabelSets containing an unlimited number of labels for any
+metric update.  Some metric exporters will restrict the set of labels
 when exporting metric data, either to reduce cost or because of
-system-imposed requirements.  A _dimensionality reduction_ maps input
-LabelSets with (potentially) a large number of labels into a smaller
-LabelSet containing only labels for an explicit set of label keys.
-Performing dimensionality reduction in an metrics export pipeline
-generally means merging aggregators computed for original LabelSets
-into a single combined aggregator for the reduced-dimension LabelSet.
+system-imposed requirements.  A _change of dimensions_ maps input
+LabelSets with potentially many labels into a LabelSet with an fixed
+set of label keys.  A change of dimensions eliminates labels with keys
+not in the output LabelSet and fills in empty values for label keys
+that are not in the input LabelSet.
 
 __Export record__: The _Export record_ is an exporter-independent
 in-memory representation combining the metric instrument, the LabelSet
-for export, and the associated (checkpointed) aggregator containing
-its state.  Metric instruments are described by a metric descriptor.
+for export, and the associated aggregate state.  Metric instruments are described by a metric descriptor.
 
 __Metric descriptor__: A _metric descriptor_ is an in-memory
 representation of the metric instrument, including all the information
-provided in when it was defined.
+provided in when it was defined, such as the metric name and instrument
+kind.
 
 __Collection__: _Collection_ refers to the process of gathering the
 current state from all active metric instruments for the exporter.
@@ -65,22 +66,27 @@ where it interfaces with the user-facing API and receives metric
 updates.  The Meter's primary job is to maintain active state about
 pending metric updates.  The most important requirement placed on the
 Meter implementation is that it be able to "forget" state about metric
-updates after they are collected, so that the Meter implementation does
-not have unbounded memory growth.
+updates after they are collected, so that the Meter implementation
+does not have unbounded memory growth.  To support forgetting metrics
+that do not receive updates, the Meter implementation itself manages
+incremental Aggregation as opposed to maintaining state for the
+process lifetime.
 
 The Meter implementation SHOULD ensure that operations on instrument
 handles be fast, because the API specification promises users that the
 handle-oriented calls are the fastest possible calling convention.
 Metric updates made via an instrument handle, when used with an
-aggregator defined by simple atomic operations, should follow a very
+Aggregator defined by simple atomic operations, should follow a very
 short code path.
 
 The Meter implementation MUST provide a `Collect()` method to initiate
 collection, which involves sweeping through metric instruments with
-un-exported metric updates, checkpointing their aggregators, and
+un-exported metric updates, checkpointing their Aggregators, and
 submitting them to the Batcher.  Batcher and Exporter MUST be called
-in a single-threaded context, therefore the Meter implementation MUST
-prevent concurrent `Collect()` calls.
+in a single-threaded context; consequently the Meter implementation
+MUST ensure that concurrent `Collect()` calls do not violate the
+single-threaded nature of the Batcher and Exporter, whether through
+locking or other avoidance techniques.
 
 This document does not specify how to coordinate synchronization
 between user-facing metric updates and metric collection activity,
@@ -96,10 +102,10 @@ instruments for each complete, distinct LabelSet.  This ensures that
 the Batcher has access to the complete set of labels when performing
 its task.
 
-In this design, reducing dimensions for export is the responsibility
-of the Batcher.  As a consequence, the cost and complexity of
-dimensionality reduction affect only the collection pass.  As a
-secondary benefit, this ensures a relatively simple code path for
+In this design, changing LabelSet dimensions for export is the
+responsibility of the Batcher.  As a consequence, the cost and
+complexity of changing dimensions affect only the collection pass.  As
+a secondary benefit, this ensures a relatively simple code path for
 entering metric updates into the Meter implementation.
 
 #### Alternatives considered
@@ -107,10 +113,10 @@ entering metric updates into the Meter implementation.
 There is an alternative to maintaining aggregators for active metric
 instruments for each complete, distinct LabelSet.  Instead of
 aggregating by each distinct LabelSet in the Meter implementation and
-reducing dimensionality in the Batcher, the Meter implementation could
-reduce dimensionality "up front".  In this design, the Meter
-implementation would only maintain Aggregators for metric instruments
-with the reduced-for-export set of dimensions.
+changing dimensionality in the Batcher, the Meter implementation could
+change dimensionality "up front".  In this alternative, the Meter
+implementation would apply a change of dimension to LabelSets on the
+instrumentation code path as opposed to the collection code path.
 
 This alternative was not selected because it puts a relatively
 complicated decision--and potentially additional synchronization--into
@@ -118,10 +124,10 @@ the instrumentation code path.
 
 ### Recommended implementation
 
-The Meter implementation supports all three metric [calling
+The Meter implementation supports the three metric [calling
 conventions](api-metrics-user.md): handle-oriented calls, direct
 calls, and RecordBatch calls.  Although not a requirement, we
-recommended the following approach for organizing the Meter
+recommend the following approach for organizing the Meter
 implementation.
 
 Of the three calling conventions, direct calls and RecordBatch calls
@@ -142,16 +148,34 @@ func (inst *instrument) RecordOne(ctx context.Context, number core.Number, label
 The Meter implementation tracks an internal set of records, where
 every record either: (1) has a current, un-released handle pinning it
 in memory, (2) has pending updates that have not been collected, (3)
-is a candidate for removing from memory.  The Meter maintains a
-mapping from the pair (Instrument, LabelSet) to an active record.
-Each active record contains an aggregator implementation, which is
-responsible for incorporating a series of metric updates into the
-current state.
+is a candidate for removing from memory.  The Meter implementation
+maintains a mapping from the pair (Instrument, LabelSet) to an active
+record.  Each active record contains an Aggregator implementation,
+which is responsible for incorporating a series of metric updates into
+the current incremental state.
 
-Because of short-lived handles, the SDK may accumulate records that
-are not associated with a user-held handle.  After these records are
-collected they may be removed from the (Instrument, LabelSet) map of
-active records.
+The Meter implementation provides a facility to remove records from
+memory when they have been inactive for at least a full collection
+period.  The Meter implementation MUST not lose updates when removing
+records from memory; it is safe to remove records that have received
+no updates because Aggregators maintain incremental state.
+
+#### Monotonic gauge limitations
+
+As described, the Meter implementation is permitted to forget state
+about metric records that have not been updated for a full collection
+interval.  This creates a potential conflict when implementing
+monotonic gauges.  The Meter implementation is not required to
+implement a monotonicity test when it has no current state.  The Meter
+implementation SHOULD implement a monotonicity test for monotonic
+gauges when it has prior state.
+
+The Meter implementation SHOULD prefer to forget monotonic gauges that
+have not received updates the same as it would for any other metric
+instrument.  However, the user can be assured that their monotonic
+gauge updates are being checked if they acquire and use a bound
+instrument, since bound instruments pin a record in the Meter
+implementation.
 
 ## Aggregator implementations
 
@@ -162,15 +186,15 @@ provide different functionality and levels of concurrent performance.
 Aggregators MUST support `Update()`, `Checkpoint()`, and `Merge()`
 operations.  `Update()` is called directly from the Meter in response
 to a metric event, and may be called concurrently.  `Update()` is also
-passed the user's telemetry context, which allows it to access the
-current trace context and distributed correlations, however none of
-the built-in aggregators use this information.
+passed the caller's distributed context, which allows it to access the
+current span context and distributed correlations, however none of the
+built-in aggregators use span context or distributed correlations.
 
 The `Checkpoint()` operation is called to atomically save a snapshot
 of the Aggregator, since `Checkpoint()` may be called concurrently
 with `Update()`.  The `Merge()` operation supports dimensionality
 reduction by combining state from multiple aggregators into a single
-Aggregator state.  
+Aggregator state.
 
 The Metric SDK SHOULD include six built-in aggregator types.  Two
 standard aggregators MUST be included that implement standard counter
