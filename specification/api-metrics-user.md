@@ -215,7 +215,7 @@ func (s *server) processStream(ctx context.Context) {
 }
 ```
 
-#### Direct metric calling convention
+#### Direct instrument calling convention
 
 When convenience is more important than performance, or there is no
 re-use to potentially optimize with bound instruments, users may
@@ -259,8 +259,8 @@ func (s *server) method(ctx context.Context) {
 
     s.meter.RecordBatch(ctx, labelSet,
         s.instruments.counter1.Measurement(1),
-	s.instruments.gauge1.Measurement(10),
-	s.instruments.measure2.Measurement(123.45),
+        s.instruments.gauge1.Measurement(10),
+        s.instruments.measure2.Measurement(123.45),
     )
 }
 ```
@@ -428,7 +428,7 @@ that it used, and the metric name is the only required field.
 See the Metric API [specification overview](api-metrics.md) for more
 information about the kind-specific monotonic and absolute options.
 
-### Bound instrument calling convention
+### Bound instrument API
 
 Counter, gauge, and measure instruments each support allocating
 bound instruments for the high-performance calling convention.  The
@@ -436,7 +436,7 @@ bound instruments for the high-performance calling convention.  The
 implements the `Add()`, `Set()` or `Record()` method, respectively,
 for counter, gauge, and measure instruments.
 
-### Direct instrument calling convention
+### Direct instrument API
 
 Counter, gauge, and measure instruments support the appropriate
 `Add()`, `Set()`, and `Record()` method for submitting individual
