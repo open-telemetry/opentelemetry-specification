@@ -235,9 +235,6 @@ OpenTelemetry
 [proto](https://github.com/open-telemetry/opentelemetry-proto/blob/a46c815aa5e85a52deb6cb35b8bc182fb3ca86a0/src/opentelemetry/proto/agent/common/v1/common.proto#L28-L96)
 for an example.
 
-**TODO**: Better describe the difference between the resource and a Node
-<https://github.com/open-telemetry/opentelemetry-proto/issues/17>
-
 ## Propagators
 
 OpenTelemetry uses `Propagators` to serialize and deserialize `SpanContext` and `DistributedContext`
