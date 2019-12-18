@@ -12,7 +12,7 @@ _This document is derived from the Golang Metrics SDK prototype._
 ## Glossary
 
 __Metric update__: The term _metric update_ refers to any single
-operation on a metric instrument; each handle-oriented or direct call
+operation on a metric instrument; each bound-instrument or direct call
 imply a single metric update, whereas each RecordBatch operation
 implies a batch of metric updates.  See the user-facing API
 specification for definitions of the three [calling
@@ -56,8 +56,8 @@ current state from all active metric instruments for the exporter.
 
 ## Meter implementation
 
-The Meter API provides methods to create metric instruments, metric
-instrument handles, and label sets.  This document describes the
+The Meter API provides methods to create metric instruments, bound 
+instruments, and label sets.  This document describes the
 standard Meter implementation and supporting packages used to build
 a complete metric export pipeline.
 
@@ -72,12 +72,12 @@ that do not receive updates, the Meter implementation itself manages
 incremental Aggregation as opposed to maintaining state for the
 process lifetime.
 
-The Meter implementation SHOULD ensure that operations on instrument
-handles be fast, because the API specification promises users that the
-handle-oriented calls are the fastest possible calling convention.
-Metric updates made via an instrument handle, when used with an
-Aggregator defined by simple atomic operations, should follow a very
-short code path.
+The Meter implementation SHOULD ensure that operations on bound
+instruments be fast, because the API specification promises users that
+the bound-instrument calls are the fastest possible calling
+convention.  Metric updates made via a bound instrument, when used
+with an Aggregator defined by simple atomic operations, should follow
+a very short code path.
 
 The Meter implementation MUST provide a `Collect()` method to initiate
 collection, which involves sweeping through metric instruments with
@@ -125,34 +125,35 @@ the instrumentation code path.
 ### Recommended implementation
 
 The Meter implementation supports the three metric [calling
-conventions](api-metrics-user.md): handle-oriented calls, direct
+conventions](api-metrics-user.md): bound-instrument calls, direct
 calls, and RecordBatch calls.  Although not a requirement, we
 recommend the following approach for organizing the Meter
 implementation.
 
 Of the three calling conventions, direct calls and RecordBatch calls
-can be easily converted into handle-oriented calls using short-lived
-handles.  For example, a direct call can be implemented by acquiring a
-handle, operating on the handle, and immediately releasing the handle.
+can be easily converted into bound-instrument calls using short-lived
+bound instruments.  For example, a direct call can be implemented by
+binding the instrument and label set, operating on the bound
+instrument, and immediately releasing it.
 
 ```golang
-// RecordOne converts a direct call into a handle-oriented call by allocating
-// a short-lived handle.
+// RecordOne converts a direct call into a bound-instrument call by allocating
+// a short-lived bound instrument.
 func (inst *instrument) RecordOne(ctx context.Context, number core.Number, labelSet api.LabelSet) {
-	h := inst.AcquireHandle(labelSet)
+	h := inst.Bind(labelSet)
 	defer h.Release()
 	h.RecordOne(ctx, number)
 }
 ```
 
 The Meter implementation tracks an internal set of records, where
-every record either: (1) has a current, un-released handle pinning it
-in memory, (2) has pending updates that have not been collected, (3)
-is a candidate for removing from memory.  The Meter implementation
-maintains a mapping from the pair (Instrument, LabelSet) to an active
-record.  Each active record contains an Aggregator implementation,
-which is responsible for incorporating a series of metric updates into
-the current incremental state.
+every record either: (1) has a current, un-released bound instrument
+pinning it in memory, (2) has pending updates that have not been
+collected, (3) is a candidate for removing from memory.  The Meter
+implementation maintains a mapping from the pair (Instrument,
+LabelSet) to an active record.  Each active record contains an
+Aggregator implementation, which is responsible for incorporating a
+series of metric updates into the current incremental state.
 
 The Meter implementation provides a facility to remove records from
 memory when they have been inactive for at least a full collection
