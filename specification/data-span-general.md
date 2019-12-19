@@ -75,10 +75,35 @@ These attributes may be used for any operation with an authenticated and/or auth
 | :-------------- | :-------------------------------------------------------------------------------- |
 | `auth.user`     | Username or client_id extracted from the access token or [Authorization] header.  |
 | `auth.role`     | Actual/assumed role the client is making the request under extracted from token or application security context. |
-| `auth.scope`    | Scopes or granted authorities the client currently possesses extracted from token or application security context. |
+| `auth.scope`    | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token] or an attribute value in a [SAML 2.0 Assertion]. |
+
+Examples of where the `auth.user` value is extracted from:
+
+| Authentication protocol | Field or description            |
+| :---------------------- | :------------------------------ |
+| [HTTP Basic/Digest Authentication] | `username`               |
+| [OAuth 2.0 Bearer Token] | [OAuth 2.0 Client Identifier] value from `client_id` for the [OAuth 2.0 Client Credentials Grant] flow and `subject` or `username` from get token info response for other flows using opaque tokens. |
+| [OpenID Connect 1.0 IDToken] | `sub` |
+| [SAML 2.0 Assertion] | `urn:oasis:names:tc:SAML:2.0:assertion:Subject` |
+| [Kerberos] | `PrincipalName` |
+
+| Framework               | Field or description            |
+| :---------------------- | :------------------------------ |
+| [JavaEE/JakartaEE Servlet] | `javax.servlet.http.HttpServletRequest.getUserPrincipal()` |
+| [Windows Communication Foundation] | `ServiceSecurityContext.Current.PrimaryIdentity` |
 
 [Authorization]: https://tools.ietf.org/html/rfc7235#section-4.2
+[OAuth 2.0 Access Token]: https://tools.ietf.org/html/rfc6749#section-3.3
+[SAML 2.0 Assertion]: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html
+[HTTP Basic/Digest Authentication]: https://tools.ietf.org/html/rfc2617
+[OAuth 2.0 Bearer Token]: https://tools.ietf.org/html/rfc6750
+[OAuth 2.0 Client Identifier]: https://tools.ietf.org/html/rfc6749#section-2.2
+[OAuth 2.0 Client Credentials Grant]: https://tools.ietf.org/html/rfc6749#section-4.4
+[OpenID Connect 1.0 IDToken]: https://openid.net/specs/openid-connect-core-1_0.html#IDToken
+[Kerberos]: https://tools.ietf.org/html/rfc4120
+[JavaEE/JakartaEE Servlet]: https://jakarta.ee/specifications/platform/8/apidocs/javax/servlet/http/HttpServletRequest.html
+[Windows Communication Foundation]: https://docs.microsoft.com/en-us/dotnet/api/system.servicemodel.servicesecuritycontext?view=netframework-4.8
 
-Given the sensitive nature of this information, SDKs and exporters may want to provide configurable
-functionality to drop these attributes for use cases where the information is not needed or would violate
-policies or regulations.
+Given the sensitive nature of this information, SDKs and exporters SHOULD drop these attributes by
+default and then provide a configuration parameter to turn on retention for use cases where the
+information is required and would not violate any policies or regulations.
