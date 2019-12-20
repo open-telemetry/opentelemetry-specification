@@ -135,9 +135,8 @@ type server struct {
 func newServer(meter metric.Meter) *server {
      return &server{
          meter:       meter,
-  instruments: newInstruments(meter),
-
-  // ... other fields
+         instruments: newInstruments(meter),
+         // ... other fields
      }
 }
 
@@ -147,14 +146,14 @@ func (s *server) operate(ctx context.Context) {
      // ... other work
 
      s.instruments.counter1.Add(ctx, 1, s.meter.Labels(
-       label1.String("..."),
-  label2.String("...")))
+         label1.String("..."),
+         label2.String("...")))
 }
 ```
 
 ### Metric calling conventions
 
-This API is factored into three core concepts: instruments, handles,
+This API is factored into three core types: instruments, bound instruments,
 and label sets.  In doing so, we provide several ways of capturing
 measurements that are semantically equivalent and generate equivalent
 metric events, but offer varying degrees of performance and
@@ -178,26 +177,22 @@ metric data into a reduced number of key dimensions.  SDKs may be
 designed to perform aggregation and/or grouping in the process, with
 various trade-offs in terms of complexity and performance.
 
-#### Metric handle calling convention
+#### Bound instrument calling convention
 
-This approach requires locating an entry for the instrument and label
-set in a table of some kind, finding the location where a metric
-events are being aggregated.  This lookup can be successfully
-precomputed, giving rise to the Handle calling convention.
-
-In situations where performance is a requirement and a metric is
+In situations where performance is a requirement and a metric instrument is
 repeatedly used with the same set of labels, the developer may elect
-to use _instrument handles_ as an optimization.  For handles to be a
-benefit, it requires that a specific instrument will be re-used with
-specific labels.  If an instrument will be used with the same label
-set more than once, obtaining an instrument handle corresponding to
-the label set ensures the highest performance available.
+to use the _bound instrument_ calling convention as an optimization.
+For bound instruments to be a benefit, it requires that a specific
+instrument will be re-used with specific labels.  If an instrument
+will be used with the same label set more than once, obtaining an
+bound instrument corresponding to the label set ensures the highest
+performance available.
 
-To obtain a handle given an instrument and label set, use the
-`GetHandle()` method to return an interface that supports the `Add()`,
-`Set()`, or `Record()` method of the instrument in question.
+To bind an instrument and label set, use the `Bind(LabelSet)` method to
+return an interface that supports the `Add()`, `Set()`, or `Record()`
+method of the instrument in question.
 
-Instrument handles may consume SDK resources indefinitely.
+Bound instruments may consume SDK resources indefinitely.
 
 ```golang
 func (s *server) processStream(ctx context.Context) {
@@ -206,21 +201,24 @@ func (s *server) processStream(ctx context.Context) {
       labelA.String("..."),
       labelB.String("..."),
   )
-  counter2Handle := s.instruments.counter2.GetHandle(streamLabels)
+  // The result of Bind() is a bound instrument
+  // (e.g., a BoundInt64Counter).
+  counter2 := s.instruments.counter2.Bind(streamLabels)
 
   for _, item := <-s.channel {
      // ... other work
 
-     // High-performance metric calling convention: use of handles.
-     counter2Handle.Add(ctx, item.size())
+     // High-performance metric calling convention: use of bound
+     // instruments.
+     counter2.Add(ctx, item.size())
   }
 }
 ```
 
-#### Direct metric calling convention
+#### Direct instrument calling convention
 
 When convenience is more important than performance, or there is no
-re-use to potentially optimize with instrument handles, users may
+re-use to potentially optimize with bound instruments, users may
 elect to operate directly on metric instruments, supplying a label set
 at the call site.
 
@@ -235,13 +233,47 @@ func (s *server) method(ctx context.Context) {
 ```
 
 This method offers the greatest convenience possible.  If performance
-becomes a problem, one option is to use handles as described above.
+becomes a problem, one option is to use bound instruments as described above.
 Another performance option, in some cases, is to just re-use the
 labels.  In the example here, `meter.Labels(...)` constructs a
 re-usable label set which may be an important performance
 optimization.
 
-#### Label set calling convention
+#### RecordBatch calling convention
+
+There is one final API for entering measurements, which is like the
+direct access calling convention but supports multiple simultaneous
+measurements.  The use of a RecordBatch API supports entering multiple
+measurements, implying a semantically atomic update to several
+instruments.
+
+For example:
+
+```golang
+func (s *server) method(ctx context.Context) {
+    // ... other work
+
+    labelSet := s.meter.Labels(...)
+
+    // ... more work
+
+    s.meter.RecordBatch(ctx, labelSet,
+        s.instruments.counter1.Measurement(1),
+        s.instruments.gauge1.Measurement(10),
+        s.instruments.measure2.Measurement(123.45),
+    )
+}
+```
+
+Using the RecordBatch calling convention is semantically identical to
+a sequence of direct calls, with the addition of atomicity.  Because
+values are entered in a single call,
+the SDK is potentially able to implement an atomic update, from the
+exporter's point of view.  Calls to `RecordBatch` may potentially
+reduce costs because the SDK can enqueue a single bulk update, or take
+a lock only once, for example.
+
+#### Label set re-use is encouraged
 
 A significant factor in the cost of metrics export is that labels,
 which arrive as an unordered list of keys and values, must be
@@ -258,16 +290,16 @@ enough that we give it first-class treatment in the API.  The
 user.
 
 Re-usable `LabelSet` objects provide a potential optimization for
-scenarios where handles might not be effective.  For example, if the
-label set will be re-used but only used once per metric, handles do
+scenarios where bound instruments might not be effective.  For example, if the
+label set will be re-used but only used once per metric, bound instruments do
 not offer any optimization.  It may be best to pre-compute a
 canonicalized `LabelSet` once and re-use it with the direct calling
 convention.
 
-Constructing an instrument handle is considered the higher-performance
-option, when the handle will be used more than once.  Still, consider
+Constructing a bound instrument is considered the higher-performance
+option, when the bound instrument will be used more than once.  Still, consider
 re-using the result of `Meter.Labels(...)` when constructing more than
-one instrument handle.
+one bound instrument.
 
 ```golang
 func (s *server) method(ctx context.Context) {
@@ -296,11 +328,11 @@ unspecified_, a distinct value type of the exported data model.
 
 ##### Option: Convenience method to bypass `meter.Labels(...)`
 
-As a language-optional feature, the direct and handle calling
+As a language-optional feature, the direct and bound instrument calling
 convention APIs may support alternate convenience methods to pass raw
 labels at the call site.  These may be offered as overloaded methods
 for `Add()`, `Set()`, and `Record()` (direct calling convention) or
-`GetHandle()` (handle calling convention), in both cases bypassing a
+`Bind()` (bound instrument calling convention), in both cases bypassing a
 call to `meter.Labels(...)`.  For example:
 
 ```java
@@ -311,7 +343,10 @@ call to `meter.Labels(...)`.  For example:
     // ... or
 
     // pass raw labels, no explicit `LabelSet`
-    handle := s.instruments.gauge1.getHandle(labelA.value(...), labelB.value(...))
+    BoundIntCounter counter = s.instruments.gauge1.bind(labelA, ..., labelB, ...)
+    for (...) {
+      counter.add(1)
+    }
   }
 ```
 
@@ -337,40 +372,6 @@ and therefore its value as an input for monitoring, depends on the
 availability of type-checking in the source language.  Passing
 unordered labels (i.e., a list of bound keys and values) to the
 `Meter.Labels(...)` constructor is considered the safer alternative.
-
-#### RecordBatch calling convention
-
-There is one final API for entering measurements, which is like the
-direct access calling convention but supports multiple simultaneous
-measurements.  The use of a RecordBatch API supports entering multiple
-measurements, implying a semantically atomic update to several
-instruments.
-
-The preceding example could be rewritten:
-
-```golang
-func (s *server) method(ctx context.Context) {
-    // ... other work
-
-    labelSet := s.meter.Labels(...)
-
-    // ... more work
-
-    s.meter.RecordBatch(ctx, labelSet,
-     s.instruments.counter1.Measurement(1),
- s.instruments.gauge1.Measurement(10),
- s.instruments.measure2.Measurement(123.45),
-    )
-}
-```
-
-Using the RecordBatch calling convention is semantically identical to
-the sequence of direct calls in the preceding example, with the
-addition of atomicity.  Because values are entered in a single call,
-the SDK is potentially able to implement an atomic update, from the
-exporter's point of view.  Calls to `RecordBatch` may potentially
-reduce costs because the SDK can enqueue a single bulk update, or take
-a lock only once, for example.
 
 ## Detailed specification
 
@@ -427,15 +428,15 @@ that it used, and the metric name is the only required field.
 See the Metric API [specification overview](api-metrics.md) for more
 information about the kind-specific monotonic and absolute options.
 
-### Instrument handle calling convention
+### Bound instrument API
 
 Counter, gauge, and measure instruments each support allocating
-handles for the high-performance calling convention.  The
-`Instrument.GetHandle(LabelSet)` method returns an interface which
+bound instruments for the high-performance calling convention.  The
+`Instrument.Bind(LabelSet)` method returns an interface which
 implements the `Add()`, `Set()` or `Record()` method, respectively,
 for counter, gauge, and measure instruments.
 
-### Instrument direct calling convention
+### Direct instrument API
 
 Counter, gauge, and measure instruments support the appropriate
 `Add()`, `Set()`, and `Record()` method for submitting individual
