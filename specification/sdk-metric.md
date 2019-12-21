@@ -9,6 +9,10 @@ API)[api-metrics-user.md] specification documents.
 
 _This document is derived from the Golang Metrics SDK prototype._
 
+## Overview
+
+![Metric SDK Design Diagram](img/metric-sdk.png)
+
 ## Glossary
 
 __Metric update__: The term _metric update_ refers to any single
