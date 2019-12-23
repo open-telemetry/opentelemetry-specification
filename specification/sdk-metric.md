@@ -48,7 +48,8 @@ that are not in the input LabelSet.
 
 __Export record__: The _Export record_ is an exporter-independent
 in-memory representation combining the metric instrument, the LabelSet
-for export, and the associated aggregate state.  Metric instruments are described by a metric descriptor.
+for export, and the associated aggregate state.  Metric instruments
+are described by a metric descriptor.
 
 __Metric descriptor__: A _metric descriptor_ is an in-memory
 representation of the metric instrument, including all the information
@@ -58,68 +59,68 @@ kind.
 __Collection__: _Collection_ refers to the process of gathering the
 current state from all active metric instruments for the exporter.
 
-## Meter implementation
+## Differentiator
 
 The Meter API provides methods to create metric instruments, bound 
 instruments, and label sets.  This document describes the
-standard Meter implementation and supporting packages used to build
+standard Differentiator and supporting packages used to build
 a complete metric export pipeline.
 
-The Meter implementation stands at the start of the export pipeline,
+The Differentiator stands at the start of the export pipeline,
 where it interfaces with the user-facing API and receives metric
 updates.  The Meter's primary job is to maintain active state about
 pending metric updates.  The most important requirement placed on the
-Meter implementation is that it be able to "forget" state about metric
-updates after they are collected, so that the Meter implementation
+Differentiator is that it be able to "forget" state about metric
+updates after they are collected, so that the Differentiator
 does not have unbounded memory growth.  To support forgetting metrics
-that do not receive updates, the Meter implementation itself manages
+that do not receive updates, the Differentiator itself manages
 incremental Aggregation as opposed to maintaining state for the
 process lifetime.
 
-The Meter implementation SHOULD ensure that operations on bound
+The Differentiator SHOULD ensure that operations on bound
 instruments be fast, because the API specification promises users that
 the bound-instrument calls are the fastest possible calling
 convention.  Metric updates made via a bound instrument, when used
 with an Aggregator defined by simple atomic operations, should follow
 a very short code path.
 
-The Meter implementation MUST provide a `Collect()` method to initiate
+The Differentiator MUST provide a `Collect()` method to initiate
 collection, which involves sweeping through metric instruments with
 un-exported metric updates, checkpointing their Aggregators, and
-submitting them to the Batcher.  Batcher and Exporter MUST be called
-in a single-threaded context; consequently the Meter implementation
+submitting them to the Integrator.  Integrator and Exporter MUST be called
+in a single-threaded context; consequently the Differentiator
 MUST ensure that concurrent `Collect()` calls do not violate the
-single-threaded nature of the Batcher and Exporter, whether through
+single-threaded nature of the Integrator and Exporter, whether through
 locking or other avoidance techniques.
 
 This document does not specify how to coordinate synchronization
 between user-facing metric updates and metric collection activity,
-however Meter implementations SHOULD make efforts to avoid lock
+however Differentiators SHOULD make efforts to avoid lock
 contention by holding locks only briefly or using lock-free
-techniques.  Meter implementations MUST ensure that there are no lost
+techniques.  Differentiators MUST ensure that there are no lost
 updates.
 
 ### Meter aggregation preserves LabelSet dimensions
 
-The Meter implementation MUST maintain Aggregators for active metric
+The Differentiator MUST maintain Aggregators for active metric
 instruments for each complete, distinct LabelSet.  This ensures that
-the Batcher has access to the complete set of labels when performing
+the Integrator has access to the complete set of labels when performing
 its task.
 
 In this design, changing LabelSet dimensions for export is the
-responsibility of the Batcher.  As a consequence, the cost and
+responsibility of the Integrator.  As a consequence, the cost and
 complexity of changing dimensions affect only the collection pass.  As
 a secondary benefit, this ensures a relatively simple code path for
-entering metric updates into the Meter implementation.
+entering metric updates into the Differentiator.
 
 #### Alternatives considered
 
 There is an alternative to maintaining aggregators for active metric
 instruments for each complete, distinct LabelSet.  Instead of
-aggregating by each distinct LabelSet in the Meter implementation and
-changing dimensionality in the Batcher, the Meter implementation could
-change dimensionality "up front".  In this alternative, the Meter
-implementation would apply a change of dimension to LabelSets on the
+aggregating by each distinct LabelSet in the Differentiator and
+changing dimensionality in the Integrator, the Differentiator could
+change dimensionality "up front".  In this alternative, the
+Differentiator would apply a change of dimension to LabelSets on the
 instrumentation code path as opposed to the collection code path.
 
 This alternative was not selected because it puts a relatively
@@ -128,11 +129,10 @@ the instrumentation code path.
 
 ### Recommended implementation
 
-The Meter implementation supports the three metric [calling
+The Differentiator supports the three metric [calling
 conventions](api-metrics-user.md): bound-instrument calls, direct
 calls, and RecordBatch calls.  Although not a requirement, we
-recommend the following approach for organizing the Meter
-implementation.
+recommend the following approach for organizing the Differentiator.
 
 Of the three calling conventions, direct calls and RecordBatch calls
 can be easily converted into bound-instrument calls using short-lived
@@ -150,37 +150,36 @@ func (inst *instrument) RecordOne(ctx context.Context, number core.Number, label
 }
 ```
 
-The Meter implementation tracks an internal set of records, where
-every record either: (1) has a current, un-released bound instrument
-pinning it in memory, (2) has pending updates that have not been
-collected, (3) is a candidate for removing from memory.  The Meter
-implementation maintains a mapping from the pair (Instrument,
-LabelSet) to an active record.  Each active record contains an
-Aggregator implementation, which is responsible for incorporating a
-series of metric updates into the current incremental state.
+The Differentiator tracks an internal set of records, where every
+record either: (1) has a current, un-released bound instrument pinning
+it in memory, (2) has pending updates that have not been collected,
+(3) is a candidate for removing from memory.  The Differentiator
+maintains a mapping from the pair (Instrument, LabelSet) to an active
+record.  Each active record contains an Aggregator implementation,
+which is responsible for incorporating a series of metric updates into
+the current incremental state.
 
-The Meter implementation provides a facility to remove records from
+The Differentiator provides a facility to remove records from
 memory when they have been inactive for at least a full collection
-period.  The Meter implementation MUST not lose updates when removing
+period.  The Differentiator MUST not lose updates when removing
 records from memory; it is safe to remove records that have received
 no updates because Aggregators maintain incremental state.
 
 #### Monotonic gauge limitations
 
-As described, the Meter implementation is permitted to forget state
-about metric records that have not been updated for a full collection
+As described, the Differentiator is permitted to forget state about
+metric records that have not been updated for a full collection
 interval.  This creates a potential conflict when implementing
-monotonic gauges.  The Meter implementation is not required to
-implement a monotonicity test when it has no current state.  The Meter
-implementation SHOULD implement a monotonicity test for monotonic
-gauges when it has prior state.
+monotonic gauges.  The Differentiator is not required to implement a
+monotonicity test when it has no current state.  The Differentiator
+SHOULD implement a monotonicity test for monotonic gauges when it has
+prior state.
 
-The Meter implementation SHOULD prefer to forget monotonic gauges that
+The Differentiator SHOULD prefer to forget monotonic gauges that
 have not received updates the same as it would for any other metric
 instrument.  However, the user can be assured that their monotonic
 gauge updates are being checked if they acquire and use a bound
-instrument, since bound instruments pin a record in the Meter
-implementation.
+instrument, since bound instruments pin a record in the Differentiator.
 
 ## Aggregator implementations
 
@@ -287,61 +286,61 @@ selected as the nearest rank.
 When using an approximate aggregator to compute estimated quantile
 values, the nearest-rank quantile definition does not apply.
 
-## Batcher implementation
+## Integrator implementation
 
-The Batcher acts as the primary source of configuration for exporting
+The Integrator acts as the primary source of configuration for exporting
 metrics from the SDK.  The two kinds of configuration are:
 
 1. Given a metric instrument, choose which concrete aggregator type to apply for in-process aggregation.
 1. Given a metric instrument, choose which dimensions to export by (i.e., the "grouping" function).
 
 The first choice--which concrete aggregator type to apply--is made
-whenever the Meter implementation encounters a new (Instrument,
+whenever the Differentiator encounters a new (Instrument,
 LabelSet) pair.  Each concrete type of aggregator will perform a
 different function.  Aggregators for counter and gauge instruments are
 relatively straightforward, but many concrete aggregators are possible
-for measure metric instruments.  The Batcher has an opportunity to
+for measure metric instruments.  The Integrator has an opportunity to
 disable instruments at this point simply by returning a `nil`
 aggregator.
 
 The second choice--which dimensions to export by--affects how the
-batcher processes records emitted by the Meter implementation during
-collection.  During collection, the Meter implementation emits an
+batcher processes records emitted by the Differentiator during
+collection.  During collection, the Differentiator emits an
 export record for each metric instrument with pending updates to the
-Batcher.
+Integrator.
 
-During the collection pass, the Batcher receives a full set of
+During the collection pass, the Integrator receives a full set of
 checkpointed aggregators corresponding to each (Instrument, LabelSet)
-pair with an active record managed by the Meter implementation.
-According to its own configuration, the Batcher at this point
+pair with an active record managed by the Differentiator.
+According to its own configuration, the Integrator at this point
 determines which dimensions to aggregate for export; it computes a
 checkpoint of (possibly) reduced-dimension export records ready for
 export.
 
-Batcher implementations support the option of being stateless or
-stateful.  Stateless Batchers compute checkpoints which describe the
+Integrator implementations support the option of being stateless or
+stateful.  Stateless Integrators compute checkpoints which describe the
 updates of a single collection period (i.e., deltas).  Stateful
-Batchers compute checkpoints from over the process lifetime; these may
+Integrators compute checkpoints from over the process lifetime; these may
 be useful for simple exporters but are prone to consuming a large and
 ever-growing amount of memory, depending on LabelSet cardinality.
 
-Two standard Batcher implementations are provided.
+Two standard Integrator implementations are provided.
 
-1. The "defaultkeys" Batcher reduces the export dimensions of each
+1. The "defaultkeys" Integrator reduces the export dimensions of each
 metric instrument to the Recommended keys declared with the
 instrument.
-1. The "ungrouped" Batcher exports metric instruments at full
+1. The "ungrouped" Integrator exports metric instruments at full
 dimensionality; each LabelSet is exported without reducing dimensions.
 
 ## Controller implementation
 
 A controller is needed to coordinate the decision to begin collection.
-Controllers generally are responsible for binding the Meter
-implementation, the Batcher, and the Exporter.
+Controllers generally are responsible for binding the Differentiator,
+the Integrator, and the Exporter.
 
 Once the decision has been made, the controller's job is to call
-`Collect()` on the Meter implementation, then read the checkpoint from
-the Batcher, then invoke the Exporter.
+`Collect()` on the Differentiator, then read the checkpoint from
+the Integrator, then invoke the Exporter.
 
 One standard "push" controller is provided, which triggers collection
 using a fixed period.  The controller is responsible for flushing
@@ -363,30 +362,30 @@ metric updates into the desired format and send them on their way.
 ## Multiple exporter support
 
 The metric export pipeline specified here does not include explicit
-support for multiple export pipelines.  In principle, the Batcher and
+support for multiple export pipelines.  In principle, the Integrator and
 Exporter interfaces specified here could be satisfied by a
 multiplexing implementation, but in practice, it will be costly to run
-multiple Batchers in parallel, particularly if they do not share the
+multiple Integrators in parallel, particularly if they do not share the
 same Aggregator selection logic.
 
 If multiple exporters are required, therefore, it is best if they can
-share a single Batcher configuration.  The SDK is not required to
-provide multiplexing implementations of the Batcher or Exporter
+share a single Integrator configuration.  The SDK is not required to
+provide multiplexing implementations of the Integrator or Exporter
 interfaces.
 
 ## LabelEncoder optimizations
 
-The Meter implementation and some Batcher implementations are required
+The Differentiator and some Integrator implementations are required
 to compute a unique key corresponding to a LabelSet, for the purposes
 of locating an aggregator to use for metric updates.  Where possible,
 Exporters can avoid a duplicate computation by providing a
-LabelEncoder to the Meter implementation.
+LabelEncoder to the Differentiator.
 
 This optimization applies for any Exporter that will internally
 compute a unique encoding for a set of labels, whether using a text or
 a binary encoding.  For example, a dogstatsd Exporter will benefit by
-providing its specific LabelEncoder implementation to the Meter
-implementation; consequently, the export records it sees will be
+providing its specific LabelEncoder implementation to the
+Differentiator; consequently, the export records it sees will be
 accompanied by a pre-computed encoding of the export LabelSet.
 
 ## Metric descriptors
