@@ -473,7 +473,7 @@ codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
   - The operation completed successfully.
 - `Cancelled`
   - The operation was cancelled (typically by the caller).
-- `UnknownError`
+- `Unknown`
   - An unknown error.
 - `InvalidArgument`
   - Client specified an invalid argument. Note that this differs from
@@ -506,7 +506,7 @@ codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
     fixed if the system state changes.
 - `Unimplemented`
   - Operation is not implemented or not supported/enabled in this service.
-- `InternalError`
+- `Internal`
   - Internal errors. Means some invariants expected by underlying system has been
     broken.
 - `Unavailable`
