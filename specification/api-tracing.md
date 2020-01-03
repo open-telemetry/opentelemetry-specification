@@ -80,7 +80,11 @@ implementation at runtime, the default full implementation is
 referred to as the SDK in this spec, which is used by all instrumented code
 within the program.
 
-A `Tracer` is more than just the code though. Each `Tracer` has a name and a resource attached to it. The API must provide [library developers][] a way to access a `Tracer` with a specific name and attached resource. We'll call that component the `TracerProvider`, in an OOP language this would likely be a `Factory`.
+A `Tracer` is more than just the code though. Each `Tracer` has a name and a
+resource attached to it. The API must provide [library developers][] a way to
+access a `Tracer` with a specific name and attached resource. We'll call that
+component the `TracerProvider`, in an OOP language this would likely be a
+`Factory`.
 
 If the [application developers][] does not include a library which implements
 the `TracerProvider`, like the OpenTelemetry SDK, the API must include a default
@@ -112,7 +116,7 @@ implementations, in the SDKs, to base the returned `Tracer` on that information.
 
 ### Tracer operations
 
-The `Tracer` MUST provide methods to:
+There MUST be functions associated with a `Tracer` to:
 
 - Get the currently active `Span`
 - Create a new `Span`
@@ -133,7 +137,7 @@ explicit parent is provided or the option to create a span without a parent is
 selected, or the current active `Span` is invalid.
 
 The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
-convenience methods to manage a `Span`'s lifetime and the scope in which a
+convenience functions to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
 `Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
 time) but stil active. A `Span` may be active on one thread after it has been
@@ -324,7 +328,7 @@ Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
-With the exception of the method to retrieve the `Span`'s `SpanContext` and
+With the exception of the function to retrieve the `Span`'s `SpanContext` and
 recording status, none of the below may be called after the `Span` is finished.
 
 #### Get Context
@@ -439,10 +443,10 @@ It is highly discouraged to update the name of a `Span` after its creation.
 spans. And often, filtering logic will be implemented before the `Span` creation
 for performance reasons. Thus the name update may interfere with this logic.
 
-The method name is called `UpdateName` to differentiate this method from the
-regular property setter. It emphasizes that this operation signifies a
-major change for a `Span` and may lead to re-calculation of sampling or
-filtering decisions made previously depending on the implementation.
+The name `UpdateName`, as opposed to `SetName`, is to emphasize that this
+operation signifies a major change for a `Span` and may lead to re-calculation
+of sampling or filtering decisions made previously depending on the
+implementation.
 
 Alternatives for the name update may be late `Span` creation, when Span is
 started with the explicit timestamp from the past at the moment where the final
