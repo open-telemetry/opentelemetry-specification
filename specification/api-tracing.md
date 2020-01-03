@@ -75,19 +75,20 @@ A duration is the elapsed time between two events.
 
 A `Tracer` is the code responsible for how `Spans`s are started and it exposes
 the API which [library developers][] use when instrumenting their code. The API
-MUST allow the [application developers][] to configure or specify at runtime the
-implementation, the default full implementation is referred to as the SDK in
-this spec, which is used by all instrumented code within the program.
+MUST allow the [application developers][] to configure or specify the
+implementation at runtime, the default full implementation is
+referred to as the SDK in this spec, which is used by all instrumented code
+within the program.
 
 If the [application developers][] does not set a `Tracer` to be used and does
 not include the library which implements the `Tracer`, like the OpenTelemetry
 SDK, the API must include a default minimal implementation which acts as a no-op
-`Tracer`. The [library developers][] *must* be able to depend on the API and
+`Tracer`. The [library developers][] MUST be able to depend on the API and
 instrument their code without thought to whether or not the final deployable
 application includes the SDK or any other implementation.
 
-To facilitate this, the [library developers][] can *not*
-specify a `Tracer` implementation to use. The API *must* provide a way for the
+To facilitate this, the [library developers][] can NOT
+specify a `Tracer` implementation to use. The API MUST provide a way for the
 developer to access a `Tracer`, which at runtime may be the default minimal
 implementation from the API, the default full implementation known as the SDK or
 a third party implementation.
@@ -96,16 +97,16 @@ However, even though the [library developers][] cannot define
 an implementation to use, they can, and should, give the `Tracer` a name and version:
 
 - `name` (optional): This name must identify the instrumentation library (also
-  referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
+  referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and NOT
   the instrumented library.
 - `version` (optional and only allowed if a `name` is given): Specifies the
   version of the instrumentation library (e.g. `semver:1.0.0`).
 
-So the API *must* offer functionality for the library developer to pass the
+So the API MUST offer functionality for the library developer to pass the
 `name` and `version` to the implementation when retrieving the `Tracer`. The
 `name` and `version` are not attributes to be added to a retreived `Tracer`,
-they must be able to be passed at the time of retrieval to allow implementations
-to base the returned `Tracer` on that information.
+they must be able to be passed at the time of retrieval to allow
+implementations, in the SDKs, to base the returned `Tracer` on that information.
 
 ### Tracer operations
 
