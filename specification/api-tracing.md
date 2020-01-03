@@ -96,10 +96,10 @@ a third party implementation.
 However, even though the [library developers][] cannot define
 an implementation to use, they can, and should, give the `Tracer` a name and version:
 
-- `name` (optional): This name must identify the instrumentation library (also
+- `name`: This name must identify the instrumentation library (also
   referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and NOT
   the instrumented library.
-- `version` (optional and only allowed if a `name` is given): Specifies the
+- `version` (optional): Specifies the
   version of the instrumentation library (e.g. `semver:1.0.0`).
 
 So the API MUST offer functionality for the library developer to pass the
