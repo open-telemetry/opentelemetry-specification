@@ -73,12 +73,11 @@ A duration is the elapsed time between two events.
 
 ## Tracer
 
-A `Tracer` is the code responsible for how `Spans`s are started and it exposes
-the API which [library developers][] use when instrumenting their code. The API
-MUST allow the [application developers][] to configure or specify the
-implementation at runtime, the default full implementation is
-referred to as the SDK in this spec, which is used by all instrumented code
-within the program.
+A `Tracer` is the code responsible for starting `Spans`s and it exposes the API
+which [library developers][] use when instrumenting their code. The API MUST
+allow the [application developers][] to configure or specify the implementation
+at runtime. The implementation is referred to as the SDK in this spec, which is
+used by all instrumented code within the program.
 
 A `Tracer` is more than just the code though. Each `Tracer` has a name and a
 resource attached to it. The API must provide [library developers][] a way to
@@ -86,18 +85,18 @@ access a `Tracer` with a specific name and attached resource. We'll call that
 component the `TracerProvider`, in an OOP language this would likely be a
 `Factory`.
 
-If the [application developers][] does not include a library which implements
+If [application developers][] do not specify a library which implements
 the `TracerProvider`, like the OpenTelemetry SDK, the API must include a default
 minimal implementation of a `TracerProvider` which returns a no-op `Tracer`. The
 [library developers][] MUST be able to depend on the API and instrument their
 code without thought to whether or not the final deployable application includes
 the SDK or any other implementation.
 
-To facilitate this, the [library developers][] can NOT specify a
+To facilitate this, the [library developers][] MUST NOT specify a
 `TracerProvider` implementation to use. The API MUST provide a way for the
 developer to access a `Tracer` from a `TracerProvider`, which at runtime may be
 the default minimal implementation from the API, the default full implementation
-known as the SDK or a third party implementation.
+known as the SDK, or a third party implementation.
 
 However, even though the [library developers][] cannot define
 an implementation to use, they can, and should, give the `Tracer` a name and version:
@@ -108,11 +107,11 @@ an implementation to use, they can, and should, give the `Tracer` a name and ver
 - `version` (optional): Specifies the
   version of the instrumentation library (e.g. `semver:1.0.0`).
 
-So the API MUST offer functionality for the library developer to pass the
-`name` and `version` to the implementation when retrieving the `Tracer`. The
-`name` and `version` are not attributes to be added to a retreived `Tracer`,
-they must be able to be passed at the time of retrieval to allow
-implementations, in the SDKs, to base the returned `Tracer` on that information.
+The API MUST offer functionality for the library developer to pass the `name`
+and `version` to `TracerProvider` when retrieving the `Tracer`. The `name` and
+`version` are not attributes to be added to a retrieved `Tracer`, they must be
+passed at the time of retrieval to allow implementations, in the SDKs, to base
+the returned `Tracer` on that information.
 
 ### Tracer operations
 
@@ -122,7 +121,7 @@ There MUST be functions associated with a `Tracer` to:
 - Create a new `Span`
 - Make a given `Span` as active
 
-The `Tracer` SHOULD allow application developer to configure other tracing
+The `Tracer` SHOULD allow the application developer to configure other tracing
 components that control how `Span`s are passed across process boundaries,
 including the binary and text format `Propagator`s used to serialize `Span`s
 created by the `Tracer`.

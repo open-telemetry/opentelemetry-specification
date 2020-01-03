@@ -22,7 +22,7 @@
   libraries, making the application developer potentially a library developer as
   well. But only the end user, or operator, should include an OpenTelemetry SDK
   implementation as a dependency and configure, either through code or
-  configuration files loaded by the program, the `Tracer` used by all libraries
+  configuration files loaded by the program, the `TracerProvider` used by all libraries
   within the final program.
 - <a name="operator"></a>Operator: The operator SHOULD be able to select a
   different SDK implementation, overriding the one chosed by the application
