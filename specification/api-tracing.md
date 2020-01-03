@@ -73,19 +73,18 @@ A duration is the elapsed time between two events.
 
 ## Tracer
 
-A `Tracer` is the code responsible for how `Spans`s are started and
-it exposes the API which [library developers][] use when
-instrumenting their code. The API MUST allow the [end users][] to
-configure or specify at runtime the implementation, the default full
-implementation is referred to as the SDK in this spec, which is used by all
-instrumented code within the program.
+A `Tracer` is the code responsible for how `Spans`s are started and it exposes
+the API which [library developers][] use when instrumenting their code. The API
+MUST allow the [application developers][] to configure or specify at runtime the
+implementation, the default full implementation is referred to as the SDK in
+this spec, which is used by all instrumented code within the program.
 
-If the [end users][] does not set a `Tracer` to be used and does not
-include the library which implements the `Tracer`, like the OpenTelemetry SDK,
-the API must include a default minimal implementation which acts as a no-op
-`Tracer`. The [library developers][] *must* be able to depend
-on the API and instrument their code without thought to whether or not the final
-deployable application includes the SDK or any other implementation.
+If the [application developers][] does not set a `Tracer` to be used and does
+not include the library which implements the `Tracer`, like the OpenTelemetry
+SDK, the API must include a default minimal implementation which acts as a no-op
+`Tracer`. The [library developers][] *must* be able to depend on the API and
+instrument their code without thought to whether or not the final deployable
+application includes the SDK or any other implementation.
 
 To facilitate this, the [library developers][] can *not*
 specify a `Tracer` implementation to use. The API *must* provide a way for the
@@ -116,10 +115,10 @@ The `Tracer` MUST provide methods to:
 - Create a new `Span`
 - Make a given `Span` as active
 
-The `Tracer` SHOULD allow end users to configure other tracing components that
-control how `Span`s are passed across process boundaries, including the binary
-and text format `Propagator`s used to serialize `Span`s created by the
-`Tracer`.
+The `Tracer` SHOULD allow application developer to configure other tracing
+components that control how `Span`s are passed across process boundaries,
+including the binary and text format `Propagator`s used to serialize `Span`s
+created by the `Tracer`.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
@@ -620,4 +619,4 @@ To summarize the interpretation of these kinds:
 | `INTERNAL` | | | | |
 
 [library developers]: glossary.md#library-developer
-[end users]: glossary.md#end-user
+[application developers]: glossary.md#app-developer
