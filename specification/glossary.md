@@ -20,4 +20,5 @@
   operator, may include an OpenTelemetry SDK implementation as a dependency and
   configure, either through code or configuration files loaded by the program,
   the `Tracer` used by all libraries within the final program.
-- <a name="operator"></a>Operator:
+- <a name="operator"></a>Operator: The operator SHOULD be able to select a
+  different SDK implementation, overriding the one chosed by the end user.
