@@ -74,26 +74,26 @@ A duration is the elapsed time between two events.
 ## Tracer
 
 A `Tracer` is the code responsible for how `Spans`s are started and
-it exposes the API which [library developers](glossary.md#library-developer) use when
-instrumenting their code. The API MUST allow the [end user](glossary.md#end-user) to
+it exposes the API which [library developers][] use when
+instrumenting their code. The API MUST allow the [end users][] to
 configure or specify at runtime the implementation, the default full
 implementation is referred to as the SDK in this spec, which is used by all
 instrumented code within the program.
 
-If the [end user](glossary.md#end-user) does not set a `Tracer` to be used and does not
+If the [end users][] does not set a `Tracer` to be used and does not
 include the library which implements the `Tracer`, like the OpenTelemetry SDK,
 the API must include a default minimal implementation which acts as a no-op
-`Tracer`. The [library developers](glossary.md#library-developer) *must* be able to depend
+`Tracer`. The [library developers][] *must* be able to depend
 on the API and instrument their code without thought to whether or not the final
 deployable application includes the SDK or any other implementation.
 
-To facilitate this, the [library developer](glossary.md#library-developer) can *not*
+To facilitate this, the [library developers][] can *not*
 specify a `Tracer` implementation to use. The API *must* provide a way for the
 developer to access a `Tracer`, which at runtime may be the default minimal
 implementation from the API, the default full implementation known as the SDK or
 a third party implementation.
 
-However, even though the [library developer](glossary.md#library-developer) cannot define
+However, even though the [library developers][] cannot define
 an implementation to use, they can, and should, give the `Tracer` a name and version:
 
 - `name` (optional): This name must identify the instrumentation library (also
@@ -618,3 +618,6 @@ To summarize the interpretation of these kinds:
 | `PRODUCER` | | yes | | maybe |
 | `CONSUMER` | | yes | maybe | |
 | `INTERNAL` | | | | |
+
+[library developers]: glossary.md#library-developer
+[end users]: glossary.md#end-user
