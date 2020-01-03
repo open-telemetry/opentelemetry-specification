@@ -80,18 +80,20 @@ implementation at runtime, the default full implementation is
 referred to as the SDK in this spec, which is used by all instrumented code
 within the program.
 
-If the [application developers][] does not set a `Tracer` to be used and does
-not include the library which implements the `Tracer`, like the OpenTelemetry
-SDK, the API must include a default minimal implementation which acts as a no-op
-`Tracer`. The [library developers][] MUST be able to depend on the API and
-instrument their code without thought to whether or not the final deployable
-application includes the SDK or any other implementation.
+A `Tracer` is more than just the code though. Each `Tracer` has a name and a resource attached to it. The API must provide [library developers][] a way to access a `Tracer` with a specific name and attached resource. We'll call that component the `TracerProvider`, in an OOP language this would likely be a `Factory`.
 
-To facilitate this, the [library developers][] can NOT
-specify a `Tracer` implementation to use. The API MUST provide a way for the
-developer to access a `Tracer`, which at runtime may be the default minimal
-implementation from the API, the default full implementation known as the SDK or
-a third party implementation.
+If the [application developers][] does not include a library which implements
+the `TracerProvider`, like the OpenTelemetry SDK, the API must include a default
+minimal implementation of a `TracerProvider` which returns a no-op `Tracer`. The
+[library developers][] MUST be able to depend on the API and instrument their
+code without thought to whether or not the final deployable application includes
+the SDK or any other implementation.
+
+To facilitate this, the [library developers][] can NOT specify a
+`TracerProvider` implementation to use. The API MUST provide a way for the
+developer to access a `Tracer` from a `TracerProvider`, which at runtime may be
+the default minimal implementation from the API, the default full implementation
+known as the SDK or a third party implementation.
 
 However, even though the [library developers][] cannot define
 an implementation to use, they can, and should, give the `Tracer` a name and version:
