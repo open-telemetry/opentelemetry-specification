@@ -138,7 +138,7 @@ Attributes defining a running environment (e.g. Cloud, Data Center).
 
 ## Version Attributes
 
-Version attributes such as `service.version` and `library.version` are values of type `string`, 
+Version attributes such as `service.version` and `library.version` are values of type `string`,
 with naming schemas hinting at the type of a version, such as the following:
 
 - `semver:1.2.3` (a semantic version)
