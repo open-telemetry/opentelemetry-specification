@@ -4,7 +4,7 @@
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
 
-The OpenTelemetry specification describes the cross-language requirements and expectations for all OpenTelemetry implementations.
+The OpenTelemetry specification describes the cross-language requirements and expectations for all OpenTelemetry implementations. Changes to the specification must be proposed using the OpenTelemetry Enhancement Proposal process,described in more details in https://github.com/open-telemetry/oteps.
 
 ## Table of Contents
 
