@@ -14,6 +14,7 @@ This document defines standard attributes for resources. These attributes are ty
 * [Environment](#environment)
   * [Cloud](#cloud)
   * [Cluster](#cluster)
+* [Version Attributes](#version-attributes)
 
 ## TODOs
 
@@ -40,6 +41,7 @@ Certain attribute groups in this document have a **Required** column. For these 
 | service.name | Logical name of the service. <br/> MUST be the same for all instances of horizontally scaled services. | `shoppingcart` | Yes |
 | service.namespace | A namespace for `service.name`.<br/>A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. The field is optional. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace. | `Shop` | No |
 | service.instance.id | The string ID of the service instance. <br/>MUST be unique for each instance of the same `service.namespace,service.name` pair (in other words `service.namespace,service.name,service.id` triplet MUST be globally unique). The ID helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). It is preferable for the ID to be persistent and stay the same for the lifetime of the service instance, however it is acceptable that the ID is ephemeral and changes during important lifetime events for the service (e.g. service restarts). If the service has no inherent unique ID that can be used as the value of this attribute it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122 for more recommendations). | `627cc493-f310-47de-96bd-71410b7dec09` | Yes |
+| service.version | The version string of the service API or implementation as defined in [Version Attributes](#version-attributes). | `semver:2.0.0` | No |
 
 Note: `service.namespace` and `service.name` are not intended to be concatenated for the purpose of forming a single globally unique name for the service. For example the following 2 sets of attributes actually describe 2 different services (despite the fact that the concatenation would result in the same string):
 
@@ -65,16 +67,7 @@ service.name = Shop.shoppingcart
 |---|---|---|---|
 | library.name | The name of the telemetry library. | `opentelemetry` | No |
 | library.language | The language of telemetry library and of the code instrumented with it. <br/> The following spelling SHOULD be used for language strings: "cpp", "dotnet", "erlang", "go", "java", "nodejs", "php", "python", "ruby", "webjs" | `java` | No |
-| library.version | The version string of the library as defined below. | `semver:1.2.3` | No |
-
-`library.version` is a `string`, with naming schemas hinting at the type of a version,
-as follows:
-
-- `semver:1.2.3` (a semantic version)
-- `git:8ae73a` (a git sha hash)
-- `0.0.4.2.20190921` (a untyped version)
-
-The type and version value MUST be separated by a colon character `:`.
+| library.version | The version string of the library as defined in [Version Attributes](#version-attributes). | `semver:1.2.3` | No |
 
 ## Compute Unit
 
@@ -142,3 +135,14 @@ Attributes defining a running environment (e.g. Cloud, Data Center).
 | cloud.account.id | The cloud account id used to identify different entities. | `opentelemetry` |
 | cloud.region | A specific geographical location where different entities can run | `us-central1` |
 | cloud.zone | Zones are a sub set of the region connected through low-latency links.<br/> In aws it is called availability-zone. | `us-central1-a` |
+
+## Version Attributes
+
+Version attributes such as `service.version` and `library.version` are values of type `string`,
+with naming schemas hinting at the type of a version, such as the following:
+
+- `semver:1.2.3` (a semantic version)
+- `git:8ae73a` (a git sha hash)
+- `0.0.4.2.20190921` (a untyped version)
+
+The type and version value MUST be separated by a colon character `:`.
