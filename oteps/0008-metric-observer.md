@@ -1,6 +1,6 @@
 # Metrics observer specification
 
-**Status:** `proposed`
+**Status:** Superceded entirely by [0072-metric-observer](0072-metric-observer.md)
 
 Propose metric `Observer` callbacks for context-free access to current Gauge instrument values on demand.
 
