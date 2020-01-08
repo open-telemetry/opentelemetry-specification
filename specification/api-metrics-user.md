@@ -23,13 +23,7 @@ external systems.  Metric names conform to the following syntax:
 3. The first character must be non-numeric, non-space, non-punctuation
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
-Metrics names belong to a namespace by virtue of a "Named" `Meter`
-instance.  A "Named" `Meter` refers to the requirement that every
-`Meter` instance must have an associated `component` label, determined
-statically in the code.  The `component` label value of the associated
-`Meter` serves as its namespace, allowing the same metric name to be
-used in multiple libraries of code, unambiguously, within the same
-application.
+Metric names belong to a namespace. The `component` label value of the associated `Meter` serves as its namespace, allowing the same metric name to be used in multiple libraries of code, unambiguously, within the same application.
 
 Metric instruments are defined using a `Meter` instance, using a
 variety of `New` methods specific to the kind of metric and type of
@@ -71,7 +65,7 @@ either floating point or integer inputs, see the detailed design below.
 Binding instruments to a single `Meter` instance has two benefits:
 
 1. Instruments can be exported from the zero state, prior to first use, with no explicit `Register` call
-2. The component name provided by the named `Meter` satisfies a namespace requirement
+2. The component name provided by the `Meter` satisfies a namespace requirement
 
 The recommended practice is to define structures to contain the
 instruments in use and keep references only to the instruments that
@@ -82,7 +76,7 @@ metric instruments statically and providing the `Meter` interface at
 the time of use.  In this example, typical of statsd clients, existing
 code may not be structured with a convenient place to store new metric
 instruments.  Where this becomes a burden, it is recommended to use
-the global meter factory to construct a static named `Meter`, to
+the global meter factory to construct a static `Meter`, to
 construct metric instruments.
 
 The situation is similar for users of Prometheus clients, where
