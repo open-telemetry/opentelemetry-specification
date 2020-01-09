@@ -29,7 +29,8 @@ external systems.  Metric names conform to the following syntax:
 3. The first character must be non-numeric, non-space, non-punctuation
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
-Metric names belong to a namespace. The `component` label value of the associated `Meter` serves as its namespace, allowing the same metric name to be used in multiple libraries of code, unambiguously, within the same application.
+Metric names belong to a namespace. The `component` label value of the associated `Meter` serves as its namespace, allowing the same metric name to be used in multiple libraries of code, unambiguously, within the same application.  
+_Note: Even though this namespace could be similar or equal to the `name` provided to `MeterFactory`, these are distinct concepts and must not be used interchangeably._
 
 Metric instruments are defined using a `Meter` instance, using a
 variety of `New` methods specific to the kind of metric and type of
