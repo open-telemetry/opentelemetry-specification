@@ -79,8 +79,8 @@ Examples: HBase, Envoy developers.
  OpenTelemetry SDKTracer, and OpenTelemetry wire format exporter.
  * They may have their own recommendations for sampling rates, but don't run the binaries in
  production, only provide packaged binaries. So their sampling rate configs, and sampling strategies
- need to a finite "built in" set from OpenTelemetry's SDK.
- * They need to deal with upstream sampling decisions made by services calling them.
+ need to be a finite "built in" set from OpenTelemetry's SDK.
+ * They need to deal with upstream sampling decisions made by services that call them.
 
 **Solution:**
  * Allow different sampling strategies by default in OpenTelemetry SDK, all configurable easily via
@@ -138,12 +138,12 @@ or the cost to store all the Spans may be too high. In order to support this use
 ensure the quality of the data we send, OpenTelemetry needs to natively support sampling with some
 requirements:
  * Send as many complete traces as possible. Sending just a subset of the spans from a trace is 
- less useful because in this case the interaction between the spans may miss.
+ less useful because in this case the interaction between the spans may be missing.
  * Allow application operator to configure the sampling frequency.
  
-For new modern systems that need to collect all the Spans and later may or may not do a deferred 
+For new modern systems that need to collect all the Spans and later may or may not make a deferred 
 sampling decision, OpenTelemetry needs to natively support a way to configure the library to 
-collect and export all the Spans. This is possible even though OpenTelemetry supports sampling by
+collect and export all the Spans. This is possible (even though OpenTelemetry supports sampling) by
 setting a default config to always collect all the spans.
 
 ### Sampling flags
@@ -174,11 +174,11 @@ instrumenting code and never access `SampledFlag` unless used in context propaga
 This is a new concept added in the OpenTelemetry API that allows to suggest sampling hints to the
 implementation of the API:
  * `NOT_RECORD`
-   * Suggest to not `RecordEvents = false` and not propagate `SampledFlag = false`.
+   * Suggest to not set (`RecordEvents = false`) and not propagate (`SampledFlag = false`).
  * `RECORD`
-   * Suggest `RecordEvents = true` and `SampledFlag = false`.
+   * Suggest to set (`RecordEvents = true`) but not propagate (`SampledFlag = false`).
  * `RECORD_AND_PROPAGATE`
-   * Suggest to `RecordEvents = true` and propagate `SampledFlag = true`.
+   * Suggest to set (`RecordEvents = true`) and propagate (`SampledFlag = true`).
 
 The default option for the span creation is to not have any suggestion (or suggestion is not
 specified). This can be implemented by using `null` as the default option or any language specific
@@ -195,7 +195,7 @@ The interface for the Sampler class that is available only in the OpenTelemetry 
  * `SpanKind`
  * Initial set of `Attributes` for the `Span` being constructed
 
-It produces as an output called `SamplingResult`:
+It produces an output called `SamplingResult` that includes:
  * A `SamplingDecision` enum [`NOT_RECORD`, `RECORD`, `RECORD_AND_PROPAGATE`].
  * A set of span Attributes that will also be added to the `Span`.
    * These attributes will be added after the initial set of `Attributes`.
@@ -263,7 +263,7 @@ There are two important use-cases to be considered:
  * Some information that may be used for sampling decision are NOT available at the moment when the
  logical `Span` operation should start (e.g. `http.route` may be determine later).
 
-The current [span creation logic][span-creation] facilitates very well the first use-case, but
+The current [span creation logic][span-creation] facilitates the first use-case very well, but
 the second use-case requires users to record the logical `start_time` and collect all the
 information necessarily to start the `Span` in custom objects, then when all the properties are
 available call the span creation API.
