@@ -49,8 +49,8 @@ Don't set a status message if the reason can be inferred from `http.status_code`
 | 501 Not Implemented     | `Unimplemented`       |
 | 503 Service Unavailable | `Unavailable`         |
 | 504 Gateway Timeout     | `DeadlineExceeded`    |
-| Other 5xx code          | `InternalError` [1]   |
-| Any status code the client fails to interpret (e.g., 093 or 573) | `UnknownError` |
+| Other 5xx code          | `Internal` [1]   |
+| Any status code the client fails to interpret (e.g., 093 or 573) | `Unknown` |
 
 Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
 
@@ -102,14 +102,14 @@ For status, the following special cases have canonical error codes assigned:
 
 | Client error                | Trace status code  |
 |-----------------------------|--------------------|
-| DNS resolution failed       | `UnknownError`     |
+| DNS resolution failed       | `Unknown`     |
 | Request cancelled by caller | `Cancelled`        |
 | URL cannot be parsed        | `InvalidArgument`  |
 | Request timed out           | `DeadlineExceeded` |
 
 This is not meant to be an exhaustive list
 but if there is no clear mapping for some error conditions,
-instrumentation developers are encouraged to use `UnknownError`
+instrumentation developers are encouraged to use `Unknown`
 and open a PR or issue in the specification repository.
 
 ## HTTP server
