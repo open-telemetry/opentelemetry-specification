@@ -1,6 +1,21 @@
 # Metrics API
 
-TODO: Table of contents
+<details>
+<summary>
+Table of Contents
+</summary>
+
+* [Overview](#overview)
+  * [User-facing API](#user-facing-api)
+  * [Meter API](#meter-api)
+  * [Purpose of this document](#purpose-of-this-document)
+* [Metric kinds and inputs](#metric-kinds-and-inputs)
+  * [Metric selection](#metric-selection)
+  * [Counter](#counter)
+  * [Gauge](#gauge)
+  * [Measure](#measure)
+
+</details>
 
 ## Overview
 
