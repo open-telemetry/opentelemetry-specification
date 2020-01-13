@@ -9,14 +9,22 @@ TODO: Add a table of contents.
 
 ## Overview
 
-Metric instruments are the entry point for application and framework developers to instrument their code using counters, gauges, and measures. Metrics are created by calling methods on a `Meter` which is in turn created by a global `MeterFactory`.
+Metric instruments are the entry point for application and framework developers to instrument their code using counters, gauges, and measures.
+Metrics are created by calling methods on a `Meter` which is in turn created by a global `MeterFactory`.
 
 ### Obtaining a Meter
 
-New `Meter` instances can be created via a `MeterFactory` and its `getMeter` method. `MeterFactory`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `MeterFactory`. The `getMeter` method expects two string arguments:
+New `Meter` instances can be created via a `MeterFactory` and its `getMeter` method.
+`MeterFactory`s are generally expected to be used as singletons.
+Implementations SHOULD provide a single global default `MeterFactory`. The `getMeter` method expects two string arguments:
 
-- `name` (required): This name must identify the instrumentation library (also referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library. In case an invalid name (null or empty string) is specified, a working default `Meter` implementation as a fallback is returned rather than returning null or throwing an exception. A library, implementing the OpenTelemetry API *may* also ignore this name and return a default instance for all calls if it does not support "named" functionality (e.g. an implementation which is not even observability-related). A `MeterFactory` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
+- `name` (required): This name must identify the instrumentation library (also referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`)
+and *not* the instrumented library.
+In case an invalid name (null or empty string) is specified, a working default `Meter` implementation as a fallback is returned
+rather than returning null or throwing an exception.
+A library, implementing the OpenTelemetry API *may* also ignore this name and return a default instance for all calls
+if it does not support "named" functionality (e.g. an implementation which is not even observability-related).
+A `MeterFactory` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `semver:1.0.0`).
 
 ### Metric names
@@ -29,8 +37,10 @@ external systems.  Metric names conform to the following syntax:
 3. The first character must be non-numeric, non-space, non-punctuation
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
-Metric names belong to a namespace. The `component` label value of the associated `Meter` serves as its namespace, allowing the same metric name to be used in multiple libraries of code, unambiguously, within the same application.  
-_Note: Even though this namespace could be similar or equal to the `name` provided to `MeterFactory`, these are distinct concepts and must not be used interchangeably._
+Metric names belong to a namespace. The `component` label value of the associated `Meter` serves as its namespace,
+allowing the same metric name to be used in multiple libraries of code, unambiguously, within the same application.  
+_Note: Even though this namespace could be similar or equal to the `name` provided to `MeterFactory`,
+these are distinct concepts and must not be used interchangeably._
 
 Metric instruments are defined using a `Meter` instance, using a
 variety of `New` methods specific to the kind of metric and type of
