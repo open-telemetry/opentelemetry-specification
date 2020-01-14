@@ -22,8 +22,6 @@ Implementations SHOULD provide a single global default `MeterFactory`. The `getM
   and *not* the instrumented library.
   In case an invalid name (null or empty string) is specified, a working default `Meter` implementation as a fallback is returned
   rather than returning null or throwing an exception.
-  A library implementing the OpenTelemetry API *may* also ignore this name and return a default instance for all calls
-  if it does not support "named" functionality (e.g. an implementation which is not even observability-related).
   A `MeterFactory` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `semver:1.0.0`).
 
@@ -38,7 +36,7 @@ external systems.  Metric names conform to the following syntax:
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
 Metric names belong to a namespace. The `component` label value of the associated `Meter` serves as its namespace,
-allowing the same metric name to be used in multiple libraries of code, unambiguously, within the same application.  
+allowing the same metric name to be used in multiple libraries of code, unambiguously, within the same application.
 _Note: Even though this namespace could be similar or equal to the `name` provided to `MeterFactory`,
 these are distinct concepts and must not be used interchangeably._
 
