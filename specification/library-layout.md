@@ -97,7 +97,7 @@ and container name.
 
 ### [/sdk/trace](sdk-tracing.md)
 
-This directory describes the SDK implementation for api/metrics.
+This directory describes the SDK implementation for api/trace.
 
 ### `/sdk/internal` (_Optional_)
 
