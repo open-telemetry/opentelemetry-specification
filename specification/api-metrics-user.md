@@ -35,20 +35,18 @@ external systems.  Metric names conform to the following syntax:
 3. The first character must be non-numeric, non-space, non-punctuation
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
-Metric names belong to a namespace. The `component` label value of the associated `Meter` serves as its namespace,
-allowing the same metric name to be used in multiple libraries of code, unambiguously, within the same application.
-_Note: Even though this namespace could be similar or equal to the `name` provided to `MeterFactory`,
-these are distinct concepts and must not be used interchangeably._
+Metric names belong to a namespace. The `name` of the associated `Meter`
+serves as its namespace, allowing the same metric name to be used in
+multiple libraries of code, unambiguously, within the same application.
 
-Metric instruments are defined using a `Meter` instance, using a
-variety of `New` methods specific to the kind of metric and type of
-input (integer or floating point).  The Meter will return an error
-when a metric name is already registered with a different kind for the
-same component name.  Metric systems are expected to automatically
-prefix exported metrics by the `component` namespace in a manner
-consistent with the target system.  For example, a Prometheus exporter
-SHOULD use the component followed by `_` as the [application
-prefix](https://prometheus.io/docs/practices/naming/#metric-names).
+Metric instruments are defined using a `Meter` instance, using a variety
+of `New` methods specific to the kind of metric and type of input(integer
+or floating point).  The Meter will return an error when a metric name is
+already registered with a different kind for the same name.  Metric systems
+are expected to automatically prefix exported metrics by the namespace in a
+manner consistent with the target system.  For example, a Prometheus exporter
+SHOULD use the namespace followed by `_` as the
+[application prefix](https://prometheus.io/docs/practices/naming/#metric-names).
 
 ### Format of a metric event
 
@@ -80,7 +78,7 @@ either floating point or integer inputs, see the detailed design below.
 Binding instruments to a single `Meter` instance has two benefits:
 
 1. Instruments can be exported from the zero state, prior to first use, with no explicit `Register` call
-2. The component name provided by the `Meter` satisfies a namespace requirement
+2. The name provided by the `Meter` satisfies a namespace requirement
 
 The recommended practice is to define structures to contain the
 instruments in use and keep references only to the instruments that
