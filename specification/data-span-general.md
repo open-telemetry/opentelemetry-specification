@@ -73,11 +73,16 @@ These attributes may be used for any operation with an authenticated and/or auth
 
 |  Attribute name |                                 Notes and examples                                |
 | :-------------- | :-------------------------------------------------------------------------------- |
-| `auth.user`     | Username or client_id extracted from the access token or [Authorization] header.  |
-| `auth.role`     | Actual/assumed role the client is making the request under extracted from token or application security context. |
-| `auth.scope`    | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token] or an attribute value in a [SAML 2.0 Assertion]. |
+| `enduser.id`    | Username or client_id extracted from the access token or [Authorization] header in the inbound request from outside the system.  |
+| `enduser.role`  | Actual/assumed role the client is making the request under extracted from token or application security context. |
+| `enduser.scope` | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token] or an attribute value in a [SAML 2.0 Assertion]. |
 
-Examples of where the `auth.user` value is extracted from:
+These attributes describe the authenticated user driving the user agent making requests to the instrumented
+system. It is expected this information would be propigated unchanged from node-to-node within the system
+using the Correlation Context mechanism. These attributes should not be used to record system-to-system
+authentication attributes.
+
+Examples of where the `enduser.id` value is extracted from:
 
 | Authentication protocol | Field or description            |
 | :---------------------- | :------------------------------ |
