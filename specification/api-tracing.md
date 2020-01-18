@@ -98,8 +98,9 @@ developer to access a `Tracer` from a `TracerProvider`, which at runtime may be
 the default minimal implementation from the API, the default full implementation
 known as the SDK, or a third party implementation.
 
-However, even though the [library developers][] cannot define
-an implementation to use, they can, and should, give the `Tracer` a name and version:
+### Named Tracers
+
+[library developers][] can, and should, give the `Tracer` a name and version:
 
 - `name`: This name must identify the instrumentation library (also
   referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and NOT
@@ -120,11 +121,6 @@ There MUST be functions associated with a `Tracer` to:
 - Get the currently active `Span`
 - Create a new `Span`
 - Make a given `Span` as active
-
-The `Tracer` SHOULD allow the application developer to configure other tracing
-components that control how `Span`s are passed across process boundaries,
-including the binary and text format `Propagator`s used to serialize `Span`s
-created by the `Tracer`.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
