@@ -12,6 +12,12 @@ following reserved names.
 
 ## Message event attributes
 
+Each message sent/received within a span should be recorded as an event. In the
+case of synchronous RPC calls there will be one sent and one received event per
+span. In case of a stream span such as a gRPC stream, WebSocket or HTTP
+server-sent events, there could be multiple messages with each message recorded
+as an individual event.
+
 Event `"name"` MUST be `"message"`.
 
 Message events MUST be associated with a tracing span.
@@ -27,8 +33,9 @@ Message events MUST be associated with a tracing span.
 The `message.id` MUST be calculated as two different counters starting from `1`,
 the first for sent messages and the second for received messages. This way we
 guarantee that the values will be consistent between different implementations.
-In case of unary calls only one sent and one received message will be recorded
-for both client and server spans.
+In protocols where the message id is included as a header in the message, the
+received message id should be that sent be the server instead of its own
+incremented value.
 
 Most exporters will likely drop the `message.content` attribute if present.
 However, logging-only exporters will likely want to log it as this information
