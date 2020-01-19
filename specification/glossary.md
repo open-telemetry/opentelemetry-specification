@@ -24,6 +24,5 @@
   the logic either defined in the official SDK specification or a third party
   implementation. The implementation must be used only through the API by a
   library developer or application developer.
-- <a name="operator"></a>Operator: The operator SHOULD be able to select a
-  different SDK implementation, overriding the one chosed by the application
-  developer.
+- <a name="operator"></a>Operator: The person deploying and maintaining the
+  deployable artifact.
