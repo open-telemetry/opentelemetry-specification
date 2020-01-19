@@ -82,8 +82,7 @@ used by all instrumented code within the program.
 A `Tracer` is more than just the code though. Each `Tracer` has a name and a
 resource attached to it. The API must provide [library developers][] a way to
 access a `Tracer` with a specific name and attached resource. We'll call that
-component the `TracerProvider`, in an OOP language this would likely be a
-`Factory`.
+component the `TracerProvider`.
 
 If [application developers][] do not specify a library which implements
 the `TracerProvider`, like the OpenTelemetry SDK, the API must include a default
