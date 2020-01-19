@@ -108,10 +108,7 @@ known as the SDK, or a third party implementation.
   version of the instrumentation library (e.g. `semver:1.0.0`).
 
 The API MUST offer functionality for the library developer to pass the `name`
-and `version` to `TracerProvider` when retrieving the `Tracer`. The `name` and
-`version` are not attributes to be added to a retrieved `Tracer`, they must be
-passed at the time of retrieval to allow implementations, in the SDKs, to base
-the returned `Tracer` on that information.
+and `version` to `TracerProvider` when retrieving the `Tracer`.
 
 ### Tracer operations
 
