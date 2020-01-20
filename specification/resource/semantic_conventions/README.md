@@ -18,7 +18,7 @@ This document defines standard attributes for resources. These attributes are ty
 
 ## TODOs
 
-* Add more compute units: Process, Lambda Function, AppEngine unit, etc.
+* Add more compute units: Process, Function as a Service, AppEngine unit, etc.
 * Add Device (mobile) and Web Browser.
 * Decide if lower case strings only.
 * Consider to add optional/required for each attribute and combination of attributes
@@ -80,7 +80,11 @@ The identifier SHOULD be stable across different versions of an implementation.
 
 ## Compute Unit
 
+<<<<<<< HEAD
 Attributes defining a compute unit (e.g. Container, Process, Lambda Function).
+=======
+Labels defining a compute unit (e.g. Container, Process, Function as a Service).
+>>>>>>> Generalize to FaaS
 
 ### Container
 
@@ -95,7 +99,7 @@ Attributes defining a compute unit (e.g. Container, Process, Lambda Function).
 | container.image.tag | Container image tag. | `0.1` |
 
 
-### Lambda
+### Function as a Service
 
 **type:** `faas`
 
