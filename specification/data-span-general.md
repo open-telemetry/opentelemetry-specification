@@ -78,7 +78,7 @@ These attributes may be used for any operation with an authenticated and/or auth
 | `enduser.scope` | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token] or an attribute value in a [SAML 2.0 Assertion]. |
 
 These attributes describe the authenticated user driving the user agent making requests to the instrumented
-system. It is expected this information would be propigated unchanged from node-to-node within the system
+system. It is expected this information would be propagated unchanged from node-to-node within the system
 using the Correlation Context mechanism. These attributes should not be used to record system-to-system
 authentication attributes.
 
