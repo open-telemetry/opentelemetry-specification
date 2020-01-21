@@ -176,10 +176,12 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.server_name` | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). | [1] |
 | `http.route` | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. | No |
 | `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `net.peer.ip`, which would identify the network-level peer, which may be a proxy. | No |
+| `http.user_agent` | Value of the HTTP [User-Agent][] header sent by the client. | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
 [X-Forwarded-For]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For
+[User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3
 
 **[1]**: `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. <https://github.com/open-telemetry/opentelemetry-python/pull/148>).
 It is thus preferred to supply the raw data that *is* available.
