@@ -80,11 +80,7 @@ The identifier SHOULD be stable across different versions of an implementation.
 
 ## Compute Unit
 
-<<<<<<< HEAD
-Attributes defining a compute unit (e.g. Container, Process, Lambda Function).
-=======
-Labels defining a compute unit (e.g. Container, Process, Function as a Service).
->>>>>>> Generalize to FaaS
+Attributes defining a compute unit (e.g. Container, Process, Function as a Service).
 
 ### Container
 
@@ -107,17 +103,10 @@ Labels defining a compute unit (e.g. Container, Process, Function as a Service).
 
 | Label  | Description  | Example  | Required |
 |---|---|---|--|
-| faas.region| A specific geographical location where the function is executed. | `us-east-2` | Yes |
-| faas.name | The name of the function being executed. | `opentelemetry-lambda` | Yes |
-| faas.identifier | The unique name of the function being executed. <br /> For example, in AWS this field correspond to the [ARN] value, in GCP to the URI of the resource, and Azure to the [FunctionDirectory] field. | `opentelemetry-lambda` | Yes |
-| faas.version | The version of the function being executed. | `opentelemetry-latest` | No |
-| faas.provider | Provider name of the function, e.g. `aws`, `gpc`, `azure`, `serverless`, ... | `aws` | No |
-| faas.payload | The input passed to the function. | `{name: 'opentelemetry'}` | No |
-| faas.trigger | Type of the trigger that spawned the function, e.g. `http`, `S3`, `PubSub`, ... | `http` | Yes |
-| faas.instance.id | String containing the unique execution id. | `opentelemetry-0001` | Yes |
-
-
-
+| faas.name | The name of the function being executed. | `my-function` | Yes |
+| faas.identifier | The unique name of the function being executed. <br /> For example, in AWS Lambda this field corresponds to the [ARN] value, in GCP to the URI of the resource, and in Azure to the [FunctionDirectory] field. | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Yes |
+| faas.service | Platform name where the function is executed, e.g. `aws-lambda`, `cloud-functions`, `azure-functions`, ... | `aws-lambda` | Yes |
+| faas.version | The version string of the function being executed as defined in [Version Attributes]. | `semver:2.0.0` | No |
 
 
 ## Deployment Service

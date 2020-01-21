@@ -13,7 +13,18 @@ can still be easily correlated and cross-analyzed.
 
 The following semantic conventions for spans are defined:
 
+<<<<<<< HEAD:specification/trace/semantic_conventions/README.md
 * [HTTP](http.md): Spans for HTTP client and server.
 * [Database](database.md): Spans for SQL and NoSQL client calls.
 * [RPC/RMI](rpc.md): Spans for remote procedure calls (e.g., gRPC).
 * [General](span-general.md): General semantic attributes that may be used in describing different kinds of operations.
+=======
+* [HTTP](data-http.md): Spans for HTTP client and server.
+* [Database](data-database.md): Spans for SQL and NoSQL client calls.
+* [RPC/RMI](data-rpc.md): Spans for remote procedure calls (e.g., gRPC).
+<<<<<<< HEAD
+* [General](data-span-general.md): General semantic attributes that may be used in describing different kinds of operations.
+=======
+* [FaaS](data-faas.md): Spans for Function as a Service (e.g. AWS Lambda).
+>>>>>>> Split FaaS between Span and Resource attributes
+>>>>>>> Split FaaS between Span and Resource attributes:specification/data-semantic-conventions.md
