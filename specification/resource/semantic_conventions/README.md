@@ -107,7 +107,9 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 | faas.identifier | The unique name of the function being executed. <br /> For example, in AWS Lambda this field corresponds to the [ARN] value, in GCP to the URI of the resource, and in Azure to the [FunctionDirectory] field. | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Yes |
 | faas.service | Platform name where the function is executed, e.g. `aws-lambda`, `cloud-functions`, `azure-functions`, ... | `aws-lambda` | Yes |
 | faas.version | The version string of the function being executed as defined in [Version Attributes]. | `semver:2.0.0` | No |
+| faas.instance | String containing the execution environment ID. | `my-function:instance-0001` | No |
 
+Note: `faas.instance` differs from `faas.id`. For more information see the [Semantic conventions for FaaS spans](data-faas#difference-between-id-and-instance).
 
 ## Deployment Service
 
