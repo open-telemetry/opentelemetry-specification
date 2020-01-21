@@ -36,9 +36,11 @@ Examples of span name: `grpc.test.EchoService/Echo`.
 | `rpc.service`  | The service name, must be equal to the $service part in the span name. | Yes |
 | `net.peer.ip`  | See [network attributes][]. | See below |
 | `net.peer.name`  | See [network attributes][]. | See below |
-| `net.peer.port`  | See [network attributes][]. | Yes |
+| `net.peer.port`  | See [network attributes][]. | See below |
 
-Additionally, at least one of [network attributes][] `net.peer.name` or `net.peer.ip` is required.
+At least one of [network attributes][] `net.peer.name` or `net.peer.ip` is required.
+For client-side spans describing the server they are connecting to, `net.peer.port` is required.
+For server-side spans describing the client connecting to them, `net.peer.port` is optional.
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
 
