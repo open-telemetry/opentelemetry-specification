@@ -256,7 +256,7 @@ as a separate operation.
 
 The API MUST accept the following parameters:
 
-- The operation name. This is a required parameter.
+- The span name. This is a required parameter.
 - The parent Span or parent Span context, and whether the new `Span` should be a
   root `Span`. API MAY also have an option for implicit parent context
   extraction from the current context as a default behavior.
@@ -446,7 +446,7 @@ started with the explicit timestamp from the past at the moment where the final
 
 Required parameters:
 
-- The new **operation name**, which supersedes whatever was passed in when the
+- The new **span name**, which supersedes whatever was passed in when the
   `Span` was started
 
 #### End
