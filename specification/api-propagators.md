@@ -40,7 +40,7 @@ Serializes the given value into the on-the-wire representation.
 
 Required arguments:
 
-- the value to serialize, can be `SpanContext` or `DistributedContext`.
+- the value to serialize, can be `SpanContext` or `CorrelationContext`.
 
 Returns the on-the-wire byte representation of the value.
 
@@ -94,7 +94,7 @@ Injects the value downstream. For example, as http headers.
 
 Required arguments:
 
-- the value to be injected, can be `SpanContext` or `DistributedContext`.
+- the value to be injected, can be `SpanContext` or `CorrelationContext`.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the `Setter` invoked for each propagation key to add or remove.
 
