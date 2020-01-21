@@ -234,7 +234,7 @@ Span name: `/webshop/articles/:article_id`.
 | `http.status_text` | `"OK"`                                          |
 | `http.client_ip`   | `"192.0.2.4"`                                   |
 | `net.peer.ip`      | `"192.0.2.5"` (the client goes through a proxy) |
-| `http.user_agent`  | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0`                               |
+| `http.user_agent`  | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
 
 Note that following the recommendations above, `http.url` is not set in the above example.
 If set, it would be
