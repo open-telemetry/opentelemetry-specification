@@ -1,7 +1,5 @@
 # Messaging systems
 
-> 🚧 WORK IN PROGRESS
-
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
