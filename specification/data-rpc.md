@@ -39,8 +39,8 @@ Examples of span name: `grpc.test.EchoService/Echo`.
 | `net.peer.port`  | See [network attributes][]. | See below |
 
 At least one of [network attributes][] `net.peer.name` or `net.peer.ip` is required.
-For client-side spans describing the server they are connecting to, `net.peer.port` is required.
-For server-side spans describing the client connecting to them, `net.peer.port` is optional.
+For client-side spans `net.peer.port` is required (it describes the server port they are connecting to).
+For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
 
