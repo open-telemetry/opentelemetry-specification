@@ -58,7 +58,7 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | -------------- | ---------------------------------------------------------------------- | --------- |
 | `component`    | Denotes the type of the span and needs to be `"msg"`.                  | Yes       |
 | `msg.flavor`   | A string identifying the messaging system kind used. Should be of the form `KIND.TECH`, e.g. `JMS.Web Sphere` or `AMQP.RabbitMQ`. | Yes |
-| `msg.dst`      | The message destination name. A deprecated alternative key for this attribute is [`message_bus.destination`][ot-msg]. | Yes       |
+| `msg.dst`      | The message destination name, e.g. `"MyQueue"` or `"MyTopic"`. | Yes       |
 | `msg.dst_kind` | The kind of message destination: Either `"queue"` or `"topic"`.        | Yes       |
 | `msg.tmp_dst`  | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
 | `msg.id`       | An integer or string used by the messaging system as an identifier for the message. | No |
@@ -67,7 +67,6 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 It is strongly recommended to also set at least the [network attributes][] `net.peer.ip`, `net.peer.name` and `net.peer.port`.
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
-[ot-msg]: https://github.com/opentracing/specification/blob/master/semantic_conventions.md#message-bus
 
 For message consumers, the following additional attributes may be set:
 
