@@ -9,14 +9,13 @@ Table of Contents
   * [Time](#time)
     * [Timestamp](#timestamp)
     * [Duration](#duration)
+* [Context Propagation](#context-propagation)
 * [Tracer](#tracer)
   * [Obtaining a tracer](#obtaining-a-tracer)
   * [Tracer operations](#tracer-operations)
     * [GetCurrentSpan](#getcurrentspan)
     * [WithSpan](#withspan)
     * [SpanBuilder](#spanbuilder)
-    * [GetBinaryFormat](#getbinaryformat)
-    * [GetHttpTextFormat](#gethttptextformat)
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
@@ -69,6 +68,20 @@ A duration is the elapsed time between two events.
 
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
+
+## Context Propagation
+
+OpenTelemetry separates its design into two layers: the top layer contains
+independent observability concerns, such as traces, metrics and correlation
+context. All concerns share an underlying distributed context propagation layer,
+for storing state and accessing data across the lifespan of a distributed
+transaction.
+
+Concerns access their data in-process using the same, shared context object.
+Each concern uses its own namespaced set of keys in the context, containing
+all of its data.
+
+See the [Context API](api-context.md)
 
 ## Tracer
 
@@ -126,14 +139,15 @@ mechanism, for instance the `ServiceLoader` class in Java.
 
 The `Tracer` MUST provide methods to:
 
-- Get the currently active `Span`
 - Create a new `Span`
+
+The `Tracer` SHOULD provide methods to:
+
+- Get the currently active `Span`
 - Make a given `Span` as active
 
-The `Tracer` SHOULD allow end users to configure other tracing components that
-control how `Span`s are passed across process boundaries, including the binary
-and text format `Propagator`s used to serialize `Span`s created by the
-`Tracer`.
+The `Tracer` MUST leverage the context layer in order to handle the
+current `Span` state and how `Span`s are passed across process boundaries.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
@@ -144,17 +158,12 @@ SHOULD create each new `Span` as a child of its active `Span` unless an
 explicit parent is provided or the option to create a span without a parent is
 selected, or the current active `Span` is invalid.
 
-The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
+The `Tracer` SHOULD provide a way to update its active `Span`, and it MAY provide
 convenience methods to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
 `Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
-
-The implementation MUST provide no-op binary and text `Propagator`s, which the
-`Tracer` SHOULD use by default if other propagators are not configured. SDKs
-SHOULD use the W3C HTTP Trace Context as the default text format. For more
-details, see [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
 
