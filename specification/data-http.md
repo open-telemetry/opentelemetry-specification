@@ -31,7 +31,7 @@ does not work for HTTP client spans, especially when instrumentation is provided
 by a lower-level middleware that is not aware of the specifics of how the URIs
 are formed. Therefore, HTTP client spans SHOULD be using conservative, low
 cardinality names formed from the available parameters of an HTTP request,
-such as the HTTP method name. Instrumentation MUST NOT default to using URI
+such as `"HTTP {METHOD_NAME}"`. Instrumentation MUST NOT default to using URI
 path as span name, but MAY provide hooks to allow custom logic to override the
 default span name.
 
