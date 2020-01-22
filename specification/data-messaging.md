@@ -56,13 +56,13 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
-| `component`    | Denotes the type of the span and needs to be `"msg"`.                  | Yes       |
-| `msg.flavor`   | A string identifying the messaging system kind used. Should be of the form `KIND.TECH`, e.g. `JMS.Web Sphere` or `AMQP.RabbitMQ`. | Yes |
-| `msg.dst`      | The message destination name, e.g. `"MyQueue"` or `"MyTopic"`. | Yes       |
-| `msg.dst_kind` | The kind of message destination: Either `"queue"` or `"topic"`.        | Yes       |
-| `msg.tmp_dst`  | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
-| `msg.id`       | An integer or string used by the messaging system as an identifier for the message. | No |
-| `msg.conversation_id` | An integer or string identifying the conversation to which the message belongs. Sometimes called "correlation ID". | No |
+| `component` | Denotes the type of the span and needs to be `"messaging"`. | Yes |
+| `messaging.flavor` | A string identifying the messaging system kind used. Should be of the form `KIND.TECH`, e.g. `JMS.Web Sphere` or `AMQP.RabbitMQ`. | Yes |
+| `messaging.dst` | The message destination name, e.g. `"MyQueue"` or `"MyTopic"`. | Yes |
+| `messaging.dst_kind` | The kind of message destination: Either `"queue"` or `"topic"`. | Yes |
+| `messaging.tmp_dst` | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
+| `messaging.message_id` | An integer or string used by the messaging system as an identifier for the message. | No |
+| `messaging.conversation_id` | An integer or string identifying the conversation to which the message belongs. Sometimes called "correlation ID". | No |
 
 It is strongly recommended to also set at least the [network attributes][] `net.peer.ip`, `net.peer.name` and `net.peer.port`.
 
@@ -72,9 +72,9 @@ For message consumers, the following additional attributes may be set:
 
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
-| `msg.op` | A string identifying which part and kind of message consumption this span describes: `recv`, `peek` or `proc`. (If the operation is `send`, this attribute must not be set: the operation can be inferred from the span kind in that case.) | No |
-| `msg.peeked_some` |  A boolean indicating whether a `peek` operation resulted in a received message or not. Must only be added if `msg.op` is `peek`. I missing, assumed to be `true` if `msg.id` is set, otherwise assumed to be `false`. | No |
+| `messaging.operation` | A string identifying which part and kind of message consumption this span describes: `receive`, `peek` or `process`. (If the operation is `send`, this attribute must not be set: the operation can be inferred from the span kind in that case.) | No |
+| `messaging.peeked_some` |  A boolean indicating whether a `peek` operation resulted in a received message or not. Must only be added if `messaging.operation` is `peek`. I missing, assumed to be `true` if `messaging.message_id` is set, otherwise assumed to be `false`. | No |
 
-Note that one or multiple Spans with `msg.op` = `proc` may often be the children of a Span with `msg.op` = `recv` or `peek`.
+Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.op` = `receive` or `peek`.
 Even though in that case one might think that the span kind is `INTERNAL`, that kind MUST NOT be used.
 Instead span kind should be set to either `CONSUMER` or `SERVER` according to the rules defined above.
