@@ -51,10 +51,10 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
-| `component` | Denotes the type of the span and needs to be `"messaging"`. | Yes |
+| `component` | Denotes the type of the span and needs to be `messaging`. | Yes |
 | `messaging.flavor` | A string identifying the messaging system kind used. Should be of the form `KIND.TECH`, e.g. `JMS.Web Sphere` or `AMQP.RabbitMQ`. | Yes |
-| `messaging.destination` | The message destination name, e.g. `"MyQueue"` or `"MyTopic"`. | Yes |
-| `messaging.destination_kind` | The kind of message destination: Either `"queue"` or `"topic"`. | Yes |
+| `messaging.destination` | The message destination name, e.g. `MyQueue` or `MyTopic`. | Yes |
+| `messaging.destination_kind` | The kind of message destination: Either `queue` or `topic`. | Yes |
 | `messaging.temp_destination` | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
 | `messaging.message_id` | An integer or string used by the messaging system as an identifier for the message. | No |
 | `messaging.conversation_id` | An integer or string identifying the conversation to which the message belongs. Sometimes called "correlation ID". | No |
