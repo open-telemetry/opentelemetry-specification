@@ -218,10 +218,18 @@ Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
 Shutdown should be called only once for each `Processor` instance. After the
-call to shutdown subsequent calls to `onStart` or `onEnd` are not allowed.
+call to shutdown subsequent calls to `onStart`, `onEnd`, or `forceFlush` are not allowed.
 
 Shutdown should not block indefinitely. Language library authors can decide if
-they want to make the shutdown timeout to be configurable.
+they want to make the shutdown timeout configurable.
+
+##### ForceFlush()
+
+Export all ended spans to the configured `Exporter` that have not yet been exported.
+
+`ForceFlush` should only be called in cases where it is absolutely necessary, such as when using some FaaS providers that may suspend the process after an invocation, but before the `Processor` exports the completed spans.
+
+`ForceFlush` should not block indefinitely. Language library authors can decide if they want to make the flush timeout configurable.
 
 #### Built-in span processors
 
@@ -328,7 +336,7 @@ return FailedNotRetryable error.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). Language library authors can decide if they
-want to make the shutdown timeout to be configurable.
+want to make the shutdown timeout configurable.
 
 #### Further Language Specialization
 
