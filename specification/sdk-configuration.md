@@ -20,7 +20,7 @@ the details ("what") about what is configurable.
 ### Programmatic
 All default SDK implementations *MUST* provide a programmatic configuration
 mechanism, in the language of the SDK itself. All other mechanisms *SHOULD*
-be able to be built on top of this mechanism, if at all possible.
+be built on top of this mechanism, if at all possible.
 
 ### Other Mechanisms
 Additional configuration mechanisms SHOULD be provided in whatever
