@@ -71,7 +71,7 @@ For message consumers, the following additional attributes may be set:
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
 | `messaging.operation` | A string identifying which part and kind of message consumption this span describes: `receive`, `peek` or `process`. (If the operation is `send`, this attribute must not be set: the operation can be inferred from the span kind in that case.) | No |
-| `messaging.peeked_some` |  A boolean indicating whether a `peek` operation resulted in a received message or not. Must only be added if `messaging.operation` is `peek`. I missing, assumed to be `true` if `messaging.message_id` is set, otherwise assumed to be `false`. | No |
+| `messaging.peeked_some` |  A boolean indicating whether a `peek` operation resulted in a received message or not. Must only be added if `messaging.operation` is `peek`. If missing, assumed to be `true` if `messaging.message_id` is set, otherwise assumed to be `false`. | No |
 
 Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.op` = `receive` or `peek`.
 Even though in that case one might think that the span kind is `INTERNAL`, that kind MUST NOT be used.
