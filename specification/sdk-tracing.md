@@ -233,14 +233,14 @@ Export all ended spans to the configured `Exporter` that have not yet been expor
 
 #### Built-in span processors
 
-SDK MUST implement simple and batch processors described below. Other common
-processing scenarios should be first considered for implementation out-of-process
-in [OpenTelemetry Collector](overview.md#collector)
+The standard OpenTelemetry SDK MUST implement both simple and batch processors,
+as described below. Other common processing scenarios should be first considered
+for implementation out-of-process in [OpenTelemetry Collector](overview.md#collector)
 
 ##### Simple processor
 
-The implementation of `SpanProcessor` that passes ended span directly to the
-configured `SpanExporter`.
+This is an implementation of `SpanProcessor` which passes finished spans to the
+configured `SpanExporter`, as they are finished.
 
 **Configurable parameters:**
 
@@ -248,13 +248,8 @@ configured `SpanExporter`.
 
 ##### Batching processor
 
-The implementation of the `SpanProcessor` that batches ended spans and pushes
+This is an implementation of the `SpanProcessor` which batches finished spans and pushes
 them to the configured `SpanExporter`.
-
-First the spans are added to a synchronized queue, then exported to the exporter
-pipeline in batches. The implementation is responsible for managing the span
-queue and sending batches of spans to the exporters. This processor can cause
-high contention in a very high traffic service.
 
 **Configurable parameters:**
 
