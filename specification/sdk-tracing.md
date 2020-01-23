@@ -239,8 +239,9 @@ for implementation out-of-process in [OpenTelemetry Collector](overview.md#colle
 
 ##### Simple processor
 
-This is an implementation of `SpanProcessor` which passes finished spans, unmodified,
-to the configured `SpanExporter`, as they are finished.
+This is an implementation of `SpanProcessor` which passes finished spans
+and passes the export-friendly span data representation to the configured
+`SpanExporter`, as soon as they are finished.
 
 **Configurable parameters:**
 
@@ -248,8 +249,9 @@ to the configured `SpanExporter`, as they are finished.
 
 ##### Batching processor
 
-This is an implementation of the `SpanProcessor` which batches finished spans and pushes
-them, unmodified, to the configured `SpanExporter`.
+This is an implementation of the `SpanProcessor` which create batches of finished
+spans and passes the export-friendly span data representations to the
+configured `SpanExporter`.
 
 **Configurable parameters:**
 
