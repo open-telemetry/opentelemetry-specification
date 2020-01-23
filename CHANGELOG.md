@@ -23,6 +23,7 @@ the release.
 - Added a Span Exporter interface for processing batches of spans.
 - Replaced DistributedContext.GetIterator with GetEntries.
 - Added clarifications and adjustments to improve cross-language applicability.
+- Added a specification for SDK configuration.
 
 ## v0.1.0 (06-21-2019)
 
