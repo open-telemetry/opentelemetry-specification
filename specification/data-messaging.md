@@ -62,7 +62,7 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | `messaging.message_id` | An integer or string used by the messaging system as an identifier for the message. | No |
 | `messaging.conversation_id` | An integer or string identifying the conversation to which the message belongs. Sometimes called "correlation ID". | No |
 
-It is strongly recommended to also set at least the [network attributes][] `net.peer.ip`, `net.peer.name` and `net.peer.port`.
+Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
 
