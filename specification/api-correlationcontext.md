@@ -9,7 +9,7 @@ additional context properties to logs and traces.
 `CorrelationContext` is a recommended name but languages can have more
 language-specific names like `cctx`.
 
-### Conflict Resolution
+## Conflict Resolution
 
 If a new name/value pair is added and its name conflicts with an existing pair, then the new pair takes precedence. The value
 is replaced by the most recent value (regardless of it is locally generated or received from a remote peer). Replacement is limited to a
