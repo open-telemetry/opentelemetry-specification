@@ -25,9 +25,6 @@ A message submitted to a queue is processed by a message *consumer* (usually exa
 
 The consumption of a message can happen in multiple steps:
 First, the lower-level receiving of a message at a consumer, and then the logical processing of the message.
-For receiving, the consumer may have the choice between peeking a destination to get a message back only if one is currently available
-(for the purpose of this document, it is not relevant whether the message is removed from the destination or not by the "peek" operation),
-or waiting until a message is received.
 Often, the waiting for a message is not particularly interesting and hidden away in a framework that only invokes some handler function to process a message once one is received
 (in the same way that the listening on a TCP port for an incoming HTTP message is not particularly interesting).
 However, in a synchronous conversation, the wait time for a message is important.
@@ -70,9 +67,8 @@ For message consumers, the following additional attributes may be set:
 
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
-| `messaging.operation` | A string identifying which part and kind of message consumption this span describes: `receive`, `peek` or `process`. (If the operation is `send`, this attribute must not be set: the operation can be inferred from the span kind in that case.) | No |
-| `messaging.peeked_some` |  A boolean indicating whether a `peek` operation resulted in a received message or not. Must only be added if `messaging.operation` is `peek`. If missing, assumed to be `true` if `messaging.message_id` is set, otherwise assumed to be `false`. | No |
+| `messaging.operation` | A string identifying which part and kind of message consumption this span describes: either `receive` or `process`. (If the operation is `send`, this attribute must not be set: the operation can be inferred from the span kind in that case.) | No |
 
-Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive` or `peek`.
+Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive`.
 Even though in that case one might think that the span kind is `INTERNAL`, that kind MUST NOT be used.
 Instead span kind should be set to either `CONSUMER` or `SERVER` according to the rules defined above.
