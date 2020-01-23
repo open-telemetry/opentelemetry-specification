@@ -18,8 +18,8 @@ the details ("what") about what is configurable.
 ## Mechanisms
 
 ### Programmatic
-All default SDK implementations MUST provide a programmatic configuration
-mechanism, in the language of the SDK itself. All other mechanisms SHOULD
+All default SDK implementations *MUST* provide a programmatic configuration
+mechanism, in the language of the SDK itself. All other mechanisms *SHOULD*
 be able to be built on top of this mechanism, if at all possible.
 
 ### Other Mechanisms
@@ -31,9 +31,17 @@ for the language community in question.
 ## Details (needs a better title)
 
 ### General
+#### Resources
+See the [Resource](sdk-resource.md) specification.
+
+#### Logging
+Configuration of SDK logging should be done in a language idiomatic fashion.
+This *MAY* be based only on configuration files (as opposed to the programmatic option)
+if that is the most idiomatic way for the language-specific logging
+system that the SDK uses.
 
 ### Tracing
-TODO: link to the tracing configuration options
+See the [Tracing](sdk-tracing.md) specification for configurable options.
 
 ### Metrics
-TODO: link to the metrics configuration options
+TODO: link to the metrics sdk specification when available.
