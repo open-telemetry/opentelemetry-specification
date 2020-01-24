@@ -52,7 +52,7 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
 | `component` | Denotes the type of the span and needs to be `messaging`. | Yes |
-| `messaging.system` | A string identifying the messaging system vendor such as `kafka`, `rabbitmq` or `jms`. | Yes |
+| `messaging.system` | A string identifying the messaging system vendor such as `kafka`, `rabbitmq` or `activemq`. | Yes |
 | `messaging.destination` | The message destination name, e.g. `MyQueue` or `MyTopic`. | Yes |
 | `messaging.destination_kind` | The kind of message destination: Either `queue` or `topic`. | Yes |
 | `messaging.temp_destination` | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
