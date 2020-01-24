@@ -5,9 +5,6 @@
 Table of Contents
 </summary>
 
-- [Binary Format](#binary-format)
-  - [ToBytes](#tobytes)
-  - [FromBytes](#frombytes)
 - [HTTP Text Format](#http-text-format)
   - [Fields](#fields)
   - [Inject](#inject)
@@ -19,43 +16,15 @@ Table of Contents
 
 </details>
 
-Propagators API consists of two main formats:
+Propagators leverage the underlying Context layer to inject and extract
+data for each concern, such as traces, metrics and correlation context.
 
-- `BinaryFormat` is used to serialize and deserialize a value into a binary representation.
+Propagators API consists of the following formats:
+
 - `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
 
 Deserializing must set `IsRemote` to true on the returned `SpanContext`.
-
-## Binary Format
-
-`BinaryFormat` is a formatter to serialize and deserialize a value into a binary format.
-
-`BinaryFormat` MUST expose the APIs that serializes values into bytes,
-and deserializes values from bytes.
-
-### ToBytes
-
-Serializes the given value into the on-the-wire representation.
-
-Required arguments:
-
-- the value to serialize, can be `SpanContext` or `DistributedContext`.
-
-Returns the on-the-wire byte representation of the value.
-
-### FromBytes
-
-Creates a value from the given on-the-wire encoded representation.
-
-If the value could not be parsed, the underlying implementation SHOULD decide to return ether
-an empty value, an invalid value, or a valid value.
-
-Required arguments:
-
-- on-the-wire byte representation of the value.
-
-Returns a value deserialized from bytes.
 
 ## HTTP Text Format
 
@@ -94,7 +63,8 @@ Injects the value downstream. For example, as http headers.
 
 Required arguments:
 
-- the value to be injected, can be `SpanContext` or `DistributedContext`.
+- a context containing the value to be injected, if any. The value can be `SpanContext` or
+`DistributedContext`. This can default to the current context if such facility exists.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the `Setter` invoked for each propagation key to add or remove.
 
@@ -120,18 +90,20 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 
 ### Extract
 
-Extracts the value from upstream. For example, as http headers.
+Extracts the value from upstream. For example, as http headers. The extracted value
+will be stored in the specified context.
 
 If the value could not be parsed, the underlying implementation will decide to return an
-object representing either an empty value, an invalid value, or a valid value. Implementations
-MUST not return null.
+object representing either a null value, an empty value, an invalid value, or a valid value.
 
 Required arguments:
 
+- a context used to store the extracted value. This can default to the current context if such facility exists.
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the instance of `Getter` invoked for each propagation key to get.
 
-Returns the non-null extracted value.
+Returns a new context created from the specified one, containing the extracted value, if any.
+The extracted value will not be present in the old context.
 
 #### Getter argument
 
