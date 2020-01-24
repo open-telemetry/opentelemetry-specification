@@ -238,9 +238,8 @@ for an example.
 ## Propagators
 
 OpenTelemetry uses `Propagators` to serialize and deserialize `SpanContext` and `DistributedContext`
-into a binary or text format. Currently there are two types of propagators:
+into a binary or text format. Currently there is one type of propagators:
 
-- `BinaryFormat` which is used to serialize and deserialize a value into a binary representation.
 - `HTTPTextFormat` which is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
 
