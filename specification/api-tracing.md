@@ -20,6 +20,7 @@ Table of Contents
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [Parenting from a Context](#parenting-from-a-context)
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
@@ -260,6 +261,11 @@ The API MUST accept the following parameters:
 - The parent Span or parent Span context, and whether the new `Span` should be a
   root `Span`. API MAY also have an option for implicit parent context
   extraction from the current context as a default behavior.
+- The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
+  and whether the new `Span` should be a root `Span`. API MAY also have an
+  option for implicit parenting from the current context as a default behavior.
+  See [Parenting from a Context](#parenting-from-a-context) for guidance on
+  `Span` parenting from explicit and implicit `Context`s.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - `Attribute`s - A collection of key-value pairs, with the same semantics as
   the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
@@ -289,6 +295,23 @@ A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
+
+#### Parenting from a Context
+
+When a new `Span` is created from a `Context` there are several scenarios to
+consider when selecting a parent. A `Context` can contain:
+
+- A current `Span`
+- An extracted `SpanContext`
+- A current `Span` and an extracted `SpanContext`
+- Neither a current `Span` or an extracted `Span` context
+
+In order handle these scenarios, a convention has been established for assigning
+a parent from a `Context`. The precedence for parent selection is as follows:
+
+- Use the current `Span`.
+- Use the extracted `SpanContext`.
+- There is no parent. Create a root `Span`.
 
 #### Add Links
 
