@@ -258,9 +258,6 @@ as a separate operation.
 The API MUST accept the following parameters:
 
 - The span name. This is a required parameter.
-- The parent Span or parent Span context, and whether the new `Span` should be a
-  root `Span`. API MAY also have an option for implicit parent context
-  extraction from the current context as a default behavior.
 - The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
   and whether the new `Span` should be a root `Span`. API MAY also have an
   option for implicit parenting from the current context as a default behavior.
@@ -298,16 +295,14 @@ parent is remote.
 
 #### Parenting from a Context
 
-When a new `Span` is created from a `Context` there are several scenarios to
-consider when selecting a parent. A `Context` can contain:
+When a new `Span` is created from a `Context` the `Context` may contain:
 
 - A current `Span`
 - An extracted `SpanContext`
 - A current `Span` and an extracted `SpanContext`
 - Neither a current `Span` or an extracted `Span` context
 
-In order handle these scenarios, a convention has been established for assigning
-a parent from a `Context`. The precedence for parent selection is as follows:
+The parent should be selected in the following order of precedence:
 
 - Use the current `Span`.
 - Use the extracted `SpanContext`.
