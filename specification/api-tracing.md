@@ -300,7 +300,7 @@ When a new `Span` is created from a `Context` the `Context` may contain:
 - A current `Span`
 - An extracted `SpanContext`
 - A current `Span` and an extracted `SpanContext`
-- Neither a current `Span` or an extracted `Span` context
+- Neither a current `Span` nor an extracted `Span` context
 
 The parent should be selected in the following order of precedence:
 
