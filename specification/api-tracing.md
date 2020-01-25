@@ -304,7 +304,7 @@ When a new `Span` is created from a `Context` the `Context` may contain:
 
 The parent should be selected in the following order of precedence:
 
-- Use the current `Span`.
+- Use the current `Span`, if available.
 - Use the extracted `SpanContext`.
 - There is no parent. Create a root `Span`.
 
