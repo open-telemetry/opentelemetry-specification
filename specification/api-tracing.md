@@ -200,7 +200,7 @@ sub-operations.
 
 `Span`s encapsulate:
 
-- The operation name
+- The span name
 - An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
 - A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
@@ -211,6 +211,24 @@ sub-operations.
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
+
+The _span name_ is a human-readable string which concisely identifies the work
+represented by the Span, for example, an RPC method name, a function name,
+or the name of a subtask or stage within a larger computation. The span name
+should be the most general string that identifies a (statistically) interesting
+_class of Spans_, rather than individual Span instances. That is, "get_user" is
+a reasonable name, while "get_user/314159", where "314159" is a user ID, is not
+a good name due to its high cardinality.
+
+For example, here are potential span names for an endpoint that gets a
+hypothetical account information:
+
+| Span Name         | Guidance     |
+| ----------------- | ------------ |
+| `get`             | Too general  |
+| `get_account/42`  | Too specific |
+| `get_account`     | Good, and account_id=42 would make a nice Span attribute |
+| `get_account/{accountId}` | Also good (using the "HTTP route") |
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
@@ -238,7 +256,7 @@ as a separate operation.
 
 The API MUST accept the following parameters:
 
-- The operation name. This is a required parameter.
+- The span name. This is a required parameter.
 - The parent Span or parent Span context, and whether the new `Span` should be a
   root `Span`. API MAY also have an option for implicit parent context
   extraction from the current context as a default behavior.
@@ -428,7 +446,7 @@ started with the explicit timestamp from the past at the moment where the final
 
 Required parameters:
 
-- The new **operation name**, which supersedes whatever was passed in when the
+- The new **span name**, which supersedes whatever was passed in when the
   `Span` was started
 
 #### End
