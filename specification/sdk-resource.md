@@ -13,7 +13,7 @@ When used with distributed tracing, a resource can be associated with the
 automatically be associated with this `Resource`.
 
 When used with metrics, a resource can be associated with the
-[MeterProvider](sdk-metrics.md#meter-sdk). When associated with `MeterProvider`
+[MeterProvider](sdk-metrics.md#meter-sdk). When associated with a `MeterProvider`,
 all `Metrics` produced by any `Meter` from the provider will automatically be
 associated with this `Resource`.
 
