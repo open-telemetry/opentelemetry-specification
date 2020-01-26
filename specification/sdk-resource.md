@@ -1,6 +1,11 @@
 # Resource SDK
 
-A [Resource](overview.md#resources) represents the entity producing telemetry.
+A [Resource](overview.md#resources) represents the entity producing
+telemetry. For example, a process producing telemetry that is running in a
+container on Kubernetes has a Pod name, it is in a namespace and possibly is
+part of a Deployment which also has a name. All three of these attributes can be
+included in the `Resource`.
+
 The primary purpose of resources as a first-class concept in the SDK is
 decoupling of discovery of resource information from exporters. This allows for
 independent development and easy customization for users that need to integrate
