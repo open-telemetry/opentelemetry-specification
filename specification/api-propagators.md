@@ -16,8 +16,8 @@ Table of Contents
 
 </details>
 
-Propagators leverage the underlying Context layer to inject and extract
-data for each concern, such as traces, metrics and correlation context.
+Propagators leverage the underlying `Context` to inject and extract
+data for each cross-cutting concern, such as traces and metrics.
 
 Propagators API consists of the following formats:
 
@@ -63,8 +63,8 @@ Injects the value downstream. For example, as http headers.
 
 Required arguments:
 
-- a context containing the value to be injected, if any. The value can be `SpanContext` or
-`DistributedContext`. This can default to the current context if such facility exists.
+- a `Context` containing the value to be injected, if any. The value can be `SpanContext` or
+`DistributedContext`. This can default to the current `Context` if such facility exists.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the `Setter` invoked for each propagation key to add or remove.
 
@@ -91,19 +91,19 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 ### Extract
 
 Extracts the value from upstream. For example, as http headers. The extracted value
-will be stored in the specified context.
+will be stored in the specified `Context`.
 
 If the value could not be parsed, the underlying implementation will decide to return an
 object representing either a null value, an empty value, an invalid value, or a valid value.
 
 Required arguments:
 
-- a context used to store the extracted value. This can default to the current context if such facility exists.
+- a `Context` used to store the extracted value. This can default to the current `Context` if such facility exists.
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the instance of `Getter` invoked for each propagation key to get.
 
-Returns a new context created from the specified one, containing the extracted value, if any.
-The extracted value will not be present in the old context.
+Returns a new `Context` created from the specified one, containing the extracted value, if any.
+The extracted value will not be present in the old `Context`.
 
 #### Getter argument
 

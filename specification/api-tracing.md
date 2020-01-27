@@ -69,23 +69,6 @@ A duration is the elapsed time between two events.
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
-## Context Propagation
-
-OpenTelemetry separates its design into two layers: the top layer contains
-independent observability concerns, such as traces, metrics and correlation
-context. All concerns share an underlying distributed context propagation layer,
-for storing state and accessing data across the lifespan of a distributed
-transaction.
-
-Concerns access their data in-process using the same, shared context object.
-Each concern uses its own namespaced set of keys in the context, containing
-all of its data.
-
-Observe that the Context Propagation layer is intended to be used primarily
-as a SDK API, rather than by instrumentation logic.
-
-See the [Context API](context.md)
-
 ## Tracer
 
 The OpenTelemetry library achieves in-process context propagation of `Span`s by

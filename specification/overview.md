@@ -235,10 +235,28 @@ OpenTelemetry
 [proto](https://github.com/open-telemetry/opentelemetry-proto/blob/a46c815aa5e85a52deb6cb35b8bc182fb3ca86a0/src/opentelemetry/proto/agent/common/v1/common.proto#L28-L96)
 for an example.
 
+## Context Propagation
+
+All of OpenTelemetry cross-cutting concerns, such as traces and metrics,
+share an underlying context propagation layer, for storing state and
+accessing data across the lifespan of a distributed transaction.
+
+Concerns access their data in-process using the same, shared context object.
+Each concern has its own slot in this `Context`, containing
+all of its data.
+
+Observe that the context propagation layer is intended to be used primarily
+as a SDK API, rather than by instrumentation logic.
+
+See the [Context](context.md)
+
 ## Propagators
 
 OpenTelemetry uses `Propagators` to serialize and deserialize `SpanContext` and `DistributedContext`
-into a binary or text format. Currently there is one type of propagators:
+into any of the supported formats. Observe that `Propagators` leverage the underlying
+`Context` to both access and record cross-cutting concerns data.
+
+Currently there is one type of propagators:
 
 - `HTTPTextFormat` which is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
