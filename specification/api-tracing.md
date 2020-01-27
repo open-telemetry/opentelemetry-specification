@@ -20,7 +20,7 @@ Table of Contents
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
-    * [Parenting from a Context](#parenting-from-a-context)
+    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
@@ -293,7 +293,7 @@ created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
 
-#### Parenting from a Context
+#### Determining the Parent Span from a Context
 
 When a new `Span` is created from a `Context`, the `Context` may contain:
 
