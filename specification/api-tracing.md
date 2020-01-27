@@ -261,8 +261,8 @@ The API MUST accept the following parameters:
 - The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
   and whether the new `Span` should be a root `Span`. API MAY also have an
   option for implicit parenting from the current context as a default behavior.
-  See [Parenting from a Context](#parenting-from-a-context) for guidance on
-  `Span` parenting from explicit and implicit `Context`s.
+  See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+  for guidance on `Span` parenting from explicit and implicit `Context`s.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - `Attribute`s - A collection of key-value pairs, with the same semantics as
   the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
