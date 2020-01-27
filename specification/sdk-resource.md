@@ -9,7 +9,7 @@ included in the `Resource`.
 The primary purpose of resources as a first-class concept in the SDK is
 decoupling of discovery of resource information from exporters. This allows for
 independent development and easy customization for users that need to integrate
-with closed source environments. SDK MUST allow for creation of `Resources` and
+with closed source environments. The SDK MUST allow for creation of `Resources` and
 for associating them with telemetry.
 
 When used with distributed tracing, a resource can be associated with the
