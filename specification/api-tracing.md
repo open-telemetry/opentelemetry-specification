@@ -81,6 +81,9 @@ Concerns access their data in-process using the same, shared context object.
 Each concern uses its own namespaced set of keys in the context, containing
 all of its data.
 
+Observe that the Context Propagation layer is intended to be used primarily
+as a SDK API, rather than by instrumentation logic.
+
 See the [Context API](context.md)
 
 ## Tracer

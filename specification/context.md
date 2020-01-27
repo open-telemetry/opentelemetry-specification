@@ -23,6 +23,9 @@ option is not available, OpenTelemetry should provide its own `Context`
 implementation. Depending on the language, its usage may be either explicit
 or implicit.
 
+`Context` is meant to be a SDK API, and thus be used by SDK and cross-cutting
+concerns authors, rather than users writing instrumentation.
+
 The `Context` mechanism is expected to have the following operations, with their
 respective language differences:
 
