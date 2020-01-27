@@ -90,7 +90,7 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 
 ### Extract
 
-Extracts the value from upstream. For example, as http headers. The extracted value
+Extracts the value from an incoming request. For example, as HTTP headers. The extracted value
 will be stored in the specified `Context`.
 
 If the value could not be parsed, the underlying implementation will decide to return an
