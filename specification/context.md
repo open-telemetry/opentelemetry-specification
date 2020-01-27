@@ -66,7 +66,10 @@ The API SHOULD accept the following parameters:
 The API SHOULD return a new `Context` with the value cleared.
 The removed value still remains present in the old `Context`.
 
-### Optional operations
+### Optional Global operations
+
+These operations are optional, and are protected to be specifically
+implement automatic scope switching and define higher level APIs.
 
 #### Get current Context
 
