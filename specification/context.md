@@ -14,7 +14,7 @@ Table of Contents
 
 </details>
 
-`Context` is a propagation mechanism which carries execution-scoped-values
+`Context` is a propagation mechanism which carries execution-scoped values
 across API boundaries and between execution units.
 
 Languages are expected to use the single, widely used `Context` implementation
