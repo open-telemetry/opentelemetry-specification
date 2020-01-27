@@ -9,7 +9,6 @@ Table of Contents
   * [Time](#time)
     * [Timestamp](#timestamp)
     * [Duration](#duration)
-* [Context Propagation](#context-propagation)
 * [Tracer](#tracer)
   * [Obtaining a tracer](#obtaining-a-tracer)
   * [Tracer operations](#tracer-operations)
