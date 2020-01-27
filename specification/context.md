@@ -5,7 +5,6 @@
 Table of Contents
 </summary>
 
-- [Create a key](#create-a-key)
 - [Get value](#get-value)
 - [Set value](#set-value)
 - [Remove value](#remove-value)
@@ -27,18 +26,6 @@ or implicit.
 The `Context` mechanism is expected to have the following operations, with their
 respective language differences:
 
-#### Create a key
-
-Keys are used to allow concerns to control access to their local state, and they
-cannot be guessed by third parties. It is recommended that concerns mediate
-data access via an API, rather than provide direct public access to their keys.
-
-The API SHOULD accept the following parameters:
-
-- (Required) The key name.
-
-The API SHOULD return an opaque object representing the newly created key.
-
 #### Get value
 
 Concerns can access their local state out of a specified `Context`.
@@ -46,9 +33,10 @@ Concerns can access their local state out of a specified `Context`.
 The API SHOULD accept the following parameters:
 
 - (Required) The `Context`.
-- (Required) The key.
+- (Required) The concern identifier.
 
-The API SHOULD return the value in the `Context` for the specified key.
+The API SHOULD return the value in the `Context` for the specified concern
+identifier.
 
 #### Set value
 
@@ -57,7 +45,7 @@ Concerns can record their local state in a specified `Context`.
 The API SHOULD accept the following parameters:
 
 - (Required) The `Context`.
-- (Required) The key.
+- (Required) The concern identifier.
 - (Required) The value to be set.
 
 The API SHOULD return a new `Context` containing the new value.
@@ -70,7 +58,7 @@ Concerns can clear their local state in a specified `Context`.
 The API SHOULD accept the following parameters:
 
 - (Required) The `Context`.
-- (Required) The key.
+- (Required) The concern identifier.
 
 The API SHOULD return a new `Context` with the value cleared.
 The removed value still remains present in the old `Context`.
