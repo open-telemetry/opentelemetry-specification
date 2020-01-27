@@ -295,7 +295,7 @@ parent is remote.
 
 #### Parenting from a Context
 
-When a new `Span` is created from a `Context` the `Context` may contain:
+When a new `Span` is created from a `Context`, the `Context` may contain:
 
 - A current `Span`
 - An extracted `SpanContext`
