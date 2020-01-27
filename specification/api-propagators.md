@@ -64,7 +64,7 @@ Injects the value downstream. For example, as http headers.
 Required arguments:
 
 - a `Context` containing the value to be injected, if any. The value can be `SpanContext` or
-`DistributedContext`. This can default to the current `Context` if such facility exists.
+`DistributedContext`. This can default to the current `Context` if such a facility exists.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the `Setter` invoked for each propagation key to add or remove.
 
