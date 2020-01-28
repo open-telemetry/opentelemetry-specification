@@ -111,10 +111,7 @@ instrument will be used to expose the last value, not a semantic
 definition.  Uses of traditional gauge instruments translate into an
 Observer or the Measure instrument in this API.
 
-### Brief: Three kinds of instrument
-
-Two of the three kinds of instrument have been used in the examples
-above.  The three instruments are:
+### Three kinds of instrument
 
 #### Counter
 
@@ -134,7 +131,8 @@ only non-negative values.  Monotonicity is useful for defining rates,
 especially; non-monotonic Counter instruments are an option to support
 sums that rise and fall.
 
-Examples: requests processed, bytes read or written, memory allocated.
+Examples: requests processed, bytes read or written, memory allocated
+and deallocated.
 
 #### Measure
 
@@ -153,24 +151,25 @@ as "absolute" in the sense that, mathematically, absolute values are
 never negative.  As an option, Measure instruments can be defined as
 not absolute, supporting both postive and negative values.
 
-Examples: request latency, number of terms in a query, temperature.
+Examples: request latency, number of query terms, temperature, fan
+speed, account balance, load average, screen width.
 
 #### Observer
 
 Observer instruments are used to report a current set of values at the
 time of collection.  Observer instruments report not only current
-values, but also which label sets are current at the moment of
-collection as a coherent set of values.  These instruments reduce
+values, but also _which label sets are current_ at the moment of
+collection, as a coherent set of values.  These instruments reduce
 collection cost because they are computed and reported only once per
 collection interval, by definition.
 
 Unlike Counter and Measure instruments, Observer instruments are
-synchronized with collection, used to report values not based in
-events but periodically, on demand, by the program itself.  There is
-no aggregation across time for Observer instruments by definition,
-only the current value is defined.
+synchronized with collection, used to report values, on demand,
+calculated by the program itself.  There is no aggregation across time
+for Observer instruments by definition, only the current value is
+defined.
 
-Observer instruments support being declared as monotonic.  A monotonic
+Observer instruments can be declared as monotonic.  A monotonic
 measure instrument supports reporting values that are not less than
 the value reported in the previous collection interval.
 
@@ -182,7 +181,7 @@ would be.
 
 Examples: memory held per shard, queue size by name.
 
-### Interpretation
+### Standard Interpretation
 
 We believe the three instrument kinds Counter, Measure, and Observer
 form a sufficient basis for expressing nearly all metric data.  But if
@@ -199,14 +198,14 @@ of instrument determines not only the meaning of the events but also
 the name of the function used to report data.  The function
 names--`Add()` for Counter instruments, `Record()` for Measure
 instruments, and `Observe()` for Observer instruments--help convey and
-reinforce the semantics of the event.
+reinforce the standard interpretation of the event.
 
 The standard implementation for the three instruments is defined as
 follows:
 
 1. Counter.  The `Add()` function accumulates a total for each
 distinct label set.  When aggregating over distinct label sets for a
-Counter, combine using addition.  Export as the computed sum.
+Counter, combine using addition.  Export as a set of calculated sums.
 2. Measure.  Use the `Record()` function to report summary statistics
 about the distribution of values, for each distinct label set.  Which
 statistics are used is determined by the implementation, but they
@@ -226,31 +225,91 @@ not cover all use-cases perfectly.  There is a natural tension between
 offering dedicated metric instruments for every distinct metric
 application and combining use-cases, generalizing semantics to reduce
 the API surface area.  We could have define more than or fewer than
-three kinds of instrument; we have three because we these seem like
-enough.  Where a uncommon use-cases call for non-standard
-implementation (e.g., a Measure instrument configured to with
-last-value aggregation), we accept that users will be required to
-provide additional configuration for how to view certain metric data.
+three kinds of instrument; we have three because these seem like
+enough.  Where uncommon use-cases call for a non-standard
+implementation configuration (e.g., a Measure instrument configured
+with last-value aggregation), we accept that users will be required to
+provide additional input on how to view certain metric data.
 
 ### Optional semantic restrictions
 
-It is common to apply restrictions on the input range of metric
-values passed to inputs `Add()`, `Record()`, and `Observe()`.  As 
+The instruments support optional declarations that indicate
+restrictions on the valid range of inputs.  There are two options, one
+to indicate whether the value is signed or not, the other to indicate
+monotonicity.  These options are meant to be used as a signal to the
+observability system, since they impact the way these data are exposed
+to users.
 
-@@@ HERE note that it's semantics, not required enforcement.
+In both cases, the optional restriction does not change the semantics
+of the instrument.  The options are independent, both can be
+meaningfully set on any instrument kind.
 
-Generally, there is a question of whether the instrument can be used
-to compute a rate, because that is usually a desirable analysis.  Each
-metric instrument offers an optional declaration, specifying
-restrictions on values input to the metric.  For example, Measures are
-declared as non-negative by default, appropriate for reporting sizes
-and durations; a Measure option is provided to record positive or
-negative values, but it does not change the kind of instrument or the
-method name used, as the semantics are unchanged.
+The specification describes enforcement of these options as "best
+effort", not required.  Users are expected to honor their own
+declarations when using instruments, and the SDK is expected to
+perform checking of these options only when it can be done
+inexpensively.
 
-@@@ Optional special case for timer instrument: SHOULD
+#### Absolute vs. Non-Absolute
+
+Absolute refers to whether an instrument accepts negative values.
+Absolute instruments can be described as accepting non-negative
+inputs, whereas non-absolute instruments can be described as accepting
+signed inputs.
+
+When an instrument is absolute (i.e., accepts non-negative updates),
+we know that the sum can be used to express a rate automatically.
+This is true for all kinds of instrument.
+
+When exporting measure values as a histogram, for example, knowing the
+instrument is absolute facilitates the use of logarithmic buckets
+(which are difficult to use when the input range spans zero).
+
+Absolute behavior is the default for all instrument kinds. The
+Non-Absolute option is supported for all instrument kinds.
+
+Because this is a simple property for the SDK to test, the
+specification recommends that SDKs SHOULD reject metric events for
+absolute instruments when negative values are used, and instead issue
+a warning to the user.
+
+#### Monotonic vs. Non-Monotonic
+
+Monotonic refers to whether an instrument only accepts values that are
+greater than or equal to the previously recorded value.  Non-monotonic
+instruments are those which accept any change in the value, positive
+or negative.
+
+Absolute-valued counters are naturally monotonic, so that Absolute and
+Monotonic have the same interpretation for Counter instruments.
+
+Measure and Observer instruments may be declared as monotonic, however
+since this property is expensive to test, the specification recommends
+that SDKs SHOULD implement monotonicity checking only when computing a
+last-value aggregation.  The SDK SHOULD only perform this test against
+the last known value when it holds the necessary information, it
+should not go out of its way to save data simply to perform
+monotonicity testing.
+
+### Option: Dedicated Measure for timer values
+
+As a language-optional feature, the API may support a dedicated
+instrument for reporting timing measurements.  This kind of
+instrument, with recommended name `TimingMeasure` (and
+`BoundTimingMeasure`), is semantically equivalent to a Measure
+instrument, and like the Measure instrument supports a `Record()`
+function, but the input value to this instrument is in the language's
+conventional data type for timing measurements.
+
+For example, in Go the API will accept a `time.Duration`, and in C++
+the API will accept a `std::chrono::duration`.  These advantage of
+using these instruments is that they use the correct units
+automatically, avoiding the potential for confusion over timing metrics.
 
 ## Metric instrument selection
+
+
+
 
 @@@ HERE add many more examples.
 
