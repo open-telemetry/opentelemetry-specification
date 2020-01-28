@@ -20,6 +20,7 @@ Table of Contents
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
@@ -257,9 +258,11 @@ as a separate operation.
 The API MUST accept the following parameters:
 
 - The span name. This is a required parameter.
-- The parent Span or parent Span context, and whether the new `Span` should be a
-  root `Span`. API MAY also have an option for implicit parent context
-  extraction from the current context as a default behavior.
+- The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
+  and whether the new `Span` should be a root `Span`. API MAY also have an
+  option for implicit parenting from the current context as a default behavior.
+  See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+  for guidance on `Span` parenting from explicit and implicit `Context`s.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - `Attribute`s - A collection of key-value pairs, with the same semantics as
   the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
@@ -289,6 +292,21 @@ A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
+
+#### Determining the Parent Span from a Context
+
+When a new `Span` is created from a `Context`, the `Context` may contain:
+
+- A current `Span`
+- An extracted `SpanContext`
+- A current `Span` and an extracted `SpanContext`
+- Neither a current `Span` nor an extracted `Span` context
+
+The parent should be selected in the following order of precedence:
+
+- Use the current `Span`, if available.
+- Use the extracted `SpanContext`, if available.
+- There is no parent. Create a root `Span`.
 
 #### Add Links
 
