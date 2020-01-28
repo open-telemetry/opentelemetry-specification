@@ -1,21 +1,19 @@
 # Metrics API
 
-<details>
-<summary>
-Table of Contents
-</summary>
+<!-- toc -->
 
-* [Overview](#overview)
+- [Overview](#overview)
   * [User-facing API](#user-facing-api)
   * [Meter API](#meter-api)
   * [Purpose of this document](#purpose-of-this-document)
-* [Metric kinds and inputs](#metric-kinds-and-inputs)
-  * [Metric selection](#metric-selection)
+- [Metric API / SDK separation](#metric-api--sdk-separation)
+  * [Justification for three kinds of instrument](#justification-for-three-kinds-of-instrument)
+  * [Metric instrument selection](#metric-instrument-selection)
   * [Counter](#counter)
+  * [Gauge](#gauge)
   * [Measure](#measure)
-  * [Observer](#observer)
 
-</details>
+<!-- tocstop -->
 
 ## Overview
 
@@ -25,14 +23,14 @@ thing being produced--mathematical, statistical summaries of certain
 observable behaviors in the program.  "Instruments" are the devices
 used by the program to record observations about their behavior.
 Therefore, we use "metric instrument" to refer to a programmatic
-interface, allocated through the API, used for capturing metric
-events.  There are three kinds of instruments known as Counters,
-Measures, and Observers.
+interface, allocated through the API, used to produce metric events.
+There are three kinds of instruments known as Counters, Measures, and
+Observers.
 
 Monitoring and alerting are the common use-case for the data provided
 through metric instruments, after various collection and aggregation
 strategies are applied to the data.  We find there are many other uses
-for the _metric events_ that stream into these instruments.  We
+for the _metric events_ recorded through these instruments.  We
 imagine metric data being aggregated and recorded as events in tracing
 and logging systems too, and for this reason OpenTelemetry requires a
 separation of the API from the SDK.
@@ -49,7 +47,7 @@ instrumentation API and how to use the instruments defined here.
 
 ### Meter API
 
-To capture measurements using an instrument, you need an SDK that
+To produce measurements using an instrument, you need an SDK that
 supports the `Meter` API, which consists of a set of constructors, the
 `Labels` function for building label sets, and the `RecordBatch`
 function for batch reporting.  Refer to the [sdk-facing OpenTelemetry
@@ -57,22 +55,21 @@ API specification](api-metrics-user.md) for more implementation notes.
 
 Because of API-SDK separation, the `Meter` implementation ultimately
 determines how metrics events are handled.  The specification's task
-is to define the semantics of the event and describe standard
-interpretation in high-level terms.  How the `Meter` accomplishes its
-goals and the export capabilities it supports are specified for the
-default SDK in the (Metric SDK
-specification WIP)[#WIP-spec-issue-347].
+is to define the semantics of the events in high-level terms, so that
+users and implementors can agree on their meaning.  How the `Meter`
+accomplishes its goals and the export capabilities it supports are
+specified for the default SDK in the (Metric SDK specification
+WIP)[#WIP-spec-issue-347].
 
 The standard interpretation for `Meter` implementations to follow is
 given so that users understand the intended use for each kind of
 metric.  For example, a Counter instrument supports `Add()` events,
-and the standard interpretation is to compute a sum.  The sum may be
+and the default implementation is to compute a sum.  The sum may be
 exported as an absolute value or as the change in value, but
 regardless of the exporter and the implementation, the purpose of
-using a Counter with `Add()` is to monitor a sum.  Counters were used
-in the example because they require almost no introduction.  A
-detailed explanation for how to select metric instruments for common
-use-cases is given below, according to the semantics defined next.
+using a Counter with `Add()` is to monitor a sum.  A detailed
+explanation for how to select metric instruments for common use-cases
+is given below, according to the semantics defined next.
 
 ### Purpose of this document
 
@@ -96,72 +93,107 @@ label set.  The semantics defined here are meant to assist both
 application and SDK implementors, and examples will be given below.
 
 The separation of API and SDK explains why the metric API does not
-have metric instrument explicitly tied to specific metric "exposition"
-types, such as "Histogram", "Summary", or "Last values" (also known,
-traditionally, as "Gauges").  In the case of Histogram and Summary
-value types, both are appropriate outputs for Measure instruments,
-because Measure instruments are meant to used for recording individual
-measurements synchronously.
+have metric instruments that generate specific metric "exposition"
+values, for example "Histogram" and "Summary" values, which are
+different ways to expose a distribution of measurements.  This API
+specifies the use of a Measure kind of instrument with `Record()` for
+recording individual measurements.  The instruments are defined so
+that users and implementors understand what they mean, beacuse
+different SDKs will handle events differently.
 
 There is a common metric instrument known as a "Gauge" that is not
 included in this API, the term "Gauge" referring to an instrument,
-often mechanical, for reading the current (also "last") value of a
-measuring device (e.g., a speedometer on your car's dashboard).  The
-problem with "Gauge" starts from the term itself, which is figurative
-in nature.  Describing the instrument as a gauge implies how it will
-be used, but not its semantics.
+often mechanical, for reading the current "last" value of a measuring
+device (e.g., a speedometer on your car's dashboard).  The problem
+with "Gauge" starts from the term itself, which is figurative in
+nature.  Using the word "gauge" suggests a behavior, that the
+instrument will be used to expose the last value, not a semantic
+definition.  Uses of traditional gauge instruments translate into an
+Observer or the Measure instrument in this API.
 
-There are use-cases for traditional gauge instruments that fall into
-both Observer and Measure instrument use-cases under the semantics
-defined here, according to the intended use of number being reported.
-This will be discussed in detail after instruments have been
-introduced and the distinctions between them have been made clear.
+### Brief: Three kinds of instrument
 
-### Justification for three kinds of instrument
+Two of the three kinds of instrument have been introduced through
+examples above:
 
-We believe the three metric kinds Counter, Measure, and Observer form
-a sufficient basis for expressing nearly all metric data.  But if the
-API and SDK are separated, and the SDK can handle metric events as it
-pleases, why not have just one kind of instrument?  This section
-explains how the instruments are fundamentally different, despite all
-metric events having the same form (i.e., a timestamp, an instrument,
-a number, and a label set).
+1. Counter.  Events contribute to a sum (i.e., a running total).  The
+key property of Counter events is that they can be semantically
+combined without affecting their meaning.  For example, two `Add(1)`
+events are semantically equivalent to one `Add(2)` event.
+2. Measure. Events are individual measurements.  The key property of
+Measure events is that they correspond to real events, they cannot be
+semantically combined.
 
-Establishing three kinds of instrument is important because it allows
-the SDK to provide good functionality, without external configuration,
-in most cases by default.
+The third kind of instrument is the Observer instrument, used for
+recording the current value from a measurement source.  Each
+collection interval, Observer instruments contribute the current value
+for each distinct set of labels.  When aggregating Observer instrument
+values across distinct label sets, the default implementation is to
+compute a sum of current values.
 
-Factors that come up:
+Whereas Counter and Measure are both synchronous instruments, called
+by the program to report on itself, the Observer instrument is
+activated by the SDK through a callback, synchronized with collection.
+Two key properties of an Observer instrument are (1) that it allows
+the programmer to report a coherent set of values, (2) that it can
+lower collection cost by computing values on demand.
 
-- is zero meaningful?  (i.e., sum important?)
-- are the number of measurements important? (is there an implied rate?)
-- is the measurement part of a current value set?
-- if so ^^^, is it natural to sum current values or average them.
-- (is it an interval or a ratio or a count)
-- is there a measurement "interval"?  is the numnber of measurements meaningful.
+### Interpretation
 
+We believe the three instrument kinds Counter, Measure, and Observer
+form a sufficient basis for expressing nearly all metric data.  But if
+the API and SDK are separated, and the SDK can handle any metric event
+as it pleases, why not have just one kind of instrument?  How are the
+instruments fundamentally different, despite all metric events having
+the same form (i.e., a timestamp, an instrument, a number, and a label
+set)?
 
+Establishing different kinds of instrument is important because in
+most cases it allows the SDK to provide default functionality without
+requiring alternative beahviors to be configured.  The choice of
+instrument determines not only the meaning of the events but also the
+name of the function used to report data.  The function names--`Add()`
+for Counter instruments, `Record()` for Measure instruments, and
+`Observe()` for Observer instruments--help convey and reinforce the
+semantics of the event.
 
+The standard implementation for the three instruments is defined as
+follows:
 
-Counter and Measure instruments offer synchronous APIs, . 
+1. Counter.  Accumulate a total for each distinct label set.  When
+aggregating distinct label sets for a Counter, combine using addition.
+Export as the computed sum.
+2. Measure.  Compute summary statistics of the value distribution for
+each distinct label set.  Which statistics are used is determined by
+the implementation, but they usually include at least the sum of
+values, the count of measurements, and the minimum and maximum values.
+When aggregating distinct label sets for a Measure, report summary
+statistics of the combined value distribution.  Exposition formats for
+Measure data vary widely by backend service.
 
-Programmers write and read these as `Add()` and `Record()` function
-calls , signifying the semantics and standard interpretation, and we
-believe these three methods are all that are needed.
+3. Observer.  Current values are provided by the Observer callback at
+the end of each Metric collection period.  When aggregating values
+_for the same label set_, combine using the more-recent value.  When
+aggregating values _for different label sets_, combine using the sum.
+Export as label set, calculated value pairs.
 
-Nevertheless, it is common to apply restrictions on metric values, the
-inputs to `Add()`, `Set()`, and `Record()`, in order to refine their
-standard interpretation.  Generally, there is a question of whether
-the instrument can be used to compute a rate, because that is usually
-a desirable analysis.  Each metric instrument offers an optional
-declaration, specifying restrictions on values input to the metric.
-For example, Measures are declared as non-negative by default,
-appropriate for reporting sizes and durations; a Measure option is
-provided to record positive or negative values, but it does not change
-the kind of instrument or the method name used, as the semantics are
-unchanged.
+### Optional restrictions
 
-### Metric instrument selection
+It is common to apply restrictions on the input range of metric
+values passed to inputs `Add()`, `Record()`, and `Observe()`.  
+
+@@@ HERE
+
+Generally, there is a question of whether the instrument can be used
+to compute a rate, because that is usually a desirable analysis.  Each
+metric instrument offers an optional declaration, specifying
+restrictions on values input to the metric.  For example, Measures are
+declared as non-negative by default, appropriate for reporting sizes
+and durations; a Measure option is provided to record positive or
+negative values, but it does not change the kind of instrument or the
+method name used, as the semantics are unchanged.
+
+## Metric instrument selection
 
 To guide the user in selecting the right kind of metric for an
 application, we'll consider the following questions about the primary
