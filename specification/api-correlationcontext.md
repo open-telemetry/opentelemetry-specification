@@ -30,7 +30,7 @@ Close Scope 1
 
 ### GetCorrelations
 
-Returns the entries in this `CorrelationContext`. The order of entries is not
+Returns the entries in this `CorrelationContext`. The order of entries MUST NOT be
 significant. Based on the language specification, the returned value can be
 either an immutable collection or an immutable iterator to the collection of
 entries in this `CorrelationContext`.
@@ -38,7 +38,7 @@ entries in this `CorrelationContext`.
 ### GetCorrelation
 
 To access the value for an entry by a prior event, the Correlations API
-provides a function which takes a context and a name as input, and returns a
+SHALL provide a function that takes a context and a name as input, and returns a
 value. Returns the `Value` associated with the given `Name`, or null
 if the given `Name` is not present.
 
@@ -52,7 +52,7 @@ OPTIONAL parameters:
 
 ### SetCorrelation
 
-To record the value for an entry, the Correlations API provides a function which
+To record the value for an entry, the Correlations API SHALL provide a function which
 takes a context, a name, and a value as input. Returns an updated `Context` which
 contains the new value.
 
@@ -68,7 +68,7 @@ OPTIONAL parameters:
 
 ### RemoveCorrelation
 
-To delete an entry, the Correlations API provides a function which takes a context
+To delete an entry, the Correlations API SHALL provide a function which takes a context
 and a name as input. Returns an updated `Context` which no longer contains the selected `Name`.
 
 REQUIRED parameters:
@@ -81,7 +81,7 @@ OPTIONAL parameters:
 
 ### ClearCorrelations
 
-To avoid sending any entries to an untrusted process, the Correlation API provides
+To avoid sending any entries to an untrusted process, the Correlations API SHALL provide
 a function to remove all Correlations from a context. Returns an updated `Context`
 with no correlations.
 
@@ -97,7 +97,7 @@ The size restriction applies to the deserialized entries so that the set of deco
 
 ### CorrelationContext Propagation
 
-`CorrelationContext` may be propagated across process boundaries or across any arbitrary boundaries
+`CorrelationContext` MAY be propagated across process boundaries or across any arbitrary boundaries
 (process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
 For example, one may propagate 'project-id' entry across all micro-services to break down metrics
 by 'project-id'.
