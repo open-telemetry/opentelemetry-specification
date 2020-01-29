@@ -12,16 +12,16 @@ is replaced with the added value (regardless if it is locally generated or recei
 scope in which the conflict arises. When the scope is closed the original value prior to the conflict is restored. For example,
 
 ```
-E# - entry names
-V# - entry values
+N# - names
+V# - values
 
 Enter Scope 1
-   Current Entries E1=V1, E2=V2
+   Current name/value pairs N1=V1, N2=V2
     Enter Scope 2
-      Add entries E3=V3, E2=V4
-      Current Entries E1=V1, E2=V4, E3=V3 <== Value of E2 is replaced by V4.
+      Add name/value pairs N3=V3, N2=V4
+      Current name/value pairs N1=V1, N2=V4, N3=V3 <== Value of N2 is replaced by V4.
     Close Scope 2
-   Current Entries E1=V1, E2=V2 <== E2 is restored.
+   Current name/value pairs N1=V1, N2=V2 <== N2 is restored.
 Close Scope 1
 ```
 
@@ -29,21 +29,21 @@ Close Scope 1
 
 ### GetCorrelations
 
-Returns the entries in this `CorrelationContext`. The order of entries MUST NOT be
+Returns the name/value pairs in this `CorrelationContext`. The order of name/value pairs MUST NOT be
 significant. Based on the language specification, the returned value can be
 either an immutable collection or an immutable iterator to the collection of
-entries in this `CorrelationContext`.
+name/value pairs in this `CorrelationContext`.
 
 ### GetCorrelation
 
-To access the value for an entry by a prior event, the Correlations API
+To access the value for a name/value pair by a prior event, the Correlations API
 SHALL provide a function that takes a context and a name as input, and returns a
-value. Returns the `Value` associated with the given `Name`, or null
-if the given `Name` is not present.
+value. Returns the value associated with the given name, or null
+if the given name is not present.
 
 REQUIRED parameters:
 
-`Name` entry name to return the value for.
+`Name` the name to return the value for.
 
 OPTIONAL parameters:
 
@@ -51,15 +51,15 @@ OPTIONAL parameters:
 
 ### SetCorrelation
 
-To record the value for an entry, the Correlations API SHALL provide a function which
+To record the value for a name/value pair, the Correlations API SHALL provide a function which
 takes a context, a name, and a value as input. Returns an updated `Context` which
 contains the new value.
 
 REQUIRED parameters:
 
-`Name` entry name for which to set the value.
+`Name` the name for which to set the value.
 
-`Value` entry value to set.
+`Value` the value to set.
 
 OPTIONAL parameters:
 
@@ -67,12 +67,12 @@ OPTIONAL parameters:
 
 ### RemoveCorrelation
 
-To delete an entry, the Correlations API SHALL provide a function which takes a context
-and a name as input. Returns an updated `Context` which no longer contains the selected `Name`.
+To delete a name/value pair, the Correlations API SHALL provide a function which takes a context
+and a name as input. Returns an updated `Context` which no longer contains the selected name.
 
 REQUIRED parameters:
 
-`Name` entry name to remove.
+`Name` the name to remove.
 
 OPTIONAL parameters:
 
@@ -80,7 +80,7 @@ OPTIONAL parameters:
 
 ### ClearCorrelations
 
-To avoid sending any entries to an untrusted process, the Correlations API SHALL provide
+To avoid sending any name/value pairs to an untrusted process, the Correlations API SHALL provide
 a function to remove all Correlations from a context. Returns an updated `Context`
 with no correlations.
 
@@ -90,13 +90,11 @@ OPTIONAL parameters:
 
 ### Limits
 
-Combined size of all entries should not exceed 8192 bytes before encoding.
-The size restriction applies to the deserialized entries so that the set of decoded
+Combined size of all name/value pairs should not exceed 8192 bytes before encoding.
+The size restriction applies to the deserialized name/value pairs so that the set of decoded
  `CorrelationContext`s is independent of the encoding format.
 
 ### CorrelationContext Propagation
 
 `CorrelationContext` MAY be propagated across process boundaries or across any arbitrary boundaries
 (process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
-For example, one may propagate 'project-id' entry across all micro-services to break down metrics
-by 'project-id'.
