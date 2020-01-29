@@ -1,15 +1,14 @@
 # Correlations API
 
-`CorrelationContext` is an abstract data type represented by set of name/value pairs describing user
-defined properties. Each name in `CorrelationContext` is associated with exactly one value.
-`CorrelationContext` is serialized using the [W3C Correlation Context](https://w3c.github.io/correlation-context/) specification and is
-used to annotate telemetry. Those values can be used to add dimension to the metric or
-additional context properties to logs and traces.
+`CorrelationContext` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
+It is an abstract data type represented by a set of name/value pairs describing user-
+defined properties. Each name in `CorrelationContext` MUST be associated with exactly one value.
+`CorrelationContext` MUST be serialized according to the [W3C Correlation Context](https://w3c.github.io/correlation-context/) specification.
 
 ## Conflict Resolution
 
-If a new name/value pair is added and its name conflicts with an existing pair, then the new pair takes precedence. The value
-is replaced by the most recent value (regardless of it is locally generated or received from a remote peer). Replacement is limited to a
+If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence. The value
+is replaced with the added value (regardless if it is locally generated or received from a remote peer). Replacement is limited to a
 scope in which the conflict arises. When the scope is closed the original value prior to the conflict is restored. For example,
 
 ```
