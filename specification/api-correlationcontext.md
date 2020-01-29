@@ -8,22 +8,7 @@ defined properties. Each name in `CorrelationContext` MUST be associated with ex
 ## Conflict Resolution
 
 If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence. The value
-is replaced with the added value (regardless if it is locally generated or received from a remote peer). Replacement is limited to a
-scope in which the conflict arises. When the scope is closed the original value prior to the conflict is restored. For example,
-
-```
-N# - names
-V# - values
-
-Enter Scope 1
-   Current name/value pairs N1=V1, N2=V2
-    Enter Scope 2
-      Add name/value pairs N3=V3, N2=V4
-      Current name/value pairs N1=V1, N2=V4, N3=V3 <== Value of N2 is replaced by V4.
-    Close Scope 2
-   Current name/value pairs N1=V1, N2=V2 <== N2 is restored.
-Close Scope 1
-```
+is replaced with the added value (regardless if it is locally generated or received from a remote peer).
 
 ## CorrelationContext
 
@@ -87,12 +72,6 @@ with no correlations.
 OPTIONAL parameters:
 
 `Context` the context from which to remove all correlations.
-
-### Limits
-
-Combined size of all name/value pairs should not exceed 8192 bytes before encoding. After the size is
-reached, correlations are dropped. The size restriction applies to the deserialized name/value pairs so
-that the set of decoded `CorrelationContext`s is independent of the encoding format.
 
 ### CorrelationContext Propagation
 
