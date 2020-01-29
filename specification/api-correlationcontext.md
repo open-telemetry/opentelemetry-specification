@@ -90,9 +90,9 @@ OPTIONAL parameters:
 
 ### Limits
 
-Combined size of all name/value pairs should not exceed 8192 bytes before encoding.
-The size restriction applies to the deserialized name/value pairs so that the set of decoded
- `CorrelationContext`s is independent of the encoding format.
+Combined size of all name/value pairs should not exceed 8192 bytes before encoding. After the size is
+reached, correlations are dropped. The size restriction applies to the deserialized name/value pairs so
+that the set of decoded `CorrelationContext`s is independent of the encoding format.
 
 ### CorrelationContext Propagation
 
