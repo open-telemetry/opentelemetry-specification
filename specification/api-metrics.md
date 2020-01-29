@@ -68,15 +68,15 @@ accomplishes its goals and the export capabilities it supports are
 specified for the default SDK in the (Metric SDK specification
 WIP)[#WIP-spec-issue-347].
 
-The standard interpretation for `Meter` implementations to follow is
-given so that users understand the intended use for each kind of
-metric.  For example, a Counter instrument supports `Add()` events,
-and the default implementation is to compute a sum.  The sum may be
-exported as an absolute value or as the change in value, but
-regardless of the exporter and the implementation, the purpose of
-using a Counter with `Add()` is to monitor a sum.  A detailed
-explanation for how to select metric instruments for common use-cases
-is given below, according to the semantics defined next.
+The standard implementation for `Meter` implementations to follow is
+given, to aid with understanding the different instrument use-cases.
+For example, a Counter instrument supports `Add()` events, and the
+standard implementation is to compute a sum.  The sum may be exported
+as a grand total or as the change in the grand total, but regardless
+of the exporter and specific techniques, the purpose of using a
+Counter with `Add()` is to monitor a sum.  A detailed explanation for
+how to select metric instruments for common use-cases is given below,
+according to the semantics defined next.
 
 ### Purpose of this document
 
