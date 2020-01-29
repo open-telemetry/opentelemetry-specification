@@ -20,6 +20,7 @@ Table of Contents
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
@@ -200,7 +201,7 @@ sub-operations.
 
 `Span`s encapsulate:
 
-- The operation name
+- The span name
 - An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
 - A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
@@ -211,6 +212,24 @@ sub-operations.
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
+
+The _span name_ is a human-readable string which concisely identifies the work
+represented by the Span, for example, an RPC method name, a function name,
+or the name of a subtask or stage within a larger computation. The span name
+should be the most general string that identifies a (statistically) interesting
+_class of Spans_, rather than individual Span instances. That is, "get_user" is
+a reasonable name, while "get_user/314159", where "314159" is a user ID, is not
+a good name due to its high cardinality.
+
+For example, here are potential span names for an endpoint that gets a
+hypothetical account information:
+
+| Span Name         | Guidance     |
+| ----------------- | ------------ |
+| `get`             | Too general  |
+| `get_account/42`  | Too specific |
+| `get_account`     | Good, and account_id=42 would make a nice Span attribute |
+| `get_account/{accountId}` | Also good (using the "HTTP route") |
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
@@ -238,10 +257,12 @@ as a separate operation.
 
 The API MUST accept the following parameters:
 
-- The operation name. This is a required parameter.
-- The parent Span or parent Span context, and whether the new `Span` should be a
-  root `Span`. API MAY also have an option for implicit parent context
-  extraction from the current context as a default behavior.
+- The span name. This is a required parameter.
+- The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
+  and whether the new `Span` should be a root `Span`. API MAY also have an
+  option for implicit parenting from the current context as a default behavior.
+  See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+  for guidance on `Span` parenting from explicit and implicit `Context`s.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - `Attribute`s - A collection of key-value pairs, with the same semantics as
   the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
@@ -271,6 +292,21 @@ A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
+
+#### Determining the Parent Span from a Context
+
+When a new `Span` is created from a `Context`, the `Context` may contain:
+
+- A current `Span`
+- An extracted `SpanContext`
+- A current `Span` and an extracted `SpanContext`
+- Neither a current `Span` nor an extracted `Span` context
+
+The parent should be selected in the following order of precedence:
+
+- Use the current `Span`, if available.
+- Use the extracted `SpanContext`, if available.
+- There is no parent. Create a root `Span`.
 
 #### Add Links
 
@@ -428,7 +464,7 @@ started with the explicit timestamp from the past at the moment where the final
 
 Required parameters:
 
-- The new **operation name**, which supersedes whatever was passed in when the
+- The new **span name**, which supersedes whatever was passed in when the
   `Span` was started
 
 #### End

@@ -32,10 +32,15 @@ Examples of span name: `grpc.test.EchoService/Echo`.
 
 | Attribute name | Notes and examples                                           | Required? |
 | -------------- | ------------------------------------------------------------ | --------- |
-| `component`    | Declares that this is a grpc component. Value MUST be `"grpc"` | Yes       |
+| `component`    | Declares that this is a grpc component. Value MUST be `"grpc"`. | Yes       |
 | `rpc.service`  | The service name, must be equal to the $service part in the span name. | Yes |
+| `net.peer.ip`  | See [network attributes][]. | See below |
+| `net.peer.name`  | See [network attributes][]. | See below |
+| `net.peer.port`  | See [network attributes][]. | See below |
 
-Additionally, the `net.peer.name` and `net.peer.port` [network attributes][] are required.
+At least one of [network attributes][] `net.peer.name` or `net.peer.ip` is required.
+For client-side spans `net.peer.port` is required (it describes the server port they are connecting to).
+For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
 

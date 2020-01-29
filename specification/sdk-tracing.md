@@ -218,21 +218,30 @@ Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
 Shutdown should be called only once for each `Processor` instance. After the
-call to shutdown subsequent calls to `onStart` or `onEnd` are not allowed.
+call to shutdown subsequent calls to `onStart`, `onEnd`, or `forceFlush` are not allowed.
 
 Shutdown should not block indefinitely. Language library authors can decide if
-they want to make the shutdown timeout to be configurable.
+they want to make the shutdown timeout configurable.
+
+##### ForceFlush()
+
+Export all ended spans to the configured `Exporter` that have not yet been exported.
+
+`ForceFlush` should only be called in cases where it is absolutely necessary, such as when using some FaaS providers that may suspend the process after an invocation, but before the `Processor` exports the completed spans.
+
+`ForceFlush` should not block indefinitely. Language library authors can decide if they want to make the flush timeout configurable.
 
 #### Built-in span processors
 
-SDK MUST implement simple and batch processors described below. Other common
-processing scenarios should be first considered for implementation out-of-process
-in [OpenTelemetry Collector](overview.md#collector)
+The standard OpenTelemetry SDK MUST implement both simple and batch processors,
+as described below. Other common processing scenarios should be first considered
+for implementation out-of-process in [OpenTelemetry Collector](overview.md#collector)
 
 ##### Simple processor
 
-The implementation of `SpanProcessor` that passes ended span directly to the
-configured `SpanExporter`.
+This is an implementation of `SpanProcessor` which passes finished spans
+and passes the export-friendly span data representation to the configured
+`SpanExporter`, as soon as they are finished.
 
 **Configurable parameters:**
 
@@ -240,13 +249,9 @@ configured `SpanExporter`.
 
 ##### Batching processor
 
-The implementation of the `SpanProcessor` that batches ended spans and pushes
-them to the configured `SpanExporter`.
-
-First the spans are added to a synchronized queue, then exported to the exporter
-pipeline in batches. The implementation is responsible for managing the span
-queue and sending batches of spans to the exporters. This processor can cause
-high contention in a very high traffic service.
+This is an implementation of the `SpanProcessor` which create batches of finished
+spans and passes the export-friendly span data representations to the
+configured `SpanExporter`.
 
 **Configurable parameters:**
 
@@ -328,7 +333,7 @@ return FailedNotRetryable error.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). Language library authors can decide if they
-want to make the shutdown timeout to be configurable.
+want to make the shutdown timeout configurable.
 
 #### Further Language Specialization
 
