@@ -7,11 +7,18 @@
   * [Meter API](#meter-api)
   * [Purpose of this document](#purpose-of-this-document)
 - [Metric API / SDK separation](#metric-api--sdk-separation)
-  * [Justification for three kinds of instrument](#justification-for-three-kinds-of-instrument)
-  * [Metric instrument selection](#metric-instrument-selection)
-  * [Counter](#counter)
-  * [Gauge](#gauge)
-  * [Measure](#measure)
+  * [Three kinds of instrument](#three-kinds-of-instrument)
+    + [Counter](#counter)
+    + [Measure](#measure)
+    + [Observer](#observer)
+  * [Standard Interpretation](#standard-interpretation)
+  * [Optional semantic restrictions](#optional-semantic-restrictions)
+    + [Absolute vs. Non-Absolute](#absolute-vs-non-absolute)
+    + [Monotonic vs. Non-Monotonic](#monotonic-vs-non-monotonic)
+- [Metric instrument selection](#metric-instrument-selection)
+  * [Counters and Measures compared](#counters-and-measures-compared)
+  * [Observer instruments](#observer-instruments)
+- [Examples](#examples)
 
 <!-- tocstop -->
 
