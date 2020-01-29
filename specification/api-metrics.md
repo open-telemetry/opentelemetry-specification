@@ -140,7 +140,7 @@ Measure instruments are used to report individual measurements.
 Measure events are semantically independent and cannot be naturally
 combined like with Counters.  Measure instruments are used to report
 many kinds of information, recommended for reporting measurements
-associated with real events in a computer program.
+associated with real events in the program.
 
 As a synchronous API, Measure `Record()` events can be used to record
 information with associated labels and context.  This is the more
@@ -291,99 +291,68 @@ the last known value when it holds the necessary information, it
 should not go out of its way to save data simply to perform
 monotonicity testing.
 
-### Option: Dedicated Measure for timer values
-
-As a language-optional feature, the API may support a dedicated
-instrument for reporting timing measurements.  This kind of
-instrument, with recommended name `TimingMeasure` (and
-`BoundTimingMeasure`), is semantically equivalent to a Measure
-instrument, and like the Measure instrument supports a `Record()`
-function, but the input value to this instrument is in the language's
-conventional data type for timing measurements.
-
-For example, in Go the API will accept a `time.Duration`, and in C++
-the API will accept a `std::chrono::duration`.  These advantage of
-using these instruments is that they use the correct units
-automatically, avoiding the potential for confusion over timing metrics.
-
 ## Metric instrument selection
 
+To guide the user in selecting the right kind of metric instrument for
+an application, we'll consider several questions about the kind of
+numbers being reported.  Here are some ways to help choose.  Examples
+are provided in the following section.
 
+### Counters and Measures compared
 
+Counters and Measures are both recommended for reporting measurements
+taken during synchronous activity, driven by events in the program.
+These measurements include an associated distributed context, the
+effective span context (if any), the correlation context, and
+user-provided LabelSet values.
 
-@@@ HERE add many more examples.
+Start with an application for metrics data in mind.  It is useful to
+consider whether you are more likely to be interested in the sum of
+values or the average value, as processed by the instrument.  Counters
+are useful when only the sum is interesting.  Measures are useful when
+the sum and any other kind of summary information about the individual
+values are of interest.
 
-To guide the user in selecting the right kind of metric for an
-application, we'll consider the following questions about the primary
-intent of reporting given data. We use "of primary interest" here to
-mean information that is almost certainly useful in understanding
-system behavior. Consider these questions:
+If only the sum is of interest, use a Counter instrument.  If the
+Counter instrument accepts non-negative `Add()` values, use a
+(default) monotonic Counter which will typically be expressed as a
+rate (i.e., change per unit time).  If the Counter accepts both
+positive and negative `Add()` values, use a non-monotonic Counter
+which will typically be expressed as the total sum.
 
-- Does the measurement represent a quantity of something? Is it also non-negative?
-- Is the sum a matter of primary interest?
-- Is the event count a matter of primary interest?
-- Is the distribution (p50, p99, etc.) a matter of primary interest?
+If you are interested in any other kind of summary value or statistic,
+such as mean, median and other quantiles, or minimum and maximum
+value, use a Measure instrument.  Measure instruments are used to
+report any kind of measurement that is not typically expressed as a
+rate or as a total sum.
 
-With answers to these questions, a user should be able to select the
-kind of metric instrument based on its primary purpose.
+If the Measure instrument accepts only non-negative values, as is
+typically the case for measuring physical quantities, use a (default)
+absolute Measure.  If the Measure instrument accepts both positive and
+negative values, use a non-absolute Measure.  Both of these are
+typically expressed in terms of a distribution of values, independent
+from and _in addition to_ the rate of these measurements.
 
-### Counter
+### Observer instruments
 
-Counters support `Add(value)`.  Choose this kind of metric when the
-value is a quantity, the sum is of primary interest, and the event
-count and value distribution are not of primary interest.
+Observer instruments are recommended for reporting measurements about
+the state of the program at a moment in time.  These expose current
+information about the program itself, not related to individual events
+taking place in the program.  Observer instruments are reported
+outside of a context, thus do not have an effective span context or
+correlation context.
 
-Counters are defined as `Monotonic = true` by default, meaning that
-positive values are expected.  `Monotonic = true` counters are
-typically used because they can automatically be interpreted as a
-rate.
+Observer instruments are meant to be used when measured values report
+on the current state of the program, as opposed to a change of state
+in the program.  When Observer instruments are used to report physical
+quantities, use a (default) absolute Observer.  When Observer
+instruments are used to report measurements can be negative for any
+reason, use a non-absolute Observer.
 
-As an option, counters can be declared as `Monotonic = false`, in which
-case they support positive and negative increments.  `Monotonic = false`
-counters are useful to report changes in an accounting scheme, such as
-the number of bytes allocated and deallocated.
+If the Observer reports a current total sum, declare it as a monotonic
+Observer.  Monotonic values are typically expressed as a rate of
+change.
 
-### Gauge
+## Examples
 
-Gauges support `Set(value)`.  Gauge metrics express a pre-calculated
-value that is either Set() by explicit instrumentation or observed
-through a callback.  Generally, this kind of metric should be used
-when the metric cannot be expressed as a sum or because the
-measurement interval is arbitrary. Use this kind of metric when the
-measurement is not a quantity, and the sum and event count are not of
-interest.
-
-Gauges are defined as `Monotonic = false` by default, meaning that new
-values are permitted to make positive or negative changes to the
-gauge.  There is no restriction on the sign of the input for gauges.
-
-As an option, gauges can be declared as `Monotonic = true`, in which case
-successive values are expected to rise monotonically.  `Monotonic = true`
-gauges are useful in reporting computed cumulative sums, allowing an
-application to compute a current value and report it, without
-remembering the last-reported value in order to report an increment.
-
-A special case of gauge is supported, called an `Observer` metric
-instrument, which is semantically equivalent to a gauge but uses a
-callback to report the current value.  Observer instruments are
-defined by a callback, instead of supporting `Set()`, but the
-semantics are the same.  The only difference between `Observer` and
-ordinary gauges is that their events do not have an associated
-OpenTelemetry context.  Observer instruments are `Monotonic = false` by
-default and `Monotonic = true` as an option, like ordinary gauges.
-
-### Measure
-
-Measures support `Record(value)`, signifying that events report
-individual measurements.  This kind of metric should be used when the
-count or rate of events is meaningful and either:
-
-- The sum is of interest in addition to the count (rate)
-- Quantile information is of interest.
-
-Measures are defined as `Absolute = true` by default, meaning that
-negative values are invalid.  `Absolute = true` measures are typically
-used to record absolute values such as durations and sizes.
-
-As an option, measures can be declared as `Absolute = false` to
-indicate support for positive and negative values.
+TODO(jmacd): Working on these 1/29/2020.
