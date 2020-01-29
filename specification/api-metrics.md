@@ -58,7 +58,7 @@ To produce measurements using an instrument, you need an SDK that
 supports the `Meter` API, which consists of a set of constructors, the
 `Labels` function for building label sets, and the `RecordBatch`
 function for batch reporting.  Refer to the [sdk-facing OpenTelemetry
-API specification](api-metrics-user.md) for more implementation notes.
+API specification](api-metrics-meter.md) for more implementation notes.
 
 Because of API-SDK separation, the `Meter` implementation ultimately
 determines how metrics events are handled.  The specification's task
@@ -95,8 +95,8 @@ convention, compared with a number of common metric libraries, and
 stems from the separation of the API and the SDK.  The SDK ultimately
 determines how to handle metric events and could potentially implement
 non-standard behavior.  All metric events can be represented as
-consisting of a timestamp, an instrument, a number (the value), and a
-label set.  The semantics defined here are meant to assist both
+consisting of a timestamp, an instrument, a number (the _value_), and
+a label set.  The semantics defined here are meant to assist both
 application and SDK implementors, and examples will be given below.
 
 The separation of API and SDK explains why the metric API does not
@@ -117,6 +117,21 @@ nature.  Using the word "gauge" suggests a behavior, that the
 instrument will be used to expose the last value, not a semantic
 definition.  Uses of traditional gauge instruments translate into an
 Observer or the Measure instrument in this API.
+
+### Label sets
+
+_Label_ is the term used to refer to a key:value attribute associated
+with a metric event.  Although they are fundamentally similar to [Span
+attributes](api-tracing.md#span) in the tracing API, a set of labels
+is given its own type in the Metric API, `LabelSet`.  Label sets are a
+feature of the API to facilitate re-use across the metric API.  Users
+are encouraged to re-use label sets whenever possible, as they may
+contain a previously encoded representation of the data.
+
+Users obtain label sets by calling the `Meter` API function (e.g.,
+`Meter.GetLabels({ key, value }, ...)`).  Each of the instrument
+calling conventions detailed in the [user-facing API
+specification](api-metrics-user.md) accepts a `LabelSet`.
 
 ### Three kinds of instrument
 
