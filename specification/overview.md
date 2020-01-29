@@ -221,8 +221,6 @@ using the OpenTracing bridge. New concerns with different criteria should consid
 cross-cutting concern to cover their use-case; they may benefit from the W3C encoding format but
 use a new HTTP header to convey data throughout a distributed trace.
 
-`CorrelationContext` is a recommended name but languages can have more language-specific names like `cctx`.
-
 ## Resources
 
 `Resource` captures information about the entity for which telemetry is
