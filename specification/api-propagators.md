@@ -90,7 +90,7 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 
 ### Extract
 
-Extracts the value from an incoming request. For example, as http headers.
+Extracts the value from an incoming request. For example, from the headers of an HTTP request.
 
 If the value could not be parsed, the implementation MUST set a null value or
 an empty value, and MUST NOT throw any exception.
