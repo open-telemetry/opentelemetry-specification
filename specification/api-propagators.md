@@ -5,6 +5,7 @@
 Table of Contents
 </summary>
 
+- [Overview] (#overview)
 - [HTTP Text Format](#http-text-format)
   - [Fields](#fields)
   - [Inject](#inject)
@@ -15,6 +16,8 @@ Table of Contents
       - [Get](#get)
 
 </details>
+
+## Overview
 
 Propagators leverage the `Context` to inject and extract
 data for each cross-cutting concern, such as traces and metrics.

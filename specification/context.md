@@ -5,6 +5,7 @@
 Table of Contents
 </summary>
 
+- [Overview](#overview)
 - [Get value](#get-value)
 - [Set value](#set-value)
 - [Remove value](#remove-value)
@@ -13,6 +14,8 @@ Table of Contents
     - [Set current Context](#set-current-context)
 
 </details>
+
+## Overview
 
 `Context` is a propagation mechanism which carries execution-scoped values
 across API boundaries and between execution units.
@@ -30,7 +33,7 @@ cross-cutting concerns authors, rather than users writing instrumentation.
 `Context` is expected to have the following operations, with their
 respective language differences:
 
-#### Get value
+## Get value
 
 Concerns can access their local state in the current execution state
 represented by a `Context`.
@@ -43,7 +46,7 @@ The API SHOULD accept the following parameters:
 The API SHOULD return the value in the `Context` for the specified concern
 identifier.
 
-#### Set value
+## Set value
 
 Concerns can record their local state in the current execution state
 represented by a `Context`.
@@ -57,7 +60,7 @@ The API SHOULD accept the following parameters:
 The API SHOULD return a new `Context` containing the new value.
 The new value will not be present in the old `Context`.
 
-#### Remove value
+## Remove value
 
 Concerns can clear their local state in a specified `Context`.
 
@@ -69,16 +72,16 @@ The API SHOULD accept the following parameters:
 The API SHOULD return a new `Context` with the value cleared.
 The removed value still remains present in the old `Context`.
 
-### Optional Global operations
+## Optional Global operations
 
 These operations are optional, and are protected to be specifically
 implement automatic scope switching and define higher level APIs.
 
-#### Get current Context
+### Get current Context
 
 The API SHOULD return the `Context` associated with program execution.
 
-#### Set current Context
+### Set current Context
 
 Associates a `Context` with program execution.
 
