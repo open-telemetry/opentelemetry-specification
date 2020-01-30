@@ -92,7 +92,7 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 
 Extracts the value from an incoming request. For example, as http headers.
 
-If the value could not be parsed, the underlying implementation MUST set a null value or
+If the value could not be parsed, the implementation MUST set a null value or
 an empty value, and MUST NOT throw any exception.
 
 Required arguments:
