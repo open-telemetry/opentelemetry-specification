@@ -71,7 +71,7 @@ The API SHOULD accept the following parameters:
 - (Required) The `Context`.
 - (Required) The concern identifier.
 
-The API SHOULD return a new `Context` with the value cleared.
+The API MUST return a new `Context` with the value cleared.
 The `Context` passed as parameter SHOULD NOT be modified.
 
 ## Optional Global operations
