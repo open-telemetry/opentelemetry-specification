@@ -81,7 +81,7 @@ implement automatic scope switching and define higher level APIs.
 
 ### Get current Context
 
-The API SHOULD return the `Context` associated with the caller's current execution unit.
+The API MUST return the `Context` associated with the caller's current execution unit.
 
 ### Set current Context
 
