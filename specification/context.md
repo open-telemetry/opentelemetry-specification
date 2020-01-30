@@ -74,7 +74,7 @@ The removed value still remains present in the old `Context`.
 
 ## Optional Global operations
 
-These operations are optional, and are protected to specifically
+These operations are optional, and SHOULD ONLY be used to
 implement automatic scope switching and define higher level APIs.
 
 ### Get current Context
