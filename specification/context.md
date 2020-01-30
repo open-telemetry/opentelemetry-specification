@@ -19,6 +19,8 @@ Table of Contents
 
 `Context` is a propagation mechanism which carries execution-scoped values
 across API boundaries and between logically associated execution units.
+Cross-cutting concerns access their data in-process using the same shared
+`Context` object.
 
 Languages are expected to use the single, widely used `Context` implementation
 if one exists for them. In the cases where an extremely clear, pre-existing

@@ -238,15 +238,8 @@ for an example.
 ## Context Propagation
 
 All of OpenTelemetry cross-cutting concerns, such as traces and metrics,
-share an underlying context propagation layer, for storing state and
+share an underlying `Context` mechanism for storing state and
 accessing data across the lifespan of a distributed transaction.
-
-Concerns access their data in-process using the same, shared context object.
-Each concern has its own slot in this `Context`, containing
-all of its data.
-
-Observe that the context propagation layer is intended to be used primarily
-as a SDK API, rather than by instrumentation logic.
 
 See the [Context](context.md)
 
