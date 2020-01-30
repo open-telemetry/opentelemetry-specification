@@ -16,7 +16,7 @@ Table of Contents
 
 </details>
 
-Propagators leverage the underlying `Context` to inject and extract
+Propagators leverage the `Context` to inject and extract
 data for each cross-cutting concern, such as traces and metrics.
 
 The Propagators API consists of the following formats:
