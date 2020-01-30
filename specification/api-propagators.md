@@ -107,7 +107,7 @@ containing the extracted value, which can be a `SpanContext`,
 
 The `Context` passed as argument MUST NOT be modified.
 
-`IsRemote` must be set to true if the extracted value is a `SpanContext`.
+If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set to true.
 
 #### Getter argument
 
