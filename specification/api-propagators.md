@@ -102,7 +102,7 @@ Required arguments:
 - the instance of `Getter` invoked for each propagation key to get.
 
 Returns a new `Context` containing the extracted value. The `Context` passed as argument
-SHOULD NOT be modified.
+MUST NOT be modified.
 
 `IsRemote` must be set to true if the extracted value is a `SpanContext`.
 
