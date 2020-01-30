@@ -95,7 +95,7 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 Extracts the value from an incoming request. For example, as http headers.
 
 If the value could not be parsed, the underlying implementation MUST set a null value or
-an empty value, without throwing any exception.
+an empty value, and MUST NOT throw any exception.
 
 Required arguments:
 
@@ -103,8 +103,8 @@ Required arguments:
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the instance of `Getter` invoked for each propagation key to get.
 
-Returns a new `Context` containing the extracted value. The extracted value will not
-be present in the old `Context`.
+Returns a new `Context` containing the extracted value. The `Context` passed as argument
+SHOULD NOT be modified.
 
 #### Getter argument
 
