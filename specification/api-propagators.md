@@ -97,12 +97,15 @@ an empty value, and MUST NOT throw any exception.
 
 Required arguments:
 
-- a `Context` used as parent of a new `Context` containing the extracted value, which can be a `SpanContext`, `DistributedContext` or another cross-cutting concern context. This argument can default to the current `Context` if such facility exists.
+- A `Context`. This argument can default to the current `Context` if such facility exists.
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the instance of `Getter` invoked for each propagation key to get.
 
-Returns a new `Context` containing the extracted value. The `Context` passed as argument
-MUST NOT be modified.
+Returns a new `Context` as child of the `Context` passed as argument,
+containing the extracted value, which can be a `SpanContext`,
+`DistributedContext` or another cross-cutting concern context.
+
+The `Context` passed as argument MUST NOT be modified.
 
 `IsRemote` must be set to true if the extracted value is a `SpanContext`.
 
