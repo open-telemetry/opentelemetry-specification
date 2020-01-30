@@ -115,8 +115,8 @@ device (e.g., a speedometer on your car's dashboard).  The problem
 with "Gauge" starts from the term itself, which is figurative in
 nature.  Using the word "gauge" suggests a behavior, that the
 instrument will be used to expose the last value, not a semantic
-definition.  Uses of traditional gauge instruments translate into an
-Observer or the Measure instrument in this API.
+definition.  Uses of traditional gauge instruments translate into uses
+of Observer or Measure instruments in this API.
 
 ### Label sets
 
@@ -137,11 +137,12 @@ specification](api-metrics-user.md) accepts a `LabelSet`.
 
 #### Counter
 
-Counter instruments are used to report sums.  These are sometimes used
-to monitor _rates_, and they are sometimes used to report _totals_.
-One key property of Counter instruments is that two `Add(1)` events
-are semantically equivalent to one `Add(2)` event, meaning that
-Counter events can be combined using addition by definition.
+Counter instruments are used to report sums.  These are commonly used
+to monitor rates, and they are sometimes used to report totals.  One
+key property of Counter instruments is that two `Add(1)` events are
+semantically equivalent to one `Add(2)` event--`Add(m)` and `Add(n)`
+is equivalent to `Add(m+n)`.  This means that Counter events can be
+combined using addition by definition.
 
 Labels associated with Counter instrument events can be used to
 compute rates and totals over selected dimensions.  When aggregating
@@ -377,4 +378,106 @@ change.
 
 ## Examples
 
-TODO(jmacd): Working on these 1/29/2020.
+### Reporting bytes read and written
+
+You wish to monitor the number of bytes read and written from a
+messaging server that supports several protocols.  The number of bytes
+read and written should be labeled with the protocol name and
+aggregated in the process.
+
+This is a typical application for the Counter instrument.  Use one
+Counter for bytes read and one Counter for bytes written.  When
+handling a request, compute a LabelSet containing the name of the
+protocol and potentially other useful labels, then call `Add()` twice
+with the same label set and the number of bytes read and written.
+
+To make lower the cost of this reporting, you can `Bind()` the
+instrument with each of the supported protocols ahead of time and
+avoid computing the label set for each request.
+
+### Reporting per-request CPU usage
+
+Suppose you have a way to measure the CPU usage of processing an
+individual request.  This is given to you in terms of cpu-seconds
+consumed.  You may wish to monitor total CPU usage, or you could be
+interested in the peak rate of CPU usage.
+
+Use a Counter instrument to `Add()` this quantity to an instrument
+named `cpu.seconds.used` after sending the response.  A Counter is
+called for, in this case, because a sum is requested, meaning a sum of
+all `Add()` events for the instrument in the specified time range.
+
+### Reporting system call duration
+
+You wish to monitor the duration of a specific system call being made
+frequently in your application, with a label to indicate a file name
+associated with the operation.
+
+This is a typical application for the Measure instrument.  Use a timer
+to measure the duration of each call and `Record()` the measurement
+with a label for the file name.
+
+### Reporting request size
+
+You wish to monitor a trend in request sizes, which means you are
+interested in characterizing individual events, as opposed to a sum.
+Label these with relevant information that may help explain variance
+in request sizes, such as the type of the request.
+
+This is a typical application for a Measure instrument.  The standard
+aggregation for Measure instruments will compute a measurement sum and
+the event count, which determines the mean request size, as well as
+the minimum and maximum sizes.
+
+### Reporting a per-request finishing account balance
+
+There's a number that rises and falls such as a bank account balance.
+You wish to monitor the average account balance at the end of
+requests, broken down by transaction type (e.g., withdrawal, deposit).
+
+Use a Measure instrument to report the current account balance at the
+end of each request.  Use a label for the transaction type.
+
+### Reporting process-wide CPU usage
+
+You are interested in reporting the CPU usage of the process as a
+whole, which is computed via a (relatively expensive) system call
+which returns two values, process-lifetime user and system
+cpu-seconds.  It is not necessary to update this measurement
+frequently, because it is meant to be used only for accounting
+purposes.
+
+A single Observer instrument is recommended for this case, with a
+label value to distinguish user from system CPU time.  Declare this as
+a monotonic instrument, since CPU usage never falls.  The Observer
+callback will be called once per collection interval, which lowers the
+cost of collecting this information.
+
+CPU usage is something that we naturally sum, which raises several
+questions.
+
+- Why not use a Counter instrument?  In order to use a Counter
+instrument, we would need to convert total usage figures into
+differences.  Calculating differences from the previous measurement is
+easy to do, but Counter instruments are not meant to be used from
+callbacks.
+- Why not report differences in the Observer callback?  Observer
+instruments are meant to be used to observe current values. Nothing
+prevents reporting differences with an Observer, but the standard
+aggregation for Observer instruments is to sum the current value
+across distinct label sets.  The standard behavior is useful for
+determining the current rate of CPU usage, but special configuration
+would be required for an Observer instrument to use Counter
+aggregation.
+
+### Reporting per-shard memory holdings
+
+Suppose you have a widely-used library that acts as a client to a
+sharded service.  For each shard it maintains some client-side state,
+holding a variable amount of memory per shard.
+
+Observe the current allocation per shard using an Observer instrument
+with a shard label.  These can be aggregated across hosts to compute
+cluster-wide memory holdings by shard, for example, using the standard
+aggregation for Observers, which sums the current value across
+distinct label sets.
