@@ -60,7 +60,7 @@ The API SHOULD accept the following parameters:
 - (Required) The value to be set.
 
 The API SHOULD return a new `Context` containing the new value.
-The new value will not be present in the old `Context`.
+The `Context` passed as parameter SHOULD NOT be modified.
 
 ## Remove value
 
@@ -72,7 +72,7 @@ The API SHOULD accept the following parameters:
 - (Required) The concern identifier.
 
 The API SHOULD return a new `Context` with the value cleared.
-The removed value still remains present in the old `Context`.
+The `Context` passed as parameter SHOULD NOT be modified.
 
 ## Optional Global operations
 
