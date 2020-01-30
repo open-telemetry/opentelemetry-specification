@@ -1,8 +1,8 @@
 # Correlations API
 
 `CorrelationContext` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
-It is an abstract data type represented by a set of name/value pairs describing user-
-defined properties. Each name in `CorrelationContext` MUST be associated with exactly one value.
+It is an abstract data type represented by a set of name/value pairs describing user-defined properties.
+Each name in `CorrelationContext` MUST be associated with exactly one value.
 `CorrelationContext` MUST be serialized according to the [W3C Correlation Context](https://w3c.github.io/correlation-context/) specification.
 
 ## Conflict Resolution
