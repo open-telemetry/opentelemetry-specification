@@ -20,15 +20,14 @@ This document defines how to describe an instance of a function that runs withou
 
 # General Attributes
 
-Span `name` should be set to the function name being executed. Depending on the value of the `faas.trigger` attribute, additional attributes MUST be set. For example, an `http` trigger MUST follow the [HTTP Server semantic conventions](data-http.md#http-server-semantic-conventions). For more information, refer to the [Function Type](#function-type) section.
+Span `name` should be set to the function name being executed. Depending on the value of the `faas.trigger` attribute, additional attributes MUST be set. For example, an `http` trigger SHOULD follow the [HTTP Server semantic conventions](data-http.md#http-server-semantic-conventions). For more information, refer to the [Function Trigger Type](#function-trigger-type) section.
 
 If Spans following this convention are produced, a Resource of type `faas` MUST exist following the [Resource semantic convention](data-resource-semantic-conventions.md#function-as-a-service). 
 
 | Attribute name  | Notes  and examples  | Required? |
 |---|---|--|
-| `component` | Denotes the type of the span and needs to be `"faas"` | Yes | 
 | `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | Yes |
-| `faas.execution` | String containing the unique execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
+| `faas.execution` | String containing the execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
 
 ## Difference between execution and instance
 
@@ -44,7 +43,7 @@ Therefore, the span attribute `faas.execution` differs from the resource attribu
 [Azure functions]: https://docs.microsoft.com/en-us/azure/azure-functions/manage-connections#static-clients
 [Google functions]: https://cloud.google.com/functions/docs/concepts/exec#function_scope_versus_global_scope
 
-# Function Type
+# Function Trigger Type
 
 This section describes how to handle the span creation and additional attributes based on the value of the attribute `faas.trigger`.
 
@@ -62,7 +61,7 @@ For `faas` spans with trigger `datasource`, it is recommended to set the followi
 
 
 ## HTTP
-The function responsibility is to provide an answer to an inbound HTTP request. The `faas` span MUST follow the recomandations described in the [HTTP Server semantic conventions](data-http.md#http-server-semantic-conventions).
+The function responsibility is to provide an answer to an inbound HTTP request. The `faas` span SHOULD follow the recomandations described in the [HTTP Server semantic conventions](data-http.md#http-server-semantic-conventions).
 
 ## PubSub
 A function is set to be executed when messages are sent to a messaging system. 

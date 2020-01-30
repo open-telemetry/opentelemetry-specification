@@ -7,14 +7,15 @@ This document defines standard attributes for resources. These attributes are ty
 * [Telemetry SDK](#telemetry-sdk)
 * [Compute Unit](#compute-unit)
   * [Container](#container)
-* [Deployment Service](#deployment-service)
+  * [Function as a Service](#function-as-a-service)
+- [Deployment Service](#deployment-service)
   * [Kubernetes](#kubernetes)
-* [Compute Instance](#compute-instance)
+- [Compute Instance](#compute-instance)
   * [Host](#host)
-* [Environment](#environment)
+- [Environment](#environment)
   * [Cloud](#cloud)
-  * [Cluster](#cluster)
-* [Version Attributes](#version-attributes)
+
+<!-- tocstop -->
 
 ## TODOs
 
@@ -108,7 +109,7 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 | faas.version | The version string of the function being executed as defined in [Version Attributes]. | `semver:2.0.0` | No |
 | faas.instance | The execution environment ID as a string. | `my-function:instance-0001` | No |
 
-Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](data-faas#difference-between-execution-and-instance).
+Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](data-faas.md#difference-between-execution-and-instance).
 
 ## Deployment Service
 
