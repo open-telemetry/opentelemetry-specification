@@ -27,8 +27,6 @@ The Propagators API consists of the following formats:
 - `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
 
-Deserializing must set `IsRemote` to true on the returned `SpanContext`.
-
 ## HTTP Text Format
 
 `HTTPTextFormat` is a formatter that injects and extracts a value as text into carriers that
@@ -105,6 +103,8 @@ Required arguments:
 
 Returns a new `Context` containing the extracted value. The `Context` passed as argument
 SHOULD NOT be modified.
+
+`IsRemote` must be set to true if the extracted value is a `SpanContext`.
 
 #### Getter argument
 
