@@ -23,7 +23,8 @@ option is not available, OpenTelemetry should provide its own `Context`
 implementation. Depending on the language, its usage may be either explicit
 or implicit.
 
-`Context` is meant to primarily be a SDK API, and thus be used by SDK and
+For languages without explicit `Context` usage, this should
+be considered to primarily be a SDK API, and thus be used by SDK and
 cross-cutting concerns authors, rather than users writing instrumentation.
 
 `Context` is expected to have the following operations, with their
@@ -31,7 +32,8 @@ respective language differences:
 
 #### Get value
 
-Concerns can access their local state out of a specified `Context`.
+Concerns can access their local state in the current execution state
+represented by a `Context`.
 
 The API SHOULD accept the following parameters:
 
@@ -43,7 +45,8 @@ identifier.
 
 #### Set value
 
-Concerns can record their local state in a specified `Context`.
+Concerns can record their local state in the current execution state
+represented by a `Context`.
 
 The API SHOULD accept the following parameters:
 
