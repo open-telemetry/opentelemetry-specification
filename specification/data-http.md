@@ -21,10 +21,19 @@ and various HTTP versions like 1.1, 2 and SPDY.
 
 ## Name
 
-Given an [RFC 3986](https://tools.ietf.org/html/rfc3986) compliant URI of the form `scheme:[//host[:port]]path[?query][#fragment]`,
-the span name of the span SHOULD be set to the URI path value,
-unless another value that represents the identity of the request and has a lower cardinality can be identified
-(e.g. the route for server spans; see below).
+HTTP spans MUST follow the overall [guidelines for span names](./api-tracing.md#span).
+Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
+is a user id, which creates high cardinality value space not suitable for span
+names. In case of HTTP servers, these endpoints are often mapped by the server
+frameworks to more concise _HTTP routes_, e.g. `/api/users/{user_id}`, which are
+recommended as the low cardinality span names. However, the same approach usually
+does not work for HTTP client spans, especially when instrumentation is provided
+by a lower-level middleware that is not aware of the specifics of how the URIs
+are formed. Therefore, HTTP client spans SHOULD be using conservative, low
+cardinality names formed from the available parameters of an HTTP request,
+such as `"HTTP {METHOD_NAME}"`. Instrumentation MUST NOT default to using URI
+path as span name, but MAY provide hooks to allow custom logic to override the
+default span name.
 
 ## Status
 
@@ -70,12 +79,14 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `http.status_code` | [HTTP response status code][]. E.g. `200` (integer) | If and only if one was received/sent. |
 | `http.status_text` | [HTTP reason phrase][]. E.g. `"OK"` | No |
 | `http.flavor` | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |  No |
+| `http.user_agent` | Value of the HTTP [User-Agent][] header sent by the client. | No |
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
+[User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3
 
 ## HTTP client
 
@@ -176,12 +187,10 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.server_name` | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). | [1] |
 | `http.route` | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. | No |
 | `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `net.peer.ip`, which would identify the network-level peer, which may be a proxy. | No |
-| `http.user_agent` | Value of the HTTP [User-Agent][] header sent by the client. | No |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
 [X-Forwarded-For]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For
-[User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3
 
 **[1]**: `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. <https://github.com/open-telemetry/opentelemetry-python/pull/148>).
 It is thus preferred to supply the raw data that *is* available.
@@ -211,7 +220,7 @@ Span name: `/webshop/articles/4` (NOTE: This is subject to change, see [open-tel
 | `http.method`      | `"GET"`                                                 |
 | `http.flavor`      | `"1.1"`                                                 |
 | `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"`     |
-| `peer.ip4`         | `"192.0.2.5"`                                           |
+| `net.peer.ip`      | `"192.0.2.5"`                                           |
 | `http.status_code` | `200`                                                   |
 | `http.status_text` | `"OK"`                                                  |
 
@@ -234,6 +243,7 @@ Span name: `/webshop/articles/:article_id`.
 | `http.status_text` | `"OK"`                                          |
 | `http.client_ip`   | `"192.0.2.4"`                                   |
 | `net.peer.ip`      | `"192.0.2.5"` (the client goes through a proxy) |
+| `http.user_agent`  | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
 
 Note that following the recommendations above, `http.url` is not set in the above example.
 If set, it would be
