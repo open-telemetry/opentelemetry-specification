@@ -83,7 +83,7 @@ The API SHOULD return the `Context` associated with program execution.
 
 ### Set current Context
 
-Associates a `Context` with program execution.
+Associates a `Context` with the caller's current execution unit.
 
 The API SHOULD accept the following parameters:
 
