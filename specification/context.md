@@ -45,7 +45,7 @@ The API SHOULD accept the following parameters:
 - (Required) The `Context`.
 - (Required) The concern identifier.
 
-The API SHOULD return the value in the `Context` for the specified concern
+The API MUST return the value in the `Context` for the specified concern
 identifier.
 
 ## Set value
