@@ -24,7 +24,7 @@ Cross-cutting concerns access their data in-process using the same shared
 
 Languages are expected to use the single, widely used `Context` implementation
 if one exists for them. In the cases where an extremely clear, pre-existing
-option is not available, OpenTelemetry should provide its own `Context`
+option is not available, OpenTelemetry MUST provide its own `Context`
 implementation. Depending on the language, its usage may be either explicit
 or implicit.
 
