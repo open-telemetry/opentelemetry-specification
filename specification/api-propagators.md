@@ -64,7 +64,7 @@ Injects the value downstream. For example, as http headers.
 
 Required arguments:
 
-- A `Context`. The Propagator MUST retrieve the appropiate value from the `Context` first, which can be `SpanContext`, `DistributedContext` or another cross-cutting concern context. This argument can default to the current `Context` if such facility exists.
+- A `Context`. The Propagator MUST retrieve the appropiate value from the `Context` first, which can be `SpanContext`, `DistributedContext` or another cross-cutting concern context. For languages supporting current `Context` state this argument is OPTIONAL, defaulting to the current `Context` instance.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the `Setter` invoked for each propagation key to add or remove.
 
@@ -97,7 +97,7 @@ an empty value, and MUST NOT throw any exception.
 
 Required arguments:
 
-- A `Context`. This argument can default to the current `Context` if such facility exists.
+- A `Context`. For languages supporting current `Context` state this argument is OPTIONAL, defaulting to the current `Context` instance.
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the instance of `Getter` invoked for each propagation key to get.
 
