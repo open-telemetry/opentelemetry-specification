@@ -75,7 +75,7 @@ The `Context` passed as parameter MUST NOT be modified.
 
 ## Optional Global operations
 
-These operations are optional, and SHOULD ONLY be used to
+These operations are optional, and SHOULD only be used to
 implement automatic scope switching and define higher level APIs.
 
 ### Get current Context
