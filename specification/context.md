@@ -39,10 +39,10 @@ respective language differences:
 Concerns can access their local state in the current execution state
 represented by a `Context`.
 
-The API SHOULD accept the following parameters:
+The API MUST accept the following parameters:
 
-- (Required) The `Context`.
-- (Required) The concern identifier.
+- The `Context`.
+- The concern identifier.
 
 The API MUST return the value in the `Context` for the specified concern
 identifier.
@@ -52,23 +52,23 @@ identifier.
 Concerns can record their local state in the current execution state
 represented by a `Context`.
 
-The API SHOULD accept the following parameters:
+The API MUST accept the following parameters:
 
-- (Required) The `Context`.
-- (Required) The concern identifier.
-- (Required) The value to be set.
+- The `Context`.
+- The concern identifier.
+- The value to be set.
 
-The API SHOULD return a new `Context` containing the new value.
-The `Context` passed as parameter SHOULD NOT be modified.
+The API MUST return a new `Context` containing the new value.
+The `Context` passed as parameter MUST NOT be modified.
 
 ## Remove value
 
 Concerns can clear their local state in a specified `Context`.
 
-The API SHOULD accept the following parameters:
+The API MUST accept the following parameters:
 
-- (Required) The `Context`.
-- (Required) The concern identifier.
+- The `Context`.
+- The concern identifier.
 
 The API MUST return a new `Context` with the value cleared.
 The `Context` passed as parameter MUST NOT be modified.
@@ -86,6 +86,6 @@ The API MUST return the `Context` associated with the caller's current execution
 
 Associates a `Context` with the caller's current execution unit.
 
-The API SHOULD accept the following parameters:
+The API MUST accept the following parameters:
 
 - (Required) The `Context`.
