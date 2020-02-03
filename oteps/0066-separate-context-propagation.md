@@ -21,7 +21,7 @@
 * [Internal details](#Internal-details)
 * [FAQ](#faq)
 
-![drawing](img/context_propagation_overview.png)
+![drawing](img/0066_context_propagation_overview.png)
 
 A proposal to refactor OpenTelemetry into a set of separate cross-cutting concerns which 
 operate on a shared context propagation mechanism.
@@ -516,7 +516,7 @@ otherContext = ExtractWithContext(Context::GetCurrent(), headers)
 
 # Internal details
 
-![drawing](img/context_propagation_details.png)
+![drawing](img/0066_context_propagation_details.png)
 
 ## Example Package Layout
 ```
