@@ -76,7 +76,8 @@ The `Context` passed as parameter MUST NOT be modified.
 ## Optional Global operations
 
 These operations are optional, and SHOULD only be used to
-implement automatic scope switching and define higher level APIs.
+implement automatic scope switching and define higher level APIs
+by SDK components and OpenTelemetry instrumentation libraries.
 
 ### Get current Context
 
