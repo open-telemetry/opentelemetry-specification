@@ -105,7 +105,7 @@ values, for example "Histogram" and "Summary" values, which are
 different ways to expose a distribution of measurements.  This API
 specifies the use of a Measure kind of instrument with `Record()` for
 recording individual measurements.  The instruments are defined so
-that users and implementors understand what they mean, beacuse
+that users and implementors understand what they mean, because
 different SDKs will handle events differently.
 
 There is a common metric instrument known as a "Gauge" that is not
@@ -369,7 +369,7 @@ Observer instruments are meant to be used when measured values report
 on the current state of the program, as opposed to a change of state
 in the program.  When Observer instruments are used to report physical
 quantities, use a (default) absolute Observer.  When Observer
-instruments are used to report measurements can be negative for any
+instruments are used to report measurements that can be negative for any
 reason, use a non-absolute Observer.
 
 If the Observer reports a current total sum, declare it as a monotonic
@@ -391,7 +391,7 @@ handling a request, compute a LabelSet containing the name of the
 protocol and potentially other useful labels, then call `Add()` twice
 with the same label set and the number of bytes read and written.
 
-To make lower the cost of this reporting, you can `Bind()` the
+To lower the cost of this reporting, you can `Bind()` the
 instrument with each of the supported protocols ahead of time and
 avoid computing the label set for each request.
 
