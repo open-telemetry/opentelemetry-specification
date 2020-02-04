@@ -5,6 +5,7 @@ Span attributes.
 
 * [Resource Conventions](data-resource-semantic-conventions.md)
 * [Span Conventions](#span-conventions)
+* [Link Conventions](data-link-semantic-conventions.md)
 
 The type of the attribute SHOULD be specified in the semantic convention
 for that attribute. Array values are allowed for attributes. For

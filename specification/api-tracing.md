@@ -286,6 +286,14 @@ a root span, and MUST generate a new `TraceId` for each root span created.
 For a Span with a parent, the `TraceId` MUST be the same as the parent.
 Also, the child span MUST inherit all `TraceState` values of its parent by default.
 
+The option for creating a span as a root span should allow to choose whether the
+ignored parents in `Context` should be captured as links in the new span. If the
+links should be captured then the implementation SHOULD add those possible
+parents as [`Link`s](#add-links) to the new `Span`. For description of the
+ignored-parent link attributes, see [Link
+Conventions](data-link-semantic-conventions.md#ignored-parent). The capturing is
+off by default.
+
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
