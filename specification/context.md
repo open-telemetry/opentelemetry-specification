@@ -93,4 +93,4 @@ Associates a `Context` with the caller's current execution unit.
 
 The API MUST accept the following parameters:
 
-- (Required) The `Context`.
+- The `Context`.
