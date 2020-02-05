@@ -132,7 +132,7 @@ The `Tracer` SHOULD provide methods to:
 - Get the currently active `Span`
 - Make a given `Span` as active
 
-The `Tracer` MUST internally leverage the context layer in order to handle the
+The `Tracer` MUST internally leverage `Context` in order to get and set the
 current `Span` state and how `Span`s are passed across process boundaries.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
