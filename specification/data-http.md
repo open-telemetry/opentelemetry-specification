@@ -73,7 +73,7 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `component`    | Denotes the type of the span and needs to be `"http"`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
 | `http.url` | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | Defined later. |
-| `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `/path/12314/?q=ddds#123"`. | Defined later. |
+| `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/12314/?q=ddds#123"`. | Defined later. |
 | `http.host` | The value of the [HTTP host header][]. When the header is empty or not present, this attribute should be the same. | Defined later. |
 | `http.scheme` | The URI scheme identifying the used protocol: `"http"` or `"https"` | Defined later. |
 | `http.status_code` | [HTTP response status code][]. E.g. `200` (integer) | If and only if one was received/sent. |
