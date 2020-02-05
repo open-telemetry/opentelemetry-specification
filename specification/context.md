@@ -33,7 +33,7 @@ Users will manipulate `Context` through the cross-cutting concerns APIs
 rather than directly.
 
 Users writing instrumentation in languages that
-use `Context` implicitly are discouraged to use the `Context` API directly.
+use `Context` implicitly are discouraged from using the `Context` API directly.
 
 `Context` is expected to have the following operations, with their
 respective language differences:
