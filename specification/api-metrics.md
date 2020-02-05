@@ -24,118 +24,140 @@
 
 ## Overview
 
-The OpenTelemetry Metrics API supports producing diagnostic
-measurements using three basic kinds of instrument.  "Metrics" are the
-thing being produced--mathematical, statistical summaries of certain
-observable behaviors in the program.  "Instruments" are the devices
-used by the program to record observations about their behavior.
-Therefore, we use "metric instrument" to refer to a programmatic
-interface, allocated through the API, used to produce metric events.
-There are three kinds of instruments known as Counters, Measures, and
-Observers.
+The OpenTelemetry Metrics API supports capturing measurements about
+the execution of a computer program in real time.  The Metrics API is
+designed explicitly for processing raw measurements, generally with
+the intent to produce continuous summaries those measurements, also in
+real time.  Hereafter, "the API" refers to the OpenTelemetry Metrics
+API unless otherwise specified.
 
-Monitoring and alerting are the common use-case for the data provided
-through metric instruments, after various collection and aggregation
-strategies are applied to the data.  We find there are many other uses
-for the _metric events_ recorded through these instruments.  We
-imagine metric data being aggregated and recorded as events in tracing
-and logging systems too, and for this reason OpenTelemetry requires a
-separation of the API from the SDK.
+The API provides functions for entering raw measurements, through
+several [calling conventions](TODO: link to user doc) that offer
+different levels of performance.  Regardless of calling convention, we
+define a _metric event_ as the logical thing that happens when a new
+measurement is entered.
 
-### User-facing API
+Monitoring and alerting systems commonly use the data provided through
+metric events, after applying various [aggregations](#aggregations)
+and converting into various [exposition formats](#exposition-formats).
+However, we find that there are many other uses for metric events,
+such as to record the aggregated or raw data in tracing and logging
+systems.  For this reason, [OpenTelemetry requires a separation of the
+API from the SDK](library-guidelines.md#requirements), so that
+different SDKs can be configured at runtime.
 
-The user-facing OpenTelemetry API for Metrics begins with a `Meter`
-interface, usually obtained through dependency injection or a global
-instance.  The `Meter` API supports defining new metric instruments.
-Review the [user-facing OpenTelemetry API
-specification](api-metrics-user.md) for more detail about the variety
-of methods, options, and optimizations available for users of the
-instrumentation API and how to use the instruments defined here.
+The word "semantic" or "semantics" as used here refers to _how we give
+meaning_ to metric events, as they take place under the API.  The term
+is used extensively in this document to define and explain these API
+functions and how we should interpret them.  As far as possible, the
+terminology used here tries to convey the intended semantics, and a
+_standard implementation_ will be described below to help us
+understand their meaning.  The standard implementation defined here
+corresponds to the behavior of the default [OpenTelemetry Metrics
+Default SDK](TODO: after PR #347 merges).
 
-### Meter API
+### Metric Instruments
 
-To produce measurements using an instrument, you need an SDK that
-supports the `Meter` API, which consists of a set of constructors, the
-`Labels` function for building label sets, and the `RecordBatch`
-function for batch reporting.  Refer to the [sdk-facing OpenTelemetry
-API specification](api-metrics-meter.md) for more implementation notes.
+A _metric instrument_, of which there are three kinds, is a device for
+entering raw measurements into the API.  There are Counter, Measure,
+and Observer instruments, each with different semantics and intended
+uses, that will be specified here.  All measurements that enter the
+API are associated with an instrument, which gives the measurement its
+properties.  Instruments are created and defined through calls to a
+`Meter` API, which is the user-facing entry point to the SDK.
 
-Because of API-SDK separation, the `Meter` implementation ultimately
-determines how metrics events are handled.  The specification's task
-is to define the semantics of the events in high-level terms, so that
-users and implementors can agree on their meaning.  How the `Meter`
-accomplishes its goals and the export capabilities it supports are
-specified for the default SDK in the (Metric SDK specification
-WIP)[#WIP-spec-issue-347].
+Each kinds of metric instrument has its own semantics, briefly
+described as:
 
-The standard implementation for `Meter` implementations to follow is
-given, to aid with understanding the different instrument use-cases.
-For example, a Counter instrument supports `Add()` events, and the
-standard implementation is to compute a sum.  The sum may be exported
-as a grand total or as the change in the grand total, but regardless
-of the exporter and specific techniques, the purpose of using a
-Counter with `Add()` is to monitor a sum.  A detailed explanation for
-how to select metric instruments for common use-cases is given below,
-according to the semantics defined next.
+- Counter: metric events of this kind _Add_ to a value that you would sum over time
+- Measure: metric events of this kind _Record_ a value that you would average over time
+- Observer: metric events of this kind _Observe_ a coherent set of values at an instant in time.
 
-### Purpose of this document
+An _instrument definition_ describes several properties of the
+instrument, including its name and its kind.  The other properties of
+a metric instrument are optional, including its description, the unit
+of measurement, and several settings convey additional meaning, such
+as indicating that it is appropriate to compute a rate over time.  An
+instrument definition is associated with the events that it produces.
 
-This document gives an overview of the specification, introduces the
-the three kinds of instrument, and discusses how end-users should
-think about various instruments and options at a high-level, without
-getting into detail about specific function calls.  For details about
-specific function calls, refer to the detailed specifications linked
-above.
-
-## Metric API / SDK separation
-
-The API distinguishes metric instruments by semantic meaning, not by
-the type of value produced in an exporter.  This is a departure from
-convention, compared with a number of common metric libraries, and
-stems from the separation of the API and the SDK.  The SDK ultimately
-determines how to handle metric events and could potentially implement
-non-standard behavior.  All metric events can be represented as
-consisting of a timestamp, an instrument, a number (the _value_), and
-a label set.  The semantics defined here are meant to assist both
-application and SDK implementors, and examples will be given below.
-
-The separation of API and SDK explains why the metric API does not
-have metric instruments that generate specific metric "exposition"
-values, for example "Histogram" and "Summary" values, which are
-different ways to expose a distribution of measurements.  This API
-specifies the use of a Measure kind of instrument with `Record()` for
-recording individual measurements.  The instruments are defined so
-that users and implementors understand what they mean, because
-different SDKs will handle events differently.
-
-There is a common metric instrument known as a "Gauge" that is not
-included in this API, the term "Gauge" referring to an instrument,
-often mechanical, for reading the current "last" value of a measuring
-device (e.g., a speedometer on your car's dashboard).  The problem
-with "Gauge" starts from the term itself, which is figurative in
-nature.  Using the word "gauge" suggests a behavior, that the
-instrument will be used to expose the last value, not a semantic
-definition.  Uses of traditional gauge instruments translate into uses
-of Observer or Measure instruments in this API.
+Details about calling conventions for each kind of instrument are
+covered in the [user-level API specification](api-metrics-user.md).
 
 ### Label sets
 
-_Label_ is the term used to refer to a key:value attribute associated
+_Label_ is the term used to refer to a key-value attribute associated
 with a metric event.  Although they are fundamentally similar to [Span
-attributes](api-tracing.md#span) in the tracing API, a set of labels
-is given its own type in the Metric API, `LabelSet`.  Label sets are a
-feature of the API to facilitate re-use across the metric API.  Users
-are encouraged to re-use label sets whenever possible, as they may
-contain a previously encoded representation of the data.
+attributes](api-tracing.md#span) in the tracing API, a [label
+set](TODO: link to user doc) is given its own type in the Metrics API
+(generally: `LabelSet`).  Label sets are a feature of the API meant to
+facilitate re-use, to lower the cost of processing metric events.
+Users are encouraged to re-use label sets whenever possible, as they
+may contain a previously encoded representation of the labels.
 
-Users obtain label sets by calling the `Meter` API function (e.g.,
-`Meter.GetLabels({ key, value }, ...)`).  Each of the instrument
-calling conventions detailed in the [user-facing API
-specification](api-metrics-user.md) accepts a `LabelSet`.
+Users obtain label sets by calling a `Meter` API function.  Each of
+the instrument calling conventions detailed in the [user-level API
+specification](api-metrics-user.md) accepts a label set.
 
-### Three kinds of instrument
+### Meter Interface
 
-#### Counter
+To produce measurements using an instrument, you need an SDK that
+supports the `Meter` API, which consists of a set of instrument
+constructors, functionality related to label sets, and a facility for
+reporting batches of measurements in a semantically atomic way.
+
+There is a global `Meter` instance available for use.  Use of the this
+instance allows library code that uses it to be automatically enabled
+whenever the main application configures an SDK at the global level.
+
+Details about installing an SDK and obtaining a `Meter` are covered in
+the [SDK-level API specification](api-metrics-meter.md).
+
+### Aggregations
+
+_Aggregation_ refers to the process of combining a large number of
+measurements into exact or estimated statistics about the metric
+events that took place during a window of real time, during program
+execution.  Computing aggregations is mainly a subject of the SDK
+specification.
+
+The semantic connection between the API and the SDK is established
+here, through the interpretation given by the standard implementation.
+In the standard implementation:
+
+- Counter instruments use _Sum_ aggregation
+- Measure instruments use _MinMaxSumCount_ aggregation
+- Observer instruments use _LastValue_ aggregation.
+
+The default Metric SDK specification includes support for configuring
+alternative aggregations, so that metric instruments can be repuposed
+and their data can be examined in different ways.  Using the default
+SDK, or an alternate one, we are able to change the interpretation of
+metric events at runtime.  Other aggregations are available,
+especially for Measure instruments, where we are generally interested
+in a variety of forms of statistics, such as histogram and quantile
+summaries.
+
+### Metric Event Format
+
+Metric events have the same logical representation, regardless of
+kind.  Whether a Counter, a Measure, or an Observer instrument, metric
+events produced through an instrument consist of:
+
+- an implicit timestamp at the moment the API function is called
+- the instrument definition
+- a value (numeric)
+- a label set
+- a [Context](api-context.md)
+
+Because metric events are implicitly timestamped, we could refer to a
+series of metric events as a _time series_. However, we reserve the
+use of this term for the SDK specification, to refer to parts of a
+data format that express explicitly timestamped values, in sequence,
+resulting from an aggregation over time.
+
+## Three kinds of instrument
+
+### Counter
 
 Counter instruments are used to report sums.  These are commonly used
 to monitor rates, and they are sometimes used to report totals.  One
@@ -157,7 +179,7 @@ sums that rise and fall.
 Examples: requests processed, bytes read or written, memory allocated
 and deallocated.
 
-#### Measure
+### Measure
 
 Measure instruments are used to report individual measurements.
 Measure events are semantically independent and cannot be naturally
@@ -177,7 +199,7 @@ not absolute, supporting both postive and negative values.
 Examples: request latency, number of query terms, temperature, fan
 speed, account balance, load average, screen width.
 
-#### Observer
+### Observer
 
 Observer instruments are used to report a current set of values at the
 time of collection.  Observer instruments report not only current
@@ -204,7 +226,7 @@ would be.
 
 Examples: memory held per shard, queue size by name.
 
-### Standard Interpretation
+## Interpretation
 
 We believe the three instrument kinds Counter, Measure, and Observer
 form a sufficient basis for expressing nearly all metric data.  But if
@@ -362,6 +384,7 @@ Observer instruments are recommended for reporting measurements about
 the state of the program at a moment in time.  These expose current
 information about the program itself, not related to individual events
 taking place in the program.  Observer instruments are reported
+b
 outside of a context, thus do not have an effective span context or
 correlation context.
 
