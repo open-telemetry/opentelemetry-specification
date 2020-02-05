@@ -102,7 +102,7 @@ Required arguments:
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the instance of `Getter` invoked for each propagation key to get.
 
-Returns a new `Context` as child of the `Context` passed as argument,
+Returns a new `Context` derived from the `Context` passed as argument,
 containing the extracted value, which can be a `SpanContext`,
 `DistributedContext` or another cross-cutting concern context.
 
