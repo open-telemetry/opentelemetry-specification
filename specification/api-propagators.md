@@ -106,8 +106,6 @@ Returns a new `Context` as child of the `Context` passed as argument,
 containing the extracted value, which can be a `SpanContext`,
 `DistributedContext` or another cross-cutting concern context.
 
-The `Context` passed as an argument MUST NOT be modified.
-
 If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set to true.
 
 #### Getter argument
