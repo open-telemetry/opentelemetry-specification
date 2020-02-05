@@ -178,7 +178,7 @@ Each composite `Propagator` will be bound to a specific format, such
 as `HttpTextFormat`, as different formats will likely work on a different
 data types.
 
-### Create Composite Propagator
+### Create a Composite Propagator
 
 Required arguments:
 
