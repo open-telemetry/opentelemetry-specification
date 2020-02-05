@@ -92,8 +92,9 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 
 Extracts the value from an incoming request. For example, from the headers of an HTTP request.
 
-If a cross-cutting concern value could not be parsed, the implementation MUST set a value
-it deems appropiate, and it MUST NOT throw any exception.
+If a cross-cutting concern value could not be parsed from the carrier,
+the implementation MUST NOT throw an exception. It MUST store a value in `Context`
+that the implementation can recognize as a null or empty value.
 
 Required arguments:
 
