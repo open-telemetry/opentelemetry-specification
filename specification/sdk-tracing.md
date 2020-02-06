@@ -127,14 +127,15 @@ of the `TraceID`.
 
 ## Tracer Creation
 
-New `Tracer` instances are always created through a `TracerFactory` (see [API](api-tracing.md#obtaining-a-tracer)).
-The `name` and `version` arguments supplied to the `TracerFactory` must be used
-to create a `Resource` instance which is stored on the created `Tracer`.
+New `Tracer` instances are always created through a `TracerProvider` (see
+[API](api-tracing.md#obtaining-a-tracer)).  The `name` and `version` arguments
+supplied to the `TracerProvider` must be used to create a
+[`Resource`](sdk-resource.md) instance which is stored on the created `Tracer`.
 
 All configuration objects (SDK specific) and extension points (span processors,
-propagators) must be provided to the `TracerFactory`. `Tracer` instances must
+propagators) must be provided to the `TracerProvider`. `Tracer` instances must
 not duplicate this data (unless for read-only access) to avoid that different
-`Tracer` instances of a `TracerFactory` have different versions of these data.
+`Tracer` instances of a `TracerProvider` have different versions of these data.
 
 The readable representations of all `Span` instances created by a `Tracer` must
 provide a `getLibraryResource` method that returns this `Resource` information
@@ -149,20 +150,20 @@ invocations. The span processors are invoked only when
 Built-in span processors are responsible for batching and conversion of spans to
 exportable representation and passing batches to exporters.
 
-Span processors can be registered directly on SDK `TracerFactory` and they are
+Span processors can be registered directly on SDK `TracerProvider` and they are
 invoked in the same order as they were registered.
 
-All `Tracer` instances created by a `TracerFactory` share the same span processors.
+All `Tracer` instances created by a `TracerProvider` share the same span processors.
 Changes to this collection reflect in all `Tracer` instances.
 Implementation-wise, this could mean that `Tracer` instances have a reference to
-their `TracerFactory` and can access span processor objects only via this
+their `TracerProvider` and can access span processor objects only via this
 reference.
 
-Manipulation of the span processors collection must only happen on `TracerFactory`
+Manipulation of the span processors collection must only happen on `TracerProvider`
 instances. This means methods like `addSpanProcessor` must be implemented on
-`TracerFactory`.
+`TracerProvider`.
 
-Each processor registered on `TracerFactory` is a start of pipeline that consist
+Each processor registered on `TracerProvider` is a start of pipeline that consist
 of span processor and optional exporter. SDK MUST allow to end each pipeline with
 individual exporter.
 
