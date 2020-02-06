@@ -201,6 +201,8 @@ Required arguments:
 
 ### Inject
 
+Required arguments:
+
 - A `Context`.
 - The carrier that holds propagation fields.
 - The instance of `Getter` invoked for each propagation key to get.
