@@ -16,12 +16,14 @@ Table of Contents
 
 </details>
 
-Propagators API consists of one main format:
+Propagators API currently consists of one format:
 
 - `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
 
 Deserializing must set `IsRemote` to true on the returned `SpanContext`.
+
+A binary format will be added in the future.
 
 ## HTTP Text Format
 
