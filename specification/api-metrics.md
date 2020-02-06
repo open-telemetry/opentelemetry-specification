@@ -1,4 +1,4 @@
-# Metrics API
+		# Metrics API
 
 <!-- toc -->
 
@@ -27,9 +27,9 @@
 The OpenTelemetry Metrics API supports capturing measurements about
 the execution of a computer program in real time.  The Metrics API is
 designed explicitly for processing raw measurements, generally with
-the intent to produce continuous summaries those measurements, also in
-real time.  Hereafter, "the API" refers to the OpenTelemetry Metrics
-API unless otherwise specified.
+the intent to produce continuous summaries of those measurements, also
+in real time.  Hereafter, "the API" refers to the OpenTelemetry
+Metrics API.
 
 The API provides functions for entering raw measurements, through
 several [calling conventions](TODO: link to user doc) that offer
@@ -41,10 +41,10 @@ Monitoring and alerting systems commonly use the data provided through
 metric events, after applying various [aggregations](#aggregations)
 and converting into various [exposition formats](#exposition-formats).
 However, we find that there are many other uses for metric events,
-such as to record the aggregated or raw data in tracing and logging
-systems.  For this reason, [OpenTelemetry requires a separation of the
-API from the SDK](library-guidelines.md#requirements), so that
-different SDKs can be configured at runtime.
+such as to record aggregated or raw measurements in tracing and
+logging systems.  For this reason, [OpenTelemetry requires a
+separation of the API from the SDK](library-guidelines.md#requirements),
+so that different SDKs can be configured at runtime.
 
 The word "semantic" or "semantics" as used here refers to _how we give
 meaning_ to metric events, as they take place under the API.  The term
@@ -75,10 +75,10 @@ described as:
 
 An _instrument definition_ describes several properties of the
 instrument, including its name and its kind.  The other properties of
-a metric instrument are optional, including its description, the unit
-of measurement, and several settings convey additional meaning, such
-as indicating that it is appropriate to compute a rate over time.  An
-instrument definition is associated with the events that it produces.
+a metric instrument are optional, including a description, the unit of
+measurement, and several settings that convey additional meaning
+(e.g., monotonicity).  An instrument definition is associated with the
+events that it produces.
 
 Details about calling conventions for each kind of instrument are
 covered in the [user-level API specification](api-metrics-user.md).
@@ -120,9 +120,10 @@ events that took place during a window of real time, during program
 execution.  Computing aggregations is mainly a subject of the SDK
 specification.
 
-The semantic connection between the API and the SDK is established
-here, through the interpretation given by the standard implementation.
-In the standard implementation:
+Users do not have a facility in the API to select the aggregation they
+want for particular instruments.  The choice of instrument dictates
+semantics and thus gives a default interpretation.  For the standard
+implementation:
 
 - Counter instruments use _Sum_ aggregation
 - Measure instruments use _MinMaxSumCount_ aggregation
@@ -132,10 +133,48 @@ The default Metric SDK specification includes support for configuring
 alternative aggregations, so that metric instruments can be repuposed
 and their data can be examined in different ways.  Using the default
 SDK, or an alternate one, we are able to change the interpretation of
-metric events at runtime.  Other aggregations are available,
-especially for Measure instruments, where we are generally interested
-in a variety of forms of statistics, such as histogram and quantile
-summaries.
+metric events at runtime.
+
+Other standard aggregations are available, especially for Measure
+instruments, where we are generally interested in a variety of forms
+of statistics, such as histogram and quantile summaries.
+
+### Time
+
+Time is a fundamental property of metric events, but not an explicit
+one.  Users do not provide explicit timestamps for metric events.  The
+SDK is welcome to, but not required to capture the current timestamp
+for each event by reading from a clock.
+
+This non-requirement stems from a common optimization in metrics
+reporting, which is to configure metric data collection with a
+relatively small period (e.g., 1 second) and use a single timestamp to
+describe a batch of exported data, since the loss of precision is
+insignificant when aggregating data across minutes or hours of data.
+
+Aggregations are commonly computed over a series of events that fall
+into a contiguous region of time, known as the collection interval.
+Since the SDK controls decision to start collection, it is possible to
+collect aggregated metric data while only reading the clock once per
+collection interval.
+
+Counter and Measure instruments offer synchronous APIs for entering
+measurements.  Metric events from Counter and Measure instruments
+happen when they happen, the moment the SDK receives the function
+call.
+
+The Observer instrument supports an asynchronous API, allowing the SDK
+to collect metric data on demand, once per collection interval.  A
+single Observer instrument callback can enter multiple metric events
+associated with different label sets.  Semantically, by definition,
+these observations are captured at a single instant in time, the
+instant that they became the current set of last-measured values.
+
+Because metric events are implicitly timestamped, we could refer to a
+series of metric events as a _time series_. However, we reserve the
+use of this term for the SDK specification, to refer to parts of a
+data format that express explicitly timestamped values, in a sequence,
+resulting from an aggregation of raw measurements over time.
 
 ### Metric Event Format
 
@@ -144,18 +183,21 @@ kind.  Whether a Counter, a Measure, or an Observer instrument, metric
 events produced through an instrument consist of:
 
 - an implicit timestamp at the moment the API function is called
-- the instrument definition
+- the instrument definition (name, kind, and options)
 - a value (numeric)
 - a label set
 - a [Context](api-context.md)
 
-Because metric events are implicitly timestamped, we could refer to a
-series of metric events as a _time series_. However, we reserve the
-use of this term for the SDK specification, to refer to parts of a
-data format that express explicitly timestamped values, in sequence,
-resulting from an aggregation over time.
+This is the outcome of separating the API from the SDK--a common
+representation for metric events, where the only semantic distinction
+is the kind of instrument that was used.
 
 ## Three kinds of instrument
+
+Because of API-SDK separation, the `Meter` implementation ultimately
+determines how metrics events are handled.  Therefore, the choice of
+instrument should be guided by semantics and the intended
+interpretation.  Here we detail the three instruments.
 
 ### Counter
 
@@ -164,7 +206,7 @@ to monitor rates, and they are sometimes used to report totals.  One
 key property of Counter instruments is that two `Add(1)` events are
 semantically equivalent to one `Add(2)` event--`Add(m)` and `Add(n)`
 is equivalent to `Add(m+n)`.  This means that Counter events can be
-combined using addition by definition.
+combined using addition, by definition.
 
 Labels associated with Counter instrument events can be used to
 compute rates and totals over selected dimensions.  When aggregating
