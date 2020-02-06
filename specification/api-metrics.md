@@ -199,50 +199,80 @@ is the kind of instrument that was specified by the user.
 Because the API is separated from the SDK, the implementation
 ultimately determines how metric events are handled.  Therefore, the
 choice of instrument should be guided by semantics and the intended
-interpretation.  Here we detail the three instruments and their semantics.
+interpretation.  Here we detail the three instruments and their
+individual semantics.
+
+Metric instruments can be qualified in several ways, primarily related
+to the range of values that are semantically meaningful for the
+specific instrument.  _Range options_, as they are called, indicate
+additional semantics that are commonly useful to the SDK and systems
+based on telemetry data.
+
+Normally, without setting any explicit options, instruments accept
+non-negative values by default, called _Absolute_ instruments.  An
+explicit to declare support for both positive and negative values
+existed, these are called _Unrestricted_ instruments.
+
+Out-of-range values are considered semantically meaningless.  SDKs
+SHOULD implement data validation for Absolute (as opposed to
+Unrestricted) instruments by dropping negative values.  (The [default
+SDK](TODO: link) MUST implement data validation for Absolute
+instruments.)
 
 ### Counter
 
-Counter instruments are used to report sums.  These are commonly used
-to monitor rates, and they are sometimes used to report totals.  One
-key property of Counter instruments is that two `Add(1)` events are
-semantically equivalent to one `Add(2)` event--`Add(m)` and `Add(n)`
-is equivalent to `Add(m+n)`.  This means that Counter events can be
-combined using addition, by definition, which makes them relatively
-inexpensive
+Counter instruments are used to enter changes in sums, synchronously.
+These are commonly used to monitor rates, and they are sometimes used
+to report totals that rise and fall.  An essential property of Counter
+instruments is that two `Add(1)` events are semantically equivalent to
+one `Add(2)` event--`Add(m)` and `Add(n)` is equivalent to `Add(m+n)`.
+This property means that Counter events can be combined using
+addition, by definition, which makes them relatively inexpensive.
 
 Labels associated with Counter instrument events can be used to
-compute rates and totals over selected dimensions.  When aggregating
-Counter events we naturally combine values using addition.  Counter
-`Add(0)` events are no-ops by definition.
+compute rates and totals from the instrument, over selected
+dimensions.  When aggregating Counter events, we naturally combine
+values using arithmetic addition.  Counter `Add(0)` events are no-ops,
+by definition.
 
-Counters are monotonic by default, meaning `Add()` logically accepts
-only non-negative values.  Monotonicity is useful for defining rates,
-especially; non-monotonic Counter instruments are an option to support
-sums that rise and fall.
+#### Range options
 
-Examples: requests processed, bytes read or written, memory allocated
-and deallocated.
+Counter instruments are Absolute by default, meaning `Add()` logically
+accepts only non-negative values.  Absolute counters are commonly
+useful for defining rates.  The sum of an absolute counter is
+monotonic because it never adds a negative amount.  Examples: requests
+processed, bytes read or written.
+
+Unrestricted Counter instruments are an option to support sums that
+rise and fall, useful in selected cases where the report value changes
+to an sum that may be unknown to the observer.  Examples: semaphore
+up/down, channel enqueue/deque.
 
 ### Measure
 
-Measure instruments are used to report individual measurements.
-Measure events are semantically independent and cannot be naturally
-combined like with Counters.  Measure instruments are used to report
-many kinds of information, recommended for reporting measurements
-associated with real events in the program.
+Semantically, metric events from Measure instruments are independent,
+meaning they cannot be combined naturally, as with Counters.  Measure
+instruments are used to report many kinds of information, and are
+recommended for all cases where the additive property of Counter
+instruments does not apply.
 
-As a synchronous API, Measure `Record()` events can be used to record
-information with associated labels and context.  This is the more
-general of the two synchronous metric instruments.
+Labels associated with Measure instrument events can be used to
+compute information about the distribution of values from the
+instrument, over selected dimensions.  When aggregating Measure
+events, the output statistics are expected to reflect the combined
+data set.
 
-Measure instruments support non-negative values by default, also known
-as "absolute" in the sense that, mathematically, absolute values are
-never negative.  As an option, Measure instruments can be defined as
-not absolute, supporting both postive and negative values.
+#### Range options
 
-Examples: request latency, number of query terms, temperature, fan
-speed, account balance, load average, screen width.
+Measure instruments are Absolute by default, meaning `Record()`
+logically accepts only non-negative values.  Absolute measures are
+commonly used for measuring things like latency and size that are
+never negative.  Examples: request latency, request size, screen
+width.
+
+Unrestricted Measure instruments are an option to support
+distributions that include negative values.  Examples: fan speed,
+velocity, longitude.
 
 ### Observer
 
