@@ -22,10 +22,12 @@ Table of Contents
 Propagators leverage the `Context` to inject and extract
 data for each cross-cutting concern, such as traces and metrics.
 
-The Propagators API consists of the following formats:
+The Propagators API currently consists of one format:
 
 - `HTTPTextFormat` is used to inject values into and extract values from carriers as text that travel
   in-band across process boundaries.
+
+A binary format will be added in the future.
 
 ## HTTP Text Format
 
