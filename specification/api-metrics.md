@@ -103,7 +103,7 @@ specification](api-metrics-user.md) accepts a label set.
 To produce measurements using an instrument, you need an SDK that
 supports the `Meter` API, which consists of a set of instrument
 constructors, functionality related to label sets, and a facility for
-reporting batches of measurements in a semantically atomic way.
+entering batches of measurements in a semantically atomic way.
 
 There is a global `Meter` instance available for use.  Use of the this
 instance allows library code that uses it to be automatically enabled
@@ -223,7 +223,7 @@ instruments.)
 
 Counter instruments are used to enter changes in sums, synchronously.
 These are commonly used to monitor rates, and they are sometimes used
-to report totals that rise and fall.  An essential property of Counter
+to enter totals that rise and fall.  An essential property of Counter
 instruments is that two `Add(1)` events are semantically equivalent to
 one `Add(2)` event--`Add(m)` and `Add(n)` is equivalent to `Add(m+n)`.
 This property means that Counter events can be combined using
@@ -244,7 +244,7 @@ monotonic because it never adds a negative amount.  Examples: requests
 processed, bytes read or written.
 
 Unrestricted Counter instruments are an option to support sums that
-rise and fall, useful in selected cases where the report value changes
+rise and fall, useful in selected cases where the enter value changes
 to an sum that may be unknown to the observer.  Examples: semaphore
 up/down, channel enqueue/deque.
 
@@ -252,7 +252,7 @@ up/down, channel enqueue/deque.
 
 Semantically, metric events from Measure instruments are independent,
 meaning they cannot be combined naturally, as with Counters.  Measure
-instruments are used to report many kinds of information, and are
+instruments are used to enter many kinds of information, and are
 recommended for all cases where the additive property of Counter
 instruments does not apply.
 
@@ -271,27 +271,48 @@ never negative.  Examples: request latency, request size, screen
 width.
 
 Unrestricted Measure instruments are an option to support
-distributions that include negative values.  Examples: fan speed,
-velocity, longitude.
+distributions that include negative values.  Example: velocity,
+longitude.
 
 ### Observer
 
-Observer instruments are used to report a current set of values at the
-time of collection.  Observer instruments report not only current
-values, but also _which label sets are current_ at the moment of
-collection, as a coherent set of values.  These instruments reduce
-collection cost because they are computed and reported only once per
-collection interval, by definition.
+Observer instruments are used to enter a _current set of values_ at a
+point in time.  Observer instruments are asynchronous, with the use of
+callbacks allowing the user to enter multiple values per collection
+interval.  
+
+Observer instruments enter not only current values, but also
+effectively _which label sets are current_ at the moment of
+collection.  These instruments can be used to compute probabilities
+and ratios, because values are part of a set.
 
 Unlike Counter and Measure instruments, Observer instruments are
-synchronized with collection, used to report values, on demand,
-calculated by the program itself.  There is no aggregation across time
-for Observer instruments by definition, only the current value is
-defined.
+synchronized with collection.  There is no aggregation across time for
+Observer instruments by definition, only the current set of values is
+semantically defined.
 
-Observer instruments can be declared as monotonic.  A monotonic
-measure instrument supports reporting values that are not less than
-the value reported in the previous collection interval.
+These values are considered coherent, because measurements from an
+Observer instrument in a single collection interval are considered
+simultaneous.  The set of measurements entered through one callback
+invocation implicitly share a timestamp.
+
+#### Range options
+
+Observer instruments are Absolute by default, meaning `Observe()`
+logically accepts only non-negative values.  Absolute observers are
+commonly used for measuring things like cpu-load or queue sizes.
+
+Unrestricted Observer instruments can be used for quantities that can
+be negative, such as account balance or degrees Celsius.
+
+Observer instruments can be declared as _Monotonic_, a special kind of
+range option that applies only to Observer instruments.  The range of
+a Monotonic Observer logically must be greater than or equal to the
+preceding value.
+
+#### Aggregation options
+
+TODO: HERE
 
 When aggregating Observer instrument values across dimensions other
 than time, Observer instruments may be treated like Counters (to
