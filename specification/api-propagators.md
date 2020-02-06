@@ -177,6 +177,11 @@ in the order they were specified.
 Each composite `Propagator` will be bound to a specific format, such
 as `HttpTextFormat`, as different formats will likely work on a different
 data types.
+There MUST be functions to accomplish the following operations.
+
+- Create a composite propagator
+- Extract from a composite propagator
+- Inject into a composite propagator
 
 ### Create a Composite Propagator
 
