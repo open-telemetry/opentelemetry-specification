@@ -52,9 +52,9 @@ is used extensively in this document to define and explain these API
 functions and how we should interpret them.  As far as possible, the
 terminology used here tries to convey the intended semantics, and a
 _standard implementation_ will be described below to help us
-understand their meaning.  The standard implementation defined here
-corresponds to the behavior of the default [OpenTelemetry Metrics
-Default SDK](TODO: after PR #347 merges).
+understand their meaning.  The standard implementation performs
+aggregation corresponding to the default interpretation for each kind
+of metric event.
 
 ### Metric Instruments
 
@@ -185,8 +185,8 @@ events produced through an instrument consist of:
 - an implicit timestamp at the moment the API function is called
 - the instrument definition (name, kind, and options)
 - a value (numeric)
+- a [Context](api-context.md) (span context, correlation context)
 - a label set
-- a [Context](api-context.md)
 
 This is the outcome of separating the API from the SDK--a common
 representation for metric events, where the only semantic distinction
@@ -194,10 +194,10 @@ is the kind of instrument that was used.
 
 ## Three kinds of instrument
 
-Because of API-SDK separation, the `Meter` implementation ultimately
-determines how metrics events are handled.  Therefore, the choice of
-instrument should be guided by semantics and the intended
-interpretation.  Here we detail the three instruments.
+Because the API is separated from the SDK, the implementation
+ultimately determines how metric events are handled.  Therefore, the
+choice of instrument should be guided by semantics and the intended
+interpretation.  Here we detail the three instruments and their semantics.
 
 ### Counter
 
@@ -206,7 +206,8 @@ to monitor rates, and they are sometimes used to report totals.  One
 key property of Counter instruments is that two `Add(1)` events are
 semantically equivalent to one `Add(2)` event--`Add(m)` and `Add(n)`
 is equivalent to `Add(m+n)`.  This means that Counter events can be
-combined using addition, by definition.
+combined using addition, by definition, which makes them relatively
+inexpensive
 
 Labels associated with Counter instrument events can be used to
 compute rates and totals over selected dimensions.  When aggregating
