@@ -127,14 +127,15 @@ of the `TraceID`.
 
 ## Tracer Creation
 
-New `Tracer` instances are always created through a `TracerFactory` (see [API](api-tracing.md#obtaining-a-tracer)).
-The `name` and `version` arguments supplied to the `TracerFactory` must be used
-to create a `Resource` instance which is stored on the created `Tracer`.
+New `Tracer` instances are always created through a `TracerProvider` (see
+[API](api-tracing.md#obtaining-a-tracer)).  The `name` and `version` arguments
+supplied to the `TracerProvider` must be used to create a
+[`Resource`](sdk-resource.md) instance which is stored on the created `Tracer`.
 
 All configuration objects (SDK specific) and extension points (span processors,
-propagators) must be provided to the `TracerFactory`. `Tracer` instances must
+propagators) must be provided to the `TracerProvider`. `Tracer` instances must
 not duplicate this data (unless for read-only access) to avoid that different
-`Tracer` instances of a `TracerFactory` have different versions of these data.
+`Tracer` instances of a `TracerProvider` have different versions of these data.
 
 The readable representations of all `Span` instances created by a `Tracer` must
 provide a `getLibraryResource` method that returns this `Resource` information
@@ -149,20 +150,20 @@ invocations. The span processors are invoked only when
 Built-in span processors are responsible for batching and conversion of spans to
 exportable representation and passing batches to exporters.
 
-Span processors can be registered directly on SDK `TracerFactory` and they are
+Span processors can be registered directly on SDK `TracerProvider` and they are
 invoked in the same order as they were registered.
 
-All `Tracer` instances created by a `TracerFactory` share the same span processors.
+All `Tracer` instances created by a `TracerProvider` share the same span processors.
 Changes to this collection reflect in all `Tracer` instances.
 Implementation-wise, this could mean that `Tracer` instances have a reference to
-their `TracerFactory` and can access span processor objects only via this
+their `TracerProvider` and can access span processor objects only via this
 reference.
 
-Manipulation of the span processors collection must only happen on `TracerFactory`
+Manipulation of the span processors collection must only happen on `TracerProvider`
 instances. This means methods like `addSpanProcessor` must be implemented on
-`TracerFactory`.
+`TracerProvider`.
 
-Each processor registered on `TracerFactory` is a start of pipeline that consist
+Each processor registered on `TracerProvider` is a start of pipeline that consist
 of span processor and optional exporter. SDK MUST allow to end each pipeline with
 individual exporter.
 
@@ -218,21 +219,30 @@ Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
 Shutdown should be called only once for each `Processor` instance. After the
-call to shutdown subsequent calls to `onStart` or `onEnd` are not allowed.
+call to shutdown subsequent calls to `onStart`, `onEnd`, or `forceFlush` are not allowed.
 
 Shutdown should not block indefinitely. Language library authors can decide if
-they want to make the shutdown timeout to be configurable.
+they want to make the shutdown timeout configurable.
+
+##### ForceFlush()
+
+Export all ended spans to the configured `Exporter` that have not yet been exported.
+
+`ForceFlush` should only be called in cases where it is absolutely necessary, such as when using some FaaS providers that may suspend the process after an invocation, but before the `Processor` exports the completed spans.
+
+`ForceFlush` should not block indefinitely. Language library authors can decide if they want to make the flush timeout configurable.
 
 #### Built-in span processors
 
-SDK MUST implement simple and batch processors described below. Other common
-processing scenarios should be first considered for implementation out-of-process
-in [OpenTelemetry Collector](overview.md#collector)
+The standard OpenTelemetry SDK MUST implement both simple and batch processors,
+as described below. Other common processing scenarios should be first considered
+for implementation out-of-process in [OpenTelemetry Collector](overview.md#collector)
 
 ##### Simple processor
 
-The implementation of `SpanProcessor` that passes ended span directly to the
-configured `SpanExporter`.
+This is an implementation of `SpanProcessor` which passes finished spans
+and passes the export-friendly span data representation to the configured
+`SpanExporter`, as soon as they are finished.
 
 **Configurable parameters:**
 
@@ -240,13 +250,9 @@ configured `SpanExporter`.
 
 ##### Batching processor
 
-The implementation of the `SpanProcessor` that batches ended spans and pushes
-them to the configured `SpanExporter`.
-
-First the spans are added to a synchronized queue, then exported to the exporter
-pipeline in batches. The implementation is responsible for managing the span
-queue and sending batches of spans to the exporters. This processor can cause
-high contention in a very high traffic service.
+This is an implementation of the `SpanProcessor` which create batches of finished
+spans and passes the export-friendly span data representations to the
+configured `SpanExporter`.
 
 **Configurable parameters:**
 
@@ -328,7 +334,7 @@ return FailedNotRetryable error.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). Language library authors can decide if they
-want to make the shutdown timeout to be configurable.
+want to make the shutdown timeout configurable.
 
 #### Further Language Specialization
 
