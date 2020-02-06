@@ -162,8 +162,8 @@ collection interval.  The default SDK takes this approach.
 
 Counter and Measure instruments offer synchronous APIs for entering
 measurements.  Metric events from Counter and Measure instruments are
-captured when they happen, the moment the SDK receives the function
-call.
+captured at the moment they happen, when the SDK receives the
+corresponding function call.
 
 The Observer instrument supports an asynchronous API, allowing the SDK
 to collect metric data on demand, once per collection interval.  A
@@ -184,15 +184,15 @@ Metric events have the same logical representation, regardless of
 kind.  Whether a Counter, a Measure, or an Observer instrument, metric
 events produced through an instrument consist of:
 
-- an implicit timestamp at the moment the API function is called
-- the instrument definition (name, kind, and options)
-- a value (numeric)
-- a [Context](api-context.md) (span context, correlation context)
-- a label set
+- [Context](context.md) (Span context, Correlation context)
+- timestamp (implicit to the SDK)
+- instrument definition (name, kind, and semantic options)
+- label set (associated key-values)
+- value (a number)
 
-This is the outcome of separating the API from the SDK--a common
+This format is the result of separating the API from the SDK--a common
 representation for metric events, where the only semantic distinction
-is the kind of instrument that was used.
+is the kind of instrument that was specified by the user.
 
 ## Three kinds of instrument
 
