@@ -22,7 +22,7 @@ across API boundaries and between logically associated execution units.
 Cross-cutting concerns access their data in-process using the same shared
 `Context` object.
 
-`Context` MUST be immutable, and all its operations MUST
+`Context` MUST be immutable, and its set and remove operations MUST
 result in the creation of a new `Context` cointaining the original
 values and the specified values updated.
 
