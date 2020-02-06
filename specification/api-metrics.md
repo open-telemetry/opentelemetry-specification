@@ -118,7 +118,8 @@ _Aggregation_ refers to the process of combining a large number of
 measurements into exact or estimated statistics about the metric
 events that took place during a window of real time, during program
 execution.  Computing aggregations is mainly a subject of the SDK
-specification.
+specification, with the goal of reducing the amount of data that must
+be sent to the telemetry collection backend.
 
 Users do not have a facility in the API to select the aggregation they
 want for particular instruments.  The choice of instrument dictates
@@ -142,9 +143,10 @@ of statistics, such as histogram and quantile summaries.
 ### Time
 
 Time is a fundamental property of metric events, but not an explicit
-one.  Users do not provide explicit timestamps for metric events.  The
-SDK is welcome to, but not required to capture the current timestamp
-for each event by reading from a clock.
+one.  Users do not provide explicit timestamps for metric events.
+SDKs are discouraged from capturing the current timestamp for each
+event (by reading from a clock) unless there is a definite need for
+high-precision timestamps.
 
 This non-requirement stems from a common optimization in metrics
 reporting, which is to configure metric data collection with a
@@ -156,11 +158,11 @@ Aggregations are commonly computed over a series of events that fall
 into a contiguous region of time, known as the collection interval.
 Since the SDK controls decision to start collection, it is possible to
 collect aggregated metric data while only reading the clock once per
-collection interval.
+collection interval.  The default SDK takes this approach.
 
 Counter and Measure instruments offer synchronous APIs for entering
-measurements.  Metric events from Counter and Measure instruments
-happen when they happen, the moment the SDK receives the function
+measurements.  Metric events from Counter and Measure instruments are
+captured when they happen, the moment the SDK receives the function
 call.
 
 The Observer instrument supports an asynchronous API, allowing the SDK
