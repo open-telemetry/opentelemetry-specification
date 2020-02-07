@@ -175,7 +175,7 @@ The resulting composite `Propagator` will invoke the `Propagators`
 in the order they were specified.
 
 Each composite `Propagator` will be bound to a specific format, such
-as `HttpTextFormat`, as different formats will likely work on a different
+as `HttpTextFormat`, as different formats will likely operate on different
 data types.
 There MUST be functions to accomplish the following operations.
 
