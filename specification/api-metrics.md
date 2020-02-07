@@ -112,7 +112,7 @@ specification](api-metrics-user.md) accepts a label set.
 ### Meter Interface
 
 To produce measurements using an instrument, you need an SDK that
-supports the `Meter` API, which consists of a set of instrument
+implements the `Meter` API, which consists of a set of instrument
 constructors, functionality related to label sets, and a facility for
 entering batches of measurements in a semantically atomic way.
 
@@ -309,7 +309,7 @@ cumulative _total.
 
 2. Measure.  Use the `Record()` function to report summary statistics
 about the distribution of values, for each distinct label set.  The
-summary statistics to use are determined by the implementation, but
+summary statistics to use are determined by the aggregation, but
 they usually include at least the sum of values, the count of
 measurements, and the minimum and maximum values.  When aggregating
 distinct Measure events, report summary statistics of the combined
