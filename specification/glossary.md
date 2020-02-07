@@ -12,7 +12,7 @@
   configuration files loaded by the program, the `TracerProvider` used by all libraries
   within the final program.
 - <a name="library-developer"></a>Library Developer: This is a developer working
-  on code that will be used by others. They are not creating a final deployable
+  on code that will be integrated into other code. They are not creating a final deployable
   artifact and must only rely on the OpenTelemetry API as a dependency of their
   library. The library may have the express purpose of making another library
   observable (such libraries are called "integrations") or they may develop a
