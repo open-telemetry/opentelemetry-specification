@@ -15,7 +15,6 @@ Table of Contents
     * [GetCurrentSpan](#getcurrentspan)
     * [WithSpan](#withspan)
     * [SpanBuilder](#spanbuilder)
-    * [GetBinaryFormat](#getbinaryformat)
     * [GetHttpTextFormat](#gethttptextformat)
 * [SpanContext](#spancontext)
 * [Span](#span)
@@ -132,9 +131,8 @@ The `Tracer` MUST provide methods to:
 - Make a given `Span` as active
 
 The `Tracer` SHOULD allow end users to configure other tracing components that
-control how `Span`s are passed across process boundaries, including the binary
-and text format `Propagator`s used to serialize `Span`s created by the
-`Tracer`.
+control how `Span`s are passed across process boundaries, including the text
+format `Propagator` used to serialize `Span`s created by the `Tracer`.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
@@ -152,7 +150,7 @@ convenience methods to manage a `Span`'s lifetime and the scope in which a
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
 
-The implementation MUST provide no-op binary and text `Propagator`s, which the
+The implementation MUST provide a text `Propagator`, which the
 `Tracer` SHOULD use by default if other propagators are not configured. SDKs
 SHOULD use the W3C HTTP Trace Context as the default text format. For more
 details, see [trace-context](https://github.com/w3c/trace-context).

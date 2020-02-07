@@ -6,9 +6,6 @@ Table of Contents
 </summary>
 
 - [Overview](#overview)
-- [Binary Format](#binary-format)
-  - [ToBytes](#tobytes)
-  - [FromBytes](#frombytes)
 - [HTTP Text Format](#http-text-format)
   - [Fields](#fields)
   - [Inject](#inject)
@@ -32,43 +29,14 @@ of `Propagator`s for every supported format.
 The Propagators API is expected to be leveraged by users writing
 instrumentation libraries.
 
-The Propagators API defines two main formats:
+Propagators API currently consists of one format:
 
-- `BinaryFormat` is used to serialize and deserialize a value into a binary representation.
 - `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
 
 Deserializing must set `IsRemote` to true on the returned `SpanContext`.
 
-## Binary Format
-
-`BinaryFormat` is a formatter to serialize and deserialize a value into a binary format.
-
-`BinaryFormat` MUST expose the APIs that serializes values into bytes,
-and deserializes values from bytes.
-
-### ToBytes
-
-Serializes the given value into the on-the-wire representation.
-
-Required arguments:
-
-- the value to serialize, can be `SpanContext` or `DistributedContext`.
-
-Returns the on-the-wire byte representation of the value.
-
-### FromBytes
-
-Creates a value from the given on-the-wire encoded representation.
-
-If the value could not be parsed, the underlying implementation SHOULD decide to return ether
-an empty value, an invalid value, or a valid value.
-
-Required arguments:
-
-- on-the-wire byte representation of the value.
-
-Returns a value deserialized from bytes.
+A binary format will be added in the future.
 
 ## HTTP Text Format
 
