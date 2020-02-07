@@ -165,7 +165,7 @@ Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
-- the `Setter` invoked for each propagation key to add or remove.
+- The `Setter` invoked for each propagation key to add or remove.
 
 ### Inject
 
