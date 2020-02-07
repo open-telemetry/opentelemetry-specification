@@ -5,7 +5,7 @@
 - <a name="app-developer"></a>Application Developer: An application developer is
   responsible for code that becomes a deployable artifact to run with some
   configuration by an operator. The application developer's project may depend
-  on third party libraries that have been instrumented and may include its own
+  on third party libraries that have been instrumented with OpenTelemetry and may include its own
   libraries, making the application developer potentially a library developer as
   well. But only the end user, or operator, should include an OpenTelemetry SDK
   implementation as a dependency and configure, either through code or
