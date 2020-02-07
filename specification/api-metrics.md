@@ -238,9 +238,7 @@ by definition.
 
 Labels associated with Counter instrument events can be used to
 compute rates and totals from the instrument, over selected
-dimensions.  When aggregating Counter events, we naturally combine
-values using arithmetic addition.  Counter `Add(0)` events are no-ops,
-by definition.
+dimensions.  Counter `Add(0)` events are no-ops, by definition.
 
 ### Measure
 
