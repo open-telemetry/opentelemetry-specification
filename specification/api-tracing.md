@@ -75,7 +75,7 @@ at runtime. The implementation is referred to as the SDK in this spec, which is
 used by all instrumented code within the program.
 
 A `Tracer` is more than just the code though. Each `Tracer` has a name and 
-optionally a version. The API must provide [library developers][] a way to
+optionally a version. The API must provide [library developers][] a component to
 access a `Tracer` with a specific name and version. We'll call that
 component the `TracerProvider`.
 
