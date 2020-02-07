@@ -80,8 +80,8 @@ properties.  Instruments are created and defined through calls to a
 Each kinds of metric instrument has its own semantics, briefly
 described as:
 
-- Counter: metric events of this kind _Add_ to a value that you would sum over time
-- Measure: metric events of this kind _Record_ a value that you would average over time
+- Counter: metric events of this kind _Add_ to a value that is summed over time
+- Measure: metric events of this kind _Record_ a value that is aggregated over time
 - Observer: metric events of this kind _Observe_ a coherent set of values at an instant in time.
 
 An _instrument definition_ describes several properties of the
@@ -305,15 +305,15 @@ Depending on the exposition format, sums are exported either as pairs
 of label set and cumulative _difference_ or as pairs of label set and
 cumulative _total.
 
-2. Measure.  Use the `Record()` function to report summary statistics
-about the distribution of values, for each distinct label set.  The
-summary statistics to use are determined by the aggregation, but
-they usually include at least the sum of values, the count of
-measurements, and the minimum and maximum values.  When aggregating
-distinct Measure events, report summary statistics of the combined
-value distribution.  Exposition formats for summary statistics vary
-widely, but typically include pairs of label set and (sum, count,
-minimum and maximum value).
+2. Measure.  Use the `Record()` function to report events that for
+which the SDK will compute summary statistics about the distribution
+of values, for each distinct label set.  The summary statistics to use
+are determined by the aggregation, but they usually include at least
+the sum of values, the count of measurements, and the minimum and
+maximum values.  When aggregating distinct Measure events, report
+summary statistics of the combined value distribution.  Exposition
+formats for summary statistics vary widely, but typically include
+pairs of label set and (sum, count, minimum and maximum value).
 
 3. Observer.  Current values are provided by the Observer callback at
 the end of each Metric collection period.  When aggregating values
@@ -392,10 +392,10 @@ user-provided LabelSet values.
 
 Start with an application for metrics data in mind.  It is useful to
 consider whether you are more likely to be interested in the sum of
-values or the average value, as processed by the instrument.  Counters
-are useful when only the sum is interesting.  Measures are useful when
-the sum and any other kind of summary information about the individual
-values are of interest.
+values or any other aggregate value (e.g., average, histogram), as
+processed by the instrument.  Counters are useful when only the sum is
+interesting.  Measures are useful when the sum and any other kind of
+summary information about the individual values are of interest.
 
 If only the sum is of interest, use a Counter instrument.
 
