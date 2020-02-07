@@ -177,7 +177,7 @@ Required arguments:
 
 ## Global Propagators
 
-Implementations can optionally provide global `Propagator`s for
+Implementations MAY provide global `Propagator`s for
 each supported format.
 
 If offered, the global `Propagator`s should default to a composite `Propagator`
