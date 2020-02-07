@@ -70,7 +70,6 @@ Note that the items marked with [1] are different from the mapping defined in th
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
-| `component`    | Denotes the type of the span and needs to be `"http"`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
 | `http.url` | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | Defined later. |
 | `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/12314/?q=ddds#123"`. | Defined later. |
@@ -216,7 +215,6 @@ Span name: `/webshop/articles/4` (NOTE: This is subject to change, see [open-tel
 
 |   Attribute name   |                                       Value             |
 | :----------------- | :-------------------------------------------------------|
-| `component`        | `"http"`                                                |
 | `http.method`      | `"GET"`                                                 |
 | `http.flavor`      | `"1.1"`                                                 |
 | `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"`     |
@@ -230,7 +228,6 @@ Span name: `/webshop/articles/:article_id`.
 
 |   Attribute name   |                      Value                      |
 | :----------------- | :---------------------------------------------- |
-| `component`        | `"http"`                                        |
 | `http.method`      | `"GET"`                                         |
 | `http.flavor`      | `"1.1"`                                         |
 | `http.target`      | `"/webshop/articles/4?s=1"`                     |
