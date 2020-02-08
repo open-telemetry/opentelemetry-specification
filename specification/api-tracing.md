@@ -80,7 +80,7 @@ access a `Tracer` with a specific name and version. We'll call that
 component the `TracerProvider`.
 
 If [application developers][] do not specify a library which implements
-the `TracerProvider`, like the OpenTelemetry SDK, the API must include a default
+the `TracerProvider`, like the OpenTelemetry SDK, the API MUST include a default
 minimal implementation of a `TracerProvider` which returns a no-op `Tracer`. The
 [library developers][] MUST be able to depend on the API and instrument their
 code without thought to whether or not the final deployable application includes
