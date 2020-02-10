@@ -24,19 +24,19 @@ Table of Contents
 Cross-cutting concerns send their state to the next process using
 `Propagator`s, which are defined as objects used to read and write
 context data to and from messages exchanged by the applications.
-Each concern creates a set of `Propagator`s for every supported format.
+Each concern creates a set of `Propagator`s for every supported `Format`.
 
 The Propagators API is expected to be leveraged by users writing
 instrumentation libraries.
 
-Propagators API currently consists of one format:
+Propagators API currently consists of one `Format`:
 
 - `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
 
 Deserializing must set `IsRemote` to true on the returned `SpanContext`.
 
-A binary format will be added in the future.
+A binary `Format` will be added in the future.
 
 ## HTTP Text Format
 
@@ -131,7 +131,7 @@ Required arguments:
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text format implemenations MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text `Format` implementions MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
 
 ## Composite Propagator
 
@@ -142,8 +142,8 @@ single entity.
 The resulting composite `Propagator` will invoke the `Propagators`
 in the order they were specified.
 
-Each composite `Propagator` will be bound to a specific format, such
-as `HttpTextFormat`, as different formats will likely operate on different
+Each composite `Propagator` will be bound to a specific `Format`, such
+as `HttpTextFormat`, as different `Format`s will likely operate on different
 data types.
 There MUST be functions to accomplish the following operations.
 
@@ -178,7 +178,7 @@ Required arguments:
 ## Global Propagators
 
 Implementations MAY provide global `Propagator`s for
-each supported format.
+each supported `Format`.
 
 If offered, the global `Propagator`s should default to a composite `Propagator`
 containing W3C Trace Context and Correlation Context `Propagator`s,
@@ -187,13 +187,13 @@ OpenTelemetry implementations.
 
 ### Get Global Propagator
 
-This method MUST exist for each supported format.
+This method MUST exist for each supported `Format`.
 
 Returns a global `Propagator`. This usually will be composite instance.
 
 ### Set Global Propagator
 
-This method MUST exist for each supported format.
+This method MUST exist for each supported `Format`.
 
 Sets the global `Propagator` instance.
 
