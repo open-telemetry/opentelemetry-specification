@@ -20,7 +20,7 @@ Table of Contents
 ## Overview
 
 Propagators leverage the `Context` to inject and extract
-data for each cross-cutting concern, such as traces and metrics.
+data for each cross-cutting concern, such as traces and correlation context.
 
 The Propagators API currently consists of one format:
 
@@ -66,7 +66,7 @@ Injects the value downstream. For example, as http headers.
 
 Required arguments:
 
-- A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, which can be a `SpanContext`, a `DistributedContext` or another cross-cutting concern context. For languages supporting current `Context` state, this argument is OPTIONAL, defaulting to the current `Context` instance.
+- A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, which can be a `SpanContext`, a `CorrelationContext` or another cross-cutting concern context. For languages supporting current `Context` state, this argument is OPTIONAL, defaulting to the current `Context` instance.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the `Setter` invoked for each propagation key to add or remove.
 
@@ -106,7 +106,7 @@ Required arguments:
 
 Returns a new `Context` derived from the `Context` passed as argument,
 containing the extracted value, which can be a `SpanContext`,
-`DistributedContext` or another cross-cutting concern context.
+`CorrelationContext` or another cross-cutting concern context.
 
 If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set to true.
 

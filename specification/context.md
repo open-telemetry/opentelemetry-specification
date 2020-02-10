@@ -32,10 +32,9 @@ option is not available, OpenTelemetry MUST provide its own `Context`
 implementation. Depending on the language, its usage may be either explicit
 or implicit.
 
-Users writing instrumentation in languages that
-use `Context` implicitly are discouraged from using the `Context` API directly.
-In those cases, users will manipulate `Context` through the cross-cutting
-concerns APIs instead.
+Users writing instrumentation in languages that use `Context` implicitly are
+discouraged from using the `Context` API directly. In those cases, users will
+manipulate `Context` through the cross-cutting concerns APIs instead.
 
 `Context` is expected to have the following operations, with their
 respective language differences:
