@@ -93,3 +93,6 @@ Associates a `Context` with the caller's current execution unit.
 The API MUST accept the following parameters:
 
 - The `Context`.
+
+The API SHOULD return a handle that can be used to restore the previous
+`Context`.
