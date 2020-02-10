@@ -23,8 +23,8 @@ Table of Contents
 
 Cross-cutting concerns send their state to the next process using
 `Propagator`s, which are defined as objects used to read and write
-context data to and from RPC requests. Each concern creates a set
-of `Propagator`s for every supported format.
+context data to and from messages exchanged by the applications.
+Each concern creates a set of `Propagator`s for every supported format.
 
 The Propagators API is expected to be leveraged by users writing
 instrumentation libraries.
