@@ -116,9 +116,12 @@ implements the `Meter` API.  This interface consists of a set of instrument
 constructors, functionality related to label sets, and a facility for
 entering batches of measurements in a semantically atomic way.
 
-There is a global `Meter` instance available for use.  Use of the this
-instance allows library code to operate in a no-op fashion until
-whenever the main application configures an SDK at the global level.
+There is a global `Meter` instance available for use that facilitates
+automatic instrumentation for third-party code.  Use of this instance
+allows code to statically initialize its metric instruments, without
+explicit dependency injection.  The global `Meter` instance acts as a
+no-op implementation until the application explicitly initializes a
+global `Meter` by installing an SDK.
 
 Details about installing an SDK and obtaining a `Meter` are covered in
 the [SDK-level API specification](api-metrics-meter.md).
