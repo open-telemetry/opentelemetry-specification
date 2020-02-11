@@ -8,7 +8,7 @@
   * [Meter Interface](#meter-interface)
   * [Aggregations](#aggregations)
   * [Time](#time)
-  * [WithKeys declaration on metric instruments](#withkeys-declaration-on-metric-instruments)
+  * [WithRecommendedKeys declaration on metric instruments](#withrecommendedkeys-declaration-on-metric-instruments)
   * [Metric Event Format](#metric-event-format)
 - [Three kinds of instrument](#three-kinds-of-instrument)
   * [Counter](#counter)
@@ -206,7 +206,7 @@ use of this term for the SDK specification, to refer to parts of a
 data format that express explicitly timestamped values, in a sequence,
 resulting from an aggregation of raw measurements over time.
 
-### WithKeys declaration on metric instruments
+### WithRecommendedKeys declaration on metric instruments
 
 A standard feature of metric SDKs is to pre-aggregate metric events
 according to a specified set of label keys (i.e., dimensions).  To
@@ -229,12 +229,12 @@ ik2]` are the ignored keys, then a metric event having labels
 event having labels `{ak1=A, ak2=B, ik1=Y, ik1=Z}` because they
 have identical label values for all of the aggregation keys.
 
-The API provides a `WithKeys` option for the user to declare the
+The API provides a `WithRecommendedKeys` option for the user to declare the
 recommended aggregation keys when declaring new metric instruments,
 intended as the default way to configure an exporter for
 pre-aggregation, if it is expected.  Since this is only expected in
 some exporters, it is regarded as an option relevant to the exporter,
-whether keys configured through `WithKeys` are applied for aggregation
+whether keys configured through `WithRecommendedKeys` are applied for aggregation
 purposes or not.  This allows the user influence the standard
 implementation behavior, especially for exporters that require
 pre-specified aggregation keys.
