@@ -431,7 +431,7 @@ rate or as a total sum.
 ### Observer instruments
 
 Observer instruments are recommended for reporting measurements about
-the state of the program at a moment in time.  These expose current
+the state of the program periodically.  These expose current
 information about the program itself, not related to individual events
 taking place in the program.  Observer instruments are reported
 outside of a context, thus do not have an effective span context or
