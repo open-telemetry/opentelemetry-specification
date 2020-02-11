@@ -287,10 +287,9 @@ Observer instruments by definition, only the current set of values is
 semantically defined.
 
 These values are considered coherent, because measurements from an
-Observer instrument in a single collection interval are considered
-simultaneous.  The set of measurements captured through one callback
-invocation are considered independent metric events; explicitly, these
-events share a single timestamp.
+Observer instrument in a single collection interval are captured at
+the same logical time.  A single callback invocation generates (zero
+or more) simultaneous metric events, all sharing an implicit timestamp.
 
 ## Interpretation
 
