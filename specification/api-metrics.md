@@ -77,11 +77,11 @@ API are associated with an instrument, which gives the measurement its
 properties.  Instruments are created and defined through calls to a
 `Meter` API, which is the user-facing entry point to the SDK.
 
-Each kinds of metric instrument has its own semantics, briefly
+Each kind of metric instrument has its own semantics, briefly
 described as:
 
-- Counter: metric events of this kind _Add_ to a value that is summed over time
-- Measure: metric events of this kind _Record_ a value that is aggregated over time
+- Counter: metric events of this kind _Add_ to a value that is summed over time.
+- Measure: metric events of this kind _Record_ a value that is aggregated over time.
 - Observer: metric events of this kind _Observe_ a coherent set of values at an instant in time.
 
 An _instrument definition_ describes several properties of the
@@ -101,7 +101,7 @@ with a metric event.  Although they are fundamentally similar to [Span
 attributes](api-tracing.md#span) in the tracing API, a [label
 set](TODO: link to user doc) is given its own type in the Metrics API
 (generally: `LabelSet`).  Label sets are a feature of the API meant to
-facilitate re-use, to lower the cost of processing metric events.
+facilitate re-use and thereby to lower the cost of processing metric events.
 Users are encouraged to re-use label sets whenever possible, as they
 may contain a previously encoded representation of the labels.
 
@@ -112,12 +112,12 @@ specification](api-metrics-user.md) accepts a label set.
 ### Meter Interface
 
 To produce measurements using an instrument, you need an SDK that
-implements the `Meter` API, which consists of a set of instrument
+implements the `Meter` API.  This interface consists of a set of instrument
 constructors, functionality related to label sets, and a facility for
 entering batches of measurements in a semantically atomic way.
 
 There is a global `Meter` instance available for use.  Use of the this
-instance allows library code that uses it to be automatically enabled
+instance allows library code to operate in a no-op fashion until
 whenever the main application configures an SDK at the global level.
 
 Details about installing an SDK and obtaining a `Meter` are covered in
@@ -167,7 +167,7 @@ insignificant when aggregating data across minutes or hours of data.
 
 Aggregations are commonly computed over a series of events that fall
 into a contiguous region of time, known as the collection interval.
-Since the SDK controls decision to start collection, it is possible to
+Since the SDK controls the decision to start collection, it is possible to
 collect aggregated metric data while only reading the clock once per
 collection interval.  The default SDK takes this approach.
 
@@ -303,7 +303,7 @@ distinct label set.  When aggregating over distinct label sets for a
 Counter, combine using arithmetic addition and export as a sum.
 Depending on the exposition format, sums are exported either as pairs
 of label set and cumulative _difference_ or as pairs of label set and
-cumulative _total.
+cumulative _total_.
 
 2. Measure.  Use the `Record()` function to report events that for
 which the SDK will compute summary statistics about the distribution
@@ -328,7 +328,7 @@ terms of the intended semantics.
 
 ### Option: Dedicated Measure instrument for timing measurements
 
-As a language-optional feature, the API may support a dedicated
+As a language-optional feature, the API MAY support a dedicated
 instrument for reporting timing measurements.  This kind of
 instrument, with recommended name `Timer` (and
 `BoundTimer`), is semantically equivalent to a Measure
