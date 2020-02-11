@@ -330,8 +330,8 @@ terms of the intended semantics.
 
 As a language-optional feature, the API may support a dedicated
 instrument for reporting timing measurements.  This kind of
-instrument, with recommended name `TimingMeasure` (and
-`BoundTimingMeasure`), is semantically equivalent to a Measure
+instrument, with recommended name `Timer` (and
+`BoundTimer`), is semantically equivalent to a Measure
 instrument, and like the Measure instrument supports a `Record()`
 function, but the input value to this instrument is in the language's
 conventional data type for timing measurements.
