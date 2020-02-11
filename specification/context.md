@@ -11,7 +11,8 @@ Table of Contents
 - [Set value](#set-value)
 - [Optional operations](#optional-operations)
     - [Get current Context](#get-current-context)
-    - [Set current Context](#set-current-context)
+    - [Attach Context](#attach-context)
+    - [Detach Context](#detach-context)
 
 </details>
 
@@ -89,7 +90,7 @@ higher level APIs by SDK components and OpenTelemetry instrumentation libraries.
 
 The API MUST return the `Context` associated with the caller's current execution unit.
 
-### Set current Context
+### Attach Context
 
 Associates a `Context` with the caller's current execution unit.
 
@@ -97,5 +98,14 @@ The API MUST accept the following parameters:
 
 - The `Context`.
 
-The API SHOULD return a handle that can be used to restore the previous
+The API MUST return an object that can be used as `Token` to restore the previous
 `Context`.
+
+### Detach Context
+
+Resets the `Context` associated with the caller's current execution unit
+to the value it had before attaching a specified `Context`.
+
+The API MUST accept the following parameters:
+
+- A `Token` that was returned by a previous call to attach a `Context`.
