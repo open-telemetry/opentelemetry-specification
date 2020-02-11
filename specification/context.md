@@ -6,6 +6,7 @@ Table of Contents
 </summary>
 
 - [Overview](#overview)
+- [Create a key](#create-a-key)
 - [Get value](#get-value)
 - [Set value](#set-value)
 - [Optional operations](#optional-operations)
@@ -40,6 +41,18 @@ a specified `Context`.
 `Context` is expected to have the following operations, with their
 respective language differences:
 
+## Create a key
+
+Keys are used to allow cross-cutting concerns to control access to their local state,
+and they cannot be guessed by third parties. It is recommended that concerns mediate
+data access via an API, rather than provide direct public access to their keys.
+
+The API MUST accept the following parameter:
+
+- The key identifier. Different languages may impose different restrictions on the expected types, so this parameter remains an implementation detail.
+
+The API MUST return an opaque object representing the newly created key.
+
 ## Get value
 
 Concerns can access their local state in the current execution state
@@ -48,10 +61,9 @@ represented by a `Context`.
 The API MUST accept the following parameters:
 
 - The `Context`.
-- The concern identifier.
+- The key.
 
-The API MUST return the value in the `Context` for the specified concern
-identifier.
+The API MUST return the value in the `Context` for the specified key.
 
 ## Set value
 
@@ -61,7 +73,7 @@ represented by a `Context`.
 The API MUST accept the following parameters:
 
 - The `Context`.
-- The concern identifier.
+- The key.
 - The value to be set.
 
 The API MUST return a new `Context` containing the new value.
