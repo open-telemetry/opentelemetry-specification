@@ -282,7 +282,7 @@ summary statistics.
 
 Labels associated with Counter instrument events can be used to
 compute rates and totals from the instrument, over selected
-dimensions.  
+dimensions.
 
 ### Measure
 
@@ -325,7 +325,6 @@ Observer instrument in a single collection interval are captured at
 the same logical time.  A single callback invocation generates (zero
 or more) simultaneous metric events, all sharing an implicit timestamp.
 
-
 ## Interpretation
 
 We believe the three instrument kinds Counter, Measure, and Observer
@@ -348,29 +347,11 @@ meaning of these actions.
 The standard implementation for the three instruments is defined as
 follows:
 
-1. Counter.  The `Add()` function accumulates a total for each
-distinct label set.  When aggregating over distinct label sets for a
-Counter, combine using arithmetic addition and export as a sum.
-Depending on the exposition format, sums are exported either as pairs
-of label set and cumulative _delta_ or as pairs of label set and
-cumulative _total_.
+1. Counter.  The `Add()` function accumulates a total for each distinct label set.  When aggregating over distinct label sets for a Counter, combine using arithmetic addition and export as a sum. Depending on the exposition format, sums are exported either as pairs of label set and cumulative _delta_ or as pairs of label set and cumulative _total_.
 
-2. Measure.  Use the `Record()` function to report events for which
-the SDK will compute summary statistics about the distribution of
-values, for each distinct label set.  The summary statistics to use
-are determined by the aggregation, but they usually include at least
-the sum of values, the count of measurements, and the minimum and
-maximum values.  When aggregating distinct Measure events, report
-summary statistics of the combined value distribution.  Exposition
-formats for summary statistics vary widely, but typically include
-pairs of label set and (sum, count, minimum and maximum value).
+2. Measure.  Use the `Record()` function to report events for which the SDK will compute summary statistics about the distribution of values, for each distinct label set.  The summary statistics to use are determined by the aggregation, but they usually include at least the sum of values, the count of measurements, and the minimum and maximum values.  When aggregating distinct Measure events, report summary statistics of the combined value distribution.  Exposition formats for summary statistics vary widely, but typically include pairs of label set and (sum, count, minimum and maximum value).
 
-3. Observer.  Current values are provided by the Observer callback at
-the end of each Metric collection period.  When aggregating values
-_for the same label set_, combine using the most-recent value.  When
-aggregating values _for different label sets_, combine the value
-distribution as for Measure instruments.  Export as pairs of label set
-and (sum, count, minimum and maximum value).
+3. Observer.  Current values are provided by the Observer callback at the end of each Metric collection period.  When aggregating values _for the same label set_, combine using the most-recent value.  When aggregating values _for different label sets_, combine the value distribution as for Measure instruments.  Export as pairs of label set and (sum, count, minimum and maximum value).
 
 We believe that the standard behavior of one of these three
 instruments covers nearly all use-cases for users of OpenTelemetry in
@@ -401,14 +382,8 @@ confusion over timing metric events.
 We are aware of a number of reasons to iterate on these
 instrumentation kinds, in order to offer:
 
-1. Range restrictions on input data.  Instruments accepting negative
-values is rare in most applications, for example, and it is useful to
-offer both a semantic declaration (e.g., "negative values are
-meaningless") and a data validation step (e.g., "negative values
-should be dropped").
-2. Monotonicity support.  When a series of values is known to be
-monotonic, it is useful to declare this; this allows us to detect
-process resets.
+1. Range restrictions on input data.  Instruments accepting negative values is rare in most applications, for example, and it is useful to offer both a semantic declaration (e.g., "negative values are meaningless") and a data validation step (e.g., "negative values should be dropped").
+2. Monotonicity support.  When a series of values is known to be monotonic, it is useful to declare this; this allows us to detect process resets.
 
 For the most part, these behaviors are not necessary for correctness
 within the local process or the SDK, but they are valuable in
@@ -425,10 +400,8 @@ A _View API_ is defined as an interface to an SDK mechanism that
 supports configuring aggregations, including which operator is applied
 (sum, p99, last-value, etc.) and which dimensions are used.
 
-1. Should the API user be provided with options to configure specific
-views, statically, in the source?
-2. Should the View API be a stand-alone facility, able to install
-configurable aggregations, at runtime?
+1. Should the API user be provided with options to configure specific views, statically, in the source?
+2. Should the View API be a stand-alone facility, able to install configurable aggregations, at runtime?
 
 ## Metric instrument selection
 
@@ -557,19 +530,8 @@ cost of collecting this information.
 CPU usage is something that we naturally sum, which raises several
 questions.
 
-- Why not use a Counter instrument?  In order to use a Counter
-instrument, we would need to convert total usage figures into
-deltas.  Calculating deltas from the previous measurement is
-easy to do, but Counter instruments are not meant to be used from
-callbacks.
-- Why not report deltass in the Observer callback?  Observer
-instruments are meant to be used to observe current values. Nothing
-prevents reporting deltas with an Observer, but the standard
-aggregation for Observer instruments is to sum the current value
-across distinct label sets.  The standard behavior is useful for
-determining the current rate of CPU usage, but special configuration
-would be required for an Observer instrument to use Counter
-aggregation.
+- Why not use a Counter instrument?  In order to use a Counter instrument, we would need to convert total usage figures into deltas.  Calculating deltas from the previous measurement is easy to do, but Counter instruments are not meant to be used from callbacks.
+- Why not report deltass in the Observer callback?  Observer instruments are meant to be used to observe current values. Nothing prevents reporting deltas with an Observer, but the standard aggregation for Observer instruments is to sum the current value across distinct label sets.  The standard behavior is useful for determining the current rate of CPU usage, but special configuration would be required for an Observer instrument to use Counter aggregation.
 
 ### Reporting per-shard memory holdings
 
