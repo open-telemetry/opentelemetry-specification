@@ -578,7 +578,7 @@ distinct label sets.
 Suppose your server maintains the count of active requests, which
 rises and falls as new requests begin and end processing.
 
-Observer the number of active requests periodically with an Observer
+Observe the number of active requests periodically with an Observer
 instrument.  Labels can be used to indicate which application-specific
 properties are associated with these events.
 
