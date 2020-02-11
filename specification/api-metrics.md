@@ -120,11 +120,7 @@ To produce measurements using an instrument, you need an SDK that
 implements the `Meter` API.  This interface consists of a set of
 instrument constructors, functionality related to label sets, and a
 facility for entering batches of measurements in a semantically atomic
-way.  As an obligatory step, the API requires the caller to provide
-the name of the instrumenting library (optionally, the version), that
-is meant to be used for identifying instrumentation produced from that
-library for such purposes as disabling instrumentation, configuring
-aggregation, and applying sampling policies.
+way.
 
 There is a global `Meter` instance available for use that facilitates
 automatic instrumentation for third-party code.  Use of this instance
@@ -133,8 +129,16 @@ explicit dependency injection.  The global `Meter` instance acts as a
 no-op implementation until the application explicitly initializes a
 global `Meter` by installing an SDK.
 
-Details about installing an SDK and obtaining a `Meter` are covered in
-the [SDK-level API specification](api-metrics-meter.md).
+As an obligatory step, the API requires the caller to provide the name
+of the instrumenting library (optionally, the version) when obtaining
+a `Meter` implementation, that is meant to be used for identifying
+instrumentation produced from that library for such purposes as
+disabling instrumentation, configuring aggregation, and applying
+sampling policies.  (TODO: refer to the semantic convention on the
+Named Tracer/Meter).
+
+Details about installing an SDK and obtaining a named `Meter` are
+covered in the [SDK-level API specification](api-metrics-meter.md).
 
 ### Aggregations
 
