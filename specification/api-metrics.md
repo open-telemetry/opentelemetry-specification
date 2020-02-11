@@ -36,10 +36,10 @@
 ## Overview
 
 The OpenTelemetry Metrics API supports capturing measurements about
-the execution of a computer program in real time.  The Metrics API is
+the execution of a computer program as it runs.  The Metrics API is
 designed explicitly for processing raw measurements, generally with
-the intent to produce continuous summaries of those measurements, also
-in real time.  Hereafter, "the API" refers to the OpenTelemetry
+the intent to produce continuous summaries of those measurements
+simultaneously.  Hereafter, "the API" refers to the OpenTelemetry
 Metrics API.
 
 The word "semantic" or "semantics" as used here refers to _how we give
