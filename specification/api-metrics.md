@@ -345,7 +345,7 @@ function, but the input value to this instrument is in the language's
 conventional data type for timing measurements.
 
 For example, in Go the API will accept a `time.Duration`, and in C++
-the API will accept a `std::chrono::duration`.  These advantage of
+the API will accept a `std::chrono::duration`.  The advantage of
 using these instruments is that they use the correct units
 automatically, avoiding the potential for confusion over timing metrics.
 
