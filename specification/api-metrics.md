@@ -23,13 +23,15 @@
   * [Counters and Measures compared](#counters-and-measures-compared)
   * [Observer instruments](#observer-instruments)
 - [Examples](#examples)
-  * [Reporting bytes read and written](#reporting-bytes-read-and-written)
-  * [Reporting per-request CPU usage](#reporting-per-request-cpu-usage)
+  * [Reporting total bytes read](#reporting-total-bytes-read)
+  * [Reporting total bytes read and bytes per request](#reporting-total-bytes-read-and-bytes-per-request)
   * [Reporting system call duration](#reporting-system-call-duration)
   * [Reporting request size](#reporting-request-size)
   * [Reporting a per-request finishing account balance](#reporting-a-per-request-finishing-account-balance)
   * [Reporting process-wide CPU usage](#reporting-process-wide-cpu-usage)
   * [Reporting per-shard memory holdings](#reporting-per-shard-memory-holdings)
+  * [Reporting number of active requests](#reporting-number-of-active-requests)
+  * [Reporting bytes read and written correlated by end user](#reporting-bytes-read-and-written-correlated-by-end-user)
 
 <!-- tocstop -->
 
