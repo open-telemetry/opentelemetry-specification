@@ -49,9 +49,9 @@ offer different levels of performance.  Regardless of calling
 convention, we define a _metric event_ as the logical thing that
 happens when a new measurement is entered.  The word "enter" as used
 here refers to the logical creation of an event through one of the
-calling conventions.  This moment of entry defines an implicit
-timestamp, which is the wall time an SDK would read from a clock at
-that moment.
+calling conventions.  This moment of entry (at "run time") defines an
+implicit timestamp, which is the wall time an SDK would read from a
+clock at that moment.
 
 The word "semantic" or "semantics" as used here refers to _how we give
 meaning_ to metric events, as they take place under the API.  The term
