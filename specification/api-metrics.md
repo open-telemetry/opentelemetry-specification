@@ -259,9 +259,10 @@ dimensions.  Counter `Add(0)` events are no-ops, by definition.
 
 Semantically, metric events from Measure instruments are independent,
 meaning they cannot be combined naturally, as with Counters.  Measure
-instruments are used to capture many kinds of information, and are
-recommended for all cases where the additive property of Counter
-instruments does not apply.
+instruments are used to capture many kinds of information,
+synchronously, and are recommended for all cases that reflect an event
+in the application where the additive property of Counter instruments
+does not apply.
 
 Labels associated with Measure instrument events can be used to
 compute information about the distribution of values from the
