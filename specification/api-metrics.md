@@ -266,10 +266,10 @@ individual semantics.
 Counter instruments are used to capture changes in running sums,
 synchronously.  These are commonly used to monitor rates, and they are
 sometimes used to capture totals that rise and fall.  An essential
-property of Counter instruments is that two `Add(1)` events are
-semantically equivalent to one `Add(2)` event--`Add(m)` and `Add(n)`
-is equivalent to `Add(m+n)`.  This property means that Counter events
-can be combined inexpensively, by definition.
+property of Counter instruments is that two events `Add(m)` and
+`Add(n)` are semantically equivalent to one event `Add(m+n)`.  This
+property means that Counter events can be combined inexpensively, by
+definition.  Counter `Add(0)` events are no-ops, by definition.
 
 Counter instruments can be seen as special cases of Measure
 instruments with the additive property described above and a
@@ -280,7 +280,7 @@ summary statistics.
 
 Labels associated with Counter instrument events can be used to
 compute rates and totals from the instrument, over selected
-dimensions.  Counter `Add(0)` events are no-ops, by definition.
+dimensions.  
 
 ### Measure
 
@@ -350,9 +350,9 @@ Depending on the exposition format, sums are exported either as pairs
 of label set and cumulative _delta_ or as pairs of label set and
 cumulative _total_.
 
-2. Measure.  Use the `Record()` function to report events that for
-which the SDK will compute summary statistics about the distribution
-of values, for each distinct label set.  The summary statistics to use
+2. Measure.  Use the `Record()` function to report events for which
+the SDK will compute summary statistics about the distribution of
+values, for each distinct label set.  The summary statistics to use
 are determined by the aggregation, but they usually include at least
 the sum of values, the count of measurements, and the minimum and
 maximum values.  When aggregating distinct Measure events, report
