@@ -301,10 +301,12 @@ data set.
 
 ### Observer
 
-Observer instruments are used to capture a _current set of values_ at a
-point in time.  Observer instruments are asynchronous, with the use of
-callbacks allowing the user to capture multiple values per collection
-interval.  
+Observer instruments are used to capture a _current set of values_ at
+a point in time.  Observer instruments are asynchronous, with the use
+of callbacks allowing the user to capture multiple values per
+collection interval.  Observer instruments are not associated with a
+Context, meaning it is impossible to associate Observer instruments
+with Correlation Context.
 
 Observer instruments capture not only current values, but also
 effectively _which label sets are current_ at the moment of
