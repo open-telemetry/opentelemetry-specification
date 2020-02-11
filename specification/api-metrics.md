@@ -470,22 +470,39 @@ change of state in the program.
 
 ## Examples
 
-### Reporting bytes read and written
+### Reporting total bytes read
 
-You wish to monitor the number of bytes read and written from a
-messaging server that supports several protocols.  The number of bytes
-read and written should be labeled with the protocol name and
-aggregated in the process.
+You wish to monitor the total number of bytes read from a messaging
+server that supports several protocols.  The number of bytes read
+should be labeled with the protocol name and aggregated in the
+process.
 
 This is a typical application for the Counter instrument.  Use one
-Counter for bytes read and one Counter for bytes written.  When
-handling a request, compute a LabelSet containing the name of the
-protocol and potentially other useful labels, then call `Add()` twice
-with the same label set and the number of bytes read and written.
+Counter for capturing the number bytes read.  When handling a request,
+compute a LabelSet containing the name of the protocol and potentially
+other useful labels, then call `Add()` with the same label set and the
+number of bytes read.
 
 To lower the cost of this reporting, you can `Bind()` the
 instrument with each of the supported protocols ahead of time and
 avoid computing the label set for each request.
+
+### Reporting total bytes read and bytes per request
+
+You wish to monitor the total number of bytes read as well as the
+number of bytes read per request, to have observability into total
+traffic as well as typical request size.  As with the example above,
+these metric events should be labeled with a protocol name.
+
+This is a typical application for the Measure instrument.  Use one
+Measure for capturing the number of bytes per request.  A sum
+aggregation applied to this data yields the total bytes read; other
+aggregations allow you to export the minimum and maximum number of
+bytes read, as well as the average value, and quantile estimates.
+
+In this case, the guidance is to create a single instrument.  Do not
+create a Counter instrument to export a sum when you want to export
+other summary statistics using a Measure instrument.
 
 ### Reporting per-request CPU usage
 
