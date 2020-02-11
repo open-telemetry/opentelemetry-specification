@@ -271,6 +271,13 @@ semantically equivalent to one `Add(2)` event--`Add(m)` and `Add(n)`
 is equivalent to `Add(m+n)`.  This property means that Counter events
 can be combined inexpensively, by definition.
 
+Counter instruments can be seen as special cases of Measure
+instruments with the additive property described above and a
+more-specific verb to improve readability (i.e., "Add" instead of
+"Record").  Counter instruments are special cases of Measure
+instruments in that they only preserve a Sum, by default, and no other
+summary statistics.
+
 Labels associated with Counter instrument events can be used to
 compute rates and totals from the instrument, over selected
 dimensions.  Counter `Add(0)` events are no-ops, by definition.
