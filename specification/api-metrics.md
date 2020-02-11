@@ -42,21 +42,6 @@ the intent to produce continuous summaries of those measurements, also
 in real time.  Hereafter, "the API" refers to the OpenTelemetry
 Metrics API.
 
-The API provides functions for entering raw measurements, through
-several [calling conventions](TODO: link to user doc) that offer
-different levels of performance.  Regardless of calling convention, we
-define a _metric event_ as the logical thing that happens when a new
-measurement is entered.
-
-Monitoring and alerting systems commonly use the data provided through
-metric events, after applying various [aggregations](#aggregations)
-and converting into various [exposition formats](#exposition-formats).
-However, we find that there are many other uses for metric events,
-such as to record aggregated or raw measurements in tracing and
-logging systems.  For this reason, [OpenTelemetry requires a
-separation of the API from the SDK](library-guidelines.md#requirements),
-so that different SDKs can be configured at runtime.
-
 The word "semantic" or "semantics" as used here refers to _how we give
 meaning_ to metric events, as they take place under the API.  The term
 is used extensively in this document to define and explain these API
@@ -66,6 +51,24 @@ _standard implementation_ will be described below to help us
 understand their meaning.  The standard implementation performs
 aggregation corresponding to the default interpretation for each kind
 of metric event.
+
+The API provides functions for entering raw measurements, through
+several [calling
+conventions](api-metrics-user.md#metric-calling-conventions) that
+offer different levels of performance.  Regardless of calling
+convention, we define a _metric event_ as the logical thing that
+happens when a new measurement is entered.  The word "enter" as used
+here refers to the logical creation of an event through one of the
+calling conventions.
+
+Monitoring and alerting systems commonly use the data provided through
+metric events, after applying various [aggregations](#aggregations)
+and converting into various [exposition formats](#exposition-formats).
+However, we find that there are many other uses for metric events,
+such as to record aggregated or raw measurements in tracing and
+logging systems.  For this reason, [OpenTelemetry requires a
+separation of the API from the SDK](library-guidelines.md#requirements),
+so that different SDKs can be configured at runtime.
 
 ### Metric Instruments
 
