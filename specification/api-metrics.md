@@ -554,3 +554,16 @@ rises and falls as new requests begin and end processing.
 Observer the number of active requests periodically with an Observer
 instrument.  Labels can be used to indicate which application-specific
 properties are associated with these events.
+
+### Reporting bytes read and written correlated by end user
+
+An application uses storage servers to read and write from some
+underlying media.  These requests are made in the context of the end
+user that made the request into the frontend system, with Correlation
+Context passed from the frontend to the storage servers carrying these
+properties.
+
+Use Counter instruments to report the number of bytes read and written
+by the storage server.  Configure the SDK to use a Correltion Context
+label key (e.g., named "app.user") to aggregate events by all metric
+instruments.
