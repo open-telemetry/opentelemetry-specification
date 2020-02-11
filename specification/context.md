@@ -78,9 +78,10 @@ The API MUST return a new `Context` with the value cleared.
 
 ## Optional Global operations
 
-These operations are optional, and SHOULD only be used to
-implement automatic scope switching and define higher level APIs
-by SDK components and OpenTelemetry instrumentation libraries.
+These operations are expected to only be implemented by languages
+using `Context` implicitly, and thus are optional. These operations
+SHOULD only be used to implement automatic scope switching and define
+higher level APIs by SDK components and OpenTelemetry instrumentation libraries.
 
 ### Get current Context
 
