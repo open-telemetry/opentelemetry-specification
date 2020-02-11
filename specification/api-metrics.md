@@ -351,8 +351,8 @@ automatically, avoiding the potential for confusion over timing metrics.
 
 ### Future Work: Option Support
 
-We are aware of a number of reasons to refine on these types, in order
-to offer:
+We are aware of a number of reasons to iterate on these
+instrumentation kinds, in order to offer:
 
 1. Range restrictions on input data.  Instruments accepting negative
 values is rare in most applications, for example, and it is useful to
