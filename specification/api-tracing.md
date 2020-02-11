@@ -12,11 +12,6 @@ Table of Contents
 * [Tracer](#tracer)
   * [Obtaining a tracer](#obtaining-a-tracer)
   * [Tracer operations](#tracer-operations)
-    * [GetCurrentSpan](#getcurrentspan)
-    * [WithSpan](#withspan)
-    * [SpanBuilder](#spanbuilder)
-    * [GetBinaryFormat](#getbinaryformat)
-    * [GetHttpTextFormat](#gethttptextformat)
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
@@ -77,14 +72,14 @@ The OpenTelemetry library achieves in-process context propagation of `Span`s by
 way of the `Tracer`.
 
 The `Tracer` is responsible for tracking the currently active `Span`, and
-exposes methods for creating and activating new `Span`s. The `Tracer` is
+exposes functions for creating and activating new `Span`s. The `Tracer` is
 configured with `Propagator`s which support transferring span context across
 process boundaries.
 
 ### Obtaining a Tracer
 
 New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
-method. This method expects two string arguments:
+function. This function expects two string arguments:
 
 `TracerFactory`s are generally expected to be used as singletons. Implementations
 SHOULD provide a single global default `TracerFactory`.
@@ -125,16 +120,15 @@ mechanism, for instance the `ServiceLoader` class in Java.
 
 ### Tracer operations
 
-The `Tracer` MUST provide methods to:
+The `Tracer` MUST provide functions to:
 
 - Get the currently active `Span`
 - Create a new `Span`
 - Make a given `Span` as active
 
 The `Tracer` SHOULD allow end users to configure other tracing components that
-control how `Span`s are passed across process boundaries, including the binary
-and text format `Propagator`s used to serialize `Span`s created by the
-`Tracer`.
+control how `Span`s are passed across process boundaries, including the text
+format `Propagator` used to serialize `Span`s created by the `Tracer`.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
@@ -146,13 +140,13 @@ explicit parent is provided or the option to create a span without a parent is
 selected, or the current active `Span` is invalid.
 
 The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
-convenience methods to manage a `Span`'s lifetime and the scope in which a
+convenience functions to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
 `Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
 
-The implementation MUST provide no-op binary and text `Propagator`s, which the
+The implementation MUST provide a text `Propagator`, which the
 `Tracer` SHOULD use by default if other propagators are not configured. SDKs
 SHOULD use the W3C HTTP Trace Context as the default text format. For more
 details, see [trace-context](https://github.com/w3c/trace-context).
@@ -337,7 +331,7 @@ Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
-With the exception of the method to retrieve the `Span`'s `SpanContext` and
+With the exception of the function to retrieve the `Span`'s `SpanContext` and
 recording status, none of the below may be called after the `Span` is finished.
 
 #### Get Context
@@ -452,10 +446,10 @@ It is highly discouraged to update the name of a `Span` after its creation.
 spans. And often, filtering logic will be implemented before the `Span` creation
 for performance reasons. Thus the name update may interfere with this logic.
 
-The method name is called `UpdateName` to differentiate this method from the
-regular property setter. It emphasizes that this operation signifies a
-major change for a `Span` and may lead to re-calculation of sampling or
-filtering decisions made previously depending on the implementation.
+The function name is called `UpdateName` to differentiate this function from the
+regular property setter. It emphasizes that this operation signifies a major
+change for a `Span` and may lead to re-calculation of sampling or filtering
+decisions made previously depending on the implementation.
 
 Alternatives for the name update may be late `Span` creation, when Span is
 started with the explicit timestamp from the past at the moment where the final
