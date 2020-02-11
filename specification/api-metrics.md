@@ -133,7 +133,7 @@ a `Meter` implementation, that is meant to be used for identifying
 instrumentation produced from that library for such purposes as
 disabling instrumentation, configuring aggregation, and applying
 sampling policies.  (TODO: refer to the semantic convention on the
-Named Tracer/Meter).
+reporting library name).
 
 Details about installing an SDK and obtaining a named `Meter` are
 covered in the [SDK-level API specification](api-metrics-meter.md).
@@ -284,12 +284,14 @@ and ratios, because values are part of a set.
 Unlike Counter and Measure instruments, Observer instruments are
 synchronized with collection.  There is no aggregation across time for
 Observer instruments by definition, only the current set of values is
-semantically defined.
+semantically defined.  Because Observer instruments are activated by
+the SDK, they can be effectively disabled at low cost.
 
 These values are considered coherent, because measurements from an
 Observer instrument in a single collection interval are captured at
 the same logical time.  A single callback invocation generates (zero
 or more) simultaneous metric events, all sharing an implicit timestamp.
+
 
 ## Interpretation
 
@@ -542,3 +544,12 @@ with a shard label.  These can be aggregated across hosts to compute
 cluster-wide memory holdings by shard, for example, using the standard
 aggregation for Observers, which sums the current value across
 distinct label sets.
+
+### Reporting number of active requests
+
+Suppose your server maintains the count of active requests, which
+rises and falls as new requests begin and end processing.
+
+Observer the number of active requests periodically with an Observer
+instrument.  Labels can be used to indicate which application-specific
+properties are associated with these events.
