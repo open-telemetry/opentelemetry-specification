@@ -142,7 +142,7 @@ explicit parent is provided or the option to create a span without a parent is
 selected, or the current active `Span` is invalid.
 
 The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
-convenience methods to manage a `Span`'s lifetime and the scope in which a
+convenience functions to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
 `Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
 time) but stil active. A `Span` may be active on one thread after it has been
