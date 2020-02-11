@@ -289,7 +289,8 @@ semantically defined.
 These values are considered coherent, because measurements from an
 Observer instrument in a single collection interval are considered
 simultaneous.  The set of measurements captured through one callback
-invocation implicitly share a single timestamp.
+invocation are considered independent metric events; explicitly, these
+events share a single timestamp.
 
 ## Interpretation
 
