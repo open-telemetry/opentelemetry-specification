@@ -207,15 +207,35 @@ resulting from an aggregation of raw measurements over time.
 ### WithKeys declaration on metric instruments
 
 A standard feature of metric SDKs is to pre-aggregate metric events
-according to a specified set of label keys (i.e., dimensions).  The
-API provides a `WithKeys` option for the user to declare the
-recommended aggregation keys.
+according to a specified set of label keys (i.e., dimensions).  To
+perform this task, the SDK must aggregate metric events over the
+collection interval: (1) across time, (2) across key dimensions in
+_label space_.
 
-This feature is useful for configuring _pre-aggegation_ within the
-SDK, prior to export, and generally helps lower the cost of exporting
-metric data.  This feature is included in the API to ensure that this
-optimization is easily configured at the point where instruments are
-declared.
+When aggregating across spatial dimensions, metric events for
+different label sets are combined into an aggregated value for each
+distinct "group" of values for the key dimensions.  It means that
+measurements are combined for all metric events having the same values
+for selected keys, explicitly disregarding any additional labels with
+keys not in the set of aggregation keys.  Some exporters are known to
+require pre-specifying the label keys used for aggregation (e.g.,
+Prometheus).
+
+For example, if `[ak1, ak2]` are the aggregation keys and `[ik1,
+ik2]` are the ignored keys, then a metric event having labels
+`{ak1=A, ak2=B, ik1=C, ik1=D}` will be combined with a metric
+event having labels `{ak1=A, ak2=B, ik1=Y, ik1=Z}` because they
+have identical label values for all of the aggregation keys.
+
+The API provides a `WithKeys` option for the user to declare the
+recommended aggregation keys when declaring new metric instruments,
+intended as the default way to configure an exporter for
+pre-aggregation, if it is expected.  Since this is only expected in
+some exporters, it is regarded as an option relevant to the exporter,
+whether keys configured through `WithKeys` are applied for aggregation
+purposes or not.  This allows the user influence the standard
+implementation behavior, especially for exporters that require
+pre-specified aggregation keys.
 
 ### Metric Event Format
 
