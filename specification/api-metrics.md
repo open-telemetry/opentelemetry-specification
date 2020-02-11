@@ -103,12 +103,12 @@ covered in the [user-level API specification](api-metrics-user.md).
 
 _Label_ is the term used to refer to a key-value attribute associated
 with a metric event.  Although they are fundamentally similar to [Span
-attributes](api-tracing.md#span) in the tracing API, a [label
-set](TODO: link to user doc) is given its own type in the Metrics API
-(generally: `LabelSet`).  Label sets are a feature of the API meant to
-facilitate re-use and thereby to lower the cost of processing metric events.
-Users are encouraged to re-use label sets whenever possible, as they
-may contain a previously encoded representation of the labels.
+attributes](api-tracing.md#span) in the tracing API, a label set is
+given its own type in the Metrics API (generally: `LabelSet`).  Label
+sets are a feature of the API meant to facilitate re-use and thereby
+to lower the cost of processing metric events.  Users are encouraged
+to re-use label sets whenever possible, as they may contain a
+previously encoded representation of the labels.
 
 Users obtain label sets by calling a `Meter` API function.  Each of
 the instrument calling conventions detailed in the [user-level API
@@ -117,9 +117,14 @@ specification](api-metrics-user.md) accepts a label set.
 ### Meter Interface
 
 To produce measurements using an instrument, you need an SDK that
-implements the `Meter` API.  This interface consists of a set of instrument
-constructors, functionality related to label sets, and a facility for
-entering batches of measurements in a semantically atomic way.
+implements the `Meter` API.  This interface consists of a set of
+instrument constructors, functionality related to label sets, and a
+facility for entering batches of measurements in a semantically atomic
+way.  As an obligatory step, the API requires the caller to provide
+the name of the instrumenting library (optionally, the version), that
+is meant to be used for identifying instrumentation produced from that
+library for such purposes as disabling instrumentation, configuring
+aggregation, and applying sampling policies.
 
 There is a global `Meter` instance available for use that facilitates
 automatic instrumentation for third-party code.  Use of this instance
