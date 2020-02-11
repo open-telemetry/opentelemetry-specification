@@ -245,11 +245,9 @@ See the [Context](context.md)
 
 ## Propagators
 
-OpenTelemetry uses `Propagators` to serialize and deserialize `SpanContext` and `DistributedContext`
-into any of the supported formats. Observe that `Propagators` leverage the underlying
-`Context` to both access and record cross-cutting concerns data.
-
-Currently there is one type of propagators:
+OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
+such as `SpanContext` and `CorrelationContext` into a `Format`. Currently there is one
+type of propagator:
 
 - `HTTPTextFormat` which is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
