@@ -8,7 +8,6 @@ Table of Contents
 - [Overview](#overview)
 - [Get value](#get-value)
 - [Set value](#set-value)
-- [Remove value](#remove-value)
 - [Optional operations](#optional-operations)
     - [Get current Context](#get-current-context)
     - [Set current Context](#set-current-context)
@@ -22,7 +21,7 @@ across API boundaries and between logically associated execution units.
 Cross-cutting concerns access their data in-process using the same shared
 `Context` object.
 
-`Context` MUST be immutable, and its set and remove operations MUST
+`Context` MUST be immutable, and its write operations MUST
 result in the creation of a new `Context` cointaining the original
 values and the specified values updated.
 
@@ -64,17 +63,6 @@ The API MUST accept the following parameters:
 - The value to be set.
 
 The API MUST return a new `Context` containing the new value.
-
-## Remove value
-
-Concerns can clear their local state in a specified `Context`.
-
-The API MUST accept the following parameters:
-
-- The `Context`.
-- The concern identifier.
-
-The API MUST return a new `Context` with the value cleared.
 
 ## Optional Global operations
 
