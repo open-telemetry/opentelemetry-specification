@@ -345,16 +345,21 @@ terms of the intended semantics.
 
 As a language-optional feature, the API MAY support a dedicated
 instrument for reporting timing measurements.  This kind of
-instrument, with recommended name `Timer` (and
-`BoundTimer`), is semantically equivalent to a Measure
-instrument, and like the Measure instrument supports a `Record()`
-function, but the input value to this instrument is in the language's
-conventional data type for timing measurements.
+instrument, with recommended name `Timer` (and `BoundTimer`), is
+semantically equivalent to a Measure instrument.  Like the Measure
+instrument, Timers support a `Record()` function.  The input value to
+this instrument is in the language's conventional data type for timing
+measurements.
+
+Timer instruments MUST capture only the magnitude of the input value
+(i.e., an absolute value).  When the user provides a negative value to
+the Timer `Record()` function, the captured measurement is the number
+stripped of its sign.
 
 For example, in Go the API will accept a `time.Duration`, and in C++
-the API will accept a `std::chrono::duration`.  The advantage of
-using these instruments is that they use the correct units
-automatically, avoiding the potential for confusion over timing metrics.
+the API will accept a `std::chrono::duration`.  These instruments
+apply the correct units automatically, reducing the potential for
+confusion over timing metric events.
 
 ### Future Work: Option Support
 
