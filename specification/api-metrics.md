@@ -504,18 +504,6 @@ In this case, the guidance is to create a single instrument.  Do not
 create a Counter instrument to export a sum when you want to export
 other summary statistics using a Measure instrument.
 
-### Reporting per-request CPU usage
-
-Suppose you have a way to measure the CPU usage of processing an
-individual request.  This is given to you in terms of cpu-seconds
-consumed.  You may wish to monitor total CPU usage, or you could be
-interested in the peak rate of CPU usage.
-
-Use a Counter instrument to `Add()` this quantity to an instrument
-named `cpu.seconds.used` after sending the response.  A Counter is
-called for, in this case, because a sum is requested, meaning a sum of
-all `Add()` events for the instrument in the specified time range.
-
 ### Reporting system call duration
 
 You wish to monitor the duration of a specific system call being made
