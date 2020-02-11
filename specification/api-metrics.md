@@ -42,16 +42,14 @@ the intent to produce continuous summaries of those measurements
 simultaneously.  Hereafter, "the API" refers to the OpenTelemetry
 Metrics API.
 
-The API provides functions for entering raw measurements, through
+The API provides functions for capturing raw measurements, through
 several [calling
 conventions](api-metrics-user.md#metric-calling-conventions) that
 offer different levels of performance.  Regardless of calling
 convention, we define a _metric event_ as the logical thing that
-happens when a new measurement is entered.  The word "enter" as used
-here refers to the logical creation of an event through one of the
-calling conventions.  This moment of entry (at "run time") defines an
-implicit timestamp, which is the wall time an SDK would read from a
-clock at that moment.
+happens when a new measurement is captured.  This moment of capture
+(at "run time") defines an implicit timestamp, which is the wall time
+an SDK would read from a clock at that moment.
 
 The word "semantic" or "semantics" as used here refers to _how we give
 meaning_ to metric events, as they take place under the API.  The term
@@ -75,9 +73,9 @@ so that different SDKs can be configured at run time.
 ### Metric Instruments
 
 A _metric instrument_, of which there are three kinds, is a device for
-entering raw measurements into the API.  There are Counter, Measure,
+capturing raw measurements into the API.  There are Counter, Measure,
 and Observer instruments, each with different semantics and intended
-uses, that will be specified here.  All measurements that enter the
+uses, that will be specified here.  All measurements captured by the
 API are associated with an instrument, which gives the measurement its
 properties.  Instruments are created and defined through calls to a
 `Meter` API, which is the user-facing entry point to the SDK.
@@ -119,7 +117,7 @@ specification](api-metrics-user.md) accepts a label set.
 To produce measurements using an instrument, you need an SDK that
 implements the `Meter` API.  This interface consists of a set of
 instrument constructors, functionality related to label sets, and a
-facility for entering batches of measurements in a semantically atomic
+facility for capturing batches of measurements in a semantically atomic
 way.
 
 There is a global `Meter` instance available for use that facilitates
@@ -188,14 +186,14 @@ Since the SDK controls the decision to start collection, it is possible to
 collect aggregated metric data while only reading the clock once per
 collection interval.  The default SDK takes this approach.
 
-Counter and Measure instruments offer synchronous APIs for entering
+Counter and Measure instruments offer synchronous APIs for capturing
 measurements.  Metric events from Counter and Measure instruments are
 captured at the moment they happen, when the SDK receives the
 corresponding function call.
 
 The Observer instrument supports an asynchronous API, allowing the SDK
 to collect metric data on demand, once per collection interval.  A
-single Observer instrument callback can enter multiple metric events
+single Observer instrument callback can capture multiple metric events
 associated with different label sets.  Semantically, by definition,
 these observations are captured at a single instant in time, the
 instant that they became the current set of last-measured values.
@@ -245,13 +243,13 @@ individual semantics.
 
 ### Counter
 
-Counter instruments are used to enter changes in sums, synchronously.
-These are commonly used to monitor rates, and they are sometimes used
-to enter totals that rise and fall.  An essential property of Counter
-instruments is that two `Add(1)` events are semantically equivalent to
-one `Add(2)` event--`Add(m)` and `Add(n)` is equivalent to `Add(m+n)`.
-This property means that Counter events can be combined inexpensively,
-by definition.
+Counter instruments are used to capture changes in running sums,
+synchronously.  These are commonly used to monitor rates, and they are
+sometimes used to capture totals that rise and fall.  An essential
+property of Counter instruments is that two `Add(1)` events are
+semantically equivalent to one `Add(2)` event--`Add(m)` and `Add(n)`
+is equivalent to `Add(m+n)`.  This property means that Counter events
+can be combined inexpensively, by definition.
 
 Labels associated with Counter instrument events can be used to
 compute rates and totals from the instrument, over selected
@@ -261,7 +259,7 @@ dimensions.  Counter `Add(0)` events are no-ops, by definition.
 
 Semantically, metric events from Measure instruments are independent,
 meaning they cannot be combined naturally, as with Counters.  Measure
-instruments are used to enter many kinds of information, and are
+instruments are used to capture many kinds of information, and are
 recommended for all cases where the additive property of Counter
 instruments does not apply.
 
@@ -273,12 +271,12 @@ data set.
 
 ### Observer
 
-Observer instruments are used to enter a _current set of values_ at a
+Observer instruments are used to capture a _current set of values_ at a
 point in time.  Observer instruments are asynchronous, with the use of
-callbacks allowing the user to enter multiple values per collection
+callbacks allowing the user to capture multiple values per collection
 interval.  
 
-Observer instruments enter not only current values, but also
+Observer instruments capture not only current values, but also
 effectively _which label sets are current_ at the moment of
 collection.  These instruments can be used to compute probabilities
 and ratios, because values are part of a set.
@@ -290,7 +288,7 @@ semantically defined.
 
 These values are considered coherent, because measurements from an
 Observer instrument in a single collection interval are considered
-simultaneous.  The set of measurements entered through one callback
+simultaneous.  The set of measurements captured through one callback
 invocation implicitly share a single timestamp.
 
 ## Interpretation
@@ -319,7 +317,7 @@ follows:
 distinct label set.  When aggregating over distinct label sets for a
 Counter, combine using arithmetic addition and export as a sum.
 Depending on the exposition format, sums are exported either as pairs
-of label set and cumulative _difference_ or as pairs of label set and
+of label set and cumulative _delta_ or as pairs of label set and
 cumulative _total_.
 
 2. Measure.  Use the `Record()` function to report events that for
@@ -516,12 +514,12 @@ questions.
 
 - Why not use a Counter instrument?  In order to use a Counter
 instrument, we would need to convert total usage figures into
-differences.  Calculating differences from the previous measurement is
+deltas.  Calculating deltas from the previous measurement is
 easy to do, but Counter instruments are not meant to be used from
 callbacks.
-- Why not report differences in the Observer callback?  Observer
+- Why not report deltass in the Observer callback?  Observer
 instruments are meant to be used to observe current values. Nothing
-prevents reporting differences with an Observer, but the standard
+prevents reporting deltas with an Observer, but the standard
 aggregation for Observer instruments is to sum the current value
 across distinct label sets.  The standard behavior is useful for
 determining the current rate of CPU usage, but special configuration
