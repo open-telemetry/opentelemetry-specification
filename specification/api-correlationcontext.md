@@ -19,6 +19,10 @@ significant. Based on the language specification, the returned value can be
 either an immutable collection or an immutable iterator to the collection of
 name/value pairs in this `CorrelationContext`.
 
+OPTIONAL parameters:
+
+`Context` the context from which to remove the correlation.
+
 ### GetCorrelation
 
 To access the value for a name/value pair by a prior event, the Correlations API
