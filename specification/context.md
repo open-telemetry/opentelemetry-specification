@@ -39,7 +39,7 @@ manipulate `Context` through cross-cutting concerns APIs instead, in order to
 perform operations such as setting trace or correlation context values for
 a specified `Context`.
 
-`Context` is expected to have the following operations, with their
+A `Context` is expected to have the following operations, with their
 respective language differences:
 
 ## Create a key
