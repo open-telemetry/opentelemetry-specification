@@ -26,15 +26,16 @@ Cross-cutting concerns send their state to the next process using
 context data to and from messages exchanged by the applications.
 Each concern creates a set of `Propagator`s for every supported `Format`.
 
+Propagators leverage the `Context` to inject and extract data for each
+cross-cutting concern, such as traces and correlation context.
+
 The Propagators API is expected to be leveraged by users writing
 instrumentation libraries.
 
-Propagators API currently consists of one `Format`:
+The Propagators API currently consists of one `Format`:
 
-- `HTTPTextFormat` is used to inject and extract a value as text into carriers that travel
+- `HTTPTextFormat` is used to inject values into and extract values from carriers as text that travel
   in-band across process boundaries.
-
-Deserializing must set `IsRemote` to true on the returned `SpanContext`.
 
 A binary `Format` will be added in the future.
 
@@ -75,7 +76,7 @@ Injects the value downstream. For example, as http headers.
 
 Required arguments:
 
-- the cross-cutting concern value to be injected, such as `SpanContext` or `DistributedContext`.
+- A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as `SpanContext`, `CorrelationContext` or another cross-cutting concern context. For languages supporting current `Context` state, this argument is OPTIONAL, defaulting to the current `Context` instance.
 - the carrier that holds propagation fields. For example, an outgoing message or http request.
 - the `Setter` invoked for each propagation key to add or remove.
 
@@ -101,18 +102,23 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 
 ### Extract
 
-Extracts the value from upstream. For example, as http headers.
+Extracts the value from an incoming request. For example, from the headers of an HTTP request.
 
-If the value could not be parsed, the underlying implementation will decide to return an
-object representing either an empty value, an invalid value, or a valid value. Implementations
-MUST not return null.
+If a value can not be parsed from the carrier for a cross-cutting concern,
+the implementation MUST NOT throw an exception. It MUST store a value in the `Context`
+that the implementation can recognize as a null or empty value.
 
 Required arguments:
 
+- A `Context`. For languages supporting current `Context` state this argument is OPTIONAL, defaulting to the current `Context` instance.
 - the carrier holds propagation fields. For example, an outgoing message or http request.
 - the instance of `Getter` invoked for each propagation key to get.
 
-Returns the non-null cross-cutting concern extracted value.
+Returns a new `Context` derived from the `Context` passed as argument,
+containing the extracted value, which can be a `SpanContext`,
+`CorrelationContext` or another cross-cutting concern context.
+
+If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set to true.
 
 #### Getter argument
 
