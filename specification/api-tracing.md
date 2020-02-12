@@ -122,13 +122,15 @@ mechanism, for instance the `ServiceLoader` class in Java.
 
 The `Tracer` MUST provide functions to:
 
-- Get the currently active `Span`
 - Create a new `Span`
+
+The `Tracer` SHOULD provide methods to:
+
+- Get the currently active `Span`
 - Make a given `Span` as active
 
-The `Tracer` SHOULD allow end users to configure other tracing components that
-control how `Span`s are passed across process boundaries, including the text
-format `Propagator` used to serialize `Span`s created by the `Tracer`.
+The `Tracer` MUST internally leverage the `Context` in order to get and set the
+current `Span` state and how `Span`s are passed across process boundaries.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
@@ -139,17 +141,12 @@ SHOULD create each new `Span` as a child of its active `Span` unless an
 explicit parent is provided or the option to create a span without a parent is
 selected, or the current active `Span` is invalid.
 
-The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
+The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
 convenience functions to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
 `Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
-
-The implementation MUST provide a text `Propagator`, which the
-`Tracer` SHOULD use by default if other propagators are not configured. SDKs
-SHOULD use the W3C HTTP Trace Context as the default text format. For more
-details, see [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
 
