@@ -24,7 +24,7 @@ Cross-cutting concerns access their data in-process using the same shared
 `Context` object.
 
 A `Context` MUST be immutable, and its write operations MUST
-result in the creation of a new `Context` cointaining the original
+result in the creation of a new `Context` containing the original
 values and the specified values updated.
 
 Languages are expected to use the single, widely used `Context` implementation
