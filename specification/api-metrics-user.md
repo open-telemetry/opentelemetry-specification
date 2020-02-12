@@ -39,19 +39,20 @@ v0.3 milestone too, as discussed in [OTEP
 ## Overview
 
 Metric instruments are the entry point for application and framework developers to instrument their code using counters, gauges, and measures.
-Metrics are created by calling methods on a `Meter` which is in turn created by a global `MeterFactory`.
+Metrics are created by calling methods on a `Meter` which is in turn created by a global `MeterProvider`.
 
 ### Obtaining a Meter
 
-New `Meter` instances can be created via a `MeterFactory` and its `getMeter` method.
-`MeterFactory`s are generally expected to be used as singletons.
-Implementations SHOULD provide a single global default `MeterFactory`. The `getMeter` method expects two string arguments:
+New `Meter` instances can be created via a `MeterProvider` and its `getMeter` method.
+`MeterProvider`s are generally expected to be used as singletons.
+Implementations SHOULD provide a single global default `MeterProvider`. The `getMeter` method expects two string arguments:
 
 - `name` (required): This name must identify the instrumentation library (also referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`)
   and *not* the instrumented library.
-  In case an invalid name (null or empty string) is specified, a working default `Meter` implementation as a fallback is returned
+  In case an invalid name (null or empty string) is specified, a working default `Meter` implementation is returned as a fallback
   rather than returning null or throwing an exception.
-  A `MeterFactory` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
+  A `MeterProvider` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
+  This name will be used as the `namespace` for any metrics created using the returned `Meter`.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `semver:1.0.0`).
 
 ### Metric names
@@ -64,9 +65,9 @@ external systems.  Metric names conform to the following syntax:
 3. The first character must be non-numeric, non-space, non-punctuation
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
-Metric names belong to a namespace. The `name` of the associated `Meter`
-serves as its namespace, allowing the same metric name to be used in
-multiple libraries of code, unambiguously, within the same application.
+Metric names belong to a namespace, which is the `name` of the associated `Meter`,
+allowing the same metric name to be used in multiple libraries of code,
+unambiguously, within the same application.
 
 Metric instruments are defined using a `Meter` instance, using a variety
 of `New` methods specific to the kind of metric and type of input(integer
@@ -118,14 +119,14 @@ metric instruments statically and providing the `Meter` interface at
 the time of use.  In this example, typical of statsd clients, existing
 code may not be structured with a convenient place to store new metric
 instruments.  Where this becomes a burden, it is recommended to use
-the global meter factory to construct a static `Meter`, to
+the global meter provider to construct a static `Meter`, to
 construct metric instruments.
 
 The situation is similar for users of Prometheus clients, where
 instruments are allocated statically and there is an implicit global.
 Such code may not have access to the appropriate `Meter` where
 instruments are defined.  Where this becomes a burden, it is
-recommended to use the global meter factory to construct a static
+recommended to use the global meter provider to construct a static
 named `Meter`, to construct metric instruments.
 
 Applications are expected to construct long-lived instruments.
