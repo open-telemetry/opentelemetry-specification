@@ -26,7 +26,7 @@ Cross-cutting concerns send their state to the next process using
 context data to and from messages exchanged by the applications.
 Each concern creates a set of `Propagator`s for every supported `Format`.
 
-Propagators leverage `Context` to inject and extract data for each
+Propagators leverage the `Context` to inject and extract data for each
 cross-cutting concern, such as traces and correlation context.
 
 The Propagators API is expected to be leveraged by users writing
