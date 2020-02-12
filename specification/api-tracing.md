@@ -78,13 +78,13 @@ process boundaries.
 
 ### Obtaining a Tracer
 
-New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
+New `Tracer` instances can be created via a `TracerProvider` and its `getTracer`
 function. This function expects two string arguments:
 
-`TracerFactory`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `TracerFactory`.
+`TracerProvider`s are generally expected to be used as singletons. Implementations
+SHOULD provide a single global default `TracerProvider`.
 
-Some applications may use multiple `TracerFactory` instances, e.g. to provide
+Some applications may use multiple `TracerProvider` instances, e.g. to provide
 different settings (e.g. `SpanProcessor`s) to each of those instances and -
 in further consequence - to the `Tracer` instances created by them.
 
@@ -97,22 +97,22 @@ in further consequence - to the `Tracer` instances created by them.
   A library, implementing the OpenTelemetry API *may* also ignore this name and
   return a default instance for all calls, if it does not support "named"
   functionality (e.g. an implementation which is not even observability-related).
-  A TracerFactory could also return a no-op Tracer here if application owners configure
+  A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library
   (e.g. `semver:1.0.0`).
 
 Implementations might require the user to specify configuration properties at
-`TracerFactory` creation time, or rely on external configuration, e.g. when using the
+`TracerProvider` creation time, or rely on external configuration, e.g. when using the
 provider pattern.
 
 #### Runtimes with multiple deployments/applications
 
 Runtimes that support multiple deployments or applications might need to
-provide a different `TracerFactory` instance to each deployment. To support this,
-the global `TracerFactory` registry may delegate calls to create new instances of
-`TracerFactory` to a separate `Provider` component, and the runtime may include
-its own `Provider` implementation which returns a different `TracerFactory` for
+provide a different `TracerProvider` instance to each deployment. To support this,
+the global `TracerProvider` registry may delegate calls to create new instances of
+`TracerProvider` to a separate `Provider` component, and the runtime may include
+its own `Provider` implementation which returns a different `TracerProvider` for
 each deployment.
 
 `Provider` instances are registered with the API via some language-specific
