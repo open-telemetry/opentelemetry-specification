@@ -235,7 +235,7 @@ intended as the default way to configure an exporter for
 pre-aggregation, if it is expected.  Since this is only expected in
 some exporters, it is regarded as an option relevant to the exporter,
 whether keys configured through `WithRecommendedKeys` are applied for aggregation
-purposes or not.  This allows the user influence the standard
+purposes or not.  This allows the user to influence the standard
 implementation behavior, especially for exporters that require
 pre-specified aggregation keys.
 
