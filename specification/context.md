@@ -98,7 +98,7 @@ The API MUST accept the following parameters:
 
 - The `Context`.
 
-The API MUST return an object that can be used as `Token` to restore the previous
+The API MUST return an object that can be used as a `Token` to restore the previous
 `Context`.
 
 ### Detach Context
