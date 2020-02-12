@@ -1,5 +1,9 @@
 # Metric SDK-facing API
 
-This document will be updated as part of the v0.2 milestone with a
-detailed list of `Meter` API methods.  These methods will match the
-user-facing API specified [here](api-metrics-user.md).
+<!-- toc -->
+<!-- tocstop -->
+
+This document will be updated as part of the v0.4 milestone with a
+detailed list of `Meter` API functions.  These functions are given a
+high-level description in the [overview document](api-metrics.md) and
+this document will simply give details on the `Meter` API.

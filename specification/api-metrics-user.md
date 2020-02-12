@@ -1,11 +1,40 @@
 # Metric User-facing API
 
-Note: This specification for the v0.2 OpenTelemetry milestone does not
-cover the Observer gauge instrument discussed in the
-[overview](api-metrics.md).  Observer instruments will be added in the
-v0.3 milestone.
+<!-- toc -->
 
-TODO: Add a table of contents.
+- [Overview](#overview)
+  * [Obtaining a Meter](#obtaining-a-meter)
+  * [Metric names](#metric-names)
+  * [Format of a metric event](#format-of-a-metric-event)
+  * [New constructors](#new-constructors)
+    + [Metric instrument constructor example code](#metric-instrument-constructor-example-code)
+  * [Metric calling conventions](#metric-calling-conventions)
+    + [Bound instrument calling convention](#bound-instrument-calling-convention)
+    + [Direct instrument calling convention](#direct-instrument-calling-convention)
+    + [RecordBatch calling convention](#recordbatch-calling-convention)
+    + [Label set re-use is encouraged](#label-set-re-use-is-encouraged)
+      - [Missing label keys](#missing-label-keys)
+      - [Option: Convenience method to bypass `meter.Labels(...)`](#option-convenience-method-to-bypass-meterlabels)
+      - [Option: Ordered LabelSet construction](#option-ordered-labelset-construction)
+- [Detailed specification](#detailed-specification)
+  * [Instrument construction](#instrument-construction)
+    + [Recommended label keys](#recommended-label-keys)
+    + [Instrument options](#instrument-options)
+  * [Bound instrument API](#bound-instrument-api)
+  * [Direct instrument API](#direct-instrument-api)
+  * [Interaction with distributed correlation context](#interaction-with-distributed-correlation-context)
+
+<!-- tocstop -->
+
+Note: This specification for the v0.3 OpenTelemetry milestone does not
+include specification related to the Observer instrument, as described
+in the [overview](api-metrics.md).  Observer instruments were detailed
+in [OTEP
+72-metric-observer](https://github.com/open-telemetry/oteps/blob/master/text/0072-metric-observer.md)
+and will be added to this document following the v0.3 milestone.
+Gauge instruments will be removed from this specification folowing the
+v0.3 milestone too, as discussed in [OTEP
+80-remove-metric-gauge](https://github.com/open-telemetry/oteps/blob/master/text/0080-remove-metric-gauge.md).
 
 ## Overview
 
