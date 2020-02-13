@@ -5,14 +5,9 @@ It is an abstract data type represented by a set of name/value pairs describing 
 Each name in `CorrelationContext` MUST be associated with exactly one value.
 `CorrelationContext` MUST be serialized according to the [W3C Correlation Context](https://w3c.github.io/correlation-context/) specification.
 
-## Conflict Resolution
-
-If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence. The value
-is replaced with the added value (regardless if it is locally generated or received from a remote peer).
-
 ## CorrelationContext
 
-### GetCorrelations
+### Get correlations
 
 Returns the name/value pairs in this `CorrelationContext`. The order of name/value pairs MUST NOT be
 significant. Based on the language specification, the returned value can be
@@ -21,9 +16,9 @@ name/value pairs in this `CorrelationContext`.
 
 OPTIONAL parameters:
 
-`Context` the context from which to remove the correlation.
+`Context` the context from which to get the correlations.
 
-### GetCorrelation
+### Get correlation
 
 To access the value for a name/value pair by a prior event, the Correlations API
 SHALL provide a function that takes a context and a name as input, and returns a
@@ -38,7 +33,7 @@ OPTIONAL parameters:
 
 `Context` the context from which to get the correlation.
 
-### SetCorrelation
+### Set correlation
 
 To record the value for a name/value pair, the Correlations API SHALL provide a function which
 takes a context, a name, and a value as input. Returns an updated `Context` which
@@ -54,7 +49,7 @@ OPTIONAL parameters:
 
 `Context` the context to which the value will be set.
 
-### RemoveCorrelation
+### Remove correlation
 
 To delete a name/value pair, the Correlations API SHALL provide a function which takes a context
 and a name as input. Returns an updated `Context` which no longer contains the selected name.
@@ -67,7 +62,7 @@ OPTIONAL parameters:
 
 `Context` the context from which to remove the correlation.
 
-### ClearCorrelations
+### Clear correlations
 
 To avoid sending any name/value pairs to an untrusted process, the Correlations API SHALL provide
 a function to remove all Correlations from a context. Returns an updated `Context`
@@ -77,7 +72,12 @@ OPTIONAL parameters:
 
 `Context` the context from which to remove all correlations.
 
-### CorrelationContext Propagation
+## CorrelationContext Propagation
 
 `CorrelationContext` MAY be propagated across process boundaries or across any arbitrary boundaries
 (process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
+
+## Conflict Resolution
+
+If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence. The value
+is replaced with the added value (regardless if it is locally generated or received from a remote peer).
