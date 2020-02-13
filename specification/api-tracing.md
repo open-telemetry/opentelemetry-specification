@@ -389,7 +389,7 @@ attribute's value.
 
 Attribute values expressing a numerical value of zero or an empty string are
 considered meaningful and MUST be stored and passed to the exporter.
-Attribute values of `null` are considered undefined and are discarded as if
+Attribute values of `null` are considered to be not set and discarded as if
 `SetAttribute` was never called.
 If overwriting values is allowed, this results in clearing the previous value
 and dropping the attribute key from the set of attributes.
