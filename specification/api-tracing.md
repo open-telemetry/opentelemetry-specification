@@ -371,7 +371,7 @@ A `Span` MUST have the ability to set attributes associated with it.
 
 An `Attribute` is defined by the following properties:
 
-- (Required) The attribute key, which must be a non-null and non-empty string.
+- (Required) The attribute key, which must be a non-`null` and non-empty string.
 - (Required) The attribute value, which is either:
   - A primitive type: string, boolean or numeric.
   - An array of primitive type values. The array MUST be homogeneous,
@@ -388,9 +388,9 @@ with the same key as an existing attribute SHOULD overwrite the existing
 attribute's value.
 
 Attribute values expressing a numerical value of zero or an empty string are
-considered meaningful and MUST be stored and passed to the exporter.
-Attribute values of `null` are considered to be not set and discarded as if
-`SetAttribute` was never called.
+considered meaningful and MUST be stored and passed on to span processors / exporters.
+Attribute values of `null` are considered to be not set and get discarded as if
+`SetAttribute` had never been called.
 If overwriting values is allowed, this results in clearing the previous value
 and dropping the attribute key from the set of attributes.
 
