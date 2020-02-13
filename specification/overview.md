@@ -200,7 +200,7 @@ name/value pairs, called `CorrelationContext`. `CorrelationContext` is intended 
 indexing observability events in one service with attributes provided by a prior service in
 the same transaction. This helps to establish a causal relationship between these events.
 
-The `CorrelationContext` implements the [W3C Correlation-Context specification](https://w3c.github.io/correlation-context/).
+The `CorrelationContext` implements the editor's draft of the [W3C Correlation-Context specification](https://w3c.github.io/correlation-context/).
 While `CorrelationContext` can be used to prototype other cross-cutting concerns, this mechanism is primarily intended
 to convey values for the OpenTelemetry observability systems.
 
