@@ -308,7 +308,8 @@ description](overview.md#links-between-spans).
 A `Link` is defined by the following properties:
 
 - (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`.
+- (Optional) One or more `Attribute`s with the same semantics as defined for
+  [Span Attributes](#set-attributes).
 
 The `Link` SHOULD be an immutable type.
 
@@ -370,7 +371,7 @@ A `Span` MUST have the ability to set attributes associated with it.
 
 An `Attribute` is defined by the following properties:
 
-- (Required) The attribute key, which must be a string.
+- (Required) The attribute key, which must be a non-null and non-empty string.
 - (Required) The attribute value, which is either:
   - A primitive type: string, boolean or numeric.
   - An array of primitive type values. The array MUST be homogeneous,
@@ -386,6 +387,18 @@ Attributes SHOULD preserve the order in which they're set. Setting an attribute
 with the same key as an existing attribute SHOULD overwrite the existing
 attribute's value.
 
+Attribute values expressing a numerical value of zero or an empty string are
+considered meaningful and MUST be stored and passed to the exporter.
+Attribute values of `null` are considered undefined and are discarded as if
+`SetAttribute` was never called.
+If overwriting values is allowed, this results in clearing the previous value
+and dropping the attribute key from the set of attributes.
+
+`null` values within arrays MUST be preserved. This is required for map/dictionary
+structures represented as two arrays with indices that are kept in sync
+(e.g., two attributes `header_keys` and `header_values`, both containing an
+array of strings to represent a mapping `header_keys[i] -> header_values[i]`).
+
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](data-semantic-conventions.md) that have prescribed semantic meanings.
 
@@ -397,7 +410,8 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 
 - (Required) Name of the event.
-- (Optional) One or more `Attribute`.
+- (Optional) One or more `Attribute`s with the same semantics as defined for
+  [Span Attributes](#set-attributes).
 - (Optional) Timestamp for the event.
 
 The `Event` SHOULD be an immutable type.
