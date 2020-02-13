@@ -394,10 +394,12 @@ that `SetAttribute` call had never been made.
 As an exception to this, if overwriting of values is supported, this results in
 clearing the previous value and dropping the attribute key from the set of attributes.
 
-`null` values within arrays MUST be preserved. This is required for map/dictionary
-structures represented as two arrays with indices that are kept in sync
-(e.g., two attributes `header_keys` and `header_values`, both containing an
-array of strings to represent a mapping `header_keys[i] -> header_values[i]`).
+`null` values within arrays MUST be preserved. If exporters do not support
+exporting `null` values, they MAY replace those values by 0, `false`, or empty strings.
+This is required for map/dictionary structures represented as two arrays with
+indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
+both containing an array of strings to represent a mapping
+`header_keys[i] -> header_values[i]`).
 
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](data-semantic-conventions.md) that have prescribed semantic meanings.
