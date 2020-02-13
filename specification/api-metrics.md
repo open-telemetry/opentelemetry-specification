@@ -271,7 +271,12 @@ sometimes used to capture totals that rise and fall.  An essential
 property of Counter instruments is that two events `Add(m)` and
 `Add(n)` are semantically equivalent to one event `Add(m+n)`.  This
 property means that Counter events can be combined inexpensively, by
-definition.  Counter `Add(0)` events are no-ops, by definition.
+definition.
+
+Note that `Add(0)` events are not considered a special case, despite
+contributing nothing to a sum.  `Add(0)` events MUST be observed by
+the SDK in case non-default aggregations are configured for the
+instrument.
 
 Counter instruments can be seen as special cases of Measure
 instruments with the additive property described above and a
@@ -357,33 +362,13 @@ We believe that the standard behavior of one of these three
 instruments covers nearly all use-cases for users of OpenTelemetry in
 terms of the intended semantics.
 
-### Option: Dedicated Measure instrument for timing measurements
-
-As a language-optional feature, the API MAY support a dedicated
-instrument for reporting timing measurements.  This kind of
-instrument, with recommended name `Timer` (and `BoundTimer`), is
-semantically equivalent to a Measure instrument.  Like the Measure
-instrument, Timers support a `Record()` function.  The input value to
-this instrument is in the language's conventional data type for timing
-measurements.
-
-Timer instruments MUST capture only the magnitude of the input value
-(i.e., an absolute value).  When the user provides a negative value to
-the Timer `Record()` function, the captured measurement is the number
-stripped of its sign.
-
-For example, in Go the API will accept a `time.Duration`, and in C++
-the API will accept a `std::chrono::duration`.  These instruments
-apply the correct units automatically, reducing the potential for
-confusion over timing metric events.
-
 ### Future Work: Option Support
 
 We are aware of a number of reasons to iterate on these
 instrumentation kinds, in order to offer:
 
 1. Range restrictions on input data.  Instruments accepting negative values is rare in most applications, for example, and it is useful to offer both a semantic declaration (e.g., "negative values are meaningless") and a data validation step (e.g., "negative values should be dropped").
-2. Monotonicity support.  When a series of values is known to be monotonic, it is useful to declare this; this allows us to detect process resets.
+2. Monotonicity support.  When a series of values is known to be monotonic, it is useful to declare this..
 
 For the most part, these behaviors are not necessary for correctness
 within the local process or the SDK, but they are valuable in
@@ -402,6 +387,8 @@ supports configuring aggregations, including which operator is applied
 
 1. Should the API user be provided with options to configure specific views, statically, in the source?
 2. Should the View API be a stand-alone facility, able to install configurable aggregations, at runtime?
+
+See the [current issue on this topic](https://github.com/open-telemetry/opentelemetry-specification/issues/466).
 
 ## Metric instrument selection
 
