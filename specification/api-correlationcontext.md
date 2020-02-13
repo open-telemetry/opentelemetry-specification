@@ -1,11 +1,27 @@
-# Correlations API
+# CorrelationContext API
+
+<details>
+<summary>
+Table of Contents
+</summary>
+
+- [Overview](#overview)
+    - [Get correlations](#get-correlations)
+    - [Get correlation](#get-correlation)
+    - [Set correlation](#set-correlation)
+    - [Remove correlation](#remove-correlation)
+    - [Clear correlations](#clear-correlations)
+- [CorrelationContext Propagation](#correlationcontext-propagation)
+- [Conflict Resolution](#conflict-resolution)
+
+</details>
+
+## Overview
 
 `CorrelationContext` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
 It is an abstract data type represented by a set of name/value pairs describing user-defined properties.
 Each name in `CorrelationContext` MUST be associated with exactly one value.
 `CorrelationContext` MUST be serialized according to the [W3C Correlation Context](https://w3c.github.io/correlation-context/) specification.
-
-## CorrelationContext
 
 ### Get correlations
 
