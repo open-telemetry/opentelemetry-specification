@@ -95,7 +95,6 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 | container.image.name | Name of the image the container was built on. | `gcr.io/opentelemetry/operator` |
 | container.image.tag | Container image tag. | `0.1` |
 
-
 ### Function as a Service
 
 **type:** `faas`
@@ -106,10 +105,13 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 |---|---|---|--|
 | faas.name | The name of the function being executed. | `my-function` | Yes |
 | faas.id | The unique name of the function being executed. <br /> For example, in AWS Lambda this field corresponds to the [ARN] value, in GCP to the URI of the resource, and in Azure to the [FunctionDirectory] field. | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Yes |
-| faas.version | The version string of the function being executed as defined in [Version Attributes]. | `semver:2.0.0` | No |
+| faas.version | The version string of the function being executed as defined in [Version Attributes](#version-attributes). | `semver:2.0.0` | No |
 | faas.instance | The execution environment ID as a string. | `my-function:instance-0001` | No |
 
 Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](data-faas.md#difference-between-execution-and-instance).
+
+[ARN]:https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html
+[FunctionDirectory]: https://github.com/Azure/azure-functions-host/wiki/Retrieving-information-about-the-currently-running-function
 
 ## Deployment Service
 
@@ -175,7 +177,3 @@ with naming schemas hinting at the type of a version, such as the following:
 - `0.0.4.2.20190921` (a untyped version)
 
 The type and version value MUST be separated by a colon character `:`.
-
-[ARN]:https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html
-[FunctionDirectory]: https://github.com/Azure/azure-functions-host/wiki/Retrieving-information-about-the-currently-running-function
-[Version Attributes]: data-resource-semantic-conventions.md#version-attributes
