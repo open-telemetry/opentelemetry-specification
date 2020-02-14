@@ -44,13 +44,14 @@ respective language differences:
 
 ## Create a key
 
-Keys are used to allow cross-cutting concerns to control access to their local state,
-and they cannot be guessed by third parties. It is recommended that concerns mediate
+Keys are used to allow cross-cutting concerns to control access to their local state.
+They are unique such that other libraries which may use the same context
+cannot accidentally use the same key. It is recommended that concerns mediate
 data access via an API, rather than provide direct public access to their keys.
 
 The API MUST accept the following parameter:
 
-- The key identifier. Different languages may impose different restrictions on the expected types, so this parameter remains an implementation detail.
+- The key name. The key name exists for debugging purposes and does not uniquely identify the key. Multiple calls to `CreateKey` with the same name SHOULD NOT return the same value unless language constraints dictate otherwise. Different languages may impose different restrictions on the expected types, so this parameter remains an implementation detail.
 
 The API MUST return an opaque object representing the newly created key.
 
