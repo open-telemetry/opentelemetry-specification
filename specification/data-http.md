@@ -21,10 +21,19 @@ and various HTTP versions like 1.1, 2 and SPDY.
 
 ## Name
 
-Given an [RFC 3986](https://tools.ietf.org/html/rfc3986) compliant URI of the form `scheme:[//host[:port]]path[?query][#fragment]`,
-the span name of the span SHOULD be set to the URI path value,
-unless another value that represents the identity of the request and has a lower cardinality can be identified
-(e.g. the route for server spans; see below).
+HTTP spans MUST follow the overall [guidelines for span names](./api-tracing.md#span).
+Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
+is a user id, which creates high cardinality value space not suitable for span
+names. In case of HTTP servers, these endpoints are often mapped by the server
+frameworks to more concise _HTTP routes_, e.g. `/api/users/{user_id}`, which are
+recommended as the low cardinality span names. However, the same approach usually
+does not work for HTTP client spans, especially when instrumentation is provided
+by a lower-level middleware that is not aware of the specifics of how the URIs
+are formed. Therefore, HTTP client spans SHOULD be using conservative, low
+cardinality names formed from the available parameters of an HTTP request,
+such as `"HTTP {METHOD_NAME}"`. Instrumentation MUST NOT default to using URI
+path as span name, but MAY provide hooks to allow custom logic to override the
+default span name.
 
 ## Status
 
@@ -49,8 +58,8 @@ Don't set a status message if the reason can be inferred from `http.status_code`
 | 501 Not Implemented     | `Unimplemented`       |
 | 503 Service Unavailable | `Unavailable`         |
 | 504 Gateway Timeout     | `DeadlineExceeded`    |
-| Other 5xx code          | `InternalError` [1]   |
-| Any status code the client fails to interpret (e.g., 093 or 573) | `UnknownError` |
+| Other 5xx code          | `Internal` [1]   |
+| Any status code the client fails to interpret (e.g., 093 or 573) | `Unknown` |
 
 Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
 
@@ -61,21 +70,22 @@ Note that the items marked with [1] are different from the mapping defined in th
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
-| `component`    | Denotes the type of the span and needs to be `"http"`. | Yes |
 | `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
 | `http.url` | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | Defined later. |
-| `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `/path/12314/?q=ddds#123"`. | Defined later. |
+| `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/12314/?q=ddds#123"`. | Defined later. |
 | `http.host` | The value of the [HTTP host header][]. When the header is empty or not present, this attribute should be the same. | Defined later. |
 | `http.scheme` | The URI scheme identifying the used protocol: `"http"` or `"https"` | Defined later. |
 | `http.status_code` | [HTTP response status code][]. E.g. `200` (integer) | If and only if one was received/sent. |
 | `http.status_text` | [HTTP reason phrase][]. E.g. `"OK"` | No |
 | `http.flavor` | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |  No |
+| `http.user_agent` | Value of the HTTP [User-Agent][] header sent by the client. | No |
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
+[User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3
 
 ## HTTP client
 
@@ -102,14 +112,14 @@ For status, the following special cases have canonical error codes assigned:
 
 | Client error                | Trace status code  |
 |-----------------------------|--------------------|
-| DNS resolution failed       | `UnknownError`     |
+| DNS resolution failed       | `Unknown`     |
 | Request cancelled by caller | `Cancelled`        |
 | URL cannot be parsed        | `InvalidArgument`  |
 | Request timed out           | `DeadlineExceeded` |
 
 This is not meant to be an exhaustive list
 but if there is no clear mapping for some error conditions,
-instrumentation developers are encouraged to use `UnknownError`
+instrumentation developers are encouraged to use `Unknown`
 and open a PR or issue in the specification repository.
 
 ## HTTP server
@@ -205,11 +215,10 @@ Span name: `/webshop/articles/4` (NOTE: This is subject to change, see [open-tel
 
 |   Attribute name   |                                       Value             |
 | :----------------- | :-------------------------------------------------------|
-| `component`        | `"http"`                                                |
 | `http.method`      | `"GET"`                                                 |
 | `http.flavor`      | `"1.1"`                                                 |
 | `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"`     |
-| `peer.ip4`         | `"192.0.2.5"`                                           |
+| `net.peer.ip`      | `"192.0.2.5"`                                           |
 | `http.status_code` | `200`                                                   |
 | `http.status_text` | `"OK"`                                                  |
 
@@ -219,7 +228,6 @@ Span name: `/webshop/articles/:article_id`.
 
 |   Attribute name   |                      Value                      |
 | :----------------- | :---------------------------------------------- |
-| `component`        | `"http"`                                        |
 | `http.method`      | `"GET"`                                         |
 | `http.flavor`      | `"1.1"`                                         |
 | `http.target`      | `"/webshop/articles/4?s=1"`                     |
@@ -232,6 +240,7 @@ Span name: `/webshop/articles/:article_id`.
 | `http.status_text` | `"OK"`                                          |
 | `http.client_ip`   | `"192.0.2.4"`                                   |
 | `net.peer.ip`      | `"192.0.2.5"` (the client goes through a proxy) |
+| `http.user_agent`  | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
 
 Note that following the recommendations above, `http.url` is not set in the above example.
 If set, it would be

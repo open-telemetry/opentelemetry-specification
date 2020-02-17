@@ -94,7 +94,7 @@ A **Span** may be linked to zero or more other **Spans** (defined by
 **SpanContext**) that are causally related. **Links** can point to
 **SpanContexts** inside a single **Trace** or across different **Traces**.
 **Links** can be used to represent batched operations where a **Span** was
-initiated by multiple initiating **Span**s, each representing a single incoming
+initiated by multiple initiating **Spans**, each representing a single incoming
 item being processed in the batch.
 
 Another example of using a **Link** is to declare the relationship between
@@ -107,7 +107,7 @@ initiated by one of many fast incoming requests.
 When using the scatter/gather (also called fork/join) pattern, the root
 operation starts multiple downstream processing operations and all of them are
 aggregated back in a single **Span**. This last **Span** is linked to many
-operations it aggregates. All of them are the **Span**s from the same Trace. And
+operations it aggregates. All of them are the **Spans** from the same Trace. And
 similar to the Parent field of a **Span**. It is recommended, however, to not
 set parent of the **Span** in this scenario as semantically the parent field
 represents a single parent scenario, in many cases the parent **Span** fully
@@ -235,12 +235,20 @@ OpenTelemetry
 [proto](https://github.com/open-telemetry/opentelemetry-proto/blob/a46c815aa5e85a52deb6cb35b8bc182fb3ca86a0/src/opentelemetry/proto/agent/common/v1/common.proto#L28-L96)
 for an example.
 
+## Context Propagation
+
+All of OpenTelemetry cross-cutting concerns, such as traces and metrics,
+share an underlying `Context` mechanism for storing state and
+accessing data across the lifespan of a distributed transaction.
+
+See the [Context](context.md)
+
 ## Propagators
 
-OpenTelemetry uses `Propagators` to serialize and deserialize `SpanContext` and `DistributedContext`
-into a binary or text format. Currently there are two types of propagators:
+OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
+such as `SpanContext` and `CorrelationContext` into a `Format`. Currently there is one
+type of propagator:
 
-- `BinaryFormat` which is used to serialize and deserialize a value into a binary representation.
 - `HTTPTextFormat` which is used to inject and extract a value as text into carriers that travel
   in-band across process boundaries.
 

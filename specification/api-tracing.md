@@ -12,14 +12,10 @@ Table of Contents
 * [Tracer](#tracer)
   * [Obtaining a tracer](#obtaining-a-tracer)
   * [Tracer operations](#tracer-operations)
-    * [GetCurrentSpan](#getcurrentspan)
-    * [WithSpan](#withspan)
-    * [SpanBuilder](#spanbuilder)
-    * [GetBinaryFormat](#getbinaryformat)
-    * [GetHttpTextFormat](#gethttptextformat)
 * [SpanContext](#spancontext)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
@@ -76,19 +72,19 @@ The OpenTelemetry library achieves in-process context propagation of `Span`s by
 way of the `Tracer`.
 
 The `Tracer` is responsible for tracking the currently active `Span`, and
-exposes methods for creating and activating new `Span`s. The `Tracer` is
+exposes functions for creating and activating new `Span`s. The `Tracer` is
 configured with `Propagator`s which support transferring span context across
 process boundaries.
 
 ### Obtaining a Tracer
 
-New `Tracer` instances can be created via a `TracerFactory` and its `getTracer`
-method. This method expects two string arguments:
+New `Tracer` instances can be created via a `TracerProvider` and its `getTracer`
+function. This function expects two string arguments:
 
-`TracerFactory`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `TracerFactory`.
+`TracerProvider`s are generally expected to be used as singletons. Implementations
+SHOULD provide a single global default `TracerProvider`.
 
-Some applications may use multiple `TracerFactory` instances, e.g. to provide
+Some applications may use multiple `TracerProvider` instances, e.g. to provide
 different settings (e.g. `SpanProcessor`s) to each of those instances and -
 in further consequence - to the `Tracer` instances created by them.
 
@@ -101,22 +97,22 @@ in further consequence - to the `Tracer` instances created by them.
   A library, implementing the OpenTelemetry API *may* also ignore this name and
   return a default instance for all calls, if it does not support "named"
   functionality (e.g. an implementation which is not even observability-related).
-  A TracerFactory could also return a no-op Tracer here if application owners configure
+  A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library
   (e.g. `semver:1.0.0`).
 
 Implementations might require the user to specify configuration properties at
-`TracerFactory` creation time, or rely on external configuration, e.g. when using the
+`TracerProvider` creation time, or rely on external configuration, e.g. when using the
 provider pattern.
 
 #### Runtimes with multiple deployments/applications
 
 Runtimes that support multiple deployments or applications might need to
-provide a different `TracerFactory` instance to each deployment. To support this,
-the global `TracerFactory` registry may delegate calls to create new instances of
-`TracerFactory` to a separate `Provider` component, and the runtime may include
-its own `Provider` implementation which returns a different `TracerFactory` for
+provide a different `TracerProvider` instance to each deployment. To support this,
+the global `TracerProvider` registry may delegate calls to create new instances of
+`TracerProvider` to a separate `Provider` component, and the runtime may include
+its own `Provider` implementation which returns a different `TracerProvider` for
 each deployment.
 
 `Provider` instances are registered with the API via some language-specific
@@ -124,16 +120,17 @@ mechanism, for instance the `ServiceLoader` class in Java.
 
 ### Tracer operations
 
-The `Tracer` MUST provide methods to:
+The `Tracer` MUST provide functions to:
+
+- Create a new `Span`
+
+The `Tracer` SHOULD provide methods to:
 
 - Get the currently active `Span`
-- Create a new `Span`
 - Make a given `Span` as active
 
-The `Tracer` SHOULD allow end users to configure other tracing components that
-control how `Span`s are passed across process boundaries, including the binary
-and text format `Propagator`s used to serialize `Span`s created by the
-`Tracer`.
+The `Tracer` MUST internally leverage the `Context` in order to get and set the
+current `Span` state and how `Span`s are passed across process boundaries.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
@@ -144,17 +141,12 @@ SHOULD create each new `Span` as a child of its active `Span` unless an
 explicit parent is provided or the option to create a span without a parent is
 selected, or the current active `Span` is invalid.
 
-The `Tracer` MUST provide a way to update its active `Span`, and MAY provide
-convenience methods to manage a `Span`'s lifetime and the scope in which a
+The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
+convenience functions to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
 `Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
 time) but stil active. A `Span` may be active on one thread after it has been
 made inactive on another.
-
-The implementation MUST provide no-op binary and text `Propagator`s, which the
-`Tracer` SHOULD use by default if other propagators are not configured. SDKs
-SHOULD use the W3C HTTP Trace Context as the default text format. For more
-details, see [trace-context](https://github.com/w3c/trace-context).
 
 ## SpanContext
 
@@ -200,7 +192,7 @@ sub-operations.
 
 `Span`s encapsulate:
 
-- The operation name
+- The span name
 - An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
 - A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
@@ -211,6 +203,24 @@ sub-operations.
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
+
+The _span name_ is a human-readable string which concisely identifies the work
+represented by the Span, for example, an RPC method name, a function name,
+or the name of a subtask or stage within a larger computation. The span name
+should be the most general string that identifies a (statistically) interesting
+_class of Spans_, rather than individual Span instances. That is, "get_user" is
+a reasonable name, while "get_user/314159", where "314159" is a user ID, is not
+a good name due to its high cardinality.
+
+For example, here are potential span names for an endpoint that gets a
+hypothetical account information:
+
+| Span Name         | Guidance     |
+| ----------------- | ------------ |
+| `get`             | Too general  |
+| `get_account/42`  | Too specific |
+| `get_account`     | Good, and account_id=42 would make a nice Span attribute |
+| `get_account/{accountId}` | Also good (using the "HTTP route") |
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation. A `Span`'s start time SHOULD be set to the current time on [span
@@ -238,10 +248,12 @@ as a separate operation.
 
 The API MUST accept the following parameters:
 
-- The operation name. This is a required parameter.
-- The parent Span or parent Span context, and whether the new `Span` should be a
-  root `Span`. API MAY also have an option for implicit parent context
-  extraction from the current context as a default behavior.
+- The span name. This is a required parameter.
+- The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
+  and whether the new `Span` should be a root `Span`. API MAY also have an
+  option for implicit parenting from the current context as a default behavior.
+  See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+  for guidance on `Span` parenting from explicit and implicit `Context`s.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - `Attribute`s - A collection of key-value pairs, with the same semantics as
   the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
@@ -272,6 +284,21 @@ created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
 
+#### Determining the Parent Span from a Context
+
+When a new `Span` is created from a `Context`, the `Context` may contain:
+
+- A current `Span`
+- An extracted `SpanContext`
+- A current `Span` and an extracted `SpanContext`
+- Neither a current `Span` nor an extracted `Span` context
+
+The parent should be selected in the following order of precedence:
+
+- Use the current `Span`, if available.
+- Use the extracted `SpanContext`, if available.
+- There is no parent. Create a root `Span`.
+
 #### Add Links
 
 During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
@@ -301,7 +328,7 @@ Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
-With the exception of the method to retrieve the `Span`'s `SpanContext` and
+With the exception of the function to retrieve the `Span`'s `SpanContext` and
 recording status, none of the below may be called after the `Span` is finished.
 
 #### Get Context
@@ -416,10 +443,10 @@ It is highly discouraged to update the name of a `Span` after its creation.
 spans. And often, filtering logic will be implemented before the `Span` creation
 for performance reasons. Thus the name update may interfere with this logic.
 
-The method name is called `UpdateName` to differentiate this method from the
-regular property setter. It emphasizes that this operation signifies a
-major change for a `Span` and may lead to re-calculation of sampling or
-filtering decisions made previously depending on the implementation.
+The function name is called `UpdateName` to differentiate this function from the
+regular property setter. It emphasizes that this operation signifies a major
+change for a `Span` and may lead to re-calculation of sampling or filtering
+decisions made previously depending on the implementation.
 
 Alternatives for the name update may be late `Span` creation, when Span is
 started with the explicit timestamp from the past at the moment where the final
@@ -428,7 +455,7 @@ started with the explicit timestamp from the past at the moment where the final
 
 Required parameters:
 
-- The new **operation name**, which supersedes whatever was passed in when the
+- The new **span name**, which supersedes whatever was passed in when the
   `Span` was started
 
 #### End
@@ -473,7 +500,7 @@ codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
   - The operation completed successfully.
 - `Cancelled`
   - The operation was cancelled (typically by the caller).
-- `UnknownError`
+- `Unknown`
   - An unknown error.
 - `InvalidArgument`
   - Client specified an invalid argument. Note that this differs from
@@ -506,7 +533,7 @@ codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
     fixed if the system state changes.
 - `Unimplemented`
   - Operation is not implemented or not supported/enabled in this service.
-- `InternalError`
+- `Internal`
   - Internal errors. Means some invariants expected by underlying system has been
     broken.
 - `Unavailable`
