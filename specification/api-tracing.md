@@ -308,7 +308,7 @@ description](overview.md#links-between-spans).
 A `Link` is defined by the following properties:
 
 - (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`s with the same semantics as defined for
+- (Optional) One or more `Attribute`s with the same restrictions as defined for
   [Span Attributes](#set-attributes).
 
 The `Link` SHOULD be an immutable type.
@@ -413,7 +413,7 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 
 - (Required) Name of the event.
-- (Optional) One or more `Attribute`s with the same semantics as defined for
+- (Optional) One or more `Attribute`s with the same restrictions as defined for
   [Span Attributes](#set-attributes).
 - (Optional) Timestamp for the event.
 
