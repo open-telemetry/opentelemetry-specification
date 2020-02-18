@@ -73,3 +73,11 @@ For message consumers, the following additional attributes may be set:
 Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive`.
 Even though in that case one might think that the span kind is `INTERNAL`, that kind MUST NOT be used.
 Instead span kind should be set to either `CONSUMER` or `SERVER` according to the rules defined above.
+
+### Attributes specific to certain messaging systems
+
+#### RabbitMQ
+
+In RabbitMQ, the destination is defined by an _exchange_ and a _routing key_.
+`messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
+The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_key`, unless it is empty.
