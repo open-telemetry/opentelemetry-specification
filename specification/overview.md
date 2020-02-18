@@ -204,7 +204,7 @@ The `CorrelationContext` implements the editor's draft of the [W3C Correlation-C
 While `CorrelationContext` can be used to prototype other cross-cutting concerns, this mechanism is primarily intended
 to convey values for the OpenTelemetry observability systems.
 
-These values can be consumed from `CorrelationContext` and used as an additional dimension for a metric,
+These values can be consumed from `CorrelationContext` and used as additional dimensions for metrics,
 or additional context for logs and traces. Some examples:
 
 - a web service can benefit from including context around what service has sent the request
