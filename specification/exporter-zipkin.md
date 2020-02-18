@@ -14,18 +14,18 @@ and Zipkin.
 | Span.TraceID             | Span.TraceID     |                                                              |
 | Span.ParentID            | Span.ParentID    |                                                              |
 | Span.SpanID              | Span.ID          |                                                              |
-| Span.TraceState          | TODO             | TODO                                                         |
+| Span.TraceState          | TBD              | TBD                                                          |
 | Span.Name                | Span.Name        |                                                              |
 | Span.Kind                | Span.Kind        | See [SpanKind](#spankind) for values mapping                |
 | Span.StartTime           | Span.Timestamp   | See [Unit of time](#unit-of-time)                            |
 | Span.EndTime             | Span.Duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
 | Span.Attributes          | Span.Tags        | See [Attributes](#attributes) for data types for the mapping. |
 | Span.Events              | Span.Annotations | See [Events](#events) for the mapping format.                |
-| Span.Links               | TODO             | TODO                                                         |
+| Span.Links               | TBD              | TBD                                                          |
 | Span.Status              | Add to Span.Tags | See [Status](#status) for tag names to use.                  |
-| Span.LocalChildSpanCount | TODO             | TODO                                                         |
+| Span.LocalChildSpanCount | TBD              | TBD                                                          |
 
-TODO: This is work in progress document and it is currently doesn't specify
+TBD : This is work in progress document and it is currently doesn't specify
 mapping for these fields:
 
 OpenTelemetry fields:
@@ -68,11 +68,13 @@ Zipkin.
 
 OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to Zipkin.
 Primitive types MUST be converted to string using en-US culture settings.
-Boolean values must use lower case strings `"true"` and `"false"`.
+Boolean values must use lower case strings `true` and `false`, except an
+attribute named `error`. In case if value of the attribute is `false`, Zipkin
+tag needs to be omitted.
 
 Array values MUST be serialized to string like a JSON list.
 
-TODO: add examples
+TBD: add examples
 
 ### Status
 
