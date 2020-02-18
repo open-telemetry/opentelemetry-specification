@@ -509,7 +509,7 @@ import "go.opentelemetry.io/api/distributedcontext"
 func (s *server) doThing(ctx context.Context) {
     var doLabels []core.KeyValue{
      key1.String("..."),
- key2.String("..."),
+     key2.String("..."),
     }
 
     correlations := distributedcontext.FromContext()
