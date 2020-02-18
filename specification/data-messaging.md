@@ -21,7 +21,7 @@ A *message* usually consists of headers (or properties, or meta information) and
 
 A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier. Two kinds of destinations are are distinguished: *topic*s and *queue*s.
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all *subscribers* of the topic.
-A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at least once-mode for messages with [idempotent][] processing).
+A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
 
 The consumption of a message can happen in multiple steps:
 First, the lower-level receiving of a message at a consumer, and then the logical processing of the message.
