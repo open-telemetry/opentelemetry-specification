@@ -70,6 +70,7 @@ For message consumers, the following additional attributes may be set:
 | -------------- | ---------------------------------------------------------------------- | --------- |
 | `messaging.operation` | A string identifying which part and kind of message consumption this span describes: either `receive` or `process`. (If the operation is `send`, this attribute must not be set: the operation can be inferred from the span kind in that case.) | No |
 
+The _receive_ span is be used to track the time used for receiving the message(s), whereas the _process_ span(s) track the time for processing the message(s).
 Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive`.
 Even though in that case one might think that the span kind is `INTERNAL`, that kind MUST NOT be used.
 Instead span kind should be set to either `CONSUMER` or `SERVER` according to the rules defined above.
