@@ -72,7 +72,8 @@ Boolean values must use lower case strings `true` and `false`, except an
 attribute named `error`. In case if value of the attribute is `false`, Zipkin
 tag needs to be omitted.
 
-Array values MUST be serialized to string like a JSON list.
+Array values MUST be serialized to string like a JSON list as mentioned in
+[semantic conventions document](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/data-semantic-conventions.md#semantic-conventions).
 
 TBD: add examples
 
@@ -103,7 +104,8 @@ include attribute values like this:
 ### Unit of Time
 
 Zipkin times like `timestamp`, `duration` and `annotation.timestamp` MUST be
-reported in microseconds with decimal accuracy.
+reported in microseconds with decimal accuracy. For example, `duration` of 1234
+nanoseconds will be represented as 1.234 microseconds.
 
 ## Request Payload
 
