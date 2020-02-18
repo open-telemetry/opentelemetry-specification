@@ -23,7 +23,7 @@ A destination is usually identified by some name unique within the messaging sys
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all *subscribers* of the topic.
 A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
 
-The consumption of a message can happen in multiple steps:
+The consumption of a message can happen in multiple steps.
 First, the lower-level receiving of a message at a consumer, and then the logical processing of the message.
 Often, the waiting for a message is not particularly interesting and hidden away in a framework that only invokes some handler function to process a message once one is received
 (in the same way that the listening on a TCP port for an incoming HTTP message is not particularly interesting).
