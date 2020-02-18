@@ -41,7 +41,7 @@ Given these definitions, the remainder of this section describes the semantic co
 
 **Span name:** The span name should usually be set to the message destination name.
 The conversation ID should be used instead when it is expected to have lower cardinality.
-In particular, the conversation ID must be used if the message destination is unnamed or temporary.
+In particular, the conversation ID must be used if the message destination is unnamed or temporary unless multiple conversations can be combined to a logical destination of lower cardinality.
 
 **Span kind:** A producer of a message should set the span kind to `PRODUCER` unless it synchronously waits for a response: then it should use `CLIENT`.
 The processor of the message should set the kind to `CONSUMER`, unless it always sends back a reply that is directed to the producer of the message
