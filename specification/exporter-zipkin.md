@@ -16,7 +16,7 @@ and Zipkin.
 | Span.SpanID              | Span.ID          |                                                              |
 | Span.TraceState          | TODO             | TODO                                                         |
 | Span.Name                | Span.Name        |                                                              |
-| Span.Kind                | Span.Kind        | See [SpanKind](#span-kind) for values mapping                |
+| Span.Kind                | Span.Kind        | See [SpanKind](#spankind) for values mapping                |
 | Span.StartTime           | Span.Timestamp   | See [Unit of time](#unit-of-time)                            |
 | Span.EndTime             | Span.Duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
 | Span.Attributes          | Span.Tags        | See [Attributes](#attributes) for data types for the mapping. |
