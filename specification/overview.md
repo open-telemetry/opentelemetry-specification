@@ -211,7 +211,7 @@ or additional context for logs and traces. Some examples:
 - a SaaS provider can include context about the API user or token that is responsible for that request
 - determining that a particular browser version is associated with a failure in an image processing service
 
-For backwards compatibility with OpenTracing, Baggage is propagated as `CorrelationContext` when
+For backward compatibility with OpenTracing, Baggage is propagated as `CorrelationContext` when
 using the OpenTracing bridge. New concerns with different criteria should consider creating a new
 cross-cutting concern to cover their use-case; they may benefit from the W3C encoding format but
 use a new HTTP header to convey data throughout a distributed trace.
