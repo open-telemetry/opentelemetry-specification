@@ -68,7 +68,7 @@ Zipkin.
 
 OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to Zipkin.
 Primitive types MUST be converted to string using en-US culture settings.
-Boolean values must use lower case strings `true` and `false`, except an
+Boolean values must use lower case strings `"true"` and `"false"`, except an
 attribute named `error`. In case if value of the attribute is `false`, Zipkin
 tag needs to be omitted.
 
