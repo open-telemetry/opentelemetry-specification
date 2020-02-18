@@ -19,7 +19,7 @@ A *message* usually consists of headers (or properties, or meta information) and
 * Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual routing, delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
 * Logically: some particular message *destination*.
 
-A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier. Two kinds of targets are are distinguished: *topic*s and *queue*s.
+A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier. Two kinds of destinations are are distinguished: *topic*s and *queue*s.
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all *subscribers* of the topic.
 A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at least once-mode for messages with [idempotent][] processing).
 
@@ -29,7 +29,7 @@ Often, the waiting for a message is not particularly interesting and hidden away
 (in the same way that the listening on a TCP port for an incoming HTTP message is not particularly interesting).
 However, in a synchronous conversation, the wait time for a message is important.
 
-In some messaging systems, a message can receive a reply message that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*. The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit conversation ID. Sometimes a conversation can span multiple message targets (e.g. initiated via a topic, continued on a temporary one-to-one queue).
+In some messaging systems, a message can receive a reply message that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*. The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit conversation ID. Sometimes a conversation can span multiple message destinations (e.g. initiated via a topic, continued on a temporary one-to-one queue).
 
 Some messaging systems support the concept of *temporary destination* (often only temporary queues) that are established just for a particular set of communication partners (often one to one) or conversation. Often such destinations are unnamed or have an auto-generated name.
 
