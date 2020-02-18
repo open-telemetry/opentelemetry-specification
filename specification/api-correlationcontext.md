@@ -1,4 +1,4 @@
-# CorrelationContext API
+# Correlations API
 
 <details>
 <summary>
@@ -6,6 +6,7 @@ Table of Contents
 </summary>
 
 - [Overview](#overview)
+    - [CorrelationContext](#correlationcontext)
     - [Get correlations](#get-correlations)
     - [Get correlation](#get-correlation)
     - [Set correlation](#set-correlation)
@@ -18,6 +19,13 @@ Table of Contents
 
 ## Overview
 
+The Correlations API consists of:
+
+- the `CorrelationContext`
+- functions to interact with the `CorrelationContext` in a `Context`
+
+### CorrelationContext
+
 `CorrelationContext` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
 It is an abstract data type represented by a set of name/value pairs describing user-defined properties.
 Each name in `CorrelationContext` MUST be associated with exactly one value.
@@ -26,14 +34,14 @@ specification.
 
 ### Get correlations
 
-Returns the name/value pairs in this `CorrelationContext`. The order of name/value pairs MUST NOT be
+Returns the name/value pairs in the `CorrelationContext`. The order of name/value pairs MUST NOT be
 significant. Based on the language specification, the returned value can be
 either an immutable collection or an immutable iterator to the collection of
-name/value pairs in this `CorrelationContext`.
+name/value pairs in the `CorrelationContext`.
 
 OPTIONAL parameters:
 
-`Context` the context from which to get the correlations.
+`Context` the context containing the `CorrelationContext` from which to get the correlations.
 
 ### Get correlation
 
@@ -48,13 +56,13 @@ REQUIRED parameters:
 
 OPTIONAL parameters:
 
-`Context` the context from which to get the correlation.
+`Context` the context containing the `CorrelationContext` from which to get the correlation.
 
 ### Set correlation
 
 To record the value for a name/value pair, the Correlations API SHALL provide a function which
-takes a context, a name, and a value as input. Returns an updated `Context` which
-contains the new value.
+takes a context, a name, and a value as input. Returns a new `Context` which
+contains a `CorrelationContext` with the new value.
 
 REQUIRED parameters:
 
@@ -64,12 +72,12 @@ REQUIRED parameters:
 
 OPTIONAL parameters:
 
-`Context` the context to which the value will be set.
+`Context` the context containing the `CorrelationContext` in which to set the correlation.
 
 ### Remove correlation
 
 To delete a name/value pair, the Correlations API SHALL provide a function which takes a context
-and a name as input. Returns an updated `Context` which no longer contains the selected name.
+and a name as input. Returns a new `Context` which no longer contains the selected name.
 
 REQUIRED parameters:
 
@@ -77,17 +85,17 @@ REQUIRED parameters:
 
 OPTIONAL parameters:
 
-`Context` the context from which to remove the correlation.
+`Context` the context containing the `CorrelationContext` from which to remove the correlation.
 
 ### Clear correlations
 
 To avoid sending any name/value pairs to an untrusted process, the Correlations API SHALL provide
-a function to remove all Correlations from a context. Returns an updated `Context`
+a function to remove all Correlations from a context. Returns a new `Context`
 with no correlations.
 
 OPTIONAL parameters:
 
-`Context` the context from which to remove all correlations.
+`Context` the context containing the `CorrelationContext` from which to remove all correlations.
 
 ## CorrelationContext Propagation
 
