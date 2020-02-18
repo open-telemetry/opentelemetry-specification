@@ -76,7 +76,7 @@ If Zipkin `SpanKind` resolves to either `SpanKind.CLIENT` or `SpanKind.PRODUCER`
 |3|http.host|Commonly used address attribute for Http Spans.|
 |3|db.instance|Commonly used address attribute for DB Spans.|
 
-Highest priority match should be selected.
+Lowest priority match should be selected. In the event that multiple hits occur at the same priority level (Ex: `net.peer.name` & `peer.service` are both specified), take the value from the first attribute matched.
 
 ### Attribute
 
