@@ -57,8 +57,8 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | `messaging.temp_destination` | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
 | `messaging.protocol` | The transport protocol such as `AMQP` or `MQTT`. | No |
 | `messaging.url` | Connection substring such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
-| `messaging.message_id` | An integer or string used by the messaging system as an identifier for the message. | No |
-| `messaging.conversation_id` | An integer or string identifying the conversation to which the message belongs. Sometimes called "correlation ID". | No |
+| `messaging.message_id` | A value used by the messaging system as an identifier for the message, represented as a string. | No |
+| `messaging.conversation_id` | A value identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | No |
 
 Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
 
