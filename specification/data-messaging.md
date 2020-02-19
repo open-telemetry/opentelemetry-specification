@@ -7,6 +7,7 @@
 - [Definitions](#definitions)
 - [Conventions](#conventions)
 - [Messaging attributes](#messaging-attributes)
+- [Examples](#examples)
 
 <!-- tocstop -->
 
@@ -82,3 +83,60 @@ Instead span kind should be set to either `CONSUMER` or `SERVER` according to th
 In RabbitMQ, the destination is defined by an _exchange_ and a _routing key_.
 `messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
 The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_key`, unless it is empty.
+
+## Examples
+
+### Topic with multiple consumers
+
+Given is a process P, that publishes a message to a topic T on messaging system MS, and two processes CA and CB, which both receive the message and process it.
+
+```
+Process P:  | Span P1 |
+--
+Process CA:              | Span CA1 |
+--
+Process CB:                 | Span CB1 |
+```
+
+| Field or Attribute | Span P1 | Span CA1 | Span CB1 |
+|-|-|-|-|-|-|
+| Name | `"T"` | `"T"` | `"T"` |
+| Parent |  | Span P1 | Span P1 |
+| Links |  |  |  |
+| SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` |
+| Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
+| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
+| `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
+| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `messaging.destination` | `"T"` | `"T"` | `"T"` |
+| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.operation` |  | `"process"` | `"process"` |
+| `messaging.message_id` | `"a1"` | `"a1"`| `"a1"` |
+
+### Batch consumer
+
+Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span C1) and processes each message separately (Spans C2 and C3).  
+Since a span can only have one parent and the propagated trace and span IDs are not known when the receiving span is started, the receiving span will have no parent and the processing spans are correlated with the producing spans using links.
+
+```
+Process P: | Span P1 | Span P2 |
+--
+Process C:                      |  Span C1  |
+                                        | Span C2 |
+                                          | Span C3 |
+```
+
+| Field or Attribute | Span P1 | Span P2 | Span C1 | Span C2 | Span C3 |
+|-|-|-|-|-|-|
+| Name | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
+| Parent |  |  |  | Span C1 | Span C1 |
+| Links |  |  |  | Span P1 | Span P2 |
+| SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
+| Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
+| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
+| `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
+| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
+| `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
+| `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
+| `messaging.message_id` | `"a1"` | `"a2"` | | `"a1"` | `"a2"` |
