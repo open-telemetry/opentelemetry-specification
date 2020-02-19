@@ -197,6 +197,7 @@ sub-operations.
   `Span`
 - A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
   or null
+- A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
 - An ordered mapping of [`Attribute`s](#set-attributes)
