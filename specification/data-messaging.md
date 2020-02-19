@@ -115,7 +115,8 @@ Process CB:                 | Span CB1 |
 
 ### Batch consumer
 
-Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span C1) and processes each message separately (Spans C2 and C3).  
+Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span C1) and processes each message separately (Spans C2 and C3).
+
 Since a span can only have one parent and the propagated trace and span IDs are not known when the receiving span is started, the receiving span will have no parent and the processing spans are correlated with the producing spans using links.
 
 ```
