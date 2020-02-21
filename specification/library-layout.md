@@ -17,7 +17,7 @@ api
    ├── metrics
    ├── trace
    │   └── propagation
-   ├── correlationcontext
+   ├── distributedcontext
    │   └── propagation
    ├── internal
    └── logs
@@ -33,10 +33,15 @@ This directory describes the API that provides in-process context propagation.
 
 This directory describes the Metrics API that can be used to record application metrics.
 
-### [/correlationcontext](api-correlationcontext.md)
+### [/distributedcontext](api-distributedcontext.md)
 
-This directory describes the CorrelationContext API that can be used to manage context propagation
+This directory describes the DistributedContext API that can be used to manage context propagation
 and metrics-related labeling.
+
+This API consists of a few main classes:
+
+- `Entry` is used to label anything that is associated with a specific operation, such as an HTTP request.
+- An `Entry` consists of `EntryMetadata`, `EntryKey`, and `EntryValue`.
 
 ### [/trace](api-tracing.md)
 
@@ -66,7 +71,7 @@ sdk
    ├── metrics
    ├── resource
    ├── trace
-   ├── correlationcontext
+   ├── distributedcontext
    ├── internal
    └── logs
 ```
@@ -88,7 +93,7 @@ information about the entity for which stats or traces are recorded. For example
 by a Kubernetes container can be linked to a resource that specifies the cluster, namespace, pod,
 and container name.
 
-### `/sdk/correlationcontext`
+### `/sdk/distributedcontext`
 
 ### [/sdk/trace](sdk-tracing.md)
 

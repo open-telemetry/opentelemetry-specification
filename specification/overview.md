@@ -193,28 +193,31 @@ OpenTelemetry defines the naming convention for metric names as well as a
 well-known metric names in [Semantic Conventions](data-semantic-conventions.md)
 document.
 
-## CorrelationContext
+## DistributedContext
 
-In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
-name/value pairs, called `CorrelationContext`. `CorrelationContext` is intended for
-indexing observability events in one service with attributes provided by a prior service in
-the same transaction. This helps to establish a causal relationship between these events.
+The **DistributedContext** exists to store labels that describe the context of an operation an application performs. It is intended to enable context that are custom to the application or integrations in contrast to other contexts, such as `SpanContext`. Only one **DistributedContext** should be associated with any particular operation.
 
-The `CorrelationContext` implements the editor's draft of the [W3C Correlation-Context specification](https://w3c.github.io/correlation-context/).
-While `CorrelationContext` can be used to prototype other cross-cutting concerns, this mechanism is primarily intended
-to convey values for the OpenTelemetry observability systems.
+For example, a web service can benefit from including context around what service has sent the request. Or a SaaS provider can include context about the API user or token that is responsible for that request. These values can be consumed from **DistributedContext** and used as an additional dimension for a metric, or additional context for logs and traces.
 
-These values can be consumed from `CorrelationContext` and used as additional dimensions for metrics,
-or additional context for logs and traces. Some examples:
+**DistributedContext** is a collection of key-value `Entry` pairs, with each key of associated with exactly one value. **DistributedContext** is serializable,
+to facilitate propagating it not only inside the process but also across process boundaries.
 
-- a web service can benefit from including context around what service has sent the request
-- a SaaS provider can include context about the API user or token that is responsible for that request
-- determining that a particular browser version is associated with a failure in an image processing service
+**DistributedContext** is a recommended name but languages can have more language-specific names like **dctx**.
 
-For backward compatibility with OpenTracing, Baggage is propagated as `CorrelationContext` when
-using the OpenTracing bridge. New concerns with different criteria should consider creating a new
-cross-cutting concern to cover their use-case; they may benefit from the W3C encoding format but
-use a new HTTP header to convey data throughout a distributed trace.
+### Entry
+
+An **Entry** is used to represent the labels that are contained inside the `DistributedContext`, representing values such as the service that originated the request, or vendor-specific data. It consists of an **EntryKey**, an **EntryValue** and an **EntryMetadata**.
+
+- **EntryKey** is the name of the **Entry**. **EntryKey** along with **EntryValue**
+  can be used to aggregate and group stats, annotate traces and logs, etc. **EntryKey** is
+  a string that contains only printable ASCII (codes between 32 and 126 inclusive) and with
+  a length greater than zero and less than 256.
+- **EntryValue** is a string that contains only printable ASCII (codes between 32 and 126).
+- **EntryMetadata** contains properties associated with an **Entry**.
+  For now only the property **EntryTTL** is defined.
+- **EntryTTL** is an integer that represents number of hops an entry can propagate.
+  Anytime a sender serializes an entry, sends it over the wire and a receiver deserializes
+  the entry then the entry is considered to have travelled one hop.
 
 ## Resources
 
