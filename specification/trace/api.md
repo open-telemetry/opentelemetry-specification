@@ -122,7 +122,8 @@ mechanism, for instance the `ServiceLoader` class in Java.
 
 The `Tracer` MUST provide functions to:
 
-- Create a new `Span`
+- Start a new active `Span`
+- Create a new inactive `Span`
 
 The `Tracer` SHOULD provide methods to:
 
@@ -130,16 +131,20 @@ The `Tracer` SHOULD provide methods to:
 - Make a given `Span` as active
 
 The `Tracer` MUST internally leverage the `Context` in order to get and set the
-current `Span` state and how `Span`s are passed across process boundaries.
+currently active `Span` and how `Span`s are passed across process boundaries. A
+`Span` that is created, as opposed to started, is not tracked in the `Context`
+by the `Tracer`, but it MUST have a start timestamp set at the time of creation.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
 
-When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
-new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
-SHOULD create each new `Span` as a child of its active `Span` unless an
+When starting or creating a new `Span`, the `Tracer` MUST allow the caller to
+specify the new `Span`'s parent in the form of a `Span` or `SpanContext`. The
+`Tracer` SHOULD create each new `Span` as a child of its active `Span` unless an
 explicit parent is provided or the option to create a span without a parent is
-selected, or the current active `Span` is invalid.
+selected, or the current active `Span` is invalid. Last the `Tracer` would check
+if `Context` has an extracted `SpanContext`. See [Determining the Parent Span
+from a Context](#determining-the-parent-span-from-a-context).
 
 The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
 convenience functions to manage a `Span`'s lifetime and the scope in which a
@@ -245,10 +250,16 @@ the currently active `Span` is set as the new `Span`'s parent. The `Tracer`
 MAY provide other default options for newly created `Span`s.
 
 `Span` creation MUST NOT set the newly created `Span` as the currently
-active `Span` by default, but this functionality MAY be offered additionally
-as a separate operation.
+active `Span` by default. While starting a `Span` through a `Tracer` MUST
+set the `Span` as the currently active `Span`.
 
-The API MUST accept the following parameters:
+A common case where creating a `Span` but not making it active is in the use of
+async callbacks. Before the callback is setup a `Span` is created, with the
+currently active `Span`, if one exists, as the parent. This new `Span` is passed
+to the callback as an argument and to be set as active within the body of the
+callback when it is run.
+
+The API functions for starting and creating a `Span` MUST accept the following parameters:
 
 - The span name. This is a required parameter.
 - The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
