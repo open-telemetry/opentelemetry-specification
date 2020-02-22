@@ -120,20 +120,24 @@ mechanism, for instance the `ServiceLoader` class in Java.
 
 ### Tracer operations
 
+The currently active `Span` for a `Tracer` is one that is tracked in the current
+`Context` by the `Tracer`. An inactive `Span` is not currently tracked in any
+`Context`.
+
 The `Tracer` MUST provide functions to:
 
 - Start a new active `Span`
-- Create a new inactive `Span`
+- Start a new inactive `Span`
 
 The `Tracer` SHOULD provide methods to:
 
 - Get the currently active `Span`
-- Make a given `Span` as active
+- Make a given `Span` active
 
 The `Tracer` MUST internally leverage the `Context` in order to get and set the
 currently active `Span` and how `Span`s are passed across process boundaries. A
-`Span` that is created, as opposed to started, is not tracked in the `Context`
-by the `Tracer`, but it MUST have a start timestamp set at the time of creation.
+`Span` that is started but inactive is not tracked in the `Context` by the
+`Tracer`, but it still MUST have a start timestamp set at the time of creation.
 
 When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
