@@ -21,7 +21,7 @@ Depending on the protocol and the type of operation, additional information
 is needed to represent and analyze a span correctly in monitoring systems. It is
 also important to unify how this attribution is made in different languages.
 This way, the operator will not need to learn specifics of a language and
-telemetry collected from multi-language micro-service can still be easily
+telemetry collected from polyglot micro-services environment can still be easily
 correlated and cross-analyzed.
 
 The following semantic conventions for spans are defined:
