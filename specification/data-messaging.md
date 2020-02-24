@@ -99,15 +99,15 @@ Process CB:                 | Span CB1 |
 ```
 
 | Field or Attribute | Span P1 | Span CA1 | Span CB1 |
-|-|-|-|-|-|-|
+|-|-|-|-|
 | Name | `"T"` | `"T"` | `"T"` |
 | Parent |  | Span P1 | Span P1 |
 | Links |  |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` |
-| Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
-| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
-| `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
-| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| Status | `Ok` | `Ok` | `Ok` |
+| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` |
+| `net.peer.port` | `1234` | `1234` | `1234` |
+| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination` | `"T"` | `"T"` | `"T"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
