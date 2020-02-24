@@ -54,7 +54,7 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | -------------- | ---------------------------------------------------------------------- | --------- |
 | `messaging.system` | A string identifying the messaging system vendor such as `kafka`, `rabbitmq` or `activemq`. | Yes |
 | `messaging.destination` | The message destination name, e.g. `MyQueue` or `MyTopic`. This might be equal to the span name but is required nevertheless. | Yes |
-| `messaging.destination_kind` | The kind of message destination: Either `queue` or `topic`. | Yes |
+| `messaging.destination_kind` | The kind of message destination: Either `queue` or `topic`. | Yes, if either of them applies. |
 | `messaging.temp_destination` | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
 | `messaging.protocol` | The transport protocol such as `AMQP` or `MQTT`. | No |
 | `messaging.url` | Connection substring such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
