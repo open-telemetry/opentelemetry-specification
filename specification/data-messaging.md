@@ -93,17 +93,17 @@ The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_ke
 Given is a process P, that publishes a message to a topic T on messaging system MS, and two processes CA and CB, which both receive the message and process it.
 
 ```
-Process P:  | Span P1 |
+Process P:  | Span Prod1 |
 --
 Process CA:              | Span CA1 |
 --
 Process CB:                 | Span CB1 |
 ```
 
-| Field or Attribute | Span P1 | Span CA1 | Span CB1 |
+| Field or Attribute | Span Prod1 | Span CA1 | Span CB1 |
 |-|-|-|-|
 | Name | `"T"` | `"T"` | `"T"` |
-| Parent |  | Span P1 | Span P1 |
+| Parent |  | Span Prod1 | Span Prod1 |
 | Links |  |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` |
@@ -117,23 +117,23 @@ Process CB:                 | Span CB1 |
 
 ### Batch receiving
 
-Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span C1) and processes each message separately (Spans C2 and C3).
+Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span Recv1) and processes each message separately (Spans Proc1 and Proc2).
 
 Since a span can only have one parent and the propagated trace and span IDs are not known when the receiving span is started, the receiving span will have no parent and the processing spans are correlated with the producing spans using links.
 
 ```
-Process P: | Span P1 | Span P2 |
+Process P: | Span Prod1 | Span Prod2 |
 --
-Process C:                      |  Span C1  |
-                                        | Span C2 |
-                                            | Span C3 |
+Process C:                      | Span Recv1 |
+                                        | Span Proc1 |
+                                               | Span Proc2 |
 ```
 
-| Field or Attribute | Span P1 | Span P2 | Span C1 | Span C2 | Span C3 |
+| Field or Attribute | Span Prod1 | Span Prod2 | Span Recv1 | Span Proc1 | Span Proc2 |
 |-|-|-|-|-|-|
 | Name | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
-| Parent |  |  |  | Span C1 | Span C1 |
-| Links |  |  |  | Span P1 | Span P2 |
+| Parent |  |  |  | Span Recv1 | Span Recv1 |
+| Links |  |  |  | Span Prod1 | Span Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
@@ -146,7 +146,7 @@ Process C:                      |  Span C1  |
 
 ### Batch processing
 
-Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them separately (Span C1 and C2) and processes both messages in one batch (Span C3).
+Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them separately (Span Recv1 and Recv2) and processes both messages in one batch (Span Proc1).
 
 Since each span can only have one parent, C3 should not choose a random parent out of C1 and C2, but rather rely on the implicitly selected parent as defined by the [tracing API spec](api-tracing.md).
 Similarly, only one value can be set as `message_id`, so C3 cannot report both `a1` and `a2` and therefore attribute is left out.
@@ -156,17 +156,17 @@ The client library or application could also add the receiver span's span contex
 The status of the batch processing span is selected by the application. Depending on the semantics of the operation. A span status `Ok` could, for example, be set only if all messages or if just at least one were properly processed.
 
 ```
-Process P: | Span P1 | Span P2 |
+Process P: | Span Prod1 | Span Prod2 |
 --
-Process C:                      | Span C1 | Span C2 |
-                                                     | Span C3 |
+Process C:                              | Span Recv1 | Span Recv2 |
+                                                                   | Span Proc1 |
 ```
 
-| Field or Attribute | Span P1 | Span P2 | Span C1 | Span C2 | Span C3 |
+| Field or Attribute | Span Prod1 | Span Prod2 | Span Recv1 | Span Recv2 | Span Proc1 |
 |-|-|-|-|-|-|
 | Name | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
-| Parent |  |  | Span P1 | Span P2 |  |
-| Links |  |  |  |  | Span P1 + P2 |
+| Parent |  |  | Span Prod1 | Span Prod2 |  |
+| Links |  |  |  |  | Span Prod1 + Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
