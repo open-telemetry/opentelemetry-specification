@@ -20,7 +20,8 @@ A *message* usually consists of headers (or properties, or meta information) and
 * Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual routing, delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
 * Logically: some particular message *destination*.
 
-A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier. Two kinds of destinations are are distinguished: *topic*s and *queue*s.
+A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier.
+Two kinds of destinations are distinguished: *topic*s and *queue*s.
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all *subscribers* of the topic.
 A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
 
@@ -57,11 +58,12 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | `messaging.destination_kind` | The kind of message destination: Either `queue` or `topic`. | Yes, if either of them applies. |
 | `messaging.temp_destination` | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
 | `messaging.protocol` | The transport protocol such as `AMQP` or `MQTT`. | No |
-| `messaging.url` | Connection substring such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
+| `messaging.url` | Connection string such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
 | `messaging.message_id` | A value used by the messaging system as an identifier for the message, represented as a string. | No |
 | `messaging.conversation_id` | A value identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | No |
 
 Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
+These attributes should be set to the broker to which the message is sent/from which it is received.
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
 
