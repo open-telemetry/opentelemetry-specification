@@ -31,7 +31,7 @@ Synonyms: *Instrumentation Library*, *Integration*.
 
 <a name="name"></a>
 
-## Name (of a Tracer or Meter)
+## Tracer Name / Meter Name
 
 This refers to the `name` specified when creating a new `Tracer` or `Meter`
 (see [Obtaining a Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-tracing.md#obtaining-a-tracer)/[Obtaining a Meter](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-metrics-user.md#obtaining-a-meter)). It is identical to
