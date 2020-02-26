@@ -371,7 +371,7 @@ A `Span` MUST have the ability to set attributes associated with it.
 
 An `Attribute` is defined by the following properties:
 
-- (Required) The attribute key, which must be a non-`null` and non-empty string.
+- (Required) The attribute key, which MUST be a non-`null` and non-empty string.
 - (Required) The attribute value, which is either:
   - A primitive type: string, boolean or numeric.
   - An array of primitive type values. The array MUST be homogeneous,
