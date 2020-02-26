@@ -15,7 +15,7 @@ See [Library](https://github.com/open-telemetry/opentelemetry-specification/blob
 Denotes the library instrumented with OpenTelemetry API calls, thus the library
 that is producing telemetry data.
 
-Example: `org.mongodb`.
+Example: `org.mongodb.client`.
 
 <a name="instrumenting_library"></a>
 
