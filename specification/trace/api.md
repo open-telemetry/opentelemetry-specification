@@ -120,7 +120,7 @@ mechanism, for instance the `ServiceLoader` class in Java.
 
 ### Tracer operations
 
-The currently active `Span` for a `Tracer` is one that is tracked in the current
+The currently active `Span` for a `Tracer` is the one that is tracked in the current
 `Context` by the `Tracer`. An inactive `Span` is not currently tracked in any
 `Context`.
 
