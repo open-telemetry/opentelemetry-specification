@@ -44,7 +44,7 @@ creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](api-tracing.md#obta
 This term applies to [Metric names](api-metrics-user.md#metric-names) only and is used to disambiguate identical metric
 names used in different instrumenting libraries. The [Name](#name) provided
 for creating a `Meter` serves as its namespace in addition to the primary semantics
-describe [here](#name).
+described [here](#name).
 
 The `version` argument is not relevant here and will not be included in
 the resulting namespace string.
