@@ -5,15 +5,17 @@ specification.
 
 ## (Telemetry) Library
 
-Denotes the actual *OpenTelemetry* library in use.  
+Denotes the actual *OpenTelemetry* (or API compatible) library in use.  
 See [Library](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/data-resource-semantic-conventions.md#library)
 
 <a name="instrumented_library"></a>
 
 ## Instrumented Library
 
-Denotes the library instrumented with OpenTelemetry API calls, thus the library
-that is producing telemetry data.
+Denotes the library whose "actions" (e.g. called methods/functions, operations, ...)
+result in OpenTelemetry signals (traces, metrics, logs).  
+The actual OpenTelemetry API calls can happen inside this library but might as well
+happen in a different one (the [Instrumenting Library](#instrumenting_library)).
 
 Example: `org.mongodb.client`.
 
@@ -33,12 +35,16 @@ Synonyms: *Instrumentation Library*, *Integration*.
 
 ## Tracer Name / Meter Name
 
-This refers to the `name` specified when creating a new `Tracer` or `Meter`
-(see [Obtaining a Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-tracing.md#obtaining-a-tracer)/[Obtaining a Meter](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-metrics-user.md#obtaining-a-meter)). It is identical to
-[Instrumenting Library](#instrumenting_library).
+This refers to the `name` and (optional) `version` arguments specified when
+creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-tracing.md#obtaining-a-tracer)/[Obtaining a Meter](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-metrics-user.md#obtaining-a-meter)). It is identical to [Instrumenting Library](#instrumenting_library).
+
+
 
 ## Namespace
 
 This term applies to [Metric names](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-metrics-user.md#metric-names) only and is used to disambiguate identical metric
-names used in different libraries. The [Name](#name) provided for creating a `Meter`
+names used in different instrumenting libraries. The [Name](#name) provided for creating a `Meter`
 also serves as its namespace.
+
+The `version` argument is not relevant here and will not be included in
+the resulting namespace string.
