@@ -25,7 +25,8 @@ Example: `org.mongodb.client`.
 
 Denotes the library which provides the instrumentation *for* a given library (i.e.
 the [Instrumented Library](#instrumented_library)). Hence, *Instrumented Library*
-and *Instrumenting Library* can be identical, but they don't necessarily have to.
+and *Instrumenting Library* can be identical if a library has built-in OpenTelemetry
+instrumentation or gets auto-instrumented, but they don't necessarily have to.
 
 Example: `io.opentelemetry.contrib.mongodb`.
 
@@ -38,13 +39,12 @@ Synonyms: *Instrumentation Library*, *Integration*.
 This refers to the `name` and (optional) `version` arguments specified when
 creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-tracing.md#obtaining-a-tracer)/[Obtaining a Meter](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-metrics-user.md#obtaining-a-meter)). It is identical to [Instrumenting Library](#instrumenting_library).
 
-
-
 ## Namespace
 
 This term applies to [Metric names](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-metrics-user.md#metric-names) only and is used to disambiguate identical metric
-names used in different instrumenting libraries. The [Name](#name) provided for creating a `Meter`
-also serves as its namespace.
+names used in different instrumenting libraries. The [Name](#name) provided
+for creating a `Meter` serves as its namespace in addition to the primary semantics
+describe [here](#name).
 
 The `version` argument is not relevant here and will not be included in
 the resulting namespace string.
