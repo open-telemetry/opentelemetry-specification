@@ -63,16 +63,18 @@ service.name = Shop.shoppingcart
 
 **Description:** The SDK used to produce telemetry data.
 
-In OpenTelemetry, this is the OpenTelemetry SDK implementation being used.  
-If the default SDK provided by the OpenTelemetry project is used, `telemetry.sdk.name` MUST
-be set to `opentelemetry-sdk`.  
-If another SDK, like a fork or a vendor-provided SDK is used, `telemetry.sdk.name` MUST be set
-to the fully-qualified class or module name of that SDK's main entry point, depending on the language.
-This value should be stable across different versions of an implementation.
+If the default OpenTelemetry SDK provided by the OpenTelemetry project is used,
+`telemetry.sdk.name` MUST be set to `opentelemetry-sdk`.
+
+If another SDK, like a fork or a vendor-provided implementation, is used, `telemetry.sdk.name`
+MUST be set to the fully-qualified class or module name of that SDK's main entry point
+or another suitable identifier depending on the language.
+The identifier `opentelemetry-sdk` is reserved and MUST NOT be used in this case.
+The identifier SHOULD be stable across different versions of an implementation.
 
 | Attribute  | Description  | Example  | Required? |
 |---|---|---|---|
-| telemetry.sdk.name | The name of the telemetry SDK. | `opentelemetry-sdk` | No |
+| telemetry.sdk.name | The name of the telemetry SDK as defined above. | `opentelemetry-sdk` | No |
 | telemetry.sdk.language | The language of the telemetry SDK.<br/> One of the following values MUST be used, if one applies: "cpp", "dotnet", "erlang", "go", "java", "nodejs", "php", "python", "ruby", "webjs" | `java` | No |
 | telemetry.sdk.version | The version string of the telemetry SDK as defined in [Version Attributes](#version-attributes). | `semver:1.2.3` | No |
 
