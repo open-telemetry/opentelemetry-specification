@@ -4,7 +4,7 @@ This document defines standard attributes for resources. These attributes are ty
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
 * [Service](#service)
-* [Library](#library)
+* [Telemetry SDK](#telemetry-sdk)
 * [Compute Unit](#compute-unit)
   * [Container](#container)
 * [Deployment Service](#deployment-service)
@@ -57,17 +57,24 @@ namespace = Company
 service.name = Shop.shoppingcart
 ```
 
-## Library
+## Telemetry SDK
 
-**type:** `library`
+**type:** `telemetry.sdk`
 
-**Description:** Telemetry library information.
+**Description:** The SDK used to produce telemetry data.
+
+In OpenTelemetry, this is the OpenTelemetry SDK implementation being used.  
+If the default SDK provided by the OpenTelemetry project is used, `telemetry.sdk.name` MUST
+be set to `opentelemetry-sdk`.  
+If another SDK, like a fork or a vendor-provided SDK is used, `telemetry.sdk.name` MUST be set
+to the fully-qualified class or module name of that SDK's main entry point, depending on the language.
+This value should be stable across different versions of an implementation.
 
 | Attribute  | Description  | Example  | Required? |
 |---|---|---|---|
-| library.name | The name of the telemetry library. | `opentelemetry` | No |
-| library.language | The language of telemetry library and of the code instrumented with it. <br/> The following spelling SHOULD be used for language strings: "cpp", "dotnet", "erlang", "go", "java", "nodejs", "php", "python", "ruby", "webjs" | `java` | No |
-| library.version | The version string of the library as defined in [Version Attributes](#version-attributes). | `semver:1.2.3` | No |
+| telemetry.sdk.name | The name of the telemetry SDK. | `opentelemetry-sdk` | No |
+| telemetry.sdk.language | The language of telemetry SDK.<br/> One of the following values MUST be used, if one applies: "cpp", "dotnet", "erlang", "go", "java", "nodejs", "php", "python", "ruby", "webjs" | `java` | No |
+| telemetry.sdk.version | The version string of the telemetry SDK as defined in [Version Attributes](#version-attributes). | `semver:1.2.3` | No |
 
 ## Compute Unit
 
