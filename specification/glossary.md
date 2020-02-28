@@ -23,10 +23,10 @@ Example: `org.mongodb.client`.
 
 ## Instrumenting Library
 
-Denotes the library which provides the instrumentation *for* a given library (i.e.
-the [Instrumented Library](#instrumented_library)). Hence, *Instrumented Library*
-and *Instrumenting Library* can be identical if a library has built-in OpenTelemetry
-instrumentation, but they don't necessarily have to.
+Denotes the library which provides the instrumentation *for* a given library
+(i.e. *for* the [Instrumented Library](#instrumented_library)). Hence,
+*Instrumented Library* and *Instrumenting Library* can be identical if a library
+has built-in OpenTelemetry instrumentation, but they don't necessarily have to.
 
 Example: `io.opentelemetry.contrib.mongodb`.
 
