@@ -73,7 +73,7 @@ This value should be stable across different versions of an implementation.
 | Attribute  | Description  | Example  | Required? |
 |---|---|---|---|
 | telemetry.sdk.name | The name of the telemetry SDK. | `opentelemetry-sdk` | No |
-| telemetry.sdk.language | The language of telemetry SDK.<br/> One of the following values MUST be used, if one applies: "cpp", "dotnet", "erlang", "go", "java", "nodejs", "php", "python", "ruby", "webjs" | `java` | No |
+| telemetry.sdk.language | The language of the telemetry SDK.<br/> One of the following values MUST be used, if one applies: "cpp", "dotnet", "erlang", "go", "java", "nodejs", "php", "python", "ruby", "webjs" | `java` | No |
 | telemetry.sdk.version | The version string of the telemetry SDK as defined in [Version Attributes](#version-attributes). | `semver:1.2.3` | No |
 
 ## Compute Unit
