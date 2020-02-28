@@ -12,8 +12,8 @@ See [Library resource semantic conventions](data-resource-semantic-conventions.m
 
 ## Instrumented Library
 
-Denotes the library whose "actions" (e.g. called methods/functions, operations, ...)
-result in OpenTelemetry signals (traces, metrics, logs).  
+Denotes the library that is monitored, i.e. the library of interest that signals (traces, metrics, logs) are emitted for.
+
 The actual OpenTelemetry API calls can happen inside this library but might as well
 happen in a different one (the [Instrumenting Library](#instrumenting_library)).
 
