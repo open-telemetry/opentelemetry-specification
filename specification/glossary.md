@@ -6,7 +6,7 @@ specification.
 ## (Telemetry) Library
 
 Denotes the actual *OpenTelemetry* (or API-compatible) library in use.  
-See [Library](data-resource-semantic-conventions.md#library)
+See [Library resource semantic conventions](data-resource-semantic-conventions.md#library)
 
 <a name="instrumented_library"></a>
 
