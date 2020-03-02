@@ -10,7 +10,7 @@ Table of Contents
   - [Fields](#fields)
   - [Inject](#inject)
     - [Setter argument](#setter)
-      - [Put](#put)
+      - [Set](#set)
   - [Extract](#extract)
     - [Getter argument](#getter)
       - [Get](#get)
@@ -82,13 +82,13 @@ Required arguments:
 
 #### Setter argument
 
-Setter is an argument in `Inject` that puts value into given field.
+Setter is an argument in `Inject` that sets value into given field.
 
 `Setter` allows a `HTTPTextFormat` to set propagated fields into a carrier.
 
-`Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Setter` class with `Put` method as described below.
+`Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Setter` class with `Set` method as described below.
 
-##### Put
+##### Set
 
 Replaces a propagated field with the given value.
 
