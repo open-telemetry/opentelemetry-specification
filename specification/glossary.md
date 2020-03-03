@@ -15,7 +15,7 @@ See [Library resource semantic conventions](data-resource-semantic-conventions.m
 
 Denotes the library for which the telemetry signals (traces, metrics, logs) are gathered.
 
-The calls to the OpenTelemetry API can be done either by the Instrumented Library itself, 
+The calls to the OpenTelemetry API can be done either by the Instrumented Library itself,
 or by another [Instrumenting Library](#instrumenting_library).
 
 Example: `org.mongodb.client`.
@@ -24,7 +24,7 @@ Example: `org.mongodb.client`.
 
 ## Instrumenting Library
 
-Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library). 
+Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library).
 *Instrumented Library* and *Instrumenting Library* may be the same library
 if it has built-in OpenTelemetry instrumentation.
 
