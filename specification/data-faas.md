@@ -61,7 +61,7 @@ For `faas` spans with trigger `datasource`, it is recommended to set the followi
 
 ### HTTP
 
-The function responsibility is to provide an answer to an inbound HTTP request. The `faas` span SHOULD follow the recomandations described in the [HTTP Server semantic conventions](data-http.md#http-server-semantic-conventions).
+The function responsibility is to provide an answer to an inbound HTTP request. The `faas` span SHOULD follow the recommendations described in the [HTTP Server semantic conventions](data-http.md#http-server-semantic-conventions).
 
 ### PubSub
 
@@ -87,4 +87,4 @@ A function is scheduled to be executed regularly. The following additional attri
 
 Function as a Service offers such flexibility that it is not possible to fully cover with semantic conventions.
 When a function does not satisfy any of the aforementioned cases, a span MUST set the attribute `faas.trigger` to `"other"`.
-In this case, it is responsability of the framework or instrumentation library to define the most appropriate attributes.
+In this case, it is responsibility of the framework or instrumentation library to define the most appropriate attributes.
