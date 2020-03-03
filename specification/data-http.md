@@ -100,13 +100,13 @@ One of the following sets of attributes is required (in order of usual preferenc
 
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
-* `http.scheme`, `peer.hostname`, `peer.port`, `http.target`
-* `http.scheme`, `peer.ip`, `peer.port`, `http.target`
+* `http.scheme`, `net.peer.name`, `net.peer.port`, `http.target`
+* `http.scheme`, `net.peer.ip`, `net.peer.port`, `http.target`
 
 Note that in some cases `http.host` might be different
-from the `peer.hostname`
-used to look up the `peer.ip` that is actually connected to.
-In that case it is strongly recommended to set the `peer.hostname` attribute in addition to `http.host`.
+from the `net.peer.name`
+used to look up the `net.peer.ip` that is actually connected to.
+In that case it is strongly recommended to set the `net.peer.name` attribute in addition to `http.host`.
 
 For status, the following special cases have canonical error codes assigned:
 
