@@ -3,11 +3,12 @@
 Below are a list of some OpenTelemetry specific terms that are used across this
 specification.
 
-## (Telemetry) Library
+## Telemetry SDK
 
 Denotes the library that implements the *OpenTelemetry API*.
 
-See [Library resource semantic conventions](data-resource-semantic-conventions.md#library)
+See [Library Guidelines](library-guidelines.md#sdk-implementation) and
+[Library resource semantic conventions](data-resource-semantic-conventions.md#telemetry-sdk)
 
 <a name="instrumented_library"></a>
 
