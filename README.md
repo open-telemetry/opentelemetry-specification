@@ -9,6 +9,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
 ## Table of Contents
 
 - [Overview](specification/overview.md)
+- [Glossary](specification/glossary.md)
 - [Library Guidelines](specification/library-guidelines.md)
   - [Package/Library Layout](specification/library-layout.md)
   - [Concurrency and Thread-Safety](specification/concurrency.md)
