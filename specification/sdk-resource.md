@@ -37,6 +37,9 @@ Required parameters:
 - a collection of name/value attributes, where name is a string and value can be one
   of: string, int64, double, bool.
 
+The key and value, if value is a string, are trimmed, url encoded strings and
+case sensitive.
+
 ### Merge
 
 The interface MUST provide a way for a primary resource to merge with a
