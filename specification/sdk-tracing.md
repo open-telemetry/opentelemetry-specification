@@ -120,6 +120,12 @@ These are the default samplers implemented in the OpenTelemetry SDK:
   should be configuration to change this to "root spans only", or "all spans".
   * Description MUST be `ProbabilitySampler{0.000100}`.
 
+#### Sampler Design Considerations
+
+Sampling algorithms should consider the fact that many attributes of the span
+are mutable after it's initial creation, including span attributes and the
+span name.
+
 #### Probability Sampler algorithm
 
 TODO: Add details about how the probability sampler is implemented as a function
