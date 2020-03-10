@@ -293,8 +293,12 @@ Export() will never be called concurrently for the same exporter instance.
 Export() can be called again only after the current call returns.
 
 Export() must not block indefinitely, there must be a reasonable upper limit
-after which the call must time out with an error result (typically
-FailedRetryable).
+after which the call must time out with an error result (`Failure`).
+
+Any retry logic that is required by the exporter is the responsibility
+of the exporter. The default SDK SHOULD NOT implement retry logic, as
+the required logic is likely to depend heavily on the specific protocol
+and backend the spans are being sent to.
 
 **Parameters:**
 
@@ -312,16 +316,11 @@ exporter.
 
 ExportResult is one of:
 
-* Success - batch is successfully exported. For protocol exporters this
-  typically means that the data is sent over the wire and delivered to the
-  destination server.
-* FailedNotRetryable - exporting failed. The caller must not retry exporting the
-  same batch. The batch must be dropped. This for example can happen when the
-  batch contains bad data and cannot be serialized.
-* FailedRetryable - cannot export to the destination. The caller should record
-  the error and may retry exporting the same batch after some time. This for
-  example can happen when the destination is unavailable, there is a network
-  error or endpoint does not exist.
+* `Success` - The batch has been successfully exported.
+  For protocol exporters this typically means that the data is sent over
+  the wire and delivered to the destination server.
+* `Failure` - exporting failed. The batch must be dropped. For example, this
+  can happen when the batch contains bad data and cannot be serialized.
 
 #### `Shutdown()`
 
@@ -330,7 +329,7 @@ for exporter to do any cleanup required.
 
 `Shutdown` should be called only once for each `Exporter` instance. After the
 call to `Shutdown` subsequent calls to `Export` are not allowed and should
-return FailedNotRetryable error.
+return a `Failure` result.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). Language library authors can decide if they
@@ -375,8 +374,7 @@ type ExportResultCode int
 
 const (
     Success ExportResultCode = iota
-    FailedNotRetryable
-    FailedRetryable
+    Failure
 )
 ```
 
@@ -385,7 +383,7 @@ const (
 ```java
 public interface SpanExporter {
  public enum ResultCode {
-   Success, FailedNotRetryable, FailedRetryable
+   Success, Failure
  }
 
  ResultCode export(Collection<ExportableSpan> batch);
