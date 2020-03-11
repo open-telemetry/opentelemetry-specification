@@ -61,7 +61,7 @@ service.name = Shop.shoppingcart
 
 **type:** `telemetry.sdk`
 
-**Description:** The SDK used to produce telemetry data.
+**Description:** The telemetry SDK used to capture data recorded by the instrumentation libraries.
 
 If the default OpenTelemetry SDK provided by the OpenTelemetry project is used,
 `telemetry.sdk.name` MUST be set to `opentelemetry`.
