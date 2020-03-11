@@ -138,7 +138,7 @@ currently active `Span` and how `Span`s are passed across process boundaries. A
 `Span` that is started but inactive is not tracked in the `Context` by the
 `Tracer`, but it still MUST have a start timestamp set at the time of creation.
 
-A common case where starting an inactive `Span` is used is with asynchronous
+A common case of starting an inactive `Span` is with asynchronous
 callbacks. Before the callback is set up, an inactive `Span` is started, with
 the currently active `Span`, if one exists, as the parent. This new `Span` is
 passed to the callback as an argument and to be set as active within the body of
