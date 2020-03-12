@@ -13,13 +13,14 @@ with closed source environments. The SDK MUST allow for creation of `Resources` 
 for associating them with telemetry.
 
 When used with distributed tracing, a resource can be associated with the
-[TracerProvider](sdk-tracing.md#tracer-sdk). When associated with a
-`TracerProvider`, all `Span`s produced by any `Tracer` from the provider will
-automatically be associated with this `Resource`.
+[TracerProvider](sdk-tracing.md#tracer-sdk) when it is created.
+That association cannot be changed later.
+When associated with a `TracerProvider`,
+all `Span`s produced by any `Tracer` from the provider MUST be associated with this `Resource`.
 
-When used with metrics, a resource can be associated with the
+Analogous to distributed tracing, when used with metrics, a resource can be associated with the
 [MeterProvider](sdk-metrics.md#meter-sdk). When associated with a `MeterProvider`,
-all `Metrics` produced by any `Meter` from the provider will automatically be
+all `Metrics` produced by any `Meter` from the provider will  be
 associated with this `Resource`.
 
 ## Resource creation
@@ -67,7 +68,8 @@ attributes"](data-semantic-conventions.md) that have prescribed semantic meaning
 
 ## Resource operations
 
-In addition to resource creation, the following operations should be provided:
+Resources are immutable. Thus, in addition to resource creation,
+only the following operations should be provided:
 
 ### Retrieve attributes
 
