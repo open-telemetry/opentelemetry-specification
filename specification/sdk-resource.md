@@ -1,6 +1,6 @@
 # Resource SDK
 
-A [Resource](overview.md#resources) represents the entity producing
+A [Resource](overview.md#resources) is an immutable representation of the entity producing
 telemetry. For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
