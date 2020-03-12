@@ -63,11 +63,11 @@ service.name = Shop.shoppingcart
 
 **Description:** The telemetry SDK used to capture data recorded by the instrumentation libraries.
 
-If the default OpenTelemetry SDK provided by the OpenTelemetry project is used,
-`telemetry.sdk.name` MUST be set to `opentelemetry`.
+The default OpenTelemetry SDK provided by the OpenTelemetry project MUST set `telemetry.sdk.name`
+to the value `opentelemetry`.
 
-If another SDK, like a fork or a vendor-provided implementation, is used, `telemetry.sdk.name`
-MUST be set to the fully-qualified class or module name of that SDK's main entry point
+If another SDK, like a fork or a vendor-provided implementation, is used, this SDK MUST set the attribute
+`telemetry.sdk.name` to the fully-qualified class or module name of this SDK's main entry point
 or another suitable identifier depending on the language.
 The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
 The identifier SHOULD be stable across different versions of an implementation.
