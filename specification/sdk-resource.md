@@ -18,9 +18,10 @@ That association cannot be changed later.
 When associated with a `TracerProvider`,
 all `Span`s produced by any `Tracer` from the provider MUST be associated with this `Resource`.
 
-Analogous to distributed tracing, when used with metrics, a resource can be associated with the
-[MeterProvider](sdk-metrics.md#meter-sdk). When associated with a `MeterProvider`,
-all `Metrics` produced by any `Meter` from the provider will  be
+Analogous to distributed tracing, when used with metrics,
+a resource can be associated with the [MeterProvider](sdk-metrics.md#meter-sdk).
+When associated with a `MeterProvider`,
+all `Metrics` produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
 ## Resource creation
