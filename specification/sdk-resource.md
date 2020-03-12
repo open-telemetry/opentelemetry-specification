@@ -41,23 +41,27 @@ Required parameters:
 
 ### Merge
 
-The interface MUST provide a way for a primary resource to merge with a
-secondary resource, resulting in the creation of a brand new resource. The
-original resources should be unmodified.
+The interface MUST provide a way for a primary resource and a
+secondary resource to be merged into a new resource.
 
-This is utilized for merging of resources whose attributes come from different
-sources, such as environment variables, or metadata extracted from the host or
-container.
+Note: This is intended to be utilized for merging of resources whose attributes
+come from different sources,
+such as environment variables, or metadata extracted from the host or container.
 
-Already set attributes MUST NOT be overwritten unless they are the empty string.
+The resulting resource MUST have all attributes that are on any of the two input resources.
+Conflicts (i.e. a key for which attributes exist on both the primary and secondary resource)
+MUST be handled as follows:
+
+* If the value on the primary resource is an empty string, the result has the value of the secondary resource.
+* Otherwise, the value of the primary resource is used.
 
 Attribute key namespacing SHOULD be used to prevent collisions across different
 resource detection steps.
 
 Required parameters:
 
-- the primary resource whose attributes takes precedence.
-- the secondary resource whose attributes will be merged.
+- the primary resource whose attributes take precedence.
+- the secondary resource whose attributes will be merged in.
 
 ### The empty resource
 
