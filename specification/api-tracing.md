@@ -126,8 +126,9 @@ The `Tracer` MUST provide functions to:
 
 The `Tracer` SHOULD provide methods to:
 
+- Finish the currently active `Span`
 - Get the currently active `Span`
-- Make a given `Span` as active
+- Make a given `Span` active
 
 The `Tracer` MUST internally leverage the `Context` in order to get and set the
 current `Span` state and how `Span`s are passed across process boundaries.
