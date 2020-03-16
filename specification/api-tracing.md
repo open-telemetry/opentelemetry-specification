@@ -126,7 +126,7 @@ The `Tracer` MUST provide functions to:
 
 The `Tracer` SHOULD provide methods to:
 
-- Finish the currently active `Span`
+- End the currently active `Span`
 - Get the currently active `Span`
 - Make a given `Span` active
 
