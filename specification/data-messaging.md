@@ -57,7 +57,8 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | `messaging.destination` | The message destination name, e.g. `MyQueue` or `MyTopic`. This might be equal to the span name but is required nevertheless. | Yes |
 | `messaging.destination_kind` | The kind of message destination: Either `queue` or `topic`. | Yes, if either of them applies. |
 | `messaging.temp_destination` | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
-| `messaging.protocol` | The transport protocol name (without version), such as `AMQP` or `MQTT`. | No |
+| `messaging.protocol` | The name of the transport protocol such as `AMQP` or `MQTT`. | No |
+| `messaging.protocol_version` | The version of the transport protocol such as `0.9.1`. | No |
 | `messaging.url` | Connection string such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
 | `messaging.message_id` | A value used by the messaging system as an identifier for the message, represented as a string. | No |
 | `messaging.conversation_id` | A value identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | No |
