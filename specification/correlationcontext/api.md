@@ -13,6 +13,7 @@ Table of Contents
   - [Remove correlation](#remove-correlation)
   - [Clear correlations](#clear-correlations)
 - [CorrelationContext Propagation](#correlationcontext-propagation)
+    - [Serialization](#serialization)
 - [Conflict Resolution](#conflict-resolution)
 
 </details>
@@ -29,8 +30,6 @@ The Correlations API consists of:
 `CorrelationContext` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
 It is an abstract data type represented by a set of name/value pairs describing user-defined properties.
 Each name in `CorrelationContext` MUST be associated with exactly one value.
-`CorrelationContext` MUST be serialized according to the editor's draft of the [W3C Correlation Context](https://w3c.github.io/correlation-context/)
-specification.
 
 ### Get correlations
 
@@ -101,6 +100,10 @@ OPTIONAL parameters:
 
 `CorrelationContext` MAY be propagated across process boundaries or across any arbitrary boundaries
 (process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
+
+### Serialization
+
+Until the [W3C Correlation Context](https://w3c.github.io/correlation-context/) specification is recommended for use, Correlation Context should be serialized using [IETF Dictionary](https://tools.ietf.org/html/draft-ietf-httpbis-header-structure-17#section-3.2) as specified in the current draft of [IETF Structured Field Values for HTTP](https://datatracker.ietf.org/doc/draft-ietf-httpbis-header-structure/) with the header name `otcorrelationcontext`.
 
 ## Conflict Resolution
 
