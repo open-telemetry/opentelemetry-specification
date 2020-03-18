@@ -186,10 +186,7 @@ Required arguments:
 Implementations MAY provide global `Propagator`s for
 each supported `Format`.
 
-If offered, the global `Propagator`s should default to a composite `Propagator`
-containing W3C Trace Context and Correlation Context `Propagator`s,
-in order to provide propagation even in the presence of no-op
-OpenTelemetry implementations.
+The global `Propagator`s MUST default to a no-op `Propagator`.
 
 ### Get Global Propagator
 
