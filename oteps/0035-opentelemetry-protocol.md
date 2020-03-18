@@ -12,7 +12,7 @@ OpenTelemetry Protocol (OTLP) specification describes the encoding, transport an
   - [Protocol Details](#protocol-details)
     - [Export Request and Response](#export-request-and-response)
       - [OTLP over gRPC](#otlp-over-grpc)
-      - [Result Code](#result-code)
+      - [Export Response](#export-response)
       - [Throttling](#throttling)
       - [gRPC Service Definition](#grpc-service-definition)
     - [Other Transports](#other-transports)
@@ -82,15 +82,68 @@ If the client is shutting down (e.g. when the containing process wants to exit) 
 
 If the client is unable to deliver a certain request (e.g. a timer expired while waiting for acknowledgements) the client SHOULD record the fact that the data was not delivered.
 
-#### Result Code
+#### Export Response
 
-`Export` response includes a `result_code` field, which indicates whether the server was able to successfully process the received data. Possible values for `result_code` field are:
+The server may respond with either a success or an error to export requests.
 
-- `Success` - telemetry data is successfully processed by the server. If the server receives an empty request (a request that does not carry any telemetry data) the server SHOULD respond with `Success`.
+The success response indicates telemetry data is successfully processed by the server. If the server receives an empty request (a request that does not carry any telemetry data) the server SHOULD respond with success.
 
-- `FailedNotRetryable` - processing of telemetry data failed. The client MUST NOT retry sending the same telemetry data. The telemetry data MUST be dropped. This for example can happen when the request contains bad data and cannot be deserialized or otherwise processed by the server. The client SHOULD maintain a counter of such dropped data.
+When using gRPC transport, success response is returned via `ExportResponse` message.
 
-- `FailedRetryable` - processing of telemetry data failed. The client SHOULD record the error and may retry exporting the same data immediately. This can happen when the server is temporarily unable to process the data.
+When an error is returned by the server it falls into 2 broad categories: retryable and not-retryable:
+
+- Retryable errors indicate that processing of telemetry data failed and the client SHOULD record the error and may retry exporting the same data. This can happen when the server is temporarily unable to process the data.
+
+- Not-retryable errors indicate that processing of telemetry data failed and the client MUST NOT retry sending the same telemetry data. The telemetry data MUST be dropped. This can happen, for example, when the request contains bad data and cannot be deserialized or otherwise processed by the server. The client SHOULD maintain a counter of such dropped data.
+
+When using gRPC transport the server SHOULD indicate retryable errors using code [Unavailable](https://godoc.org/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails) using [RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40) containing 0 value of RetryDelay. Here is a sample Go code to illustrate:
+
+```go
+  // Do this on server side.
+  st, err := status.New(codes.Unavailable, "Server is unavailable").
+    WithDetails(&errdetails.RetryInfo{RetryDelay: &duration.Duration{Seconds: 0}})
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  return st.Err()
+```
+
+To indicate not-retryable errors the server is recommended to use code [InvalidArgument](https://godoc.org/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails) using [BadRequest](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L119). Other gRPC status code may be used if it is more appropriate. Here is a sample Go code to illustrate:
+
+```go
+  // Do this on server side.
+  st, err := status.New(codes.InvalidArgument, "Invalid Argument").
+    WithDetails(&errdetails.BadRequest{})
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  return st.Err()
+```
+
+The server MAY use other gRPC codes to indicate retryable and not-retryable errors if those other gRPC codes are more appropriate for a particular erroneous situation. The client SHOULD interpret gRPC status codes as retryable or not-retryable according to the following table:
+
+|gRPC Code|Retryable?|
+|---------|----------|
+|CANCELLED|Yes|
+|UNKNOWN|No|
+|INVALID_ARGUMENT|No|
+|DEADLINE_EXCEEDED|Yes|
+|NOT_FOUND|No|
+|ALREADY_EXISTS|No|
+|PERMISSION_DENIED|No|
+|UNAUTHENTICATED|No|
+|RESOURCE_EXHAUSTED|Yes|
+|FAILED_PRECONDITION|No|
+|ABORTED|Yes|
+|OUT_OF_RANGE|Yes|
+|UNIMPLEMENTED|No|
+|INTERNAL|No|
+|UNAVAILABLE|Yes|
+|DATA_LOSS|Yes|
+
+When retrying, the client SHOULD implement a backoff strategy. An exception to this is the Throttling case explained below, which provides explicit instructions about retrying interval.
 
 #### Throttling
 
@@ -98,7 +151,7 @@ OTLP allows backpressure signalling.
 
 If the server is unable to keep up with the pace of data it receives from the client then it SHOULD signal that fact to the client. The client MUST then throttle itself to avoid overwhelming the server.
 
-To signal backpressure when using gRPC transport the server SHOULD return an error with code [Unavailable](https://godoc.org/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails) using [RetryInfo](https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto#L40). Here is a sample Go code to illustrate:
+To signal backpressure when using gRPC transport, the server SHOULD return an error with code [Unavailable](https://godoc.org/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails) using [RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40). Here is a sample Go code to illustrate:
 
 ```go
   // Do this on server side.
@@ -242,22 +295,7 @@ message MetricExportRequest {
 
 // A response to ExportRequest.
 message ExportResponse {
-  enum ResultCode {
-    // Telemetry data is successfully processed by the server.
-    Success = 0;
-    
-    // processing of telemetry data failed. The client MUST NOT retry 
-    // sending the same telemetry data. The telemetry data MUST be dropped. 
-    // This for example can happen when the request contains bad data and 
-    // cannot be deserialized or otherwise processed by the server.
-    FailedNotRetryable = 1;
-    
-    // Processing of telemetry data failed. The client SHOULD record the 
-    // error and may retry exporting the same data after some time. This 
-    // for example can happen when the server is overloaded.
-    FailedRetryable = 2;
-  }
-  ResultCode result_code = 2;
+    // Response in an empty message.
 }
 
 // A list of spans from a Resource.
