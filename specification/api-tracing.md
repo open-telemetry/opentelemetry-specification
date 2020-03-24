@@ -243,10 +243,6 @@ Span state and how Spans are passed across process boundaries.
 When getting the current span, the API MUST return a placeholder Span with an
 invalid SpanContext if there is no currently active Span.
 
-When an active Span is made inactive, the previously-active Span SHOULD be made
-active. A Span maybe finished (i.e. have a non-null end time) but still active.
-A Span may be active on one thread after it has been made inactive on another.
-
 ### Span Creation
 
 Implementations MUST provide a way to create `Span`s via a `Tracer`. By default,
