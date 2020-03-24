@@ -14,6 +14,7 @@ Table of Contents
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
 * [Span](#span)
+  * [Span Context Interaction](#span-context-interaction)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
@@ -68,13 +69,7 @@ A duration is the elapsed time between two events.
 
 ## Tracer
 
-The OpenTelemetry library achieves in-process context propagation of `Span`s by
-way of the `Tracer`.
-
-The `Tracer` is responsible for tracking the currently active `Span`, and
-exposes functions for creating and activating new `Span`s. The `Tracer` is
-configured with `Propagator`s which support transferring span context across
-process boundaries.
+The `Tracer` main responsibility it to allow creating `Spans`.
 
 ### Obtaining a Tracer
 
@@ -124,29 +119,13 @@ The `Tracer` MUST provide functions to:
 
 - Create a new `Span`
 
-The `Tracer` SHOULD provide methods to:
-
-- Get the currently active `Span`
-- Make a given `Span` as active
-
-The `Tracer` MUST internally leverage the `Context` in order to get and set the
-current `Span` state and how `Span`s are passed across process boundaries.
-
-When getting the current span, the `Tracer` MUST return a placeholder `Span`
-with an invalid `SpanContext` if there is no currently active `Span`.
-
 When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
 new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
 SHOULD create each new `Span` as a child of its active `Span` unless an
 explicit parent is provided or the option to create a span without a parent is
 selected, or the current active `Span` is invalid.
 
-The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
-convenience functions to manage a `Span`'s lifetime and the scope in which a
-`Span` is active. When an active `Span` is made inactive, the previously-active
-`Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
-time) but still active. A `Span` may be active on one thread after it has been
-made inactive on another.
+The `Tracer` MAY provide convenience functions to manage a `Span`'s lifetime.
 
 ## SpanContext
 
@@ -236,6 +215,32 @@ attributes besides its `SpanContext`.
 Vendors may implement the `Span` interface to effect vendor-specific logic.
 However, alternative implementations MUST NOT allow callers to create `Span`s
 directly. All `Span`s MUST be created via a `Tracer`.
+
+### Span Context Interaction
+
+The OpenTelemetry library achieves in-process context propagation of `Span`s by
+way of the [Context](./context.md).
+
+Tracing API is responsible to provide functionality to track the currently
+active Span, and exposes functionality to activate new Spans. The API MAY
+provide default Propagators which support transferring span context across
+process boundaries.
+
+The API MUST provide methods to (depending on the language, global functions
+or util class e.g. `TracingContextUtils`):
+
+* Get the currently active Span
+* Make a given Span as active
+
+The API MUST internally leverage the Context in order to get and set the current
+Span state and how Spans are passed across process boundaries.
+
+When getting the current span, the API MUST return a placeholder Span with an
+invalid SpanContext if there is no currently active Span.
+
+When an active Span is made inactive, the previously-active Span SHOULD be made
+active. A Span maybe finished (i.e. have a non-null end time) but still active.
+A Span may be active on one thread after it has been made inactive on another.
 
 ### Span Creation
 
@@ -581,7 +586,8 @@ Returns the `StatusCanonicalCode` of this `Status`.
 ### GetDescription
 
 Returns the description of this `Status`.
-Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
+Languages should follow their usual conventions on whether to return `null` or
+an empty string here if no description was given.
 
 ### GetIsOk
 
