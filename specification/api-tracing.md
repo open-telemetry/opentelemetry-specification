@@ -69,7 +69,7 @@ A duration is the elapsed time between two events.
 
 ## Tracer
 
-The `Tracer` main responsibility it to allow creating `Spans`.
+The `Tracer`'s main responsibility it to allow creating `Spans`.
 
 ### Obtaining a Tracer
 
