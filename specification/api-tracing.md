@@ -231,7 +231,7 @@ provide default Propagators which support transferring span context across
 process boundaries.
 
 The API MUST provide methods (or, depending on the language, global functions
-or util class e.g. `TracingContextUtils`) to:
+or a util class e.g. `TracingContextUtils`) to:
 
 * Get the currently active Span
 * Get/Set a Span from/to a Context
