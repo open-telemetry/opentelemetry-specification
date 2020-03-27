@@ -1,6 +1,6 @@
 # Resource SDK
 
-A [Resource](overview.md#resources) represents the entity producing
+A [Resource](overview.md#resources) is an immutable representation of the entity producing
 telemetry. For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
@@ -13,13 +13,15 @@ with closed source environments. The SDK MUST allow for creation of `Resources` 
 for associating them with telemetry.
 
 When used with distributed tracing, a resource can be associated with the
-[TracerProvider](sdk-tracing.md#tracer-sdk). When associated with a
-`TracerProvider`, all `Span`s produced by any `Tracer` from the provider will
-automatically be associated with this `Resource`.
+[TracerProvider](sdk-tracing.md#tracer-sdk) when it is created.
+That association cannot be changed later.
+When associated with a `TracerProvider`,
+all `Span`s produced by any `Tracer` from the provider MUST be associated with this `Resource`.
 
-When used with metrics, a resource can be associated with the
-[MeterProvider](sdk-metrics.md#meter-sdk). When associated with a `MeterProvider`,
-all `Metrics` produced by any `Meter` from the provider will automatically be
+Analogous to distributed tracing, when used with metrics,
+a resource can be associated with a [MeterProvider](sdk-metrics.md#meter-sdk).
+When associated with a `MeterProvider`,
+all `Metrics` produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
 ## Resource creation
@@ -39,23 +41,27 @@ Required parameters:
 
 ### Merge
 
-The interface MUST provide a way for a primary resource to merge with a
-secondary resource, resulting in the creation of a brand new resource. The
-original resources should be unmodified.
+The interface MUST provide a way for a primary resource and a
+secondary resource to be merged into a new resource.
 
-This is utilized for merging of resources whose attributes come from different
-sources, such as environment variables, or metadata extracted from the host or
-container.
+Note: This is intended to be utilized for merging of resources whose attributes
+come from different sources,
+such as environment variables, or metadata extracted from the host or container.
 
-Already set attributes MUST NOT be overwritten unless they are the empty string.
+The resulting resource MUST have all attributes that are on any of the two input resources.
+Conflicts (i.e. a key for which attributes exist on both the primary and secondary resource)
+MUST be handled as follows:
+
+* If the value on the primary resource is an empty string, the result has the value of the secondary resource.
+* Otherwise, the value of the primary resource is used.
 
 Attribute key namespacing SHOULD be used to prevent collisions across different
 resource detection steps.
 
 Required parameters:
 
-- the primary resource whose attributes takes precedence.
-- the secondary resource whose attributes will be merged.
+- the primary resource whose attributes take precedence.
+- the secondary resource whose attributes will be merged in.
 
 ### The empty resource
 
@@ -67,7 +73,8 @@ attributes"](data-semantic-conventions.md) that have prescribed semantic meaning
 
 ## Resource operations
 
-In addition to resource creation, the following operations should be provided:
+Resources are immutable. Thus, in addition to resource creation,
+only the following operations should be provided:
 
 ### Retrieve attributes
 

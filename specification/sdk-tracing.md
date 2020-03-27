@@ -19,7 +19,7 @@ the backend.
 
 Sampling may be implemented on different stages of a trace collection.
 OpenTelemetry API defines a `Sampler` interface that can be used at
-instrumentation points by libraries to check the sampling `Decision` early and
+instrumentation points by libraries to check the `SamplingResult` early and
 optimize the amount of telemetry that needs to be collected.
 
 All other sampling algorithms may be implemented on SDK layer in exporters, or

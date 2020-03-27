@@ -9,11 +9,12 @@ The OpenTelemetry specification describes the cross-language requirements and ex
 ## Table of Contents
 
 - [Overview](specification/overview.md)
+- [Glossary](specification/glossary.md)
 - [Library Guidelines](specification/library-guidelines.md)
   - [Package/Library Layout](specification/library-layout.md)
   - [Concurrency and Thread-Safety](specification/concurrency.md)
 - API Specification
-  - [DistributedContext](specification/api-distributedcontext.md)
+  - [CorrelationContext](specification/api-correlationcontext.md)
     - [Propagators](specification/api-propagators.md)
   - [Tracing](specification/api-tracing.md)
   - [Metrics](specification/api-metrics.md)
@@ -22,6 +23,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
 - SDK Specification
   - [Tracing](specification/sdk-tracing.md)
   - [Resource](specification/sdk-resource.md)
+  - [Configuration](specification/sdk-configuration.md)
 - Data Specification
   - [Semantic Conventions](specification/data-semantic-conventions.md)
   - [Protocol](specification/protocol.md)

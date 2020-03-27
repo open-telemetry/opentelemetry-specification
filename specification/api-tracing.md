@@ -197,6 +197,7 @@ sub-operations.
   `Span`
 - A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
   or null
+- A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
 - An ordered mapping of [`Attribute`s](#set-attributes)
@@ -308,7 +309,8 @@ description](overview.md#links-between-spans).
 A `Link` is defined by the following properties:
 
 - (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`.
+- (Optional) One or more `Attribute`s with the same restrictions as defined for
+  [Span Attributes](#set-attributes).
 
 The `Link` SHOULD be an immutable type.
 
@@ -370,7 +372,7 @@ A `Span` MUST have the ability to set attributes associated with it.
 
 An `Attribute` is defined by the following properties:
 
-- (Required) The attribute key, which must be a string.
+- (Required) The attribute key, which MUST be a non-`null` and non-empty string.
 - (Required) The attribute value, which is either:
   - A primitive type: string, boolean or numeric.
   - An array of primitive type values. The array MUST be homogeneous,
@@ -386,6 +388,21 @@ Attributes SHOULD preserve the order in which they're set. Setting an attribute
 with the same key as an existing attribute SHOULD overwrite the existing
 attribute's value.
 
+Attribute values expressing a numerical value of zero or an empty string are
+considered meaningful and MUST be stored and passed on to span processors / exporters.
+Attribute values of `null` are considered to be not set and get discarded as if
+that `SetAttribute` call had never been made.
+As an exception to this, if overwriting of values is supported, this results in
+clearing the previous value and dropping the attribute key from the set of attributes.
+
+`null` values within arrays MUST be preserved as-is (i.e., passed on to span
+processors / exporters as `null`). If exporters do not support exporting `null`
+values, they MAY replace those values by 0, `false`, or empty strings.
+This is required for map/dictionary structures represented as two arrays with
+indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
+both containing an array of strings to represent a mapping
+`header_keys[i] -> header_values[i]`).
+
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](data-semantic-conventions.md) that have prescribed semantic meanings.
 
@@ -397,7 +414,8 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 
 - (Required) Name of the event.
-- (Optional) One or more `Attribute`.
+- (Optional) One or more `Attribute`s with the same restrictions as defined for
+  [Span Attributes](#set-attributes).
 - (Optional) Timestamp for the event.
 
 The `Event` SHOULD be an immutable type.
