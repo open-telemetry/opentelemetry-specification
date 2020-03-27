@@ -225,7 +225,7 @@ An `active Span` referes to a Span that is set to an
 [Attached Context](./context.md#attach-context). This applies only to languages
 using `Context` implicitly.
 
-Tracing API is responsible to provide functionality to track the currently
+The API is responsible to provide functionality to track the currently
 active Span, and exposes functionality to activate new Spans. The API MAY
 provide default Propagators which support transferring span context across
 process boundaries.
