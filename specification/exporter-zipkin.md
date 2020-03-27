@@ -73,10 +73,11 @@ If Zipkin `SpanKind` resolves to either `SpanKind.CLIENT` or `SpanKind.PRODUCER`
 |1|peer.service|Remote service name defined in OpenTracing specification.|
 |2|peer.hostname|Remote hostname defined in OpenTracing specification.|
 |2|peer.address|Remote address defined in OpenTracing specification.|
+|2|net.peer.ip & net.peer.port|[OpenTelemetry adopted attribute for remote address of the peer.](./data-span-general.md#general-network-connection-attributes)|
 |3|http.host|Commonly used address attribute for Http Spans.|
 |3|db.instance|Commonly used address attribute for DB Spans.|
 
-Lowest priority match should be selected. In the event that multiple hits occur at the same priority level (Ex: `net.peer.name` & `peer.service` are both specified), take the value from the first attribute matched.
+Lowest priority match should be selected. In the event that multiple hits occur at the same priority level (Ex: `net.peer.name` & `peer.service` are both specified), take the value from the first attribute matched. `net.peer.ip` can be used by itself as remote endpoint but should be combined with `net.peer.port` if it is also present.
 
 ### Attribute
 
