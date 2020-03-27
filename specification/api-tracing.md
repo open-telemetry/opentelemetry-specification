@@ -238,7 +238,7 @@ or a util class e.g. `TracingContextUtils`) to:
 * Make a given Span active
 
 The API MUST internally leverage the Context in order to get and set the current
-Span state and how Spans are passed across process boundaries.
+Span and for passing Spans across process boundaries.
 
 When getting the current span, the API MUST return a placeholder Span with an
 invalid SpanContext if there is no currently active Span.
