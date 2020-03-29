@@ -42,7 +42,6 @@ Zipkin fields:
 
 - Service name
 - Local_endpoint
-- Remote_endpoint
 - debug
 - Shared
 
@@ -63,6 +62,22 @@ Zipkin.
 | `SpanKind.CONSUMER`|`SpanKind.CONSUMER`||
 | `SpanKind.PRODUCER`|`SpanKind.PRODUCER` ||
 |`SpanKind.INTERNAL`|`null` |must be omitted (set to `null`)|
+
+### Remote endpoint
+
+If Zipkin `SpanKind` resolves to either `SpanKind.CLIENT` or `SpanKind.PRODUCER` then the service SHOULD specify remote endpoint otherwise Zipkin won't treat the Span as a dependency. OpenTelemetry doesn't have a perfectly expressive field for the destination service, so the following mapping is applied:
+
+|Priority|Attribute Name|Reason|
+|---|---|---|
+|1|net.peer.name|[OpenTelemetry adopted attribute for remote hostname, or similar.](./data-span-general.md#general-network-connection-attributes)|
+|1|peer.service|Remote service name defined in OpenTracing specification.|
+|2|peer.hostname|Remote hostname defined in OpenTracing specification.|
+|2|peer.address|Remote address defined in OpenTracing specification.|
+|2|net.peer.ip & net.peer.port|[OpenTelemetry adopted attribute for remote address of the peer.](./data-span-general.md#general-network-connection-attributes)|
+|3|http.host|Commonly used address attribute for Http Spans.|
+|3|db.instance|Commonly used address attribute for DB Spans.|
+
+Lowest priority match should be selected. In the event that multiple hits occur at the same priority level (Ex: `net.peer.name` & `peer.service` are both specified), take the value from the first attribute matched. `net.peer.ip` can be used by itself as remote endpoint but should be combined with `net.peer.port` if it is also present.
 
 ### Attribute
 
