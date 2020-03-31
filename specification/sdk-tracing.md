@@ -123,7 +123,7 @@ These are the default samplers implemented in the OpenTelemetry SDK:
 #### Sampler Design Considerations
 
 Sampling algorithms should consider the fact that many attributes of the span
-are mutable after it's initial creation, including span attributes and the
+are mutable after its initial creation, including span attributes and the
 span name.
 
 #### Probability Sampler algorithm
