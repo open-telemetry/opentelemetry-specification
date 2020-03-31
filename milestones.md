@@ -137,9 +137,9 @@ and languages SDKs will implement OpenTelemetry collector exporter.
 
 ### Getting to release
 
-By end of year the basic language SDKs will be complete and we will begin
+By the end of year the basic language SDKs will be complete and we will begin
 stabilization work. Also OpenCensus can be switched to the OpenTelemetry SDK. As
-well as instrumentation adapters can be implemented. So we will have early
+well as instrumentations can be implemented. So we will have early
 adopters.
 
 By early September we committed to provide a production ready full-featured

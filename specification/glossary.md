@@ -23,15 +23,13 @@ Example: `org.mongodb.client`.
 
 <a name="instrumenting_library"></a>
 
-## Instrumenting Library
+## Instrumentation Library
 
 Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library).
 *Instrumented Library* and *Instrumenting Library* may be the same library
 if it has built-in OpenTelemetry instrumentation.
 
 Example: `io.opentelemetry.contrib.mongodb`.
-
-Synonyms: *Instrumentation Library*, *Integration*.
 
 <a name="name"></a>
 

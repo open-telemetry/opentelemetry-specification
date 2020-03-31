@@ -266,23 +266,24 @@ service).
 Read more at OpenTelemetry Service [Long-term
 Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/docs/vision.md).
 
-## Instrumentation adapters
+## Instrumentation Libraries
 
-The inspiration of the project is to make every library and application
-manageable out of the box by instrumenting it with OpenTelemetry. However on the
-way to this goal there will be a need to enable instrumentation by plugging
-instrumentation adapters into the library of choice. These adapters can be
-wrapping library APIs, subscribing to the library-specific callbacks or
-translating telemetry exposed in other formats into OpenTelemetry model.
+A goal of the project is to enable opentelemetry instrumentation on every library
+and application out of the box. To achieve that goal, there is a need to author
+instrumentation libraries on these shared libraries and applications. These
+instrumentations can be wrapping library APIs that subscribe to library-specific
+callbacks or translators that convert telemetry exposed in other formats into
+opentelemetry models.
 
-Instrumentation adapters may be called different names. It is often referred as
-plugin, collector or auto-collector, telemetry module, bridge, etc. It is always
-recommended to follow the library and language standards. For instance, if
-instrumentation adapter is implemented as "log appender" - it will probably be
-called an `appender`, not an instrumentation adapter. However if there is no
-established name - the recommendation is to call packages "Instrumentation
-Adapter" or simply "Adapter".
+When naming these instrumentations, it is recommended to follow the library and
+language standards. For instance, if an instrumentation is implemented as a
+"log appender" - it will probably be called an `appender`.
 
-## Code injecting adapters
+If there is no established name - the recommendation is to call prefix packages
+with "instrumentation", followed by the instrumented library name itself.
 
-TODO: fill out as a result of SIG discussion.
+Here are some example library names that illustrate the opentelemetry
+recommendation:
+
+* opentelemetry-instrumentation-flask (Python)
+* @opentelemetry/instrumentation-grpc (Javascript)

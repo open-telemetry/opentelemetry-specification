@@ -47,7 +47,7 @@ New `Meter` instances can be created via a `MeterProvider` and its `getMeter` me
 `MeterProvider`s are generally expected to be used as singletons.
 Implementations SHOULD provide a single global default `MeterProvider`. The `getMeter` method expects two string arguments:
 
-- `name` (required): This name must identify the instrumentation library (also referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`)
+- `name` (required): This name must identify the instrumentation library (e.g. `io.opentelemetry.contrib.mongodb`)
   and *not* the instrumented library.
   In case an invalid name (null or empty string) is specified, a working default `Meter` implementation is returned as a fallback
   rather than returning null or throwing an exception.
