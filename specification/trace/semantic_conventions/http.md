@@ -44,7 +44,7 @@ In the case of an HTTP redirect, the request should normally be considered succe
 unless the client aborts following redirects due to hitting some limit (redirect loop).
 If following a (chain of) redirect(s) successfully, the status should be set according to the result of the final HTTP request.
 
-Don't set the span status description if the reason can be inferred from `http.status_code` and `http.status_text` already.
+Don't set the span status description if the reason can be inferred from `http.status_code` and `http.status_text`.
 
 | HTTP code               | Span status code      |
 |-------------------------|-----------------------|
