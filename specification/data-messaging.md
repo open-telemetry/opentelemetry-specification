@@ -64,9 +64,12 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | `messaging.conversation_id` | A value identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | No |
 
 Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
+Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
 [network attributes]: data-span-general.md#general-network-connection-attributes
+[`net.transport`]: data-span-general.md#nettransport-attribute
+[Hangfire]: https://www.hangfire.io/
 
 For message consumers, the following additional attributes may be set:
 
