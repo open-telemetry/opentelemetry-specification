@@ -179,6 +179,7 @@ TraceID and a non-zero SpanID.
 
 `IsRemote` is a boolean flag which returns true if the SpanContext was propagated
 from a remote parent.
+When creating children from remote spans, their IsRemote flag MUST be set to false.
 
 Please review the W3C specification for details on the [Tracestate
 field](https://www.w3.org/TR/trace-context/#tracestate-field).
