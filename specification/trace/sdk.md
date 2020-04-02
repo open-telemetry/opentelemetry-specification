@@ -358,7 +358,7 @@ languages. Examples are for illustration purposes only. Language library authors
 are free to deviate from these provided that their design remain true to the
 spirit of `Exporter` concept.
 
-###### Go SpanExporter Interface
+##### Go SpanExporter Interface
 
 ```go
 type SpanExporter interface {
@@ -380,7 +380,7 @@ const (
 )
 ```
 
-#### Java SpanExporter Interface
+##### Java SpanExporter Interface
 
 ```java
 public interface SpanExporter {
