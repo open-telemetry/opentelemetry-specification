@@ -141,7 +141,7 @@ The readable representations of all `Span` instances created by a `Tracer` must
 provide a `getLibraryResource` method that returns this `Resource` information
 held by the `Tracer`.
 
-### Span processor
+## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
 invocations. The span processors are invoked only when
@@ -188,9 +188,9 @@ in the SDK:
   +-----+--------------+   +---------------------+
 ```
 
-#### Interface definition
+### Interface definition
 
-##### OnStart(Span)
+#### OnStart(Span)
 
 `OnStart` is called when a span is started. This method is called synchronously
 on the thread that started the span, therefore it should not block or throw
@@ -202,7 +202,7 @@ exceptions.
 
 **Returns:** `Void`
 
-##### OnEnd(Span)
+#### OnEnd(Span)
 
 `OnEnd` is called when a span is ended. This method is called synchronously on
 the execution thread, therefore it should not block or throw an exception.
@@ -213,7 +213,7 @@ the execution thread, therefore it should not block or throw an exception.
 
 **Returns:** `Void`
 
-##### Shutdown()
+#### Shutdown()
 
 Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
@@ -224,7 +224,7 @@ call to shutdown subsequent calls to `onStart`, `onEnd`, or `forceFlush` are not
 Shutdown should not block indefinitely. Language library authors can decide if
 they want to make the shutdown timeout configurable.
 
-##### ForceFlush()
+#### ForceFlush()
 
 Export all ended spans to the configured `Exporter` that have not yet been exported.
 
@@ -232,13 +232,13 @@ Export all ended spans to the configured `Exporter` that have not yet been expor
 
 `ForceFlush` should not block indefinitely. Language library authors can decide if they want to make the flush timeout configurable.
 
-#### Built-in span processors
+### Built-in span processors
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below. Other common processing scenarios should be first considered
 for implementation out-of-process in [OpenTelemetry Collector](../overview.md#collector)
 
-##### Simple processor
+#### Simple processor
 
 This is an implementation of `SpanProcessor` which passes finished spans
 and passes the export-friendly span data representation to the configured
@@ -248,7 +248,7 @@ and passes the export-friendly span data representation to the configured
 
 * `exporter` - the exporter where the spans are pushed.
 
-##### Batching processor
+#### Batching processor
 
 This is an implementation of the `SpanProcessor` which create batches of finished
 spans and passes the export-friendly span data representations to the
@@ -266,7 +266,7 @@ configured `SpanExporter`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
 
-### Span Exporter
+## Span Exporter
 
 `Span Exporter` defines the interface that protocol-specific exporters must
 implement so that they can be plugged into OpenTelemetry SDK and support sending
@@ -276,14 +276,14 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
-#### Interface Definition
+### Interface Definition
 
 The exporter must support two functions: **Export** and **Shutdown**. In
 strongly typed languages typically there will be 2 separate `Exporter`
 interfaces, one that accepts spans (SpanExporter) and one that accepts metrics
 (MetricsExporter).
 
-##### `Export(batch)`
+#### `Export(batch)`
 
 Exports a batch of telemetry data. Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
@@ -323,7 +323,7 @@ ExportResult is one of:
   example can happen when the destination is unavailable, there is a network
   error or endpoint does not exist.
 
-##### `Shutdown()`
+#### `Shutdown()`
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
@@ -336,7 +336,7 @@ return FailedNotRetryable error.
 and the destination is unavailable). Language library authors can decide if they
 want to make the shutdown timeout configurable.
 
-#### Further Language Specialization
+### Further Language Specialization
 
 Based on the generic interface definition laid out above library authors must
 define the exact interface for the particular language.
@@ -351,7 +351,7 @@ allocations and use allocation arenas where possible, thus avoiding explosion of
 allocation/deallocation/collection operations in the presence of high rate of
 telemetry data generation.
 
-##### Examples
+#### Examples
 
 These are examples on what the `Exporter` interface can look like in specific
 languages. Examples are for illustration purposes only. Language library authors
@@ -380,7 +380,7 @@ const (
 )
 ```
 
-##### Java SpanExporter Interface
+#### Java SpanExporter Interface
 
 ```java
 public interface SpanExporter {
