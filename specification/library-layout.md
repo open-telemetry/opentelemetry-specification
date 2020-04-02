@@ -29,22 +29,22 @@ api
 
 This directory describes the API that provides in-process context propagation.
 
-### [/metrics](api-metrics.md)
+### [/metrics](./metrics/api.md)
 
 This directory describes the Metrics API that can be used to record application metrics.
 
-### [/correlationcontext](api-correlationcontext.md)
+### [/correlationcontext](correlationcontext/api.md)
 
 This directory describes the CorrelationContext API that can be used to manage context propagation
 and metrics-related labeling.
 
-### [/trace](api-tracing.md)
+### [/trace](trace/api.md)
 
 This API consist of a few main classes:
 
-- `Tracer` is used for all operations. See [Tracer](api-tracing.md#tracer) section.
+- `Tracer` is used for all operations. See [Tracer](trace/api.md#tracer) section.
 - `Span` is a mutable object storing information about the current operation
-   execution. See [Span](api-tracing.md#span) section.
+   execution. See [Span](trace/api.md#span) section.
 
 ### `/internal` (_Optional_)
 
@@ -81,7 +81,7 @@ This directory describes the SDK implementation for api/context.
 
 This directory describes the SDK implementation for api/metrics.
 
-### [/sdk/resource](sdk-resource.md)
+### [/sdk/resource](resource/sdk.md)
 
 The resource directory primarily defines a type [Resource](overview.md#resources) that captures
 information about the entity for which stats or traces are recorded. For example, metrics exposed
@@ -90,7 +90,7 @@ and container name.
 
 ### `/sdk/correlationcontext`
 
-### [/sdk/trace](sdk-tracing.md)
+### [/sdk/trace](trace/sdk.md)
 
 This directory describes the SDK implementation for api/trace.
 

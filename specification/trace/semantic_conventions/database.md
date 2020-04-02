@@ -21,4 +21,4 @@ attribute names.
 
 Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
 
-[network attributes]: data-span-general.md#general-network-connection-attributes
+[network attributes]: span-general.md#general-network-connection-attributes

@@ -21,7 +21,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
 
 ## Name
 
-HTTP spans MUST follow the overall [guidelines for span names](./api-tracing.md#span).
+HTTP spans MUST follow the overall [guidelines for span names](../api.md#span).
 Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
 is a user id, which creates high cardinality value space not suitable for span
 names. In case of HTTP servers, these endpoints are often mapped by the server
@@ -82,7 +82,7 @@ Note that the items marked with [1] are different from the mapping defined in th
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
-[network attributes]: data-span-general.md#general-network-connection-attributes
+[network attributes]: span-general.md#general-network-connection-attributes
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
 [User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3

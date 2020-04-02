@@ -1,6 +1,6 @@
 # Resource SDK
 
-A [Resource](overview.md#resources) is an immutable representation of the entity producing
+A [Resource](../overview.md#resources) is an immutable representation of the entity producing
 telemetry. For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
@@ -13,14 +13,14 @@ with closed source environments. The SDK MUST allow for creation of `Resources` 
 for associating them with telemetry.
 
 When used with distributed tracing, a resource can be associated with the
-[TracerProvider](sdk-tracing.md#tracer-sdk) when it is created.
+[TracerProvider](../trace/sdk.md#tracer-sdk) when it is created.
 That association cannot be changed later.
 When associated with a `TracerProvider`,
 all `Span`s produced by any `Tracer` from the provider MUST be associated with this `Resource`.
 
 Analogous to distributed tracing, when used with metrics,
 a resource can be associated with a `MeterProvider`.
-When associated with a [`MeterProvider`](api-metrics-user.md#obtaining-a-meter),
+When associated with a [`MeterProvider`](../metrics/api-user.md#obtaining-a-meter),
 all `Metrics` produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
@@ -69,7 +69,7 @@ It is recommended, but not required, to provide a way to quickly create an empty
 resource.
 
 Note that the OpenTelemetry project documents certain ["standard
-attributes"](data-semantic-conventions.md) that have prescribed semantic meanings.
+attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
 ## Resource operations
 
