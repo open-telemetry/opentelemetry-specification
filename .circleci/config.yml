@@ -8,23 +8,31 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Misspell Install
+          command: make install-misspell
+      - run:
           name: Misspell check
-          command: make precommit
+          command: make misspell
+
   markdownlint:
     docker:
-      - image: circleci/ruby:latest
+      - image: node:13
     steps:
       - checkout
       - run:
-          name: Install markdownlint
-          command: gem install mdl
+          name: Install Tools
+          command: |
+            make install-markdown-lint
+            make install-markdown-link-check
       - run:
-          name: Check markdownlint
-          command: mdl -c .mdlrc .
+          name: Run Tools
+          command: |
+            make markdown-lint
+            make enforce-markdown-link-check
 
 workflows:
   version: 2
-  build:
+  check-errors:
     jobs:
       - misspell
       - markdownlint
