@@ -6,12 +6,12 @@ Table of Contents
 </summary>
 
 - [Overview](#overview)
-    - [CorrelationContext](#correlationcontext)
-    - [Get correlations](#get-correlations)
-    - [Get correlation](#get-correlation)
-    - [Set correlation](#set-correlation)
-    - [Remove correlation](#remove-correlation)
-    - [Clear correlations](#clear-correlations)
+  - [CorrelationContext](#correlationcontext)
+  - [Get correlations](#get-correlations)
+  - [Get correlation](#get-correlation)
+  - [Set correlation](#set-correlation)
+  - [Remove correlation](#remove-correlation)
+  - [Clear correlations](#clear-correlations)
 - [CorrelationContext Propagation](#correlationcontext-propagation)
 - [Conflict Resolution](#conflict-resolution)
 

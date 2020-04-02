@@ -43,7 +43,7 @@ one that is needlessly restrictive and complex.
 Markdown files should be properly formatted before a pull request is sent out.
 In this repository we follow the
 [markdownlint rules](https://github.com/DavidAnson/markdownlint#rules--aliases)
-with some customizations. See [mdlstyle](.mdlstyle.rb) or
+with some customizations. See [markdownlint](.markdownlint.yaml) or
 [settings](.vscode/settings.json) for details.
 
 We highly encourage to use line breaks in markdown files at `80` characters
@@ -63,7 +63,7 @@ To fix style violations, follow the
 [instruction](https://github.com/DavidAnson/markdownlint#optionsresultversion)
 with the Node version of markdownlint. If you are using Visual Studio Code,
 you can also use the `fixAll` command of the
-[vscode markdownlint extension](hhttps://github.com/DavidAnson/vscode-markdownlint).
+[vscode markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint).
 
 ### Misspell check
 

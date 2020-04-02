@@ -10,9 +10,9 @@ Table of Contents
 - [Get value](#get-value)
 - [Set value](#set-value)
 - [Optional operations](#optional-operations)
-    - [Get current Context](#get-current-context)
-    - [Attach Context](#attach-context)
-    - [Detach Context](#detach-context)
+  - [Get current Context](#get-current-context)
+  - [Attach Context](#attach-context)
+  - [Detach Context](#detach-context)
 
 </details>
 
