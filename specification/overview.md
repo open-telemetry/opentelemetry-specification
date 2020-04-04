@@ -268,21 +268,23 @@ Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/do
 
 ## Instrumentation Libraries
 
-A goal of the project is to enable opentelemetry instrumentation on every library
+See [Instrumentation Library](glossary.md#instrumenting_library)
+
+A goal of the project is to enable OpenTelemetry instrumentation on every library
 and application out of the box. To achieve that goal, there is a need to author
-instrumentation libraries on these shared libraries and applications. These
-instrumentations can be wrapping library APIs that subscribe to library-specific
+instrumentation libraries on these shared libraries and applications. An
+instrumentation may wrap library APIs, subscribe to library-specific
 callbacks or translators that convert telemetry exposed in other formats into
-opentelemetry models.
+OpenTelemetry models.
 
-When naming these instrumentations, it is recommended to follow the library and
-language standards. For instance, if an instrumentation is implemented as a
-"log appender" - it will probably be called an `appender`.
+If the library that is being instrumented has a convention around the naming of
+an integration (e.g. 'middleware' for a web framework), the instrumentation should
+have a name that follows the convention of that library.
 
-If there is no established name - the recommendation is to call prefix packages
-with "instrumentation", followed by the instrumented library name itself.
+If there is no established name, the recommendation is to prefix packages
+with "opentelemetry-instrumentation", followed by the instrumented library name itself.
 
-Here are some example library names that illustrate the opentelemetry
+Here are some example library names that illustrate the OpenTelemetry
 recommendation:
 
 * opentelemetry-instrumentation-flask (Python)

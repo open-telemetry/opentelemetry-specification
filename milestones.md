@@ -49,7 +49,7 @@ Alpha v0.1 release.
 ### Alpha v0.2
 
 The spirit of this release is to have a demo-able product that anybody can start
-playing with and start implementing instrumentation adaptors and data collectors
+playing with and start implementing instrumentation and data collectors
 for various scenarios.
 
 As part of this release we ask to implement Tracing and Metrics exporters so it
@@ -138,8 +138,8 @@ and languages SDKs will implement OpenTelemetry collector exporter.
 ### Getting to release
 
 By the end of year the basic language SDKs will be complete and we will begin
-stabilization work. Also OpenCensus can be switched to the OpenTelemetry SDK. As
-well as instrumentations can be implemented. So we will have early
+stabilization work. Also OpenCensus can be switched to the OpenTelemetry SDK.
+Several instrumentation libraries may also be implemented. So we will have early
 adopters.
 
 By early September we committed to provide a production ready full-featured

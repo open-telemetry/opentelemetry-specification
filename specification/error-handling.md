@@ -44,7 +44,7 @@ And make a reasonable trade off of the SDK performance and fullness of type chec
 
 ## Self-diagnostics
 
-All OpenTelemetry libraries -- the API, SDK, exporters, instrumentations, etc. -- are encouraged to expose self-troubleshooting metrics, spans, and other telemetry that can be easily enabled and filtered out by default.
+All OpenTelemetry libraries -- the API, SDK, exporters, an instrumentation, etc. -- are encouraged to expose self-troubleshooting metrics, spans, and other telemetry that can be easily enabled and filtered out by default.
 
 One good example of such telemetry is a `Span` exporter that indicates how much time exporters spend uploading telemetry.
 Another example may be a metric exposed by a `SpanProcessor` that describes the current queue size of telemetry data to be uploaded.
