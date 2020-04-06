@@ -28,7 +28,7 @@
 
 Note: This specification for the v0.3 OpenTelemetry milestone does not
 include specification related to the Observer instrument, as described
-in the [overview](api-metrics.md).  Observer instruments were detailed
+in the [overview](api.md).  Observer instruments were detailed
 in [OTEP
 72-metric-observer](https://github.com/open-telemetry/oteps/blob/master/text/0072-metric-observer.md)
 and will be added to this document following the v0.3 milestone.
@@ -412,7 +412,7 @@ unordered labels (i.e., a list of bound keys and values) to the
 
 ## Detailed specification
 
-See the [SDK-facing Metrics API](api-metrics-meter.md) specification
+See the [SDK-facing Metrics API](api-meter.md) specification
 for an in-depth summary of each method in the Metrics API.
 
 ### Instrument construction
@@ -462,7 +462,7 @@ that it used, and the metric name is the only required field.
 | Monotonic              | WithMonotonic(boolean)    | Configure a counter or gauge that accepts only monotonic/non-monotonic updates. |
 | Absolute               | WithAbsolute(boolean)     | Configure a measure that does or does not accept negative updates. |
 
-See the Metric API [specification overview](api-metrics.md) for more
+See the Metric API [specification overview](api.md) for more
 information about the kind-specific monotonic and absolute options.
 
 ### Bound instrument API

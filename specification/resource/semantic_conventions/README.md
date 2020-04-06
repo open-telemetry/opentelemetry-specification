@@ -1,6 +1,6 @@
-# Resource Conventions
+# Resource Semantic Conventions
 
-This document defines standard attributes for resources. These attributes are typically used in the [Resource](sdk-resource.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
+This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
 * [Service](#service)

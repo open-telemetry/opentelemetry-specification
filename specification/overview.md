@@ -189,10 +189,6 @@ validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
-OpenTelemetry defines the naming convention for metric names as well as a
-well-known metric names in [Semantic Conventions](data-semantic-conventions.md)
-document.
-
 ## CorrelationContext
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
@@ -238,7 +234,7 @@ All of OpenTelemetry cross-cutting concerns, such as traces and metrics,
 share an underlying `Context` mechanism for storing state and
 accessing data across the lifespan of a distributed transaction.
 
-See the [Context](context.md)
+See the [Context](context/context.md)
 
 ## Propagators
 
@@ -286,3 +282,17 @@ Adapter" or simply "Adapter".
 ## Code injecting adapters
 
 TODO: fill out as a result of SIG discussion.
+
+## Semantic Conventions
+
+OpenTelemetry defines standard names and values of Resource attributes and
+Span attributes.
+
+* [Resource Conventions](resource/semantic_conventions/README.md)
+* [Span Conventions](trace/semantic_conventions/README.md)
+* [Metrics Conventions](metrics/semantic_conventions/README.md)
+
+The type of the attribute SHOULD be specified in the semantic convention
+for that attribute. Array values are allowed for attributes. For
+protocols that do not natively support array values such values MUST be
+represented as JSON strings.

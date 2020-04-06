@@ -41,7 +41,7 @@ At least one of [network attributes][] `net.peer.name` or `net.peer.ip` is requi
 For client-side spans `net.peer.port` is required (it describes the server port they are connecting to).
 For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
 
-[network attributes]: data-span-general.md#general-network-connection-attributes
+[network attributes]: span-general.md#general-network-connection-attributes
 
 ### Status
 

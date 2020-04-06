@@ -4,7 +4,7 @@ This document will drive OpenTelemetry Protocol design and RFC.
 
 ## Goals
 
-See the goals of OpenTelemetry Protocol design [here](proto-design-goals.md).
+See the goals of OpenTelemetry Protocol design [here](design-goals.md).
 
 ## Vocabulary
 

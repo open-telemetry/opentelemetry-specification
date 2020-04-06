@@ -46,7 +46,7 @@ Metrics API.
 
 The API provides functions for capturing raw measurements, through
 several [calling
-conventions](api-metrics-user.md#metric-calling-conventions) that
+conventions](api-user.md#metric-calling-conventions) that
 offer different levels of performance.  Regardless of calling
 convention, we define a _metric event_ as the logical thing that
 happens when a new measurement is captured.  This moment of capture
@@ -69,7 +69,7 @@ and converting into various [exposition formats](#exposition-formats).
 However, we find that there are many other uses for metric events,
 such as to record aggregated or raw measurements in tracing and
 logging systems.  For this reason, [OpenTelemetry requires a
-separation of the API from the SDK](library-guidelines.md#requirements),
+separation of the API from the SDK](../library-guidelines.md#requirements),
 so that different SDKs can be configured at run time.
 
 ### Metric Instruments
@@ -97,13 +97,13 @@ measurement, and several settings that convey additional meaning
 events that it produces.
 
 Details about calling conventions for each kind of instrument are
-covered in the [user-level API specification](api-metrics-user.md).
+covered in the [user-level API specification](api-user.md).
 
 ### Label sets
 
 _Label_ is the term used to refer to a key-value attribute associated
 with a metric event.  Although they are fundamentally similar to [Span
-attributes](api-tracing.md#span) in the tracing API, a label set is
+attributes](../trace/api.md#span) in the tracing API, a label set is
 given its own type in the Metrics API (generally: `LabelSet`).  Label
 sets are a feature of the API meant to facilitate re-use and thereby
 to lower the cost of processing metric events.  Users are encouraged
@@ -112,7 +112,7 @@ previously encoded representation of the labels.
 
 Users obtain label sets by calling a `Meter` API function.  Each of
 the instrument calling conventions detailed in the [user-level API
-specification](api-metrics-user.md) accepts a label set.
+specification](api-user.md) accepts a label set.
 
 ### Meter Interface
 
@@ -138,7 +138,7 @@ sampling policies.  (TODO: refer to the semantic convention on the
 reporting library name).
 
 Details about installing an SDK and obtaining a named `Meter` are
-covered in the [SDK-level API specification](api-metrics-meter.md).
+covered in the [SDK-level API specification](api-meter.md).
 
 ### Aggregations
 
@@ -245,7 +245,7 @@ Metric events have the same logical representation, regardless of
 kind.  Whether a Counter, a Measure, or an Observer instrument, metric
 events produced through an instrument consist of:
 
-- [Context](context.md) (Span context, Correlation context)
+- [Context](../context/context.md) (Span context, Correlation context)
 - timestamp (implicit to the SDK)
 - instrument definition (name, kind, and semantic options)
 - label set (associated key-values)

@@ -75,7 +75,7 @@ Returns the sampling Decision for a `Span` to be created.
 * Initial set of `Attributes` for the `Span` being constructed
 * Collection of links that will be associated with the `Span` to be created.
   Typically useful for batch operations, see
-  [Links Between Spans](overview.md#links-between-spans).
+  [Links Between Spans](../overview.md#links-between-spans).
 
 **Return value:**
 
@@ -128,9 +128,9 @@ of the `TraceID`.
 ## Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api-tracing.md#obtaining-a-tracer)).  The `name` and `version` arguments
+[API](api.md#obtaining-a-tracer)).  The `name` and `version` arguments
 supplied to the `TracerProvider` must be used to create a
-[`Resource`](sdk-resource.md) instance which is stored on the created `Tracer`.
+[`Resource`](../resource/sdk.md) instance which is stored on the created `Tracer`.
 
 All configuration objects (SDK specific) and extension points (span processors,
 propagators) must be provided to the `TracerProvider`. `Tracer` instances must
@@ -145,7 +145,7 @@ held by the `Tracer`.
 
 Span processor is an interface which allows hooks for span start and end method
 invocations. The span processors are invoked only when
-[`IsRecording`](api-tracing.md#isrecording) is true.
+[`IsRecording`](api.md#isrecording) is true.
 
 Built-in span processors are responsible for batching and conversion of spans to
 exportable representation and passing batches to exporters.
@@ -236,7 +236,7 @@ Export all ended spans to the configured `Exporter` that have not yet been expor
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below. Other common processing scenarios should be first considered
-for implementation out-of-process in [OpenTelemetry Collector](overview.md#collector)
+for implementation out-of-process in [OpenTelemetry Collector](../overview.md#collector)
 
 ##### Simple processor
 
