@@ -35,7 +35,7 @@ _Note to Language Library Authors:_ OpenTelemetry specification, API and SDK imp
 
 Here is a generic design for a language library (arrows indicate calls):
 
-![Language Library Design Diagram](img/library-design.png)
+![Language Library Design Diagram](../internal/img/library-design.png)
 
 ### Expected Usage
 
@@ -55,7 +55,7 @@ This self-sufficiency is achieved the following way.
 
 The API dependency contains a minimal implementation of the API. When no other implementation is explicitly included in the application no telemetry data will be collected. Here is what active components look like in this case:
 
-![Minimal Operation Diagram](img/library-minimal.png)
+![Minimal Operation Diagram](../internal/img/library-minimal.png)
 
 It is important that values returned from this minimal implementation of API are valid and do not require the caller to perform extra checks (e.g. createSpan() method should not fail and should return a valid non-null Span object). The caller should not need to know and worry about the fact that minimal implementation is in effect. This minimizes the boilerplate and error handling in the instrumented code.
 
@@ -67,17 +67,17 @@ SDK implementation is a separate (optional) dependency. When it is plugged in it
 
 SDK implements core functionality that is required for translating API calls into telemetry data that is ready for exporting. Here is how OpenTelemetry components look like when SDK is enabled:
 
-![Full Operation Diagram](img/library-full.png)
+![Full Operation Diagram](../internal/img/library-full.png)
 
-SDK defines an [Exporter interface](sdk-tracing.md#span-exporter). Protocol-specific exporters that are responsible for sending telemetry data to backends must implement this interface.
+SDK defines an [Exporter interface](trace/sdk.md#span-exporter). Protocol-specific exporters that are responsible for sending telemetry data to backends must implement this interface.
 
 SDK also includes optional helper exporters that can be composed for additional functionality if needed.
 
-Library designers need to define the language-specific `Exporter` interface based on [this generic specification](sdk-tracing.md#span-exporter).
+Library designers need to define the language-specific `Exporter` interface based on [this generic specification](trace/sdk.md#span-exporter).
 
 #### Protocol Exporters
 
-Telemetry backend vendors are expected to implement [Exporter interface](sdk-tracing.md#span-exporter). Data received via Export() function should be serialized and sent to the backend in a vendor-specific way.
+Telemetry backend vendors are expected to implement [Exporter interface](trace/sdk.md#span-exporter). Data received via Export() function should be serialized and sent to the backend in a vendor-specific way.
 
 Vendors are encouraged to keep protocol-specific exporters as simple as possible and achieve desirable additional functionality such as queuing and retrying using helpers provided by SDK.
 

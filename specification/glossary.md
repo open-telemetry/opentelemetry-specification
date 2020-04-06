@@ -8,7 +8,7 @@ specification.
 Denotes the library that implements the *OpenTelemetry API*.
 
 See [Library Guidelines](library-guidelines.md#sdk-implementation) and
-[Library resource semantic conventions](data-resource-semantic-conventions.md#telemetry-sdk)
+[Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk)
 
 <a name="instrumented_library"></a>
 
@@ -38,11 +38,11 @@ Synonyms: *Instrumentation Library*, *Integration*.
 ## Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](api-tracing.md#obtaining-a-tracer)/[Obtaining a Meter](api-metrics-user.md#obtaining-a-meter)). It identifies the [Instrumenting Library](#instrumenting_library).
+creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api-user.md#obtaining-a-meter)). It identifies the [Instrumenting Library](#instrumenting_library).
 
 ## Namespace
 
-This term applies to [Metric names](api-metrics-user.md#metric-names) only. The namespace is used to disambiguate identical metric
+This term applies to [Metric names](metrics/api-user.md#metric-names) only. The namespace is used to disambiguate identical metric
 names used in different [instrumenting libraries](#instrumenting_library). The [Name](#name) provided
 for creating a `Meter` serves as its namespace in addition to the primary semantics
 described [here](#name).
