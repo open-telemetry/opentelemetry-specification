@@ -21,17 +21,30 @@ and various HTTP versions like 1.1, 2 and SPDY.
 
 ## Name
 
-HTTP spans MUST follow the overall [guidelines for span names](../api.md#span).
+HTTP spans MUST follow the overall [guidelines for span names](./api-tracing.md#span).
+
 Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
 is a user id, which creates high cardinality value space not suitable for span
-names. In case of HTTP servers, these endpoints are often mapped by the server
-frameworks to more concise _HTTP routes_, e.g. `/api/users/{user_id}`, which are
-recommended as the low cardinality span names. However, the same approach usually
-does not work for HTTP client spans, especially when instrumentation is provided
+names. In case of HTTP servers, these paths are often mapped by the server
+frameworks to more concise _HTTP routes_, e.g. `/api/users/{user_id}`.
+In turn, these routes are handled by a particular handler (function/class/etc.; e.g. `display_user`).
+
+> Note that some web frameworks call the handlers endpoints,
+while others refer to the complete URI as the "endpoint".
+Thus, the term "endpoint" should be avoided.
+
+Because multiple routes can map to the same handler, but not vice versa,
+the handler name is recommended as the low cardinality span name.
+Otherwise, the HTTP route is the next-best recommended name.
+
+However, the above approach usually does not work for HTTP client spans,
+especially when instrumentation is provided
 by a lower-level middleware that is not aware of the specifics of how the URIs
 are formed. Therefore, HTTP client spans SHOULD be using conservative, low
 cardinality names formed from the available parameters of an HTTP request,
-such as `"HTTP {METHOD_NAME}"`. Instrumentation MUST NOT default to using URI
+such as `"HTTP {METHOD_NAME}"`.
+
+For both server and client spans, instrumentation MUST NOT default to using URI
 path as span name, but MAY provide hooks to allow custom logic to override the
 default span name.
 
