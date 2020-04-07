@@ -16,4 +16,5 @@ The following semantic conventions for spans are defined:
 * [HTTP](http.md): Spans for HTTP client and server.
 * [Database](database.md): Spans for SQL and NoSQL client calls.
 * [RPC/RMI](rpc.md): Spans for remote procedure calls (e.g., gRPC).
+* [Messaging](messaging.md): Spans for interaction with messaging systems (queues, publish/subscribe, etc.).
 * [General](span-general.md): General semantic attributes that may be used in describing different kinds of operations.
