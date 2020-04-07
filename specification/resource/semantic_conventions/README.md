@@ -3,9 +3,9 @@
 This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
-* [Service](#service)
-* [Telemetry SDK](#telemetry-sdk)
-* [Compute Unit](#compute-unit)
+- [Service](#service)
+- [Telemetry SDK](#telemetry-sdk)
+- [Compute Unit](#compute-unit)
   * [Container](#container)
   * [Function as a Service](#function-as-a-service)
 - [Deployment Service](#deployment-service)
@@ -108,7 +108,7 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 | faas.version | The version string of the function being executed as defined in [Version Attributes](#version-attributes). | `semver:2.0.0` | No |
 | faas.instance | The execution environment ID as a string. | `my-function:instance-0001` | No |
 
-Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](data-faas.md#difference-between-execution-and-instance).
+Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/data-faas.md#difference-between-execution-and-instance).
 
 [ARN]:https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html
 [FunctionDirectory]: https://github.com/Azure/azure-functions-host/wiki/Retrieving-information-about-the-currently-running-function

@@ -18,4 +18,3 @@ The following semantic conventions for spans are defined:
 * [RPC/RMI](rpc.md): Spans for remote procedure calls (e.g., gRPC).
 * [General](span-general.md): General semantic attributes that may be used in describing different kinds of operations.
 * [FaaS](data-faas.md): Spans for Function as a Service (e.g., AWS Lambda).
-
