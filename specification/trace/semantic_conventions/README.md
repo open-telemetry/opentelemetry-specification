@@ -11,6 +11,9 @@ This way, the operator will not need to learn specifics of a language and
 telemetry collected from polyglot (multi-language) micro-service environments
 can still be easily correlated and cross-analyzed.
 
+The type of the attribute SHOULD be specified in the semantic convention for that attribute.
+Array values are allowed for attributes. For protocols that do not natively support array values such values MUST be represented as JSON strings.
+
 The following semantic conventions for spans are defined:
 
 * [HTTP](http.md): Spans for HTTP client and server.
