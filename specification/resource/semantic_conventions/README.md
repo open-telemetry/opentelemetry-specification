@@ -108,7 +108,7 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 | faas.version | The version string of the function being executed as defined in [Version Attributes](#version-attributes). | `semver:2.0.0` | No |
 | faas.instance | The execution environment ID as a string. | `my-function:instance-0001` | No |
 
-Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/data-faas.md#difference-between-execution-and-instance).
+Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/faas.md#difference-between-execution-and-instance).
 
 [ARN]:https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html
 [FunctionDirectory]: https://github.com/Azure/azure-functions-host/wiki/Retrieving-information-about-the-currently-running-function

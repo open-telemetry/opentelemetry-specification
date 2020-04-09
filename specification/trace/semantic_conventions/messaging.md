@@ -67,8 +67,8 @@ Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network 
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
-[network attributes]: data-span-general.md#general-network-connection-attributes
-[`net.transport`]: data-span-general.md#nettransport-attribute
+[network attributes]: span-general.md#general-network-connection-attributes
+[`net.transport`]: span-general.md#nettransport-attribute
 [Hangfire]: https://www.hangfire.io/
 
 For message consumers, the following additional attributes may be set:
@@ -152,7 +152,7 @@ Process C:                      | Span Recv1 |
 
 Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them separately (Span Recv1 and Recv2) and processes both messages in one batch (Span Proc1).
 
-Since each span can only have one parent, C3 should not choose a random parent out of C1 and C2, but rather rely on the implicitly selected parent as defined by the [tracing API spec](api-tracing.md).
+Since each span can only have one parent, C3 should not choose a random parent out of C1 and C2, but rather rely on the implicitly selected parent as defined by the [tracing API spec](../api.md).
 Similarly, only one value can be set as `message_id`, so C3 cannot report both `a1` and `a2` and therefore attribute is left out.
 Depending on the implementation, the producing spans might still be available in the meta data of the messages and should be added to C3 as links.
 The client library or application could also add the receiver span's span context to the data structure it returns for each message. In this case, C3 could also add links to the receiver spans C1 and C2.

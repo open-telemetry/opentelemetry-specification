@@ -73,7 +73,7 @@ attribute named `error`. In case if value of the attribute is `false`, Zipkin
 tag needs to be omitted.
 
 Array values MUST be serialized to string like a JSON list as mentioned in
-[semantic conventions document](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/data-semantic-conventions.md#semantic-conventions).
+[semantic conventions](../../overview.md#semantic-conventions).
 
 TBD: add examples
 
