@@ -178,10 +178,9 @@ func newServer(meter metric.Meter) *server {
 func (s *server) operate(ctx context.Context) {
      // ... other work
 
-     s.instruments.counter1.Add(ctx, 1, []KeyValue{
+     s.instruments.counter1.Add(ctx, 1,
         key.String("label1", "..."),
         key.String("label2", "..."),
-    },
 }
 ```
 
@@ -234,10 +233,10 @@ func (s *server) processStream(ctx context.Context) {
 
   // The result of Bind() is a bound instrument
   // (e.g., a BoundInt64Counter).
-  counter2 := s.instruments.counter2.Bind([]KeyValue{
+  counter2 := s.instruments.counter2.Bind(
       key.String("labelA", "..."),
       key.String("labelB", "..."),
-  })
+  )
 
   for _, item := <-s.channel {
      // ... other work
@@ -262,7 +261,7 @@ For example, to update a single counter:
 func (s *server) method(ctx context.Context) {
     // ... other work
 
-    s.instruments.counter1.Add(ctx, 1, []KeyValue(...))
+    s.instruments.counter1.Add(ctx, 1, ...)
 }
 ```
 
@@ -279,9 +278,7 @@ For example:
 func (s *server) method(ctx context.Context) {
     // ... other work
 
-    // ... more work
-
-    s.meter.RecordBatch(ctx, []KeyValue{...},
+    s.meter.RecordBatch(ctx, labels,
         s.instruments.counter1.Measurement(1),
         s.instruments.gauge1.Measurement(10),
         s.instruments.measure2.Measurement(123.45),
