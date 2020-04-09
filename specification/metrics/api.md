@@ -99,20 +99,14 @@ events that it produces.
 Details about calling conventions for each kind of instrument are
 covered in the [user-level API specification](api-user.md).
 
-### Label sets
+### Labels
 
-_Label_ is the term used to refer to a key-value attribute associated
-with a metric event.  Although they are fundamentally similar to [Span
-attributes](../trace/api.md#span) in the tracing API, a label set is
-given its own type in the Metrics API (generally: `LabelSet`).  Label
-sets are a feature of the API meant to facilitate re-use and thereby
-to lower the cost of processing metric events.  Users are encouraged
-to re-use label sets whenever possible, as they may contain a
-previously encoded representation of the labels.
+A _Label_ is the term used to refer to a key-value attribute associated with a
+metric event, similar to a [Span attribute](../trace/api.md#span) in the
+tracing API.
 
-Users obtain label sets by calling a `Meter` API function.  Each of
-the instrument calling conventions detailed in the [user-level API
-specification](api-user.md) accepts a label set.
+Each of the instrument calling conventions detailed in the [user-level API
+specification](api-user.md) accept a set of labels as an argument.
 
 ### Meter Interface
 
