@@ -4,7 +4,7 @@
 
 - [Overview](#overview)
   * [Metric Instruments](#metric-instruments)
-  * [Label sets](#label-sets)
+  * [Labels](#labels)
   * [Meter Interface](#meter-interface)
   * [Aggregations](#aggregations)
   * [Time](#time)
@@ -16,7 +16,6 @@
   * [Observer](#observer)
 - [Interpretation](#interpretation)
   * [Standard implementation](#standard-implementation)
-  * [Option: Dedicated Measure instrument for timing measurements](#option-dedicated-measure-instrument-for-timing-measurements)
   * [Future Work: Option Support](#future-work-option-support)
   * [Future Work: Configurable Aggregations / View API](#future-work-configurable-aggregations--view-api)
 - [Metric instrument selection](#metric-instrument-selection)
