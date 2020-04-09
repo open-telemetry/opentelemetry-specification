@@ -9,11 +9,6 @@ document is to ensure all contributors work in alignment. As our vision changes
 over time maintainers reserve the right to add, modify, and remove items from
 this document.
 
-(The content in this proposal is a starting point for discussion. I believe it
-is important for us to collectively come up with such vision. I am posting
-this PR largely to open the discussion. Comments, thoughts and opinions are
-highly welcome!)
-
 This document uses vocabulary introduced in https://github.com/open-telemetry/oteps/pull/91.
 
 ### First-class Citizen
