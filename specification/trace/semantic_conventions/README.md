@@ -13,9 +13,9 @@ can still be easily correlated and cross-analyzed.
 
 The following semantic conventions for spans are defined:
 
+* [General](span-general.md): General semantic attributes that may be used in describing different kinds of operations.
 * [HTTP](http.md): Spans for HTTP client and server.
 * [Database](database.md): Spans for SQL and NoSQL client calls.
 * [RPC/RMI](rpc.md): Spans for remote procedure calls (e.g., gRPC).
 * [Messaging](messaging.md): Spans for interaction with messaging systems (queues, publish/subscribe, etc.).
-* [General](span-general.md): General semantic attributes that may be used in describing different kinds of operations.
-* [FaaS](data-faas.md): Spans for Function as a Service (e.g., AWS Lambda).
+* [FaaS](faas.md): Spans for Function as a Service (e.g., AWS Lambda).

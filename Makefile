@@ -30,7 +30,7 @@ enforce-markdown-link-check:
 	@LINKCHECKOUT=`find . -name \*.md -exec $(MARKDOWN_LINK_CHECK) {} 2>&1 >/dev/null \;`; \
 		if [ "$$LINKCHECKOUT" ]; then \
 			echo "$(MARKDOWN_LINK_CHECK) FAILED => errors:\n"; \
-			echo "Run 'make $(MARKDOWN_LINK_CHECK)' to see the errors" \
+			echo "Run 'make $(MARKDOWN_LINK_CHECK)' to see the errors"; \
 			exit 1; \
 		else \
 			echo "Check markdown links finished successfully"; \
