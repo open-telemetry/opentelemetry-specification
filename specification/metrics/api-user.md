@@ -188,6 +188,7 @@ func (s *server) operate(ctx context.Context) {
 ### Metric calling conventions
 
 The metrics API provides three semantically equivalent ways to capture measurements:
+
 - calling bound metric instruments
 - calling unbound metric instruments with labels
 - batch recording without a metric instrument
