@@ -107,7 +107,7 @@ Until the [W3C Correlation Context](https://w3c.github.io/correlation-context/) 
 
 #### Header Name
 
-`CorrelationContext` implementations MUST use the header name `otbaggage`.
+`CorrelationContext` implementations MUST use the header name `otcorrelations`.
 
 #### Header Value
 
@@ -129,7 +129,7 @@ Correlation Context:
 Header:
 
 ```
-otcorrelcationcontext: user=foo%40example.com,name=Example%20Name
+otcorrelations: user=foo%40example.com,name=Example%20Name
 ```
 
 ## Conflict Resolution
