@@ -395,7 +395,7 @@ metric events.
 
 ### Interaction with distributed correlation context
 
-As described above, labels are strictly to "local".  I.e., the application
+As described above, labels are strictly "local".  I.e., the application
 explicitly declares these labels, whereas distributed correlation context
 labels are implicitly associated with the event.
 
