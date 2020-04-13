@@ -102,10 +102,18 @@ The API MUST accept the following parameters:
 The API MUST return a value that can be used as a `Token` to restore the previous
 `Context`.
 
+Note that every call to this operation should result in a corresponding call to
+[Detach Context](#detach-context).
+
 ### Detach Context
 
 Resets the `Context` associated with the caller's current execution unit
 to the value it had before attaching a specified `Context`.
+
+This operation is intended to help making sure the correct `Context`
+is associated with the caller's current execution unit. Users can
+rely on it to identify a wrong call order and emit a signal to warn
+users about the broken invariant.
 
 The API MUST accept the following parameters:
 
