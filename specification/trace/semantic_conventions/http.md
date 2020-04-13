@@ -37,7 +37,7 @@ default span name.
 
 ## Status
 
-Implementations MUST set the [span status](api-tracing.md#status) if the HTTP communication failed
+Implementations MUST set the [span status](../api.md#status) if the HTTP communication failed
 or an HTTP error status code is returned (e.g. above 3xx).
 
 In the case of an HTTP redirect, the request should normally be considered successful,
