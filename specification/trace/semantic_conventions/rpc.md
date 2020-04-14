@@ -1,7 +1,6 @@
 # Semantic conventions for RPC spans
 
-This document defines how to describe remote procedure calls
-(also called "remote method invocations" / "RMI") with spans.
+This document defines how to describe remote procedure calls (also called "remote method invocations" / "RMI") with spans.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
@@ -45,15 +44,12 @@ For server-side spans `net.peer.port` is optional (it describes the port the cli
 
 ### Status
 
-Implementations MUST set status which MUST be the same as the gRPC client/server
-status. The mapping between gRPC canonical codes and OpenTelemetry status codes
-is 1:1 as OpenTelemetry canonical codes is just a snapshot of grpc codes which
-can be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
+Implementations MUST set status which MUST be the same as the gRPC client/server status.
+The mapping between gRPC canonical codes and OpenTelemetry status codes is 1:1 as OpenTelemetry canonical codes is just a snapshot of grpc codes which can be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
 
 ### Events
 
-In the lifetime of a gRPC stream, an event for each message sent/received on
-client and server spans SHOULD be created with the following attributes:
+In the lifetime of a gRPC stream, an event for each message sent/received on client and server spans SHOULD be created with the following attributes:
 
 ```
 -> [time],
@@ -73,8 +69,6 @@ client and server spans SHOULD be created with the following attributes:
     "message.uncompressed_size" = <uncompressed size in bytes>
 ```
 
-The `message.id` MUST be calculated as two different counters starting from `1`
-one for sent messages and one for received message. This way we guarantee that
-the values will be consistent between different implementations. In case of
-unary calls only one sent and one received message will be recorded for both
-client and server spans.
+The `message.id` MUST be calculated as two different counters starting from `1` one for sent messages and one for received message.
+This way we guarantee that the values will be consistent between different implementations.
+In case of unary calls only one sent and one received message will be recorded for both client and server spans.

@@ -10,10 +10,9 @@
 
 ## Abstract
 
-The default Open Telemetry SDK (hereafter referred to as "The SDK")
-is highly configurable. This specification outlines the mechanisms by
-which the SDK can be configured. It does
-not attempt to specify the details of what can be configured.
+The default Open Telemetry SDK (hereafter referred to as "The SDK") is highly configurable.
+This specification outlines the mechanisms by which the SDK can be configured.
+It does not attempt to specify the details of what can be configured.
 
 ## Configuration Interface
 
@@ -30,6 +29,5 @@ consumable by the programatic interface.
 
 ### Other Mechanisms
 
-Additional configuration mechanisms SHOULD be provided in whatever
-language/format/style is idiomatic for the language of the SDK. The
-SDK can include as many configuration mechanisms as appropriate.
+Additional configuration mechanisms SHOULD be provided in whatever language/format/style is idiomatic for the language of the SDK.
+The SDK can include as many configuration mechanisms as appropriate.

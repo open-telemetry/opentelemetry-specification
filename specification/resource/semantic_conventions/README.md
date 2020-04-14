@@ -1,6 +1,8 @@
 # Resource Semantic Conventions
 
-This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
+This document defines standard attributes for resources.
+These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner.
+The majority of these attributes are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
 - [Service](#service)
@@ -27,9 +29,14 @@ This document defines standard attributes for resources. These attributes are ty
 
 ### Document Conventions
 
-Attributes are grouped logically by the type of the concept that they described. Attributes in the same group have a common prefix that ends with a dot. For example all attributes that describe Kubernetes properties start with "k8s."
+Attributes are grouped logically by the type of the concept that they described.
+Attributes in the same group have a common prefix that ends with a dot.
+For example all attributes that describe Kubernetes properties start with "k8s."
 
-Certain attribute groups in this document have a **Required** column. For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource. However it is also valid if the entire attribute group is omitted (i.e. none of the attributes from the particular group are present even though some of them are marked as Required in this document).
+Certain attribute groups in this document have a **Required** column.
+For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource.
+However it is also valid if the entire attribute group is omitted (i.e.
+none of the attributes from the particular group are present even though some of them are marked as Required in this document).
 
 ## Service
 
@@ -64,12 +71,9 @@ service.name = Shop.shoppingcart
 
 **Description:** The telemetry SDK used to capture data recorded by the instrumentation libraries.
 
-The default OpenTelemetry SDK provided by the OpenTelemetry project MUST set `telemetry.sdk.name`
-to the value `opentelemetry`.
+The default OpenTelemetry SDK provided by the OpenTelemetry project MUST set `telemetry.sdk.name` to the value `opentelemetry`.
 
-If another SDK, like a fork or a vendor-provided implementation, is used, this SDK MUST set the attribute
-`telemetry.sdk.name` to the fully-qualified class or module name of this SDK's main entry point
-or another suitable identifier depending on the language.
+If another SDK, like a fork or a vendor-provided implementation, is used, this SDK MUST set the attribute `telemetry.sdk.name` to the fully-qualified class or module name of this SDK's main entry point or another suitable identifier depending on the language.
 The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
 The identifier SHOULD be stable across different versions of an implementation.
 
@@ -169,8 +173,7 @@ Attributes defining a running environment (e.g. Cloud, Data Center).
 
 ## Version Attributes
 
-Version attributes such as `service.version` and `library.version` are values of type `string`,
-with naming schemas hinting at the type of a version, such as the following:
+Version attributes such as `service.version` and `library.version` are values of type `string`, with naming schemas hinting at the type of a version, such as the following:
 
 - `semver:1.2.3` (a semantic version)
 - `git:8ae73a` (a git sha hash)

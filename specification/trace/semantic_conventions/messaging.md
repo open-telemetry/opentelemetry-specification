@@ -15,9 +15,12 @@
 
 Although messaging systems are not as standardized as, e.g., HTTP, it is assumed that the following definitions are applicable to most of them that have similar concepts at all (names borrowed mostly from JMS):
 
-A *message* usually consists of headers (or properties, or meta information) and an optional body. It is sent by a single message *producer* to:
+A *message* usually consists of headers (or properties, or meta information) and an optional body.
+It is sent by a single message *producer* to:
 
-* Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual routing, delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
+* Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC).
+  The broker handles the actual routing, delivery, re-delivery, persistence, etc.
+  In some messaging systems the broker may be identical or co-located with (some) message consumers.
 * Logically: some particular message *destination*.
 
 A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier.
@@ -27,12 +30,14 @@ A message submitted to a queue is processed by a message *consumer* (usually exa
 
 The consumption of a message can happen in multiple steps.
 First, the lower-level receiving of a message at a consumer, and then the logical processing of the message.
-Often, the waiting for a message is not particularly interesting and hidden away in a framework that only invokes some handler function to process a message once one is received
-(in the same way that the listening on a TCP port for an incoming HTTP message is not particularly interesting).
+Often, the waiting for a message is not particularly interesting and hidden away in a framework that only invokes some handler function to process a message once one is received (in the same way that the listening on a TCP port for an incoming HTTP message is not particularly interesting).
 However, in a synchronous conversation, the wait time for a message is important.
 
-In some messaging systems, a message can receive a reply message that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*. The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit conversation ID. Sometimes a conversation can span multiple message destinations (e.g. initiated via a topic, continued on a temporary one-to-one queue).
-
+In some messaging systems, a message can receive a reply message that answers a particular other message that was sent earlier.
+All messages that are grouped together by such a reply-relationship are called a *conversation*.
+The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit conversation ID.
+Sometimes a conversation can span multiple message destinations (e.g.
+initiated via a topic, continued on a temporary one-to-one queue).
 Some messaging systems support the concept of *temporary destination* (often only temporary queues) that are established just for a particular set of communication partners (often one to one) or conversation. Often such destinations are unnamed or have an auto-generated name.
 
 [idempotent]: https://en.wikipedia.org/wiki/Idempotence
@@ -87,7 +92,8 @@ Instead span kind should be set to either `CONSUMER` or `SERVER` according to th
 #### RabbitMQ
 
 In RabbitMQ, the destination is defined by an _exchange_ and a _routing key_.
-`messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
+`messaging.destination` MUST be set to the name of the exchange.
+This will be an empty string if the default exchange is used.
 The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_key`, unless it is empty.
 
 ## Examples
@@ -157,8 +163,9 @@ Similarly, only one value can be set as `message_id`, so C3 cannot report both `
 Depending on the implementation, the producing spans might still be available in the meta data of the messages and should be added to C3 as links.
 The client library or application could also add the receiver span's span context to the data structure it returns for each message. In this case, C3 could also add links to the receiver spans C1 and C2.
 
-The status of the batch processing span is selected by the application. Depending on the semantics of the operation. A span status `Ok` could, for example, be set only if all messages or if just at least one were properly processed.
-
+The status of the batch processing span is selected by the application.
+Depending on the semantics of the operation.
+A span status `Ok` could, for example, be set only if all messages or if just at least one were properly processed.
 ```
 Process P: | Span Prod1 | Span Prod2 |
 --

@@ -2,14 +2,11 @@
 
 For database client call the `SpanKind` MUST be `Client`.
 
-Span `name` should be set to low cardinality value representing the statement
-executed on the database. It may be stored procedure name (without argument), sql
-statement without variable arguments, etc. When it's impossible to get any
-meaningful representation of the span `name`, it can be populated using the same
-value as `db.instance`.
+Span `name` should be set to low cardinality value representing the statement executed on the database.
+It may be stored procedure name (without argument), sql statement without variable arguments, etc.
+When it's impossible to get any meaningful representation of the span `name`, it can be populated using the same value as `db.instance`.
 
-Note, Redis, Cassandra, HBase and other storage systems may reuse the same
-attribute names.
+Note, Redis, Cassandra, HBase and other storage systems may reuse the same attribute names.
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |

@@ -1,14 +1,12 @@
 # Glossary
 
-Below are a list of some OpenTelemetry specific terms that are used across this
-specification.
+Below are a list of some OpenTelemetry specific terms that are used across this specification.
 
 ## Telemetry SDK
 
 Denotes the library that implements the *OpenTelemetry API*.
 
-See [Library Guidelines](library-guidelines.md#sdk-implementation) and
-[Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk)
+See [Library Guidelines](library-guidelines.md#sdk-implementation) and [Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk)
 
 <a name="instrumented_library"></a>
 
@@ -16,8 +14,7 @@ See [Library Guidelines](library-guidelines.md#sdk-implementation) and
 
 Denotes the library for which the telemetry signals (traces, metrics, logs) are gathered.
 
-The calls to the OpenTelemetry API can be done either by the Instrumented Library itself,
-or by another [Instrumenting Library](#instrumenting_library).
+The calls to the OpenTelemetry API can be done either by the Instrumented Library itself, or by another [Instrumenting Library](#instrumenting_library).
 
 Example: `org.mongodb.client`.
 
@@ -26,8 +23,7 @@ Example: `org.mongodb.client`.
 ## Instrumenting Library
 
 Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library).
-*Instrumented Library* and *Instrumenting Library* may be the same library
-if it has built-in OpenTelemetry instrumentation.
+*Instrumented Library* and *Instrumenting Library* may be the same library if it has built-in OpenTelemetry instrumentation.
 
 Example: `io.opentelemetry.contrib.mongodb`.
 
@@ -37,15 +33,13 @@ Synonyms: *Instrumentation Library*, *Integration*.
 
 ## Tracer Name / Meter Name
 
-This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api-user.md#obtaining-a-meter)). It identifies the [Instrumenting Library](#instrumenting_library).
+This refers to the `name` and (optional) `version` arguments specified when creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api-user.md#obtaining-a-meter)).
+It identifies the [Instrumenting Library](#instrumenting_library).
 
 ## Namespace
 
-This term applies to [Metric names](metrics/api-user.md#metric-names) only. The namespace is used to disambiguate identical metric
-names used in different [instrumenting libraries](#instrumenting_library). The [Name](#name) provided
-for creating a `Meter` serves as its namespace in addition to the primary semantics
-described [here](#name).
+This term applies to [Metric names](metrics/api-user.md#metric-names) only.
+The namespace is used to disambiguate identical metric names used in different [instrumenting libraries](#instrumenting_library).
+The [Name](#name) provided for creating a `Meter` serves as its namespace in addition to the primary semantics described [here](#name).
 
-The `version` argument is not relevant here and will not be included in
-the resulting namespace string.
+The `version` argument is not relevant here and will not be included in the resulting namespace string.

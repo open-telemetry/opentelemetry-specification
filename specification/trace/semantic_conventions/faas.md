@@ -61,7 +61,8 @@ For `faas` spans with trigger `datasource`, it is recommended to set the followi
 
 ### HTTP
 
-The function responsibility is to provide an answer to an inbound HTTP request. The `faas` span SHOULD follow the recommendations described in the [HTTP Server semantic conventions](http.md#http-server-semantic-conventions).
+The function responsibility is to provide an answer to an inbound HTTP request.
+The `faas` span SHOULD follow the recommendations described in the [HTTP Server semantic conventions](http.md#http-server-semantic-conventions).
 
 ### PubSub
 
@@ -72,7 +73,8 @@ This way, it is possible to correlate each individual message with its execution
 
 ### Timer
 
-A function is scheduled to be executed regularly. The following additional attributes are recommended.
+A function is scheduled to be executed regularly.
+The following additional attributes are recommended.
 
 | Attribute name  | Notes  and examples  | Required? |
 |---|---|--|

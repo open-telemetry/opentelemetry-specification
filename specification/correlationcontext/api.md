@@ -34,10 +34,9 @@ specification.
 
 ### Get correlations
 
-Returns the name/value pairs in the `CorrelationContext`. The order of name/value pairs MUST NOT be
-significant. Based on the language specification, the returned value can be
-either an immutable collection or an immutable iterator to the collection of
-name/value pairs in the `CorrelationContext`.
+Returns the name/value pairs in the `CorrelationContext`.
+The order of name/value pairs MUST NOT be significant.
+Based on the language specification, the returned value can be either an immutable collection or an immutable iterator to the collection of name/value pairs in the `CorrelationContext`.
 
 OPTIONAL parameters:
 
@@ -45,10 +44,8 @@ OPTIONAL parameters:
 
 ### Get correlation
 
-To access the value for a name/value pair by a prior event, the Correlations API
-SHALL provide a function that takes a context and a name as input, and returns a
-value. Returns the value associated with the given name, or null
-if the given name is not present.
+To access the value for a name/value pair by a prior event, the Correlations API SHALL provide a function that takes a context and a name as input, and returns a value.
+Returns the value associated with the given name, or null if the given name is not present.
 
 REQUIRED parameters:
 
@@ -60,9 +57,8 @@ OPTIONAL parameters:
 
 ### Set correlation
 
-To record the value for a name/value pair, the Correlations API SHALL provide a function which
-takes a context, a name, and a value as input. Returns a new `Context` which
-contains a `CorrelationContext` with the new value.
+To record the value for a name/value pair, the Correlations API SHALL provide a function which takes a context, a name, and a value as input.
+Returns a new `Context` which contains a `CorrelationContext` with the new value.
 
 REQUIRED parameters:
 
@@ -76,8 +72,8 @@ OPTIONAL parameters:
 
 ### Remove correlation
 
-To delete a name/value pair, the Correlations API SHALL provide a function which takes a context
-and a name as input. Returns a new `Context` which no longer contains the selected name.
+To delete a name/value pair, the Correlations API SHALL provide a function which takes a context and a name as input.
+Returns a new `Context` which no longer contains the selected name.
 
 REQUIRED parameters:
 
@@ -89,9 +85,8 @@ OPTIONAL parameters:
 
 ### Clear correlations
 
-To avoid sending any name/value pairs to an untrusted process, the Correlations API SHALL provide
-a function to remove all Correlations from a context. Returns a new `Context`
-with no correlations.
+To avoid sending any name/value pairs to an untrusted process, the Correlations API SHALL provide a function to remove all Correlations from a context.
+Returns a new `Context` with no correlations.
 
 OPTIONAL parameters:
 
@@ -104,5 +99,5 @@ OPTIONAL parameters:
 
 ## Conflict Resolution
 
-If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence. The value
-is replaced with the added value (regardless if it is locally generated or received from a remote peer).
+If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence.
+The value is replaced with the added value (regardless if it is locally generated or received from a remote peer).

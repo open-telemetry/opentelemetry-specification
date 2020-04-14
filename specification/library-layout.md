@@ -1,8 +1,7 @@
 # OpenTelemetry Project Package Layout
 
-This documentation serves to document the "look and feel" of a basic layout for OpenTelemetry
-projects. This package layout is intentionally generic and it doesn't try to impose a language
-specific package structure.
+This documentation serves to document the "look and feel" of a basic layout for OpenTelemetry projects.
+This package layout is intentionally generic and it doesn't try to impose a language specific package structure.
 
 ## API Package
 
@@ -83,10 +82,8 @@ This directory describes the SDK implementation for api/metrics.
 
 ### [/sdk/resource](resource/sdk.md)
 
-The resource directory primarily defines a type [Resource](overview.md#resources) that captures
-information about the entity for which stats or traces are recorded. For example, metrics exposed
-by a Kubernetes container can be linked to a resource that specifies the cluster, namespace, pod,
-and container name.
+The resource directory primarily defines a type [Resource](overview.md#resources) that captures information about the entity for which stats or traces are recorded.
+For example, metrics exposed by a Kubernetes container can be linked to a resource that specifies the cluster, namespace, pod, and container name.
 
 ### `/sdk/correlationcontext`
 
