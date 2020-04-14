@@ -324,11 +324,8 @@ Integrators compute checkpoints from over the process lifetime; these may
 be useful for simple exporters but are prone to consuming a large and
 ever-growing amount of memory, depending on LabelSet cardinality.
 
-Two standard Integrator implementations are provided.
+One standard Integrator implementation is provided.
 
-1. The "defaultkeys" Integrator reduces the export dimensions of each
-metric instrument to the Recommended keys declared with the
-instrument.
 1. The "ungrouped" Integrator exports metric instruments at full
 dimensionality; each LabelSet is exported without reducing dimensions.
 
