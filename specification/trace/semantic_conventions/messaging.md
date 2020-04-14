@@ -167,6 +167,7 @@ The client library or application could also add the receiver span's span contex
 The status of the batch processing span is selected by the application.
 Depending on the semantics of the operation.
 A span status `Ok` could, for example, be set only if all messages or if just at least one were properly processed.
+
 ```
 Process P: | Span Prod1 | Span Prod2 |
 --

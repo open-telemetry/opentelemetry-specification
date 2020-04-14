@@ -82,6 +82,7 @@ Setter is an argument in `Inject` that sets value into given field.
 
 `Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
 One of the ways to implement it is `Setter` class with `Set` method as described below.
+
 ##### Set
 
 Replaces a propagated field with the given value.
