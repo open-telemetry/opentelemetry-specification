@@ -10,6 +10,7 @@ See the goals of OpenTelemetry Protocol design [here](design-goals.md).
 
 There are 2 parties involved in telemetry data exchange.
 In this document the party that is the source of telemetry data is called the Client, the party that is the destination of telemetry data is called the Server.
+
 Examples of a Client are instrumented applications or sending side of telemetry collectors, examples of Servers are telemetry backends or receiving side of telemetry collectors (so a Collector is typically both a Client and a Server depending on which side you look from).
 
 ## Known Issues with Existing Protocols
@@ -40,6 +41,7 @@ The protocol must support traces and metrics as data types.
 
 The protocol must ensure reliable data delivery and clear visibility when the data cannot be delivered.
 This should be achieved by sending data acknowledgements from the Server to the Client.
+
 Note that acknowledgements alone are not sufficient to guarantee that: a) no data will be lost and b) no data will be duplicated. Acknowledgements can help to guarantee a) but not b). Guaranteeing both at the same is difficult. Because it is usually preferable for telemetry data to be duplicated than to lose it, we choose to guarantee that there are no data losses while potentially allowing duplicate data.
 
 Duplicates can typically happen in edge cases (e.g.
