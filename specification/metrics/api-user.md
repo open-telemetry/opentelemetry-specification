@@ -12,10 +12,8 @@
     + [Bound instrument calling convention](#bound-instrument-calling-convention)
     + [Direct instrument calling convention](#direct-instrument-calling-convention)
     + [RecordBatch calling convention](#recordbatch-calling-convention)
-    + [Label set re-use is encouraged](#label-set-re-use-is-encouraged)
       - [Missing label keys](#missing-label-keys)
-      - [Option: Convenience method to bypass `meter.Labels(...)`](#option-convenience-method-to-bypass-meterlabels)
-      - [Option: Ordered LabelSet construction](#option-ordered-labelset-construction)
+      - [Option: Ordered labels](#option-ordered-labels)
 - [Detailed specification](#detailed-specification)
   * [Instrument construction](#instrument-construction)
     + [Recommended label keys](#recommended-label-keys)
@@ -85,13 +83,11 @@ include the instrument, a numerical value, and an optional
 set of labels.  The instrument, discussed in detail below, contains
 the metric name and various optional settings.
 
-Labels are key:value pairs associated with events describing various
-dimensions or categories that describe the event.  A "label key"
-refers to the key component while "label value" refers to the
-correlated value component of a label.  Label refers to the pair of
-label key and value.  Labels are passed in to the metric event in the
-form of a `LabelSet` argument, using several input methods discussed
-below.
+Labels are key:value pairs associated with events describing various dimensions
+or categories that describe the event.  A "label key" refers to the key
+component while "label value" refers to the correlated value component of a
+label.  Label refers to the pair of label key and value.  Labels are passed in
+to the metric event at construction time.
 
 Metric events always have an associated component name, the name
 passed when constructing the corresponding `Meter`.  Metric events are
@@ -182,30 +178,32 @@ func newServer(meter metric.Meter) *server {
 func (s *server) operate(ctx context.Context) {
      // ... other work
 
-     s.instruments.counter1.Add(ctx, 1, s.meter.Labels(
-         label1.String("..."),
-         label2.String("...")))
+     s.instruments.counter1.Add(ctx, 1,
+        key.String("label1", "..."),
+        key.String("label2", "..."),
 }
 ```
 
 ### Metric calling conventions
 
-This API is factored into three core types: instruments, bound instruments,
-and label sets.  In doing so, we provide several ways of capturing
-measurements that are semantically equivalent and generate equivalent
-metric events, but offer varying degrees of performance and
-convenience.
+The metrics API provides three semantically equivalent ways to capture measurements:
+
+- calling bound metric instruments
+- calling unbound metric instruments with labels
+- batch recording without a metric instrument
+
+All three methods generate equivalent metric events, but offer varying degrees
+of performance and convenience.
 
 This section applies to calling conventions for counter, gauge, and
 measure instruments.
 
-As described above, metric events consist of an instrument, a set of
-labels, and a numerical value, plus associated context.  The
-performance of a metric API depends on the work done to enter a new
-measurement.  One approach to reduce cost is to aggregate intermediate
-results in the SDK, so that subsequent events happening in the same
-collection period, for the same label set, combine into the same
-working memory.
+As described above, metric events consist of an instrument, a set of labels,
+and a numerical value, plus associated context.  The performance of a metric
+API depends on the work done to enter a new measurement.  One approach to
+reduce cost is to aggregate intermediate results in the SDK, so that subsequent
+events happening in the same collection period, for the same set of labels,
+combine into the same working memory.
 
 In this document, the term "aggregation" is used to describe the
 process of coalescing metric events for a complete set of labels,
@@ -217,30 +215,28 @@ various trade-offs in terms of complexity and performance.
 #### Bound instrument calling convention
 
 In situations where performance is a requirement and a metric instrument is
-repeatedly used with the same set of labels, the developer may elect
-to use the _bound instrument_ calling convention as an optimization.
-For bound instruments to be a benefit, it requires that a specific
-instrument will be re-used with specific labels.  If an instrument
-will be used with the same label set more than once, obtaining an
-bound instrument corresponding to the label set ensures the highest
-performance available.
+repeatedly used with the same set of labels, the developer may elect to use the
+_bound instrument_ calling convention as an optimization.  For bound
+instruments to be a benefit, it requires that a specific instrument will be
+re-used with specific labels.  If an instrument will be used with the same
+labels more than once, obtaining a bound instrument corresponding to the labels
+ensures the highest performance available.
 
-To bind an instrument and label set, use the `Bind(LabelSet)` method to
-return an interface that supports the `Add()`, `Set()`, or `Record()`
-method of the instrument in question.
+To bind an instrument, use the `Bind(labels)` method to return an interface
+that supports the `Add()`, `Set()`, or `Record()` method of the instrument in
+question.
 
 Bound instruments may consume SDK resources indefinitely.
 
 ```golang
 func (s *server) processStream(ctx context.Context) {
 
-  streamLabels := s.meter.Labels(
-      labelA.String("..."),
-      labelB.String("..."),
-  )
   // The result of Bind() is a bound instrument
   // (e.g., a BoundInt64Counter).
-  counter2 := s.instruments.counter2.Bind(streamLabels)
+  counter2 := s.instruments.counter2.Bind(
+      key.String("labelA", "..."),
+      key.String("labelB", "..."),
+  )
 
   for _, item := <-s.channel {
      // ... other work
@@ -254,10 +250,10 @@ func (s *server) processStream(ctx context.Context) {
 
 #### Direct instrument calling convention
 
-When convenience is more important than performance, or there is no
-re-use to potentially optimize with bound instruments, users may
-elect to operate directly on metric instruments, supplying a label set
-at the call site.
+When convenience is more important than performance, or there is no re-use to
+potentially optimize with bound instruments, users may elect to operate
+directly on metric instruments, supplying labels at the call site.  This method
+offers the greatest convenience possible
 
 For example, to update a single counter:
 
@@ -265,24 +261,16 @@ For example, to update a single counter:
 func (s *server) method(ctx context.Context) {
     // ... other work
 
-    s.instruments.counter1.Add(ctx, 1, s.meter.Labels(...))
+    s.instruments.counter1.Add(ctx, 1, ...)
 }
 ```
 
-This method offers the greatest convenience possible.  If performance
-becomes a problem, one option is to use bound instruments as described above.
-Another performance option, in some cases, is to just re-use the
-labels.  In the example here, `meter.Labels(...)` constructs a
-re-usable label set which may be an important performance
-optimization.
-
 #### RecordBatch calling convention
 
-There is one final API for entering measurements, which is like the
-direct access calling convention but supports multiple simultaneous
-measurements.  The use of a RecordBatch API supports entering multiple
-measurements, implying a semantically atomic update to several
-instruments.
+There is one final API for entering measurements, which is like the direct
+access calling convention but supports multiple simultaneous measurements.  The
+use of a RecordBatch API supports entering multiple measurements, implying a
+semantically atomic update to several instruments.
 
 For example:
 
@@ -290,11 +278,7 @@ For example:
 func (s *server) method(ctx context.Context) {
     // ... other work
 
-    labelSet := s.meter.Labels(...)
-
-    // ... more work
-
-    s.meter.RecordBatch(ctx, labelSet,
+    s.meter.RecordBatch(ctx, labels,
         s.instruments.counter1.Measurement(1),
         s.instruments.gauge1.Measurement(10),
         s.instruments.measure2.Measurement(123.45),
@@ -310,92 +294,23 @@ exporter's point of view.  Calls to `RecordBatch` may potentially
 reduce costs because the SDK can enqueue a single bulk update, or take
 a lock only once, for example.
 
-#### Label set re-use is encouraged
-
-A significant factor in the cost of metrics export is that labels,
-which arrive as an unordered list of keys and values, must be
-canonicalized in some way before they can be used for lookup.
-Canonicalizing labels can be an expensive operation as it may require
-sorting or de-duplicating by some other means, possibly even
-serializing, the set of labels to produce a valid map key.
-
-The operation of converting an unordered set of labels into a
-canonicalized set of labels, useful for pre-aggregation, is expensive
-enough that we give it first-class treatment in the API.  The
-`meter.Labels(...)` API canonicalizes labels, returning an opaque
-`LabelSet` object, another form of pre-computation available to the
-user.
-
-Re-usable `LabelSet` objects provide a potential optimization for
-scenarios where bound instruments might not be effective.  For example, if the
-label set will be re-used but only used once per metric, bound instruments do
-not offer any optimization.  It may be best to pre-compute a
-canonicalized `LabelSet` once and re-use it with the direct calling
-convention.
-
-Constructing a bound instrument is considered the higher-performance
-option, when the bound instrument will be used more than once.  Still, consider
-re-using the result of `Meter.Labels(...)` when constructing more than
-one bound instrument.
-
-```golang
-func (s *server) method(ctx context.Context) {
-    // ... other work
-
-    labelSet := s.meter.Labels(...)
-
-    s.instruments.counter1.Add(ctx, 1, labelSet)
-
-    // ... more work
-
-    s.instruments.gauge1.Set(ctx, 10, labelSet)
-
-    // ... more work
-
-    s.instruments.measure1.Record(ctx, 100, labelSet)
-}
-```
-
 ##### Missing label keys
 
-When the SDK interprets a `LabelSet` in the context of grouping
-aggregated values for an exporter, and where there are keys that are
-missing, the SDK is required to consider these values _explicitly
-unspecified_, a distinct value type of the exported data model.
+When the SDK interprets labels in the context of grouping aggregated values for
+an exporter, and where there are keys that are missing, the SDK is required to
+consider these values _explicitly unspecified_, a distinct value type of the
+exported data model.
 
-##### Option: Convenience method to bypass `meter.Labels(...)`
+##### Option: Ordered labels
 
-As a language-optional feature, the direct and bound instrument calling
-convention APIs may support alternate convenience methods to pass raw
-labels at the call site.  These may be offered as overloaded methods
-for `Add()`, `Set()`, and `Record()` (direct calling convention) or
-`Bind()` (bound instrument calling convention), in both cases bypassing a
-call to `meter.Labels(...)`.  For example:
-
-```java
-  public void method() {
-    // pass raw labels, no explicit `LabelSet`
-    s.instruments.counter1.add(1, labelA.value(...), labelB.value(...))
-
-    // ... or
-
-    // pass raw labels, no explicit `LabelSet`
-    BoundIntCounter counter = s.instruments.gauge1.bind(labelA, ..., labelB, ...)
-    for (...) {
-      counter.add(1)
-    }
-  }
-```
-
-##### Option: Ordered LabelSet construction
-
-As a language-level decision, APIs may support _ordered_ LabelSet
-construction, in which a pre-defined set of ordered label keys is
-defined such that values can be supplied in order.  For example,
+As a language-level decision, APIs may support label key ordering.  In this
+case, the user may specify an ordered sequence of label keys, which is used to
+create an unordered set of labels from a sequence of similarly ordered label
+values.  For example:
 
 ```golang
 
-var rpcLabelKeys = meter.OrderedLabelKeys("a", "b", "c")
+var rpcLabelKeys = OrderedLabelKeys("a", "b", "c")
 
 for _, input := range stream {
     labels := rpcLabelKeys.Values(1, 2, 3)  // a=1, b=2, c=3
@@ -404,11 +319,10 @@ for _, input := range stream {
 }
 ```
 
-This is specified as a language-optional feature because its safety,
-and therefore its value as an input for monitoring, depends on the
-availability of type-checking in the source language.  Passing
-unordered labels (i.e., a list of bound keys and values) to the
-`Meter.Labels(...)` constructor is considered the safer alternative.
+This is specified as a language-optional feature because its safety, and
+therefore its value as an input for monitoring, depends on the availability of
+type-checking in the source language.  Passing unordered labels (i.e., a
+mapping from keys to values) is considered the safer alternative.
 
 ## Detailed specification
 
@@ -443,10 +357,10 @@ are usually selected by the developer for exhibiting low cardinality,
 importance for monitoring purposes, and _an intention to provide these
 variables locally_.
 
-SDKs should consider grouping exported metric data by the recommended
-label keys of each instrument, unless superceded by another form of
-configuration.  Recommended keys that are missing will be considered
-explicitly unspecified, as for missing `LabelSet` keys in general.
+SDKs should consider grouping exported metric data by the recommended label
+keys of each instrument, unless superceded by another form of configuration.
+Recommended keys that are missing will be considered explicitly unspecified, as
+for missing labels in general.
 
 #### Instrument options
 
@@ -467,11 +381,11 @@ information about the kind-specific monotonic and absolute options.
 
 ### Bound instrument API
 
-Counter, gauge, and measure instruments each support allocating
-bound instruments for the high-performance calling convention.  The
-`Instrument.Bind(LabelSet)` method returns an interface which
-implements the `Add()`, `Set()` or `Record()` method, respectively,
-for counter, gauge, and measure instruments.
+Counter, gauge, and measure instruments each support allocating bound
+instruments for the high-performance calling convention.  The
+`Instrument.Bind(labels)` method returns an interface which implements the
+`Add()`, `Set()` or `Record()` method, respectively, for counter, gauge, and
+measure instruments.
 
 ### Direct instrument API
 
@@ -481,25 +395,23 @@ metric events.
 
 ### Interaction with distributed correlation context
 
-The `LabelSet` type introduced above applies strictly to "local"
-labels, meaning provided in a call to `meter.Labels(...)`.  The
-application explicitly declares these labels, whereas distributed
-correlation context labels are implicitly associated with the event.
+As described above, labels are strictly "local".  I.e., the application
+explicitly declares these labels, whereas distributed correlation context
+labels are implicitly associated with the event.
 
-There is a clear intention to pre-aggregate metrics within the SDK,
-using the contents of a `LabelSet` to derive grouping keys.  There are
-two available options for users to apply distributed correlation
-context to the local grouping function used for metrics
-pre-aggregation:
+There is a clear intention to pre-aggregate metrics within the SDK, using
+labels to derive grouping keys.  There are two available options for users to
+apply distributed correlation context to the local grouping function used for
+metrics pre-aggregation:
 
 1. The distributed context, whether implicit or explicit, is
   associated with every metric event.  The SDK could _automatically_
   project selected label keys from the distributed correlation into the
-  metric event.  This would require some manner of dynamic mapping from
-  `LabelSet` to grouping key during aggregation.
+  metric event.
 2. The user can explicitly perform the same projection of distributed
-  correlation into a `LabelSet` by extracting from the correlation
-  context and including it in the call to `metric.Labels(...)`.
+  correlation into labels by extracting labels from the correlation
+  context and including them in the call to create the metric or bound
+  instrument.
 
 An example of an explicit projection follows.
 
