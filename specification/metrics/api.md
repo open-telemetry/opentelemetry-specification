@@ -210,7 +210,7 @@ A single callback invocation generates (zero or more) simultaneous metric events
 ## Interpretation
 
 We believe the three instrument kinds Counter, Measure, and Observer form a sufficient basis for expressing nearly all metric data.
-But if the API and SDK are separated, and the SDK can handle any metric event as it pleases, why not have just one kind of instrument.
+But if the API and SDK are separated, and the SDK can handle any metric event as it pleases, why not have just one kind of instrument?
 How are the instruments fundamentally different, and why are there only three?
 
 Establishing different kinds of instrument is important because in most cases it allows the SDK to provide good default functionality, without requiring alternative behaviors to be configured.
