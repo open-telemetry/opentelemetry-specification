@@ -222,23 +222,19 @@ The function names--`Add()` for Counter instruments, `Record()` for Measure inst
 The standard implementation for the three instruments is defined as
 follows:
 
-1. Counter.
-   The `Add()` function accumulates a total for each distinct set of labels.
+1. Counter. The `Add()` function accumulates a total for each distinct set of labels.
    When aggregating over labels for a Counter, combine using arithmetic addition and export as a sum.
    Depending on the exposition format, sums are exported either as pairs of labels and cumulative _delta_ or as pairs of labels and cumulative _total_.
-2. Measure.
-   Use the `Record()` function to report events for which the SDK will compute summary statistics about the distribution of values, for each distinct set of labels.
+2. Measure. Use the `Record()` function to report events for which the SDK will compute summary statistics about the distribution of values, for each distinct set of labels.
    The summary statistics to use are determined by the aggregation, but they usually include at least the sum of values, the count of measurements, and the minimum and maximum values.
    When aggregating distinct Measure events, report summary statistics of the combined value distribution.
    Exposition formats for summary statistics vary widely, but typically include pairs of labels and (sum, count, minimum and maximum value).
-3. Observer.
-   Current values are provided by the Observer callback at the end of each Metric collection period.
+3. Observer. Current values are provided by the Observer callback at the end of each Metric collection period.
    When aggregating values _for the same set of labels_, combine using the most-recent value.
    When aggregating values _for different sets of labels_, combine the value distribution as for Measure instruments.
    Export as pairs of labels and (sum, count, minimum and maximum value).
-   We believe that the standard behavior of one of these three
-   instruments covers nearly all use-cases for users of OpenTelemetry in
-   terms of the intended semantics.
+
+We believe that the standard behavior of one of these three instruments covers nearly all use-cases for users of OpenTelemetry in terms of the intended semantics.
 
 ### Future Work: Option Support
 
