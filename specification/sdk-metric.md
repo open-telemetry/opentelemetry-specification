@@ -304,7 +304,7 @@ disable instruments at this point simply by returning a `nil`
 aggregator.
 
 The second choice--which dimensions to export by--affects how the
-batcher processes records emitted by the Differentiator during
+integrator processes records emitted by the Differentiator during
 collection.  During collection, the Differentiator emits an
 export record for each metric instrument with pending updates to the
 Integrator.
