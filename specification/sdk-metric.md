@@ -59,50 +59,50 @@ kind.
 __Collection__: _Collection_ refers to the process of gathering the
 current state from all active metric instruments for the exporter.
 
-## Differentiator
+## Accumulator
 
 The Meter API provides methods to create metric instruments, bound 
 instruments, and label sets.  This document describes the
-standard Differentiator and supporting packages used to build
+standard Accumulator and supporting packages used to build
 a complete metric export pipeline.
 
-The Differentiator stands at the start of the export pipeline,
+The Accumulator stands at the start of the export pipeline,
 where it interfaces with the user-facing API and receives metric
 updates.  The Meter's primary job is to maintain active state about
 pending metric updates.  The most important requirement placed on the
-Differentiator is that it be able to "forget" state about metric
-updates after they are collected, so that the Differentiator
+Accumulator is that it be able to "forget" state about metric
+updates after they are collected, so that the Accumulator
 does not have unbounded memory growth.  To support forgetting metrics
-that do not receive updates, the Differentiator itself manages
+that do not receive updates, the Accumulator itself manages
 incremental Aggregation as opposed to maintaining state for the
 process lifetime.
 
-The Differentiator SHOULD ensure that operations on bound
+The Accumulator SHOULD ensure that operations on bound
 instruments be fast, because the API specification promises users that
 the bound-instrument calls are the fastest possible calling
 convention.  Metric updates made via a bound instrument, when used
 with an Aggregator defined by simple atomic operations, should follow
 a very short code path.
 
-The Differentiator MUST provide a `Collect()` method to initiate
+The Accumulator MUST provide a `Collect()` method to initiate
 collection, which involves sweeping through metric instruments with
 un-exported metric updates, checkpointing their Aggregators, and
 submitting them to the Integrator.  Integrator and Exporter MUST be called
-in a single-threaded context; consequently the Differentiator
+in a single-threaded context; consequently the Accumulator
 MUST ensure that concurrent `Collect()` calls do not violate the
 single-threaded nature of the Integrator and Exporter, whether through
 locking or other avoidance techniques.
 
 This document does not specify how to coordinate synchronization
 between user-facing metric updates and metric collection activity,
-however Differentiators SHOULD make efforts to avoid lock
+however Accumulators SHOULD make efforts to avoid lock
 contention by holding locks only briefly or using lock-free
-techniques.  Differentiators MUST ensure that there are no lost
+techniques.  Accumulators MUST ensure that there are no lost
 updates.
 
 ### Meter aggregation preserves LabelSet dimensions
 
-The Differentiator MUST maintain Aggregators for active metric
+The Accumulator MUST maintain Aggregators for active metric
 instruments for each complete, distinct LabelSet.  This ensures that
 the Integrator has access to the complete set of labels when performing
 its task.
@@ -111,16 +111,16 @@ In this design, changing LabelSet dimensions for export is the
 responsibility of the Integrator.  As a consequence, the cost and
 complexity of changing dimensions affect only the collection pass.  As
 a secondary benefit, this ensures a relatively simple code path for
-entering metric updates into the Differentiator.
+entering metric updates into the Accumulator.
 
 #### Alternatives considered
 
 There is an alternative to maintaining aggregators for active metric
 instruments for each complete, distinct LabelSet.  Instead of
-aggregating by each distinct LabelSet in the Differentiator and
-changing dimensionality in the Integrator, the Differentiator could
+aggregating by each distinct LabelSet in the Accumulator and
+changing dimensionality in the Integrator, the Accumulator could
 change dimensionality "up front".  In this alternative, the
-Differentiator would apply a change of dimension to LabelSets on the
+Accumulator would apply a change of dimension to LabelSets on the
 instrumentation code path as opposed to the collection code path.
 
 This alternative was not selected because it puts a relatively
@@ -129,10 +129,10 @@ the instrumentation code path.
 
 ### Recommended implementation
 
-The Differentiator supports the three metric [calling
+The Accumulator supports the three metric [calling
 conventions](api-metrics-user.md): bound-instrument calls, direct
 calls, and RecordBatch calls.  Although not a requirement, we
-recommend the following approach for organizing the Differentiator.
+recommend the following approach for organizing the Accumulator.
 
 Of the three calling conventions, direct calls and RecordBatch calls
 can be easily converted into bound-instrument calls using short-lived
@@ -150,36 +150,36 @@ func (inst *instrument) RecordOne(ctx context.Context, number core.Number, label
 }
 ```
 
-The Differentiator tracks an internal set of records, where every
+The Accumulator tracks an internal set of records, where every
 record either: (1) has a current, un-released bound instrument pinning
 it in memory, (2) has pending updates that have not been collected,
-(3) is a candidate for removing from memory.  The Differentiator
+(3) is a candidate for removing from memory.  The Accumulator
 maintains a mapping from the pair (Instrument, LabelSet) to an active
 record.  Each active record contains an Aggregator implementation,
 which is responsible for incorporating a series of metric updates into
 the current incremental state.
 
-The Differentiator provides a facility to remove records from
+The Accumulator provides a facility to remove records from
 memory when they have been inactive for at least a full collection
-period.  The Differentiator MUST not lose updates when removing
+period.  The Accumulator MUST not lose updates when removing
 records from memory; it is safe to remove records that have received
 no updates because Aggregators maintain incremental state.
 
 #### Monotonic gauge limitations
 
-As described, the Differentiator is permitted to forget state about
+As described, the Accumulator is permitted to forget state about
 metric records that have not been updated for a full collection
 interval.  This creates a potential conflict when implementing
-monotonic gauges.  The Differentiator is not required to implement a
-monotonicity test when it has no current state.  The Differentiator
+monotonic gauges.  The Accumulator is not required to implement a
+monotonicity test when it has no current state.  The Accumulator
 SHOULD implement a monotonicity test for monotonic gauges when it has
 prior state.
 
-The Differentiator SHOULD prefer to forget monotonic gauges that
+The Accumulator SHOULD prefer to forget monotonic gauges that
 have not received updates the same as it would for any other metric
 instrument.  However, the user can be assured that their monotonic
 gauge updates are being checked if they acquire and use a bound
-instrument, since bound instruments pin a record in the Differentiator.
+instrument, since bound instruments pin a record in the Accumulator.
 
 ## Aggregator implementations
 
@@ -295,7 +295,7 @@ metrics from the SDK.  The two kinds of configuration are:
 1. Given a metric instrument, choose which dimensions to export by (i.e., the "grouping" function).
 
 The first choice--which concrete aggregator type to apply--is made
-whenever the Differentiator encounters a new (Instrument,
+whenever the Accumulator encounters a new (Instrument,
 LabelSet) pair.  Each concrete type of aggregator will perform a
 different function.  Aggregators for counter and gauge instruments are
 relatively straightforward, but many concrete aggregators are possible
@@ -304,14 +304,14 @@ disable instruments at this point simply by returning a `nil`
 aggregator.
 
 The second choice--which dimensions to export by--affects how the
-integrator processes records emitted by the Differentiator during
-collection.  During collection, the Differentiator emits an
+integrator processes records emitted by the Accumulator during
+collection.  During collection, the Accumulator emits an
 export record for each metric instrument with pending updates to the
 Integrator.
 
 During the collection pass, the Integrator receives a full set of
 checkpointed aggregators corresponding to each (Instrument, LabelSet)
-pair with an active record managed by the Differentiator.
+pair with an active record managed by the Accumulator.
 According to its own configuration, the Integrator at this point
 determines which dimensions to aggregate for export; it computes a
 checkpoint of (possibly) reduced-dimension export records ready for
@@ -332,11 +332,11 @@ dimensionality; each LabelSet is exported without reducing dimensions.
 ## Controller implementation
 
 A controller is needed to coordinate the decision to begin collection.
-Controllers generally are responsible for binding the Differentiator,
+Controllers generally are responsible for binding the Accumulator,
 the Integrator, and the Exporter.
 
 Once the decision has been made, the controller's job is to call
-`Collect()` on the Differentiator, then read the checkpoint from
+`Collect()` on the Accumulator, then read the checkpoint from
 the Integrator, then invoke the Exporter.
 
 One standard "push" controller is provided, which triggers collection
@@ -372,17 +372,17 @@ interfaces.
 
 ## LabelEncoder optimizations
 
-The Differentiator and some Integrator implementations are required
+The Accumulator and some Integrator implementations are required
 to compute a unique key corresponding to a LabelSet, for the purposes
 of locating an aggregator to use for metric updates.  Where possible,
 Exporters can avoid a duplicate computation by providing a
-LabelEncoder to the Differentiator.
+LabelEncoder to the Accumulator.
 
 This optimization applies for any Exporter that will internally
 compute a unique encoding for a set of labels, whether using a text or
 a binary encoding.  For example, a dogstatsd Exporter will benefit by
 providing its specific LabelEncoder implementation to the
-Differentiator; consequently, the export records it sees will be
+Accumulator; consequently, the export records it sees will be
 accompanied by a pre-computed encoding of the export LabelSet.
 
 ## Metric descriptors
