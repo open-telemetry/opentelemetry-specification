@@ -188,7 +188,7 @@ each supported `Format`.
 
 If offered, the global `Propagator`s should default to a composite `Propagator`
 containing the W3C Trace Context Propagator and the Correlation Context `Propagator`
-specified in [api-correlationcontext.md](api-correlationcontext.md#serialization),
+specified in [api-correlationcontext.md](../correlationcontext/api.md#serialization),
 in order to provide propagation even in the presence of no-op
 OpenTelemetry implementations.
 
