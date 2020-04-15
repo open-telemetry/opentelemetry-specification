@@ -13,7 +13,7 @@ Table of Contents
   - [Remove correlation](#remove-correlation)
   - [Clear correlations](#clear-correlations)
 - [CorrelationContext Propagation](#correlationcontext-propagation)
-    - [Serialization](#serialization)
+  - [Serialization](#serialization)
 - [Conflict Resolution](#conflict-resolution)
 
 </details>
