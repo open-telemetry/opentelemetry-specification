@@ -112,8 +112,10 @@ to the value it had before attaching a specified `Context`.
 
 This operation is intended to help making sure the correct `Context`
 is associated with the caller's current execution unit. Users can
-rely on it to identify a wrong call order and emit a signal to warn
-users about the broken invariant.
+rely on it to identify a wrong call order, i.e. trying to detach
+a `Context` that is not the current instance. In this case the operation
+can emit a signal to warn users of the wrong call order, such as logging
+an error or returning an error value.
 
 The API MUST accept the following parameters:
 
