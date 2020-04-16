@@ -118,3 +118,6 @@ users about the broken invariant.
 The API MUST accept the following parameters:
 
 - A `Token` that was returned by a previous call to attach a `Context`.
+
+The API optionally CAN return a value used to check whether the operation
+was successful or not.
