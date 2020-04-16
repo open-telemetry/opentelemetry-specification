@@ -114,3 +114,22 @@ omitted from the payload when they are empty in the OpenTelemetry `Span`.
 
 For example, an OpenTelemetry `Span` without any `Event` should not have an
 `annotations` field in the Zipkin payload.
+
+
+## Special cases
+
+These special cases might only apply to Zipkin [Thrift format](https://github.com/openzipkin/zipkin-api/tree/master/thrift).
+
+### Missing start time
+
+Missing span start time (`null`) should be derived from the Annotations in the following order:
+
+1. use timestamp from client send annotation `cs`
+2. use timestamp from server receive annotation `sr`
+
+### Missing duration
+
+Missing span duration (`null`)should be derived tom the Annotations in the following order:
+
+1. the timestamp difference between client receive `cr` and client send `cs` annotations
+2. the timestamp difference between the last and first annotations
