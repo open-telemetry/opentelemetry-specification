@@ -115,7 +115,6 @@ omitted from the payload when they are empty in the OpenTelemetry `Span`.
 For example, an OpenTelemetry `Span` without any `Event` should not have an
 `annotations` field in the Zipkin payload.
 
-
 ## Special cases
 
 These special cases might only apply to Zipkin [Thrift format](https://github.com/openzipkin/zipkin-api/tree/master/thrift).
