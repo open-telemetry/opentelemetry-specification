@@ -129,7 +129,7 @@ Missing span start time (`null`) should be derived from the Annotations in the f
 
 ### Missing duration
 
-Missing span duration (`null`)should be derived tom the Annotations in the following order:
+Missing span duration (`null`) should be derived from the Annotations in the following order:
 
 1. the timestamp difference between client receive `cr` and client send `cs` annotations
-2. the timestamp difference between the last and first annotations
+2. the timestamp difference between the last and first annotation
