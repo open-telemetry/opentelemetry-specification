@@ -62,6 +62,8 @@ The processor of the message should set the kind to `CONSUMER`, unless it always
 | `messaging.url` | Connection string such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
 | `messaging.message_id` | A value used by the messaging system as an identifier for the message, represented as a string. | No |
 | `messaging.conversation_id` | A value identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | No |
+| `messaging.message_payload_size_bytes` | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | No |
+| `messaging.message_payload_compressed_size_bytes` | The compressed size of the message payload in bytes. | No |
 
 Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
