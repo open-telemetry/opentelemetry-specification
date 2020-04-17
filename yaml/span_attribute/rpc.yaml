@@ -1,0 +1,30 @@
+groups:
+  - id: rpc
+    prefix: 'rpc'
+    brief: 'This document defines semantic conventions for remote procedure calls.'
+    attributes:
+      - id: service
+        type: string
+        required: always
+        sampling_relevant: true
+        brief: 'The service name, must be equal to the $service part in the span name.'
+        examples: "EchoService"
+    constraints:
+      - any_of:
+        - net.peer.ip
+        - net.peer.name
+  - id: grpc.client
+    extends: rpc
+    span_kind: client
+    brief: 'Outgoing gRPC request.'
+    attributes:
+      - ref: net.peer.port
+        required: always
+        brief: 'It describes the server port the client is connecting to'
+  - id: grpc.server
+    extends: rpc
+    span_kind: server
+    brief: 'Incoming gRPC request.'
+    attributes:
+      - ref: net.peer.port
+        brief: 'It describes the port the client is connecting from'
