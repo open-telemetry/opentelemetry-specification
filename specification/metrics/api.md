@@ -4,11 +4,10 @@
 
 - [Overview](#overview)
   * [Metric Instruments](#metric-instruments)
-  * [Label sets](#label-sets)
+  * [Labels](#labels)
   * [Meter Interface](#meter-interface)
   * [Aggregations](#aggregations)
   * [Time](#time)
-  * [WithRecommendedKeys declaration on metric instruments](#withrecommendedkeys-declaration-on-metric-instruments)
   * [Metric Event Format](#metric-event-format)
 - [Three kinds of instrument](#three-kinds-of-instrument)
   * [Counter](#counter)
@@ -16,7 +15,6 @@
   * [Observer](#observer)
 - [Interpretation](#interpretation)
   * [Standard implementation](#standard-implementation)
-  * [Option: Dedicated Measure instrument for timing measurements](#option-dedicated-measure-instrument-for-timing-measurements)
   * [Future Work: Option Support](#future-work-option-support)
   * [Future Work: Configurable Aggregations / View API](#future-work-configurable-aggregations--view-api)
 - [Metric instrument selection](#metric-instrument-selection)
@@ -99,27 +97,20 @@ events that it produces.
 Details about calling conventions for each kind of instrument are
 covered in the [user-level API specification](api-user.md).
 
-### Label sets
+### Labels
 
-_Label_ is the term used to refer to a key-value attribute associated
-with a metric event.  Although they are fundamentally similar to [Span
-attributes](../trace/api.md#span) in the tracing API, a label set is
-given its own type in the Metrics API (generally: `LabelSet`).  Label
-sets are a feature of the API meant to facilitate re-use and thereby
-to lower the cost of processing metric events.  Users are encouraged
-to re-use label sets whenever possible, as they may contain a
-previously encoded representation of the labels.
+A _Label_ is the term used to refer to a key-value attribute associated with a
+metric event, similar to a [Span attribute](../trace/api.md#span) in the
+tracing API.
 
-Users obtain label sets by calling a `Meter` API function.  Each of
-the instrument calling conventions detailed in the [user-level API
-specification](api-user.md) accepts a label set.
+Each of the instrument calling conventions detailed in the [user-level API
+specification](api-user.md) accept a set of labels as an argument.
 
 ### Meter Interface
 
-To produce measurements using an instrument, you need an SDK that
-implements the `Meter` API.  This interface consists of a set of
-instrument constructors, functionality related to label sets, and a
-facility for capturing batches of measurements in a semantically atomic
+To produce measurements using an instrument, you need an SDK that implements
+the `Meter` API.  This interface consists of a set of instrument constructors,
+and a facilities for capturing batches of measurements in a semantically atomic
 way.
 
 There is a global `Meter` instance available for use that facilitates
@@ -193,51 +184,18 @@ measurements.  Metric events from Counter and Measure instruments are
 captured at the moment they happen, when the SDK receives the
 corresponding function call.
 
-The Observer instrument supports an asynchronous API, allowing the SDK
-to collect metric data on demand, once per collection interval.  A
-single Observer instrument callback can capture multiple metric events
-associated with different label sets.  Semantically, by definition,
-these observations are captured at a single instant in time, the
-instant that they became the current set of last-measured values.
+The Observer instrument supports an asynchronous API, allowing the SDK to
+collect metric data on demand, once per collection interval.  A single Observer
+instrument callback can capture multiple metric events associated with
+different sets of labels.  Semantically, by definition, these observations are
+captured at a single instant in time, the instant that they became the current
+set of last-measured values.
 
 Because metric events are implicitly timestamped, we could refer to a
 series of metric events as a _time series_. However, we reserve the
 use of this term for the SDK specification, to refer to parts of a
 data format that express explicitly timestamped values, in a sequence,
 resulting from an aggregation of raw measurements over time.
-
-### WithRecommendedKeys declaration on metric instruments
-
-A standard feature of metric SDKs is to pre-aggregate metric events
-according to a specified set of label keys (i.e., dimensions).  To
-perform this task, the SDK must aggregate metric events over the
-collection interval: (1) across time, (2) across key dimensions in
-_label space_.
-
-When aggregating across spatial dimensions, metric events for
-different label sets are combined into an aggregated value for each
-distinct "group" of values for the key dimensions.  It means that
-measurements are combined for all metric events having the same values
-for selected keys, explicitly disregarding any additional labels with
-keys not in the set of aggregation keys.  Some exporters are known to
-require pre-specifying the label keys used for aggregation (e.g.,
-Prometheus).
-
-For example, if `[ak1, ak2]` are the aggregation keys and `[ik1,
-ik2]` are the ignored keys, then a metric event having labels
-`{ak1=A, ak2=B, ik1=C, ik1=D}` will be combined with a metric
-event having labels `{ak1=A, ak2=B, ik1=Y, ik1=Z}` because they
-have identical label values for all of the aggregation keys.
-
-The API provides a `WithRecommendedKeys` option for the user to declare the
-recommended aggregation keys when declaring new metric instruments,
-intended as the default way to configure an exporter for
-pre-aggregation, if it is expected.  Since this is only expected in
-some exporters, it is regarded as an option relevant to the exporter,
-whether keys configured through `WithRecommendedKeys` are applied for aggregation
-purposes or not.  This allows the user to influence the standard
-implementation behavior, especially for exporters that require
-pre-specified aggregation keys.
 
 ### Metric Event Format
 
@@ -248,7 +206,7 @@ events produced through an instrument consist of:
 - [Context](../context/context.md) (Span context, Correlation context)
 - timestamp (implicit to the SDK)
 - instrument definition (name, kind, and semantic options)
-- label set (associated key-values)
+- associated label keys and values
 - value (a signed integer or floating point number)
 
 This format is the result of separating the API from the SDK--a common
@@ -314,10 +272,9 @@ Context, by definition.  This means, for example, it is not possible
 to associate Observer instrument events with Correlation or Span
 context.
 
-Observer instruments capture not only current values, but also
-effectively _which label sets are current_ at the moment of
-collection.  These instruments can be used to compute probabilities
-and ratios, because values are part of a set.
+Observer instruments capture not only current values, but also effectively
+_which labels are current_ at the moment of collection.  These instruments can
+be used to compute probabilities and ratios, because values are part of a set.
 
 Unlike Counter and Measure instruments, Observer instruments are
 synchronized with collection.  There is no aggregation across time for
@@ -352,11 +309,11 @@ meaning of these actions.
 The standard implementation for the three instruments is defined as
 follows:
 
-1. Counter.  The `Add()` function accumulates a total for each distinct label set.  When aggregating over distinct label sets for a Counter, combine using arithmetic addition and export as a sum. Depending on the exposition format, sums are exported either as pairs of label set and cumulative _delta_ or as pairs of label set and cumulative _total_.
+1. Counter.  The `Add()` function accumulates a total for each distinct set of labels.  When aggregating over labels for a Counter, combine using arithmetic addition and export as a sum. Depending on the exposition format, sums are exported either as pairs of labels and cumulative _delta_ or as pairs of labels and cumulative _total_.
 
-2. Measure.  Use the `Record()` function to report events for which the SDK will compute summary statistics about the distribution of values, for each distinct label set.  The summary statistics to use are determined by the aggregation, but they usually include at least the sum of values, the count of measurements, and the minimum and maximum values.  When aggregating distinct Measure events, report summary statistics of the combined value distribution.  Exposition formats for summary statistics vary widely, but typically include pairs of label set and (sum, count, minimum and maximum value).
+2. Measure.  Use the `Record()` function to report events for which the SDK will compute summary statistics about the distribution of values, for each distinct set of labels.  The summary statistics to use are determined by the aggregation, but they usually include at least the sum of values, the count of measurements, and the minimum and maximum values.  When aggregating distinct Measure events, report summary statistics of the combined value distribution.  Exposition formats for summary statistics vary widely, but typically include pairs of labels and (sum, count, minimum and maximum value).
 
-3. Observer.  Current values are provided by the Observer callback at the end of each Metric collection period.  When aggregating values _for the same label set_, combine using the most-recent value.  When aggregating values _for different label sets_, combine the value distribution as for Measure instruments.  Export as pairs of label set and (sum, count, minimum and maximum value).
+3. Observer.  Current values are provided by the Observer callback at the end of each Metric collection period.  When aggregating values _for the same set of labels_, combine using the most-recent value.  When aggregating values _for different sets of labels_, combine the value distribution as for Measure instruments.  Export as pairs of labels and (sum, count, minimum and maximum value).
 
 We believe that the standard behavior of one of these three
 instruments covers nearly all use-cases for users of OpenTelemetry in
@@ -442,15 +399,13 @@ server that supports several protocols.  The number of bytes read
 should be labeled with the protocol name and aggregated in the
 process.
 
-This is a typical application for the Counter instrument.  Use one
-Counter for capturing the number bytes read.  When handling a request,
-compute a LabelSet containing the name of the protocol and potentially
-other useful labels, then call `Add()` with the same label set and the
-number of bytes read.
+This is a typical application for the Counter instrument.  Use one Counter for
+capturing the number bytes read.  When handling a request, compute a LabelSet
+containing the name of the protocol and potentially other useful labels, then
+call `Add()` with the same labels and the number of bytes read.
 
-To lower the cost of this reporting, you can `Bind()` the
-instrument with each of the supported protocols ahead of time and
-avoid computing the label set for each request.
+To lower the cost of this reporting, you can `Bind()` the instrument with each
+of the supported protocols ahead of time.
 
 ### Reporting total bytes read and bytes per request
 
@@ -518,7 +473,7 @@ CPU usage is something that we naturally sum, which raises several
 questions.
 
 - Why not use a Counter instrument?  In order to use a Counter instrument, we would need to convert total usage figures into deltas.  Calculating deltas from the previous measurement is easy to do, but Counter instruments are not meant to be used from callbacks.
-- Why not report deltas in the Observer callback?  Observer instruments are meant to be used to observe current values. Nothing prevents reporting deltas with an Observer, but the standard aggregation for Observer instruments is to sum the current value across distinct label sets.  The standard behavior is useful for determining the current rate of CPU usage, but special configuration would be required for an Observer instrument to use Counter aggregation.
+- Why not report deltas in the Observer callback?  Observer instruments are meant to be used to observe current values. Nothing prevents reporting deltas with an Observer, but the standard aggregation for Observer instruments is to sum the current value across distinct labels.  The standard behavior is useful for determining the current rate of CPU usage, but special configuration would be required for an Observer instrument to use Counter aggregation.
 
 ### Reporting per-shard memory holdings
 
@@ -526,11 +481,10 @@ Suppose you have a widely-used library that acts as a client to a
 sharded service.  For each shard it maintains some client-side state,
 holding a variable amount of memory per shard.
 
-Observe the current allocation per shard using an Observer instrument
-with a shard label.  These can be aggregated across hosts to compute
-cluster-wide memory holdings by shard, for example, using the standard
-aggregation for Observers, which sums the current value across
-distinct label sets.
+Observe the current allocation per shard using an Observer instrument with a
+shard label.  These can be aggregated across hosts to compute cluster-wide
+memory holdings by shard, for example, using the standard aggregation for
+Observers, which sums the current value across distinct labels.
 
 ### Reporting number of active requests
 
