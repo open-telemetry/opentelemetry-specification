@@ -119,9 +119,10 @@ These are the default samplers implemented in the OpenTelemetry SDK:
   that are root spans (no parent) and Spans with remote parent. However there
   should be configuration to change this to "root spans only", or "all spans".
   * Description MUST be `ProbabilitySampler{0.000100}`.
-  * If the probability is applied (as opposed to using the parent's `SampledFlag` value), the set of span Attributes
-  returned in the result MUST include an attribute with the key `sampling.probability` and a value of the probability
-  being used.
+  * If the probability is applied (as opposed to using the parent's
+  `SampledFlag` value), the set of span Attributes returned in the result MUST
+  include an attribute with the key `sampling.probability` and a value of the
+  probability being used.
 
 #### Probability Sampler algorithm
 
