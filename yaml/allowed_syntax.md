@@ -3,7 +3,6 @@
 First, the syntax with a pseudo [EBNF](https://en.wikipedia.org/wiki/Extended_Backus-Naur_form) grammar is presented.
 Then, the semantic of each field is described.
 
-
 ## Syntax
 
 All attributes are lower case.
@@ -98,12 +97,12 @@ An attribute is defined by:
 - `id`, string that uniquely identifies the attribute.
 - `type`, either a string literal denoting the type or an enum definition (See later).
    The accepted strings literals are:
-   * "string": String attributes.
-   * "number": Numeric attributes.
-   * "boolean": Boolean attributes.
-   * "string[]": Array of strings attributes.
-   * "number[]": Array of numbers attributes.
-   * "boolean[]": Array of booleans attributes.
+  * "string": String attributes.
+  * "number": Numeric attributes.
+  * "boolean": Boolean attributes.
+  * "string[]": Array of strings attributes.
+  * "number[]": Array of numbers attributes.
+  * "boolean[]": Array of booleans attributes.
 - `ref`, optional string, reference an existing attribute, see later.
 - `required`, optional, specifies if the attribute is mandatory.
     Can be "always", or "conditional". When omitted, the attribute is not required.
@@ -120,20 +119,26 @@ An attribute is defined by:
 Examples for setting the `examples` field:
 
 A single example value for a string attribute. All the following three representations are equivalent:
+
 ```yaml
 examples: 'this is a single string'
 ```
+
 or
+
 ```yaml
 examples: ['this is a single string']
 ```
+
 or
+
 ```yaml
 examples:
    - 'this is a single string'
 ```
 
 Attention, the following will throw a type mismatch error because a string type as example value is expected and not an array of string:
+
 ```yaml
 examples:
    - ['this is an error']
@@ -144,10 +149,13 @@ examples: [['this is an error']]
 ---
 
 Multiple example values for a string attribute:
+
 ```yaml
 examples: ['this is a single string', 'this is another one']
 ```
+
 or
+
 ```yaml
 examples:
    - 'this is a single string'
@@ -157,16 +165,20 @@ examples:
 ---
 
 A single example value for an array of strings attribute:
+
 ```yaml
 examples: ['first element of first array', 'second element of first array']
 ```
+
 or
+
 ```yaml
 examples:
    - ['first element of first array', 'second element of first array']
 ```
 
 Attention, the following will throw a type mismatch error because an array of strings as type for the example values is expected and not a string:
+
 ```yaml
 examples: 'this is an error'
 ```
@@ -174,16 +186,18 @@ examples: 'this is an error'
 ---
 
 Multiple example values for an array of string attribute:
+
 ```yaml
 examples: [ ['first element of first array', 'second element of first array'], ['first element of second array', 'second element of second array'] ]
 ```
+
 or
+
 ```yaml
 examples:
    - ['first element of first array', 'second element of first array']
    - ['first element of second array', 'second element of second array']
 ```
-
 
 ### Ref
 
@@ -191,7 +205,6 @@ examples:
 `ref` is useful for specifying that an existing attribute of another semantic convention is part of
 the current semantic convention and inherit its `brief`, `note`, and `example` values. However, if these
 fields are present in the current attribute definition, they override the inherited values.
-
 
 ### Type
 
@@ -215,9 +228,11 @@ Allow to define additional requirements on the semantic convention.
 Currently, it supports `any_of` and `include`.
 
 #### Any Of
+
 `any_of` accepts a list of sequences. Each sequence contains a list of attribute ids that are required.
 `any_of` enforces that all attributes of at least one of the sequences are set.
 
 #### Include
+
 `include` accepts a semantic conventions `id`. It includes as part of this semantic convention all constraints
 and required attributes that are not already defined in the current semantic convention.
