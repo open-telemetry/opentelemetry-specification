@@ -72,7 +72,7 @@ outside of the context of the originating Meter name. For example, when instrume
 an http server library, "latency" is not an appropriate instrument name, as it is too generic.
 Instead, as an example, we should favor a name like "http_request_latency",
 as it would inform the viewer of the semantic meaning of the latency being tracked.
-(Note: this is just an example, actual semantic conventions for instrument naming will
+(Note: this is just an example; actual semantic conventions for instrument naming will
 be tracked elsewhere in the specifications.)
 
 Metric instruments are defined using a `Meter` instance, using a variety
