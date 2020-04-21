@@ -70,8 +70,10 @@ unambiguously, within the same application.
 Metric instrument names SHOULD be semantically meaningful, even when viewed
 outside of the context of the originating Meter name. For example, when instrumenting
 an http server library, "latency" is not an appropriate instrument name, as it is too generic.
-Instead, favor a name like "http_request_latency", as it informs the viewer of the
-semantic meaning of the latency.
+Instead, as an example, we should favor a name like "http_request_latency",
+as it would inform the viewer of the semantic meaning of the latency being tracked.
+(Note: this is just an example, actual semantic conventions for instrument naming will
+be tracked elsewhere in the specifications.)
 
 Metric instruments are defined using a `Meter` instance, using a variety
 of `New` methods specific to the kind of metric and type of input (integer
