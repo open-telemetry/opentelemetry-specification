@@ -53,27 +53,35 @@ Implementations SHOULD provide a single global default `MeterProvider`. The `get
   This name will be used as the `namespace` for any metrics created using the returned `Meter`.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `semver:1.0.0`).
 
-### Metric names
+### Metric Instrument names
 
 Metric instruments have names, which are how we refer to them in
-external systems.  Metric names conform to the following syntax:
+external systems.  Metric instrument names conform to the following syntax:
 
 1. They are non-empty strings
 2. They are case-insensitive
 3. The first character must be non-numeric, non-space, non-punctuation
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
-Metric names belong to a namespace, which is the `name` of the associated `Meter`,
+Metric instrument names belong to a namespace, which is the `name` of the associated `Meter`,
 allowing the same metric name to be used in multiple libraries of code,
 unambiguously, within the same application.
 
+Metric instrument names SHOULD be semantically meaningful, even when viewed
+outside of the context of the originating Meter name. For example, when instrumenting
+an http server library, "latency" is not an appropriate instrument name, as it is too generic.
+Instead, as an example, we should favor a name like "http_request_latency",
+as it would inform the viewer of the semantic meaning of the latency being tracked.
+(Note: this is just an example; actual semantic conventions for instrument naming will
+be tracked elsewhere in the specifications.)
+
 Metric instruments are defined using a `Meter` instance, using a variety
-of `New` methods specific to the kind of metric and type of input(integer
+of `New` methods specific to the kind of metric and type of input (integer
 or floating point).  The Meter will return an error when a metric name is
-already registered with a different kind for the same name.  Metric systems
-are expected to automatically prefix exported metrics by the namespace in a
-manner consistent with the target system.  For example, a Prometheus exporter
-SHOULD use the namespace followed by `_` as the
+already registered with a different kind for the same name. Metric systems
+are expected to automatically prefix exported metrics by the namespace, if
+necessary, in a manner consistent with the target system. For example, a
+Prometheus exporter SHOULD use the namespace followed by `_` as the
 [application prefix](https://prometheus.io/docs/practices/naming/#metric-names).
 
 ### Format of a metric event
