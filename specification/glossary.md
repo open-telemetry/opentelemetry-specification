@@ -71,8 +71,8 @@ additional qualifiers should be used (e.g. `Log Record`).
 
 ### Embedded Log
 
-`Log Records` embedded inside a [Span](api-tracing.md#span)
-object, in the [Events](api-tracing.md#add-events) list.
+`Log Records` embedded inside a [Span](trace/api.md#span)
+object, in the [Events](trace/api.md#add-events) list.
 
 ### Standalone Log
 
