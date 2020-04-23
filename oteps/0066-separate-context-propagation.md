@@ -254,7 +254,7 @@ takes an injector.
 **Go:** https://github.com/open-telemetry/opentelemetry-go/pull/381  
 **Java:** https://github.com/open-telemetry/opentelemetry-java/pull/655  
 **Python:** https://github.com/open-telemetry/opentelemetry-python/pull/325  
-**Ruby:** https://github.com/open-telemetry/opentelemetry-ruby/pull/147
+**Ruby:** https://github.com/open-telemetry/opentelemetry-ruby/pull/147  
 **C#/.NET:** https://github.com/open-telemetry/opentelemetry-dotnet/pull/399
 
 # Examples
