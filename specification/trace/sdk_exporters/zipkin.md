@@ -115,9 +115,13 @@ omitted from the payload when they are empty in the OpenTelemetry `Span`.
 For example, an OpenTelemetry `Span` without any `Event` should not have an
 `annotations` field in the Zipkin payload.
 
-## Special cases
+## Considerations for Legacy (v1) Format
 
-These special cases might only apply to Zipkin [Thrift format](https://github.com/openzipkin/zipkin-api/tree/master/thrift).
+Zipkin's v2 [json](https://github.com/openzipkin/zipkin-api/blob/master/zipkin2-api.yaml) format was defined in 2017, followed up by a [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format in 2018.
+
+Frameworks made before then use a more complex v1 [Thrift](https://github.com/openzipkin/zipkin-api/blob/master/thrift/zipkinCore.thrift) or [json](https://github.com/openzipkin/zipkin-api/blob/master/zipkin-api.yaml) format that notably differs in so far as it uses terminology such as Binary Annotation, and repeats endpoint information on each attribute.
+
+Below is the conversion process of v1 format into OpenTelemetry format.
 
 ### Missing start time
 
