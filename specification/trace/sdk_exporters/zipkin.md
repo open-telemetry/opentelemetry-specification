@@ -121,18 +121,10 @@ Zipkin's v2 [json](https://github.com/openzipkin/zipkin-api/blob/master/zipkin2-
 
 Frameworks made before then use a more complex v1 [Thrift](https://github.com/openzipkin/zipkin-api/blob/master/thrift/zipkinCore.thrift) or [json](https://github.com/openzipkin/zipkin-api/blob/master/zipkin-api.yaml) format that notably differs in so far as it uses terminology such as Binary Annotation, and repeats endpoint information on each attribute.
 
-Below is the conversion process of v1 format into OpenTelemetry format.
+Consider using [V1SpanConverter.java](https://github.com/openzipkin/zipkin/blob/master/zipkin/src/main/java/zipkin2/v1/V1SpanConverter.java) as a reference implementation for converting v1 model to OpenTelemetry.
 
-### Missing start time
+Follows a list of cases that require special handling:
 
-Missing span start time (`null`) should be derived from the Annotations in the following order:
-
-1. use timestamp from client send annotation `cs`
-2. use timestamp from server receive annotation `sr`
-
-### Missing duration
-
-Missing span duration (`null`) should be derived from the Annotations in the following order:
-
-1. the timestamp difference between client receive `cr` and client send `cs` annotations
-2. the timestamp difference between the last and first annotation
+* Missing start time
+* Missing duration
+* TBD
