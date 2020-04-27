@@ -123,8 +123,4 @@ Frameworks made before then use a more complex v1 [Thrift](https://github.com/op
 
 Consider using [V1SpanConverter.java](https://github.com/openzipkin/zipkin/blob/master/zipkin/src/main/java/zipkin2/v1/V1SpanConverter.java) as a reference implementation for converting v1 model to OpenTelemetry.
 
-Follows a list of cases that require special handling:
-
-* Missing start time
-* Missing duration
-* TBD
+The span timestamp and duration were late additions to the V1 format. As in the code link above, it is possible to heuristically derive them from annotations.
