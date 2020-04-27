@@ -6,6 +6,8 @@ Table of Contents
 </summary>
 
 - [Overview](#overview)
+- [Formats](#formats)
+  - [Carrier](#carrier)
 - [HTTP Text Format](#http-text-format)
   - [Fields](#fields)
   - [Inject](#inject)
@@ -32,16 +34,29 @@ cross-cutting concern, such as traces and correlation context.
 The Propagators API is expected to be leveraged by users writing
 instrumentation libraries.
 
+## Formats
+
+A `Format` defines the restrictions imposed by a specific transport in
+order to propagate in-band context data across process boundaries.
+
 The Propagators API currently consists of one `Format`:
 
-- `HTTPTextFormat` is used to inject values into and extract values from carriers as text that travel
-  in-band across process boundaries.
+- `HTTPTextFormat` is a format that injects values into and extracts values from carriers as
+  text.
 
 A binary `Format` will be added in the future.
 
+### Carrier
+
+A carrier is defined as a medium that `Format`s use to read values from and
+write values to. Carriers used at[inject](#inject) are expected to be mutable.
+
+Each specific `Format` will define the exact semantics of their related carriers.
+Examples of possible carriers are byte buffers or map-alike objects using string values.
+
 ## HTTP Text Format
 
-`HTTPTextFormat` is a formatter that injects and extracts a cross-cutting concern
+`HTTPTextFormat` is a format that injects and extracts a cross-cutting concern
 value as text into carriers that travel in-band across process boundaries.
 
 Encoding is expected to conform to the HTTP Header Field semantics. Values are often encoded as
@@ -68,7 +83,7 @@ The use cases of this are:
 - allow pre-allocation of fields, especially in systems like gRPC Metadata
 - allow a single-pass over an iterator
 
-Returns list of fields that will be used by this formatter.
+Returns list of fields that will be used by `Propagator`s implementing this `Format`.
 
 ### Inject
 
