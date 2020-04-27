@@ -36,7 +36,11 @@ The OpenTelemetry specification describes the cross-language requirements and ex
 
 ## Project Timeline
 
-OpenTelemetry is currently under development. Check out our [current milestones](milestones.md).
+The current project status as well as information on notable past releases is found at
+[the OpenTelemetry project page](https://opentelemetry.io/project-status/).
+
+Information about current work and future development plans is found at the
+[specification development milestones](https://github.com/open-telemetry/opentelemetry-specification/milestones).
 
 ## Notation Conventions and Compliance
 
