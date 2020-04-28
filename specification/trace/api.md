@@ -126,17 +126,16 @@ by the `Tracer`. An inactive `Span` is not currently tracked in any `Context`.
 The `Tracer` MUST provide functions to:
 
 - Start a new active `Span`
-- Start a new inactive `Span`
-- Make a given `Span` active
 
 The `Tracer` SHOULD provide methods to:
 
 - Get the currently active `Span`
+- Start a new inactive `Span`
+- Make a given `Span` active
 
 The `Tracer` MUST internally leverage the `Context` in order to get and set the
 currently active `Span` and how `Span`s are passed across process boundaries. A
-`Span` that is started but inactive is not tracked in the `Context` by the
-`Tracer`, but it still MUST have a start timestamp set at the time of creation.
+`Span` that is started but inactive is not tracked in the `Context`.
 
 A common case of starting an inactive `Span` is with asynchronous
 callbacks. Before the callback is set up, an inactive `Span` is started, with
@@ -148,12 +147,9 @@ When getting the current span, the `Tracer` MUST return a placeholder `Span`
 with an invalid `SpanContext` if there is no currently active `Span`.
 
 When starting a new `Span`, the `Tracer` MUST allow the caller to specify the
-new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
-SHOULD create each new `Span` as a child of its active `Span` unless an explicit
-parent is provided or the option to create a span without a parent is selected,
-or the current active `Span` is invalid. Last the `Tracer` would check if
-`Context` has an extracted `SpanContext`. See [Determining the Parent Span from
-a Context](#determining-the-parent-span-from-a-context).
+new `Span`'s parent in the form of a `Span` or `SpanContext`.  See [Determining
+the Parent Span from a Context](#determining-the-parent-span-from-a-context) for
+how parent is deteremined if it is not provided as an argument.
 
 The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
 convenience functions to manage a `Span`'s lifetime and the scope in which a
@@ -193,7 +189,6 @@ TraceID and a non-zero SpanID.
 
 `IsRemote` is a boolean flag which returns true if the SpanContext was propagated
 from a remote parent.
-When creating children from remote spans, their IsRemote flag MUST be set to false.
 
 Please review the W3C specification for details on the [Tracestate
 field](https://www.w3.org/TR/trace-context/#tracestate-field).
