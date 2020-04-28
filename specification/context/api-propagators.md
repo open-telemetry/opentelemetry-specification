@@ -49,7 +49,7 @@ A binary `Format` will be added in the future.
 ### Carrier
 
 A carrier is defined as a medium that `Format`s use to read values from and
-write values to. Carriers used at[inject](#inject) are expected to be mutable.
+write values to. Carriers used at [inject](#inject) are expected to be mutable.
 
 Each specific `Format` will define the exact semantics of their related carriers.
 Examples of possible carriers are byte buffers or map-alike objects using string values.
