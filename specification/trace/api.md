@@ -125,12 +125,12 @@ by the `Tracer`. An inactive `Span` is not currently tracked in any `Context`.
 
 The `Tracer` MUST provide functions to:
 
-- Start a new active `Span`
+- Start a new inactive `Span`
 
 The `Tracer` SHOULD provide methods to:
 
+- Start a new active `Span`
 - Get the currently active `Span`
-- Start a new inactive `Span`
 - Make a given `Span` active
 
 The `Tracer` MUST internally leverage the `Context` in order to get and set the
