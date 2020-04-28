@@ -233,7 +233,7 @@ Span name: `/webshop/articles/:article_id`.
 | `http.target`      | `"/webshop/articles/4?s=1"`                     |
 | `http.host`        | `"example.com:8080"`                            |
 | `http.server_name` | `"example.com"`                                 |
-| `host.port`        | `8080`                                          |
+| `net.host.port`    | `8080`                                          |
 | `http.scheme`      | `"https"`                                       |
 | `http.route`       | `"/webshop/articles/:article_id"`               |
 | `http.status_code` | `200`                                           |
