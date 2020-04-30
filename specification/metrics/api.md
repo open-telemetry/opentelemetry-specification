@@ -141,19 +141,18 @@ Each of the instrument calling conventions detailed in the [user-level
 API specification](api-user.md) accepts a list of labels as an
 argument, which are used to compute a label set.  The set of labels is
 defined as a unique mapping from key to value, but since they are
-passed in a list, the specification dictates that duplicate keys are
-resolved by taking the last value to appear in the list.
+passed in as a list, the specification dictates that duplicate keys are
+empowersresolved by taking the last value to appear in the list.  This is known
+as "last-value wins".
 
 Measurements by a synchronous instrument are commonly combined with
-other measurements having the same label set, as an significant
-optimization.  Read more about [combining measurements through
-aggregation](TODO) below.
+other measurements having exactly the same label set, which enables
+significant optimizations.  Read more about [combining measurements
+through aggregation](TODO) below.
 
 Asynchronous instruments are permitted to observe at most one value
-per distinct label set per callback invocation.  When used with
-asynchronous instruments, therefore, we are able to monitor a
-collection of label sets; read more about [current label sets for
-asynchronous instruments](TODO) below.
+per distinct label set, per callback invocation.  Read more about
+[current label sets for asynchronous instruments](TODO) below.
 
 @@@ HERE
 
