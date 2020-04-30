@@ -38,9 +38,9 @@
 The OpenTelemetry Metrics API supports capturing measurements about
 the execution of a computer program at run time.  The Metrics API is
 designed explicitly for processing raw measurements, generally with
-the intent to produce continuous summaries of those measurements
-simultaneously.  Hereafter, "the API" refers to the OpenTelemetry
-Metrics API.
+the intent to produce continuous summaries of those measurements,
+efficiently and simultaneously.  Hereafter, "the API" refers to the
+OpenTelemetry Metrics API.
 
 The API provides functions for capturing raw measurements, through
 several [calling
@@ -72,26 +72,58 @@ so that different SDKs can be configured at run time.
 
 ### Metric Instruments
 
-A _metric instrument_, of which there are three kinds, is a device for
-capturing raw measurements into the API.  There are Counter, Measure,
-and Observer instruments, each with different semantics and intended
-uses, that will be specified here.  All measurements captured by the
-API are associated with an instrument, which gives the measurement its
-properties.  Instruments are created and defined through calls to a
-`Meter` API, which is the user-facing entry point to the SDK.
+A _metric instrument_ is a device for capturing raw measurements in
+the API.  There are six kinds of instrument, each with a dedicated
+purpose.  The API purposefully avoids optional features that change
+the semantic interpretation of an instrument; the API instead prefers
+instruments that support a single method with fixed interpretation.
 
-Each kind of metric instrument has its own semantics, briefly
-described as:
+All measurements captured by the API are associated with an
+instrument, which gives the measurement its semantic properties.
+Instruments are created and defined through calls to a `Meter` API,
+which is the user-facing entry point to the SDK.
 
-- Counter: metric events of this kind _Add_ to a value that is summed over time.
-- Measure: metric events of this kind _Record_ a value that is aggregated over time.
-- Observer: metric events of this kind _Observe_ a coherent set of values at an instant in time.
+Instruments are classified in several ways that distinguish them from
+one another.
+
+1. Synchronicity: A synchronous instrument is called by the user in an OpenTelemetry [Context](../context/context.md). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
+2. Additivity: An additive instrument is used to capture information about a sum of values.  A non-additive instrument is used to capture information about individual values.
+3. Monotonicity: An additive instrument can be monotonic, when the sequence of captured sums is non-descending.  Monotonic instruments are useful for monitoring rate information.
+
+The metric instruments names are shown below along with whether they
+are synchronous, additive, and/or monotonic.
+
+| Name | Synchronous | Additive | Monotonic |
+| ---- | ----------- | -------- | --------- |
+| Counter           | Yes | Yes | Yes |
+| UpDownCounter     | Yes | Yes | No  |
+| ValueRecorder     | Yes | No  | No  |
+| SumObserver       | No  | Yes | Yes |
+| UpDownSumObserver | No  | Yes | No  |
+| ValueObserver     | No  | No  | No  |
+
+The synchronous instruments are useful for measurements that are
+gathered in a tracing context.  The asynchronous instruments are
+useful when measurements are expensive, therefore should be gathered
+periodically.  Read more [characteristics of synchronous and
+asynchronous instruments](TODO) below.
+
+The additive instruments are useful in situations where we are only
+interested in the sum, as this enables significant optimizations in
+the export pipeline.  The synchronous and asynchronous additive
+instruments have a significant difference: synchronous instruments are
+used to capture changes in a sum, whereas asynchronous instruments are
+used to capture sums directly.  Read more [characteristics of additive
+instruments](TODO) below.
+
+The monotonic instruments are significant because they support rate
+calculations.  Read more information about [choosing metric
+instruments](TODO) below.
 
 An _instrument definition_ describes several properties of the
 instrument, including its name and its kind.  The other properties of
-a metric instrument are optional, including a description, the unit of
-measurement, and several settings that convey additional meaning
-(e.g., monotonicity).  An instrument definition is associated with the
+a metric instrument are optional, including a description and the unit
+of measurement.  An instrument definition is associated with the
 events that it produces.
 
 Details about calling conventions for each kind of instrument are
@@ -99,12 +131,31 @@ covered in the [user-level API specification](api-user.md).
 
 ### Labels
 
-A _Label_ is the term used to refer to a key-value attribute associated with a
-metric event, similar to a [Span attribute](../trace/api.md#span) in the
-tracing API.
+_Label_ is the term used to refer to a key-value attribute associated
+with a metric event, similar to a [Span
+attribute](../trace/api.md#span) in the tracing API.  Each label
+categorizes the metric event, allowing events to be filtered and
+grouped for analysis.
 
-Each of the instrument calling conventions detailed in the [user-level API
-specification](api-user.md) accept a set of labels as an argument.
+Each of the instrument calling conventions detailed in the [user-level
+API specification](api-user.md) accepts a list of labels as an
+argument, which are used to compute a label set.  The set of labels is
+defined as a unique mapping from key to value, but since they are
+passed in a list, the specification dictates that duplicate keys are
+resolved by taking the last value to appear in the list.
+
+Measurements by a synchronous instrument are commonly combined with
+other measurements having the same label set, as an significant
+optimization.  Read more about [combining measurements through
+aggregation](TODO) below.
+
+Asynchronous instruments are permitted to observe at most one value
+per distinct label set per callback invocation.  When used with
+asynchronous instruments, therefore, we are able to monitor a
+collection of label sets; read more about [current label sets for
+asynchronous instruments](TODO) below.
+
+@@@ HERE
 
 ### Meter Interface
 
