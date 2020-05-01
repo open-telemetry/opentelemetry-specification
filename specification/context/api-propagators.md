@@ -6,14 +6,17 @@ Table of Contents
 </summary>
 
 - [Overview](#overview)
-- [Formats](#formats)
+- [Format](#format)
   - [Carrier](#carrier)
+  - [Operations](#operations)
+    - [Inject](#inject)
+    - [Extract](#extract)
 - [HTTP Text Format](#http-text-format)
   - [Fields](#fields)
-  - [Inject](#inject)
+  - [Inject](#inject-1)
     - [Setter argument](#setter)
       - [Set](#set)
-  - [Extract](#extract)
+  - [Extract](#extract-1)
     - [Getter argument](#getter)
       - [Get](#get)
 - [Composite Propagator](#composite-propagator)
@@ -34,37 +37,80 @@ cross-cutting concern, such as traces and correlation context.
 The Propagators API is expected to be leveraged by users writing
 instrumentation libraries.
 
-## Formats
+## Format
 
-A `Format` defines the restrictions imposed by a specific transport in
-order to propagate in-band context data across process boundaries.
+A `Format` is a contract representing the restrictions imposed by a specific transport
+and bound to a data type, in order to propagate in-band context data across process boundaries.
+`Propagator`s in turn implement a specific `Format`.
 
-The Propagators API currently consists of one `Format`:
+Propagation is usually implemented via library-specific request
+interceptors, where the client-side injects values and the server-side extracts them.
 
-- `HTTPTextFormat` is a format that injects values into and extracts values from carriers as
-  text.
+The Propagators API currently defines one `Format`:
+
+- `HTTPTextFormat` is a format requiring `Propagator`s to inject values into and extracts values
+  from carriers as text values.
 
 A binary `Format` will be added in the future.
 
 ### Carrier
 
-A carrier is defined as a medium that `Format`s use to read values from and
-write values to. Carriers used at [inject](#inject) are expected to be mutable.
+A carrier is the medium used by the `Format` contract to read values from and write values to.
+Each specific `Format` defines its expected carrier type, such as a string map or a byte array.
 
-Each specific `Format` will define the exact semantics of their related carriers.
-Examples of possible carriers are byte buffers or map-alike objects using string values.
+`Propagators` implementing a specific `Format` use its associated carrier type to propagate
+context data.
+
+Carriers used at [Inject](#inject) are expected to be mutable.
+
+### Operations
+
+Each `Format` MUST define an `Inject` and an `Extract` operation, in order to write
+values to and read values from respectively. Each `Format`s MUST define the specific carrier type
+and CAN define additional parameters.
+
+#### Inject
+
+Injects the value downstream. For example, as http headers.
+
+Required arguments:
+
+- A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as
+`SpanContext`, `CorrelationContext` or another cross-cutting concern context. For languages
+supporting current `Context` state, this argument is OPTIONAL, defaulting to the current `Context`
+instance.
+- The carrier that holds the propagation fields. For example, an outgoing message or http request.
+
+#### Extract
+
+Extracts the value from an incoming request. For example, from the headers of an HTTP request.
+
+If a value can not be parsed from the carrier for a cross-cutting concern,
+the implementation MUST NOT throw an exception. It MUST store a value in the `Context`
+that the implementation can recognize as a null or empty value.
+
+Required arguments:
+
+- A `Context`. For languages supporting current `Context` state this argument is OPTIONAL, defaulting
+to the current `Context` instance.
+- The carrier that holds the propagation fields. For example, an incoming message or http response.
+
+Returns a new `Context` derived from the `Context` passed as argument,
+containing the extracted value, which can be a `SpanContext`,
+`CorrelationContext` or another cross-cutting concern context.
+
+If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set to true.
 
 ## HTTP Text Format
 
-`HTTPTextFormat` is a format that injects and extracts a cross-cutting concern
+`HTTPTextFormat` is a format that requires the injection and extraction of a cross-cutting concern
 value as text into carriers that travel in-band across process boundaries.
 
 Encoding is expected to conform to the HTTP Header Field semantics. Values are often encoded as
 RPC/HTTP request headers.
 
 The carrier of propagated data on both the client (injector) and server (extractor) side is
-usually an http request. Propagation is usually implemented via library-specific request
-interceptors, where the client-side injects values and the server-side extracts them.
+usually an http request.
 
 `HTTPTextFormat` MUST expose the APIs that injects values into carriers,
 and extracts values from carriers.
@@ -83,23 +129,23 @@ The use cases of this are:
 - allow pre-allocation of fields, especially in systems like gRPC Metadata
 - allow a single-pass over an iterator
 
-Returns list of fields that will be used by `Propagator`s implementing this `Format`.
+Returns list of fields that will be used by a `Propagator`s implementing `HttpTextFormat`.
 
 ### Inject
 
-Injects the value downstream. For example, as http headers.
+Injects the value downstream.
 
 Required arguments:
 
-- A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as `SpanContext`, `CorrelationContext` or another cross-cutting concern context. For languages supporting current `Context` state, this argument is OPTIONAL, defaulting to the current `Context` instance.
-- the carrier that holds propagation fields. For example, an outgoing message or http request.
-- the `Setter` invoked for each propagation key to add or remove.
+- A `Context`. 
+- The carrier that holds propagation fields. For example, an outgoing message or http request.
+- The `Setter` invoked for each propagation key to add or remove.
 
 #### Setter argument
 
-Setter is an argument in `Inject` that sets value into given field.
+Setter is an argument in `Inject` that sets values into given fields.
 
-`Setter` allows a `HTTPTextFormat` to set propagated fields into a carrier.
+`Setter` allows a `Propagator`s implementing `HttpTextFormat` to set propagated fields into a carrier.
 
 `Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Setter` class with `Set` method as described below.
 
@@ -117,29 +163,21 @@ The implemenation SHOULD preserve casing (e.g. it should not transform `Content-
 
 ### Extract
 
-Extracts the value from an incoming request. For example, from the headers of an HTTP request.
-
-If a value can not be parsed from the carrier for a cross-cutting concern,
-the implementation MUST NOT throw an exception. It MUST store a value in the `Context`
-that the implementation can recognize as a null or empty value.
+Extracts the value from an incoming request.
 
 Required arguments:
 
-- A `Context`. For languages supporting current `Context` state this argument is OPTIONAL, defaulting to the current `Context` instance.
-- the carrier holds propagation fields. For example, an outgoing message or http request.
-- the instance of `Getter` invoked for each propagation key to get.
+- A `Context`.
+- The carrier holds propagation fields. For example, an incoming message or http response.
+- The instance of `Getter` invoked for each propagation key to get.
 
-Returns a new `Context` derived from the `Context` passed as argument,
-containing the extracted value, which can be a `SpanContext`,
-`CorrelationContext` or another cross-cutting concern context.
-
-If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set to true.
+Returns a new `Context` derived from the `Context` passed as argument.
 
 #### Getter argument
 
 Getter is an argument in `Extract` that get value from given field
 
-`Getter` allows a `HttpTextFormat` to read propagated fields from a carrier.
+`Getter` allows a `Propagator` implementing `HttpTextFormat` to read propagated fields from a carrier.
 
 `Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Getter` class with `Get` method as described below.
 
@@ -163,7 +201,7 @@ single entity.
 The resulting composite `Propagator` will invoke the `Propagators`
 in the order they were specified.
 
-Each composite `Propagator` will be bound to a specific `Format`, such
+Each composite `Propagator` will implement a specific `Format`, such
 as `HttpTextFormat`, as different `Format`s will likely operate on different
 data types.
 There MUST be functions to accomplish the following operations.

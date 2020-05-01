@@ -239,11 +239,13 @@ See the [Context](context/context.md)
 ## Propagators
 
 OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
-such as `SpanContext` and `CorrelationContext` given the restrictions imposed by specific
-`Format`s. The Propagators API currently consists of one `Format`:
+such as `SpanContext` and `CorrelationContext`. `Propagators` implement a specific
+`Format`, which defines the restrictions imposed by a specific transport and bound to a data type.
 
-- `HTTPTextFormat` is a format that injects values into and extracts values from carriers as
-text.
+The Propagators API currently defines one `Format`:
+
+- `HTTPTextFormat` is a format requiring `Propagator`s to inject values into and extracts values
+from carriers as text.
 
 ## Collector
 
