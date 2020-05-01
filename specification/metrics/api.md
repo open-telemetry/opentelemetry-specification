@@ -263,26 +263,83 @@ resulting from an aggregation of raw measurements over time.
 ### Metric Event Format
 
 Metric events have the same logical representation, regardless of
-kind.  Whether a Counter, a Measure, or an Observer instrument, metric
-events produced through an instrument consist of:
+instrument kind.  Metric events captured through any instrument
+consist of:
 
-- [Context](../context/context.md) (Span context, Correlation context)
-- timestamp (implicit to the SDK)
-- instrument definition (name, kind, and semantic options)
-- associated label keys and values
-- value (a signed integer or floating point number)
+- timestamp (implicit)
+- instrument definition (name, kind, description, unit of measure)
+- label set (keys and values)
+- value (signed integer or floating point number)
+- [resources](../resource/sdk.md) associated with the SDK at startup.
 
-This format is the result of separating the API from the SDK--a common
-representation for metric events, where the only semantic distinction
-is the kind of instrument that was specified by the user.
+Synchronous events have one additional property, the distributed
+[Context](../context/context.md) (Span context, Correlation context)
+that was active at the time.
 
-## Three kinds of instrument
+## Instruments
 
 Because the API is separated from the SDK, the implementation
 ultimately determines how metric events are handled.  Therefore, the
 choice of instrument should be guided by semantics and the intended
-interpretation.  Here we detail the three instruments and their
+interpretation.  Here we detail the instruments and their
 individual semantics.
+
+### Synchronous and asynchronous instruments compared
+
+Synchronous instruments are called in a request context, meaning they
+potentially have an associated tracing context and distributed
+correlation values.  Multiple metric events may occur for a
+synchronous instrument within a given collection interval.
+
+Asynchronous instruments are reported by a callback, once per
+collection interval, and lack request context.  They are permitted to
+report only one value per distinct label set per period.  If the
+application observes multiple values for the same label set, in a
+single callback, the last value "wins".
+
+### Additive and non-additive instruments compared
+
+Additive instruments are used to capture information about a sum,
+where, by definition, only the sum is of interest.  Individual events
+are considered not meaningful for these instruments, the event count
+is not computed.  This means, for example, that two `Counter` events
+`Add(N)` and `Add(M)` are equivalent to one `Counter` event `Add(N +
+M)`.  This is the case because `Counter` is synchronous, and
+synchronous additive instruments are used to capture changes to a sum.
+
+Asynchronous, additive instruments (e.g., `SumObserver`) are used to
+capture sums directly.  This means, for example, that in any sequence
+of `SumObserver` observations for a given instrument and label set,
+the Last Value defines the sum of the instrument.
+
+In both synchronous and asynchronous cases, the additive instruments
+are easily aggregated into a single number per collection interval
+without loss of information.  This property makes additive instruments
+higher performance, in general, than non-additive instruments.
+
+Non-additive instruments use a relatively inexpensive aggregation by
+method default (MinMaxSumCount), but still more expensive than the
+default for additive instruments (Sum).  Unlike additive instruments,
+where only the sum is of interest by definition, non-additive
+instruments can be configured with even more expensive aggregators.
+
+### Monotonic and non-monotonic instruments compared
+
+Monotonicity applies only to additive instruments.  `Counter` and
+`SumObserver` instruments are defined as monotonic because the sum
+captured by either instrument is non-descending.  The `UpDown-`
+varations of these two instruments are non-monotonic, meaning the sum
+is ascending or descending.
+
+Monotonic instruments are commonly used to capture information about a
+sum, where the sum itself is less relevant than the rate expressed by
+the change over time of the sum.
+
+@@@
+
+
+
+
 
 ### Counter
 
