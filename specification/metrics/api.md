@@ -154,13 +154,11 @@ Asynchronous instruments are permitted to observe at most one value
 per distinct label set, per callback invocation.  Read more about
 [current label sets for asynchronous instruments](TODO) below.
 
-@@@ HERE
-
 ### Meter Interface
 
 To produce measurements using an instrument, you need an SDK that implements
 the `Meter` API.  This interface consists of a set of instrument constructors,
-and a facilities for capturing batches of measurements in a semantically atomic
+and a facility for capturing batches of measurements in a semantically atomic
 way.
 
 There is a global `Meter` instance available for use that facilitates
@@ -168,46 +166,59 @@ automatic instrumentation for third-party code.  Use of this instance
 allows code to statically initialize its metric instruments, without
 explicit dependency injection.  The global `Meter` instance acts as a
 no-op implementation until the application explicitly initializes a
-global `Meter` by installing an SDK.
+global `Meter` by installing an SDK.  Note that it is not necessary to
+use the global instance: multiple instances of the OpenTelemetry SDK
+may run simultaneously.
 
 As an obligatory step, the API requires the caller to provide the name
 of the instrumenting library (optionally, the version) when obtaining
-a `Meter` implementation, that is meant to be used for identifying
-instrumentation produced from that library for such purposes as
-disabling instrumentation, configuring aggregation, and applying
-sampling policies.  (TODO: refer to the semantic convention on the
-reporting library name).
+a `Meter` implementation.  The library name is meant to be used for
+identifying instrumentation produced from that library, for such
+purposes as disabling instrumentation, configuring aggregation, and
+applying sampling policies.  See the specification on [obtaining a
+Tracer](../trace/api.md#obtaining-a-tracer) for more details.
 
 Details about installing an SDK and obtaining a named `Meter` are
 covered in the [SDK-level API specification](api-meter.md).
 
 ### Aggregations
 
-_Aggregation_ refers to the process of combining a large number of
-measurements into exact or estimated statistics about the metric
-events that took place during a window of real time, during program
-execution.  Computing aggregations is mainly a subject of the SDK
-specification, with the goal of reducing the amount of data that must
-be sent to the telemetry collection backend.
+_Aggregation_ refers to the process of combining multiple measurements
+into exact or estimated statistics about the metric
+events that took place during an interval time, during program
+execution.
 
-Users do not have a facility in the API to select the aggregation they
-want for particular instruments.  The choice of instrument dictates
-semantics and thus gives a default interpretation.  For the standard
-implementation:
+Each instrument specifies a default aggregation that is suited to the
+semantics of the instrument, that serves to explain its properties and
+give users an understanding of how it is meant to be used.
+Instruments, in the absence of any configuration override, can be
+expected to deliver a useful, economical aggregation out of the box.
 
-- Counter instruments use _Sum_ aggregation
-- Measure instruments use _MinMaxSumCount_ aggregation
-- Observer instruments use _LastValue_ aggregation.
+The additive instruments (`Counter`, `UpDownCounter`, `SumObserver`,
+`UpDownSumObserver`) use Sum aggregation, by default.  Details about
+computing a Sum aggregation vary, but from the user's perspective this
+means they will be able to monitor the sum of values entered.  The
+distinction between synchronous and asynchronous instruments is
+crucial to specifying how exporters work, a topic that is covered in
+the [SDK specification](TODO).
 
-The default Metric SDK specification includes support for configuring
-alternative aggregations, so that metric instruments can be repuposed
-and their data can be examined in different ways.  Using the default
-SDK, or an alternate one, we are able to change the interpretation of
-metric events at runtime.
+The non-additive instruments (`ValueRecorder`, `ValueObserver`) use
+MinMaxSumCount aggregation, by default.  This aggregation keeps track
+of the minimum value, the maximum value, the sum of values, and the
+count of values.  These four values support monitoring the range of
+values, the rate of events, and the average event value.  
 
-Other standard aggregations are available, especially for Measure
-instruments, where we are generally interested in a variety of forms
-of statistics, such as histogram and quantile summaries.
+Other standard aggregations are available, especially for non-additive
+instruments, where we are generally interested in a variety of
+different summaries, such as histograms, quantile summaries,
+cardinality estimates, and other kinds of sketch data structure.
+
+The default OpenTelemetry SDK implements a [Views API](TODO), which
+supports configuring non-default aggregation behavior(s) on the level
+of an individual instrument.  Even though OpenTelemetry SDKs can be
+configured to treat instruments in non-standard ways, users are
+expected to select instruments based on their semantic meaning, which
+is explained using the default aggregation.
 
 ### Time
 
@@ -215,7 +226,7 @@ Time is a fundamental property of metric events, but not an explicit
 one.  Users do not provide explicit timestamps for metric events.
 SDKs are discouraged from capturing the current timestamp for each
 event (by reading from a clock) unless there is a definite need for
-high-precision timestamps.
+high-precision timestamps calculated on every event.
 
 This non-requirement stems from a common optimization in metrics
 reporting, which is to configure metric data collection with a
@@ -228,6 +239,11 @@ into a contiguous region of time, known as the collection interval.
 Since the SDK controls the decision to start collection, it is possible to
 collect aggregated metric data while only reading the clock once per
 collection interval.  The default SDK takes this approach.
+
+
+@@@
+
+
 
 Counter and Measure instruments offer synchronous APIs for capturing
 measurements.  Metric events from Counter and Measure instruments are
