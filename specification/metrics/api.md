@@ -240,22 +240,19 @@ Since the SDK controls the decision to start collection, it is possible to
 collect aggregated metric data while only reading the clock once per
 collection interval.  The default SDK takes this approach.
 
+Metric events produced with synchronous instruments happen at an
+instant in time, thus fall into a collection interval where they are
+aggregated together with other events from the same instrument and
+label set.  Because events may happen simultaneously with one another,
+the _most recent event_ is technically not well defined.
 
-@@@
-
-
-
-Counter and Measure instruments offer synchronous APIs for capturing
-measurements.  Metric events from Counter and Measure instruments are
-captured at the moment they happen, when the SDK receives the
-corresponding function call.
-
-The Observer instrument supports an asynchronous API, allowing the SDK to
-collect metric data on demand, once per collection interval.  A single Observer
-instrument callback can capture multiple metric events associated with
-different sets of labels.  Semantically, by definition, these observations are
-captured at a single instant in time, the instant that they became the current
-set of last-measured values.
+Asynchronous instruments allow the SDK to evaluate metric instruments
+through observations made once per collection interval.  Because they
+are synchronized with collection (unlike synchronous instruments),
+these instruments unambiguously define the most recent event.  We
+define the _Last Value_ of an instrument and label set, with repect to
+a moment in time, as the value that was measured during the most
+recent prior collection interval.
 
 Because metric events are implicitly timestamped, we could refer to a
 series of metric events as a _time series_. However, we reserve the
@@ -329,6 +326,14 @@ events, the output statistics are expected to reflect the combined
 data set.
 
 ### Observer
+
+
+
+@@@ THIS:
+Semantically, according to this definition, the asynchronous
+observations are captured at a single instant in time, the instant
+that they became the current set of last-measured values.
+
 
 Observer instruments are used to capture a _current set of values_ at
 a point in time.  Observer instruments are asynchronous, with the use
