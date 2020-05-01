@@ -137,7 +137,7 @@ Injects the value downstream.
 
 Required arguments:
 
-- A `Context`. 
+- A `Context`.
 - The carrier that holds propagation fields. For example, an outgoing message or http request.
 - The `Setter` invoked for each propagation key to add or remove.
 
