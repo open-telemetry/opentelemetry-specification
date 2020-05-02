@@ -276,7 +276,7 @@ Synchronous events have one additional property, the distributed
 [Context](../context/context.md) (Span context, Correlation context)
 that was active at the time.
 
-## Instruments
+## Instrument categories
 
 Because the API is separated from the SDK, the implementation
 ultimately determines how metric events are handled.  Therefore, the
@@ -296,6 +296,15 @@ collection interval, and lack request context.  They are permitted to
 report only one value per distinct label set per period.  If the
 application observes multiple values for the same label set, in a
 single callback, the last value "wins".
+
+To ensure that the definition of last value is consistent across
+asynchronous instruments, the timestamp associated with asynchronous
+events is fixed to the timestamp at the end of the interval in which
+it was computed.  All asynchronous events are timestamped with the end
+of the interval, which is the moment they become the last value
+corresponding to the instrument and label set.  (For this reasons,
+SDKs SHOULD capture observer instruments near the end of the
+collection interval.)
 
 ### Additive and non-additive instruments compared
 
@@ -333,64 +342,187 @@ is ascending or descending.
 
 Monotonic instruments are commonly used to capture information about a
 sum, where the sum itself is less relevant than the rate expressed by
-the change over time of the sum.
+the sum's change over time.  The Monotonic property is defined by this
+API to refer to a non-decreasing sum.  Non-increasing sums are not
+considered a feature in the Metric API.
 
-@@@
+### Function names
 
+Each instrument supports a single function, named to help convey the
+instrument's semantics.
 
+Synchronous additive instruments support an `Add()` function,
+signifying that they add to a sum and do not directly capture a sum.
 
+Synchronous non-additive instruments support a `Record()` function,
+signifying that they capture individual events, not only a sum.
 
+Asynchronous instruments all support an `Observe()` function,
+signifying that they capture only one value per measurement interval.
+
+## Instrument kinds
 
 ### Counter
 
-Counter instruments are used to capture changes in running sums,
-synchronously.  These are commonly used to monitor rates, and they are
-sometimes used to capture totals that rise and fall.  An essential
-property of Counter instruments is that two events `Add(m)` and
-`Add(n)` are semantically equivalent to one event `Add(m+n)`.  This
-property means that Counter events can be combined inexpensively, by
-definition.
+`Counter` is the most common synchronous instrument.  This instrument
+supports an `Add(increment)` function for reporting a sum, and is
+restricted to non-negative increments.  The default aggregation is
+`Sum`, as for any additive instrument.
 
-Note that `Add(0)` events are not considered a special case, despite
-contributing nothing to a sum.  `Add(0)` events MUST be observed by
-the SDK in case non-default aggregations are configured for the
-instrument.
+Example uses for `Counter`:
+- count the number of bytes received
+- count the number of accounts created
+- count the number of checkpoints run
+- count a number of 5xx errors.
 
-Counter instruments can be seen as special cases of Measure
-instruments with the additive property described above and a
-more-specific verb to improve readability (i.e., "Add" instead of
-"Record").  Counter instruments are special cases of Measure
-instruments in that they only preserve a Sum, by default, and no other
-summary statistics.
+These example instruments would be useful for monitoring the rate of
+any of these quantities.  In these situations, it is usually more
+convenient to report by how much a sum changes, as it happens, than to
+calculate and report the sum on every measurement.
 
-Labels associated with Counter instrument events can be used to
-compute rates and totals from the instrument, over selected
-dimensions.
+### UpDownCounter
 
-### Measure
+`UpDownCounter` is similar to `Counter` except that `Add(increment)`
+supports negative increments.  This makes `UpDownCounter` not useful
+for computing a rate aggregation.  It aggregates a `Sum`, only the sum
+is non-monotonic.  It is generally useful for capturing changes in an
+amount of resources used, or any quantity that rises and falls in a
+request context.
 
-Semantically, metric events from Measure instruments are independent,
-meaning they cannot be combined naturally, as with Counters.  Measure
-instruments are used to capture many kinds of information,
-synchronously, and are recommended for all cases that reflect an event
-in the application where the additive property of Counter instruments
-does not apply.
+Example uses for `UpDownCounter`:
+- count memory in use by instrumenting `new` and `delete`
+- count queue size by instrumenting `enqueue` and `dequeue`
+- count semaphore `up` and `down` operations.
 
-Labels associated with Measure instrument events can be used to
-compute information about the distribution of values from the
-instrument, over selected dimensions.  When aggregating Measure
-events, the output statistics are expected to reflect the combined
-data set.
+These example instruments would be useful for monitoring resource
+levels across a group of processes.
+
+### ValueRecorder
+
+`ValueRecorder` is a non-additive synchronous instrument useful for
+recording any non-additive number, positive or negative.  Values
+captured by a `ValueRecorder` are treated as individual events
+belonging to a distribution that is being summarized.  `ValueRecorder`
+should be chosen either when capturing measurements that do not
+contribute meaningfully to a sum, or when capturing numbers that are
+additive in nature, but where the distribution of individual
+increments is considered interesting.
+
+One of the most common uses for `ValueRecorder` is to capture latency
+measurements.  Latency measurements are not additive in the sense that
+there is little need to know the latency-sum of all processed
+requests.  We use a `ValueRecorder` instrument to capture latency
+measurements typically because we are interested in knowing mean,
+median, and other summary statistics about individual events.
+
+The default aggregation for `ValueRecorder` computes the minimum and
+maximum values, the sum of event values, and the count of events,
+allowing the rate, the mean, and and range of input values to be
+monitored.
+
+Example uses for `ValueRecorder` that are non-additive:
+- capture any kind of timing information
+- capture the acceleration experienced by a pilot
+- capture nozzle pressure of a fuel injector
+- capture the velocity of a MIDI key-press.
+
+Example _additive_ uses of `ValueRecorder` capture measurements that
+are additive, but where we may have an interest in the distribution of
+values and not only the sum:
+- capture a request size
+- capture an account balance
+- capture a queue length
+- capture a number of board feet of lumber.
+
+These examples show that although they are additive in nature,
+choosing `ValueRecorder` as opposed to `Counter` or `UpDownCounter`
+implies an interest in more than the sum.  If you did not care to
+collect information about the distribution, you would have chosen one
+of the additive instruments instead.  Using `ValueRecorder` makes
+sense for capturing distributions that are likely to be important in
+an observability setting.
+
+Use these with caution because they naturally cost more than the use
+of additive measurements.
+
+### SumObserver
+
+`SumObserver` is the asynchronous instrument corresponding to
+`Counter`, used to capture a monotonic sum.  "Sum" appears in the
+name to remind users that it is used to capture sums directly.  Use a
+`SumObserver` to capture any value that starts at zero and rises
+throughout the process lifetime and never falls.
+
+Example uses for `SumObserver`.
+- capture process user/system CPU seconds
+- capture the number of cache misses.
+
+A `SumObserver` is a good choice in situations where a measurement is
+expensive to compute, such that it would be wasteful to compute on
+every request.  For example, a system call is needed to capture
+process CPU usage, therefore it should be done periodically, not on
+each request.  A `SumObserver` is also a good choice in situations
+where it would be impractical or wasteful to instrument individual
+changes that comprise a sum.  For example, even though the number of
+cache misses is a sum of individual cache-miss events, it would be too
+expensive to synchronously capture each event using a `Counter`.
+
+### UpDownSumObserver
+
+`UpDownSumObserver` is the asynchronous instrument corresponding to
+`UpDownCounter`, used to capture a non-monotonic count.  "Sum" appears
+in the name to remind users that it is used to capture sums directly.
+Use a `UpDownSumObserver` to capture any value that starts at zero and
+rises or falls throughout the process lifetime.
+
+Example uses for `UpDownSumObserver`.
+- capture process heap size
+- capture number of active shards
+- capture number of requests started/completed
+- capture current queue size.
+
+The same considerations mentioned for choosing `SumObserver` over the
+synchronous `Counter` apply for choosing `UpDownSumObserver` over the
+synchronous `UpDownCounter`.  If a measurement is expensive to
+compute, or if the corresponding changes happen so frequently that it
+would be impractical to instrument them, use a `UpDownSumObserver`.
+
+### ValueObserver
+
+`ValueObserver` is the asynchronous instrument corresponding to
+`ValueRecorder`, used to capture non-additive measurements that are
+expensive to compute and/or are not request-oriented.
+
+Example uses for `ValueObserver`:
+- capture CPU fan speed
+- capture CPU temperature.
+
+Note that these examples use non-additive measurements.  In the
+`ValueRecorder` case above, example uses were given for capturing
+synchronous cumulative measurements in a request context (e.g.,
+current queue size seen by a request).  In the asynchronous case,
+however, how should users decide whether to use `ValueObserver` as
+opposed to `UpDownSumObserver`?
+
+Consider how to report the size of a queue asynchronously.  Both
+`ValueObserver` and `UpDownSumObserver` logically apply in this case.
+Asynchronous instruments capture only one measurement per interval, so
+in this example the `SumObserver` reports a current sum, while the
+`ValueObserver` reports a current sum (equal to the max and the min)
+and a count equal to 1.  When there is no aggregation, these results
+are equivalent.
+
+The recommendation is to choose the instrument with the
+more-appropriate default aggregation.  If you are observing a queue
+size across a group of machines and the only thing you want to know is
+the aggregate queue size, use `SumObserver`.  If you are observing a
+queue size across a group of machines and you are interested in
+knowing the distribution of queue sizes across those machines, use
+`ValueObserver`.
+
+@@@
 
 ### Observer
-
-
-
-@@@ THIS:
-Semantically, according to this definition, the asynchronous
-observations are captured at a single instant in time, the instant
-that they became the current set of last-measured values.
-
 
 Observer instruments are used to capture a _current set of values_ at
 a point in time.  Observer instruments are asynchronous, with the use
