@@ -303,7 +303,7 @@ events is fixed to the timestamp at the end of the interval in which
 it was computed.  All asynchronous events are timestamped with the end
 of the interval, which is the moment they become the last value
 corresponding to the instrument and label set.  (For this reasons,
-SDKs SHOULD capture observer instruments near the end of the
+SDKs SHOULD run asynchronous instrument callbacks near the end of the
 collection interval.)
 
 ### Additive and non-additive instruments compared
@@ -520,9 +520,63 @@ queue size across a group of machines and you are interested in
 knowing the distribution of queue sizes across those machines, use
 `ValueObserver`.
 
-@@@
+## Details
 
-### Observer
+### Memory requirements
+
+The API is designed not to impose long-lived memory requirements on
+the user, although for some exporters it cannot be avoided.  The
+potential for unbounded memory growth comes up when using momentary
+labels, labels that are used for a while and then are not used again.
+If the SDK is required to retain memory of every combination of
+instrument and label set it has ever seen, long-lived memory can
+become a problem--the requirement cannot be met.
+
+Nevertheless, exporters may be forced to allocate long-lived memory to
+perform their function, particularly with respect to the additive
+instruments.  Metric exposition formats commonly have two ways of
+exposing additive instrument data: in terms of the change in a sum, or
+in terms of the sum itself.  (The terms "delta" and "cumulative" are
+used to describe these two approaches in an export pipeline, they will
+not be used to describe the additive instruments.)
+
+There are two cases where an exporter must retain memory in order to
+operate correctly.
+
+1. An exporter that exports sums but receives changes in the sum
+2. An exporter that exports changes in a sum but receives the sum.
+
+In both of these cases, the exporter must maintain memory of the last
+value of the sum, to convert between the two representations of
+additive data when both forms of input are present.
+
+An exporter can avoid this memory requirement by supporting exposition
+of additive metric data in both ways, as with OTLP.  A client
+configured with OTLP for metrics export does not have a long-lived
+memory requirement, because that protocol supports both forms of
+additive data.  Although, the memory requirement then arises in the
+downstream system for any exporter that does not support both forms.
+
+It is tempting to consider not supporting one of these forms of
+additive metric data, as a way to avoid exporter memory requirements.
+However, legacy protocols existing with both forms, so this would not
+help.  Besides, the fact that synchronous additive instruments accept
+one, while asynchronous additive instruments accepts the other, is
+ultimately meant as a user convenience.  Had OpenTelemetry not
+specified that asynchronous additive instruments accept sums directly,
+this burden would fall to the user (e.g., since operating systems
+report heap usage as a sum, the user would be forced into a memory
+requirement in order to report changes the sum).
+
+### Asynchronous observations are coherent
+
+@@@ HERE
+
+Asynchronous instruments are permitted to observe at most one value
+per instrument and label set, per interval.  This property supports
+the definition of Last Value for asynchronous instruments
+
+
 
 Observer instruments are used to capture a _current set of values_ at
 a point in time.  Observer instruments are asynchronous, with the use
