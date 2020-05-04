@@ -1,8 +1,6 @@
 # OTLP Trace Data Format
 
-_Author: Tigran Najaryan, Splunk_
-
-**Status:** `approved`
+**Author**: Tigran Najaryan, Splunk
 
 OTLP Trace Data Format specification describes the structure of the trace data that is transported by OpenTelemetry Protocol (RFC0035).
 
@@ -336,32 +334,34 @@ One of the original aspiring goals for OTLP was to _"support very fast pass-thro
 The following shows [benchmarking of encoding/decoding in Go](https://github.com/tigrannajaryan/exp-otelproto/) using various schemas.
 
 Legend:
+
 - OpenCensus    - OpenCensus protocol schema.
 - OTLP/AttrMap  - OTLP schema using map for attributes.
 - OTLP/AttrList - OTLP schema using list of key/values for attributes and with reduced nesting for values.
 - OTLP/AttrList/TimeWrapped - Same as OTLP/AttrList, except using google.protobuf.Timestamp instead of int64 for timestamps.
 
 Suffixes:
+
 - Attributes - a span with 3 attributes.
 - TimedEvent - a span with 3 timed events.
 
 ```
-BenchmarkEncode/OpenCensus/Attributes-8         	      10	 605614915 ns/op
-BenchmarkEncode/OpenCensus/TimedEvent-8         	      10	1025026687 ns/op
-BenchmarkEncode/OTLP/AttrAsMap/Attributes-8     	      10	 519539723 ns/op
-BenchmarkEncode/OTLP/AttrAsMap/TimedEvent-8     	      10	 841371163 ns/op
-BenchmarkEncode/OTLP/AttrAsList/Attributes-8    	      50	 128790429 ns/op
-BenchmarkEncode/OTLP/AttrAsList/TimedEvent-8    	      50	 175874878 ns/op
-BenchmarkEncode/OTLP/AttrAsList/TimeWrapped/Attributes-8         	      50	 153184772 ns/op
-BenchmarkEncode/OTLP/AttrAsList/TimeWrapped/TimedEvent-8         	      30	 232705272 ns/op
-BenchmarkDecode/OpenCensus/Attributes-8                          	      10	 644103382 ns/op
-BenchmarkDecode/OpenCensus/TimedEvent-8                          	       5	1132059855 ns/op
-BenchmarkDecode/OTLP/AttrAsMap/Attributes-8                      	      10	 529679038 ns/op
-BenchmarkDecode/OTLP/AttrAsMap/TimedEvent-8                      	      10	 867364162 ns/op
-BenchmarkDecode/OTLP/AttrAsList/Attributes-8                     	      50	 228834160 ns/op
-BenchmarkDecode/OTLP/AttrAsList/TimedEvent-8                     	      20	 321160309 ns/op
-BenchmarkDecode/OTLP/AttrAsList/TimeWrapped/Attributes-8         	      30	 277597851 ns/op
-BenchmarkDecode/OTLP/AttrAsList/TimeWrapped/TimedEvent-8         	      20	 443386880 ns/op
+BenchmarkEncode/OpenCensus/Attributes-8                                 10  605614915 ns/op
+BenchmarkEncode/OpenCensus/TimedEvent-8                                 10 1025026687 ns/op
+BenchmarkEncode/OTLP/AttrAsMap/Attributes-8                             10  519539723 ns/op
+BenchmarkEncode/OTLP/AttrAsMap/TimedEvent-8                             10  841371163 ns/op
+BenchmarkEncode/OTLP/AttrAsList/Attributes-8                            50  128790429 ns/op
+BenchmarkEncode/OTLP/AttrAsList/TimedEvent-8                            50  175874878 ns/op
+BenchmarkEncode/OTLP/AttrAsList/TimeWrapped/Attributes-8                50  153184772 ns/op
+BenchmarkEncode/OTLP/AttrAsList/TimeWrapped/TimedEvent-8                30  232705272 ns/op
+BenchmarkDecode/OpenCensus/Attributes-8                                 10  644103382 ns/op
+BenchmarkDecode/OpenCensus/TimedEvent-8                                  5 1132059855 ns/op
+BenchmarkDecode/OTLP/AttrAsMap/Attributes-8                             10  529679038 ns/op
+BenchmarkDecode/OTLP/AttrAsMap/TimedEvent-8                             10  867364162 ns/op
+BenchmarkDecode/OTLP/AttrAsList/Attributes-8                            50  228834160 ns/op
+BenchmarkDecode/OTLP/AttrAsList/TimedEvent-8                            20  321160309 ns/op
+BenchmarkDecode/OTLP/AttrAsList/TimeWrapped/Attributes-8                30  277597851 ns/op
+BenchmarkDecode/OTLP/AttrAsList/TimeWrapped/TimedEvent-8                20  443386880 ns/op
 ```
 
 The benchmark encodes/decodes 1000 batches of 100 spans, each span containing 3 attributes or 3 timed events. The total uncompressed, encoded size of each batch is around 20KBytes.

@@ -31,8 +31,8 @@ additional qualifiers should be used (e.g. `Log Record`).
 
 ### Embedded Log
 
-`Log Records` embedded inside a [Span](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-tracing.md#span) 
-object, in the [Events](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-tracing.md#add-events) list.
+`Log Records` embedded inside a [Span](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#span)
+object, in the [Events](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-events) list.
 
 ### Standalone Log
 

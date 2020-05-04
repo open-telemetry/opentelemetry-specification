@@ -1,6 +1,6 @@
 # OpenTelemetry Logs Vision
 
-The following are high-level items that define our long-term vision for 
+The following are high-level items that define our long-term vision for
 Logs support in OpenTelemetry project, what we aspire to achieve.
 
 This a vision document that reflects our current desires. It is not a commitment
@@ -9,38 +9,39 @@ document is to ensure all contributors work in alignment. As our vision changes
 over time maintainers reserve the right to add, modify, and remove items from
 this document.
 
-This document uses vocabulary introduced in https://github.com/open-telemetry/oteps/pull/91.
+This document uses vocabulary introduced in <https://github.com/open-telemetry/oteps/pull/91>.
 
-### First-class Citizen
+## First-class Citizen
 
 Logs are a first-class citizen in observability, along with traces and metrics.
 We will aim to have best-in-class support for logs at OpenTelemetry.
 
-### Correlation
+## Correlation
 
 OpenTelemetry will define how logs will be correlated with traces and metrics
 and how this correlation information will be stored.
 
 Correlation will work across 2 major dimensions:
+
 - To correlate telemetry emitted for the same request (also known as Request
   or Trace Context Correlation),
 - To correlate telemetry emitted from the same source (also known as Resource
   Context Correlation).
 
-### Logs Data Model
+## Logs Data Model
 
 We will design a Log Data model that will aim to correctly represent all types
 of logs. The purpose of the data model is to have a common understanding of what
 a log record is, what data needs to be recorded, transferred, stored and
 interpreted by a logging system.
 
-Existing log formats can be unambiguously mapped to this data model. Reverse 
-mapping from this data model is also possible to the extent that the target log 
+Existing log formats can be unambiguously mapped to this data model. Reverse
+mapping from this data model is also possible to the extent that the target log
 format has equivalent capabilities.
 
 We will produce mapping recommendations for commonly used log formats.
 
-### Log Protocol
+## Log Protocol
 
 Armed with the Log Data model we will aim to design a high performance protocol
 for logs, which will pursue the same [design goals](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/protocol/design-goals.md)
@@ -55,7 +56,7 @@ The reason for this design is to have a single OpenTelemetry protocol that can
 deliver logs, traces and metrics via one connection and satisfy all design
 goals.
 
-### Unified Collection
+## Unified Collection
 
 We aim to have high-performance, unified
 [Collector](https://github.com/open-telemetry/opentelemetry-collector/) that
@@ -67,6 +68,7 @@ The unified Collector will support multiple log protocols including the newly
 designed OpenTelemetry log protocol.
 
 Unified collection is important for the following reasons:
+
 - One agent (or one collector) to deploy and manage.
 - One place of configuration for target endpoints, authentication tokens, etc.
 - Uniform tagging of all 3 types of telemetry data (enrichment by attributes
@@ -109,7 +111,7 @@ system logs, infrastructure logs, third-party and first-party application logs.
 
 ### Standalone and Embedded Logs
 
-OpenTelemetry will support both logs embedded inside [Spans](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/api-tracing.md#span)
+OpenTelemetry will support both logs embedded inside [Spans](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#span)
 and standalone logs recorded elsewhere. The support of embedded logs is
 important for OpenTelemetry's primary use cases, where errors and exceptions
 need to be embedded in Spans. The support of standalone logs is important for

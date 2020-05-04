@@ -1,7 +1,5 @@
 # Rename "Cumulative" to "Counter" in the metrics API
 
-**Status:** `approved`
-
 Prefer the name "Counter" as opposed to "Cumulative".
 
 ## Motivation
@@ -39,7 +37,7 @@ It is possible that reducing all of these cases into the broad term "Counter" cr
 
 ## Internal details
 
-Simply replace every "Cumulative" with "Counter", then edit for grammar. 
+Simply replace every "Cumulative" with "Counter", then edit for grammar.
 
 ## Prior art and alternatives
 
