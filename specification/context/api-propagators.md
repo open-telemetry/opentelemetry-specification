@@ -6,12 +6,12 @@ Table of Contents
 </summary>
 
 - [Overview](#overview)
-- [Format](#format)
+- [Propagator Types](#propagator-types)
   - [Carrier](#carrier)
   - [Operations](#operations)
     - [Inject](#inject)
     - [Extract](#extract)
-- [HTTP Text Format](#http-text-format)
+- [HTTPText Propagator](#httptext-propagator)
   - [Fields](#fields)
   - [Inject](#inject-1)
     - [Setter argument](#setter)
@@ -29,44 +29,42 @@ Table of Contents
 Cross-cutting concerns send their state to the next process using
 `Propagator`s, which are defined as objects used to read and write
 context data to and from messages exchanged by the applications.
-Each concern creates a set of `Propagator`s for every supported `Format`.
+Each concern creates a set of `Propagator`s for every supported
+`Propagator` type.
 
 Propagators leverage the `Context` to inject and extract data for each
 cross-cutting concern, such as traces and correlation context.
 
-The Propagators API is expected to be leveraged by users writing
-instrumentation libraries.
-
-## Format
-
-A `Format` is a contract representing the restrictions imposed by a specific transport
-and bound to a data type, in order to propagate in-band context data across process boundaries.
-`Propagator`s in turn implement a specific `Format`.
-
 Propagation is usually implemented via library-specific request
 interceptors, where the client-side injects values and the server-side extracts them.
 
-The Propagators API currently defines one `Format`:
+The Propagators API is expected to be leveraged by users writing
+instrumentation libraries.
 
-- `HTTPTextFormat` is a format requiring `Propagator`s to inject values into and extracts values
-  from carriers as text values.
+## Propagator Types
 
-A binary `Format` will be added in the future.
+A `Propagator` type defines the restrictions imposed by a specific transport
+and bound to a data type, in order to propagate in-band context data across process boundaries.
+
+The Propagators API currently defines one `Propagator` type:
+
+- `HTTPTextPropagator` is a type that inject values into and extracts values
+  from carriers as text.
+
+A binary `Propagator` type will be added in the future.
 
 ### Carrier
 
-A carrier is the medium used by the `Format` contract to read values from and write values to.
-Each specific `Format` defines its expected carrier type, such as a string map or a byte array.
-
-`Propagators` implementing a specific `Format` use its associated carrier type to propagate
-context data.
+A carrier is the medium used by Propagators to read values from and write values to.
+Each specific `Propagator` type defines its expected carrier type, such as a string map
+or a byte array.
 
 Carriers used at [Inject](#inject) are expected to be mutable.
 
 ### Operations
 
-Each `Format` MUST define an `Inject` and an `Extract` operation, in order to write
-values to and read values from respectively. Each `Format`s MUST define the specific carrier type
+`Propagator`s MUST define `Inject` and `Extract` operations, in order to write
+values to and read values from respectively. Each `Propagator` type MUST define the specific carrier type
 and CAN define additional parameters.
 
 #### Inject
@@ -101,9 +99,9 @@ containing the extracted value, which can be a `SpanContext`,
 
 If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set to true.
 
-## HTTP Text Format
+## HTTPText Propagator
 
-`HTTPTextFormat` is a format that requires the injection and extraction of a cross-cutting concern
+`HTTPTextPropagator` requires the injection and extraction of a cross-cutting concern
 value as text into carriers that travel in-band across process boundaries.
 
 Encoding is expected to conform to the HTTP Header Field semantics. Values are often encoded as
@@ -112,7 +110,7 @@ RPC/HTTP request headers.
 The carrier of propagated data on both the client (injector) and server (extractor) side is
 usually an http request.
 
-`HTTPTextFormat` MUST expose the APIs that injects values into carriers,
+`HTTPTextPropagator` MUST expose the APIs that injects values into carriers,
 and extracts values from carriers.
 
 ### Fields
@@ -129,7 +127,7 @@ The use cases of this are:
 - allow pre-allocation of fields, especially in systems like gRPC Metadata
 - allow a single-pass over an iterator
 
-Returns list of fields that will be used by a `Propagator`s implementing `HttpTextFormat`.
+Returns list of fields that will be used by the `HttpTextPropagator`.
 
 ### Inject
 
@@ -145,7 +143,7 @@ Required arguments:
 
 Setter is an argument in `Inject` that sets values into given fields.
 
-`Setter` allows a `Propagator`s implementing `HttpTextFormat` to set propagated fields into a carrier.
+`Setter` allows a `HttpTextPropagator` to set propagated fields into a carrier.
 
 `Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Setter` class with `Set` method as described below.
 
@@ -159,7 +157,7 @@ Required arguments:
 - the key of the field.
 - the value of the field.
 
-The implemenation SHOULD preserve casing (e.g. it should not transform `Content-Type` to `content-type`) if the used protocol is case insensitive, otherwise it MUST preserve casing.
+The implementation SHOULD preserve casing (e.g. it should not transform `Content-Type` to `content-type`) if the used protocol is case insensitive, otherwise it MUST preserve casing.
 
 ### Extract
 
@@ -177,7 +175,7 @@ Returns a new `Context` derived from the `Context` passed as argument.
 
 Getter is an argument in `Extract` that get value from given field
 
-`Getter` allows a `Propagator` implementing `HttpTextFormat` to read propagated fields from a carrier.
+`Getter` allows a `HttpTextPropagator` to read propagated fields from a carrier.
 
 `Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Getter` class with `Get` method as described below.
 
@@ -190,7 +188,7 @@ Required arguments:
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text `Format` implementions MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, `HTTPTextPropagator`s MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
 
 ## Composite Propagator
 
@@ -201,9 +199,10 @@ single entity.
 The resulting composite `Propagator` will invoke the `Propagators`
 in the order they were specified.
 
-Each composite `Propagator` will implement a specific `Format`, such
-as `HttpTextFormat`, as different `Format`s will likely operate on different
+Each composite `Propagator` will implement a specific `Propagator` type, such
+as `HttpTextPropagator`, as different `Propagator` types will likely operate on different
 data types.
+
 There MUST be functions to accomplish the following operations.
 
 - Create a composite propagator
@@ -237,7 +236,7 @@ Required arguments:
 ## Global Propagators
 
 Implementations MAY provide global `Propagator`s for
-each supported `Format`.
+each supported `Propagator` type.
 
 If offered, the global `Propagator`s should default to a composite `Propagator`
 containing W3C Trace Context and Correlation Context `Propagator`s,
@@ -246,13 +245,13 @@ OpenTelemetry implementations.
 
 ### Get Global Propagator
 
-This method MUST exist for each supported `Format`.
+This method MUST exist for each supported `Propagator` type.
 
 Returns a global `Propagator`. This usually will be composite instance.
 
 ### Set Global Propagator
 
-This method MUST exist for each supported `Format`.
+This method MUST exist for each supported `Propagator` type.
 
 Sets the global `Propagator` instance.
 
