@@ -1,7 +1,5 @@
 # Remove SpanData
 
-**Status:** `approved`
-
 Remove and replace SpanData by adding span start and end options.
 
 ## Motivation
@@ -24,7 +22,7 @@ I'd like to propose getting rid of SpanData and `tracer.recordSpanData()` and re
 
 ## Trade-offs and mitigations
 
-From https://github.com/open-telemetry/opentelemetry-specification/issues/71: If the underlying SDK automatically adds tags to spans such as thread-id, stacktrace, and cpu-usage when a span is started, they would be incorrect for out of band spans as the tracer would not know the difference between in and out of band spans. This can be mitigated by indicating that the span is out of band to prevent attaching incorrect information, possibly with an `isOutOfBand()` option on `startSpan()`.
+From <https://github.com/open-telemetry/opentelemetry-specification/issues/71>: If the underlying SDK automatically adds tags to spans such as thread-id, stacktrace, and cpu-usage when a span is started, they would be incorrect for out of band spans as the tracer would not know the difference between in and out of band spans. This can be mitigated by indicating that the span is out of band to prevent attaching incorrect information, possibly with an `isOutOfBand()` option on `startSpan()`.
 
 ## Prior art and alternatives
 
@@ -38,7 +36,7 @@ There also seems to be some hidden dependency between SpanData and the sampler A
 
 We might want to include attributes as a start option to give the underlying sampler more information to sample with. We also might want to include optional events, which would be for bulk adding events with explicit timestamps.
 
-We will also want to ensure, assuming the span or subtrace is being created in the same process, that the timestamps use the same precision and are monotonic. 
+We will also want to ensure, assuming the span or subtrace is being created in the same process, that the timestamps use the same precision and are monotonic.
 
 ## Related Issues
 

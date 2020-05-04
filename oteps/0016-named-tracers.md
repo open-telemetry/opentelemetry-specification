@@ -1,7 +1,5 @@
 # Named Tracers and Meters
 
-**Status:** `approved`
-
 _Associate Tracers and Meters with the name and version of the instrumentation library which reports telemetry data by parameterizing the API which the library uses to acquire the Tracer or Meter._
 
 ## Suggested reading
@@ -20,7 +18,7 @@ For an operator of an application using OpenTelemetry, there is currently no way
 
 ### Instrumentation library identification
 
-If an instrumentation library hasn't implemented [semantic conventions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/data-semantic-conventions.md) correctly or those conventions change over time, it's currently hard to interpret and sanitize data produced by it selectively. The produced Spans or Metrics cannot later be associated with the library which reported them, either in the processing pipeline or the backend.
+If an instrumentation library hasn't implemented [semantic conventions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/overview.md#semantic-conventions) correctly or those conventions change over time, it's currently hard to interpret and sanitize data produced by it selectively. The produced Spans or Metrics cannot later be associated with the library which reported them, either in the processing pipeline or the backend.
 
 ### Disable instrumentation of pre-instrumented libraries
 
@@ -29,8 +27,9 @@ It is the eventual goal of OpenTelemetry that library vendors implement the Open
 ## Solution
 
 This proposal attempts to solve the stated problems by introducing the concept of:
- * _Named Tracers and Meters_ which are associated with the **name** (e.g. _"io.opentelemetry.contrib.mongodb"_) and **version** (e.g._"semver:1.0.0"_) of the library which acquired them.
- * A `TracerProvider` / `MeterProvider` as the only means of acquiring a Tracer or Meter.
+
+* _Named Tracers and Meters_ which are associated with the **name** (e.g. _"io.opentelemetry.contrib.mongodb"_) and **version** (e.g._"semver:1.0.0"_) of the library which acquired them.
+* A `TracerProvider` / `MeterProvider` as the only means of acquiring a Tracer or Meter.
 
 Based on the name and version, a Provider could provide a no-op Tracer or Meter to specific instrumentation libraries, or a Sampler could be implemented that discards Spans or Metrics from certain libraries. Also, by providing custom Exporters, Span or Metric data could be sanitized before it gets processed in a back-end system. However, this is beyond the scope of this proposal, which only provides the fundamental mechanisms.
 
@@ -38,7 +37,8 @@ Based on the name and version, a Provider could provide a no-op Tracer or Meter 
 
 From a user perspective, working with *Named Tracers / Meters* and `TracerProvider` / `MeterProvider` is conceptually similar to how e.g. the [Java logging API](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)) and logging frameworks like [log4j](https://www.slf4j.org/apidocs/org/slf4j/LoggerFactory.html) work. In analogy to requesting Logger objects through LoggerFactories, an instrumentation library would create specific Tracer / Meter objects through a TracerProvider / MeterProvider.
 
-New Tracers or Meters can be created by providing the name and version of an instrumentation library. The version (following the convention proposed in https://github.com/open-telemetry/oteps/pull/38) is basically optional but *should* be supplied since only this information enables following scenarios:
+New Tracers or Meters can be created by providing the name and version of an instrumentation library. The version (following the convention proposed in <https://github.com/open-telemetry/oteps/pull/38>) is basically optional but *should* be supplied since only this information enables following scenarios:
+
 * Only a specific range of versions of a given instrumentation library need to be suppressed, while other versions are allowed (e.g. due to a bug in those specific versions).
 * Go modules allow multiple versions of the same middleware in a single build so those need to be determined at runtime.
 
@@ -82,20 +82,24 @@ On an SDK level, the SpanData class and its Metrics counterpart are extended wit
 
 ## Glossary of Terms
 
-#### Instrumentation library
+### Instrumentation library
+
 Also known as the trace/metrics reporter, this may be either a library/module/plugin provided by OpenTelemetry that instruments an existing library, a third party integration which instruments some library, or a library that has implemented the OpenTelemetry API in order to instrument itself. In any case, the instrumentation library is the library which provides tracing and metrics data to OpenTelemetry.
 
 examples:
+
 * `@opentelemetry/plugin-http`
 * `io.opentelemetry.redis`
 * `redis-client` (in this case, `redis-client` has instrumented itself with the OpenTelemetry API)
 
-#### Tracer / Meter name and version
+### Tracer / Meter name and version
+
 When an instrumentation library acquires a Tracer/Meter, it provides its own name and version to the Tracer/Meter Provider. This name/version two-tuple is said to be the Tracer/Meter's _name_ and _version_. Note that this is the name and version of the library which acquires the Tracer/Meter, and not the library it is monitoring. In cases where the library is instrumenting itself using the OpenTelemetry API, they may be the same.
 
 example: If the `http` version `semver:3.0.0` library is being instrumented by a library with the name `io.opentelemetry.contrib.http` and version `semver:1.3.2`, then the tracer name and version are also `io.opentelemetry.contrib.http` and `semver:1.3.2`. If that same `http` library has built-in instrumentation through use of the OpenTelemetry API, then the tracer name and version would be `http` and `semver:3.0.0`.
 
-#### Meter namespace
+### Meter namespace
+
 Meter name is used as a namespace for all metrics created by it. This allows a telemetry library to register a metric using any name, such as `latency`, without worrying about collisions with a metric registered under the same name by a different library.
 
 example: The libraries `redis` and `io.opentelemetry.redis` may both register metrics with the name `latency`. These metrics can still be uniquely identified even though they have the same name because they are registered under different namespaces (`redis` and `io.opentelemetry.redis` respectively). In this case, the operator may disable one of these metrics because they are measuring the same thing.
@@ -115,7 +119,7 @@ Overall, this would not change a lot compared to the `TracerProvider` since the 
 
 Instead of setting the `component` property based on the given Tracer names, those names could also be used as *prefixes* for produced span names (e.g. `<TracerName-SpanName>`). However, with regard to data quality and semantic conventions, a dedicated `component` set on spans is probably preferred.
 
-Instead of using plain strings as an argument for creating new Tracers, a `Resource` identifying an instrumentation library could be used. Such resources must have a _version_ and a _name_ label (there could be semantic convention definitions for those labels). This implementation alternative mainly depends on the availability of the `Resource` data type on an API level (see https://github.com/open-telemetry/opentelemetry-specification/pull/254).
+Instead of using plain strings as an argument for creating new Tracers, a `Resource` identifying an instrumentation library could be used. Such resources must have a _version_ and a _name_ label (there could be semantic convention definitions for those labels). This implementation alternative mainly depends on the availability of the `Resource` data type on an API level (see <https://github.com/open-telemetry/opentelemetry-specification/pull/254>).
 
 ```java
 // Create resource for given instrumentation library information (name + version)
