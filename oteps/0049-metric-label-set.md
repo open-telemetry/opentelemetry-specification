@@ -1,7 +1,5 @@
 # Metric `LabelSet` specification
 
-**Status:** `proposed`
-
 Introduce a first-class `LabelSet` API type as a handle on a pre-defined set of labels for the Metrics API.
 
 ## Motivation
@@ -20,7 +18,7 @@ Metric instrument APIs which presently take labels in the form `{ Key: Value, ..
 var (
     cumulative = metric.NewFloat64Cumulative("my_counter")
     gauge      = metric.NewFloat64Gauge("my_gauge")
-)    
+)
 ```
 
 Use a `LabelSet` to construct multiple Handles:

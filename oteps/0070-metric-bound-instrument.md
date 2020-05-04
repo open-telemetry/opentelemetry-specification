@@ -1,7 +1,5 @@
 # Rename metric instrument Handles to "Bound Instruments"
 
-*Status: proposed 11/26/2019*
-
 The OpenTelemetry metrics API specification refers to a concept known
 as ["metric handles"](0009-metric-handles.md), which is a metric
 instrument bound to a `LabelSet`.  This OTEP proposes to change that

@@ -1,12 +1,10 @@
 # Consolidate pre-aggregated and raw metrics APIs
 
-**Status:** `approved`
-
-# Foreword
+## Foreword
 
 A working group convened on 8/21/2019 to discuss and debate the two metrics RFCs (0003 and 0004) and several surrounding concerns.  This document has been revised with related updates that were agreed upon during this working session.  See the [meeting notes](https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit#).
 
-# Overview
+## Overview
 
 Introduce a `Measure` kind of metric object that supports a `Record` API method.  Like existing `Gauge` and `Cumulative` metrics, the new `Measure` metric supports pre-defined labels.  A new `RecordBatch` measurement API  is introduced for recording multiple metric observations simultaneously.
 
@@ -18,7 +16,7 @@ Since this document will be read in the future after the proposal has been writt
 
 The preceding specification used the term `TimeSeries` to describe an instrument bound with a set of pre-defined labels.  In this document, [the term "Handle" is used to describe an instrument with bound labels](0009-metric-handles.md).  In a future OTEP this will be again changed to "Bound instrument".  The term "Handle" is used throughout this document to refer to a bound instrument.
 
-# Motivation
+## Motivation
 
 In the preceding `Metric.GetOrCreateTimeSeries` API for Gauges and Cumulatives, the caller obtains a `TimeSeries` handle for repeatedly recording metrics with certain pre-defined label values set.  This enables an important optimization for exporting pre-aggregated metrics, since the implementation is able to compute the aggregate summary "entry" using a pointer or fast table lookup. The efficiency gain requires that the aggregation keys be a subset of the pre-defined labels.
 
@@ -28,7 +26,7 @@ The preceding raw statistics API did not specify support for pre-defined labels.
 
 The preceding raw statistics API supported all-or-none recording for interdependent measurements using a common label set.  This RFC introduces a `RecordBatch` API to support recording batches of measurements in a single API call, where a `Measurement` is now defined as a pair of `MeasureMetric` and `Value` (integer or floating point).
 
-# Explanation
+## Explanation
 
 The common use for `MeasureMetric`, like the preceding raw statistics API, is for reporting information about rates and distributions over structured, numerical event data.  Measure metrics are the most general-purpose of metrics.  Informally, the individual metric event has a logical format expressed as one primary key=value (the metric name and a numerical value) and any number of secondary key=values (the labels, resources, and context).
 
@@ -72,7 +70,7 @@ Metric instrument Handles combine a metric instrument with a set of pre-defined 
 By separation of API and implementation in OpenTelemetry, we know that an implementation is free to do _anything_ in response to a metric API call.  By the low-level interpretation defined above, all metric events have the same structural representation, only their logical interpretation varies according to the metric definition.  Therefore, we select metric kinds based on two primary concerns:
 
 1. What should be the default implementation behavior?  Unless configured otherwise, how should the implementation treat this metric variable?
-1. How will the program source code read?  Each metric uses a different verb, which helps convey meaning and describe default behavior.  Cumulatives have an `Add()` method.  Gauges have a `Set()` method.  Measures have a `Record()` method.
+2. How will the program source code read?  Each metric uses a different verb, which helps convey meaning and describe default behavior.  Cumulatives have an `Add()` method.  Gauges have a `Set()` method.  Measures have a `Record()` method.
 
 To guide the user in selecting the right kind of metric for an application, we'll consider the following questions about the primary intent of reporting given data.  We use "of primary interest" here to mean information that is almost certainly useful in understanding system behavior.  Consider these questions:
 
@@ -106,7 +104,7 @@ For gauge metrics, the default OpenTelemetry implementation exports the last val
 Measure metrics express a distribution of measured values.  This kind of metric should be used when the count or rate of events is meaningful and either:
 
 1. The sum is of interest in addition to the count (rate)
-1. Quantile information is of interest.
+2. Quantile information is of interest.
 
 The key property of a measure metric event is that computing quantiles and/or summarizing a distribution (e.g., via a histogram) may be expensive.  Not only will implementations have various capabilities and algorithms for this task, users may wish to control the quality and cost of aggregating measure metrics.
 
@@ -135,7 +133,7 @@ Applications sometimes want to act upon multiple metric instruments in a single 
 
 A single measurement is defined as:
 
-- Instrument: the measure instrument (not a Handle) 
+- Instrument: the measure instrument (not a Handle)
 - Value: the recorded floating point or integer data
 
 The batch measurement API uses a language-specific method name (e.g., `RecordBatch`).  The entire batch of measurements takes place within a (implicit or explicit) context.
@@ -148,7 +146,7 @@ Prometheus supports the notion of vector metrics, which are those that support p
 
 ### `GetHandle` argument ordering
 
-Argument ordering has been proposed as the way to pass pre-defined label values in `GetHandle`.  The argument list must match the parameter list exactly, and if it doesn't we generally find out at runtime or not at all.  This model has more optimization potential, but is easier to misuse than the alternative.  The alternative approach is to always pass label:value pairs to `GetOrCreateTimeseries`, as opposed to an ordered list of values. 
+Argument ordering has been proposed as the way to pass pre-defined label values in `GetHandle`.  The argument list must match the parameter list exactly, and if it doesn't we generally find out at runtime or not at all.  This model has more optimization potential, but is easier to misuse than the alternative.  The alternative approach is to always pass label:value pairs to `GetOrCreateTimeseries`, as opposed to an ordered list of values.
 
 ### `RecordBatch` argument ordering
 

@@ -1,38 +1,35 @@
 # OpenTelemetry Protocol Specification
 
-_Author: Tigran Najaryan, Omnition Inc._
-
-**Status:** `approved`
+**Author**: Tigran Najaryan, Omnition Inc.
 
 OpenTelemetry Protocol (OTLP) specification describes the encoding, transport and delivery mechanism of telemetry data between telemetry sources, intermediate nodes such as collectors and telemetry backends.
 
 ## Table of Contents
 
-  - [Motivation](#motivation)
-  - [Protocol Details](#protocol-details)
-    - [Export Request and Response](#export-request-and-response)
-      - [OTLP over gRPC](#otlp-over-grpc)
-      - [Export Response](#export-response)
-      - [Throttling](#throttling)
-      - [gRPC Service Definition](#grpc-service-definition)
-    - [Other Transports](#other-transports)
-  - [Implementation Recommendations](#implementation-recommendations)
-    - [Multi-Destination Exporting](#multi-destination-exporting)
-  - [Trade-offs and mitigations](#trade-offs-and-mitigations)
-    - [Request Acknowledgements](#request-acknowledgements)
-      - [Duplicate Data](#duplicate-data)
-    - [Partial Success](#partial-success)
-  - [Future Versions and Interoperability](#future-versions-and-interoperability)
-  - [Prior Art, Alternatives and Future Possibilities](#prior-art-alternatives-and-future-possibilities)
-  - [Open Questions](#open-questions)
-  - [Appendix A - Protocol Buffer Definitions](#appendix-a---protocol-buffer-definitions)
-  - [Appendix B - Performance Benchmarks](#appendix-b---performance-benchmarks)
-    - [Throughput - Sequential vs Concurrent](#throughput---sequential-vs-concurrent)
-    - [CPU Usage - gRPC vs WebSocket/Experimental](#cpu-usage---grpc-vs-websocketexperimental)
-    - [Benchmarking Raw Results](#benchmarking-raw-results)
-  - [Glossary](#glossary)
-  - [Acknowledgements](#acknowledgements)
-
+- [Motivation](#motivation)
+- [Protocol Details](#protocol-details)
+  - [Export Request and Response](#export-request-and-response)
+    - [OTLP over gRPC](#otlp-over-grpc)
+    - [Export Response](#export-response)
+    - [Throttling](#throttling)
+    - [gRPC Service Definition](#grpc-service-definition)
+  - [Other Transports](#other-transports)
+- [Implementation Recommendations](#implementation-recommendations)
+  - [Multi-Destination Exporting](#multi-destination-exporting)
+- [Trade-offs and mitigations](#trade-offs-and-mitigations)
+  - [Request Acknowledgements](#request-acknowledgements)
+    - [Duplicate Data](#duplicate-data)
+  - [Partial Success](#partial-success)
+- [Future Versions and Interoperability](#future-versions-and-interoperability)
+- [Prior Art, Alternatives and Future Possibilities](#prior-art-alternatives-and-future-possibilities)
+- [Open Questions](#open-questions)
+- [Appendix A - Protocol Buffer Definitions](#appendix-a---protocol-buffer-definitions)
+- [Appendix B - Performance Benchmarks](#appendix-b---performance-benchmarks)
+  - [Throughput - Sequential vs Concurrent](#throughput---sequential-vs-concurrent)
+  - [CPU Usage - gRPC vs WebSocket/Experimental](#cpu-usage---grpc-vs-websocketexperimental)
+  - [Benchmarking Raw Results](#benchmarking-raw-results)
+- [Glossary](#glossary)
+- [Acknowledgements](#acknowledgements)
 
 ## Motivation
 
@@ -319,7 +316,7 @@ Benchmarking of OTLP vs other telemetry protocols was done using [reference impl
 
 ### Throughput - Sequential vs Concurrent
 
-Using 20 concurrent requests shows the following throughput advantage in benchmarks compared to sequential for various values of network roundtrip latency: 
+Using 20 concurrent requests shows the following throughput advantage in benchmarks compared to sequential for various values of network roundtrip latency:
 
 ```
 +-----------+-----------------------+

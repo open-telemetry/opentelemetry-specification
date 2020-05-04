@@ -1,7 +1,5 @@
 # Version Semantic Attribute
 
-**Status:** `approved`
-
 Add a standard `version` semantic attribute.
 
 ## Motivation
