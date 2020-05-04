@@ -30,7 +30,7 @@ Here is a list of decisions and trade-offs related to supporting out-of-band rep
    * Example in the create metric we need to allow users to specify the resource, see
    [here][create-metric]. The developer that writes the instrumentation has no knowledge about where
    the monitored resource is deployed so there is no way to configure the right resource.
-2. [RFC](./0002-remove-spandata.md) removes support to report SpanData.
+2. [RFC](./trace/0002-remove-spandata.md) removes support to report SpanData.
    * This will require that the trace API has to support all the possible fields to be configured
    via the API, for example need to allow users to set a pre-generated `SpanId` that can be avoided
    if we do not support out-of-band reporting.
