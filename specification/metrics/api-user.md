@@ -110,7 +110,7 @@ Binding instruments to a single `Meter` instance has two benefits:
 
 The recommended practice is to define structures to contain the
 instruments in use and keep references only to the instruments that
-are specifically needed.
+are specifically needed in application code.
 
 We recognize that many existing metric systems support allocating
 metric instruments statically and providing the `Meter` interface at
@@ -138,20 +138,25 @@ using the provided, non-global `Meter` instance.
 
 ```golang
 type instruments struct {
-    counter1 metric.Int64Counter
-    counter2 metric.Float64Counter
-    gauge3   metric.Int64Gauge
-    measure4 metric.Float64Measure
+    counter1  metric.Int64Counter
+    counter2  metric.Float64Counter
+    recorder3 metric.Float64ValueRecorder
+    observer4 metric.Int64SumObserver
+    
 }
 
-func newInstruments(metric.Meter meter) *instruments {
-  return &instruments{
-    counter1: meter.NewCounter("counter1", ...),  // Optional parameters
-    counter2: meter.NewCounter("counter2", ...),  // are discussed below.
-    gauge3:   meter.NewGauge("gauge3", ...),
-    measure4: meter.NewMeasure("measure4", ...),
+func (s *server) setInstruments(metric.Meter meter) *instruments {
+  s.instruments = &instruments{
+    counter1: meter.NewInt64Counter("counter1", ...),  // Optional parameters
+    counter2: meter.NewFloat64Counter("counter2", ...),  // are discussed below.
+    recorder3: meter.NewFloat64ValueRecorder("recorder3", ...),
+    observer4:   meter.NewInt64SumObserver("observer4",
+                     metric.NewInt64ObserverCallback(server.observeSumNumber4)),
   }
 }
+
+func newServer(meter metric.Meter) *server {
+
 ```
 
 Code will be structured to call `newInstruments` somewhere in a
@@ -168,11 +173,12 @@ type server struct {
 }
 
 func newServer(meter metric.Meter) *server {
-     return &server{
+     s := &server{
          meter:       meter,
-         instruments: newInstruments(meter),
          // ... other fields
      }
+     s.setInstruments(meter)
+     return s
 }
 
 // ...
@@ -435,3 +441,164 @@ func (s *server) doThing(ctx context.Context) {
     // ...
 }
 ```
+
+## Metric instrument selection
+
+To guide the user in selecting the right kind of metric instrument for
+an application, we'll consider several questions about the kind of
+numbers being reported.  Here are some ways to help choose.  Examples
+are provided in the following section.
+
+### Counters and Measures compared
+
+Counters and Measures are both recommended for reporting measurements
+taken during synchronous activity, driven by events in the program.
+These measurements include an associated distributed context, the
+effective span context (if any), the correlation context, and
+user-provided LabelSet values.
+
+Start with an application for metrics data in mind.  It is useful to
+consider whether you are more likely to be interested in the sum of
+values or any other aggregate value (e.g., average, histogram), as
+processed by the instrument.  Counters are useful when only the sum is
+interesting.  Measures are useful when the sum and any other kind of
+summary information about the individual values are of interest.
+
+If only the sum is of interest, use a Counter instrument.
+
+If you are interested in any other kind of summary value or statistic,
+such as mean, median and other quantiles, or minimum and maximum
+value, use a Measure instrument.  Measure instruments are used to
+report any kind of measurement that is not typically expressed as a
+rate or as a total sum.
+
+### Observer instruments
+
+Observer instruments are recommended for reporting measurements about
+the state of the program periodically.  These expose current
+information about the program itself, not related to individual events
+taking place in the program.  Observer instruments are reported
+outside of a context, thus do not have an effective span context or
+correlation context.
+
+Observer instruments are meant to be used when measured values report
+on the current state of the program, as opposed to an event or a
+change of state in the program.
+
+## Examples
+
+### Reporting total bytes read
+
+You wish to monitor the total number of bytes read from a messaging
+server that supports several protocols.  The number of bytes read
+should be labeled with the protocol name and aggregated in the
+process.
+
+This is a typical application for the Counter instrument.  Use one Counter for
+capturing the number bytes read.  When handling a request, compute a LabelSet
+containing the name of the protocol and potentially other useful labels, then
+call `Add()` with the same labels and the number of bytes read.
+
+To lower the cost of this reporting, you can `Bind()` the instrument with each
+of the supported protocols ahead of time.
+
+### Reporting total bytes read and bytes per request
+
+You wish to monitor the total number of bytes read as well as the
+number of bytes read per request, to have observability into total
+traffic as well as typical request size.  As with the example above,
+these metric events should be labeled with a protocol name.
+
+This is a typical application for the Measure instrument.  Use one
+Measure for capturing the number of bytes per request.  A sum
+aggregation applied to this data yields the total bytes read; other
+aggregations allow you to export the minimum and maximum number of
+bytes read, as well as the average value, and quantile estimates.
+
+In this case, the guidance is to create a single instrument.  Do not
+create a Counter instrument to export a sum when you want to export
+other summary statistics using a Measure instrument.
+
+### Reporting system call duration
+
+You wish to monitor the duration of a specific system call being made
+frequently in your application, with a label to indicate a file name
+associated with the operation.
+
+This is a typical application for the Measure instrument.  Use a timer
+to measure the duration of each call and `Record()` the measurement
+with a label for the file name.
+
+### Reporting request size
+
+You wish to monitor a trend in request sizes, which means you are
+interested in characterizing individual events, as opposed to a sum.
+Label these with relevant information that may help explain variance
+in request sizes, such as the type of the request.
+
+This is a typical application for a Measure instrument.  The standard
+aggregation for Measure instruments will compute a measurement sum and
+the event count, which determines the mean request size, as well as
+the minimum and maximum sizes.
+
+### Reporting a per-request finishing account balance
+
+There's a number that rises and falls such as a bank account balance.
+You wish to monitor the average account balance at the end of
+requests, broken down by transaction type (e.g., withdrawal, deposit).
+
+Use a Measure instrument to report the current account balance at the
+end of each request.  Use a label for the transaction type.
+
+### Reporting process-wide CPU usage
+
+You are interested in reporting the CPU usage of the process as a
+whole, which is computed via a (relatively expensive) system call
+which returns two values, process-lifetime user and system
+cpu-seconds.  It is not necessary to update this measurement
+frequently, because it is meant to be used only for accounting
+purposes.
+
+A single Observer instrument is recommended for this case, with a
+label value to distinguish user from system CPU time.  The Observer
+callback will be called once per collection interval, which lowers the
+cost of collecting this information.
+
+CPU usage is something that we naturally sum, which raises several
+questions.
+
+- Why not use a Counter instrument?  In order to use a Counter instrument, we would need to convert total usage figures into deltas.  Calculating deltas from the previous measurement is easy to do, but Counter instruments are not meant to be used from callbacks.
+- Why not report deltas in the Observer callback?  Observer instruments are meant to be used to observe current values. Nothing prevents reporting deltas with an Observer, but the standard aggregation for Observer instruments is to sum the current value across distinct labels.  The standard behavior is useful for determining the current rate of CPU usage, but special configuration would be required for an Observer instrument to use Counter aggregation.
+
+### Reporting per-shard memory holdings
+
+Suppose you have a widely-used library that acts as a client to a
+sharded service.  For each shard it maintains some client-side state,
+holding a variable amount of memory per shard.
+
+Observe the current allocation per shard using an Observer instrument with a
+shard label.  These can be aggregated across hosts to compute cluster-wide
+memory holdings by shard, for example, using the standard aggregation for
+Observers, which sums the current value across distinct labels.
+
+### Reporting number of active requests
+
+Suppose your server maintains the count of active requests, which
+rises and falls as new requests begin and end processing.
+
+Observe the number of active requests periodically with an Observer
+instrument.  Labels can be used to indicate which application-specific
+properties are associated with these events.
+
+### Reporting bytes read and written correlated by end user
+
+An application uses storage servers to read and write from some
+underlying media.  These requests are made in the context of the end
+user that made the request into the frontend system, with Correlation
+Context passed from the frontend to the storage servers carrying these
+properties.
+
+Use Counter instruments to report the number of bytes read and written
+by the storage server.  Configure the SDK to use a Correltion Context
+label key (e.g., named "app.user") to aggregate events by all metric
+instruments.
