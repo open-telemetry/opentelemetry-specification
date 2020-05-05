@@ -32,7 +32,7 @@ context data to and from messages exchanged by the applications.
 Each concern creates a set of `Propagator`s for every supported
 `Propagator` type.
 
-Propagators leverage the `Context` to inject and extract data for each
+`Propagator`s leverage the `Context` to inject and extract data for each
 cross-cutting concern, such as traces and correlation context.
 
 Propagation is usually implemented via library-specific request
@@ -55,7 +55,7 @@ A binary `Propagator` type will be added in the future.
 
 ### Carrier
 
-A carrier is the medium used by Propagators to read values from and write values to.
+A carrier is the medium used by `Propagator`s to read values from and write values to.
 Each specific `Propagator` type defines its expected carrier type, such as a string map
 or a byte array.
 
