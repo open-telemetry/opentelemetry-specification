@@ -9,10 +9,22 @@
   * [Aggregations](#aggregations)
   * [Time](#time)
   * [Metric Event Format](#metric-event-format)
-- [Three kinds of instrument](#three-kinds-of-instrument)
+- [Instrument categories](#instrument-categories)
+  * [Synchronous and asynchronous instruments compared](#synchronous-and-asynchronous-instruments-compared)
+  * [Additive and non-additive instruments compared](#additive-and-non-additive-instruments-compared)
+  * [Monotonic and non-monotonic instruments compared](#monotonic-and-non-monotonic-instruments-compared)
+  * [Function names](#function-names)
+- [Instrument kinds](#instrument-kinds)
   * [Counter](#counter)
-  * [Measure](#measure)
-  * [Observer](#observer)
+  * [UpDownCounter](#updowncounter)
+  * [ValueRecorder](#valuerecorder)
+  * [SumObserver](#sumobserver)
+  * [UpDownSumObserver](#updownsumobserver)
+  * [ValueObserver](#valueobserver)
+- [Details](#details)
+  * [Memory requirements](#memory-requirements)
+  * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
+    + [Asynchronous instruments define moment-in-time ratios](#asynchronous-instruments-define-moment-in-time-ratios)
 - [Interpretation](#interpretation)
   * [Standard implementation](#standard-implementation)
   * [Future Work: Option Support](#future-work-option-support)
@@ -276,13 +288,14 @@ Synchronous events have one additional property, the distributed
 [Context](../context/context.md) (Span context, Correlation context)
 that was active at the time.
 
-## Instrument categories
+## Instrument properties
 
 Because the API is separated from the SDK, the implementation
 ultimately determines how metric events are handled.  Therefore, the
 choice of instrument should be guided by semantics and the intended
-interpretation.  Here we detail the instruments and their
-individual semantics.
+interpretation.  The semantics of the individual instruments is
+defined by several properties, detailed here, to assist with
+instrument selection.
 
 ### Synchronous and asynchronous instruments compared
 
@@ -360,7 +373,7 @@ signifying that they capture individual events, not only a sum.
 Asynchronous instruments all support an `Observe()` function,
 signifying that they capture only one value per measurement interval.
 
-## Instrument kinds
+## Six kinds of instrument
 
 ### Counter
 
@@ -401,7 +414,7 @@ levels across a group of processes.
 
 `ValueRecorder` is a non-additive synchronous instrument useful for
 recording any non-additive number, positive or negative.  Values
-captured by a `ValueRecorder` are treated as individual events
+captured by a `Record(value)` are treated as individual events
 belonging to a distribution that is being summarized.  `ValueRecorder`
 should be chosen either when capturing measurements that do not
 contribute meaningfully to a sum, or when capturing numbers that are
@@ -448,10 +461,10 @@ of additive measurements.
 ### SumObserver
 
 `SumObserver` is the asynchronous instrument corresponding to
-`Counter`, used to capture a monotonic sum.  "Sum" appears in the
-name to remind users that it is used to capture sums directly.  Use a
-`SumObserver` to capture any value that starts at zero and rises
-throughout the process lifetime and never falls.
+`Counter`, used to capture a monotonic sum with `Observe(sum)`.  "Sum"
+appears in the name to remind users that it is used to capture sums
+directly.  Use a `SumObserver` to capture any value that starts at
+zero and rises throughout the process lifetime and never falls.
 
 Example uses for `SumObserver`.
 - capture process user/system CPU seconds
@@ -470,10 +483,11 @@ expensive to synchronously capture each event using a `Counter`.
 ### UpDownSumObserver
 
 `UpDownSumObserver` is the asynchronous instrument corresponding to
-`UpDownCounter`, used to capture a non-monotonic count.  "Sum" appears
-in the name to remind users that it is used to capture sums directly.
-Use a `UpDownSumObserver` to capture any value that starts at zero and
-rises or falls throughout the process lifetime.
+`UpDownCounter`, used to capture a non-monotonic count with
+`Observe(sum)`.  "Sum" appears in the name to remind users that it is
+used to capture sums directly.  Use a `UpDownSumObserver` to capture
+any value that starts at zero and rises or falls throughout the
+process lifetime.
 
 Example uses for `UpDownSumObserver`.
 - capture process heap size
@@ -490,8 +504,10 @@ would be impractical to instrument them, use a `UpDownSumObserver`.
 ### ValueObserver
 
 `ValueObserver` is the asynchronous instrument corresponding to
-`ValueRecorder`, used to capture non-additive measurements that are
-expensive to compute and/or are not request-oriented.
+`ValueRecorder`, used to capture non-additive measurements with
+`Observe(value)`.  These instruments are especially useful for
+capturing measurements that are expensive to compute, since it gives
+the SDK control over how often they are evaluated.
 
 Example uses for `ValueObserver`:
 - capture CPU fan speed
@@ -526,19 +542,19 @@ knowing the distribution of queue sizes across those machines, use
 
 The API is designed not to impose long-lived memory requirements on
 the user, although for some exporters it cannot be avoided.  The
-potential for unbounded memory growth comes up when using momentary
-labels, labels that are used for a while and then are not used again.
+potential for unbounded memory growth comes from "momentary-use"
+labels, labels which are used briefly and then are not used again.
 If the SDK is required to retain memory of every combination of
 instrument and label set it has ever seen, long-lived memory can
-become a problem--the requirement cannot be met.
+become a problem.
 
 Nevertheless, exporters may be forced to allocate long-lived memory to
 perform their function, particularly with respect to the additive
 instruments.  Metric exposition formats commonly have two ways of
 exposing additive instrument data: in terms of the change in a sum, or
 in terms of the sum itself.  (The terms "delta" and "cumulative" are
-used to describe these two approaches in an export pipeline, they will
-not be used to describe the additive instruments.)
+used to describe these two approaches in an export pipeline, we avoid
+their use to describe the additive instruments.)
 
 There are two cases where an exporter must retain memory in order to
 operate correctly.
@@ -559,265 +575,112 @@ downstream system for any exporter that does not support both forms.
 
 It is tempting to consider not supporting one of these forms of
 additive metric data, as a way to avoid exporter memory requirements.
-However, legacy protocols existing with both forms, so this would not
-help.  Besides, the fact that synchronous additive instruments accept
-one, while asynchronous additive instruments accepts the other, is
-ultimately meant as a user convenience.  Had OpenTelemetry not
-specified that asynchronous additive instruments accept sums directly,
-this burden would fall to the user (e.g., since operating systems
-report heap usage as a sum, the user would be forced into a memory
-requirement in order to report changes the sum).
+However, legacy protocols exist with both forms, so this would not
+necessarily help.  Besides, the fact that synchronous additive
+instruments accept one, while asynchronous additive instruments
+accepts the other, is ultimately meant as a user convenience.  Had
+OpenTelemetry not specified that asynchronous additive instruments
+accept sums directly, this burden would fall to the user (e.g., since
+operating systems report heap usage as a sum, the user would be forced
+into a memory requirement in order to report changes in the sum).
 
-### Asynchronous observations are coherent
+### Asynchronous observations form a current set
 
-@@@ HERE
+Asynchronous instrument callbacks are permitted to observe one value
+per instrument, per distinct label set, per callback invokation.  The
+set of values recorded by one callback invokation represent a current
+snapshot of the instrument; it is this set of values that defines the
+Last Value for the instrument until the next collection interval.
 
-Asynchronous instruments are permitted to observe at most one value
-per instrument and label set, per interval.  This property supports
-the definition of Last Value for asynchronous instruments
+Asynchronous instruments are expected to record an observation for
+every label set that it considers "current".  This means that
+asynchronous callbacks are expected to observe a value, even when the
+value has not changed since the last callback invokation.  To not
+observe a label set implies that a value is no longer current.  The
+Last Value becomes undefined, as it is no longer current, when it is
+not observed during a collection interval.
 
+The definition of Last Value is possible for asynchronous instruments,
+because their collection is coordinated by the SDK and because they
+are expected to report all current values.  Another expression of this
+property is that an SDK can keep just one collection interval worth of
+observations in memory to lookup the current Last Value of any
+instrument and label set.  In this way, asynchronous instruments
+support querying current values, independent of the duration of a
+collection interval, using data collected at a single point in time.
 
+Recall that Last Value is not defined for synchronous instruments, and
+it is precisely because there is not a well-defined notion of what is
+"current".  To determine the "last-recorded" value for a synchronous
+instrument could require inspecting multiple collection windows of
+data, because there is no mechanism to ensure that a current value is
+recorded during each interval.
 
-Observer instruments are used to capture a _current set of values_ at
-a point in time.  Observer instruments are asynchronous, with the use
-of callbacks allowing the user to capture multiple values per
-collection interval.  Observer instruments are not associated with a
-Context, by definition.  This means, for example, it is not possible
-to associate Observer instrument events with Correlation or Span
-context.
+#### Asynchronous instruments define moment-in-time ratios 
 
-Observer instruments capture not only current values, but also effectively
-_which labels are current_ at the moment of collection.  These instruments can
-be used to compute probabilities and ratios, because values are part of a set.
+The notion of a current set developed for asynchronous instruments
+above can be useful for monitoring ratios.  When the set of observed
+values for an instrument add up to a whole, then each observation may
+be divided by the sum of observed values from the same interval to
+calculate its current relative contribution.  Current relative
+contribution is defined in this way, independent of the collection
+interval duration, thanks to the properties of asynchronous
+instruments.
 
-Unlike Counter and Measure instruments, Observer instruments are
-synchronized with collection.  There is no aggregation across time for
-Observer instruments by definition, only the current set of values is
-semantically defined.  Because Observer instruments are activated by
-the SDK, they can be effectively disabled at low cost.
+### Interpretation
 
-These values are considered coherent, because measurements from an
-Observer instrument in a single collection interval are captured at
-the same logical time.  A single callback invocation generates (zero
-or more) simultaneous metric events, all sharing an implicit timestamp.
+How are the instruments fundamentally different, and why are there
+only three?  Why not one instrument?  Why not ten?
 
-## Interpretation
-
-We believe the three instrument kinds Counter, Measure, and Observer
-form a sufficient basis for expressing nearly all metric data.  But if
-the API and SDK are separated, and the SDK can handle any metric event
-as it pleases, why not have just one kind of instrument?  How are the
-instruments fundamentally different, and why are there only three?
+As we have seen, the six instruments are categorized as to whether
+they are synchronous, additive, and/or and monotonic.  This approach
+gives each of the six instruments unique semantics, in ways that
+meaningfully improve the performance and interpreation of metric
+events.
 
 Establishing different kinds of instrument is important because in
-most cases it allows the SDK to provide good default functionality,
-without requiring alternative behaviors to be configured.  The choice
-of instrument determines not only the meaning of the events but also
-the name of the function used to report data.  The function
-names--`Add()` for Counter instruments, `Record()` for Measure
-instruments, and `Observe()` for Observer instruments--help convey the
-meaning of these actions.
+most cases it allows the SDK to provide good default functionality
+"out of the box", without requiring alternative behaviors to be
+configured.  The choice of instrument determines not only the meaning
+of the events but also the name of the function called by the user.
+The function names--`Add()` for additive instruments, `Record()` for
+non-additive instruments, and `Observe()` for asynchronous
+instruments--help convey the meaning of these actions.
 
-### Standard implementation
+The properties and standard implementation described for the
+individual instruments is summarized in the table below.
 
-The standard implementation for the three instruments is defined as
-follows:
+| **Name** | Instrument kind | Function name | Default aggregation | Notes |
+| ----------------------- | ----- | --------- | ------------- | --- |
+| **Counter**             | Synchronous additive monotonic | Add(increment) | Sum | Per-request, part of a monotonic sum |
+| **UpDownCounter**       | Synchronous additive | Add(increment) | Sum | Per-request, part of a non-monotonic sum |
+| **ValueRecorder**       | Synchronous  | Record(value) | MinMaxSumCount  | Per-request, any non-additive measurement |
+| **SumObserver**         | Asynchronous additive monotonic | Observe(sum) | Sum | Per-interval, reporting a monotonic sum |
+| **UpDownSumObserver**   | Asynchronous additive | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
+| **ValueObserver**       | Asynchronous | Observe(value) | MinMaxSumCount  | Per-interval, any non-additive measurement |
 
-1. Counter.  The `Add()` function accumulates a total for each distinct set of labels.  When aggregating over labels for a Counter, combine using arithmetic addition and export as a sum. Depending on the exposition format, sums are exported either as pairs of labels and cumulative _delta_ or as pairs of labels and cumulative _total_.
+### Related OpenTelemetry work
 
-2. Measure.  Use the `Record()` function to report events for which the SDK will compute summary statistics about the distribution of values, for each distinct set of labels.  The summary statistics to use are determined by the aggregation, but they usually include at least the sum of values, the count of measurements, and the minimum and maximum values.  When aggregating distinct Measure events, report summary statistics of the combined value distribution.  Exposition formats for summary statistics vary widely, but typically include pairs of labels and (sum, count, minimum and maximum value).
+Several ongoing efforts are underway as this specification is being
+written.
 
-3. Observer.  Current values are provided by the Observer callback at the end of each Metric collection period.  When aggregating values _for the same set of labels_, combine using the most-recent value.  When aggregating values _for different sets of labels_, combine the value distribution as for Measure instruments.  Export as pairs of labels and (sum, count, minimum and maximum value).
+#### Metric Views
 
-We believe that the standard behavior of one of these three
-instruments covers nearly all use-cases for users of OpenTelemetry in
-terms of the intended semantics.
-
-### Future Work: Option Support
-
-We are aware of a number of reasons to iterate on these
-instrumentation kinds, in order to offer:
-
-1. Range restrictions on input data.  Instruments accepting negative values is rare in most applications, for example, and it is useful to offer both a semantic declaration (e.g., "negative values are meaningless") and a data validation step (e.g., "negative values should be dropped").
-2. Monotonicity support.  When a series of values is known to be monotonic, it is useful to declare this..
-
-For the most part, these behaviors are not necessary for correctness
-within the local process or the SDK, but they are valuable in
-down-stream services that use this data.  We look to future work on
-this subject.
-
-### Future Work: Configurable Aggregations / View API
-
-The API does not support configurable aggregations, in this
-specification.  This is a requirement for OpenTelemetry, but there are
-two ways this has been requested.
+The API does not support configurable aggregations for metric
+instruments.  
 
 A _View API_ is defined as an interface to an SDK mechanism that
 supports configuring aggregations, including which operator is applied
 (sum, p99, last-value, etc.) and which dimensions are used.
 
-1. Should the API user be provided with options to configure specific views, statically, in the source?
-2. Should the View API be a stand-alone facility, able to install configurable aggregations, at runtime?
+See the [current issue discussion on this topic](https://github.com/open-telemetry/opentelemetry-specification/issues/466) and the [current OTEP draft](https://github.com/open-telemetry/oteps/pull/89).
 
-See the [current issue on this topic](https://github.com/open-telemetry/opentelemetry-specification/issues/466).
+#### OTLP Metric protocol
 
-## Metric instrument selection
+The OTLP protocol is designed to export metric data in a memoryless
+way, as documented above.  Several details of the protocol are being
+worked out.  See the [current protocol](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
 
-To guide the user in selecting the right kind of metric instrument for
-an application, we'll consider several questions about the kind of
-numbers being reported.  Here are some ways to help choose.  Examples
-are provided in the following section.
+### Metric SDK default implementation
 
-### Counters and Measures compared
-
-Counters and Measures are both recommended for reporting measurements
-taken during synchronous activity, driven by events in the program.
-These measurements include an associated distributed context, the
-effective span context (if any), the correlation context, and
-user-provided LabelSet values.
-
-Start with an application for metrics data in mind.  It is useful to
-consider whether you are more likely to be interested in the sum of
-values or any other aggregate value (e.g., average, histogram), as
-processed by the instrument.  Counters are useful when only the sum is
-interesting.  Measures are useful when the sum and any other kind of
-summary information about the individual values are of interest.
-
-If only the sum is of interest, use a Counter instrument.
-
-If you are interested in any other kind of summary value or statistic,
-such as mean, median and other quantiles, or minimum and maximum
-value, use a Measure instrument.  Measure instruments are used to
-report any kind of measurement that is not typically expressed as a
-rate or as a total sum.
-
-### Observer instruments
-
-Observer instruments are recommended for reporting measurements about
-the state of the program periodically.  These expose current
-information about the program itself, not related to individual events
-taking place in the program.  Observer instruments are reported
-outside of a context, thus do not have an effective span context or
-correlation context.
-
-Observer instruments are meant to be used when measured values report
-on the current state of the program, as opposed to an event or a
-change of state in the program.
-
-## Examples
-
-### Reporting total bytes read
-
-You wish to monitor the total number of bytes read from a messaging
-server that supports several protocols.  The number of bytes read
-should be labeled with the protocol name and aggregated in the
-process.
-
-This is a typical application for the Counter instrument.  Use one Counter for
-capturing the number bytes read.  When handling a request, compute a LabelSet
-containing the name of the protocol and potentially other useful labels, then
-call `Add()` with the same labels and the number of bytes read.
-
-To lower the cost of this reporting, you can `Bind()` the instrument with each
-of the supported protocols ahead of time.
-
-### Reporting total bytes read and bytes per request
-
-You wish to monitor the total number of bytes read as well as the
-number of bytes read per request, to have observability into total
-traffic as well as typical request size.  As with the example above,
-these metric events should be labeled with a protocol name.
-
-This is a typical application for the Measure instrument.  Use one
-Measure for capturing the number of bytes per request.  A sum
-aggregation applied to this data yields the total bytes read; other
-aggregations allow you to export the minimum and maximum number of
-bytes read, as well as the average value, and quantile estimates.
-
-In this case, the guidance is to create a single instrument.  Do not
-create a Counter instrument to export a sum when you want to export
-other summary statistics using a Measure instrument.
-
-### Reporting system call duration
-
-You wish to monitor the duration of a specific system call being made
-frequently in your application, with a label to indicate a file name
-associated with the operation.
-
-This is a typical application for the Measure instrument.  Use a timer
-to measure the duration of each call and `Record()` the measurement
-with a label for the file name.
-
-### Reporting request size
-
-You wish to monitor a trend in request sizes, which means you are
-interested in characterizing individual events, as opposed to a sum.
-Label these with relevant information that may help explain variance
-in request sizes, such as the type of the request.
-
-This is a typical application for a Measure instrument.  The standard
-aggregation for Measure instruments will compute a measurement sum and
-the event count, which determines the mean request size, as well as
-the minimum and maximum sizes.
-
-### Reporting a per-request finishing account balance
-
-There's a number that rises and falls such as a bank account balance.
-You wish to monitor the average account balance at the end of
-requests, broken down by transaction type (e.g., withdrawal, deposit).
-
-Use a Measure instrument to report the current account balance at the
-end of each request.  Use a label for the transaction type.
-
-### Reporting process-wide CPU usage
-
-You are interested in reporting the CPU usage of the process as a
-whole, which is computed via a (relatively expensive) system call
-which returns two values, process-lifetime user and system
-cpu-seconds.  It is not necessary to update this measurement
-frequently, because it is meant to be used only for accounting
-purposes.
-
-A single Observer instrument is recommended for this case, with a
-label value to distinguish user from system CPU time.  The Observer
-callback will be called once per collection interval, which lowers the
-cost of collecting this information.
-
-CPU usage is something that we naturally sum, which raises several
-questions.
-
-- Why not use a Counter instrument?  In order to use a Counter instrument, we would need to convert total usage figures into deltas.  Calculating deltas from the previous measurement is easy to do, but Counter instruments are not meant to be used from callbacks.
-- Why not report deltas in the Observer callback?  Observer instruments are meant to be used to observe current values. Nothing prevents reporting deltas with an Observer, but the standard aggregation for Observer instruments is to sum the current value across distinct labels.  The standard behavior is useful for determining the current rate of CPU usage, but special configuration would be required for an Observer instrument to use Counter aggregation.
-
-### Reporting per-shard memory holdings
-
-Suppose you have a widely-used library that acts as a client to a
-sharded service.  For each shard it maintains some client-side state,
-holding a variable amount of memory per shard.
-
-Observe the current allocation per shard using an Observer instrument with a
-shard label.  These can be aggregated across hosts to compute cluster-wide
-memory holdings by shard, for example, using the standard aggregation for
-Observers, which sums the current value across distinct labels.
-
-### Reporting number of active requests
-
-Suppose your server maintains the count of active requests, which
-rises and falls as new requests begin and end processing.
-
-Observe the number of active requests periodically with an Observer
-instrument.  Labels can be used to indicate which application-specific
-properties are associated with these events.
-
-### Reporting bytes read and written correlated by end user
-
-An application uses storage servers to read and write from some
-underlying media.  These requests are made in the context of the end
-user that made the request into the frontend system, with Correlation
-Context passed from the frontend to the storage servers carrying these
-properties.
-
-Use Counter instruments to report the number of bytes read and written
-by the storage server.  Configure the SDK to use a Correltion Context
-label key (e.g., named "app.user") to aggregate events by all metric
-instruments.
+The OpenTelemetry SDK includes default support for the metric API.  The specification for the default SDK is underway, see the [current draft](https://github.com/open-telemetry/opentelemetry-specification/pull/347).
