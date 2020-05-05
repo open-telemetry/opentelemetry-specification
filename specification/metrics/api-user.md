@@ -53,8 +53,9 @@ external systems.  Metric instrument names conform to the following syntax:
 3. The first character must be non-numeric, non-space, non-punctuation
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
-Metric instrument names should include their namespacing in the name.
-For example, HTTP metrics should be prefixed by "http_".
+Metric instrument names belong to a namespace, which is the `name` of the associated `Meter`,
+allowing the same metric name to be used in multiple libraries of code,
+unambiguously, within the same application.
 
 Metric instrument names SHOULD be semantically meaningful, even when viewed
 outside of the context of the originating Meter name. For example, when instrumenting

@@ -23,7 +23,7 @@
   * [ValueObserver](#valueobserver)
 - [Interpretation](#interpretation)
 - [User-facing API specification with examples](#user-facing-api-specification-with-examples)
-- [Specification Details](#specification-details)
+- [Details](#details)
   * [Memory requirements](#memory-requirements)
   * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
     + [Asynchronous instruments define moment-in-time ratios](#asynchronous-instruments-define-moment-in-time-ratios)
@@ -564,7 +564,7 @@ user-facing, function-level Metrics API, including the the calling
 conventions.  [Examples and guides for selecting instruments are
 included for users in this document](api-user.md).
 
-## Specification Details
+## Details
 
 ### Memory requirements
 
