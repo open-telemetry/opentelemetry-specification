@@ -9,12 +9,12 @@
   * [Aggregations](#aggregations)
   * [Time](#time)
   * [Metric Event Format](#metric-event-format)
-- [Instrument categories](#instrument-categories)
+- [Instrument properties](#instrument-properties)
   * [Synchronous and asynchronous instruments compared](#synchronous-and-asynchronous-instruments-compared)
   * [Additive and non-additive instruments compared](#additive-and-non-additive-instruments-compared)
   * [Monotonic and non-monotonic instruments compared](#monotonic-and-non-monotonic-instruments-compared)
   * [Function names](#function-names)
-- [Instrument kinds](#instrument-kinds)
+- [Six kinds of instrument](#six-kinds-of-instrument)
   * [Counter](#counter)
   * [UpDownCounter](#updowncounter)
   * [ValueRecorder](#valuerecorder)
@@ -25,23 +25,12 @@
   * [Memory requirements](#memory-requirements)
   * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
     + [Asynchronous instruments define moment-in-time ratios](#asynchronous-instruments-define-moment-in-time-ratios)
-- [Interpretation](#interpretation)
-  * [Standard implementation](#standard-implementation)
-  * [Future Work: Option Support](#future-work-option-support)
-  * [Future Work: Configurable Aggregations / View API](#future-work-configurable-aggregations--view-api)
-- [Metric instrument selection](#metric-instrument-selection)
-  * [Counters and Measures compared](#counters-and-measures-compared)
-  * [Observer instruments](#observer-instruments)
-- [Examples](#examples)
-  * [Reporting total bytes read](#reporting-total-bytes-read)
-  * [Reporting total bytes read and bytes per request](#reporting-total-bytes-read-and-bytes-per-request)
-  * [Reporting system call duration](#reporting-system-call-duration)
-  * [Reporting request size](#reporting-request-size)
-  * [Reporting a per-request finishing account balance](#reporting-a-per-request-finishing-account-balance)
-  * [Reporting process-wide CPU usage](#reporting-process-wide-cpu-usage)
-  * [Reporting per-shard memory holdings](#reporting-per-shard-memory-holdings)
-  * [Reporting number of active requests](#reporting-number-of-active-requests)
-  * [Reporting bytes read and written correlated by end user](#reporting-bytes-read-and-written-correlated-by-end-user)
+  * [Interpretation](#interpretation)
+  * [User-facing API specification with examples](#user-facing-api-specification-with-examples)
+  * [Related OpenTelemetry work](#related-opentelemetry-work)
+    + [Metric Views](#metric-views)
+    + [OTLP Metric protocol](#otlp-metric-protocol)
+  * [Metric SDK default implementation](#metric-sdk-default-implementation)
 
 <!-- tocstop -->
 
@@ -658,6 +647,13 @@ individual instruments is summarized in the table below.
 | **SumObserver**         | Asynchronous additive monotonic | Observe(sum) | Sum | Per-interval, reporting a monotonic sum |
 | **UpDownSumObserver**   | Asynchronous additive | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
 | **ValueObserver**       | Asynchronous | Observe(value) | MinMaxSumCount  | Per-interval, any non-additive measurement |
+
+### User-facing API specification with examples
+
+See the [user-level API specification](api-user.md) for more description of the
+user-facing, function-level Metrics API, including the the calling
+conventions.  [Examples and guides for selecting instruments are
+included for users in this document](api-user.md).
 
 ### Related OpenTelemetry work
 
