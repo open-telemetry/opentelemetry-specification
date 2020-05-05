@@ -27,7 +27,13 @@
 ## Overview
 
 Metric instruments are the entry point for application and framework developers to instrument their code using counters, gauges, and measures.
-Metrics are created by calling methods on a `Meter` which is in turn created by a global `MeterProvider`.
+Metrics are created by calling methods on a `Meter` which is in turn created by a `MeterProvider`.
+
+### Obtaining a MeterProvider
+
+A MeterProvider instance can be obtained by initializing and configuring an OpenTracing SDK. The application or library chooses whether it will use a global instance of the MeterProvider interface, or whether it will use dependency injection to allow the caller or `main()` function to configure the provider.  The same pattern is used for other aspects of the OpenTelemetry API, for configuring the Tracing SDK and Propagators.
+
+Use of a global instance may be seen as an anti-pattern in many situations, but it most cases it is the correct pattern for telemetry data, in order to combine telemetry data from inter-dependent libraries _without use of dependency injection_.  OpenTelemetry language APIs SHOULD offer a global instance for this reason.  Languges that offer a global instance MUST ensure that `Meter` instances allocated through the global `MeterProvider` and instruments allocated through those `Meter` instances have their initialization deferred until the global SDK is initialized.
 
 ### Obtaining a Meter
 
@@ -56,6 +62,7 @@ external systems.  Metric instrument names conform to the following syntax:
 Metric instrument names belong to a namespace, which is the `name` of the associated `Meter`,
 allowing the same metric name to be used in multiple libraries of code,
 unambiguously, within the same application.
+`Meter` implementations MUST not register the same instrument twice; implementations MUST return errors in this case.
 
 Metric instrument names SHOULD be semantically meaningful, even when viewed
 outside of the context of the originating Meter name. For example, when instrumenting
@@ -66,10 +73,9 @@ as it would inform the viewer of the semantic meaning of the latency being track
 be tracked elsewhere in the specifications.)
 
 Metric instruments are defined using a `Meter` instance, using a variety
-of `New` methods specific to the kind of metric and type of input (integer
-or floating point).  The Meter will return an error when a metric name is
-already registered with a different kind for the same name. Metric systems
-are expected to automatically prefix exported metrics by the namespace, if
+of `New` methods detailed below.  Exporters SHOULD NOT automatically
+prefix the instrument name by the `Meter` name, so that alternate instrumentation libraries can be configured to report identical instrument names. Metric exporters
+are expected to automatically sanitize metric names, if
 necessary, in a manner consistent with the target system. For example, a
 Prometheus exporter SHOULD use the namespace followed by `_` as the
 [application prefix](https://prometheus.io/docs/practices/naming/#metric-names).
@@ -99,31 +105,28 @@ distributed correlation context and span context.
 The `Meter` interface allows creating registered metric instruments
 using a specific constructor for each kind of instrument.  There are
 at least six constructors representing the six kinds of instrument,
-and possible more as dictated by the language, for example, if
-specializations are provided for integer and floating pointer numbers
-(such languages might support 12 constructors).
+and possibly more as dictated by the language.  For example, if
+specializations are provided for integer and floating pointer numbers, 
+the OpenTelemetry API would support 12 constructors.
 
 Binding instruments to a single `Meter` instance has two benefits:
 
 1. Instruments can be exported from the zero state, prior to first use, with no explicit `Register` call
-2. The library-name and version are implicitly included in each metric event.
-
-The recommended practice is to define structures to contain the
-instruments in use and keep references only to the instruments that
-are specifically needed in application code.
+2. The library-name and version are implicitly included in the metric event.
 
 We recognize that many existing metric systems support allocating
 metric instruments statically and providing the `Meter` interface at
-the time of use.  In this example, typical of statsd clients, existing
+the time of use.  In one example, typical of statsd clients, existing
 code may not be structured with a convenient place to store new metric
 instruments.  Where this becomes a burden, it is recommended to use
-the global meter provider to construct a static `Meter`, to
-construct metric instruments.
+the global `MeterProvider` to construct a static `Meter`, and to
+construct and use globally-scoped metric instruments.
 
-The situation is similar for users of Prometheus clients, where
-instruments are allocated statically and there is an implicit global.
-Such code may not have access to the appropriate `Meter` where
-instruments are defined.  Where this becomes a burden, it is
+The situation is similar for users of existing Prometheus clients, where
+instruments can be allocated to the global `Registerer`.  
+Such code may not have access to an appropriate `MeterProvider` or `Meter`
+instance at the location where instruments are defined.
+Where this becomes a burden, it is
 recommended to use the global meter provider to construct a static
 named `Meter`, to construct metric instruments.
 
@@ -134,63 +137,91 @@ is no method to delete them.
 #### Metric instrument constructor example code
 
 In this Golang example, a struct holding four instruments is built
-using the provided, non-global `Meter` instance.
+using the provided, non-global `Meter` instance.  An example `server`
+type is shown, which holds a reference to instruments struct.  There
+are three synchronous instruments and one asynchronous instrument.
 
 ```golang
-type instruments struct {
-    counter1  metric.Int64Counter
-    counter2  metric.Float64Counter
-    recorder3 metric.Float64ValueRecorder
-    observer4 metric.Int64SumObserver
-    
-}
-
-func (s *server) setInstruments(metric.Meter meter) *instruments {
-  s.instruments = &instruments{
-    counter1: meter.NewInt64Counter("counter1", ...),  // Optional parameters
-    counter2: meter.NewFloat64Counter("counter2", ...),  // are discussed below.
-    recorder3: meter.NewFloat64ValueRecorder("recorder3", ...),
-    observer4:   meter.NewInt64SumObserver("observer4",
-                     metric.NewInt64ObserverCallback(server.observeSumNumber4)),
-  }
-}
-
-func newServer(meter metric.Meter) *server {
-
-```
-
-Code will be structured to call `newInstruments` somewhere in a
-constructor and keep the `instruments` reference for use at runtime.
-Here's an example of building a server with configured instruments and
-a single metric operation.
-
-```golang
+// server runs a service.  It is initialized with the `Meter` used for
+// metric instrumentation.
 type server struct {
-    meter        metric.Meter
-    instruments *instruments
+	meter       metric.Meter
+	instruments *instruments
 
-    // ... other fields
+	// suppose a server organizes a number of things:
+	things []*Thing
 }
 
-func newServer(meter metric.Meter) *server {
-     s := &server{
-         meter:       meter,
-         // ... other fields
-     }
-     s.setInstruments(meter)
-     return s
+// instruments are the set of instruments used by this server.
+type instruments struct {
+	counter1  metric.Int64Counter
+	counter2  metric.Float64Counter
+	recorder3 metric.Float64ValueRecorder
+	observer4 metric.Int64SumObserver
 }
 
-// ...
+// setInstruments configures a server for the passed `MeterProvider` instance,
+// initializing the instruments it uses.
+func (s *server) setInstruments(provider metric.MeterProvider) {
+	// Must() causes constructor errors to panic, which could only happen
+	// if another Meter named "server-library" has already registered the
+	// metric names below.
+	meter := provider.Meter("server-library")
+	must := metric.Must(meter)
+	s.meter = meter
+	s.instruments = &instruments{
+		counter1:  must.NewInt64Counter("counter1"),   // Optional parameters
+		counter2:  must.NewFloat64Counter("counter2"), // are discussed below.
+		recorder3: must.NewFloat64ValueRecorder("recorder3"),
+		observer4: must.NewNewInt64SumObserver("observer4",
+			metric.NewInt64ObserverCallback(server.observeSumNumber4)),
+	}
+}
 
-func (s *server) operate(ctx context.Context) {
-     // ... other work
+// newServer returns a server with fully initialized metric instruments.
+func newServer(provider metric.MeterProvider) *server {
+	s := &server{
+		// ... other fields
+	}
+	s.setInstruments(provider)
+	return s
+}
 
-     s.instruments.counter1.Add(ctx, 1,
-        key.String("label1", "..."),
-        key.String("label2", "..."),
+// operate processes one request.  it uses the synchronous instruments to
+// support monitoring request performance.
+func (s *server) operate(ctx context.Context, req *request) {
+	thing := s.thing[req.thingNumber]
+	// ... other work
+
+	s.instruments.counter1.Add(
+		ctx,
+		1,
+		key.String("thing_type", thing.Type()),
+		key.String("label1", "..."),
+	)
+}
+
+// observerSumNumber4 is an asynchronous instrument callback for the
+// "observer4" instrument, which captures the current value of a sum
+// for each Thing handled by this server.
+func (s *server) observeSumNumber4(result metric.Int64ObserverResult) {
+	for _, thing := range s.things {
+		value := thing.measureSomething()
+		s.observer4.Observe(
+			result,
+			value,
+			key.String("thing_type", thing.Type()),
+		)
+	}
 }
 ```
+
+The example above was structured to avoid using the global
+`MeterProvider` instance, for the purposes of demonstration.  With the
+use of the global instance, the example `server` type is simplified by
+removing the `meter` and `instruments` fields, placing them in static
+variables.  It is up to the application author whether to use the
+global instance or not.
 
 ### Metric calling conventions
 
