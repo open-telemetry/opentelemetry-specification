@@ -21,12 +21,12 @@
   * [SumObserver](#sumobserver)
   * [UpDownSumObserver](#updownsumobserver)
   * [ValueObserver](#valueobserver)
-- [Details](#details)
+- [Interpretation](#interpretation)
+- [User-facing API specification with examples](#user-facing-api-specification-with-examples)
+- [Specification Details](#specification-details)
   * [Memory requirements](#memory-requirements)
   * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
     + [Asynchronous instruments define moment-in-time ratios](#asynchronous-instruments-define-moment-in-time-ratios)
-  * [Interpretation](#interpretation)
-  * [User-facing API specification with examples](#user-facing-api-specification-with-examples)
   * [Related OpenTelemetry work](#related-opentelemetry-work)
     + [Metric Views](#metric-views)
     + [OTLP Metric protocol](#otlp-metric-protocol)
@@ -525,7 +525,46 @@ queue size across a group of machines and you are interested in
 knowing the distribution of queue sizes across those machines, use
 `ValueObserver`.
 
-## Details
+## Interpretation
+
+How are the instruments fundamentally different, and why are there
+only three?  Why not one instrument?  Why not ten?
+
+As we have seen, the six instruments are categorized as to whether
+they are synchronous, additive, and/or and monotonic.  This approach
+gives each of the six instruments unique semantics, in ways that
+meaningfully improve the performance and interpreation of metric
+events.
+
+Establishing different kinds of instrument is important because in
+most cases it allows the SDK to provide good default functionality
+"out of the box", without requiring alternative behaviors to be
+configured.  The choice of instrument determines not only the meaning
+of the events but also the name of the function called by the user.
+The function names--`Add()` for additive instruments, `Record()` for
+non-additive instruments, and `Observe()` for asynchronous
+instruments--help convey the meaning of these actions.
+
+The properties and standard implementation described for the
+individual instruments is summarized in the table below.
+
+| **Name** | Instrument kind | Function(argument) | Default aggregation | Notes |
+| ----------------------- | ----- | --------- | ------------- | --- |
+| **Counter**             | Synchronous additive monotonic | Add(increment) | Sum | Per-request, part of a monotonic sum |
+| **UpDownCounter**       | Synchronous additive | Add(increment) | Sum | Per-request, part of a non-monotonic sum |
+| **ValueRecorder**       | Synchronous  | Record(value) | MinMaxSumCount  | Per-request, any non-additive measurement |
+| **SumObserver**         | Asynchronous additive monotonic | Observe(sum) | Sum | Per-interval, reporting a monotonic sum |
+| **UpDownSumObserver**   | Asynchronous additive | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
+| **ValueObserver**       | Asynchronous | Observe(value) | MinMaxSumCount  | Per-interval, any non-additive measurement |
+
+## User-facing API specification with examples
+
+See the [user-level API specification](api-user.md) for more description of the
+user-facing, function-level Metrics API, including the the calling
+conventions.  [Examples and guides for selecting instruments are
+included for users in this document](api-user.md).
+
+## Specification Details
 
 ### Memory requirements
 
@@ -615,45 +654,6 @@ calculate its current relative contribution.  Current relative
 contribution is defined in this way, independent of the collection
 interval duration, thanks to the properties of asynchronous
 instruments.
-
-### Interpretation
-
-How are the instruments fundamentally different, and why are there
-only three?  Why not one instrument?  Why not ten?
-
-As we have seen, the six instruments are categorized as to whether
-they are synchronous, additive, and/or and monotonic.  This approach
-gives each of the six instruments unique semantics, in ways that
-meaningfully improve the performance and interpreation of metric
-events.
-
-Establishing different kinds of instrument is important because in
-most cases it allows the SDK to provide good default functionality
-"out of the box", without requiring alternative behaviors to be
-configured.  The choice of instrument determines not only the meaning
-of the events but also the name of the function called by the user.
-The function names--`Add()` for additive instruments, `Record()` for
-non-additive instruments, and `Observe()` for asynchronous
-instruments--help convey the meaning of these actions.
-
-The properties and standard implementation described for the
-individual instruments is summarized in the table below.
-
-| **Name** | Instrument kind | Function name | Default aggregation | Notes |
-| ----------------------- | ----- | --------- | ------------- | --- |
-| **Counter**             | Synchronous additive monotonic | Add(increment) | Sum | Per-request, part of a monotonic sum |
-| **UpDownCounter**       | Synchronous additive | Add(increment) | Sum | Per-request, part of a non-monotonic sum |
-| **ValueRecorder**       | Synchronous  | Record(value) | MinMaxSumCount  | Per-request, any non-additive measurement |
-| **SumObserver**         | Asynchronous additive monotonic | Observe(sum) | Sum | Per-interval, reporting a monotonic sum |
-| **UpDownSumObserver**   | Asynchronous additive | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
-| **ValueObserver**       | Asynchronous | Observe(value) | MinMaxSumCount  | Per-interval, any non-additive measurement |
-
-### User-facing API specification with examples
-
-See the [user-level API specification](api-user.md) for more description of the
-user-facing, function-level Metrics API, including the the calling
-conventions.  [Examples and guides for selecting instruments are
-included for users in this document](api-user.md).
 
 ### Related OpenTelemetry work
 

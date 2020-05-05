@@ -24,16 +24,6 @@
 
 <!-- tocstop -->
 
-Note: This specification for the v0.3 OpenTelemetry milestone does not
-include specification related to the Observer instrument, as described
-in the [overview](api.md).  Observer instruments were detailed
-in [OTEP
-72-metric-observer](https://github.com/open-telemetry/oteps/blob/master/text/0072-metric-observer.md)
-and will be added to this document following the v0.3 milestone.
-Gauge instruments will be removed from this specification folowing the
-v0.3 milestone too, as discussed in [OTEP
-80-remove-metric-gauge](https://github.com/open-telemetry/oteps/blob/master/text/0080-remove-metric-gauge.md).
-
 ## Overview
 
 Metric instruments are the entry point for application and framework developers to instrument their code using counters, gauges, and measures.
@@ -63,9 +53,8 @@ external systems.  Metric instrument names conform to the following syntax:
 3. The first character must be non-numeric, non-space, non-punctuation
 4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
 
-Metric instrument names belong to a namespace, which is the `name` of the associated `Meter`,
-allowing the same metric name to be used in multiple libraries of code,
-unambiguously, within the same application.
+Metric instrument names should include their namespacing in the name.
+For example, HTTP metrics should be prefixed by "http_".
 
 Metric instrument names SHOULD be semantically meaningful, even when viewed
 outside of the context of the originating Meter name. For example, when instrumenting
@@ -86,10 +75,11 @@ Prometheus exporter SHOULD use the namespace followed by `_` as the
 
 ### Format of a metric event
 
-Regardless of the instrument kind or method of input, metric events
-include the instrument, a numerical value, and an optional
-set of labels.  The instrument, discussed in detail below, contains
-the metric name and various optional settings.
+As [stated in the general API
+specification](api.md#metric-event-format), metric events consist of
+the timestamp, the instrument definition (name, kind, description,
+unit), a numerical value, an optional label set, and a resource label
+set.  
 
 Labels are key:value pairs associated with events describing various dimensions
 or categories that describe the event.  A "label key" refers to the key
@@ -97,22 +87,25 @@ component while "label value" refers to the correlated value component of a
 label.  Label refers to the pair of label key and value.  Labels are passed in
 to the metric event at construction time.
 
-Metric events always have an associated component name, the name
-passed when constructing the corresponding `Meter`.  Metric events are
-associated with the current (implicit or explicit) OpenTelemetry
-context, including distributed correlation context and span context.
+Metric events always have an associated reporting library name and
+optional version, which are passed when constructing the corresponding
+`Meter`.  Synchronous metric events are additionally associated with
+the the OpenTelemetry [Context](../context/api.md), including
+distributed correlation context and span context.
 
 ### New constructors
 
-The `Meter` interface allows creating of a registered metric
-instrument using methods specific to each kind of metric.  There are
-six constructors representing the three kinds of instrument taking
-either floating point or integer inputs, see the detailed design below.
+The `Meter` interface allows creating registered metric instruments
+using a specific constructor for each kind of instrument.  There are
+at least six constructors representing the six kinds of instrument,
+and possible more as dictated by the language, for example, if
+specializations are provided for integer and floating pointer numbers
+(such languages might support 12 constructors).
 
 Binding instruments to a single `Meter` instance has two benefits:
 
 1. Instruments can be exported from the zero state, prior to first use, with no explicit `Register` call
-2. The name provided by the `Meter` satisfies a namespace requirement
+2. The library-name and version are implicitly included in each metric event.
 
 The recommended practice is to define structures to contain the
 instruments in use and keep references only to the instruments that
