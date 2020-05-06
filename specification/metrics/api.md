@@ -199,7 +199,7 @@ computing a Sum aggregation vary, but from the user's perspective this
 means they will be able to monitor the sum of values captured.  The
 distinction between synchronous and asynchronous instruments is
 crucial to specifying how exporters work, a topic that is covered in
-the [SDK specification](TODO).
+the [SDK specification (WIP)](https://github.com/open-telemetry/opentelemetry-specification/pull/347).
 
 The non-additive instruments (`ValueRecorder`, `ValueObserver`) use
 a MinMaxSumCount aggregation, by default.  This aggregation keeps track
@@ -212,7 +212,7 @@ instruments, where we are generally interested in a variety of
 different summaries, such as histograms, quantile summaries,
 cardinality estimates, and other kinds of sketch data structure.
 
-The default OpenTelemetry SDK implements a [Views API (WIP)](TODO), which
+The default OpenTelemetry SDK implements a [Views API (WIP)](https://github.com/open-telemetry/oteps/pull/89), which
 supports configuring non-default aggregation behavior(s) on the level
 of an individual instrument.  Even though OpenTelemetry SDKs can be
 configured to treat instruments in non-standard ways, users are
@@ -283,6 +283,10 @@ choice of instrument should be guided by semantics and the intended
 interpretation.  The semantics of the individual instruments is
 defined by several properties, detailed here, to assist with
 instrument selection.
+
+### Instrument naming
+
+TODO: move and update content on metric names from api-user.md
 
 ### Synchronous and asynchronous instruments compared
 
@@ -572,17 +576,32 @@ individual instruments is summarized in the table below.
 | **UpDownSumObserver**   | Asynchronous additive | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
 | **ValueObserver**       | Asynchronous | Observe(value) | MinMaxSumCount  | Per-interval, any non-additive measurement |
 
+### Constructors
+
+TODO: specify detail on the metric instrument constructors from api-user.md
+
 ## Label Sets
 
-
+TODO: incorporate more detail on label sets from api-user.md
 
 ## Synchronous instruments
 
+TODO: Organize a section on synchronous instruments from:
+
+- parts of the "Details" section below
+- parts on calling conventions from api-user.md
+
 ## Asynchronous instruments
 
+TODO: Organize a section on asynchronous instrument from:
 
+- parts of the "Details" section below
+- new text on calling conventions including multi-observer support
 
-@@@
+## Details
+
+TODO: This content will be re-organized into the sections dedicated to
+sync- and async-instruments above in a future PR.
 
 ### Memory requirements
 
