@@ -223,33 +223,24 @@ removing the `meter` and `instruments` fields, placing them in static
 variables.  It is up to the application author whether to use the
 global instance or not.
 
-### Metric calling conventions
+### Synchronous calling conventions
 
-The metrics API provides three semantically equivalent ways to capture measurements:
+The metrics API provides three semantically equivalent ways to capture
+measurements using synchronous instruments:
 
-- calling bound metric instruments
-- calling unbound metric instruments with labels
-- batch recording without a metric instrument
+- calling bound metric instruments, which have a pre-associated set of labels
+- calling unbound metric instruments, passing the associated set of labels directly
+- batch recording measurements for multiple instruments using a single set of labels.
 
 All three methods generate equivalent metric events, but offer varying degrees
 of performance and convenience.
 
-This section applies to calling conventions for counter, gauge, and
-measure instruments.
-
-As described above, metric events consist of an instrument, a set of labels,
-and a numerical value, plus associated context.  The performance of a metric
+As described above, metric events consist of an instrument definition, a set of labels,
+and a numerical value, plus associated context and resources.  The performance of a metric
 API depends on the work done to enter a new measurement.  One approach to
 reduce cost is to aggregate intermediate results in the SDK, so that subsequent
 events happening in the same collection period, for the same set of labels,
 combine into the same working memory.
-
-In this document, the term "aggregation" is used to describe the
-process of coalescing metric events for a complete set of labels,
-whereas "grouping" is used to describe further coalescing aggregate
-metric data into a reduced number of key dimensions.  SDKs may be
-designed to perform aggregation and/or grouping in the process, with
-various trade-offs in terms of complexity and performance.
 
 #### Bound instrument calling convention
 
@@ -261,11 +252,15 @@ re-used with specific labels.  If an instrument will be used with the same
 labels more than once, obtaining a bound instrument corresponding to the labels
 ensures the highest performance available.
 
-To bind an instrument, use the `Bind(labels)` method to return an interface
-that supports the `Add()`, `Set()`, or `Record()` method of the instrument in
-question.
+To bind an instrument, use the `Bind(labels...)` method to return an
+interface that supports the corresponding synchronous API (i.e.,
+`Add()` or `Record()`).  Bound instruments are invoked without labels;
+the corresponding metric event is associated with the labels that were
+bound to the instrument.  Bound instruments may consume SDK resources
+indefinitely until the user calls `Unbind()` to release the bound
+instrument.
 
-Bound instruments may consume SDK resources indefinitely.
+For example, to repeatedly update a counter with the same labels:
 
 ```golang
 func (s *server) processStream(ctx context.Context) {
@@ -300,7 +295,10 @@ For example, to update a single counter:
 func (s *server) method(ctx context.Context) {
     // ... other work
 
-    s.instruments.counter1.Add(ctx, 1, ...)
+    s.instruments.counter1.Add(ctx, 1,
+        key.String("labelA", "..."),
+        key.String("labelB", "..."),
+        )
 }
 ```
 
@@ -330,7 +328,7 @@ a sequence of direct calls, with the addition of atomicity.  Because
 values are entered in a single call,
 the SDK is potentially able to implement an atomic update, from the
 exporter's point of view.  Calls to `RecordBatch` may potentially
-reduce costs because the SDK can enqueue a single bulk update, or take
+reduce cost because the SDK can enqueue a single bulk update, or take
 a lock only once, for example.
 
 ##### Missing label keys
