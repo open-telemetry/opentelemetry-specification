@@ -79,7 +79,7 @@ purpose.  The API purposefully avoids optional features that change
 the semantic interpretation of an instrument; the API instead prefers
 instruments that support a single method with fixed interpretation.
 
-All measurements captured by the API are associated with
+All measurements captured by the API are associated with the
 instrument used to make the measurement, thus giving the measurement its semantic properties.
 Instruments are created and defined through calls to a `Meter` API,
 which is the user-facing entry point to the SDK.
@@ -87,7 +87,7 @@ which is the user-facing entry point to the SDK.
 Instruments are classified in several ways that distinguish them from
 one another.
 
-1. Synchronicity: A synchronous instrument is called by the user in an OpenTelemetry [Context](../context/context.md). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
+1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., Span context, Correlation context). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
 2. Additivity: An additive instrument is used to capture information about a sum of values.  A non-additive instrument is used to capture information about individual values.
 3. Monotonicity: An additive instrument can be monotonic, when the sequence of captured sums is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
 
@@ -104,7 +104,7 @@ are synchronous, additive, and/or monotonic.
 | ValueObserver     | No  | No  | No  |
 
 The synchronous instruments are useful for measurements that are
-gathered in a tracing context.  The asynchronous instruments are
+gathered in a distributed [Context](../context/context.md) (i.e., Span context, Correlation context).  The asynchronous instruments are
 useful when measurements are expensive, therefore should be gathered
 periodically.  Read more [characteristics of synchronous and
 asynchronous instruments](#synchronous-and-asynchronous-instruments-compared) below.
@@ -272,7 +272,7 @@ consist of:
 - [resources](../resource/sdk.md) associated with the SDK at startup.
 
 Synchronous events have one additional property, the distributed
-[Context](../context/context.md) (Span context, Correlation context)
+[Context](../context/context.md) (i.e., Span context, Correlation context)
 that was active at the time.
 
 ## Instrument properties
@@ -290,13 +290,12 @@ TODO: move and update content on metric names from api-user.md
 
 ### Synchronous and asynchronous instruments compared
 
-Synchronous instruments are called in a request context, meaning they
-have an associated tracing context and distributed
-correlation values.  Multiple metric events may occur for a
+Synchronous instruments are called inside a request, meaning they
+have an associated distributed [Context](../context/context.md) (i.e., Span context, Correlation context).  Multiple metric events may occur for a
 synchronous instrument within a given collection interval.
 
 Asynchronous instruments are reported by a callback, once per
-collection interval, and lack request context.  They are permitted to
+collection interval, and lack Context.  They are permitted to
 report only one value per distinct label set per period.  If the
 application observes multiple values for the same label set, in a
 single callback, the last value is the only value kept.
@@ -391,8 +390,8 @@ calculate and report the sum on every measurement.
 supports negative increments.  This makes `UpDownCounter` not useful
 for computing a rate aggregation.  It aggregates a `Sum`, only the sum
 is non-monotonic.  It is generally useful for capturing changes in an
-amount of resources used, or any quantity that rises and falls in a
-request context.
+amount of resources used, or any quantity that rises and falls during a
+request.
 
 Example uses for `UpDownCounter`:
 
@@ -513,7 +512,7 @@ Example uses for `ValueObserver`:
 
 Note that these examples use non-additive measurements.  In the
 `ValueRecorder` case above, example uses were given for capturing
-synchronous additive measurements in a request context (e.g.,
+synchronous additive measurements during a request (e.g.,
 current queue size seen by a request).  In the asynchronous case,
 however, how should users decide whether to use `ValueObserver` as
 opposed to `UpDownSumObserver`?
