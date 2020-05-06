@@ -248,4 +248,4 @@ Should helpers of this nature be standardized, if there is demand?  These helper
 
 Should such helpers be standardized?  The answer is probably no.
 
-[otep-88]: https://github.com/open-telemetry/oteps/blob/master/text/0088-metric-instrument-optional-refinements.md
+[otep-88]: ./0088-metric-instrument-optional-refinements.md
