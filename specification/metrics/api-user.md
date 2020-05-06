@@ -338,6 +338,20 @@ an exporter, and where there are keys that are missing, the SDK is required to
 consider these values _explicitly unspecified_, a distinct value type of the
 exported data model.
 
+##### Option: Labels using a built-in type
+
+Some programming languages have an existing facility that supports
+passing dictionaries of unique key:value mappings.  The OpenTelemetry
+specification allows languages to take this optional approach.  If the
+use of a dictionary for key:value mappings is both idiomatic and not
+considered an expensive option in the language, this is an acceptable
+option to passing labels as an ordered list.
+
+When labels are passed as a dictionary, not as an ordered list, the
+mapping should be unique.  The OpenTelemetry rule for handling
+duplicates only applies when labels are passed as an ordered list
+(which is that the last-value in the sequence takes precedence).
+
 ##### Option: Ordered labels
 
 As a language-level decision, APIs may support label key ordering.  In this
