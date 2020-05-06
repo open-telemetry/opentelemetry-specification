@@ -572,14 +572,17 @@ individual instruments is summarized in the table below.
 | **UpDownSumObserver**   | Asynchronous additive | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
 | **ValueObserver**       | Asynchronous | Observe(value) | MinMaxSumCount  | Per-interval, any non-additive measurement |
 
-## User-facing API specification with examples
+## Label Sets
 
-See the [user-level API specification](api-user.md) for more description of the
-user-facing, function-level Metrics API, including the the calling
-conventions.  [Examples and guides for selecting instruments are
-included for users in this document](api-user.md).
 
-## Details
+
+## Synchronous instruments
+
+## Asynchronous instruments
+
+
+
+@@@
 
 ### Memory requirements
 
