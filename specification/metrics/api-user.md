@@ -28,11 +28,11 @@ Note: This specification for the v0.3 OpenTelemetry milestone does not
 include specification related to the Observer instrument, as described
 in the [overview](api.md).  Observer instruments were detailed
 in [OTEP
-72-metric-observer](https://github.com/open-telemetry/oteps/blob/master/text/0072-metric-observer.md)
+72-metric-observer](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0072-metric-observer.md)
 and will be added to this document following the v0.3 milestone.
 Gauge instruments will be removed from this specification folowing the
 v0.3 milestone too, as discussed in [OTEP
-80-remove-metric-gauge](https://github.com/open-telemetry/oteps/blob/master/text/0080-remove-metric-gauge.md).
+80-remove-metric-gauge](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0080-remove-metric-gauge.md).
 
 ## Overview
 
