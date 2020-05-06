@@ -14,14 +14,14 @@
   * [Additive and non-additive instruments compared](#additive-and-non-additive-instruments-compared)
   * [Monotonic and non-monotonic instruments compared](#monotonic-and-non-monotonic-instruments-compared)
   * [Function names](#function-names)
-- [Six kinds of instrument](#six-kinds-of-instrument)
+- [The instruments](#the-instruments)
   * [Counter](#counter)
   * [UpDownCounter](#updowncounter)
   * [ValueRecorder](#valuerecorder)
   * [SumObserver](#sumobserver)
   * [UpDownSumObserver](#updownsumobserver)
   * [ValueObserver](#valueobserver)
-- [Interpretation](#interpretation)
+  * [Interpretation](#interpretation)
 - [User-facing API specification with examples](#user-facing-api-specification-with-examples)
 - [Details](#details)
   * [Memory requirements](#memory-requirements)
@@ -74,7 +74,7 @@ so that different SDKs can be configured at run time.
 ### Metric Instruments
 
 A _metric instrument_ is a device for capturing raw measurements in
-the API.  There are six kinds of instrument, each with a dedicated
+the API.  The standard instruments, listed in the table below, each have a dedicated
 purpose.  The API purposefully avoids optional features that change
 the semantic interpretation of an instrument; the API instead prefers
 instruments that support a single method with fixed interpretation.
@@ -360,7 +360,7 @@ signifying that they capture individual events, not only a sum.
 Asynchronous instruments all support an `Observe()` function,
 signifying that they capture only one value per measurement interval.
 
-## Six kinds of instrument
+## The instruments
 
 ### Counter
 
@@ -540,14 +540,14 @@ across a group of machines and you are interested in knowing the
 distribution of queue sizes across those machines, use
 `ValueObserver`.
 
-## Interpretation
+### Interpretation
 
 How are the instruments fundamentally different, and why are there
 only three?  Why not one instrument?  Why not ten?
 
-As we have seen, the six instruments are categorized as to whether
+As we have seen, the instruments are categorized as to whether
 they are synchronous, additive, and/or and monotonic.  This approach
-gives each of the six instruments unique semantics, in ways that
+gives each of the instruments unique semantics, in ways that
 meaningfully improve the performance and interpreation of metric
 events.
 
