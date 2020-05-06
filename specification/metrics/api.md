@@ -79,8 +79,8 @@ purpose.  The API purposefully avoids optional features that change
 the semantic interpretation of an instrument; the API instead prefers
 instruments that support a single method with fixed interpretation.
 
-All measurements captured by the API are associated with an
-instrument, which gives the measurement its semantic properties.
+All measurements captured by the API are associated with 
+instrument used to make the measurement, thus giving the measurement its semantic properties.
 Instruments are created and defined through calls to a `Meter` API,
 which is the user-facing entry point to the SDK.
 
@@ -89,7 +89,7 @@ one another.
 
 1. Synchronicity: A synchronous instrument is called by the user in an OpenTelemetry [Context](../context/context.md). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
 2. Additivity: An additive instrument is used to capture information about a sum of values.  A non-additive instrument is used to capture information about individual values.
-3. Monotonicity: An additive instrument can be monotonic, when the sequence of captured sums is non-descending.  Monotonic instruments are useful for monitoring rate information.
+3. Monotonicity: An additive instrument can be monotonic, when the sequence of captured sums is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
 
 The metric instruments names are shown below along with whether they
 are synchronous, additive, and/or monotonic.
@@ -107,7 +107,7 @@ The synchronous instruments are useful for measurements that are
 gathered in a tracing context.  The asynchronous instruments are
 useful when measurements are expensive, therefore should be gathered
 periodically.  Read more [characteristics of synchronous and
-asynchronous instruments](TODO) below.
+asynchronous instruments](#synchronous-and-asynchronous-instruments-compared) below.
 
 The additive instruments are useful in situations where we are only
 interested in the sum, as this enables significant optimizations in
@@ -115,17 +115,17 @@ the export pipeline.  The synchronous and asynchronous additive
 instruments have a significant difference: synchronous instruments are
 used to capture changes in a sum, whereas asynchronous instruments are
 used to capture sums directly.  Read more [characteristics of additive
-instruments](TODO) below.
+instruments](#additive-and-non-additive-instruments-compared) below.
 
 The monotonic instruments are significant because they support rate
 calculations.  Read more information about [choosing metric
-instruments](TODO) below.
+instruments](#monotonic-and-non-monotonic-instruments-compared) below.
 
 An _instrument definition_ describes several properties of the
 instrument, including its name and its kind.  The other properties of
 a metric instrument are optional, including a description and the unit
 of measurement.  An instrument definition is associated with the
-events that it produces.
+data that it produces.
 
 Details about calling conventions for each kind of instrument are
 covered in the [user-level API specification](api-user.md).
@@ -139,28 +139,27 @@ categorizes the metric event, allowing events to be filtered and
 grouped for analysis.
 
 Each of the instrument calling conventions detailed in the [user-level
-API specification](api-user.md) accepts a list of labels as an
-argument, which are used to compute a label set.  The set of labels is
-defined as a unique mapping from key to value, but since they are
-passed in as a list, the specification dictates that duplicate keys are
-empowersresolved by taking the last value to appear in the list.  This is known
-as "last-value wins".
+API specification](api-user.md) accepts a set of labels as an
+argument.  The set of labels is defined as a unique mapping from key to value.
+Typically, labels are passed to the API in the form of a list of
+key:values, in which case the specification dictates that duplicate
+entries for a key are resolved by taking the last value to appear in the list.
+This is known as "last-value wins".
 
 Measurements by a synchronous instrument are commonly combined with
 other measurements having exactly the same label set, which enables
 significant optimizations.  Read more about [combining measurements
-through aggregation](TODO) below.
+through aggregation](#aggregations) below.
 
 Asynchronous instruments are permitted to observe at most one value
 per distinct label set, per callback invocation.  Read more about
-[current label sets for asynchronous instruments](TODO) below.
+[current label sets for asynchronous instruments](#asynchronous-observations-form-a-current-set) below.
 
 ### Meter Interface
 
-To produce measurements using an instrument, you need an SDK that implements
-the `Meter` API.  This interface consists of a set of instrument constructors,
-and a facility for capturing batches of measurements in a semantically atomic
-way.
+The API defines a `Meter` interface.  This interface consists of a set
+of instrument constructors, and a facility for capturing batches of
+measurements in a semantically atomic way.
 
 There is a global `Meter` instance available for use that facilitates
 automatic instrumentation for third-party code.  Use of this instance
@@ -185,9 +184,8 @@ covered in the [SDK-level API specification](api-meter.md).
 ### Aggregations
 
 _Aggregation_ refers to the process of combining multiple measurements
-into exact or estimated statistics about the metric
-events that took place during an interval time, during program
-execution.
+into exact or estimated statistics about the measurements that took
+place during an interval of time, during program execution.
 
 Each instrument specifies a default aggregation that is suited to the
 semantics of the instrument, that serves to explain its properties and
@@ -196,15 +194,15 @@ Instruments, in the absence of any configuration override, can be
 expected to deliver a useful, economical aggregation out of the box.
 
 The additive instruments (`Counter`, `UpDownCounter`, `SumObserver`,
-`UpDownSumObserver`) use Sum aggregation, by default.  Details about
+`UpDownSumObserver`) use a Sum aggregation by default.  Details about
 computing a Sum aggregation vary, but from the user's perspective this
-means they will be able to monitor the sum of values entered.  The
+means they will be able to monitor the sum of values captured.  The
 distinction between synchronous and asynchronous instruments is
 crucial to specifying how exporters work, a topic that is covered in
 the [SDK specification](TODO).
 
 The non-additive instruments (`ValueRecorder`, `ValueObserver`) use
-MinMaxSumCount aggregation, by default.  This aggregation keeps track
+a MinMaxSumCount aggregation, by default.  This aggregation keeps track
 of the minimum value, the maximum value, the sum of values, and the
 count of values.  These four values support monitoring the range of
 values, the rate of events, and the average event value.  
@@ -214,7 +212,7 @@ instruments, where we are generally interested in a variety of
 different summaries, such as histograms, quantile summaries,
 cardinality estimates, and other kinds of sketch data structure.
 
-The default OpenTelemetry SDK implements a [Views API](TODO), which
+The default OpenTelemetry SDK implements a [Views API (WIP)](TODO), which
 supports configuring non-default aggregation behavior(s) on the level
 of an individual instrument.  Even though OpenTelemetry SDKs can be
 configured to treat instruments in non-standard ways, users are
@@ -248,12 +246,12 @@ label set.  Because events may happen simultaneously with one another,
 the _most recent event_ is technically not well defined.
 
 Asynchronous instruments allow the SDK to evaluate metric instruments
-through observations made once per collection interval.  Because they
-are synchronized with collection (unlike synchronous instruments),
+through observations made once per collection interval.  Because of this
+coupling with collection (unlike synchronous instruments),
 these instruments unambiguously define the most recent event.  We
 define the _Last Value_ of an instrument and label set, with repect to
 a moment in time, as the value that was measured during the most
-recent prior collection interval.
+recent collection interval.
 
 Because metric events are implicitly timestamped, we could refer to a
 series of metric events as a _time series_. However, we reserve the
@@ -289,7 +287,7 @@ instrument selection.
 ### Synchronous and asynchronous instruments compared
 
 Synchronous instruments are called in a request context, meaning they
-potentially have an associated tracing context and distributed
+have an associated tracing context and distributed
 correlation values.  Multiple metric events may occur for a
 synchronous instrument within a given collection interval.
 
@@ -297,7 +295,7 @@ Asynchronous instruments are reported by a callback, once per
 collection interval, and lack request context.  They are permitted to
 report only one value per distinct label set per period.  If the
 application observes multiple values for the same label set, in a
-single callback, the last value "wins".
+single callback, the last value is the only value kept.
 
 To ensure that the definition of last value is consistent across
 asynchronous instruments, the timestamp associated with asynchronous
@@ -324,11 +322,11 @@ of `SumObserver` observations for a given instrument and label set,
 the Last Value defines the sum of the instrument.
 
 In both synchronous and asynchronous cases, the additive instruments
-are easily aggregated into a single number per collection interval
+are inexpensively aggregated into a single number per collection interval
 without loss of information.  This property makes additive instruments
 higher performance, in general, than non-additive instruments.
 
-Non-additive instruments use a relatively inexpensive aggregation by
+Non-additive instruments use a relatively inexpensive aggregation
 method default (MinMaxSumCount), but still more expensive than the
 default for additive instruments (Sum).  Unlike additive instruments,
 where only the sum is of interest by definition, non-additive
@@ -338,9 +336,9 @@ instruments can be configured with even more expensive aggregators.
 
 Monotonicity applies only to additive instruments.  `Counter` and
 `SumObserver` instruments are defined as monotonic because the sum
-captured by either instrument is non-descending.  The `UpDown-`
+captured by either instrument is non-decreasing.  The `UpDown-`
 varations of these two instruments are non-monotonic, meaning the sum
-is ascending or descending.
+can increase, decrease, or remain constant without any guarantees.
 
 Monotonic instruments are commonly used to capture information about a
 sum, where the sum itself is less relevant than the rate expressed by
@@ -375,7 +373,7 @@ Example uses for `Counter`:
 - count the number of bytes received
 - count the number of accounts created
 - count the number of checkpoints run
-- count a number of 5xx errors.
+- count the number of 5xx errors.
 
 These example instruments would be useful for monitoring the rate of
 any of these quantities.  In these situations, it is usually more
@@ -479,6 +477,7 @@ any value that starts at zero and rises or falls throughout the
 process lifetime.
 
 Example uses for `UpDownSumObserver`.
+
 - capture process heap size
 - capture number of active shards
 - capture number of requests started/completed
@@ -504,7 +503,7 @@ Example uses for `ValueObserver`:
 
 Note that these examples use non-additive measurements.  In the
 `ValueRecorder` case above, example uses were given for capturing
-synchronous cumulative measurements in a request context (e.g.,
+synchronous additive measurements in a request context (e.g.,
 current queue size seen by a request).  In the asynchronous case,
 however, how should users decide whether to use `ValueObserver` as
 opposed to `UpDownSumObserver`?
@@ -595,8 +594,10 @@ value of the sum, to convert between the two representations of
 additive data when both forms of input are present.
 
 An exporter can avoid this memory requirement by supporting exposition
-of additive metric data in both ways, as with OTLP.  A client
-configured with OTLP for metrics export does not have a long-lived
+of additive metric data in both ways, as with the [OpenTelemetry
+protocol
+buffer](https://github.com/open-telemetry/opentelemetry-proto) (OTLP).
+A client configured to export OTLP does not have a long-lived
 memory requirement, because that protocol supports both forms of
 additive data.  Although, the memory requirement then arises in the
 downstream system for any exporter that does not support both forms.
@@ -615,15 +616,15 @@ into a memory requirement in order to report changes in the sum).
 ### Asynchronous observations form a current set
 
 Asynchronous instrument callbacks are permitted to observe one value
-per instrument, per distinct label set, per callback invokation.  The
-set of values recorded by one callback invokation represent a current
+per instrument, per distinct label set, per callback invocation.  The
+set of values recorded by one callback invocation represent a current
 snapshot of the instrument; it is this set of values that defines the
 Last Value for the instrument until the next collection interval.
 
 Asynchronous instruments are expected to record an observation for
 every label set that it considers "current".  This means that
 asynchronous callbacks are expected to observe a value, even when the
-value has not changed since the last callback invokation.  To not
+value has not changed since the last callback invocation.  To not
 observe a label set implies that a value is no longer current.  The
 Last Value becomes undefined, as it is no longer current, when it is
 not observed during a collection interval.
