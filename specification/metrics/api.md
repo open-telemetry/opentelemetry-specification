@@ -516,12 +516,22 @@ in this example the `SumObserver` reports a current sum, while the
 and a count equal to 1.  When there is no aggregation, these results
 are equivalent.
 
-The recommendation is to choose the instrument with the
-more-appropriate default aggregation.  If you are observing a queue
-size across a group of machines and the only thing you want to know is
-the aggregate queue size, use `SumObserver`.  If you are observing a
-queue size across a group of machines and you are interested in
-knowing the distribution of queue sizes across those machines, use
+It may seem pointless to define a default aggregation when there is
+exactly one data point.  The default aggregation is specified to apply
+when performing spatial aggregation, meaning to combine measurements
+across label sets or in a distributed setting.  Although a
+`ValueObserver` observes one value per collection interval, the
+default aggregation specifies how it will be aggregated with other
+values, absent any other configuration.
+
+Therefore, considering the choice between `ValueObserver` and
+`UpDownSumObserver`, the recommendation is to choose the instrument
+with the more-appropriate default aggregation.  If you are observing a
+queue size across a group of machines and the only thing you want to
+know is the aggregate queue size, use `SumObserver` because it
+produces a sum, not a distribution.  If you are observing a queue size
+across a group of machines and you are interested in knowing the
+distribution of queue sizes across those machines, use
 `ValueObserver`.
 
 ## Interpretation
