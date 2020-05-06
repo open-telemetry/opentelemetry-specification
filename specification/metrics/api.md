@@ -79,7 +79,7 @@ purpose.  The API purposefully avoids optional features that change
 the semantic interpretation of an instrument; the API instead prefers
 instruments that support a single method with fixed interpretation.
 
-All measurements captured by the API are associated with 
+All measurements captured by the API are associated with
 instrument used to make the measurement, thus giving the measurement its semantic properties.
 Instruments are created and defined through calls to a `Meter` API,
 which is the user-facing entry point to the SDK.
@@ -205,7 +205,7 @@ The non-additive instruments (`ValueRecorder`, `ValueObserver`) use
 a MinMaxSumCount aggregation, by default.  This aggregation keeps track
 of the minimum value, the maximum value, the sum of values, and the
 count of values.  These four values support monitoring the range of
-values, the rate of events, and the average event value.  
+values, the rate of events, and the average event value.
 
 Other standard aggregations are available, especially for non-additive
 instruments, where we are generally interested in a variety of
@@ -370,6 +370,7 @@ restricted to non-negative increments.  The default aggregation is
 `Sum`, as for any additive instrument.
 
 Example uses for `Counter`:
+
 - count the number of bytes received
 - count the number of accounts created
 - count the number of checkpoints run
@@ -390,6 +391,7 @@ amount of resources used, or any quantity that rises and falls in a
 request context.
 
 Example uses for `UpDownCounter`:
+
 - count memory in use by instrumenting `new` and `delete`
 - count queue size by instrumenting `enqueue` and `dequeue`
 - count semaphore `up` and `down` operations.
@@ -421,6 +423,7 @@ allowing the rate, the mean, and and range of input values to be
 monitored.
 
 Example uses for `ValueRecorder` that are non-additive:
+
 - capture any kind of timing information
 - capture the acceleration experienced by a pilot
 - capture nozzle pressure of a fuel injector
@@ -429,6 +432,7 @@ Example uses for `ValueRecorder` that are non-additive:
 Example _additive_ uses of `ValueRecorder` capture measurements that
 are additive, but where we may have an interest in the distribution of
 values and not only the sum:
+
 - capture a request size
 - capture an account balance
 - capture a queue length
@@ -454,6 +458,7 @@ directly.  Use a `SumObserver` to capture any value that starts at
 zero and rises throughout the process lifetime and never falls.
 
 Example uses for `SumObserver`.
+
 - capture process user/system CPU seconds
 - capture the number of cache misses.
 
@@ -498,6 +503,7 @@ capturing measurements that are expensive to compute, since it gives
 the SDK control over how often they are evaluated.
 
 Example uses for `ValueObserver`:
+
 - capture CPU fan speed
 - capture CPU temperature.
 
@@ -655,7 +661,7 @@ instrument could require inspecting multiple collection windows of
 data, because there is no mechanism to ensure that a current value is
 recorded during each interval.
 
-#### Asynchronous instruments define moment-in-time ratios 
+#### Asynchronous instruments define moment-in-time ratios
 
 The notion of a current set developed for asynchronous instruments
 above can be useful for monitoring ratios.  When the set of observed
@@ -674,7 +680,7 @@ written.
 #### Metric Views
 
 The API does not support configurable aggregations for metric
-instruments.  
+instruments.
 
 A _View API_ is defined as an interface to an SDK mechanism that
 supports configuring aggregations, including which operator is applied
