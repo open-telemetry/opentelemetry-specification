@@ -9,7 +9,7 @@ the release.
 
 ## v0.3.0 (02-21-2020)
 
-- [OTEP-0059](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0059-otlp-trace-data-format.md) Add OTLP Trace Data Format specification.
+- [OTEP-0059](https://github.com/open-telemetry/oteps/blob/master/text/trace/0059-otlp-trace-data-format.md) Add OTLP Trace Data Format specification.
 - [OTEP-0066](https://github.com/open-telemetry/oteps/blob/master/text/0066-separate-context-propagation.md) Separate Layer for Context Propagation.
 - [OTEP-0070](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0070-metric-bound-instrument.md) Rename metric instrument "Handles" to "Bound Instruments".
 - [OTEP-0072](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0072-metric-observer.md) Metric Observer instrument specification (refinement).
