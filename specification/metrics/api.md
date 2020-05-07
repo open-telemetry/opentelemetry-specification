@@ -148,7 +148,7 @@ changes in a sum, whereas asynchronous instruments are used to capture
 sums directly.  Read more [characteristics of additive
 instruments](#additive-and-non-additive-instruments-compared) below.
 
-The monotonic instruments are significant because they support rate
+The monotonic additive instruments are significant because they support rate
 calculations.  Read more information about [choosing metric
 instruments](#monotonic-and-non-monotonic-instruments-compared) below.
 
