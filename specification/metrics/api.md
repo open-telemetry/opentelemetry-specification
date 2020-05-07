@@ -58,7 +58,7 @@ is used extensively in this document to define and explain these API
 functions and how we should interpret them.  As far as possible, the
 terminology used here tries to convey the intended semantics, and a
 _standard implementation_ will be described below to help us
-understand their meaning.  The standard implementation performs
+understand their meaning.  Standard implementations perform
 aggregation corresponding to the default interpretation for each kind
 of metric event.
 
@@ -71,13 +71,47 @@ logging systems.  For this reason, [OpenTelemetry requires a
 separation of the API from the SDK](../library-guidelines.md#requirements),
 so that different SDKs can be configured at run time.
 
+### Measurements
+
+The term _capture_ is used in this document to describe the action
+performed when the user passes a measurement to the API.  The result
+of a capture depends on the configured SDK, and if there is no SDK
+installed, the default action is to do nothing in response to captured
+events.  This usage is intended to convey that _anything can happen_
+with the measurement, depending on the SDK, but implying that the user
+has put effort into taking some kind of measurement.  For both
+performance and semantic reasons, the API let users choose between two
+kinds of measurement.
+
+The term _additive_ is used to specify a characteristic of some
+measurements, meant to indicate that only the sum is considered useful
+information.  These are measurements that you would naturally combine
+using arithmethic addition, usually real quantities of something
+(e.g., number of bytes).
+
+Non-additive measurements are used when the set of values, also known
+as the population, is presumed to have useful information.  A
+non-additive measurement is either one that you would not naturally
+combine using arithmetic addition (e.g., request latency), or it is a
+measurement you would naturally add where the intention is to monitor
+the distribution of values (e.g., queue size).  The median value is
+considered useful information for non-additive measurements.
+
+Non-additive instruments semantically capture more information than
+additive instruments.  Non-additive measurements are more expensive
+than additive measurements, by this definition.  Users will choose
+additive instruments except when they expect to get value from the
+additional cost of information about individual values.  None of this
+is to prevent an SDK from re-interpreting measurements based on
+configuration.  Anything can happen with any kind of measurement.
+
 ### Metric Instruments
 
 A _metric instrument_ is a device for capturing raw measurements in
 the API.  The standard instruments, listed in the table below, each have a dedicated
 purpose.  The API purposefully avoids optional features that change
 the semantic interpretation of an instrument; the API instead prefers
-instruments that support a single method with fixed interpretation.
+instruments that support a single method each with fixed interpretation.
 
 All measurements captured by the API are associated with the
 instrument used to make the measurement, thus giving the measurement its semantic properties.
@@ -88,8 +122,8 @@ Instruments are classified in several ways that distinguish them from
 one another.
 
 1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., Span context, Correlation context). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
-2. Additivity: An additive instrument is used to capture information about a sum of values.  A non-additive instrument is used to capture information about individual values.
-3. Monotonicity: An additive instrument can be monotonic, when the sequence of captured sums is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
+2. Additivity: An additive instrument is one that records additive measurements, as described above.
+3. Monotonicity: A monotonic instrument is an additive instrument, where the progression of each sum is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
 
 The metric instruments names are shown below along with whether they
 are synchronous, additive, and/or monotonic.
@@ -109,12 +143,10 @@ useful when measurements are expensive, therefore should be gathered
 periodically.  Read more [characteristics of synchronous and
 asynchronous instruments](#synchronous-and-asynchronous-instruments-compared) below.
 
-The additive instruments are useful in situations where we are only
-interested in the sum, as this enables significant optimizations in
-the export pipeline.  The synchronous and asynchronous additive
-instruments have a significant difference: synchronous instruments are
-used to capture changes in a sum, whereas asynchronous instruments are
-used to capture sums directly.  Read more [characteristics of additive
+The synchronous and asynchronous additive instruments have a
+significant difference: synchronous instruments are used to capture
+changes in a sum, whereas asynchronous instruments are used to capture
+sums directly.  Read more [characteristics of additive
 instruments](#additive-and-non-additive-instruments-compared) below.
 
 The monotonic instruments are significant because they support rate
