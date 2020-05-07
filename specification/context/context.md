@@ -10,9 +10,9 @@ Table of Contents
 - [Get value](#get-value)
 - [Set value](#set-value)
 - [Optional operations](#optional-operations)
-    - [Get current Context](#get-current-context)
-    - [Attach Context](#attach-context)
-    - [Detach Context](#detach-context)
+  - [Get current Context](#get-current-context)
+  - [Attach Context](#attach-context)
+  - [Detach Context](#detach-context)
 
 </details>
 
@@ -102,11 +102,24 @@ The API MUST accept the following parameters:
 The API MUST return a value that can be used as a `Token` to restore the previous
 `Context`.
 
+Note that every call to this operation should result in a corresponding call to
+[Detach Context](#detach-context).
+
 ### Detach Context
 
 Resets the `Context` associated with the caller's current execution unit
 to the value it had before attaching a specified `Context`.
 
+This operation is intended to help making sure the correct `Context`
+is associated with the caller's current execution unit. Users can
+rely on it to identify a wrong call order, i.e. trying to detach
+a `Context` that is not the current instance. In this case the operation
+can emit a signal to warn users of the wrong call order, such as logging
+an error or returning an error value.
+
 The API MUST accept the following parameters:
 
 - A `Token` that was returned by a previous call to attach a `Context`.
+
+The API MAY return a value used to check whether the operation
+was successful or not.

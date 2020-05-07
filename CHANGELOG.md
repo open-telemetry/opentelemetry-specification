@@ -9,11 +9,11 @@ the release.
 
 ## v0.3.0 (02-21-2020)
 
-- [OTEP-0059](https://github.com/open-telemetry/oteps/blob/master/text/0059-otlp-trace-data-format.md) Add OTLP Trace Data Format specification.
+- [OTEP-0059](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0059-otlp-trace-data-format.md) Add OTLP Trace Data Format specification.
 - [OTEP-0066](https://github.com/open-telemetry/oteps/blob/master/text/0066-separate-context-propagation.md) Separate Layer for Context Propagation.
-- [OTEP-0070](https://github.com/open-telemetry/oteps/blob/master/text/0070-metric-bound-instrument.md) Rename metric instrument "Handles" to "Bound Instruments".
-- [OTEP-0072](https://github.com/open-telemetry/oteps/blob/master/text/0072-metric-observer.md) Metric Observer instrument specification (refinement).
-- [OTEP-0080](https://github.com/open-telemetry/oteps/blob/master/text/0080-remove-metric-gauge.md) Remove the Metric Gauge instrument, recommend use of other instruments.
+- [OTEP-0070](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0070-metric-bound-instrument.md) Rename metric instrument "Handles" to "Bound Instruments".
+- [OTEP-0072](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0072-metric-observer.md) Metric Observer instrument specification (refinement).
+- [OTEP-0080](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0080-remove-metric-gauge.md) Remove the Metric Gauge instrument, recommend use of other instruments.
 - Update 0003-measure-metric-type to match current Specification.
 - Update 0009-metric-handles to match current Specification.
 - Clarify named tracers and meters.
@@ -33,12 +33,12 @@ the release.
 ## v0.2.0 (10-22-2019)
 
 - [OTEP-0001](https://github.com/open-telemetry/oteps/blob/master/text/0001-telemetry-without-manual-instrumentation.md) Added Auto-Instrumentation.
-- [OTEP-0002](https://github.com/open-telemetry/oteps/blob/master/text/0002-remove-spandata.md): Removed SpanData interface in favor of Span Start and End options.
-- [OTEP-0003](https://github.com/open-telemetry/oteps/blob/master/text/0003-measure-metric-type.md) Consolidatesd pre-aggregated and raw metrics APIs.
-- [OTEP-0008](https://github.com/open-telemetry/oteps/blob/master/text/0008-metric-observer.md) Added Metrics Observers API.
-- [OTEP-0009](https://github.com/open-telemetry/oteps/blob/master/text/0009-metric-handles.md) Added Metrics Handle API.
-- [OTEP-0010](https://github.com/open-telemetry/oteps/blob/master/text/0010-cumulative-to-counter.md) Rename "Cumulative" to "Counter" in the Metrics API.
-- [OTEP-006](https://github.com/open-telemetry/oteps/blob/master/text/0006-sampling.md) Moved sampling from the API tp the SDK.
+- [OTEP-0002](https://github.com/open-telemetry/oteps/blob/master/text/trace/0002-remove-spandata.md): Removed SpanData interface in favor of Span Start and End options.
+- [OTEP-0003](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0003-measure-metric-type.md) Consolidatesd pre-aggregated and raw metrics APIs.
+- [OTEP-0008](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0008-metric-observer.md) Added Metrics Observers API.
+- [OTEP-0009](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0009-metric-handles.md) Added Metrics Handle API.
+- [OTEP-0010](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0010-cumulative-to-counter.md) Rename "Cumulative" to "Counter" in the Metrics API.
+- [OTEP-006](https://github.com/open-telemetry/oteps/blob/master/text/trace/0006-sampling.md) Moved sampling from the API tp the SDK.
 - [OTEP-0007](https://github.com/open-telemetry/oteps/blob/master/text/0007-no-out-of-band-reporting.md) Moved support for out-of-band telemetry from the API to the SDK.
 - [OTEP-0016](https://github.com/open-telemetry/oteps/blob/master/text/0016-named-tracers.md) Added named providers for Tracers and Meters.
 - Added design goals and requirements for a telemetry data exchange protocol.

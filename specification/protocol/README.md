@@ -2,6 +2,6 @@
 
 This is the specification of new OpenTelemetry protocol. This is work in progress.
 
-- [Design Goals](proto-design-goals.md).
-- [Requirements](proto-requirements.md).
+- [Design Goals](design-goals.md).
+- [Requirements](requirements.md).
 - Specification (TBD).

@@ -178,6 +178,7 @@ TraceID and a non-zero SpanID.
 
 `IsRemote` is a boolean flag which returns true if the SpanContext was propagated
 from a remote parent.
+When creating children from remote spans, their IsRemote flag MUST be set to false.
 
 Please review the W3C specification for details on the [Tracestate
 field](https://www.w3.org/TR/trace-context/#tracestate-field).
@@ -258,7 +259,7 @@ The API MUST accept the following parameters:
 - `Attribute`s - A collection of key-value pairs, with the same semantics as
   the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
-  description](sdk-tracing.md#sampling). An empty collection will be assumed if
+  description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
 
   Whenever possible, users SHOULD set any already known attributes at span creation
@@ -303,7 +304,7 @@ The parent should be selected in the following order of precedence:
 
 During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
 `Span`s can be from the same or a different trace. See [Links
-description](overview.md#links-between-spans).
+description](../overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
 
@@ -359,7 +360,7 @@ allows to record and process information about the individual Span without
 sending it to the backend. An example of this scenario may be recording and
 processing of all incoming requests for the processing and building of
 SLA/SLO latency charts while sending only a subset - sampled spans - to the
-backend. See also the [sampling section of SDK design](sdk-tracing.md#sampling).
+backend. See also the [sampling section of SDK design](sdk.md#sampling).
 
 Users of the API should only access the `IsRecording` property when
 instrumenting code and never access `SampledFlag` unless used in context
@@ -403,7 +404,7 @@ both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
 Note that the OpenTelemetry project documents certain ["standard
-attributes"](data-semantic-conventions.md) that have prescribed semantic meanings.
+attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
 #### Add Events
 
@@ -435,7 +436,7 @@ Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
-keys"](data-semantic-conventions.md) which have prescribed semantic meanings.
+keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
 
 #### Set Status
 

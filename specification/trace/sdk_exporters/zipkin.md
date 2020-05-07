@@ -73,7 +73,7 @@ attribute named `error`. In case if value of the attribute is `false`, Zipkin
 tag needs to be omitted.
 
 Array values MUST be serialized to string like a JSON list as mentioned in
-[semantic conventions document](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/data-semantic-conventions.md#semantic-conventions).
+[semantic conventions](../../overview.md#semantic-conventions).
 
 TBD: add examples
 
@@ -114,3 +114,13 @@ omitted from the payload when they are empty in the OpenTelemetry `Span`.
 
 For example, an OpenTelemetry `Span` without any `Event` should not have an
 `annotations` field in the Zipkin payload.
+
+## Considerations for Legacy (v1) Format
+
+Zipkin's v2 [json](https://github.com/openzipkin/zipkin-api/blob/master/zipkin2-api.yaml) format was defined in 2017, followed up by a [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format in 2018.
+
+Frameworks made before then use a more complex v1 [Thrift](https://github.com/openzipkin/zipkin-api/blob/master/thrift/zipkinCore.thrift) or [json](https://github.com/openzipkin/zipkin-api/blob/master/zipkin-api.yaml) format that notably differs in so far as it uses terminology such as Binary Annotation, and repeats endpoint information on each attribute.
+
+Consider using [V1SpanConverter.java](https://github.com/openzipkin/zipkin/blob/master/zipkin/src/main/java/zipkin2/v1/V1SpanConverter.java) as a reference implementation for converting v1 model to OpenTelemetry.
+
+The span timestamp and duration were late additions to the V1 format. As in the code link above, it is possible to heuristically derive them from annotations.

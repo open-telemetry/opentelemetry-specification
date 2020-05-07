@@ -21,7 +21,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
 
 ## Name
 
-HTTP spans MUST follow the overall [guidelines for span names](./api-tracing.md#span).
+HTTP spans MUST follow the overall [guidelines for span names](../api.md#span).
 Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
 is a user id, which creates high cardinality value space not suitable for span
 names. In case of HTTP servers, these endpoints are often mapped by the server
@@ -37,14 +37,14 @@ default span name.
 
 ## Status
 
-Implementations MUST set status if the HTTP communication failed
+Implementations MUST set the [span status](../api.md#status) if the HTTP communication failed
 or an HTTP error status code is returned (e.g. above 3xx).
 
 In the case of an HTTP redirect, the request should normally be considered successful,
 unless the client aborts following redirects due to hitting some limit (redirect loop).
-If following a (chain of) redirect(s) successfully, the Status should be set according to the result of the final HTTP request.
+If following a (chain of) redirect(s) successfully, the status should be set according to the result of the final HTTP request.
 
-Don't set a status message if the reason can be inferred from `http.status_code` and `http.status_text` already.
+Don't set the span status description if the reason can be inferred from `http.status_code` and `http.status_text`.
 
 | HTTP code               | Span status code      |
 |-------------------------|-----------------------|
@@ -82,7 +82,7 @@ Note that the items marked with [1] are different from the mapping defined in th
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
-[network attributes]: data-span-general.md#general-network-connection-attributes
+[network attributes]: span-general.md#general-network-connection-attributes
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
 [User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3
@@ -233,7 +233,7 @@ Span name: `/webshop/articles/:article_id`.
 | `http.target`      | `"/webshop/articles/4?s=1"`                     |
 | `http.host`        | `"example.com:8080"`                            |
 | `http.server_name` | `"example.com"`                                 |
-| `host.port`        | `8080`                                          |
+| `net.host.port`    | `8080`                                          |
 | `http.scheme`      | `"https"`                                       |
 | `http.route`       | `"/webshop/articles/:article_id"`               |
 | `http.status_code` | `200`                                           |
