@@ -44,13 +44,12 @@ efficiently and simultaneously.  Hereafter, "the API" refers to the
 OpenTelemetry Metrics API.
 
 The API provides functions for capturing raw measurements, through
-several [calling
-conventions](api-user.md#metric-calling-conventions) that
-offer different levels of performance.  Regardless of calling
-convention, we define a _metric event_ as the logical thing that
-happens when a new measurement is captured.  This moment of capture
-(at "run time") defines an implicit timestamp, which is the wall time
-an SDK would read from a clock at that moment.
+several calling conventions that offer different levels of
+performance.  Regardless of calling convention, we define a _metric
+event_ as the logical thing that happens when a new measurement is
+captured.  This moment of capture (at "run time") defines an implicit
+timestamp, which is the wall time an SDK would read from a clock at
+that moment.
 
 The word "semantic" or "semantics" as used here refers to _how we give
 meaning_ to metric events, as they take place under the API.  The term
@@ -159,9 +158,6 @@ a metric instrument are optional, including a description and the unit
 of measurement.  An instrument definition is associated with the
 data that it produces.
 
-Details about calling conventions for each kind of instrument are
-covered in the [user-level API specification](api-user.md).
-
 ### Labels
 
 _Label_ is the term used to refer to a key-value attribute associated
@@ -170,13 +166,13 @@ attribute](../trace/api.md#span) in the tracing API.  Each label
 categorizes the metric event, allowing events to be filtered and
 grouped for analysis.
 
-Each of the instrument calling conventions detailed in the [user-level
-API specification](api-user.md) accepts a set of labels as an
-argument.  The set of labels is defined as a unique mapping from key to value.
-Typically, labels are passed to the API in the form of a list of
-key:values, in which case the specification dictates that duplicate
-entries for a key are resolved by taking the last value to appear in the list.
-This is known as "last-value wins".
+Each of the instrument calling conventions (detailed below) accepts a
+set of labels as an argument.  The set of labels is defined as a
+unique mapping from key to value.  Typically, labels are passed to the
+API in the form of a list of key:values, in which case the
+specification dictates that duplicate entries for a key are resolved
+by taking the last value to appear in the list.  This is known as
+"last-value wins".
 
 Measurements by a synchronous instrument are commonly combined with
 other measurements having exactly the same label set, which enables
