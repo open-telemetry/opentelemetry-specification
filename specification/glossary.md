@@ -25,11 +25,7 @@ Example: `org.mongodb.client`.
 
 <a name="instrumenting_library"></a>
 
-<<<<<<< HEAD
-## Instrumentation Library
-=======
-### Instrumenting Library
->>>>>>> master
+### Instrumentation Library
 
 Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library).
 *Instrumented Library* and *Insrumentation Library* may be the same library
