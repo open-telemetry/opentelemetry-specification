@@ -620,6 +620,31 @@ TODO: Organize a section on synchronous instruments from:
 - parts of the "Details" section below
 - parts on calling conventions from api-user.md
 
+### Association with distributed context
+
+Synchronous measurements are implicitly associated with the
+distributed [Context](../context/context.md) at runtime, which may
+include a Span context and Correlation values.  The Metric SDK may use
+this information in many ways, but one feature is of particular
+interest in OpenTelemetry.
+
+#### Correlation context into metric labels
+
+Correlation context is supported in OpenTelemetry as a means for
+labels to propagate from one process to another in a distributed
+computation.  Sometimes it is useful to aggregate metric data using
+distributed correlation values as metric labels.
+
+The use of correlation context must be explicitly configured, using
+the [Views API (WIP)](https://github.com/open-telemetry/oteps/pull/89)
+to select specific key correlation values that should be applied as
+labels.  The default SDK will not automatically use correlation
+context labels in the export pipeline, since using correlation labels
+can be a significant expense.
+
+Configuring views for applying Correlation context labels is a [work in
+progress](https://github.com/open-telemetry/oteps/pull/89).
+
 ## Asynchronous instruments
 
 TODO: Organize a section on asynchronous instrument from:
