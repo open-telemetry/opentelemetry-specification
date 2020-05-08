@@ -3,6 +3,7 @@
 <!-- toc -->
 
 - [Overview](#overview)
+  * [Measurements](#measurements)
   * [Metric Instruments](#metric-instruments)
   * [Labels](#labels)
   * [Meter Interface](#meter-interface)
@@ -10,6 +11,7 @@
   * [Time](#time)
   * [Metric Event Format](#metric-event-format)
 - [Instrument properties](#instrument-properties)
+  * [Instrument naming](#instrument-naming)
   * [Synchronous and asynchronous instruments compared](#synchronous-and-asynchronous-instruments-compared)
   * [Additive and non-additive instruments compared](#additive-and-non-additive-instruments-compared)
   * [Monotonic and non-monotonic instruments compared](#monotonic-and-non-monotonic-instruments-compared)
@@ -22,7 +24,10 @@
   * [UpDownSumObserver](#updownsumobserver)
   * [ValueObserver](#valueobserver)
   * [Interpretation](#interpretation)
-- [User-facing API specification with examples](#user-facing-api-specification-with-examples)
+  * [Constructors](#constructors)
+- [Label Sets](#label-sets)
+- [Synchronous instruments](#synchronous-instruments)
+- [Asynchronous instruments](#asynchronous-instruments)
 - [Details](#details)
   * [Memory requirements](#memory-requirements)
   * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
@@ -171,8 +176,7 @@ set of labels as an argument.  The set of labels is defined as a
 unique mapping from key to value.  Typically, labels are passed to the
 API in the form of a list of key:values, in which case the
 specification dictates that duplicate entries for a key are resolved
-by taking the last value to appear in the list.  This is known as
-"last-value wins".
+by taking the last value to appear in the list.
 
 Measurements by a synchronous instrument are commonly combined with
 other measurements having exactly the same label set, which enables
@@ -372,10 +376,9 @@ varations of these two instruments are non-monotonic, meaning the sum
 can increase, decrease, or remain constant without any guarantees.
 
 Monotonic instruments are commonly used to capture information about a
-sum, where the sum itself is less relevant than the rate expressed by
-the sum's change over time.  The Monotonic property is defined by this
-API to refer to a non-decreasing sum.  Non-increasing sums are not
-considered a feature in the Metric API.
+sum that is meant to be monitored as a rate.  The Monotonic property
+is defined by this API to refer to a non-decreasing sum.
+Non-increasing sums are not considered a feature in the Metric API.
 
 ### Function names
 
