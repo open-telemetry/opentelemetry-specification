@@ -193,10 +193,11 @@ There is a global `Meter` instance available for use that facilitates
 automatic instrumentation for third-party code.  Use of this instance
 allows code to statically initialize its metric instruments, without
 explicit dependency injection.  The global `Meter` instance acts as a
-no-op implementation until the application explicitly initializes a
-global `Meter` by installing an SDK.  Note that it is not necessary to
-use the global instance: multiple instances of the OpenTelemetry SDK
-may run simultaneously.
+no-op implementation until the application initializes a global
+`Meter` by installing an SDK either explicitly, through a service
+provider interface, or other language-specific support.  Note that it
+is not necessary to use the global instance: multiple instances of the
+OpenTelemetry SDK may run simultaneously.
 
 As an obligatory step, the API requires the caller to provide the name
 of the instrumenting library (optionally, the version) when obtaining
