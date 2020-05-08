@@ -183,10 +183,6 @@ other measurements having exactly the same label set, which enables
 significant optimizations.  Read more about [combining measurements
 through aggregation](#aggregations) below.
 
-Asynchronous instruments are permitted to observe at most one value
-per distinct label set, per callback invocation.  Read more about
-[current label sets for asynchronous instruments](#asynchronous-observations-form-a-current-set) below.
-
 ### Meter Interface
 
 The API defines a `Meter` interface.  This interface consists of a set
@@ -406,6 +402,7 @@ restricted to non-negative increments.  The default aggregation is
 Example uses for `Counter`:
 
 - count the number of bytes received
+- count the number of requests completed
 - count the number of accounts created
 - count the number of checkpoints run
 - count the number of 5xx errors.
@@ -426,6 +423,7 @@ request.
 
 Example uses for `UpDownCounter`:
 
+- count the number of active requests
 - count memory in use by instrumenting `new` and `delete`
 - count queue size by instrumenting `enqueue` and `dequeue`
 - count semaphore `up` and `down` operations.
