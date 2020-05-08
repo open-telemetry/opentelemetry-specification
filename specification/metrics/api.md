@@ -452,7 +452,7 @@ median, and other summary statistics about individual events.
 
 The default aggregation for `ValueRecorder` computes the minimum and
 maximum values, the sum of event values, and the count of events,
-allowing the rate, the mean, and and range of input values to be
+allowing the rate, the mean, and range of input values to be
 monitored.
 
 Example uses for `ValueRecorder` that are non-additive:
@@ -581,7 +581,7 @@ only three?  Why not one instrument?  Why not ten?
 As we have seen, the instruments are categorized as to whether
 they are synchronous, additive, and/or and monotonic.  This approach
 gives each of the instruments unique semantics, in ways that
-meaningfully improve the performance and interpreation of metric
+meaningfully improve the performance and interpretation of metric
 events.
 
 Establishing different kinds of instrument is important because in
