@@ -657,54 +657,6 @@ TODO: Organize a section on asynchronous instrument from:
 TODO: This content will be re-organized into the sections dedicated to
 sync- and async-instruments above in a future PR.
 
-### Memory requirements
-
-The API is designed not to impose long-lived memory requirements on
-the user, although for some exporters it cannot be avoided.  The
-potential for unbounded memory growth comes from "momentary-use"
-labels, labels which are used briefly and then are not used again.
-If the SDK is required to retain memory of every combination of
-instrument and label set it has ever seen, long-lived memory can
-become a problem.
-
-Nevertheless, exporters may be forced to allocate long-lived memory to
-perform their function, particularly with respect to the additive
-instruments.  Metric exposition formats commonly have two ways of
-exposing additive instrument data: in terms of the change in a sum, or
-in terms of the sum itself.  (The terms "delta" and "cumulative" are
-used to describe these two approaches in an export pipeline, we avoid
-their use to describe the additive instruments.)
-
-There are two cases where an exporter must retain memory in order to
-operate correctly.
-
-1. An exporter that exports sums but receives changes in the sum
-2. An exporter that exports changes in a sum but receives the sum.
-
-In both of these cases, the exporter must maintain memory of the last
-value of the sum, to convert between the two representations of
-additive data when both forms of input are present.
-
-An exporter can avoid this memory requirement by supporting exposition
-of additive metric data in both ways, as with the [OpenTelemetry
-protocol
-buffer](https://github.com/open-telemetry/opentelemetry-proto) (OTLP).
-A client configured to export OTLP does not have a long-lived
-memory requirement, because that protocol supports both forms of
-additive data.  Although, the memory requirement then arises in the
-downstream system for any exporter that does not support both forms.
-
-It is tempting to consider not supporting one of these forms of
-additive metric data, as a way to avoid exporter memory requirements.
-However, legacy protocols exist with both forms, so this would not
-necessarily help.  Besides, the fact that synchronous additive
-instruments accept one, while asynchronous additive instruments
-accepts the other, is ultimately meant as a user convenience.  Had
-OpenTelemetry not specified that asynchronous additive instruments
-accept sums directly, this burden would fall to the user (e.g., since
-operating systems report heap usage as a sum, the user would be forced
-into a memory requirement in order to report changes in the sum).
-
 ### Asynchronous observations form a current set
 
 Asynchronous instrument callbacks are permitted to observe one value
