@@ -207,9 +207,6 @@ purposes as disabling instrumentation, configuring aggregation, and
 applying sampling policies.  See the specification on [obtaining a
 Tracer](../trace/api.md#obtaining-a-tracer) for more details.
 
-Details about installing an SDK and obtaining a named `Meter` are
-covered in the [SDK-level API specification](api-meter.md).
-
 ### Aggregations
 
 _Aggregation_ refers to the process of combining multiple measurements

@@ -18,8 +18,6 @@ The OpenTelemetry specification describes the cross-language requirements and ex
     - [Propagators](specification/context/api-propagators.md)
   - [Tracing](specification/trace/api.md)
   - [Metrics](specification/metrics/api.md)
-    - [User-Facing API](specification/metrics/api-user.md)
-    - [Meter API](specification/metrics/api-meter.md)
 - SDK Specification
   - [Tracing](specification/trace/sdk.md)
   - [Resource](specification/resource/sdk.md)
