@@ -96,6 +96,9 @@ For an HTTP client span, `SpanKind` MUST be `Client`.
 If set, `http.url` must be the originally requested URL,
 before any HTTP-redirects that may happen when executing the request.
 
+The span start and send times SHOULD be as close to the time the client began sending the request
+and the time the client completes the request as possible.
+
 One of the following sets of attributes is required (in order of usual preference unless for a particular web client/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
 
 * `http.url`
@@ -180,6 +183,9 @@ Given an inbound request for a route (e.g. `"/users/:userID?"`) the `name` attri
 If the route does not include the application root, it SHOULD be prepended to the span name.
 
 If the route cannot be determined, the `name` attribute MUST be set as defined in the general semantic conventions for HTTP.
+
+The span start and send times SHOULD be as close to the time the server began handling the request
+and the time the server completes the request as possible.
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
