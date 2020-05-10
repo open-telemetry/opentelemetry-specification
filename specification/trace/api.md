@@ -225,7 +225,21 @@ hypothetical account information:
 | `get_account/{accountId}` | Also good (using the "HTTP route") |
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
-operation. A `Span`'s start time SHOULD be set to the current time on [span
+operation.
+
+For example, an http server span should start right when the request has begun being handled by the server, and end when the response has been completely sent.
+This would include the following, if they are present in that particular
+request-response cycle:
+
+- receiving the HTTP request
+- parsing of the HTTP request
+- parsing of the body of the HTTP request
+- any web server middleware that is applied
+- business logic
+- construction of the HTTP response
+- sending of the HTTP response
+
+A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
 change the its name, set its `Attribute`s, and add `Link`s and `Event`s. These
 MUST NOT be changed after the `Span`'s end time has been set.
