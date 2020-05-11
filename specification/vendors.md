@@ -4,7 +4,9 @@
 <summary>Table of Contents</summary>
 
 * [Abstract](#abstract)
-* [What it means to support OpenTelemetry](#what-it-means-to-support-opentelemetry)
+* [Supports OpenTelemetry](#supports-opentelemetry)
+* [Implements OpenTelemetry](#implements-opentelemetry)
+* [Qualifications](#qualifications)
 
 </details>
 
@@ -28,15 +30,7 @@ work with any vendor who claims support for OpenTelemetry.
 This document will explain what is required of a vendor to be considered to
 "Support OpenTelemetry" or "Implements OpenTelemetry".
 
-## What it means to support OpenTelemetry
-
-## Tracing, Metrics and Logging Qualifications
-
-A vendor can qualify their support for OpenTelemetry with the type of telemetry
-they support. For example, a vendor that accepts the OpenTelemetry protocol
-exports for metrics only will be listed as "Supports OpenTelemetry Metrics".
-
-### Default SDK and the OpenTelemetry Protocol
+## Supports OpenTelemetry
 
 "Supports OpenTelemetry" means the vendor must accept the output of the default
 SDK through the OpenTelemetry Protocol either directly -- meaning the vendor's
@@ -44,8 +38,16 @@ endpoint/collector/agent implements the receiver end of the protocol -- or as an
 exporter that works with the [OpenTelemetry
 Collector](https://github.com/open-telemetry/opentelemetry-collector/).
 
-### Custom SDK
+## Implements OpenTelemetry
 
 A vendor with a custom SDK implementation will be listed as "Implements
 OpenTelemetry". If the custom SDK is optional then the vendor can be listed as
 "Supports OpenTelemetry".
+
+## Qualifications
+
+A vendor can qualify their support for OpenTelemetry with the type of telemetry
+they support. For example, a vendor that accepts the OpenTelemetry protocol
+exports for metrics only will be listed as "Supports OpenTelemetry Metrics" or
+one that implements a custom SDK only for tracing will be listed as "Implements
+OpenTelemetry Tracing".
