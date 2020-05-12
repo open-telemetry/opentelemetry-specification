@@ -376,8 +376,9 @@ An `Attribute` is defined by the following properties:
 - (Required) The attribute key, which MUST be a non-`null` and non-empty string.
 - (Required) The attribute value, which is either:
   - A primitive type: string, boolean or numeric.
-  - An array of primitive type values. The array MUST be homogeneous,
-    i.e. it MUST NOT contain values of different types.
+  - A child Attribute
+  - An array of primitive type values or children Attributes. The array MUST be
+    homogeneous, i.e. it MUST NOT contain values of different types.
 
 The Span interface MUST provide:
 
