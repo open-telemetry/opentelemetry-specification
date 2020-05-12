@@ -44,6 +44,7 @@ Examples of span names:
 | -------------- | ---------------------------------------------------------------------- | --------- |
 | `rpc.system`   | A string identifying the remoting system, e.g., `"grpc"`, `"java_rmi"` or `"wcf"`.       | Yes |
 | `rpc.service`  | The service name, must be equal to the $service part in the span name.                   | Yes |
+| `rpc.method`   | The name of the method being called, must be equal to the $method part in the span name. | Yes |
 | `net.peer.ip`   | See [network attributes][]. | See below |
 | `net.peer.name` | See [network attributes][]. | See below |
 | `net.peer.port` | See [network attributes][]. | See below |
