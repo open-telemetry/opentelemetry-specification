@@ -7,41 +7,60 @@ This document defines how to describe remote procedure calls
 
 <!-- toc -->
 
-- [gRPC](#grpc)
+- [Common remote procedure call conventions](#common-remote-procedure-call-conventions)
+  * [Span name](#span-name)
   * [Attributes](#attributes)
+- [gRPC](#grpc)
   * [Status](#status)
   * [Events](#events)
 
 <!-- tocstop -->
 
-## gRPC
+## Common remote procedure call conventions
 
-Implementations MUST create a span, when the gRPC call starts, one for
-client-side and one for server-side. Outgoing requests should be a span `kind`
-of `CLIENT` and incoming requests should be a span `kind` of `SERVER`.
+A remote procedure calls is described by two separate spans, one on the client-side and one on the server-side.
+For outgoing requests, the `SpanKind` MUST be set to `CLIENT` and for incoming requests to `SERVER`.
 
-Span `name` MUST be full gRPC method name formatted as:
+### Span name
+
+The _span name_ MUST be the full RPC method name formatted as:
 
 ```
 $package.$service/$method
 ```
 
-Examples of span name: `grpc.test.EchoService/Echo`.
+(where $service must not contain dots).
+
+Examples of span names:
+
+- `grpc.test.EchoService/Echo`
+- `com.example.ExampleRmiService/exampleMethod`
+- `MyCalcService.Calculator/Add` reported by the server and  
+  `MyServiceReference.ICalculator/Add` reported by the client for .NET WCF calls
 
 ### Attributes
 
-| Attribute name | Notes and examples                                           | Required? |
-| -------------- | ------------------------------------------------------------ | --------- |
-| `rpc.service`  | The service name, must be equal to the $service part in the span name. | Yes |
-| `net.peer.ip`  | See [network attributes][]. | See below |
-| `net.peer.name`  | See [network attributes][]. | See below |
-| `net.peer.port`  | See [network attributes][]. | See below |
+| Attribute name |                          Notes and examples                            | Required? |
+| -------------- | ---------------------------------------------------------------------- | --------- |
+| `rpc.system`   | A string identifying the remoting system, e.g., `"grpc"`, `"java_rmi"` or `"wcf"`.       | Yes |
+| `rpc.service`  | The service name, must be equal to the $service part in the span name.                   | Yes |
+| `net.peer.ip`   | See [network attributes][]. | See below |
+| `net.peer.name` | See [network attributes][]. | See below |
+| `net.peer.port` | See [network attributes][]. | See below |
 
 At least one of [network attributes][] `net.peer.name` or `net.peer.ip` is required.
 For client-side spans `net.peer.port` is required (it describes the server port they are connecting to).
 For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
 
 [network attributes]: span-general.md#general-network-connection-attributes
+
+## gRPC
+
+For remote procedure calls via [gRPC][], additional conventions are described in this section.
+
+`rpc.system` MUST be set to `"grpc"`.
+
+[gRPC]: https://grpc.io/
 
 ### Status
 
