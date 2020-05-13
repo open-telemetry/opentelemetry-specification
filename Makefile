@@ -23,7 +23,7 @@ install-markdown-link-check:
 
 .PHONY: markdown-link-check
 markdown-link-check:
-	find . -name \*.md -print0 | xargs -0 -n1 $(MARKDOWN_LINK_CHECK) -q
+	find . -name \*.md -print0 | xargs -0 -n1 $(MARKDOWN_LINK_CHECK) --quiet
 
 .PHONY: install-markdown-lint
 install-markdown-lint:
