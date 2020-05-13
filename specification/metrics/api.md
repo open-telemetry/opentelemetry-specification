@@ -302,6 +302,63 @@ Synchronous events have one additional property, the distributed
 [Context](../context/context.md) (i.e., Span context, Correlation context)
 that was active at the time.
 
+## Meter provider
+
+A `MeterProvider` instance can be obtained by initializing and
+configuring an OpenTracing Metrics SDK.  This document does not
+specify how to construct an SDK, only that they must implement the
+`MeterProvider`.  Once configured, the application or library chooses
+whether it will use a global instance of the `MeterProvider`
+interface, or whether it will use dependency injection for greater
+control over configuring the provider.
+
+### Obtaining a Meter
+
+New `Meter` instances can be created via a `MeterProvider` and its
+`GetMeter(name)` method.  `MeterProvider`s are generally expected to
+be used as singletons.  Implementations SHOULD provide a single global
+default `MeterProvider`. The `GetMeter` method expects two string
+arguments:
+
+- `name` (required): This name must identify the instrumentation library (e.g. `io.opentelemetry.contrib.mongodb`)
+  and *not* the instrumented library.
+  In case an invalid name (null or empty string) is specified, a working default `Meter` implementation is returned as a fallback
+  rather than returning null or throwing an exception.
+  A `MeterProvider` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
+- `version` (optional): Specifies the version of the instrumentation library (e.g. `semver:1.0.0`).
+
+Each distinctly named `Meter` establishes a separate namespace for its
+metric instruments, making it possible for multiple instrumentation
+libraries to report the metrics with the same instrument name used by
+other libraries.  The name of the `Meter` is explicitly not intended
+to be used as part of the instrument name, as that would prevent
+instrumentation libraries from capturing metrics by the same name.
+
+### Global Meter provider
+
+Use of a global instance may be seen as an anti-pattern in many
+situations, but it most cases it is the correct pattern for telemetry
+data, in order to combine telemetry data from inter-dependent
+libraries _without use of dependency injection_.  OpenTelemetry
+language APIs SHOULD offer a global instance for this reason.
+Languges that offer a global instance MUST ensure that `Meter`
+instances allocated through the global `MeterProvider` and instruments
+allocated through those `Meter` instances have their initialization
+deferred until the a global SDK is first initialized.
+
+#### Get the global MetricProvider
+
+Since the global `MetricProvider` is a singleton and supports a single
+method, callers can obtain a global `Meter` using a global `GetMeter`
+call.  For example, `global.GetMeter(name, version)` calls `GetMeter`
+on the global `MetricProvider` and returns a named `Meter` instance.
+
+#### Set the global MetricProvider
+
+A global function installs a Metric provider as the global SDK.  For
+example, use `global.SetMetricProvider(MetricProvider)` to install the
+SDK after it is initialized.
+
 ## Instrument properties
 
 Because the API is separated from the SDK, the implementation
