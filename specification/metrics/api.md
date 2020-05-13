@@ -969,7 +969,7 @@ labels...)` function.
 ```golang
 func (s *server) registerObservers(.Context) {
      s.observer1 = s.meter.NewInt64SumObserver(
-     	 "service_load_factor",
+         "service_load_factor",
           metric.WithCallback(func(result metric.Float64ObserverResult) {
              for _, listener := range s.listeners {
                  result.Observe(
