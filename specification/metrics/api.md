@@ -391,11 +391,6 @@ like "http_request_latency", as it would inform the viewer of the
 semantic meaning of the latency measurement.  Multiple instrumentation
 libraries may be written to generate this metric.
 
-TODO: File an issue about more prescriptive guidance on metric naming.
-When to use labels instead of components in a name?  Avoid units in
-the name.  Use plural or use singular names?  Use the OpenMetrics
-guidance when it's available?
-
 ### Synchronous and asynchronous instruments compared
 
 Synchronous instruments are called inside a request, meaning they
@@ -721,16 +716,189 @@ Applications are expected to construct long-lived instruments.
 Instruments are considered permanent for the lifetime of a SDK, there
 is no method to delete them.
 
-## Label Sets
+### Sets of labels
 
-TODO: incorporate more detail on label sets from api-user.md
+Semantically, a set of labels is a unique mapping from string key to
+value.  Across the API, a set of labels MUST be passed in the same,
+idiomatic form.  Common representations include an ordered list of
+key:values, or a map of key:values.
 
-## Synchronous instruments
+When labels are passed as an ordered list of key:values, and there are
+duplicate keys found, the last value in the list for any given key is
+taken in order to form a unique mapping.
 
-TODO: Organize a section on synchronous instruments from:
+The type of the label value is generally presumed to be a string by
+exporters, although as a level-level decision, the label value type
+could be any idiomatic type in that langauge that has a string
+representation.
 
-- parts of the "Details" section below
-- parts on calling conventions from api-user.md
+#### Label performance
+
+Label handling can be a significant cost in the production of metric
+data overall.
+
+SDK support for in-process aggregation depends on the ability to find
+an active record for an instrument, label set combination pair.  This
+allows measurements to be combined.  Label handling costs can be
+lowered through the use of bound synchronous instruments and
+batch-reporting functions (`RecordBatch`, `BatchObserver`).
+
+#### Missing label keys
+
+When the SDK interprets labels in the context of grouping aggregated
+values for an exporter, and where there are keys that are missing, the
+SDK is required to consider these values _explicitly unspecified_.
+There is no implicit "empty" value assumed for label keys that are
+expected but not present.
+
+#### Option: Ordered labels
+
+As a language-level decision, APIs may support label key ordering.  In this
+case, the user may specify an ordered sequence of label keys, which is used to
+create an unordered set of labels from a sequence of similarly ordered label
+values.  For example:
+
+```golang
+
+var rpcLabelKeys = OrderedLabelKeys("a", "b", "c")
+
+for _, input := range stream {
+    labels := rpcLabelKeys.Values(1, 2, 3)  // a=1, b=2, c=3
+
+    // ...
+}
+```
+
+This is specified as a language-optional feature because its safety, and
+therefore its value as an input for monitoring, depends on the availability of
+type-checking in the source language.  Passing unordered labels (i.e., a
+mapping from keys to values) is considered the safer alternative.
+
+## Synchronous instrument details
+
+The following details are specified for synchronous instruments.
+
+### Synchronous calling conventions
+
+The metrics API provides three semantically equivalent ways to capture
+measurements using synchronous instruments:
+
+- calling bound instruments, which have a pre-associated set of labels
+- calling unbound instruments, passing the associated set of labels directly
+- batch recording measurements for multiple instruments using a single set of labels.
+
+All three methods generate equivalent metric events, but offer varying degrees
+of performance and convenience.
+
+The performance of the metric API depends on the work done to enter a
+new measurement, which is typically dominated by the cost of handling
+labels.  Bound instruments are the highest-performance calling
+convention, because they can amortize the cost of handling labels
+across many uses.  Recording multiple measurements via
+`RecordBatch()`, another calling convention, is a good option for
+improving performance, since the cost of handling labels is spread
+across multiple measurements.  The direct calling convention is the
+most convenient, but least performant calling convention for entering
+measurements through the API.
+
+#### Bound instrument calling convention
+
+In situations where performance is a requirement and a metric
+instrument is repeatedly used with the same set of labels, the
+developer may elect to use the _bound instrument_ calling convention
+as an optimization.  For bound instruments to be a benefit, it
+requires that a specific instrument will be re-used with specific
+labels.  If an instrument will be used with the same labels more than
+once, obtaining a bound instrument corresponding to the labels ensures
+the highest performance available.
+
+To bind an instrument, use the `Bind(labels...)` method to return an
+interface that supports the corresponding synchronous API (i.e.,
+`Add()` or `Record()`).  Bound instruments are invoked without labels;
+the corresponding metric event is associated with the labels that were
+bound to the instrument.  Bound instruments may consume SDK resources
+indefinitely until the user calls `Unbind()` to release the bound
+instrument.
+
+For example, to repeatedly update a counter with the same labels:
+
+```golang
+func (s *server) processStream(ctx context.Context) {
+
+  // The result of Bind() is a bound instrument
+  // (e.g., a BoundInt64Counter).
+  counter2 := s.instruments.counter2.Bind(
+      kv.String("labelA", "..."),
+      kv.String("labelB", "..."),
+  )
+
+  for _, item := <-s.channel {
+     // ... other work
+
+     // High-performance metric calling convention: use of bound
+     // instruments.
+     counter2.Add(ctx, item.size())
+  }
+}
+```
+
+#### Direct instrument calling convention
+
+When convenience is more important than performance, or there is no re-use to
+potentially optimize with bound instruments, users may elect to operate
+directly on metric instruments, supplying labels at the call site.  This method
+offers the greatest convenience possible
+
+For example, to update a single counter:
+
+```golang
+func (s *server) method(ctx context.Context) {
+    // ... other work
+
+    s.instruments.counter1.Add(ctx, 1,
+        kv.String("labelA", "..."),
+        kv.String("labelB", "..."),
+        )
+}
+```
+
+Direct calls are convenient because they do not require allocating and
+storing a bound instrument.  They are appropriate for use in cases
+where an instrument will be used rarely, or rarely used with the same
+set of labels.  Unlike bound instruments, there is not a long-term
+consumption of SDK resources when using the direct calling convention.
+
+#### RecordBatch calling convention
+
+There is one final API for entering measurements, which is like the
+direct access calling convention but supports multiple simultaneous
+measurements.  The use of the `RecordBatch` API supports entering
+multiple measurements, implying a semantically atomic update to
+several instruments.  Calls to `RecordBatch` amortize the cost of
+label handling across multiple measurements.
+
+For example:
+
+```golang
+func (s *server) method(ctx context.Context) {
+    // ... other work
+
+    s.meter.RecordBatch(ctx, labels,
+        s.instruments.counter1.Measurement(1),
+        s.instruments.gauge1.Measurement(10),
+        s.instruments.measure2.Measurement(123.45),
+    )
+}
+```
+
+Using the RecordBatch calling convention is semantically identical to
+a sequence of direct calls, with the addition of atomicity.  Because
+values are entered in a single call, the SDK is potentially able to
+implement an atomic update, from the exporter's point of view, because
+the SDK can enqueue a single bulk update, or take a lock only once,
+for example.  Like the direct calling convention, there is not a
+long-term consumption of SDK resources when using the batch calling
+convention.
 
 ### Association with distributed context
 
@@ -757,17 +925,85 @@ can be a significant expense.
 Configuring views for applying Correlation context labels is a [work in
 progress](https://github.com/open-telemetry/oteps/pull/89).
 
-## Asynchronous instruments
+## Asynchronous instrument details
 
-TODO: Organize a section on asynchronous instrument from:
+The following details are specified for synchronous instruments.
 
-- parts of the "Details" section below
-- new text on calling conventions including multi-observer support
+### Asynchronous calling conventions
 
-## Details
+The metrics API provides two semantically equivalent ways to capture
+measurements using asynchronous instruments, either through
+single-instrument callbacks or through multi-instrument batch
+callbacks.
 
-TODO: This content will be re-organized into the sections dedicated to
-sync- and async-instruments above in a future PR.
+Whether single or batch, asynchronous instruments must be observed
+through only one callback.  The constructors return no-op instruments
+for `null` observer callbacks.  It is considered an error when more
+than one callback is specified for any asynchronous instrument.
+
+Instruments may not observe more than one value per distinct label set
+per instrument.  When more than one value is observed for a single
+instrument and label set, the last observed value is taken and earlier
+values are discarded without error.
+
+#### Single-instrument observer
+
+A single instrument callback is bound to one instrument.  Its
+callback receives an `ObserverResult` with an `Observe(value,
+labels...)` function.
+
+```golang
+func (s *server) registerObservers(.Context) {
+     s.observer1 = s.meter.NewInt64SumObserver(
+     	 "service_load_factor",
+          metric.WithCallback(func(result metric.Float64ObserverResult) {
+             for _, listener := range s.listeners {
+                 result.Observe(
+                     s.loadFactor(),
+                     kv.String("name", server.name),
+                     kv.String("port", listener.port),
+                 )
+             }
+          }),
+          metric.WithDescription("The load factor use for load balancing purposes"),
+    )
+}
+
+```
+
+#### Batch observer
+
+A `BatchObserver` callback supports observing multiple instruments in
+one callback.  Its callback receives an `BatchObserverResult` with an
+`Observe(labels, observations...)` function.
+
+An observation is returned by calling `Observation(value)`, on an
+asychronous instrument.
+
+```golang
+func (s *server) registerObservers(.Context) {
+     var observer1 metric.SumObserver
+     var observer2 metric.UpDownSumObserver
+     var observer3 metric.ValueObserver
+
+     batch := s.meter.NewBatchObserver(func (result BatchObserverResult) {
+          result.Observe(
+             []kv.KeyValue{
+                 kv.String("name", server.name),
+                 kv.String("port", listener.port),
+             },
+             s.observer1.Observation(value1),
+             s.observer2.Observation(value2),
+             s.observer3.Observation(value3),
+          },
+          metric.WithDescription("The load factor use for load balancing purposes"),
+    )
+
+     s.observer1 = s.meter.NewSumObserver(..., metric.WithBatch(batch))
+     s.observer2 = s.meter.NewSumObserver(..., metric.WithBatch(batch))
+     s.observer3 = s.meter.NewSumObserver(..., metric.WithBatch(batch))
+}
+```
 
 ### Asynchronous observations form a current set
 
