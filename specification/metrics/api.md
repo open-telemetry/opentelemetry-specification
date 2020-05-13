@@ -30,10 +30,10 @@
   * [ValueObserver](#valueobserver)
   * [Interpretation](#interpretation)
   * [Constructors](#constructors)
-  * [Sets of labels](#sets-of-labels)
-    + [Label performance](#label-performance)
-    + [Missing label keys](#missing-label-keys)
-    + [Option: Ordered labels](#option-ordered-labels)
+- [Sets of labels](#sets-of-labels)
+  * [Label performance](#label-performance)
+  * [Missing label keys](#missing-label-keys)
+  * [Option: Ordered labels](#option-ordered-labels)
 - [Synchronous instrument details](#synchronous-instrument-details)
   * [Synchronous calling conventions](#synchronous-calling-conventions)
     + [Bound instrument calling convention](#bound-instrument-calling-convention)
@@ -730,7 +730,7 @@ Applications are expected to construct long-lived instruments.
 Instruments are considered permanent for the lifetime of a SDK, there
 is no method to delete them.
 
-### Sets of labels
+## Sets of labels
 
 Semantically, a set of labels is a unique mapping from string key to
 value.  Across the API, a set of labels MUST be passed in the same,
@@ -746,7 +746,7 @@ exporters, although as a level-level decision, the label value type
 could be any idiomatic type in that langauge that has a string
 representation.
 
-#### Label performance
+### Label performance
 
 Label handling can be a significant cost in the production of metric
 data overall.
@@ -757,7 +757,7 @@ allows measurements to be combined.  Label handling costs can be
 lowered through the use of bound synchronous instruments and
 batch-reporting functions (`RecordBatch`, `BatchObserver`).
 
-#### Missing label keys
+### Missing label keys
 
 When the SDK interprets labels in the context of grouping aggregated
 values for an exporter, and where there are keys that are missing, the
@@ -765,7 +765,7 @@ SDK is required to consider these values _explicitly unspecified_.
 There is no implicit "empty" value assumed for label keys that are
 expected but not present.
 
-#### Option: Ordered labels
+### Option: Ordered labels
 
 As a language-level decision, APIs may support label key ordering.  In this
 case, the user may specify an ordered sequence of label keys, which is used to
