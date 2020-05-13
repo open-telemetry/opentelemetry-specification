@@ -47,9 +47,9 @@
     + [Batch observer](#batch-observer)
   * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
     + [Asynchronous instruments define moment-in-time ratios](#asynchronous-instruments-define-moment-in-time-ratios)
-  * [Related OpenTelemetry work](#related-opentelemetry-work)
-    + [Metric Views](#metric-views)
-    + [OTLP Metric protocol](#otlp-metric-protocol)
+- [Related OpenTelemetry work](#related-opentelemetry-work)
+  * [Metric Views](#metric-views)
+  * [OTLP Metric protocol](#otlp-metric-protocol)
   * [Metric SDK default implementation](#metric-sdk-default-implementation)
 
 <!-- tocstop -->
@@ -1062,12 +1062,12 @@ contribution is defined in this way, independent of the collection
 interval duration, thanks to the properties of asynchronous
 instruments.
 
-### Related OpenTelemetry work
+## Related OpenTelemetry work
 
 Several ongoing efforts are underway as this specification is being
 written.
 
-#### Metric Views
+### Metric Views
 
 The API does not support configurable aggregations for metric
 instruments.
@@ -1078,7 +1078,7 @@ supports configuring aggregations, including which operator is applied
 
 See the [current issue discussion on this topic](https://github.com/open-telemetry/opentelemetry-specification/issues/466) and the [current OTEP draft](https://github.com/open-telemetry/oteps/pull/89).
 
-#### OTLP Metric protocol
+### OTLP Metric protocol
 
 The OTLP protocol is designed to export metric data in a memoryless
 way, as documented above.  Several details of the protocol are being
