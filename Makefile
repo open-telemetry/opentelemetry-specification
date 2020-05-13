@@ -23,18 +23,7 @@ install-markdown-link-check:
 
 .PHONY: markdown-link-check
 markdown-link-check:
-	find . -name \*.md -exec $(MARKDOWN_LINK_CHECK) {} \;
-
-.PHONY: enforce-markdown-link-check
-enforce-markdown-link-check:
-	@LINKCHECKOUT=`find . -name \*.md -exec $(MARKDOWN_LINK_CHECK) {} 2>&1 >/dev/null \;`; \
-		if [ "$$LINKCHECKOUT" ]; then \
-			echo "$(MARKDOWN_LINK_CHECK) FAILED => errors:\n"; \
-			echo "Run 'make $(MARKDOWN_LINK_CHECK)' to see the errors"; \
-			exit 1; \
-		else \
-			echo "Check markdown links finished successfully"; \
-		fi
+	find . -name \*.md -print0 | xargs -0 -n1 $(MARKDOWN_LINK_CHECK) --quiet
 
 .PHONY: install-markdown-lint
 install-markdown-lint:

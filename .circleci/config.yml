@@ -28,7 +28,7 @@ jobs:
           name: Run Tools
           command: |
             make markdown-lint
-            make enforce-markdown-link-check
+            make markdown-link-check
 
 workflows:
   version: 2
