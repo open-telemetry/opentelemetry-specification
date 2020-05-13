@@ -368,9 +368,33 @@ interpretation.  The semantics of the individual instruments is
 defined by several properties, detailed here, to assist with
 instrument selection.
 
-### Instrument naming
+### Instrument naming requirements
 
-TODO: move and update content on metric names from api-user.md
+Metric instruments are primarily defined by their name, which is how
+we refer to them in external systems.  Metric instrument names conform
+to the following syntax:
+
+1. They are non-empty strings
+2. They are case-insensitive
+3. The first character must be non-numeric, non-space, non-punctuation
+4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
+
+Metric instrument names belong to a namespace, established by the the
+associated `Meter` instance.  `Meter` implementations MUST return an
+error when multiple instruments are registered by the same name.
+
+Metric instrument names SHOULD be semantically meaningful, independent
+of the originating Meter name.  For example, when instrumenting an
+http server library, "latency" is not an appropriate instrument name,
+as it is too generic.  Instead, as an example, we should favor a name
+like "http_request_latency", as it would inform the viewer of the
+semantic meaning of the latency measurement.  Multiple instrumentation
+libraries may be written to generate this metric.
+
+TODO: File an issue about more prescriptive guidance on metric naming.
+When to use labels instead of components in a name?  Avoid units in
+the name.  Use plural or use singular names?  Use the OpenMetrics
+guidance when it's available?
 
 ### Synchronous and asynchronous instruments compared
 
@@ -662,7 +686,40 @@ individual instruments is summarized in the table below.
 
 ### Constructors
 
-TODO: specify detail on the metric instrument constructors from api-user.md
+The `Meter` interface supports functions to create new, registered
+metric instruments.  Instrument constructors are named by adding a
+`New-` prefix to the kind of instrument it constructs.  
+
+There is at least one constructor representing each kind instrument in
+this specification (see [above](#metric-instruments)), and possibly
+more as dictated by the language.  For example, if specializations are
+provided for integer and floating pointer numbers, the OpenTelemetry
+API would support 2 constructors per instrument kind.
+
+Binding instruments to a single `Meter` instance has two benefits:
+
+1. Instruments can be exported from the zero state, prior to first use, without an explicit registration call
+2. The library-name and version are implicitly associated with the metric event.
+
+Some existing metric systems support allocating metric instruments
+statically and providing the equivalent of a `Meter` interface at the
+time of use.  In one example, typical of statsd clients, existing code
+may not be structured with a convenient place to store new metric
+instruments.  Where this becomes a burden, it is recommended to use
+the global `MeterProvider` to construct a static `Meter`, and to
+construct and use globally-scoped metric instruments.
+
+The situation is similar for users of existing Prometheus clients, where
+instruments can be allocated to the global `Registerer`.  
+Such code may not have access to an appropriate `MeterProvider` or `Meter`
+instance at the location where instruments are defined.
+Where this becomes a burden, it is
+recommended to use the global meter provider to construct a static
+named `Meter`, to construct metric instruments.
+
+Applications are expected to construct long-lived instruments.
+Instruments are considered permanent for the lifetime of a SDK, there
+is no method to delete them.
 
 ## Label Sets
 
