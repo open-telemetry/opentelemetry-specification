@@ -48,12 +48,15 @@ Examples of span names:
 | `net.peer.ip`   | See [network attributes][]. | See below |
 | `net.peer.name` | See [network attributes][]. | See below |
 | `net.peer.port` | See [network attributes][]. | See below |
+| `net.transport` | See [network attributes][]. | See below |
 
 At least one of [network attributes][] `net.peer.name` or `net.peer.ip` is required.
-For client-side spans `net.peer.port` is required (it describes the server port they are connecting to).
+For client-side spans `net.peer.port` is required if the connection is IP-based (it describes the server port they are connecting to).
 For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
+Furthermore, setting [net.transport][] is required for non-IP connection like named pipe bindings.
 
 [network attributes]: span-general.md#general-network-connection-attributes
+[net.transport]: span-general.md#nettransport-attribute
 
 ## gRPC
 
