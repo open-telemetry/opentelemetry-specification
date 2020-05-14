@@ -319,7 +319,7 @@ that was active at the time.
 ## Meter provider
 
 A `MeterProvider` instance can be obtained by initializing and
-configuring an OpenTracing Metrics SDK.  This document does not
+configuring an OpenTelemetry Metrics SDK.  This document does not
 specify how to construct an SDK, only that they must implement the
 `MeterProvider`.  Once configured, the application or library chooses
 whether it will use a global instance of the `MeterProvider`
@@ -329,7 +329,7 @@ control over configuring the provider.
 ### Obtaining a Meter
 
 New `Meter` instances can be created via a `MeterProvider` and its
-`GetMeter(name)` method.  `MeterProvider`s are generally expected to
+`GetMeter(name, version)` method.  `MeterProvider`s are generally expected to
 be used as singletons.  Implementations SHOULD provide a single global
 default `MeterProvider`. The `GetMeter` method expects two string
 arguments:
@@ -391,7 +391,7 @@ to the following syntax:
 1. They are non-empty strings
 2. They are case-insensitive
 3. The first character must be non-numeric, non-space, non-punctuation
-4. Subsequent characters must be belong to the alphanumeric characters, '_', '.', and '-'.
+4. Subsequent characters must be belong to the alphanumeric characters, '\_', '.', and '-'.
 
 Metric instrument names belong to a namespace, established by the the
 associated `Meter` instance.  `Meter` implementations MUST return an
@@ -401,7 +401,7 @@ Metric instrument names SHOULD be semantically meaningful, independent
 of the originating Meter name.  For example, when instrumenting an
 http server library, "latency" is not an appropriate instrument name,
 as it is too generic.  Instead, as an example, we should favor a name
-like "http_request_latency", as it would inform the viewer of the
+like "http\_request\_latency", as it would inform the viewer of the
 semantic meaning of the latency measurement.  Multiple instrumentation
 libraries may be written to generate this metric.
 
@@ -742,7 +742,7 @@ duplicate keys found, the last value in the list for any given key is
 taken in order to form a unique mapping.
 
 The type of the label value is generally presumed to be a string by
-exporters, although as a level-level decision, the label value type
+exporters, although as a language-level decision, the label value type
 could be any idiomatic type in that langauge that has a string
 representation.
 
@@ -767,7 +767,7 @@ expected but not present.
 
 ### Option: Ordered labels
 
-As a language-level decision, APIs may support label key ordering.  In this
+As a language-level decision, APIs MAY support label key ordering.  In this
 case, the user may specify an ordered sequence of label keys, which is used to
 create an unordered set of labels from a sequence of similarly ordered label
 values.  For example:
@@ -905,7 +905,7 @@ func (s *server) method(ctx context.Context) {
 }
 ```
 
-Using the RecordBatch calling convention is semantically identical to
+Using the _record batch_ calling convention is semantically identical to
 a sequence of direct calls, with the addition of atomicity.  Because
 values are entered in a single call, the SDK is potentially able to
 implement an atomic update, from the exporter's point of view, because
@@ -996,10 +996,6 @@ asychronous instrument.
 
 ```golang
 func (s *server) registerObservers(.Context) {
-     var observer1 metric.SumObserver
-     var observer2 metric.UpDownSumObserver
-     var observer3 metric.ValueObserver
-
      batch := s.meter.NewBatchObserver(func (result BatchObserverResult) {
           result.Observe(
              []kv.KeyValue{
