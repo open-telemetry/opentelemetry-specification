@@ -40,17 +40,7 @@ Synonyms: *Instrumentation Library*
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api-user.md#obtaining-a-meter)). It identifies the [Instrumenting Library](#instrumenting_library).
-
-### Namespace
-
-This term applies to [Metric names](metrics/api-user.md#metric-names) only. The namespace is used to disambiguate identical metric
-names used in different [instrumenting libraries](#instrumenting_library). The [Name](#name) provided
-for creating a `Meter` serves as its namespace in addition to the primary semantics
-described [here](#name).
-
-The `version` argument is not relevant here and will not be included in
-the resulting namespace string.
+creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api.md#meter-interface)). It identifies the [Instrumenting Library](#instrumenting_library).
 
 ## Logs
 
