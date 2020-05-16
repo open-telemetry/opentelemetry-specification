@@ -227,17 +227,20 @@ hypothetical account information:
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation.
 
-For example, an http server span should start right when the request has begun being handled by the server, and end when the response has been completely sent.
-This would include the following, if they are present in that particular
-request-response cycle:
+For example, If a span represents a request-response cycle (e.g. HTTP or an RPC),
+the span should have a start time that corresponds to the start time of the
+first sub operations, and an end time of when the final sub operation is complete.
+This includes:
 
-- receiving the HTTP request
-- parsing of the HTTP request
-- parsing of the body of the HTTP request
-- any web server middleware that is applied
+- receiving the data from the request
+- parsing of the data (e.g. from a binary or json format)
+- any middleware or additional processing logic
 - business logic
-- construction of the HTTP response
-- sending of the HTTP response
+- construction of the response
+- sending of the response
+
+Child spans may be created to represent any sub-operations, to provide more
+granular observability.
 
 A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
