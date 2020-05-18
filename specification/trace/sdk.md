@@ -103,7 +103,7 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 #### AlwaysOn
 
-* This will be used as a default.
+* This is the default sampler.
 * Returns `RECORD_AND_SAMPLED` always.
 * Description MUST be `AlwaysOnSampler`.
 
@@ -127,7 +127,7 @@ TODO: Split out the parent handling.
 
 #### ParentOrElse
 
-* This is a composite sampler. `ParentOrElse(delegateSampler)` delegates to  `delegateSampler` for root spans and otherwise respects the parent sampling decision.
+* This is a composite sampler. `ParentOrElse(delegateSampler)` either respects the parent span's sampling decision or delegates to  `delegateSampler` for root spans.
 * If parent exists:
   * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
   * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
