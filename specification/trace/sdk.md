@@ -124,20 +124,20 @@ Description MUST NOT change over time and caller can cache the returned value.
 TODO: Add details about how the probability sampler is implemented as a function
 of the `TraceID`.
 
-#### RootOnly
+#### ParentOrElse
 
-* Is a composite sampler `RootOnly(delegateSampler)` which ensures that the `delegateSampler` is called only for root spans.
+* Is a composite sampler `ParentOrElse(delegateSampler)` which ensures that the `delegateSampler` is called only for root spans.
 * If there is a parent:
   * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
   * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
 * If no parent (root span) returns the result of the `delegateSampler`.
-* Description MUST be `RootOnly{delegateSampler.getDescription()}`.
+* Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
 
-|Parent's `SampledFlag`|`RootOnly(delegateSampler)`
+|Parent|`ParentOrElse(delegateSampler)`
 |--|--|
-|`true`|`RECORD_AND_SAMPLED`|
-|`false`|`NOT_RECORD`|
-|no parent(root spans)|Result of `delegateSampler()`|
+|Exists and `SampledFlag` is `true`|`RECORD_AND_SAMPLED`|
+|Exists and `SampledFlag` is `false`|`NOT_RECORD`|
+|No parent(root spans)|Result of `delegateSampler()`|
 
 ## Tracer Creation
 
