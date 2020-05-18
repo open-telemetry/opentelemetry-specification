@@ -88,8 +88,7 @@ Some applications may use multiple `TracerProvider` instances, e.g. to provide
 different settings (e.g. `SpanProcessor`s) to each of those instances and -
 in further consequence - to the `Tracer` instances created by them.
 
-- `name` (required): This name must identify the instrumentation library (also
-  referred to as integration, e.g. `io.opentelemetry.contrib.mongodb`) and *not*
+- `name` (required): This name must identify the instrumentation library (e.g. `io.opentelemetry.contrib.mongodb`) and *not*
   the instrumented library.
   In case an invalid name (null or empty string) is specified, a working
   default Tracer implementation as a fallback is returned rather than returning
