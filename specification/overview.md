@@ -261,22 +261,29 @@ service).
 Read more at OpenTelemetry Service [Long-term
 Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/docs/vision.md).
 
-## Instrumentation adapters
+## Instrumentation Libraries
+
+See [Instrumentation Library](glossary.md#instrumentation_library)
 
 The inspiration of the project is to make every library and application
-manageable out of the box by instrumenting it with OpenTelemetry. However on the
-way to this goal there will be a need to enable instrumentation by plugging
-instrumentation adapters into the library of choice. These adapters can be
-wrapping library APIs, subscribing to the library-specific callbacks or
-translating telemetry exposed in other formats into OpenTelemetry model.
+observable out of the box by having them call OpenTelemetry API directly. However,
+many libraries will not have such integration, and as such there is a need for
+a separate library which would inject such calls, using mechanisms such as
+wrapping interfaces, subscribing to library-specific callbacks, or translating
+existing telemetry into the OpenTelemetry model.
 
-Instrumentation adapters may be called different names. It is often referred as
-plugin, collector or auto-collector, telemetry module, bridge, etc. It is always
-recommended to follow the library and language standards. For instance, if
-instrumentation adapter is implemented as "log appender" - it will probably be
-called an `appender`, not an instrumentation adapter. However if there is no
-established name - the recommendation is to call packages "Instrumentation
-Adapter" or simply "Adapter".
+A library that enables OpenTelemetry observability for another library is called
+an [Instrumentation Library](glossary.md#instrumentation_library).
+
+An instrumentation library should be named to follow any naming conventions of
+the instrumented library (e.g. 'middleware' for a web framework).
+
+If there is no established name, the recommendation is to prefix packages
+with "opentelemetry-instrumentation", followed by the instrumented library
+name itself. Examples include:
+
+* opentelemetry-instrumentation-flask (Python)
+* @opentelemetry/instrumentation-grpc (Javascript)
 
 ## Code injecting adapters
 
