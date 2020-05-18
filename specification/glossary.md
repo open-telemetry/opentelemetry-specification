@@ -33,7 +33,7 @@ if it has built-in OpenTelemetry instrumentation.
 
 Example: `io.opentelemetry.contrib.mongodb`.
 
-Synonyms: *Instrumentation Library*
+Synonyms: *Instrumenting Library*
 
 <a name="name"></a>
 
