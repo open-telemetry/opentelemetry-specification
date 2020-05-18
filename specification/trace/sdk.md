@@ -123,14 +123,15 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 TODO: Add details about how the probability sampler is implemented as a function
 of the `TraceID`.
+TODO: Split out the parent handling.
 
 #### ParentOrElse
 
-* Is a composite sampler `ParentOrElse(delegateSampler)` which ensures that the `delegateSampler` is called only for root spans.
-* If there is a parent:
+* This is a composite sampler. `ParentOrElse(delegateSampler)` delegates to  `delegateSampler` for root spans and otherwise respects the parent sampling decision.
+* If parent exists:
   * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
   * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
-* If no parent (root span) returns the result of the `delegateSampler`.
+* If no parent (root span) exists returns the result of the `delegateSampler`.
 * Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
 
 |Parent|`ParentOrElse(delegateSampler)`
