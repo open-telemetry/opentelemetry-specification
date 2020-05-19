@@ -227,9 +227,9 @@ hypothetical account information:
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation.
 
-For example, If a span represents a request-response cycle (e.g. HTTP or an RPC),
+For example, if a span represents a request-response cycle (e.g. HTTP or an RPC),
 the span should have a start time that corresponds to the start time of the
-first sub operations, and an end time of when the final sub operation is complete.
+first sub-operation, and an end time of when the final sub-operation is complete.
 This includes:
 
 - receiving the data from the request
@@ -239,7 +239,7 @@ This includes:
 - construction of the response
 - sending of the response
 
-Child spans may be created to represent any sub-operations, to provide more
+Child spans (or in some cases events) may be created to represent any sub-operations, to provide more
 granular observability.
 
 A `Span`'s start time SHOULD be set to the current time on [span
