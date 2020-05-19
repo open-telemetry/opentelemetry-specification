@@ -38,10 +38,6 @@ SDK through one of two mechanisms:
 - By providing an exporter for the [OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector/) and / or the OpenTelemetry SDKs
 - By building a receiver for the OpenTelemetry protocol
 
-endpoint/collector/agent implements the receiver end of the protocol -- or as an
-exporter that works with the [OpenTelemetry
-Collector](https://github.com/open-telemetry/opentelemetry-collector/).
-
 ## Implements OpenTelemetry
 
 A vendor with a custom SDK implementation will be listed as "Implements
