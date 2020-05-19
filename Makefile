@@ -1,5 +1,5 @@
 # All documents to be used in spell check.
-ALL_DOC := $(shell find . -name '*.md' -type f | sort)
+ALL_DOCS := $(shell find . -name '*.md' -type f | grep -v ^./node_modules | sort)
 
 TOOLS_DIR := ./.tools
 MISSPELL_BINARY=$(TOOLS_DIR)/misspell
@@ -23,7 +23,7 @@ install-markdown-link-check:
 
 .PHONY: markdown-link-check
 markdown-link-check:
-	find . -name \*.md -print0 | xargs -0 -n1 $(MARKDOWN_LINK_CHECK) --quiet
+	$(MARKDOWN_LINK_CHECK) --quiet $(ALL_DOCS)
 
 .PHONY: install-markdown-lint
 install-markdown-lint:
