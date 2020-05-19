@@ -906,10 +906,10 @@ Another valid interface for recording batches uses a builder pattern:
 
 ```java
     meter.RecordBatch(labels).
-    	put(s.instruments.counter, 1).
-	put(s.instruments.updowncounter, 10).
-	put(s.instruments.valuerecorder, 123.45).
-	record();
+        put(s.instruments.counter, 1).
+        put(s.instruments.updowncounter, 10).
+        put(s.instruments.valuerecorder, 123.45).
+        record();
 ```
 
 Using the _record batch_ calling convention is semantically identical to
