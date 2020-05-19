@@ -318,7 +318,7 @@ that was active at the time.
 
 ## Meter provider
 
-A `MeterProvider` instance can be obtained by initializing and
+A concrete `MeterProvider` implementation can be obtained by initializing and
 configuring an OpenTelemetry Metrics SDK.  This document does not
 specify how to construct an SDK, only that they must implement the
 `MeterProvider`.  Once configured, the application or library chooses
@@ -369,7 +369,7 @@ on the global `MeterProvider` and returns a named `Meter` instance.
 
 #### Set the global MeterProvider
 
-A global function installs a Metric provider as the global SDK.  For
+A global function installs a MeterProvider as the global SDK.  For
 example, use `global.SetMeterProvider(MeterProvider)` to install the
 SDK after it is initialized.
 
