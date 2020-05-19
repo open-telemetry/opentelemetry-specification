@@ -239,8 +239,10 @@ This includes:
 - construction of the response
 - sending of the response
 
-Child spans (or in some cases events) may be created to represent any sub-operations, to provide more
-granular observability.
+Child spans (or in some cases events) may be created to represent
+sub-operations which require more detailed observability. Child spans should
+measure the timing of the respective sub-operation, and may add additional
+attributes.
 
 A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
