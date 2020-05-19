@@ -397,6 +397,9 @@ Metric instrument names belong to a namespace, established by the the
 associated `Meter` instance.  `Meter` implementations MUST return an
 error when multiple instruments are registered by the same name.
 
+TODO: [The following paragraph is a placeholder for a more-detailed
+document that is needed.](https://github.com/open-telemetry/opentelemetry-specification/issues/600)
+
 Metric instrument names SHOULD be semantically meaningful, independent
 of the originating Meter name.  For example, when instrumenting an
 http server library, "latency" is not an appropriate instrument name,
@@ -697,7 +700,8 @@ individual instruments is summarized in the table below.
 
 The `Meter` interface supports functions to create new, registered
 metric instruments.  Instrument constructors are named by adding a
-`New-` prefix to the kind of instrument it constructs.  
+`New-` prefix to the kind of instrument it constructs, with a
+builder pattern, or some other idiomatic approach in the language.
 
 There is at least one constructor representing each kind instrument in
 this specification (see [above](#metric-instruments)), and possibly
@@ -743,7 +747,7 @@ taken in order to form a unique mapping.
 
 The type of the label value is generally presumed to be a string by
 exporters, although as a language-level decision, the label value type
-could be any idiomatic type in that langauge that has a string
+could be any idiomatic type in that language that has a string
 representation.
 
 ### Label performance
@@ -756,14 +760,6 @@ an active record for an instrument, label set combination pair.  This
 allows measurements to be combined.  Label handling costs can be
 lowered through the use of bound synchronous instruments and
 batch-reporting functions (`RecordBatch`, `BatchObserver`).
-
-### Missing label keys
-
-When the SDK interprets labels in the context of grouping aggregated
-values for an exporter, and where there are keys that are missing, the
-SDK is required to consider these values _explicitly unspecified_.
-There is no implicit "empty" value assumed for label keys that are
-expected but not present.
 
 ### Option: Ordered labels
 
@@ -845,6 +841,7 @@ func (s *server) processStream(ctx context.Context) {
       kv.String("labelA", "..."),
       kv.String("labelB", "..."),
   )
+  defer counter2.Unbind()
 
   for _, item := <-s.channel {
      // ... other work
@@ -898,11 +895,21 @@ func (s *server) method(ctx context.Context) {
     // ... other work
 
     s.meter.RecordBatch(ctx, labels,
-        s.instruments.counter1.Measurement(1),
-        s.instruments.gauge1.Measurement(10),
-        s.instruments.measure2.Measurement(123.45),
+        s.instruments.counter.Measurement(1),
+        s.instruments.updowncounter.Measurement(10),
+        s.instruments.valuerecorder.Measurement(123.45),
     )
 }
+```
+
+Another valid interface for recording batches uses a builder pattern:
+
+```java
+    meter.RecordBatch(labels).
+    	put(s.instruments.counter, 1).
+	put(s.instruments.updowncounter, 10).
+	put(s.instruments.valuerecorder, 123.45).
+	record();
 ```
 
 Using the _record batch_ calling convention is semantically identical to
@@ -1006,12 +1013,11 @@ func (s *server) registerObservers(.Context) {
              s.observer2.Observation(value2),
              s.observer3.Observation(value3),
           },
-          metric.WithDescription("The load factor use for load balancing purposes"),
     )
 
-     s.observer1 = s.meter.NewSumObserver(..., metric.WithBatch(batch))
-     s.observer2 = s.meter.NewSumObserver(..., metric.WithBatch(batch))
-     s.observer3 = s.meter.NewSumObserver(..., metric.WithBatch(batch))
+     s.observer1 = batch.NewSumObserver(...)
+     s.observer2 = batch.NewUpDownSumObserver(...)
+     s.observer3 = batch.NewValueObserver(...)
 }
 ```
 
