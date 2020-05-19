@@ -13,8 +13,8 @@
 - [Meter provider](#meter-provider)
   * [Obtaining a Meter](#obtaining-a-meter)
   * [Global Meter provider](#global-meter-provider)
-    + [Get the global MetricProvider](#get-the-global-metricprovider)
-    + [Set the global MetricProvider](#set-the-global-metricprovider)
+    + [Get the global MeterProvider](#get-the-global-metricprovider)
+    + [Set the global MeterProvider](#set-the-global-metricprovider)
 - [Instrument properties](#instrument-properties)
   * [Instrument naming requirements](#instrument-naming-requirements)
   * [Synchronous and asynchronous instruments compared](#synchronous-and-asynchronous-instruments-compared)
@@ -360,17 +360,17 @@ instances allocated through the global `MeterProvider` and instruments
 allocated through those `Meter` instances have their initialization
 deferred until the a global SDK is first initialized.
 
-#### Get the global MetricProvider
+#### Get the global MeterProvider
 
-Since the global `MetricProvider` is a singleton and supports a single
+Since the global `MeterProvider` is a singleton and supports a single
 method, callers can obtain a global `Meter` using a global `GetMeter`
 call.  For example, `global.GetMeter(name, version)` calls `GetMeter`
-on the global `MetricProvider` and returns a named `Meter` instance.
+on the global `MeterProvider` and returns a named `Meter` instance.
 
-#### Set the global MetricProvider
+#### Set the global MeterProvider
 
 A global function installs a Metric provider as the global SDK.  For
-example, use `global.SetMetricProvider(MetricProvider)` to install the
+example, use `global.SetMeterProvider(MeterProvider)` to install the
 SDK after it is initialized.
 
 ## Instrument properties
