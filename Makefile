@@ -1,9 +1,10 @@
 # All documents to be used in spell check.
-ALL_DOC := $(shell find . -name '*.md' -type f | sort)
+ALL_DOCS := $(shell find . -name '*.md' -type f | grep -v ^./node_modules | sort)
 
 TOOLS_DIR := ./.tools
 MISSPELL_BINARY=$(TOOLS_DIR)/misspell
 MARKDOWN_LINK_CHECK=markdown-link-check
+MARKDOWN_LINT=markdownlint
 
 .PHONY: install-misspell
 install-misspell:
@@ -23,7 +24,7 @@ install-markdown-link-check:
 
 .PHONY: markdown-link-check
 markdown-link-check:
-	find . -name \*.md -print0 | xargs -0 -n1 $(MARKDOWN_LINK_CHECK) --quiet
+	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet $$f; done
 
 .PHONY: install-markdown-lint
 install-markdown-lint:
@@ -31,4 +32,4 @@ install-markdown-lint:
 
 .PHONY: markdown-lint
 markdown-lint:
-	markdownlint -c .markdownlint.yaml '**/*.md'
+	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f; done
