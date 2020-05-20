@@ -36,7 +36,7 @@ This document will explain what is required of a vendor to be considered to
 SDK through one of two mechanisms:
 
 - By providing an exporter for the [OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector/) and / or the OpenTelemetry SDKs
-- By building a receiver for the OpenTelemetry protocol
+- By building a receiver for the [OpenTelemetry protocol](https://github.com/open-telemetry/opentelemetry-proto)
 
 ## Implements OpenTelemetry
 
