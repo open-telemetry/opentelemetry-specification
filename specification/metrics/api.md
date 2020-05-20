@@ -91,7 +91,7 @@ kinds of measurement.
 The term _additive_ is used to specify a characteristic of some
 measurements, meant to indicate that only the sum is considered useful
 information.  These are measurements that you would naturally combine
-using arithmethic addition, usually real quantities of something
+using arithmetic addition, usually real quantities of something
 (e.g., number of bytes).
 
 Non-additive measurements are used when the set of values, also known
@@ -367,7 +367,7 @@ instruments can be configured with even more expensive aggregators.
 Monotonicity applies only to additive instruments.  `Counter` and
 `SumObserver` instruments are defined as monotonic because the sum
 captured by either instrument is non-decreasing.  The `UpDown-`
-varations of these two instruments are non-monotonic, meaning the sum
+variations of these two instruments are non-monotonic, meaning the sum
 can increase, decrease, or remain constant without any guarantees.
 
 Monotonic instruments are commonly used to capture information about a

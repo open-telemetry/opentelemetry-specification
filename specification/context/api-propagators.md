@@ -137,7 +137,7 @@ Required arguments:
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text `Format` implementions MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text `Format` implementions MUST ensure to always use the canonical casing for their attributes. NOTE: Canonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
 
 ## Injectors and Extractors as Separate Interfaces
 
