@@ -101,36 +101,52 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 ### Built-in samplers
 
-These are the default samplers implemented in the OpenTelemetry SDK:
+#### AlwaysOn
 
-* ALWAYS_ON
-  * This will be used as a default.
-  * Description MUST be `AlwaysOnSampler`.
-* ALWAYS_OFF
-  * Description MUST be `AlwaysOffSampler`.
-* ALWAYS_PARENT
-  * `Returns RECORD_AND_SAMPLED` if `SampledFlag` is set to true on parent
-  SpanContext and `NOT_RECORD` otherwise.
-  * Description MUST be `AlwaysParentSampler`.
-* Probability
-  * The default behavior should be to trust the parent `SampledFlag`. However
+* This is the default sampler.
+* Returns `RECORD_AND_SAMPLED` always.
+* Description MUST be `AlwaysOnSampler`.
+
+#### AlwaysOff
+
+* Returns `NOT_RECORD` always.
+* Description MUST be `AlwaysOffSampler`.
+
+#### Probability
+
+* The default behavior should be to trust the parent `SampledFlag`. However
   there should be configuration to change this.
-  * The default behavior is to apply the sampling probability only for Spans
+* The default behavior is to apply the sampling probability only for Spans
   that are root spans (no parent) and Spans with remote parent. However there
   should be configuration to change this to "root spans only", or "all spans".
-  * Description MUST be `ProbabilitySampler{0.000100}`.
-
-#### Probability Sampler algorithm
+* Description MUST be `ProbabilitySampler{0.000100}`.
 
 TODO: Add details about how the probability sampler is implemented as a function
 of the `TraceID`.
+TODO: Split out the parent handling.
+
+#### ParentOrElse
+
+* This is a composite sampler. `ParentOrElse(delegateSampler)` either respects the parent span's sampling decision or delegates to  `delegateSampler` for root spans.
+* If parent exists:
+  * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
+  * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
+* If no parent (root span) exists returns the result of the `delegateSampler`.
+* Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
+
+|Parent|`ParentOrElse(delegateSampler)`
+|--|--|
+|Exists and `SampledFlag` is `true`|`RECORD_AND_SAMPLED`|
+|Exists and `SampledFlag` is `false`|`NOT_RECORD`|
+|No parent(root spans)|Result of `delegateSampler()`|
 
 ## Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api.md#obtaining-a-tracer)).  The `name` and `version` arguments
-supplied to the `TracerProvider` must be used to create a
-[`Resource`](../resource/sdk.md) instance which is stored on the created `Tracer`.
+[API](api.md#obtaining-a-tracer)). The `name` and `version` arguments
+supplied to the `TracerProvider` must be used to create an
+[`InstrumentationLibrary`][otep-83] instance which is stored on the created
+`Tracer`.
 
 All configuration objects (SDK specific) and extension points (span processors,
 propagators) must be provided to the `TracerProvider`. `Tracer` instances must
@@ -138,8 +154,8 @@ not duplicate this data (unless for read-only access) to avoid that different
 `Tracer` instances of a `TracerProvider` have different versions of these data.
 
 The readable representations of all `Span` instances created by a `Tracer` must
-provide a `getLibraryResource` method that returns this `Resource` information
-held by the `Tracer`.
+provide a `getInstrumentationLibrary` method that returns the
+`InstrumentationLibrary` information held by the `Tracer`.
 
 ## Span processor
 
@@ -392,3 +408,4 @@ public interface SpanExporter {
 ```
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
+[otep-83]: https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md

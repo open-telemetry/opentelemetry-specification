@@ -25,32 +25,24 @@ Example: `org.mongodb.client`.
 
 <a name="instrumenting_library"></a>
 
-### Instrumenting Library
+### Instrumentation Library
 
 Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library).
-*Instrumented Library* and *Instrumenting Library* may be the same library
+*Instrumented Library* and *Instrumentation Library* may be the same library
 if it has built-in OpenTelemetry instrumentation.
+
+See [Overview](overview.md#instrumentation-libraries) for a more detailed definition and naming guidelines.
 
 Example: `io.opentelemetry.contrib.mongodb`.
 
-Synonyms: *Instrumentation Library*, *Integration*.
+Synonyms: *Instrumenting Library*
 
 <a name="name"></a>
 
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api-user.md#obtaining-a-meter)). It identifies the [Instrumenting Library](#instrumenting_library).
-
-### Namespace
-
-This term applies to [Metric names](metrics/api-user.md#metric-names) only. The namespace is used to disambiguate identical metric
-names used in different [instrumenting libraries](#instrumenting_library). The [Name](#name) provided
-for creating a `Meter` serves as its namespace in addition to the primary semantics
-described [here](#name).
-
-The `version` argument is not relevant here and will not be included in
-the resulting namespace string.
+creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api.md#meter-interface)). It identifies the [Instrumenting Library](#instrumenting_library).
 
 ## Logs
 
