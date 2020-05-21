@@ -143,9 +143,10 @@ TODO: Split out the parent handling.
 ## Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api.md#obtaining-a-tracer)).  The `name` and `version` arguments
-supplied to the `TracerProvider` must be used to create a
-[`Resource`](../resource/sdk.md) instance which is stored on the created `Tracer`.
+[API](api.md#obtaining-a-tracer)). The `name` and `version` arguments
+supplied to the `TracerProvider` must be used to create an
+[`InstrumentationLibrary`][otep-83] instance which is stored on the created
+`Tracer`.
 
 All configuration objects (SDK specific) and extension points (span processors,
 propagators) must be provided to the `TracerProvider`. `Tracer` instances must
@@ -153,8 +154,8 @@ not duplicate this data (unless for read-only access) to avoid that different
 `Tracer` instances of a `TracerProvider` have different versions of these data.
 
 The readable representations of all `Span` instances created by a `Tracer` must
-provide a `getLibraryResource` method that returns this `Resource` information
-held by the `Tracer`.
+provide a `getInstrumentationLibrary` method that returns the
+`InstrumentationLibrary` information held by the `Tracer`.
 
 ## Span processor
 
@@ -407,3 +408,4 @@ public interface SpanExporter {
 ```
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
+[otep-83]: https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md
