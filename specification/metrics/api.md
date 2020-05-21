@@ -750,6 +750,10 @@ exporters, although as a language-level decision, the label value type
 could be any idiomatic type in that language that has a string
 representation.
 
+Users are not required to pre-declare the set of label keys that will
+be used with metric instruments in the API.  Users can freely use any
+set of labels for any metric event when calling the API.
+
 ### Label performance
 
 Label handling can be a significant cost in the production of metric
@@ -794,7 +798,7 @@ The metrics API provides three semantically equivalent ways to capture
 measurements using synchronous instruments:
 
 - calling bound instruments, which have a pre-associated set of labels
-- calling unbound instruments, passing the associated set of labels directly
+- directly calling instruments, passing the associated set of labels
 - batch recording measurements for multiple instruments using a single set of labels.
 
 All three methods generate equivalent metric events, but offer varying degrees
@@ -855,10 +859,10 @@ func (s *server) processStream(ctx context.Context) {
 
 #### Direct instrument calling convention
 
-When convenience is more important than performance, or there is no re-use to
-potentially optimize with bound instruments, users may elect to operate
-directly on metric instruments, supplying labels at the call site.  This method
-offers the greatest convenience possible
+When convenience is more important than performance, or when values
+are not known ahead of time, users may elect to operate directly on
+metric instruments, meaning to supply labels at the call site.  This
+method offers the greatest convenience possible.
 
 For example, to update a single counter:
 
