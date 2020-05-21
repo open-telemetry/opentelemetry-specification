@@ -137,7 +137,7 @@ Required arguments:
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text `Format` implementions MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, text `Format` implementions MUST ensure to always use the canonical casing for their attributes. NOTE: Canonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
 
 ## Injectors and Extractors as Separate Interfaces
 
@@ -195,7 +195,8 @@ Implementations MAY provide global `Propagator`s for
 each supported `Format`.
 
 If offered, the global `Propagator`s should default to a composite `Propagator`
-containing W3C Trace Context and Correlation Context `Propagator`s,
+containing the W3C Trace Context Propagator and the Correlation Context `Propagator`
+specified in [api-correlationcontext.md](../correlationcontext/api.md#serialization),
 in order to provide propagation even in the presence of no-op
 OpenTelemetry implementations.
 

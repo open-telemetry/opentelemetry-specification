@@ -13,6 +13,7 @@ Table of Contents
   - [Remove correlation](#remove-correlation)
   - [Clear correlations](#clear-correlations)
 - [CorrelationContext Propagation](#correlationcontext-propagation)
+  - [Serialization](#serialization)
 - [Conflict Resolution](#conflict-resolution)
 
 </details>
@@ -29,8 +30,6 @@ The Correlations API consists of:
 `CorrelationContext` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
 It is an abstract data type represented by a set of name/value pairs describing user-defined properties.
 Each name in `CorrelationContext` MUST be associated with exactly one value.
-`CorrelationContext` MUST be serialized according to the editor's draft of the [W3C Correlation Context](https://w3c.github.io/correlation-context/)
-specification.
 
 ### Get correlations
 
@@ -101,6 +100,37 @@ OPTIONAL parameters:
 
 `CorrelationContext` MAY be propagated across process boundaries or across any arbitrary boundaries
 (process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
+
+### Serialization
+
+Until the [W3C Correlation Context](https://w3c.github.io/correlation-context/) specification is recommended for use, OpenTelemetry `CorrelationContext` implementations MUST be serialized according to the [editor's draft of W3C Correlation Context as of March 27, 2020](https://github.com/w3c/correlation-context/blob/c974664b9ab4d33af6355f1f7f03a2d52c89a99e/correlation_context/HTTP_HEADER_FORMAT.md) using a vendor-specific header name to avoid collisions with the W3C Correlation Context specification should it change in the future.
+
+#### Header Name
+
+`CorrelationContext` implementations MUST use the header name `otcorrelations`.
+
+#### Header Value
+
+`CorrelationContext` MUST be serialized according to the [editor's draft of W3C Correlation Context as of March 27, 2020](https://github.com/w3c/correlation-context/blob/c974664b9ab4d33af6355f1f7f03a2d52c89a99e/correlation_context/HTTP_HEADER_FORMAT.md).
+
+`CorrelationContext` values MUST be serialized as Percent-Encoded UTF-8 strings according to [RFC 3986 Section 2.1](https://tools.ietf.org/html/rfc3986#section-2.1).
+
+#### Example
+
+Correlation Context:
+
+```json
+{
+  "user": "foo@example.com",
+  "name": "Example Name"
+}
+```
+
+Header:
+
+```
+otcorrelations: user=foo%40example.com,name=Example%20Name
+```
 
 ## Conflict Resolution
 

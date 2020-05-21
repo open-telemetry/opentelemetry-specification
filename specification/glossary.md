@@ -25,15 +25,17 @@ Example: `org.mongodb.client`.
 
 <a name="instrumenting_library"></a>
 
-### Instrumenting Library
+### Instrumentation Library
 
 Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library).
-*Instrumented Library* and *Instrumenting Library* may be the same library
+*Instrumented Library* and *Instrumentation Library* may be the same library
 if it has built-in OpenTelemetry instrumentation.
+
+See [Overview](overview.md#instrumentation-libraries) for a more detailed definition and naming guidelines.
 
 Example: `io.opentelemetry.contrib.mongodb`.
 
-Synonyms: *Instrumentation Library*, *Integration*.
+Synonyms: *Instrumenting Library*
 
 <a name="name"></a>
 
