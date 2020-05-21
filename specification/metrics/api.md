@@ -10,8 +10,13 @@
   * [Aggregations](#aggregations)
   * [Time](#time)
   * [Metric Event Format](#metric-event-format)
+- [Meter provider](#meter-provider)
+  * [Obtaining a Meter](#obtaining-a-meter)
+  * [Global Meter provider](#global-meter-provider)
+    + [Get the global MeterProvider](#get-the-global-metricprovider)
+    + [Set the global MeterProvider](#set-the-global-metricprovider)
 - [Instrument properties](#instrument-properties)
-  * [Instrument naming](#instrument-naming)
+  * [Instrument naming requirements](#instrument-naming-requirements)
   * [Synchronous and asynchronous instruments compared](#synchronous-and-asynchronous-instruments-compared)
   * [Additive and non-additive instruments compared](#additive-and-non-additive-instruments-compared)
   * [Monotonic and non-monotonic instruments compared](#monotonic-and-non-monotonic-instruments-compared)
@@ -25,17 +30,26 @@
   * [ValueObserver](#valueobserver)
   * [Interpretation](#interpretation)
   * [Constructors](#constructors)
-- [Label Sets](#label-sets)
-- [Synchronous instruments](#synchronous-instruments)
+- [Sets of labels](#sets-of-labels)
+  * [Label performance](#label-performance)
+  * [Missing label keys](#missing-label-keys)
+  * [Option: Ordered labels](#option-ordered-labels)
+- [Synchronous instrument details](#synchronous-instrument-details)
+  * [Synchronous calling conventions](#synchronous-calling-conventions)
+    + [Bound instrument calling convention](#bound-instrument-calling-convention)
+    + [Direct instrument calling convention](#direct-instrument-calling-convention)
+    + [RecordBatch calling convention](#recordbatch-calling-convention)
   * [Association with distributed context](#association-with-distributed-context)
     + [Correlation context into metric labels](#correlation-context-into-metric-labels)
-- [Asynchronous instruments](#asynchronous-instruments)
-- [Details](#details)
+- [Asynchronous instrument details](#asynchronous-instrument-details)
+  * [Asynchronous calling conventions](#asynchronous-calling-conventions)
+    + [Single-instrument observer](#single-instrument-observer)
+    + [Batch observer](#batch-observer)
   * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
     + [Asynchronous instruments define moment-in-time ratios](#asynchronous-instruments-define-moment-in-time-ratios)
-  * [Related OpenTelemetry work](#related-opentelemetry-work)
-    + [Metric Views](#metric-views)
-    + [OTLP Metric protocol](#otlp-metric-protocol)
+- [Related OpenTelemetry work](#related-opentelemetry-work)
+  * [Metric Views](#metric-views)
+  * [OTLP Metric protocol](#otlp-metric-protocol)
   * [Metric SDK default implementation](#metric-sdk-default-implementation)
 
 <!-- tocstop -->
@@ -302,6 +316,63 @@ Synchronous events have one additional property, the distributed
 [Context](../context/context.md) (i.e., Span context, Correlation context)
 that was active at the time.
 
+## Meter provider
+
+A concrete `MeterProvider` implementation can be obtained by initializing and
+configuring an OpenTelemetry Metrics SDK.  This document does not
+specify how to construct an SDK, only that they must implement the
+`MeterProvider`.  Once configured, the application or library chooses
+whether it will use a global instance of the `MeterProvider`
+interface, or whether it will use dependency injection for greater
+control over configuring the provider.
+
+### Obtaining a Meter
+
+New `Meter` instances can be created via a `MeterProvider` and its
+`GetMeter(name, version)` method.  `MeterProvider`s are generally expected to
+be used as singletons.  Implementations SHOULD provide a single global
+default `MeterProvider`. The `GetMeter` method expects two string
+arguments:
+
+- `name` (required): This name must identify the instrumentation library (e.g. `io.opentelemetry.contrib.mongodb`)
+  and *not* the instrumented library.
+  In case an invalid name (null or empty string) is specified, a working default `Meter` implementation is returned as a fallback
+  rather than returning null or throwing an exception.
+  A `MeterProvider` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
+- `version` (optional): Specifies the version of the instrumentation library (e.g. `semver:1.0.0`).
+
+Each distinctly named `Meter` establishes a separate namespace for its
+metric instruments, making it possible for multiple instrumentation
+libraries to report the metrics with the same instrument name used by
+other libraries.  The name of the `Meter` is explicitly not intended
+to be used as part of the instrument name, as that would prevent
+instrumentation libraries from capturing metrics by the same name.
+
+### Global Meter provider
+
+Use of a global instance may be seen as an anti-pattern in many
+situations, but it most cases it is the correct pattern for telemetry
+data, in order to combine telemetry data from inter-dependent
+libraries _without use of dependency injection_.  OpenTelemetry
+language APIs SHOULD offer a global instance for this reason.
+Languges that offer a global instance MUST ensure that `Meter`
+instances allocated through the global `MeterProvider` and instruments
+allocated through those `Meter` instances have their initialization
+deferred until the a global SDK is first initialized.
+
+#### Get the global MeterProvider
+
+Since the global `MeterProvider` is a singleton and supports a single
+method, callers can obtain a global `Meter` using a global `GetMeter`
+call.  For example, `global.GetMeter(name, version)` calls `GetMeter`
+on the global `MeterProvider` and returns a named `Meter` instance.
+
+#### Set the global MeterProvider
+
+A global function installs a MeterProvider as the global SDK.  For
+example, use `global.SetMeterProvider(MeterProvider)` to install the
+SDK after it is initialized.
+
 ## Instrument properties
 
 Because the API is separated from the SDK, the implementation
@@ -311,9 +382,31 @@ interpretation.  The semantics of the individual instruments is
 defined by several properties, detailed here, to assist with
 instrument selection.
 
-### Instrument naming
+### Instrument naming requirements
 
-TODO: move and update content on metric names from api-user.md
+Metric instruments are primarily defined by their name, which is how
+we refer to them in external systems.  Metric instrument names conform
+to the following syntax:
+
+1. They are non-empty strings
+2. They are case-insensitive
+3. The first character must be non-numeric, non-space, non-punctuation
+4. Subsequent characters must be belong to the alphanumeric characters, '\_', '.', and '-'.
+
+Metric instrument names belong to a namespace, established by the the
+associated `Meter` instance.  `Meter` implementations MUST return an
+error when multiple instruments are registered by the same name.
+
+TODO: [The following paragraph is a placeholder for a more-detailed
+document that is needed.](https://github.com/open-telemetry/opentelemetry-specification/issues/600)
+
+Metric instrument names SHOULD be semantically meaningful, independent
+of the originating Meter name.  For example, when instrumenting an
+http server library, "latency" is not an appropriate instrument name,
+as it is too generic.  Instead, as an example, we should favor a name
+like "http\_request\_latency", as it would inform the viewer of the
+semantic meaning of the latency measurement.  Multiple instrumentation
+libraries may be written to generate this metric.
 
 ### Synchronous and asynchronous instruments compared
 
@@ -605,18 +698,232 @@ individual instruments is summarized in the table below.
 
 ### Constructors
 
-TODO: specify detail on the metric instrument constructors from api-user.md
+The `Meter` interface supports functions to create new, registered
+metric instruments.  Instrument constructors are named by adding a
+`New-` prefix to the kind of instrument it constructs, with a
+builder pattern, or some other idiomatic approach in the language.
 
-## Label Sets
+There is at least one constructor representing each kind instrument in
+this specification (see [above](#metric-instruments)), and possibly
+more as dictated by the language.  For example, if specializations are
+provided for integer and floating pointer numbers, the OpenTelemetry
+API would support 2 constructors per instrument kind.
 
-TODO: incorporate more detail on label sets from api-user.md
+Binding instruments to a single `Meter` instance has two benefits:
 
-## Synchronous instruments
+1. Instruments can be exported from the zero state, prior to first use, without an explicit registration call
+2. The library-name and version are implicitly associated with the metric event.
 
-TODO: Organize a section on synchronous instruments from:
+Some existing metric systems support allocating metric instruments
+statically and providing the equivalent of a `Meter` interface at the
+time of use.  In one example, typical of statsd clients, existing code
+may not be structured with a convenient place to store new metric
+instruments.  Where this becomes a burden, it is recommended to use
+the global `MeterProvider` to construct a static `Meter`, and to
+construct and use globally-scoped metric instruments.
 
-- parts of the "Details" section below
-- parts on calling conventions from api-user.md
+The situation is similar for users of existing Prometheus clients, where
+instruments can be allocated to the global `Registerer`.  
+Such code may not have access to an appropriate `MeterProvider` or `Meter`
+instance at the location where instruments are defined.
+Where this becomes a burden, it is
+recommended to use the global meter provider to construct a static
+named `Meter`, to construct metric instruments.
+
+Applications are expected to construct long-lived instruments.
+Instruments are considered permanent for the lifetime of a SDK, there
+is no method to delete them.
+
+## Sets of labels
+
+Semantically, a set of labels is a unique mapping from string key to
+value.  Across the API, a set of labels MUST be passed in the same,
+idiomatic form.  Common representations include an ordered list of
+key:values, or a map of key:values.
+
+When labels are passed as an ordered list of key:values, and there are
+duplicate keys found, the last value in the list for any given key is
+taken in order to form a unique mapping.
+
+The type of the label value is generally presumed to be a string by
+exporters, although as a language-level decision, the label value type
+could be any idiomatic type in that language that has a string
+representation.
+
+Users are not required to pre-declare the set of label keys that will
+be used with metric instruments in the API.  Users can freely use any
+set of labels for any metric event when calling the API.
+
+### Label performance
+
+Label handling can be a significant cost in the production of metric
+data overall.
+
+SDK support for in-process aggregation depends on the ability to find
+an active record for an instrument, label set combination pair.  This
+allows measurements to be combined.  Label handling costs can be
+lowered through the use of bound synchronous instruments and
+batch-reporting functions (`RecordBatch`, `BatchObserver`).
+
+### Option: Ordered labels
+
+As a language-level decision, APIs MAY support label key ordering.  In this
+case, the user may specify an ordered sequence of label keys, which is used to
+create an unordered set of labels from a sequence of similarly ordered label
+values.  For example:
+
+```golang
+
+var rpcLabelKeys = OrderedLabelKeys("a", "b", "c")
+
+for _, input := range stream {
+    labels := rpcLabelKeys.Values(1, 2, 3)  // a=1, b=2, c=3
+
+    // ...
+}
+```
+
+This is specified as a language-optional feature because its safety, and
+therefore its value as an input for monitoring, depends on the availability of
+type-checking in the source language.  Passing unordered labels (i.e., a
+mapping from keys to values) is considered the safer alternative.
+
+## Synchronous instrument details
+
+The following details are specified for synchronous instruments.
+
+### Synchronous calling conventions
+
+The metrics API provides three semantically equivalent ways to capture
+measurements using synchronous instruments:
+
+- calling bound instruments, which have a pre-associated set of labels
+- directly calling instruments, passing the associated set of labels
+- batch recording measurements for multiple instruments using a single set of labels.
+
+All three methods generate equivalent metric events, but offer varying degrees
+of performance and convenience.
+
+The performance of the metric API depends on the work done to enter a
+new measurement, which is typically dominated by the cost of handling
+labels.  Bound instruments are the highest-performance calling
+convention, because they can amortize the cost of handling labels
+across many uses.  Recording multiple measurements via
+`RecordBatch()`, another calling convention, is a good option for
+improving performance, since the cost of handling labels is spread
+across multiple measurements.  The direct calling convention is the
+most convenient, but least performant calling convention for entering
+measurements through the API.
+
+#### Bound instrument calling convention
+
+In situations where performance is a requirement and a metric
+instrument is repeatedly used with the same set of labels, the
+developer may elect to use the _bound instrument_ calling convention
+as an optimization.  For bound instruments to be a benefit, it
+requires that a specific instrument will be re-used with specific
+labels.  If an instrument will be used with the same labels more than
+once, obtaining a bound instrument corresponding to the labels ensures
+the highest performance available.
+
+To bind an instrument, use the `Bind(labels...)` method to return an
+interface that supports the corresponding synchronous API (i.e.,
+`Add()` or `Record()`).  Bound instruments are invoked without labels;
+the corresponding metric event is associated with the labels that were
+bound to the instrument.  Bound instruments may consume SDK resources
+indefinitely until the user calls `Unbind()` to release the bound
+instrument.
+
+For example, to repeatedly update a counter with the same labels:
+
+```golang
+func (s *server) processStream(ctx context.Context) {
+
+  // The result of Bind() is a bound instrument
+  // (e.g., a BoundInt64Counter).
+  counter2 := s.instruments.counter2.Bind(
+      kv.String("labelA", "..."),
+      kv.String("labelB", "..."),
+  )
+  defer counter2.Unbind()
+
+  for _, item := <-s.channel {
+     // ... other work
+
+     // High-performance metric calling convention: use of bound
+     // instruments.
+     counter2.Add(ctx, item.size())
+  }
+}
+```
+
+#### Direct instrument calling convention
+
+When convenience is more important than performance, or when values
+are not known ahead of time, users may elect to operate directly on
+metric instruments, meaning to supply labels at the call site.  This
+method offers the greatest convenience possible.
+
+For example, to update a single counter:
+
+```golang
+func (s *server) method(ctx context.Context) {
+    // ... other work
+
+    s.instruments.counter1.Add(ctx, 1,
+        kv.String("labelA", "..."),
+        kv.String("labelB", "..."),
+        )
+}
+```
+
+Direct calls are convenient because they do not require allocating and
+storing a bound instrument.  They are appropriate for use in cases
+where an instrument will be used rarely, or rarely used with the same
+set of labels.  Unlike bound instruments, there is not a long-term
+consumption of SDK resources when using the direct calling convention.
+
+#### RecordBatch calling convention
+
+There is one final API for entering measurements, which is like the
+direct access calling convention but supports multiple simultaneous
+measurements.  The use of the `RecordBatch` API supports entering
+multiple measurements, implying a semantically atomic update to
+several instruments.  Calls to `RecordBatch` amortize the cost of
+label handling across multiple measurements.
+
+For example:
+
+```golang
+func (s *server) method(ctx context.Context) {
+    // ... other work
+
+    s.meter.RecordBatch(ctx, labels,
+        s.instruments.counter.Measurement(1),
+        s.instruments.updowncounter.Measurement(10),
+        s.instruments.valuerecorder.Measurement(123.45),
+    )
+}
+```
+
+Another valid interface for recording batches uses a builder pattern:
+
+```java
+    meter.RecordBatch(labels).
+        put(s.instruments.counter, 1).
+        put(s.instruments.updowncounter, 10).
+        put(s.instruments.valuerecorder, 123.45).
+        record();
+```
+
+Using the _record batch_ calling convention is semantically identical to
+a sequence of direct calls, with the addition of atomicity.  Because
+values are entered in a single call, the SDK is potentially able to
+implement an atomic update, from the exporter's point of view, because
+the SDK can enqueue a single bulk update, or take a lock only once,
+for example.  Like the direct calling convention, there is not a
+long-term consumption of SDK resources when using the batch calling
+convention.
 
 ### Association with distributed context
 
@@ -643,17 +950,80 @@ can be a significant expense.
 Configuring views for applying Correlation context labels is a [work in
 progress](https://github.com/open-telemetry/oteps/pull/89).
 
-## Asynchronous instruments
+## Asynchronous instrument details
 
-TODO: Organize a section on asynchronous instrument from:
+The following details are specified for synchronous instruments.
 
-- parts of the "Details" section below
-- new text on calling conventions including multi-observer support
+### Asynchronous calling conventions
 
-## Details
+The metrics API provides two semantically equivalent ways to capture
+measurements using asynchronous instruments, either through
+single-instrument callbacks or through multi-instrument batch
+callbacks.
 
-TODO: This content will be re-organized into the sections dedicated to
-sync- and async-instruments above in a future PR.
+Whether single or batch, asynchronous instruments must be observed
+through only one callback.  The constructors return no-op instruments
+for `null` observer callbacks.  It is considered an error when more
+than one callback is specified for any asynchronous instrument.
+
+Instruments may not observe more than one value per distinct label set
+per instrument.  When more than one value is observed for a single
+instrument and label set, the last observed value is taken and earlier
+values are discarded without error.
+
+#### Single-instrument observer
+
+A single instrument callback is bound to one instrument.  Its
+callback receives an `ObserverResult` with an `Observe(value,
+labels...)` function.
+
+```golang
+func (s *server) registerObservers(.Context) {
+     s.observer1 = s.meter.NewInt64SumObserver(
+         "service_load_factor",
+          metric.WithCallback(func(result metric.Float64ObserverResult) {
+             for _, listener := range s.listeners {
+                 result.Observe(
+                     s.loadFactor(),
+                     kv.String("name", server.name),
+                     kv.String("port", listener.port),
+                 )
+             }
+          }),
+          metric.WithDescription("The load factor use for load balancing purposes"),
+    )
+}
+
+```
+
+#### Batch observer
+
+A `BatchObserver` callback supports observing multiple instruments in
+one callback.  Its callback receives an `BatchObserverResult` with an
+`Observe(labels, observations...)` function.
+
+An observation is returned by calling `Observation(value)`, on an
+asynchronous instrument.
+
+```golang
+func (s *server) registerObservers(.Context) {
+     batch := s.meter.NewBatchObserver(func (result BatchObserverResult) {
+          result.Observe(
+             []kv.KeyValue{
+                 kv.String("name", server.name),
+                 kv.String("port", listener.port),
+             },
+             s.observer1.Observation(value1),
+             s.observer2.Observation(value2),
+             s.observer3.Observation(value3),
+          },
+    )
+
+     s.observer1 = batch.NewSumObserver(...)
+     s.observer2 = batch.NewUpDownSumObserver(...)
+     s.observer3 = batch.NewValueObserver(...)
+}
+```
 
 ### Asynchronous observations form a current set
 
@@ -698,12 +1068,12 @@ contribution is defined in this way, independent of the collection
 interval duration, thanks to the properties of asynchronous
 instruments.
 
-### Related OpenTelemetry work
+## Related OpenTelemetry work
 
 Several ongoing efforts are underway as this specification is being
 written.
 
-#### Metric Views
+### Metric Views
 
 The API does not support configurable aggregations for metric
 instruments.
@@ -714,7 +1084,7 @@ supports configuring aggregations, including which operator is applied
 
 See the [current issue discussion on this topic](https://github.com/open-telemetry/opentelemetry-specification/issues/466) and the [current OTEP draft](https://github.com/open-telemetry/oteps/pull/89).
 
-#### OTLP Metric protocol
+### OTLP Metric protocol
 
 The OTLP protocol is designed to export metric data in a memoryless
 way, as documented above.  Several details of the protocol are being
