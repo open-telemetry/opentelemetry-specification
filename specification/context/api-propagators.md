@@ -139,13 +139,19 @@ Required arguments:
 - The carrier that holds propagation fields. For example, an outgoing message or http request.
 - The `Setter` invoked for each propagation key to add or remove.
 
+`Setter` is defined as a separate object from the carrier to avoid runtime allocations,
+removing the need for additional objects wrapping the carrier that access its contents
+through a given interface.
+
+`Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
+
 #### Setter argument
 
 Setter is an argument in `Inject` that sets values into given fields.
 
 `Setter` allows a `HttpTextPropagator` to set propagated fields into a carrier.
 
-`Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Setter` class with `Set` method as described below.
+One of the ways to implement it is `Setter` class with `Set` method as described below.
 
 ##### Set
 
@@ -171,13 +177,19 @@ Required arguments:
 
 Returns a new `Context` derived from the `Context` passed as argument.
 
+`Getter` is defined as a separate object from the carrier to avoid runtime allocations,
+removing the need for additional objects wrapping the carrier that access its contents
+through a given interface.
+
+`Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
+
 #### Getter argument
 
 Getter is an argument in `Extract` that get value from given field
 
 `Getter` allows a `HttpTextPropagator` to read propagated fields from a carrier.
 
-`Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations. One of the ways to implement it is `Getter` class with `Get` method as described below.
+One of the ways to implement it is `Getter` class with `Get` method as described below.
 
 ##### Get
 
@@ -188,7 +200,7 @@ Required arguments:
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, `HTTPTextPropagator`s MUST ensure to always use the canonical casing for their attributes. NOTE: Cannonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, `HTTPTextPropagator`s MUST ensure to always use the canonical casing for their attributes. NOTE: Canonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
 
 ## Injectors and Extractors as Separate Interfaces
 
