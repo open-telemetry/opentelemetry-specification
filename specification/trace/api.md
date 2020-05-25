@@ -104,7 +104,7 @@ That API MUST accept the following parameters:
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
 
-Implementations of this function MUST be prepared that an user calls the
+Implementations of this function MUST be prepared that a user calls the
 function only once per name+version combination (i.e. caches and re-uses the
 returned `Tracer` instance). If configuration changes should be picked up by
 users, these changes SHOULD be reflected in already returned objects, not only
@@ -123,7 +123,7 @@ actively update their configuration if it changes.
 
 Some applications may have to use multiple `TracerProvider` instances, e.g.
 to have different settings (e.g. `SpanProcessor`s) to each (and
-consequently to the `Tracer`s crated by them).
+consequently to the `Tracer`s created by them).
 
 For example, runtimes that support multiple deployments or applications might need to
 provide a different `TracerProvider` instance to each deployment. To support this,
@@ -277,9 +277,9 @@ A Span MUST ONLY be created via a [`Tracer`](#tracer).
 
 When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
 new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
-SHOULD create each new `Span` as a child of its active `Span` unless an
+SHOULD create each new `Span` as a child of its active `Span`, unless an
 explicit parent is provided or the option to create a span without a parent is
-selected, or the current active `Span` is invalid.
+selected, or the currently active `Span` is invalid.
 
 `Span` creation MUST NOT set the newly created `Span` as the currently
 active `Span` by default, but this functionality MAY be offered additionally
