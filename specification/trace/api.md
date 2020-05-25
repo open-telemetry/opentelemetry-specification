@@ -36,7 +36,7 @@ Table of Contents
 
 </details>
 
-Tracing API consist of a these main classes:
+Tracing API consist of these main classes:
 
 - [`TracerProvider`](#tracerprovider) is the entry point of the API. It creates `Tracer`s.
 - [`Tracer`](#tracer) is the class responsible for creating `Span`s.
