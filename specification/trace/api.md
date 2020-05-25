@@ -157,7 +157,7 @@ The `Tracer` SHOULD provide methods to:
 - Get the currently active `Span`
 - Make a given `Span` as active
 
-The `Tracer` MUST use the [`Context`](../context/Context.md)
+The `Tracer` MUST use the [`Context`](../context/context.md)
 in order to get and set the current `Span` state and to decide how `Span`s
 are passed across process boundaries.
 
@@ -166,7 +166,7 @@ the `Tracer` MUST return a placeholder `Span` with an invalid `SpanContext`
 and `IsRecording` being false.
 
 For any two `Tracer`s returned from the same `TracerProvider` and queried at the
-time in the same logical execution unit (see [Context](../context/Context.md)),
+time in the same logical execution unit (see [Context](../context/context.md)),
 the active Span MUST be the same unless at least one them
 returns the placeholder span (see above).
 Note: This means that implementations are allowed to "disable" a `Tracer`
