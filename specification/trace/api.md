@@ -38,7 +38,8 @@ Table of Contents
 
 Tracing API consist of these main classes:
 
-- [`TracerProvider`](#tracerprovider) is the entry point of the API. It creates `Tracer`s.
+- [`TracerProvider`](#tracerprovider) is the entry point of the API.
+  It provides access to `Tracer`s.
 - [`Tracer`](#tracer) is the class responsible for creating `Span`s.
 - [`Span`](#span) is the API to trace an operation.
 
@@ -68,7 +69,7 @@ A duration is the elapsed time between two events.
 
 ## TracerProvider
 
-New `Tracer` instances can be created via a `TracerProvider`.
+`Tracer`s can be accessed with a `TracerProvider`.
 
 In implementations of the API, the `TracerProvider` is expected to be the
 stateful object that holds any configuration
@@ -114,7 +115,7 @@ if the user calls the API to get a `Tracer` again.
 
 Note: This could, for example, be implemented by storing any mutable
 configuration in the `TracerProvider` and having `Tracer` implementation objects
-have a reference to the `TracerProvider` that created them.
+have a reference to the `TracerProvider` from which they were obtained.
 If configuration must be stored per-tracer (such as disabling a certain tracer),
 the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
@@ -124,7 +125,7 @@ returned `Tracer`s and actively update their configuration if it changes.
 
 Some applications may have to use multiple `TracerProvider` instances, e.g.
 to have different settings (e.g. `SpanProcessor`s) to each (and
-consequently to the `Tracer`s created by them).
+consequently to the `Tracer`s obtained from them).
 
 For example, runtimes that support multiple deployments or applications might need to
 provide a different `TracerProvider` instance to each deployment. To support this,
