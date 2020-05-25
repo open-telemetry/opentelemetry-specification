@@ -78,7 +78,9 @@ when creating the `TracerProvider`, or rely on external configuration, e.g. when
 using the provider pattern.
 
 Normally the `TracerProvider` is expected to be accessed as a singleton, i.e.,
-the API SHOULD provide a single global default `TracerProvider`.
+the API SHOULD provide a global default `TracerProvider`. However, there may be
+cases where more than one `TracerProvider` is required:
+see [below](#multi-tracerprovider).
 
 ### TracerProvider operations
 
@@ -110,16 +112,15 @@ returned `Tracer` instance). If configuration changes should be picked up by
 users, these changes SHOULD be reflected in already returned objects, not only
 if the user calls the API to get a `Tracer` again.
 
-Note: This could, for example, be implemented by
-storing any mutable configuration in the `TracerProvider` and
-having `Tracer` implementation objects have a reference to the `TracerProvider`
-that created them. If configuration must be stored per-tracer
-(such as disabling a certain tracer), the tracer could, for example, do a
-look-up with its name+version in a map in the `TracerProvider`, or the
-`TracerProvider` could maintain a registry of all returned `Tracer`s and
-actively update their configuration if it changes.
+Note: This could, for example, be implemented by storing any mutable
+configuration in the `TracerProvider` and having `Tracer` implementation objects
+have a reference to the `TracerProvider` that created them.
+If configuration must be stored per-tracer (such as disabling a certain tracer),
+the tracer could, for example, do a look-up with its name+version in a map in
+the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
+returned `Tracer`s and actively update their configuration if it changes.
 
-### Runtimes with multiple deployments/applications
+### Runtimes with multiple deployments/applications <a name="multi-tracerprovider"></a>
 
 Some applications may have to use multiple `TracerProvider` instances, e.g.
 to have different settings (e.g. `SpanProcessor`s) to each (and
@@ -164,15 +165,14 @@ When getting the current `Span` while there is none that is currently active,
 the `Tracer` MUST return a placeholder `Span` with an invalid `SpanContext`
 and `IsRecording` being false.
 
-For any two `Tracer`s returned from the same `TracerProvider`
-and queried at the same time in the same logical execution unit
-(see [Context](../context/Context.md)), the active Span
-MUST be the same unless at least one them returns the placeholder span
-(see above).
-Note: This means that implementations are allowed to "disable" a `Tracer` such
-that it has no active `Span`. Such `Tracer`s are expected but not required to
-also return placeholder `Span`s when creating a new `Span` and to do nothing if
-requested to set the current `Span`.
+For any two `Tracer`s returned from the same `TracerProvider` and queried at the
+time in the same logical execution unit (see [Context](../context/Context.md)),
+the active Span MUST be the same unless at least one them
+returns the placeholder span (see above).
+Note: This means that implementations are allowed to "disable" a `Tracer`
+such that it has no active `Span`.
+Such `Tracer`s would typically also return placeholder `Span`s when creating a
+new `Span` and to do nothing if requested to set the current `Span`.
 
 The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
 convenience functions to manage a `Span`'s lifetime and the scope in which a
