@@ -155,14 +155,15 @@ The `Tracer` MUST provide functions to:
 The `Tracer` SHOULD provide methods to:
 
 - Get the currently active `Span`
-- Make a given `Span` as active
+- Mark a given `Span` as active
 
 The `Tracer` MUST use the [`Context`](../context/context.md)
 in order to get and set the current `Span` and to decide how `Span`s
 are passed across process boundaries.
 
-When getting the current `Span` while there is none that is currently active,
-the `Tracer` MUST return a placeholder `Span` with an invalid `SpanContext`
+If there is no currently active `Span`
+and the `Tracer` is asked for the current `Span`,
+it MUST return a placeholder `Span` with an invalid `SpanContext`
 and `IsRecording` being false.
 
 For any two `Tracer`s returned from the same `TracerProvider` and queried at the
