@@ -107,11 +107,10 @@ That API MUST accept the following parameters:
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
 
-Implementations of this function MUST be prepared that a user calls the
-function only once per name+version combination (i.e. caches and re-uses the
-returned `Tracer` instance). If the implementation wants configuration changes to be picked up by
-users, these changes SHOULD be reflected in already returned objects, not only
-if the user calls the API to get a `Tracer` again.
+Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
+with the same name+version to pick up configuration changes.
+This can be achieved either by allowing to work with an outdated configuration or
+by ensuring that new configuration applies also to previously returned `Tracer`s.
 
 Note: This could, for example, be implemented by storing any mutable
 configuration in the `TracerProvider` and having `Tracer` implementation objects
