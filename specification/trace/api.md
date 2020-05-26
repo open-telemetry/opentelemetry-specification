@@ -109,7 +109,7 @@ It is unspecified whether or under which conditions the same or different
 
 Implementations of this function MUST be prepared that a user calls the
 function only once per name+version combination (i.e. caches and re-uses the
-returned `Tracer` instance). If configuration changes should be picked up by
+returned `Tracer` instance). If the implementation wants configuration changes to be picked up by
 users, these changes SHOULD be reflected in already returned objects, not only
 if the user calls the API to get a `Tracer` again.
 
