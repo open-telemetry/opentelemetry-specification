@@ -142,9 +142,9 @@ The tracer is responsible for creating `Span`s.
 
 Note: Apart from the library name and version
 provided to the `TracerProvider` to get them,
-`Tracer`s are not usually expected to not have mutable state of their own
-(but they may contain a reference to shared mutable configuration that is
-expected to be owned by the `TracerProvider`).
+`Tracer`s will usually be stateless.
+They may contain a reference to shared mutable configuration that is
+expected to be owned by the `TracerProvider`, however.
 
 ### Tracer operations
 
