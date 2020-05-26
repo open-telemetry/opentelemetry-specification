@@ -69,7 +69,6 @@ Returns the sampling Decision for a `Span` to be created.
 * `TraceId` of the `Span` to be created. It can be different from the `TraceId`
   in the `SpanContext`. Typically in situations when the `Span` to be created
   starts a new Trace.
-* `SpanId` of the `Span` to be created.
 * Name of the `Span` to be created.
 * `SpanKind`
 * Initial set of `Attributes` for the `Span` being constructed
