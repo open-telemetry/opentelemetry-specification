@@ -158,7 +158,7 @@ The `Tracer` SHOULD provide methods to:
 - Make a given `Span` as active
 
 The `Tracer` MUST use the [`Context`](../context/context.md)
-in order to get and set the current `Span` state and to decide how `Span`s
+in order to get and set the current `Span` and to decide how `Span`s
 are passed across process boundaries.
 
 When getting the current `Span` while there is none that is currently active,
