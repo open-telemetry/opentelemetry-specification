@@ -3,13 +3,12 @@
 The purpose of this document is to define the _standard_ Metrics SDK
 provided with OpenTelemetry libraries in each language.
 
-Note: This document assumes you have read both the (Metrics API
-overview)[api-metrics.md] and the (Metrics User-Facing
-API)[api-metrics-user.md] specification documents.
-
-_This document is derived from the Golang Metrics SDK prototype._
+Note: This document assumes you have read the (Metrics API)[api.md]	
+specification.
 
 ## Overview
+
+
 
 ![Metric SDK Design Diagram](img/metric-sdk.png)
 
@@ -58,6 +57,8 @@ kind.
 
 __Collection__: _Collection_ refers to the process of gathering the
 current state from all active metric instruments for the exporter.
+
+@@@ Revisit ^^^
 
 ## Accumulator
 
