@@ -177,7 +177,7 @@ new `Span` and to do nothing if requested to set the current `Span`.
 The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
 convenience functions to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
-`Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
+`Span` SHOULD be made active. A `Span` may be finished (i.e. have a non-null end
 time) but still be active. A `Span` may be active in one logical execution unit
 after it has been made inactive on another.
 
