@@ -4,27 +4,27 @@
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
 
-The OpenTelemetry specification describes the cross-language requirements and expectations for all OpenTelemetry implementations.
+The OpenTelemetry specification describes the cross-language requirements and expectations for all OpenTelemetry implementations. Substantive changes to the specification must be proposed using the [OpenTelemetry Enhancement Proposal](https://github.com/open-telemetry/oteps) process. Small changes, such as clarifications, wording changes, spelling/grammar corrections, etc. can be made directly via pull requests.
 
 ## Table of Contents
 
 - [Overview](specification/overview.md)
+- [Glossary](specification/glossary.md)
 - [Library Guidelines](specification/library-guidelines.md)
   - [Package/Library Layout](specification/library-layout.md)
   - [Concurrency and Thread-Safety](specification/concurrency.md)
 - API Specification
-  - [DistributedContext](specification/api-distributedcontext.md)
-    - [Propagators](specification/api-propagators.md)
-  - [Tracing](specification/api-tracing.md)
-  - [Metrics](specification/api-metrics.md)
-    - [User-Facing API](specification/api-metrics-user.md)
-    - [Meter API](specification/api-metrics-meter.md)
+  - [CorrelationContext](specification/correlationcontext/api.md)
+    - [Propagators](specification/context/api-propagators.md)
+  - [Tracing](specification/trace/api.md)
+  - [Metrics](specification/metrics/api.md)
 - SDK Specification
-  - [Tracing](specification/sdk-tracing.md)
-  - [Resource](specification/sdk-resource.md)
+  - [Tracing](specification/trace/sdk.md)
+  - [Resource](specification/resource/sdk.md)
+  - [Configuration](specification/sdk-configuration.md)
 - Data Specification
-  - [Semantic Conventions](specification/data-semantic-conventions.md)
-  - [Protocol](specification/protocol.md)
+  - [Semantic Conventions](specification/overview.md#semantic-conventions.md)
+  - [Protocol](specification/protocol/README.md)
 - About the Project
   - [Timeline](#project-timeline)
   - [Notation Conventions and Compliance](#notation-conventions-and-compliance)
@@ -34,7 +34,11 @@ The OpenTelemetry specification describes the cross-language requirements and ex
 
 ## Project Timeline
 
-OpenTelemetry is currently under development. Check out our [current milestones](milestones.md).
+The current project status as well as information on notable past releases is found at
+[the OpenTelemetry project page](https://opentelemetry.io/project-status/).
+
+Information about current work and future development plans is found at the
+[specification development milestones](https://github.com/open-telemetry/opentelemetry-specification/milestones).
 
 ## Notation Conventions and Compliance
 

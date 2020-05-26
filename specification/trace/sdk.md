@@ -19,7 +19,7 @@ the backend.
 
 Sampling may be implemented on different stages of a trace collection.
 OpenTelemetry API defines a `Sampler` interface that can be used at
-instrumentation points by libraries to check the sampling `Decision` early and
+instrumentation points by libraries to check the `SamplingResult` early and
 optimize the amount of telemetry that needs to be collected.
 
 All other sampling algorithms may be implemented on SDK layer in exporters, or
@@ -34,7 +34,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   all spans with this flag set. However, [Span Exporter](#span-exporter) will
   not receive them unless the `Sampled` flag was set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
-  the `SpanContext` to child Spans. For more details see the [W3C
+  the `SpanContext` to child Spans. For more details see the [W3C Trace Context
   specification][trace-flags]. This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Processor](#span-processor) and [Span
   Exporter](#span-exporter) will receive spans with the `Sampled` flag set for
@@ -75,7 +75,7 @@ Returns the sampling Decision for a `Span` to be created.
 * Initial set of `Attributes` for the `Span` being constructed
 * Collection of links that will be associated with the `Span` to be created.
   Typically useful for batch operations, see
-  [Links Between Spans](overview.md#links-between-spans).
+  [Links Between Spans](../overview.md#links-between-spans).
 
 **Return value:**
 
@@ -101,68 +101,85 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 ### Built-in samplers
 
-These are the default samplers implemented in the OpenTelemetry SDK:
+#### AlwaysOn
 
-* ALWAYS_ON
-  * This will be used as a default.
-  * Description MUST be `AlwaysOnSampler`.
-* ALWAYS_OFF
-  * Description MUST be `AlwaysOffSampler`.
-* ALWAYS_PARENT
-  * `Returns RECORD_AND_SAMPLED` if `SampledFlag` is set to true on parent
-  SpanContext and `NOT_RECORD` otherwise.
-  * Description MUST be `AlwaysParentSampler`.
-* Probability
-  * The default behavior should be to trust the parent `SampledFlag`. However
+* This is the default sampler.
+* Returns `RECORD_AND_SAMPLED` always.
+* Description MUST be `AlwaysOnSampler`.
+
+#### AlwaysOff
+
+* Returns `NOT_RECORD` always.
+* Description MUST be `AlwaysOffSampler`.
+
+#### Probability
+
+* The default behavior should be to trust the parent `SampledFlag`. However
   there should be configuration to change this.
-  * The default behavior is to apply the sampling probability only for Spans
+* The default behavior is to apply the sampling probability only for Spans
   that are root spans (no parent) and Spans with remote parent. However there
   should be configuration to change this to "root spans only", or "all spans".
-  * Description MUST be `ProbabilitySampler{0.000100}`.
-
-#### Probability Sampler algorithm
+* Description MUST be `ProbabilitySampler{0.000100}`.
 
 TODO: Add details about how the probability sampler is implemented as a function
 of the `TraceID`.
+TODO: Split out the parent handling.
+
+#### ParentOrElse
+
+* This is a composite sampler. `ParentOrElse(delegateSampler)` either respects the parent span's sampling decision or delegates to  `delegateSampler` for root spans.
+* If parent exists:
+  * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
+  * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
+* If no parent (root span) exists returns the result of the `delegateSampler`.
+* Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
+
+|Parent|`ParentOrElse(delegateSampler)`
+|--|--|
+|Exists and `SampledFlag` is `true`|`RECORD_AND_SAMPLED`|
+|Exists and `SampledFlag` is `false`|`NOT_RECORD`|
+|No parent(root spans)|Result of `delegateSampler()`|
 
 ## Tracer Creation
 
-New `Tracer` instances are always created through a `TracerFactory` (see [API](api-tracing.md#obtaining-a-tracer)).
-The `name` and `version` arguments supplied to the `TracerFactory` must be used
-to create a `Resource` instance which is stored on the created `Tracer`.
+New `Tracer` instances are always created through a `TracerProvider` (see
+[API](api.md#obtaining-a-tracer)). The `name` and `version` arguments
+supplied to the `TracerProvider` must be used to create an
+[`InstrumentationLibrary`][otep-83] instance which is stored on the created
+`Tracer`.
 
 All configuration objects (SDK specific) and extension points (span processors,
-propagators) must be provided to the `TracerFactory`. `Tracer` instances must
+propagators) must be provided to the `TracerProvider`. `Tracer` instances must
 not duplicate this data (unless for read-only access) to avoid that different
-`Tracer` instances of a `TracerFactory` have different versions of these data.
+`Tracer` instances of a `TracerProvider` have different versions of these data.
 
 The readable representations of all `Span` instances created by a `Tracer` must
-provide a `getLibraryResource` method that returns this `Resource` information
-held by the `Tracer`.
+provide a `getInstrumentationLibrary` method that returns the
+`InstrumentationLibrary` information held by the `Tracer`.
 
-### Span processor
+## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
 invocations. The span processors are invoked only when
-[`IsRecording`](api-tracing.md#isrecording) is true.
+[`IsRecording`](api.md#isrecording) is true.
 
 Built-in span processors are responsible for batching and conversion of spans to
 exportable representation and passing batches to exporters.
 
-Span processors can be registered directly on SDK `TracerFactory` and they are
+Span processors can be registered directly on SDK `TracerProvider` and they are
 invoked in the same order as they were registered.
 
-All `Tracer` instances created by a `TracerFactory` share the same span processors.
+All `Tracer` instances created by a `TracerProvider` share the same span processors.
 Changes to this collection reflect in all `Tracer` instances.
 Implementation-wise, this could mean that `Tracer` instances have a reference to
-their `TracerFactory` and can access span processor objects only via this
+their `TracerProvider` and can access span processor objects only via this
 reference.
 
-Manipulation of the span processors collection must only happen on `TracerFactory`
+Manipulation of the span processors collection must only happen on `TracerProvider`
 instances. This means methods like `addSpanProcessor` must be implemented on
-`TracerFactory`.
+`TracerProvider`.
 
-Each processor registered on `TracerFactory` is a start of pipeline that consist
+Each processor registered on `TracerProvider` is a start of pipeline that consist
 of span processor and optional exporter. SDK MUST allow to end each pipeline with
 individual exporter.
 
@@ -187,9 +204,9 @@ in the SDK:
   +-----+--------------+   +---------------------+
 ```
 
-#### Interface definition
+### Interface definition
 
-##### OnStart(Span)
+#### OnStart(Span)
 
 `OnStart` is called when a span is started. This method is called synchronously
 on the thread that started the span, therefore it should not block or throw
@@ -201,7 +218,7 @@ exceptions.
 
 **Returns:** `Void`
 
-##### OnEnd(Span)
+#### OnEnd(Span)
 
 `OnEnd` is called when a span is ended. This method is called synchronously on
 the execution thread, therefore it should not block or throw an exception.
@@ -212,41 +229,46 @@ the execution thread, therefore it should not block or throw an exception.
 
 **Returns:** `Void`
 
-##### Shutdown()
+#### Shutdown()
 
 Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
 Shutdown should be called only once for each `Processor` instance. After the
-call to shutdown subsequent calls to `onStart` or `onEnd` are not allowed.
+call to shutdown subsequent calls to `onStart`, `onEnd`, or `forceFlush` are not allowed.
 
 Shutdown should not block indefinitely. Language library authors can decide if
-they want to make the shutdown timeout to be configurable.
+they want to make the shutdown timeout configurable.
 
-#### Built-in span processors
+#### ForceFlush()
 
-SDK MUST implement simple and batch processors described below. Other common
-processing scenarios should be first considered for implementation out-of-process
-in [OpenTelemetry Collector](overview.md#collector)
+Export all ended spans to the configured `Exporter` that have not yet been exported.
 
-##### Simple processor
+`ForceFlush` should only be called in cases where it is absolutely necessary, such as when using some FaaS providers that may suspend the process after an invocation, but before the `Processor` exports the completed spans.
 
-The implementation of `SpanProcessor` that passes ended span directly to the
-configured `SpanExporter`.
+`ForceFlush` should not block indefinitely. Language library authors can decide if they want to make the flush timeout configurable.
+
+### Built-in span processors
+
+The standard OpenTelemetry SDK MUST implement both simple and batch processors,
+as described below. Other common processing scenarios should be first considered
+for implementation out-of-process in [OpenTelemetry Collector](../overview.md#collector)
+
+#### Simple processor
+
+This is an implementation of `SpanProcessor` which passes finished spans
+and passes the export-friendly span data representation to the configured
+`SpanExporter`, as soon as they are finished.
 
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
 
-##### Batching processor
+#### Batching processor
 
-The implementation of the `SpanProcessor` that batches ended spans and pushes
-them to the configured `SpanExporter`.
-
-First the spans are added to a synchronized queue, then exported to the exporter
-pipeline in batches. The implementation is responsible for managing the span
-queue and sending batches of spans to the exporters. This processor can cause
-high contention in a very high traffic service.
+This is an implementation of the `SpanProcessor` which create batches of finished
+spans and passes the export-friendly span data representations to the
+configured `SpanExporter`.
 
 **Configurable parameters:**
 
@@ -260,7 +282,7 @@ high contention in a very high traffic service.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
 
-### Span Exporter
+## Span Exporter
 
 `Span Exporter` defines the interface that protocol-specific exporters must
 implement so that they can be plugged into OpenTelemetry SDK and support sending
@@ -270,14 +292,14 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
-#### Interface Definition
+### Interface Definition
 
 The exporter must support two functions: **Export** and **Shutdown**. In
 strongly typed languages typically there will be 2 separate `Exporter`
 interfaces, one that accepts spans (SpanExporter) and one that accepts metrics
 (MetricsExporter).
 
-##### `Export(batch)`
+#### `Export(batch)`
 
 Exports a batch of telemetry data. Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
@@ -287,8 +309,12 @@ Export() will never be called concurrently for the same exporter instance.
 Export() can be called again only after the current call returns.
 
 Export() must not block indefinitely, there must be a reasonable upper limit
-after which the call must time out with an error result (typically
-FailedRetryable).
+after which the call must time out with an error result (`Failure`).
+
+Any retry logic that is required by the exporter is the responsibility
+of the exporter. The default SDK SHOULD NOT implement retry logic, as
+the required logic is likely to depend heavily on the specific protocol
+and backend the spans are being sent to.
 
 **Parameters:**
 
@@ -306,31 +332,26 @@ exporter.
 
 ExportResult is one of:
 
-* Success - batch is successfully exported. For protocol exporters this
-  typically means that the data is sent over the wire and delivered to the
-  destination server.
-* FailedNotRetryable - exporting failed. The caller must not retry exporting the
-  same batch. The batch must be dropped. This for example can happen when the
-  batch contains bad data and cannot be serialized.
-* FailedRetryable - cannot export to the destination. The caller should record
-  the error and may retry exporting the same batch after some time. This for
-  example can happen when the destination is unavailable, there is a network
-  error or endpoint does not exist.
+* `Success` - The batch has been successfully exported.
+  For protocol exporters this typically means that the data is sent over
+  the wire and delivered to the destination server.
+* `Failure` - exporting failed. The batch must be dropped. For example, this
+  can happen when the batch contains bad data and cannot be serialized.
 
-##### `Shutdown()`
+#### `Shutdown()`
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
 
 `Shutdown` should be called only once for each `Exporter` instance. After the
 call to `Shutdown` subsequent calls to `Export` are not allowed and should
-return FailedNotRetryable error.
+return a `Failure` result.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). Language library authors can decide if they
-want to make the shutdown timeout to be configurable.
+want to make the shutdown timeout configurable.
 
-#### Further Language Specialization
+### Further Language Specialization
 
 Based on the generic interface definition laid out above library authors must
 define the exact interface for the particular language.
@@ -345,14 +366,14 @@ allocations and use allocation arenas where possible, thus avoiding explosion of
 allocation/deallocation/collection operations in the presence of high rate of
 telemetry data generation.
 
-##### Examples
+#### Examples
 
 These are examples on what the `Exporter` interface can look like in specific
 languages. Examples are for illustration purposes only. Language library authors
 are free to deviate from these provided that their design remain true to the
 spirit of `Exporter` concept.
 
-###### Go SpanExporter Interface
+##### Go SpanExporter Interface
 
 ```go
 type SpanExporter interface {
@@ -369,8 +390,7 @@ type ExportResultCode int
 
 const (
     Success ExportResultCode = iota
-    FailedNotRetryable
-    FailedRetryable
+    Failure
 )
 ```
 
@@ -379,10 +399,13 @@ const (
 ```java
 public interface SpanExporter {
  public enum ResultCode {
-   Success, FailedNotRetryable, FailedRetryable
+   Success, Failure
  }
 
  ResultCode export(Collection<ExportableSpan> batch);
  void shutdown();
 }
 ```
+
+[trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
+[otep-83]: https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md
