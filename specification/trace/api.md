@@ -36,7 +36,7 @@ Table of Contents
 
 </details>
 
-Tracing API consist of these main classes:
+The Tracing API consist of these main classes:
 
 - [`TracerProvider`](#tracerprovider) is the entry point of the API.
   It provides access to `Tracer`s.
@@ -78,7 +78,7 @@ Implementations might require the user to specify such configuration properties
 when creating the `TracerProvider`, or rely on external configuration, e.g. when
 using the provider pattern.
 
-Normally the `TracerProvider` is expected to be accessed as a singleton, i.e.,
+Normally, the `TracerProvider` is expected to be accessed as a singleton, i.e.,
 the API SHOULD provide a global default `TracerProvider`. However, there may be
 cases where more than one `TracerProvider` is required:
 see [below](#multi-tracerprovider).
@@ -124,7 +124,7 @@ returned `Tracer`s and actively update their configuration if it changes.
 ### Runtimes with multiple deployments/applications <a name="multi-tracerprovider"></a>
 
 Some applications may have to use multiple `TracerProvider` instances, e.g.
-to have different settings (e.g. `SpanProcessor`s) to each (and
+to have different settings (like `SpanProcessor`s) for each (and
 consequently to the `Tracer`s obtained from them).
 
 For example, runtimes that support multiple deployments or applications might need to
@@ -143,9 +143,9 @@ The tracer is responsible for creating `Span`s.
 
 Note: Apart from the library name and version
 provided to the `TracerProvider` to get them,
-`Tracer`s are not usually expected to not have mutable state on their own
+`Tracer`s are not usually expected to not have mutable state of their own
 (but they may contain a reference to shared mutable configuration that is
-expected to be owned by the TracerProvider).
+expected to be owned by the `TracerProvider`).
 
 ### Tracer operations
 
@@ -167,8 +167,8 @@ the `Tracer` MUST return a placeholder `Span` with an invalid `SpanContext`
 and `IsRecording` being false.
 
 For any two `Tracer`s returned from the same `TracerProvider` and queried at the
-time in the same logical execution unit (see [Context](../context/context.md)),
-the active Span MUST be the same unless at least one them
+same time in the same logical execution unit (see [Context](../context/context.md)),
+the active Span MUST be the same unless at least one of the `Tracer`s
 returns the placeholder span (see above).
 Note: This means that implementations are allowed to "disable" a `Tracer`
 such that it has no active `Span`.
@@ -179,7 +179,7 @@ The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
 convenience functions to manage a `Span`'s lifetime and the scope in which a
 `Span` is active. When an active `Span` is made inactive, the previously-active
 `Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
-time) but still active. A `Span` may be active in one logical execution unit
+time) but still be active. A `Span` may be active in one logical execution unit
 after it has been made inactive on another.
 
 ## SpanContext
