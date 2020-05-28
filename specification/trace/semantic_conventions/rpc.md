@@ -11,6 +11,7 @@ This document defines how to describe remote procedure calls
   * [Span name](#span-name)
   * [Attributes](#attributes)
     + [Service name](#service-name)
+  * [Distinction from HTTP spans](#distinction-from-http-spans)
 - [gRPC](#grpc)
   * [Status](#status)
   * [Events](#events)
@@ -20,7 +21,10 @@ This document defines how to describe remote procedure calls
 ## Common remote procedure call conventions
 
 A remote procedure calls is described by two separate spans, one on the client-side and one on the server-side.
+
 For outgoing requests, the `SpanKind` MUST be set to `CLIENT` and for incoming requests to `SERVER`.
+
+Remote procedure calls can only be represented with these semantic conventions, when the names of the called service and method are known and available.
 
 ### Span name
 
@@ -69,6 +73,12 @@ This process could expose two RPC endpoints, one called `CurrencyQuotes` (= `rpc
 [network attributes]: span-general.md#general-network-connection-attributes
 [net.transport]: span-general.md#nettransport-attribute
 [`service.name` resource attribute]: ../../resource/semantic_conventions/README.md#service
+
+### Distinction from HTTP spans
+
+HTTP calls can generally be represented using [HTTP spans](./http.md) only.
+If they address a particular remote service and method known to the caller, i.e., when it is a remote procedure call transported over HTTP, the `rpc.*` attributes might be added additionally on that span, or in a separate RPC span surrounding the transporting HTTP call.
+Note that _method_ in this context is about the called remote procedure and _not_ the HTTP verb (GET, POST, etc.).
 
 ## gRPC
 
