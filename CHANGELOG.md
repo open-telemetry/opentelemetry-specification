@@ -7,6 +7,8 @@ the release.
 
 ## Unreleased
 
+- Remove SpanId from Sampler input.
+
 ## v0.3.0 (02-21-2020)
 
 - [OTEP-0059](https://github.com/open-telemetry/oteps/blob/master/text/trace/0059-otlp-trace-data-format.md) Add OTLP Trace Data Format specification.
