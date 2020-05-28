@@ -76,8 +76,8 @@ This process could expose two RPC endpoints, one called `CurrencyQuotes` (= `rpc
 
 ### Distinction from HTTP spans
 
-HTTP calls can generally be represented using [HTTP spans](./http.md) only.
-If they address a particular remote service and method known to the caller, i.e., when it is a remote procedure call transported over HTTP, the `rpc.*` attributes might be added additionally on that span, or in a separate RPC span surrounding the transporting HTTP call.
+HTTP calls can generally be represented using just [HTTP spans](./http.md).
+If they address a particular remote service and method known to the caller, i.e., when it is a remote procedure call transported over HTTP, the `rpc.*` attributes might be added additionally on that span, or in a separate RPC span that is a parent of the transporting HTTP call.
 Note that _method_ in this context is about the called remote procedure and _not_ the HTTP verb (GET, POST, etc.).
 
 ## gRPC
