@@ -29,7 +29,9 @@ The _span name_ MUST be the full RPC method name formatted as:
 $package.$service/$method
 ```
 
-(where $service must not contain dots).
+(where $service must not contain dots)
+
+If no package applies or it is known, the `$package.` part (including the period) is omitted.
 
 Examples of span names:
 
@@ -37,13 +39,14 @@ Examples of span names:
 - `com.example.ExampleRmiService/exampleMethod`
 - `MyCalcService.Calculator/Add` reported by the server and  
   `MyServiceReference.ICalculator/Add` reported by the client for .NET WCF calls
+- `MyServiceWithNoPackage/theMethod`
 
 ### Attributes
 
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
 | `rpc.system`   | A string identifying the remoting system, e.g., `"grpc"`, `"java_rmi"` or `"wcf"`.       | Yes |
-| `rpc.service`  | The service name, must be equal to the $service part in the span name.                   | Yes |
+| `rpc.service`  | The full name of the service being called, including its package name, if applicable.    | Yes |
 | `rpc.method`   | The name of the method being called, must be equal to the $method part in the span name. | Yes |
 | `net.peer.ip`   | See [network attributes][]. | See below |
 | `net.peer.name` | See [network attributes][]. | See below |
