@@ -36,7 +36,7 @@ $package.$service/$method
 
 (where $service must not contain dots)
 
-If the package name does not apply or is unknown, the `$package.` part (including the period) is omitted.
+If there is no package name or if it is unknown, the `$package.` part (including the period) is omitted.
 
 Examples of span names:
 
