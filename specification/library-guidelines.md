@@ -21,7 +21,6 @@ _Note to Language Library Authors:_ OpenTelemetry specification, API and SDK imp
 5. The SDK implementation should include the following exporters:
     - Jaeger.
     - Zipkin.
-    - OpenCensus.
     - Prometheus.
     - OpenTelemetry Protocol (when the protocol is specified and approved).
     - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
@@ -115,3 +114,45 @@ guidelines on the performance expectations that API implementations should meet,
 See the [Concurrency and Thread-Safety](concurrency.md) specification for
 guidelines on what concurrency safeties should API implementations provide
 and how they should be documented.
+
+### Integration Test
+
+The goal of integration test is to make sure:
+* The API package and SDK package are designed properly, so another SDK can be used to work with the API package.
+* The exporters are functional, and the emitted data meets with the expectation.
+* The context propagation is implemented correctly, so a distributed trace could be built among multiple services.
+* Sampling logic is implemented consistently across the services, and across the SDKs.
+
+A test harness is needed to verify each language library's integration and interoperability with other libraries and backends.
+
+Each language library should use the test harness as part of the CI (continuous integration).
+
+#### Test Harness
+
+The test harness should include:
+* A document which explains how to use it to implement integration test.
+* A [Docker compose](https://docs.docker.com/compose/).
+* A container image which provides integration test service that can be invoked from the library's CI job.
+* A simplied version of the OpenTelemetry C++ SDK, which will be used to test the interfacing between API and SDK. For example, using OpenTelemetry Python API with C++ SDK.
+* The latest version of OpenTelemetry Collector.
+* The latest stable version of Prometheus backend.
+* The latest stable version of Jaeger backend.
+* The latest stable version of Zipkin backend.
+
+#### CI Requirement
+
+Each language library should implement a test service which interacts with the test harness. The test service should include:
+* A REST endpoint which is used to receive incoming requests from the harness and other services that are involved during the CI.
+* The ability to react to the requests from the harness.
+* The ability to specify the SDK.
+  * Without the SDK
+  * With the language specific SDK
+  * With the simplifed C++ SDK
+* The ability to configure the SDK, when the language specific SDK is used.
+  * Sampler
+  * Exporter
+* The ability to call other REST endpoints based on the instruction given by the harness.
+
+Each language SDK should determine which platform and runtime version should be tested. For example, a language library could decide to only cover one specific combination of platform and runtime during integration test, and rely on the unit test to cover the other platforms and runtime versions.
+
+### Unit Test
