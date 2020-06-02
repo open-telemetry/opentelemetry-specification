@@ -78,10 +78,15 @@ Implementations might require the user to specify such configuration properties
 when creating the `TracerProvider`, or rely on external configuration, e.g. when
 using the provider pattern.
 
-Normally, the `TracerProvider` is expected to be accessed as a singleton, i.e.,
-the API SHOULD provide a global default `TracerProvider`. However, there may be
-cases where more than one `TracerProvider` is required:
-see [below](#multi-tracerprovider).
+Normally, the `TracerProvider` is expected to be accessed from a central place.
+Thus, the API SHOULD provide a way to set/register and access
+a global default `TracerProvider`.
+However, some applications may want to or have to use multiple `TracerProvider`
+instances, e.g. to have different settings (like `SpanProcessor`s) for each (and
+consequently to the `Tracer`s obtained from them), or because its easier with
+dependency injection frameworks.
+Thus, implementations of `TracerProvider` SHOULD allow creating an arbitrary
+number of instances.
 
 ### TracerProvider operations
 
@@ -119,22 +124,6 @@ If configuration must be stored per-tracer (such as disabling a certain tracer),
 the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
-
-### Runtimes with multiple deployments/applications <a name="multi-tracerprovider"></a>
-
-Some applications may have to use multiple `TracerProvider` instances, e.g.
-to have different settings (like `SpanProcessor`s) for each (and
-consequently to the `Tracer`s obtained from them).
-
-For example, runtimes that support multiple deployments or applications might need to
-provide a different `TracerProvider` instance to each deployment. To support this,
-a global `TracerProvider` registry may delegate calls to create new instances of
-`TracerProvider` to a separate `Provider` component, and the runtime may include
-its own `Provider` implementation which returns a different `TracerProvider` for
-each deployment.
-
-`Provider` instances are registered with the API via some language-specific
-mechanism, for instance the `ServiceLoader` class in Java.
 
 ## Tracer
 
