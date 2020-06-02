@@ -6,5 +6,4 @@ This folder will be used to develop experimental features. Experimental features
 - Be in active development or testing.
 - Approved as a general direction via OTEP process.
 
-Experimental status allows to develop components that are on trajectory to become a part of a main package while developed on a faster cadence. Experimental status preceeds alpha version. Specifications from this folder MUST go thru the regular PR review process when moving out of experimental status.
-
+Experimental status allows to develop components that are on trajectory to become a part of a main package while developed on a faster cadence. Experimental status precedes alpha version. Specifications from this folder MUST go thru the regular PR review process when moving out of experimental status.
