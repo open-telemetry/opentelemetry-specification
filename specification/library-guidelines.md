@@ -21,6 +21,7 @@ _Note to Language Library Authors:_ OpenTelemetry specification, API and SDK imp
 5. The SDK implementation should include the following exporters:
     - Jaeger.
     - Zipkin.
+    - OpenCensus.
     - Prometheus.
     - OpenTelemetry Protocol (when the protocol is specified and approved).
     - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
