@@ -120,7 +120,7 @@ and how they should be documented.
 
 The goal of integration test is to make sure:
 * The API package and SDK package are designed properly, so another SDK can be used to work with the API package.
-* The exporters are functional, and the emitted data meets with the expectation.
+* The exporters are functional, and the emitted data meets expectations.
 * The context propagation is implemented correctly, so a distributed trace could be built among multiple services.
 * Sampling logic is implemented consistently across the services, and across the SDKs.
 
