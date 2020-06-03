@@ -266,7 +266,7 @@ When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
 new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
 SHOULD create each new `Span` as a child of its active `Span`, unless an
 explicit parent is provided or the option to create a span without a parent is
-selected, or the currently active `Span` is invalid.
+selected.
 
 `Span` creation MUST NOT set the newly created `Span` as the currently
 active `Span` by default, but this functionality MAY be offered additionally
