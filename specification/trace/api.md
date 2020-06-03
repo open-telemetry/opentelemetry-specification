@@ -140,30 +140,12 @@ The `Tracer` SHOULD provide methods to:
 - Get the currently active `Span`
 - Mark a given `Span` as active
 
-The `Tracer` MUST use the [`Context`](../context/context.md)
-in order to get and set the current `Span` and to decide how `Span`s
-are passed across process boundaries.
-
-If there is no currently active `Span`
-and the `Tracer` is asked for the current `Span`,
-it MUST return a placeholder `Span` with an invalid `SpanContext`
-and `IsRecording` being false.
-
-For any two `Tracer`s returned from the same `TracerProvider` and queried at the
-same time in the same logical execution unit (see [Context](../context/context.md)),
-the active Span MUST be the same unless at least one of the `Tracer`s
-returns the placeholder span (see above).
-Note: This means that implementations are allowed to "disable" a `Tracer`
-such that it has no active `Span`.
-Such `Tracer`s would typically also return placeholder `Span`s when creating a
-new `Span` and to do nothing if requested to set the current `Span`.
-
-The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
-convenience functions to manage a `Span`'s lifetime and the scope in which a
-`Span` is active. When an active `Span` is made inactive, the previously-active
-`Span` SHOULD be made active. A `Span` may be finished (i.e. have a non-null end
-time) but still be active. A `Span` may be active in one logical execution unit
-after it has been made inactive on another.
+The `Tracer` MUST delegate to the [`Context`](../context/context.md) to perform
+these tasks, i.e. the above methods MUST do the same as a single equivalent
+method of the Context management system.
+In particular, this implies that the active span MUST not depend on the `Tracer`
+that it is queried from/was set to, as long as the tracers were obtained from
+the same `TracerProvider`.
 
 ## SpanContext
 
