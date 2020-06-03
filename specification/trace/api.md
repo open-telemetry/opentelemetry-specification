@@ -126,11 +126,8 @@ returned `Tracer`s and actively update their configuration if it changes.
 
 The tracer is responsible for creating `Span`s.
 
-Note: Apart from the library name and version
-provided to the `TracerProvider` to get them,
-`Tracer`s will usually be stateless.
-They may contain a reference to shared mutable configuration that is
-expected to be owned by the `TracerProvider`, however.
+Note that `Tracers` should usually *not* be responsible for configuration.
+This should be the responsibility of the `TracerProvider` instead.
 
 ### Tracer operations
 
