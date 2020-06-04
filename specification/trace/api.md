@@ -239,7 +239,7 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 ### Span Creation
 
-A Span MUST ONLY be created via a [`Tracer`](#tracer).
+There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
 
 When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
 new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
