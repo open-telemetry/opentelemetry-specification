@@ -20,12 +20,16 @@ Introduce Data Model for Log Records as it is understood by OpenTelemetry.
     * [Error Semantics](#error-semantics)
     * [Displaying Severity](#displaying-severity)
     * [Comparing Severity](#comparing-severity)
-  * [Field: `ShortName`](#field-shortname)
+  * [Field: `Name`](#field-name)
   * [Field: `Body`](#field-body)
   * [Field: `Resource`](#field-resource)
   * [Field: `Attributes`](#field-attributes)
 * [Example Log Records](#example-log-records)
-* [Open Questions](#open-questions)
+* [Questions Resolved during OTEP discussion](#questions-resolved-during-otep-discussion)
+  * [TraceFlags vs TraceParent and TraceState](#traceflags-vs-traceparent-and-tracestate)
+  * [Severity Fields](#severity-fields-1)
+  * [Timestamp Requirements](#timestamp-requirements)
+  * [Security Logs](#security-logs)
 * [Alternate Design](#alternate-design)
 * [Prior Art](#prior-art)
   * [RFC5424 Syslog](#rfc5424-syslog)
@@ -40,6 +44,7 @@ Introduce Data Model for Log Records as it is understood by OpenTelemetry.
   * [Apache HTTP Server access log](#apache-http-server-access-log)
   * [CloudTrail Log Event](#cloudtrail-log-event)
   * [Google Cloud Logging](#google-cloud-logging)
+* [Elastic Common Schema](#elastic-common-schema)
 * [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
 * [References](#references)
 
@@ -167,7 +172,7 @@ SpanId         |Request span id.
 TraceFlags     |W3C trace flag.
 SeverityText   |The severity text (also known as log level).
 SeverityNumber |Numerical value of the severity.
-ShortName      |Short event identifier.
+Name           |Short event identifier.
 Body           |The body of the log record.
 Resource       |Describes the source of the log.
 Attributes     |Additional information about the event.
@@ -375,12 +380,12 @@ equal to INFO then it may be preferable from the user experience perspective to
 ensure that **severity="Informational"** and **severity="INFO"** conditions both
 to are TRUE for that record.
 
-### Field: `ShortName`
+### Field: `Name`
 
 Type: string.
 
 Description: Short event identifier that does not contain varying parts.
-`ShortName` describes what happened (e.g. "ProcessStarted"). Recommended to be
+`Name` describes what happened (e.g. "ProcessStarted"). Recommended to be
 no longer than 50 characters. Not guaranteed to be unique in any way. Typically
 used for filtering and grouping purposes in backends. This field is optional.
 
@@ -635,7 +640,7 @@ this data model.
     <td>MSGID</td>
     <td>string</td>
     <td>Defines the type of the event. Part of event source identity. Example: "TCPIN"</td>
-    <td>ShortName</td>
+    <td>Name</td>
   </tr>
   <tr>
     <td>STRUCTURED-DATA</td>
@@ -689,7 +694,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>EventID</td>
     <td>uint</td>
     <td>The identifier that the provider used to identify the event.</td>
-    <td>ShortName</td>
+    <td>Name</td>
   </tr>
   <tr>
     <td>Message</td>
@@ -724,7 +729,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>EventType</td>
     <td>string</td>
     <td>Short machine understandable string describing the event type. SignalFx specific concept. Non-namespaced. Example: k8s Event Reason field.</td>
-    <td>ShortName</td>
+    <td>Name</td>
   </tr>
   <tr>
     <td>Category</td>
@@ -972,7 +977,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>errorCode</td>
     <td>string</td>
     <td>The AWS service error if the request returns an error.</td>
-    <td>ShortName</td>
+    <td>Name</td>
   </tr>
   <tr>
     <td>errorMessage</td>
@@ -994,7 +999,7 @@ Field            | Type               | Description                             
 -----------------|--------------------| ------------------------------------------------------- | ---------------------------
 timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
 resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
-log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | ShortName
+log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Name
 json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
 proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
 text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
