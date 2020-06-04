@@ -72,8 +72,7 @@ A duration is the elapsed time between two events.
 `Tracer`s can be accessed with a `TracerProvider`.
 
 In implementations of the API, the `TracerProvider` is expected to be the
-stateful object that holds any configuration
-(such as SpanProcessors and Exporters in the default SDK).
+stateful object that holds any configuration.
 
 Normally, the `TracerProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access

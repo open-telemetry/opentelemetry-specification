@@ -147,10 +147,18 @@ supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.
 
-All configuration objects (SDK specific) and extension points (span processors,
-propagators) must be provided to the `TracerProvider`. `Tracer` instances must
-not duplicate this data (unless for read-only access) to avoid that different
-`Tracer` instances of a `TracerProvider` have different versions of these data.
+Configuration (i.e., [Span processors](#span-processor) and [`Sampler`](#sampling))
+MUST be managed solely by the `TracerProvider` and it MUST provide some way to
+configure them, at least when creating or initializing it.
+
+The TracerProvider MAY provide methods to update the configuration. If
+configuration is updated (e.g., adding a `SpanProcessor`),
+the updated configuration MUST also apply to all already returned `Tracers`
+(i.e. it MUST NOT matter whether a `Tracer` was obtained from the
+`TracerProvider` before or after the configuration change).
+Note: Implementation-wise, this could mean that `Tracer` instances have a
+reference to their `TracerProvider` and access configuration only via this
+reference.
 
 The readable representations of all `Span` instances created by a `Tracer` must
 provide a `getInstrumentationLibrary` method that returns the
@@ -167,16 +175,6 @@ exportable representation and passing batches to exporters.
 
 Span processors can be registered directly on SDK `TracerProvider` and they are
 invoked in the same order as they were registered.
-
-All `Tracer` instances created by a `TracerProvider` share the same span processors.
-Changes to this collection reflect in all `Tracer` instances.
-Implementation-wise, this could mean that `Tracer` instances have a reference to
-their `TracerProvider` and can access span processor objects only via this
-reference.
-
-Manipulation of the span processors collection must only happen on `TracerProvider`
-instances. This means methods like `addSpanProcessor` must be implemented on
-`TracerProvider`.
 
 Each processor registered on `TracerProvider` is a start of pipeline that consist
 of span processor and optional exporter. SDK MUST allow to end each pipeline with
