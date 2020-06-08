@@ -5,7 +5,10 @@
 <!-- toc -->
 
 - [Connection-level attributes](#connection-level-attributes)
+  * [Notes and well-known identifiers for `db.system`](#notes-and-well-known-identifiers-for-dbsystem)
+  * [Connection-level attributes for specific technologies](#connection-level-attributes-for-specific-technologies)
 - [Call-level attributes](#call-level-attributes)
+  * [Call-level attributes for specific technologies](#call-level-attributes-for-specific-technologies)
 
 <!-- tocstop -->
 
@@ -22,8 +25,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
-| `db.type`      | Database type. For any SQL database, `"sql"`. For others, the lower-case database category, e.g., `"cassandra"`, `"hbase"`, `"mongodb"`, or `"redis"`. | Yes       |
-| `db.dbms`      | An identifier for the DBMS (database management system) product. E.g., `"mssql"`, `"mysql"`, `"oracle"`, `"db2"`, `"postgresql"`. | No, but recommended for `db.type="sql"` |
+| `db.system`    | An identifier for the database management system (DBMS) product being used. See list below for well-known identifiers. | Yes       |
 | `db.connection_string` | The connection string used to connect to the database. It is recommended to remove embedded credentials. | No       |
 | `db.user`      | Username for accessing the database, e.g., `"readonly_user"` or `"reporting_user"` | No        |
 | `net.peer.name` | Defined in the general [network attributes][]. | See below |
@@ -36,14 +38,46 @@ If using a port other than the default port for this DBMS, `net.peer.port` is re
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines.
 For in-process databases, `net.transport` MUST be set to `"inproc"`.
 
-While `db.dbms` is optional, it is strongly recommended to set it if `db.type="sql"`.
-For other `db.type`s, it is still recommended but less important since there is usually only one significant implementation per type.
-
-Note: Future version of this semantic convention could provide a list of well-known values for `db.type` and `db.dbms` to allow back ends to analyze the data further.
-Back ends could, for example, use the value of `db.dbms` to determine the appropriate SQL dialect for parsing the `db.statement`.
-
 [network attributes]: span-general.md#general-network-connection-attributes
 [`net.transport`]: span-general.md#nettransport-attribute
+
+### Notes and well-known identifiers for `db.system`
+
+This is a non-exhaustive list of well-known identifiers to be specified for `db.system`.
+
+If a value defined in this list applies to the DBMS to which the request is sent, this value MUST be used.
+If no value defined in this list is suitable, a custom value MUST be provided.
+This custom value MUST be the name of the DBMS in lowercase and without a version number to stay consistent with existing identifiers.
+
+The value `generic_sql` is intended as a fallback and MUST only be used if the DBMS is known to be SQL-compliant but the concrete product is not known to the instrumentation.
+If the concrete DBMS is known to the instrumentation, its specific identifier MUST be used.
+
+| Value for `db.system` | Product name              | Note                           |
+| :-------------------- | :------------------------ | :----------------------------- |
+| `"db2"`               | IBM Db2                   |                                |
+| `"derby"`             | Apache Derby              |                                |
+| `"hive"`              | Apache Hive               |                                |
+| `"mariadb"`           | MariaDB                   |                                |
+| `"mssql"`             | Microsoft SQL Server      |                                |
+| `"mysql"`             | MySQL                     |                                |
+| `"oracle"`            | Oracle Database           |                                |
+| `"postgresql"`        | PostgreSQL                |                                |
+| `"sqlite"`            | SQLite                    |                                |
+| `"teradata"`          | Teradata                  |                                |
+| `"generic_sql"`       | Generic SQL Database      | Fallback only. See note above. |
+| `"cassandra"`         | Cassandra                 |                                |
+| `"cosmosdb"`          | Microsoft Azure Cosmos DB |                                |
+| `"couchbase"`         | Couchbase                 |                                |
+| `"couchdb"`           | CouchDB                   |                                |
+| `"dynamodb"`          | Amazon DynamoDB           |                                |
+| `"hbase"`             | HBase                     |                                |
+| `"mongodb"`           | MongoDB                   |                                |
+| `"neo4j"`             | Neo4j                     |                                |
+| `"redis"`             | Redis                     |                                |
+
+Back ends could, for example, use the provided identifier to determine the appropriate SQL dialect for parsing the `db.statement`.
+
+When additional attributes are added that only apply to a specific DBMS, its identifier SHOULD be used as a namespace in the attribute key as for the attributes in the sections below.
 
 ### Connection-level attributes for specific technologies
 
@@ -65,8 +99,8 @@ Usually only one `db.name` will be used per connection though.
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `db.name`  | If no tech-specific attribute is defined below, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). | Yes (if applicable and no more specific attribute is defined) |
-| `db.statement` | A database statement for the given database type. Note that the value may be sanitized to exclude sensitive information. E.g., for `db.type="sql"`, `"SELECT * FROM wuser_table"`; for `db.type="redis"`, `"SET mykey 'WuValue'"`. | Yes (if applicable)       |
-| `db.operation` | The type of operation that is executed, e.g. the [MongoDB command name][] such as `findAndModify`. While it would semantically make sense to set this, e.g., to an SQL keyword like `SELECT` or `INSERT`, it is *not* recommended to attempt any client-side parsing of `db.statement` just to get this property (the back end can do that if required). | Yes, if `db.statement` is not applicable.       |
+| `db.statement` | The database statement being executed.. Note that the value may be sanitized to exclude sensitive information. E.g., for `db.system="generic_sql"`, `"SELECT * FROM wuser_table"`; for `db.system="redis"`, `"SET mykey 'WuValue'"`. | Yes (if applicable)       |
+| `db.operation` | The name of the operation being executed, e.g. the [MongoDB command name][] such as `findAndModify`. While it would semantically make sense to set this, e.g., to an SQL keyword like `SELECT` or `INSERT`, it is *not* recommended to attempt any client-side parsing of `db.statement` just to get this property (the back end can do that if required). | Yes, if `db.statement` is not applicable.       |
 
 [MongoDB command name]: https://docs.mongodb.com/manual/reference/command/#database-operations
 
