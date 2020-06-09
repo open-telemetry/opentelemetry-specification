@@ -7,6 +7,7 @@ the release.
 
 ## Unreleased
 
+- Extend semantic conventions for RPC and allow non-gRPC calls ([#604](https://github.com/open-telemetry/opentelemetry-specification/pull/604))
 - Added conventions for naming of exporter packages
 
 ## v0.5.0 (06-02-2020)
