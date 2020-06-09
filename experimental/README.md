@@ -4,7 +4,7 @@ This folder will be used to develop experimental features. Experimental status a
 
 Experimental features must be:
 
-- Implementeable as a plugin to OpenTelemetry components (API, SDK, collector, etc.).
+- Implementable as a plugin to OpenTelemetry components (API, SDK, collector, etc.).
 - Be in active development or testing.
 - Approved as a general direction via OTEP process.
 
