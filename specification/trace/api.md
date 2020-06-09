@@ -98,7 +98,7 @@ in further consequence - to the `Tracer` instances created by them.
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library
+- `version` (optional): Specifies the [version](../resource/semantic_conventions#version-attributes) of the instrumentation library
   (e.g. `semver:1.0.0`).
 
 Implementations might require the user to specify configuration properties at
