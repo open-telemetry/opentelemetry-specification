@@ -8,6 +8,7 @@ the release.
 ## Unreleased
 
 - Remove SpanId from Sampler input.
+- Added conventions for naming of exporter packages
 
 ## v0.3.0 (02-21-2020)
 

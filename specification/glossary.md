@@ -43,7 +43,7 @@ Example: `io.opentelemetry.contrib.mongodb`.
 
 Synonyms: *Instrumenting Library*
 
-<a name="name"></a>
+<a name="instrumentation_library"></a>
 
 ### Tracer Name / Meter Name
 
