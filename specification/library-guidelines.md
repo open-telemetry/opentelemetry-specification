@@ -82,11 +82,13 @@ Vendors are encouraged to keep protocol-specific exporters as simple as possible
 
 End users should be given the flexibility of making many of the decisions regarding the queuing, retrying, tagging, batching functionality that make the most sense for their application. For example, if an application's telemetry data must be delivered to a remote backend that has no guaranteed availability the end user may choose to use a persistent local queue and an `Exporter` to retry sending on failures. As opposed to that for an application that sends telemetry to a locally running Agent daemon, the end user may prefer to have a simpler exporting configuration without retrying or queueing.
 
-If additional exporters for the OpenTelemetry SDK are provided as separate libraries, the
-name of the library should be prefixed with opentelemetry, then exporter, using the namespacing conventions of the particular language. For example:
+If additional exporters for the sdk are provided as separate libraries, the
+name of the library should be prefixed with the terms "OpenTelemetry" and "Exporter" in accordance with the naming conventions of the respective technology.
 
-- python: opentelemetry-exporter-jaeger
-- javascript: @opentelemetry/exporter-jeager
+For example:
+
+- Python and Java: opentelemetry-exporter-jaeger
+- Javascript: @opentelemetry/exporter-jeager
 
 ### Alternative Implementations
 
