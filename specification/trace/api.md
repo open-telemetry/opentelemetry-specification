@@ -187,8 +187,7 @@ field](https://www.w3.org/TR/trace-context/#tracestate-field).
 
 A `Span` represents a single operation within a trace. Spans can be nested to
 form a trace tree. Each trace contains a root span, which typically describes
-the end-to-end latency and, optionally, one or more sub-spans for its
-sub-operations.
+the entire operation and, optionally, one or more sub-spans for its sub-operations.
 
 `Span`s encapsulate:
 
