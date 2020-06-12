@@ -67,6 +67,15 @@ If `net.transport` is `"unix"` or `"pipe"`, the absolute path to the file repres
 If there is no such file (e.g., anonymous pipe),
 the name should explicitly be set to the empty string to distinguish it from the case where the name is just unknown or not covered by the instrumentation.
 
+## General remote service attributes
+
+These attributes may be used for any remote operation that applies to a target service. Users will generally define what a service is, though instrumentation
+may provide a fallback when not user-controlled based on instrumentation-specific behavior,
+
+|  Attribute name |                                 Notes and examples                                |
+| :-------------- | :-------------------------------------------------------------------------------- |
+| `peer.service`    | Remote service name, indicating a semantic name for the target of the request. For example, for a Redis cache of auth tokens, this may be `AuthCache`. Note that this usually does not relate to transport-level names like `net.*.names` attributes above, for example when the service is sharded and accessible from several endpoints. |
+
 ## General identity attributes
 
 These attributes may be used for any operation with an authenticated and/or authorized enduser.
