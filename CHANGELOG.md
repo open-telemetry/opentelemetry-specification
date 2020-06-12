@@ -7,6 +7,8 @@ the release.
 
 ## Unreleased
 
+- Added conventions for naming of exporter packages
+
 ## v0.5.0 (06-02-2020)
 
 - Define Log Data Model.
