@@ -27,6 +27,7 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 |---|---|--|
 | `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | Yes |
 | `faas.execution` | String containing the execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
+| `faas.coldstart` | A boolean indicating that the serverless function is executed for the first time (aka cold start). | No |
 
 ### Difference between execution and instance
 
