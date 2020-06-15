@@ -36,11 +36,12 @@ Table of Contents
 
 </details>
 
-Tracing API consist of a few main classes:
+The Tracing API consist of these main classes:
 
-- `Tracer` is used for all operations. See [Tracer](#tracer) section.
-- `Span` is a mutable object storing information about the current operation
-   execution. See [Span](#span) section.
+- [`TracerProvider`](#tracerprovider) is the entry point of the API.
+  It provides access to `Tracer`s.
+- [`Tracer`](#tracer) is the class responsible for creating `Span`s.
+- [`Span`](#span) is the API to trace an operation.
 
 ## Data types
 
@@ -66,27 +67,32 @@ A duration is the elapsed time between two events.
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
-## Tracer
+## TracerProvider
 
-The OpenTelemetry library achieves in-process context propagation of `Span`s by
-way of the `Tracer`.
+`Tracer`s can be accessed with a `TracerProvider`.
 
-The `Tracer` is responsible for tracking the currently active `Span`, and
-exposes functions for creating and activating new `Span`s. The `Tracer` is
-configured with `Propagator`s which support transferring span context across
-process boundaries.
+In implementations of the API, the `TracerProvider` is expected to be the
+stateful object that holds any configuration.
 
-### Obtaining a Tracer
+Normally, the `TracerProvider` is expected to be accessed from a central place.
+Thus, the API SHOULD provide a way to set/register and access
+a global default `TracerProvider`.
 
-New `Tracer` instances can be created via a `TracerProvider` and its `getTracer`
-function. This function expects two string arguments:
+Notwithstanding any global `TracerProvider`, some applications may want to or
+have to use multiple `TracerProvider` instances,
+e.g. to have different configuration (like `SpanProcessor`s) for each
+(and consequently for the `Tracer`s obtained from them),
+or because its easier with dependency injection frameworks.
+Thus, implementations of `TracerProvider` SHOULD allow creating an arbitrary
+number of `TracerProvider` instances.
 
-`TracerProvider`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `TracerProvider`.
+### TracerProvider operations
 
-Some applications may use multiple `TracerProvider` instances, e.g. to provide
-different settings (e.g. `SpanProcessor`s) to each of those instances and -
-in further consequence - to the `Tracer` instances created by them.
+The `TracerProvider` MUST provide functions to:
+
+- Get a `Tracer`
+
+That API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
   (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
@@ -101,51 +107,46 @@ in further consequence - to the `Tracer` instances created by them.
 - `version` (optional): Specifies the [version](../resource/semantic_conventions#version-attributes) of the instrumentation library
   (e.g. `semver:1.0.0`).
 
-Implementations might require the user to specify configuration properties at
-`TracerProvider` creation time, or rely on external configuration, e.g. when using the
-provider pattern.
+It is unspecified whether or under which conditions the same or different
+`Tracer` instances are returned from this functions.
 
-#### Runtimes with multiple deployments/applications
+Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
+with the same name+version to pick up configuration changes.
+This can be achieved either by allowing to work with an outdated configuration or
+by ensuring that new configuration applies also to previously returned `Tracer`s.
 
-Runtimes that support multiple deployments or applications might need to
-provide a different `TracerProvider` instance to each deployment. To support this,
-the global `TracerProvider` registry may delegate calls to create new instances of
-`TracerProvider` to a separate `Provider` component, and the runtime may include
-its own `Provider` implementation which returns a different `TracerProvider` for
-each deployment.
+Note: This could, for example, be implemented by storing any mutable
+configuration in the `TracerProvider` and having `Tracer` implementation objects
+have a reference to the `TracerProvider` from which they were obtained.
+If configuration must be stored per-tracer (such as disabling a certain tracer),
+the tracer could, for example, do a look-up with its name+version in a map in
+the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
+returned `Tracer`s and actively update their configuration if it changes.
 
-`Provider` instances are registered with the API via some language-specific
-mechanism, for instance the `ServiceLoader` class in Java.
+## Tracer
+
+The tracer is responsible for creating `Span`s.
+
+Note that `Tracers` should usually *not* be responsible for configuration.
+This should be the responsibility of the `TracerProvider` instead.
 
 ### Tracer operations
 
 The `Tracer` MUST provide functions to:
 
-- Create a new `Span`
+- [Create a new `Span`](#span-creation) (see the section on `Span`)
 
 The `Tracer` SHOULD provide methods to:
 
 - Get the currently active `Span`
-- Make a given `Span` as active
+- Mark a given `Span` as active
 
-The `Tracer` MUST internally leverage the `Context` in order to get and set the
-current `Span` state and how `Span`s are passed across process boundaries.
-
-When getting the current span, the `Tracer` MUST return a placeholder `Span`
-with an invalid `SpanContext` if there is no currently active `Span`.
-
-When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
-new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
-SHOULD create each new `Span` as a child of its active `Span` unless an
-explicit parent is provided or the option to create a span without a parent is
-selected, or the current active `Span` is invalid.
-
-The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
-convenience functions to manage a `Span`'s lifetime and the scope in which a
-`Span` is active. When an active `Span` is made inactive, the previously-active
-`Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
-time) but still active. A `Span` may be active on one thread after it has been
-made inactive on another.
+The `Tracer` MUST delegate to the [`Context`](../context/context.md) to perform
+these tasks, i.e. the above methods MUST do the same as a single equivalent
+method of the Context management system.
+In particular, this implies that the active span MUST not depend on the `Tracer`
+that it is queried from/was set to, as long as the tracers were obtained from
+the same `TracerProvider`.
 
 ## SpanContext
 
@@ -238,9 +239,13 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 ### Span Creation
 
-Implementations MUST provide a way to create `Span`s via a `Tracer`. By default,
-the currently active `Span` is set as the new `Span`'s parent. The `Tracer`
-MAY provide other default options for newly created `Span`s.
+There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
+
+When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
+new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
+SHOULD create each new `Span` as a child of its active `Span`, unless an
+explicit parent is provided or the option to create a span without a parent is
+selected.
 
 `Span` creation MUST NOT set the newly created `Span` as the currently
 active `Span` by default, but this functionality MAY be offered additionally
