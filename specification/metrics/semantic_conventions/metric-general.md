@@ -26,7 +26,7 @@ incremented by 1.
 
 The duration metric represents the total duration of all operations that occur.
 For each timed operation, the value of the `duration` metric should be incremented by
-the duration of the operation.
+the duration of the operation in milliseconds.
 
 ### errors
 
