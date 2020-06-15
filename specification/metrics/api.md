@@ -641,7 +641,7 @@ opposed to `UpDownSumObserver`?
 Consider how to report the size of a queue asynchronously.  Both
 `ValueObserver` and `UpDownSumObserver` logically apply in this case.
 Asynchronous instruments capture only one measurement per interval, so
-in this example the `SumObserver` reports a current sum, while the
+in this example the `UpDownSumObserver` reports a current sum, while the
 `ValueObserver` reports a current sum (equal to the max and the min)
 and a count equal to 1.  When there is no aggregation, these results
 are equivalent.
