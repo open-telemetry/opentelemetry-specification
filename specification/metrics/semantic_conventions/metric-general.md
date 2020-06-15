@@ -6,14 +6,15 @@ particular operation.
 ## Summarizing timed operations
 
 Timed operations that may be more fully described by Spans can be summarized by three
-`Counter` metrics: `throughput`, `duration`, and `errors`.
+metrics: `throughput`, `duration`, and `errors`.
 The name of these metrics should be namespaced with the Span category and the Span
-kind, like this:
-```
-{category}.{span.kind}.throughput
-{category}.{span.kind}.duration
-{category}.{span.kind}.errors
-```
+kind.
+
+| Name                               | Type            |
+| ----                               | ----            |
+|`{category}.{span.kind}.throughput` | `Counter`       |
+|`{category}.{span.kind}.duration`   | `ValueRecorder` |
+|`{category}.{span.kind}.errors`     | `Counter`       |
 
 ### throughput
 
