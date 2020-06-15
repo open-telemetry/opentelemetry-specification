@@ -54,7 +54,7 @@ and Zipkin.
 
 Zipkin service name MUST be set to the value of the
 [resource attribute](../../resource/semantic_conventions/README.md):
-`service.name`. In Zipkin it is important that the service name is consistent 
+`service.name`. In Zipkin it is important that the service name is consistent
 for all spans in a local root. Otherwise service graph and aggregations would
 not work properly. OpenTelemetry doesn't provide this consistency guarantee.
 Exporter may chose to override the value for service name based on a local root
