@@ -8,6 +8,7 @@ the release.
 ## Unreleased
 
 - Revise and extend semantic conventions for databases ([#575](https://github.com/open-telemetry/opentelemetry-specification/pull/575))
+- Added conventions for naming of exporter packages
 
 ## v0.5.0 (06-02-2020)
 
