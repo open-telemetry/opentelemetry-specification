@@ -5,10 +5,10 @@ particular operation.
 
 ## Summarizing timed operations
 
-Timed operations that may be more fully described by Spans can be summarized by a single `ValueRecorder` metric recording duration.  The name of this metric  should be namespaced with the Span category and the Span kind.
+Timed operations that may be more fully described by Spans can be summarized by a single [`ValueRecorder`](../api.md#valuerecorder) recording duration.  The instrument name should be prefixed with the Span category and kind.
 The resulting name should look like `{category}.{span.kind}.duration`. See [examples](#examples) below.
 
-For each operation being recorded, the `duration` metric should be incremented by the the duration of the operation **in milliseconds**.
+For each operation being recorded, the duration of the operation **in milliseconds** should be recorded onto the `duration` instrument.
 
 #### errors
 
