@@ -49,7 +49,7 @@ and bound to a data type, in order to propagate in-band context data across proc
 The Propagators API currently defines one `Propagator` type:
 
 - `HTTPTextPropagator` is a type that inject values into and extracts values
-  from carriers as text.
+  from carriers as string key/value pairs.
 
 A binary `Propagator` type will be added in the future.
 
@@ -69,7 +69,7 @@ and CAN define additional parameters.
 
 #### Inject
 
-Injects the value downstream. For example, as http headers.
+Injects the value into a carrier. For example, into the headers of an HTTP request.
 
 Required arguments:
 
@@ -77,7 +77,7 @@ Required arguments:
 `SpanContext`, `CorrelationContext` or another cross-cutting concern context. For languages
 supporting current `Context` state, this argument is OPTIONAL, defaulting to the current `Context`
 instance.
-- The carrier that holds the propagation fields. For example, an outgoing message or http request.
+- The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
 
@@ -101,14 +101,14 @@ If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set t
 
 ## HTTPText Propagator
 
-`HTTPTextPropagator` requires the injection and extraction of a cross-cutting concern
-value as text into carriers that travel in-band across process boundaries.
+`HTTPTextPropagator` performs the injection and extraction of a cross-cutting concern
+value as string key/values pairs into carriers that travel in-band across process boundaries.
 
 Encoding is expected to conform to the HTTP Header Field semantics. Values are often encoded as
 RPC/HTTP request headers.
 
 The carrier of propagated data on both the client (injector) and server (extractor) side is
-usually an http request.
+usually an HTTP request.
 
 `HTTPTextPropagator` MUST expose the APIs that injects values into carriers,
 and extracts values from carriers.
@@ -159,7 +159,7 @@ Replaces a propagated field with the given value.
 
 Required arguments:
 
-- the carrier holds propagation fields. For example, an outgoing message or http request.
+- the carrier holding the propagation fields. For example, an outgoing message or an HTTP request.
 - the key of the field.
 - the value of the field.
 
