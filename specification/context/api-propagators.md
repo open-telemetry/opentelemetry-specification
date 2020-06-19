@@ -131,13 +131,13 @@ Returns list of fields that will be used by the `HttpTextPropagator`.
 
 ### Inject
 
-Injects the value downstream.
+Injects the value downstream. The required arguments are the same as defined by
+the base [Inject](#inject) operation.
 
-Required arguments:
+Optional arguments:
 
-- A `Context`.
-- The carrier that holds propagation fields. For example, an outgoing message or http request.
-- The `Setter` invoked for each propagation key to add or remove.
+- A `Setter` invoked for each propagation key to add or remove. This is an additional
+  argument that languages are free to define to help inject data into the carrier.
 
 `Setter` is defined as a separate object from the carrier to avoid runtime allocations,
 removing the need for additional objects wrapping the carrier that access its contents
@@ -167,13 +167,13 @@ The implementation SHOULD preserve casing (e.g. it should not transform `Content
 
 ### Extract
 
-Extracts the value from an incoming request.
+Extracts the value from an incoming request. The required arguments are the same as defined by
+the base [Extract](#extract) operation.
 
-Required arguments:
+Optional arguments:
 
-- A `Context`.
-- The carrier holds propagation fields. For example, an incoming message or http response.
-- The instance of `Getter` invoked for each propagation key to get.
+- A `Getter` invoked for each propagation key to get. This is an additional
+  argument that languages are free to define to help extract data from the carrier.
 
 Returns a new `Context` derived from the `Context` passed as argument.
 
