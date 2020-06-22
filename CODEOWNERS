@@ -12,7 +12,7 @@
 #  https://help.github.com/en/articles/about-code-owners
 #
 
-# Global owners, will be the owners for everything in the repo.
+# Global owners, will be the owners for everything in the repo. Membership is tracked via https://github.com/open-telemetry/community/blob/master/community-members.md 
 *   @specs-approvers
 
 # Trace owners (global + trace)
