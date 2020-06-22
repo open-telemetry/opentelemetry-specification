@@ -69,12 +69,12 @@ the name should explicitly be set to the empty string to distinguish it from the
 
 ## General remote service attributes
 
-These attributes may be used for any remote operation that applies to a target service. Users will generally define what a service is, though instrumentation
+These attributes may be used for any remote operation that applies to a service. Users will generally define what a service is, though instrumentation
 may provide a fallback when not user-controlled based on instrumentation-specific behavior.
 
 |  Attribute name |                                 Notes and examples                                |
 | :-------------- | :-------------------------------------------------------------------------------- |
-| `peer.service`  | Remote service name, indicating a semantic name for the target of the request. For example, for a Redis cache of auth tokens, this may be `AuthCache`. Note that this usually does not relate to transport-level names like `net.*.name` attributes above, for example when the service is sharded and accessible from several endpoints. |
+| `peer.service`  | Logical name of the service. <br/> MUST be the same for all instances of horizontally scaled services. |
 
 ## General identity attributes
 
