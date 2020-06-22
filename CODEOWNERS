@@ -12,4 +12,17 @@
 #  https://help.github.com/en/articles/about-code-owners
 #
 
-*  @bogdandrutu @carlosalberto @SergeyKanzhelev @yurishkuro @tedsuo @iredelmeier @arminru @c24t @reyang @tigrannajaryan @jmacd
+# Global owners, will be the owners for everything in the repo. Membership is tracked via https://github.com/open-telemetry/community/blob/master/community-members.md 
+*   @specs-approvers
+
+# Trace owners (global + trace)
+experimental/trace/    @specs-approvers @specs-trace-approvers
+specification/trace/   @specs-approvers @specs-trace-approvers
+
+# Metrics owners (global + metrics)
+experimental/metrics/    @specs-approvers @specs-metrics-approvers
+specification/metrics/   @specs-approvers @specs-metrics-approvers
+
+# Logs owners (global + logs)
+experimental/logs/    @specs-approvers @specs-logs-approvers
+specification/logs/   @specs-approvers @specs-logs-approvers
