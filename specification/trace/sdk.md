@@ -163,21 +163,21 @@ reference.
 ## Additional Span interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
-only defines write-only access to the Span.
+only defines write-only access to the span.
 This is good because instrumentations and applications are not to use the data
 stored in a span for application logic.
 However, the SDK needs to eventually read back the data in some locations.
 Thus, the SDK specification defines two new terms:
 
 * **Readable span**: A span interface that MUST allow to retrieve all information
-  that was added to the span (e.g. all attributes, events, (parent) SpanContext,
+  that was added to the span (e.g. all attributes, events, (parent) `SpanContext`,
   etc.).
   A readable span MAY be identical to a read/write span, i.e., SDKs are not
   required to have a read-only interface.
   SDKs are also allowed to use a read/write span instead of a different readable interface
   only in some places where the SDK requires a readable span.
 * **Read/write span**: A span that provides both the full API as defined in the
-  [API-level definition for Span's interface](api.md#span-operations) and
+  [API-level definition for span's interface](api.md#span-operations) and
   additionally the same interface as for Readable spans
   as defined in the above bullet point.
 
