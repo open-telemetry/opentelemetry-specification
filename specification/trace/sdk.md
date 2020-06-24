@@ -172,6 +172,8 @@ Thus, the SDK specification defines two new terms:
 * **Readable span**: A span interface that MUST allow to retrieve all information
   that was added to the span (e.g. all attributes, events, (parent) `SpanContext`,
   etc.).
+  The readable span MUST provide a method called `getInstrumentationLibrary` (or similar),
+  that returns the `InstrumentationLibrary` information held by the `Tracer` that created the span.
   A readable span MAY be identical to a read/write span, i.e., SDKs are not
   required to have a read-only interface.
   SDKs are also allowed to use a read/write span instead of a different readable interface
