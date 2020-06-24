@@ -172,16 +172,18 @@ Thus, the SDK specification defines two new terms:
 * **Readable span**: A span interface that MUST allow to retrieve all information
   that was added to the span (e.g. all attributes, events, (parent) `SpanContext`,
   etc.).
+  
   The readable span MUST provide a method called `getInstrumentationLibrary` (or similar),
   that returns the `InstrumentationLibrary` information held by the `Tracer` that created the span.
-  A readable span MAY be identical to a read/write span, i.e., SDKs are not
-  required to have a read-only interface.
-  SDKs are also allowed to use a read/write span instead of a different readable interface
-  only in some places where the SDK requires a readable span.
 * **Read/write span**: A span that provides both the full API as defined in the
   [API-level definition for span's interface](api.md#span-operations) and
   additionally the same interface as for readable spans
   as defined in the above bullet point.
+  
+The readable span interface MAY be identical to the read/write interface,
+i.e., SDKs are not required to have a read-only interface.
+SDKs are also allowed to use a read/write span instead of a different readable interface
+only in some places where the SDK requires a readable span.
 
 ## Span processor
 
@@ -339,8 +341,8 @@ and backend the spans are being sent to.
 
 **Parameters:**
 
-batch - a batch of telemetry data. The exact data type of the batch is language
-specific, typically it is a list of [readable spans](#additional-span-interfaces),
+batch - a batch of [readable spans](#additional-span-interfaces). The exact data type of the batch is language
+specific, typically it is some kind of list,
 e.g. for spans in Java it will be typically `Collection<SpanData>`.
 
 **Returns:** ExportResult:
