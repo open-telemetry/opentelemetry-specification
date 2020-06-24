@@ -39,6 +39,7 @@ The goal of this specification is to unify the environment variable names betwee
 | Name                            | Description                                       | Notes                                                                                                    |
 | ------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent                     |                                                                                                          |
+| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent                         |                                                                                                          |
 | OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                   | <!-- markdown-link-check-disable -->default: "http://localhost:14250"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication | -                                                                                                        |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication | -                                                                                                        |
