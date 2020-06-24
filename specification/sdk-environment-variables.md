@@ -48,7 +48,6 @@ The goal of this specification is to unify the environment variable names betwee
 
 ## Zipkin Exporter
 
-| Name                              | Description                | Notes                                                                                                                |
-| --------------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| OTEL_EXPORTER_ZIPKIN_ENDPOINT     | Endpoint for Zipkin traces | <!-- markdown-link-check-disable -->default: "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_ZIPKIN_SERVICE_NAME | The Zipkin service name    | -                                                                                                                    |
+| Name                          | Description                | Notes                                                                                                                |
+| ----------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable -->default: "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
