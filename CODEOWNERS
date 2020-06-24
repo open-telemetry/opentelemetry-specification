@@ -13,7 +13,7 @@
 #
 
 # Global owners, will be the owners for everything in the repo. Membership is tracked via https://github.com/open-telemetry/community/blob/master/community-members.md 
-*   @specs-approvers
+*   @open-telemetry/specs-approvers
 
 # Trace owners (global + trace)
 experimental/trace/     @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
