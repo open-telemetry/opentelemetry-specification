@@ -160,9 +160,26 @@ Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
 
-The readable representations of all `Span` instances created by a `Tracer` must
-provide a `getInstrumentationLibrary` method that returns the
-`InstrumentationLibrary` information held by the `Tracer`.
+## Additional Span interfaces
+
+The [API-level definition for Span's interface](api.md#span-operations)
+only defines write-only access to the Span.
+This is good because instrumentations and applications are not to use the data
+stored in a span for application logic.
+However, the SDK needs to eventually read back the data in some locations.
+Thus, the SDK specification defines two new terms:
+
+* **Readable span**: A span interface that MUST allow to retrieve all information
+  that was added to the span (e.g. all attributes, events, (parent) SpanContext,
+  etc.).
+  A readable span MAY be identical to a read/write span, i.e., SDKs are not
+  required to have a read-only interface.
+  SDKs are also allowed to use a read/write span instead of a different readable
+  only in some places where the SDK requires a readable span.
+* **Read/write span**: A span that provides both the full API as defined in the
+  [API-level definition for Span's interface](api.md#span-operations) and
+  additionally the same interface as for Readable spans
+  as defined in the above bullet point.
 
 ## Span processor
 
@@ -211,7 +228,7 @@ exceptions.
 
 **Parameters:**
 
-* `Span` - a readable span object.
+* `Span` - a [read/write span object](#additional-span-interfaces) for the started span.
 
 **Returns:** `Void`
 
@@ -222,7 +239,11 @@ the execution thread, therefore it should not block or throw an exception.
 
 **Parameters:**
 
-* `Span` - a readable span object.
+* `Span` - a [readable span object](#additional-span-interfaces) for the started span.
+  Note: Since multiple SpanProcessors may be involved, and OnEnd is typically used
+  for sending data to exporters, SpanProcessors should rather not modify spans
+  in `OnEnd`, since the resulting behavior would be sensitive to the order of
+  `SpanProcessors`'s `OnEnd` calls.
 
 **Returns:** `Void`
 
@@ -298,7 +319,8 @@ interfaces, one that accepts spans (SpanExporter) and one that accepts metrics
 
 #### `Export(batch)`
 
-Exports a batch of telemetry data. Protocol exporters that will implement this
+Exports a batch of [readable spans](#additional-span-interfaces).
+Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
 destination.
 
@@ -316,14 +338,8 @@ and backend the spans are being sent to.
 **Parameters:**
 
 batch - a batch of telemetry data. The exact data type of the batch is language
-specific, typically it is a list of telemetry items, e.g. for spans in Java it
-will be typically `Collection<ExportableSpan>`.
-
-Note that the data type for a span for illustration purposes here is written as
-an imaginary type ExportableSpan (similarly for metrics it would be e.g.
-ExportableMetrics). The actual data type must be specified by language library
-authors, it should be able to represent the span data that can be read by the
-exporter.
+specific, typically it is a list of [readable spans](#additional-span-interfaces),
+e.g. for spans in Java it will be typically `Collection<ExportableSpan>`.
 
 **Returns:** ExportResult:
 
