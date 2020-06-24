@@ -164,7 +164,7 @@ reference.
 
 The [API-level definition for Span's interface](api.md#span-operations)
 only defines write-only access to the span.
-This is good because instrumentations and applications are not to use the data
+This is good because instrumentations and applications are not meant to use the data
 stored in a span for application logic.
 However, the SDK needs to eventually read back the data in some locations.
 Thus, the SDK specification defines two new terms:
@@ -242,7 +242,7 @@ the execution thread, therefore it should not block or throw an exception.
 * `Span` - a [readable span object](#additional-span-interfaces) for the started span.
   Note: Since multiple SpanProcessors may be involved, and OnEnd is typically used
   for sending data to exporters, SpanProcessors should rather not modify spans
-  in `OnEnd`, since the resulting behavior would be sensitive to the order of
+  in `OnEnd`, even if the passed object would allow this, since the resulting behavior would be sensitive to the order of
   `SpanProcessors`'s `OnEnd` calls.
 
 **Returns:** `Void`
@@ -339,7 +339,7 @@ and backend the spans are being sent to.
 
 batch - a batch of telemetry data. The exact data type of the batch is language
 specific, typically it is a list of [readable spans](#additional-span-interfaces),
-e.g. for spans in Java it will be typically `Collection<ExportableSpan>`.
+e.g. for spans in Java it will be typically `Collection<SpanData>`.
 
 **Returns:** ExportResult:
 
