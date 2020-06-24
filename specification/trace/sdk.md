@@ -178,7 +178,7 @@ Thus, the SDK specification defines two new terms:
   only in some places where the SDK requires a readable span.
 * **Read/write span**: A span that provides both the full API as defined in the
   [API-level definition for span's interface](api.md#span-operations) and
-  additionally the same interface as for Readable spans
+  additionally the same interface as for readable spans
   as defined in the above bullet point.
 
 ## Span processor
