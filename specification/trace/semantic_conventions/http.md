@@ -79,6 +79,11 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `http.status_text` | [HTTP reason phrase][]. E.g. `"OK"` | No |
 | `http.flavor` | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |  No |
 | `http.user_agent` | Value of the HTTP [User-Agent][] header sent by the client. | No |
+| `http.request_content_length` | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length][] header. For requests using transport encoding, this should be the compressed size. | No |
+| `http.request_content_length_uncompressed` | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | No |
+| `http.response_content_length` | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length][] header. For requests using transport encoding, this should be the compressed size. | No |
+| `http.response_content_length_uncompressed` | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | No |
+
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
@@ -86,6 +91,7 @@ It is recommended to also use the general [network attributes][], especially `ne
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
 [User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3
+[Content-Length]: https://tools.ietf.org/html/rfc7230#section-3.3.2
 
 ## HTTP client
 
