@@ -104,6 +104,11 @@ Usually only one `db.name` will be used per connection though.
 
 [MongoDB command name]: https://docs.mongodb.com/manual/reference/command/#database-operations
 
+For Redis, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.
+If, for example, the [`HMSET` command][] is invoked, `"HMSET myhash field1 'Hello' field2 'World'"` would be a suitable value for `db.statement`.
+
+[`HMSET` command]: https://redis.io/commands/hmset
+
 ### Call-level attributes for specific technologies
 
 | Technology | Attribute name | Notes and examples                                           | Required? |
