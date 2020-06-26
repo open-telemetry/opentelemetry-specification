@@ -9,6 +9,10 @@
   * [Connection-level attributes for specific technologies](#connection-level-attributes-for-specific-technologies)
 - [Call-level attributes](#call-level-attributes)
   * [Call-level attributes for specific technologies](#call-level-attributes-for-specific-technologies)
+- [Examples](#examples)
+  * [MySQL](#mysql)
+  * [Redis](#redis)
+  * [MongoDB](#mongodb)
 
 <!-- tocstop -->
 
@@ -127,3 +131,56 @@ In **CouchDB**, `db.operation` should be set to the HTTP method + the target RES
 For example, when retrieving a document, `db.operation` would be set to (literally, i.e., without replacing the placeholders with concrete values): [`GET /{db}/{docid}`][CouchDB get doc].
 
 [CouchDB get doc]: http://docs.couchdb.org/en/stable/api/document/common.html#get--db-docid
+
+## Examples
+
+### MySQL
+
+| Key | Value |
+| :---------------------- | :----------------------------------------------------------- |
+| Span name               | `"SELECT * FROM orders WHERE order_id = ?"` |
+| `db.system`             | `"mysql"` |
+| `db.connection_string`  | `"Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;"` |
+| `db.user`               | `"billing_user"` |
+| `net.peer.name`         | `"shopdb.example.com"` |
+| `net.peer.ip`           | `"192.0.2.12"` |
+| `net.peer.port`         | `3306` |
+| `net.transport`         | `"IP.TCP"` |
+| `db.name`               | `"ShopDb"` |
+| `db.statement`          | `"SELECT * FROM orders WHERE order_id = 'o4711'"` |
+| `db.operation`          | not set |
+
+### Redis
+
+In this example, Redis is connected using a unix domain socket and therefore the connection string and `net.peer.ip` are left out.
+Furthermore, `db.name` is not specified as there is no database name in Redis.
+If a database other than the default database (index 0) is used, it would make sense to specify its index number as `db.name`.
+
+| Key | Value |
+| :---------------------- | :----------------------------------------------------------- |
+| Span name               | `"HMSET myhash"` |
+| `db.system`             | `"redis"` |
+| `db.connection_string`  | not set |
+| `db.user`               | not set |
+| `net.peer.name`         | `"/tmp/redis.sock"` |
+| `net.transport`         | `"Unix"` |
+| `db.name`               | not set |
+| `db.statement`          | `"HMSET myhash field1 'Hello' field2 'World"` |
+| `db.operation`          | not set |
+
+### MongoDB
+
+| Key | Value |
+| :---------------------- | :----------------------------------------------------------- |
+| Span name               | `"products.findAndModify"` |
+| `db.system`             | `"mongodb"` |
+| `db.connection_string`  | not set |
+| `db.user`               | `"the_user"` |
+| `net.peer.name`         | `"mongodb0.example.com"` |
+| `net.peer.ip`           | `"192.0.2.14"` |
+| `net.peer.port`         | `27017` |
+| `net.transport`         | `"IP.TCP"` |
+| `db.name`               | `"shopDb"` |
+| `db.statement`          | not set |
+| `db.operation`          | `"findAndModify"` |
+| `db.mongodb.collection` | `"products"` |
