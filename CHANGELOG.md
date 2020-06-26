@@ -14,6 +14,7 @@ the release.
 - Clarify Tracer vs TracerProvider in tracing API and SDK spec. Most importantly:
   * Configuration should be stored not per Tracer but in the TracerProvider.
   * Active spans are not per Tracer.
+- Add peer.service to provide a user-configured name for a remote service
 
 ## v0.5.0 (06-02-2020)
 
