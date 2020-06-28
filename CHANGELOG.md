@@ -11,6 +11,7 @@ the release.
 - Add span attribute to indicate cold starts of Function as a Service executions ([#650](https://github.com/open-telemetry/opentelemetry-specification/pull/650))
 - Added conventions for naming of exporter packages
 - Add semantic conventions for container id
+- Add semantic conventions for HTTP content length
 - Clarify Tracer vs TracerProvider in tracing API and SDK spec. Most importantly:
   * Configuration should be stored not per Tracer but in the TracerProvider.
   * Active spans are not per Tracer.
