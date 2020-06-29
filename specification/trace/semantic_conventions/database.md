@@ -112,10 +112,18 @@ Usually only one `db.name` will be used per connection though.
 
 [MongoDB command name]: https://docs.mongodb.com/manual/reference/command/#database-operations
 
-For Redis, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.
+In some **SQL** databases, the database name to be used for `db.name` is called "schema name".
+
+**Redis** does not have a database name to use for `db.name`.
+For **Redis**, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.
 If, for example, the [`HMSET` command][] is invoked, `"HMSET myhash field1 'Hello' field2 'World'"` would be a suitable value for `db.statement`.
 
 [`HMSET` command]: https://redis.io/commands/hmset
+
+In **CouchDB**, `db.operation` should be set to the HTTP method + the target REST route according to the API reference documentation.
+For example, when retrieving a document, `db.operation` would be set to (literally, i.e., without replacing the placeholders with concrete values): [`GET /{db}/{docid}`][CouchDB get doc].
+
+[CouchDB get doc]: http://docs.couchdb.org/en/stable/api/document/common.html#get--db-docid
 
 ### Call-level attributes for specific technologies
 
@@ -126,15 +134,6 @@ If, for example, the [`HMSET` command][] is invoked, `"HMSET myhash field1 'Hell
 | MongoDB | `db.mongodb.collection` | The collection being accessed within the database stated in `db.name`. | Yes |
 
 [HBase namespace]: https://hbase.apache.org/book.html#_namespace
-
-In some **SQL** databases, the database name to be used for `db.name` is called "schema name".
-
-**Redis** does not have a database name to use for `db.name`.
-
-In **CouchDB**, `db.operation` should be set to the HTTP method + the target REST route according to the API reference documentation.
-For example, when retrieving a document, `db.operation` would be set to (literally, i.e., without replacing the placeholders with concrete values): [`GET /{db}/{docid}`][CouchDB get doc].
-
-[CouchDB get doc]: http://docs.couchdb.org/en/stable/api/document/common.html#get--db-docid
 
 ## Examples
 
