@@ -127,11 +127,11 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 
 ### Call-level attributes for specific technologies
 
-| Technology | Attribute name | Notes and examples                                           | Required? |
-| ---------- | :------------- | :----------------------------------------------------------- | --------- |
-| Cassandra | `db.cassandra.keyspace` | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | Yes |
-| HBase | `db.hbase.namespace` | The [HBase namespace][] being accessed. To be used instead of the generic `db.name` attribute. | Yes |
-| MongoDB | `db.mongodb.collection` | The collection being accessed within the database stated in `db.name`. | Yes |
+| Technology | Attribute name            | Notes and examples                                           | Required? |
+| ---------- | :------------------------ | :----------------------------------------------------------- | --------- |
+| Cassandra  | `db.cassandra.keyspace`   | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | Yes |
+| HBase      | `db.hbase.namespace`      | The [HBase namespace][] being accessed. To be used instead of the generic `db.name` attribute. | Yes |
+| MongoDB    | `db.mongodb.collection`   | The collection being accessed within the database stated in `db.name`. | Yes |
 
 [HBase namespace]: https://hbase.apache.org/book.html#_namespace
 
