@@ -91,9 +91,10 @@ When additional attributes are added that only apply to a specific DBMS, its ide
 | Technology | Attribute name | Notes and examples                                           | Required? |
 | ---------- | :------------- | :----------------------------------------------------------- | --------- |
 | Microsoft SQL Server | `db.mssql.instance_name` | The [instance name][] connecting to. This name is used to determine the port of a named instance. | See below. |
-| JDBC Clients | `db.jdbc.driver_classname` | The fully-qualified class name of the JDBC driver used to connect, e.g., `"org.postgresql.Driver"` or `"com.microsoft.sqlserver.jdbc.SQLServerDriver"`. | No |
+| JDBC Clients | `db.jdbc.driver_classname` | The fully-qualified class name of the [Java Database Connectivity (JDBC)][jdbc] driver used to connect, e.g., `"org.postgresql.Driver"` or `"com.microsoft.sqlserver.jdbc.SQLServerDriver"`. | No |
 
 [instance name]: https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15
+[jdbc]: https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/
 
 - Microsoft SQL Server:
   - If setting a `db.mssql.instance_name`, `net.peer.port` is no longer required (but still recommended if non-standard).
