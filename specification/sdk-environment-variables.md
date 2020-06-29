@@ -43,7 +43,6 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                   | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication | - |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication | - |
-| OTEL_EXPORTER_JAEGER_TAGS       | Jaeger process tags                               | - |
 | OTEL_EXPORTER_JAEGER_DISABLED   | Disables the Jaeger exporter when true            | - |
 
 ## Zipkin Exporter
