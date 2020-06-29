@@ -16,11 +16,11 @@
 
 <!-- tocstop -->
 
-For database client calls the `SpanKind` MUST be `Client`.
+**Span kind:** MUST always be `CLIENT`.
 
-The _span name_ should be set to a low cardinality value representing the statement executed on the database.
+The **span name** SHOULD be set to a low cardinality value representing the statement executed on the database.
 It may be a stored procedure name (without arguments), SQL statement without variable arguments, operation name, etc.
-When it's impossible to get any meaningful representation of the span name, it can be populated using the same value as `db.name` or the tech-specific database name.
+When it's otherwise impossible to get any meaningful span name, `db.name` or the tech-specific database name MAY be used.
 
 ## Connection-level attributes
 
@@ -29,7 +29,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
-| `db.system`    | An identifier for the database management system (DBMS) product being used. See list below for well-known identifiers. | Yes       |
+| `db.system`    | An identifier for the database management system (DBMS) product being used. See below for a [list of well-known identifiers](#notes-and-well-known-identifiers-for-dbsystem). | Yes       |
 | `db.connection_string` | The connection string used to connect to the database. It is recommended to remove embedded credentials. | No       |
 | `db.user`      | Username for accessing the database, e.g., `"readonly_user"` or `"reporting_user"` | No        |
 | `net.peer.name` | Defined in the general [network attributes][]. | See below |
@@ -118,10 +118,10 @@ If, for example, the [`HMSET` command][] is invoked, `"HMSET myhash field1 'Hell
 | Technology | Attribute name | Notes and examples                                           | Required? |
 | ---------- | :------------- | :----------------------------------------------------------- | --------- |
 | Cassandra | `db.cassandra.keyspace` | The name of the keyspace being accessed. To be used instead of the general `db.name` attribute. | Yes |
-| HBase | `db.hbase.namespace` | The [HBase namespace][hbase ns] being accessed. To be used instead of the general `db.name` attribute. | Yes |
+| HBase | `db.hbase.namespace` | The [HBase namespace][] being accessed. To be used instead of the general `db.name` attribute. | Yes |
 | MongoDB | `db.mongodb.collection` | The collection being accessed within the database stated in `db.name`. | Yes |
 
-[hbase ns]: https://hbase.apache.org/book.html#_namespace
+[HBase namespace]: https://hbase.apache.org/book.html#_namespace
 
 In some **SQL** databases, the database name to be used for `db.name` is called "schema name".
 
