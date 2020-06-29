@@ -53,6 +53,9 @@ If a value defined in this list applies to the DBMS to which the request is sent
 If no value defined in this list is suitable, a custom value MUST be provided.
 This custom value MUST be the name of the DBMS in lowercase and without a version number to stay consistent with existing identifiers.
 
+It is encouraged to open a PR towards this specification to add missing values to the list, especially when instrumentations for those missing databases are written.
+This allows multiple instrumentations for the same database to be aligned and eases analyzing for backends.
+
 The value `other_sql` is intended as a fallback and MUST only be used if the DBMS is known to be SQL-compliant but the concrete product is not known to the instrumentation.
 If the concrete DBMS is known to the instrumentation, its specific identifier MUST be used.
 
