@@ -77,8 +77,8 @@ Instrumentation is expected to provide a way for users to configure this name.
 | `peer.service`  | Logical name of the service. <br/> MUST be the same for all instances of horizontally scaled services. Generally, a user SHOULD not set this to a fully qualified RPC service name as it would be a duplicate of `rpc.service`. |
 
 Examples of `peer.service` that users may specify:
-- A Redis cache of auth tokens, `AuthTokenCache`.
-- A gRPC service `io.opentelemetry.AuthService` may be hosted in both a gateway, `ExternalApiService` and a backend, `AuthService`.
+- A Redis cache of auth tokens. `peer.service=AuthTokenCache`.
+- A gRPC service `rpc.service=io.opentelemetry.AuthService` may be hosted in both a gateway, `peer.service=ExternalApiService` and a backend, `peer.service=AuthService`.
 
 ## General identity attributes
 
