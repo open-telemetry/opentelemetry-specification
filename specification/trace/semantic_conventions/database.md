@@ -53,7 +53,7 @@ If a value defined in this list applies to the DBMS to which the request is sent
 If no value defined in this list is suitable, a custom value MUST be provided.
 This custom value MUST be the name of the DBMS in lowercase and without a version number to stay consistent with existing identifiers.
 
-The value `generic_sql` is intended as a fallback and MUST only be used if the DBMS is known to be SQL-compliant but the concrete product is not known to the instrumentation.
+The value `other_sql` is intended as a fallback and MUST only be used if the DBMS is known to be SQL-compliant but the concrete product is not known to the instrumentation.
 If the concrete DBMS is known to the instrumentation, its specific identifier MUST be used.
 
 | Value for `db.system` | Product name              | Note                           |
@@ -68,7 +68,7 @@ If the concrete DBMS is known to the instrumentation, its specific identifier MU
 | `"postgresql"`        | PostgreSQL                |                                |
 | `"sqlite"`            | SQLite                    |                                |
 | `"teradata"`          | Teradata                  |                                |
-| `"generic_sql"`       | Generic SQL Database      | Fallback only. See note above. |
+| `"other_sql"`         | Some other SQL Database   | Fallback only. See note above. |
 | `"cassandra"`         | Cassandra                 |                                |
 | `"cosmosdb"`          | Microsoft Azure Cosmos DB |                                |
 | `"couchbase"`         | Couchbase                 |                                |
@@ -103,7 +103,7 @@ Usually only one `db.name` will be used per connection though.
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `db.name`  | If no tech-specific attribute is defined below, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). | Yes (if applicable and no more specific attribute is defined) |
-| `db.statement` | The database statement being executed.. Note that the value may be sanitized to exclude sensitive information. E.g., for `db.system="generic_sql"`, `"SELECT * FROM wuser_table"`; for `db.system="redis"`, `"SET mykey 'WuValue'"`. | Yes (if applicable)       |
+| `db.statement` | The database statement being executed.. Note that the value may be sanitized to exclude sensitive information. E.g., for `db.system="other_sql"`, `"SELECT * FROM wuser_table"`; for `db.system="redis"`, `"SET mykey 'WuValue'"`. | Yes (if applicable)       |
 | `db.operation` | The name of the operation being executed, e.g. the [MongoDB command name][] such as `findAndModify`. While it would semantically make sense to set this, e.g., to an SQL keyword like `SELECT` or `INSERT`, it is *not* recommended to attempt any client-side parsing of `db.statement` just to get this property (the back end can do that if required). | Yes, if `db.statement` is not applicable.       |
 
 [MongoDB command name]: https://docs.mongodb.com/manual/reference/command/#database-operations
