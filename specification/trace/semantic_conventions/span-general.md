@@ -74,7 +74,7 @@ Instrumentation is expected to provide a way for users to configure this name.
 
 |  Attribute name |                                 Notes and examples                                |
 | :-------------- | :-------------------------------------------------------------------------------- |
-| `peer.service`  | The (hypothetical) [`service.name`](../../resources/resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. |
+| `peer.service`  | The (hypothetical) [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. |
 
 Examples of `peer.service` that users may specify:
 - A Redis cache of auth tokens. `peer.service=AuthTokenCache`.
