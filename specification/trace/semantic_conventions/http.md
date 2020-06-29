@@ -54,6 +54,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | 403 Forbidden           | `PermissionDenied`    |
 | 404 Not Found           | `NotFound`            |
 | 429 Too Many Requests   | `ResourceExhausted`   |
+| 499 Client Closed       | `Cancelled`           |
 | Other 4xx code          | `InvalidArgument` [1] |
 | 501 Not Implemented     | `Unimplemented`       |
 | 503 Service Unavailable | `Unavailable`         |
