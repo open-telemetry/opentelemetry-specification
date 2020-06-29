@@ -114,7 +114,6 @@ Usually only one `db.name` will be used per connection though.
 
 In some **SQL** databases, the database name to be used for `db.name` is called "schema name".
 
-**Redis** does not have a database name to use for `db.name`.
 For **Redis**, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.
 If, for example, the [`HMSET` command][] is invoked, `"HMSET myhash field1 'Hello' field2 'World'"` would be a suitable value for `db.statement`.
 
@@ -131,9 +130,11 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 | ---------- | :------------------------ | :----------------------------------------------------------- | --------- |
 | Cassandra  | `db.cassandra.keyspace`   | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | Yes |
 | HBase      | `db.hbase.namespace`      | The [HBase namespace][] being accessed. To be used instead of the generic `db.name` attribute. | Yes |
+| Redis      | `db.redis.database_index` | The index of the database being accessed as used in the [`SELECT` command], provided as an integer. To be used instead of the generic `db.name` attribute. | Yes, if other than the default database (`0`) |
 | MongoDB    | `db.mongodb.collection`   | The collection being accessed within the database stated in `db.name`. | Yes |
 
 [HBase namespace]: https://hbase.apache.org/book.html#_namespace
+[`SELECT` command]: https://redis.io/commands/select
 
 ## Examples
 
