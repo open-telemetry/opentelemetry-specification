@@ -50,3 +50,11 @@ The goal of this specification is to unify the environment variable names betwee
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
+
+## Language Specific Environment Variables
+
+To ensure consistent naming across projects, this specification recommends that language specific environment variables are formed using the following convention:
+
+```
+OTEL_{LANGUAGE}_{FEATURE}
+```
