@@ -200,7 +200,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
-- An ordered mapping of [`Attribute`s](#set-attributes)
+- [`Attribute`s](#set-attributes), a collection of key-value pairs
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
