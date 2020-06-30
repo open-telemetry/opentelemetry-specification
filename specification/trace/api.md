@@ -224,7 +224,26 @@ hypothetical account information:
 | `get_account/{accountId}` | Also good (using the "HTTP route") |
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
-operation. A `Span`'s start time SHOULD be set to the current time on [span
+operation.
+
+For example, if a span represents a request-response cycle (e.g. HTTP or an RPC),
+the span should have a start time that corresponds to the start time of the
+first sub-operation, and an end time of when the final sub-operation is complete.
+This includes:
+
+- receiving the data from the request
+- parsing of the data (e.g. from a binary or json format)
+- any middleware or additional processing logic
+- business logic
+- construction of the response
+- sending of the response
+
+Child spans (or in some cases events) may be created to represent
+sub-operations which require more detailed observability. Child spans should
+measure the timing of the respective sub-operation, and may add additional
+attributes.
+
+A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
 change the its name, set its `Attribute`s, and add `Link`s and `Event`s. These
 MUST NOT be changed after the `Span`'s end time has been set.
