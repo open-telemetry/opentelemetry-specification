@@ -107,7 +107,7 @@ Usually only one `db.name` will be used per connection though.
 | Attribute name | Notes and examples                                           | Required? |
 | :------------- | :----------------------------------------------------------- | --------- |
 | `db.name`  | If no [tech-specific attribute](#call-level-attributes-for-specific-technologies) is defined in the list below, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). | Yes (if applicable and no more specific attribute is defined) |
-| `db.statement` | The database statement being executed.. Note that the value may be sanitized to exclude sensitive information. E.g., for `db.system="other_sql"`, `"SELECT * FROM wuser_table"`; for `db.system="redis"`, `"SET mykey 'WuValue'"`. | Yes (if applicable)       |
+| `db.statement` | The database statement being executed. Note that the value may be sanitized to exclude sensitive information. E.g., for `db.system="other_sql"`, `"SELECT * FROM wuser_table"`; for `db.system="redis"`, `"SET mykey 'WuValue'"`. | Yes (if applicable)       |
 | `db.operation` | The name of the operation being executed, e.g. the [MongoDB command name][] such as `findAndModify`. While it would semantically make sense to set this, e.g., to an SQL keyword like `SELECT` or `INSERT`, it is *not* recommended to attempt any client-side parsing of `db.statement` just to get this property (the back end can do that if required). | Yes, if `db.statement` is not applicable.       |
 
 [MongoDB command name]: https://docs.mongodb.com/manual/reference/command/#database-operations
