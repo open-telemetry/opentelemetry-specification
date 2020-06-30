@@ -78,7 +78,7 @@ Instrumentation is expected to provide a way for users to configure this name.
 
 Examples of `peer.service` that users may specify:
 - A Redis cache of auth tokens as `peer.service="AuthTokenCache"`.
-- A gRPC service `rpc.service=io.opentelemetry.AuthService` may be hosted in both a gateway, `peer.service=ExternalApiService` and a backend, `peer.service=AuthService`.
+- A gRPC service `rpc.service="io.opentelemetry.AuthService"` may be hosted in both a gateway, `peer.service="ExternalApiService"` and a backend, `peer.service="AuthService"`.
 
 ## General identity attributes
 
