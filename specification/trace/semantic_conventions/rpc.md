@@ -69,8 +69,7 @@ On the server process receiving and handling the remote procedure call, the serv
 
 As an example, given a process deployed as `QuoteService`, this would be the name that goes into the `service.name` resource attribute which applies to the entire process.
 This process could expose two RPC endpoints, one called `CurrencyQuotes` (= `rpc.service`) with a method called `getMeanRate` (= `rpc.method`) and the other endpoint called `StockQuotes`  (= `rpc.service`) with two methods `getCurrentBid` and `getLastClose` (= `rpc.method`).
-
-Generally, a user SHOULD not set `peer.service` to a fully qualified RPC service name as that will be redundant with `rpc.service`.
+The same applies for `peer.service`, and generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service name.
 
 [network attributes]: span-general.md#general-network-connection-attributes
 [net.transport]: span-general.md#nettransport-attribute
