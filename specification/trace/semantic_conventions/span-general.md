@@ -72,8 +72,9 @@ the name should explicitly be set to the empty string to distinguish it from the
 
 ## General remote service attributes
 
-These attributes may be used for any operation that accesses some remote service. Users can define what the name of a service is based on their particular semantics in their distributed system.
-Instrumentation is expected to provide a way for users to configure this name.
+This attribute may be used for any operation that accesses some remote service.
+Users can define what the name of a service is based on their particular semantics in their distributed system.
+Instrumentations SHOULD provide a way for users to configure this name.
 
 |  Attribute name |                                 Notes and examples                                |
 | :-------------- | :-------------------------------------------------------------------------------- |
