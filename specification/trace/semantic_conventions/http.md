@@ -53,8 +53,8 @@ Don't set the span status description if the reason can be inferred from `http.s
 | 401 Unauthorized ⚠      | `Unauthenticated` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
 | 403 Forbidden           | `PermissionDenied`    |
 | 404 Not Found           | `NotFound`            |
-| 429 Too Many Requests   | `ResourceExhausted` (Not an official HTTP status code, defined by [NGINX][nginx-http-499])  |
-| 499 Client Closed       | `Cancelled`           |
+| 429 Too Many Requests   | `ResourceExhausted`   |
+| 499 Client Closed       | `Cancelled` (Not an official HTTP status code, defined by [NGINX][nginx-http-499]) |
 | Other 4xx code          | `InvalidArgument` [1] |
 | 501 Not Implemented     | `Unimplemented`       |
 | 503 Service Unavailable | `Unavailable`         |
