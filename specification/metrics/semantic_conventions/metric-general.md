@@ -40,7 +40,7 @@ Care should be taken when adding labels to the duration instruments in order to 
 excessive cardinality.
 
 For example, adding `http.status_code` as a label to the instrument whose duration
-represents HTTP client latency would be reasonable, but `http.response_code` would not.
+represents HTTP client latency would be reasonable, but `http.response_content_length` would not.
 
 ### Examples
 
