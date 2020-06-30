@@ -14,7 +14,6 @@ the release.
 - Clarify Tracer vs TracerProvider in tracing API and SDK spec. Most importantly:
   * Configuration should be stored not per Tracer but in the TracerProvider.
   * Active spans are not per Tracer.
-=======
 - Add semantic conventions for process resource.
 - Add peer.service to provide a user-configured name for a remote service
 
