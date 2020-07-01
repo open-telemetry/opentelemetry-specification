@@ -11,8 +11,6 @@ the release.
 
 New:
 
-- Add CODEOWNERS to support area owners ([#661](https://github.com/open-telemetry/opentelemetry-specification/pull/661))
-- Add experimental folder for new features ([#632](https://github.com/open-telemetry/opentelemetry-specification/pull/632))
 - Add span attribute to indicate cold starts of Function as a Service executions ([#650](https://github.com/open-telemetry/opentelemetry-specification/pull/650))
 - Add conventions for naming of exporter packages ([#629](https://github.com/open-telemetry/opentelemetry-specification/pull/629))
 - Add semantic conventions for container id ([#673](https://github.com/open-telemetry/opentelemetry-specification/pull/673))
@@ -30,9 +28,6 @@ Updates:
   * Active spans are not per Tracer.
 - Do not set any value in Context upon failed extraction ([#671](https://github.com/open-telemetry/opentelemetry-specification/pull/671))
 - Clarify semantic conventions around span start and end time ([#592](https://github.com/open-telemetry/opentelemetry-specification/pull/592))
-
-Removals:
-- Remove zPagesProcessor mentioned in the SDK ([#683](https://github.com/open-telemetry/opentelemetry-specification/pull/683))
 
 ## v0.5.0 (06-02-2020)
 
