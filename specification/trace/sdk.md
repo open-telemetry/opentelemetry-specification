@@ -189,16 +189,16 @@ in the SDK:
 ```
   +-----+--------------+   +-------------------------+   +-------------------+
   |     |              |   |                         |   |                   |
-  |     |              |   | BatchExporterProcessor  |   |    SpanExporter   |
-  |     |              +---> SimpleExporterProcessor +--->  (JaegerExporter) |
+  |     |              |   | Batching Span Processor |   |    SpanExporter   |
+  |     |              +---> Simple Span Processor   +--->  (JaegerExporter) |
   |     |              |   |                         |   |                   |
   | SDK | Span.start() |   +-------------------------+   +-------------------+
   |     | Span.end()   |
-  |     |              |   +---------------------+
-  |     |              |   |                     |
-  |     |              +---> ZPagesProcessor     |
-  |     |              |   |                     |
-  +-----+--------------+   +---------------------+
+  |     |              |
+  |     |              |
+  |     |              |
+  |     |              |
+  +-----+--------------+
 ```
 
 ### Interface definition
