@@ -8,6 +8,7 @@ the release.
 ## Unreleased
 
 - Extend semantic conventions for RPC and allow non-gRPC calls ([#604](https://github.com/open-telemetry/opentelemetry-specification/pull/604))
+- Revise and extend semantic conventions for databases ([#575](https://github.com/open-telemetry/opentelemetry-specification/pull/575))
 - Add span attribute to indicate cold starts of Function as a Service executions ([#650](https://github.com/open-telemetry/opentelemetry-specification/pull/650))
 - Added conventions for naming of exporter packages
 - Add semantic conventions for container id
