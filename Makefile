@@ -24,7 +24,7 @@ install-markdown-link-check:
 
 .PHONY: markdown-link-check
 markdown-link-check:
-	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet $$f; done
+	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f; done
 
 .PHONY: install-markdown-lint
 install-markdown-lint:
