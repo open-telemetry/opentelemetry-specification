@@ -7,16 +7,30 @@ the release.
 
 ## Unreleased
 
-- Extend semantic conventions for RPC and allow non-gRPC calls ([#604](https://github.com/open-telemetry/opentelemetry-specification/pull/604))
+- Provide clear definitions for readable and read/write span interfaces in the SDK ([#669](https://github.com/open-telemetry/opentelemetry-specification/pull/669))
+  * SpanProcessors must provide read/write access at least in OnStart.
+
+## v0.6.0 (07-01-2020)
+
+New:
+
 - Add span attribute to indicate cold starts of Function as a Service executions ([#650](https://github.com/open-telemetry/opentelemetry-specification/pull/650))
-- Added conventions for naming of exporter packages
-- Add semantic conventions for HTTP content length
-- Clarify Tracer vs TracerProvider in tracing API and SDK spec. Most importantly:
+- Add conventions for naming of exporter packages ([#629](https://github.com/open-telemetry/opentelemetry-specification/pull/629))
+- Add semantic conventions for container id ([#673](https://github.com/open-telemetry/opentelemetry-specification/pull/673))
+- Add semantic conventions for HTTP content length ([#641](https://github.com/open-telemetry/opentelemetry-specification/pull/641))
+- Add semantic conventions for process resource ([#635](https://github.com/open-telemetry/opentelemetry-specification/pull/635))
+- Add peer.service to provide a user-configured name for a remote service ([#652](https://github.com/open-telemetry/opentelemetry-specification/pull/652))
+
+Updates:
+- Improve root Span description ([#645](https://github.com/open-telemetry/opentelemetry-specification/pull/645))
+- Extend semantic conventions for RPC and allow non-gRPC calls ([#604](https://github.com/open-telemetry/opentelemetry-specification/pull/604))
+- Revise and extend semantic conventions for databases ([#575](https://github.com/open-telemetry/opentelemetry-specification/pull/575))
+- Clarify Tracer vs TracerProvider in tracing API and SDK spec. ([#619](https://github.com/open-telemetry/opentelemetry-specification/pull/619))
+  Most importantly:
   * Configuration should be stored not per Tracer but in the TracerProvider.
   * Active spans are not per Tracer.
-- Provide clear definitions for readable and read/write span interfaces in the SDK.
-  * SpanProcessors must provide read/write access at least in OnStart.
-- Add semantic conventions for process resource.
+- Do not set any value in Context upon failed extraction ([#671](https://github.com/open-telemetry/opentelemetry-specification/pull/671))
+- Clarify semantic conventions around span start and end time ([#592](https://github.com/open-telemetry/opentelemetry-specification/pull/592))
 
 ## v0.5.0 (06-02-2020)
 
