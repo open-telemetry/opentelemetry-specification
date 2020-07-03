@@ -142,7 +142,7 @@ TODO: Split out the parent handling.
 ## Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api.md#tracerprovicer)). The `name` and `version` arguments
+[API](api.md#tracerprovider)). The `name` and `version` arguments
 supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.

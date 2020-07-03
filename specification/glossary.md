@@ -33,7 +33,7 @@ Example: `org.mongodb.client`.
 
 ### Instrumentation Library
 
-Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library).
+Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented-library).
 *Instrumented Library* and *Instrumentation Library* may be the same library
 if it has built-in OpenTelemetry instrumentation.
 
