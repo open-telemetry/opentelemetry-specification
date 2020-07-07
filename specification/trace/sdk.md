@@ -184,7 +184,7 @@ Thus, the SDK specification defines two new terms:
 The readable span interface MAY be identical to the read/write interface,
 i.e., SDKs are not required to have a read-only interface.
 SDKs are also allowed to use a read/write span instead of a different readable interface
-only in some places where the SDK requires a readable span.
+only in some places where the specification requires a readable span.
 
 ## Span processor
 
