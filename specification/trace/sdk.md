@@ -6,6 +6,7 @@
 
 * [Sampling](#sampling)
 * [Tracer Creation](#tracer-creation)
+* [Additional Span Interfaces](#additional-span-interfaces)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -160,7 +161,7 @@ Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
 
-## Additional Span interfaces
+## Additional Span Interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
 only defines write-only access to the span.
