@@ -61,6 +61,8 @@ The span name SHOULD be set to the message destination name and the operation be
 If the conversation ID is expected to have lower cardinality than the message destination name, it SHOULD be used instead.
 In particular, the conversation ID SHOULD be used if the message destination is unnamed or temporary unless multiple conversations can be combined to a logical destination of lower cardinality.
 
+If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans (operations `receive` and `process`) below.
+
 Examples:
 
 * `shop.orders send`
