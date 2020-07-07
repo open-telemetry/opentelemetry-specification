@@ -6,8 +6,15 @@
 
 - [Definitions](#definitions)
 - [Conventions](#conventions)
+  * [Span name](#span-name)
+  * [Span Kind](#span-kind)
 - [Messaging attributes](#messaging-attributes)
+  * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
+    + [RabbitMQ](#rabbitmq)
 - [Examples](#examples)
+  * [Topic with multiple consumers](#topic-with-multiple-consumers)
+  * [Batch receiving](#batch-receiving)
+  * [Batch processing](#batch-processing)
 
 <!-- tocstop -->
 
@@ -41,11 +48,33 @@ Some messaging systems support the concept of *temporary destination* (often onl
 
 Given these definitions, the remainder of this section describes the semantic conventions that shall be followed for Spans describing interactions with messaging systems.
 
-**Span name:** The span name should usually be set to the message destination name.
-The conversation ID should be used instead when it is expected to have lower cardinality.
-In particular, the conversation ID must be used if the message destination is unnamed or temporary unless multiple conversations can be combined to a logical destination of lower cardinality.
+### Span name
 
-**Span kind:** A producer of a message should set the span kind to `PRODUCER` unless it synchronously waits for a response: then it should use `CLIENT`.
+The span name SHOULD be set to the message destination name and the operation being performed in the following format:
+
+```
+<destination name> <operation name>
+```
+
+`<operation name>` can be any of `send`, `receive` or `process`.
+
+If the conversation ID is expected to have lower cardinality than the message destination name, it SHOULD be used instead.
+In particular, the conversation ID SHOULD be used if the message destination is unnamed or temporary unless multiple conversations can be combined to a logical destination of lower cardinality.
+
+Examples:
+
+* `shop.orders send`
+* `shop.orders receive`
+* `shop.orders process`
+* `print_jobs send`
+* `topic with spaces process`
+* `conversation-A1B2C3D4 send`
+* `conversation-A1B2C3D4 receive`
+* `AuthenticationRequest-Conversations process`
+
+### Span Kind
+
+A producer of a message should set the span kind to `PRODUCER` unless it synchronously waits for a response: then it should use `CLIENT`.
 The processor of the message should set the kind to `CONSUMER`, unless it always sends back a reply that is directed to the producer of the message
 (as opposed to e.g., a queue on which the producer happens to listen): then it should use `SERVER`.
 

@@ -7,6 +7,12 @@ the release.
 
 ## Unreleased
 
+New:
+
+Updates:
+
+- Adapt messaging semantic conventions to include the operation in the span name ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
+
 ## v0.6.0 (07-01-2020)
 
 New:
@@ -19,6 +25,7 @@ New:
 - Add peer.service to provide a user-configured name for a remote service ([#652](https://github.com/open-telemetry/opentelemetry-specification/pull/652))
 
 Updates:
+
 - Improve root Span description ([#645](https://github.com/open-telemetry/opentelemetry-specification/pull/645))
 - Extend semantic conventions for RPC and allow non-gRPC calls ([#604](https://github.com/open-telemetry/opentelemetry-specification/pull/604))
 - Revise and extend semantic conventions for databases ([#575](https://github.com/open-telemetry/opentelemetry-specification/pull/575))
