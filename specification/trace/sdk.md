@@ -170,21 +170,27 @@ stored in a span for application logic.
 However, the SDK needs to eventually read back the data in some locations.
 Thus, the SDK specification defines two new terms:
 
-* **Readable span**: A span interface that MUST allow to retrieve all information
+* **Readable span**: A span interface satisfies the requirements of being a
+  readable span if it allows to retrieve all information
   that was added to the span (e.g. all attributes, events, (parent) `SpanContext`,
   etc.).
   
-  The readable span MUST provide a method called `getInstrumentationLibrary` (or similar),
+  A readable span interface MUST provide a method called `getInstrumentationLibrary` (or similar),
   that returns the `InstrumentationLibrary` information held by the `Tracer` that created the span.
-* **Read/write span**: A span that provides both the full span API as defined in the
+* **Read/write span**: A span interface satisfies this requirement of being a
+  read/write span if it provides both the full span API as defined in the
   [API-level definition for span's interface](api.md#span-operations) and
-  additionally the same interface as for readable spans
+  additionally satisfies the requirements for being a readable span
   as defined in the above bullet point.
   
-The readable span interface MAY be identical to the read/write interface,
-i.e., SDKs are not required to have a read-only interface.
-SDKs are also allowed to use a read/write span instead of a different readable interface
-only in some places where the specification requires a readable span.
+Note: First, these requirements use "interface" in the most abstract sense --
+it does not need to be an actual Java `interface` for example but could also be
+a `final` POJO. Second, these are abstract requirements for interfaces. Not all
+places in the spec that talk about a readable span need to be implemented by the
+same concrete interface. For example, this allows using a different interface
+for the readable span passed to an exporter than for the readable span passed
+to a SpanProcessor's OnEnd. On the other hand,
+it allows implementing a readable span as a read/write span.
 
 ## Span processor
 
