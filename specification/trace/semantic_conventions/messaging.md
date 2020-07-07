@@ -8,6 +8,7 @@
 - [Conventions](#conventions)
   * [Span name](#span-name)
   * [Span Kind](#span-kind)
+  * [Operation names](#operation-names)
 - [Messaging attributes](#messaging-attributes)
   * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
     + [RabbitMQ](#rabbitmq)
@@ -56,12 +57,13 @@ The span name SHOULD be set to the message destination name and the operation be
 <destination name> <operation name>
 ```
 
-`<operation name>` can be any of `send`, `receive` or `process`.
+The values allowed for `<operation name>` are defined in the section [Operation names](#operation-names) below.
 
+The message destination name, i.e., the name of the topic or queue, is usually a low cardinality identifier suitable to be used as a span name.
 If the conversation ID is expected to have lower cardinality than the message destination name, it SHOULD be used instead.
 In particular, the conversation ID SHOULD be used if the message destination is unnamed or temporary unless multiple conversations can be combined to a logical destination of lower cardinality.
 
-If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans (operations `receive` and `process`) below.
+If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans below.
 
 Examples:
 
@@ -79,6 +81,16 @@ Examples:
 A producer of a message should set the span kind to `PRODUCER` unless it synchronously waits for a response: then it should use `CLIENT`.
 The processor of the message should set the kind to `CONSUMER`, unless it always sends back a reply that is directed to the producer of the message
 (as opposed to e.g., a queue on which the producer happens to listen): then it should use `SERVER`.
+
+### Operation names
+
+The following operations related to messages are defined for these semantic conventions:
+
+| Operation name | Description |
+| -------------- | ----------- |
+| `send`         | A message is sent to a destination by a message producer/client.       |
+| `receive`      | A message is received from a destination by a message consumer/server. |
+| `process`      | A message that was previously received from a destination is processed by a message consumer/server. |
 
 ## Messaging attributes
 
@@ -108,7 +120,7 @@ For message consumers, the following additional attributes may be set:
 
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
-| `messaging.operation` | A string identifying which part and kind of message consumption this span describes: either `receive` or `process`. (If the operation is `send`, this attribute must not be set: the operation can be inferred from the span kind in that case.) | No |
+| `messaging.operation` | A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. Only `"receive"` and `"process"` are used for this attribute. If the operation is `"send"`, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case. | No |
 
 The _receive_ span is be used to track the time used for receiving the message(s), whereas the _process_ span(s) track the time for processing the message(s).
 Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive`.
