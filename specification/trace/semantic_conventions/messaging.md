@@ -139,7 +139,7 @@ Process CB:                 | Span CB1 |
 
 | Field or Attribute | Span Prod1 | Span CA1 | Span CB1 |
 |-|-|-|-|
-| Name | `"T"` | `"T"` | `"T"` |
+| Span name | `"T send"` | `"T process"` | `"T process"` |
 | Parent |  | Span Prod1 | Span Prod1 |
 | Links |  |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` |
@@ -168,7 +168,7 @@ Process C:                      | Span Recv1 |
 
 | Field or Attribute | Span Prod1 | Span Prod2 | Span Recv1 | Span Proc1 | Span Proc2 |
 |-|-|-|-|-|-|
-| Name | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
+| Span name | `"Q send"` | `"Q send"` | `"Q receive"` | `"Q process"` | `"Q process"` |
 | Parent |  |  |  | Span Recv1 | Span Recv1 |
 | Links |  |  |  | Span Prod1 | Span Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
@@ -201,7 +201,7 @@ Process C:                              | Span Recv1 | Span Recv2 |
 
 | Field or Attribute | Span Prod1 | Span Prod2 | Span Recv1 | Span Recv2 | Span Proc1 |
 |-|-|-|-|-|-|
-| Name | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
+| Span name | `"Q send"` | `"Q send"` | `"Q receive"` | `"Q receive"` | `"Q process"` |
 | Parent |  |  | Span Prod1 | Span Prod2 |  |
 | Links |  |  |  |  | Span Prod1 + Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
