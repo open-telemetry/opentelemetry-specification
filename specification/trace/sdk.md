@@ -175,7 +175,7 @@ Thus, the SDK specification defines two new terms:
   
   The readable span MUST provide a method called `getInstrumentationLibrary` (or similar),
   that returns the `InstrumentationLibrary` information held by the `Tracer` that created the span.
-* **Read/write span**: A span that provides both the full API as defined in the
+* **Read/write span**: A span that provides both the full span API as defined in the
   [API-level definition for span's interface](api.md#span-operations) and
   additionally the same interface as for readable spans
   as defined in the above bullet point.
@@ -238,16 +238,15 @@ exceptions.
 
 #### OnEnd(Span)
 
-`OnEnd` is called when a span is ended. This method is called synchronously on
-the execution thread, therefore it should not block or throw an exception.
+`OnEnd` is called after a span is ended (i.e., the end timestamp is already set).
+This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
+therefore it should not block or throw an exception.
 
 **Parameters:**
 
-* `Span` - a [readable span object](#additional-span-interfaces) for the started span.
-  Note: Since multiple SpanProcessors may be involved, and OnEnd is typically used
-  for sending data to exporters, SpanProcessors should rather not modify spans
-  in `OnEnd`, even if the passed object would allow this, since the resulting behavior would be sensitive to the order of
-  `SpanProcessors`'s `OnEnd` calls.
+* `Span` - a [readable span object](#additional-span-interfaces) for the ended span.
+  Note: Even if the passed Span may be technically writable,
+  since it's already ended at this point, modifying it is not allowed.
 
 **Returns:** `Void`
 
