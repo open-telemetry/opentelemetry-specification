@@ -8,6 +8,7 @@
   * [Destinations](#destinations)
   * [Message consumption](#message-consumption)
   * [Conversations](#conversations)
+  * [Temporary destinations](#temporary-destinations)
 - [Conventions](#conventions)
   * [Span name](#span-name)
   * [Span kind](#span-kind)
@@ -53,6 +54,8 @@ However, in a synchronous conversation, the wait time for a message is important
 In some messaging systems, a message can receive a reply message that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*.
 The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit *conversation ID* (sometimes called *correlation ID*).
 Sometimes a conversation can span multiple message destinations (e.g. initiated via a topic, continued on a temporary one-to-one queue).
+
+### Temporary destinations
 
 Some messaging systems support the concept of *temporary destination* (often only temporary queues) that are established just for a particular set of communication partners (often one to one) or conversation. Often such destinations are unnamed or have an auto-generated name.
 
