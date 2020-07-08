@@ -5,6 +5,9 @@
 <!-- toc -->
 
 - [Definitions](#definitions)
+  * [Destinations](#destinations)
+  * [Message consumption](#message-consumption)
+  * [Conversations](#conversations)
 - [Conventions](#conventions)
   * [Span name](#span-name)
   * [Span kind](#span-kind)
@@ -28,10 +31,16 @@ A *message* usually consists of headers (or properties, or meta information) and
 * Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual routing, delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
 * Logically: some particular message *destination*.
 
+### Destinations
+
 A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier.
 Two kinds of destinations are distinguished: *topic*s and *queue*s.
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all *subscribers* of the topic.
 A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
+
+[idempotent]: https://en.wikipedia.org/wiki/Idempotence
+
+### Message consumption
 
 The consumption of a message can happen in multiple steps.
 First, the lower-level receiving of a message at a consumer, and then the logical processing of the message.
@@ -39,13 +48,13 @@ Often, the waiting for a message is not particularly interesting and hidden away
 (in the same way that the listening on a TCP port for an incoming HTTP message is not particularly interesting).
 However, in a synchronous conversation, the wait time for a message is important.
 
+### Conversations
+
 In some messaging systems, a message can receive a reply message that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*.
 The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit *conversation ID* (sometimes called *correlation ID*).
 Sometimes a conversation can span multiple message destinations (e.g. initiated via a topic, continued on a temporary one-to-one queue).
 
 Some messaging systems support the concept of *temporary destination* (often only temporary queues) that are established just for a particular set of communication partners (often one to one) or conversation. Often such destinations are unnamed or have an auto-generated name.
-
-[idempotent]: https://en.wikipedia.org/wiki/Idempotence
 
 ## Conventions
 
@@ -62,7 +71,7 @@ The span name SHOULD be set to the message destination name and the operation be
 The values allowed for `<operation name>` are defined in the section [Operation names](#operation-names) below.
 
 The message destination name, i.e., the name of the topic or queue, is usually a low cardinality identifier suitable to be used as a span name.
-If the conversation ID (see [Definitions](#definitions) above) is expected to have lower cardinality than the message destination name, it SHOULD be used instead.
+If the [conversation ID](#conversations) is expected to have lower cardinality than the message destination name, it SHOULD be used instead.
 In particular, the conversation ID SHOULD be used if the message destination is unnamed or temporary unless multiple conversations can be combined to a logical destination of lower cardinality.
 
 If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans below.
@@ -106,7 +115,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.protocol_version` | The version of the transport protocol such as `0.9.1`. | No |
 | `messaging.url` | Connection string such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
 | `messaging.message_id` | A value used by the messaging system as an identifier for the message, represented as a string. | No |
-| `messaging.conversation_id` | A value identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | No |
+| `messaging.conversation_id` | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | No |
 | `messaging.message_payload_size_bytes` | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | No |
 | `messaging.message_payload_compressed_size_bytes` | The compressed size of the message payload in bytes. | No |
 
