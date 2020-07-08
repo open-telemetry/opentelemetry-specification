@@ -7,6 +7,12 @@ the release.
 
 ## Unreleased
 
+New:
+
+- Add resource semantic conventions for operating systems ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
+
+Updates:
+
 ## v0.6.0 (07-01-2020)
 
 New:
