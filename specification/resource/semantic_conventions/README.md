@@ -105,6 +105,7 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 | container.image.tag | Container image tag. | `0.1` |
 
 [identify Docker containers]: https://docs.docker.com/engine/reference/run/#container-identification
+
 ### Function as a Service
 
 **type:** `faas`
