@@ -3,6 +3,12 @@
 This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [TODOs](#todos)
+  * [Document Conventions](#document-conventions)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
@@ -15,6 +21,7 @@ This document defines standard attributes for resources. These attributes are ty
   * [Host](#host)
 - [Environment](#environment)
   * [Cloud](#cloud)
+- [Version Attributes](#version-attributes)
 
 <!-- tocstop -->
 
