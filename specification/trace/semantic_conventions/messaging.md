@@ -57,7 +57,8 @@ Sometimes a conversation can span multiple message destinations (e.g. initiated 
 
 ### Temporary destinations
 
-Some messaging systems support the concept of *temporary destination* (often only temporary queues) that are established just for a particular set of communication partners (often one to one) or conversation. Often such destinations are unnamed or have an auto-generated name.
+Some messaging systems support the concept of *temporary destination* (often only temporary queues) that are established just for a particular set of communication partners (often one to one) or conversation.
+Often such destinations are unnamed or have an auto-generated name.
 
 ## Conventions
 
@@ -75,7 +76,7 @@ The values allowed for `<operation name>` are defined in the section [Operation 
 
 The message destination name, i.e., the name of the topic or queue, is usually a low cardinality identifier suitable to be used as a span name.
 If the [conversation ID](#conversations) is expected to have lower cardinality than the message destination name, it SHOULD be used instead.
-In particular, the conversation ID SHOULD be used if the message destination is unnamed or temporary unless multiple conversations can be combined to a logical destination of lower cardinality.
+In particular, the conversation ID SHOULD be used if the message destination is unnamed or [temporary](#temporary-destinations) unless multiple conversations can be combined to a logical destination of lower cardinality.
 
 If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans below.
 
@@ -113,7 +114,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.system` | A string identifying the messaging system such as `kafka`, `rabbitmq` or `activemq`. | Yes |
 | `messaging.destination` | The message destination name, e.g. `MyQueue` or `MyTopic`. This might be equal to the span name but is required nevertheless. | Yes |
 | `messaging.destination_kind` | The kind of message destination: Either `queue` or `topic`. | Yes, if either of them applies. |
-| `messaging.temp_destination` | A boolean that is `true` if the message destination is temporary. | If temporary (assumed to be `false` if missing). |
+| `messaging.temp_destination` | A boolean that is `true` if the message destination is [temporary](#temporary-destinations). | If temporary (assumed to be `false` if missing). |
 | `messaging.protocol` | The name of the transport protocol such as `AMQP` or `MQTT`. | No |
 | `messaging.protocol_version` | The version of the transport protocol such as `0.9.1`. | No |
 | `messaging.url` | Connection string such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
