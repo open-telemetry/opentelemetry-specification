@@ -7,7 +7,7 @@
 - [Definitions](#definitions)
 - [Conventions](#conventions)
   * [Span name](#span-name)
-  * [Span Kind](#span-kind)
+  * [Span kind](#span-kind)
   * [Operation names](#operation-names)
 - [Messaging attributes](#messaging-attributes)
   * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
@@ -76,7 +76,7 @@ Examples:
 * `conversation-A1B2C3D4 receive`
 * `AuthenticationRequest-Conversations process`
 
-### Span Kind
+### Span kind
 
 A producer of a message should set the span kind to `PRODUCER` unless it synchronously waits for a response: then it should use `CLIENT`.
 The processor of the message should set the kind to `CONSUMER`, unless it always sends back a reply that is directed to the producer of the message
