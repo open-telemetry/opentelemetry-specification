@@ -20,6 +20,7 @@ This document defines standard attributes for resources. These attributes are ty
 - [Compute Instance](#compute-instance)
   * [Host](#host)
 - [Environment](#environment)
+  * [Operating System](#operating-system)
   * [Cloud](#cloud)
 - [Version Attributes](#version-attributes)
 
