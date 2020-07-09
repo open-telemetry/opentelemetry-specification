@@ -51,7 +51,7 @@ The Propagators API currently defines one `Propagator` type:
 - `HTTPTextPropagator` is a type that inject values into and extracts values
   from carriers as string key/value pairs.
 
-A binary `Propagator` type will be added in the future.
+A binary `Propagator` type will be added in the future (see [#437](https://github.com/open-telemetry/opentelemetry-specification/issues/437)).
 
 ### Carrier
 
