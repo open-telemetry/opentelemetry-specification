@@ -351,7 +351,7 @@ instrumentation libraries from capturing metrics by the same name.
 ### Global Meter provider
 
 Use of a global instance may be seen as an anti-pattern in many
-situations, but it most cases it is the correct pattern for telemetry
+situations, but in most cases it is the correct pattern for telemetry
 data, in order to combine telemetry data from inter-dependent
 libraries _without use of dependency injection_.  OpenTelemetry
 language APIs SHOULD offer a global instance for this reason.
@@ -391,7 +391,7 @@ to the following syntax:
 1. They are non-empty strings
 2. They are case-insensitive
 3. The first character must be non-numeric, non-space, non-punctuation
-4. Subsequent characters must be belong to the alphanumeric characters, '\_', '.', and '-'.
+4. Subsequent characters must belong to the alphanumeric characters, '\_', '.', and '-'.
 
 Metric instrument names belong to a namespace, established by the the
 associated `Meter` instance.  `Meter` implementations MUST return an
@@ -641,7 +641,7 @@ opposed to `UpDownSumObserver`?
 Consider how to report the size of a queue asynchronously.  Both
 `ValueObserver` and `UpDownSumObserver` logically apply in this case.
 Asynchronous instruments capture only one measurement per interval, so
-in this example the `SumObserver` reports a current sum, while the
+in this example the `UpDownSumObserver` reports a current sum, while the
 `ValueObserver` reports a current sum (equal to the max and the min)
 and a count equal to 1.  When there is no aggregation, these results
 are equivalent.
@@ -703,7 +703,7 @@ metric instruments.  Instrument constructors are named by adding a
 `New-` prefix to the kind of instrument it constructs, with a
 builder pattern, or some other idiomatic approach in the language.
 
-There is at least one constructor representing each kind instrument in
+There is at least one constructor representing each kind of instrument in
 this specification (see [above](#metric-instruments)), and possibly
 more as dictated by the language.  For example, if specializations are
 provided for integer and floating pointer numbers, the OpenTelemetry
@@ -952,7 +952,7 @@ progress](https://github.com/open-telemetry/oteps/pull/89).
 
 ## Asynchronous instrument details
 
-The following details are specified for synchronous instruments.
+The following details are specified for asynchronous instruments.
 
 ### Asynchronous calling conventions
 

@@ -9,6 +9,9 @@ Particular operations may refer to or require some of these attributes.
 <!-- toc -->
 
 - [General network connection attributes](#general-network-connection-attributes)
+  * [`net.transport` attribute](#nettransport-attribute)
+  * [`net.*.name` attributes](#netname-attributes)
+- [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
 
 <!-- tocstop -->
@@ -66,6 +69,20 @@ It will usually not make sense to use reverse-lookup to obtain `net.host.name`, 
 If `net.transport` is `"unix"` or `"pipe"`, the absolute path to the file representing it should be used as `net.peer.name` (`net.host.name` doesn't make sense in that context).
 If there is no such file (e.g., anonymous pipe),
 the name should explicitly be set to the empty string to distinguish it from the case where the name is just unknown or not covered by the instrumentation.
+
+## General remote service attributes
+
+This attribute may be used for any operation that accesses some remote service.
+Users can define what the name of a service is based on their particular semantics in their distributed system.
+Instrumentations SHOULD provide a way for users to configure this name.
+
+|  Attribute name |                                 Notes and examples                                |
+| :-------------- | :-------------------------------------------------------------------------------- |
+| `peer.service`  | The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. |
+
+Examples of `peer.service` that users may specify:
+- A Redis cache of auth tokens as `peer.service="AuthTokenCache"`.
+- A gRPC service `rpc.service="io.opentelemetry.AuthService"` may be hosted in both a gateway, `peer.service="ExternalApiService"` and a backend, `peer.service="AuthService"`.
 
 ## General identity attributes
 

@@ -12,7 +12,13 @@ Denotes the library that implements the *OpenTelemetry API*.
 See [Library Guidelines](library-guidelines.md#sdk-implementation) and
 [Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk)
 
-<a name="instrumented_library"></a>
+<a name="telemetry_sdk"></a>
+
+### Exporter Library
+
+Libraries which are compatible with the [Telemetry SDK](glossary.md#telemetry-sdk) and provide functionality to emit telemetry to consumers.
+
+<a name="exporter_library"></a>
 
 ### Instrumented Library
 
@@ -27,7 +33,7 @@ Example: `org.mongodb.client`.
 
 ### Instrumentation Library
 
-Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented_library).
+Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented-library).
 *Instrumented Library* and *Instrumentation Library* may be the same library
 if it has built-in OpenTelemetry instrumentation.
 
@@ -37,7 +43,7 @@ Example: `io.opentelemetry.contrib.mongodb`.
 
 Synonyms: *Instrumenting Library*
 
-<a name="name"></a>
+<a name="instrumentation_library"></a>
 
 ### Tracer Name / Meter Name
 

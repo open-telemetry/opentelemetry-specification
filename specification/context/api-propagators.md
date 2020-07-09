@@ -84,8 +84,8 @@ instance.
 Extracts the value from an incoming request. For example, from the headers of an HTTP request.
 
 If a value can not be parsed from the carrier for a cross-cutting concern,
-the implementation MUST NOT throw an exception. It MUST store a value in the `Context`
-that the implementation can recognize as a null or empty value.
+the implementation MUST NOT throw an exception and MUST NOT store a new value in the `Context`,
+in order to preserve any previously existing valid value.
 
 Required arguments:
 

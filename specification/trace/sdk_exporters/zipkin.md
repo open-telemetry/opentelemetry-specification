@@ -40,7 +40,6 @@ OpenTelemetry fields:
 
 Zipkin fields:
 
-- Service name
 - Local_endpoint
 - Remote_endpoint
 - debug
@@ -50,6 +49,22 @@ Zipkin fields:
 
 This section discusses the details of the transformations between OpenTelemetry
 and Zipkin.
+
+### Service name
+
+Zipkin service name MUST be set to the value of the
+[resource attribute](../../resource/semantic_conventions/README.md):
+`service.name`. In Zipkin it is important that the service name is consistent
+for all spans in a local root. Otherwise service graph and aggregations would
+not work properly. OpenTelemetry doesn't provide this consistency guarantee.
+Exporter may chose to override the value for service name based on a local root
+span to improve Zipkin user experience.
+
+*Note*, the attribute `service.namespace` must not be used for the Zipkin
+service name and should be sent as a Zipkin tag.
+
+*Note*, exporter to Zipkin MUST allow to configure the default "fall back" name
+to use as a Zipkin service name.
 
 ### SpanKind
 
@@ -66,7 +81,13 @@ Zipkin.
 
 ### Attribute
 
-OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to Zipkin.
+OpenTelemetry Span and Resource `Attribute`(s) MUST be reported as `tags` to
+Zipkin.
+
+Some attributes defined in [semantic
+convention](../semantic_conventions/README.md)
+document maps to the strongly-typed fields of Zipkin spans.
+
 Primitive types MUST be converted to string using en-US culture settings.
 Boolean values must use lower case strings `"true"` and `"false"`, except an
 attribute named `error`. In case if value of the attribute is `false`, Zipkin

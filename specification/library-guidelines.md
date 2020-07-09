@@ -21,7 +21,6 @@ _Note to Language Library Authors:_ OpenTelemetry specification, API and SDK imp
 5. The SDK implementation should include the following exporters:
     - Jaeger.
     - Zipkin.
-    - OpenCensus.
     - Prometheus.
     - OpenTelemetry Protocol (when the protocol is specified and approved).
     - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
@@ -82,6 +81,14 @@ Telemetry backend vendors are expected to implement [Exporter interface](trace/s
 Vendors are encouraged to keep protocol-specific exporters as simple as possible and achieve desirable additional functionality such as queuing and retrying using helpers provided by SDK.
 
 End users should be given the flexibility of making many of the decisions regarding the queuing, retrying, tagging, batching functionality that make the most sense for their application. For example, if an application's telemetry data must be delivered to a remote backend that has no guaranteed availability the end user may choose to use a persistent local queue and an `Exporter` to retry sending on failures. As opposed to that for an application that sends telemetry to a locally running Agent daemon, the end user may prefer to have a simpler exporting configuration without retrying or queueing.
+
+If additional exporters for the sdk are provided as separate libraries, the
+name of the library should be prefixed with the terms "OpenTelemetry" and "Exporter" in accordance with the naming conventions of the respective technology.
+
+For example:
+
+- Python and Java: opentelemetry-exporter-jaeger
+- Javascript: @opentelemetry/exporter-jeager
 
 ### Alternative Implementations
 
