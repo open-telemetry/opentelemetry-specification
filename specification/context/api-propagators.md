@@ -97,8 +97,6 @@ Returns a new `Context` derived from the `Context` passed as argument,
 containing the extracted value, which can be a `SpanContext`,
 `CorrelationContext` or another cross-cutting concern context.
 
-If the extracted value is a `SpanContext`, its `IsRemote` property MUST be set to true.
-
 ## HTTPText Propagator
 
 `HTTPTextPropagator` performs the injection and extraction of a cross-cutting concern
@@ -200,7 +198,7 @@ Required arguments:
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive. To improve compatibility with other text-based protocols, `HTTPTextPropagator`s MUST ensure to always use the canonical casing for their attributes. NOTE: Canonical casing for HTTP headers is usually title case (e.g. `Content-Type` instead of `content-type`).
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive.
 
 ## Injectors and Extractors as Separate Interfaces
 
