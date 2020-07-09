@@ -64,7 +64,7 @@ Carriers used at [Inject](#inject) are expected to be mutable.
 ### Operations
 
 `Propagator`s MUST define `Inject` and `Extract` operations, in order to write
-values to and read values from respectively. Each `Propagator` type MUST define the specific carrier type
+values to and read values from carriers respectively. Each `Propagator` type MUST define the specific carrier type
 and CAN define additional parameters.
 
 #### Inject
