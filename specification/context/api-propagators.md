@@ -35,8 +35,8 @@ Each concern creates a set of `Propagator`s for every supported
 `Propagator`s leverage the `Context` to inject and extract data for each
 cross-cutting concern, such as traces and correlation context.
 
-Propagation is usually implemented via library-specific request
-interceptors, where the client-side injects values and the server-side extracts them.
+Propagation is usually implemented via a cooperation of library-specific request
+interceptors and `Propagators`, where the interceptors detect incoming and outgoing requests and use the `Propagator`'s extract and inject operations respectively.
 
 The Propagators API is expected to be leveraged by users writing
 instrumentation libraries.
