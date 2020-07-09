@@ -129,7 +129,7 @@ Returns list of fields that will be used by the `HttpTextPropagator`.
 
 ### Inject
 
-Injects the value downstream. The required arguments are the same as defined by
+Injects the value into a carrier. The required arguments are the same as defined by
 the base [Inject](#inject) operation.
 
 Optional arguments:
