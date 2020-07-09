@@ -19,8 +19,11 @@ _recorded_ Spans of a given category and kind should be aggregated together in a
 [`ValueRecorder`](../api.md#valuerecorder).  A Span's duration should be recorded onto
 this instrument regardless of whether the Span is sampled.
 
-The instrument's name name should be prefixed with the Span category and kind,
+The instrument's name name should be prefixed with a category and the Span's kind,
 using the pattern `{category}.{span.kind}.duration`.
+
+For Spans that follow one of the common semantic-conventional _areas_, the category
+should be the label prefix used in that semantic convention.
 
 For example:
 * `http.server.duration`
@@ -29,13 +32,13 @@ For example:
 
 #### Status
 
-The duration instrument must include a `status` label. The value of this label must be
-one of the valid Span [`StatusCanonicalCode`s](../api.md#statuscanonicalcode).
+Recordings with the duration instrument must include a `status` label. The value of this
+label must be one of the valid Span [`StatusCanonicalCode`s](../api.md#statuscanonicalcode).
 
 #### Labels
 
-Labels applied to these metrics should follow the attribute semantic conventions of the
-spans from which they are derived.
+Labels applied to these metric recordings should follow the attribute semantic conventions
+of the spans from which they are derived.
 
 Care should be taken when adding labels to the duration instruments in order to avoid
 excessive cardinality.
