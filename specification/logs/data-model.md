@@ -354,15 +354,6 @@ comparisons `SeverityNumber` field should be used. `SeverityNumber` can be
 compared to another `SeverityNumber` or to numbers in the 1..24 range (or to the
 corresponding short names).
 
-When severity is used in equality or inequality comparisons (for example in
-filters in the UIs) the recommendation is to attempt to use both `SeverityText`
-and short name of `SeverityNumber` to perform matches (i.e. equality with either
-of these fields should be considered a match). For example if we have a record
-with `SeverityText` field equal to "Informational" and `SeverityNumber` field
-equal to INFO then it may be preferable from the user experience perspective to
-ensure that **severity="Informational"** and **severity="INFO"** conditions both
-to are TRUE for that record.
-
 ### Field: `Name`
 
 Type: string.
