@@ -157,20 +157,20 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 ### Redis
 
 In this example, Redis is connected using a unix domain socket and therefore the connection string and `net.peer.ip` are left out.
-Furthermore, `db.name` is not specified as there is no database name in Redis.
-If a database other than the default database (index 0) is used, it would make sense to specify its index number as `db.name`.
+Furthermore, `db.name` is not specified as there is no database name in Redis and `db.redis.database_index` is set instead.
 
 | Key | Value |
-| :---------------------- | :----------------------------------------------------------- |
-| Span name               | `"HMSET myhash"` |
-| `db.system`             | `"redis"` |
-| `db.connection_string`  | not set |
-| `db.user`               | not set |
-| `net.peer.name`         | `"/tmp/redis.sock"` |
-| `net.transport`         | `"Unix"` |
-| `db.name`               | not set |
-| `db.statement`          | `"HMSET myhash field1 'Hello' field2 'World"` |
-| `db.operation`          | not set |
+| :------------------------ | :-------------------------------------------- |
+| Span name                 | `"HMSET myhash"` |
+| `db.system`               | `"redis"` |
+| `db.connection_string`    | not set |
+| `db.user`                 | not set |
+| `net.peer.name`           | `"/tmp/redis.sock"` |
+| `net.transport`           | `"Unix"` |
+| `db.name`                 | not set |
+| `db.statement`            | `"HMSET myhash field1 'Hello' field2 'World"` |
+| `db.operation`            | not set |
+| `db.redis.database_index` | `15` |
 
 ### MongoDB
 
