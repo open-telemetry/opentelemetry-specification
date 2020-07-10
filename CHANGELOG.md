@@ -7,6 +7,8 @@ the release.
 
 ## Unreleased
 
+- Add semantic convention for NGINX custom HTTP 499 status code.
+
 ## v0.6.0 (07-01-2020)
 
 New:

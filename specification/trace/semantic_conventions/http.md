@@ -54,6 +54,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | 403 Forbidden           | `PermissionDenied`    |
 | 404 Not Found           | `NotFound`            |
 | 429 Too Many Requests   | `ResourceExhausted`   |
+| 499 Client Closed       | `Cancelled` (Not an official HTTP status code, defined by [NGINX][nginx-http-499]) |
 | Other 4xx code          | `InvalidArgument` [1] |
 | 501 Not Implemented     | `Unimplemented`       |
 | 503 Service Unavailable | `Unavailable`         |
@@ -65,6 +66,7 @@ Note that the items marked with [1] are different from the mapping defined in th
 
 [oc-http-status]: https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#mapping-from-http-status-codes-to-trace-status-codes
 [rfc-unauthorized]: https://tools.ietf.org/html/rfc7235#section-3.1
+[nginx-http-499]: https://httpstatuses.com/499
 
 ## Common Attributes
 
