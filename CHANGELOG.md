@@ -7,6 +7,10 @@ the release.
 
 ## Unreleased
 
+Updates:
+
+- Clean up api-propagators.md, by extending documentation and removing redundant sections ([#577](https://github.com/open-telemetry/opentelemetry-specification/pull/577))
+
 ## v0.6.0 (07-01-2020)
 
 New:
