@@ -203,6 +203,7 @@ In case of virtualized environments, this is the operating system as it is obser
 | `WINDOWS` | Microsoft Windows |
 | `LINUX` | Linux |
 | `DARWIN` | Apple Darwin |
+| `BSD` | BSD (Berkeley Software Distribution) family |
 | `HPUX` | HP-UX (Hewlett Packard Unix) |
 | `AIX` | AIX (Advanced Interactive eXecutive) |
 | `SOLARIS` | Oracle Solaris |
