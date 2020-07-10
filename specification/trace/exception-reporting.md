@@ -18,6 +18,7 @@ their types.
 | exception.type    | String | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. E.g. "java.net.ConnectException", "OSError"                                                                                                                                                                                                     | One of `exception.type` or `exception.message` is required |
 | exception.message | String | The exception message. E.g. `"Division by zero"`, `"Can't convert 'int' object to str implicitly"`                                                                                                                                                                                                                                                                                                                                  | One of `exception.type` or `exception.message` is required |
 | stacktrace        | String | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. E.g. `"Exception in thread \"main\" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)"`. | No                                                         |
+| log.severity      | String | The severity of the exception E.g. `Fatal`, `Error`, `Warn`, etc.                                                                                                                                                                                                                                                                                                                                                                   | No                                                         |
 
 ### Stacktrace Representation
 
@@ -51,8 +52,8 @@ document.
 **Examples:**
 
 ```
-RecordException(exception: Exception)
-RecordException(type: String, message: String, stacktrace: String)
+RecordException(exception: Exception, severity: String)
+RecordException(type: String, message: String, stacktrace: String, severity: String)
 ```
 
 [gcp-error-reporting]: https://cloud.google.com/error-reporting/reference/rest/v1beta1/projects.events/report
