@@ -28,8 +28,8 @@ to adopt them if they see fit.
 
 | Language   | Format                                                              |
 | ---------- | ------------------------------------------------------------------- |
-| Java       | the return value of [Throwable.printStackTrace()][java-stacktrace]  |
-| Python     | return value of [traceback.format_exc()][python-stacktrace]         |
+| Java       | the contents of [Throwable.printStackTrace()][java-stacktrace]      |
+| Python     | the return value of [traceback.format_exc()][python-stacktrace]     |
 | Javascript | the return value of [error.stack][js-stacktrace] as returned by V8  |
 | Ruby       | the result of [Exception.backtrace][ruby-stacktrace] joined by "\n" |
 | C#         | the return value of [Exception.ToString()][csharp-stacktrace]       |
