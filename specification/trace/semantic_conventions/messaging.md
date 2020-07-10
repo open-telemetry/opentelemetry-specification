@@ -77,6 +77,7 @@ The values allowed for `<operation name>` are defined in the section [Operation 
 The message destination name, i.e., the name of the topic or queue, is usually a low cardinality identifier suitable to be used as a span name.
 If the [conversation ID](#conversations) is expected to have lower cardinality than the message destination name, it SHOULD be used instead.
 In particular, the conversation ID SHOULD be used if the message destination is unnamed or [temporary](#temporary-destinations) unless multiple conversations can be combined to a logical destination of lower cardinality.
+If the conversation ID on the other hand is expected to be of too high cardinality as well, introducing an artificial destination name instead is recommended.
 
 If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans below.
 
@@ -90,6 +91,7 @@ Examples:
 * `conversation-A1B2C3D4 send`
 * `conversation-A1B2C3D4 receive`
 * `AuthenticationRequest-Conversations process`
+* `(temporary) send` (if neither the destination name nor the conversation ID have low cardinality)
 
 ### Span kind
 

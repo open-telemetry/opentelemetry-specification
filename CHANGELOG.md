@@ -11,7 +11,7 @@ New:
 
 Updates:
 
-- Adapt messaging semantic conventions to include the operation in the span name ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
+- Adapt semantic conventions for the span name of messaging systems ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
 
 ## v0.6.0 (07-01-2020)
 
