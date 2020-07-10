@@ -105,6 +105,14 @@ value as string key/values pairs into carriers that travel in-band across proces
 The carrier of propagated data on both the client (injector) and server (extractor) side is
 usually an HTTP request.
 
+`Getter` and `Setter` are optional helper components used for extraction and injection respectively,
+and are defined as separate objects from the carrier to avoid runtime allocations,
+by removing the need for additional interface-implementing-objects wrapping the carrier in order
+to access its contents.
+
+`Getter` and `Setter` MUST be stateless and allowed to be saved as constants, in order to effectively
+avoid runtime allocations.
+
 ### Fields
 
 The propagation fields defined. If your carrier is reused, you should delete the fields here
@@ -130,12 +138,6 @@ Optional arguments:
 
 - A `Setter` invoked for each propagation key to add or remove. This is an additional
   argument that languages are free to define to help inject data into the carrier.
-
-`Setter` is defined as a separate object from the carrier to avoid runtime allocations,
-removing the need for additional objects wrapping the carrier that access its contents
-through a given interface.
-
-`Setter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
 
 #### Setter argument
 
@@ -168,12 +170,6 @@ Optional arguments:
   argument that languages are free to define to help extract data from the carrier.
 
 Returns a new `Context` derived from the `Context` passed as argument.
-
-`Getter` is defined as a separate object from the carrier to avoid runtime allocations,
-removing the need for additional objects wrapping the carrier that access its contents
-through a given interface.
-
-`Getter` MUST be stateless and allowed to be saved as a constant to avoid runtime allocations.
 
 #### Getter argument
 
