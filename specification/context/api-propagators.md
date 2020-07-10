@@ -44,7 +44,7 @@ instrumentation libraries.
 ## Propagator Types
 
 A `Propagator` type defines the restrictions imposed by a specific transport
-and bound to a data type, in order to propagate in-band context data across process boundaries.
+and is bound to a data type, in order to propagate in-band context data across process boundaries.
 
 The Propagators API currently defines one `Propagator` type:
 
