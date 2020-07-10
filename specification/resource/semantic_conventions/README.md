@@ -196,7 +196,8 @@ In case of virtualized environments, this is the operating system as it is obser
 | `os.type` | string | The operating system type. | `"WINDOWS"` | Yes |
 | `os.description` | string | Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands. | `"Microsoft Windows [Version 10.0.18363.778]"`<br>`"Ubuntu 18.04.1 LTS"` | No |
 
-`os.type` MUST be one of the following or, if none of the listed values apply, a custom value best describing the family the operating system belongs to:
+`os.type` SHOULD be set to one of the values listed below.
+If none of the listed values apply, a custom value best describing the family the operating system belongs to CAN be used.
 
 | Value  | Description |
 |---|---|
