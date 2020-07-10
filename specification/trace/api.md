@@ -440,6 +440,11 @@ An `Event` is defined by the following properties:
 - (Optional) One or more `Attribute`s with the same restrictions as defined for
   [Span Attributes](#set-attributes).
 - (Optional) Timestamp for the event.
+- (Optional) SeverityNumber of the event as defined in
+  [log data model](https://github.com/open-telemetry/oteps/blob/master/text/logs/0097-log-data-model.md#field-severitynumber).
+  If unspecified SeverityNumber is set to INFO. The SeverityNumber has the same
+  [error semantics](https://github.com/open-telemetry/oteps/blob/master/text/logs/0097-log-data-model.md#error-semantics)
+  as defined in log data model.
 
 The `Event` SHOULD be an immutable type.
 
