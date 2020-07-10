@@ -102,14 +102,8 @@ containing the extracted value, which can be a `SpanContext`,
 `HTTPTextPropagator` performs the injection and extraction of a cross-cutting concern
 value as string key/values pairs into carriers that travel in-band across process boundaries.
 
-Encoding is expected to conform to the HTTP Header Field semantics. Values are often encoded as
-RPC/HTTP request headers.
-
 The carrier of propagated data on both the client (injector) and server (extractor) side is
 usually an HTTP request.
-
-`HTTPTextPropagator` MUST expose the APIs that injects values into carriers,
-and extracts values from carriers.
 
 ### Fields
 
