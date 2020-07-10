@@ -118,6 +118,8 @@ avoid runtime allocations.
 The propagation fields defined. If your carrier is reused, you should delete the fields here
 before calling [inject](#inject).
 
+Fields are defined as string keys identifying format-specific components in a carrier.
+
 For example, if the carrier is a single-use or immutable request object, you don't need to
 clear fields as they couldn't have been set before. If it is a mutable, retryable object,
 successive calls should clear these fields first.
