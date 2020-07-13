@@ -207,7 +207,7 @@ If none of the listed values apply, a custom value best describing the family th
 | `FREEBSD` | FreeBSD |
 | `NETBSD` | NetBSD|
 | `OPENBSD` | OpenBSD |
-| `DRAGONFLY_BSD` | DragonFly BSD |
+| `DRAGONFLYBSD` | DragonFly BSD |
 | `HPUX` | HP-UX (Hewlett Packard Unix) |
 | `AIX` | AIX (Advanced Interactive eXecutive) |
 | `SOLARIS` | Oracle Solaris |
