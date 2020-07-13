@@ -204,7 +204,10 @@ If none of the listed values apply, a custom value best describing the family th
 | `WINDOWS` | Microsoft Windows |
 | `LINUX` | Linux |
 | `DARWIN` | Apple Darwin |
-| `BSD` | BSD (Berkeley Software Distribution) family |
+| `FREEBSD` | FreeBSD |
+| `NETBSD` | NetBSD|
+| `OPENBSD` | OpenBSD |
+| `DRAGONFLY_BSD` | DragonFly BSD |
 | `HPUX` | HP-UX (Hewlett Packard Unix) |
 | `AIX` | AIX (Advanced Interactive eXecutive) |
 | `SOLARIS` | Oracle Solaris |
