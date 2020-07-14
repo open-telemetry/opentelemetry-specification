@@ -75,7 +75,7 @@ The span name SHOULD be set to the message destination name and the operation be
 The destination name SHOULD only be used for the span name if it is known to be of low cardinality (cf. [general span name guidelines](../api.md#span)).
 This can be assumed if it is statically derived from application code or configuration.
 If the destination name is dynamic, such as a [conversation ID](#conversations) or a value obtained from a `Reply-To` header, it SHOULD NOT be used for the span name.
-In these cases, an artifical destination name that best expresses the destination, or a generic, static fallback like `"(temporary)"` for [temporary destinations](#temporary-destinations) SHOULD be used instead.
+In these cases, an artificial destination name that best expresses the destination, or a generic, static fallback like `"(temporary)"` for [temporary destinations](#temporary-destinations) SHOULD be used instead.
 
 The values allowed for `<operation name>` are defined in the section [Operation names](#operation-names) below.
 If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans below.
