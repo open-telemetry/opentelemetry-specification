@@ -8,7 +8,7 @@ This document defines standard attributes for resources. These attributes are ty
 <!-- toc -->
 
 - [TODOs](#todos)
-  * [Document Conventions](#document-conventions)
+- [Document Conventions](#document-conventions)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
@@ -34,7 +34,7 @@ This document defines standard attributes for resources. These attributes are ty
 * Consider to add optional/required for each attribute and combination of attributes
   (e.g when supplying a k8s resource all k8s may be required).
 
-### Document Conventions
+## Document Conventions
 
 Attributes are grouped logically by the type of the concept that they described. Attributes in the same group have a common prefix that ends with a dot. For example all attributes that describe Kubernetes properties start with "k8s."
 
