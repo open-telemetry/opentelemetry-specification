@@ -72,13 +72,12 @@ The span name SHOULD be set to the message destination name and the operation be
 <destination name> <operation name>
 ```
 
+The destination name SHOULD only be used for the span name if it is known to be of low cardinality (cf. [general span name guidelines](../api.md#span)).
+This can be assumed if it is statically derived from application code or configuration.
+If the destination name is dynamic, such as a [conversation ID](#conversations) or a value obtained from a `Reply-To` header, it SHOULD NOT be used for the span name.
+In these cases, an artifical destination name that best expresses the destination, or a generic, static fallback like `"(temporary)"` for [temporary destinations](#temporary-destinations) SHOULD be used instead.
+
 The values allowed for `<operation name>` are defined in the section [Operation names](#operation-names) below.
-
-The message destination name, i.e., the name of the topic or queue, is usually a low cardinality identifier suitable to be used as a span name.
-If the [conversation ID](#conversations) is expected to have lower cardinality than the message destination name, it SHOULD be used instead.
-In particular, the conversation ID SHOULD be used if the message destination is unnamed or [temporary](#temporary-destinations) unless multiple conversations can be combined to a logical destination of lower cardinality.
-If the conversation ID on the other hand is expected to be of too high cardinality as well, introducing an artificial destination name instead is recommended.
-
 If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans below.
 
 Examples:
@@ -88,10 +87,8 @@ Examples:
 * `shop.orders process`
 * `print_jobs send`
 * `topic with spaces process`
-* `conversation-A1B2C3D4 send`
-* `conversation-A1B2C3D4 receive`
 * `AuthenticationRequest-Conversations process`
-* `(temporary) send` (if neither the destination name nor the conversation ID have low cardinality)
+* `(temporary) send` (as a stable identifier for randomly generated, temporary destination names)
 
 ### Span kind
 
