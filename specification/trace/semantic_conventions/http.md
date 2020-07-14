@@ -54,6 +54,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | 403 Forbidden           | `PermissionDenied`    |
 | 404 Not Found           | `NotFound`            |
 | 429 Too Many Requests   | `ResourceExhausted`   |
+| 499 Client Closed       | `Cancelled` (Not an official HTTP status code, defined by [NGINX][nginx-http-499]) |
 | Other 4xx code          | `InvalidArgument` [1] |
 | 501 Not Implemented     | `Unimplemented`       |
 | 503 Service Unavailable | `Unavailable`         |
@@ -65,6 +66,7 @@ Note that the items marked with [1] are different from the mapping defined in th
 
 [oc-http-status]: https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#mapping-from-http-status-codes-to-trace-status-codes
 [rfc-unauthorized]: https://tools.ietf.org/html/rfc7235#section-3.1
+[nginx-http-499]: https://httpstatuses.com/499
 
 ## Common Attributes
 
@@ -79,6 +81,11 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `http.status_text` | [HTTP reason phrase][]. E.g. `"OK"` | No |
 | `http.flavor` | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |  No |
 | `http.user_agent` | Value of the HTTP [User-Agent][] header sent by the client. | No |
+| `http.request_content_length` | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length][] header. For requests using transport encoding, this should be the compressed size. | No |
+| `http.request_content_length_uncompressed` | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | No |
+| `http.response_content_length` | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length][] header. For requests using transport encoding, this should be the compressed size. | No |
+| `http.response_content_length_uncompressed` | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | No |
+
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
@@ -86,6 +93,7 @@ It is recommended to also use the general [network attributes][], especially `ne
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
 [User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3
+[Content-Length]: https://tools.ietf.org/html/rfc7230#section-3.3.2
 
 ## HTTP client
 
@@ -233,7 +241,7 @@ Span name: `/webshop/articles/:article_id`.
 | `http.target`      | `"/webshop/articles/4?s=1"`                     |
 | `http.host`        | `"example.com:8080"`                            |
 | `http.server_name` | `"example.com"`                                 |
-| `host.port`        | `8080`                                          |
+| `net.host.port`    | `8080`                                          |
 | `http.scheme`      | `"https"`                                       |
 | `http.route`       | `"/webshop/articles/:article_id"`               |
 | `http.status_code` | `200`                                           |

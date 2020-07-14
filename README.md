@@ -18,8 +18,6 @@ The OpenTelemetry specification describes the cross-language requirements and ex
     - [Propagators](specification/context/api-propagators.md)
   - [Tracing](specification/trace/api.md)
   - [Metrics](specification/metrics/api.md)
-    - [User-Facing API](specification/metrics/api-user.md)
-    - [Meter API](specification/metrics/api-meter.md)
 - SDK Specification
   - [Tracing](specification/trace/sdk.md)
   - [Resource](specification/resource/sdk.md)
@@ -31,12 +29,17 @@ The OpenTelemetry specification describes the cross-language requirements and ex
   - [Timeline](#project-timeline)
   - [Notation Conventions and Compliance](#notation-conventions-and-compliance)
   - [Versioning](#versioning)
+  - [Acronym](#acronym)
   - [Contributions](#contributions)
   - [License](#license)
 
 ## Project Timeline
 
-OpenTelemetry is currently under development. Check out our [current milestones](milestones.md).
+The current project status as well as information on notable past releases is found at
+[the OpenTelemetry project page](https://opentelemetry.io/project-status/).
+
+Information about current work and future development plans is found at the
+[specification development milestones](https://github.com/open-telemetry/opentelemetry-specification/milestones).
 
 ## Notation Conventions and Compliance
 
@@ -50,6 +53,12 @@ Conversely, an implementation of the [specification](./specification) is complia
 Changes to the [specification](./specification) are versioned according to [Semantic Versioning 2.0](https://semver.org/spec/v2.0.0.html) and described in [CHANGELOG.md](CHANGELOG.md). Layout changes are not versioned. Specific implementations of the specification should specify which version they implement.
 
 Changes to the change process itself are not currently versioned but may be independently versioned in the future.
+
+## Acronym
+
+The official acronym used by the OpenTelemetry project is "OTel".
+
+Please refrain from using "OT" in order to avoid confusion with the now deprecated "OpenTracing" project.
 
 ## Contributions
 

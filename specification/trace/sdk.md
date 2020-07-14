@@ -69,7 +69,6 @@ Returns the sampling Decision for a `Span` to be created.
 * `TraceId` of the `Span` to be created. It can be different from the `TraceId`
   in the `SpanContext`. Typically in situations when the `Span` to be created
   starts a new Trace.
-* `SpanId` of the `Span` to be created.
 * Name of the `Span` to be created.
 * `SpanKind`
 * Initial set of `Attributes` for the `Span` being constructed
@@ -101,45 +100,69 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 ### Built-in samplers
 
-These are the default samplers implemented in the OpenTelemetry SDK:
+#### AlwaysOn
 
-* ALWAYS_ON
-  * This will be used as a default.
-  * Description MUST be `AlwaysOnSampler`.
-* ALWAYS_OFF
-  * Description MUST be `AlwaysOffSampler`.
-* ALWAYS_PARENT
-  * `Returns RECORD_AND_SAMPLED` if `SampledFlag` is set to true on parent
-  SpanContext and `NOT_RECORD` otherwise.
-  * Description MUST be `AlwaysParentSampler`.
-* Probability
-  * The default behavior should be to trust the parent `SampledFlag`. However
+* This is the default sampler.
+* Returns `RECORD_AND_SAMPLED` always.
+* Description MUST be `AlwaysOnSampler`.
+
+#### AlwaysOff
+
+* Returns `NOT_RECORD` always.
+* Description MUST be `AlwaysOffSampler`.
+
+#### Probability
+
+* The default behavior should be to trust the parent `SampledFlag`. However
   there should be configuration to change this.
-  * The default behavior is to apply the sampling probability only for Spans
+* The default behavior is to apply the sampling probability only for Spans
   that are root spans (no parent) and Spans with remote parent. However there
   should be configuration to change this to "root spans only", or "all spans".
-  * Description MUST be `ProbabilitySampler{0.000100}`.
-
-#### Probability Sampler algorithm
+* Description MUST be `ProbabilitySampler{0.000100}`.
 
 TODO: Add details about how the probability sampler is implemented as a function
 of the `TraceID`.
+TODO: Split out the parent handling.
+
+#### ParentOrElse
+
+* This is a composite sampler. `ParentOrElse(delegateSampler)` either respects the parent span's sampling decision or delegates to  `delegateSampler` for root spans.
+* If parent exists:
+  * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
+  * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
+* If no parent (root span) exists returns the result of the `delegateSampler`.
+* Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
+
+|Parent|`ParentOrElse(delegateSampler)`
+|--|--|
+|Exists and `SampledFlag` is `true`|`RECORD_AND_SAMPLED`|
+|Exists and `SampledFlag` is `false`|`NOT_RECORD`|
+|No parent(root spans)|Result of `delegateSampler()`|
 
 ## Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api.md#obtaining-a-tracer)).  The `name` and `version` arguments
-supplied to the `TracerProvider` must be used to create a
-[`Resource`](../resource/sdk.md) instance which is stored on the created `Tracer`.
+[API](api.md#tracerprovider)). The `name` and `version` arguments
+supplied to the `TracerProvider` must be used to create an
+[`InstrumentationLibrary`][otep-83] instance which is stored on the created
+`Tracer`.
 
-All configuration objects (SDK specific) and extension points (span processors,
-propagators) must be provided to the `TracerProvider`. `Tracer` instances must
-not duplicate this data (unless for read-only access) to avoid that different
-`Tracer` instances of a `TracerProvider` have different versions of these data.
+Configuration (i.e., [Span processors](#span-processor) and [`Sampler`](#sampling))
+MUST be managed solely by the `TracerProvider` and it MUST provide some way to
+configure them, at least when creating or initializing it.
+
+The TracerProvider MAY provide methods to update the configuration. If
+configuration is updated (e.g., adding a `SpanProcessor`),
+the updated configuration MUST also apply to all already returned `Tracers`
+(i.e. it MUST NOT matter whether a `Tracer` was obtained from the
+`TracerProvider` before or after the configuration change).
+Note: Implementation-wise, this could mean that `Tracer` instances have a
+reference to their `TracerProvider` and access configuration only via this
+reference.
 
 The readable representations of all `Span` instances created by a `Tracer` must
-provide a `getLibraryResource` method that returns this `Resource` information
-held by the `Tracer`.
+provide a `getInstrumentationLibrary` method that returns the
+`InstrumentationLibrary` information held by the `Tracer`.
 
 ## Span processor
 
@@ -152,16 +175,6 @@ exportable representation and passing batches to exporters.
 
 Span processors can be registered directly on SDK `TracerProvider` and they are
 invoked in the same order as they were registered.
-
-All `Tracer` instances created by a `TracerProvider` share the same span processors.
-Changes to this collection reflect in all `Tracer` instances.
-Implementation-wise, this could mean that `Tracer` instances have a reference to
-their `TracerProvider` and can access span processor objects only via this
-reference.
-
-Manipulation of the span processors collection must only happen on `TracerProvider`
-instances. This means methods like `addSpanProcessor` must be implemented on
-`TracerProvider`.
 
 Each processor registered on `TracerProvider` is a start of pipeline that consist
 of span processor and optional exporter. SDK MUST allow to end each pipeline with
@@ -176,16 +189,16 @@ in the SDK:
 ```
   +-----+--------------+   +-------------------------+   +-------------------+
   |     |              |   |                         |   |                   |
-  |     |              |   | BatchExporterProcessor  |   |    SpanExporter   |
-  |     |              +---> SimpleExporterProcessor +--->  (JaegerExporter) |
+  |     |              |   | Batching Span Processor |   |    SpanExporter   |
+  |     |              +---> Simple Span Processor   +--->  (JaegerExporter) |
   |     |              |   |                         |   |                   |
   | SDK | Span.start() |   +-------------------------+   +-------------------+
   |     | Span.end()   |
-  |     |              |   +---------------------+
-  |     |              |   |                     |
-  |     |              +---> ZPagesProcessor     |
-  |     |              |   |                     |
-  +-----+--------------+   +---------------------+
+  |     |              |
+  |     |              |
+  |     |              |
+  |     |              |
+  +-----+--------------+
 ```
 
 ### Interface definition
@@ -392,3 +405,4 @@ public interface SpanExporter {
 ```
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
+[otep-83]: https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md

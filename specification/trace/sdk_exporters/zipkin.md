@@ -40,7 +40,6 @@ OpenTelemetry fields:
 
 Zipkin fields:
 
-- Service name
 - Local_endpoint
 - Remote_endpoint
 - debug
@@ -50,6 +49,22 @@ Zipkin fields:
 
 This section discusses the details of the transformations between OpenTelemetry
 and Zipkin.
+
+### Service name
+
+Zipkin service name MUST be set to the value of the
+[resource attribute](../../resource/semantic_conventions/README.md):
+`service.name`. In Zipkin it is important that the service name is consistent
+for all spans in a local root. Otherwise service graph and aggregations would
+not work properly. OpenTelemetry doesn't provide this consistency guarantee.
+Exporter may chose to override the value for service name based on a local root
+span to improve Zipkin user experience.
+
+*Note*, the attribute `service.namespace` must not be used for the Zipkin
+service name and should be sent as a Zipkin tag.
+
+*Note*, exporter to Zipkin MUST allow to configure the default "fall back" name
+to use as a Zipkin service name.
 
 ### SpanKind
 
@@ -66,7 +81,13 @@ Zipkin.
 
 ### Attribute
 
-OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to Zipkin.
+OpenTelemetry Span and Resource `Attribute`(s) MUST be reported as `tags` to
+Zipkin.
+
+Some attributes defined in [semantic
+convention](../semantic_conventions/README.md)
+document maps to the strongly-typed fields of Zipkin spans.
+
 Primitive types MUST be converted to string using en-US culture settings.
 Boolean values must use lower case strings `"true"` and `"false"`, except an
 attribute named `error`. In case if value of the attribute is `false`, Zipkin
@@ -114,3 +135,13 @@ omitted from the payload when they are empty in the OpenTelemetry `Span`.
 
 For example, an OpenTelemetry `Span` without any `Event` should not have an
 `annotations` field in the Zipkin payload.
+
+## Considerations for Legacy (v1) Format
+
+Zipkin's v2 [json](https://github.com/openzipkin/zipkin-api/blob/master/zipkin2-api.yaml) format was defined in 2017, followed up by a [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format in 2018.
+
+Frameworks made before then use a more complex v1 [Thrift](https://github.com/openzipkin/zipkin-api/blob/master/thrift/zipkinCore.thrift) or [json](https://github.com/openzipkin/zipkin-api/blob/master/zipkin-api.yaml) format that notably differs in so far as it uses terminology such as Binary Annotation, and repeats endpoint information on each attribute.
+
+Consider using [V1SpanConverter.java](https://github.com/openzipkin/zipkin/blob/master/zipkin/src/main/java/zipkin2/v1/V1SpanConverter.java) as a reference implementation for converting v1 model to OpenTelemetry.
+
+The span timestamp and duration were late additions to the V1 format. As in the code link above, it is possible to heuristically derive them from annotations.
