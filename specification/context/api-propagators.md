@@ -74,9 +74,7 @@ Injects the value into a carrier. For example, into the headers of an HTTP reque
 Required arguments:
 
 - A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as
-`SpanContext`, `CorrelationContext` or another cross-cutting concern context. For languages
-supporting current `Context` state, this argument is OPTIONAL, defaulting to the current `Context`
-instance.
+`SpanContext`, `CorrelationContext` or another cross-cutting concern context.
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
@@ -89,8 +87,7 @@ in order to preserve any previously existing valid value.
 
 Required arguments:
 
-- A `Context`. For languages supporting current `Context` state this argument is OPTIONAL, defaulting
-to the current `Context` instance.
+- A `Context`.
 - The carrier that holds the propagation fields. For example, an incoming message or http response.
 
 Returns a new `Context` derived from the `Context` passed as argument,
