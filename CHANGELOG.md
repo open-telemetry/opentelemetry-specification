@@ -9,6 +9,7 @@ the release.
 
 - Provide clear definitions for readable and read/write span interfaces in the SDK ([#669](https://github.com/open-telemetry/opentelemetry-specification/pull/669))
   * SpanProcessors must provide read/write access at least in OnStart.
+- Add semantic convention for NGINX custom HTTP 499 status code.
 
 ## v0.6.0 (07-01-2020)
 
