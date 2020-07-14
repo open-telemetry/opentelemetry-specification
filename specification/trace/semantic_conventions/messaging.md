@@ -88,7 +88,7 @@ Examples:
 * `print_jobs send`
 * `topic with spaces process`
 * `AuthenticationRequest-Conversations process`
-* `(temporary) send` (as a stable identifier for randomly generated, temporary destination names)
+* `(temporary) send` (`(temporary)` being a stable identifier for randomly generated, temporary destination names)
 
 ### Span kind
 
