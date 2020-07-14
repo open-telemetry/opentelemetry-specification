@@ -1,7 +1,7 @@
 ---
 name: Miscellaneous (anything else)
 about: Issues that do not fit into other categories
-labels: area:miscellaneous
+labels: spec:miscellaneous
 ---
 
 **What are you trying to achieve?**
