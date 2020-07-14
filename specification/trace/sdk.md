@@ -18,7 +18,7 @@ OpenTelemetry by reducing the number of samples of traces collected and sent to
 the backend.
 
 Sampling may be implemented on different stages of a trace collection.
-OpenTelemetry API defines a `Sampler` interface that can be used at
+OpenTelemetry SDK defines a `Sampler` interface that can be used at
 instrumentation points by libraries to check the `SamplingResult` early and
 optimize the amount of telemetry that needs to be collected.
 
