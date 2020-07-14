@@ -34,7 +34,7 @@ For example:
 #### Status
 
 Recordings with the duration instrument must include a `status` label. The value of this
-label must be one of the valid Span [`StatusCanonicalCode`s](../api.md#statuscanonicalcode).
+label must be a valid Span [`StatusCanonicalCode`](../../trace/api.md#statuscanonicalcode).
 
 #### Labels
 
