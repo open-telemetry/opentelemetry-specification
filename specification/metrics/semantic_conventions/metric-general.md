@@ -26,6 +26,7 @@ For Spans that follow one of the common semantic-conventional _areas_, the categ
 should be the label prefix used in that semantic convention.
 
 For example:
+
 * `http.server.duration`
 * `http.client.duration`
 * `db.client.duration`
