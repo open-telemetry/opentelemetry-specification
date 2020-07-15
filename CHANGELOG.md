@@ -9,14 +9,12 @@ the release.
 
 New:
 
-Updates:
-
-- Adapt semantic conventions for the span name of messaging systems ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
 - Add resource semantic conventions for operating systems ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
 
 Updates:
 
 - Add semantic convention for NGINX custom HTTP 499 status code.
+- Adapt semantic conventions for the span name of messaging systems ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
 
 ## v0.6.0 (07-01-2020)
 
