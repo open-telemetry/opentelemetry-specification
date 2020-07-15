@@ -3,6 +3,12 @@
 This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [TODOs](#todos)
+- [Document Conventions](#document-conventions)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
@@ -14,7 +20,9 @@ This document defines standard attributes for resources. These attributes are ty
 - [Compute Instance](#compute-instance)
   * [Host](#host)
 - [Environment](#environment)
+  * [Operating System](#operating-system)
   * [Cloud](#cloud)
+- [Version Attributes](#version-attributes)
 
 <!-- tocstop -->
 
@@ -26,7 +34,7 @@ This document defines standard attributes for resources. These attributes are ty
 * Consider to add optional/required for each attribute and combination of attributes
   (e.g when supplying a k8s resource all k8s may be required).
 
-### Document Conventions
+## Document Conventions
 
 Attributes are grouped logically by the type of the concept that they described. Attributes in the same group have a common prefix that ends with a dot. For example all attributes that describe Kubernetes properties start with "k8s."
 
@@ -98,6 +106,7 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 | container.image.tag | Container image tag. | `0.1` |
 
 [identify Docker containers]: https://docs.docker.com/engine/reference/run/#container-identification
+
 ### Function as a Service
 
 **type:** `faas`
@@ -172,7 +181,37 @@ Attributes defining a computing instance (e.g. host).
 
 ## Environment
 
-Attributes defining a running environment (e.g. Cloud, Data Center).
+Attributes defining a running environment (e.g. Operating System, Cloud, Data Center).
+
+### Operating System
+
+**type:** `os`
+
+**Description**: The operating system (OS) on which the process represented by this resource is running.
+
+In case of virtualized environments, this is the operating system as it is observed by the process, i.e., the virtualized guest rather than the underlying host.
+
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `os.type` | string | The operating system type. | `"WINDOWS"` | Yes |
+| `os.description` | string | Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands. | `"Microsoft Windows [Version 10.0.18363.778]"`<br>`"Ubuntu 18.04.1 LTS"` | No |
+
+`os.type` SHOULD be set to one of the values listed below.
+If none of the listed values apply, a custom value best describing the family the operating system belongs to CAN be used.
+
+| Value  | Description |
+|---|---|
+| `WINDOWS` | Microsoft Windows |
+| `LINUX` | Linux |
+| `DARWIN` | Apple Darwin |
+| `FREEBSD` | FreeBSD |
+| `NETBSD` | NetBSD|
+| `OPENBSD` | OpenBSD |
+| `DRAGONFLYBSD` | DragonFly BSD |
+| `HPUX` | HP-UX (Hewlett Packard Unix) |
+| `AIX` | AIX (Advanced Interactive eXecutive) |
+| `SOLARIS` | Oracle Solaris |
+| `ZOS` | IBM z/OS |
 
 ### Cloud
 
