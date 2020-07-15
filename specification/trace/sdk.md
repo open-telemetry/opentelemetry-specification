@@ -17,13 +17,9 @@ Sampling is a mechanism to control the noise and overhead introduced by
 OpenTelemetry by reducing the number of samples of traces collected and sent to
 the backend.
 
-Sampling may be implemented on different stages of a trace collection.
-OpenTelemetry SDK defines a `Sampler` interface that can be used at
-instrumentation points by libraries to check the `SamplingResult` early and
-optimize the amount of telemetry that needs to be collected.
-
-All other sampling algorithms may be implemented on SDK layer in exporters, or
-even out of process in Agent or Collector.
+Sampling may be implemented on different stages of a trace collection. The
+earliest sampling could happen before the trace is actually created, and the
+latest sampling could happen on the Collector which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
