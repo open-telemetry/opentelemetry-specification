@@ -29,6 +29,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
   - [Timeline](#project-timeline)
   - [Notation Conventions and Compliance](#notation-conventions-and-compliance)
   - [Versioning](#versioning)
+  - [Acronym](#acronym)
   - [Contributions](#contributions)
   - [License](#license)
 
@@ -52,6 +53,12 @@ Conversely, an implementation of the [specification](./specification) is complia
 Changes to the [specification](./specification) are versioned according to [Semantic Versioning 2.0](https://semver.org/spec/v2.0.0.html) and described in [CHANGELOG.md](CHANGELOG.md). Layout changes are not versioned. Specific implementations of the specification should specify which version they implement.
 
 Changes to the change process itself are not currently versioned but may be independently versioned in the future.
+
+## Acronym
+
+The official acronym used by the OpenTelemetry project is "OTel".
+
+Please refrain from using "OT" in order to avoid confusion with the now deprecated "OpenTracing" project.
 
 ## Contributions
 
