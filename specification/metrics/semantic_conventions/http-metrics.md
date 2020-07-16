@@ -38,5 +38,5 @@ follow the same convention as
 [http span names](../../trace/semantic_conventions/http.md#name).
 
 `http.target`: Similar to `http.url`, parameterized targets can lead to high
-cardinality which is why urls should follow the same convention as
+cardinality which is why targets should follow the same convention as
 [http span names](../../trace/semantic_conventions/http.md#name).
