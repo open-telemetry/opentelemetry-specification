@@ -3,6 +3,12 @@
 This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [TODOs](#todos)
+- [Document Conventions](#document-conventions)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
@@ -14,7 +20,9 @@ This document defines standard attributes for resources. These attributes are ty
 - [Compute Instance](#compute-instance)
   * [Host](#host)
 - [Environment](#environment)
+  * [Operating System](#operating-system)
   * [Cloud](#cloud)
+- [Version Attributes](#version-attributes)
 
 <!-- tocstop -->
 
@@ -26,7 +34,7 @@ This document defines standard attributes for resources. These attributes are ty
 * Consider to add optional/required for each attribute and combination of attributes
   (e.g when supplying a k8s resource all k8s may be required).
 
-### Document Conventions
+## Document Conventions
 
 Attributes are grouped logically by the type of the concept that they described. Attributes in the same group have a common prefix that ends with a dot. For example all attributes that describe Kubernetes properties start with "k8s."
 
@@ -98,6 +106,7 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 | container.image.tag | Container image tag. | `0.1` |
 
 [identify Docker containers]: https://docs.docker.com/engine/reference/run/#container-identification
+
 ### Function as a Service
 
 **type:** `faas`
@@ -125,10 +134,10 @@ Note: The resource attribute `faas.instance` differs from the span attribute `fa
 | Attribute  | Description  | Example  | Required |
 |---|---|---|--|
 | process.pid | Process identifier (PID). | `1234` | Yes |
-| process.executable.name | The name of the process executable. On Unix based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | See below |
-| process.executable.path | The full path to the process executable. On Unix based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | See below |
-| process.command | The command used to launch the process (i.e. the command name). On Unix based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | See below |
-| process.command_line | The full command used to launch the process. The value can be either a list of strings representing the ordered list of arguments, or a single string representing the full command. On Unix based systems, can be set to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. On Windows, can be set to the result of `GetCommandLineW`. | Unix: `[ cmd/otecol, --config=config.yaml ]`, Windows: `cmd/otecol --config=config.yaml` | See below |
+| process.executable.name | The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | See below |
+| process.executable.path | The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | See below |
+| process.command | The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | See below |
+| process.command_line | The full command used to launch the process. The value can be either a list of strings representing the ordered list of arguments, or a single string representing the full command. On Linux based systems, can be set to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. On Windows, can be set to the result of `GetCommandLineW`. | Linux: `[ cmd/otecol, --config=config.yaml ]`, Windows: `cmd/otecol --config=config.yaml` | See below |
 | process.owner | The username of the user that owns the process. | `root` | No |
 
 At least one of `process.executable.name`, `process.executable.path`, `process.command`, or `process.command_line` is required.
@@ -172,7 +181,37 @@ Attributes defining a computing instance (e.g. host).
 
 ## Environment
 
-Attributes defining a running environment (e.g. Cloud, Data Center).
+Attributes defining a running environment (e.g. Operating System, Cloud, Data Center).
+
+### Operating System
+
+**type:** `os`
+
+**Description**: The operating system (OS) on which the process represented by this resource is running.
+
+In case of virtualized environments, this is the operating system as it is observed by the process, i.e., the virtualized guest rather than the underlying host.
+
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `os.type` | string | The operating system type. | `"WINDOWS"` | Yes |
+| `os.description` | string | Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands. | `"Microsoft Windows [Version 10.0.18363.778]"`<br>`"Ubuntu 18.04.1 LTS"` | No |
+
+`os.type` SHOULD be set to one of the values listed below.
+If none of the listed values apply, a custom value best describing the family the operating system belongs to CAN be used.
+
+| Value  | Description |
+|---|---|
+| `WINDOWS` | Microsoft Windows |
+| `LINUX` | Linux |
+| `DARWIN` | Apple Darwin |
+| `FREEBSD` | FreeBSD |
+| `NETBSD` | NetBSD|
+| `OPENBSD` | OpenBSD |
+| `DRAGONFLYBSD` | DragonFly BSD |
+| `HPUX` | HP-UX (Hewlett Packard Unix) |
+| `AIX` | AIX (Advanced Interactive eXecutive) |
+| `SOLARIS` | Oracle Solaris |
+| `ZOS` | IBM z/OS |
 
 ### Cloud
 
