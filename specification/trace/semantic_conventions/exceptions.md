@@ -1,14 +1,22 @@
-# Exception Reporting
+# Semantic Conventions for Exceptions
 
-This document defines semantic conventions and APIs for recording application
+This document defines semantic conventions for recording application
 exceptions.
+
+<!-- toc -->
+
+- [Recording an Exception](#recording-an-exception)
+- [Attributes](#attributes)
+  - [Stacktrace Representation](#stacktrace-representation)
+
+<!-- tocstop -->
 
 ## Recording an Exception
 
 An exception SHOULD be recorded as an `Event` on the span during which it occurred.
 The name of the event MUST be `"exception"`.
 
-## Semantic Conventions
+## Attributes
 
 The table below indicates which attributes should be added to the `Event` and
 their types.
@@ -39,21 +47,6 @@ Backends can use the language specified methodology for generating a stacktrace
 combined with platform information from the
 [telemetry sdk resource][telemetry-sdk-resource] in order to extract more fine
 grained information from a stacktrace, if necessary.
-
-## API
-
-To facilitate recording an exception languages SHOULD provide a
-`Span.RecordException` convenience method. The signature of the method is to be
-determined by each language and can be overloaded as appropriate. The method
-MUST record an exception as an `Event` with the conventions outlined in this
-document.
-
-**Examples:**
-
-```
-RecordException(exception: Exception)
-RecordException(type: String, message: String, stacktrace: String)
-```
 
 [gcp-error-reporting]: https://cloud.google.com/error-reporting/reference/rest/v1beta1/projects.events/report
 [java-stacktrace]: https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html#printStackTrace%28%29

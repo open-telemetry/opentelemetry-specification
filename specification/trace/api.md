@@ -5,34 +5,35 @@
 Table of Contents
 </summary>
 
-* [Data types](#data-types)
-  * [Time](#time)
-    * [Timestamp](#timestamp)
-    * [Duration](#duration)
-* [Tracer](#tracer)
-  * [Obtaining a tracer](#obtaining-a-tracer)
-  * [Tracer operations](#tracer-operations)
-* [SpanContext](#spancontext)
-* [Span](#span)
-  * [Span creation](#span-creation)
-    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-    * [Add Links](#add-links)
-  * [Span operations](#span-operations)
-    * [Get Context](#get-context)
-    * [IsRecording](#isrecording)
-    * [Set Attributes](#set-attributes)
-    * [Add Events](#add-events)
-    * [Set Status](#set-status)
-    * [UpdateName](#updatename)
-    * [End](#end)
-  * [Span lifetime](#span-lifetime)
-* [Status](#status)
-  * [StatusCanonicalCode](#statuscanonicalcode)
-  * [Status creation](#status-creation)
-  * [GetCanonicalCode](#getcanonicalcode)
-  * [GetDescription](#getdescription)
-  * [GetIsOk](#getisok)
-* [SpanKind](#spankind)
+- [Data types](#data-types)
+  - [Time](#time)
+    - [Timestamp](#timestamp)
+    - [Duration](#duration)
+- [Tracer](#tracer)
+  - [Obtaining a tracer](#obtaining-a-tracer)
+  - [Tracer operations](#tracer-operations)
+- [SpanContext](#spancontext)
+- [Span](#span)
+  - [Span creation](#span-creation)
+    - [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+    - [Add Links](#add-links)
+  - [Span operations](#span-operations)
+    - [Get Context](#get-context)
+    - [IsRecording](#isrecording)
+    - [Set Attributes](#set-attributes)
+    - [Add Events](#add-events)
+    - [Set Status](#set-status)
+    - [UpdateName](#updatename)
+    - [End](#end)
+    - [Record Exception](#record-exception)
+  - [Span lifetime](#span-lifetime)
+- [Status](#status)
+  - [StatusCanonicalCode](#statuscanonicalcode)
+  - [Status creation](#status-creation)
+  - [GetCanonicalCode](#getcanonicalcode)
+  - [GetDescription](#getdescription)
+  - [GetIsOk](#getisok)
+- [SpanKind](#spankind)
 
 </details>
 
@@ -57,15 +58,15 @@ The representation of those values is language specific.
 
 A timestamp is the time elapsed since the Unix epoch.
 
-* The minimal precision is milliseconds.
-* The maximal precision is nanoseconds.
+- The minimal precision is milliseconds.
+- The maximal precision is nanoseconds.
 
 #### Duration
 
 A duration is the elapsed time between two events.
 
-* The minimal precision is milliseconds.
-* The maximal precision is nanoseconds.
+- The minimal precision is milliseconds.
+- The maximal precision is nanoseconds.
 
 ## TracerProvider
 
@@ -95,11 +96,11 @@ The `TracerProvider` MUST provide functions to:
 That API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
-  (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
+  (e.g. `io.opentelemetry.contrib.mongodb`) and _not_ the instrumented library.
   In case an invalid name (null or empty string) is specified, a working
   default Tracer implementation as a fallback is returned rather than returning
   null or throwing an exception.
-  A library, implementing the OpenTelemetry API *may* also ignore this name and
+  A library, implementing the OpenTelemetry API _may_ also ignore this name and
   return a default instance for all calls, if it does not support "named"
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
@@ -127,7 +128,7 @@ returned `Tracer`s and actively update their configuration if it changes.
 
 The tracer is responsible for creating `Span`s.
 
-Note that `Tracers` should usually *not* be responsible for configuration.
+Note that `Tracers` should usually _not_ be responsible for configuration.
 This should be the responsibility of the `TracerProvider` instead.
 
 ### Tracer operations
@@ -216,12 +217,12 @@ a good name due to its high cardinality.
 For example, here are potential span names for an endpoint that gets a
 hypothetical account information:
 
-| Span Name         | Guidance     |
-| ----------------- | ------------ |
-| `get`             | Too general  |
-| `get_account/42`  | Too specific |
-| `get_account`     | Good, and account_id=42 would make a nice Span attribute |
-| `get_account/{accountId}` | Also good (using the "HTTP route") |
+| Span Name                 | Guidance                                                 |
+| ------------------------- | -------------------------------------------------------- |
+| `get`                     | Too general                                              |
+| `get_account/42`          | Too specific                                             |
+| `get_account`             | Good, and account_id=42 would make a nice Span attribute |
+| `get_account/{accountId}` | Also good (using the "HTTP route")                       |
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
 operation.
@@ -515,6 +516,19 @@ Parameters:
 
 This API MUST be non-blocking.
 
+#### Record Exception
+
+To facilitate recording an exception languages SHOULD provide a
+`RecordException` convenience method. The signature of the method is to be
+determined by each language and can be overloaded as appropriate. The method
+MUST record an exception as an `Event` with the conventions outlined in the
+[exception semantic conventions](semantic_conventions/exceptions.md) document.
+
+Examples:
+
+- `RecordException(exception: Exception)`
+- `RecordException(type: String, message: String, stacktrace: String)`
+
 ### Span lifetime
 
 Span lifetime represents the process of recording the start and the end
@@ -613,55 +627,55 @@ Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 ## SpanKind
 
 `SpanKind` describes the relationship between the Span, its parents,
-and its children in a Trace.  `SpanKind` describes two independent
+and its children in a Trace. `SpanKind` describes two independent
 properties that benefit tracing systems during analysis.
 
 The first property described by `SpanKind` reflects whether the Span
-is a remote child or parent.  Spans with a remote parent are
-interesting because they are sources of external load.  Spans with a
+is a remote child or parent. Spans with a remote parent are
+interesting because they are sources of external load. Spans with a
 remote child are interesting because they reflect a non-local system
 dependency.
 
 The second property described by `SpanKind` reflects whether a child
-Span represents a synchronous call.  When a child span is synchronous,
+Span represents a synchronous call. When a child span is synchronous,
 the parent is expected to wait for it to complete under ordinary
-circumstances.  It can be useful for tracing systems to know this
+circumstances. It can be useful for tracing systems to know this
 property, since synchronous Spans may contribute to the overall trace
 latency. Asynchronous scenarios can be remote or local.
 
 In order for `SpanKind` to be meaningful, callers should arrange that
-a single Span does not serve more than one purpose.  For example, a
+a single Span does not serve more than one purpose. For example, a
 server-side span should not be used directly as the parent of another
-remote span.  As a simple guideline, instrumentation should create a
+remote span. As a simple guideline, instrumentation should create a
 new Span prior to extracting and serializing the span context for a
 remote call.
 
 These are the possible SpanKinds:
 
-* `SERVER` Indicates that the span covers server-side handling of a
-  synchronous RPC or other remote request.  This span is the child of
+- `SERVER` Indicates that the span covers server-side handling of a
+  synchronous RPC or other remote request. This span is the child of
   a remote `CLIENT` span that was expected to wait for a response.
-* `CLIENT` Indicates that the span describes a synchronous request to
-  some remote service.  This span is the parent of a remote `SERVER`
+- `CLIENT` Indicates that the span describes a synchronous request to
+  some remote service. This span is the parent of a remote `SERVER`
   span and waits for its response.
-* `PRODUCER` Indicates that the span describes the parent of an
-  asynchronous request.  This parent span is expected to end before
+- `PRODUCER` Indicates that the span describes the parent of an
+  asynchronous request. This parent span is expected to end before
   the corresponding child `CONSUMER` span, possibly even before the
   child span starts. In messaging scenarios with batching, tracing
   individual messages requires a new `PRODUCER` span per message to
   be created.
-* `CONSUMER` Indicates that the span describes the child of an
+- `CONSUMER` Indicates that the span describes the child of an
   asynchronous `PRODUCER` request.
-* `INTERNAL` Default value. Indicates that the span represents an
+- `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
   operations with remote parents or children.
 
 To summarize the interpretation of these kinds:
 
 | `SpanKind` | Synchronous | Asynchronous | Remote Incoming | Remote Outgoing |
-|--|--|--|--|--|
-| `CLIENT` | yes | | | yes |
-| `SERVER` | yes | | yes | |
-| `PRODUCER` | | yes | | maybe |
-| `CONSUMER` | | yes | maybe | |
-| `INTERNAL` | | | | |
+| ---------- | ----------- | ------------ | --------------- | --------------- |
+| `CLIENT`   | yes         |              |                 | yes             |
+| `SERVER`   | yes         |              | yes             |                 |
+| `PRODUCER` |             | yes          |                 | maybe           |
+| `CONSUMER` |             | yes          | maybe           |                 |
+| `INTERNAL` |             |              |                 |                 |
