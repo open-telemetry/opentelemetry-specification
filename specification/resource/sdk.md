@@ -26,7 +26,9 @@ associated with this `Resource`.
 
 ## Resource creation
 
-The SDK must support two ways to instantiate new resources. Those are:
+A resource is made by a collection of attributes. Resources MUST use the same
+`Attribute` definition used for [Span Attributes](../trace/api.md#set-attributes).
+The SDK MUST support two ways to instantiate new resources. Those are:
 
 ### Create
 
@@ -36,8 +38,11 @@ object. A factory method is recommended to enable support for cached objects.
 
 Required parameters:
 
-- a collection of name/value attributes, where name is a string and value can be one
-  of: string, int64, double, bool.
+- a collection of [attributes](../trace/api.md#set-attributes).
+
+Attribute values of `null` are considered to be used to create the resource and
+get discarded as if that attribute had never been part of the collection.
+`null` values within arrays MUST be preserved as-is.
 
 ### Merge
 
