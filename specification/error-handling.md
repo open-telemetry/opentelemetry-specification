@@ -52,7 +52,50 @@ Another example may be a metric exposed by a `SpanProcessor` that describes the 
 Whenever the library suppresses an error that would otherwise have been exposed to the user, the library SHOULD log the error using language-specific conventions.
 SDKs MAY expose callbacks to allow end users to handle self-diagnostics separately from application code.
 
-## Exceptions to the rule
+## Configuring Error Handlers
 
-SDK authors MAY supply settings that allow end users to change the library's default error handling behavior.
+SDK authors MUST supply settings that allow end users to change the library's default error handling behavior.
 Application developers may want to run with strict error handling in a staging environment to catch invalid uses of the API, or malformed config.
+Note that configuring a custom error handler in this way is the only exception to the basic error handling principles outlined above. 
+
+The mechanism by which end users set or register a custom error handler should follow language-specific conventions. 
+SDK authors SHOULD provide a mechanism to distinguish between different types of errors within a custom error handler. For example, 
+an end user should have the ability to selectively ignore errors surfaced by the `SpanExporter` while logging all other errors. 
+
+### Examples 
+
+These are examples of how end users might register custom error handlers. 
+Examples are for illustration purposes only. Language library authors
+are free to deviate from these provided that their design matches the requirements outlined above. 
+
+##### Go ErrorHandler
+
+```go
+// The basic Error Handler interface
+type ErrorHandler interface {
+	Handle(error)
+}
+
+func Handler() ErrorHandler
+func SetHandler(ErrorHandler)
+```
+
+
+```go
+// Registering a custom Error Handler
+type IgnoreExporterErrorsHandler struct{}
+
+func (IgnoreExporterErrorsHandler) Handle(err error) {
+    switch err.(type) {
+    case *SpanExporterError:
+    default:
+        fmt.Println(err)
+    }
+}
+
+func main() {
+    // Other setup ... 
+    opentelemetrysdk.SetHandler(IgnoreExporterErrorsHandler{})
+}
+
+```
