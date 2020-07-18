@@ -52,7 +52,16 @@ Synonyms: *Instrumenting Library*
 
 > In telecommunications, **in-band** signaling is the sending of control information within the same band or channel used for data such as voice or video. This is in contrast to **out-of-band** signaling which is sent over a different channel, or even over a separate network ([Wikipedia](https://en.wikipedia.org/wiki/In-band_signaling)).
 
-In OpenTelemetry we refer to **in-band data** as data that is passed between components of a distributed system as part of the business requests, for example, when trace or correlation contexts are included in the requests in the form of HTTP headers. Such data usually does not contain the telemetry, but is used to correlate and join the telemetry produced by various components. The telemetry itself is referred to as **out-of-band data**, because it is exported from applications asynchronously, usually by background routines, rather than from the critical path of the business logic. Metrics, logs, and traces exported to telemetry backends are the examples of out-of-band data.
+In OpenTelemetry we refer to **in-band data** as data
+that is passed between components of a distributed system as part of the business requests,
+for example, when trace or correlation contexts are included in the requests in the form of HTTP headers.
+Such data usually does not contain the telemetry,
+but is used to correlate and join the telemetry produced by various components.
+The telemetry itself is transferred as **out-of-band data**:
+it is transferred from applications in dedicated requests,
+usually asynchronously by background routines,
+rather than from the critical path of the business logic.
+Metrics, logs, and traces exported to telemetry backends are examples of out-of-band data.
 
 ### Tracer Name / Meter Name
 
