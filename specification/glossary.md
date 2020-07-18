@@ -57,7 +57,7 @@ that is passed between components of a distributed system as part of the busines
 for example, when trace or correlation contexts are included in the requests in the form of HTTP headers.
 Such data usually does not contain the telemetry,
 but is used to correlate and join the telemetry produced by various components.
-The telemetry itself is transferred as **out-of-band data**:
+The telemetry itself is referred to as **out-of-band data**:
 it is transferred from applications in dedicated requests,
 usually asynchronously by background routines,
 rather than from the critical path of the business logic.
