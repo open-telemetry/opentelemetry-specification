@@ -7,7 +7,15 @@ the release.
 
 ## Unreleased
 
+New:
+
+- Add resource semantic conventions for operating systems ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
+
+Updates:
+
 - Add semantic convention for NGINX custom HTTP 499 status code.
+- Adapt semantic conventions for the span name of messaging systems ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
+- Specify how `Probability` sampler is used with `ParentOrElse` sampler.
 
 ## v0.6.0 (07-01-2020)
 
@@ -21,6 +29,7 @@ New:
 - Add peer.service to provide a user-configured name for a remote service ([#652](https://github.com/open-telemetry/opentelemetry-specification/pull/652))
 
 Updates:
+
 - Improve root Span description ([#645](https://github.com/open-telemetry/opentelemetry-specification/pull/645))
 - Extend semantic conventions for RPC and allow non-gRPC calls ([#604](https://github.com/open-telemetry/opentelemetry-specification/pull/604))
 - Revise and extend semantic conventions for databases ([#575](https://github.com/open-telemetry/opentelemetry-specification/pull/575))
