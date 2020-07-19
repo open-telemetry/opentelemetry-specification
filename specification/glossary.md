@@ -34,7 +34,7 @@ See [Library Guidelines](library-guidelines.md#sdk-implementation) and
 <a name="exporter_library"></a>
 ### Exporter Library
 
-Libraries which are compatible with the [Telemetry SDK](glossary.md#telemetry-sdk) and provide functionality to emit telemetry to consumers.
+Libraries which are compatible with the [Telemetry SDK](#telemetry-sdk) and provide functionality to emit telemetry to consumers.
 
 ### Instrumented Library
 
