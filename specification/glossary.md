@@ -45,6 +45,7 @@ or by another [Instrumentation Library](#instrumentation-library).
 
 Example: `org.mongodb.client`.
 
+<a name="instrumenting_library"></a>
 <a name="instrumentation_library"></a>
 ### Instrumentation Library
 
@@ -63,7 +64,8 @@ Synonyms: *Instrumenting Library*.
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api.md#meter-interface)). The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
+creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api.md#meter-interface)).
+The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
 
 ## Logs
 
@@ -73,7 +75,7 @@ A recording of an event. Typically the record includes a timestamp indicating
 when the event happened as well as other data that describes what happened,
 where it happened, etc.
 
-Also known as Log Entry.
+Synonyms: *Log Entry*.
 
 ### Log
 
