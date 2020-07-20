@@ -57,10 +57,7 @@ SDKs MAY expose callbacks to allow end users to handle self-diagnostics separate
 SDK authors MUST supply settings that allow end users to change the library's default error handling behavior.
 Application developers may want to run with strict error handling in a staging environment to catch invalid uses of the API, or malformed config.
 Note that configuring a custom error handler in this way is the only exception to the basic error handling principles outlined above. 
-
 The mechanism by which end users set or register a custom error handler should follow language-specific conventions. 
-SDK authors SHOULD provide a mechanism to distinguish between different types of errors within a custom error handler. For example, 
-an end user should have the ability to selectively ignore errors surfaced by the `SpanExporter` while logging all other errors. 
 
 ### Examples 
 
@@ -73,11 +70,11 @@ are free to deviate from these provided that their design matches the requiremen
 ```go
 // The basic Error Handler interface
 type ErrorHandler interface {
-	Handle(error)
+	Handle(err error)
 }
 
 func Handler() ErrorHandler
-func SetHandler(ErrorHandler)
+func SetHandler(handler ErrorHandler)
 ```
 
 
@@ -97,5 +94,38 @@ func main() {
     // Other setup ... 
     opentelemetrysdk.SetHandler(IgnoreExporterErrorsHandler{})
 }
+
+```
+
+##### Java ErrorHandler
+
+```java
+// The basic Error Handler interface
+public interface ErrorHandler {
+  void handle(OpenTelemetryException e);
+}
+
+public static void handleError(OpenTelemetryException e);
+public static void setErrorHandler(ErrorHandler h);
+```
+
+
+```java
+// Registering a custom Error Handler
+public class IgnoreExporterHandler implements ErrorHandler {
+    public void handle(OpenTelemetryException e) {
+        if (!(e instanceof SpanExporterException)) {
+            logger.log(Level.WARNING, e.getMessage(), e);
+        }
+    }
+}
+
+public static void main(String[] args) {
+    // Other setup ... 
+    OpenTelemetrySdk.setErrorHandler(new IgnoreExporterHandler());
+}
+
+
+
 
 ```
