@@ -13,12 +13,12 @@ The goal of this specification is to unify the environment variable names betwee
 
 ## Batch Span Processor
 
-| Name                      | Description                                    | Default |
-| ------------------------- | ---------------------------------------------- | ------- |
-| OTEL_BSP_SCHEDULE_DELAY   | Delay interval between two consecutive exports | -       |
-| OTEL_BSP_MAX_QUEUE        | Maximum queue size                             | -       |
-| OTEL_BSP_MAX_EXPORT_BATCH | Maximum batch size                             | -       |
-| OTEL_BSP_EXPORT_TIMEOUT   | Maximum allowed time to export data            | -       |
+| Name                           | Description                                    | Default | Notes                                                 |
+| ------------------------------ | ---------------------------------------------- | ------- | ----------------------------------------------------- |
+| OTEL_BSP_SCHEDULE_DELAY_MILLIS | Delay interval between two consecutive exports | 5000    |                                                       |
+| OTEL_BSP_EXPORT_TIMEOUT_MILLIS | Maximum allowed time to export data            | 30000   |                                                       |
+| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
+| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
 ## OTLP Span Exporter
 
