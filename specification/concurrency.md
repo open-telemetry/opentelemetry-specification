@@ -9,6 +9,10 @@ situations.
 The following are general recommendations of concurrent call safety of
 specific subsets of the API.
 
+## Trace API
+
+**TracerProvider** - all methods are safe to be called concurrently.
+
 **Tracer** - all methods are safe to be called concurrently.
 
 **SpanBuilder** - It is not safe to concurrently call any methods of the
@@ -18,5 +22,18 @@ SpanBuilder is used by more than one thread/coroutine.
 
 **Span** - All methods of Span are safe to be called concurrently.
 
+**Event** - Events are immutable and is safe to be used concurrently. Lazy
+initialized eventss must be implemented to be safe to be called concurrently.
+
 **Link** - Links are immutable and is safe to be used concurrently. Lazy
 initialized links must be implemented to be safe to be called concurrently.
+
+## Metrics API
+
+**MeterProvider** - all methods are safe to be called concurrently.
+
+**Meter** - all methods are safe to be called concurrently.
+
+**Instrument** - All methods of any Instrument are safe to be called concurrently.
+
+**Bound** - All methods of any Bound are safe to be called concurrently.
