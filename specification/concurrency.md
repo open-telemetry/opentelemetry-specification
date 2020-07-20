@@ -36,4 +36,4 @@ initialized links must be implemented to be safe to be called concurrently.
 
 **Instrument** - All methods of any Instrument are safe to be called concurrently.
 
-**Bound** - All methods of any Bound are safe to be called concurrently.
+**Bound Instrument** - All methods of any Bound Instrument are safe to be called concurrently.
