@@ -704,14 +704,14 @@ The API layer MAY include the following `Propagator`s:
 ## Behavior of the API in the absence of an installed SDK
 
 In general, in the absence of an installed SDK, the Trace API is intended to a "no-op" API.
-This means that operations on a Tracer should have no side effects and do nothing. However, there
+This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
 is one important exception to this general rule, and that is related to propagation of a SpanContext.
 
-Several cases must be considered when a new Span is requested to be created, especially in relation to the
+The following cases must be considered when a new Span is requested to be created, especially in relation to the
 requested parent SpanContext:
 
-* A valid SpanContext is specified as the parent of the new Span: The API MUST treat this parent context as the
-context for the newly created Span. This means that a SpanContext that has been provided by a configured Propagator
-will be propagated through the resulting call stack, but that no new Spans will be created.
-* No valid SpanContext is specified as the parent of the new Span: The API MUST create an invalid Span for use
-by the API caller. This means that both the TraceID and the SpanID should be invalid.
+* A valid `SpanContext` is specified as the parent of the new `Span`: The API MUST treat this parent context as the
+context for the newly created `Span`. This means that a `SpanContext` that has been provided by a configured `Propagator`
+will be propagated through the resulting call stack, but that no new `SpanContext`s will be created.
+* No valid `SpanContext` is specified as the parent of the new `Span`: The API MUST create an invalid `Span` for use
+by the API caller. This means that both the `TraceID` and the `SpanID` should be invalid.
