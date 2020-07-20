@@ -110,16 +110,12 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 #### Probability
 
-* The default behavior should be to trust the parent `SampledFlag`. However
-  there should be configuration to change this.
-* The default behavior is to apply the sampling probability only for Spans
-  that are root spans (no parent) and Spans with remote parent. However there
-  should be configuration to change this to "root spans only", or "all spans".
+* The `ProbabilitySampler` MUST ignore the parent `SampledFlag`.
+  To respect the parent `SampledFlag`, the `ProbabilitySampler` should be used as a delegate of the `ParentOrElse` sampler specified below.
 * Description MUST be `ProbabilitySampler{0.000100}`.
 
-TODO: Add details about how the probability sampler is implemented as a function
+TODO: Add details about how the `ProbabilitySampler` is implemented as a function
 of the `TraceID`.
-TODO: Split out the parent handling.
 
 #### ParentOrElse
 
@@ -301,7 +297,7 @@ configured `SpanExporter`.
   dropped. The default value is `2048`.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
-* `exporterTimeoutMillis` - how long the export can run before it is cancelled.
+* `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
@@ -356,6 +352,9 @@ ExportResult is one of:
   the wire and delivered to the destination server.
 * `Failure` - exporting failed. The batch must be dropped. For example, this
   can happen when the batch contains bad data and cannot be serialized.
+
+Note: this result may be returned via an async mechanism or a callback, if that
+is idiomatic for the language implementation.
 
 #### `Shutdown()`
 

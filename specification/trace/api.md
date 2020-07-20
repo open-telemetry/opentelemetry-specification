@@ -25,6 +25,7 @@ Table of Contents
     * [Set Status](#set-status)
     * [UpdateName](#updatename)
     * [End](#end)
+    * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
 * [Status](#status)
   * [StatusCanonicalCode](#statuscanonicalcode)
@@ -179,7 +180,8 @@ TraceID and a non-zero SpanID.
 
 `IsRemote` is a boolean flag which returns true if the SpanContext was propagated
 from a remote parent.
-When creating children from remote spans, their IsRemote flag MUST be set to false.
+When extracting a `SpanContext` through the Propagators API, its `IsRemote` flag MUST
+be set to true, whereas the SpanContext of any child spans MUST have it set to false.
 
 Please review the W3C specification for details on the [Tracestate
 field](https://www.w3.org/TR/trace-context/#tracestate-field).
@@ -514,6 +516,19 @@ Parameters:
 - (Optional) Timestamp to explicitly set the end timestamp
 
 This API MUST be non-blocking.
+
+#### Record Exception
+
+To facilitate recording an exception languages SHOULD provide a
+`RecordException` convenience method. The signature of the method is to be
+determined by each language and can be overloaded as appropriate. The method
+MUST record an exception as an `Event` with the conventions outlined in the
+[exception semantic conventions](semantic_conventions/exceptions.md) document.
+
+Examples:
+
+- `RecordException(exception: Exception)`
+- `RecordException(type: String, message: String, stacktrace: String)`
 
 ### Span lifetime
 
