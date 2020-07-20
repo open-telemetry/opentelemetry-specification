@@ -16,6 +16,7 @@ Updates:
 - Add semantic convention for NGINX custom HTTP 499 status code.
 - Adapt semantic conventions for the span name of messaging systems ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
 - Specify how `Probability` sampler is used with `ParentOrElse` sampler.
+- Clean up api-propagators.md, by extending documentation and removing redundant sections ([#577](https://github.com/open-telemetry/opentelemetry-specification/pull/577))
 
 ## v0.6.0 (07-01-2020)
 
