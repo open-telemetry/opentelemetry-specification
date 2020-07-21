@@ -23,10 +23,12 @@ SpanBuilder is used by more than one thread/coroutine.
 **Span** - All methods of Span are safe to be called concurrently.
 
 **Event** - Events are immutable and safe to be used concurrently. Lazy
-initialized events must be implemented to be safe to be called concurrently.
+initialized events must be thread safe. This is the responsibility of the
+implementer of these events.
 
 **Link** - Links are immutable and is safe to be used concurrently. Lazy
-initialized links must be implemented to be safe to be called concurrently.
+initialized links must be thread safe. This is the responsibility of the
+implementer of these links.
 
 ## Metrics API
 
