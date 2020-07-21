@@ -4,12 +4,11 @@ The goal of this specification is to unify the environment variable names betwee
 
 ## General SDK Configuration
 
-| Name                      | Description                                      | Notes                                                                                           | Default                           |
-| ------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- | --------------------------------- |
-| OTEL_RESOURCE_LABELS      | Key-value pairs to be used as resource labels    | Final name and value format TBD by [OTEP-111](https://github.com/open-telemetry/oteps/pull/111) |                                   |
-| OTEL_SAMPLING_PROBABILITY | Probability to be used by the ProbabiltySampler  |                                                                                                 | 1                                 |
-| OTEL_LOG_LEVEL            | Log level used by the SDK logger                 |                                                                                                 | "info"                            |
-| OTEL_PROPAGATORS          | Propagators to be used as a comma separated list |                                                                                                 | "tracecontext,correlationcontext" |
+| Name                 | Description                                      | Notes                                                                                           | Default                           |
+| -------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- | --------------------------------- |
+| OTEL_RESOURCE_LABELS | Key-value pairs to be used as resource labels    | Final name and value format TBD by [OTEP-111](https://github.com/open-telemetry/oteps/pull/111) |                                   |
+| OTEL_LOG_LEVEL       | Log level used by the SDK logger                 |                                                                                                 | "info"                            |
+| OTEL_PROPAGATORS     | Propagators to be used as a comma separated list |                                                                                                 | "tracecontext,correlationcontext" |
 
 ## Batch Span Processor
 
