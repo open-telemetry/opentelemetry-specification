@@ -4,11 +4,11 @@ The goal of this specification is to unify the environment variable names betwee
 
 ## General SDK Configuration
 
-| Name                 | Description                                      | Notes                                                                                           | Default                           |
-| -------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- | --------------------------------- |
-| OTEL_RESOURCE_LABELS | Key-value pairs to be used as resource labels    | Final name and value format TBD by [OTEP-111](https://github.com/open-telemetry/oteps/pull/111) |                                   |
-| OTEL_LOG_LEVEL       | Log level used by the SDK logger                 |                                                                                                 | "info"                            |
-| OTEL_PROPAGATORS     | Propagators to be used as a comma separated list |                                                                                                 | "tracecontext,correlationcontext" |
+| Name                 | Description                                      | Default                           | Notes                                                                                           |
+| -------------------- | ------------------------------------------------ | --------------------------------- | ----------------------------------------------------------------------------------------------- |
+| OTEL_RESOURCE_LABELS | Key-value pairs to be used as resource labels    |                                   | Final name and value format TBD by [OTEP-111](https://github.com/open-telemetry/oteps/pull/111) |
+| OTEL_LOG_LEVEL       | Log level used by the SDK logger                 | "info"                            |                                                                                                 |
+| OTEL_PROPAGATORS     | Propagators to be used as a comma separated list | "tracecontext,correlationcontext" |                                                                                                 |
 
 ## Batch Span Processor
 
@@ -35,13 +35,13 @@ The goal of this specification is to unify the environment variable names betwee
 
 ## Jaeger Exporter
 
-| Name                            | Description Default                               |
-| ------------------------------- | ------------------------------------------------- |
-| OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent                     | "localhost" |
-| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent                         | 6832 |
+| Name                            | Description                                       | Default                                                                                          |
+| ------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent                     | "localhost"                                                                                      |
+| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent                         | 6832                                                                                             |
 | OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                   | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication | - |
-| OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication | - |
+| OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication | -                                                                                                |
+| OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication | -                                                                                                |
 
 ## Zipkin Exporter
 
