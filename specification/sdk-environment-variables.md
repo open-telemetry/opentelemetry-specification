@@ -21,17 +21,17 @@ The goal of this specification is to unify the environment variable names betwee
 
 ## OTLP Span Exporter
 
-| Name                             | Description                                                   | Default |
-| -------------------------------- | ------------------------------------------------------------- | ------- |
-| OTEL_EXPORTER_OTLP_SPAN_TIMEOUT  | Max waiting time for the collector to process each span batch | -       |
-| OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Ingest endpoint for OTLP spans                                | -       |
+| Name                             | Description                                | Default |
+| -------------------------------- | ------------------------------------------ | ------- |
+| OTEL_EXPORTER_OTLP_SPAN_TIMEOUT  | Max waiting time to export each span batch | -       |
+| OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Ingest endpoint for OTLP spans             | -       |
 
 ## OTLP Metric Exporter
 
-| Name                               | Description                                                     | Default |
-| ---------------------------------- | --------------------------------------------------------------- | ------- |
-| OTEL_EXPORTER_OTLP_METRIC_TIMEOUT  | Max waiting time for the collector to process each metric batch | -       |
-| OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Ingest endpoint for OTLP metrics                                | -       |
+| Name                               | Description                                  | Default |
+| ---------------------------------- | -------------------------------------------- | ------- |
+| OTEL_EXPORTER_OTLP_METRIC_TIMEOUT  | Max waiting time to export each metric batch | -       |
+| OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Ingest endpoint for OTLP metrics             | -       |
 
 ## Jaeger Exporter
 
