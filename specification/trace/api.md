@@ -202,7 +202,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
-- [`Attribute`s](#set-attributes), a collection of key-value pairs
+- [`Attributes`](../common/common.md#attributes)
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
@@ -281,8 +281,7 @@ The API MUST accept the following parameters:
   See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
   for guidance on `Span` parenting from explicit and implicit `Context`s.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
-- `Attribute`s - A collection of key-value pairs, with the same semantics as
-  the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
+- [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
@@ -334,8 +333,7 @@ description](../overview.md#links-between-spans).
 A `Link` is defined by the following properties:
 
 - (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`s with the same restrictions as defined for
-  [Span Attributes](#set-attributes).
+- (Optional) One or more `Attribute`s as defined [here](../).
 
 The `Link` SHOULD be an immutable type.
 
@@ -393,15 +391,7 @@ propagators.
 
 #### Set Attributes
 
-A `Span` MUST have the ability to set attributes associated with it.
-
-An `Attribute` is defined by the following properties:
-
-- (Required) The attribute key, which MUST be a non-`null` and non-empty string.
-- (Required) The attribute value, which is either:
-  - A primitive type: string, boolean or numeric.
-  - An array of primitive type values. The array MUST be homogeneous,
-    i.e. it MUST NOT contain values of different types.
+A `Span` MUST have the ability to set [`Attributes`](../common/common.md#attributes) associated with it.
 
 The Span interface MUST provide:
 
@@ -420,14 +410,6 @@ that `SetAttribute` call had never been made.
 As an exception to this, if overwriting of values is supported, this results in
 clearing the previous value and dropping the attribute key from the set of attributes.
 
-`null` values within arrays MUST be preserved as-is (i.e., passed on to span
-processors / exporters as `null`). If exporters do not support exporting `null`
-values, they MAY replace those values by 0, `false`, or empty strings.
-This is required for map/dictionary structures represented as two arrays with
-indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
-both containing an array of strings to represent a mapping
-`header_keys[i] -> header_values[i]`).
-
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
@@ -439,8 +421,7 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 
 - (Required) Name of the event.
-- (Optional) One or more `Attribute`s with the same restrictions as defined for
-  [Span Attributes](#set-attributes).
+- (Optional) [`Attributes`](../common/common.md#attributes).
 - (Optional) Timestamp for the event.
 
 The `Event` SHOULD be an immutable type.

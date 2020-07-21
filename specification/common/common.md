@@ -1,0 +1,29 @@
+# Context
+
+<details>
+<summary>
+Table of Contents
+</summary>
+
+- [Attributes](#attribute)
+
+</details>
+
+## Attributes
+
+Attributes represent a list with zero or more key:value pairs (`Attribute`). An `Attribute` is defined by the following properties:
+
+- (Required) The attribute key, which MUST be a non-`null` and non-empty string.
+- (Required) The attribute value, which is either:
+  - A primitive type: string, boolean or double (IEEE 754-1985) and int64.
+  - An array of primitive type values. The array MUST be homogeneous,
+    i.e. it MUST NOT contain values of different types. For protocols that do
+    not natively support array values such values MUST be represented as JSON strings.
+
+`null` values within arrays MUST be preserved as-is (i.e., passed on to span
+processors / exporters as `null`). If exporters do not support exporting `null`
+values, they MAY replace those values by 0, `false`, or empty strings.
+This is required for map/dictionary structures represented as two arrays with
+indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
+both containing an array of strings to represent a mapping
+`header_keys[i] -> header_values[i]`).
