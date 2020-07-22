@@ -186,6 +186,13 @@ validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
+## Logs
+
+### Data model
+
+[Log Data Model](data-model.md) defines how logs and events are understood by
+OpenTelemetry.
+
 ## CorrelationContext
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
