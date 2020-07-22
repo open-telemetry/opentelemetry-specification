@@ -1,4 +1,4 @@
-# Context
+# Common specification concepts
 
 <details>
 <summary>
