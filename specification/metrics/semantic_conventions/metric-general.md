@@ -19,7 +19,7 @@ _recorded_ Spans of a given category and kind should be aggregated together in a
 [`ValueRecorder`](../api.md#valuerecorder).  A Span's duration should be recorded onto
 this instrument regardless of whether the Span is sampled.
 
-The instrument's name name should be prefixed with a category and the Span's kind,
+The instrument's name should be prefixed with a category and the Span's kind,
 using the pattern `{category}.{span.kind}.duration`.
 
 For Spans that follow one of the common semantic-conventional _areas_, the category
