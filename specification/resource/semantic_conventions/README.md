@@ -12,16 +12,9 @@ This document defines standard attributes for resources. These attributes are ty
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
-  * [Container](#container)
-  * [Function as a Service](#function-as-a-service)
-  * [Process](#process)
 - [Deployment Service](#deployment-service)
-  * [Kubernetes](#kubernetes)
 - [Compute Instance](#compute-instance)
-  * [Host](#host)
 - [Environment](#environment)
-  * [Operating System](#operating-system)
-  * [Cloud](#cloud)
 - [Version Attributes](#version-attributes)
 
 <!-- tocstop -->
@@ -90,141 +83,30 @@ The identifier SHOULD be stable across different versions of an implementation.
 
 ## Compute Unit
 
-Attributes defining a compute unit (e.g. Container, Process, Function as a Service).
+Attributes defining a compute unit (e.g. Container, Process, Function as a Service):
 
-### Container
-
-**type:** `container`
-
-**Description:** A container instance.
-
-| Attribute  | Description  | Example  |
-|---|---|---|
-| container.name | Container name. | `opentelemetry-autoconf` |
-| container.id | Container id. Usually a UUID, as for example used to [identify Docker containers][]. The UUID might be abbreviated. | `a3bf90e006b2` |
-| container.image.name | Name of the image the container was built on. | `gcr.io/opentelemetry/operator` |
-| container.image.tag | Container image tag. | `0.1` |
-
-[identify Docker containers]: https://docs.docker.com/engine/reference/run/#container-identification
-
-### Function as a Service
-
-**type:** `faas`
-
-**Description:** A serverless instance.
-
-| Label  | Description  | Example  | Required |
-|---|---|---|--|
-| faas.name | The name of the function being executed. | `my-function` | Yes |
-| faas.id | The unique name of the function being executed. <br /> For example, in AWS Lambda this field corresponds to the [ARN] value, in GCP to the URI of the resource, and in Azure to the [FunctionDirectory] field. | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Yes |
-| faas.version | The version string of the function being executed as defined in [Version Attributes](#version-attributes). | `semver:2.0.0` | No |
-| faas.instance | The execution environment ID as a string. | `my-function:instance-0001` | No |
-
-Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/faas.md#difference-between-execution-and-instance).
-
-[ARN]:https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html
-[FunctionDirectory]: https://github.com/Azure/azure-functions-host/wiki/Retrieving-information-about-the-currently-running-function
-
-### Process
-
-**type:** `process`
-
-**Description:** An operating system process.
-
-| Attribute  | Description  | Example  | Required |
-|---|---|---|--|
-| process.pid | Process identifier (PID). | `1234` | Yes |
-| process.executable.name | The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | See below |
-| process.executable.path | The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | See below |
-| process.command | The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | See below |
-| process.command_line | The full command used to launch the process. The value can be either a list of strings representing the ordered list of arguments, or a single string representing the full command. On Linux based systems, can be set to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. On Windows, can be set to the result of `GetCommandLineW`. | Linux: `[ cmd/otecol, --config=config.yaml ]`, Windows: `cmd/otecol --config=config.yaml` | See below |
-| process.owner | The username of the user that owns the process. | `root` | No |
-
-At least one of `process.executable.name`, `process.executable.path`, `process.command`, or `process.command_line` is required.
+- [Container](./container.md)
+- [Function as a Service](./faas.md)
+- [Process](./process.md)
 
 ## Deployment Service
 
-Attributes defining a deployment service (e.g. Kubernetes).
+Attributes defining a deployment service (e.g. Kubernetes):
 
-### Kubernetes
-
-**type:** `k8s`
-
-**Description:** A Kubernetes resource.
-
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.cluster.name | The name of the cluster that the pod is running in. | `opentelemetry-cluster` |
-| k8s.namespace.name | The name of the namespace that the pod is running in. | `default` |
-| k8s.pod.name | The name of the pod. | `opentelemetry-pod-autoconf` |
-| k8s.deployment.name | The name of the deployment. | `opentelemetry` |
+- [Kubernetes](./k8s.md)
 
 ## Compute Instance
 
-Attributes defining a computing instance (e.g. host).
+Attributes defining a computing instance (e.g. host):
 
-### Host
-
-**type:** `host`
-
-**Description:** A host is defined as a general computing instance.
-
-| Attribute  | Description  | Example  |
-|---|---|---|
-| host.hostname | Hostname of the host.<br/> It contains what the `hostname` command returns on the host machine. | `opentelemetry-test` |
-| host.id | Unique host id.<br/> For Cloud this must be the instance_id assigned by the cloud provider | `opentelemetry-test` |
-| host.name | Name of the host.<br/> It may contain what `hostname` returns on Unix systems, the fully qualified, or a name specified by the user. | `opentelemetry-test` |
-| host.type | Type of host.<br/> For Cloud this must be the machine type.| `n1-standard-1` |
-| host.image.name | Name of the VM image or OS install the host was instantiated from. | `infra-ami-eks-worker-node-7d4ec78312`, `CentOS-8-x86_64-1905` |
-| host.image.id | VM image id. For Cloud, this value is from the provider. | `ami-07b06b442921831e5` |
-| host.image.version | The version string of the VM image as defined in [Version Attributes](#version-attributes). | `0.1` |
+- [Host](./host.md)
 
 ## Environment
 
-Attributes defining a running environment (e.g. Operating System, Cloud, Data Center).
+Attributes defining a running environment (e.g. Operating System, Cloud, Data Center):
 
-### Operating System
-
-**type:** `os`
-
-**Description**: The operating system (OS) on which the process represented by this resource is running.
-
-In case of virtualized environments, this is the operating system as it is observed by the process, i.e., the virtualized guest rather than the underlying host.
-
-| Attribute  | Type | Description  | Example  | Required |
-|---|---|---|---|---|
-| `os.type` | string | The operating system type. | `"WINDOWS"` | Yes |
-| `os.description` | string | Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands. | `"Microsoft Windows [Version 10.0.18363.778]"`<br>`"Ubuntu 18.04.1 LTS"` | No |
-
-`os.type` SHOULD be set to one of the values listed below.
-If none of the listed values apply, a custom value best describing the family the operating system belongs to CAN be used.
-
-| Value  | Description |
-|---|---|
-| `WINDOWS` | Microsoft Windows |
-| `LINUX` | Linux |
-| `DARWIN` | Apple Darwin |
-| `FREEBSD` | FreeBSD |
-| `NETBSD` | NetBSD|
-| `OPENBSD` | OpenBSD |
-| `DRAGONFLYBSD` | DragonFly BSD |
-| `HPUX` | HP-UX (Hewlett Packard Unix) |
-| `AIX` | AIX (Advanced Interactive eXecutive) |
-| `SOLARIS` | Oracle Solaris |
-| `ZOS` | IBM z/OS |
-
-### Cloud
-
-**type:** `cloud`
-
-**Description:** A cloud infrastructure (e.g. GCP, Azure, AWS).
-
-| Attribute  | Description  | Example  |
-|---|---|---|
-| cloud.provider | Name of the cloud provider.<br/> Example values are aws, azure, gcp. | `gcp` |
-| cloud.account.id | The cloud account id used to identify different entities. | `opentelemetry` |
-| cloud.region | A specific geographical location where different entities can run | `us-central1` |
-| cloud.zone | Zones are a sub set of the region connected through low-latency links.<br/> In aws it is called availability-zone. | `us-central1-a` |
+- [Operating System](./os.md)
+- [Cloud](./cloud.md)
 
 ## Version Attributes
 
