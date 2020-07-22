@@ -47,6 +47,7 @@
     + [Batch observer](#batch-observer)
   * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
     + [Asynchronous instruments define moment-in-time ratios](#asynchronous-instruments-define-moment-in-time-ratios)
+- [Concurrency](#concurrency)
 - [Related OpenTelemetry work](#related-opentelemetry-work)
   * [Metric Views](#metric-views)
   * [OTLP Metric protocol](#otlp-metric-protocol)
@@ -1067,6 +1068,20 @@ calculate its current relative contribution.  Current relative
 contribution is defined in this way, independent of the collection
 interval duration, thanks to the properties of asynchronous
 instruments.
+
+## Concurrency
+
+For languages which support concurrent execution the Metrics APIs provide
+specific guarantees and safeties. Not all of API functions are safe to
+be called concurrently.
+
+**MeterProvider** - all methods are safe to be called concurrently.
+
+**Meter** - all methods are safe to be called concurrently.
+
+**Instrument** - All methods of any Instrument are safe to be called concurrently.
+
+**Bound Instrument** - All methods of any Bound Instrument are safe to be called concurrently.
 
 ## Related OpenTelemetry work
 
