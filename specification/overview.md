@@ -54,11 +54,8 @@ Each **Span** encapsulates the following state:
 
 - An operation name
 - A start and finish timestamp
-- A set of zero or more key:value **Attributes**. The keys must be strings. The
-  values may be strings, bools, or numeric types.
-- A set of zero or more **Events**, each of which is itself a key:value map
-  paired with a timestamp. The keys must be strings, though the values may be of
-  the same types as Span **Attributes**.
+- [**Attributes**](./common/common.md#attributes): A list of key-value pairs.
+- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
   (via the **SpanContext** of those related **Spans**).
@@ -300,6 +297,4 @@ Span attributes.
 * [Metrics Conventions](metrics/semantic_conventions/README.md)
 
 The type of the attribute SHOULD be specified in the semantic convention
-for that attribute. Array values are allowed for attributes. For
-protocols that do not natively support array values such values MUST be
-represented as JSON strings.
+for that attribute. See more details about [Attributes](./common/common.md#attributes).
