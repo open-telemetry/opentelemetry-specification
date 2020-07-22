@@ -11,7 +11,7 @@ Table of Contents
 
 ## Attributes
 
-Attributes represent a list with zero or more key:value pairs (`Attribute`). An `Attribute` is defined by the following properties:
+Attributes are a list of zero or more key-value pairs. An `Attribute` MUST have the following properties:
 
 - The attribute key, which MUST be a non-`null` and non-empty string.
 - The attribute value, which is either:
