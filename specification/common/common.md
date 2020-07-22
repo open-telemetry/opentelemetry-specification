@@ -14,7 +14,7 @@ Table of Contents
 Attributes represent a list with zero or more key:value pairs (`Attribute`). An `Attribute` is defined by the following properties:
 
 - The attribute key, which MUST be a non-`null` and non-empty string.
-- (Required) The attribute value, which is either:
+- The attribute value, which is either:
   - A primitive type: string, boolean or double (IEEE 754-1985) and int64.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e. it MUST NOT contain values of different types. For protocols that do
