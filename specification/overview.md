@@ -54,7 +54,7 @@ Each **Span** encapsulates the following state:
 
 - An operation name
 - A start and finish timestamp
-- [**Attributes**](./common/common.md#attributes)
+- [**Attributes**](./common/common.md#attributes): A list of key-value pairs.
 - A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
