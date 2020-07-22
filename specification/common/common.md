@@ -15,7 +15,7 @@ Attributes represent a list with zero or more key:value pairs (`Attribute`). An 
 
 - The attribute key, which MUST be a non-`null` and non-empty string.
 - The attribute value, which is either:
-  - A primitive type: string, boolean or double (IEEE 754-1985) and int64.
+  - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e. it MUST NOT contain values of different types. For protocols that do
     not natively support array values such values MUST be represented as JSON strings.
