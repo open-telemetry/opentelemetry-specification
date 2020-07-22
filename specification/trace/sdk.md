@@ -177,7 +177,13 @@ Thus, the SDK specification defines two new terms:
   
 Note: First, these requirements use "interface" in the most abstract sense --
 it does not need to be an actual Java `interface` for example but could also be
-a `final` POJO. Second, these are abstract requirements for interfaces. Not all
+a `final` POJO, or, especially in the case of read/write span, even two (or more)
+separate objects that are passed together to give full read/write capabilities
+(when chosing this implemenation technique,
+changes through one object should be reflected in the other
+objects immediately if they are observable through them at all
+to avoid introducing suble gotchas).
+Second, these are abstract requirements for interfaces. Not all
 places in the spec that talk about a readable span need to be implemented by the
 same concrete interface. For example, this allows using a different interface
 for the readable span passed to an exporter than for the readable span passed
