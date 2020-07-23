@@ -7,7 +7,7 @@ Particular operations may refer to or require some of these attributes.
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
-
+- [Display hints for spans](#display-hints)
 - [General network connection attributes](#general-network-connection-attributes)
   * [`net.transport` attribute](#nettransport-attribute)
   * [`net.*.name` attributes](#netname-attributes)
@@ -15,6 +15,36 @@ Particular operations may refer to or require some of these attributes.
 - [General identity attributes](#general-identity-attributes)
 
 <!-- tocstop -->
+
+## Display hints
+
+UIs are expected to utilize all available semantic conventions when choosing how to 
+display a span, and to make their own decisions about what information is most important. 
+However, there are cases when display hints can be helpful, especially when the spans 
+represent a non-standard operation or have a span name which is useful for grouping but 
+poor for human readability.
+
+| Attribute name | Notes and examples                                                  |
+| :------------- | :------------------------------------------------------------------ |
+|`display.name`  | a custom span name to display instead of the span name              |
+|`display.field` | the key to the attribute which should be used as the display name   |
+|`display.type`  | clarifies the type of operation being performed                     |
+
+
+All display hints are optional. These display hints are not required to be set by 
+instrumentation, and it is not required that UIs respect their values, even when they 
+are set.
+
+The value of `display.field` MUST match another attribute key, with the expectation that 
+the value of that field will be used as the span name in the display. If both 
+`display.name` and `display.field` are set, `display.name` should take precedence.
+
+The `display.type` field may match an appropriate namespace (db, http, faas, etc) or be 
+completely custom.
+
+
+
+
 
 ## General network connection attributes
 
