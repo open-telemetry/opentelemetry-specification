@@ -44,6 +44,25 @@ should be ignored.
 The `display.type` field may match an appropriate namespace (db, http, faas, etc) or be 
 completely custom.
 
+### Example 
+Imagine instrumenting a simple http client, HipClient, which does not have a concept 
+of routes or handlers. In this case, the span name would default to a low cardinaility grouping
+such as "HTTP {METHOD_NAME}". This may be useful for grouping, but it is not nearly as helpful as 
+the url, or potentially method name plus the url. It may also be helpful to display to the user
+that the type of http request was a HipClient request.
+
+In this example, the low cardinality span name could be replaced with something more readable:
+
+* **Span Name**: "HTTP GET"
+* **display.name**: "GET /account/123"
+* **display.type**: "HipClient"
+
+Alternatively, if the `http.url` attribute has been set on the span, it could be referenced 
+for the display name:
+* **Span Name**: "HTTP GET"
+* **display.attribute**: "http.url"
+* **display.type**: "HipClient"
+
 ## General network connection attributes
 
 These attributes may be used for any network related operation.
