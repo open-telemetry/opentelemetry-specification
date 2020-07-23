@@ -24,11 +24,11 @@ However, there are cases when display hints can be helpful, especially when the 
 represent a non-standard operation or have a span name which is useful for grouping but 
 poor for human readability.
 
-| Attribute name | Notes and examples                                                  |
-| :------------- | :------------------------------------------------------------------ |
-|`display.name`  | a custom span name to display instead of the span name              |
+| Attribute name     | Notes and examples                                                  |
+| :----------------- | :------------------------------------------------------------------ |
+|`display.name`      | a custom span name to display instead of the span name              |
 |`display.attribute` | the key to the attribute which should be used as the display name   |
-|`display.type`  | clarifies the type of operation being performed                     |
+|`display.type`      | clarifies the type of operation being performed                     |
 
 
 All display hints are optional. These display hints are not required to be set by 
