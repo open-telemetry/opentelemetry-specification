@@ -42,10 +42,6 @@ the value of that field will be used as the span name in the display. If both
 The `display.type` field may match an appropriate namespace (db, http, faas, etc) or be 
 completely custom.
 
-
-
-
-
 ## General network connection attributes
 
 These attributes may be used for any network related operation.
