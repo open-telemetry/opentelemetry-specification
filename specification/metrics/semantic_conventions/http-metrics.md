@@ -10,9 +10,10 @@ to metric events it allows for finely tuned filtering.
 Below is a table of the metric instruments that MUST be used for HTTP spans. They MUST be of the specified
 type and units.
 
-| Name                                | Span kind       | Type          | Units         | Description |
-|-------------------------------------|-----------------|---------------|---------------|-------------|
-| `http.{span.kind}.request.duration` | Client & Server | ValueRecorder | milliseconds  | measure a request duration |
+| Name                                | Span kind       | Type          | Units        | Description |
+|-------------------------------------|-----------------|---------------|--------------|-------------|
+| `http.{span.kind}.duration`         | Client & Server | ValueRecorder | milliseconds | measure a request duration |
+| `http.{span.kind}.request`          | Client & Server | Count         | requests     | measure number of requests |
 
 ### Labels
 
