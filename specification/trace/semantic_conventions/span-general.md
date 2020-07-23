@@ -37,7 +37,9 @@ are set.
 
 The value of `display.attribute` MUST match another attribute key, with the expectation that 
 the value of that attribute will be used as the span name in the display. If both 
-`display.name` and `display.attribute` are set, `display.name` should take precedence.
+`display.name` and `display.attribute` are set, `display.name` should take precedence. If 
+the value of the attribute `display.attribute` points to is unset or empty, this field 
+should be ignored.
 
 The `display.type` field may match an appropriate namespace (db, http, faas, etc) or be 
 completely custom.
