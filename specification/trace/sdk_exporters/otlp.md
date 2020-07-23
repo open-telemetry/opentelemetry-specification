@@ -1,6 +1,6 @@
 # OpenTelemetry Protocol Collector Exporter
 
-This document specifies the configuration options available to the OpenTelemetry Protocol ([OTLP](https://github.com/open-telemetry/opentelemetry-proto)) [Collector](https://github.com/open-telemetry/opentelemetry-collector) `SpanExporter` and `MetricsExporter` as well as the retry behavior.
+This document specifies the configuration options available to the OpenTelemetry Protocol ([OTLP](https://github.com/open-telemetry/oteps/blob/master/text/0035-opentelemetry-protocol.md)) [Collector](https://github.com/open-telemetry/opentelemetry-collector) `SpanExporter` and `MetricsExporter` as well as the retry behavior.
 
 ## Configuration Options
 
