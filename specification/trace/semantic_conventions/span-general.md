@@ -27,7 +27,7 @@ poor for human readability.
 | Attribute name | Notes and examples                                                  |
 | :------------- | :------------------------------------------------------------------ |
 |`display.name`  | a custom span name to display instead of the span name              |
-|`display.field` | the key to the attribute which should be used as the display name   |
+|`display.attribute` | the key to the attribute which should be used as the display name   |
 |`display.type`  | clarifies the type of operation being performed                     |
 
 
@@ -35,9 +35,9 @@ All display hints are optional. These display hints are not required to be set b
 instrumentation, and it is not required that UIs respect their values, even when they 
 are set.
 
-The value of `display.field` MUST match another attribute key, with the expectation that 
-the value of that field will be used as the span name in the display. If both 
-`display.name` and `display.field` are set, `display.name` should take precedence.
+The value of `display.attribute` MUST match another attribute key, with the expectation that 
+the value of that attribute will be used as the span name in the display. If both 
+`display.name` and `display.attribute` are set, `display.name` should take precedence.
 
 The `display.type` field may match an appropriate namespace (db, http, faas, etc) or be 
 completely custom.
