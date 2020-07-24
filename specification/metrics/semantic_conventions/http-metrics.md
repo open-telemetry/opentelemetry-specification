@@ -29,14 +29,16 @@ and whether they should be on server, client, or both types of HTTP metric event
 |--------------------|-----------------|-------------------|--------------------|
 | `http.method`      | Client & Server | Yes               | The HTTP request method. E.g. `"GET"` |
 | `http.host`        | Client & Server | see [label substitution](#label-substitution) | The value of the [HTTP host header][]. When the header is empty or not present, this label should be the same. |
-| `http.scheme`      | Client & Server | Optional          | The URI scheme identifying the used protocol: `"http"` or `"https"` |
+| `http.scheme`      | Client & Server | see [label substitution](#label-substitution) | The URI scheme identifying the used protocol: `"http"` or `"https"` |
 | `http.status_code` | Client & Server | Optional          | [HTTP response status code][]. E.g. `200` (integer) |
 | `http.status_text` | Client & Server | Optional          | [HTTP reason phrase][]. E.g. `"OK"` |
 | `http.flavor`      | Client & Server | Optional          | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |
 | `net.peer.name`    | Client          | see [1] in [label substitution](#label-substitution) | The name of the service the request is going to. |
 | `net.peer.port`    | Client          | see [1] in [label substitution](#label-substitution) | The port of the service the request is going to. E.g. `8080` |
 | `net.peer.ip`      | Client          | see [1] in [label substitution](#label-substitution) | The IP address of the service the request is going to. E.g. `255.255.255.0` |
-| `http.server_name` | Server          | see [2] [label substitution](#label-substitution) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this label MUST NOT be set ( `net.host.name` should be used instead). |
+| `http.server_name` | Server          | see [2] in [label substitution](#label-substitution) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this label MUST NOT be set ( `net.host.name` should be used instead). |
+| `net.host.name`    | Server          | see [2] in [label substitution](#label-substitution) | The name of the host. |
+| `net.host.port`    | Server          | see [2] in [label substitution](#label-substitution) | The port of the host. |
 | `http.route`       | Server          | Optional          | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. |
 
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
@@ -49,8 +51,8 @@ To avoid high cardinality the following labels SHOULD substitute any parameters 
 
 | Label name        | Type            | Recommended |  Notes and examples |
 |-------------------|-----------------|-------------|---------------------|
-|`http.url`         | Client & Server | see [1] & [2] in [label substitution](#label-substitution) | The originally requested URL |
-|`http.target`      | Client & Server | see [1] & [2] in [label substitution](#label-substitution) | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/{id}/?q={}"`. |
+|`http.url`         | Client & Server | see [label substitution](#label-substitution) | The originally requested URL |
+|`http.target`      | Client & Server | see [label substitution](#label-substitution) | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/{id}/?q={}"`. |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 
