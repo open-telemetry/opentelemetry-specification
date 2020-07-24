@@ -21,6 +21,7 @@ Table of Contents
       - [Get](#get)
 - [Composite Propagator](#composite-propagator)
 - [Global Propagators](#global-propagators)
+- [Additional Propagators](#additional-propagators)
 
 </details>
 
@@ -266,3 +267,10 @@ Sets the global `Propagator` instance.
 Required parameters:
 
 - A `Propagator`. This usually will be a composite instance.
+
+## Additional Propagators
+
+Additional `Propagator`s implementing well known propagation protocols, if offered,
+SHOULD be be offered as official OpenTelemetry extension packages.
+Examples are `Propagator`s implementing the Jaeger trace header protocol or the
+AWS X-Ray trace header protocol.

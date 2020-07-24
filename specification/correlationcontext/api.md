@@ -15,6 +15,7 @@ Table of Contents
 - [CorrelationContext Propagation](#correlationcontext-propagation)
   - [Serialization](#serialization)
 - [Conflict Resolution](#conflict-resolution)
+- [Included Propagators](#included-propagators)
 
 </details>
 
@@ -136,3 +137,9 @@ otcorrelations: user=foo%40example.com,name=Example%20Name
 
 If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence. The value
 is replaced with the added value (regardless if it is locally generated or received from a remote peer).
+
+## Included Propagators
+
+The API layer MUST include the following `Propagator`s:
+
+* A `HTTPTextPropagator` implementing the [w3c Baggage Specification](https://w3c.github.io/baggage/).

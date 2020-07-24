@@ -8,6 +8,7 @@
 * [Tracer Creation](#tracer-creation)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
+* [Included Propagators](#included-propagators)
 
 </details>
 
@@ -398,6 +399,12 @@ public interface SpanExporter {
  void shutdown();
 }
 ```
+
+## Included Propagators
+
+The SDK layer MUST include the following propagators:
+
+* A `HTTPTextPropagator` implementing the [B3 Propagation Specification](https://github.com/openzipkin/b3-propagation).
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
 [otep-83]: https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md
