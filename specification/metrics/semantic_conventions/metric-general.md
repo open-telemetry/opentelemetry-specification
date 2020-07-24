@@ -33,7 +33,7 @@ For example:
 #### Labels
 
 Labels applied to these metric recordings should follow the attribute semantic conventions
-of the Spans from which they are derived.
+of the corresponding Span for the operation.
 
 Care should be taken when adding labels to the duration instruments in order to avoid
 excessive cardinality.
