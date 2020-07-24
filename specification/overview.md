@@ -190,7 +190,7 @@ from the backend.
 
 ### Data model
 
-[Log Data Model](data-model.md) defines how logs and events are understood by
+[Log Data Model](logs/data-model.md) defines how logs and events are understood by
 OpenTelemetry.
 
 ## CorrelationContext
