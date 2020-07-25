@@ -5,36 +5,38 @@
 Table of Contents
 </summary>
 
-* [Data types](#data-types)
-  * [Time](#time)
-    * [Timestamp](#timestamp)
-    * [Duration](#duration)
-* [Tracer](#tracer)
-  * [Obtaining a tracer](#obtaining-a-tracer)
-  * [Tracer operations](#tracer-operations)
-* [SpanContext](#spancontext)
-* [Span](#span)
-  * [Span creation](#span-creation)
-    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-    * [Add Links](#add-links)
-  * [Span operations](#span-operations)
-    * [Get Context](#get-context)
-    * [IsRecording](#isrecording)
-    * [Set Attributes](#set-attributes)
-    * [Add Events](#add-events)
-    * [Set Status](#set-status)
-    * [UpdateName](#updatename)
-    * [End](#end)
-    * [Record Exception](#record-exception)
-  * [Span lifetime](#span-lifetime)
-* [Status](#status)
-  * [StatusCanonicalCode](#statuscanonicalcode)
-  * [Status creation](#status-creation)
-  * [GetCanonicalCode](#getcanonicalcode)
-  * [GetDescription](#getdescription)
-  * [GetIsOk](#getisok)
-* [SpanKind](#spankind)
-* [Concurrency](#concurrency)
+- [Tracing API](#tracing-api)
+  - [Data types](#data-types)
+    - [Time](#time)
+      - [Timestamp](#timestamp)
+      - [Duration](#duration)
+  - [TracerProvider](#tracerprovider)
+    - [TracerProvider operations](#tracerprovider-operations)
+  - [Tracer](#tracer)
+    - [Tracer operations](#tracer-operations)
+  - [SpanContext](#spancontext)
+  - [Span](#span)
+    - [Span Creation](#span-creation)
+      - [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+      - [Add Links](#add-links)
+    - [Span operations](#span-operations)
+      - [Get Context](#get-context)
+      - [IsRecording](#isrecording)
+      - [Set Attributes](#set-attributes)
+      - [Add Events](#add-events)
+      - [Set Status](#set-status)
+      - [UpdateName](#updatename)
+      - [End](#end)
+      - [Record Exception](#record-exception)
+    - [Span lifetime](#span-lifetime)
+  - [Status](#status)
+    - [StatusCanonicalCode](#statuscanonicalcode)
+    - [Status creation](#status-creation)
+    - [GetCanonicalCode](#getcanonicalcode)
+    - [GetDescription](#getdescription)
+    - [GetIsOk](#getisok)
+  - [SpanKind](#spankind)
+  - [Concurrency](#concurrency)
 
 </details>
 
@@ -156,36 +158,35 @@ A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
 `SpanContext` MUST be a final (sealed) class.
 
-The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext
+The OpenTelemetry `SpanContext` representation conforms to the [W3C TraceContext
 specification](https://www.w3.org/TR/trace-context/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
 `TraceFlags` and system-specific `TraceState` values.
 
-`TraceId` A valid trace identifier is a 16-byte array with at least one
+`TraceId` A valid trace identifier is an 16-byte array with at least one
 non-zero byte.
 
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero
 byte.
 
-`TraceFlags` contain details about the trace. Unlike Tracestate values,
-TraceFlags are present in all traces. Currently, the only `TraceFlags` is a
-boolean `sampled`
-[flag](https://www.w3.org/TR/trace-context/#trace-flags).
+`TraceFlags` contain details about the trace. Unlike TraceState values,
+TraceFlags are present in all traces. The current version of the specification
+only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
 
-`Tracestate` carries system-specific configuration data, represented as a list
-of key-value pairs. TraceState allows multiple tracing systems to participate in
-the same trace.
+`TraceState` carries system-specific configuration data, represented as a list
+of key-value pairs separated by commas (`,`). TraceState allows multiple tracing
+systems to participate in the same trace. Please review the [W3C
+specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
+details on this field.
 
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
-`IsRemote` is a boolean flag which returns true if the SpanContext was propagated
-from a remote parent.
-When extracting a `SpanContext` through the Propagators API, its `IsRemote` flag MUST
-be set to true, whereas the SpanContext of any child spans MUST have it set to false.
-
-Please review the W3C specification for details on the [Tracestate
-field](https://www.w3.org/TR/trace-context/#tracestate-field).
+`IsRemote` is a boolean flag which returns true if the SpanContext was
+propagated from a remote parent. When extracting a `SpanContext` through the
+[Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
+flag MUST be set to true, whereas the SpanContext of any child spans MUST have
+it set to false.
 
 ## Span
 
