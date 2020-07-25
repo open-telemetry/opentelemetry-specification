@@ -44,9 +44,8 @@ The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
 
-The SDK defines the two interfaces [`Sampler`](#sampler) and
-[`Decision`](#decision) as well as a set of [built-in
-samplers](#built-in-samplers).
+The SDK defines the interface [`Sampler`](#sampler) as well as a set of
+[built-in samplers](#built-in-samplers).
 
 ### Sampler
 

@@ -1,0 +1,28 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**.md",
+          "toc.yml"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          ".markdownlint.yaml",
+          ".vscode/settings.json",
+          "**.png"
+        ]
+      }
+    ],
+    "dest": "_site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "noLangKeyword": false,
+    "keepFileLink": false,
+    "cleanupCacheHistory": true,
+    "disableGitFeatures": true
+  }
+}
