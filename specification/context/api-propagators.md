@@ -21,7 +21,7 @@ Table of Contents
       - [Get](#get)
 - [Composite Propagator](#composite-propagator)
 - [Global Propagators](#global-propagators)
-- [Additional Propagators](#additional-propagators)
+- [Included Propagators Distribution](#included-propagators-distribution)
 
 </details>
 
@@ -268,9 +268,10 @@ Required parameters:
 
 - A `Propagator`. This usually will be a composite instance.
 
-## Additional Propagators
+## Included Propagators Distribution
 
-Additional `Propagator`s implementing well known propagation protocols, if offered,
-SHOULD be be offered as official OpenTelemetry extension packages.
-Examples are `Propagator`s implementing the Jaeger trace header protocol or the
-AWS X-Ray trace header protocol.
+`Propagator`s implementing officially supported protocols such as
+[B3 Propagation Specification](https://github.com/openzipkin/b3-propagation),
+as well as additionally offered `Propagator`s implementing well known
+protocols such as AWS X-Ray trace header protocol, SHOULD be part of
+official OpenTelemetry extension packages.
