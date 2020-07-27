@@ -28,7 +28,7 @@ span_kind ::= "client"
           |   "consumer"
           |   "internal"
 
-attributes ::= (id type brief examples | ref [brief] [examples]) [required] [sampling_relevant] [note]
+attributes ::= (id type brief examples | ref [brief] [examples]) [required] [note]
 
 # ref MUST point to an existing attribute id
 ref ::= id
@@ -49,10 +49,8 @@ members ::= member {member}
 
 member ::= id value [brief] [note]
 
-required ::= "yes"
-         |   "conditional"
-
-sampling_relevant ::= boolean
+required ::= "always"
+         |   "conditional" <condition>
 
 examples ::= <example_value> {<example_value>}
 
@@ -84,7 +82,7 @@ The field `semconv` represents a semantic convention and it is made by:
 - `prefix`, optional string, prefix for the attributes for this semantic convention.
     It defaults to an empty string.
 - `extends`, optional string, reference another semantic convention `id`.
-    It inherits the prefix and all attributes defined in the specified semantic convention.
+    It inherits the prefix, constraints, and all attributes defined in the specified semantic convention.
 - `span_kind`, optional enum, specifies the kind of the span.
     Leaf semconv nodes (in the hierarchy tree) that do not have this field set will generate a warning.
 - `attributes`, list of attributes that belong to the semantic convention.
@@ -106,9 +104,8 @@ An attribute is defined by:
 - `ref`, optional string, reference an existing attribute, see later.
 - `required`, optional, specifies if the attribute is mandatory.
     Can be "always", or "conditional". When omitted, the attribute is not required.
-    When it set to "conditional", `note` is expected to contain a description of
+    When set to "conditional",the string provided as `<condition>` MUST specify
     the conditions under which the attribute is required.
-- `sampling_relevant`, optional boolean, specifies if it is relevant for sampling. It defaults to `false`.
 - `brief`, string, brief description of the attribute.
 - `note`, optional string, additional notes to the attribute. It defaults to an empty string.
 - `examples`, sequence/dictionary of example values for the attribute.
