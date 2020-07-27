@@ -142,4 +142,4 @@ is replaced with the added value (regardless if it is locally generated or recei
 
 The API layer MUST include the following `Propagator`s:
 
-* A `HTTPTextPropagator` implementing the [w3c Baggage Specification](https://w3c.github.io/baggage/).
+* A `HTTPTextPropagator` implementing the [W3C Baggage Specification](https://w3c.github.io/baggage/).
