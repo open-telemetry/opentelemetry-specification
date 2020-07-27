@@ -79,7 +79,7 @@ class MarkdownRenderer:
     valid_parameters = ["tag", "full", "remove_constraints"]
 
     prelude = "<!-- semconv {} -->\n"
-    table_headers = "| Attribute  | Type | Description  | Example  | Required |\n|---|---|---|---|---|"
+    table_headers = "| Attribute  | Type | Description  | Example  | Required |\n|---|---|---|---|---|\n"
 
     def __init__(
         self,
