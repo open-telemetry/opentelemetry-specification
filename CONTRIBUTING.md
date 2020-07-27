@@ -111,7 +111,7 @@ Open a pull request against the master branch.
 
 A PR is considered to be **ready to merge** when:
 
-* It has received two approvals from the [code owners](./CODEOWNERS) (at
+* It has received two approvals from the [code owners](./.github/CODEOWNERS) (at
   different companies).
 * Major feedbacks are resolved.
 * It has been at least two working days since the last modification (except for
