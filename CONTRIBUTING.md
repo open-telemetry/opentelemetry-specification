@@ -82,3 +82,52 @@ To quickly fix typos, use
 ```bash
 make misspell-correction
 ```
+
+## Pull Request
+
+### How to Send Pull Requests
+
+Everyone is welcome to contribute code to `OpenTelemetry Specification` via
+GitHub pull requests (PRs).
+
+To create a new PR, check out a new branch, make modifications and push the branch:
+
+```sh
+git checkout -b ${USERNAME}/feature_branch_name
+# edit files
+git commit -m "Description"
+git push ${USERNAME}/feature_branch_name
+```
+
+Open a pull request against the master branch.
+
+### How to Receive Comments
+
+* If the PR is not ready for review, please put `[WIP]` in the title, tag it
+  as `work-in-progress`, or mark it as [`draft`](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
+* Make sure CLA is signed and CI is clear.
+
+### How to Get PR Merged
+
+A PR is considered to be **ready to merge** when:
+
+* It has received two approvals from the [code owners](./CODEOWNERS) (at
+  different companies).
+* Major feedbacks are resolved.
+* It has been at least two working days since the last modification (except for
+  the trivial updates, such like typo, cosmetic, rebase, etc.). This gives
+  people reasonable time to review.
+* Trivial change (typo, cosmetic, CI improvement, etc.) doesn't have to wait for
+  one day.
+
+Any [spec
+approver](https://github.com/orgs/open-telemetry/teams/specs-approvers) can
+merge the PR once it is **ready to merge**.
+
+### If a PR is stuck
+
+If a PR has been stuck for more than 2 weeks, the owner should bring it to the
+[OpenTelemetry Specification SIG
+meeting](https://github.com/open-telemetry/community#cross-language-specification).
+
+If a PR has been opened for more than 6 months, it will be closed.
