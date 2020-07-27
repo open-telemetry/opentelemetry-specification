@@ -144,7 +144,7 @@ groups:
         examples: '83.164.160.102'
     constraints:
       - any_of:
-        - [http.url]
         - [http.scheme, http.host, http.target]
         - [http.scheme, http.server_name, net.host.port, http.target]
         - [http.scheme, net.host.name, net.host.port, http.target]
+        - [http.url]

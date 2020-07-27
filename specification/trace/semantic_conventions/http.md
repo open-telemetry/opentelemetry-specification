@@ -214,10 +214,10 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 
 At least one of the following is required:
 
-* `http.url`
 * `http.scheme`, `http.host`, `http.target`
 * `http.scheme`, `http.server_name`, [net.host.port](span-general.md), `http.target`
 * `http.scheme`, [net.host.name](span-general.md), [net.host.port](span-general.md), `http.target`
+* `http.url`
 <!-- endsemconv -->
 
 Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones.
