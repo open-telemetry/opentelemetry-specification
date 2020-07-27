@@ -161,7 +161,7 @@ specification](https://www.w3.org/TR/trace-context/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
 `TraceFlags` and system-specific `TraceState` values.
 
-`TraceId` A valid trace identifier is an 16-byte array with at least one
+`TraceId` A valid trace identifier is a 16-byte array with at least one
 non-zero byte.
 
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero
