@@ -22,6 +22,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
   - [Resource](specification/resource/sdk.md)
   - [Configuration](specification/sdk-configuration.md)
 - Data Specification
+  - [Semantic Conventions](specification/overview.md#semantic-conventions)
   - [Protocol](specification/protocol/README.md)
 - About the Project
   - [Timeline](#project-timeline)
