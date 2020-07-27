@@ -118,7 +118,7 @@ A PR is considered to be **ready to merge** when:
   the trivial updates, such like typo, cosmetic, rebase, etc.). This gives
   people reasonable time to review.
 * Trivial change (typo, cosmetic, CI improvement, etc.) doesn't have to wait for
-  one day.
+  two days.
 
 Any [spec
 approver](https://github.com/orgs/open-telemetry/teams/specs-approvers) can
