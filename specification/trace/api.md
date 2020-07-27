@@ -9,8 +9,9 @@ Table of Contents
   * [Time](#time)
     * [Timestamp](#timestamp)
     * [Duration](#duration)
+* [TracerProvider](#tracerprovider)
+  * [TracerProvider operations](#tracerprovider-operations)
 * [Tracer](#tracer)
-  * [Obtaining a tracer](#obtaining-a-tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
 * [Span](#span)
@@ -106,7 +107,7 @@ That API MUST accept the following parameters:
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the [version](../resource/semantic_conventions#version-attributes) of the instrumentation library
+- `version` (optional): Specifies the [version](../resource/semantic_conventions/README.md#version-attributes) of the instrumentation library
   (e.g. `semver:1.0.0`).
 
 It is unspecified whether or under which conditions the same or different
@@ -334,7 +335,7 @@ description](../overview.md#links-between-spans).
 A `Link` is defined by the following properties:
 
 - (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`s as defined [here](../).
+- (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
 
