@@ -103,8 +103,8 @@ Open a pull request against the master branch.
 
 ### How to Receive Comments
 
-* If the PR is not ready for review, please put `[WIP]` in the title, tag it
-  as `work-in-progress`, or mark it as [`draft`](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
+* If the PR is not ready for review, please put `[WIP]` in the title or mark it
+  as [`draft`](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 * Make sure CLA is signed and CI is clear.
 
 ### How to Get PR Merged
