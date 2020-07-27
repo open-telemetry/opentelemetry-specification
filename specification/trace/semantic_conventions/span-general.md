@@ -25,32 +25,32 @@ while the `net.host.*` properties describe the local end.
 In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
 the `net.peer.*` properties of a client are equal to the `net.host.*` properties of the server and vice versa.
 
-|  Attribute name  |                                 Notes and examples                                |
-| :--------------- | :-------------------------------------------------------------------------------- |
-| `net.transport` | Transport protocol used. See [note below](#net.transport).                         |
-| `net.peer.ip`   | Remote address of the peer (dotted decimal for IPv4 or [RFC5952][] for IPv6)       |
-| `net.peer.port` | Remote port number as an integer. E.g., `80`.                                      |
-| `net.peer.name` | Remote hostname or similar, see [note below](#net.name).                           |
-| `net.host.ip`   | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.         |
-| `net.host.port` | Like `net.peer.port` but for the host port.                                        |
-| `net.host.name` | Local hostname or similar, see [note below](#net.name).                            |
+<!-- semconv network -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `net.transport` | string enum | Transport protocol used. See note below. | `IP.TCP` | No |
+| `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
+| `net.peer.port` | number | Remote port number. | `80`<br>`8080`<br>`443` | No |
+| `net.peer.name` | string | Remote hostname or similar, see note below. | `example.com` | No |
+| `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
+| `net.host.port` | number | Like `net.peer.port` but for the host port. | `35555` | No |
+| `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
 
-[RFC5952]: https://tools.ietf.org/html/rfc5952
+`net.transport` MUST be one of the following:
 
-<a name="net.transport"></a>
+| Value  | Description |
+|---|---|
+| `IP.TCP` | IP.TCP |
+| `IP.UDP` | IP.UDP |
+| `IP` | Another IP-based protocol |
+| `Unix` | Unix Domain socket. See below. |
+| `pipe` | Named or anonymous pipe. See note below. |
+| `inproc` | In-process communication. [1] |
+| `other` | Something else (non IP-based). |
 
-### `net.transport` attribute
+**[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
 
-This attribute should be set to the name of the transport layer protocol (or the relevant protocol below the "application protocol"). One of these strings should be used:
-
-* `IP.TCP`
-* `IP.UDP`
-* `IP`: Another IP-based protocol.
-* `Unix`: Unix Domain socket. See note below.
-* `pipe`: Named or anonymous pipe. See note below.
-* `inproc`: Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
-* `other`: Something else (not IP-based).
-
+<!-- endsemconv -->
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 
 <a name="net.name"></a>
