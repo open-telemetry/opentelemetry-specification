@@ -64,7 +64,7 @@ Synonyms: *Instrumenting Library*.
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#obtaining-a-tracer)/[Obtaining a Meter](metrics/api.md#meter-interface)).
+creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meter-interface)).
 The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
 
 ## Logs

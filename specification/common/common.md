@@ -5,7 +5,7 @@
 Table of Contents
 </summary>
 
-- [Attributes](#attribute)
+- [Attributes](#attributes)
 
 </details>
 
