@@ -49,7 +49,7 @@ The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 
 ### Sampler
 
-`Sampler` interface allows to create custom samplers which will return a
+`Sampler` interface allows users to create custom samplers which will return a
 sampling `SamplingResult` based on information that is typically available just
 before the `Span` was created.
 
@@ -94,6 +94,8 @@ be displayed on debug pages or in the logs. Example:
 Description MUST NOT change over time and caller can cache the returned value.
 
 ### Built-in samplers
+OpenTelemetry supports a number of built-in samplers to choose from. 
+The default sampler if one is not specified is `ParentOrElse(AlwaysOn)`.
 
 #### AlwaysOn
 
@@ -121,7 +123,6 @@ of the `TraceID`.
   * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
   * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
 * If no parent (root span) exists returns the result of the `delegateSampler`.
-* `ParentOrElse(AlwaysOn)` is the default sampler. 
 * Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
 
 |Parent|`ParentOrElse(delegateSampler)`
