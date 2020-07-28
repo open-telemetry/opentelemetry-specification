@@ -83,7 +83,7 @@ To quickly fix typos, use
 make misspell-correction
 ```
 
-## Pull Request
+## Pull Requests
 
 ### How to create a PR
 
