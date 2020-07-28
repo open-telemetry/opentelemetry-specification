@@ -90,7 +90,9 @@ make misspell-correction
 Everyone is welcome to contribute to the OpenTelemetry specification via GitHub
 pull requests (PRs).
 
-To create a new PR, fork the project in GitHub and clone the upstream repo:
+To [create a new
+PR](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request),
+fork the project in GitHub and clone the upstream repo:
 
 ```sh
 git clone https://github.com/open-telemetry/opentelemetry-specification.git
