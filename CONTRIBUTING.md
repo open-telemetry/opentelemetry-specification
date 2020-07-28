@@ -123,8 +123,9 @@ and comment on a PR that doesn't have CLA signed.
 
 A PR is considered to be **ready to merge** when:
 
-* It has received two approvals from the [code owners](./.github/CODEOWNERS) (at
-  different companies).
+* It has received more than two approvals from the [code
+  owners](./.github/CODEOWNERS) (if approvals are from only one company, it
+  won't count).
 * There is no `request changes` from the [code owners](./.github/CODEOWNERS).
 * It has been at least two working days since the last modification (except for
   the trivial updates, such like typo, cosmetic, rebase, etc.). This gives
