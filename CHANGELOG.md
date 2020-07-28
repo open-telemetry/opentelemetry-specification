@@ -12,7 +12,7 @@ New:
 - Add resource semantic conventions for operating systems ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
 - Add Span API and semantic conventions for exceptions
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697),
-  [#???](https://github.com/open-telemetry/opentelemetry-specification/pull/???))
+  [#747](https://github.com/open-telemetry/opentelemetry-specification/pull/747))
 
 Updates:
 
