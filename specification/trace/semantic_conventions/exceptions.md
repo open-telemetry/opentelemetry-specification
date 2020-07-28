@@ -26,6 +26,7 @@ their types.
 | exception.type       | String | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. E.g. "java.net.ConnectException", "OSError"                                                                                                                                                                                                     | One of `exception.type` or `exception.message` is required |
 | exception.message    | String | The exception message. E.g. `"Division by zero"`, `"Can't convert 'int' object to str implicitly"`                                                                                                                                                                                                                                                                                                                                  | One of `exception.type` or `exception.message` is required |
 | exception.stacktrace | String | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. E.g. `"Exception in thread \"main\" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)"`. | No                                                         |
+| exception.event      | String | An enum-like string describing the event that happened with the exception. [See below.](#exception.event) | Yes                                                         |
 
 ### Stacktrace Representation
 
@@ -56,3 +57,34 @@ grained information from a stacktrace, if necessary.
 [csharp-stacktrace]: https://docs.microsoft.com/en-us/dotnet/api/system.exception.tostring
 [go-stacktrace]: https://golang.org/pkg/runtime/debug/#Stack
 [telemetry-sdk-resource]: https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#telemetry-sdk
+
+### exception.event
+
+This string describes what event occurred. It MUST be one of the following strings:
+
+* `handled`: The exception was caught without rethrowing it.
+* `translated`: A special case of `handled`:
+  If the exception was translated into some non-exception error indicator
+  (e.g. a `KeyNotFoundException` was caught and translated into an HTTP 404 status code).
+  Instrumentations may not be able distinguish this from `handled` and SHOULD use `handled` if in doubt.
+* `thrown`: The exception was thrown.
+  Typical code that should set this: `throw new RuntimeException("Error!")`.
+* `rethrown`: The exception was caught and then re-thrown as-is.
+  Typical code that should set this: `throw;` in C++,
+  `raise` (without argument) in Python, `catch (... e) { ...; throw e}` in Java.
+  If a new exception object is thrown (even if a previous exception is the cause),
+  `thrown` MUST be used instead.
+  Instrumentations may not be able distinguish this from `thrown` and SHOULD use `thrown` if in doubt.
+
+Note that instrumentations are not expected to record all exception events.
+Typically, `thrown` is the most important events.
+`rethrown` may also be useful especially if the original `thrown` event was not instrumented.
+Instrumentations should use good judgment of when to record `translated` and especially `handled` events.
+They may often not be that interesting and exception events can be relatively heavyweight.
+
+In particular, there is one typical case where multiple closely-related exception events occur:
+If an exception is handled by throwing a new exception,
+logically both a `handled` and a `thrown` event occur.
+As information about the original exception is usually found in the cause-chain
+encoded in the `exception.stacktrace` of the `thrown` exception,
+instrumentations SHOULD NOT record the the `handled` exception in this case.
