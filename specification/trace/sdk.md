@@ -97,7 +97,6 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 #### AlwaysOn
 
-* This is the default sampler.
 * Returns `RECORD_AND_SAMPLED` always.
 * Description MUST be `AlwaysOnSampler`.
 
@@ -122,6 +121,7 @@ of the `TraceID`.
   * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
   * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
 * If no parent (root span) exists returns the result of the `delegateSampler`.
+* `ParentOrElse(AlwaysOn)` is the default sampler. 
 * Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
 
 |Parent|`ParentOrElse(delegateSampler)`
