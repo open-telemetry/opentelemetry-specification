@@ -95,7 +95,7 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 ### Built-in samplers
 OpenTelemetry supports a number of built-in samplers to choose from. 
-The default sampler if one is not specified is `ParentOrElse(AlwaysOn)`.
+The default sampler is `ParentOrElse(AlwaysOn)`.
 
 #### AlwaysOn
 
