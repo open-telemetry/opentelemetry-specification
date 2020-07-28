@@ -79,7 +79,7 @@ This string describes what event occurred. It MUST be one of the following strin
   Instrumentations may not be able distinguish this from `thrown` and SHOULD use `thrown` if in doubt.
 
 Note that instrumentations are not expected to record all exception events.
-Typically, `thrown` is the most important events.
+Typically, `thrown` is the most important event.
 `rethrown` may also be useful especially if the original `thrown` event was not instrumented.
 Instrumentations should use good judgment of when to record `translated` and especially `handled` events.
 They may often not be that interesting and exception events can be relatively heavyweight.
