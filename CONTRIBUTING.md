@@ -85,7 +85,7 @@ make misspell-correction
 
 ## Pull Request
 
-### How to send PR
+### How to create a PR
 
 Everyone is welcome to contribute to `OpenTelemetry Specification` via GitHub
 pull requests (PRs).
