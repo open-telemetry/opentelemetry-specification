@@ -119,7 +119,7 @@ If the PR is not ready for review, please mark it as
 Please make sure CLA is signed and CI is clear. We don't expect people to review
 and comment on a PR that doesn't have CLA signed.
 
-### How to get PR merged
+### How to get your PR merged
 
 A PR is considered to be **ready to merge** when:
 
