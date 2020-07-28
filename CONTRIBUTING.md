@@ -96,7 +96,7 @@ To create a new PR, fork the project in GitHub and clone the upstream repo:
 git clone https://github.com/open-telemetry/opentelemetry-specification.git
 ```
 
-Add your fork as an origin:
+Add your fork as a remote:
 
 ```sh
 git remote add fork https://github.com/YOUR_GITHUB_USERNAME/opentelemetry-specification.git
