@@ -87,7 +87,7 @@ make misspell-correction
 
 ### How to create a PR
 
-Everyone is welcome to contribute to `OpenTelemetry Specification` via GitHub
+Everyone is welcome to contribute to the OpenTelemetry specification via GitHub
 pull requests (PRs).
 
 To create a new PR, fork the project in GitHub and clone the upstream repo:
