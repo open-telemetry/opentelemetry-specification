@@ -85,29 +85,41 @@ make misspell-correction
 
 ## Pull Request
 
-### How to Send Pull Requests
+### How to send PR
 
 Everyone is welcome to contribute code to `OpenTelemetry Specification` via
 GitHub pull requests (PRs).
 
-To create a new PR, check out a new branch, make modifications and push the branch:
+To create a new PR, fork the project in GitHub and clone the upstream repo:
 
 ```sh
-git checkout -b ${USERNAME}/feature_branch_name
-# edit files
-git commit -m "Description"
-git push ${USERNAME}/feature_branch_name
+git clone https://github.com/open-telemetry/opentelemetry-specification.git
 ```
 
-Open a pull request against the master branch.
+Add your fork as an origin:
 
-### How to Receive Comments
+```sh
+git remote add fork https://github.com/YOUR_GITHUB_USERNAME/opentelemetry-specification.git
+```
+
+Check out a new branch, make modifications and push the branch to your fork:
+
+```sh
+$ git checkout -b feature
+# edit files
+$ git commit
+$ git push fork feature
+```
+
+Open a pull request against the main `opentelemetry-specification` repo.
+
+### How to receive comments
 
 * If the PR is not ready for review, please put `[WIP]` in the title or mark it
   as [`draft`](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 * Make sure CLA is signed and CI is clear.
 
-### How to Get PR Merged
+### How to get PR merged
 
 A PR is considered to be **ready to merge** when:
 
@@ -124,10 +136,16 @@ Any [spec
 approver](https://github.com/orgs/open-telemetry/teams/specs-approvers) can
 merge the PR once it is **ready to merge**.
 
-### If a PR is stuck
+If a PR has been stuck (e.g. there are lots of debates and people couldn't agree
+on each other), the owner should try to get people aligned by:
 
-If a PR has been stuck for more than 2 weeks, the owner should bring it to the
-[OpenTelemetry Specification SIG
+* Consolidating the perspectives and putting a summary in the PR.
+* Tagging subdomain experts (by looking at the change history) in the PR asking
+  for suggestion.
+* Reaching out to more people on the [gitter
+  channel](https://gitter.im/open-telemetry/opentelemetry-specification).
+* Stepping back to see if it makes sense to scope down the PR.
+
+If none of the above worked and the PR has been stuck for more than 2 weeks, the
+owner should bring it to the [OpenTelemetry Specification SIG
 meeting](https://github.com/open-telemetry/community#cross-language-specification).
-
-If a PR has been opened for more than 6 months, it will be closed.
