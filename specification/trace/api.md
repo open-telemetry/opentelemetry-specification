@@ -510,8 +510,8 @@ MUST record an exception as an `Event` with the conventions outlined in the
 
 Examples:
 
-- `RecordException(exception: Exception)`
-- `RecordException(type: String, message: String, stacktrace: String)`
+- `RecordException(exception: Exception, event: ExceptionEvent)`
+- `RecordException(type: String, message: String, stacktrace: String, event: ExceptionEvent)`
 
 ### Span lifetime
 
