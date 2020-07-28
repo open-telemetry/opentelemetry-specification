@@ -144,7 +144,7 @@ on each other), the owner should try to get people aligned by:
   for suggestion.
 * Reaching out to more people on the [gitter
   channel](https://gitter.im/open-telemetry/opentelemetry-specification).
-* Stepping back to see if it makes sense to scope down the PR.
+* Stepping back to see if it makes sense to narrow down the scope of the PR or split it up.
 
 If none of the above worked and the PR has been stuck for more than 2 weeks, the
 owner should bring it to the [OpenTelemetry Specification SIG
