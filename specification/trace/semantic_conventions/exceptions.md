@@ -58,6 +58,8 @@ grained information from a stacktrace, if necessary.
 [go-stacktrace]: https://golang.org/pkg/runtime/debug/#Stack
 [telemetry-sdk-resource]: https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#telemetry-sdk
 
+<a name="exception.event"></a>
+
 ### exception.event
 
 This string describes what event occurred. It MUST be one of the following strings:
