@@ -64,11 +64,11 @@ grained information from a stacktrace, if necessary.
 
 This string describes what event occurred. It MUST be one of the following strings:
 
-* `handled`: The exception was caught without rethrowing it.
+* `handled`: The exception was caught.
 * `translated`: A special case of `handled`:
   If the exception was translated into some non-exception error indicator
   (e.g. a `KeyNotFoundException` was caught and translated into an HTTP 404 status code).
-  Instrumentations may not be able distinguish this from `handled` and SHOULD use `handled` if in doubt.
+  If possible, instrumentations SHOULD NOT record a `handled` for the same exception immediately preceding this.
 * `thrown`: The exception was thrown.
   Typical code that should set this: `throw new RuntimeException("Error!")`.
 * `rethrown`: The exception was caught and then re-thrown as-is.
@@ -90,3 +90,59 @@ logically both a `handled` and a `thrown` event occur.
 As information about the original exception is usually found in the cause-chain
 encoded in the `exception.stacktrace` of the `thrown` exception,
 instrumentations SHOULD NOT record the the `handled` exception in this case.
+
+The following example (Java) shows several possible events:
+
+```java
+public class Example {
+  public static void main(String[] args) {
+    try {
+      someMethodThatMayThrow();
+    } catch (Exception e) {
+      // e is *handled*
+      // (if instrumentation can detect the translation below,
+      // e should not be recorded here).
+      e.printStackTrace();
+      System.exit(1); // e is *translated* (to exit code 1).
+    }
+  }
+
+  static void someMethodThatMayThrow() {
+    someMethodWithCleanup();
+  } // Instrumentation may record a *rethrown* exception here
+  // if a span is recorded within this method.
+  // E.g. if someMethodThatMayThrow was instrumented with a span that is both
+  // started and ended within the method (typically using some kind of Scope API)-
+
+  static void someMethodThatMayThrow() {
+    try {
+      someOptionalMethod();
+    } catch (IOException e) { // e is *handled* here
+      // OK, we don't care. Or we call an alternative method.
+    }
+    try {
+      someFailingMethod();
+    } (catch Exception e) {
+      // e is *handled* (should not be recorded because of rethrow below)
+
+      // ...Some cleanup...
+      throw e; // e is *rethrown*
+    }
+  }
+
+  static void someOptionalMethod() throws IOException {
+    try {
+      // Something that throws an IOException
+    } catch (IOException e) {
+      // Even though we throw an exception that has e as a cause,
+      // we do not rethrow it, but throw a new exception object,
+      // so this is a *thrown* exception.
+      throw new IOException("some optional operation failed", e);
+    }
+  }
+
+  static void someFailingMethod() {
+    throw new RuntimeException("Whoops"); // e is *thrown*
+  }
+}
+```
