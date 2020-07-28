@@ -129,7 +129,7 @@ A PR is considered to be **ready to merge** when:
 * It has been at least two working days since the last modification (except for
   the trivial updates, such like typo, cosmetic, rebase, etc.). This gives
   people reasonable time to review.
-* Trivial change (typo, cosmetic, CI improvement, etc.) doesn't have to wait for
+* Trivial changes (typos, cosmetic changes, CI improvements, etc.) don't have to wait for
   two days.
 
 Any [spec
@@ -144,7 +144,7 @@ on each other), the owner should try to get people aligned by:
   for suggestion.
 * Reaching out to more people on the [gitter
   channel](https://gitter.im/open-telemetry/opentelemetry-specification).
-* Stepping back to see if it makes sense to scope down the PR.
+* Stepping back to see if it makes sense to narrow down the scope of the PR or split it up.
 
 If none of the above worked and the PR has been stuck for more than 2 weeks, the
 owner should bring it to the [OpenTelemetry Specification SIG
