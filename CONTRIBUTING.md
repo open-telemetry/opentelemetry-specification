@@ -130,8 +130,8 @@ A PR is considered to be **ready to merge** when:
 * It has been at least two working days since the last modification (except for
   the trivial updates, such like typo, cosmetic, rebase, etc.). This gives
   people reasonable time to review.
-* Trivial changes (typos, cosmetic changes, CI improvements, etc.) don't have to wait for
-  two days.
+* Trivial changes (typos, cosmetic changes, CI improvements, etc.) don't have to
+  wait for two days.
 
 Any [spec
 approver](https://github.com/orgs/open-telemetry/teams/specs-approvers) can
@@ -140,12 +140,15 @@ merge the PR once it is **ready to merge**.
 If a PR has been stuck (e.g. there are lots of debates and people couldn't agree
 on each other), the owner should try to get people aligned by:
 
-* Consolidating the perspectives and putting a summary in the PR.
+* Consolidating the perspectives and putting a summary in the PR. It is
+  recommended to add a link into the PR description, which points to a comment
+  with a summary in the PR conversation.
 * Tagging subdomain experts (by looking at the change history) in the PR asking
   for suggestion.
 * Reaching out to more people on the [gitter
   channel](https://gitter.im/open-telemetry/opentelemetry-specification).
-* Stepping back to see if it makes sense to narrow down the scope of the PR or split it up.
+* Stepping back to see if it makes sense to narrow down the scope of the PR or
+  split it up.
 
 If none of the above worked and the PR has been stuck for more than 2 weeks, the
 owner should bring it to the [OpenTelemetry Specification SIG
