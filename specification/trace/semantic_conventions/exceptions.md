@@ -68,7 +68,9 @@ This string describes what event occurred. It MUST be one of the following strin
 * `translated`: A special case of `handled`:
   If the exception was translated into some non-exception error indicator
   (e.g. a `KeyNotFoundException` was caught and translated into an HTTP 404 status code).
-  If possible, instrumentations SHOULD NOT record a `handled` for the same exception immediately preceding this.
+  This can typically only be detected on a case-by-case basis for certain libraries
+  (like a HTTP framework instrumentation).
+  A generic exception instrumentation would not use this.
 * `thrown`: The exception was thrown (or rethrown).
   This is expected to be the most commonly recorded event.
 
