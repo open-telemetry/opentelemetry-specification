@@ -18,10 +18,10 @@ The configuration options are configurable separately for the `SpanExporter` and
 
 ## Retry
 
-[Transient errors](#transient-errors) MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
+[Transient errors](#transient-errors) MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered. 
 
 ## Transient Errors
-Transient errors are errors which expect the backend to recover. These are defined per protocol:
+Transient errors are errors which expect the backend to recover. The following status codes are defined as transient errors:
 
 | HTTP Status Code | Description |
 | ---------------- | ----------- |
@@ -39,3 +39,5 @@ Transient errors are errors which expect the backend to recover. These are defin
 | 14 | Unavailable |
 | 15 | Data Loss |
 | 16 | Unauthenticated |
+
+Additional details on transient errors can be found in [otep-35](https://github.com/open-telemetry/oteps/blob/master/text/0035-opentelemetry-protocol.md#export-response) for gRPC and [otep-99](https://github.com/open-telemetry/oteps/blob/master/text/0099-otlp-http.md#failures) for HTTP
