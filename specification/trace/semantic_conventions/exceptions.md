@@ -69,18 +69,11 @@ This string describes what event occurred. It MUST be one of the following strin
   If the exception was translated into some non-exception error indicator
   (e.g. a `KeyNotFoundException` was caught and translated into an HTTP 404 status code).
   If possible, instrumentations SHOULD NOT record a `handled` for the same exception immediately preceding this.
-* `thrown`: The exception was thrown.
-  Typical code that should set this: `throw new RuntimeException("Error!")`.
-* `rethrown`: The exception was caught and then re-thrown as-is.
-  Typical code that should set this: `throw;` in C++,
-  `raise` (without argument) in Python, `catch (... e) { ...; throw e}` in Java.
-  If a new exception object is thrown (even if a previous exception is the cause),
-  `thrown` MUST be used instead.
-  Instrumentations may not be able distinguish this from `thrown` and SHOULD use `thrown` if in doubt.
+* `thrown`: The exception was thrown (or rethrown).
+  This is expected to be the most commonly recorded event.
 
 Note that instrumentations are not expected to record all exception events.
 Typically, `thrown` is the most important event.
-`rethrown` may also be useful especially if the original `thrown` event was not instrumented.
 Instrumentations should use good judgment of when to record `translated` and especially `handled` events.
 They may often not be that interesting and exception events can be relatively heavyweight.
 
@@ -109,10 +102,12 @@ public class Example {
 
   static void someMethodThatMayThrow() {
     someMethodWithCleanup();
-  } // Instrumentation may record a *rethrown* exception here
+  } // Instrumentation may record a *thrown* exception here
   // if a span is recorded within this method.
   // E.g. if someMethodThatMayThrow was instrumented with a span that is both
-  // started and ended within the method (typically using some kind of Scope API)-
+  // started and ended within the method (typically using some kind of Scope API)
+  // This is expected to be the most typical kind of recorded exception for
+  // auto-instrumentations.
 
   static void someMethodThatMayThrow() {
     try {
@@ -126,7 +121,7 @@ public class Example {
       // e is *handled* (should not be recorded because of rethrow below)
 
       // ...Some cleanup...
-      throw e; // e is *rethrown*
+      throw e; // e is *thrown* (rethrown)
     }
   }
 
@@ -134,10 +129,7 @@ public class Example {
     try {
       // Something that throws an IOException
     } catch (IOException e) {
-      // Even though we throw an exception that has e as a cause,
-      // we do not rethrow it, but throw a new exception object,
-      // so this is a *thrown* exception.
-      throw new IOException("some optional operation failed", e);
+      throw new IOException("some optional operation failed", e); // *thrown*
     }
   }
 
