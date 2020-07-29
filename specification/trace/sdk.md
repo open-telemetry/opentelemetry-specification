@@ -182,7 +182,7 @@ separate objects that are passed together to give full read/write capabilities
 (when chosing this implemenation technique,
 changes through one object should be reflected in the other
 objects immediately if they are observable through them at all
-to avoid introducing suble gotchas).
+to avoid introducing subtle gotchas).
 Second, these are abstract requirements for interfaces. Not all
 places in the spec that talk about a readable span need to be implemented by the
 same concrete interface. For example, this allows using a different interface
