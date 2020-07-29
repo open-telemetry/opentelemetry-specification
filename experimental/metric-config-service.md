@@ -1,6 +1,25 @@
 # Metric Configuration Service
 
-<!-- TODO: generate toc here -->
+- [Metric Configuration Service](#metric-configuration-service)
+  * [Overview](#overview)
+  * [Service Protocol](#service-protocol)
+    + [Metric Config Request](#metric-config-request)
+    + [Metric Config Response](#metric-config-response)
+      - [Schedules](#schedules)
+      - [Fingerprint](#fingerprint)
+      - [Wait Time](#wait-time)
+    + [Push vs Pull Metric Model](#push-vs-pull-metric-model)
+  * [Implementation Details](#implementation-details)
+    + [Collection Periods](#collection-periods)
+    + [Go SDK](#go-sdk)
+    + [Collector Extension](#collector-extension)
+      - [Local File](#local-file)
+        * [Matching Behavior](#matching-behavior)
+        * [Fingerprint Hashing](#fingerprint-hashing)
+      - [Remote Backend](#remote-backend)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 ## Overview
 The OpenTelemetry Metric Configuration Service adds the ability to dynamically
@@ -22,15 +41,16 @@ Configuration data is communicated between an SDK and a backend (either directly
 or indirectly through a Collector) using the following protocol specification.
 The SDK is assumed to be the client, and makes the metric config requests. The
 configuration backend is therefore the server, and serves the metric config
-responses. For more details on this arrangement, see [TODO: link Push vs Pull
-section]
+responses. For more details on this arrangement, see
+[below](#push-vs-pull-metric-model).
 
 ### Metric Config Request
 A request consists of two fields: `resource` and an optional
 `last_known_fingerprint`.
 
-`resource` is an OpenTelemetry Resource [TODO: link resource page] that
-describes a source of telemetry data. All requests SHOULD have a nonempty
+`resource` is an OpenTelemetry
+[Resource](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/overview.md#resources)
+that describes a source of telemetry data. All requests SHOULD have a nonempty
 `resource` field.
 
 `last_known_fingerprint` is a sequence of bytes that correspond to the last set
@@ -60,8 +80,9 @@ by the schedule, even if it matches an inclusion pattern. In this sense,
 
 `period_sec` describes the period with which the metric should be collected (in
 seconds). For optimization purposes, all schedules in the response SHOULD have
-periods that are divisible by the smallest period (see [TODO: link Collection
-Periods section]). A period of 0 means that the metric should not be collected
+periods that are divisible by the smallest period (see
+[below](#collection-periods)). A period of 0 means that the metric should not be
+collected
 
 #### Fingerprint
 `fingerprint` is a sequence of bytes that corresponds to the set of schedules
@@ -78,7 +99,7 @@ the response are optional.
 #### Wait Time
 `suggested_wait_time_sec` is a duration (in seconds) that the SDK should wait
 before sending the next metric config request. A response MAY have a
-`suggested_wait_time_sec`, but Its use is optional, and the SDK need not obey
+`suggested_wait_time_sec`, but its use is optional, and the SDK need not obey
 it. As the name implies, it is simply a suggestion.
 
 ### Push vs Pull Metric Model
@@ -97,9 +118,11 @@ metrics on a push-based model.
 ## Implementation Details
 Because this specification is experimental, and may imply substantial changes to
 the existing system, we provide additional details on the example prototype
-implementations available here [TODO: link PRs]. The actual implementation in an
-SDK will likely differ. We offer these details not as formal specification, but
-as an example of how this system might look.
+implementations available on the
+[contrib collector](https://github.com/vmingchen/opentelemetry-collector-contrib) and
+[contrib Go SDK](https://github.com/vmingchen/opentelemetry-go-contrib). The
+actual implementation in an SDK will likely differ. We offer these details not
+as formal specification, but as an example of how this system might look.
 
 ### Collection Periods
 Though the protocol does not enforce specific collection periods, the SDK MAY
@@ -123,16 +146,15 @@ recommended that the SDK and all backends use the following periods:
 * 7 days
 
 However, the SDK MUST still be able to handle periods of any nonzero integer
-duration, even if they violate the divisibility suggestion. For a specific
-example in implementation, see below, as well as [TODO: link period_matcher and
-CollectionPeriod]
+duration, even if they violate the divisibility suggestion.
 
 ### Go SDK
-A prototype implementation of metric configuration is available for the Go SDK
-[TODO: link PR]. It provides an alternative push controller component with the
-ability to configure collection periods on a per-metric basis. When used in
-conjunction with the Collector extension (see below), the controller exports
-metrics based on configuration information it receives from the backend.
+A prototype implementation of metric configuration is available for the Go SDK,
+currently hosted on the [contrib repo](https://github.com/vmingchen/opentelemetry-go-contrib). It provides an
+alternative push controller component with the ability to configure collection
+periods on a per-metric basis. When used in conjunction with the Collector
+extension (see below), the controller exports metrics based on configuration
+information it receives from the backend.
 
 The per-metric implementation is achieved by using a modified `Accumulator`
 implementation. Rather than exporting every metric upon calling `Collect()`, the
@@ -145,12 +167,12 @@ this feature.
 
 ### Collector Extension
 An example configuration backend is implemented as an extension for the
-Collector [TODO: link PR]. When this extension is enabled, the Collector
+Collector, currently hosted on the [contrib repo](https://github.com/vmingchen/opentelemetry-collector-contrib). When this extension is enabled, the Collector
 functions as a potential endpoint for Agent/SDKs to retrieve configuration data.
 The following schematic illustrates the Collector’s position in the overall
 architecture, as well as how the configuration information flows.
 
-<!-- TODO: image here, STOPPED HERE-->
+![dynamic config schematic](../internal/img/dynamic-config-service.png)
 
 Requests from the SDK, represented at the bottom, flow upwards to the Collector,
 which functions as our configuration backend. The Collector then references
