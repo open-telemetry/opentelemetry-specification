@@ -172,7 +172,7 @@ TraceFlags are present in all traces. The current version of the specification
 only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
 
 `TraceState` carries system-specific configuration data, represented as a list
-of key-value pairs separated by commas (`,`). TraceState allows multiple tracing
+of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. Please review the [W3C
 specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
 details on this field.
