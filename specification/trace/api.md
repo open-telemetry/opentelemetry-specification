@@ -180,7 +180,7 @@ details on this field.
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
-`IsRemote` is a boolean flag which returns true if the SpanContext was
+`IsRemote` is a boolean which is true if the SpanContext was
 propagated from a remote parent. When extracting a `SpanContext` through the
 [Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
 flag MUST be set to true, whereas the SpanContext of any child spans MUST have
