@@ -14,7 +14,7 @@ Computing count, duration, and error rate from _all_ Spans (including `sampled=t
 
 ### Convention
 
-When creating duration metrics from Spans, the duration **in milliseconds** of all
+When creating duration metrics from Spans, the duration **in seconds** of all
 _recorded_ Spans of a given category and kind should be aggregated together in a single
 [`ValueRecorder`](../api.md#valuerecorder).
 
