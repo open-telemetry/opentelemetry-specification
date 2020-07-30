@@ -691,6 +691,6 @@ implementer of these links.
 
 ## Included Propagators
 
-The API layer MUST include the following `Propagator`s:
+The API layer MAY include the following `Propagator`s:
 
 * A `HTTPTextPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
