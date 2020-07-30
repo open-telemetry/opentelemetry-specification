@@ -14,7 +14,7 @@ type and units.
 | Name                   | Type            | Instrument    | Units        | Description |
 |------------------------|-----------------|---------------|--------------|-------------|
 | `http.{type}.duration` | Client & Server | ValueRecorder | milliseconds | measure a request duration |
-| `http.{type}.request`  | Client & Server | Count         | requests     | measure number of requests |
+| `http.{type}.requests`  | Client & Server | Count         | requests     | measure number of requests |
 
 ### Labels
 
