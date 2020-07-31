@@ -415,7 +415,7 @@ clearing the previous value and dropping the attribute key from the set of attri
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
-Note that [samplers](sdk.md#sampler) can only consider information already
+Note that [Samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any changes done later, including new or changed
 attributes, cannot change their decisions.
 
@@ -469,7 +469,7 @@ The Span interface MUST provide:
 Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
 name will depend on the implementation.
 
-Note that [samplers](sdk.md#sampler) can only consider information already 
+Note that [Samplers](sdk.md#sampler) can only consider information already 
 present during span creation. Any changes done later, including updated span 
 name, cannot change their decisions.
 
