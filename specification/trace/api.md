@@ -417,7 +417,7 @@ attributes"](semantic_conventions/README.md) that have prescribed semantic meani
 
 Note that [samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any changes done later, including new or changed
-attributes, cannot be considered for sampling.
+attributes, cannot change their decisions.
 
 
 #### Add Events
@@ -471,7 +471,7 @@ name will depend on the implementation.
 
 Note that [samplers](sdk.md#sampler) can only consider information already 
 present during span creation. Any changes done later, including updated span 
-name, cannot be considered for sampling.
+name, cannot change their decisions.
 
 Alternatives for the name update may be late `Span` creation, when Span is
 started with the explicit timestamp from the past at the moment where the final
