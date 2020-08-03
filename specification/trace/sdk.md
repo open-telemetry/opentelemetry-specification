@@ -188,10 +188,11 @@ Thus, the SDK specification defines sets of possible requirements for
   additionally must be able to retrieve all information that was added to the span
   (as with *readable span*).
 
-  It MUST be possible for functions being called with this to somehow obtain
-  the same `Span` instance and type that the span creation API returned
-  (or will return) to the user (e.g. the `Span` could be one of the parameters
-  passed to such a function, or a getter could be provided).
+  It MUST be possible for functions being called with this
+  to somehow obtain the same `Span` instance and type
+  that the [span creation API](api.md#span-creation) returned (or will return) to the user
+  (for example, the `Span` could be one of the parameters passed to such a function,
+  or a getter could be provided).
   
 ## Span processor
 
@@ -243,8 +244,8 @@ exceptions.
 * `Span` - a [read/write span object](#additional-span-interfaces) for the started span.
   It SHOULD be possible to keep a reference to this span object and updates to the span
   SHOULD be reflected in it.
-  (for example, this is useful for creating a SpanProcessor that periodically
-  evaluates/prints information about all active span from a background thread)
+  For example, this is useful for creating a SpanProcessor that periodically
+  evaluates/prints information about all active span from a background thread.
 
 **Returns:** `Void`
 
