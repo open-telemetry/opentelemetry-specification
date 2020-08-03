@@ -160,36 +160,39 @@ only defines write-only access to the span.
 This is good because instrumentations and applications are not meant to use the data
 stored in a span for application logic.
 However, the SDK needs to eventually read back the data in some locations.
-Thus, the SDK specification defines two new terms:
+Thus, the SDK specification defines sets of possible requirements for
+`Span`-like parameters:
 
-* **Readable span**: A span interface satisfies the requirements of being a
-  readable span if it allows to retrieve all information
-  that was added to the span (e.g. all attributes, events, (parent) `SpanContext`,
-  etc.).
+* **Readable span**: A function receiving this as argument MUST be able to
+  access all information that was added to the span,
+  as listed [in the API spec](api.md#span-data-members).
+  In particular, it MUST also be able to access
+  the `InstrumentationLibrary` and `Resource` information (implicitly)
+  associated with the span.
+  It must also be able to reliably determine whether the Span has ended
+  (some languages might implement this by having an end timestamp of `null`,
+  others might have an explicit `hasEnded` boolean).
   
-  A readable span interface MUST provide a method called `getInstrumentationLibrary` (or similar),
-  that returns the `InstrumentationLibrary` information held by the `Tracer` that created the span.
-* **Read/write span**: A span interface satisfies this requirement of being a
-  read/write span if it provides both the full span API as defined in the
+  A function receiving this as argument might not be able to modify the Span.
+
+  Note: Typically this will be implemented with a new interface or
+  (immutable) value type.
+  In some languages SpanProcessors may have a different readable span type
+  than exporters (e.g. a `SpanData` type might contain an immutable snapshot and
+  a `ReadableSpan` interface might read information directly from the same
+  underlying data structure that the `Span` interface manipulates).
+
+* **Read/write span**: A function receiving this as argument must have access to
+  both the full span API as defined in the
   [API-level definition for span's interface](api.md#span-operations) and
-  additionally satisfies the requirements for being a readable span
-  as defined in the above bullet point.
-  
-Note: First, these requirements use "interface" in the most abstract sense --
-it does not need to be an actual Java `interface` for example but could also be
-a `final` POJO, or, especially in the case of read/write span, even two (or more)
-separate objects that are passed together to give full read/write capabilities
-(when chosing this implemenation technique,
-changes through one object should be reflected in the other
-objects immediately if they are observable through them at all
-to avoid introducing subtle gotchas).
-Second, these are abstract requirements for interfaces. Not all
-places in the spec that talk about a readable span need to be implemented by the
-same concrete interface. For example, this allows using a different interface
-for the readable span passed to an exporter than for the readable span passed
-to a SpanProcessor's OnEnd. On the other hand,
-it allows implementing a readable span as a read/write span.
+  additionally must be able to retrieve all information that was added to the span
+  (as with *readable span*).
 
+  It MUST be possible for functions being called with this to somehow obtain
+  the same `Span` instance and type that the span creation API returned
+  (or will return) to the user (e.g. the `Span` could be one of the parameters
+  passed to such a function, or a getter could be provided).
+  
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
@@ -238,6 +241,10 @@ exceptions.
 **Parameters:**
 
 * `Span` - a [read/write span object](#additional-span-interfaces) for the started span.
+  It SHOULD be possible to keep a reference to this span object and updates to the span
+  SHOULD be reflected in it.
+  (for example, this is useful for creating a SpanProcessor that periodically
+  evaluates/prints information about all active span from a background thread)
 
 **Returns:** `Void`
 
