@@ -157,7 +157,7 @@ A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
 `SpanContext` MUST be a final (sealed) class.
 
-The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext
+The OpenTelemetry `SpanContext` representation conforms to the [W3C TraceContext
 specification](https://www.w3.org/TR/trace-context/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
 `TraceFlags` and system-specific `TraceState` values.
@@ -168,25 +168,24 @@ non-zero byte.
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero
 byte.
 
-`TraceFlags` contain details about the trace. Unlike Tracestate values,
-TraceFlags are present in all traces. Currently, the only `TraceFlags` is a
-boolean `sampled`
-[flag](https://www.w3.org/TR/trace-context/#trace-flags).
+`TraceFlags` contain details about the trace. Unlike TraceState values,
+TraceFlags are present in all traces. The current version of the specification
+only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
 
-`Tracestate` carries system-specific configuration data, represented as a list
-of key-value pairs. TraceState allows multiple tracing systems to participate in
-the same trace.
+`TraceState` carries system-specific configuration data, represented as a list
+of key-value pairs. TraceState allows multiple tracing
+systems to participate in the same trace. Please review the [W3C
+specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
+details on this field.
 
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
-`IsRemote` is a boolean flag which returns true if the SpanContext was propagated
-from a remote parent.
-When extracting a `SpanContext` through the Propagators API, its `IsRemote` flag MUST
-be set to true, whereas the SpanContext of any child spans MUST have it set to false.
-
-Please review the W3C specification for details on the [Tracestate
-field](https://www.w3.org/TR/trace-context/#tracestate-field).
+`IsRemote` is a boolean which is true if the SpanContext was
+propagated from a remote parent. When extracting a `SpanContext` through the
+[Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
+flag MUST be set to true, whereas the SpanContext of any child spans MUST have
+it set to false.
 
 ## Span
 
