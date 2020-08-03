@@ -415,6 +415,11 @@ clearing the previous value and dropping the attribute key from the set of attri
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
+Note that [Samplers](sdk.md#sampler) can only consider information already
+present during span creation. Any changes done later, including new or changed
+attributes, cannot change their decisions.
+
+
 #### Add Events
 
 A `Span` MUST have the ability to add events. Events have a time associated
@@ -464,15 +469,9 @@ The Span interface MUST provide:
 Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
 name will depend on the implementation.
 
-It is highly discouraged to update the name of a `Span` after its creation.
-`Span` name is often used to group, filter and identify the logical groups of
-spans. And often, filtering logic will be implemented before the `Span` creation
-for performance reasons. Thus the name update may interfere with this logic.
-
-The function name is called `UpdateName` to differentiate this function from the
-regular property setter. It emphasizes that this operation signifies a major
-change for a `Span` and may lead to re-calculation of sampling or filtering
-decisions made previously depending on the implementation.
+Note that [Samplers](sdk.md#sampler) can only consider information already 
+present during span creation. Any changes done later, including updated span 
+name, cannot change their decisions.
 
 Alternatives for the name update may be late `Span` creation, when Span is
 started with the explicit timestamp from the past at the moment where the final
