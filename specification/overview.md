@@ -54,11 +54,8 @@ Each **Span** encapsulates the following state:
 
 - An operation name
 - A start and finish timestamp
-- A set of zero or more key:value **Attributes**. The keys must be strings. The
-  values may be strings, bools, or numeric types.
-- A set of zero or more **Events**, each of which is itself a key:value map
-  paired with a timestamp. The keys must be strings, though the values may be of
-  the same types as Span **Attributes**.
+- [**Attributes**](./common/common.md#attributes): A list of key-value pairs.
+- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
   (via the **SpanContext** of those related **Spans**).
@@ -189,6 +186,13 @@ validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
+## Logs
+
+### Data model
+
+[Log Data Model](logs/data-model.md) defines how logs and events are understood by
+OpenTelemetry.
+
 ## CorrelationContext
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
@@ -238,11 +242,12 @@ See the [Context](context/context.md)
 ## Propagators
 
 OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
-such as `SpanContext` and `CorrelationContext` into a `Format`. Currently there is one
-type of propagator:
+such as `SpanContext` and `CorrelationContext`. Different `Propagator` types define the restrictions
+imposed by a specific transport and bound to a data type.
 
-- `HTTPTextFormat` which is used to inject and extract a value as text into carriers that travel
-  in-band across process boundaries.
+The Propagators API currently defines one `Propagator` type:
+
+- `HTTPTextPropagator` injects values into and extracts values from carriers as text.
 
 ## Collector
 
@@ -299,6 +304,4 @@ Span attributes.
 * [Metrics Conventions](metrics/semantic_conventions/README.md)
 
 The type of the attribute SHOULD be specified in the semantic convention
-for that attribute. Array values are allowed for attributes. For
-protocols that do not natively support array values such values MUST be
-represented as JSON strings.
+for that attribute. See more details about [Attributes](./common/common.md#attributes).

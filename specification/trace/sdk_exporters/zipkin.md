@@ -9,21 +9,21 @@ Zipkin's v2 API is defined in the
 The following table summarizes the major transformations between OpenTelemetry
 and Zipkin.
 
-| OpenTelemetry            | Zipkin           | Notes                                                        |
-| ------------------------ | ---------------- | ------------------------------------------------------------ |
-| Span.TraceID             | Span.TraceID     |                                                              |
-| Span.ParentID            | Span.ParentID    |                                                              |
-| Span.SpanID              | Span.ID          |                                                              |
-| Span.TraceState          | TBD              | TBD                                                          |
-| Span.Name                | Span.Name        |                                                              |
-| Span.Kind                | Span.Kind        | See [SpanKind](#spankind) for values mapping                |
-| Span.StartTime           | Span.Timestamp   | See [Unit of time](#unit-of-time)                            |
+| OpenTelemetry            | Zipkin           | Notes                                                                                         |
+| ------------------------ | ---------------- | --------------------------------------------------------------------------------------------- |
+| Span.TraceID             | Span.TraceID     |                                                                                               |
+| Span.ParentID            | Span.ParentID    |                                                                                               |
+| Span.SpanID              | Span.ID          |                                                                                               |
+| Span.TraceState          | TBD              | TBD                                                                                           |
+| Span.Name                | Span.Name        |                                                                                               |
+| Span.Kind                | Span.Kind        | See [SpanKind](#spankind) for values mapping                                                  |
+| Span.StartTime           | Span.Timestamp   | See [Unit of time](#unit-of-time)                                                             |
 | Span.EndTime             | Span.Duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
-| Span.Attributes          | Span.Tags        | See [Attributes](#attributes) for data types for the mapping. |
-| Span.Events              | Span.Annotations | See [Events](#events) for the mapping format.                |
-| Span.Links               | TBD              | TBD                                                          |
-| Span.Status              | Add to Span.Tags | See [Status](#status) for tag names to use.                  |
-| Span.LocalChildSpanCount | TBD              | TBD                                                          |
+| Span.Attributes          | Span.Tags        | See [Attributes](../../common/common.md#attributes) for data types for the mapping.            |
+| Span.Events              | Span.Annotations | See [Events](#events) for the mapping format.                                                 |
+| Span.Links               | TBD              | TBD                                                                                           |
+| Span.Status              | Add to Span.Tags | See [Status](#status) for tag names to use.                                                   |
+| Span.LocalChildSpanCount | TBD              | TBD                                                                                           |
 
 TBD : This is work in progress document and it is currently doesn't specify
 mapping for these fields:

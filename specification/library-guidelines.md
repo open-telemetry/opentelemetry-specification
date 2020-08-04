@@ -119,6 +119,8 @@ guidelines on the performance expectations that API implementations should meet,
 
 ### Concurrency and Thread-Safety
 
-See the [Concurrency and Thread-Safety](concurrency.md) specification for
-guidelines on what concurrency safeties should API implementations provide
-and how they should be documented.
+Please refer to individual API specification for guidelines on what concurrency
+safeties should API implementations provide and how they should be documented:
+
+* [Metrics API](./metrics/api.md#concurrency)
+* [Tracing API](./trace/api.md#concurrency)

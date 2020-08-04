@@ -9,7 +9,7 @@ Table of Contents
 - [Create a key](#create-a-key)
 - [Get value](#get-value)
 - [Set value](#set-value)
-- [Optional operations](#optional-operations)
+- [Optional global operations](#optional-global-operations)
   - [Get current Context](#get-current-context)
   - [Attach Context](#attach-context)
   - [Detach Context](#detach-context)

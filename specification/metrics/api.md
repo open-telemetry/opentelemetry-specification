@@ -13,8 +13,8 @@
 - [Meter provider](#meter-provider)
   * [Obtaining a Meter](#obtaining-a-meter)
   * [Global Meter provider](#global-meter-provider)
-    + [Get the global MeterProvider](#get-the-global-metricprovider)
-    + [Set the global MeterProvider](#set-the-global-metricprovider)
+    + [Get the global MeterProvider](#get-the-global-meterprovider)
+    + [Set the global MeterProvider](#set-the-global-meterprovider)
 - [Instrument properties](#instrument-properties)
   * [Instrument naming requirements](#instrument-naming-requirements)
   * [Synchronous and asynchronous instruments compared](#synchronous-and-asynchronous-instruments-compared)
@@ -32,7 +32,6 @@
   * [Constructors](#constructors)
 - [Sets of labels](#sets-of-labels)
   * [Label performance](#label-performance)
-  * [Missing label keys](#missing-label-keys)
   * [Option: Ordered labels](#option-ordered-labels)
 - [Synchronous instrument details](#synchronous-instrument-details)
   * [Synchronous calling conventions](#synchronous-calling-conventions)
@@ -47,6 +46,7 @@
     + [Batch observer](#batch-observer)
   * [Asynchronous observations form a current set](#asynchronous-observations-form-a-current-set)
     + [Asynchronous instruments define moment-in-time ratios](#asynchronous-instruments-define-moment-in-time-ratios)
+- [Concurrency](#concurrency)
 - [Related OpenTelemetry work](#related-opentelemetry-work)
   * [Metric Views](#metric-views)
   * [OTLP Metric protocol](#otlp-metric-protocol)
@@ -81,14 +81,13 @@ understand their meaning.  Standard implementations perform
 aggregation corresponding to the default interpretation for each kind
 of metric event.
 
-Monitoring and alerting systems commonly use the data provided through
-metric events, after applying various [aggregations](#aggregations)
-and converting into various [exposition formats](#exposition-formats).
-However, we find that there are many other uses for metric events,
-such as to record aggregated or raw measurements in tracing and
-logging systems.  For this reason, [OpenTelemetry requires a
-separation of the API from the SDK](../library-guidelines.md#requirements),
-so that different SDKs can be configured at run time.
+Monitoring and alerting systems commonly use the data provided through metric
+events, after applying various [aggregations](#aggregations) and converting into
+various exposition formats. However, we find that there are many other uses for
+metric events, such as to record aggregated or raw measurements in tracing and
+logging systems.  For this reason, [OpenTelemetry requires a separation of the
+API from the SDK](../library-guidelines.md#requirements), so that different SDKs
+can be configured at run time.
 
 ### Measurements
 
@@ -214,13 +213,13 @@ provider interface, or other language-specific support.  Note that it
 is not necessary to use the global instance: multiple instances of the
 OpenTelemetry SDK may run simultaneously.
 
-As an obligatory step, the API requires the caller to provide the name
-of the instrumenting library (optionally, the version) when obtaining
-a `Meter` implementation.  The library name is meant to be used for
-identifying instrumentation produced from that library, for such
-purposes as disabling instrumentation, configuring aggregation, and
-applying sampling policies.  See the specification on [obtaining a
-Tracer](../trace/api.md#obtaining-a-tracer) for more details.
+As an obligatory step, the API requires the caller to provide the name of the
+instrumenting library (optionally, the version) when obtaining a `Meter`
+implementation.  The library name is meant to be used for identifying
+instrumentation produced from that library, for such purposes as disabling
+instrumentation, configuring aggregation, and applying sampling policies.  See
+the specification on [TracerProvider](../trace/api.md#tracerprovider) for more
+details.
 
 ### Aggregations
 
@@ -1067,6 +1066,20 @@ calculate its current relative contribution.  Current relative
 contribution is defined in this way, independent of the collection
 interval duration, thanks to the properties of asynchronous
 instruments.
+
+## Concurrency
+
+For languages which support concurrent execution the Metrics APIs provide
+specific guarantees and safeties. Not all of API functions are safe to
+be called concurrently.
+
+**MeterProvider** - all methods are safe to be called concurrently.
+
+**Meter** - all methods are safe to be called concurrently.
+
+**Instrument** - All methods of any Instrument are safe to be called concurrently.
+
+**Bound Instrument** - All methods of any Bound Instrument are safe to be called concurrently.
 
 ## Related OpenTelemetry work
 
