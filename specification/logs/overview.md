@@ -292,6 +292,8 @@ similar agent to read the logs,
 [then send the logs](https://github.com/open-telemetry/opentelemetry-collector/tree/master/receiver/fluentforwardreceiver)
 to OpenTelemetry Collector.
 
+![Application to File Logs](img/app-to-file-logs.png)
+
 The benefit of this approach is that how logs are produced and where they are
 written by the application requires no or minimal changes. The downside is that
 it requires the often non-trivial log file reading and parsing functionality.
@@ -308,6 +310,8 @@ The most convenient way to achieve this is to provide addons or extensions to
 the commonly used logging libraries. The addons implement sending over such
 network protocols, which would then typically require small, localized changes
 to the application code to change the logging target.
+
+![Application to Collector](img/app-to-otelcol.png)
 
 The application logs will be also enriched by the resource context, similarly to
 how it is done for third-party applications and so will potentially have full
