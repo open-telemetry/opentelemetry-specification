@@ -734,20 +734,20 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
   <tr>
     <td>Category</td>
     <td>enum</td>
-    <td>Describes where the event originated and why. SignalFx specific concept. Example: AGENT. </td>
+    <td>Describes where the event originated and why. SignalFx specific concept. Example: AGENT. If this attribute is not present on the SignalFx Event, it should be set to the null attribute value in the LogRecord -- this will allow unambigous identification of SignalFx events when they are represented as LogRecords.</td>
     <td>Attributes["com.splunk.signalfx.event_category"]</td>
   </tr>
   <tr>
     <td>Dimensions</td>
     <td>map of string to string</td>
-    <td>Helps to define the identity of the event source together with EventType and Category. Multiple occurrences of events coming from the same event source can happen across time and they all have the value of Dimensions. </td>
-    <td>Resource</td>
+    <td>Helps to define the identity of the event source together with EventType and Category. Multiple occurrences of events coming from the same event source can happen across time and they all have the same value of Dimensions. In SignalFx, event Dimensions, along with the EventType, determine individual Event Time Series (ETS).</td>
+    <td>Attributes</td>
   </tr>
   <tr>
     <td>Properties</td>
     <td>map of string to any</td>
-    <td>Additional information about the specific event occurrence. Unlike Dimensions which are fixed for a particular event source, Properties can have different values for each occurrence of the event coming from the same event source.</td>
-    <td>Attributes</td>
+    <td>Additional information about the specific event occurrence. Unlike Dimensions which are fixed for a particular event source, Properties can have different values for each occurrence of the event coming from the same event source. In SignalFx, event Properties are considered additional metadata about an event and do not factor into the identity of an Event Time Series (ETS).</td>
+    <td>Attributes["com.splunk.signalfx.event_properties"]</td>
   </tr>
 </table>
 
