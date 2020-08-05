@@ -11,31 +11,30 @@ from them. By adding HTTP labels to metric events it allows for finely tuned fil
 Below is a table of the metric instruments that MUST be used for HTTP spans. They MUST be of the specified
 type and units.
 
-| Name                   | Type            | Instrument    | Units        | Description |
-|------------------------|-----------------|---------------|--------------|-------------|
-| `http.{type}.duration` | Client & Server | ValueRecorder | milliseconds | measure a request duration |
-| `http.{type}.requests` | Client & Server | Count         | requests     | measure number of requests |
+| Name                   | Type                | Instrument    | Units        | Description |
+|------------------------|---------------------|---------------|--------------|-------------|
+| `http.{type}.duration` | `client` & `server` | ValueRecorder | milliseconds | measure a request duration |
 
 ### Labels
 
 Below is a table of the labels that SHOULD be included on metric events
 and whether they should be on server, client, or both types of HTTP metric events:
 
-| Label name         | Type            | Recommended       | Notes and examples |
-|--------------------|-----------------|-------------------|--------------------|
-| `http.method`      | Client & Server | Yes               | The HTTP request method. E.g. `"GET"` |
-| `http.host`        | Client & Server | see [label alternatives](#label-alternatives) | The value of the [HTTP host header][]. When the header is empty or not present, this label should be the same. |
-| `http.scheme`      | Client & Server | see [label alternatives](#label-alternatives) | The URI scheme identifying the used protocol: `"http"` or `"https"` |
-| `http.status_code` | Client & Server | Optional          | [HTTP response status code][]. E.g. `200` (integer) |
-| `http.status_text` | Client & Server | Optional          | [HTTP reason phrase][]. E.g. `"OK"` |
-| `http.flavor`      | Client & Server | Optional          | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |
-| `net.peer.name`    | Client          | see [1] in [label alternatives](#label-alternatives) | The name of the service the request is going to. |
-| `net.peer.port`    | Client          | see [1] in [label alternatives](#label-alternatives) | The port of the service the request is going to. E.g. `8080` |
-| `net.peer.ip`      | Client          | see [1] in [label alternatives](#label-alternatives) | The IP address of the service the request is going to. E.g. `255.255.255.0` |
-| `http.server_name` | Server          | see [2] in [label alternatives](#label-alternatives) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this label MUST NOT be set ( `net.host.name` should be used instead). |
-| `net.host.name`    | Server          | see [2] in [label alternatives](#label-alternatives) | The name of the host. |
-| `net.host.port`    | Server          | see [2] in [label alternatives](#label-alternatives) | The port of the host. |
-| `http.route`       | Server          | Optional          | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. |
+| Label name         | Type                | Recommended       | Notes and examples |
+|--------------------|---------------------|-------------------|--------------------|
+| `http.method`      | `client` & `server` | Yes               | The HTTP request method. E.g. `"GET"` |
+| `http.host`        | `client` & `server` | see [label alternatives](#label-alternatives) | The value of the [HTTP host header][]. When the header is empty or not present, this label should be the same. |
+| `http.scheme`      | `client` & `server` | see [label alternatives](#label-alternatives) | The URI scheme identifying the used protocol: `"http"` or `"https"` |
+| `http.status_code` | `client` & `server` | Optional          | [HTTP response status code][]. E.g. `200` (integer) |
+| `http.status_text` | `client` & `server` | Optional          | [HTTP reason phrase][]. E.g. `"OK"` |
+| `http.flavor`      | `client` & `server` | Optional          | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |
+| `net.peer.name`    | `client`            | see [1] in [label alternatives](#label-alternatives) | The name of the service the request is going to. |
+| `net.peer.port`    | `client`            | see [1] in [label alternatives](#label-alternatives) | The port of the service the request is going to. E.g. `8080` |
+| `net.peer.ip`      | `client`            | see [1] in [label alternatives](#label-alternatives) | The IP address of the service the request is going to. E.g. `255.255.255.0` |
+| `http.server_name` | `server`            | see [2] in [label alternatives](#label-alternatives) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this label MUST NOT be set ( `net.host.name` should be used instead). |
+| `net.host.name`    | `server`            | see [2] in [label alternatives](#label-alternatives) | The name of the host. |
+| `net.host.port`    | `server`            | see [2] in [label alternatives](#label-alternatives) | The port of the host. |
+| `http.route`       | `server`            | Optional          | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. |
 
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
@@ -45,10 +44,10 @@ and whether they should be on server, client, or both types of HTTP metric event
 
 To avoid high cardinality the following labels SHOULD substitute any parameters when added as labels to http metric events as described below:
 
-| Label name        | Type            | Recommended |  Notes and examples |
-|-------------------|-----------------|-------------|---------------------|
-|`http.url`         | Client & Server | see [label alternatives](#label-alternatives) | The originally requested URL |
-|`http.target`      | Client & Server | see [label alternatives](#label-alternatives) | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/{id}/?q={}"`. |
+| Label name        | Type                | Recommended |  Notes and examples |
+|-------------------|---------------------|-------------|---------------------|
+|`http.url`         | `client` & `server` | see [label alternatives](#label-alternatives) | The originally requested URL |
+|`http.target`      | `client` & `server` | see [label alternatives](#label-alternatives) | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/{id}/?q={}"`. |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 
