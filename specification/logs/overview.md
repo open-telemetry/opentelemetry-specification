@@ -215,9 +215,8 @@ of logs see Events and Logs (link TBD)). Like system logs, the
 infrastructure logs lack a request context and can be enriched by the resource
 context - information about the node, pod, container, etc.
 
-OpenTelemetry Collector needs to know how to query logs from most common
-infrastructure controllers (e.g. from Kubernetes via
-[Events API](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#event-v1-core)).
+OpenTelemetry Collector or other agents can be used to query logs from most
+common infrastructure controllers.
 
 ### Third-party Application Logs
 
@@ -388,18 +387,6 @@ The following functionality exists to enable log collection:
 - Ability to send logs via common network protocols for logs, such as Syslog, or
   vendor-specific log formats. Collector contains exporters that directly
   implement this ability.
-
-To support infrastructure log and event collection in cloud native environments
-we have the following features:
-
-- Collecting Kubernetes infrastructure events and application logs from pods
-  (link TBD).
-
-- Enriching Kubernetes events by appropriate metadata such as cluster name, etc.
-  using
-  [Kubernetes processor](https://pkg.go.dev/github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sprocessor?tab=doc).
-
-- Other infrastructure logs and events collection will be added as needed.
 
 ## Auto-Instrumenting Existing Logging
 
