@@ -272,7 +272,7 @@ Required parameters:
 
 `Propagator`s implementing officially supported protocols such as
 [B3 Propagation Specification](https://github.com/openzipkin/b3-propagation)
-MUST be mantained by the OpenTelemetry organization and MUST be distributed as
+MUST be maintained by the OpenTelemetry organization and MUST be distributed as
 OpenTelemetry extension packages.
 
 Additional `Propagator`s implementing vendor-specific protocols such as
