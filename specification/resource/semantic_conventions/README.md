@@ -12,7 +12,6 @@ This document defines standard attributes for resources. These attributes are ty
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
-- [Deployment Service](#deployment-service)
 - [Compute Instance](#compute-instance)
 - [Environment](#environment)
 - [Version Attributes](#version-attributes)
@@ -89,12 +88,6 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 - [Function as a Service](./faas.md)
 - [Process](./process.md)
 
-## Deployment Service
-
-Attributes defining a deployment service (e.g. Kubernetes):
-
-- [Kubernetes](./k8s.md)
-
 ## Compute Instance
 
 Attributes defining a computing instance (e.g. host):
@@ -103,10 +96,13 @@ Attributes defining a computing instance (e.g. host):
 
 ## Environment
 
-Attributes defining a running environment (e.g. Operating System, Cloud, Data Center):
+Attributes defining a running environment (e.g. Operating System, Cloud, Data Center, Deployment Service):
 
 - [Operating System](./os.md)
 - [Cloud](./cloud.md)
+- Deployment:
+  - [Environment](./deployment_environment.md)
+  - [Kubernetes](./k8s.md)
 
 ## Version Attributes
 
