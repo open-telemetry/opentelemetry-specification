@@ -21,6 +21,7 @@ Table of Contents
       - [Get](#get)
 - [Composite Propagator](#composite-propagator)
 - [Global Propagators](#global-propagators)
+- [Propagators Distribution](#propagators-distribution)
 
 </details>
 
@@ -266,3 +267,14 @@ Sets the global `Propagator` instance.
 Required parameters:
 
 - A `Propagator`. This usually will be a composite instance.
+
+## Propagators Distribution
+
+`Propagator`s implementing officially supported protocols such as
+[B3 Propagation Specification](https://github.com/openzipkin/b3-propagation)
+MUST be maintained by the OpenTelemetry organization and MUST be distributed as
+OpenTelemetry extension packages.
+
+Additional `Propagator`s implementing vendor-specific protocols such as
+AWS X-Ray trace header protocol are encouraged to be maintained and distributed by
+their respective vendors.

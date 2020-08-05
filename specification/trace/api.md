@@ -36,6 +36,7 @@ Table of Contents
   * [GetIsOk](#getisok)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
+* [Included Propagators](#included-propagators)
 
 </details>
 
@@ -687,3 +688,9 @@ implementer of these events.
 **Link** - Links are immutable and is safe to be used concurrently. Lazy
 initialized links must be thread safe. This is the responsibility of the
 implementer of these links.
+
+## Included Propagators
+
+The API layer MAY include the following `Propagator`s:
+
+* A `HTTPTextPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
