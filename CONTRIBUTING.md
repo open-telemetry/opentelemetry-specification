@@ -136,7 +136,7 @@ A PR is considered to be **ready to merge** when:
   wait for two days.
 
 Any [spec
-approver](https://github.com/orgs/open-telemetry/teams/specs-approvers) can
+maintainers](https://github.com/open-telemetry/community/blob/master/community-members.md#specifications-and-proto) can
 merge the PR once it is **ready to merge**.
 
 If a PR has been stuck (e.g. there are lots of debates and people couldn't agree
