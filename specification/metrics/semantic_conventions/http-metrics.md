@@ -11,9 +11,19 @@ operations. By adding HTTP labels to metric events it allows for finely tuned fi
 The following metric instruments MUST be used to describe HTTP operations. They MUST be of the specified
 type and units.
 
-| Name                   | Type                | Instrument    | Units   | Description |
-|------------------------|---------------------|---------------|---------|-------------|
-| `http.{type}.duration` | `client` & `server` | ValueRecorder | seconds | measure a request duration |
+#### HTTP Server
+Below is a table of HTTP server metric instruments.
+
+| Name                   | Instrument    | Units        | Description |
+|------------------------|---------------|--------------|-------------|
+| `http.server.duration` | ValueRecorder | milliseconds | measures the duration of the inbound HTTP request |
+
+#### HTTP Client
+Below is a table of HTTP client metric instruments.
+
+| Name                   | Instrument    | Units        | Description |
+|------------------------|---------------|--------------|-------------|
+| `http.client.duration` | ValueRecorder | milliseconds | measure the duration of the outbound HTTP request |
 
 ### Labels
 
