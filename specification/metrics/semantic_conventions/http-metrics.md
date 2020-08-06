@@ -1,26 +1,26 @@
 # General
 
-The conventions described in this section are HTTP specific. HTTP calls are
-generally fully described by Spans so a lot of the data below can be derived
-from them. By adding HTTP labels to metric events it allows for finely tuned filtering.
+The conventions described in this section are HTTP specific. When HTTP operations occur,
+metric events about those operations will be generated and reported to provide insight into the
+operations. By adding HTTP labels to metric events it allows for finely tuned filtering.
 
 **Discaimer:** These are initial HTTP metric instruments and labels but more may be added in the future.
 
 ### Metric Instruments
 
-Below is a table of the metric instruments that MUST be used for HTTP spans. They MUST be of the specified
+The following metric instruments MUST be used to describe HTTP operations. They MUST be of the specified
 type and units.
 
-| Name                   | Type                | Instrument    | Units        | Description |
-|------------------------|---------------------|---------------|--------------|-------------|
-| `http.{type}.duration` | `client` & `server` | ValueRecorder | milliseconds | measure a request duration |
+| Name                   | Type                | Instrument    | Units   | Description |
+|------------------------|---------------------|---------------|---------|-------------|
+| `http.{type}.duration` | `client` & `server` | ValueRecorder | seconds | measure a request duration |
 
 ### Labels
 
 Below is a table of the labels that SHOULD be included on metric events
 and whether they should be on server, client, or both types of HTTP metric events:
 
-| Label name         | Type                | Recommended       | Notes and examples |
+| Name               | Type                | Recommended       | Notes and examples |
 |--------------------|---------------------|-------------------|--------------------|
 | `http.method`      | `client` & `server` | Yes               | The HTTP request method. E.g. `"GET"` |
 | `http.host`        | `client` & `server` | see [label alternatives](#label-alternatives) | The value of the [HTTP host header][]. When the header is empty or not present, this label should be the same. |
