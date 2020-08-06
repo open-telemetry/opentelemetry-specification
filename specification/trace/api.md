@@ -406,7 +406,7 @@ Attributes SHOULD preserve the order in which they're set. Setting an attribute
 with the same key as an existing attribute SHOULD overwrite the existing
 attribute's value.
 
-Attribute values expressing a numerical value of zero or an empty string are
+Attribute values expressing a numerical value of zero, an empty string, or an empty array are
 considered meaningful and MUST be stored and passed on to span processors / exporters.
 Attribute values of `null` are considered to be not set and get discarded as if
 that `SetAttribute` call had never been made.
