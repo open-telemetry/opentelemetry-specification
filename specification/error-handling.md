@@ -52,7 +52,73 @@ Another example may be a metric exposed by a `SpanProcessor` that describes the 
 Whenever the library suppresses an error that would otherwise have been exposed to the user, the library SHOULD log the error using language-specific conventions.
 SDKs MAY expose callbacks to allow end users to handle self-diagnostics separately from application code.
 
-## Exceptions to the rule
+## Configuring Error Handlers
 
-SDK authors MAY supply settings that allow end users to change the library's default error handling behavior.
+SDK implementations MUST allow end users to change the library's default error handling behavior for relevant errors.
 Application developers may want to run with strict error handling in a staging environment to catch invalid uses of the API, or malformed config.
+Note that configuring a custom error handler in this way is the only exception to the basic error handling principles outlined above. 
+The mechanism by which end users set or register a custom error handler should follow language-specific conventions. 
+
+### Examples 
+
+These are examples of how end users might register custom error handlers. 
+Examples are for illustration purposes only. Language library authors
+are free to deviate from these provided that their design matches the requirements outlined above. 
+
+##### Go
+
+```go
+// The basic Error Handler interface
+type ErrorHandler interface {
+	Handle(err error)
+}
+
+func Handler() ErrorHandler
+func SetHandler(handler ErrorHandler)
+```
+
+
+```go
+// Registering a custom Error Handler
+type IgnoreExporterErrorsHandler struct{}
+
+func (IgnoreExporterErrorsHandler) Handle(err error) {
+    switch err.(type) {
+    case *SpanExporterError:
+    default:
+        fmt.Println(err)
+    }
+}
+
+func main() {
+    // Other setup ... 
+    opentelemetrysdk.SetHandler(IgnoreExporterErrorsHandler{})
+}
+
+```
+
+##### Java
+
+OpenTelemetry Java uses [java.util.logging](https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html)
+to output and handle all logs, including errors. Custom handlers and filters can be registered both in code and using the 
+Java logging configuration file.  
+
+```properties
+## Turn off all error logging 
+io.opentelemetry.level = OFF
+```
+
+```java
+// Creating a custom filter which does not log errors that come from the exporter
+public class IgnoreExportErrorsFilter implements Filter {
+
+ public boolean isLoggable(LogRecord record) {
+    return !record.getMessage().contains("Exception thrown by the export");
+ }
+}
+```
+
+```properties
+## Registering the custom filter on the BatchSpanProcessor
+io.opentelemetry.sdk.trace.export.BatchSpanProcessor = io.opentelemetry.extensions.logging.IgnoreExportErrorsFilter
+```

@@ -136,3 +136,4 @@ otcorrelations: user=foo%40example.com,name=Example%20Name
 
 If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence. The value
 is replaced with the added value (regardless if it is locally generated or received from a remote peer).
+

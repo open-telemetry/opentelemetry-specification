@@ -11,7 +11,7 @@ Here are the key principles:
 
 Although there are inevitable overhead to achieve monitoring, API should not degrade the end-user application as possible. So that it should not block the end-user application nor consume too much memory resource.
 
-See also [Concurrency and Thread-Safety](concurrency.md) if the implementation supports concurrency.
+See also [Concurrency and Thread-Safety](library-guidelines.md#concurrency-and-thread-safety) if the implementation supports concurrency.
 
 ### Tradeoff between non-blocking and memory consumption
 
