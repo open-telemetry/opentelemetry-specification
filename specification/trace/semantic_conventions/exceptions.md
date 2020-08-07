@@ -13,8 +13,43 @@ exceptions.
 
 ## Recording an Exception
 
-An exception SHOULD be recorded as an `Event` on the span during which it occurred.
+An exception that escapes the scope of a span SHOULD be recorded
+as an `Event` on that span
+(of course, other exceptions that are deemed relevant may also be recorded).
+An exception is considered to have escaped the scope if the span is ended
+while the exception is still "in flight". Note:
+
+* While it is usually not possible to determine whether some exception thrown
+  now *will* escape the scope of a span, it is trivial to know that an exception
+  will escape, if one checks for an active exception just before ending the span.
+  See the [example below](#exception-end-example).
+* Special considerations may apply for Go, where exception semantic conventions
+  might be used for non-exceptions.
+  See [issue #764](https://github.com/open-telemetry/opentelemetry-specification/issues/764).
+
 The name of the event MUST be `"exception"`.
+
+Note that multiple events (on the same or different Spans) might be logged
+for the same exception object instance.
+For example, one event might be logged in an instrumented exception constructor
+and another event might be logged when an exception leaves the scope of a span.
+
+<a name="exception-end-example"></a>
+
+A typical template for an auto-instrumentation implementing this semantic convention
+could look like this:
+
+```java
+Span span = myTracer.startSpan(/*...*/);
+try {
+  // original code
+} catch (Throwable e) {
+ span.recordException(e); // We know that the exception is escaping here.
+ throw e;
+} finally {
+ span.end();
+}
+```
 
 ## Attributes
 
