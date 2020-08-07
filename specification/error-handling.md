@@ -54,7 +54,7 @@ SDKs MAY expose callbacks to allow end users to handle self-diagnostics separate
 
 ## Configuring Error Handlers
 
-SDK implementations MUST allow end users to change the library's default error handling behavior for non-recoverable errors.
+SDK implementations MUST allow end users to change the library's default error handling behavior for relevant errors.
 Application developers may want to run with strict error handling in a staging environment to catch invalid uses of the API, or malformed config.
 Note that configuring a custom error handler in this way is the only exception to the basic error handling principles outlined above. 
 The mechanism by which end users set or register a custom error handler should follow language-specific conventions. 
