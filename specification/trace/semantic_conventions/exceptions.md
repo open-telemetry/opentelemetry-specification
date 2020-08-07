@@ -13,7 +13,12 @@ exceptions.
 
 ## Recording an Exception
 
-An exception SHOULD be recorded as an `Event` on the span during which it occurred.
+An unhandled exception that leaves the scope of a span
+SHOULD be recorded as an `Event` on that span.
+Other (handled, not leaving a span's scope) exceptions MUST NOT be recorded.
+An exception is considered to leave the scope of a span if the span is ended
+because of stack unwinding caused by the exception.
+
 The name of the event MUST be `"exception"`.
 
 ## Attributes

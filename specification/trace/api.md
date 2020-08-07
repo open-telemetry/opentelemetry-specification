@@ -513,6 +513,9 @@ Examples:
 - `RecordException(exception: Exception)`
 - `RecordException(type: String, message: String, stacktrace: String)`
 
+Note that as per the semantic conventions, only exceptions leaving the scope of
+a span unhandled must be recorded.
+
 ### Span lifetime
 
 Span lifetime represents the process of recording the start and the end
