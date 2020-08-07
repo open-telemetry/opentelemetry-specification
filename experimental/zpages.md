@@ -1,7 +1,7 @@
 # zPages
 ## Table of Contents
 - [Overview](#overview)
-  - [Types of zPages](types-of-zpages)
+  - [Types of zPages](#types-of-zpages)
     - [TraceZ](#tracez)
       - [TraceConfigz](#traceconfigz) 
     - [RPCz](#rpcz)
