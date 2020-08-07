@@ -21,15 +21,15 @@
 ## Overview
 zPages are webpages that allow easy viewing of tracing/metrics information. When included for a process, zPages will display basic information about that process on a webpage.
 
-The idea of "zPages" originates from one of OpenTelemetry's predecessors, [OpenCensus](https://opencensus.io/). You can read more about it [here](https://opencensus.io/zpages). OpenCensus has different zPage implementations in [Java](https://opencensus.io/zpages/java/), [Go](https://opencensus.io/zpages/go/), and [Node](https://opencensus.io/zpages/node/) and there has been similar internal solutions developed at companies like Uber. Within OpenTelemetry, zPages are also either developed or being developed in [C#](https://github.com/open-telemetry/opentelemetry-dotnet/tree/master/src/OpenTelemetry.Exporter.ZPages), Java, and C++.
+The idea of "zPages" originates from one of OpenTelemetry's predecessors, [OpenCensus](https://opencensus.io/). You can read more about zPages from the OpenCensus docs [here](https://opencensus.io/zpages) or the OTEP [here](https://github.com/open-telemetry/oteps/blob/master/text/0110-z-pages.md). OpenCensus has different zPage implementations in [Java](https://opencensus.io/zpages/java/), [Go](https://opencensus.io/zpages/go/), and [Node](https://opencensus.io/zpages/node/) and there has been similar internal solutions developed at companies like Uber. Within OpenTelemetry, zPages are also either developed or being developed in [C#](https://github.com/open-telemetry/opentelemetry-dotnet/tree/master/src/OpenTelemetry.Exporter.ZPages), Java, and C++.
 
-While zPages are uniquely useful in being more lightweight and quicker compared to installing external exporters like Jaeger and Zipkin, they still offer many useful ways to debug and gain insight into applications. The uses depend on the type of zPage, which is detailed below
+While zPages are uniquely useful in being more lightweight and quicker compared to installing external exporters like Jaeger and Zipkin, they still offer many useful ways to debug and gain insight into applications. The uses depend on the type of zPage, which is detailed below.
 
 ## Types of zPages
 ### TraceZ
 TraceZ shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. It also allows users to look closer at details for spans that are sampled.
 
-This type of zPage is useful particularly for debugging latency issues (slow parts of applications), deadlocks (running spans that don't end), and errors (where error happen and what types). They're also good for spotting patterns, like seeing what speeds are typical for operations with a given span name.
+This type of zPage is useful particularly for debugging latency issues (slow parts of applications), deadlocks (running spans that don't end), and errors (where error happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
 
 You can read about TraceZ more [here](https://opencensus.io/zpages/java/#tracez).
 
@@ -47,9 +47,9 @@ RPCz provides details on sent and received RPC messages, which is categorized  b
 You can read about RPCz more [here](https://docs.google.com/document/d/1RWNyUIaKTYK12tck_rQjki4jTyHFfkD8sk54mjwRwso/edit#) and [here](https://opencensus.io/zpages/java/#rpcz).
 
 ### StatsZ
-StatsZ is focused more on metrics, displays stats and measues for any exported views. These views are grouped into directories using their namespaces
+StatsZ is focused more on metrics, as it displays stats and measues for exported views. These views are grouped into directories using their namespaces
 
-You can read more about StatZ [here](https://opencensus.io/zpages/java/#statsz)
+You can read more about StatsZ [here](https://opencensus.io/zpages/java/#statsz)
 
 ## Design and Implementation
 ### TraceZ Details
@@ -81,7 +81,7 @@ This wrapper class acts as an injection point, running all of the different zPag
 ### HTTP Server
 All zPages have some sort of HTTP Server component to render their information on a webpage when a host:port and endpoint is accessed.
 
-Traditionally, zPages have approached this by rendering webpages purely on the server-side. This means it would simply resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Depending on the type of zPages, a pure server-side approach uses data to generate HTML pages using hardcoded strings from scratch or using a template. All zPages need some server-side rendering.
+Traditionally, zPages have approached this by rendering webpages purely on the server-side. This means the server would only serve statuc resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Based on the type of zPage and the server language used, a pure server-side approach would generate HTML pages using hardcoded strings from scratch or using a template. All zPages need some server-side rendering.
 
 Optionally, there could also be an API layer that translates native data structures to JSON strings for a frontend to use when designated endpoints are accessed. This API layer would be paired with a frontend that provides client-side functionality, which would need Javascript. The frontend Javascript would use the API by requesting information at endpoints to add updates to the HTML DOM without unnecessarily requesting and re-rendering static resources. This makes initial page loads quicker and requires no knowledge of client-side rendering.
 
