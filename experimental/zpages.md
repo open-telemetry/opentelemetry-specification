@@ -6,7 +6,7 @@
       - [TraceConfigz](#traceconfigz) 
     - [RPCz](#rpcz)
     - [StatsZ](#statsz)
-- [Design and Implementation](#design)
+- [Design and Implementation](#design-and-implementation)
   - [TraceZ](#tracez-details)
     - [TraceConfigZ](#traceconfigz-details)
   - [RPCz](#rpcz-details)
