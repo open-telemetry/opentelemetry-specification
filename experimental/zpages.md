@@ -105,8 +105,8 @@ All HTML, CSS, and Javascript files would be used across different OT language r
   - Some process has to be created to update the static files in a repository and serving them at the correct endpoints
   - Initial setup may be difficult (one way this can be achieved is with Github modules)
 
-- Proxy/Shim layer
+### Proxy/Shim layer
+> TODO
 
-
-> TODO: Link spec where possible, Add pictures, design docs links
+> GENERAL TODO: Link spec where possible, add pictures/figures and design docs links
 
