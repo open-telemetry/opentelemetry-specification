@@ -19,7 +19,7 @@
   - [Shared Static Files](#shared-static-files)
 
 ## Overview
-zPages are webpages that allow easy viewing of tracing/metrics information. When included for a process, zPages will display basic information about that process on a webpage.
+zPages are an alternative to external exporters, calculating and serving in-process webpages that show various tracing and metrics information when included.
 
 The idea of "zPages" originates from one of OpenTelemetry's predecessors, [OpenCensus](https://opencensus.io/). You can read more about zPages from the OpenCensus docs [here](https://opencensus.io/zpages) or the OTEP [here](https://github.com/open-telemetry/oteps/blob/master/text/0110-z-pages.md). OpenCensus has different zPage implementations in [Java](https://opencensus.io/zpages/java/), [Go](https://opencensus.io/zpages/go/), and [Node](https://opencensus.io/zpages/node/) and there has been similar internal solutions developed at companies like Uber. Within OpenTelemetry, zPages are also either developed or being developed in [C#](https://github.com/open-telemetry/opentelemetry-dotnet/tree/master/src/OpenTelemetry.Exporter.ZPages), Java, and C++.
 
@@ -95,7 +95,7 @@ zPages that compatible across different languages, with processing of informatio
   - More complicated than using local methods, and requires extra setup (i.e. RPC communication setup) in applications to somehow send information to zPages to work
 
 ### Shared Static Files
-All HTML, CSS, and Javascript files would be used across different OT language repositories for their in-process zPages
+All HTML, CSS, and Javascript files would be used across different OTel language repositories for their in-process zPages
 - Pros
   - When client-side features are rolled out (including filtering/sorting data, interval refreshing, unit toggles), changes are all centralized
   - Rendering logic and responsibility is focused and can be more effective, zPages developers can focus on other priorities
