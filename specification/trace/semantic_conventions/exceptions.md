@@ -15,12 +15,16 @@ exceptions.
 
 An unhandled exception that leaves the scope of a span
 SHOULD be recorded as an `Event` on that span.
-Other (handled, not leaving a span's scope) exceptions MUST NOT be recorded.
 An exception is considered to leave the scope of a span if the span is ended
 while the exception is still "in flight"
 (special considerations may apply for Go, where exception semantic conventions are used for non-exceptions).
 
 The name of the event MUST be `"exception"`.
+
+Note that multiple events (on the same or different Spans)
+might be logged for the same exception object instance.
+E.g. one event might be logged in an instrumented exception constructor
+and another event might be logged when an exception leaves the scope of a span.
 
 ## Attributes
 
@@ -32,6 +36,7 @@ their types.
 | exception.type       | String | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. E.g. "java.net.ConnectException", "OSError"                                                                                                                                                                                                     | One of `exception.type` or `exception.message` is required |
 | exception.message    | String | The exception message. E.g. `"Division by zero"`, `"Can't convert 'int' object to str implicitly"`                                                                                                                                                                                                                                                                                                                                  | One of `exception.type` or `exception.message` is required |
 | exception.stacktrace | String | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. E.g. `"Exception in thread \"main\" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)"`. | No                                                         |
+| exception.left_scope | Bool | SHOULD be set to true if the exception event is recoded while observing the exception leaving the scope of the span. Note that an exception may still leave the scope of the span even if this was not set or set to false, if the event was recorded at an earlier time. | No |
 
 ### Stacktrace Representation
 
