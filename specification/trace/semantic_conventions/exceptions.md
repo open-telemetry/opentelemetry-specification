@@ -13,7 +13,7 @@ exceptions.
 
 ## Recording an Exception
 
-An unhandled exception that leaves the scope of a span
+An exception that leaves the scope of a span
 SHOULD be recorded as an `Event` on that span.
 An exception is considered to leave the scope of a span if the span is ended
 while the exception is still "in flight"
@@ -25,6 +25,20 @@ Note that multiple events (on the same or different Spans)
 might be logged for the same exception object instance.
 E.g. one event might be logged in an instrumented exception constructor
 and another event might be logged when an exception leaves the scope of a span.
+
+A typical template for an auto-instrumentation implementing this semantic convention
+could look like this:
+
+```java
+Span span = myTracer.startSpan(/*...*/);
+try {
+  // original code
+} catch (Throwable e) {
+ span.recordException(e, /*leftScope=*/true);
+} finally {
+ span.end();
+}
+```
 
 ## Attributes
 
