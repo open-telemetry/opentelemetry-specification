@@ -1,0 +1,9 @@
+name: 'AutoAssignOwner'
+on: pull_request_target
+
+jobs:
+  add-owner:
+    runs-on: ubuntu-latest
+    steps:
+    - name: run
+      uses: kentaro-m/auto-assign-action@v1.1.1
