@@ -138,7 +138,7 @@ Specifying an explicit timestamp is not supported, and an error MUST be raised.
 ### SpanContext
 
 The `SpanContext` interface MUST be implemented using a OpenTelemetry `SpanContext`
-in conjuction with an associated `CorrelationContext`.
+in conjunction with an associated `CorrelationContext`.
 
 Observe that the assigned `SpanContext` and `CorrelationContext` MUST be read-only
 and MUST NOT change after creation.
