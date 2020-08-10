@@ -8,8 +8,8 @@
   * [Create a Tracer shim](#create-a-tracer-shim)
   * [Inject](#inject)
   * [Extract](#extract)
-* [Scope Manager](#scope-manager)
-  * [Activate a Span](#active-a-span)
+* [ScopeManager](#scopemanager)
+  * [Activate a Span](#activate-a-span)
   * [Get the active Span](#get-the-active-span)
 * [Span](#span)
   * [Get Context](#get-context)
@@ -42,7 +42,7 @@ API:
 - An OpenTelemetry `Tracer` MUST be used to create `Span`s.
 - A `CorrelationContextManager` MUST be used to create the `CorrelationContext`
   objects used to implement the OpenTracing `Span` baggage.
-- A `Propagator` MUST be used in order to perform inject and extract operations.
+- A set of `Propagator` MUST be leveraged in order to perform inject and extract operations.
 
 ### Create a Tracer Shim
 
@@ -50,7 +50,7 @@ The operation MUST accept the following parameters:
 
 - An OpenTelemetry `Tracer`.
 - A `CorrelationContextManager`.
-- A list of `Propagator`s of the supported types, usually `Composite Propagator`s.
+- A set of `Propagator`s of the supported types, usually `Composite Propagator`s.
 
 The API MUST return an OpenTracing `Tracer`.
 
@@ -60,7 +60,7 @@ Inject the underlying `SpanContext` using the registered `Propagator`s:
 
 - `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered `HTTPTextPropagator`, if any.
 
-Errors MUST NOT raised if the specified OpenTracing `Format` is  not supported.
+Errors MUST NOT be raised if the specified OpenTracing `Format` is  not supported.
 
 ### Extract
 
