@@ -714,5 +714,5 @@ requested parent SpanContext:
 context for the newly created `Span`. This means that a `SpanContext` that has been provided by a configured `Propagator`
 will be propagated through to any child span, but that no new `SpanContext`s will be created.
 * No valid `SpanContext` is specified as the parent of the new `Span`: The API MUST create an non-valid
-(both SpanID and TradeID are all zeros) `Span` for use
+(both SpanID and TradeID are equivalent to being all zeros) `Span` for use
 by the API caller. This means that both the `TraceID` and the `SpanID` should be invalid.
