@@ -14,6 +14,8 @@ Table of Contents
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
+  * [IsValid](#isvalid)
+  * [IsRemote](#isremote)
 * [Span](#span)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
@@ -179,10 +181,14 @@ systems to participate in the same trace. Please review the [W3C
 specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
 details on this field.
 
-`IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
-TraceID and a non-zero SpanID.
+### IsValid
 
-`IsRemote` is a boolean which is true if the SpanContext was
+An API that returns a boolean value, which is `true` if the SpanContext has a
+non-zero TraceID and a non-zero SpanID.
+
+### IsRemote
+
+An API that returns a boolean value, which is `true` if the SpanContext was
 propagated from a remote parent. When extracting a `SpanContext` through the
 [Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
 flag MUST be set to true, whereas the SpanContext of any child spans MUST have
