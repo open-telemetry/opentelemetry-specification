@@ -50,6 +50,23 @@ containers on your cluster.
 | k8s.pod.uid | The uid of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
 | k8s.pod.name | The name of the Pod. | `opentelemetry-pod-autoconf` |
 
+## Container
+
+A container specification in a Pod template. This type is intended to be used to
+capture information such as name of a container in a Pod template which is different
+from the name of the running container.
+
+Note: This type is different from [container](./container.md), which corresponds
+to a running container.
+
+**type:** `k8s.container`
+
+**Description:** A container in a [PodTemplate](https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates).
+
+| Attribute  | Description  | Example  |
+|---|---|---|
+| k8s.container.name | The name of the Container in a Pod template. | `redis` |
+
 ## ReplicaSet
 
 A ReplicaSet’s purpose is to maintain a stable set of replica Pods running at
