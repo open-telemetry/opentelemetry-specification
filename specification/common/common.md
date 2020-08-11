@@ -20,6 +20,13 @@ Attributes are a list of zero or more key-value pairs. An `Attribute` MUST have 
     i.e. it MUST NOT contain values of different types. For protocols that do
     not natively support array values such values SHOULD be represented as JSON strings.
 
+Attribute values expressing a numerical value of zero, an empty string, or an
+empty array are considered meaningful and MUST be stored and passed on to
+processors / exporters. Attribute values of `null` are considered to be not set
+and get discarded as if that `Attribute` was never been created.
+As an exception to this, if overwriting of values is supported, this results in
+clearing the previous value and dropping the attribute key from the set of attributes.
+
 `null` values within arrays MUST be preserved as-is (i.e., passed on to span
 processors / exporters as `null`). If exporters do not support exporting `null`
 values, they MAY replace those values by 0, `false`, or empty strings.
