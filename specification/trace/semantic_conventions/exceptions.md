@@ -44,6 +44,7 @@ try {
   // original code
 } catch (Throwable e) {
  span.recordException(e, /*escaped=*/true);
+ throw e;
 } finally {
  span.end();
 }
