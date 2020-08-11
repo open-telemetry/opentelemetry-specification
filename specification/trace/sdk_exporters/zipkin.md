@@ -80,7 +80,7 @@ Zipkin.
 
 ### Remote endpoint
 
-If Zipkin `SpanKind` resolves to either `SpanKind.CLIENT` or `SpanKind.PRODUCER` then the service SHOULD specify remote endpoint otherwise Zipkin won't treat the Span as a dependency. `peer.service` is the preferred attribute but is not always available. The following table lists the possible attributes for `RemoteEndpoint` by preferred ranking:
+If Zipkin `SpanKind` resolves to either `SpanKind.CLIENT` or `SpanKind.PRODUCER` then the service SHOULD specify remote endpoint otherwise Zipkin won't treat the Span as a dependency. `peer.service` is the preferred attribute but is not always available. The following table lists the possible attributes for `remoteEndpoint` by preferred ranking:
 
 |Rank|Attribute Name|Reason|
 |---|---|---|
@@ -93,7 +93,7 @@ If Zipkin `SpanKind` resolves to either `SpanKind.CLIENT` or `SpanKind.PRODUCER`
 |7|db.name|Commonly used database name attribute for DB Spans.|
 
 * Ranking should control the selection order. For example, `net.peer.name` (Rank 2) should be selected before `http.host` (Rank 6).
-* `net.peer.ip` can be used by itself as `RemoteEndpoint` but should be combined with `net.peer.port` if it is also present.
+* `net.peer.ip` can be used by itself as `remoteEndpoint` but should be combined with `net.peer.port` if it is also present.
 
 ### Attribute
 
