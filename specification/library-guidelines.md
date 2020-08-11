@@ -21,7 +21,6 @@ _Note to Language Library Authors:_ OpenTelemetry specification, API and SDK imp
 5. The SDK implementation should include the following exporters:
     - Jaeger.
     - Zipkin.
-    - OpenCensus.
     - Prometheus.
     - OpenTelemetry Protocol (when the protocol is specified and approved).
     - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
@@ -83,6 +82,14 @@ Vendors are encouraged to keep protocol-specific exporters as simple as possible
 
 End users should be given the flexibility of making many of the decisions regarding the queuing, retrying, tagging, batching functionality that make the most sense for their application. For example, if an application's telemetry data must be delivered to a remote backend that has no guaranteed availability the end user may choose to use a persistent local queue and an `Exporter` to retry sending on failures. As opposed to that for an application that sends telemetry to a locally running Agent daemon, the end user may prefer to have a simpler exporting configuration without retrying or queueing.
 
+If additional exporters for the sdk are provided as separate libraries, the
+name of the library should be prefixed with the terms "OpenTelemetry" and "Exporter" in accordance with the naming conventions of the respective technology.
+
+For example:
+
+- Python and Java: opentelemetry-exporter-jaeger
+- Javascript: @opentelemetry/exporter-jeager
+
 ### Alternative Implementations
 
 The end-user application may decide to take a dependency on alternative implementation.
@@ -112,6 +119,8 @@ guidelines on the performance expectations that API implementations should meet,
 
 ### Concurrency and Thread-Safety
 
-See the [Concurrency and Thread-Safety](concurrency.md) specification for
-guidelines on what concurrency safeties should API implementations provide
-and how they should be documented.
+Please refer to individual API specification for guidelines on what concurrency
+safeties should API implementations provide and how they should be documented:
+
+* [Metrics API](./metrics/api.md#concurrency)
+* [Tracing API](./trace/api.md#concurrency)

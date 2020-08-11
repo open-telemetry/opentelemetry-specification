@@ -6,6 +6,7 @@
 
 * [Sampling](#sampling)
 * [Tracer Creation](#tracer-creation)
+* [Additional Span Interfaces](#additional-span-interfaces)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -17,13 +18,9 @@ Sampling is a mechanism to control the noise and overhead introduced by
 OpenTelemetry by reducing the number of samples of traces collected and sent to
 the backend.
 
-Sampling may be implemented on different stages of a trace collection.
-OpenTelemetry API defines a `Sampler` interface that can be used at
-instrumentation points by libraries to check the `SamplingResult` early and
-optimize the amount of telemetry that needs to be collected.
-
-All other sampling algorithms may be implemented on SDK layer in exporters, or
-even out of process in Agent or Collector.
+Sampling may be implemented on different stages of a trace collection. The
+earliest sampling could happen before the trace is actually created, and the
+latest sampling could happen on the Collector which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
@@ -48,13 +45,12 @@ The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
 
-The SDK defines the two interfaces [`Sampler`](#sampler) and
-[`Decision`](#decision) as well as a set of [built-in
-samplers](#built-in-samplers).
+The SDK defines the interface [`Sampler`](#sampler) as well as a set of
+[built-in samplers](#built-in-samplers).
 
 ### Sampler
 
-`Sampler` interface allows to create custom samplers which will return a
+`Sampler` interface allows users to create custom samplers which will return a
 sampling `SamplingResult` based on information that is typically available just
 before the `Span` was created.
 
@@ -69,7 +65,6 @@ Returns the sampling Decision for a `Span` to be created.
 * `TraceId` of the `Span` to be created. It can be different from the `TraceId`
   in the `SpanContext`. Typically in situations when the `Span` to be created
   starts a new Trace.
-* `SpanId` of the `Span` to be created.
 * Name of the `Span` to be created.
 * `SpanKind`
 * Initial set of `Attributes` for the `Span` being constructed
@@ -101,9 +96,11 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 ### Built-in samplers
 
+OpenTelemetry supports a number of built-in samplers to choose from. 
+The default sampler is `ParentOrElse(AlwaysOn)`.
+
 #### AlwaysOn
 
-* This is the default sampler.
 * Returns `RECORD_AND_SAMPLED` always.
 * Description MUST be `AlwaysOnSampler`.
 
@@ -114,16 +111,12 @@ Description MUST NOT change over time and caller can cache the returned value.
 
 #### Probability
 
-* The default behavior should be to trust the parent `SampledFlag`. However
-  there should be configuration to change this.
-* The default behavior is to apply the sampling probability only for Spans
-  that are root spans (no parent) and Spans with remote parent. However there
-  should be configuration to change this to "root spans only", or "all spans".
+* The `ProbabilitySampler` MUST ignore the parent `SampledFlag`.
+  To respect the parent `SampledFlag`, the `ProbabilitySampler` should be used as a delegate of the `ParentOrElse` sampler specified below.
 * Description MUST be `ProbabilitySampler{0.000100}`.
 
-TODO: Add details about how the probability sampler is implemented as a function
+TODO: Add details about how the `ProbabilitySampler` is implemented as a function
 of the `TraceID`.
-TODO: Split out the parent handling.
 
 #### ParentOrElse
 
@@ -143,20 +136,65 @@ TODO: Split out the parent handling.
 ## Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api.md#obtaining-a-tracer)). The `name` and `version` arguments
+[API](api.md#tracerprovider)). The `name` and `version` arguments
 supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.
 
-All configuration objects (SDK specific) and extension points (span processors,
-propagators) must be provided to the `TracerProvider`. `Tracer` instances must
-not duplicate this data (unless for read-only access) to avoid that different
-`Tracer` instances of a `TracerProvider` have different versions of these data.
+Configuration (i.e., [Span processors](#span-processor) and [`Sampler`](#sampling))
+MUST be managed solely by the `TracerProvider` and it MUST provide some way to
+configure them, at least when creating or initializing it.
 
-The readable representations of all `Span` instances created by a `Tracer` must
-provide a `getInstrumentationLibrary` method that returns the
-`InstrumentationLibrary` information held by the `Tracer`.
+The TracerProvider MAY provide methods to update the configuration. If
+configuration is updated (e.g., adding a `SpanProcessor`),
+the updated configuration MUST also apply to all already returned `Tracers`
+(i.e. it MUST NOT matter whether a `Tracer` was obtained from the
+`TracerProvider` before or after the configuration change).
+Note: Implementation-wise, this could mean that `Tracer` instances have a
+reference to their `TracerProvider` and access configuration only via this
+reference.
 
+## Additional Span Interfaces
+
+The [API-level definition for Span's interface](api.md#span-operations)
+only defines write-only access to the span.
+This is good because instrumentations and applications are not meant to use the data
+stored in a span for application logic.
+However, the SDK needs to eventually read back the data in some locations.
+Thus, the SDK specification defines sets of possible requirements for
+`Span`-like parameters:
+
+* **Readable span**: A function receiving this as argument MUST be able to
+  access all information that was added to the span,
+  as listed [in the API spec](api.md#span-data-members).
+  In particular, it MUST also be able to access
+  the `InstrumentationLibrary` and `Resource` information (implicitly)
+  associated with the span.
+  It must also be able to reliably determine whether the Span has ended
+  (some languages might implement this by having an end timestamp of `null`,
+  others might have an explicit `hasEnded` boolean).
+  
+  A function receiving this as argument might not be able to modify the Span.
+
+  Note: Typically this will be implemented with a new interface or
+  (immutable) value type.
+  In some languages SpanProcessors may have a different readable span type
+  than exporters (e.g. a `SpanData` type might contain an immutable snapshot and
+  a `ReadableSpan` interface might read information directly from the same
+  underlying data structure that the `Span` interface manipulates).
+
+* **Read/write span**: A function receiving this as argument must have access to
+  both the full span API as defined in the
+  [API-level definition for span's interface](api.md#span-operations) and
+  additionally must be able to retrieve all information that was added to the span
+  (as with *readable span*).
+
+  It MUST be possible for functions being called with this
+  to somehow obtain the same `Span` instance and type
+  that the [span creation API](api.md#span-creation) returned (or will return) to the user
+  (for example, the `Span` could be one of the parameters passed to such a function,
+  or a getter could be provided).
+  
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
@@ -168,16 +206,6 @@ exportable representation and passing batches to exporters.
 
 Span processors can be registered directly on SDK `TracerProvider` and they are
 invoked in the same order as they were registered.
-
-All `Tracer` instances created by a `TracerProvider` share the same span processors.
-Changes to this collection reflect in all `Tracer` instances.
-Implementation-wise, this could mean that `Tracer` instances have a reference to
-their `TracerProvider` and can access span processor objects only via this
-reference.
-
-Manipulation of the span processors collection must only happen on `TracerProvider`
-instances. This means methods like `addSpanProcessor` must be implemented on
-`TracerProvider`.
 
 Each processor registered on `TracerProvider` is a start of pipeline that consist
 of span processor and optional exporter. SDK MUST allow to end each pipeline with
@@ -192,16 +220,16 @@ in the SDK:
 ```
   +-----+--------------+   +-------------------------+   +-------------------+
   |     |              |   |                         |   |                   |
-  |     |              |   | BatchExporterProcessor  |   |    SpanExporter   |
-  |     |              +---> SimpleExporterProcessor +--->  (JaegerExporter) |
+  |     |              |   | Batching Span Processor |   |    SpanExporter   |
+  |     |              +---> Simple Span Processor   +--->  (JaegerExporter) |
   |     |              |   |                         |   |                   |
   | SDK | Span.start() |   +-------------------------+   +-------------------+
   |     | Span.end()   |
-  |     |              |   +---------------------+
-  |     |              |   |                     |
-  |     |              +---> ZPagesProcessor     |
-  |     |              |   |                     |
-  +-----+--------------+   +---------------------+
+  |     |              |
+  |     |              |
+  |     |              |
+  |     |              |
+  +-----+--------------+
 ```
 
 ### Interface definition
@@ -214,18 +242,25 @@ exceptions.
 
 **Parameters:**
 
-* `Span` - a readable span object.
+* `Span` - a [read/write span object](#additional-span-interfaces) for the started span.
+  It SHOULD be possible to keep a reference to this span object and updates to the span
+  SHOULD be reflected in it.
+  For example, this is useful for creating a SpanProcessor that periodically
+  evaluates/prints information about all active span from a background thread.
 
 **Returns:** `Void`
 
 #### OnEnd(Span)
 
-`OnEnd` is called when a span is ended. This method is called synchronously on
-the execution thread, therefore it should not block or throw an exception.
+`OnEnd` is called after a span is ended (i.e., the end timestamp is already set).
+This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
+therefore it should not block or throw an exception.
 
 **Parameters:**
 
-* `Span` - a readable span object.
+* `Span` - a [readable span object](#additional-span-interfaces) for the ended span.
+  Note: Even if the passed Span may be technically writable,
+  since it's already ended at this point, modifying it is not allowed.
 
 **Returns:** `Void`
 
@@ -277,7 +312,7 @@ configured `SpanExporter`.
   dropped. The default value is `2048`.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
-* `exporterTimeoutMillis` - how long the export can run before it is cancelled.
+* `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
@@ -301,7 +336,8 @@ interfaces, one that accepts spans (SpanExporter) and one that accepts metrics
 
 #### `Export(batch)`
 
-Exports a batch of telemetry data. Protocol exporters that will implement this
+Exports a batch of [readable spans](#additional-span-interfaces).
+Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
 destination.
 
@@ -318,15 +354,9 @@ and backend the spans are being sent to.
 
 **Parameters:**
 
-batch - a batch of telemetry data. The exact data type of the batch is language
-specific, typically it is a list of telemetry items, e.g. for spans in Java it
-will be typically `Collection<ExportableSpan>`.
-
-Note that the data type for a span for illustration purposes here is written as
-an imaginary type ExportableSpan (similarly for metrics it would be e.g.
-ExportableMetrics). The actual data type must be specified by language library
-authors, it should be able to represent the span data that can be read by the
-exporter.
+batch - a batch of [readable spans](#additional-span-interfaces). The exact data type of the batch is language
+specific, typically it is some kind of list,
+e.g. for spans in Java it will be typically `Collection<SpanData>`.
 
 **Returns:** ExportResult:
 
@@ -337,6 +367,9 @@ ExportResult is one of:
   the wire and delivered to the destination server.
 * `Failure` - exporting failed. The batch must be dropped. For example, this
   can happen when the batch contains bad data and cannot be serialized.
+
+Note: this result may be returned via an async mechanism or a callback, if that
+is idiomatic for the language implementation.
 
 #### `Shutdown()`
 

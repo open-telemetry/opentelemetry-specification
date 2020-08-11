@@ -9,8 +9,9 @@ Table of Contents
   * [Time](#time)
     * [Timestamp](#timestamp)
     * [Duration](#duration)
+* [TracerProvider](#tracerprovider)
+  * [TracerProvider operations](#tracerprovider-operations)
 * [Tracer](#tracer)
-  * [Obtaining a tracer](#obtaining-a-tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
 * [Span](#span)
@@ -25,6 +26,7 @@ Table of Contents
     * [Set Status](#set-status)
     * [UpdateName](#updatename)
     * [End](#end)
+    * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
 * [Status](#status)
   * [StatusCanonicalCode](#statuscanonicalcode)
@@ -33,14 +35,17 @@ Table of Contents
   * [GetDescription](#getdescription)
   * [GetIsOk](#getisok)
 * [SpanKind](#spankind)
+* [Concurrency](#concurrency)
+* [Included Propagators](#included-propagators)
 
 </details>
 
-Tracing API consist of a few main classes:
+The Tracing API consist of these main classes:
 
-- `Tracer` is used for all operations. See [Tracer](#tracer) section.
-- `Span` is a mutable object storing information about the current operation
-   execution. See [Span](#span) section.
+- [`TracerProvider`](#tracerprovider) is the entry point of the API.
+  It provides access to `Tracer`s.
+- [`Tracer`](#tracer) is the class responsible for creating `Span`s.
+- [`Span`](#span) is the API to trace an operation.
 
 ## Data types
 
@@ -66,27 +71,32 @@ A duration is the elapsed time between two events.
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
-## Tracer
+## TracerProvider
 
-The OpenTelemetry library achieves in-process context propagation of `Span`s by
-way of the `Tracer`.
+`Tracer`s can be accessed with a `TracerProvider`.
 
-The `Tracer` is responsible for tracking the currently active `Span`, and
-exposes functions for creating and activating new `Span`s. The `Tracer` is
-configured with `Propagator`s which support transferring span context across
-process boundaries.
+In implementations of the API, the `TracerProvider` is expected to be the
+stateful object that holds any configuration.
 
-### Obtaining a Tracer
+Normally, the `TracerProvider` is expected to be accessed from a central place.
+Thus, the API SHOULD provide a way to set/register and access
+a global default `TracerProvider`.
 
-New `Tracer` instances can be created via a `TracerProvider` and its `getTracer`
-function. This function expects two string arguments:
+Notwithstanding any global `TracerProvider`, some applications may want to or
+have to use multiple `TracerProvider` instances,
+e.g. to have different configuration (like `SpanProcessor`s) for each
+(and consequently for the `Tracer`s obtained from them),
+or because its easier with dependency injection frameworks.
+Thus, implementations of `TracerProvider` SHOULD allow creating an arbitrary
+number of `TracerProvider` instances.
 
-`TracerProvider`s are generally expected to be used as singletons. Implementations
-SHOULD provide a single global default `TracerProvider`.
+### TracerProvider operations
 
-Some applications may use multiple `TracerProvider` instances, e.g. to provide
-different settings (e.g. `SpanProcessor`s) to each of those instances and -
-in further consequence - to the `Tracer` instances created by them.
+The `TracerProvider` MUST provide functions to:
+
+- Get a `Tracer`
+
+That API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
   (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
@@ -98,54 +108,49 @@ in further consequence - to the `Tracer` instances created by them.
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library
+- `version` (optional): Specifies the [version](../resource/semantic_conventions/README.md#version-attributes) of the instrumentation library
   (e.g. `semver:1.0.0`).
 
-Implementations might require the user to specify configuration properties at
-`TracerProvider` creation time, or rely on external configuration, e.g. when using the
-provider pattern.
+It is unspecified whether or under which conditions the same or different
+`Tracer` instances are returned from this functions.
 
-#### Runtimes with multiple deployments/applications
+Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
+with the same name+version to pick up configuration changes.
+This can be achieved either by allowing to work with an outdated configuration or
+by ensuring that new configuration applies also to previously returned `Tracer`s.
 
-Runtimes that support multiple deployments or applications might need to
-provide a different `TracerProvider` instance to each deployment. To support this,
-the global `TracerProvider` registry may delegate calls to create new instances of
-`TracerProvider` to a separate `Provider` component, and the runtime may include
-its own `Provider` implementation which returns a different `TracerProvider` for
-each deployment.
+Note: This could, for example, be implemented by storing any mutable
+configuration in the `TracerProvider` and having `Tracer` implementation objects
+have a reference to the `TracerProvider` from which they were obtained.
+If configuration must be stored per-tracer (such as disabling a certain tracer),
+the tracer could, for example, do a look-up with its name+version in a map in
+the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
+returned `Tracer`s and actively update their configuration if it changes.
 
-`Provider` instances are registered with the API via some language-specific
-mechanism, for instance the `ServiceLoader` class in Java.
+## Tracer
+
+The tracer is responsible for creating `Span`s.
+
+Note that `Tracers` should usually *not* be responsible for configuration.
+This should be the responsibility of the `TracerProvider` instead.
 
 ### Tracer operations
 
 The `Tracer` MUST provide functions to:
 
-- Create a new `Span`
+- [Create a new `Span`](#span-creation) (see the section on `Span`)
 
 The `Tracer` SHOULD provide methods to:
 
 - Get the currently active `Span`
-- Make a given `Span` as active
+- Mark a given `Span` as active
 
-The `Tracer` MUST internally leverage the `Context` in order to get and set the
-current `Span` state and how `Span`s are passed across process boundaries.
-
-When getting the current span, the `Tracer` MUST return a placeholder `Span`
-with an invalid `SpanContext` if there is no currently active `Span`.
-
-When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
-new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
-SHOULD create each new `Span` as a child of its active `Span` unless an
-explicit parent is provided or the option to create a span without a parent is
-selected, or the current active `Span` is invalid.
-
-The `Tracer` SHOULD provide a way to update its active `Span` and MAY provide
-convenience functions to manage a `Span`'s lifetime and the scope in which a
-`Span` is active. When an active `Span` is made inactive, the previously-active
-`Span` SHOULD be made active. A `Span` maybe finished (i.e. have a non-null end
-time) but still active. A `Span` may be active on one thread after it has been
-made inactive on another.
+The `Tracer` MUST delegate to the [`Context`](../context/context.md) to perform
+these tasks, i.e. the above methods MUST do the same as a single equivalent
+method of the Context management system.
+In particular, this implies that the active span MUST not depend on the `Tracer`
+that it is queried from/was set to, as long as the tracers were obtained from
+the same `TracerProvider`.
 
 ## SpanContext
 
@@ -153,7 +158,7 @@ A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
 `SpanContext` MUST be a final (sealed) class.
 
-The OpenTelemetry `SpanContext` representation conforms to the [w3c TraceContext
+The OpenTelemetry `SpanContext` representation conforms to the [W3C TraceContext
 specification](https://www.w3.org/TR/trace-context/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
 `TraceFlags` and system-specific `TraceState` values.
@@ -164,32 +169,32 @@ non-zero byte.
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero
 byte.
 
-`TraceFlags` contain details about the trace. Unlike Tracestate values,
-TraceFlags are present in all traces. Currently, the only `TraceFlags` is a
-boolean `sampled`
-[flag](https://www.w3.org/TR/trace-context/#trace-flags).
+`TraceFlags` contain details about the trace. Unlike TraceState values,
+TraceFlags are present in all traces. The current version of the specification
+only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
 
-`Tracestate` carries system-specific configuration data, represented as a list
-of key-value pairs. TraceState allows multiple tracing systems to participate in
-the same trace.
+`TraceState` carries system-specific configuration data, represented as a list
+of key-value pairs. TraceState allows multiple tracing
+systems to participate in the same trace. Please review the [W3C
+specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
+details on this field.
 
 `IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
 TraceID and a non-zero SpanID.
 
-`IsRemote` is a boolean flag which returns true if the SpanContext was propagated
-from a remote parent.
-When creating children from remote spans, their IsRemote flag MUST be set to false.
-
-Please review the W3C specification for details on the [Tracestate
-field](https://www.w3.org/TR/trace-context/#tracestate-field).
+`IsRemote` is a boolean which is true if the SpanContext was
+propagated from a remote parent. When extracting a `SpanContext` through the
+[Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
+flag MUST be set to true, whereas the SpanContext of any child spans MUST have
+it set to false.
 
 ## Span
 
 A `Span` represents a single operation within a trace. Spans can be nested to
 form a trace tree. Each trace contains a root span, which typically describes
-the end-to-end latency and, optionally, one or more sub-spans for its
-sub-operations.
+the entire operation and, optionally, one or more sub-spans for its sub-operations.
 
+<a name="span-data-members"></a>
 `Span`s encapsulate:
 
 - The span name
@@ -200,7 +205,7 @@ sub-operations.
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
-- An ordered mapping of [`Attribute`s](#set-attributes)
+- [`Attributes`](../common/common.md#attributes)
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
@@ -224,7 +229,26 @@ hypothetical account information:
 | `get_account/{accountId}` | Also good (using the "HTTP route") |
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
-operation. A `Span`'s start time SHOULD be set to the current time on [span
+operation.
+
+For example, if a span represents a request-response cycle (e.g. HTTP or an RPC),
+the span should have a start time that corresponds to the start time of the
+first sub-operation, and an end time of when the final sub-operation is complete.
+This includes:
+
+- receiving the data from the request
+- parsing of the data (e.g. from a binary or json format)
+- any middleware or additional processing logic
+- business logic
+- construction of the response
+- sending of the response
+
+Child spans (or in some cases events) may be created to represent
+sub-operations which require more detailed observability. Child spans should
+measure the timing of the respective sub-operation, and may add additional
+attributes.
+
+A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
 change the its name, set its `Attribute`s, and add `Link`s and `Event`s. These
 MUST NOT be changed after the `Span`'s end time has been set.
@@ -239,9 +263,13 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 ### Span Creation
 
-Implementations MUST provide a way to create `Span`s via a `Tracer`. By default,
-the currently active `Span` is set as the new `Span`'s parent. The `Tracer`
-MAY provide other default options for newly created `Span`s.
+There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
+
+When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
+new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
+SHOULD create each new `Span` as a child of its active `Span`, unless an
+explicit parent is provided or the option to create a span without a parent is
+selected.
 
 `Span` creation MUST NOT set the newly created `Span` as the currently
 active `Span` by default, but this functionality MAY be offered additionally
@@ -256,8 +284,7 @@ The API MUST accept the following parameters:
   See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
   for guidance on `Span` parenting from explicit and implicit `Context`s.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
-- `Attribute`s - A collection of key-value pairs, with the same semantics as
-  the ones settable with [Span::SetAttributes](#set-attributes). Additionally,
+- [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
@@ -309,8 +336,7 @@ description](../overview.md#links-between-spans).
 A `Link` is defined by the following properties:
 
 - (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`s with the same restrictions as defined for
-  [Span Attributes](#set-attributes).
+- (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
 
@@ -368,15 +394,7 @@ propagators.
 
 #### Set Attributes
 
-A `Span` MUST have the ability to set attributes associated with it.
-
-An `Attribute` is defined by the following properties:
-
-- (Required) The attribute key, which MUST be a non-`null` and non-empty string.
-- (Required) The attribute value, which is either:
-  - A primitive type: string, boolean or numeric.
-  - An array of primitive type values. The array MUST be homogeneous,
-    i.e. it MUST NOT contain values of different types.
+A `Span` MUST have the ability to set [`Attributes`](../common/common.md#attributes) associated with it.
 
 The Span interface MUST provide:
 
@@ -388,23 +406,20 @@ Attributes SHOULD preserve the order in which they're set. Setting an attribute
 with the same key as an existing attribute SHOULD overwrite the existing
 attribute's value.
 
-Attribute values expressing a numerical value of zero or an empty string are
+Attribute values expressing a numerical value of zero, an empty string, or an empty array are
 considered meaningful and MUST be stored and passed on to span processors / exporters.
 Attribute values of `null` are considered to be not set and get discarded as if
 that `SetAttribute` call had never been made.
 As an exception to this, if overwriting of values is supported, this results in
 clearing the previous value and dropping the attribute key from the set of attributes.
 
-`null` values within arrays MUST be preserved as-is (i.e., passed on to span
-processors / exporters as `null`). If exporters do not support exporting `null`
-values, they MAY replace those values by 0, `false`, or empty strings.
-This is required for map/dictionary structures represented as two arrays with
-indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
-both containing an array of strings to represent a mapping
-`header_keys[i] -> header_values[i]`).
-
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
+
+Note that [Samplers](sdk.md#sampler) can only consider information already
+present during span creation. Any changes done later, including new or changed
+attributes, cannot change their decisions.
+
 
 #### Add Events
 
@@ -414,8 +429,7 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 
 - (Required) Name of the event.
-- (Optional) One or more `Attribute`s with the same restrictions as defined for
-  [Span Attributes](#set-attributes).
+- (Optional) [`Attributes`](../common/common.md#attributes).
 - (Optional) Timestamp for the event.
 
 The `Event` SHOULD be an immutable type.
@@ -456,15 +470,9 @@ The Span interface MUST provide:
 Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
 name will depend on the implementation.
 
-It is highly discouraged to update the name of a `Span` after its creation.
-`Span` name is often used to group, filter and identify the logical groups of
-spans. And often, filtering logic will be implemented before the `Span` creation
-for performance reasons. Thus the name update may interfere with this logic.
-
-The function name is called `UpdateName` to differentiate this function from the
-regular property setter. It emphasizes that this operation signifies a major
-change for a `Span` and may lead to re-calculation of sampling or filtering
-decisions made previously depending on the implementation.
+Note that [Samplers](sdk.md#sampler) can only consider information already 
+present during span creation. Any changes done later, including updated span 
+name, cannot change their decisions.
 
 Alternatives for the name update may be late `Span` creation, when Span is
 started with the explicit timestamp from the past at the moment where the final
@@ -491,6 +499,19 @@ Parameters:
 - (Optional) Timestamp to explicitly set the end timestamp
 
 This API MUST be non-blocking.
+
+#### Record Exception
+
+To facilitate recording an exception languages SHOULD provide a
+`RecordException` convenience method. The signature of the method is to be
+determined by each language and can be overloaded as appropriate. The method
+MUST record an exception as an `Event` with the conventions outlined in the
+[exception semantic conventions](semantic_conventions/exceptions.md) document.
+
+Examples:
+
+- `RecordException(exception: Exception)`
+- `RecordException(type: String, message: String, stacktrace: String)`
 
 ### Span lifetime
 
@@ -642,3 +663,34 @@ To summarize the interpretation of these kinds:
 | `PRODUCER` | | yes | | maybe |
 | `CONSUMER` | | yes | maybe | |
 | `INTERNAL` | | | | |
+
+## Concurrency
+
+For languages which support concurrent execution the Tracing APIs provide
+specific guarantees and safeties. Not all of API functions are safe to
+be called concurrently.
+
+**TracerProvider** - all methods are safe to be called concurrently.
+
+**Tracer** - all methods are safe to be called concurrently.
+
+**SpanBuilder** - It is not safe to concurrently call any methods of the
+same SpanBuilder instance. Different instances of SpanBuilder can be safely
+used concurrently by different threads/coroutines, provided that no single
+SpanBuilder is used by more than one thread/coroutine.
+
+**Span** - All methods of Span are safe to be called concurrently.
+
+**Event** - Events are immutable and safe to be used concurrently. Lazy
+initialized events must be thread safe. This is the responsibility of the
+implementer of these events.
+
+**Link** - Links are immutable and is safe to be used concurrently. Lazy
+initialized links must be thread safe. This is the responsibility of the
+implementer of these links.
+
+## Included Propagators
+
+The API layer MAY include the following `Propagator`s:
+
+* A `HTTPTextPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).

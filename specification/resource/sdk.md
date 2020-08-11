@@ -13,7 +13,7 @@ with closed source environments. The SDK MUST allow for creation of `Resources` 
 for associating them with telemetry.
 
 When used with distributed tracing, a resource can be associated with the
-[TracerProvider](../trace/sdk.md#tracer-sdk) when it is created.
+[TracerProvider](../trace/api.md#tracerprovider) when it is created.
 That association cannot be changed later.
 When associated with a `TracerProvider`,
 all `Span`s produced by any `Tracer` from the provider MUST be associated with this `Resource`.
@@ -30,14 +30,13 @@ The SDK must support two ways to instantiate new resources. Those are:
 
 ### Create
 
-The interface MUST provide a way to create a new resource, from a collection of
-attributes. Examples include a factory method or a constructor for a resource
+The interface MUST provide a way to create a new resource, from [`Attributes`](../common/common.md#attributes).
+Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
 
 Required parameters:
 
-- a collection of name/value attributes, where name is a string and value can be one
-  of: string, int64, double, bool.
+- [`Attributes`](../common/common.md#attributes)
 
 ### Merge
 

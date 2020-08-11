@@ -7,6 +7,79 @@ the release.
 
 ## Unreleased
 
+New:
+
+- Add resource semantic conventions for operating systems ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
+
+Updates:
+
+- Add semantic convention for NGINX custom HTTP 499 status code.
+- Adapt semantic conventions for the span name of messaging systems ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
+- Provide clear definitions for readable and read/write span interfaces in the SDK ([#669](https://github.com/open-telemetry/opentelemetry-specification/pull/669))
+  * SpanProcessors must provide read/write access at least in OnStart.
+- Specify how `Probability` sampler is used with `ParentOrElse` sampler.
+- Clean up api-propagators.md, by extending documentation and removing redundant sections ([#577](https://github.com/open-telemetry/opentelemetry-specification/pull/577))
+
+## v0.6.0 (07-01-2020)
+
+New:
+
+- Add span attribute to indicate cold starts of Function as a Service executions ([#650](https://github.com/open-telemetry/opentelemetry-specification/pull/650))
+- Add conventions for naming of exporter packages ([#629](https://github.com/open-telemetry/opentelemetry-specification/pull/629))
+- Add semantic conventions for container id ([#673](https://github.com/open-telemetry/opentelemetry-specification/pull/673))
+- Add semantic conventions for HTTP content length ([#641](https://github.com/open-telemetry/opentelemetry-specification/pull/641))
+- Add semantic conventions for process resource ([#635](https://github.com/open-telemetry/opentelemetry-specification/pull/635))
+- Add peer.service to provide a user-configured name for a remote service ([#652](https://github.com/open-telemetry/opentelemetry-specification/pull/652))
+
+Updates:
+
+- Improve root Span description ([#645](https://github.com/open-telemetry/opentelemetry-specification/pull/645))
+- Extend semantic conventions for RPC and allow non-gRPC calls ([#604](https://github.com/open-telemetry/opentelemetry-specification/pull/604))
+- Revise and extend semantic conventions for databases ([#575](https://github.com/open-telemetry/opentelemetry-specification/pull/575))
+- Clarify Tracer vs TracerProvider in tracing API and SDK spec. ([#619](https://github.com/open-telemetry/opentelemetry-specification/pull/619))
+  Most importantly:
+  * Configuration should be stored not per Tracer but in the TracerProvider.
+  * Active spans are not per Tracer.
+- Do not set any value in Context upon failed extraction ([#671](https://github.com/open-telemetry/opentelemetry-specification/pull/671))
+- Clarify semantic conventions around span start and end time ([#592](https://github.com/open-telemetry/opentelemetry-specification/pull/592))
+
+## v0.5.0 (06-02-2020)
+
+- Define Log Data Model.
+- Remove SpanId from Sampler input.
+- Clarify what it will mean for a vendor to "support OpenTelemetry".
+- Clarify Tracers should reference an InstrumentationLibrary rather than a Resource.
+- Replace ALWAYS_PARENT sampler with a composite ParentOrElse sampler.
+- Incorporate old content on metrics calling conventions, label sets.
+- Update api-metrics-user.md and api-metrics-meter.md with the latest metrics API.
+- Normalize Instrumentation term for instrumentations.
+- Change w3c correlation context to custom header.
+
+## v0.4.0 (05-12-2020)
+
+- [OTEP-83](https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md) Introduce the notion of InstrumentationLibrary.
+- [OTEP-88](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0088-metric-instrument-optional-refinements.md) Metrics API instrument foundation.
+- [OTEP-91](https://github.com/open-telemetry/oteps/blob/master/text/logs/0091-logs-vocabulary.md) Logs vocabulary.
+- [OTEP-92](https://github.com/open-telemetry/oteps/blob/master/text/logs/0092-logs-vision.md) Logs Vision.
+- [OTEP-90](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0090-remove-labelset-from-metrics-api.md) Remove LabelSet from the metrics API.
+- [OTEP-98](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0098-metric-instruments-explained.md) Explain the metric instruments.
+- [OTEP-99](https://github.com/open-telemetry/oteps/blob/master/text/0099-otlp-http.md) OTLP/HTTP: HTTP Transport Extension for OTLP.
+- Define handling of null and empty attribute values.
+- Rename Setter.put to Setter.set
+- Add glossary for typically misused terms.
+- Clarify that resources are immutable.
+- Clarify that SpanContext.IsRemote is false on remote children.
+- Move specifications into sub-directories per signal.
+- Remove references to obsolete `peer.*` attributes.
+- Span semantic conventions for for messaging systems.
+- Span semantic conventions for function as a service.
+- Remove the handling of retries from trace exporters.
+- Remove Metrics' default keys.
+- Add some clarifying language to the semantics of metric instrument naming.
+- Allow injectors and extractors to be separate interfaces.
+- Add an explanation on why Context Restore operation is needed.
+- Document special Zipkin conversion cases.
+
 ## v0.3.0 (02-21-2020)
 
 - [OTEP-0059](https://github.com/open-telemetry/oteps/blob/master/text/trace/0059-otlp-trace-data-format.md) Add OTLP Trace Data Format specification.
