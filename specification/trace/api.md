@@ -516,8 +516,8 @@ MUST record an exception as an `Event` with the conventions outlined in the
 
 Examples:
 
-- `RecordException(exception: Exception, escaped: boolean? = null)`
-- `RecordException(type: String, message: String, stacktrace: String, escaped: boolean?)`
+- `RecordException(exception: Exception)`
+- `RecordException(type: String, message: String, stacktrace: String)`
 
 ### Span lifetime
 
