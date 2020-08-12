@@ -247,7 +247,7 @@ imposed by a specific transport and bound to a data type.
 
 The Propagators API currently defines one `Propagator` type:
 
-- `HTTPTextPropagator` injects values into and extracts values from carriers as text.
+- `TextPropagator` injects values into and extracts values from carriers as text.
 
 ## Collector
 
