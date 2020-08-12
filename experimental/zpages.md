@@ -27,7 +27,7 @@ zPages are uniquely useful in a couple of different ways. One is that they're mo
 
 ## Types of zPages
 ### TraceZ
-TraceZ shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. In addition to these counts, TraceZ also keeps samples for for error, running, and each of the latency buckets for a given span names to allows users to look closer at span fields. This is particularlu useful compared to external exporters, which would otherwise likely sample them out.
+TraceZ shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. In addition to these counts, TraceZ also keeps samples for for error, running, and each of the latency buckets for given span names to allow users to look closer at span fields. This is particularly useful compared to external exporters, which would otherwise likely sample them out.
 
 This zPage is particularly useful for debugging latency issues (slow parts of applications), deadlocks and instrumentation problems (running spans that don't end), and errors (where error happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
 
@@ -35,7 +35,7 @@ This zPage is particularly useful for debugging latency issues (slow parts of ap
 
 TraceConfigZ is closely related to and requires implementation of TraceZ, allowing the user to modify how spans are sampled or how much data to keep in TraceZ by updating the TraceZ components accordingly.
 
-For example, the sampling probability can be increased, decreased, or customized in other ways (i.e. depending on span parentage). Number of kept attritubtes, annotations, events, and links can also be adjusted. This would be useful for users that want to more accurately capture span insights or allow scaling better for exceptionally large and complex applications.
+For example, the sampling probability can be increased, decreased, or customized in other ways (i.e. depending on span parentage). Number of kept attributes, annotations, events, and links can also be adjusted. This would be useful for users that want to more accurately capture span insights or allow scaling better for exceptionally large and complex applications.
 
 ### RPCz
 RPCz provides details on sent and received RPC messages, which is categorized  by RPC methods. This includes overall and error counts, average latency per call, RPCs sent per second, and input/output size per second.
@@ -80,20 +80,20 @@ Traditionally, zPages have approached this by rendering webpages purely on the s
 
 All zPages need some server-side rendering, but the data and UI layer could optionally be separated by adding client-side functionality.
 
-Instead of directly translating native data structures to HTML strings based on the stored information, the data layer would do 2 things depending on the webpage endpoint accessed: 1. Serve the static HTML, JS, and CSS files, which are consistent, not server generated, and not data dependent and 2. Act like a web/HTTP API by translating stored data to JSON strings. Whether the data layer does one or the other depends on which URL endpoint is accessed; the former is intended for the initial zPages load, and former for user interactions.
+Instead of directly translating native data structures to HTML strings based on the stored information, the data layer would do 2 things depending on the webpage endpoint accessed: 1. Serve the static HTML, JS, and CSS files, which are consistent, not server generated, and not data dependent and 2. Act like a web/HTTP API by translating stored data to JSON strings. Whether the data layer does one or the other depends on which URL endpoint is accessed; the former is intended for the initial zPages load, and latter for user interactions.
 
 The UI/frontend/rendering layer is the HTML, CSS, and Javascript itself, in contrast to the logic to serve those files. This frontend uses the data layer's API on the client-side within the browser with Javascript by accessing certain endpoints depending on the user's actions. The data returned interacts with the Javascript, which determines and executes the logic necessary to render update to the HTML DOM. Modifying the HTML DOM means there are no unnecessary requesting and re-rendering static files, and only parts of the webpage are changed. This makes subsequent data queries quicker and requires no knowledge of client-side rendering for the zPages developer. 
 
-In either case, a benefit of reasoning about the zPages HTTP server as a separate component means that zPages can be mounted in a existing server. For example, this can be done in Java by calling this zPage logic from a servlet.
+In either case, a benefit of reasoning about the zPages HTTP server as a separate component means that zPages can be mounted in an existing server. For example, this can be done in Java by calling this zPage logic from a servlet.
 
 -------------
 ## Future Possibilities
 ### Out-process
-Out-process zPages are ones that are compatible across different languages, which executes process of tracing and metrics information outside of applications (as opposed to in-process zPages).
+Out-process zPages are ones that are compatible across different languages, which executes the processing of tracing and metrics information outside of applications (as opposed to in-process zPages).
 - Pros
   - zPages can be added to any OpenTelemetry repository, and future development can be completely focused there
 - Cons
-  - More complicated than using local methods since it require setup (i.e. RPC or exporters) to allow zPages and applications to communication to work. This would make it similar to other tracing systems.
+  - More complicated than using local methods since it require setup (i.e. RPC or exporters) to allow zPages and applications to communicate. This would make it similar to other tracing systems.
 
 ### Shared Static Files
 All HTML, CSS, and Javascript files would be used across different OTel language repositories for their in-process zPages
