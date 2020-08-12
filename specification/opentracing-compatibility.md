@@ -60,7 +60,7 @@ Inject the underlying `SpanContext` using the registered `Propagator`s:
 
 - `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered `HTTPTextPropagator`, if any.
 
-Errors MUST NOT be raised if the specified OpenTracing `Format` is  not supported.
+Errors MUST NOT be raised if the specified OpenTracing `Format` is `BINARY`.
 
 ### Extract
 
@@ -69,7 +69,7 @@ Extract an OpenTelemetry `SpanContext` from a carrier using the registered `Prop
 - `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered `HTTPTextPropagator`, if any.
 
 Returns an OpenTracing `SpanContext` with the underlying extracted `SpanContext`, or null if
-either the OpenTracing `Format` is not supported or no value could be extracted.
+either the OpenTracing `Format` is `BINARY` or no value could be extracted.
 
 ## ScopeManager.
 
@@ -121,19 +121,23 @@ containing the specified name/value pair.
 
 Calls `Set Attribute` on the underlying `Span` with the specified name/value pair.
 
-If the type of the specified value is not supported, an error MUST be raised.
+If the type of the specified value is not supported, the value MUST NOT be set and
+a warning SHOULD be generated following the [error handling](error-handling.md)
+section.
 
 ### Log
 
 Calls `Add Event` on the underlying `Span`.
 
-Specifying an explicit timestamp is not supported, and an error MUST be raised.
+If an explicit timestamp is specified, it MUST be converted from microseconds
+to nanoseconds.
 
 ### Finish
 
 Calls `End` on the underlying `Span`.
 
-Specifying an explicit timestamp is not supported, and an error MUST be raised.
+If an explicit timestamp is specified, it MUST be converted from microseconds
+to nanoseconds.
 
 ### SpanContext
 
