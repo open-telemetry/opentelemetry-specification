@@ -13,6 +13,7 @@ Particular operations may refer to or require some of these attributes.
   * [`net.*.name` attributes](#netname-attributes)
 - [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
+- [General thread attributes](#general-thread-attributes)
 
 <!-- tocstop -->
 
@@ -129,3 +130,22 @@ Examples of where the `enduser.id` value is extracted from:
 Given the sensitive nature of this information, SDKs and exporters SHOULD drop these attributes by
 default and then provide a configuration parameter to turn on retention for use cases where the
 information is required and would not violate any policies or regulations.
+
+## General thread attributes
+
+These attributes may be used for any operation to store information about
+a span's current execution thread.
+
+| Attribute name | Notes and examples                                       |
+|----------------|----------------------------------------------------------|
+| `thread.id`    | Current thread id, if exposed by the platform. E.g. `42` |
+| `thread.name`  | Current thread name. E.g. `main`                         |
+
+Examples of where `thread.id` and `thread.name` can be extracted from:
+
+| Launguage or platform | `thread.id`                            | `thread.name`                      |
+|-----------------------|----------------------------------------|------------------------------------|
+| JVM                   | `Thread.currentThread().getId()`       | `Thread.currentThread().getName()` |
+| .Net                  | `Thread.CurrentThread.ManagedThreadId` | `Thread.CurrentThread.Name`        |
+| Python                | `threading.current_thread().ident`     | `threading.current_thread().name`  |
+| Ruby                  |                                        | `Thread.current.name`              |
