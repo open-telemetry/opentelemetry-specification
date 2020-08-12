@@ -402,9 +402,8 @@ The Span interface MUST provide:
   as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
   implementations may offer a separate API for each of the possible value types.
 
-Attributes SHOULD preserve the order in which they're set. Setting an attribute
-with the same key as an existing attribute SHOULD overwrite the existing
-attribute's value.
+Setting an attribute with the same key as an existing attribute SHOULD overwrite
+the existing attribute's value.
 
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
