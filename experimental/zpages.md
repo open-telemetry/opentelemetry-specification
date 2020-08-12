@@ -27,7 +27,7 @@ zPages are uniquely useful in a couple of different ways. One is that they're mo
 
 ## Types of zPages
 ### TraceZ
-TraceZ shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. In addition to these counts, TraceZ also keeps samples for for error, running, and each of the latency buckets for given span names to allow users to look closer at span fields. This is particularly useful compared to external exporters, which would otherwise likely sample them out.
+TraceZ shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. In addition to these counts, TraceZ also keeps a set number of samples for error, running, and latency (including within each duration bucket) spans for each span name to allow users to look closer at span fields. This is particularly useful compared to external exporters that would otherwise likely sample them out.
 
 This zPage is particularly useful for debugging latency issues (slow parts of applications), deadlocks and instrumentation problems (running spans that don't end), and errors (where error happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
 
