@@ -19,17 +19,17 @@
   - [Shared Static Files](#shared-static-files)
 
 ## Overview
-zPages are an in-process alternative to external exporters. When included, they collect and aggregate tracing and metrics information in the background; this data is served on webpages when requested.
+zPages are an in-process alternative to external exporters. When included, they collect and aggregate tracing and metrics information in the background; this data is served on web pages when requested.
 
-The idea of "zPages" originates from one of OpenTelemetry's predecessors, [OpenCensus](https://opencensus.io/). You can read more about zPages from the OpenCensus docs [here](https://opencensus.io/zpages) or the OTEP [here](https://github.com/open-telemetry/oteps/blob/master/text/0110-z-pages.md). OpenCensus has different zPage implementations in [Java](https://opencensus.io/zpages/java/), [Go](https://opencensus.io/zpages/go/), and [Node](https://opencensus.io/zpages/node/) and there has been similar internal solutions developed at companies like Uber. Within OpenTelemetry, zPages are also either developed or being developed in [C#](https://github.com/open-telemetry/opentelemetry-dotnet/tree/master/src/OpenTelemetry.Exporter.ZPages), Java, and C++.
+The idea of "zPages" originates from one of OpenTelemetry's predecessors, [OpenCensus](https://opencensus.io/). You can read more about zPages from the OpenCensus docs [here](https://opencensus.io/zpages) or the OTEP [here](https://github.com/open-telemetry/oteps/blob/master/text/0110-z-pages.md). OpenCensus has different zPage implementations in [Java](https://opencensus.io/zpages/java/), [Go](https://opencensus.io/zpages/go/), and [Node](https://opencensus.io/zpages/node/) and there has been similar internal solutions developed at companies like Uber. Within OpenTelemetry, zPages are also either developed or being developed in [C#](https://github.com/open-telemetry/opentelemetry-dotnet/tree/master/src/OpenTelemetry.Exporter.ZPages), Java, and C++. The OTel Collector also has [an implementation](https://github.com/open-telemetry/opentelemetry-collector/tree/master/extension/zpagesextension) of zPages.
 
-zPages are uniquely useful in a couple of different ways. One is that they're more lightweight and quicker compared to installing external tracing systems like Jaeger and Zipkin, yet they still share useful ways to debug and gain insight into instrumented applications; these uses depend on the type of zPage, which is detailed below. For high throughput applications, zPages can also analyze more telemetry with the limited set of supported scenarios than external exporters; this is because zPages are in-memory while external exporters are typically configured to send subset of telemetry for reach analysis to save costs.
+zPages are uniquely useful in a couple of different ways. One is that they're more lightweight and quicker compared to installing external tracing systems like Jaeger and Zipkin, yet they still share useful ways to debug and gain insight into instrumented applications; these uses depend on the type of zPage, which is detailed below. For high throughput applications, zPages can also analyze more telemetry with the limited set of supported scenarios than external exporters; this is because zPages are in-memory while external exporters are typically configured to send a subset of telemetry for reach analysis to save costs.
 
 ## Types of zPages
 ### TraceZ
 TraceZ shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. In addition to these counts, TraceZ also keeps a set number of samples for error, running, and latency (including within each duration bucket) spans for each span name to allow users to look closer at span fields. This is particularly useful compared to external exporters that would otherwise likely sample them out.
 
-This zPage is particularly useful for debugging latency issues (slow parts of applications), deadlocks and instrumentation problems (running spans that don't end), and errors (where error happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
+This zPage is also useful for debugging latency issues (slow parts of applications), deadlocks and instrumentation problems (running spans that don't end), and errors (where errors happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
 
 ### TraceConfigZ
 
@@ -76,13 +76,13 @@ Each zPages implementation ideally creates a wrapper class for zPages, since the
 ### HTTP Server
 All zPages have some sort of HTTP Server component to render their information on a webpage when a host:port and endpoint is accessed.
 
-Traditionally, zPages have approached this by rendering webpages purely on the server-side. This means the server would only serve static resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Based on the type of zPage and the server language used, a pure server-side approach would generate HTML pages using hardcoded strings from scratch or using a template; this would tightly couple the data and UI layer.
+Traditionally, zPages have approached this by rendering web pages purely on the server-side. This means the server would only serve static resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Based on the type of zPage and the server language used, a pure server-side approach would generate HTML pages using hardcoded strings from scratch or using a template; this would tightly couple the data and UI layer.
 
 All zPages need some server-side rendering, but the data and UI layer could optionally be separated by adding client-side functionality.
 
 Instead of directly translating native data structures to HTML strings based on the stored information, the data layer would do 2 things depending on the webpage endpoint accessed: 1. Serve the static HTML, JS, and CSS files, which are consistent, not server generated, and not data dependent and 2. Act like a web/HTTP API by translating stored data to JSON strings. Whether the data layer does one or the other depends on which URL endpoint is accessed; the former is intended for the initial zPages load, and latter for user interactions.
 
-The UI/frontend/rendering layer is the HTML, CSS, and Javascript itself, in contrast to the logic to serve those files. This frontend uses the data layer's API on the client-side within the browser with Javascript by accessing certain endpoints depending on the user's actions. The data returned interacts with the Javascript, which determines and executes the logic necessary to render update to the HTML DOM. Modifying the HTML DOM means there are no unnecessary requesting and re-rendering static files, and only parts of the webpage are changed. This makes subsequent data queries quicker and requires no knowledge of client-side rendering for the zPages developer. 
+The UI/frontend/rendering layer is the HTML, CSS, and Javascript itself, in contrast to the logic to serve those files. This frontend uses the data layer's API on the client-side within the browser with Javascript by accessing certain endpoints depending on the user's actions. The data returned interacts with the Javascript, which determines and executes the logic necessary to render updates to the HTML DOM. Modifying the HTML DOM means there are no unnecessary requesting and re-rendering static files, and only parts of the webpage are changed. This makes subsequent data queries quicker and requires no knowledge of client-side rendering for the zPages developer. 
 
 In either case, a benefit of reasoning about the zPages HTTP server as a separate component means that zPages can be mounted in an existing server. For example, this can be done in Java by calling this zPage logic from a servlet.
 
@@ -110,3 +110,6 @@ All HTML, CSS, and Javascript files would be used across different OTel language
 > TODO
 
 > GENERAL TODO: Link spec where possible, add pictures/figures and design docs links
+
+
+
