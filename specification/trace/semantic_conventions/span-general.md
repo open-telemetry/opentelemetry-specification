@@ -138,7 +138,7 @@ a span's current execution thread.
 
 | Attribute name | Notes and examples                                       |
 |----------------|----------------------------------------------------------|
-| `thread.id`    | Current thread id, if exposed by the platform. E.g. `42` |
+| `thread.id`    | Current "managed" thread ID (as opposed to OS thread ID). E.g. `42` |
 | `thread.name`  | Current thread name. E.g. `main`                         |
 
 Examples of where `thread.id` and `thread.name` can be extracted from:
