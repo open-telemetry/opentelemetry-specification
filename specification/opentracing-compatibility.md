@@ -26,7 +26,7 @@
 ## Abstract
 
 The OpenTelemetry project aims to provide backwards compatibility with the
-[OpenTracing](https://opentracing.io) project in order ease migration of
+[OpenTracing](https://opentracing.io) project in order to ease migration of
 instrumented codebases.
 
 This functionality will be provided as a bridge layer implementing the
