@@ -29,7 +29,7 @@ While zPages are uniquely useful in being more lightweight and quicker compared 
 ### TraceZ
 TraceZ shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. It also allows users to look closer at details for spans that are sampled.
 
-This type of zPage is useful particularly for debugging latency issues (slow parts of applications), deadlocks (running spans that don't end), and errors (where error happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
+This type of zPage is useful particularly for debugging latency issues (slow parts of applications), deadlocks and instrumentation problems (e.g. running spans that don't end), and errors (where error happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
 
 You can read about TraceZ more [here](https://opencensus.io/zpages/java/#tracez).
 
@@ -109,4 +109,3 @@ All HTML, CSS, and Javascript files would be used across different OTel language
 > TODO
 
 > GENERAL TODO: Link spec where possible, add pictures/figures and design docs links
-
