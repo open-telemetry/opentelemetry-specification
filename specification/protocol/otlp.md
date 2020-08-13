@@ -1,6 +1,6 @@
 # OpenTelemetry Protocol Specification
 
-OpenTelemetry Protocol (OTLP) specification describes the encoding, transport
+OpenTelemetry Protocol (OTLP) specification describes the encoding, transport,
 and delivery mechanism of telemetry data between telemetry sources, intermediate
 nodes such as collectors and telemetry backends.
 
@@ -36,26 +36,7 @@ nodes such as collectors and telemetry backends.
 * [References](#references)
 
 OTLP is a general-purpose telemetry data delivery protocol designed in the scope
-of OpenTelemetry project. It is an incremental improvement of OpenCensus
-protocol. Compared to OpenCensus protocol OTLP has the following improvements:
-
-- Ensures high reliability of data delivery and clear visibility when the data
-  cannot be delivered. OTLP uses acknowledgements to implement reliable
-  delivery.
-
-- It is friendly to Level 7 Load Balancers and allows them to correctly map
-  imbalanced incoming traffic to a balanced outgoing traffic. This allows to
-  efficiently operate large networks of nodes where telemetry data generation
-  rates change over time.
-
-- Allows backpressure signalling from telemetry data destinations to sources.
-  This is important for implementing reliable multi-hop telemetry data delivery
-  all the way from the source to the destination via intermediate nodes, each
-  having different processing capacity and thus requiring different data
-  transfer rates.
-
-- Defines both gRPC and HTTP 1.1 transports, allowing the clients to choose the
-  best available transport.
+of OpenTelemetry project.
 
 ## Protocol Details
 
@@ -74,14 +55,12 @@ and response type: `Export`.
 ### OTLP/gRPC
 
 After establishing the underlying gRPC transport the client starts sending
-telemetry data using unary requests using `Export*Request` messages
-([`ExportTraceServiceRequest`](https://github.com/open-telemetry/opentelemetry-proto/blob/e6c3c4a74d57f870a0d781bada02cb2b2c497d14/opentelemetry/proto/collector/trace/v1/trace_service.proto#L38)
-for traces,
-[`ExportMetricsServiceRequest`](https://github.com/open-telemetry/opentelemetry-proto/blob/e6c3c4a74d57f870a0d781bada02cb2b2c497d14/opentelemetry/proto/collector/metrics/v1/metrics_service.proto#L35)
-for metrics,
-[`ExportLogsServiceRequest`](https://github.com/open-telemetry/opentelemetry-proto/blob/ca6dcbbf390d8b3ce419a931eb351d189a3eb4fa/opentelemetry/proto/collector/logs/v1/logs_service.proto#L38)
-for logs). The client continuously sends a sequence of requests to the server
-and expects to receive a response to each request:
+telemetry data using unary requests using
+[Export*ServiceRequest](https://github.com/open-telemetry/opentelemetry-proto)
+messages (`ExportTraceServiceRequest` for traces, `ExportMetricsServiceRequest`
+for metrics, `ExportLogsServiceRequest` for logs). The client continuously sends
+a sequence of requests to the server and expects to receive a response to each
+request:
 
 ![Request-Response](img/otlp-request-response.png)
 
@@ -145,13 +124,10 @@ The success response indicates telemetry data is successfully processed by the
 server. If the server receives an empty request (a request that does not carry
 any telemetry data) the server SHOULD respond with success.
 
-Success response is returned via `Export*Response` message
-([`ExportTraceServiceResponse`](https://github.com/open-telemetry/opentelemetry-proto/blob/e6c3c4a74d57f870a0d781bada02cb2b2c497d14/opentelemetry/proto/collector/trace/v1/trace_service.proto#L47)
-for traces,
-[`ExportMetricsServiceResponse`](https://github.com/open-telemetry/opentelemetry-proto/blob/e6c3c4a74d57f870a0d781bada02cb2b2c497d14/opentelemetry/proto/collector/metrics/v1/metrics_service.proto#L44)
-for metrics,
-[`ExportLogsServiceResponse`](https://github.com/open-telemetry/opentelemetry-proto/blob/ca6dcbbf390d8b3ce419a931eb351d189a3eb4fa/opentelemetry/proto/collector/logs/v1/logs_service.proto#L47)
-for logs).
+Success response is returned via
+[Export*ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
+message (`ExportTraceServiceResponse` for traces, `ExportMetricsServiceResponse`
+for metrics, `ExportLogsServiceResponse` for logs).
 
 When an error is returned by the server it falls into 2 broad categories:
 retryable and not-retryable:
@@ -274,7 +250,8 @@ Here is a sample Go code to illustrate:
 ```
 
 When the client receives this signal it SHOULD follow the recommendations
-outlined in documentation for `RetryInfo`:
+outlined in documentation for
+[RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40):
 
 ```
 // Describes when the clients can retry a failed request. Clients could ignore
@@ -299,10 +276,16 @@ data while it is throttled.
 
 #### gRPC Service and Protobuf Definitions
 
-gRPC service definitions [are here](https://github.com/open-telemetry/opentelemetry-proto/tree/master/opentelemetry/proto/collector).
+gRPC service definitions
+[are here](https://github.com/open-telemetry/opentelemetry-proto/tree/master/opentelemetry/proto/collector).
 
 Protobuf definitions for requests and responses
 [are here](https://github.com/open-telemetry/opentelemetry-proto/tree/master/opentelemetry/proto).
+
+Please make sure to check the proto version and
+[maturity level](https://github.com/open-telemetry/opentelemetry-proto/#maturity-level).
+Schemas for different signals may be at different maturity level - some stable,
+some in beta.
 
 #### Default Port
 
@@ -328,18 +311,13 @@ format.
 The default URL path for requests that carry trace data is `/v1/traces` (for
 example the full URL when connecting to "example.com" server will be
 `https://example.com/v1/traces`). The request body is a Protobuf-encoded
-[`ExportTraceServiceRequest`](https://github.com/open-telemetry/opentelemetry-proto/blob/e6c3c4a74d57f870a0d781bada02cb2b2c497d14/opentelemetry/proto/collector/trace/v1/trace_service.proto#L38)
-message.
+`ExportTraceServiceRequest` message.
 
 The default URL path for requests that carry metric data is `/v1/metrics` and
-the request body is a Protobuf-encoded
-[`ExportMetricsServiceRequest`](https://github.com/open-telemetry/opentelemetry-proto/blob/e6c3c4a74d57f870a0d781bada02cb2b2c497d14/opentelemetry/proto/collector/metrics/v1/metrics_service.proto#L35)
-message.
+the request body is a Protobuf-encoded `ExportMetricsServiceRequest` message.
 
 The default URL path for requests that carry log data is `/v1/logs` and the
-request body is a Protobuf-encoded
-[`ExportLogsServiceRequest`](https://github.com/open-telemetry/opentelemetry-proto/blob/ca6dcbbf390d8b3ce419a931eb351d189a3eb4fa/opentelemetry/proto/collector/logs/v1/logs_service.proto#L38)
-message.
+request body is a Protobuf-encoded `ExportLogsServiceRequest` message.
 
 The client MUST set "Content-Type: application/x-protobuf" request header when
 sending binary-encoded Protobuf or "Content-Type: application/json" request
@@ -365,7 +343,8 @@ the specific message to use in the Success and Failure cases).
 The server MUST set "Content-Type: application/x-protobuf" header if the
 response body is binary-encoded Protobuf payload. The server MUST set
 "Content-Type: application/json" if the response is JSON-encoded Protobuf
-payload.
+payload. The server MUST use the same "Content-Type" in the response as it
+received in the request.
 
 If the request header "Accept-Encoding: gzip" is present in the request the
 server MAY gzip-encode the response and set "Content-Encoding: gzip" response
@@ -374,12 +353,9 @@ header.
 ##### Success
 
 On success the server MUST respond with `HTTP 200 OK`. Response body MUST be
-Protobuf-encoded
-[`ExportTraceServiceResponse`](https://github.com/open-telemetry/opentelemetry-proto/blob/e6c3c4a74d57f870a0d781bada02cb2b2c497d14/opentelemetry/proto/collector/trace/v1/trace_service.proto#L47)
-message for traces, 
-[`ExportMetricsServiceResponse`](https://github.com/open-telemetry/opentelemetry-proto/blob/e6c3c4a74d57f870a0d781bada02cb2b2c497d14/opentelemetry/proto/collector/metrics/v1/metrics_service.proto#L44)
-message for metrics and [`ExportLogsServiceResponse`](https://github.com/open-telemetry/opentelemetry-proto/blob/ca6dcbbf390d8b3ce419a931eb351d189a3eb4fa/opentelemetry/proto/collector/logs/v1/logs_service.proto#L47)
-message for logs.
+Protobuf-encoded `ExportTraceServiceResponse` message for traces,
+`ExportMetricsServiceResponse` message for metrics and
+`ExportLogsServiceResponse` message for logs.
 
 The server SHOULD respond with success no sooner than after successfully
 decoding and validating the request.
