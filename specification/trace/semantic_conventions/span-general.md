@@ -134,12 +134,12 @@ information is required and would not violate any policies or regulations.
 ## General thread attributes
 
 These attributes may be used for any operation to store information about
-a span's current execution thread.
+a thread that started a span.
 
-| Attribute name | Notes and examples                                       |
-|----------------|----------------------------------------------------------|
+| Attribute name | Notes and examples                                                  |
+|----------------|---------------------------------------------------------------------|
 | `thread.id`    | Current "managed" thread ID (as opposed to OS thread ID). E.g. `42` |
-| `thread.name`  | Current thread name. E.g. `main`                         |
+| `thread.name`  | Current thread name. E.g. `main`                                    |
 
 Examples of where `thread.id` and `thread.name` can be extracted from:
 
@@ -149,3 +149,4 @@ Examples of where `thread.id` and `thread.name` can be extracted from:
 | .Net                  | `Thread.CurrentThread.ManagedThreadId` | `Thread.CurrentThread.Name`        |
 | Python                | `threading.current_thread().ident`     | `threading.current_thread().name`  |
 | Ruby                  |                                        | `Thread.current.name`              |
+| C++                   | `std::this_thread::get_id`             |                                    |
