@@ -172,7 +172,7 @@ functions as a potential endpoint for Agent/SDKs to retrieve configuration data.
 The following schematic illustrates the Collector’s position in the overall
 architecture, as well as how the configuration information flows.
 
-![dynamic config schematic](../internal/img/dynamic-config-service.png)
+![dynamic config schematic](../../internal/img/dynamic-config-service.png)
 
 Requests from the SDK, represented at the bottom, flow upwards to the Collector,
 which functions as our configuration backend. The Collector then references
