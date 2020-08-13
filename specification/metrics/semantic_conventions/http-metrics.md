@@ -44,7 +44,6 @@ and whether they should be on server, client, or both types of HTTP metric event
 | `http.server_name` | `server`            | see [2] in [label alternatives](#label-alternatives) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this label MUST NOT be set ( `net.host.name` should be used instead). |
 | `net.host.name`    | `server`            | see [2] in [label alternatives](#label-alternatives) | The name of the host. |
 | `net.host.port`    | `server`            | see [2] in [label alternatives](#label-alternatives) | The port of the host. |
-| `http.route`       | `server`            | Optional          | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. |
 
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
