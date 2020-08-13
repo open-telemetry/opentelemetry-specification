@@ -142,7 +142,7 @@ retryable and not-retryable:
   and cannot be deserialized or otherwise processed by the server. The client
   SHOULD maintain a counter of such dropped data.
 
-The server SHOULD indicate retryable errors using code
+The server MUST indicate retryable errors using code
 [Unavailable](https://godoc.org/google.golang.org/grpc/codes) and MAY supply
 additional
 [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails)
@@ -217,7 +217,7 @@ If the server is unable to keep up with the pace of data it receives from the
 client then it SHOULD signal that fact to the client. The client MUST then
 throttle itself to avoid overwhelming the server.
 
-To signal backpressure when using gRPC transport, the server SHOULD return an
+To signal backpressure when using gRPC transport, the server MUST return an
 error with code [Unavailable](https://godoc.org/google.golang.org/grpc/codes)
 and MAY supply additional
 [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails)
@@ -495,7 +495,7 @@ OTLP introduce new functionality that cannot be understood and supported by
 nodes implementing the old versions of OTLP the protocol must regress to the
 lowest common denominator from functional perspective.
 
-When possible the interoperability SHOULD be ensured between all versions of
+When possible the interoperability MUST be ensured between all versions of
 OTLP that are not declared obsolete.
 
 OTLP does not use explicit protocol version numbering. OTLP's interoperability
@@ -525,11 +525,6 @@ of clients and servers of different versions is based on the following concepts:
    require a discovery. The implementation which supports a new, optional
    capability MUST adjust its behavior to match the expectation of a peer that
    does not support a particular capability.
-
-The current version of OTLP is the initial version that describes mandatory
-capabilities only. Implementations of this specification SHOULD NOT attempt to
-detect the capabilities of their peers and should operate as defined in this
-document.
 
 ## Glossary
 
