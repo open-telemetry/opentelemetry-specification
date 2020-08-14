@@ -22,8 +22,8 @@ OpenTelemetry Span's `InstrumentationLibraryInfo` MUST be reported as `tags` to 
  
 | OpenTelemetry | Jaeger |
 | ------------- | ------ |
-| `InstrumentationLibraryInfo.name`|`otel.instrumentationLibrary.name`|
-| `InstrumentationLibraryInfo.version`|`otel.instrumentationLibrary.version`|
+| `InstrumentationLibraryInfo.name`|`otel.instrumentation_library.name`|
+| `InstrumentationLibraryInfo.version`|`otel.instrumentation_library.version`|
 
 ### Attribute
 
