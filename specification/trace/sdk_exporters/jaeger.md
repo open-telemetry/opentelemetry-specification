@@ -16,14 +16,14 @@ TBD
 This section discusses the details of the transformations between OpenTelemetry
 and Jaeger.
 
-### InstrumentationLibraryInfo
+### InstrumentationLibrary
 
-OpenTelemetry Span's `InstrumentationLibraryInfo` MUST be reported as `tags` to Jaeger using the following mapping.
+OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Jaeger using the following mapping.
  
 | OpenTelemetry | Jaeger |
 | ------------- | ------ |
-| `InstrumentationLibraryInfo.name`|`otel.instrumentation_library.name`|
-| `InstrumentationLibraryInfo.version`|`otel.instrumentation_library.version`|
+| `InstrumentationLibrary.name`|`otel.instrumentation_library.name`|
+| `InstrumentationLibrary.version`|`otel.instrumentation_library.version`|
 
 ### Attribute
 
