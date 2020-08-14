@@ -13,8 +13,9 @@ exceptions.
 
 ## Recording an Exception
 
-An exception that escapes the scope of a span
-SHOULD be recorded as an `Event` on that span.
+An exception that escapes the scope of a span SHOULD be recorded
+as an `Event` on that span
+(of course, other exceptions that are deemed relevant may also be recorded).
 An exception is considered to have escaped the scope if the span is ended
 while the exception is still "in flight". Note:
 
@@ -28,9 +29,9 @@ while the exception is still "in flight". Note:
 
 The name of the event MUST be `"exception"`.
 
-Note that multiple events (on the same or different Spans)
-might be logged for the same exception object instance.
-E.g. one event might be logged in an instrumented exception constructor
+Note that multiple events (on the same or different Spans) might be logged
+for the same exception object instance.
+For example, one event might be logged in an instrumented exception constructor
 and another event might be logged when an exception leaves the scope of a span.
 
 <a name="exception-end-example"></a>
