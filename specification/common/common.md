@@ -56,7 +56,7 @@ Attribute names SHOULD follow these rules:
   words by underscores (i.e. use snake_case). For example `http.status_code`
   denotes the status code in the http namespace.
 
-- Attribute names should not coincide with namespaces. For example if
+- Attribute names SHOULD NOT coincide with namespaces. For example if
   `service.instance.id` is an attribute name then it is no longer valid to have
   an attribute named `service.instance` because `service.instance` is already a
   namespace. Because of this rule be careful when choosing attribute names:
@@ -66,7 +66,7 @@ Attribute names SHOULD follow these rules:
 
 #### Recommendations for OpenTelemetry Authors
 
-- All attributes names that are part of OpenTelemetry semantic conventions
+- All attribute names that are part of OpenTelemetry semantic conventions
   SHOULD be part of a namespace. 
 
 - When coming up with a new convention make sure to check existing namespaces
@@ -80,10 +80,11 @@ Attribute names SHOULD follow these rules:
 - When a new namespace is necessary consider whether it should be a top-level
   namespace (e.g. `service`) or a nested namespace (e.g. `service.instance`).
 
-- Semantic conventions MUST limit attribute names to
+- Semantic conventions MUST limit attribute names to printable Basic Latin
+  characters (more precisely to
   [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
-  subset of Unicode code points only. It is recommended to further limit
-  attribute names to the following Unicode code points: Latin alphabet, Numeric,
+  subset of Unicode code points). It is recommended to further limit attribute
+  names to the following Unicode code points: Latin alphabet, Numeric,
   Underscore, Dot (as namespace delimiter).
 
 #### Recommendations for Application Developers
@@ -108,9 +109,10 @@ new name. To do that consider a few options:
   does not clash with an existing semantic convention namespace. If in doubt
   prefix it with your company's reverse domain name.
 
-- It is recommended to limit attribute names to
+- It is recommended to limit attribute names to printable Basic Latin characters
+  (more precisely to
   [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
-  subset of Unicode code points only.
+  subset of Unicode code points).
 
 - The attribute may be generally applicable to applications in the industry. In
   that case consider submitting a proposal to this specification to add a new
