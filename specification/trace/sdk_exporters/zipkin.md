@@ -85,7 +85,7 @@ OpenTelemetry Span's `InstrumentationLibraryInfo` MUST be reported as `tags` to 
  
 | OpenTelemetry | Zipkin
 | ------------- | ------ |
-| `InstrumentationLibraryInfo.name`|`otel.instrumentationLibrary.name`|
+| `InstrumentationLibraryInfo.name`|`otel.instrumentation_library.name`|
 | `InstrumentationLibraryInfo.version`|`otel.instrumentationLibrary.version`|
 
 ### Attribute
