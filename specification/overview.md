@@ -27,7 +27,6 @@ Table of Contents
 - [Propagators](#propagators)
 - [Collector](#collector)
 - [Instrumentation Libraries](#instrumentation-libraries)
-- [Code injecting adapters](#code-injecting-adapters)
 - [Semantic Conventions](#semantic-conventions)
 
 <!-- tocstop -->
