@@ -79,14 +79,14 @@ Zipkin.
 | `SpanKind.PRODUCER`|`SpanKind.PRODUCER` ||
 | `SpanKind.INTERNAL`|`null` |must be omitted (set to `null`)|
 
-### InstrumentationLibraryInfo
+### InstrumentationLibrary
 
-OpenTelemetry Span's `InstrumentationLibraryInfo` MUST be reported as `tags` to Zipkin using the following mapping.
+OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Zipkin using the following mapping.
  
 | OpenTelemetry | Zipkin
 | ------------- | ------ |
-| `InstrumentationLibraryInfo.name`|`otel.instrumentation_library.name`|
-| `InstrumentationLibraryInfo.version`|`otel.instrumentation_library.version`|
+| `InstrumentationLibrary.name`|`otel.instrumentation_library.name`|
+| `InstrumentationLibrary.version`|`otel.instrumentation_library.version`|
 
 ### Attribute
 
