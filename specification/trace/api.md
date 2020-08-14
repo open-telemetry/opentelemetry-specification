@@ -216,13 +216,16 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
-The _span name_ is a human-readable string which concisely identifies the work
-represented by the Span, for example, an RPC method name, a function name,
-or the name of a subtask or stage within a larger computation. The span name
-should be the most general string that identifies a (statistically) interesting
-_class of Spans_, rather than individual Span instances. That is, "get_user" is
-a reasonable name, while "get_user/314159", where "314159" is a user ID, is not
-a good name due to its high cardinality.
+The _span name_ concisely identifies the work represented by the Span,
+for example, an RPC method name, a function name,
+or the name of a subtask or stage within a larger computation.
+The span name SHOULD be the most general string that identifies a
+(statistically) interesting _class of Spans_,
+rather than individual Span instances.
+That is, "get_user" is a reasonable name, while "get_user/314159",
+where "314159" is a user ID, is not a good name due to its high cardinality.
+While a human-readable span name can be useful, one SHOULD NOT compromise
+on the generality of the span name to improve human-readability.
 
 For example, here are potential span names for an endpoint that gets a
 hypothetical account information:
