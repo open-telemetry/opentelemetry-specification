@@ -1,7 +1,30 @@
 # Glossary
 
-Below are a list of some OpenTelemetry specific terms that are used across this
-specification.
+This document defines some terms that are used across this specification.
+
+Some other fundamental terms are documented in the [overview document](overview.md).
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Common](#common)
+  * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
+  * [Telemetry SDK](#telemetry-sdk)
+  * [Exporter Library](#exporter-library)
+  * [Instrumented Library](#instrumented-library)
+  * [Instrumentation Library](#instrumentation-library)
+  * [Tracer Name / Meter Name](#tracer-name--meter-name)
+- [Logs](#logs)
+  * [Log Record](#log-record)
+  * [Log](#log)
+  * [Embedded Log](#embedded-log)
+  * [Standalone Log](#standalone-log)
+  * [Log Attributes](#log-attributes)
+  * [Structured Logs](#structured-logs)
+  * [Flat File Logs](#flat-file-logs)
+
+<!-- tocstop -->
 
 ## Common
 
