@@ -6,8 +6,9 @@ exceptions.
 <!-- toc -->
 
 - [Recording an Exception](#recording-an-exception)
-- [Attributes](#attributes)
+- [Event Attributes](#event-attributes)
   - [Stacktrace Representation](#stacktrace-representation)
+- [Span Attributes](#span-attributes)
 
 <!-- tocstop -->
 
@@ -16,7 +17,7 @@ exceptions.
 An exception SHOULD be recorded as an `Event` on the span during which it occurred.
 The name of the event MUST be `"exception"`.
 
-## Attributes
+## Event Attributes
 
 The table below indicates which attributes should be added to the `Event` and
 their types.
@@ -47,6 +48,20 @@ Backends can use the language specified methodology for generating a stacktrace
 combined with platform information from the
 [telemetry sdk resource][telemetry-sdk-resource] in order to extract more fine
 grained information from a stacktrace, if necessary.
+
+## Span Attributes
+
+A tracing backend should have an easy way to identify if an error was observed
+during the execution of a span without having to iterate through its events. As
+a cue to the tracing backend that an abnormal condition may have occurred, an
+instrumentation author SHOULD add an `error.hint` span attribute, that conveys
+the author's best guess as to whether or not an error was observed during the
+span.
+
+| Attribute name                                    | Type    | Notes and examples                                             | Required? |
+| :------------------------------------------------ | :------ | :------------------------------------------------------------- | :-------- |
+| error.hint                                        | Boolean | An instrumentation author's best guess as to whether or not an |
+| error was observed during the execution of a span | No      |
 
 [gcp-error-reporting]: https://cloud.google.com/error-reporting/reference/rest/v1beta1/projects.events/report
 [java-stacktrace]: https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html#printStackTrace%28%29
