@@ -70,6 +70,40 @@ resource.
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
+### Detecting resource information from the environment
+
+Custom resource detectors related to specific environments (e.g. specific cloud
+vendors) MUST be implemented as packages separate from the SDK.
+
+Resource detector packages MUST provide a method that returns a single resource.
+This can then be associated with `TracerProvider` or `MeterProvider` instances
+as described above.
+
+Resource detector packages MAY detect resource information from multiple
+possible sources and merge the result using the `Merge` operation described
+above.
+
+Resource detection logic MUST be synchronous and is expected to complete quickly
+since this is run during application initialization. Errors should be handled as
+specified in the [Error Handling
+principles](../error-handling.md#basic-error-handling-principles). Note the
+failure to detect any resource information MUST NOT be considered an error,
+whereas an error that occurs during an attempt to detect resource information
+SHOULD be considered an error.
+
+### Specifying resource information via an environment variable
+
+The SDK MUST extract information from the `OTEL_RESOURCE_ATTRIBUTES` environment
+variable and merge this, as the secondary resource, with any resource
+information provided by the user.
+
+The `OTEL_RESOURCE_ATTRIBUTES` environment variable will contain of a list of
+key value pairs, and these are expected to be represented in a format matching
+to the [W3C
+Correlation-Context](https://github.com/w3c/correlation-context/blob/master/correlation_context/HTTP_HEADER_FORMAT.md#header-value),
+except that additional semi-colon delimited metadata is not supported, i.e.:
+`key1=value1,key2=value2`. All attribute values MUST be considered strings.
+
 ## Resource operations
 
 Resources are immutable. Thus, in addition to resource creation,
