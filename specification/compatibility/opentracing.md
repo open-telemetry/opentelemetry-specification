@@ -143,9 +143,6 @@ OTel units.
 The `SpanContext` interface MUST be implemented using a OpenTelemetry `SpanContext`
 in conjunction with an associated `CorrelationContext`.
 
-Observe that the assigned `SpanContext` and `CorrelationContext` MUST be read-only
-and MUST NOT change after creation.
-
 #### Get Baggage Items
 
 Returns a shim exposing the associated `CorrelationContext` values.
