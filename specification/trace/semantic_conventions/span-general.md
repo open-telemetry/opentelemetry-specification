@@ -150,3 +150,4 @@ Examples of where `thread.id` and `thread.name` can be extracted from:
 | Python                | `threading.current_thread().ident`     | `threading.current_thread().name`  |
 | Ruby                  |                                        | `Thread.current.name`              |
 | C++                   | `std::this_thread::get_id()`             |                                    |
+| Erlang               | `erlang:system_info(scheduler_id)` |                                  |
