@@ -33,8 +33,8 @@ This zPage is also useful for debugging latency issues (slow parts of applicatio
  
 ### TraceConfigz
  
-TraceConfigz is closely related to and requires implementation of Tracez, allowing the user to modify how spans are sampled or how much data to keep in Tracez by updating the Tracez components accordingly.
- 
+TraceConfigz allows the user to control how spans are sampled for both zPages and external backends.
+
 For example, the sampling probability can be increased, decreased, or customized in other ways (i.e. depending on span parentage). Number of kept attributes, annotations, events, and links can also be adjusted. This would be useful for users that want to more accurately capture span insights or allow scaling better for exceptionally large and complex applications.
  
 ### RPCz
