@@ -208,7 +208,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.route` | string | The matched route (path template). | `/users/:userID?` | No |
 | `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | No |
 
-**[1]:** http.url is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148). It is thus preferred to supply the raw data that is available.
+**[1]:** `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148). It is thus preferred to supply the raw data that is available.
 
 **[2]:** This is not necessarily the same as `net.peer.ip`, which would identify the network-level peer, which may be a proxy.
 

@@ -76,9 +76,11 @@ This attribute may be used for any operation that accesses some remote service.
 Users can define what the name of a service is based on their particular semantics in their distributed system.
 Instrumentations SHOULD provide a way for users to configure this name.
 
-|  Attribute name |                                 Notes and examples                                |
-| :-------------- | :-------------------------------------------------------------------------------- |
-| `peer.service`  | The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. |
+<!-- semconv peer -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `peer.service` | string | The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. | `AuthTokenCache` | No |
+<!-- endsemconv -->
 
 Examples of `peer.service` that users may specify:
 - A Redis cache of auth tokens as `peer.service="AuthTokenCache"`.
@@ -88,11 +90,13 @@ Examples of `peer.service` that users may specify:
 
 These attributes may be used for any operation with an authenticated and/or authorized enduser.
 
-|  Attribute name |                                 Notes and examples                                |
-| :-------------- | :-------------------------------------------------------------------------------- |
-| `enduser.id`    | Username or client_id extracted from the access token or [Authorization] header in the inbound request from outside the system.  |
-| `enduser.role`  | Actual/assumed role the client is making the request under extracted from token or application security context. |
-| `enduser.scope` | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token] or an attribute value in a [SAML 2.0 Assertion]. |
+<!-- semconv identity -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `enduser.id` | string | Username or client_id extracted from the access token or [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2) header in the inbound request from outside the system. | `username` | No |
+| `enduser.role` | string | Actual/assumed role the client is making the request under extracted from token or application security context. | `admin` | No |
+| `enduser.scope` | string | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3) or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html). | `read:message, write:files` | No |
+<!-- endsemconv -->
 
 These attributes describe the authenticated user driving the user agent making requests to the instrumented
 system. It is expected this information would be propagated unchanged from node-to-node within the system

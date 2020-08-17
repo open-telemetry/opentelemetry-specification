@@ -1,0 +1,18 @@
+name: Semantic Convention Check
+on:
+  push:
+    tags: [ '**' ]
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    paths:
+      - .github/workflows/semantic-convention-check.yml
+      - 'spec/**'
+
+jobs:
+  test-markdown:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Verify that semantic convention tables are up-to-date
+      run: docker run --rm -v $(pwd)/yaml:/source -v $(pwd)/specification:/spec thisthatdc/semconvgen -f /source markdown -md /spec --md-check

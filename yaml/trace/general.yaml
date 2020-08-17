@@ -60,6 +60,17 @@ groups:
         type: string
         brief: 'Local hostname or similar, see note below.'
         examples: 'localhost'
+  - id: peer
+    prefix: peer
+    brief: "Operations that access some remote service."
+    attributes:
+      - id: service
+        type: string
+        brief: >
+          The [`service.name`](../../resource/semantic_conventions/README.md#service)
+          of the remote service. SHOULD be equal to the actual `service.name`
+          resource attribute of the remote service if any.
+        examples: "AuthTokenCache"
   - id: identity
     prefix: enduser
     brief: >
@@ -68,8 +79,9 @@ groups:
       - id: id
         type: string
         brief: >
-          Username or client_id extracted from the access token or Authorization header
-          in the inbound request from outside the system.
+          Username or client_id extracted from the access token or
+          [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2)
+          header in the inbound request from outside the system.
         examples: 'username'
       - id: role
         type: string
@@ -80,5 +92,6 @@ groups:
         brief: >
           Scopes or granted authorities the client currently possesses extracted from token
           or application security context. The value would come from the scope associated
-          with an OAuth 2.0 Access Token or an attribute value in a SAML 2.0 Assertion.
+          with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3)
+          or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html).
         examples: 'read:message, write:files'
