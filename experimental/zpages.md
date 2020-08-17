@@ -80,11 +80,12 @@ Traditionally, zPages have approached this by rendering web pages purely on the 
 
 All zPages need some server-side rendering, but the data and UI layer could optionally be separated by adding client-side functionality.
 
-Instead of directly translating native data structures to HTML strings based on the stored information, the data layer would do 2 things depending on the webpage endpoint accessed: 1. Serve the static HTML, JS, and CSS files, which are consistent, not server generated, and not data dependent and 2. Act like a web/HTTP API by translating stored data to JSON strings. Whether the data layer does one or the other depends on which URL endpoint is accessed; the former is intended for the initial zPages load, and latter for user interactions.
+Instead of directly translating native data structures to HTML strings based on the stored information, the data layer would do 2 things depending on the webpage endpoint accessed: 1. Serve the static HTML, JS, and CSS files, which are consistent, not server generated, and not data dependent and 2. Act like a web REST API by translating stored data to a web-compatible string format (e.g. JSON). Whether the data layer does one or the other depends on which URL endpoint is accessed; the former is intended for the initial zPages load, and latter for user interactions. This separation also allows users to access zPages data, such as when using wget on the latter endpoints, without HTML/CSS.Javascript.
+> TODO: data endpoints for serving zPage data should be standardized and documented here (i.e. URL and data formatting, required/optional parameters)
 
 The UI/frontend/rendering layer is the HTML, CSS, and Javascript itself, in contrast to the logic to serve those files. This frontend uses the data layer's API on the client-side within the browser with Javascript by accessing certain endpoints depending on the user's actions. The data returned interacts with the Javascript, which determines and executes the logic necessary to render updates to the HTML DOM. Modifying the HTML DOM means there are no unnecessary requesting and re-rendering static files, and only parts of the webpage are changed. This makes subsequent data queries quicker and requires no knowledge of client-side rendering for the zPages developer. 
 
-In either case, a benefit of reasoning about the zPages HTTP server as a separate component means that zPages can be mounted in an existing server. For example, this can be done in Java by calling this zPage logic from a servlet.
+In either case, a benefit of reasoning about the zPages HTTP server as a separate component means that zPages can be mounted in an existing server. For example, this can be done in Java by calling zPages logic from a servlet. It's also worth noting that having zPages in an embedded HTTP server increases the vulnerability of application by increasing its attack surface area. A malicious actor could potentially read sensistive data in telemetry, perform DOS attacks on the HTTP server, or initiate a telemetry storm by reconfiguring how telemetry is collected (i.e. through TraceConfigZ); zPages should be reserved for protected dev environments for most cases because of this.
 
 -------------
 ## Future Possibilities
@@ -110,6 +111,3 @@ All HTML, CSS, and Javascript files would be used across different OTel language
 > TODO
 
 > GENERAL TODO: Link spec where possible, add pictures/figures and design docs links
-
-
-
