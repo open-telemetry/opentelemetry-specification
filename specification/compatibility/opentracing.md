@@ -121,23 +121,22 @@ containing the specified name/value pair.
 
 Calls `Set Attribute` on the underlying `Span` with the specified name/value pair.
 
-If the type of the specified value is not supported, the value MUST NOT be set and
-a warning SHOULD be generated following the [error handling](error-handling.md)
-section.
+If the type of the specified value is not supported, the value MUST be converted
+to a string.
 
 ### Log
 
 Calls `Add Event` on the underlying `Span`.
 
-If an explicit timestamp is specified, it MUST be converted from microseconds
-to nanoseconds.
+If an explicit timestamp is specified, a conversion MUST be done to match the OT and
+OTel units.
 
 ### Finish
 
 Calls `End` on the underlying `Span`.
 
-If an explicit timestamp is specified, it MUST be converted from microseconds
-to nanoseconds.
+If an explicit timestamp is specified, a conversion MUST be done to match the OT and
+OTel units.
 
 ### SpanContext
 
