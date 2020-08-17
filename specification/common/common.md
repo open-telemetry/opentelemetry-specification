@@ -98,23 +98,27 @@ and
 If appropriate attribute name does not exists you will need to come up with a
 new name. To do that consider a few options:
 
-- The attribute is specific to your company. It is recommended to prefix the
-  attribute name by your company's reverse domain name, e.g.
-  `com.acme.shopname`.
+- The attribute is specific to your company and may be possibly used outside the
+  company as well. To avoid name clashes with attributes introduced by other
+  companies (in a distributed system that uses applications from multiple
+  vendors) it is recommended to prefix the attribute name by your company's
+  reverse domain name, e.g. `com.acme.shopname`.
 
-- The attribute is specific to your application. It is recommended to prefix the
-  attribute name by your application name, provided that the application name is
-  resonably unique and is not a generic enough word (e.g.
+- The attribute is specific to your application that will be used internally
+  only. If you already have an internal company process that helps you to ensure
+  no name clashes happen then feel free to follow it. Otherwise it is
+  recommended to prefix the attribute name by your application name, provided
+  that the application name is reasonably unique within your organization (e.g.
   `myuniquemapapp.longitude` is likely fine). Make sure the application name
-  does not clash with an existing semantic convention namespace. If in doubt
-  prefix it with your company's reverse domain name.
-
-- It is recommended to limit attribute names to printable Basic Latin characters
-  (more precisely to
-  [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
-  subset of Unicode code points).
+  does not clash with an existing semantic convention namespace.
 
 - The attribute may be generally applicable to applications in the industry. In
   that case consider submitting a proposal to this specification to add a new
   attribute to the semantic conventions, if necessary also to add a new
   namespace for the attribute.
+
+It is recommended to limit attribute names to printable Basic Latin characters
+(more precisely to
+[U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
+subset of Unicode code points).
+
