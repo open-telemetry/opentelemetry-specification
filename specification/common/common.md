@@ -40,11 +40,17 @@ both containing an array of strings to represent a mapping
 ## Attribute and Label Naming
 
 _This section applies to Resource, Span and Log attribute names (also known as
-the "attribute keys") and to Metric labels. For brevity within this section when
-we use the term "name" without an adjective it is implied to mean "attribute
-name or metric label"._
+the "attribute keys") and to keys of Metric labels. For brevity within this
+section when we use the term "name" without an adjective it is implied to mean
+"attribute name or metric label key"._
 
 Every name MUST be a valid Unicode sequence.
+
+_Note: we merely require that the names are represented as Unicode sequences.
+This specification does not define how exactly the Unicode sequences are
+encoded. The encoding can vary from one programming language to another and from
+one wire format to another. Use the idiomatic way to represent Unicode in the
+particular programming language or wire format._
 
 Names SHOULD follow these rules:
 
@@ -66,7 +72,7 @@ Names SHOULD follow these rules:
   namespace. Because of this rule be careful when choosing names: every existing
   name prohibits existence of an equally named namespace in the future, and vice
   versa: any existing namespace prohibits existence of an equally named
-  attribute or label in the future.
+  attribute or label key in the future.
 
 ### Recommendations for OpenTelemetry Authors
 
@@ -111,8 +117,8 @@ To do that consider a few options:
 - The name is specific to your application that will be used internally only. If
   you already have an internal company process that helps you to ensure no name
   clashes happen then feel free to follow it. Otherwise it is recommended to
-  prefix the attribute or label name by your application name, provided that the
-  application name is reasonably unique within your organization (e.g.
+  prefix the attribute name or label key by your application name, provided that
+  the application name is reasonably unique within your organization (e.g.
   `myuniquemapapp.longitude` is likely fine). Make sure the application name
   does not clash with an existing semantic convention namespace.
 
