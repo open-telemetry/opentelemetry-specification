@@ -89,6 +89,14 @@ logging systems.  For this reason, [OpenTelemetry requires a separation of the
 API from the SDK](../library-guidelines.md#requirements), so that different SDKs
 can be configured at run time.
 
+### Behavior of the API in the absence of an installed SDK
+
+In the absence of an installed Metrics SDK, the Metrics API MUST consist only
+of no-ops. None of the calls on any part of the API can have any side effects
+or do anything meaningful. Meters MUST return no-op implementations of any
+instruments. The API MUST NOT throw exceptions or cause any problems for
+users.
+
 ### Measurements
 
 The term _capture_ is used in this document to describe the action
