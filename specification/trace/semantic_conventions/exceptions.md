@@ -51,12 +51,12 @@ grained information from a stacktrace, if necessary.
 
 ## Span Attributes
 
-A tracing backend should have an easy way to identify if an error was observed
-during the execution of a span without having to iterate through its events. As
-a cue to the tracing backend that an abnormal condition may have occurred, an
-instrumentation author SHOULD add an `error.hint` span attribute, that conveys
-the author's best guess as to whether or not an error was observed during the
-span.
+An `error.hint` attribute can be added to a span to indicate that an error
+likely occurred during the execution of a span. Definitively distinguishing
+an exception from an error is subject to interpretation and can vary between
+applications. As such, the `error.hint` attribute conveys the instrumentation
+author's best guess as to whether or not an error was observed. Tracing backends
+can choose to honor or ignore the hint, or use it as a cue for further analysis.
 
 | Attribute name                                    | Type    | Notes and examples                                             | Required? |
 | :------------------------------------------------ | :------ | :------------------------------------------------------------- | :-------- |
