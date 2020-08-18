@@ -468,8 +468,8 @@ The Span interface MUST provide:
 Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
 name will depend on the implementation.
 
-Note that [Samplers](sdk.md#sampler) can only consider information already 
-present during span creation. Any changes done later, including updated span 
+Note that [Samplers](sdk.md#sampler) can only consider information already
+present during span creation. Any changes done later, including updated span
 name, cannot change their decisions.
 
 Alternatives for the name update may be late `Span` creation, when Span is
@@ -692,3 +692,19 @@ implementer of these links.
 The API layer MAY include the following `Propagator`s:
 
 * A `HTTPTextPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
+
+## Behavior of the API in the absence of an installed SDK
+
+In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
+This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
+is one important exception to this general rule, and that is related to propagation of a SpanContext.
+
+The following cases must be considered when a new Span is requested to be created, especially in relation to the
+requested parent SpanContext:
+
+* A valid `SpanContext` is specified as the parent of the new `Span`: The API MUST treat this parent context as the
+context for the newly created `Span`. This means that a `SpanContext` that has been provided by a configured `Propagator`
+will be propagated through to any child span, but that no new `SpanContext`s will be created.
+* No valid `SpanContext` is specified as the parent of the new `Span`: The API MUST create an non-valid
+(both SpanID and TradeID are equivalent to being all zeros) `Span` for use
+by the API caller. This means that both the `TraceID` and the `SpanID` should be invalid.
