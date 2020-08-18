@@ -18,6 +18,7 @@ Table of Contents
       - [Set](#set)
   - [Extract](#extract-1)
     - [Getter argument](#getter-argument)
+      - [Keys](#keys)
       - [Get](#get)
 - [Composite Propagator](#composite-propagator)
 - [Global Propagators](#global-propagators)
@@ -113,7 +114,7 @@ avoid runtime allocations.
 
 ### Fields
 
-The propagation fields defined. If your carrier is reused, you should delete the fields here
+The predefined propagation fields. If your carrier is reused, you should delete the fields here
 before calling [inject](#inject).
 
 Fields are defined as string keys identifying format-specific components in a carrier.
@@ -128,6 +129,9 @@ The use cases of this are:
 - allow a single-pass over an iterator
 
 Returns list of fields that will be used by the `HttpTextPropagator`.
+
+Observe that some `Propagator`s may define additional fields with variable names, such
+as fields with different names simply sharing the `jaeger-` prefix.
 
 ### Inject
 
@@ -177,7 +181,20 @@ Getter is an argument in `Extract` that get value from given field
 
 `Getter` allows a `HttpTextPropagator` to read propagated fields from a carrier.
 
-One of the ways to implement it is `Getter` class with `Get` method as described below.
+One of the ways to implement it is `Getter` class with `Get` and `Keys` methods
+as described below.
+
+##### Keys
+
+The Keys function MUST return the list of all the keys in the carrier.
+
+Required arguments:
+
+- The carrier of the propagation  fields, such as an HTTP request.
+
+The Keys function can be called by `Propagator`s using variable key names in order to
+iterate over the entire keys in the specified carrier. For example, it can be used to
+detect all keys starting with the prefix `jaeger-`.
 
 ##### Get
 
