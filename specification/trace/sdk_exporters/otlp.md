@@ -38,6 +38,18 @@ export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=collector.example.com/v1/metrics
 export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=http
 ```
 
+Example 3
+
+Traces are configured using the generic configuration, metrics are configured using specific configuration:
+
+```bash
+export OTEL_EXPORTER_OTLP_ENDPOINT=collector:55680
+export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+
+export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=collector.example.com/v1/metrics
+export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=http
+```
+
 ## Retry
 
 [Transient errors](#transient-errors) MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered. 
