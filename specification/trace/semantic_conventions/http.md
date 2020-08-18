@@ -115,12 +115,12 @@ before any HTTP-redirects that may happen when executing the request.
 
 <!-- semconv http.client -->
 
-At least one of the following is required:
+**Additional attribute requirements:** At least one of the following sets of attributes is required:
 
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
-* `http.scheme`, [net.peer.name](span-general.md), [net.peer.port](span-general.md), `http.target`
-* `http.scheme`, [net.peer.ip](span-general.md), [net.peer.port](span-general.md), `http.target`
+* `http.scheme`, [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.peer.ip`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
 <!-- endsemconv -->
 
 Note that in some cases `http.host` might be different
@@ -212,11 +212,11 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 
 **[2]:** This is not necessarily the same as `net.peer.ip`, which would identify the network-level peer, which may be a proxy.
 
-At least one of the following is required:
+**Additional attribute requirements:** At least one of the following sets of attributes is required:
 
 * `http.scheme`, `http.host`, `http.target`
-* `http.scheme`, `http.server_name`, [net.host.port](span-general.md), `http.target`
-* `http.scheme`, [net.host.name](span-general.md), [net.host.port](span-general.md), `http.target`
+* `http.scheme`, `http.server_name`, [`net.host.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.host.name`](span-general.md), [`net.host.port`](span-general.md), `http.target`
 * `http.url`
 <!-- endsemconv -->
 
