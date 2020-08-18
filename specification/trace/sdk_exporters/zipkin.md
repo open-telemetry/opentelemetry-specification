@@ -77,7 +77,16 @@ Zipkin.
 | `SpanKind.SERVER`|`SpanKind.SERVER`||
 | `SpanKind.CONSUMER`|`SpanKind.CONSUMER`||
 | `SpanKind.PRODUCER`|`SpanKind.PRODUCER` ||
-|`SpanKind.INTERNAL`|`null` |must be omitted (set to `null`)|
+| `SpanKind.INTERNAL`|`null` |must be omitted (set to `null`)|
+
+### InstrumentationLibrary
+
+OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Zipkin using the following mapping.
+ 
+| OpenTelemetry | Zipkin
+| ------------- | ------ |
+| `InstrumentationLibrary.name`|`otel.instrumentation_library.name`|
+| `InstrumentationLibrary.version`|`otel.instrumentation_library.version`|
 
 ### Attribute
 

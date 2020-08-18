@@ -14,6 +14,8 @@ Table of Contents
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
+  * [IsValid](#isvalid)
+  * [IsRemote](#isremote)
 * [Span](#span)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
@@ -179,10 +181,14 @@ systems to participate in the same trace. Please review the [W3C
 specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
 details on this field.
 
-`IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
-TraceID and a non-zero SpanID.
+### IsValid
 
-`IsRemote` is a boolean which is true if the SpanContext was
+An API that returns a boolean value, which is `true` if the SpanContext has a
+non-zero TraceID and a non-zero SpanID.
+
+### IsRemote
+
+An API that returns a boolean value, which is `true` if the SpanContext was
 propagated from a remote parent. When extracting a `SpanContext` through the
 [Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
 flag MUST be set to true, whereas the SpanContext of any child spans MUST have
@@ -402,16 +408,8 @@ The Span interface MUST provide:
   as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
   implementations may offer a separate API for each of the possible value types.
 
-Attributes SHOULD preserve the order in which they're set. Setting an attribute
-with the same key as an existing attribute SHOULD overwrite the existing
-attribute's value.
-
-Attribute values expressing a numerical value of zero, an empty string, or an empty array are
-considered meaningful and MUST be stored and passed on to span processors / exporters.
-Attribute values of `null` are considered to be not set and get discarded as if
-that `SetAttribute` call had never been made.
-As an exception to this, if overwriting of values is supported, this results in
-clearing the previous value and dropping the attribute key from the set of attributes.
+Setting an attribute with the same key as an existing attribute SHOULD overwrite
+the existing attribute's value.
 
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
