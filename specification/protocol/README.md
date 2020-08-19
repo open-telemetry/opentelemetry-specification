@@ -1,7 +1,7 @@
 # OpenTelemetry Protocol
 
-This is the specification of new OpenTelemetry protocol. This is work in progress.
+This is the specification of new OpenTelemetry protocol (OTLP).
 
 - [Design Goals](design-goals.md).
 - [Requirements](requirements.md).
-- Specification (TBD).
+- [Specification](otlp.md).
