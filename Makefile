@@ -1,5 +1,5 @@
 # All documents to be used in spell check.
-ALL_DOCS := $(shell find . -name '*.md' -type f | grep -v ^./node_modules | sort)
+ALL_DOCS := $(shell find . -name '*.md' -not -path './.github/*' -type f | grep -v ^./node_modules | sort)
 
 TOOLS_DIR := ./.tools
 MISSPELL_BINARY=$(TOOLS_DIR)/misspell
@@ -32,4 +32,5 @@ install-markdown-lint:
 
 .PHONY: markdown-lint
 markdown-lint:
-	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f; done
+	@echo $(ALL_DOCS)
+	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
