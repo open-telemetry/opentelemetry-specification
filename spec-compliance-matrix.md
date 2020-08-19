@@ -1,15 +1,16 @@
-# Implementation Compliance with Specification
+# Compliance of Implementations with Specification
 
-The following table shows which features are implemented by each OpenTelemetry
+The following tables show which features are implemented by each OpenTelemetry
 language implementation.
 
 `+` means the feature is supported, `-` means it is not supported, `N/A` means
-the feature is not applicable to the particular SDK, blank cell means the status
-of the feature is not known.
+the feature is not applicable to the particular language, blank cell means the
+status of the feature is not known.
+
+## Traces
 
 |Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
-|**Traces API**|
 |[TracerProvider](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracerprovider-operations)|
 |Create TracerProvider                         |  |    |       |      |    |      |   |    |   |    |
 |Get a Tracer                                  |  |    |       |      |    |      |   |    |   |    |
@@ -58,17 +59,39 @@ of the feature is not known.
 |[Span exceptions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#record-exception)|
 |RecordException                               |  |    |       |      |    |      |   |    |   |    |
 |RecordException with extra parameters         |  |    |       |      |    |      |   |    |   |    |
-|**Metrics API**|
+
+## Metrics
+
+|Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
+|----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
 |TBD|
-|**Resource**|
+
+## Resource
+
+|Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
+|----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
 |TBD|
-|**Context Propagation**|
+
+## Context Propagation
+
+|Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
+|----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
 |TBD|
-|**Error Handling**|
+
+## Error Handling
+|Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
+|----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
 |TBD|
-|**Environment Variables**|
+
+## Environment Variables
+|Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
+|----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
 |TBD|
-|**Exporters**|
+
+## Exporters
+
+|Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
+|----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
 |Standard output (logging)                     |  |    |       |      |    |      |   |    |   |    |
 |In-memory (mock exporter)                     |  |    |       |      |    |      |   |    |   |    |
 |[OTLP](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/protocol/otlp.md)|
