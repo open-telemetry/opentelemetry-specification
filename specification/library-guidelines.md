@@ -134,7 +134,7 @@ The test harness should include:
 * A document which explains how to use it to implement integration test.
 * A [Docker compose](https://docs.docker.com/compose/) file.
 * A container image which provides an integration test service that can be invoked from the library's CI job.
-* A simplied version of the OpenTelemetry C++ SDK, which will be used to test the interfacing between API and SDK. For example, using OpenTelemetry Python API with C++ SDK.
+* A simplified version of the OpenTelemetry C++ SDK, which will be used to test the interfacing between API and SDK. For example, using the OpenTelemetry Python API with the C++ SDK.
 * The latest version of OpenTelemetry Collector.
 * The latest stable version of Prometheus backend.
 * The latest stable version of Jaeger backend.
