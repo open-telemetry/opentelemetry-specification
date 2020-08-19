@@ -6,7 +6,6 @@
 
 | Attribute  | Description  | Example  |
 |---|---|---|
-| host.hostname | Hostname of the host.<br/> It contains what the `hostname` command returns on the host machine. | `opentelemetry-test` |
 | host.id | Unique host id.<br/> For Cloud this must be the instance_id assigned by the cloud provider | `opentelemetry-test` |
 | host.name | Name of the host.<br/> It may contain what `hostname` returns on Unix systems, the fully qualified, or a name specified by the user. | `opentelemetry-test` |
 | host.type | Type of host.<br/> For Cloud this must be the machine type.| `n1-standard-1` |
