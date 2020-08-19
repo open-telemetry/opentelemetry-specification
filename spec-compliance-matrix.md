@@ -1,7 +1,7 @@
-# SDK Compliance with Specification
+# Implementation Compliance with Specification
 
 The following table shows which features are implemented by each OpenTelemetry
-language SDK.
+language implementation.
 
 `+` means the feature is supported, `-` means it is not supported, `N/A` means
 the feature is not applicable to the particular SDK, blank cell means the status
