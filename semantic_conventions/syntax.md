@@ -142,8 +142,6 @@ examples:
 examples: [['this is an error']]
 ```
 
----
-
 Multiple example values for a string attribute:
 
 ```yaml
@@ -157,8 +155,6 @@ examples:
    - 'this is a single string'
    - 'this is another one'
 ```
-
----
 
 A single example value for an array of strings attribute:
 
@@ -178,8 +174,6 @@ Attention, the following will throw a type mismatch error because an array of st
 ```yaml
 examples: 'this is an error'
 ```
-
----
 
 Multiple example values for an array of string attribute:
 
