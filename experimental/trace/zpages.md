@@ -78,11 +78,11 @@ All zPages have some sort of HTTP Server component to render their information o
  
 Traditionally, zPages have approached this by rendering web pages purely on the server-side. This means the server would only serve static resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Based on the type of zPage and the server language used, a pure server-side approach would generate HTML pages using hardcoded strings from scratch or using a template; this would tightly couple the data and UI layer.
  
-All zPages need some server-side rendering, but the data and UI layer could optionally be separated by adding client-side functionality. This separation has benefits including 1.) allowing users to access isolayed zPages data, such as when using wget on the latter endpoints, without HTML/CSS/Javascript nd 2.) adding extensibility to zPages (e.g. the frontend can be centralized and used in multiple  OTel language repositories). This approach is detailed below.
+All zPages need some server-side rendering, but the data and UI layer could optionally be separated by adding client-side functionality. This separation has benefits including 1.) allowing users to access isolated zPages data, such as when using wget on the endpoints serving JSON data, without HTML/CSS/Javascript and 2.) adding extensibility to zPages (e.g. the frontend can be centralized and used in multiple  OTel language repositories). This approach is detailed below.
 
 Instead of directly translating native data structures to HTML strings based on the stored information, the data layer would do 2 things depending on the webpage endpoint accessed: 1. Serve the static HTML, JS, and CSS files, which are consistent, not server generated, and not data dependent and 2. Act like a web REST API by translating stored data to JSON. Whether the data layer does one or the other depends on which URL endpoint is accessed; the former is intended for the initial zPages load, and latter for user interactions. If the client requests the data via a request parameter or "Accept" HTTP header, that data should be available as a JSON-encoded response.
 
-> TODO: data endpoints for serving zPage data should be standardized and documented here (i.e. URL and data formatting, required/optional parameters)
+> TODO: add standardized URL endpoints for serving zPage data, along with expected JSON formatting and required/optional parameters
  
 The UI/frontend/rendering layer is the HTML, CSS, and Javascript itself, in contrast to the logic to serve those files. This frontend uses the data layer's API on the client-side within the browser with Javascript by accessing certain endpoints depending on the user's actions. The data returned interacts with the Javascript, which determines and executes the logic necessary to render updates to the HTML DOM. Modifying the HTML DOM means there are no unnecessary requesting and re-rendering static files, and only parts of the webpage are changed. This makes subsequent data queries quicker and requires no knowledge of client-side rendering for the zPages developer.
  
@@ -112,4 +112,5 @@ All HTML, CSS, and Javascript files would be used across different OTel language
 > TODO
  
 > GENERAL TODO: Link spec where possible, add pictures/figures and design docs links
+
 
