@@ -6,7 +6,7 @@ Table of Contents
 </summary>
 
 - [Attributes](#attributes)
-  - [Attribute Naming](#attribute-naming)
+  - [Attribute and Label Naming](#attribute-and-label-naming)
 </details>
 
 ## Attributes
@@ -37,12 +37,22 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
-### Attribute Naming
+## Attribute and Label Naming
 
-Attribute name (also known as the "attribute key") MUST be a valid Unicode
-sequence.
+_This section applies to Resource, Span and Log attribute names (also known as
+the "attribute keys") and to keys of Metric labels. For brevity within this
+section when we use the term "name" without an adjective it is implied to mean
+"attribute name or metric label key"._
 
-Attribute names SHOULD follow these rules:
+Every name MUST be a valid Unicode sequence.
+
+_Note: we merely require that the names are represented as Unicode sequences.
+This specification does not define how exactly the Unicode sequences are
+encoded. The encoding can vary from one programming language to another and from
+one wire format to another. Use the idiomatic way to represent Unicode in the
+particular programming language or wire format._
+
+Names SHOULD follow these rules:
 
 - Use namespacing to avoid name clashes. Delimit the namespaces using a dot
   character. For example `service.version` denotes the service version where
@@ -56,68 +66,67 @@ Attribute names SHOULD follow these rules:
   words by underscores (i.e. use snake_case). For example `http.status_code`
   denotes the status code in the http namespace.
 
-- Attribute names SHOULD NOT coincide with namespaces. For example if
+- Names SHOULD NOT coincide with namespaces. For example if
   `service.instance.id` is an attribute name then it is no longer valid to have
   an attribute named `service.instance` because `service.instance` is already a
-  namespace. Because of this rule be careful when choosing attribute names:
-  every existing attribute name prohibits existence of an equally named
-  namespace in the future, and vice versa: any existing namespace prohibits
-  existence of an equally named attribute in the future.
+  namespace. Because of this rule be careful when choosing names: every existing
+  name prohibits existence of an equally named namespace in the future, and vice
+  versa: any existing namespace prohibits existence of an equally named
+  attribute or label key in the future.
 
-#### Recommendations for OpenTelemetry Authors
+### Recommendations for OpenTelemetry Authors
 
-- All attribute names that are part of OpenTelemetry semantic conventions
-  SHOULD be part of a namespace. 
+- All names that are part of OpenTelemetry semantic conventions SHOULD be part
+  of a namespace.
 
-- When coming up with a new convention make sure to check existing namespaces
-  for
+- When coming up with a new semantic convention make sure to check existing
+  namespaces for
   [Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
   [Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
   and
   [Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions)
-  to see if the new attributes fits.
+  to see if the new name fits.
 
 - When a new namespace is necessary consider whether it should be a top-level
   namespace (e.g. `service`) or a nested namespace (e.g. `service.instance`).
 
-- Semantic conventions MUST limit attribute names to printable Basic Latin
-  characters (more precisely to
+- Semantic conventions MUST limit names to printable Basic Latin characters
+  (more precisely to
   [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
-  subset of Unicode code points). It is recommended to further limit attribute
-  names to the following Unicode code points: Latin alphabet, Numeric,
-  Underscore, Dot (as namespace delimiter).
+  subset of Unicode code points). It is recommended to further limit names to
+  the following Unicode code points: Latin alphabet, Numeric, Underscore, Dot
+  (as namespace delimiter).
 
-#### Recommendations for Application Developers
+### Recommendations for Application Developers
 
-As an application developer when you need to record an attribute first consult
-existing semantic conventions for
+As an application developer when you need to record an attribute or a label
+first consult existing semantic conventions for
 [Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
 [Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
 and
 [Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions).
-If appropriate attribute name does not exists you will need to come up with a
-new name. To do that consider a few options:
+If an appropriate name does not exists you will need to come up with a new name.
+To do that consider a few options:
 
-- The attribute is specific to your company and may be possibly used outside the
-  company as well. To avoid name clashes with attributes introduced by other
-  companies (in a distributed system that uses applications from multiple
-  vendors) it is recommended to prefix the attribute name by your company's
-  reverse domain name, e.g. `com.acme.shopname`.
+- The name is specific to your company and may be possibly used outside the
+  company as well. To avoid clashes with names introduced by other companies (in
+  a distributed system that uses applications from multiple vendors) it is
+  recommended to prefix the new name by your company's reverse domain name, e.g.
+  `com.acme.shopname`.
 
-- The attribute is specific to your application that will be used internally
-  only. If you already have an internal company process that helps you to ensure
-  no name clashes happen then feel free to follow it. Otherwise it is
-  recommended to prefix the attribute name by your application name, provided
-  that the application name is reasonably unique within your organization (e.g.
+- The name is specific to your application that will be used internally only. If
+  you already have an internal company process that helps you to ensure no name
+  clashes happen then feel free to follow it. Otherwise it is recommended to
+  prefix the attribute name or label key by your application name, provided that
+  the application name is reasonably unique within your organization (e.g.
   `myuniquemapapp.longitude` is likely fine). Make sure the application name
   does not clash with an existing semantic convention namespace.
 
-- The attribute may be generally applicable to applications in the industry. In
-  that case consider submitting a proposal to this specification to add a new
-  attribute to the semantic conventions, if necessary also to add a new
-  namespace for the attribute.
+- The name may be generally applicable to applications in the industry. In that
+  case consider submitting a proposal to this specification to add a new name to
+  the semantic conventions, and if necessary also to add a new namespace.
 
-It is recommended to limit attribute names to printable Basic Latin characters
+It is recommended to limit names to printable Basic Latin characters
 (more precisely to
 [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
 subset of Unicode code points).
