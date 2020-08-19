@@ -27,8 +27,8 @@ There are three major components of the Metrics SDK that data flows
 through, in order:
 
 1. **Accumulator**: Receives metric events from the API, computes one Aggregator per active (Instrument, Label Set)
-2. **Processor**: Receives Accumulations from the Accumulator, transforms into CheckpointSet
-3. **Exporter**: Receives CheckpointSet, transforms into some protocol and sends it somewhere.
+2. **Processor**: Receives Accumulations from the Accumulator, transforms into ExportRecordSet
+3. **Exporter**: Receives ExportRecordSet, transforms into some protocol and sends it somewhere.
 
 These terms are defined in the API specification:
 
@@ -41,7 +41,7 @@ These terms are defined in the API specification:
 - **Label**: a key-value describing a property of the metric event
 - **Label Set**: a set of key-values with unique keys
 - **Measurement**: an integer or floating point number
-- **Resource**: a set of key-values with unique keys describing the process
+- **Resource**: a set of key-values with unique keys describing the process.
 
 These are the significant Key data types used in the model architecture
 
@@ -50,11 +50,11 @@ These are the significant Key data types used in the model architecture
 - **Aggregation**: the result of aggregating one or more events by a specific aggregator
 - **AggregationKind**: describes the kind of read API the Aggregation supports (e.g., Sum)
 - **Accumulation**: consists of Instrument, Label Set, Resource, and Aggregator snapshot
-- **CheckpointSet**: a set of export records
-- **Controller**: coordinates the Accumulator, Processor, and Exporter components in an export pipeline.
+- **ExportRecordSet**: a set of export records
+- **Controller**: coordinates the Accumulator, Processor, and Exporter components in an export pipeline
 - **Export Record**: consists of Instrument, Label Set, Resource, Timestamp(s), and Aggregation
 - **ExportKind**: one of Delta, Cumulative, or Pass-Through
-- **ExportKindSelector**: chooses which ExportKind to use for a metric instrument
+- **ExportKindSelector**: chooses which ExportKind to use for a metric instrument.
 
 ## Dataflow Diagram
 
