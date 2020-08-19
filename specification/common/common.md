@@ -7,6 +7,7 @@ Table of Contents
 
 - [Attributes](#attributes)
   - [Attribute and Label Naming](#attribute-and-label-naming)
+
 </details>
 
 ## Attributes
@@ -130,4 +131,3 @@ It is recommended to limit names to printable Basic Latin characters
 (more precisely to
 [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
 subset of Unicode code points).
-

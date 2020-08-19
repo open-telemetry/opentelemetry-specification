@@ -226,7 +226,6 @@ That is, "get_user" is a reasonable name, while "get_user/314159",
 where "314159" is a user ID, is not a good name due to its high cardinality.
 Generality SHOULD be prioritized over human-readability.
 
-
 For example, here are potential span names for an endpoint that gets a
 hypothetical account information:
 
@@ -420,7 +419,6 @@ attributes"](semantic_conventions/README.md) that have prescribed semantic meani
 Note that [Samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any changes done later, including new or changed
 attributes, cannot change their decisions.
-
 
 #### Add Events
 
