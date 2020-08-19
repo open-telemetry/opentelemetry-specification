@@ -146,7 +146,7 @@ Each language library should implement a test service which interacts with the t
 * A REST endpoint which is used to receive incoming requests from the harness and other services that are involved during the CI.
 * The ability to react to the requests from the harness.
 * The ability to specify the SDK.
-  * Without the SDK
+  * Without the SDK (API-only mode)
   * With the language specific SDK
   * With the simplifed C++ SDK
 * The ability to configure the SDK, when the language specific default SDK is used.
