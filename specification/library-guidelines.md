@@ -133,7 +133,7 @@ Each language library should use the test harness as part of the CI (continuous 
 The test harness should include:
 * A document which explains how to use it to implement integration test.
 * A [Docker compose](https://docs.docker.com/compose/) file.
-* A container image which provides integration test service that can be invoked from the library's CI job.
+* A container image which provides an integration test service that can be invoked from the library's CI job.
 * A simplied version of the OpenTelemetry C++ SDK, which will be used to test the interfacing between API and SDK. For example, using OpenTelemetry Python API with C++ SDK.
 * The latest version of OpenTelemetry Collector.
 * The latest stable version of Prometheus backend.
