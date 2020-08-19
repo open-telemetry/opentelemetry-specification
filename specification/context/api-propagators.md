@@ -270,10 +270,11 @@ Required parameters:
 
 ## Propagators Distribution
 
-`Propagator`s implementing officially supported protocols such as
-[B3 Propagation Specification](https://github.com/openzipkin/b3-propagation)
-MUST be maintained by the OpenTelemetry organization and MUST be distributed as
-OpenTelemetry extension packages.
+The official list of propagators that MUST be maintained by the OpenTelemetry
+organization and MUST be distributed as OpenTelemetry extension packages:
+
+* [B3](https://github.com/openzipkin/b3-propagation)
+* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
 
 Additional `Propagator`s implementing vendor-specific protocols such as
 AWS X-Ray trace header protocol are encouraged to be maintained and distributed by

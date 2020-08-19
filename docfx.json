@@ -11,6 +11,7 @@
     "resource": [
       {
         "files": [
+          ".github/CODEOWNERS",
           ".markdownlint.yaml",
           ".vscode/settings.json",
           "**.png"

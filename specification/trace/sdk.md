@@ -95,7 +95,8 @@ be displayed on debug pages or in the logs. Example:
 Description MUST NOT change over time and caller can cache the returned value.
 
 ### Built-in samplers
-OpenTelemetry supports a number of built-in samplers to choose from. 
+
+OpenTelemetry supports a number of built-in samplers to choose from.
 The default sampler is `ParentOrElse(AlwaysOn)`.
 
 #### AlwaysOn

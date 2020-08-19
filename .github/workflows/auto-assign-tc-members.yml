@@ -1,0 +1,13 @@
+name: 'Auto Assign'
+on:
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+
+jobs:
+  add-owner:
+    runs-on: ubuntu-latest
+    steps:
+    - name: run
+      uses: kentaro-m/auto-assign-action@v1.1.1
+      with:
+        configuration-path: ".github/auto_assign.yml"

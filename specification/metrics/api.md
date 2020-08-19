@@ -89,6 +89,15 @@ logging systems.  For this reason, [OpenTelemetry requires a separation of the
 API from the SDK](../library-guidelines.md#requirements), so that different SDKs
 can be configured at run time.
 
+### Behavior of the API in the absence of an installed SDK
+
+In the absence of an installed Metrics SDK, the Metrics API MUST consist only
+of no-ops. None of the calls on any part of the API can have any side effects
+or do anything meaningful. Meters MUST return no-op implementations of any
+instruments. From a user's perspective, calls to these should be ignored without raising errors
+(i.e., *no* `null` references MUST be returned in languages where accessing these results in errors).
+The API MUST NOT throw exceptions on any calls made to it.
+
 ### Measurements
 
 The term _capture_ is used in this document to describe the action
@@ -829,9 +838,14 @@ To bind an instrument, use the `Bind(labels...)` method to return an
 interface that supports the corresponding synchronous API (i.e.,
 `Add()` or `Record()`).  Bound instruments are invoked without labels;
 the corresponding metric event is associated with the labels that were
-bound to the instrument.  Bound instruments may consume SDK resources
-indefinitely until the user calls `Unbind()` to release the bound
-instrument.
+bound to the instrument.
+
+As a consequence of their performance advantage, bound instruments
+also consume resources in the SDK.  Bound instruments MUST support an
+`Unbind()` method for users to indicate they are finished with the
+binding and release the associated resources.  Note that `Unbind()`
+does not imply deletion of a timeseries, it only permits the SDK to
+forget the timeseries existed after there are no pending updates.
 
 For example, to repeatedly update a counter with the same labels:
 
