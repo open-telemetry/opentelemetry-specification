@@ -154,6 +154,6 @@ Each language library should implement a test service which interacts with the t
   * Exporter
 * The ability to call other REST endpoints based on the instruction given by the harness.
 
-Each language SDK should determine which platform and runtime version should be tested. For example, a language library could decide to only cover one specific combination of platform and runtime during integration test, and rely on the unit test to cover the other platforms and runtime versions.
+Each language SDK should determine which platform and runtime version should be tested. For example, a language library could decide to only cover one specific combination of platform and runtime during integration test, and rely on the unit tests to cover the other platforms and runtime versions.
 
 ### Unit Test
