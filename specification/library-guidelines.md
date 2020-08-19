@@ -149,7 +149,7 @@ Each language library should implement a test service which interacts with the t
   * Without the SDK
   * With the language specific SDK
   * With the simplifed C++ SDK
-* The ability to configure the SDK, when the language specific SDK is used.
+* The ability to configure the SDK, when the language specific default SDK is used.
   * Sampler
   * Exporter
 * The ability to call other REST endpoints based on the instruction given by the harness.
