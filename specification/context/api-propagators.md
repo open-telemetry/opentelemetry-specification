@@ -130,8 +130,9 @@ The use cases of this are:
 
 Returns list of fields that will be used by the `HttpTextPropagator`.
 
-Observe that some `Propagator`s may define additional fields with variable names, such
-as fields with different names simply sharing the `jaeger-` prefix.
+Observe that some `Propagator`s may define, besides the returned values, additional fields with
+variable names. To get a full list of fields for a specific carrier object, use the
+[Keys](#keys) operation.
 
 ### Inject
 
@@ -186,15 +187,17 @@ as described below.
 
 ##### Keys
 
-The Keys function MUST return the list of all the keys in the carrier.
+The `Keys` function MUST return the list of all the keys in the carrier.
 
 Required arguments:
 
-- The carrier of the propagation  fields, such as an HTTP request.
+- The carrier of the propagation fields, such as an HTTP request.
 
-The Keys function can be called by `Propagator`s using variable key names in order to
-iterate over the entire keys in the specified carrier. For example, it can be used to
-detect all keys starting with the prefix `jaeger-`.
+The `Keys` function can be called by `Propagator`s which are using variable key names in order to
+iterate over all the keys in the specified carrier.
+
+For example, it can be used to detect all keys following the `uberctx-{user-defined-key}` pattern, as defined by the
+[Jaeger Propagation Format](https://www.jaegertracing.io/docs/1.18/client-libraries/#baggage).
 
 ##### Get
 
