@@ -1,4 +1,4 @@
-# Metric SDK
+# Metrics SDK
 
 Note: This document assumes you are familiar with the (Metrics
 API)[api.md] specification.
@@ -23,7 +23,7 @@ guidelines](../library-guidelines.md).
 ## Export Pipeline Terminology
 
 *Export Pipeline* is used to describe a whole assembly of SDK parts.
-There are three major components of the Metric SDK that data flows
+There are three major components of the Metrics SDK that data flows
 through, in order:
 
 1. *Accumulator*: Receives metric events from the API, computes one Aggregator per active (Instrument, Label Set)
@@ -58,7 +58,7 @@ These are the significant Key data types used in the model architecture
 
 ## Dataflow Diagram
 
-![Metric SDK Design Diagram](img/metric-sdk.png)
+![Metrics SDK Design Diagram](img/metrics-sdk.png)
 
 ## Accumulator Detail
 
