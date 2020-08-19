@@ -124,7 +124,7 @@ The goal of integration test is to make sure:
 * The context propagation is implemented correctly, so a distributed trace could be built among multiple services.
 * Sampling logic is implemented consistently across the services, and across the SDKs.
 
-A test harness is needed to verify each language library's integration and interoperability with other libraries and backends.
+A test harness is needed to verify each language library's integration and interoperability with other libraries and certain backends listed below.
 
 Each language library should use the test harness as part of the CI (continuous integration).
 
