@@ -52,9 +52,10 @@ export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=http
 
 ## Retry
 
-[Transient errors](#transient-errors) MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered. 
+[Transient errors](#transient-errors) MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
 
 ## Transient Errors
+
 Transient errors are errors which expect the backend to recover. The following status codes are defined as transient errors:
 
 | HTTP Status Code | Description |

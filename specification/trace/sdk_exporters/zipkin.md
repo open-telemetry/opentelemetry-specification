@@ -82,7 +82,7 @@ Zipkin.
 ### InstrumentationLibrary
 
 OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Zipkin using the following mapping.
- 
+
 | OpenTelemetry | Zipkin
 | ------------- | ------ |
 | `InstrumentationLibrary.name`|`otel.instrumentation_library.name`|
