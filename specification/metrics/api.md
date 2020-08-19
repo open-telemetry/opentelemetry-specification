@@ -94,8 +94,9 @@ can be configured at run time.
 In the absence of an installed Metrics SDK, the Metrics API MUST consist only
 of no-ops. None of the calls on any part of the API can have any side effects
 or do anything meaningful. Meters MUST return no-op implementations of any
-instruments. The API MUST NOT throw exceptions or cause any problems for
-users.
+instruments. From a user's perspective, calls to these should be ignored without raising errors
+(i.e., *no* `null` references MUST be returned in languages where accessing these results in errors).
+The API MUST NOT throw exceptions on any calls made to it.
 
 ### Measurements
 
