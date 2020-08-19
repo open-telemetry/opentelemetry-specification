@@ -84,7 +84,6 @@ The field `semconv` represents a semantic convention and it is made by:
 - `extends`, optional string, reference another semantic convention `id`.
     It inherits the prefix, constraints, and all attributes defined in the specified semantic convention.
 - `span_kind`, optional enum, specifies the kind of the span.
-    Leaf semconv nodes (in the hierarchy tree) that do not have this field set will generate a warning.
 - `attributes`, list of attributes that belong to the semantic convention.
 - `constraints`, optional list, additional constraints (See later). It defaults to an empty list.
 

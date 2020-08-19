@@ -39,4 +39,4 @@ markdown-lint:
 
 .PHONY: table-generation
 table-generation:
-	docker run --rm -v $(PWD)/yaml:/source -v $(PWD)/specification:/spec thisthatdc/semconvgen -f /source markdown -md /spec
+	docker run --rm -v $(PWD)/semantic_conventions:/source -v $(PWD)/specification:/spec thisthatdc/semconvgen -f /source markdown -md /spec
