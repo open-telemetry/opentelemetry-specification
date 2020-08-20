@@ -357,7 +357,7 @@ language APIs SHOULD offer a global instance for this reason.
 Languges that offer a global instance MUST ensure that `Meter`
 instances allocated through the global `MeterProvider` and instruments
 allocated through those `Meter` instances have their initialization
-deferred until the global SDK is first initialized.
+deferred until the a global SDK is first initialized.
 
 #### Get the global MeterProvider
 
@@ -377,7 +377,7 @@ SDK after it is initialized.
 Because the API is separated from the SDK, the implementation
 ultimately determines how metric events are handled.  Therefore, the
 choice of instrument should be guided by semantics and the intended
-interpretation.  The semantics of the individual instruments are
+interpretation.  The semantics of the individual instruments is
 defined by several properties, detailed here, to assist with
 instrument selection.
 
@@ -410,9 +410,8 @@ libraries may be written to generate this metric.
 ### Synchronous and asynchronous instruments compared
 
 Synchronous instruments are called inside a request, meaning they
-have an associated distributed [Context](../context/context.md) (i.e.,
-Span context, Correlation context).  Multiple metric events may occur
-for a synchronous instrument within a given collection interval.
+have an associated distributed [Context](../context/context.md) (i.e., Span context, Correlation context).  Multiple metric events may occur for a
+synchronous instrument within a given collection interval.
 
 Asynchronous instruments are reported by a callback, once per
 collection interval, and lack Context.  They are permitted to
