@@ -109,6 +109,7 @@ In either case, a benefit of reasoning about the zPages HTTP server as a separat
 ### Out-process
 
 Out-process zPages are ones that are compatible across different languages, which executes the processing of tracing and metrics information outside of applications (as opposed to in-process zPages).
+
 - Pros
   - zPages can be added to any OpenTelemetry repository, and future development can be completely focused there
 - Cons
@@ -117,6 +118,7 @@ Out-process zPages are ones that are compatible across different languages, whic
 ### Shared Static Files
 
 All HTML, CSS, and Javascript files would be used across different OTel language repositories for their in-process zPages
+
 - Pros
   - When client-side features are rolled out (including filtering/sorting data, interval refreshing, unit toggles), changes are all centralized
   - Rendering logic and responsibility is focused and can be more effective, zPages developers can focus on other priorities
@@ -129,7 +131,4 @@ All HTML, CSS, and Javascript files would be used across different OTel language
 ### Proxy/Shim layer
 
 > TODO
-
 > GENERAL TODO: Link spec where possible, add pictures/figures and design docs links
-
-
