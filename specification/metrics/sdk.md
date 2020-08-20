@@ -26,11 +26,11 @@ guidelines](../library-guidelines.md).
 There are three major components of the Metrics SDK that data flows
 through, in order:
 
-1. **Accumulator**: Receives metric events from the API, computes one Aggregator per active (Instrument, Label Set)
+1. **Accumulator**: Receives metric events from the API, computes one Accumulation per active Instrument and Label Set pair
 2. **Processor**: Receives Accumulations from the Accumulator, transforms into ExportRecordSet
 3. **Exporter**: Receives ExportRecordSet, transforms into some protocol and sends it somewhere.
 
-These terms are defined in the API specification:
+These terms are defined in the Metrics API specification:
 
 - **Metric Instrument**: the API object used by a developer for instrumentation
 - **Synchronous Instrument**: a metric instrument called by the user with application context
@@ -40,7 +40,10 @@ These terms are defined in the API specification:
 - **Collection Interval**: the period between calls to Accumulator.Collect()
 - **Label**: a key-value describing a property of the metric event
 - **Label Set**: a set of key-values with unique keys
-- **Measurement**: an integer or floating point number
+- **Measurement**: an integer or floating point number.
+
+Defined in the [Resource SDK](../resource/sdk.md) specification:
+
 - **Resource**: a set of key-values with unique keys describing the process.
 
 These are the significant Key data types used in the model architecture
