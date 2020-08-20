@@ -1,7 +1,7 @@
 name: 'Auto Assign'
-on:
-  pull_request:
-    types: [assigned, opened, synchronize, reopened]
+on: 
+  pull_request_target:
+    types: [opened, reopened]
 
 jobs:
   add-owner:
@@ -9,5 +9,6 @@ jobs:
     steps:
     - name: run
       uses: kentaro-m/auto-assign-action@v1.1.1
-      with:
+      with: 
         configuration-path: ".github/auto_assign.yml"
+        repo-token: '${{ secrets.GITHUB_TOKEN }}'

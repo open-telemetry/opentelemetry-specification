@@ -19,6 +19,7 @@ The OpenTelemetry specification describes the cross-language requirements and ex
   - [Metrics](specification/metrics/api.md)
 - SDK Specification
   - [Tracing](specification/trace/sdk.md)
+  - [Metrics](specification/metrics/sdk.md)
   - [Resource](specification/resource/sdk.md)
   - [Configuration](specification/sdk-configuration.md)
 - Data Specification
