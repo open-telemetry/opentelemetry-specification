@@ -82,6 +82,7 @@ Instrumentations SHOULD provide a way for users to configure this name.
 | `peer.service`  | The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. |
 
 Examples of `peer.service` that users may specify:
+
 - A Redis cache of auth tokens as `peer.service="AuthTokenCache"`.
 - A gRPC service `rpc.service="io.opentelemetry.AuthService"` may be hosted in both a gateway, `peer.service="ExternalApiService"` and a backend, `peer.service="AuthService"`.
 

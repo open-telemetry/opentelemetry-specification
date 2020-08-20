@@ -56,27 +56,26 @@ SDKs MAY expose callbacks to allow end users to handle self-diagnostics separate
 
 SDK implementations MUST allow end users to change the library's default error handling behavior for relevant errors.
 Application developers may want to run with strict error handling in a staging environment to catch invalid uses of the API, or malformed config.
-Note that configuring a custom error handler in this way is the only exception to the basic error handling principles outlined above. 
-The mechanism by which end users set or register a custom error handler should follow language-specific conventions. 
+Note that configuring a custom error handler in this way is the only exception to the basic error handling principles outlined above.
+The mechanism by which end users set or register a custom error handler should follow language-specific conventions.
 
-### Examples 
+### Examples
 
-These are examples of how end users might register custom error handlers. 
+These are examples of how end users might register custom error handlers.
 Examples are for illustration purposes only. Language library authors
-are free to deviate from these provided that their design matches the requirements outlined above. 
+are free to deviate from these provided that their design matches the requirements outlined above.
 
-##### Go
+#### Go
 
 ```go
 // The basic Error Handler interface
 type ErrorHandler interface {
-	Handle(err error)
+  Handle(err error)
 }
 
 func Handler() ErrorHandler
 func SetHandler(handler ErrorHandler)
 ```
-
 
 ```go
 // Registering a custom Error Handler
@@ -91,7 +90,7 @@ func (IgnoreExporterErrorsHandler) Handle(err error) {
 }
 
 func main() {
-    // Other setup ... 
+    // Other setup ...
     opentelemetrysdk.SetHandler(IgnoreExporterErrorsHandler{})
 }
 
@@ -100,11 +99,10 @@ func main() {
 ##### Java
 
 OpenTelemetry Java uses [java.util.logging](https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html)
-to output and handle all logs, including errors. Custom handlers and filters can be registered both in code and using the 
-Java logging configuration file.  
+to output and handle all logs, including errors. Custom handlers and filters can be registered both in code and using the Java logging configuration file.  
 
 ```properties
-## Turn off all error logging 
+## Turn off all error logging
 io.opentelemetry.level = OFF
 ```
 
