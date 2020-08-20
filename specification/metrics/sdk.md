@@ -46,7 +46,7 @@ Defined in the [Resource SDK](../resource/sdk.md) specification:
 
 - **Resource**: a set of key-values with unique keys describing the process.
 
-These are the significant Key data types used in the model architecture
+These are the significant data types used in the model architecture:
 
 - **Aggregator**: aggregates one or more measurements in a useful way
 - **AggregatorSelector**: chooses which Aggregator to assign to a metric instrument
