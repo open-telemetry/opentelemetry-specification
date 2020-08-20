@@ -448,6 +448,12 @@ The Span interface MUST provide:
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
 
+Consumers should be aware that an event's timestamp might be before the start or
+after the end of the span if such timestamp was provided by the user to the
+`AddEvent` API.
+The specification does not require any normalization if the provided timestamp
+is out of this range.
+
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
 
