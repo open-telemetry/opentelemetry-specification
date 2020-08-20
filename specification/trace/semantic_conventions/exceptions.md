@@ -6,9 +6,8 @@ exceptions.
 <!-- toc -->
 
 - [Recording an Exception](#recording-an-exception)
-- [Event Attributes](#event-attributes)
+- [Attributes](#event-attributes)
   - [Stacktrace Representation](#stacktrace-representation)
-- [Span Attributes](#span-attributes)
 
 <!-- tocstop -->
 
@@ -17,7 +16,7 @@ exceptions.
 An exception SHOULD be recorded as an `Event` on the span during which it occurred.
 The name of the event MUST be `"exception"`.
 
-## Event Attributes
+## Attributes
 
 The table below indicates which attributes should be added to the `Event` and
 their types.
@@ -35,33 +34,19 @@ possible representations of stacktraces in various languages. The table is not
 meant to be a recommendation for any particular language, although SIGs are free
 to adopt them if they see fit.
 
-| Language   | Format                                                              |
-| ---------- | ------------------------------------------------------------------- |
-| C#         | the return value of [Exception.ToString()][csharp-stacktrace]       |
-| Go         | the return value of [runtime.Stack][go-stacktrace]                  |
-| Java       | the contents of [Throwable.printStackTrace()][java-stacktrace]      |
-| Javascript | the return value of [error.stack][js-stacktrace] as returned by V8  |
-| Python     | the return value of [traceback.format_exc()][python-stacktrace]     |
-| Ruby       | the return value of [Exception.full_message][ruby-full-message]     |
+| Language   | Format                                                             |
+| ---------- | ------------------------------------------------------------------ |
+| C#         | the return value of [Exception.ToString()][csharp-stacktrace]      |
+| Go         | the return value of [runtime.Stack][go-stacktrace]                 |
+| Java       | the contents of [Throwable.printStackTrace()][java-stacktrace]     |
+| Javascript | the return value of [error.stack][js-stacktrace] as returned by V8 |
+| Python     | the return value of [traceback.format_exc()][python-stacktrace]    |
+| Ruby       | the return value of [Exception.full_message][ruby-full-message]    |
 
 Backends can use the language specified methodology for generating a stacktrace
 combined with platform information from the
 [telemetry sdk resource][telemetry-sdk-resource] in order to extract more fine
 grained information from a stacktrace, if necessary.
-
-## Span Attributes
-
-An `error.hint` attribute can be added to a span to indicate that an error
-likely occurred during the execution of a span. Definitively distinguishing
-an exception from an error is subject to interpretation and can vary between
-applications. As such, the `error.hint` attribute conveys the instrumentation
-author's best guess as to whether or not an error was observed. Tracing backends
-can choose to honor or ignore the hint, or use it as a cue for further analysis.
-
-| Attribute name                                    | Type    | Notes and examples                                             | Required? |
-| :------------------------------------------------ | :------ | :------------------------------------------------------------- | :-------- |
-| error.hint                                        | Boolean | An instrumentation author's best guess as to whether or not an |
-| error was observed during the execution of a span | No      |
 
 [gcp-error-reporting]: https://cloud.google.com/error-reporting/reference/rest/v1beta1/projects.events/report
 [java-stacktrace]: https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html#printStackTrace%28%29

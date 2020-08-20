@@ -152,3 +152,19 @@ Examples of where `thread.id` and `thread.name` can be extracted from:
 | Ruby                  |                                        | `Thread.current.name`              |
 | C++                   | `std::this_thread::get_id()`             |                                    |
 | Erlang               | `erlang:system_info(scheduler_id)` |                                  |
+
+## Error Attributes
+
+A span or event can be annotated with an `error.hint` attribute to indicate that
+an error condition was observed. If an [exception event](exceptions) is
+considered to be an error, both the event and the span SHOULD have matching
+`error.hint` attributes set to `true`. It's possible for more than one exception
+event to have an `error.hint` attribute set. An `error.hint` represents an
+instrumentation author's best judgement as to whether or not an error condition
+was encountered, but the decision is not definitive. Tracing backends can use
+the `error.hint` attribute as a cue for further analysis and can ultimately
+choose to honor or ignore the hint.
+
+| Attribute name | Notes and examples                                                                                                       |
+| :------------- | :----------------------------------------------------------------------------------------------------------------------- |
+| error.hint     | A boolean value that represents an instrumentation author's best judgement as to whether an error condition was observed |
