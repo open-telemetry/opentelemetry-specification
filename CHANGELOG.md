@@ -22,6 +22,7 @@ Updates:
   * SpanProcessors must provide read/write access at least in OnStart.
 - Specify how `Probability` sampler is used with `ParentOrElse` sampler.
 - Clean up api-propagators.md, by extending documentation and removing redundant sections ([#577](https://github.com/open-telemetry/opentelemetry-specification/pull/577))
+- Remove lazy Event and Link API from Span interface ([#840](https://github.com/open-telemetry/opentelemetry-specification/pull/840))
 
 ## v0.6.0 (07-01-2020)
 
