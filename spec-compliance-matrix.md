@@ -79,11 +79,13 @@ status of the feature is not known.
 |TBD|
 
 ## Error Handling
+
 |Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
 |TBD|
 
 ## Environment Variables
+
 |Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
 |TBD|
@@ -118,9 +120,9 @@ status of the feature is not known.
 |Event attributes mapping to Annotations       |  |    |       |      |    |      |   |    |   |    |
 |Fractional microseconds in timestamps         |  |    |       |      |    |      |   |    |   |    |
 |Service name mapping                          |  |    |       |      |    |      |   |    |   |    |
-|[Jaeger]()|
+|Jaeger|
 |TBD|
-|[OpenCensus]()|
+|OpenCensus|
 |TBD|
-|[Prometheus]()|
+|Prometheus|
 |TBD|
