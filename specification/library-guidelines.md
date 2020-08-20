@@ -10,7 +10,8 @@ _Note to Language Library Authors:_ OpenTelemetry specification, API and SDK imp
 
 ## Requirements
 
-1. The OpenTelemetry API must be well-defined and clearly decoupled from the implementation. This allows end users to consume API only without also consuming the implementation (see points 2 and 3 for why it is important).
+1. The OpenTelemetry API must be well-defined and clearly decoupled from the implementation. This allows end users
+to consume API only without also consuming the implementation (see points 2 and 3 for why it is important).
 
 2. Third party libraries and frameworks that add instrumentation to their code will have a dependency only on the API of OpenTelemetry language library. The developers of third party libraries and frameworks do not care (and cannot know) what specific implementation of OpenTelemetry is used in the final application.
 
