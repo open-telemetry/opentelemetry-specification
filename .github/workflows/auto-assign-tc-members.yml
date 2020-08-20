@@ -1,7 +1,5 @@
 name: 'Auto Assign'
-on:
-  pull_request:
-    types: [assigned, opened, synchronize, reopened]
+on: pull_request_target
 
 jobs:
   add-owner:
