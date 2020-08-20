@@ -103,6 +103,9 @@ value as string key/values pairs into carriers that travel in-band across proces
 The carrier of propagated data on both the client (injector) and server (extractor) side is
 usually an HTTP request.
 
+In order to increase compatibility, the key/value pairs MUST only use US-ASCII octets.
+a la [RFC 7230](https://tools.ietf.org/html/rfc7230#section-3.2.4).
+
 `Getter` and `Setter` are optional helper components used for extraction and injection respectively,
 and are defined as separate objects from the carrier to avoid runtime allocations,
 by removing the need for additional interface-implementing-objects wrapping the carrier in order
