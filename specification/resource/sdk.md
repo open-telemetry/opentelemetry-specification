@@ -72,8 +72,9 @@ attributes"](semantic_conventions/README.md) that have prescribed semantic meani
 
 ### Detecting resource information from the environment
 
-Custom resource detectors related to specific environments (e.g. specific cloud
-vendors) MUST be implemented as packages separate from the SDK.
+Custom resource detectors related to generic platforms (e.g. Docker, Kubernetes)
+or vendor specific environments (e.g. EKS, AKS, GKE) MUST be implemented as
+packages separate from the SDK.
 
 Resource detector packages MUST provide a method that returns a single resource.
 This can then be associated with `TracerProvider` or `MeterProvider` instances
@@ -94,8 +95,9 @@ SHOULD be considered an error.
 ### Specifying resource information via an environment variable
 
 The SDK MUST extract information from the `OTEL_RESOURCE_ATTRIBUTES` environment
-variable and merge this, as the secondary resource, with any resource
-information provided by the user.
+variable and [merge](#merge) this, as the secondary resource, with any resource
+information provided by the user, i.e. the user provided resource information
+has higher priority.
 
 The `OTEL_RESOURCE_ATTRIBUTES` environment variable will contain of a list of
 key value pairs, and these are expected to be represented in a format matching
