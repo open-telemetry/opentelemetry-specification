@@ -445,8 +445,9 @@ The Span interface MUST provide:
   wrapping class or function that returns an `Event` or formatted attributes. When
   providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
-Events SHOULD preserve the order in which they're set. This will typically match
-the ordering of the events' timestamps.
+Events SHOULD preserve the order in which they are recorded.
+This will typically match the ordering of the events' timestamps,
+but events may be recorded out-of-order using custom timestamps.
 
 Consumers should be aware that an event's timestamp might be before the start or
 after the end of the span if such timestamp was provided by the user to the
