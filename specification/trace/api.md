@@ -453,10 +453,10 @@ This will typically match the ordering of the events' timestamps,
 but events may be recorded out-of-order using custom timestamps.
 
 Consumers should be aware that an event's timestamp might be before the start or
-after the end of the span if such timestamp was provided by the user to the
-`AddEvent` API.
-The specification does not require any normalization if the provided timestamp
-is out of this range.
+after the end of the span if custom timestamps were provided by the user for the
+event or when starting or ending the span.
+The specification does not require any normalization if provided timestamps are
+out of range.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
