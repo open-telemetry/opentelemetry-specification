@@ -429,7 +429,10 @@ An `Event` is defined by the following properties:
 
 - (Required) Name of the event.
 - (Optional) [`Attributes`](../common/common.md#attributes).
-- (Optional) Timestamp for the event. If not provided, the current time when the event is added MUST be used.
+- (Optional) Custom Timestamp for the event. A custom timestamp SHOULD only be provided,
+if there is a significant difference between the time at which the event occurred and
+the time it is recorded at. If a custom timestamp is not provided, the current time
+at recording the event is added by the implementation.
 
 The `Event` SHOULD be an immutable type.
 
