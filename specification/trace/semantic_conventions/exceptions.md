@@ -41,7 +41,7 @@ to adopt them if they see fit.
 | Java       | the contents of [Throwable.printStackTrace()][java-stacktrace]      |
 | Javascript | the return value of [error.stack][js-stacktrace] as returned by V8  |
 | Python     | the return value of [traceback.format_exc()][python-stacktrace]     |
-| Ruby       | the result of [Exception.backtrace][ruby-stacktrace] joined by "\n" |
+| Ruby       | the return value of [Exception.full_message][ruby-full-message]     |
 
 Backends can use the language specified methodology for generating a stacktrace
 combined with platform information from the
@@ -52,7 +52,7 @@ grained information from a stacktrace, if necessary.
 [java-stacktrace]: https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html#printStackTrace%28%29
 [python-stacktrace]: https://docs.python.org/3/library/traceback.html#traceback.format_exc
 [js-stacktrace]: https://v8.dev/docs/stack-trace-api
-[ruby-stacktrace]: https://ruby-doc.org/core-2.7.1/Exception.html#method-i-backtrace
+[ruby-stacktrace]: https://ruby-doc.org/core-2.7.1/Exception.html#method-i-full_message
 [csharp-stacktrace]: https://docs.microsoft.com/en-us/dotnet/api/system.exception.tostring
 [go-stacktrace]: https://golang.org/pkg/runtime/debug/#Stack
 [telemetry-sdk-resource]: https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#telemetry-sdk

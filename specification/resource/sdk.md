@@ -13,7 +13,7 @@ with closed source environments. The SDK MUST allow for creation of `Resources` 
 for associating them with telemetry.
 
 When used with distributed tracing, a resource can be associated with the
-[TracerProvider](../trace/api.md#tracerprovider) when it is created.
+[TracerProvider](../trace/api.md#tracerprovider) when the TracerProvider is created.
 That association cannot be changed later.
 When associated with a `TracerProvider`,
 all `Span`s produced by any `Tracer` from the provider MUST be associated with this `Resource`.
