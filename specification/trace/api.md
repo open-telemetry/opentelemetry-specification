@@ -428,11 +428,9 @@ with the moment when they are added to the `Span`.
 An `Event` is defined by the following properties:
 
 - (Required) Name of the event.
+- (Required) A timestamp for the event. Either the time at which the event was
+added or a custom timestamp provided by the user.
 - (Optional) [`Attributes`](../common/common.md#attributes).
-- (Optional) Custom Timestamp for the event. A custom timestamp SHOULD only be provided,
-if there is a significant difference between the time at which the event occurred and
-the time it is recorded at. If a custom timestamp is not provided, the current time
-at recording the event is added by the implementation.
 
 The `Event` SHOULD be an immutable type.
 
@@ -440,6 +438,10 @@ The Span interface MUST provide:
 
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
+  This API takes the name of the event, optional `Attributes` and an optional
+  `Timestamp` which can be used to specify the time at which the event occurred.
+  If no custom timestamp is provided by the user, the implementation automatically
+  sets the time at which this API is called on the event.
 - An API to record a single `Event` whose attributes or attribute values are
   lazily constructed, with the intention of avoiding unnecessary work if an event
   is unused. If the language supports overloads then this SHOULD be called
