@@ -427,10 +427,10 @@ with the moment when they are added to the `Span`.
 
 An `Event` is defined by the following properties:
 
-- (Required) Name of the event.
-- (Required) A timestamp for the event. Either the time at which the event was
+- Name of the event.
+- A timestamp for the event. Either the time at which the event was
 added or a custom timestamp provided by the user.
-- (Optional) [`Attributes`](../common/common.md#attributes).
+- [`Attributes`](../common/common.md#attributes) further describing the event.
 
 The `Event` SHOULD be an immutable type.
 
