@@ -8,7 +8,7 @@ The goal of this specification is to unify the environment variable names betwee
 | -------------------- | ------------------------------------------------ | --------------------------------- | ------------------------------------------------------------------------------------------- |
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes    |                                   | Spec details TBD. Proposal in [OTEP-111](https://github.com/open-telemetry/oteps/pull/111). |
 | OTEL_LOG_LEVEL       | Log level used by the SDK logger                 | "info"                            |                                                                                             |
-| OTEL_PROPAGATORS     | Propagators to be used as a comma separated list | "tracecontext,correlationcontext" |                                                                                             |
+| OTEL_PROPAGATORS     | Propagators to be used as a comma separated list | "tracecontext,baggage" |                                                                                             |
 
 ## Batch Span Processor
 
