@@ -704,7 +704,7 @@ implementer of these links.
 
 The API layer MAY include the following `Propagator`s:
 
-* A `HTTPTextPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
+* A `TextMapPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
 
 ## Behavior of the API in the absence of an installed SDK
 
