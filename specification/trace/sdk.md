@@ -81,10 +81,8 @@ It produces an output called `SamplingResult` which contains:
   will be dropped.
   * `RECORD` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
   * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
-* A set of span Attributes that will also be added to the `Span`.
-  * The list of attributes returned by `SamplingResult` MUST be immutable.
-  Caller may call this method any number of times and can safely cache the
-  returned value.
+* A set of span Attributes that will also be added to the `Span`. The returned
+object must be immutable (multiple calls may return different immutable objects).
 
 #### GetDescription
 
@@ -97,7 +95,7 @@ Description MUST NOT change over time and caller can cache the returned value.
 ### Built-in samplers
 
 OpenTelemetry supports a number of built-in samplers to choose from.
-The default sampler is `ParentOrElse(AlwaysOn)`.
+The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### AlwaysOn
 
@@ -111,27 +109,42 @@ The default sampler is `ParentOrElse(AlwaysOn)`.
 
 #### Probability
 
-* The `ProbabilitySampler` MUST ignore the parent `SampledFlag`.
-  To respect the parent `SampledFlag`, the `ProbabilitySampler` should be used as a delegate of the `ParentOrElse` sampler specified below.
+* The `ProbabilitySampler` MUST ignore the parent. To respect the parent
+`SampledFlag`, the `ProbabilitySampler` should be used as a delegate of the
+`ParentBased` sampler specified below.
 * Description MUST be `ProbabilitySampler{0.000100}`.
 
 TODO: Add details about how the `ProbabilitySampler` is implemented as a function
 of the `TraceID`.
 
-#### ParentOrElse
+#### ParentBased
 
-* This is a composite sampler. `ParentOrElse(delegateSampler)` either respects the parent span's sampling decision or delegates to  `delegateSampler` for root spans.
-* If parent exists:
-  * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
-  * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
-* If no parent (root span) exists returns the result of the `delegateSampler`.
-* Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
+* This is a composite sampler. `ParentBased` helps distinguished between the
+following cases:
+  * No parent (root span).
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `false`
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `true`
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `false`
 
-|Parent|`ParentOrElse(delegateSampler)`
-|--|--|
-|Exists and `SampledFlag` is `true`|`RECORD_AND_SAMPLED`|
-|Exists and `SampledFlag` is `false`|`NOT_RECORD`|
-|No parent(root spans)|Result of `delegateSampler()`|
+Required parameters:
+
+* `root(Sampler)` - Sampler called for spans with no parent (root spans)
+
+Optional parameters:
+
+* `remoteParentSampled(Sampler)` (default: AlwaysOn)
+* `remoteParentNotSampled(Sampler)` (default: AlwaysOff)
+* `localParentSampled(Sampler)` (default: AlwaysOn)
+* `localParentNotSampled(Sampler)` (default: AlwaysOff)
+
+|Parent| parent.isRemote() | parent.IsSampled()| Invoke sampler|
+|--|--|--|--|
+|absent| n/a | n/a |`root()`|
+|present|true|true|`remoteParentSampled()`|
+|present|true|false|`remoteParentNotSampled()`|
+|present|false|true|`localParentSampled()`|
+|present|false|false|`localParentNotSampled()`|
 
 ## Tracer Creation
 
