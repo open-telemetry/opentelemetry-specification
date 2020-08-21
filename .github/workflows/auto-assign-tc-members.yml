@@ -1,7 +1,7 @@
 name: 'Auto Assign'
 on: 
   pull_request_target:
-    types: [opened, reopened]
+    types: [opened]
 
 jobs:
   add-owner:
