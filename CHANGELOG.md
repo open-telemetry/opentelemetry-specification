@@ -10,6 +10,7 @@ the release.
 New:
 
 - Add resource semantic conventions for operating systems ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
+- Add resource semantic convention for deployment environment [#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/)
 - Clarification of the behavior of the Trace API, re: context propagation, in the absence of an installed SDK
 - Add Span API and semantic conventions for recording exceptions
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
