@@ -6,7 +6,7 @@ exceptions.
 <!-- toc -->
 
 - [Recording an Exception](#recording-an-exception)
-- [Attributes](#event-attributes)
+- [Attributes](#attributes)
   - [Stacktrace Representation](#stacktrace-representation)
 
 <!-- tocstop -->
@@ -34,14 +34,14 @@ possible representations of stacktraces in various languages. The table is not
 meant to be a recommendation for any particular language, although SIGs are free
 to adopt them if they see fit.
 
-| Language   | Format                                                             |
-| ---------- | ------------------------------------------------------------------ |
-| C#         | the return value of [Exception.ToString()][csharp-stacktrace]      |
-| Go         | the return value of [runtime.Stack][go-stacktrace]                 |
-| Java       | the contents of [Throwable.printStackTrace()][java-stacktrace]     |
-| Javascript | the return value of [error.stack][js-stacktrace] as returned by V8 |
-| Python     | the return value of [traceback.format_exc()][python-stacktrace]    |
-| Ruby       | the return value of [Exception.full_message][ruby-full-message]    |
+| Language   | Format                                                              |
+| ---------- | ------------------------------------------------------------------- |
+| C#         | the return value of [Exception.ToString()][csharp-stacktrace]       |
+| Go         | the return value of [runtime.Stack][go-stacktrace]                  |
+| Java       | the contents of [Throwable.printStackTrace()][java-stacktrace]      |
+| Javascript | the return value of [error.stack][js-stacktrace] as returned by V8  |
+| Python     | the return value of [traceback.format_exc()][python-stacktrace]     |
+| Ruby       | the return value of [Exception.full_message][ruby-full-message]     |
 
 Backends can use the language specified methodology for generating a stacktrace
 combined with platform information from the
