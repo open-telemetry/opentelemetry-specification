@@ -1,12 +1,36 @@
 # Glossary
 
-Below are a list of some OpenTelemetry specific terms that are used across this
-specification.
+This document defines some terms that are used across this specification.
+
+Some other fundamental terms are documented in the [overview document](overview.md).
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Common](#common)
+  * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
+  * [Telemetry SDK](#telemetry-sdk)
+  * [Exporter Library](#exporter-library)
+  * [Instrumented Library](#instrumented-library)
+  * [Instrumentation Library](#instrumentation-library)
+  * [Tracer Name / Meter Name](#tracer-name--meter-name)
+- [Logs](#logs)
+  * [Log Record](#log-record)
+  * [Log](#log)
+  * [Embedded Log](#embedded-log)
+  * [Standalone Log](#standalone-log)
+  * [Log Attributes](#log-attributes)
+  * [Structured Logs](#structured-logs)
+  * [Flat File Logs](#flat-file-logs)
+
+<!-- tocstop -->
 
 ## Common
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>
+
 ### In-band and Out-of-band Data
 
 > In telecommunications, **in-band signaling** is the sending of control information within the same band or channel used for data such as voice or video. This is in contrast to **out-of-band signaling** which is sent over a different channel, or even over a separate network ([Wikipedia](https://en.wikipedia.org/wiki/In-band_signaling)).
@@ -23,7 +47,6 @@ usually asynchronously by background routines
 rather than from the critical path of the business logic.
 Metrics, logs, and traces exported to telemetry backends are examples of out-of-band data.
 
-<a name="telemetry_sdk"></a>
 ### Telemetry SDK
 
 Denotes the library that implements the *OpenTelemetry API*.
@@ -31,7 +54,6 @@ Denotes the library that implements the *OpenTelemetry API*.
 See [Library Guidelines](library-guidelines.md#sdk-implementation) and
 [Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk).
 
-<a name="exporter_library"></a>
 ### Exporter Library
 
 Libraries which are compatible with the [Telemetry SDK](#telemetry-sdk) and provide functionality to emit telemetry to consumers.
@@ -45,8 +67,6 @@ or by another [Instrumentation Library](#instrumentation-library).
 
 Example: `org.mongodb.client`.
 
-<a name="instrumenting_library"></a>
-<a name="instrumentation_library"></a>
 ### Instrumentation Library
 
 Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented-library).
@@ -59,8 +79,6 @@ Example: `io.opentelemetry.contrib.mongodb`.
 
 Synonyms: *Instrumenting Library*.
 
-<a name="tracer-name"></a>
-<a name="meter-name"></a>
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
