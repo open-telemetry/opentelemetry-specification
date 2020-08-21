@@ -11,7 +11,7 @@ Table of Contents
   - [Operations](#operations)
     - [Inject](#inject)
     - [Extract](#extract)
-- [HTTPText Propagator](#httptext-propagator)
+- [TextMap Propagator](#textmap-propagator)
   - [Fields](#fields)
   - [Inject](#inject-1)
     - [Setter argument](#setter-argument)
@@ -50,7 +50,7 @@ and is bound to a data type, in order to propagate in-band context data across p
 
 The Propagators API currently defines one `Propagator` type:
 
-- `HTTPTextPropagator` is a type that inject values into and extracts values
+- `TextMapPropagator` is a type that inject values into and extracts values
   from carriers as string key/value pairs.
 
 A binary `Propagator` type will be added in the future (see [#437](https://github.com/open-telemetry/opentelemetry-specification/issues/437)).
@@ -96,13 +96,16 @@ Returns a new `Context` derived from the `Context` passed as argument,
 containing the extracted value, which can be a `SpanContext`,
 `CorrelationContext` or another cross-cutting concern context.
 
-## HTTPText Propagator
+## TextMap Propagator
 
-`HTTPTextPropagator` performs the injection and extraction of a cross-cutting concern
+`TextMapPropagator` performs the injection and extraction of a cross-cutting concern
 value as string key/values pairs into carriers that travel in-band across process boundaries.
 
 The carrier of propagated data on both the client (injector) and server (extractor) side is
 usually an HTTP request.
+
+In order to increase compatibility, the key/value pairs MUST only consist of US-ASCII characters
+that make up valid HTTP header fields as per [RFC 7230](https://tools.ietf.org/html/rfc7230#section-3.2).
 
 `Getter` and `Setter` are optional helper components used for extraction and injection respectively,
 and are defined as separate objects from the carrier to avoid runtime allocations,
@@ -128,7 +131,7 @@ The use cases of this are:
 - allow pre-allocation of fields, especially in systems like gRPC Metadata
 - allow a single-pass over an iterator
 
-Returns list of fields that will be used by the `HttpTextPropagator`.
+Returns list of fields that will be used by the `TextMapPropagator`.
 
 Observe that some `Propagator`s may define, besides the returned values, additional fields with
 variable names. To get a full list of fields for a specific carrier object, use the
@@ -148,7 +151,7 @@ Optional arguments:
 
 Setter is an argument in `Inject` that sets values into given fields.
 
-`Setter` allows a `HttpTextPropagator` to set propagated fields into a carrier.
+`Setter` allows a `TextMapPropagator` to set propagated fields into a carrier.
 
 One of the ways to implement it is `Setter` class with `Set` method as described below.
 
@@ -180,7 +183,7 @@ Returns a new `Context` derived from the `Context` passed as argument.
 
 Getter is an argument in `Extract` that get value from given field
 
-`Getter` allows a `HttpTextPropagator` to read propagated fields from a carrier.
+`Getter` allows a `TextMapPropagator` to read propagated fields from a carrier.
 
 One of the ways to implement it is `Getter` class with `Get` and `Keys` methods
 as described below. Languages may decide on alternative implementations and 
@@ -229,7 +232,7 @@ A composite propagator can be built from a list of propagators, or a list of
 injectors and extractors. The resulting composite `Propagator` will invoke the `Propagator`s, `Injector`s, or `Extractor`s, in the order they were specified.
 
 Each composite `Propagator` will implement a specific `Propagator` type, such
-as `HttpTextPropagator`, as different `Propagator` types will likely operate on different
+as `TextMapPropagator`, as different `Propagator` types will likely operate on different
 data types.
 
 There MUST be functions to accomplish the following operations.

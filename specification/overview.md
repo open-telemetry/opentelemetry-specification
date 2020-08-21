@@ -285,7 +285,7 @@ imposed by a specific transport and bound to a data type.
 
 The Propagators API currently defines one `Propagator` type:
 
-- `HTTPTextPropagator` injects values into and extracts values from carriers as text.
+- `TextMapPropagator` injects values into and extracts values from carriers as text.
 
 ## Collector
 
@@ -306,7 +306,7 @@ Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/do
 
 ## Instrumentation Libraries
 
-See [Instrumentation Library](glossary.md#instrumentation_library)
+See [Instrumentation Library](glossary.md#instrumentation-library)
 
 The inspiration of the project is to make every library and application
 observable out of the box by having them call OpenTelemetry API directly. However,
@@ -316,7 +316,7 @@ wrapping interfaces, subscribing to library-specific callbacks, or translating
 existing telemetry into the OpenTelemetry model.
 
 A library that enables OpenTelemetry observability for another library is called
-an [Instrumentation Library](glossary.md#instrumentation_library).
+an [Instrumentation Library](glossary.md#instrumentation-library).
 
 An instrumentation library should be named to follow any naming conventions of
 the instrumented library (e.g. 'middleware' for a web framework).
