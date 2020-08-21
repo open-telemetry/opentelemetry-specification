@@ -81,10 +81,8 @@ It produces an output called `SamplingResult` which contains:
   will be dropped.
   * `RECORD` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
   * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
-* A set of span Attributes that will also be added to the `Span`.
-  * The list of attributes returned by `SamplingResult` MUST be immutable.
-  Caller may call this method any number of times and can safely cache the
-  returned value.
+* A set of span Attributes that will also be added to the `Span`. The returned
+object must be immutable (multiple calls may return different immutable objects).
 
 #### GetDescription
 
