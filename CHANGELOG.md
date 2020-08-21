@@ -23,6 +23,7 @@ Updates:
 - Specify how `Probability` sampler is used with `ParentOrElse` sampler.
 - Clean up api-propagators.md, by extending documentation and removing redundant sections ([#577](https://github.com/open-telemetry/opentelemetry-specification/pull/577))
 - Rename HTTPText propagator to TextMap ([#793](https://github.com/open-telemetry/opentelemetry-specification/pull/793))
+- Rename ParentOrElse sampler to ParentBased and add multiple delegate samplers ([#610](https://github.com/open-telemetry/opentelemetry-specification/pull/610))
 
 ## v0.6.0 (07-01-2020)
 
