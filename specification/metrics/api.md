@@ -838,9 +838,14 @@ To bind an instrument, use the `Bind(labels...)` method to return an
 interface that supports the corresponding synchronous API (i.e.,
 `Add()` or `Record()`).  Bound instruments are invoked without labels;
 the corresponding metric event is associated with the labels that were
-bound to the instrument.  Bound instruments may consume SDK resources
-indefinitely until the user calls `Unbind()` to release the bound
-instrument.
+bound to the instrument.
+
+As a consequence of their performance advantage, bound instruments
+also consume resources in the SDK.  Bound instruments MUST support an
+`Unbind()` method for users to indicate they are finished with the
+binding and release the associated resources.  Note that `Unbind()`
+does not imply deletion of a timeseries, it only permits the SDK to
+forget the timeseries existed after there are no pending updates.
 
 For example, to repeatedly update a counter with the same labels:
 

@@ -19,7 +19,7 @@ and Jaeger.
 ### InstrumentationLibrary
 
 OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as span `tags` to Jaeger using the following mapping.
- 
+
 | OpenTelemetry | Jaeger |
 | ------------- | ------ |
 | `InstrumentationLibrary.name`|`otel.instrumentation_library.name`|
