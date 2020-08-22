@@ -1,5 +1,43 @@
 # Overview
 
+<details>
+<summary>
+Table of Contents
+</summary>
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Distributed Tracing](#distributed-tracing)
+  * [Trace](#trace)
+  * [Span](#span)
+  * [SpanContext](#spancontext)
+  * [Links between spans](#links-between-spans)
+- [Metrics](#metrics)
+  * [Recording raw measurements](#recording-raw-measurements)
+    + [Measure](#measure)
+    + [Measurement](#measurement)
+  * [Recording metrics with predefined aggregation](#recording-metrics-with-predefined-aggregation)
+  * [Metrics data model and SDK](#metrics-data-model-and-sdk)
+- [Logs](#logs)
+  * [Data model](#data-model)
+- [CorrelationContext](#correlationcontext)
+- [Resources](#resources)
+- [Context Propagation](#context-propagation)
+- [Propagators](#propagators)
+- [Collector](#collector)
+- [Instrumentation Libraries](#instrumentation-libraries)
+- [Semantic Conventions](#semantic-conventions)
+
+<!-- tocstop -->
+
+</details>
+
+This document provides an overview of the pillars of telemetry that
+OpenTelemetry supports and defines important fundamental terms.
+
+Additional term definitions can be found in the [glossary](glossary.md).
+
 ## Distributed Tracing
 
 A distributed trace is a set of events, triggered as a result of a single
@@ -54,11 +92,8 @@ Each **Span** encapsulates the following state:
 
 - An operation name
 - A start and finish timestamp
-- A set of zero or more key:value **Attributes**. The keys must be strings. The
-  values may be strings, bools, or numeric types.
-- A set of zero or more **Events**, each of which is itself a key:value map
-  paired with a timestamp. The keys must be strings, though the values may be of
-  the same types as Span **Attributes**.
+- [**Attributes**](./common/common.md#attributes): A list of key-value pairs.
+- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
   (via the **SpanContext** of those related **Spans**).
@@ -189,6 +224,13 @@ validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
+## Logs
+
+### Data model
+
+[Log Data Model](logs/data-model.md) defines how logs and events are understood by
+OpenTelemetry.
+
 ## CorrelationContext
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
@@ -243,7 +285,7 @@ imposed by a specific transport and bound to a data type.
 
 The Propagators API currently defines one `Propagator` type:
 
-- `HTTPTextPropagator` injects values into and extracts values from carriers as text.
+- `TextMapPropagator` injects values into and extracts values from carriers as text.
 
 ## Collector
 
@@ -264,7 +306,7 @@ Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/do
 
 ## Instrumentation Libraries
 
-See [Instrumentation Library](glossary.md#instrumentation_library)
+See [Instrumentation Library](glossary.md#instrumentation-library)
 
 The inspiration of the project is to make every library and application
 observable out of the box by having them call OpenTelemetry API directly. However,
@@ -274,7 +316,7 @@ wrapping interfaces, subscribing to library-specific callbacks, or translating
 existing telemetry into the OpenTelemetry model.
 
 A library that enables OpenTelemetry observability for another library is called
-an [Instrumentation Library](glossary.md#instrumentation_library).
+an [Instrumentation Library](glossary.md#instrumentation-library).
 
 An instrumentation library should be named to follow any naming conventions of
 the instrumented library (e.g. 'middleware' for a web framework).
@@ -286,10 +328,6 @@ name itself. Examples include:
 * opentelemetry-instrumentation-flask (Python)
 * @opentelemetry/instrumentation-grpc (Javascript)
 
-## Code injecting adapters
-
-TODO: fill out as a result of SIG discussion.
-
 ## Semantic Conventions
 
 OpenTelemetry defines standard names and values of Resource attributes and
@@ -300,6 +338,4 @@ Span attributes.
 * [Metrics Conventions](metrics/semantic_conventions/README.md)
 
 The type of the attribute SHOULD be specified in the semantic convention
-for that attribute. Array values are allowed for attributes. For
-protocols that do not natively support array values such values MUST be
-represented as JSON strings.
+for that attribute. See more details about [Attributes](./common/common.md#attributes).

@@ -103,7 +103,7 @@ OPTIONAL parameters:
 
 ### Serialization
 
-Until the [W3C Correlation Context](https://w3c.github.io/correlation-context/) specification is recommended for use, OpenTelemetry `CorrelationContext` implementations MUST be serialized according to the [editor's draft of W3C Correlation Context as of March 27, 2020](https://github.com/w3c/correlation-context/blob/c974664b9ab4d33af6355f1f7f03a2d52c89a99e/correlation_context/HTTP_HEADER_FORMAT.md) using a vendor-specific header name to avoid collisions with the W3C Correlation Context specification should it change in the future.
+Until the [W3C Correlation Context](https://w3c.github.io/baggage/) specification is recommended for use, OpenTelemetry `CorrelationContext` implementations MUST be serialized according to the [editor's draft of W3C Correlation Context as of March 27, 2020](https://github.com/w3c/correlation-context/blob/c974664b9ab4d33af6355f1f7f03a2d52c89a99e/correlation_context/HTTP_HEADER_FORMAT.md) using a vendor-specific header name to avoid collisions with the W3C Correlation Context specification should it change in the future.
 
 #### Header Name
 
