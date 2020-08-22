@@ -186,7 +186,7 @@ Getter is an argument in `Extract` that get value from given field
 `Getter` allows a `TextMapPropagator` to read propagated fields from a carrier.
 
 One of the ways to implement it is `Getter` class with `Get` and `Keys` methods
-as described below. Languages may decide on alternative implementations and 
+as described below. Languages may decide on alternative implementations and
 expose corresponding methods as delegates or other ways.
 
 ##### Keys
