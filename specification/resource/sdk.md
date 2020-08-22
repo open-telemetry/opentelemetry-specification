@@ -76,17 +76,17 @@ Custom resource detectors related to generic platforms (e.g. Docker, Kubernetes)
 or vendor specific environments (e.g. EKS, AKS, GKE) MUST be implemented as
 packages separate from the SDK.
 
-Resource detector packages MUST provide a method that returns a single resource.
-This can then be associated with `TracerProvider` or `MeterProvider` instances
-as described above.
+Resource detector packages MUST provide a method that returns a resource. This
+can then be associated with `TracerProvider` or `MeterProvider` instances as
+described above.
 
 Resource detector packages MAY detect resource information from multiple
 possible sources and merge the result using the `Merge` operation described
 above.
 
-Resource detection logic MUST be synchronous and is expected to complete quickly
-since this is run during application initialization. Errors should be handled as
-specified in the [Error Handling
+Resource detection logic is expected to complete quickly since this code will be
+run during application initialization. Errors should be handled as specified in
+the [Error Handling
 principles](../error-handling.md#basic-error-handling-principles). Note the
 failure to detect any resource information MUST NOT be considered an error,
 whereas an error that occurs during an attempt to detect resource information
