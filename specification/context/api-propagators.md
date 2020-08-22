@@ -250,8 +250,9 @@ Implementations MAY provide global `Propagator`s for
 each supported `Propagator` type.
 
 If offered, the global `Propagator`s MUST default to a no-op instance.
-Users MUST call [Set Global Propagator](#set-global-propagator) to
-override the default value.
+In order to override the default value, an call to
+[Set Global Propagator](#set-global-propagator) MUST be done
+by either SDK implementations, OpenTelemetry extensions or final application code.
 
 ### Get Global Propagator
 
