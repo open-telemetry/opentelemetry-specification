@@ -34,8 +34,9 @@ status of the feature is not known.
 |User-defined start timestamp                  |  |    |       |      |    |      |   | +  |   |    |
 |End                                           |  |    |       |      |    |      |   | +  |   |    |
 |End with timestamp                            |  |    |       |      |    |      |   | -  |   |    |
-|Set/Get status                                |  |    |       |      |    |      |   | +  |   |    |
-|Set/Get span kind                             |  |    |       |      |    |      |   | +  |   |    |
+|IsRecording                                   |  |    |       |      |    |      |   |    |   |    |
+|Get status                                    |  |    |       |      |    |      |   | +  |   |    |
+|Get span kind                                 |  |    |       |      |    |      |   | +  |   |    |
 |Safe for concurrent calls                     |  |    |       |      |    |      |   | +  |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  |  |    |       |      |    |      |   | +  |   |    |
