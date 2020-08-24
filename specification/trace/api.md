@@ -337,8 +337,8 @@ The parent should be selected in the following order of precedence:
 
 #### Add Links
 
-During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
-`Span`s can be from the same or a different trace. See [Links
+During the `Span` creation user MUST have the ability to record links to other `Span`s.
+Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
@@ -348,17 +348,10 @@ A `Link` is defined by the following properties:
 
 The `Link` SHOULD be an immutable type.
 
-The Span creation API should provide:
+The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`.
-- An API to record a single `Link` whose attributes or attribute values are
-  lazily constructed, with the intention of avoiding unnecessary work if a link
-  is unused. If the language supports overloads then this SHOULD be called
-  `AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
-  be easier to defer `Link` or attribute creation entirely by providing a wrapping
-  class or function that returns a `Link` or formatted attributes. When providing
-  a wrapping class or function it SHOULD be named `LinkFormatter`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -442,13 +435,6 @@ The Span interface MUST provide:
   `Timestamp` which can be used to specify the time at which the event occurred.
   If no custom timestamp is provided by the user, the implementation automatically
   sets the time at which this API is called on the event.
-- An API to record a single `Event` whose attributes or attribute values are
-  lazily constructed, with the intention of avoiding unnecessary work if an event
-  is unused. If the language supports overloads then this SHOULD be called
-  `AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
-  might be easier to defer `Event` or attribute creation entirely by providing a
-  wrapping class or function that returns an `Event` or formatted attributes. When
-  providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they are recorded.
 This will typically match the ordering of the events' timestamps,
@@ -692,13 +678,9 @@ SpanBuilder is used by more than one thread/coroutine.
 
 **Span** - All methods of Span are safe to be called concurrently.
 
-**Event** - Events are immutable and safe to be used concurrently. Lazy
-initialized events must be thread safe. This is the responsibility of the
-implementer of these events.
+**Event** - Events are immutable and safe to be used concurrently.
 
-**Link** - Links are immutable and is safe to be used concurrently. Lazy
-initialized links must be thread safe. This is the responsibility of the
-implementer of these links.
+**Link** - Links are immutable and safe to be used concurrently.
 
 ## Included Propagators
 
