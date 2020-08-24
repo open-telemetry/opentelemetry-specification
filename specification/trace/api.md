@@ -14,6 +14,7 @@ Table of Contents
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
+  * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [IsValid](#isvalid)
   * [IsRemote](#isremote)
 * [Span](#span)
@@ -181,6 +182,18 @@ systems to participate in the same trace. Please review the [W3C
 specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
 details on this field.
 
+### Retrieving the TraceId and SpanId
+
+The API must allow retrieving the `TraceId` and `SpanId` in the following forms:
+
+* Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
+`TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
+(result MUST be a 16-hex-character lowercase string).
+* Binary - returns the binary representation of the `TraceId` (result MUST be a
+16-byte array) `SpanId` (result MUST be a 8-byte array).
+
+The API should not expose details about how they are internally stored.
+
 ### IsValid
 
 An API that returns a boolean value, which is `true` if the SpanContext has a
@@ -225,7 +238,6 @@ rather than individual Span instances while still being human-readable.
 That is, "get_user" is a reasonable name, while "get_user/314159",
 where "314159" is a user ID, is not a good name due to its high cardinality.
 Generality SHOULD be prioritized over human-readability.
-
 
 For example, here are potential span names for an endpoint that gets a
 hypothetical account information:
@@ -338,8 +350,8 @@ The parent should be selected in the following order of precedence:
 
 #### Add Links
 
-During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
-`Span`s can be from the same or a different trace. See [Links
+During the `Span` creation user MUST have the ability to record links to other `Span`s.
+Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
@@ -349,17 +361,10 @@ A `Link` is defined by the following properties:
 
 The `Link` SHOULD be an immutable type.
 
-The Span creation API should provide:
+The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`.
-- An API to record a single `Link` whose attributes or attribute values are
-  lazily constructed, with the intention of avoiding unnecessary work if a link
-  is unused. If the language supports overloads then this SHOULD be called
-  `AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
-  be easier to defer `Link` or attribute creation entirely by providing a wrapping
-  class or function that returns a `Link` or formatted attributes. When providing
-  a wrapping class or function it SHOULD be named `LinkFormatter`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -421,7 +426,6 @@ Note that [Samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any changes done later, including new or changed
 attributes, cannot change their decisions.
 
-
 #### Add Events
 
 A `Span` MUST have the ability to add events. Events have a time associated
@@ -439,13 +443,6 @@ The Span interface MUST provide:
 
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
-- An API to record a single `Event` whose attributes or attribute values are
-  lazily constructed, with the intention of avoiding unnecessary work if an event
-  is unused. If the language supports overloads then this SHOULD be called
-  `AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
-  might be easier to defer `Event` or attribute creation entirely by providing a
-  wrapping class or function that returns an `Event` or formatted attributes. When
-  providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
@@ -682,19 +679,15 @@ SpanBuilder is used by more than one thread/coroutine.
 
 **Span** - All methods of Span are safe to be called concurrently.
 
-**Event** - Events are immutable and safe to be used concurrently. Lazy
-initialized events must be thread safe. This is the responsibility of the
-implementer of these events.
+**Event** - Events are immutable and safe to be used concurrently.
 
-**Link** - Links are immutable and is safe to be used concurrently. Lazy
-initialized links must be thread safe. This is the responsibility of the
-implementer of these links.
+**Link** - Links are immutable and safe to be used concurrently.
 
 ## Included Propagators
 
 The API layer MAY include the following `Propagator`s:
 
-* A `HTTPTextPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
+* A `TextMapPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
 
 ## Behavior of the API in the absence of an installed SDK
 

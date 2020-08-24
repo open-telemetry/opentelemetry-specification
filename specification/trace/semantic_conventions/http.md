@@ -86,7 +86,6 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `http.response_content_length` | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length][] header. For requests using transport encoding, this should be the compressed size. | No |
 | `http.response_content_length_uncompressed` | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | No |
 
-
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 [network attributes]: span-general.md#general-network-connection-attributes
