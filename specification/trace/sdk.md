@@ -81,16 +81,14 @@ It produces an output called `SamplingResult` which contains:
   will be dropped.
   * `RECORD` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
   * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
-* A set of span Attributes that will also be added to the `Span`.
-  * The list of attributes returned by `SamplingResult` MUST be immutable.
-  Caller may call this method any number of times and can safely cache the
-  returned value.
+* A set of span Attributes that will also be added to the `Span`. The returned
+object must be immutable (multiple calls may return different immutable objects).
 
 #### GetDescription
 
 Returns the sampler name or short description with the configuration. This may
 be displayed on debug pages or in the logs. Example:
-`"ProbabilitySampler{0.000100}"`.
+`"TraceIdRatioBased{0.000100}"`.
 
 Description MUST NOT change over time and caller can cache the returned value.
 
@@ -109,15 +107,28 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 * Returns `NOT_RECORD` always.
 * Description MUST be `AlwaysOffSampler`.
 
-#### Probability
+#### TraceIdRatioBased
 
-* The `ProbabilitySampler` MUST ignore the parent. To respect the parent
-`SampledFlag`, the `ProbabilitySampler` should be used as a delegate of the
-`ParentBased` sampler specified below.
-* Description MUST be `ProbabilitySampler{0.000100}`.
+* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
+parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
+the `ParentBased` sampler specified below.
+* Description MUST be `TraceIdRatioBased{0.000100}`.
 
-TODO: Add details about how the `ProbabilitySampler` is implemented as a function
+TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
 of the `TraceID`.
+
+##### Requirements for `TraceIdRatioBased` sampler algorithm
+
+* The sampling algorithm MUST be deterministic. A trace identified by a given
+`TraceId` is sampled or not independent of language, time, etc. To achieve this,
+implementations MUST use a deterministic hash of the `TraceId` when computing
+the sampling decision. By ensuring this, running the sampler on any child `Span`
+will produce the same decision.
+* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
+traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
+sample. This is important when a backend system may want to run with a higher
+sampling rate than the frontend system, this way all frontend traces will
+still be sampled and extra traces will be sampled on the backend only.
 
 #### ParentBased
 
