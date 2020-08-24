@@ -25,6 +25,7 @@ Updates:
 - Clarify event timestamp origin and range ([#839](https://github.com/open-telemetry/opentelemetry-specification/pull/839))
 - Rename HTTPText propagator to TextMap ([#793](https://github.com/open-telemetry/opentelemetry-specification/pull/793))
 - Rename ParentOrElse sampler to ParentBased and add multiple delegate samplers ([#610](https://github.com/open-telemetry/opentelemetry-specification/pull/610))
+- Rename ProbabilitySampler to TraceIdRatioBasedSampler and add requirements ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
 
 ## v0.6.0 (07-01-2020)
 
