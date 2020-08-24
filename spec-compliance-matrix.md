@@ -48,9 +48,11 @@ status of the feature is not known.
 |Unicode support for keys and string values    |  |    |       |      |    |      |   | +  |   |    |
 |[Span linking](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-links)|
 |AddLink                                       |  |    |       |      |    |      |   | +  |   |    |
+|AddLazyLink                                   |  |    |       |      |    |      |   | -  |   |    |
 |Safe for concurrent calls                     |  |    |       |      |    |      |   | +  |   |    |
 |[Span events](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-events)|
 |AddEvent                                      |  |    |       |      |    |      |   | +  |   |    |
+|AddLazyEvent                                  |  |    |       |      |    |      |   | -  |   |    |
 |Add order preserved                           |  |    |       |      |    |      |   | +  |   |    |
 |Span events                                   |  |    |       |      |    |      |   |    |   |    |
 |Safe for concurrent calls                     |  |    |       |      |    |      |   | +  |   |    |
