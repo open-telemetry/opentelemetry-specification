@@ -18,6 +18,7 @@ Updates:
 
 - Add semantic convention for NGINX custom HTTP 499 status code.
 - Adapt semantic conventions for the span name of messaging systems ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
+- Remove lazy Event and Link API from Span interface ([#840](https://github.com/open-telemetry/opentelemetry-specification/pull/840))
 - Provide clear definitions for readable and read/write span interfaces in the SDK ([#669](https://github.com/open-telemetry/opentelemetry-specification/pull/669))
   * SpanProcessors must provide read/write access at least in OnStart.
 - Specify how `Probability` sampler is used with `ParentOrElse` sampler.
@@ -25,6 +26,7 @@ Updates:
 - Rename HTTPText propagator to TextMap ([#793](https://github.com/open-telemetry/opentelemetry-specification/pull/793))
 - Rename ParentOrElse sampler to ParentBased and add multiple delegate samplers ([#610](https://github.com/open-telemetry/opentelemetry-specification/pull/610))
 - Rename ProbabilitySampler to TraceIdRatioBasedSampler and add requirements ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
+  * SIGs are recommended to remove any existing implementation of the lazy APIs to avoid conflicts/breaking changes in case they will be reintroduced to the spec in future.
 
 ## v0.6.0 (07-01-2020)
 
