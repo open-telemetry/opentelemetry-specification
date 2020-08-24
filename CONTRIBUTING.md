@@ -118,6 +118,8 @@ Open a pull request against the main `opentelemetry-specification` repo.
 If the PR is not ready for review, please mark it as
 [`draft`](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
+For non-trivial changes, please update the [CHANGELOG](./CHANGELOG.md).
+
 Please make sure CLA is signed and CI is clear. We don't expect people to review
 and comment on a PR that doesn't have CLA signed.
 
