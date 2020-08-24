@@ -8,12 +8,15 @@ This document defines how to describe an instance of a function that runs withou
 
 - [General Attributes](#general-attributes)
   * [Difference between execution and instance](#difference-between-execution-and-instance)
+- [Incoming Invocations](#incoming-invocations)
+- [Outgoing Invocations](#outgoing-invocations)
 - [Function Trigger Type](#function-trigger-type)
   * [Datasource](#datasource)
   * [HTTP](#http)
   * [PubSub](#pubsub)
   * [Timer](#timer)
   * [Other](#other)
+- [Example](#example)
 
 <!-- tocstop -->
 
@@ -27,7 +30,6 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 |---|---|--|
 | `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | Yes |
 | `faas.execution` | String containing the execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
-| `faas.coldstart` | A boolean indicating that the serverless function is executed for the first time (aka cold start). | No |
 
 ### Difference between execution and instance
 
@@ -43,6 +45,34 @@ The span attribute `faas.execution` differs from the resource attribute `faas.in
 [AWS lambda]: https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
 [Azure functions]: https://docs.microsoft.com/en-us/azure/azure-functions/manage-connections#static-clients
 [Google functions]: https://cloud.google.com/functions/docs/concepts/exec#function_scope_versus_global_scope
+
+## Incoming Invocations
+
+This section describes incoming FaaS invocations as they are reported by the FaaS instance itself.
+
+For incoming FaaS spans, the span kind MUST be `Server`.
+
+| Attribute | Type | Description | Required |
+|---|---|---|---|
+| `faas.coldstart` | boolean | Indicates that the serverless function is executed for the first time (aka cold start). | No |
+
+## Outgoing Invocations
+
+This section describes outgoing FaaS invocations as they are reported by a client calling a FaaS instance.
+
+For outgoing FaaS spans, the span kind MUST be `Client`.
+
+| Attribute | Type | Description | Example | Required |
+|---|---|---|---|---|
+| `faas.invoked_name` | string | The name of the invoked function. | `my-function` | Yes |
+| `faas.invoked_provider` | string | The cloud provider of the invoked function. | `aws` | Yes |
+| `faas.invoked_region` | string | The cloud region of the invoked function. | `eu-central-1` | Yes |
+
+The values for the attributes listed above SHOULD be equal to the respective [FaaS resource attributes][] and [Cloud resource attributes][], which the invoked FaaS instance reports about itself.
+The matching resource attributes are `faas.name`, `cloud.provider` and `cloud.region`.
+
+[FaaS resource attributes]: ../../resource/semantic_conventions/faas.md
+[Cloud resource attributes]: ../../resource/semantic_conventions/cloud.md
 
 ## Function Trigger Type
 
@@ -89,3 +119,24 @@ A function is scheduled to be executed regularly. The following additional attri
 Function as a Service offers such flexibility that it is not possible to fully cover with semantic conventions.
 When a function does not satisfy any of the aforementioned cases, a span MUST set the attribute `faas.trigger` to `"other"`.
 In this case, it is responsibility of the framework or instrumentation library to define the most appropriate attributes.
+
+## Example
+
+This example shows the FaaS attributes for a (non-FaaS) process hosted on Google Cloud Platform (Span A with kind `Client`), which invokes a Lambda function called "my-lambda-function" in Amazon Web Services (Span B with kind `Server`).
+
+| Span Attribute | Resource Attribute | Span A (Client, GCP) | Span B (Server, AWS Lambda) |
+| -- | -- | -- | -- |
+|  | `cloud.provider` | `"gcp"` | `"aws"` |
+|  | `cloud.region` | `"europe-west3"` | `"eu-central-1"` |
+| `faas.trigger` |  | `"http"` | `"http"` |
+| `faas.invoked_name` |  | `"my-lambda-function"` | n/a |
+| `faas.invoked_provider` |  | `"aws"` | n/a |
+| `faas.invoked_region` |  | `"eu-central-1"` | n/a |
+| `faas.execution` |  | n/a | `"af9d5aa4-a685-4c5f-a22b-444f80b3cc28"` |
+| `faas.coldstart` |  | n/a | `true` |
+|  | `faas.name` | n/a | `"my-lambda-function"` |
+|  | `faas.id` | n/a | `"arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function"` |
+|  | `faas.version` | n/a | `"semver:2.0.0"` |
+|  | `faas.instance` | n/a | `"my-lambda-function:instance-0001"` |
+
+In addition to the `faas.*` and `cloud.*` attributes listed here, both spans SHOULD include the respective HTTP attributes as specified above since the `faas.trigger` is `"http"`.
