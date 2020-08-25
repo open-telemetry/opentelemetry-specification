@@ -29,7 +29,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   dropped. Users can use this property to determine if expensive trace data
   can be avoided. [Span Processors](#span-processor) MUST receive only those
   spans which have this field set to `true`. However, [Span
-  Exporter](#span-exporter) will not receive them unless the `Sampled` flag was
+  Exporter](#span-exporter) SHOULD not receive them unless the `Sampled` flag was
   also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
