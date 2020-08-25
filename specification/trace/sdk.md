@@ -46,7 +46,7 @@ MUST NOT allow this combination.
 The following table summarizes the expected behavior for each combination of
 `IsRecording` and `SampledFlag`.
 
-| IsRecording | Sampled Flag | Span Processor receives Span? | Span Exporter receives Span? |
+| IsRecording | SampledFlag | Span Processor receives Span? | Span Exporter receives Span? |
 | ----------- | ------------ | ----------------------------- | ---------------------------- |
 | true        | true         | true                          | true                         |
 | true        | false        | true                          | false                        |
