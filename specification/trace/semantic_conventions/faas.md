@@ -66,7 +66,14 @@ For outgoing FaaS spans, the span kind MUST be `Client`.
 |---|---|---|---|---|
 | `faas.invoked_name` | string | The name of the invoked function. | `my-function` | Yes |
 | `faas.invoked_provider` | string | The cloud provider of the invoked function. | `aws` | Yes |
-| `faas.invoked_region` | string | The cloud region of the invoked function. | `eu-central-1` | Yes |
+| `faas.invoked_region` | string | The cloud region of the invoked function. | `eu-central-1` | See below |
+
+For some cloud providers, like AWS or GCP, the region in which a function is hosted is essential
+to uniquely identify the function and also part of its endpoint.
+Since it's part of the endpoint being called, the region is always known to clients.
+In these cases, `faas.invoked_region` MUST be set accordingly.
+If the region is unknown to the client or not required for identifying the invoked function,
+setting `faas.invoked_region` is optional.
 
 The values for the attributes listed above SHOULD be equal to the respective [FaaS resource attributes][]
 and [Cloud resource attributes][], which the invoked FaaS instance reports about itself.
