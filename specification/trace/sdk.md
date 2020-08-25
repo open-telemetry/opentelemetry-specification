@@ -24,18 +24,18 @@ latest sampling could happen on the Collector which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
-* `IsRecording` field of a `Span`. If `true` the current `Span` records
-  tracing events (attributes, events, status, etc.), otherwise all tracing
-  events are dropped. Users can use this property to determine if expensive
-  trace events can be avoided. [Span Processors](#span-processor) will receive
-  all spans with this flag set. However, [Span Exporter](#span-exporter) will
-  not receive them unless the `Sampled` flag was set.
+* `IsRecording` field of a `Span`. If `true` the current `Span` records tracing
+  events (attributes, events, status, etc.), otherwise all tracing events are
+  dropped. Users can use this property to determine if expensive trace events
+  can be avoided. [Span Processors](#span-processor) will receive only those
+  spans which has this field set to `true`. However, [Span
+  Exporter](#span-exporter) will not receive them unless the `Sampled` flag was
+  also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
   specification][trace-flags]. This flag indicates that the `Span` has been
-  `sampled` and will be exported. [Span Processor](#span-processor) and [Span
-  Exporter](#span-exporter) will receive spans with the `Sampled` flag set for
-  processing.
+  `sampled` and will be exported. [Span Exporters](#span-exporter) will receive
+  only those spans with the `Sampled` flag set.
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
@@ -44,6 +44,18 @@ means that the current `Span` does record information, but most likely the child
 The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
+
+The following table summarizes the expected behavior for each combination of
+`IsRecording` and `SampledFlag`.
+
+| IsRecording | Sampled Flag | Span Processor receives Span? | Span Exporter receives Span? |
+| ----------- | ------------ | ----------------------------- | ---------------------------- |
+| true        | true         | true                          | true                         |
+| true        | false        | true                          | false                        |
+| false       | true         | Not allowed                   | Not allowed                  |
+| false       | false        | false                         | false                        |
+
+
 
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers).
