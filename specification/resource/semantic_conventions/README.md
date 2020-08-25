@@ -14,6 +14,7 @@ This document defines standard attributes for resources. These attributes are ty
 - [Compute Unit](#compute-unit)
 - [Compute Instance](#compute-instance)
 - [Environment](#environment)
+- [Version attributes](#version-attributes)	
 
 <!-- tocstop -->
 
@@ -106,6 +107,6 @@ Attributes defining a running environment (e.g. Operating System, Cloud, Data Ce
 
 ## Version attributes
 
-Version attributes, such as `service.version` and `library.version` are values of type `string`. They are
+Version attributes, such as `service.version`, are values of type `string`. They are
 the exact version used to identify an artifact. This may be a semantic version, e.g., `1.2.3`, git hash, e.g.,
 `8ae73a`, or an arbitrary version string, e.g., `0.1.2.20210101`, whatever was used when building the artifact.
