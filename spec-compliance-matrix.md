@@ -91,13 +91,13 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
-|Standard output (logging)                     |  |    |       |      |    |      |   | +  |   |    |
-|In-memory (mock exporter)                     |  |    |       |      |    |      |   | -  |   |    |
+|Standard output (logging)                     |  | +  |       |      |    |      |   | +  |   |    |
+|In-memory (mock exporter)                     |  | +  |       |      |    |      |   | -  |   |    |
 |[OTLP](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/protocol/otlp.md)|
-|OTLP/gRPC Exporter                            |  |    |       |      |    |      |   | +  |   |    |
-|OTLP/HTTP binary Protobuf Exporter            |  |    |       |      |    |      |   |    |   |    |
-|OTLP/HTTP JSON Protobuf Exporter              |  |    |       |      |    |      |   |    |   |    |
-|OTLP/HTTP gzip Content-Encoding support       |  |    |       |      |    |      |   |    |   |    |
+|OTLP/gRPC Exporter                            |  | +  |       |      |    |      |   | +  |   |    |
+|OTLP/HTTP binary Protobuf Exporter            |  | -  |       |      |    |      |   |    |   |    |
+|OTLP/HTTP JSON Protobuf Exporter              |  | -  |       |      |    |      |   |    |   |    |
+|OTLP/HTTP gzip Content-Encoding support       |  | -  |       |      |    |      |   |    |   |    |
 |Concurrent sending                            |  |    |       |      |    |      |   | +  |   |    |
 |Honors retryable responses with backoff       |  |    |       |      |    |      |   |    |   |    |
 |Honors non-retryable responses                |  |    |       |      |    |      |   |    |   |    |
@@ -108,14 +108,14 @@ status of the feature is not known.
 |Zipkin V1 Thrift                              |  |    |       |      |    |      |   | -  |   |    |
 |Zipkin V2 JSON                                |  |    |       |      |    |      |   | +  |   |    |
 |Zipkin V2 Protobuf                            |  |    |       |      |    |      |   | -  |   |    |
-|Service name mapping                          |  |    |       |      |    |      |   | +  |   |    |
-|SpanKind mapping                              |  |    |       |      |    |      |   | +  |   |    |
-|InstrumentationLibrary mapping                |  |    |       |      |    |      |   | -  |   |    |
-|Boolean attributes                            |  |    |       |      |    |      |   | +  |   |    |
-|Array attributes                              |  |    |       |      |    |      |   | +  |   |    |
-|Status mapping                                |  |    |       |      |    |      |   | +  |   |    |
+|Service name mapping                          |  | +  |       |      |    |      |   | +  |   |    |
+|SpanKind mapping                              |  | +  |       |      |    |      |   | +  |   |    |
+|InstrumentationLibrary mapping                |  | +  |       |      |    |      |   | -  |   |    |
+|Boolean attributes                            |  | +  |       |      |    |      |   | +  |   |    |
+|Array attributes                              |  | +  |       |      |    |      |   | +  |   |    |
+|Status mapping                                |  | -  |       |      |    |      |   | +  |   |    |
 |Event attributes mapping to Annotations       |  |    |       |      |    |      |   | +  |   |    |
-|Fractional microseconds in timestamps         |  |    |       |      |    |      |   | -  |   |    |
+|Fractional microseconds in timestamps         |  | -  |       |      |    |      |   | -  |   |    |
 |Jaeger|
 |TBD|
 |OpenCensus|
