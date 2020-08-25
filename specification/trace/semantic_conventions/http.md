@@ -21,7 +21,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
 
 ## Name
 
-HTTP spans MUST follow the overall [guidelines for span names](./api-tracing.md#span).
+HTTP spans MUST follow the overall [guidelines for span names](../api.md#span).
 
 Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
 is a user id, which creates high cardinality value space not suitable for span
