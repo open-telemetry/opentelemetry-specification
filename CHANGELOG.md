@@ -21,7 +21,6 @@ New:
     SpanContext or even Span are not allowed anymore.
   * Readable spans MUST provide a way to retrieve the full parent context.
 
-
 Updates:
 
 - Add semantic convention for NGINX custom HTTP 499 status code.
