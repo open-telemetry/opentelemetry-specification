@@ -15,6 +15,12 @@ New:
   the absence of an installed SDK
 - Add Span API and semantic conventions for recording exceptions
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
+- Spans have parent `Context`s instead of just `SpanContext`s
+  ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
+  * A full Context is the only way to specify a parent of a span
+    SpanContext or even Span are not allowed anymore.
+  * Readable spans MUST provide a way to retrieve the full parent context.
+
 
 Updates:
 
