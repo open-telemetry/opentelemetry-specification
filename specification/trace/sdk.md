@@ -35,8 +35,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
-  that do not.
-  
+  that do not.  
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
