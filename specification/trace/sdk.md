@@ -25,7 +25,7 @@ latest sampling could happen on the Collector which is out of process.
 The OpenTelemetry API has two properties responsible for the data collection:
 
 * `IsRecording` field of a `Span`. If `true` the current `Span` records tracing
-  events (attributes, events, status, etc.), otherwise all tracing events are
+  data (attributes, events, status, etc.), otherwise all tracing data are
   dropped. Users can use this property to determine if expensive trace events
   can be avoided. [Span Processors](#span-processor) will receive only those
   spans which has this field set to `true`. However, [Span
