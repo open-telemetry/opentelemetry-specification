@@ -14,7 +14,6 @@ This document defines standard attributes for resources. These attributes are ty
 - [Compute Unit](#compute-unit)
 - [Compute Instance](#compute-instance)
 - [Environment](#environment)
-- [Version Attributes](#version-attributes)
 
 <!-- tocstop -->
 
@@ -78,8 +77,8 @@ The identifier SHOULD be stable across different versions of an implementation.
 |---|---|---|---|
 | telemetry.sdk.name | The name of the telemetry SDK as defined above. | `opentelemetry` | No |
 | telemetry.sdk.language | The language of the telemetry SDK.<br/> One of the following values MUST be used, if one applies: "cpp", "dotnet", "erlang", "go", "java", "nodejs", "php", "python", "ruby", "webjs" | `java` | No |
-| telemetry.sdk.version | The version string of the telemetry SDK as defined in [Version Attributes](#version-attributes). | `semver:1.2.3` | No |
-| telemetry.auto.version | The version string of the auto instrumentation agent, if used, as defined in [Version Attributes](#version-attributes). | `semver:1.2.3` | No |
+| telemetry.sdk.version | The version string of the telemetry SDK. | `1.2.3` | No |
+| telemetry.auto.version | The version string of the auto instrumentation agent, if used. | `1.2.3` | No |
 
 ## Compute Unit
 
