@@ -14,6 +14,7 @@ Table of Contents
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
+  * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [IsValid](#isvalid)
   * [IsRemote](#isremote)
 * [Span](#span)
@@ -180,6 +181,18 @@ of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. Please review the [W3C
 specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
 details on this field.
+
+### Retrieving the TraceId and SpanId
+
+The API must allow retrieving the `TraceId` and `SpanId` in the following forms:
+
+* Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
+`TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
+(result MUST be a 16-hex-character lowercase string).
+* Binary - returns the binary representation of the `TraceId` (result MUST be a
+16-byte array) `SpanId` (result MUST be a 8-byte array).
+
+The API should not expose details about how they are internally stored.
 
 ### IsValid
 
