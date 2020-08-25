@@ -24,18 +24,16 @@ latest sampling could happen on the Collector which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
-* `IsRecording` field of a `Span`. If `true` the current `Span` records tracing
-  data (attributes, events, status, etc.), otherwise all tracing data are
-  dropped. Users can use this property to determine if expensive trace data
-  can be avoided. [Span Processors](#span-processor) MUST receive only those
-  spans which have this field set to `true`. However, [Span
-  Exporter](#span-exporter) SHOULD not receive them unless the `Sampled` flag was
-  also set.
+* `IsRecording` field of a `Span`. If `false` the current `Span` discards all
+  tracing data (attributes, events, status, etc.). Users can use this property
+  to determine if collecting expensive trace data can be avoided. [Span
+  Processor](#span-processor) MUST receive only those spans which have this
+  field set to `true`. However, [Span Exporter](#span-exporter) SHOULD not
+  receive them unless the `Sampled` flag was also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
   specification][trace-flags]. This flag indicates that the `Span` has been
-  `sampled` and will be passed to the [Span Exporters](#span-exporter), which will usually export it out of the process.
-  only those spans with the `Sampled` flag set.
+  `sampled` and will be passed to the [Span Exporters](#span-exporter).
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
