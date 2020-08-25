@@ -34,8 +34,8 @@ status of the feature is not known.
 |User-defined start timestamp                  |  |    |       |      |    |      |   | +  |   |    |
 |End                                           |  |    |       |      |    |      |   | +  |   |    |
 |End with timestamp                            |  |    |       |      |    |      |   | -  |   |    |
-|Set/Get status                                |  |    |       |      |    |      |   | +  |   |    |
-|Set/Get span kind                             |  |    |       |      |    |      |   | +  |   |    |
+|IsRecording                                   |  |    |       |      |    |      |   |    |   |    |
+|Set status                                    |  |    |       |      |    |      |   | +  |   |    |
 |Safe for concurrent calls                     |  |    |       |      |    |      |   | +  |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  |  |    |       |      |    |      |   | +  |   |    |
@@ -52,7 +52,6 @@ status of the feature is not known.
 |[Span events](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-events)|
 |AddEvent                                      |  |    |       |      |    |      |   | +  |   |    |
 |Add order preserved                           |  |    |       |      |    |      |   | +  |   |    |
-|Span events                                   |  |    |       |      |    |      |   |    |   |    |
 |Safe for concurrent calls                     |  |    |       |      |    |      |   | +  |   |    |
 |[Span exceptions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#record-exception)|
 |RecordException                               |  |    |       |      |    |      |   | +  |   |    |
