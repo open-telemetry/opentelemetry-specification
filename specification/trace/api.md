@@ -219,8 +219,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - The span name
 - An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
-- A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
-  or null
+- A parent span in the form of a (possibly empty) [`Context`](../)
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
@@ -286,24 +285,19 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
 
-When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
-new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
-SHOULD create each new `Span` as a child of its active `Span`, unless an
-explicit parent is provided or the option to create a span without a parent is
-selected.
-
 `Span` creation MUST NOT set the newly created `Span` as the currently
 active `Span` by default, but this functionality MAY be offered additionally
-as a separate operation.
+as a separate operation. If that functionality is provided, it MUST ONLY accept a
+full [`Context`](../context/context.md) (or implicitly use the current `Context`)
+but it MUST NOT accept only a `Span` or `SpanContext`
+(that would be prone to lose information on the parent span's `Context`).
 
 The API MUST accept the following parameters:
 
 - The span name. This is a required parameter.
-- The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
-  and whether the new `Span` should be a root `Span`. API MAY also have an
-  option for implicit parenting from the current context as a default behavior.
-  See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-  for guidance on `Span` parenting from explicit and implicit `Context`s.
+- The parent `Context` or an indication that the new `Span` should be a root `Span`.
+  The API MAY also have an option for implicitly using
+  the current context as parent as a default behavior.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
@@ -333,20 +327,20 @@ created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
 
-#### Determining the Parent Span from a Context
+#### Effective Span
 
-When a new `Span` is created from a `Context`, the `Context` may contain:
+The *effective span* of a [`Context`](../context/context.md) is the first of the
+following that is available in it (with the respective key if applicable):
 
-- A current `Span`
-- An extracted `SpanContext`
-- A current `Span` and an extracted `SpanContext`
-- Neither a current `Span` nor an extracted `Span` context
+1. An actual `Span` object.
+2. An extracted `SpanContext`
+   (that MAY be wrapped in an otherwise empty non-recording `Span`).
+3. Nothing (which SHOULD be represented as a non-null empty `SpanContext` or `Span`).
 
-The parent should be selected in the following order of precedence:
+The API MUST provide functionality to get the effective Span from a `Context`.
 
-- Use the current `Span`, if available.
-- Use the extracted `SpanContext`, if available.
-- There is no parent. Create a root `Span`.
+Given a `Span` with its parent `Context`, the semantic parent Span is the
+effective span in that parent `Context`.
 
 #### Add Links
 

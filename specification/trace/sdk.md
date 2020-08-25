@@ -194,8 +194,11 @@ Thus, the SDK specification defines sets of possible requirements for
   access all information that was added to the span,
   as listed [in the API spec](api.md#span-data-members).
   In particular, it MUST also be able to access
-  the `InstrumentationLibrary` and `Resource` information (implicitly)
-  associated with the span.
+  the full parent [`Context`](../context/cotnext.md),
+  `InstrumentationLibrary` and `Resource` information
+  (implicitly) associated with the span.
+  Note: The `Context` of the span itself cannot be made available,
+  because a Span may be (active) in several or no `Context`'s at any time.
   It must also be able to reliably determine whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
