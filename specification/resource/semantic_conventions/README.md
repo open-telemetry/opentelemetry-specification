@@ -103,3 +103,9 @@ Attributes defining a running environment (e.g. Operating System, Cloud, Data Ce
 - Deployment:
   - [Environment](./deployment_environment.md)
   - [Kubernetes](./k8s.md)
+
+## Version attributes
+
+Version attributes, such as `service.version` and `library.version` are values of type `string`. They are
+the exact version used to identify an artifact. This may be a semantic version, e.g., `1.2.3`, git hash, e.g.,
+`8ae73a`, or an arbitrary version string, e.g., `0.1.2.20210101`, whatever was used when building the artifact.
