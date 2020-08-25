@@ -117,7 +117,6 @@ status of the feature is not known.
 |Status mapping                                |  |    |       |      |    |      |   | +  |   |    |
 |Event attributes mapping to Annotations       |  |    |       |      |    |      |   | +  |   |    |
 |Fractional microseconds in timestamps         |  |    |       |      |    |      |   | -  |   |    |
-|Service name mapping                          |  |    |       |      |    |      |   |    |   |    |
 |Jaeger|
 |TBD|
 |OpenCensus|
