@@ -62,11 +62,15 @@ This section describes outgoing FaaS invocations as they are reported by a clien
 
 For outgoing FaaS spans, the span kind MUST be `Client`.
 
-| Attribute | Type | Description | Example | Required |
-|---|---|---|---|---|
-| `faas.invoked_name` | string | The name of the invoked function. | `my-function` | Yes |
-| `faas.invoked_provider` | string | The cloud provider of the invoked function. | `aws` | Yes |
-| `faas.invoked_region` | string | The cloud region of the invoked function. | `eu-central-1` | See below |
+The values reported by the client for the attributes listed below SHOULD be equal to
+the respective [FaaS resource attributes][] and [Cloud resource attributes][],
+which the invoked FaaS instance reports about itself.
+
+| Attribute | Corresponding resource attribute | Type | Description | Example | Required |
+|---|---|---|---|---|---|
+| `faas.invoked_name` | `faas.name` | string | The name of the invoked function. | `my-function` | Yes |
+| `faas.invoked_provider` | `cloud.provider` | string | The cloud provider of the invoked function. | `aws` | Yes |
+| `faas.invoked_region` | `cloud.region` | string | The cloud region of the invoked function. | `eu-central-1` | See below |
 
 For some cloud providers, like AWS or GCP, the region in which a function is hosted is essential
 to uniquely identify the function and also part of its endpoint.
@@ -74,10 +78,6 @@ Since it's part of the endpoint being called, the region is always known to clie
 In these cases, `faas.invoked_region` MUST be set accordingly.
 If the region is unknown to the client or not required for identifying the invoked function,
 setting `faas.invoked_region` is optional.
-
-The values for the attributes listed above SHOULD be equal to the respective [FaaS resource attributes][]
-and [Cloud resource attributes][], which the invoked FaaS instance reports about itself.
-The matching resource attributes are `faas.name`, `cloud.provider` and `cloud.region`.
 
 [FaaS resource attributes]: ../../resource/semantic_conventions/faas.md
 [Cloud resource attributes]: ../../resource/semantic_conventions/cloud.md
