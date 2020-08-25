@@ -14,7 +14,7 @@ This document defines standard attributes for resources. These attributes are ty
 - [Compute Unit](#compute-unit)
 - [Compute Instance](#compute-instance)
 - [Environment](#environment)
-- [Version attributes](#version-attributes)	
+- [Version attributes](#version-attributes)
 
 <!-- tocstop -->
 
