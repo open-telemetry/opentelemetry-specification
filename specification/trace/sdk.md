@@ -28,7 +28,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   data (attributes, events, status, etc.), otherwise all tracing data are
   dropped. Users can use this property to determine if expensive trace data
   can be avoided. [Span Processors](#span-processor) will receive only those
-  spans which has this field set to `true`. However, [Span
+  spans which have this field set to `true`. However, [Span
   Exporter](#span-exporter) will not receive them unless the `Sampled` flag was
   also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
