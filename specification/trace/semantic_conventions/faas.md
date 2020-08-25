@@ -68,7 +68,8 @@ For outgoing FaaS spans, the span kind MUST be `Client`.
 | `faas.invoked_provider` | string | The cloud provider of the invoked function. | `aws` | Yes |
 | `faas.invoked_region` | string | The cloud region of the invoked function. | `eu-central-1` | Yes |
 
-The values for the attributes listed above SHOULD be equal to the respective [FaaS resource attributes][] and [Cloud resource attributes][], which the invoked FaaS instance reports about itself.
+The values for the attributes listed above SHOULD be equal to the respective [FaaS resource attributes][]
+and [Cloud resource attributes][], which the invoked FaaS instance reports about itself.
 The matching resource attributes are `faas.name`, `cloud.provider` and `cloud.region`.
 
 [FaaS resource attributes]: ../../resource/semantic_conventions/faas.md
