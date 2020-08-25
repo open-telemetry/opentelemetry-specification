@@ -27,7 +27,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
 * `IsRecording` field of a `Span`. If `true` the current `Span` records tracing
   data (attributes, events, status, etc.), otherwise all tracing data are
   dropped. Users can use this property to determine if expensive trace data
-  can be avoided. [Span Processors](#span-processor) will receive only those
+  can be avoided. [Span Processors](#span-processor) MUST receive only those
   spans which have this field set to `true`. However, [Span
   Exporter](#span-exporter) will not receive them unless the `Sampled` flag was
   also set.
