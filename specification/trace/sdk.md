@@ -55,8 +55,6 @@ The following table summarizes the expected behavior for each combination of
 | false       | true         | Not allowed                   | Not allowed                  |
 | false       | false        | false                         | false                        |
 
-
-
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers).
 
