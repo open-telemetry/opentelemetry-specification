@@ -19,8 +19,8 @@ Table of Contents
   * [IsRemote](#isremote)
 * [Span](#span)
   * [Span creation](#span-creation)
-    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
+  * [Effective Span](#effective-span)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecording](#isrecording)
@@ -219,7 +219,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - The span name
 - An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
-- A parent span in the form of a (possibly empty) [`Context`](../)
+- A parent span in the form of a (possibly empty) [`Context`](../context/context.md)
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
@@ -327,21 +327,6 @@ created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
 
-#### Effective Span
-
-The *effective span* of a [`Context`](../context/context.md) is the first of the
-following that is available in it (with the respective key if applicable):
-
-1. An actual `Span` object.
-2. An extracted `SpanContext`
-   (that MAY be wrapped in an otherwise empty non-recording `Span`).
-3. Nothing (which SHOULD be represented as a non-null empty `SpanContext` or `Span`).
-
-The API MUST provide functionality to get the effective Span from a `Context`.
-
-Given a `Span` with its parent `Context`, the semantic parent Span is the
-effective span in that parent `Context`.
-
 #### Add Links
 
 During the `Span` creation user MUST have the ability to record links to other `Span`s.
@@ -361,6 +346,21 @@ The Span creation API MUST provide:
   arguments. This MAY be called `AddLink`.
 
 Links SHOULD preserve the order in which they're set.
+
+### Effective Span
+
+The *effective span* of a [`Context`](../context/context.md) is the first of the
+following that is available in it (with the respective key if applicable):
+
+1. An actual `Span` object.
+2. An extracted `SpanContext`
+   (that MAY be wrapped in an otherwise empty non-recording `Span`).
+3. Nothing (which SHOULD be represented as a non-null empty `SpanContext` or `Span`).
+
+The API MUST provide functionality to get the effective Span from a `Context`.
+
+Given a `Span` with its parent `Context`, the semantic parent Span is the
+effective span in that parent `Context`.
 
 ### Span operations
 
