@@ -35,7 +35,7 @@ Each concern creates a set of `Propagator`s for every supported
 `Propagator` type.
 
 `Propagator`s leverage the `Context` to inject and extract data for each
-cross-cutting concern, such as traces and correlation context.
+cross-cutting concern, such as traces and `Baggage`.
 
 Propagation is usually implemented via a cooperation of library-specific request
 interceptors and `Propagators`, where the interceptors detect incoming and outgoing requests and use the `Propagator`'s extract and inject operations respectively.
@@ -76,7 +76,7 @@ Injects the value into a carrier. For example, into the headers of an HTTP reque
 Required arguments:
 
 - A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as
-`SpanContext`, `CorrelationContext` or another cross-cutting concern context.
+`SpanContext`, `Baggage` or another cross-cutting concern context.
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
@@ -94,7 +94,7 @@ Required arguments:
 
 Returns a new `Context` derived from the `Context` passed as argument,
 containing the extracted value, which can be a `SpanContext`,
-`CorrelationContext` or another cross-cutting concern context.
+`Baggage` or another cross-cutting concern context.
 
 ## TextMap Propagator
 
@@ -271,8 +271,8 @@ Implementations MAY provide global `Propagator`s for
 each supported `Propagator` type.
 
 If offered, the global `Propagator`s should default to a composite `Propagator`
-containing the W3C Trace Context Propagator and the Correlation Context `Propagator`
-specified in [api-correlationcontext.md](../correlationcontext/api.md#serialization),
+containing the W3C Trace Context Propagator and the Baggage `Propagator`
+specified in [api-baggage.md](../baggage/api.md#serialization),
 in order to provide propagation even in the presence of no-op
 OpenTelemetry implementations.
 
