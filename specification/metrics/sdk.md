@@ -1,7 +1,7 @@
 # Metrics SDK
 
-Note: This document assumes you are familiar with the (Metrics
-API)[api.md] specification.  Note that the examples below are copied
+Note: This document assumes you are familiar with the [Metrics
+API](api.md) specification.  Note that the examples below are copied
 from the current OpenTelemetry-Go SDK:
 
 TODO: TOC
