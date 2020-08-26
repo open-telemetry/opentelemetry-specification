@@ -68,7 +68,7 @@ These are the significant data types used in the model architecture:
 
 The Accumulator is the first component an OpenTelemetry Metric export
 pipeline, implementing the front-line [`Meter`
-interface]((api.md#meter-interface)).
+interface](api.md#meter-interface).
 
 ```
 // NewAccumulator constructs a new Accumulator for the given
@@ -139,7 +139,7 @@ the OpenTelemetry Metric API.
 [`RecordBatch`](api.md#recordbatch-calling-convention) is a user-level API
 implemented directly by the SDK.
 
-The two instrument kinds of instrument constructor build [_synchronous_
+The two instrument constructors build [_synchronous_
 and _asynchronous_](api.md#synchronous-and-asynchronous-instruments-compared)
 SDK instruments.
 
@@ -151,7 +151,7 @@ constructed by wrapping the SDK `Meter` implementation:
 ```
 // WrapMeterImpl constructs a `Meter` implementation from a
 // `MeterImpl` implementation.
-func WrapMeterImpl(impl MeterImpl, instrumentatioName string, opts ...MeterOption) Meter
+func WrapMeterImpl(impl MeterImpl, instrumentationName string, opts ...MeterOption) Meter
 ```
 
 Optional to this method:
@@ -236,10 +236,10 @@ considered language-specific details.
 ### Instrument registration
 
 The OpenTelemetry API SHOULD provide a wrapper for the Meter
-implementation (`MeterImpl`) that:
+implementation (`MeterImpl`) that stores unique instruments for retrieval by their descriptor:
 
-- Provided the instrument definitions match, returns a unique SDK instrument
-- When the instrument definitions do not match, returns a errors and a no-op instrument.
+- Provided the instrument descriptors match, returns the unique SDK instrument
+- When the instrument descriptors do not match, returns an error and a no-op instrument.
 
 ```
 // NewUniqueInstrumentMeterImpl returns a wrapped metric.MeterImpl with
