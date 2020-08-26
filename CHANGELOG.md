@@ -15,7 +15,8 @@ New:
   the absence of an installed SDK
 - Add Span API and semantic conventions for recording exceptions
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
-- Add Metric SDK specification: partial, covering terminology and Accumulator detail ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
+- Add Metric SDK specification: partial, covering terminology and Accumulator detail
+  ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
 
 Updates:
 
