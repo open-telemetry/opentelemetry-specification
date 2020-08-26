@@ -28,8 +28,12 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 
 | Attribute name  | Notes  and examples  | Required? |
 |---|---|--|
-| `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | Yes |
+| `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | See below. |
 | `faas.execution` | String containing the execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
+
+On FaaS instances, `faas.trigger` MUST be set on incoming invocations.
+Clients invoking FaaS instances MUST set `faas.trigger` on outgoing invocations, if it is known to the client.
+This is, for example, *not* the case, when the transport layer is abstracted in a FaaS client framework without access to its configuration.
 
 ### Difference between execution and instance
 
