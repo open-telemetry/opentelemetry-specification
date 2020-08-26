@@ -63,8 +63,8 @@ This section describes outgoing FaaS invocations as they are reported by a clien
 For outgoing FaaS spans, the span kind MUST be `Client`.
 
 The values reported by the client for the attributes listed below SHOULD be equal to
-the respective [FaaS resource attributes][] and [Cloud resource attributes][],
-which the invoked FaaS instance reports about itself.
+the corresponding [FaaS resource attributes][] and [Cloud resource attributes][],
+which the invoked FaaS instance reports about itself, if it's instrumented.
 
 | Attribute | Corresponding resource attribute | Type | Description | Example | Required |
 |---|---|---|---|---|---|
