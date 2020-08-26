@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Define resource mapping for Jaeger exporters
+  ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
   ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
 - Clarification of the behavior of the Trace API, re: context propagation, in
