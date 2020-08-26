@@ -85,7 +85,13 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
-|TBD|
+|OTEL_RESOURCE_ATTRIBUTES|                     |  |    |       |      |    |      |   |    |   |    |
+|OTEL_LOG_LEVEL|                               |  |    |       |      |    |      |   |    |   |    |
+|OTEL_PROPAGATORS|                             |  |    |       |      |    |      |   |    |   |    |
+|OTEL_BSP_*|                                   |  |    |       |      |    |      |   |    |   |    |
+|OTEL_EXPORTER_OTLP_*|                         |  |    |       |      |    |      |   |    |   |    |
+|OTEL_EXPORTER_JAEGER_*|                       |  |    |       |      |    |      |   |    |   |    |
+|OTEL_EXPORTER_ZIPKIN_*|                       |  |    |       |      |    |      |   |    |   |    |
 
 ## Exporters
 
