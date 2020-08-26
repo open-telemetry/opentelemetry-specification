@@ -60,10 +60,10 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
+* `Context` with parent `Span`. Typically extracted from the wire. Can be
   `null`.
 * `TraceId` of the `Span` to be created. It can be different from the `TraceId`
-  in the `SpanContext`. Typically in situations when the `Span` to be created
+  in the `Context`. Typically in situations when the `Span` to be created
   starts a new Trace.
 * Name of the `Span` to be created.
 * `SpanKind`
