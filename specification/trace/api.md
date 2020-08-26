@@ -353,6 +353,8 @@ During the `Span` creation user MUST have the ability to record links to other `
 Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
 
+`Link`s cannot be added after Span creation.
+
 A `Link` is defined by the following properties:
 
 - (Required) `SpanContext` of the `Span` to link to.
