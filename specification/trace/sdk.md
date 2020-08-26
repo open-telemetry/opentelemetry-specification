@@ -62,7 +62,7 @@ Returns the sampling Decision for a `Span` to be created.
 
 * Parent `SpanContext`. May be invalid to indicate a root span.
 * `TraceId` of the `Span` to be created.
-  If the parent `SpanContext` contains a valid `TraceId`, they always match.
+  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
 * `SpanKind` of the `Span` to be created.
 * Initial set of `Attributes` of the `Span` to be created.
