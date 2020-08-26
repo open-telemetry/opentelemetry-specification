@@ -673,11 +673,6 @@ be called concurrently.
 
 **Tracer** - all methods are safe to be called concurrently.
 
-**SpanBuilder** - It is not safe to concurrently call any methods of the
-same SpanBuilder instance. Different instances of SpanBuilder can be safely
-used concurrently by different threads/coroutines, provided that no single
-SpanBuilder is used by more than one thread/coroutine.
-
 **Span** - All methods of Span are safe to be called concurrently.
 
 **Event** - Events are immutable and safe to be used concurrently.
