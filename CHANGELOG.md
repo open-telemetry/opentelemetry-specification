@@ -44,6 +44,8 @@ Updates:
   ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
+- Add semantic conventions for process runtime
+  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882))
 
 ## v0.6.0 (07-01-2020)
 
