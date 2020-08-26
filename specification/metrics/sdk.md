@@ -238,7 +238,8 @@ considered language-specific details.
 The OpenTelemetry API SHOULD provide a wrapper for the Meter
 implementation (`MeterImpl`) that stores unique instruments for retrieval by their descriptor:
 
-- Provided the instrument descriptors match, returns the unique SDK instrument
+- Create a new instrument when none with the same name exists
+- Provided the instrument name exists and the descriptors match, returns the unique SDK instrument
 - When the instrument descriptors do not match, returns an error and a no-op instrument.
 
 ```
