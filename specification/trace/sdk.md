@@ -309,7 +309,7 @@ they want to make the shutdown timeout configurable.
 Export all pending spans to the configured `Exporter` that have not yet been
 exported.
 
-`ForceFlush` should provide a way to let the caller know whether it succeeded,
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. Language library authors can decide if they want to make
 `ForceFlush` a blocking API or an asynchronous API which notifies the caller via
 a callback or an event.
