@@ -196,4 +196,3 @@ All HTML, CSS, and Javascript files would be used across different OTel language
   - Initial setup may be difficult (one way this can be achieved is with Github modules)
 
 > GENERAL TODO: Add pictures/figures/videos, proxy/shim layer, and design docs links
-
