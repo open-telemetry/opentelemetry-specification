@@ -506,7 +506,7 @@ This API MUST be non-blocking.
 To facilitate recording an exception languages SHOULD provide a
 `RecordException` method if the language uses exceptions.
 This is a specialized variant of [`AddEvent`](#add-events),
-so for anything not specified here the same requirements as for `AddEvent` apply.
+so for anything not specified here, the same requirements as for `AddEvent` apply.
 
 The signature of the method is to be determined by each language
 and can be overloaded as appropriate.
