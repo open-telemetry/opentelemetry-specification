@@ -40,6 +40,8 @@ Updates:
   ([#610](https://github.com/open-telemetry/opentelemetry-specification/pull/610))
 - Rename ProbabilitySampler to TraceIdRatioBasedSampler and add requirements
   ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
+- Version attributes no longer have a prefix such as semver:
+  ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
 
 ## v0.6.0 (07-01-2020)
 
