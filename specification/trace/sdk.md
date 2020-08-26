@@ -70,14 +70,12 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
-  `null`.
-* `TraceId` of the `Span` to be created. It can be different from the `TraceId`
-  in the `SpanContext`. Typically in situations when the `Span` to be created
-  starts a new Trace.
+* Parent `SpanContext`. May be invalid to indicate a root span.
+* `TraceId` of the `Span` to be created.
+  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
-* `SpanKind`
-* Initial set of `Attributes` for the `Span` being constructed
+* `SpanKind` of the `Span` to be created.
+* Initial set of `Attributes` of the `Span` to be created.
 * Collection of links that will be associated with the `Span` to be created.
   Typically useful for batch operations, see
   [Links Between Spans](../overview.md#links-between-spans).
