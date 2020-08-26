@@ -18,6 +18,8 @@ New:
 
 Updates:
 
+- Renamed `CorrelationContext` to `Baggage`:
+  ([#857](https://github.com/open-telemetry/opentelemetry-specification/pull/857))
 - Add semantic convention for NGINX custom HTTP 499 status code.
 - Adapt semantic conventions for the span name of messaging systems
   ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
