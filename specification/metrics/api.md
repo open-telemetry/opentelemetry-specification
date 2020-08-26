@@ -39,7 +39,7 @@
     + [Direct instrument calling convention](#direct-instrument-calling-convention)
     + [RecordBatch calling convention](#recordbatch-calling-convention)
   * [Association with distributed context](#association-with-distributed-context)
-    + [Correlation context into metric labels](#correlation-context-into-metric-labels)
+    + [Baggage into metric labels](#baggage-into-metric-labels)
 - [Asynchronous instrument details](#asynchronous-instrument-details)
   * [Asynchronous calling conventions](#asynchronous-calling-conventions)
     + [Single-instrument observer](#single-instrument-observer)
@@ -148,7 +148,7 @@ which is the user-facing entry point to the SDK.
 Instruments are classified in several ways that distinguish them from
 one another.
 
-1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., Span context, Correlation context). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
+1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., Span context, Baggage). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
 2. Additivity: An additive instrument is one that records additive measurements, as described above.
 3. Monotonicity: A monotonic instrument is an additive instrument, where the progression of each sum is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
 
@@ -165,7 +165,7 @@ are synchronous, additive, and/or monotonic.
 | ValueObserver     | No  | No  | No  |
 
 The synchronous instruments are useful for measurements that are
-gathered in a distributed [Context](../context/context.md) (i.e., Span context, Correlation context).  The asynchronous instruments are
+gathered in a distributed [Context](../context/context.md) (i.e., Span context, Baggage).  The asynchronous instruments are
 useful when measurements are expensive, therefore should be gathered
 periodically.  Read more [characteristics of synchronous and
 asynchronous instruments](#synchronous-and-asynchronous-instruments-compared) below.
@@ -321,7 +321,7 @@ consist of:
 - [resources](../resource/sdk.md) associated with the SDK at startup.
 
 Synchronous events have one additional property, the distributed
-[Context](../context/context.md) (i.e., Span context, Correlation context)
+[Context](../context/context.md) (i.e., Span context, Baggage)
 that was active at the time.
 
 ## Meter provider
@@ -419,7 +419,7 @@ libraries may be written to generate this metric.
 ### Synchronous and asynchronous instruments compared
 
 Synchronous instruments are called inside a request, meaning they
-have an associated distributed [Context](../context/context.md) (i.e., Span context, Correlation context).  Multiple metric events may occur for a
+have an associated distributed [Context](../context/context.md) (i.e., Span context, Baggage).  Multiple metric events may occur for a
 synchronous instrument within a given collection interval.
 
 Asynchronous instruments are reported by a callback, once per
@@ -942,25 +942,25 @@ convention.
 
 Synchronous measurements are implicitly associated with the
 distributed [Context](../context/context.md) at runtime, which may
-include a Span context and Correlation values.  The Metric SDK may use
+include a Span context and Baggage entries.  The Metric SDK may use
 this information in many ways, but one feature is of particular
 interest in OpenTelemetry.
 
-#### Correlation context into metric labels
+#### Baggage into metric labels
 
-Correlation context is supported in OpenTelemetry as a means for
+Baggage is supported in OpenTelemetry as a means for
 labels to propagate from one process to another in a distributed
 computation.  Sometimes it is useful to aggregate metric data using
-distributed correlation values as metric labels.
+distributed baggage entries as metric labels.
 
-The use of correlation context must be explicitly configured, using
+The use of Baggage must be explicitly configured, using
 the [Views API (WIP)](https://github.com/open-telemetry/oteps/pull/89)
-to select specific key correlation values that should be applied as
-labels.  The default SDK will not automatically use correlation
-context labels in the export pipeline, since using correlation labels
+to select specific key baggage entries that should be applied as
+labels.  The default SDK will not automatically use Baggage
+labels in the export pipeline, since using Baggage labels
 can be a significant expense.
 
-Configuring views for applying Correlation context labels is a [work in
+Configuring views for applying Baggage labels is a [work in
 progress](https://github.com/open-telemetry/oteps/pull/89).
 
 ## Asynchronous instrument details
