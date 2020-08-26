@@ -31,7 +31,8 @@ If none of the listed values apply, a custom value best describing the runtime C
 
 | Value | Description |
 | --- | --- |
-| `golang` | Go compiler |
+| `gc` | Go compiler |
+| `gccgo` | GCC Go frontend |
 
 ***Java runtimes:***
 
