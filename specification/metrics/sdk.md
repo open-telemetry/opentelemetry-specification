@@ -5,6 +5,7 @@ API](api.md) specification.  Note that the examples below are copied
 from the current OpenTelemetry-Go SDK:
 
 TODO: TOC
+TODO: Write a list/description of the functional requirements of the SDK and put it above the model implementation description.
 
 ## Purpose
 
