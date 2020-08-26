@@ -62,8 +62,8 @@ If none of the listed values apply, a custom value best describing the runtime C
 
 | Value | Description |
 | --- | --- |
-| `dotnet-framework` | .NET Framework |
 | `dotnet-core` | .NET Core, .NET 5+ |
+| `dotnet-framework` | .NET Framework |
 | `mono` | Mono |
 
 ***Python Runtimes:***
