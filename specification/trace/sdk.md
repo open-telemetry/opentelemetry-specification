@@ -306,7 +306,7 @@ they want to make the shutdown timeout configurable.
 
 #### ForceFlush()
 
-Export all ended spans to the configured `Exporter` that have not yet been
+Export all pending spans to the configured `Exporter` that have not yet been
 exported.
 
 `ForceFlush` should provide a way to let the caller know whether it succeeded,
