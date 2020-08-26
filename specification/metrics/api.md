@@ -347,7 +347,7 @@ arguments:
   In case an invalid name (null or empty string) is specified, a working default `Meter` implementation is returned as a fallback
   rather than returning null or throwing an exception.
   A `MeterProvider` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library (e.g. `semver:1.0.0`).
+- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 
 Each distinctly named `Meter` establishes a separate namespace for its
 metric instruments, making it possible for multiple instrumentation
