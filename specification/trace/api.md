@@ -111,8 +111,7 @@ That API MUST accept the following parameters:
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the [version](../resource/semantic_conventions/README.md#version-attributes) of the instrumentation library
-  (e.g. `semver:1.0.0`).
+- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
@@ -353,6 +352,8 @@ The parent should be selected in the following order of precedence:
 During the `Span` creation user MUST have the ability to record links to other `Span`s.
 Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
+
+`Link`s cannot be added after Span creation.
 
 A `Link` is defined by the following properties:
 
@@ -684,11 +685,6 @@ be called concurrently.
 **TracerProvider** - all methods are safe to be called concurrently.
 
 **Tracer** - all methods are safe to be called concurrently.
-
-**SpanBuilder** - It is not safe to concurrently call any methods of the
-same SpanBuilder instance. Different instances of SpanBuilder can be safely
-used concurrently by different threads/coroutines, provided that no single
-SpanBuilder is used by more than one thread/coroutine.
 
 **Span** - All methods of Span are safe to be called concurrently.
 
