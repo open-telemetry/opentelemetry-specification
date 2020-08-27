@@ -18,6 +18,8 @@ New:
 
 Updates:
 
+- Renamed `CorrelationContext` to `Baggage`:
+  ([#857](https://github.com/open-telemetry/opentelemetry-specification/pull/857))
 - Add semantic convention for NGINX custom HTTP 499 status code.
 - Adapt semantic conventions for the span name of messaging systems
   ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
@@ -42,6 +44,8 @@ Updates:
   ([#610](https://github.com/open-telemetry/opentelemetry-specification/pull/610))
 - Rename ProbabilitySampler to TraceIdRatioBasedSampler and add requirements
   ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
+- Version attributes no longer have a prefix such as semver:
+  ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
 
 ## v0.6.0 (07-01-2020)
 
