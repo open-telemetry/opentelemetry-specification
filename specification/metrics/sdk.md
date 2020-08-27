@@ -175,21 +175,21 @@ core methods:
 // MeterImpl is the interface an SDK must implement to supply a Meter
 // implementation.
 type MeterImpl interface {
-	// RecordBatch atomically records a batch of measurements.
-	RecordBatch(context.Context, []label.KeyValue, ...Measurement)
+        // RecordBatch atomically records a batch of measurements.
+        RecordBatch(context.Context, []label.KeyValue, ...Measurement)
 
-	// NewSyncInstrument returns a newly constructed
-	// synchronous instrument implementation or an error, should
-	// one occur.
-	NewSyncInstrument(descriptor Descriptor) (SyncImpl, error)
+        // NewSyncInstrument returns a newly constructed
+        // synchronous instrument implementation or an error, should
+        // one occur.
+        NewSyncInstrument(descriptor Descriptor) (SyncImpl, error)
 
-	// NewAsyncInstrument returns a newly constructed
-	// asynchronous instrument implementation or an error, should
-	// one occur.
-	NewAsyncInstrument(
-		descriptor Descriptor,
-		runner AsyncRunner,
-	) (AsyncImpl, error)
+        // NewAsyncInstrument returns a newly constructed
+        // asynchronous instrument implementation or an error, should
+        // one occur.
+        NewAsyncInstrument(
+                descriptor Descriptor,
+                runner AsyncRunner,
+        ) (AsyncImpl, error)
 }
 ```
 
@@ -238,8 +238,8 @@ units of measure.  The SDK instrument MUST provide access to the
 // InstrumentImpl is a common interface for synchronous and
 // asynchronous instruments.
 type InstrumentImpl interface {
-	// Descriptor returns a copy of the instrument's Descriptor.
-	Descriptor() Descriptor
+        // Descriptor returns a copy of the instrument's Descriptor.
+        Descriptor() Descriptor
 }
 ```
 
@@ -253,25 +253,25 @@ supports both direct and bound calling conventions.
 // synchronous instrument (e.g., ValueRecorder and Counter instruments).
 type SyncImpl interface {
         // InstrumentImpl provides Descriptor().
-	InstrumentImpl
+        InstrumentImpl
 
-	// Bind creates an implementation-level bound instrument,
-	// binding a label set with this instrument implementation.
-	Bind(labels []label.KeyValue) BoundSyncImpl
+        // Bind creates an implementation-level bound instrument,
+        // binding a label set with this instrument implementation.
+        Bind(labels []label.KeyValue) BoundSyncImpl
 
-	// RecordOne captures a single synchronous metric event.
-	RecordOne(ctx context.Context, number Number, labels []label.KeyValue)
+        // RecordOne captures a single synchronous metric event.
+        RecordOne(ctx context.Context, number Number, labels []label.KeyValue)
 }
 
 // BoundSyncImpl is the implementation-level interface to a
 // generic bound synchronous instrument
 type BoundSyncImpl interface {
 
-	// RecordOne captures a single synchronous metric event.
-	RecordOne(ctx context.Context, number Number)
+        // RecordOne captures a single synchronous metric event.
+        RecordOne(ctx context.Context, number Number)
 
-	// Unbind frees the resources associated with this bound instrument.
-	Unbind()
+        // Unbind frees the resources associated with this bound instrument.
+        Unbind()
 }
 ```
 
@@ -288,7 +288,7 @@ asynchronous instruments.
 // asynchronous instrument (e.g., Observer instruments).
 type AsyncImpl interface {
         // InstrumentImpl provides Descriptor().
-	InstrumentImpl
+        InstrumentImpl
 }
 ```
 
@@ -317,7 +317,7 @@ prior collection state).
 #### Reducing Processor
 
 TODO: Label filter, LabelFilterSelector
-      
+
 ### Controller Detail
 
 TODO: Push, Pull
@@ -334,9 +334,9 @@ TODO: The default SDK behavior for `ValueRecorder` instruments is
 still in question.  Options are: LastValue, Histogram, MinMaxSumCount,
 and Sketch.
 
-https://github.com/open-telemetry/opentelemetry-specification/issues/636
-https://github.com/open-telemetry/oteps/pull/117
-https://github.com/open-telemetry/oteps/pull/118
+[Spec issue 636](https://github.com/open-telemetry/opentelemetry-specification/issues/636)
+[OTEP 117](https://github.com/open-telemetry/oteps/pull/117)
+[OTEP 118](https://github.com/open-telemetry/oteps/pull/118)
 
 #### Standard sketch histogram aggregation
 
