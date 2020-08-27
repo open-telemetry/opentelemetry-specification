@@ -295,30 +295,33 @@ therefore it should not block or throw an exception.
 Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
-`Shutdown` should be called only once for each `SpanProcessor` instance. After
+`Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
 the call to `Shutdown` subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
-are not allowed. Language library authors can decide if they want to make
-`Shutdown` a blocking API or an asynchronous API which notifies the caller via a
-callback or an event.
+are not allowed.
 
-`Shutdown` should not run indefinitely. Language library authors can decide if
-they want to make the shutdown timeout configurable.
+`Shutdown` MUST include the effects of `ForceFlush`.
+
+`Shutdown` SHOULD complete within some timeout. `Shutdown` can be implemented as
+a blocking API or an asynchronous API which notifies the caller via a callback
+or an event. Language library authors can decide if they want to make the
+shutdown timeout configurable.
 
 #### ForceFlush()
 
-Export all pending spans to the configured `Exporter` that have not yet been
+Exports all pending spans to the configured `Exporter` that have not yet been
 exported.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out. `ForceFlush` can be implemented as a blocking API or an asynchronous API which notifies the caller via
-a callback or an event.
+failed or timed out.
 
-`ForceFlush` should only be called in cases where it is absolutely necessary,
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
 such as when using some FaaS providers that may suspend the process after an
 invocation, but before the `Processor` exports the completed spans.
 
-`ForceFlush` should not run indefinitely. Language library authors can decide if
-they want to make the flush timeout configurable.
+`ForceFlush` SHOULD complete within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the flush timeout configurable.
 
 ### Built-in span processors
 
