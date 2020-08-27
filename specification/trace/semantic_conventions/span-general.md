@@ -158,7 +158,7 @@ Examples of where `thread.id` and `thread.name` can be extracted from:
 A span or event can be annotated with an `error.hint` attribute to indicate that
 an error condition was observed.
 
-When recoriding an [exception event](exceptions) and the exception is
+When recording an [exception event](exceptions.md) and the exception is
 considered to be an error, both the event and the span SHOULD have matching
 `error.hint` attributes set to `true`. It's possible for more than one exception
 event to have an `error.hint` attribute set. An `error.hint` represents an
