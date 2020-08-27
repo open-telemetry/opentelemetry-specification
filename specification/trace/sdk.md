@@ -320,7 +320,7 @@ failed or timed out.
 such as when using some FaaS providers that may suspend the process after an
 invocation, but before the `Processor` exports the completed spans.
 
-`ForceFlush` SHOULD complete within some timeout. `ForceFlush` can be
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. Language library authors can decide if they want to
 make the flush timeout configurable.
