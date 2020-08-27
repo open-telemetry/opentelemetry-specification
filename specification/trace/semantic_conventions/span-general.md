@@ -98,7 +98,7 @@ These attributes may be used for any operation with an authenticated and/or auth
 
 These attributes describe the authenticated user driving the user agent making requests to the instrumented
 system. It is expected this information would be propagated unchanged from node-to-node within the system
-using the Correlation Context mechanism. These attributes should not be used to record system-to-system
+using the Baggage mechanism. These attributes should not be used to record system-to-system
 authentication attributes.
 
 Examples of where the `enduser.id` value is extracted from:
