@@ -90,6 +90,10 @@ For example:
 - Python and Java: opentelemetry-exporter-jaeger
 - Javascript: @opentelemetry/exporter-jeager
 
+#### Resource Detection
+
+Cloud vendors are encouraged to provide packages to detect resource information from the environment. These MUST be implemented outside of the SDK. See [Resource SDK](./resource/sdk.md#detecting-resource-information-from-the-environment) for more details.
+
 ### Alternative Implementations
 
 The end-user application may decide to take a dependency on alternative implementation.

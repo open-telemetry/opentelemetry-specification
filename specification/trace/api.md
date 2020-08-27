@@ -14,6 +14,7 @@ Table of Contents
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
+  * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [IsValid](#isvalid)
   * [IsRemote](#isremote)
 * [Span](#span)
@@ -110,8 +111,7 @@ That API MUST accept the following parameters:
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the [version](../resource/semantic_conventions/README.md#version-attributes) of the instrumentation library
-  (e.g. `semver:1.0.0`).
+- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
@@ -180,6 +180,18 @@ of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. Please review the [W3C
 specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
 details on this field.
+
+### Retrieving the TraceId and SpanId
+
+The API must allow retrieving the `TraceId` and `SpanId` in the following forms:
+
+* Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
+`TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
+(result MUST be a 16-hex-character lowercase string).
+* Binary - returns the binary representation of the `TraceId` (result MUST be a
+16-byte array) `SpanId` (result MUST be a 8-byte array).
+
+The API should not expose details about how they are internally stored.
 
 ### IsValid
 
@@ -340,6 +352,8 @@ The parent should be selected in the following order of precedence:
 During the `Span` creation user MUST have the ability to record links to other `Span`s.
 Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
+
+`Link`s cannot be added after Span creation.
 
 A `Link` is defined by the following properties:
 
@@ -658,11 +672,6 @@ be called concurrently.
 **TracerProvider** - all methods are safe to be called concurrently.
 
 **Tracer** - all methods are safe to be called concurrently.
-
-**SpanBuilder** - It is not safe to concurrently call any methods of the
-same SpanBuilder instance. Different instances of SpanBuilder can be safely
-used concurrently by different threads/coroutines, provided that no single
-SpanBuilder is used by more than one thread/coroutine.
 
 **Span** - All methods of Span are safe to be called concurrently.
 
