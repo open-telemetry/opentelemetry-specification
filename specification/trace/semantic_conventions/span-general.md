@@ -13,6 +13,7 @@ Particular operations may refer to or require some of these attributes.
   * [`net.*.name` attributes](#netname-attributes)
 - [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
+- [General thread attributes](#general-thread-attributes)
 
 <!-- tocstop -->
 
@@ -84,6 +85,7 @@ Instrumentations SHOULD provide a way for users to configure this name.
 <!-- endsemconv -->
 
 Examples of `peer.service` that users may specify:
+
 - A Redis cache of auth tokens as `peer.service="AuthTokenCache"`.
 - A gRPC service `rpc.service="io.opentelemetry.AuthService"` may be hosted in both a gateway, `peer.service="ExternalApiService"` and a backend, `peer.service="AuthService"`.
 
@@ -101,7 +103,7 @@ These attributes may be used for any operation with an authenticated and/or auth
 
 These attributes describe the authenticated user driving the user agent making requests to the instrumented
 system. It is expected this information would be propagated unchanged from node-to-node within the system
-using the Correlation Context mechanism. These attributes should not be used to record system-to-system
+using the Baggage mechanism. These attributes should not be used to record system-to-system
 authentication attributes.
 
 Examples of where the `enduser.id` value is extracted from:
@@ -134,3 +136,24 @@ Examples of where the `enduser.id` value is extracted from:
 Given the sensitive nature of this information, SDKs and exporters SHOULD drop these attributes by
 default and then provide a configuration parameter to turn on retention for use cases where the
 information is required and would not violate any policies or regulations.
+
+## General thread attributes
+
+These attributes may be used for any operation to store information about
+a thread that started a span.
+
+| Attribute name | Notes and examples                                                  |
+|----------------|---------------------------------------------------------------------|
+| `thread.id`    | Current "managed" thread ID (as opposed to OS thread ID). E.g. `42` |
+| `thread.name`  | Current thread name. E.g. `main`                                    |
+
+Examples of where `thread.id` and `thread.name` can be extracted from:
+
+| Launguage or platform | `thread.id`                            | `thread.name`                      |
+|-----------------------|----------------------------------------|------------------------------------|
+| JVM                   | `Thread.currentThread().getId()`       | `Thread.currentThread().getName()` |
+| .Net                  | `Thread.CurrentThread.ManagedThreadId` | `Thread.CurrentThread.Name`        |
+| Python                | `threading.current_thread().ident`     | `threading.current_thread().name`  |
+| Ruby                  |                                        | `Thread.current.name`              |
+| C++                   | `std::this_thread::get_id()`             |                                    |
+| Erlang               | `erlang:system_info(scheduler_id)` |                                  |

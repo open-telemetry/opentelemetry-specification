@@ -30,13 +30,14 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>
+
 ### In-band and Out-of-band Data
 
 > In telecommunications, **in-band signaling** is the sending of control information within the same band or channel used for data such as voice or video. This is in contrast to **out-of-band signaling** which is sent over a different channel, or even over a separate network ([Wikipedia](https://en.wikipedia.org/wiki/In-band_signaling)).
 
 In OpenTelemetry we refer to **in-band data** as data that is passed
 between components of a distributed system as part of business messages,
-for example, when trace or correlation contexts are included
+for example, when trace or baggages are included
 in the HTTP requests in the form of HTTP headers.
 Such data usually does not contain the telemetry,
 but is used to correlate and join the telemetry produced by various components.
@@ -46,7 +47,6 @@ usually asynchronously by background routines
 rather than from the critical path of the business logic.
 Metrics, logs, and traces exported to telemetry backends are examples of out-of-band data.
 
-<a name="telemetry_sdk"></a>
 ### Telemetry SDK
 
 Denotes the library that implements the *OpenTelemetry API*.
@@ -54,7 +54,6 @@ Denotes the library that implements the *OpenTelemetry API*.
 See [Library Guidelines](library-guidelines.md#sdk-implementation) and
 [Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk).
 
-<a name="exporter_library"></a>
 ### Exporter Library
 
 Libraries which are compatible with the [Telemetry SDK](#telemetry-sdk) and provide functionality to emit telemetry to consumers.
@@ -68,8 +67,6 @@ or by another [Instrumentation Library](#instrumentation-library).
 
 Example: `org.mongodb.client`.
 
-<a name="instrumenting_library"></a>
-<a name="instrumentation_library"></a>
 ### Instrumentation Library
 
 Denotes the library that provides the instrumentation for a given [Instrumented Library](#instrumented-library).
@@ -82,8 +79,6 @@ Example: `io.opentelemetry.contrib.mongodb`.
 
 Synonyms: *Instrumenting Library*.
 
-<a name="tracer-name"></a>
-<a name="meter-name"></a>
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when

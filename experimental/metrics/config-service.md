@@ -20,8 +20,8 @@
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
-
 ## Overview
+
 The OpenTelemetry Metric Configuration Service adds the ability to dynamically
 and remotely configure metric collection schedules. A user may specify
 collection periods at runtime, and propagate these changes to instrumented
@@ -35,8 +35,8 @@ third-party metric provider has an existing metric configuration service (or
 would like to implement one in the future), and if it communicates using this
 protocol, it may speak directly with our instrumented applications.
 
-
 ## Service Protocol
+
 Configuration data is communicated between an SDK and a backend (either directly
 or indirectly through a Collector) using the following protocol specification.
 The SDK is assumed to be the client, and makes the metric config requests. The
@@ -45,6 +45,7 @@ responses. For more details on this arrangement, see
 [below](#push-vs-pull-metric-model).
 
 ### Metric Config Request
+
 A request consists of two fields: `resource` and an optional
 `last_known_fingerprint`.
 
@@ -63,10 +64,12 @@ If unspecified, the configuration backend will send the full schedules with each
 request.
 
 ### Metric Config Response
+
 A response consists of three fields `schedules`, `fingerprint`, and
 `suggested_wait_time_sec`.
 
 #### Schedules
+
 `schedules` is a list of metric schedules. Each schedule consists of three
 components: `exclusion_patterns`, `inclusion_patterns`, and `period_sec`.
 
@@ -85,6 +88,7 @@ periods that are divisible by the smallest period (see
 collected
 
 #### Fingerprint
+
 `fingerprint` is a sequence of bytes that corresponds to the set of schedules
 being sent. There are two requirements on computing fingerprints:
 
@@ -97,12 +101,14 @@ is the same as the response’s `last_known_fingerprint`, then all other fields 
 the response are optional.
 
 #### Wait Time
+
 `suggested_wait_time_sec` is a duration (in seconds) that the SDK should wait
 before sending the next metric config request. A response MAY have a
 `suggested_wait_time_sec`, but its use is optional, and the SDK need not obey
 it. As the name implies, it is simply a suggestion.
 
 ### Push vs Pull Metric Model
+
 Note that the configuration service assumes a “push” model of metric export --
 that is, metrics are pushed from the SDK to a receiving backend. The backend
 serves incoming requests that contain metric data. This is in contrast to the
@@ -114,8 +120,8 @@ metrics, and the need for our configuration service is less relevant. We
 therefore assume that all systems using the configuration service deliver
 metrics on a push-based model.
 
-
 ## Implementation Details
+
 Because this specification is experimental, and may imply substantial changes to
 the existing system, we provide additional details on the example prototype
 implementations available on the
@@ -125,6 +131,7 @@ actual implementation in an SDK will likely differ. We offer these details not
 as formal specification, but as an example of how this system might look.
 
 ### Collection Periods
+
 Though the protocol does not enforce specific collection periods, the SDK MAY
 assume that all larger collection periods will be divisible by the smallest
 period in a set of schedules, for the sake of optimization. Indeed, it is
@@ -149,6 +156,7 @@ However, the SDK MUST still be able to handle periods of any nonzero integer
 duration, even if they violate the divisibility suggestion.
 
 ### Go SDK
+
 A prototype implementation of metric configuration is available for the Go SDK,
 currently hosted on the [contrib repo](https://github.com/vmingchen/opentelemetry-go-contrib). It provides an
 alternative push controller component with the ability to configure collection
@@ -166,6 +174,7 @@ controller, in place of OpenTelemetry’s version, to be able to have access to
 this feature.
 
 ### Collector Extension
+
 An example configuration backend is implemented as an extension for the
 Collector, currently hosted on the [contrib repo](https://github.com/vmingchen/opentelemetry-collector-contrib). When this extension is enabled, the Collector
 functions as a potential endpoint for Agent/SDKs to retrieve configuration data.
@@ -184,6 +193,7 @@ The configuration data itself may be specified using one of two sources: a local
 file or a connection to a remote backend.
 
 #### Local File
+
 Configuration data can be specified in the form of a local file that the
 collector monitors. Changes to the file are immediately reflected in the
 Collector’s in-memory representation of the data, so there is no need to restart
@@ -213,6 +223,7 @@ ConfigBlocks:
 ```
 
 The following rules govern the file-based configurations:
+
 * There MUST be 1 ConfigBlock or more in a ConfigBlocks list
 * Each ConfigBlock MAY have a field Resource
 * Resource MAY have one or more strings, each a string-representation of a key-value label in a resource. If no strings are specified, then this ConfigBlock matches with any request
@@ -222,6 +233,7 @@ The following rules govern the file-based configurations:
 * Each Schedule MUST have a field Period, corresponding to the collection period of the metrics matched by this Schedule
 
 ##### Matching Behavior
+
 An incoming request specifies a resource for which configuration data should be
 returned. A ConfigBlock matches a resource if all strings listed under
 ConfigBlock::Resource exactly equal a key-value label in the resource. In the
@@ -236,11 +248,13 @@ across telemetry sources, unless superseded by a more specific ConfigBlock that
 asks for a shorter period.
 
 ##### Fingerprint Hashing
+
 Fingerprints are generated using an FNVa 64 bit hashing scheme. The hash is
 uniquely determined by the contents of a ConfigBlock. The order of patterns and
 the order of schedules do not impact the resulting hash.
 
 #### Remote Backend
+
 Alternatively, instead of using a local file, the Collector may use another
 configuration service backend. This remote backend could be another Collector,
 or it could be a third party that implements the configuration service. In the

@@ -21,7 +21,7 @@ Table of Contents
   * [Metrics data model and SDK](#metrics-data-model-and-sdk)
 - [Logs](#logs)
   * [Data model](#data-model)
-- [CorrelationContext](#correlationcontext)
+- [Baggage](#baggage)
 - [Resources](#resources)
 - [Context Propagation](#context-propagation)
 - [Propagators](#propagators)
@@ -231,24 +231,24 @@ from the backend.
 [Log Data Model](logs/data-model.md) defines how logs and events are understood by
 OpenTelemetry.
 
-## CorrelationContext
+## Baggage
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
-name/value pairs, called `CorrelationContext`. `CorrelationContext` is intended for
+name/value pairs, called `Baggage`. `Baggage` is intended for
 indexing observability events in one service with attributes provided by a prior service in
 the same transaction. This helps to establish a causal relationship between these events.
 
-While `CorrelationContext` can be used to prototype other cross-cutting concerns, this mechanism is primarily intended
+While `Baggage` can be used to prototype other cross-cutting concerns, this mechanism is primarily intended
 to convey values for the OpenTelemetry observability systems.
 
-These values can be consumed from `CorrelationContext` and used as additional dimensions for metrics,
+These values can be consumed from `Baggage` and used as additional dimensions for metrics,
 or additional context for logs and traces. Some examples:
 
 - a web service can benefit from including context around what service has sent the request
 - a SaaS provider can include context about the API user or token that is responsible for that request
 - determining that a particular browser version is associated with a failure in an image processing service
 
-For backward compatibility with OpenTracing, Baggage is propagated as `CorrelationContext` when
+For backward compatibility with OpenTracing, Baggage is propagated as `Baggage` when
 using the OpenTracing bridge. New concerns with different criteria should consider creating a new
 cross-cutting concern to cover their use-case; they may benefit from the W3C encoding format but
 use a new HTTP header to convey data throughout a distributed trace.
@@ -280,12 +280,12 @@ See the [Context](context/context.md)
 ## Propagators
 
 OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
-such as `SpanContext` and `CorrelationContext`. Different `Propagator` types define the restrictions
+such as `SpanContext` and `Baggage`. Different `Propagator` types define the restrictions
 imposed by a specific transport and bound to a data type.
 
 The Propagators API currently defines one `Propagator` type:
 
-- `HTTPTextPropagator` injects values into and extracts values from carriers as text.
+- `TextMapPropagator` injects values into and extracts values from carriers as text.
 
 ## Collector
 
@@ -306,7 +306,7 @@ Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/do
 
 ## Instrumentation Libraries
 
-See [Instrumentation Library](glossary.md#instrumentation_library)
+See [Instrumentation Library](glossary.md#instrumentation-library)
 
 The inspiration of the project is to make every library and application
 observable out of the box by having them call OpenTelemetry API directly. However,
@@ -316,7 +316,7 @@ wrapping interfaces, subscribing to library-specific callbacks, or translating
 existing telemetry into the OpenTelemetry model.
 
 A library that enables OpenTelemetry observability for another library is called
-an [Instrumentation Library](glossary.md#instrumentation_library).
+an [Instrumentation Library](glossary.md#instrumentation-library).
 
 An instrumentation library should be named to follow any naming conventions of
 the instrumented library (e.g. 'middleware' for a web framework).
