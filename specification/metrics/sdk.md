@@ -71,7 +71,7 @@ The Accumulator is the first component an OpenTelemetry Metric export
 pipeline, implementing the front-line [`Meter`
 interface](api.md#meter-interface).
 
-```
+```go
 // NewAccumulator constructs a new Accumulator for the given
 // Processor and options.
 func NewAccumulator(processor export.Processor, opts ...Option) *Accumulator
@@ -81,7 +81,7 @@ The Accumulator MUST provide the option to associate a
 [`Resource`](../resource/sdk.md) with the Accumulations that it
 produces.
 
-```
+```go
 // WithResource sets the Resource configuration option of a Config.
 func WithResource(res *resource.Resource) Option
 ```
@@ -89,7 +89,7 @@ func WithResource(res *resource.Resource) Option
 The Accumulator is called by the Controller (see below) to coordinate
 collection using a `Collect()` method.
 
-```
+```go
 // Collect traverses the list of active instruments and exports
 // data.  Collect() may not be called concurrently.
 //
@@ -112,7 +112,7 @@ significantly narrower interface.
 This interface sits at the boundary of the SDK and the API, with three
 core methods:
 
-```
+```go
 // MeterImpl is the interface an SDK must implement to supply a Meter
 // implementation.
 type MeterImpl interface {
@@ -149,7 +149,7 @@ interface](api.md#meter-interface), obtained through a [Metric API
 `Provider` interface](api.md#meter-provider).  The `Meter` interface can be
 constructed by wrapping the SDK `Meter` implementation:
 
-```
+```go
 // WrapMeterImpl constructs a `Meter` implementation from a
 // `MeterImpl` implementation.
 func WrapMeterImpl(impl MeterImpl, instrumentationName string, opts ...MeterOption) Meter
@@ -165,7 +165,7 @@ The SDK instruments are the underlying implementation for
 [OpenTelemetry Metric instruments](api.md#metric-instruments).  This
 interface links API and the SDK:
 
-```
+```go
 // InstrumentImpl is a common interface for synchronous and
 // asynchronous instruments.
 type InstrumentImpl interface {
@@ -184,7 +184,7 @@ units of measure.  The SDK instrument MUST provide access to the
 The [synchronous SDK instrument](api.md#synchronous-instrument-details)
 supports both direct and bound calling conventions.
 
-```
+```go
 // SyncImpl is the implementation-level interface to a generic
 // synchronous instrument (e.g., ValueRecorder and Counter instruments).
 type SyncImpl interface {
@@ -219,7 +219,7 @@ The interface used for running Observer callbacks is passed at the
 constructor, so there are no other API-level access methods for
 asynchronous instruments.
 
-```
+```go
 // AsyncImpl is an implementation-level interface to an
 // asynchronous instrument (e.g., Observer instruments).
 type AsyncImpl interface {
@@ -243,7 +243,7 @@ implementation (`MeterImpl`) that stores unique instruments for retrieval by the
 - Provided the instrument name exists and the descriptors match, returns the unique SDK instrument
 - When the instrument descriptors do not match, returns an error and a no-op instrument.
 
-```
+```go
 // NewUniqueInstrumentMeterImpl returns a wrapped metric.MeterImpl with
 // the addition of uniqueness checking.
 func NewUniqueInstrumentMeterImpl(impl metric.MeterImpl) metric.MeterImpl {
@@ -280,7 +280,7 @@ prior collection state).
 ### Reducing Processor
 
 TODO: Label filter, LabelFilterSelector
-
+      
 ## Controller Detail
 
 TODO: Push, Pull
