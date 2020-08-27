@@ -311,8 +311,7 @@ shutdown timeout configurable.
 
 #### ForceFlush()
 
-Exports all pending spans to the configured `Exporter` that have not yet been
-exported.
+Exports all spans that have not yet been exported to the configured `Exporter`.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
