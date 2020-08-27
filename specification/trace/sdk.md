@@ -296,7 +296,7 @@ Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
 `Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
-the call to `Shutdown` subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
+the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
 are not allowed, and should be no-op if possible.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
