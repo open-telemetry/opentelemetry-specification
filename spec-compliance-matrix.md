@@ -34,7 +34,7 @@ status of the feature is not known.
 |User-defined start timestamp                  |  | +  | +     | +    | +  | +    | + | +  |   |    |
 |End                                           |  | +  | +     | +    | +  | +    | + | +  |   |    |
 |End with timestamp                            |  | +  | +     | +    | +  | +    | + | -  |   |    |
-|IsRecording                                   |  | +  | +     |      | +  | +    | + |    |   |    |
+|IsRecording                                   |  | +  | +     | +    | +  | +    | + |    |   |    |
 |Set status                                    |  | +  | +     | +    | +  | +    | + | +  |   |    |
 |Safe for concurrent calls                     |  | +  | +     |      | +  | +    | + | +  |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
@@ -45,7 +45,7 @@ status of the feature is not known.
 |Double floating-point type                    |  | +  | +     | +    | +  | +    | - | +  |   |    |
 |Signed int64 type                             |  | +  | +     | +    | +  | +    | - | +  |   |    |
 |Array of primitives (homogeneous)             |  | +  | +     | +    | -  | -    | + | +  |   |    |
-|Unicode support for keys and string values    |  | +  | +     |      | +  | +    | + | +  |   |    |
+|Unicode support for keys and string values    |  | +  | +     | +    | +  | +    | + | +  |   |    |
 |[Span linking](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-links)|
 |AddLink                                       |  | +  | +     | +    | +  | +    | + | +  |   |    |
 |Safe for concurrent calls                     |  | +  | +     | +    | +  | +    | + | +  |   |    |
