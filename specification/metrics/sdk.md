@@ -11,11 +11,10 @@ OpenTelemetry API.
 
 In the second part, the architectural details of a model SDK
 implementation are described, using the OpenTelemetry-Go Metric SDK as
-an eample.  This is meant to show how the requirements can be
+an example.  This is meant to show how the requirements can be
 implemented, as guidance to implementors, not to mandate an exact
 reproduction of the model architecture across languages.
-OpenTelemetry SDKs are of course free to equivalent but syntactically
-different APIs that are idiomatic.
+OpenTelemetry SDKs are of course free to use any idiomatic approach.
 
 ## Expectations
 
