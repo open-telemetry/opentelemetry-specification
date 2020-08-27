@@ -297,7 +297,7 @@ for processor to do any cleanup required.
 
 `Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
 the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
-are not allowed, and should be no-op if possible.
+are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
