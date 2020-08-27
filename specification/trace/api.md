@@ -14,6 +14,9 @@ Table of Contents
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
+  * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
+  * [IsValid](#isvalid)
+  * [IsRemote](#isremote)
 * [Span](#span)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
@@ -108,8 +111,7 @@ That API MUST accept the following parameters:
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the [version](../resource/semantic_conventions/README.md#version-attributes) of the instrumentation library
-  (e.g. `semver:1.0.0`).
+- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
@@ -179,10 +181,26 @@ systems to participate in the same trace. Please review the [W3C
 specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
 details on this field.
 
-`IsValid` is a boolean flag which returns true if the SpanContext has a non-zero
-TraceID and a non-zero SpanID.
+### Retrieving the TraceId and SpanId
 
-`IsRemote` is a boolean which is true if the SpanContext was
+The API must allow retrieving the `TraceId` and `SpanId` in the following forms:
+
+* Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
+`TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
+(result MUST be a 16-hex-character lowercase string).
+* Binary - returns the binary representation of the `TraceId` (result MUST be a
+16-byte array) `SpanId` (result MUST be a 8-byte array).
+
+The API should not expose details about how they are internally stored.
+
+### IsValid
+
+An API that returns a boolean value, which is `true` if the SpanContext has a
+non-zero TraceID and a non-zero SpanID.
+
+### IsRemote
+
+An API that returns a boolean value, which is `true` if the SpanContext was
 propagated from a remote parent. When extracting a `SpanContext` through the
 [Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
 flag MUST be set to true, whereas the SpanContext of any child spans MUST have
@@ -210,13 +228,15 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
-The _span name_ is a human-readable string which concisely identifies the work
-represented by the Span, for example, an RPC method name, a function name,
-or the name of a subtask or stage within a larger computation. The span name
-should be the most general string that identifies a (statistically) interesting
-_class of Spans_, rather than individual Span instances. That is, "get_user" is
-a reasonable name, while "get_user/314159", where "314159" is a user ID, is not
-a good name due to its high cardinality.
+The _span name_ concisely identifies the work represented by the Span,
+for example, an RPC method name, a function name,
+or the name of a subtask or stage within a larger computation.
+The span name SHOULD be the most general string that identifies a
+(statistically) interesting _class of Spans_,
+rather than individual Span instances while still being human-readable.
+That is, "get_user" is a reasonable name, while "get_user/314159",
+where "314159" is a user ID, is not a good name due to its high cardinality.
+Generality SHOULD be prioritized over human-readability.
 
 For example, here are potential span names for an endpoint that gets a
 hypothetical account information:
@@ -329,9 +349,11 @@ The parent should be selected in the following order of precedence:
 
 #### Add Links
 
-During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
-`Span`s can be from the same or a different trace. See [Links
+During the `Span` creation user MUST have the ability to record links to other `Span`s.
+Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
+
+`Link`s cannot be added after Span creation.
 
 A `Link` is defined by the following properties:
 
@@ -340,17 +362,10 @@ A `Link` is defined by the following properties:
 
 The `Link` SHOULD be an immutable type.
 
-The Span creation API should provide:
+The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`.
-- An API to record a single `Link` whose attributes or attribute values are
-  lazily constructed, with the intention of avoiding unnecessary work if a link
-  is unused. If the language supports overloads then this SHOULD be called
-  `AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
-  be easier to defer `Link` or attribute creation entirely by providing a wrapping
-  class or function that returns a `Link` or formatted attributes. When providing
-  a wrapping class or function it SHOULD be named `LinkFormatter`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -402,16 +417,8 @@ The Span interface MUST provide:
   as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
   implementations may offer a separate API for each of the possible value types.
 
-Attributes SHOULD preserve the order in which they're set. Setting an attribute
-with the same key as an existing attribute SHOULD overwrite the existing
-attribute's value.
-
-Attribute values expressing a numerical value of zero or an empty string are
-considered meaningful and MUST be stored and passed on to span processors / exporters.
-Attribute values of `null` are considered to be not set and get discarded as if
-that `SetAttribute` call had never been made.
-As an exception to this, if overwriting of values is supported, this results in
-clearing the previous value and dropping the attribute key from the set of attributes.
+Setting an attribute with the same key as an existing attribute SHOULD overwrite
+the existing attribute's value.
 
 Note that the OpenTelemetry project documents certain ["standard
 attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
@@ -419,7 +426,6 @@ attributes"](semantic_conventions/README.md) that have prescribed semantic meani
 Note that [Samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any changes done later, including new or changed
 attributes, cannot change their decisions.
-
 
 #### Add Events
 
@@ -430,7 +436,7 @@ An `Event` is defined by the following properties:
 
 - (Required) Name of the event.
 - (Optional) [`Attributes`](../common/common.md#attributes).
-- (Optional) Timestamp for the event.
+- (Optional) Timestamp for the event. If not provided, the current time when the event is added MUST be used.
 
 The `Event` SHOULD be an immutable type.
 
@@ -438,19 +444,15 @@ The Span interface MUST provide:
 
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
-- An API to record a single `Event` whose attributes or attribute values are
-  lazily constructed, with the intention of avoiding unnecessary work if an event
-  is unused. If the language supports overloads then this SHOULD be called
-  `AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
-  might be easier to defer `Event` or attribute creation entirely by providing a
-  wrapping class or function that returns an `Event` or formatted attributes. When
-  providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
+
+Note that [`RecordException`](#record-exception) is a specialized variant of
+`AddEvent` for recording exception events.
 
 #### Set Status
 
@@ -470,8 +472,8 @@ The Span interface MUST provide:
 Updates the `Span` name. Upon this update, any sampling behavior based on `Span`
 name will depend on the implementation.
 
-Note that [Samplers](sdk.md#sampler) can only consider information already 
-present during span creation. Any changes done later, including updated span 
+Note that [Samplers](sdk.md#sampler) can only consider information already
+present during span creation. Any changes done later, including updated span
 name, cannot change their decisions.
 
 Alternatives for the name update may be late `Span` creation, when Span is
@@ -503,15 +505,25 @@ This API MUST be non-blocking.
 #### Record Exception
 
 To facilitate recording an exception languages SHOULD provide a
-`RecordException` convenience method. The signature of the method is to be
-determined by each language and can be overloaded as appropriate. The method
-MUST record an exception as an `Event` with the conventions outlined in the
-[exception semantic conventions](semantic_conventions/exceptions.md) document.
+`RecordException` method if the language uses exceptions.
+This is a specialized variant of [`AddEvent`](#add-events),
+so for anything not specified here, the same requirements as for `AddEvent` apply.
 
-Examples:
+The signature of the method is to be determined by each language
+and can be overloaded as appropriate.
+The method MUST record an exception as an `Event` with the conventions outlined in
+the [exception semantic conventions](semantic_conventions/exceptions.md) document.
+The minimum required argument SHOULD be no more than only an exception object.
 
-- `RecordException(exception: Exception)`
-- `RecordException(type: String, message: String, stacktrace: String)`
+If `RecordException` is provided, the method MUST accept an optional parameter
+to provide any additional event attributes
+(this SHOULD be done in the same way as for the `AddEvent` method).
+If attributes with the same name would be generated by the method already,
+the additional attributes take precedence.
+
+Note: `RecordException` may be seen as a variant of `AddEvent` with
+additional exception-specific parameters and all other parameters being optional
+(because they have defaults from the exception semantic convention).
 
 ### Span lifetime
 
@@ -674,23 +686,30 @@ be called concurrently.
 
 **Tracer** - all methods are safe to be called concurrently.
 
-**SpanBuilder** - It is not safe to concurrently call any methods of the
-same SpanBuilder instance. Different instances of SpanBuilder can be safely
-used concurrently by different threads/coroutines, provided that no single
-SpanBuilder is used by more than one thread/coroutine.
-
 **Span** - All methods of Span are safe to be called concurrently.
 
-**Event** - Events are immutable and safe to be used concurrently. Lazy
-initialized events must be thread safe. This is the responsibility of the
-implementer of these events.
+**Event** - Events are immutable and safe to be used concurrently.
 
-**Link** - Links are immutable and is safe to be used concurrently. Lazy
-initialized links must be thread safe. This is the responsibility of the
-implementer of these links.
+**Link** - Links are immutable and safe to be used concurrently.
 
 ## Included Propagators
 
 The API layer MAY include the following `Propagator`s:
 
-* A `HTTPTextPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
+* A `TextMapPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
+
+## Behavior of the API in the absence of an installed SDK
+
+In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
+This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
+is one important exception to this general rule, and that is related to propagation of a SpanContext.
+
+The following cases must be considered when a new Span is requested to be created, especially in relation to the
+requested parent SpanContext:
+
+* A valid `SpanContext` is specified as the parent of the new `Span`: The API MUST treat this parent context as the
+context for the newly created `Span`. This means that a `SpanContext` that has been provided by a configured `Propagator`
+will be propagated through to any child span, but that no new `SpanContext`s will be created.
+* No valid `SpanContext` is specified as the parent of the new `Span`: The API MUST create an non-valid
+(both SpanID and TradeID are equivalent to being all zeros) `Span` for use
+by the API caller. This means that both the `TraceID` and the `SpanID` should be invalid.

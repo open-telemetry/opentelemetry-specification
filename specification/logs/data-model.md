@@ -426,7 +426,7 @@ Example 1
   },
   "Resource": {
     "service.name": "donut_shop",
-    "service.version": "semver:2.0.0",
+    "service.version": "2.0.0",
     "k8s.pod.uid": "1138528c-c36e-11e9-a1a7-42010a800198",
   },
   "TraceId": "f4dbb3edd765f620", // this is a byte sequence
