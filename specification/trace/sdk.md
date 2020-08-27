@@ -312,10 +312,10 @@ failed or timed out.
 
 `Shutdown` MUST include the effects of `ForceFlush`.
 
-`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be implemented as
-a blocking API or an asynchronous API which notifies the caller via a callback
-or an event. Language library authors can decide if they want to make the
-shutdown timeout configurable.
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the shutdown timeout configurable.
 
 #### ForceFlush()
 
