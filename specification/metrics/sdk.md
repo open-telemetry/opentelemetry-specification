@@ -1,20 +1,28 @@
 # Metrics SDK
 
-Note: This document assumes you are familiar with the [Metrics
-API](api.md) specification.  Note that the examples below are copied
-from the current OpenTelemetry-Go SDK:
-
 TODO: TOC
+
 TODO: Write a list/description of the functional requirements of the SDK and put it above the model implementation description.
 
 ## Purpose
 
-This document describes a model implementation of the OpenTelemetry
-Metrics SDK.  The architectural details of the model SDK described
-here are meant to offer guidance to implementors, not to mandate an
-exact reproduction of the model architecture across languages.
+This document has two parts.  In the first part, the requirements of
+the default OpenTelemetry Metric SDK are listed.  These are rules for
+language implementors to follow in any approach to implementing the
+OpenTelemetry API.
+
+In the second part, the architectural details of a model SDK
+implementation are described, using the OpenTelemetry-Go Metric SDK as
+an eample.  This is meant to show how the requirements can be
+implemented, as guidance to implementors, not to mandate an exact
+reproduction of the model architecture across languages.
+OpenTelemetry SDKs are of course free to equivalent but syntactically
+different APIs that are idiomatic.
 
 ## Expectations
+
+This document assumes you are familiar with the OpenTelemetry [Metrics
+API specification](api.md).
 
 The SDK implementors are expected to follow the best practices for the
 language and runtime environment when implementing the OpenTelemetry
@@ -59,29 +67,88 @@ These are the significant data types used in the model architecture:
 - **ExportKind**: one of Delta, Cumulative, or Pass-Through
 - **ExportKindSelector**: chooses which ExportKind to use for a metric instrument.
 - **ExportRecord**: consists of Instrument, Label Set, Resource, Timestamp(s), and Aggregation
-- **ExportRecordSet**: a set of export records
+- **ExportRecordSet**: a set of export records.
+
+The term **SDK instrument** refers to the underlying implementation of
+an instrument.
 
 ## Dataflow Diagram
 
 ![Metrics SDK Design Diagram](img/metrics-sdk.png)
 
-## Accumulator: Meter Implementation
+## Requirements
+
+Requirements are listed below for the major components of the
+OpenTelemetry using the terminology outlined above.
+
+### Instrument Registration
+
+The OpenTelemetry SDK MUST ensure that an individual Meter
+implementation cannot report instruments with the same name and
+different instrument kind.
+
+For synchronous instruments, duplicate registration is permitted.  The
+SDK SHOULD return the same SDK instrument when correctly registered
+multiple times.
+
+For asynchronous instruments, duplicate registration is not permitted.
+The SDK MUST not permit registration of multiple callbacks with the same
+instrument name.
+
+### Accumulator
 
 The Accumulator is the first component an OpenTelemetry Metric export
 pipeline, implementing the front-line [`Meter`
-interface](api.md#meter-interface).
-
-```go
-// NewAccumulator constructs a new Accumulator for the given
-// Processor and options.
-func NewAccumulator(processor export.Processor, opts ...Option) *Accumulator
-```
+interface](api.md#meter-interface) and providing the SDK instrument.
+An SDK is assembled with an Accumulator and other parts, detailed
+below.
 
 The Accumulator MUST provide the option to associate a
 [`Resource`](../resource/sdk.md) with the Accumulations that it
 produces.
 
+Synchronous metric instruments are expected to be used concurrently.
+Unless concurrency is not a feature of the source language, the SDK
+Accumulator component SHOULD be designed with concurrent performance
+in mind.
+
+The Accumulator MAY use exclusive locking to maintain a map of
+synchronous instrument updates.  The Accumulator SHOULD NOT hold an
+exclusive lock while calling an Aggregator (see below), since some
+Aggregators may have higher concurrency expectations.
+
+### Processor
+
+TODO Processor requirements
+
+### Controller
+
+TODO Controller requirements
+
+### Aggregator
+
+TODO Aggregator requirements
+
+The Sum Aggregator SHOULD use atomic operations, if possible and where
+there is concurrency.
+
+## Model Implementation
+
+The model implementation is based on the [OpenTelemetry-Go
+SDK](https://github.com/open-telemetry/opentelemetry-go).  This
+section is meant as guidance for implementors, SDK implementors are of
+course recommended to use an idiomatic approach in their source
+language.
+
+### Accumulator: Meter Implementation
+
+To construct a new Accumulator, provide the Processor and options.
+
 ```go
+// NewAccumulator constructs a new Accumulator for the given
+// Processor and options.
+func NewAccumulator(processor export.Processor, opts ...Option) *Accumulator
+
 // WithResource sets the Resource configuration option of a Config.
 func WithResource(res *resource.Resource) Option
 ```
@@ -100,14 +167,7 @@ collection using a `Collect()` method.
 func (m *Accumulator) Collect(ctx context.Context) int
 ```
 
-### Implement the SDK-level API matching the user-level Metric API
-
-The OpenTelemetry Metric API specifies a number of instruments and
-supports several calling conventions, giving it a relatively large
-number of types and methods ("surface area").  The OpenTelemetry API
-SHOULD be designed and implemented following the style idioms of the
-source language, in such a way that the SDK must implement a
-significantly narrower interface.
+#### Implement the SDK-level API matching the user-level Metric API
 
 This interface sits at the boundary of the SDK and the API, with three
 core methods:
@@ -138,7 +198,7 @@ These methods cover all the necessary entry points for implementing
 the OpenTelemetry Metric API.
 
 [`RecordBatch`](api.md#recordbatch-calling-convention) is a user-level API
-implemented directly by the SDK.
+implemented directly by the Accumulator.
 
 The two instrument constructors build [_synchronous_
 and _asynchronous_](api.md#synchronous-and-asynchronous-instruments-compared)
@@ -150,20 +210,30 @@ interface](api.md#meter-interface), obtained through a [Metric API
 constructed by wrapping the SDK `Meter` implementation:
 
 ```go
-// WrapMeterImpl constructs a `Meter` implementation from a
-// `MeterImpl` implementation.
+// WrapMeterImpl constructs a named `Meter` implementation from a
+// `MeterImpl` implementation.  The `instrumentationName` is the
+// name of the instrumentation library.
 func WrapMeterImpl(impl MeterImpl, instrumentationName string, opts ...MeterOption) Meter
 ```
 
 Optional to this method:
 
-- setting the version of the OpenTelemetry API in use.
+- the instrumentation library version of the named Meter in use.
 
-### Provide access to the instrument descriptor
+To help with instrumentat registration:
 
-The SDK instruments are the underlying implementation for
-[OpenTelemetry Metric instruments](api.md#metric-instruments).  This
-interface links API and the SDK:
+```go
+// NewUniqueInstrumentMeterImpl returns a wrapped metric.MeterImpl with
+// the addition of uniqueness checking.
+func NewUniqueInstrumentMeterImpl(impl metric.MeterImpl) metric.MeterImpl {
+```
+
+#### Provide access to the instrument descriptor
+
+The API `Descriptor` method defines the instrument in terms of
+API-level constructs including name, instrument kind, description, and
+units of measure.  The SDK instrument MUST provide access to the
+`Descriptor` that was passed to its constructor.
 
 ```go
 // InstrumentImpl is a common interface for synchronous and
@@ -174,12 +244,7 @@ type InstrumentImpl interface {
 }
 ```
 
-The API `Descriptor` method defines the instrument in terms of
-API-level constructs including name, instrument kind, description, and
-units of measure.  The SDK instrument MUST provide access to the
-`Descriptor` that was passed to its constructor.
-
-#### Synchronous SDK instrument
+##### Synchronous SDK instrument
 
 The [synchronous SDK instrument](api.md#synchronous-instrument-details)
 supports both direct and bound calling conventions.
@@ -188,7 +253,7 @@ supports both direct and bound calling conventions.
 // SyncImpl is the implementation-level interface to a generic
 // synchronous instrument (e.g., ValueRecorder and Counter instruments).
 type SyncImpl interface {
-        // InstrumentImpl provides Descriptor() and Implementation()
+        // InstrumentImpl provides Descriptor().
 	InstrumentImpl
 
 	// Bind creates an implementation-level bound instrument,
@@ -211,7 +276,7 @@ type BoundSyncImpl interface {
 }
 ```
 
-#### Asynchronous SDK instrument
+##### Asynchronous SDK instrument
 
 The [asynchronous SDK instrument](api.md#asynchronous-instrument-details)
 supports both single-observer and batch-observer calling conventions.
@@ -234,64 +299,37 @@ asynchronous SDK instrument constructor supports both
 [batch](api.md#batch-observer) calling conventions.  These are
 considered language-specific details.
 
-### Instrument registration
-
-The OpenTelemetry API SHOULD provide a wrapper for the Meter
-implementation (`MeterImpl`) that stores unique instruments for retrieval by their descriptor:
-
-- Create a new instrument when none with the same name exists
-- Provided the instrument name exists and the descriptors match, returns the unique SDK instrument
-- When the instrument descriptors do not match, returns an error and a no-op instrument.
-
-```go
-// NewUniqueInstrumentMeterImpl returns a wrapped metric.MeterImpl with
-// the addition of uniqueness checking.
-func NewUniqueInstrumentMeterImpl(impl metric.MeterImpl) metric.MeterImpl {
-```
-
-### Concurrency expectations
-
-Synchronous metric instruments are expected to be used concurrently.
-Unless concurrency is not a feature of the source language, the SDK
-Accumulator component SHOULD be designed with concurrent performance
-in mind.
-
-SDK implementations SHOULD use the best concurrency primitives
-available in the source language.  Accumulators MAY use exclusive
-locking to maintain a map of synchronous instrument updates, but MUST
-not hold any exclusive lock while calling an Aggregator (see below).
-
-## Export pipeline detail
+### Export pipeline detail
 
 TODO: define AggregatorSelector, Aggregator, Accumulation, ExportKind,
 ExportKindSelector, Aggregation, AggregationKind ExportRecord,
 ExportRecordSet
 
-## Processor Detail
+### Processor Detail
 
 TODO: define the Processor interface
 
-### Basic Processor
+#### Basic Processor
 
 TODO: define how ExportKind conversion works (delta->cumulative
 required, cumulative->delta optional), Memory option (to not forget
 prior collection state).
 
-### Reducing Processor
+#### Reducing Processor
 
 TODO: Label filter, LabelFilterSelector
       
-## Controller Detail
+### Controller Detail
 
 TODO: Push, Pull
 
-## Aggregator Implementations
+### Aggregator Implementations
 
 TODO: Sum, LastValue, Histogram, MinMaxSumCount, Exact, and Sketch.
 
-## Pending issues
+### Pending issues
 
-### ValueRecorder instrument default aggregation
+#### ValueRecorder instrument default aggregation
 
 TODO: The default SDK behavior for `ValueRecorder` instruments is
 still in question.  Options are: LastValue, Histogram, MinMaxSumCount,
@@ -301,7 +339,7 @@ https://github.com/open-telemetry/opentelemetry-specification/issues/636
 https://github.com/open-telemetry/oteps/pull/117
 https://github.com/open-telemetry/oteps/pull/118
 
-### Standard sketch histogram aggregation
+#### Standard sketch histogram aggregation
 
 TODO: T.B.D.: DDSketch considered a good choice for ValueRecorder
 instrument default aggregation.
