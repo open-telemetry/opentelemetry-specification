@@ -59,7 +59,7 @@ If none of the listed values apply, a custom value best describing the runtime C
 | `iojs` | io.js |
 | `graalvm` | GraalVM |
 
-When value is `browser`, `process.runtime.version` SHOULD be set to the user agent string.
+When the value is `browser`, `process.runtime.version` SHOULD be set to the User-Agent header.
 
 ***.NET Runtimes:***
 
