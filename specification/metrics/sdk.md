@@ -2,8 +2,6 @@
 
 TODO: TOC
 
-TODO: Write a list/description of the functional requirements of the SDK and put it above the model implementation description.
-
 ## Purpose
 
 This document has two parts.  In the first part, the requirements of
@@ -36,7 +34,7 @@ guidelines](../library-guidelines.md).
 There are three major components of the Metrics SDK that data flows
 through, in order:
 
-1. **Accumulator**: Receives metric events from the API, computes one Accumulation per active Instrument and Label Set pair
+1. **Accumulator**: Receives metric events from the API through Instruments, computes one Accumulation per active Instrument and Label Set pair
 2. **Processor**: Receives Accumulations from the Accumulator, transforms into ExportRecordSet
 3. **Exporter**: Receives ExportRecordSet, transforms into some protocol and sends it somewhere.
 
@@ -117,17 +115,19 @@ synchronous instrument updates.  The Accumulator SHOULD NOT hold an
 exclusive lock while calling an Aggregator (see below), since some
 Aggregators may have higher concurrency expectations.
 
+TODO: _Are there more Accumulator functional requirements?_
+
 ### Processor
 
-TODO Processor requirements
+TODO _Processor functional requirements_
 
 ### Controller
 
-TODO Controller requirements
+TODO _Controller functional requirements_
 
 ### Aggregator
 
-TODO Aggregator requirements
+TODO _Aggregator functional requirements_
 
 The Sum Aggregator SHOULD use atomic operations, if possible and where
 there is concurrency.
@@ -288,7 +288,7 @@ asynchronous instruments.
 // AsyncImpl is an implementation-level interface to an
 // asynchronous instrument (e.g., Observer instruments).
 type AsyncImpl interface {
-        // InstrumentImpl provides Descriptor() and Implementation()
+        // InstrumentImpl provides Descriptor().
 	InstrumentImpl
 }
 ```
