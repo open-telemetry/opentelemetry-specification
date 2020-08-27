@@ -19,8 +19,7 @@ and Jaeger.
 ### Resource
 
 OpenTelemetry resources MUST be mapped to Jaeger process tags. Multiple resources can exist for a
-single process and exporters need to account for this by grouping spans by resource, and exporting
-them in batches.
+single process and exporters need to handle this case accordingly.
 
 ### InstrumentationLibrary
 
