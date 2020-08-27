@@ -1,0 +1,97 @@
+groups:
+  - id: network
+    prefix: net
+    brief: >
+        These attributes may be used for any network related operation.
+    attributes:
+      - id: transport
+        type:
+          allow_custom_values: false
+          members:
+            - id: IP.TCP
+              value: "IP.TCP"
+            - id: IP.UDP
+              value: "IP.UDP"
+            - id: IP
+              value: "IP"
+              brief: 'Another IP-based protocol'
+            - id: Unix
+              value: "Unix"
+              brief: 'Unix Domain socket. See below.'
+            - id: pipe
+              value: "pipe"
+              brief: 'Named or anonymous pipe. See note below.'
+            - id: inproc
+              value: "inproc"
+              brief: 'In-process communication.'
+              note: >
+                Signals that there is only in-process communication not using a "real" network protocol
+                in cases where network attributes would normally be expected. Usually all other network
+                attributes can be left out in that case.
+            - id: other
+              value: "other"
+              brief: 'Something else (non IP-based).'
+        brief: >
+          Transport protocol used. See note below.
+        examples: 'IP.TCP'
+      - id: peer.ip
+        type: string
+        brief: >
+          Remote address of the peer (dotted decimal for IPv4 or
+          [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6)
+        examples: '127.0.0.1'
+      - id: peer.port
+        type: number
+        brief: 'Remote port number.'
+        examples: [80, 8080, 443]
+      - id: peer.name
+        type: string
+        brief: 'Remote hostname or similar, see note below.'
+        examples: 'example.com'
+      - id: host.ip
+        type: string
+        brief: 'Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.'
+        examples: '192.168.0.1'
+      - id: host.port
+        type: number
+        brief: 'Like `net.peer.port` but for the host port.'
+        examples: 35555
+      - id: host.name
+        type: string
+        brief: 'Local hostname or similar, see note below.'
+        examples: 'localhost'
+  - id: peer
+    prefix: peer
+    brief: "Operations that access some remote service."
+    attributes:
+      - id: service
+        type: string
+        brief: >
+          The [`service.name`](../../resource/semantic_conventions/README.md#service)
+          of the remote service. SHOULD be equal to the actual `service.name`
+          resource attribute of the remote service if any.
+        examples: "AuthTokenCache"
+  - id: identity
+    prefix: enduser
+    brief: >
+        These attributes may be used for any operation with an authenticated and/or authorized enduser.
+    attributes:
+      - id: id
+        type: string
+        brief: >
+          Username or client_id extracted from the access token or
+          [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2)
+          header in the inbound request from outside the system.
+        examples: 'username'
+      - id: role
+        type: string
+        brief: 'Actual/assumed role the client is making the request under extracted from token or application security context.'
+        examples: 'admin'
+      - id: scope
+        type: string
+        brief: >
+          Scopes or granted authorities the client currently possesses extracted from token
+          or application security context. The value would come from the scope associated
+          with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3)
+          or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html).
+        examples: 'read:message, write:files'
