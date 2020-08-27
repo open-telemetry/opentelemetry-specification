@@ -299,6 +299,9 @@ for processor to do any cleanup required.
 the call to `Shutdown` subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
 are not allowed, and should be no-op if possible.
 
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
 `Shutdown` MUST include the effects of `ForceFlush`.
 
 `Shutdown` SHOULD complete within some timeout. `Shutdown` can be implemented as
