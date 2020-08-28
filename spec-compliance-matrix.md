@@ -104,19 +104,19 @@ status of the feature is not known.
 |OTLP/HTTP binary Protobuf Exporter            |  | -  | +     |      |    | +    |   |    |   |    |
 |OTLP/HTTP JSON Protobuf Exporter              |  | -  | +     |      |    | -    |   |    |   |    |
 |OTLP/HTTP gzip Content-Encoding support       |  | -  | +     |      |    | -    |   |    |   |    |
-|Concurrent sending                            |  |    |       |      |    | -    |   | +  |   |    |
-|Honors retryable responses with backoff       |  |    |       |      |    | -    |   |    |   |    |
-|Honors non-retryable responses                |  |    |       |      |    | -    |   |    |   |    |
-|Honors throttling response                    |  |    |       |      |    | -    |   |    |   |    |
+|Concurrent sending                            |  |    | +     |      |    | -    |   | +  |   |    |
+|Honors retryable responses with backoff       |  |    | +     |      |    | -    |   |    |   |    |
+|Honors non-retryable responses                |  |    | -     |      |    | -    |   |    |   |    |
+|Honors throttling response                    |  |    | -     |      |    | -    |   |    |   |    |
 |Multi-destination spec compliance             |  |    |       |      |    | -    |   |    |   |    |
 |[Zipkin](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk_exporters/zipkin.md)|
 |Zipkin V1 JSON                                |  |    |       |      |    | -    | - | -  |   |    |
 |Zipkin V1 Thrift                              |  |    |       |      |    | -    | - | -  |   |    |
 |Zipkin V2 JSON                                |  |    |       |      |    | -    | + | +  |   |    |
 |Zipkin V2 Protobuf                            |  |    |       |      |    | +    |   | -  |   |    |
-|Service name mapping                          |  | +  |       |      |    | +    | + | +  |   |    |
-|SpanKind mapping                              |  | +  |       |      |    | +    | + | +  |   |    |
-|InstrumentationLibrary mapping                |  | +  |       |      |    | -    | - | -  |   |    |
+|Service name mapping                          |  | +  | +     |      |    | +    | + | +  |   |    |
+|SpanKind mapping                              |  | +  | +     |      |    | +    | + | +  |   |    |
+|InstrumentationLibrary mapping                |  | +  | -     |      |    | -    | - | -  |   |    |
 |Boolean attributes                            |  | +  | +     |      |    | +    | + | +  |   |    |
 |Array attributes                              |  | +  | +     |      |    | +    | + | +  |   |    |
 |Status mapping                                |  | -  | +     |      |    | +    | + | +  |   |    |
