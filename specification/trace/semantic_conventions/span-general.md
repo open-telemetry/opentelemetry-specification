@@ -163,9 +163,9 @@ Examples of where `thread.id` and `thread.name` can be extracted from:
 A span or event can be annotated with an `error.hint` attribute to indicate that
 an error condition was observed.
 
-When recording an [exception event](exceptions.md) and the exception is
-considered to be an error, both the event and the span SHOULD have matching
-`error.hint` attributes set to `true`. It's possible for more than one exception
+If there are [exception events](exceptions.md) on a span, the span attribute `error.hint`
+SHOULD be set to `true`, if at least one of the event's `error.hint` attribute is `true`.
+It's possible for more than one exception
 event to have an `error.hint` attribute set. An `error.hint` represents an
 instrumentation author's best judgement as to whether or not an error condition
 was encountered, but the decision is not definitive. Tracing backends can use
@@ -174,4 +174,4 @@ choose to honor or ignore the hint.
 
 | Attribute name | Notes and examples                                                                                                       |
 | :------------- | :----------------------------------------------------------------------------------------------------------------------- |
-| error.hint     | A boolean value that represents an instrumentation author's best judgement as to whether an error condition was observed |
+| error.hint     | A boolean value that represents an instrumentation author's best judgement as to whether an error condition was observed. |

@@ -526,7 +526,7 @@ parameters:
   [`error.hint` semantic convention](semantic_conventions/exceptions.md#attributes).
   A matching `error.hint` attribute MUST be recorded on both the span and
   corresponding event. Once a span has `error.hint` set to true, subsequent
-  calls to `RecordException` MUST not change the value.
+  calls to `RecordException` MUST not change the value of the span attribute.
 
 Note: `RecordException` may be seen as a variant of `AddEvent` with
 additional exception-specific parameters and all other parameters being optional
