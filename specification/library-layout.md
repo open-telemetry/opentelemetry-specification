@@ -17,7 +17,7 @@ api
    ├── metrics
    ├── trace
    │   └── propagation
-   ├── correlationcontext
+   ├── baggage
    │   └── propagation
    ├── internal
    └── logs
@@ -33,9 +33,9 @@ This directory describes the API that provides in-process context propagation.
 
 This directory describes the Metrics API that can be used to record application metrics.
 
-### [/correlationcontext](correlationcontext/api.md)
+### [/baggage](baggage/api.md)
 
-This directory describes the CorrelationContext API that can be used to manage context propagation
+This directory describes the Baggage API that can be used to manage context propagation
 and metrics-related labeling.
 
 ### [/trace](trace/api.md)
@@ -66,7 +66,7 @@ sdk
    ├── metrics
    ├── resource
    ├── trace
-   ├── correlationcontext
+   ├── baggage
    ├── internal
    └── logs
 ```
@@ -88,7 +88,7 @@ information about the entity for which stats or traces are recorded. For example
 by a Kubernetes container can be linked to a resource that specifies the cluster, namespace, pod,
 and container name.
 
-### `/sdk/correlationcontext`
+### `/sdk/baggage`
 
 ### [/sdk/trace](trace/sdk.md)
 

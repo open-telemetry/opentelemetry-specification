@@ -21,13 +21,28 @@ This document defines how to describe an instance of a function that runs withou
 
 Span `name` should be set to the function name being executed. Depending on the value of the `faas.trigger` attribute, additional attributes MUST be set. For example, an `http` trigger SHOULD follow the [HTTP Server semantic conventions](http.md#http-server-semantic-conventions). For more information, refer to the [Function Trigger Type](#function-trigger-type) section.
 
-If Spans following this convention are produced, a Resource of type `faas` MUST exist following the [Resource semantic convention](../../resource/semantic_conventions/README.md#function-as-a-service).
+If Spans following this convention are produced, a Resource of type `faas` MUST exist following the [Resource semantic convention](../../resource/semantic_conventions/faas.md#function-as-a-service).
 
 | Attribute name  | Notes  and examples  | Required? |
 |---|---|--|
 | `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | Yes |
 | `faas.execution` | String containing the execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
 | `faas.coldstart` | A boolean indicating that the serverless function is executed for the first time (aka cold start). | No |
+
+### Function Name
+
+There are 2 locations where the function's name can be recorded: the span name and the
+[`faas.name` Resource attribute](../../resource/semantic_conventions/faas.md#function-as-a-service).
+
+It is guaranteed that if `faas.name` attribute is present it will contain the
+function name, since it is defined in the semantic convention strictly for that
+purpose. It is also highly likely that Span name will contain the function name
+(e.g. for Span displaying purposes), but it is not guaranteed (since it is a
+weaker "SHOULD" requirement). Consumers that needs such guarantee can use
+`faas.name` attribute as the source. If `faas.name` is not present but other
+`faas` attributes are present (indicating that the data is coming from a
+function) then consumers may use the span name as the fallback source for the
+function's name.
 
 ### Difference between execution and instance
 

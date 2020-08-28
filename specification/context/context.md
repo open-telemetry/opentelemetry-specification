@@ -9,7 +9,7 @@ Table of Contents
 - [Create a key](#create-a-key)
 - [Get value](#get-value)
 - [Set value](#set-value)
-- [Optional operations](#optional-operations)
+- [Optional global operations](#optional-global-operations)
   - [Get current Context](#get-current-context)
   - [Attach Context](#attach-context)
   - [Detach Context](#detach-context)
@@ -36,8 +36,8 @@ or implicit.
 Users writing instrumentation in languages that use `Context` implicitly are
 discouraged from using the `Context` API directly. In those cases, users will
 manipulate `Context` through cross-cutting concerns APIs instead, in order to
-perform operations such as setting trace or correlation context values for
-a specified `Context`.
+perform operations such as setting trace or baggage entries for a specified
+`Context`.
 
 A `Context` is expected to have the following operations, with their
 respective language differences:
