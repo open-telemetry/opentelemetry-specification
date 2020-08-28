@@ -6,26 +6,28 @@ operations. By adding HTTP labels to metric events it allows for finely tuned fi
 
 **Discaimer:** These are initial HTTP metric instruments and labels but more may be added in the future.
 
-### Metric Instruments
+## Metric Instruments
 
 The following metric instruments MUST be used to describe HTTP operations. They MUST be of the specified
 type and units.
 
-#### HTTP Server
+### HTTP Server
+
 Below is a table of HTTP server metric instruments.
 
 | Name                   | Instrument    | Units        | Description |
 |------------------------|---------------|--------------|-------------|
 | `http.server.duration` | ValueRecorder | milliseconds | measures the duration of the inbound HTTP request |
 
-#### HTTP Client
+### HTTP Client
+
 Below is a table of HTTP client metric instruments.
 
 | Name                   | Instrument    | Units        | Description |
 |------------------------|---------------|--------------|-------------|
 | `http.client.duration` | ValueRecorder | milliseconds | measure the duration of the outbound HTTP request |
 
-### Labels
+## Labels
 
 Below is a table of the labels that SHOULD be included on metric events
 and whether they should be on server, client, or both types of HTTP metric events:
@@ -49,7 +51,7 @@ and whether they should be on server, client, or both types of HTTP metric event
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
 [HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
 
-#### Parameterized labels
+### Parameterized labels
 
 To avoid high cardinality the following labels SHOULD substitute any parameters when added as labels to http metric events as described below:
 
@@ -72,7 +74,7 @@ cardinality names formed from the available parameters of an HTTP request,
 such as `"HTTP {METHOD_NAME}"`. These labels MUST NOT default to using URI
 path.
 
-#### Label alternatives
+### Label alternatives
 
 **[1]** For client metric labels, one of the following sets of labels is RECOMMENDED (in order of usual preference unless for a particular web client/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
 
