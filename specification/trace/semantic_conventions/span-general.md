@@ -168,9 +168,8 @@ SHOULD be set to `true`, if at least one of the event's `error.hint` attribute i
 It's possible for more than one exception
 event to have an `error.hint` attribute set. An `error.hint` represents an
 instrumentation author's best judgement as to whether or not an error condition
-was encountered, but the decision is not definitive. Tracing backends can use
-the `error.hint` attribute as a cue for further analysis and can ultimately
-choose to honor or ignore the hint.
+was encountered. Tracing backends can use the `error.hint` attribute as a cue
+for further analysis and can ultimately choose to honor or ignore the hint.
 
 | Attribute name | Notes and examples                                                                                                       |
 | :------------- | :----------------------------------------------------------------------------------------------------------------------- |
