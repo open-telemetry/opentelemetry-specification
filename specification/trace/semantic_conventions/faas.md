@@ -35,6 +35,21 @@ On FaaS instances, `faas.trigger` MUST be set on incoming invocations.
 Clients invoking FaaS instances MUST set `faas.trigger` on outgoing invocations, if it is known to the client.
 This is, for example, *not* the case, when the transport layer is abstracted in a FaaS client framework without access to its configuration.
 
+### Function Name
+
+There are 2 locations where the function's name can be recorded: the span name and the
+[`faas.name` Resource attribute](../../resource/semantic_conventions/faas.md#function-as-a-service).
+
+It is guaranteed that if `faas.name` attribute is present it will contain the
+function name, since it is defined in the semantic convention strictly for that
+purpose. It is also highly likely that Span name will contain the function name
+(e.g. for Span displaying purposes), but it is not guaranteed (since it is a
+weaker "SHOULD" requirement). Consumers that needs such guarantee can use
+`faas.name` attribute as the source. If `faas.name` is not present but other
+`faas` attributes are present (indicating that the data is coming from a
+function) then consumers may use the span name as the fallback source for the
+function's name.
+
 ### Difference between execution and instance
 
 For performance reasons (e.g. [AWS lambda], or [Azure functions]), FaaS providers allocate an execution environment for a single instance of a function that is used to serve multiple requests.
