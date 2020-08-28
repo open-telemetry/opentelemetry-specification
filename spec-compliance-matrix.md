@@ -67,7 +67,10 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
-|TBD|
+|Create from Attributes                        |  |    |       |      |    |      |   |    |   |    |
+|Create empty                                  |  |    |       |      |    |      |   |    |   |    |
+|Merge                                         |  |    |       |      |    |      |   |    |   |    |
+|Retrieve attributes                           |  |    |       |      |    |      |   |    |   |    |
 
 ## Context Propagation
 
