@@ -4,11 +4,11 @@ The goal of this specification is to unify the environment variable names betwee
 
 ## General SDK Configuration
 
-| Name                 | Description                                      | Default                           | Notes                                                                                       |
-| -------------------- | ------------------------------------------------ | --------------------------------- | ------------------------------------------------------------------------------------------- |
-| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes    |                                   | Spec details TBD. Proposal in [OTEP-111](https://github.com/open-telemetry/oteps/pull/111). |
-| OTEL_LOG_LEVEL       | Log level used by the SDK logger                 | "info"                            |                                                                                             |
-| OTEL_PROPAGATORS     | Propagators to be used as a comma separated list | "tracecontext,correlationcontext" |                                                                                             |
+| Name                     | Description                                       | Default                           | Notes                               |
+| ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
+| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
+| OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
+| OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage" |                                     |
 
 ## Batch Span Processor
 

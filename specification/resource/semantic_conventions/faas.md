@@ -8,7 +8,7 @@
 |---|---|---|--|
 | faas.name | The name of the function being executed. | `my-function` | Yes |
 | faas.id | The unique name of the function being executed. <br /> For example, in AWS Lambda this field corresponds to the [ARN] value, in GCP to the URI of the resource, and in Azure to the [FunctionDirectory] field. | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Yes |
-| faas.version | The version string of the function being executed as defined in [Version Attributes](./README.md#version-attributes) | `semver:2.0.0` | No |
+| faas.version | The version string of the function being executed. | `2.0.0` | No |
 | faas.instance | The execution environment ID as a string. | `my-function:instance-0001` | No |
 
 Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/faas.md#difference-between-execution-and-instance).

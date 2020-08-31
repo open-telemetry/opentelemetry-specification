@@ -65,7 +65,7 @@ Distributed tracing introduced the notion of request context propagation.
 
 Fundamentally, though, nothing prevents the logs to adopt the same context
 propagation concepts. If the recorded logs contained request context identifiers
-(such as trace and span ids or user-defined correlation context) it would result
+(such as trace and span ids or user-defined baggage) it would result
 in much richer correlation between logs and traces, as well as correlation
 between logs emitted by different components of a distributed system. This would
 make logs significantly more valuable in distributed systems.
@@ -411,7 +411,7 @@ standard output.
 ## Trace Context in Legacy Formats
 
 Earlier we briefly mentioned that it is possible to modify existing applications
-so that they include the Request Context information in the emitted logs. 
+so that they include the Request Context information in the emitted logs.
 
 [OTEP0114](https://github.com/open-telemetry/oteps/pull/114) defines how the
 trace context should be recorded in logs. To summarize, the following field
@@ -425,9 +425,7 @@ names should be used in legacy formats:
 All 3 fields are optional (see the [data model](data-model.md) for details of
 which combination of fields is considered valid).
 
-Here are examples for some legacy formats:
-
-**Syslog RFC5424**
+### Syslog RFC5424
 
 Trace id, span id and traceflags SHOULD be recorded via SD-ID "opentelemetry".
 
@@ -437,7 +435,7 @@ For example:
 [opentelemetry traceid="102981ABCD2901" spanid="abcdef1010" traceflags="01"]
 ```
 
-**Plain Text Formats**
+### Plain Text Formats
 
 The fields should be recorded according to the customary approach used for a
 particular format (e.g. field:value format for LTSV). For example:
@@ -446,7 +444,7 @@ particular format (e.g. field:value format for LTSV). For example:
 host:192.168.0.1<TAB>traceid:102981ABCD2901<TAB>spanid:abcdef1010<TAB>time:[01/Jan/2010:10:11:23 -0400]<TAB>req:GET /health HTTP/1.0<TAB>status:200
 ```
 
-**JSON Formats**
+### JSON Formats
 
 The fields should be recorded as top-level fields in the JSON structure. For example:
 
@@ -459,7 +457,7 @@ The fields should be recorded as top-level fields in the JSON structure. For exa
 }
 ```
 
-***Other Structured Formats***
+### Other Structured Formats
 
 The fields should be recorded as top-level structured attributes of the log
 record as it is customary for the particular format.
