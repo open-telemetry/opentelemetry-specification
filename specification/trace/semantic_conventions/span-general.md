@@ -158,7 +158,7 @@ Examples of where `thread.id` and `thread.name` can be extracted from:
 | C++                   | `std::this_thread::get_id()`             |                                    |
 | Erlang               | `erlang:system_info(scheduler_id)` |                                  |
 
-### Source Code Attributes
+## Source Code Attributes
 
 Often a span is closely tied to a certain unit of code that is logically responsible for handling
 the operation that the span describes (usually the method that starts the span).
