@@ -29,6 +29,21 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 | `faas.execution` | String containing the execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
 | `faas.coldstart` | A boolean indicating that the serverless function is executed for the first time (aka cold start). | No |
 
+### Function Name
+
+There are 2 locations where the function's name can be recorded: the span name and the
+[`faas.name` Resource attribute](../../resource/semantic_conventions/faas.md#function-as-a-service).
+
+It is guaranteed that if `faas.name` attribute is present it will contain the
+function name, since it is defined in the semantic convention strictly for that
+purpose. It is also highly likely that Span name will contain the function name
+(e.g. for Span displaying purposes), but it is not guaranteed (since it is a
+weaker "SHOULD" requirement). Consumers that needs such guarantee can use
+`faas.name` attribute as the source. If `faas.name` is not present but other
+`faas` attributes are present (indicating that the data is coming from a
+function) then consumers may use the span name as the fallback source for the
+function's name.
+
 ### Difference between execution and instance
 
 For performance reasons (e.g. [AWS lambda], or [Azure functions]), FaaS providers allocate an execution environment for a single instance of a function that is used to serve multiple requests.
