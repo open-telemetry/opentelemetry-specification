@@ -16,6 +16,11 @@ TBD
 This section discusses the details of the transformations between OpenTelemetry
 and Jaeger.
 
+### Resource
+
+OpenTelemetry resources MUST be mapped to Jaeger process tags. Multiple resources can exist for a
+single process and exporters need to handle this case accordingly.
+
 ### InstrumentationLibrary
 
 OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as span `tags` to Jaeger using the following mapping.
