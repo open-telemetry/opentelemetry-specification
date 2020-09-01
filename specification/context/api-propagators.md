@@ -250,9 +250,8 @@ Implementations MAY provide global `Propagator`s for
 each supported `Propagator` type.
 
 If offered, the global `Propagator`s MUST default to a no-op instance.
-In order to override the default value, an call to
-[Set Global Propagator](#set-global-propagator) MUST be done
-by either SDK implementations, OpenTelemetry extensions or final application code.
+Another propagator can be set up by installing an SDK or by directly calling
+[Set Global Propagator](#set-global-propagator) from application code.
 
 Note: OpenTelemetry .NET is an exception to this rule as his global
 `Propagator`s default to a set of specific `Propagator`s, including `TraceContext`.
