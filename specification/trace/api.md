@@ -14,6 +14,7 @@ Table of Contents
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
+  * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [IsValid](#isvalid)
   * [IsRemote](#isremote)
 * [Span](#span)
@@ -110,8 +111,7 @@ That API MUST accept the following parameters:
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the [version](../resource/semantic_conventions/README.md#version-attributes) of the instrumentation library
-  (e.g. `semver:1.0.0`).
+- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
@@ -180,6 +180,18 @@ of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. Please review the [W3C
 specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
 details on this field.
+
+### Retrieving the TraceId and SpanId
+
+The API must allow retrieving the `TraceId` and `SpanId` in the following forms:
+
+* Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
+`TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
+(result MUST be a 16-hex-character lowercase string).
+* Binary - returns the binary representation of the `TraceId` (result MUST be a
+16-byte array) `SpanId` (result MUST be a 8-byte array).
+
+The API should not expose details about how they are internally stored.
 
 ### IsValid
 
@@ -337,9 +349,11 @@ The parent should be selected in the following order of precedence:
 
 #### Add Links
 
-During the `Span` creation user MUST have the ability to record links to other `Span`s. Linked
-`Span`s can be from the same or a different trace. See [Links
+During the `Span` creation user MUST have the ability to record links to other `Span`s.
+Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
+
+`Link`s cannot be added after Span creation.
 
 A `Link` is defined by the following properties:
 
@@ -348,17 +362,10 @@ A `Link` is defined by the following properties:
 
 The `Link` SHOULD be an immutable type.
 
-The Span creation API should provide:
+The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`.
-- An API to record a single `Link` whose attributes or attribute values are
-  lazily constructed, with the intention of avoiding unnecessary work if a link
-  is unused. If the language supports overloads then this SHOULD be called
-  `AddLink` otherwise `AddLazyLink` MAY be considered. In some languages, it might
-  be easier to defer `Link` or attribute creation entirely by providing a wrapping
-  class or function that returns a `Link` or formatted attributes. When providing
-  a wrapping class or function it SHOULD be named `LinkFormatter`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -437,19 +444,15 @@ The Span interface MUST provide:
 
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
-- An API to record a single `Event` whose attributes or attribute values are
-  lazily constructed, with the intention of avoiding unnecessary work if an event
-  is unused. If the language supports overloads then this SHOULD be called
-  `AddEvent` otherwise `AddLazyEvent` MAY be considered. In some languages, it
-  might be easier to defer `Event` or attribute creation entirely by providing a
-  wrapping class or function that returns an `Event` or formatted attributes. When
-  providing a wrapping class or function it SHOULD be named `EventFormatter`.
 
 Events SHOULD preserve the order in which they're set. This will typically match
 the ordering of the events' timestamps.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
+
+Note that [`RecordException`](#record-exception) is a specialized variant of
+`AddEvent` for recording exception events.
 
 #### Set Status
 
@@ -502,15 +505,25 @@ This API MUST be non-blocking.
 #### Record Exception
 
 To facilitate recording an exception languages SHOULD provide a
-`RecordException` convenience method. The signature of the method is to be
-determined by each language and can be overloaded as appropriate. The method
-MUST record an exception as an `Event` with the conventions outlined in the
-[exception semantic conventions](semantic_conventions/exceptions.md) document.
+`RecordException` method if the language uses exceptions.
+This is a specialized variant of [`AddEvent`](#add-events),
+so for anything not specified here, the same requirements as for `AddEvent` apply.
 
-Examples:
+The signature of the method is to be determined by each language
+and can be overloaded as appropriate.
+The method MUST record an exception as an `Event` with the conventions outlined in
+the [exception semantic conventions](semantic_conventions/exceptions.md) document.
+The minimum required argument SHOULD be no more than only an exception object.
 
-- `RecordException(exception: Exception)`
-- `RecordException(type: String, message: String, stacktrace: String)`
+If `RecordException` is provided, the method MUST accept an optional parameter
+to provide any additional event attributes
+(this SHOULD be done in the same way as for the `AddEvent` method).
+If attributes with the same name would be generated by the method already,
+the additional attributes take precedence.
+
+Note: `RecordException` may be seen as a variant of `AddEvent` with
+additional exception-specific parameters and all other parameters being optional
+(because they have defaults from the exception semantic convention).
 
 ### Span lifetime
 
@@ -673,20 +686,11 @@ be called concurrently.
 
 **Tracer** - all methods are safe to be called concurrently.
 
-**SpanBuilder** - It is not safe to concurrently call any methods of the
-same SpanBuilder instance. Different instances of SpanBuilder can be safely
-used concurrently by different threads/coroutines, provided that no single
-SpanBuilder is used by more than one thread/coroutine.
-
 **Span** - All methods of Span are safe to be called concurrently.
 
-**Event** - Events are immutable and safe to be used concurrently. Lazy
-initialized events must be thread safe. This is the responsibility of the
-implementer of these events.
+**Event** - Events are immutable and safe to be used concurrently.
 
-**Link** - Links are immutable and is safe to be used concurrently. Lazy
-initialized links must be thread safe. This is the responsibility of the
-implementer of these links.
+**Link** - Links are immutable and safe to be used concurrently.
 
 ## Included Propagators
 

@@ -91,6 +91,15 @@ Names SHOULD follow these rules:
 - When a new namespace is necessary consider whether it should be a top-level
   namespace (e.g. `service`) or a nested namespace (e.g. `service.instance`).
 
+- Semantic conventions exist for four areas: for Resource, Span and Log
+  attribute names as well as Metric label keys. In addition, for spans we have
+  two more areas: Event and Link attribute names. Identical namespaces or names
+  in all these areas MUST have identical meanings. For example the `http.method`
+  span attribute name denotes exactly the same concept as the `http.method`
+  metric label, has the same data type and the same set of possible values (in
+  both cases it records the value of the HTTP protocol's request method as a
+  string).
+
 - Semantic conventions MUST limit names to printable Basic Latin characters
   (more precisely to
   [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)

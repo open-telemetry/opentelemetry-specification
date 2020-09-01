@@ -65,7 +65,7 @@ Distributed tracing introduced the notion of request context propagation.
 
 Fundamentally, though, nothing prevents the logs to adopt the same context
 propagation concepts. If the recorded logs contained request context identifiers
-(such as trace and span ids or user-defined correlation context) it would result
+(such as trace and span ids or user-defined baggage) it would result
 in much richer correlation between logs and traces, as well as correlation
 between logs emitted by different components of a distributed system. This would
 make logs significantly more valuable in distributed systems.
