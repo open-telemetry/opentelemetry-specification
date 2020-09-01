@@ -14,6 +14,7 @@ Particular operations may refer to or require some of these attributes.
 - [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
 - [General thread attributes](#general-thread-attributes)
+- [Source Code Attributes](#source-code-attributes)
 
 <!-- tocstop -->
 
