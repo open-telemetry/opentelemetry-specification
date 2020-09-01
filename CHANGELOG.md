@@ -47,6 +47,8 @@ Updates:
   ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
+- Use hex encoding for trace id and span id fields in OTLP JSON encoding:
+  ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 
 ## v0.6.0 (07-01-2020)
 
