@@ -38,6 +38,7 @@ Table of Contents
   * [GetDescription](#getdescription)
   * [GetIsOk](#getisok)
 * [SpanKind](#spankind)
+* [ParentReferenceKind](#parentreferencekind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
 
@@ -303,6 +304,8 @@ The API MUST accept the following parameters:
   option for implicit parenting from the current context as a default behavior.
   See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
   for guidance on `Span` parenting from explicit and implicit `Context`s.
+- [`ParentReferenceKind`](#parentreferencekind), default to
+  `ParentReferenceKind.CHILD_OF` if not specified.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
@@ -358,6 +361,8 @@ description](../overview.md#links-between-spans).
 A `Link` is defined by the following properties:
 
 - (Required) `SpanContext` of the `Span` to link to.
+- (Optional) `ParentReferenceKind`, default to `ParentReferenceKind.CHILD_OF`
+  if not specified.
 - (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
@@ -675,6 +680,28 @@ To summarize the interpretation of these kinds:
 | `PRODUCER` | | yes | | maybe |
 | `CONSUMER` | | yes | maybe | |
 | `INTERNAL` | | | | |
+
+## ParentReferenceKind
+
+`ParentReferenceKind` describes an additional property of the causal relationship
+between the `Span` and its parent. Similarly to `SpanKind`, it describes a property
+that benefit tracing systems during analysis.
+
+The property described by `ParentReferenceKind` reflects whether the parent `Span`
+depends on the child `Span` or not, and can be used to calculate the critical
+path.
+
+These are the possible `ParentReferenceKind`s:
+
+* `CHILD_OF` Indicates the parent `Span` depends on the outcome of the child
+  `Span` in some capacity. Observe the child `Span` may run synchronously or
+  asynchronously, but ultimately the parent depends on its outcome. Although
+  it is expected the child `Span` completes before the parent, this is not
+  always the case. For example, the parent may timeout before the child
+  completes, thus ignoring the child's pending outcome.
+* `FOLLOWS_FROM` Indicates the parent `Span` does not depend in any way in the
+  result of the child `Span`. The child `Span` may or may not complete
+  before the parent is done.
 
 ## Concurrency
 
