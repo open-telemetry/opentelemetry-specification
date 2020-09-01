@@ -76,7 +76,19 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
-|TBD|
+|Create Context Key                            |  |    |       |      |    |      |   |    |   |    |
+|Get value from Context                        |  |    |       |      |    |      |   |    |   |    |
+|Set value for Context                         |  |    |       |      |    |      |   |    |   |    |
+|Attach Context                                |  |    |       |      |    |      |   |    |   |    |
+|Detach Context                                |  |    |       |      |    |      |   |    |   |    |
+|Get current Context                           |  |    |       |      |    |      |   |    |   |    |
+|Composite Propagator support                  |  |    |       |      |    |      |   |    |   |    |
+|Global Propagator support                     |  |    |       |      |    |      |   |    |   |    |
+|[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
+|Fields                                        |  |    |       |      |    |      |   |    |   |    |
+|Setter argument                               |  |    |       |      |    |      |   |    |   |    |
+|Getter argument                               |  |    |       |      |    |      |   |    |   |    |
+|Getter argument returning Keys                |  |    |       |      |    |      |   |    |   |    |
 
 ## Error Handling
 
