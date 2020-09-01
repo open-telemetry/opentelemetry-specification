@@ -175,11 +175,10 @@ byte.
 TraceFlags are present in all traces. The current version of the specification
 only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
 
-`TraceState` carries system-specific configuration data, represented as a list
+`TraceState` carries vendor-specific trace identification data, represented as a list
 of key-value pairs. TraceState allows multiple tracing
-systems to participate in the same trace. Please review the [W3C
-specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
-details on this field.
+systems to participate in the same trace. It is fully described in [W3C
+specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 
 ### Retrieving the TraceId and SpanId
 

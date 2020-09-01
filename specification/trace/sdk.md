@@ -229,6 +229,24 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
   
+## TraceState manipulation
+
+`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by a list of key-values pairs and
+ formally defined by [W3C specification](https://www.w3.org/TR/trace-context/#tracestate-header).
+Tracing SDK MUST provide at least the following mutation operations on `TraceState`:
+
+* Update key value
+* Add a new key/value pair
+* Delete a key/value pair
+
+These operations MUST follow rules described in [W3C specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
+
+Please note, that as `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
+Such changes then make sense only right before 
+[`SpanContext` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md) 
+or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
+In both cases `Propagators` and `SpanExporters` may modify `TraceState` before serializing it to the wire.
+ 
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
