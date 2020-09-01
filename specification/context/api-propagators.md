@@ -254,7 +254,7 @@ In order to override the default value, an call to
 [Set Global Propagator](#set-global-propagator) MUST be done
 by either SDK implementations, OpenTelemetry extensions or final application code.
 
-Note: OpenTelemetry .Net is an exception to this rule as his global
+Note: OpenTelemetry .NET is an exception to this rule as his global
 `Propagator`s default to a set of specific `Propagator`s, including `TraceContext`.
 
 ### Get Global Propagator
