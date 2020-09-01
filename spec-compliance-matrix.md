@@ -54,8 +54,8 @@ status of the feature is not known.
 |Add order preserved                           |  | +  | +     | +    | +  | +    | + | +  |   | +  |
 |Safe for concurrent calls                     |  | +  | +     | +    | +  | +    | + | +  |   | +  |
 |[Span exceptions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#record-exception)|
-|RecordException                               |  | +  | +     | +    | +  | -    |   | +  |   | -  |
-|RecordException with extra parameters         |  | -  | +     | -    | -  | -    |   | +  |   | -  |
+|RecordException                               |  | +  | +     | +    | +  | -    |   | +  |   | +  |
+|RecordException with extra parameters         |  | -  | +     | -    | -  | -    |   | +  |   | +  |
 
 ## Metrics
 
