@@ -21,7 +21,7 @@ status of the feature is not known.
 |Mark Span active                              | + | +  | +     | +    | +  | +    | + | +  |   | -  |
 |Safe for concurrent calls                     | + | +  | +     |      | +  | +    | + | +  |   | +  |
 |[SpanContext](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#spancontext)|
-|IsValid                                       | + | +  | -     | +    | +  | +    | + | +  |   | +  |
+|IsValid                                       | + | +  | +     | +    | +  | +    | + | +  |   | +  |
 |IsRemote                                      | - | +  | +     | +    | +  | +    | + | +  |   | +  |
 |Conforms to the W3C TraceContext spec         | + | +  | +     | +    | +  | +    |   | -  |   | +  |
 |[Span](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#span)|
@@ -67,30 +67,30 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|-------|------|----|------|---|----|---|----|
-|Create from Attributes                        | + |    |       |      |    |      |   |    |   |    |
-|Create empty                                  | + |    |       |      |    |      |   |    |   |    |
-|Merge                                         | + |    |       |      |    |      |   |    |   |    |
-|Retrieve attributes                           | + |    |       |      |    |      |   |    |   |    |
+|Create from Attributes                        | + |    | +     |      |    |      |   |    |   |    |
+|Create empty                                  | + |    | +     |      |    |      |   |    |   |    |
+|Merge                                         | + |    | +     |      |    |      |   |    |   |    |
+|Retrieve attributes                           | + |    | +     |      |    |      |   |    |   |    |
 
 ## Context Propagation
 
 |Feature                                       |Go|Java|Node.js|Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|-------|------|----|------|---|----|---|----|
-|Create Context Key                            |  |    |       |      |    |      |   |    |   |    |
-|Get value from Context                        |  |    |       |      |    |      |   |    |   |    |
-|Set value for Context                         |  |    |       |      |    |      |   |    |   |    |
-|Attach Context                                |  |    |       |      |    |      |   |    |   |    |
-|Detach Context                                |  |    |       |      |    |      |   |    |   |    |
-|Get current Context                           |  |    |       |      |    |      |   |    |   |    |
-|Composite Propagator                          |  |    |       |      |    |      |   |    |   |    |
-|Global Propagator                             |  |    |       |      |    |      |   |    |   |    |
-|TraceContext Propagator                       |  |    |       |      |    |      |   |    |   |    |
-|B3 Propagator                                 |  |    |       |      |    |      |   |    |   |    |
-|Jaeger Propagator                             |  |    |       |      |    |      |   |    |   |    |
+|Create Context Key                            |  |    | +     |      |    |      |   |    |   |    |
+|Get value from Context                        |  |    | +     |      |    |      |   |    |   |    |
+|Set value for Context                         |  |    | +     |      |    |      |   |    |   |    |
+|Attach Context                                |  |    | +     |      |    |      |   |    |   |    |
+|Detach Context                                |  |    | +     |      |    |      |   |    |   |    |
+|Get current Context                           |  |    | +     |      |    |      |   |    |   |    |
+|Composite Propagator                          |  |    | +     |      |    |      |   |    |   |    |
+|Global Propagator                             |  |    | +     |      |    |      |   |    |   |    |
+|TraceContext Propagator                       |  |    | +     |      |    |      |   |    |   |    |
+|B3 Propagator                                 |  |    | +     |      |    |      |   |    |   |    |
+|Jaeger Propagator                             |  |    | +     |      |    |      |   |    |   |    |
 |[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
 |Fields                                        |  |    |       |      |    |      |   |    |   |    |
-|Setter argument                               |  |    |       |      |    |      |   |    |   |    |
-|Getter argument                               |  |    |       |      |    |      |   |    |   |    |
+|Setter argument                               |  |    | +     |      |    |      |   |    |   |    |
+|Getter argument                               |  |    | +     |      |    |      |   |    |   |    |
 |Getter argument returning Keys                |  |    |       |      |    |      |   |    |   |    |
 
 ## Error Handling
