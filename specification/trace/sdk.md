@@ -229,17 +229,23 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
   
-## TraceState manipulation
+## TraceState
 
-`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by a list of string key-value pairs and
+`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key/value pairs and
 formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
-Tracing SDK MUST provide at least the following operations on `TraceState` which return a new `TraceState` with the modifications applied:
+Tracing SDK MUST provide at least the following operations on `TraceState`:
 
-* Update key value
+* Get value for a given key
 * Add a new key/value pair
+* Update an existing value for a given key
 * Delete a key/value pair
 
 These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
+All mutating operations MUST return a new `TraceState` with the modifications applied.
+`TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
+Every mutating operations MUST validate input parameters.
+If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
+and SHOULD signal an error situation in a language specific way (e.g. throw an exception in java, return error value in Go, etc).
 
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
