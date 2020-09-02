@@ -129,7 +129,7 @@ Baggage:
 Header:
 
 ```
-otbaggages: user=foo%40example.com,name=Example%20Name
+otcorrelations: user=foo%40example.com,name=Example%20Name
 ```
 
 ## Conflict Resolution
