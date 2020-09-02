@@ -183,7 +183,7 @@ details on this field.
 
 ### Retrieving the TraceId and SpanId
 
-The API must allow retrieving the `TraceId` and `SpanId` in the following forms:
+The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
 
 * Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
 `TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
@@ -195,16 +195,15 @@ The API should not expose details about how they are internally stored.
 
 ### IsValid
 
-An API that returns a boolean value, which is `true` if the SpanContext has a
-non-zero TraceID and a non-zero SpanID.
+An API called `IsValid`, that returns a boolean value, which is `true` if the SpanContext has a
+non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 ### IsRemote
 
-An API that returns a boolean value, which is `true` if the SpanContext was
-propagated from a remote parent. When extracting a `SpanContext` through the
-[Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
-flag MUST be set to true, whereas the SpanContext of any child spans MUST have
-it set to false.
+An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanContext was
+propagated from a remote parent, MUST be provided.
+When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md#propagators-api),
+`IsRemote` MUST return true, whereas for the SpanContext of any child spans it MUST return false.
 
 ## Span
 
