@@ -82,8 +82,11 @@ status of the feature is not known.
 |Attach Context                                |  |    |       |      |    |      |   |    |   |    |
 |Detach Context                                |  |    |       |      |    |      |   |    |   |    |
 |Get current Context                           |  |    |       |      |    |      |   |    |   |    |
-|Composite Propagator support                  |  |    |       |      |    |      |   |    |   |    |
-|Global Propagator support                     |  |    |       |      |    |      |   |    |   |    |
+|Composite Propagator                          |  |    |       |      |    |      |   |    |   |    |
+|Global Propagator                             |  |    |       |      |    |      |   |    |   |    |
+|TraceContext Propagator                       |  |    |       |      |    |      |   |    |   |    |
+|B3 Propagator                                 |  |    |       |      |    |      |   |    |   |    |
+|Jaeger Propagator                             |  |    |       |      |    |      |   |    |   |    |
 |[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
 |Fields                                        |  |    |       |      |    |      |   |    |   |    |
 |Setter argument                               |  |    |       |      |    |      |   |    |   |    |
