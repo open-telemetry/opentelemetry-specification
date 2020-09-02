@@ -182,7 +182,7 @@ specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 
 ### Retrieving the TraceId and SpanId
 
-The API must allow retrieving the `TraceId` and `SpanId` in the following forms:
+The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
 
 * Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
 `TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
