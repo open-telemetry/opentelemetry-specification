@@ -245,7 +245,7 @@ All mutating operations MUST return a new `TraceState` with the modifications ap
 `TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
 Every mutating operations MUST validate input parameters.
 If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
-and SHOULD signal an error situation in a language specific way (e.g. throw an exception in java, return error value in Go, etc).
+and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
 
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
