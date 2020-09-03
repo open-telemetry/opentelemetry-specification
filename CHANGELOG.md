@@ -50,6 +50,8 @@ Updates:
   ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
+- Explicitly specify the SpanContext APIs IsValid and IsRemote as required
+  ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
 
 ## v0.6.0 (07-01-2020)
 

@@ -195,16 +195,15 @@ The API should not expose details about how they are internally stored.
 
 ### IsValid
 
-An API that returns a boolean value, which is `true` if the SpanContext has a
-non-zero TraceID and a non-zero SpanID.
+An API called `IsValid`, that returns a boolean value, which is `true` if the SpanContext has a
+non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 ### IsRemote
 
-An API that returns a boolean value, which is `true` if the SpanContext was
-propagated from a remote parent. When extracting a `SpanContext` through the
-[Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
-flag MUST be set to true, whereas the SpanContext of any child spans MUST have
-it set to false.
+An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanContext was
+propagated from a remote parent, MUST be provided.
+When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md#propagators-api),
+`IsRemote` MUST return true, whereas for the SpanContext of any child spans it MUST return false.
 
 ## Span
 
