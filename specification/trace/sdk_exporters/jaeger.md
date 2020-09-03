@@ -34,10 +34,6 @@ OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as span `tags` to
 
 TBD
 
-### Status
-
-TBD
-
 ### Events
 
 TBD

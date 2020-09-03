@@ -26,17 +26,10 @@ Table of Contents
     * [IsRecording](#isrecording)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
-    * [Set Status](#set-status)
     * [UpdateName](#updatename)
     * [End](#end)
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
-* [Status](#status)
-  * [StatusCanonicalCode](#statuscanonicalcode)
-  * [Status creation](#status-creation)
-  * [GetCanonicalCode](#getcanonicalcode)
-  * [GetDescription](#getdescription)
-  * [GetIsOk](#getisok)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
@@ -226,7 +219,6 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - [`Attributes`](../common/common.md#attributes)
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
-- A [`Status`](#set-status).
 
 The _span name_ concisely identifies the work represented by the Span,
 for example, an RPC method name, a function name,
@@ -371,8 +363,8 @@ Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
-With the exception of the function to retrieve the `Span`'s `SpanContext` and
-recording status, none of the below may be called after the `Span` is finished.
+With the exception of the function to retrieve the `Span`'s `SpanContext`,
+none of the below may be called after the `Span` is finished.
 
 #### Get Context
 
@@ -385,8 +377,7 @@ The Span interface MUST provide:
 #### IsRecording
 
 Returns true if this `Span` is recording information like events with the
-`AddEvent` operation, attributes using `SetAttributes`, status with `SetStatus`,
-etc.
+`AddEvent` operation, attributes using `SetAttributes`, etc.
 
 There should be no parameter.
 
@@ -453,19 +444,6 @@ keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
 
 Note that [`RecordException`](#record-exception) is a specialized variant of
 `AddEvent` for recording exception events.
-
-#### Set Status
-
-Sets the [`Status`](#status) of the `Span`. If used, this will override the
-default `Span` status, which is `OK`.
-
-Only the value of the last call will be recorded, and implementations are free
-to ignore previous calls.
-
-The Span interface MUST provide:
-
-- An API to set the `Status` where the new status is the only argument. This
-  SHOULD be called `SetStatus`.
 
 #### UpdateName
 
@@ -535,90 +513,6 @@ timestamps to the Span object:
 
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API.
-
-## Status
-
-`Status` interface represents the status of a finished `Span`. It's composed of
-a canonical code in conjunction with an optional descriptive message.
-
-### StatusCanonicalCode
-
-`StatusCanonicalCode` represents the canonical set of status codes of a finished
-`Span`, following the [Standard GRPC
-codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
-
-- `Ok`
-  - The operation completed successfully.
-- `Cancelled`
-  - The operation was cancelled (typically by the caller).
-- `Unknown`
-  - An unknown error.
-- `InvalidArgument`
-  - Client specified an invalid argument. Note that this differs from
-    `FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
-    regardless of the state of the system.
-- `DeadlineExceeded`
-  - Deadline expired before operation could complete. For operations that change the
-    state of the system, this error may be returned even if the operation has
-    completed successfully.
-- `NotFound`
-  - Some requested entity (e.g., file or directory) was not found.
-- `AlreadyExists`
-  - Some entity that we attempted to create (e.g., file or directory) already exists.
-- `PermissionDenied`
-  - The caller does not have permission to execute the specified operation.
-    `PermissionDenied` must not be used if the caller cannot be identified (use
-    `Unauthenticated1` instead for those errors).
-- `ResourceExhausted`
-  - Some resource has been exhausted, perhaps a per-user quota, or perhaps the
-    entire file system is out of space.
-- `FailedPrecondition`
-  - Operation was rejected because the system is not in a state required for the
-    operation's execution.
-- `Aborted`
-  - The operation was aborted, typically due to a concurrency issue like sequencer
-    check failures, transaction aborts, etc.
-- `OutOfRange`
-  - Operation was attempted past the valid range. E.g., seeking or reading past end
-    of file. Unlike `InvalidArgument`, this error indicates a problem that may be
-    fixed if the system state changes.
-- `Unimplemented`
-  - Operation is not implemented or not supported/enabled in this service.
-- `Internal`
-  - Internal errors. Means some invariants expected by underlying system has been
-    broken.
-- `Unavailable`
-  - The service is currently unavailable. This is a most likely a transient
-    condition and may be corrected by retrying with a backoff.
-- `DataLoss`
-  - Unrecoverable data loss or corruption.
-- `Unauthenticated`
-  - The request does not have valid authentication credentials for the operation.
-
-### Status creation
-
-API MUST provide a way to create a new `Status`.
-
-Required parameters
-
-- `StatusCanonicalCode` of this `Status`.
-
-Optional parameters
-
-- Description of this `Status`.
-
-### GetCanonicalCode
-
-Returns the `StatusCanonicalCode` of this `Status`.
-
-### GetDescription
-
-Returns the description of this `Status`.
-Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
-
-### GetIsOk
-
-Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 
 ## SpanKind
 

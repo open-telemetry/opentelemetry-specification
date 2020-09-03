@@ -22,7 +22,6 @@ and Zipkin.
 | Span.Attributes          | Span.Tags        | See [Attributes](../../common/common.md#attributes) for data types for the mapping.            |
 | Span.Events              | Span.Annotations | See [Events](#events) for the mapping format.                                                 |
 | Span.Links               | TBD              | TBD                                                                                           |
-| Span.Status              | Add to Span.Tags | See [Status](#status) for tag names to use.                                                   |
 | Span.LocalChildSpanCount | TBD              | TBD                                                                                           |
 
 TBD : This is work in progress document and it is currently doesn't specify
@@ -135,20 +134,6 @@ Array values MUST be serialized to string like a JSON list as mentioned in
 [semantic conventions](../../overview.md#semantic-conventions).
 
 TBD: add examples
-
-### Status
-
-Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin.
-
-The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
-
-| Status|Tag Key| Tag Value |
-|--|--|--|
-|Code | `ot.status_code` | Name of the code, for example: `OK` |
-|Message *(optional)* | `ot.status_description` | `{message}` |
-
-The `ot.status_code` tag value MUST follow the [Standard GRPC Code
-Names](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
 
 ### Events
 

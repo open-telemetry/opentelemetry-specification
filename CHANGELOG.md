@@ -20,6 +20,8 @@ New:
 - Add Span API and semantic conventions for recording exceptions
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697),
   [#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
+- Remove `Span.Status` as per [OTEP-134](https://github.com/open-telemetry/oteps/pull/134)
+ (#918[https://github.com/open-telemetry/opentelemetry-specification/pull/918])
 
 Updates:
 

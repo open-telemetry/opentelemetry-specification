@@ -20,7 +20,7 @@ This document defines how to describe remote procedure calls
 
 ## Common remote procedure call conventions
 
-A remote procedure calls is described by two separate spans, one on the client-side and one on the server-side.
+A remote procedure calls are described by two separate spans, one on the client-side and one on the server-side.
 
 For outgoing requests, the `SpanKind` MUST be set to `CLIENT` and for incoming requests to `SERVER`.
 
@@ -89,16 +89,12 @@ Note that _method_ in this context is about the called remote procedure and _not
 
 For remote procedure calls via [gRPC][], additional conventions are described in this section.
 
-`rpc.system` MUST be set to `"grpc"`.
+| Attribute name |                          Notes and examples                            | Required? |
+| -------------- | ---------------------------------------------------------------------- | --------- |
+| `rpc.system`   | MUST be set to `"grpc"`       | Yes |
+| `rpc.status`  | Canonical status code of the gRPC call's response    | Yes |
 
 [gRPC]: https://grpc.io/
-
-### Status
-
-Implementations MUST set status which MUST be the same as the gRPC client/server
-status. The mapping between gRPC canonical codes and OpenTelemetry status codes
-is 1:1 as OpenTelemetry canonical codes is just a snapshot of grpc codes which
-can be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
 
 ### Events
 

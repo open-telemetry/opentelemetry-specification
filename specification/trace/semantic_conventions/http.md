@@ -9,7 +9,6 @@ and various HTTP versions like 1.1, 2 and SPDY.
 <!-- toc -->
 
 - [Name](#name)
-- [Status](#status)
 - [Common Attributes](#common-attributes)
 - [HTTP client](#http-client)
 - [HTTP server](#http-server)
@@ -34,39 +33,6 @@ cardinality names formed from the available parameters of an HTTP request,
 such as `"HTTP {METHOD_NAME}"`. Instrumentation MUST NOT default to using URI
 path as span name, but MAY provide hooks to allow custom logic to override the
 default span name.
-
-## Status
-
-Implementations MUST set the [span status](../api.md#status) if the HTTP communication failed
-or an HTTP error status code is returned (e.g. above 3xx).
-
-In the case of an HTTP redirect, the request should normally be considered successful,
-unless the client aborts following redirects due to hitting some limit (redirect loop).
-If following a (chain of) redirect(s) successfully, the status should be set according to the result of the final HTTP request.
-
-Don't set the span status description if the reason can be inferred from `http.status_code` and `http.status_text`.
-
-| HTTP code               | Span status code      |
-|-------------------------|-----------------------|
-| 100...299               | `Ok`                  |
-| 3xx redirect codes      | `DeadlineExceeded` in case of loop (see above) [1], otherwise `Ok` |
-| 401 Unauthorized ⚠      | `Unauthenticated` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
-| 403 Forbidden           | `PermissionDenied`    |
-| 404 Not Found           | `NotFound`            |
-| 429 Too Many Requests   | `ResourceExhausted`   |
-| 499 Client Closed       | `Cancelled` (Not an official HTTP status code, defined by [NGINX][nginx-http-499]) |
-| Other 4xx code          | `InvalidArgument` [1] |
-| 501 Not Implemented     | `Unimplemented`       |
-| 503 Service Unavailable | `Unavailable`         |
-| 504 Gateway Timeout     | `DeadlineExceeded`    |
-| Other 5xx code          | `Internal` [1]   |
-| Any status code the client fails to interpret (e.g., 093 or 573) | `Unknown` |
-
-Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
-
-[oc-http-status]: https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#mapping-from-http-status-codes-to-trace-status-codes
-[rfc-unauthorized]: https://tools.ietf.org/html/rfc7235#section-3.1
-[nginx-http-499]: https://httpstatuses.com/499
 
 ## Common Attributes
 
@@ -127,20 +93,6 @@ Note that in some cases `http.host` might be different
 from the `net.peer.name`
 used to look up the `net.peer.ip` that is actually connected to.
 In that case it is strongly recommended to set the `net.peer.name` attribute in addition to `http.host`.
-
-For status, the following special cases have canonical error codes assigned:
-
-| Client error                | Trace status code  |
-|-----------------------------|--------------------|
-| DNS resolution failed       | `Unknown`     |
-| Request cancelled by caller | `Cancelled`        |
-| URL cannot be parsed        | `InvalidArgument`  |
-| Request timed out           | `DeadlineExceeded` |
-
-This is not meant to be an exhaustive list
-but if there is no clear mapping for some error conditions,
-instrumentation developers are encouraged to use `Unknown`
-and open a PR or issue in the specification repository.
 
 ## HTTP server
 
