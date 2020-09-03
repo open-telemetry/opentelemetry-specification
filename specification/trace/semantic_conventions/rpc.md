@@ -13,7 +13,6 @@ This document defines how to describe remote procedure calls
     + [Service name](#service-name)
   * [Distinction from HTTP spans](#distinction-from-http-spans)
 - [gRPC](#grpc)
-  * [Status](#status)
   * [Events](#events)
 
 <!-- tocstop -->
