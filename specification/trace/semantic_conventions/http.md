@@ -70,29 +70,39 @@ Note that the items marked with [1] are different from the mapping defined in th
 
 ## Common Attributes
 
-| Attribute name | Notes and examples                                           | Required? |
-| :------------- | :----------------------------------------------------------- | --------- |
-| `http.method` | HTTP request method. E.g. `"GET"`. | Yes |
-| `http.url` | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | Defined later. |
-| `http.target` | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/12314/?q=ddds#123"`. | Defined later. |
-| `http.host` | The value of the [HTTP host header][]. When the header is empty or not present, this attribute should be the same. | Defined later. |
-| `http.scheme` | The URI scheme identifying the used protocol: `"http"` or `"https"` | Defined later. |
-| `http.status_code` | [HTTP response status code][]. E.g. `200` (integer) | If and only if one was received/sent. |
-| `http.status_text` | [HTTP reason phrase][]. E.g. `"OK"` | No |
-| `http.flavor` | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |  No |
-| `http.user_agent` | Value of the HTTP [User-Agent][] header sent by the client. | No |
-| `http.request_content_length` | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length][] header. For requests using transport encoding, this should be the compressed size. | No |
-| `http.request_content_length_uncompressed` | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | No |
-| `http.response_content_length` | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length][] header. For requests using transport encoding, this should be the compressed size. | No |
-| `http.response_content_length_uncompressed` | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | No |
+<!-- semconv http -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `http.method` | string | HTTP request method. | `GET`<br>`POST`<br>`HEAD` | Yes |
+| `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | No |
+| `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/path/12314/?q=ddds#123` | No |
+| `http.host` | string | The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4). When the header is empty or not present, this attribute should be the same. | `www.example.org` | No |
+| `http.scheme` | string | The URI scheme identifying the used protocol. | `http`<br>`https` | No |
+| `http.status_code` | number | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditional<br>If and only if one was received/sent. |
+| `http.status_text` | string | [HTTP reason phrase](https://tools.ietf.org/html/rfc7230#section-3.1.2). | `OK` | No |
+| `http.flavor` | string | Kind of HTTP protocol used [1] | `1.0` | No |
+| `http.user_agent` | string | Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | No |
+| `http.request_content_length` | number | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
+| `http.request_content_length_uncompressed` | number | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
+| `http.response_content_length` | number | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
+| `http.response_content_length_uncompressed` | number | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
+
+**[1]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+
+`http.flavor` MUST be one of the following or, if none of the listed values apply, a custom value:
+
+| Value  | Description |
+|---|---|
+| `1.0` | HTTP 1.0 |
+| `1.1` | HTTP 1.1 |
+| `2.0` | HTTP 2 |
+| `SPDY` | SPDY protocol. |
+| `QUIC` | QUIC protocol. |
+<!-- endsemconv -->
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 [network attributes]: span-general.md#general-network-connection-attributes
-[HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6
-[HTTP reason phrase]: https://tools.ietf.org/html/rfc7230#section-3.1.2
-[User-Agent]: https://tools.ietf.org/html/rfc7231#section-5.5.3
-[Content-Length]: https://tools.ietf.org/html/rfc7230#section-3.3.2
 
 ## HTTP client
 
@@ -103,12 +113,15 @@ For an HTTP client span, `SpanKind` MUST be `Client`.
 If set, `http.url` must be the originally requested URL,
 before any HTTP-redirects that may happen when executing the request.
 
-One of the following sets of attributes is required (in order of usual preference unless for a particular web client/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
+<!-- semconv http.client -->
+
+**Additional attribute requirements:** At least one of the following sets of attributes is required:
 
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
-* `http.scheme`, `net.peer.name`, `net.peer.port`, `http.target`
-* `http.scheme`, `net.peer.ip`, `net.peer.port`, `http.target`
+* `http.scheme`, [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.peer.ip`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+<!-- endsemconv -->
 
 Note that in some cases `http.host` might be different
 from the `net.peer.name`
@@ -188,24 +201,24 @@ If the route does not include the application root, it SHOULD be prepended to th
 
 If the route cannot be determined, the `name` attribute MUST be set as defined in the general semantic conventions for HTTP.
 
-| Attribute name | Notes and examples                                           | Required? |
-| :------------- | :----------------------------------------------------------- | --------- |
-| `http.server_name` | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). | [1] |
-| `http.route` | The matched route (path template). (TODO: Define whether to prepend application root) E.g. `"/users/:userID?"`. | No |
-| `http.client_ip` | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For][]). Note that this is not necessarily the same as `net.peer.ip`, which would identify the network-level peer, which may be a proxy. | No |
+<!-- semconv http.server -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `http.server_name` | string | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). [1] | `example.com` | See below |
+| `http.route` | string | The matched route (path template). | `/users/:userID?` | No |
+| `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | No |
 
-[HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
-[HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
-[X-Forwarded-For]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For
+**[1]:** `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148). It is thus preferred to supply the raw data that is available.
 
-**[1]**: `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. <https://github.com/open-telemetry/opentelemetry-python/pull/148>).
-It is thus preferred to supply the raw data that *is* available.
-Namely, one of the following sets is required (in order of usual preference unless for a particular web server/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
+**[2]:** This is not necessarily the same as `net.peer.ip`, which would identify the network-level peer, which may be a proxy.
+
+**Additional attribute requirements:** At least one of the following sets of attributes is required:
 
 * `http.scheme`, `http.host`, `http.target`
-* `http.scheme`, `http.server_name`, `net.host.port`, `http.target`
-* `http.scheme`, `net.host.name`, `net.host.port`, `http.target`
+* `http.scheme`, `http.server_name`, [`net.host.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.host.name`](span-general.md), [`net.host.port`](span-general.md), `http.target`
 * `http.url`
+<!-- endsemconv -->
 
 Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones.
 For example, `http.server_name` has shown great value in practice, as bogus HTTP Host headers occur often in the wild.
