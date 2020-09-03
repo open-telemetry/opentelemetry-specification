@@ -19,8 +19,8 @@ New:
   the absence of an installed SDK
 - Add Span API and semantic conventions for recording exceptions
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697)
-  * API was extended to allow adding arbitrary event attributes ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784))
-  * `exception.escaped` was added ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
+  * API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
+  * `exception.escaped` was added ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784))
 
 Updates:
 
