@@ -19,7 +19,7 @@ This document defines how to describe remote procedure calls
 
 ## Common remote procedure call conventions
 
-A remote procedure calls are described by two separate spans, one on the client-side and one on the server-side.
+A remote procedure call is described by two separate spans, one on the client-side and one on the server-side.
 
 For outgoing requests, the `SpanKind` MUST be set to `CLIENT` and for incoming requests to `SERVER`.
 
