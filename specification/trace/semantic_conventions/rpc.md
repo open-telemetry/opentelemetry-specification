@@ -92,7 +92,7 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 | Attribute name |                          Notes and examples                            | Required? |
 | -------------- | ---------------------------------------------------------------------- | --------- |
 | `rpc.system`   | MUST be set to `"grpc"`       | Yes |
-| `rpc.status`  | Canonical status code of the gRPC call's response    | Yes |
+| `rpc.grpc.status`  | Canonical status code of the gRPC call's response    | Yes |
 
 [gRPC]: https://grpc.io/
 
