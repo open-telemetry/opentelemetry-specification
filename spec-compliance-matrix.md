@@ -35,6 +35,7 @@ status of the feature is not known.
 |End                                           | + | +  | +     | +    | +  | +    | + | +  |   | +  |
 |End with timestamp                            | + | +  | +     | +    | +  | +    | + | -  |   | +  |
 |IsRecording                                   | + | +  | +     | +    | +  | +    | + |    |   | +  |
+|Set status (REMOVED)                          | + | +  | +     | +    | +  | +    | + | +  |   | +  |
 |Safe for concurrent calls                     | + | +  | +     |      | +  | +    | + | +  |   | +  |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | +     | +    | +  | +    | + | +  |   | +  |
@@ -136,6 +137,7 @@ status of the feature is not known.
 |InstrumentationLibrary mapping                |   | +  | -     | -    |    | -    | - | -  |   |    |
 |Boolean attributes                            | + | +  | +     | +    |    | +    | + | +  |   |    |
 |Array attributes                              | + | +  | +     | -    |    | +    | + | +  |   |    |
+|Status mapping (REMOVED)                      | + | -  | +     | -    |    | +    | + | +  |   |    |
 |Event attributes mapping to Annotations       | + |    | +     | +    |    | +    | + | +  |   |    |
 |Fractional microseconds in timestamps         | + | -  | +     | -    |    | -    | - | -  |   |    |
 |Jaeger|
