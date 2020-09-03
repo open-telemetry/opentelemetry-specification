@@ -8,12 +8,15 @@ This document defines how to describe an instance of a function that runs withou
 
 - [General Attributes](#general-attributes)
   * [Difference between execution and instance](#difference-between-execution-and-instance)
+- [Incoming Invocations](#incoming-invocations)
+- [Outgoing Invocations](#outgoing-invocations)
 - [Function Trigger Type](#function-trigger-type)
   * [Datasource](#datasource)
   * [HTTP](#http)
   * [PubSub](#pubsub)
   * [Timer](#timer)
   * [Other](#other)
+- [Example](#example)
 
 <!-- tocstop -->
 
@@ -25,9 +28,12 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 
 | Attribute name  | Notes  and examples  | Required? |
 |---|---|--|
-| `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | Yes |
+| `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | See below. |
 | `faas.execution` | String containing the execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
-| `faas.coldstart` | A boolean indicating that the serverless function is executed for the first time (aka cold start). | No |
+
+On FaaS instances, `faas.trigger` MUST be set on incoming invocations.
+Clients invoking FaaS instances MUST set `faas.trigger` on outgoing invocations, if it is known to the client.
+This is, for example, *not* the case, when the transport layer is abstracted in a FaaS client framework without access to its configuration.
 
 ### Function Name
 
@@ -58,6 +64,42 @@ The span attribute `faas.execution` differs from the resource attribute `faas.in
 [AWS lambda]: https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
 [Azure functions]: https://docs.microsoft.com/en-us/azure/azure-functions/manage-connections#static-clients
 [Google functions]: https://cloud.google.com/functions/docs/concepts/exec#function_scope_versus_global_scope
+
+## Incoming Invocations
+
+This section describes incoming FaaS invocations as they are reported by the FaaS instance itself.
+
+For incoming FaaS spans, the span kind MUST be `Server`.
+
+| Attribute | Type | Description | Required |
+|---|---|---|---|
+| `faas.coldstart` | boolean | Indicates that the serverless function is executed for the first time (aka cold start). | No |
+
+## Outgoing Invocations
+
+This section describes outgoing FaaS invocations as they are reported by a client calling a FaaS instance.
+
+For outgoing FaaS spans, the span kind MUST be `Client`.
+
+The values reported by the client for the attributes listed below SHOULD be equal to
+the corresponding [FaaS resource attributes][] and [Cloud resource attributes][],
+which the invoked FaaS instance reports about itself, if it's instrumented.
+
+| Attribute | Corresponding resource attribute | Type | Description | Example | Required |
+|---|---|---|---|---|---|
+| `faas.invoked_name` | `faas.name` | string | The name of the invoked function. | `my-function` | Yes |
+| `faas.invoked_provider` | `cloud.provider` | string | The cloud provider of the invoked function. | `aws` | Yes |
+| `faas.invoked_region` | `cloud.region` | string | The cloud region of the invoked function. | `eu-central-1` | See below |
+
+For some cloud providers, like AWS or GCP, the region in which a function is hosted is essential
+to uniquely identify the function and also part of its endpoint.
+Since it's part of the endpoint being called, the region is always known to clients.
+In these cases, `faas.invoked_region` MUST be set accordingly.
+If the region is unknown to the client or not required for identifying the invoked function,
+setting `faas.invoked_region` is optional.
+
+[FaaS resource attributes]: ../../resource/semantic_conventions/faas.md
+[Cloud resource attributes]: ../../resource/semantic_conventions/cloud.md
 
 ## Function Trigger Type
 
@@ -104,3 +146,22 @@ A function is scheduled to be executed regularly. The following additional attri
 Function as a Service offers such flexibility that it is not possible to fully cover with semantic conventions.
 When a function does not satisfy any of the aforementioned cases, a span MUST set the attribute `faas.trigger` to `"other"`.
 In this case, it is responsibility of the framework or instrumentation library to define the most appropriate attributes.
+
+## Example
+
+This example shows the FaaS attributes for a (non-FaaS) process hosted on Google Cloud Platform (Span A with kind `Client`), which invokes a Lambda function called "my-lambda-function" in Amazon Web Services (Span B with kind `Server`).
+
+| Attribute Kind | Attribute               | Span A (Client, GCP)   | Span B (Server, AWS Lambda) |
+| -------------- | ----------------------- | ---------------------- | -- |
+| Resource       | `cloud.provider`        | `"gcp"`                | `"aws"` |
+| Resource       | `cloud.region`          | `"europe-west3"`       | `"eu-central-1"` |
+| Span           | `faas.invoked_name`     | `"my-lambda-function"` | n/a |
+| Span           | `faas.invoked_provider` | `"aws"`                | n/a |
+| Span           | `faas.invoked_region`   | `"eu-central-1"`       | n/a |
+| Span           | `faas.trigger`          | n/a                    | `"http"` |
+| Span           | `faas.execution`        | n/a                    | `"af9d5aa4-a685-4c5f-a22b-444f80b3cc28"` |
+| Span           | `faas.coldstart`        | n/a                    | `true` |
+| Resource       | `faas.name`             | n/a                    | `"my-lambda-function"` |
+| Resource       | `faas.id`               | n/a                    | `"arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function"` |
+| Resource       | `faas.version`          | n/a                    | `"semver:2.0.0"` |
+| Resource       | `faas.instance`         | n/a                    | `"my-lambda-function:instance-0001"` |
