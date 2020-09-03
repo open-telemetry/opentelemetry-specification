@@ -27,11 +27,28 @@ API.  Implementors SHOULD follow the general prescriptions on safety
 and performance given in [OpenTelemetry library
 guidelines](../library-guidelines.md).
 
-## Export Pipeline Terminology
+## SDK Terminology
 
-**Export Pipeline** is used to describe a whole assembly of SDK parts.
-There are three major components of the Metrics SDK that data flows
-through, in order:
+The Metrics SDK provides an implementation of the Metrics API, which
+has terms that it uses to refer to the SDK:
+
+- **Meter**: An interface that supplies the OpenTelemetry Metric API, bound together with Resources and the Instrumentation Library
+- **Provider**: An interface for obtaining **Meter** instances given the Instrumentation Library.
+ 
+These terms are useful to describe the boundary between the API and
+the SDK, but they are API-level constructs.  We can use API-level
+terms to describe the boundary between the SDK and the API, but from
+the API's perspective the SDK is opaque and without structure.
+
+This document specifies the internal structure of the default
+OpenTelemetry SDK in terms of its constituent parts, with terminologuy
+chosen to explain each part's role in exporting metric data from the
+input (API-level events) to the output (a metric exposition format).
+We use the term **Export Pipeline** as a functional description of the
+SDK at this level.
+
+There are three major components of the export pipeline that data
+flows through, in order:
 
 1. **Accumulator**: Receives metric events from the API through Instruments, computes one Accumulation per active Instrument and Label Set pair
 2. **Processor**: Receives Accumulations from the Accumulator, transforms into ExportRecordSet
@@ -51,7 +68,8 @@ These terms are defined in the Metrics API specification:
 
 Defined in the [Resource SDK](../resource/sdk.md) specification:
 
-- **Resource**: a set of key-values with unique keys describing the process.
+- **Resource**: a set of key-values with unique keys describing the process
+- **Instrumentation Library**: the name and version associated with a package of instrumentation.
 
 These are the significant data types used in the model architecture:
 
@@ -71,12 +89,54 @@ an instrument.
 
 ## Dataflow Diagram
 
+From an external perspective, the Metrics SDK implements the `Meter`
+and `Provider` interfaces described in the [Metrics API](api.md).
+From an internal perspective, the Metrics SDK encapsulates an export
+pipeline for metric data.
+
 ![Metrics SDK Design Diagram](img/metrics-sdk.png)
+
+The Accumulator component is where metric events leave the API and
+enter the export pipeline, and it is this component that is most
+responsible for SDK performance.  The Accumulator is responsible for
+organizing bound and unbound instruments, updating and synchronized
+copying of Aggregator state, invoking Observer instruments, and the
+collection cycle.
+
+The Processor component is intended as the most customizable component
+in the export pipeline.  The Processor is responsible for selecting
+Aggregators to use for specific instruments, reducing dimensionality,
+and conversion between DELTA and CUMULATIVE data point representation.
+The Processor interface supports arbitrary protocol-independent data
+transformation, and Processors can be chained together to form more
+complex export pipelines.
+
+The Exporter component converts processed data into a specific
+protocol and exports it somewhere.  Following the [library
+guidelines](../library-guidelines.md), exporters are expected to
+contain contain minimal functionality and customization is preferrably
+expressed through Processors.
 
 ## Requirements
 
 Requirements are listed below for the major components of the
 OpenTelemetry using the terminology outlined above.
+
+The data flow diagram above is meant as an abstraction, for
+understanding how the standard component names used in this document
+map into a data path.  The diagram is not meant to prescribe an
+overall architecture for the SDK, just to name the stages of an export
+pipeline and place them in context.
+
+SDKs are required to use the standard names for these components, as
+this helps build consistency across OpenTelemetry.  Every SDK SHOULD
+include these components and the interfaces detailed below, although
+the actual organization of each SDK may differ depending on the
+available libraries and performance characteristics of the source
+language.  For example, an SDK could be implemented using one
+Accumulator per instrument or it could be implemented using one
+Accumulator per collection period (assuming support for multiple
+collection periods): these are considered implementation details.
 
 ### Instrument Registration
 
