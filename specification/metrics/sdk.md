@@ -34,7 +34,7 @@ has terms that it uses to refer to the SDK:
 
 - **Meter**: An interface that supplies the OpenTelemetry Metric API, bound together with Resources and the Instrumentation Library
 - **Provider**: An interface for obtaining **Meter** instances given the Instrumentation Library.
- 
+
 These terms are useful to describe the boundary between the API and
 the SDK, but they are API-level constructs.  We can use API-level
 terms to describe the boundary between the SDK and the API, but from
@@ -114,7 +114,7 @@ complex export pipelines.
 The Exporter component converts processed data into a specific
 protocol and exports it somewhere.  Following the [library
 guidelines](../library-guidelines.md), exporters are expected to
-contain contain minimal functionality and customization is preferrably
+contain contain minimal functionality and customization is preferably
 expressed through Processors.
 
 ## Requirements
