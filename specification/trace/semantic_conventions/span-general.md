@@ -28,6 +28,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 <a name="nettransport-attribute">
 <!-- semconv network -->
+
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
 | `net.transport` | string enum | Transport protocol used. See note below. | `IP.TCP` | No |
