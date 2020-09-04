@@ -13,6 +13,8 @@ New:
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
   ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
+- Add semantic conventions for outgoing Function as a Service (FaaS) invocations
+  ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
 - Add Span API and semantic conventions for recording exceptions
@@ -53,6 +55,8 @@ Updates:
   ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
+- Explicitly specify the SpanContext APIs IsValid and IsRemote as required
+  ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
 
 ## v0.6.0 (07-01-2020)
 
