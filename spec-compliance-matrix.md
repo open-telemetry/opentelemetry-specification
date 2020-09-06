@@ -14,11 +14,13 @@ status of the feature is not known.
 |[TracerProvider](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracerprovider-operations)|
 |Create TracerProvider                         | + | +  | +     | +    | +  | +    | + | +  |   | +  |
 |Get a Tracer                                  | + | +  | +     | +    | +  | +    | + | +  |   | +  |
+|Get active Span                               |   |    |       | -    |    |      |   |    |   |    |
+|Set active Span                               |   |    |       | -    |    |      |   |    |   |    |
 |Safe for concurrent calls                     | + | +  | +     |      | +  | +    | + | +  |   | +  |
 |[Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | +     | +    | +  | +    | + | +  |   | +  |
 |Get active Span                               | + | +  | +     | +    | +  | +    | + | +  |   | +  |
-|Mark Span active                              | + | +  | +     | +    | +  | +    | + | +  |   | -  |
+|Set active Span                               | + | +  | +     | +    | +  | +    | + | +  |   | -  |
 |Safe for concurrent calls                     | + | +  | +     |      | +  | +    | + | +  |   | +  |
 |[SpanContext](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#spancontext)|
 |IsValid                                       | + | +  | -     | +    | +  | +    | + | +  |   | +  |
