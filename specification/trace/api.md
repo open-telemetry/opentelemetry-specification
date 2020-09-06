@@ -9,6 +9,7 @@ Table of Contents
   * [Time](#time)
     * [Timestamp](#timestamp)
     * [Duration](#duration)
+* [Tracer Package](#trace-package)
 * [TracerProvider](#tracerprovider)
   * [TracerProvider operations](#tracerprovider-operations)
 * [Tracer](#tracer)
@@ -74,6 +75,18 @@ A duration is the elapsed time between two events.
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
+## Trace package
+
+The `Trace Package` is the package containing the TracerProvider and Tracer
+API classes. In some languages, this may also be referred to as a module.
+
+The `Trace Package` MAY provide the following functions:
+
+- Get the currently active span
+- Set the currently active span
+
+Both of these operations MUST delegate to the configured `TracerProvider`.
+
 ## TracerProvider
 
 `Tracer`s can be accessed with a `TracerProvider`.
@@ -97,7 +110,7 @@ number of `TracerProvider` instances.
 
 The `TracerProvider` MUST provide functions to:
 
-- Get a `Tracer`
+#### Get a `Tracer`
 
 That API MUST accept the following parameters:
 
@@ -129,6 +142,17 @@ the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
 
+#### Get and set the currently active span
+
+The `TracerProvider` MUST delegate to the [`Context`](../context/context.md) to perform
+these tasks, i.e. the above methods MUST do the same as a single equivalent
+method of the Context management system. However, `TracerProvider` implementations
+are not required to behave the same way.
+
+For example, different `TracerProvider` implementations may use different context
+keys to get and set the currently active span. This would result in a different active
+span depending on the `TracerProvider` you are calling to.
+
 ## Tracer
 
 The tracer is responsible for creating `Span`s.
@@ -142,17 +166,12 @@ The `Tracer` MUST provide functions to:
 
 - [Create a new `Span`](#span-creation) (see the section on `Span`)
 
-The `Tracer` SHOULD provide methods to:
+The `Tracer` MAY provide functions to:
 
-- Get the currently active `Span`
-- Mark a given `Span` as active
+- Get the currently active span
+- Set the currently active span
 
-The `Tracer` MUST delegate to the [`Context`](../context/context.md) to perform
-these tasks, i.e. the above methods MUST do the same as a single equivalent
-method of the Context management system.
-In particular, this implies that the active span MUST not depend on the `Tracer`
-that it is queried from/was set to, as long as the tracers were obtained from
-the same `TracerProvider`.
+These functions MUST delegate to the `TracerProvider`.
 
 ## SpanContext
 
