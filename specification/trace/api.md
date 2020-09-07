@@ -82,7 +82,6 @@ API classes. In some languages, this may also be referred to as a module, or
 may be static methods on a class if the language exposes functionality purely
 by classes (such as Java).
 
-
 The `Trace Package` MAY provide the following functions:
 
 - Get the currently active span
