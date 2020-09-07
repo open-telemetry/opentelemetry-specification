@@ -78,7 +78,10 @@ A duration is the elapsed time between two events.
 ## Trace package
 
 The `Trace Package` is the package containing the TracerProvider and Tracer
-API classes. In some languages, this may also be referred to as a module.
+API classes. In some languages, this may also be referred to as a module, or
+may be static methods on a class if the language exposes functionality purely
+by classes (such as Java).
+
 
 The `Trace Package` MAY provide the following functions:
 
