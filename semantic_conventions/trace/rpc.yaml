@@ -1,0 +1,35 @@
+groups:
+    - id: rpc
+      prefix: rpc
+      brief: 'This document defines semantic conventions for remote procedure calls.'
+      attributes:
+        - id: system
+          type: string
+          required: always
+          brief: 'A string identifying the remoting system.'
+          examples: ["grpc", "java_rmi", "wcf"]
+        - id: service
+          type: string
+          required:
+            conditional: "No, but recommended"
+          brief: 'The full name of the service being called, including its package name, if applicable.'
+          examples: "myservice.EchoService"
+        - id: method
+          type: string
+          required:
+            conditional: "No, but recommended"
+          brief: 'The name of the method being called, must be equal to the $method part in the span name.'
+          examples: "exampleMethod"
+        - ref: net.peer.ip
+        - ref: net.peer.name
+        - ref: net.peer.port
+          required:
+            conditional: "See below"
+        - ref: net.transport
+          required:
+            conditional: "See below"
+      constraints:
+        - any_of:
+          - net.peer.ip
+          - net.peer.name
+        - include: network
