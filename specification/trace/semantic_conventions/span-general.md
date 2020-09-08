@@ -27,6 +27,7 @@ In an ideal situation, not accounting for proxies, multiple IP addresses or host
 the `net.peer.*` properties of a client are equal to the `net.host.*` properties of the server and vice versa.
 
 <a name="nettransport-attribute">
+
 <!-- semconv network -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|

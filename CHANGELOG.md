@@ -15,11 +15,14 @@ New:
   ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
 - Add semantic conventions for outgoing Function as a Service (FaaS) invocations
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
+- Add resource semantic convention for deployment environment
+  ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
 - Add Span API and semantic conventions for recording exceptions
-  ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697),
-  [#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
+  ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
+  * API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
+  * `exception.escaped` was added ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
 
