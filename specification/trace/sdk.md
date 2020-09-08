@@ -24,18 +24,18 @@ latest sampling could happen on the Collector which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
-* `IsRecording` field of a `Span`. If `true` the current `Span` records
-  tracing events (attributes, events, status, etc.), otherwise all tracing
-  events are dropped. Users can use this property to determine if expensive
-  trace events can be avoided. [Span Processors](#span-processor) will receive
-  all spans with this flag set. However, [Span Exporter](#span-exporter) will
-  not receive them unless the `Sampled` flag was set.
+* `IsRecording` field of a `Span`. If `false` the current `Span` discards all
+  tracing data (attributes, events, status, etc.). Users can use this property
+  to determine if collecting expensive trace data can be avoided. [Span
+  Processor](#span-processor) MUST receive only those spans which have this
+  field set to `true`. However, [Span Exporter](#span-exporter) SHOULD NOT
+  receive them unless the `Sampled` flag was also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
-  specification][trace-flags]. This flag indicates that the `Span` has been
-  `sampled` and will be exported. [Span Processor](#span-processor) and [Span
-  Exporter](#span-exporter) will receive spans with the `Sampled` flag set for
-  processing.
+  specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
+  `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
+  receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
+  that do not.  
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
@@ -44,6 +44,16 @@ means that the current `Span` does record information, but most likely the child
 The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
+
+The following table summarizes the expected behavior for each combination of
+`IsRecording` and `SampledFlag`.
+
+| `IsRecording` | `Sampled` Flag | Span Processor receives Span? | Span Exporter receives Span? |
+| ------------- | -------------- | ----------------------------- | ---------------------------- |
+| true          | true           | true                          | true                         |
+| true          | false          | true                          | false                        |
+| false         | true           | Not allowed                   | Not allowed                  |
+| false         | false          | false                         | false                        |
 
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers).
@@ -60,14 +70,12 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
-  `null`.
-* `TraceId` of the `Span` to be created. It can be different from the `TraceId`
-  in the `SpanContext`. Typically in situations when the `Span` to be created
-  starts a new Trace.
+* Parent `SpanContext`. May be invalid to indicate a root span.
+* `TraceId` of the `Span` to be created.
+  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
-* `SpanKind`
-* Initial set of `Attributes` for the `Span` being constructed
+* `SpanKind` of the `Span` to be created.
+* Initial set of `Attributes` of the `Span` to be created.
 * Collection of links that will be associated with the `Span` to be created.
   Typically useful for batch operations, see
   [Links Between Spans](../overview.md#links-between-spans).
@@ -221,6 +229,30 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
   
+## TraceState
+
+`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key/value pairs and
+formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
+Tracing SDK MUST provide at least the following operations on `TraceState`:
+
+* Get value for a given key
+* Add a new key/value pair
+* Update an existing value for a given key
+* Delete a key/value pair
+
+These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
+All mutating operations MUST return a new `TraceState` with the modifications applied.
+`TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
+Every mutating operations MUST validate input parameters.
+If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
+and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
+
+Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
+Such changes then make sense only right before
+[`SpanContext` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
+or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
+In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
+
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
