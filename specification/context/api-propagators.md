@@ -18,6 +18,7 @@ Table of Contents
       - [Set](#set)
   - [Extract](#extract-1)
     - [Getter argument](#getter-argument)
+      - [Keys](#keys)
       - [Get](#get)
 - [Composite Propagator](#composite-propagator)
 - [Global Propagators](#global-propagators)
@@ -34,7 +35,7 @@ Each concern creates a set of `Propagator`s for every supported
 `Propagator` type.
 
 `Propagator`s leverage the `Context` to inject and extract data for each
-cross-cutting concern, such as traces and correlation context.
+cross-cutting concern, such as traces and `Baggage`.
 
 Propagation is usually implemented via a cooperation of library-specific request
 interceptors and `Propagators`, where the interceptors detect incoming and outgoing requests and use the `Propagator`'s extract and inject operations respectively.
@@ -75,7 +76,7 @@ Injects the value into a carrier. For example, into the headers of an HTTP reque
 Required arguments:
 
 - A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as
-`SpanContext`, `CorrelationContext` or another cross-cutting concern context.
+`SpanContext`, `Baggage` or another cross-cutting concern context.
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
@@ -93,7 +94,7 @@ Required arguments:
 
 Returns a new `Context` derived from the `Context` passed as argument,
 containing the extracted value, which can be a `SpanContext`,
-`CorrelationContext` or another cross-cutting concern context.
+`Baggage` or another cross-cutting concern context.
 
 ## TextMap Propagator
 
@@ -116,7 +117,7 @@ avoid runtime allocations.
 
 ### Fields
 
-The propagation fields defined. If your carrier is reused, you should delete the fields here
+The predefined propagation fields. If your carrier is reused, you should delete the fields here
 before calling [inject](#inject).
 
 Fields are defined as string keys identifying format-specific components in a carrier.
@@ -131,6 +132,10 @@ The use cases of this are:
 - allow a single-pass over an iterator
 
 Returns list of fields that will be used by the `TextMapPropagator`.
+
+Observe that some `Propagator`s may define, besides the returned values, additional fields with
+variable names. To get a full list of fields for a specific carrier object, use the
+[Keys](#keys) operation.
 
 ### Inject
 
@@ -180,7 +185,23 @@ Getter is an argument in `Extract` that get value from given field
 
 `Getter` allows a `TextMapPropagator` to read propagated fields from a carrier.
 
-One of the ways to implement it is `Getter` class with `Get` method as described below.
+One of the ways to implement it is `Getter` class with `Get` and `Keys` methods
+as described below. Languages may decide on alternative implementations and
+expose corresponding methods as delegates or other ways.
+
+##### Keys
+
+The `Keys` function MUST return the list of all the keys in the carrier.
+
+Required arguments:
+
+- The carrier of the propagation fields, such as an HTTP request.
+
+The `Keys` function can be called by `Propagator`s which are using variable key names in order to
+iterate over all the keys in the specified carrier.
+
+For example, it can be used to detect all keys following the `uberctx-{user-defined-key}` pattern, as defined by the
+[Jaeger Propagation Format](https://www.jaegertracing.io/docs/1.18/client-libraries/#baggage).
 
 ##### Get
 
@@ -250,8 +271,8 @@ Implementations MAY provide global `Propagator`s for
 each supported `Propagator` type.
 
 If offered, the global `Propagator`s should default to a composite `Propagator`
-containing the W3C Trace Context Propagator and the Correlation Context `Propagator`
-specified in [api-correlationcontext.md](../correlationcontext/api.md#serialization),
+containing the W3C Trace Context Propagator and the Baggage `Propagator`
+specified in [api-baggage.md](../baggage/api.md#serialization),
 in order to provide propagation even in the presence of no-op
 OpenTelemetry implementations.
 
