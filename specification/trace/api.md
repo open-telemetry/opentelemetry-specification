@@ -175,15 +175,14 @@ byte.
 TraceFlags are present in all traces. The current version of the specification
 only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
 
-`TraceState` carries system-specific configuration data, represented as a list
+`TraceState` carries vendor-specific trace identification data, represented as a list
 of key-value pairs. TraceState allows multiple tracing
-systems to participate in the same trace. Please review the [W3C
-specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
-details on this field.
+systems to participate in the same trace. It is fully described in the [W3C Trace Context
+specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 
 ### Retrieving the TraceId and SpanId
 
-The API must allow retrieving the `TraceId` and `SpanId` in the following forms:
+The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
 
 * Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
 `TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
@@ -195,16 +194,15 @@ The API should not expose details about how they are internally stored.
 
 ### IsValid
 
-An API that returns a boolean value, which is `true` if the SpanContext has a
-non-zero TraceID and a non-zero SpanID.
+An API called `IsValid`, that returns a boolean value, which is `true` if the SpanContext has a
+non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 ### IsRemote
 
-An API that returns a boolean value, which is `true` if the SpanContext was
-propagated from a remote parent. When extracting a `SpanContext` through the
-[Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
-flag MUST be set to true, whereas the SpanContext of any child spans MUST have
-it set to false.
+An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanContext was
+propagated from a remote parent, MUST be provided.
+When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md#propagators-api),
+`IsRemote` MUST return true, whereas for the SpanContext of any child spans it MUST return false.
 
 ## Span
 
