@@ -15,7 +15,7 @@ New:
   ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
 - Add semantic conventions for outgoing Function as a Service (FaaS) invocations
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
-- Add resource semantic convention for deployment environment 
+- Add resource semantic convention for deployment environment
   ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
