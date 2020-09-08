@@ -45,10 +45,7 @@ function name, since it is defined in the semantic convention strictly for that
 purpose. It is also highly likely that Span name will contain the function name
 (e.g. for Span displaying purposes), but it is not guaranteed (since it is a
 weaker "SHOULD" requirement). Consumers that needs such guarantee can use
-`faas.name` attribute as the source. If `faas.name` is not present but other
-`faas` attributes are present (indicating that the data is coming from a
-function) then consumers may use the span name as the fallback source for the
-function's name.
+`faas.name` attribute as the source.
 
 ### Difference between execution and instance
 
