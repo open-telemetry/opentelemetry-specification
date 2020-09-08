@@ -155,7 +155,7 @@ instrument name.
 ### Accumulator
 
 The Accumulator is the first component an OpenTelemetry Metric export
-pipeline, implementing the front-line [`Meter`
+pipeline, implementing the instrument-related APIs of the [`Meter`
 interface](api.md#meter-interface) and providing the SDK instrument.
 An SDK is assembled with an Accumulator and other parts, detailed
 below.
