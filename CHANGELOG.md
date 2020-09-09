@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Default propagators in un-configured API must be no-op
+  ([#next](https://github.com/open-telemetry/opentelemetry-specification/pull/next)).
 - Define resource mapping for Jaeger exporters
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
