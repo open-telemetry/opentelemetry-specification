@@ -274,13 +274,17 @@ MAY be set up using various dependency injection techniques or available as
 global accessors.
 
 **Note:** it is discouraged practice, but certain instrumentation libraries
-might use proprietary context propagation protocols or default into a specific
-one. In such cases, instrumentation library MAY choose not to call use supplied
-propagators and instead hardcode the context extract and inject logic.
+might use proprietary context propagation protocols or be hardcoded to use a
+specific one. In such cases, instrumentation library MAY choose not to use the
+API-provided propagators and instead hardcode the context extract and inject
+logic.
 
 OpenTelemetry API MUST use no-op propagators when used unconfigured. Context
 propagation may be used for various telemetry signals - traces, metrics, logging
-and more. Platforms such as ASP.NET may pre-configure out-of-the-box
+and more. So context propagation MAY be enabled for any of them. For instance,
+trace exporter may not be configured while trace context is propagated.
+
+Platforms such as ASP.NET may pre-configure out-of-the-box
 propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` containing the W3C Trace Context Propagator and the Baggage
 `Propagator` specified in [api-baggage.md](../baggage/api.md#serialization). Platform MUST also allow to disable pre-configured propagators.
