@@ -39,6 +39,8 @@ Here is a generic design for a language library (arrows indicate calls):
 ### Expected Usage
 
 The OpenTelemetry Language Library is composed of 2 packages: API package and SDK package.
+In this specification, _package_ is used as a conceptual separation and does not prescribe the exact structure of the artifacts making up the language implementations.
+Whether the API and SDK packages are bundled as two all-in-one artifacts or split across multiple ones (e.g. one for api-trace, one for api-metric, one for sdk-trace, one for sdk-metric) is considered an implementation detail as long as the API artifact(s) stay separate from the SDK artifact(s).
 
 Third-party libraries and frameworks that want to be instrumented in OpenTelemetry-compatible way will have a dependency on the API package. The developers of these third-party libraries will add calls to telemetry API to produce telemetry data.
 
