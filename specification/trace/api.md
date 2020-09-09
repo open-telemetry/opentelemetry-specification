@@ -75,19 +75,20 @@ A duration is the elapsed time between two events.
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
-## Trace package
+## Trace Package
 
 The `Trace Package` is the package containing the TracerProvider and Tracer
 API classes. In some languages, this may also be referred to as a module, or
 may be static methods on a class if the language exposes functionality purely
 by classes (such as Java).
 
-The `Trace Package` MAY provide the following functions:
+The `Trace Package` MUST provide the following functions:
 
 - Get the currently active span
 - Set the currently active span
 
-Both of these operations MUST delegate to the configured `TracerProvider`.
+The `Trace Package` MUST delegate to the [`Context`](../context/context.md) to perform these tasks, i.e. the above methods MUST do the same as a single
+equivalent method of the Context management system.
 
 ## TracerProvider
 
@@ -144,17 +145,6 @@ the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
 
-#### Get and set the currently active span
-
-The `TracerProvider` MUST delegate to the [`Context`](../context/context.md) to perform
-these tasks, i.e. the above methods MUST do the same as a single equivalent
-method of the Context management system. However, `TracerProvider` implementations
-are not required to behave the same way.
-
-For example, different `TracerProvider` implementations may use different context
-keys to get and set the currently active span. This would result in a different active
-span depending on the `TracerProvider` you are calling to.
-
 ## Tracer
 
 The tracer is responsible for creating `Span`s.
@@ -173,7 +163,7 @@ The `Tracer` MAY provide functions to:
 - Get the currently active span
 - Set the currently active span
 
-These functions MUST delegate to the `TracerProvider`.
+These functions MUST delegate to the `Trace Package`.
 
 ## SpanContext
 

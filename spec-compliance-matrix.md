@@ -11,7 +11,7 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|[Trace package](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracerprovider-operations)|
+|[Trace Package](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#trace-package)|
 |Get active Span                               |   |    |   | +    |    |      |   |    |   |    |
 |Set active Span                               |   |    |   | +    |    |      |   |    |   |    |
 |[TracerProvider](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracerprovider-operations)|
