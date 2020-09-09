@@ -60,8 +60,11 @@ The following table summarizes the expected behavior for each combination of
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
 
-When asked to create a Span, the SDK MUST query the `Sampler`'s [`ShouldSample`](#shouldsample) method before actually creating the span, and act accordingly
-(see description of [`ShouldSample`'s](#shouldsample) return value below for how to set `IsRecording` and `Sampled` on the Span, and the [table above](#recording-sampled-reaction-table) on whether to pass the `Span` to `SpanProcessor`s.  A non-recording span MAY be implemented using the same mechanism as when a `Span` is created with no API-implementation installed (`NoOpSpan` or `DefaultSpan`).
+When asked to create a Span, the SDK MUST query the `Sampler`'s [`ShouldSample`](#shouldsample) method before actually creating the span, and act accordingly:
+see description of [`ShouldSample`'s](#shouldsample) return value below for how to set `IsRecording` and `Sampled` on the Span,
+and the [table above](#recording-sampled-reaction-table) on whether to pass the `Span` to `SpanProcessor`s. 
+A non-recording span MAY be implemented using the same mechanism as when a `Span` is created with no API-implementation installed
+(sometimes called a `NoOpSpan` or `DefaultSpan`).
 
 ### Sampler
 
