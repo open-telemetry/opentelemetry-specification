@@ -139,7 +139,7 @@ status of the feature is not known.
 |Array attributes                              | + | +  | + | -    |    | +    | + | +  |   |    |
 |Status mapping                                | + | -  | + | -    |    | +    | + | +  |   |    |
 |Event attributes mapping to Annotations       | + |    | + | +    |    | +    | + | +  |   |    |
-|Fractional microseconds in timestamps         | + | -  | + | -    |    | -    | - | -  |   |    |
+|Integer microseconds in timestamps            |   |    |   |      |    |      |   |    |   |    |
 |Jaeger|
 |TBD|
 |OpenCensus|
