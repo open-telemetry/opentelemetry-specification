@@ -102,7 +102,7 @@ Attributes defining a running environment (e.g. Operating System, Cloud, Data Ce
 - [Operating System](./os.md)
 - [Cloud](./cloud.md)
 - Deployment:
-  - [Environment](./deployment_environment.md)
+  - [Deployment Environment](./deployment_environment.md)
   - [Kubernetes](./k8s.md)
 
 ## Version attributes
