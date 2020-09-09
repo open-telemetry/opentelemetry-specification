@@ -267,14 +267,23 @@ Required arguments:
 
 ## Global Propagators
 
-Implementations MAY provide global `Propagator`s for
-each supported `Propagator` type.
+OpenTelemetry API should provide a way to obtain a propagator for each supported
+`Propagator` type. Instrumentation library SHOULD call propagators to extract
+and inject context on all remote calls. Propagators depending on the language
+MAY be set up using various dependency injection techniques or available as
+global accessors.
 
-If offered, the global `Propagator`s should default to a composite `Propagator`
-containing the W3C Trace Context Propagator and the Baggage `Propagator`
-specified in [api-baggage.md](../baggage/api.md#serialization),
-in order to provide propagation even in the presence of no-op
-OpenTelemetry implementations.
+**Note:** it is discouraged practice, but certain instrumentation libraries
+might use proprietary context propagation protocols or default into a specific
+one. In such cases, instrumentation library MAY choose not to call use supplied
+propagators and instead hardcode the context extract and inject logic.
+
+OpenTelemetry API MUST use no-op propagators when used unconfigured. Context
+propagation may be used for various telemetry signals - traces, metrics, logging
+and more. Platforms such as ASP.NET may pre-configure out-of-the-box
+propagators. If pre-configured, `Propagator`s SHOULD default to a composite
+`Propagator` containing the W3C Trace Context Propagator and the Baggage
+`Propagator` specified in [api-baggage.md](../baggage/api.md#serialization). Platform MUST also allow to disable pre-configured propagators.
 
 ### Get Global Propagator
 
