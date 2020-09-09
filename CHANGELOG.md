@@ -23,6 +23,8 @@ New:
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
   * API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
   * `exception.escaped` was added ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784))
+- Add semantic conventions for system metrics
+  ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
 
 Updates:
 
