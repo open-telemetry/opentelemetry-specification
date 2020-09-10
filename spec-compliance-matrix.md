@@ -67,31 +67,31 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|Create from Attributes                        | + |    | + |      |    |      |   |    |   |    |
-|Create empty                                  | + |    | + |      |    |      |   |    |   |    |
-|Merge                                         | + |    | + |      |    |      |   |    |   |    |
-|Retrieve attributes                           | + |    | + |      |    |      |   |    |   |    |
+|Create from Attributes                        | + |    | + | +    |    |      |   |    |   |    |
+|Create empty                                  | + |    | + | +    |    |      |   |    |   |    |
+|Merge                                         | + |    | + | +    |    |      |   |    |   |    |
+|Retrieve attributes                           | + |    | + | +    |    |      |   |    |   |    |
 
 ## Context Propagation
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Create Context Key                            |  |    | + |      |    |      |   |    |   |    |
-|Get value from Context                        |  |    | + |      |    |      |   |    |   |    |
-|Set value for Context                         |  |    | + |      |    |      |   |    |   |    |
-|Attach Context                                |  |    | + |      |    |      |   |    |   |    |
-|Detach Context                                |  |    | + |      |    |      |   |    |   |    |
-|Get current Context                           |  |    | + |      |    |      |   |    |   |    |
-|Composite Propagator                          |  |    | + |      |    |      |   |    |   |    |
-|Global Propagator                             |  |    | + |      |    |      |   |    |   |    |
-|TraceContext Propagator                       |  |    | + |      |    |      |   |    |   |    |
-|B3 Propagator                                 |  |    | + |      |    |      |   |    |   |    |
-|Jaeger Propagator                             |  |    | + |      |    |      |   |    |   |    |
+|Create Context Key                            |  |    | + | +    |    |      |   |    |   |    |
+|Get value from Context                        |  |    | + | +    |    |      |   |    |   |    |
+|Set value for Context                         |  |    | + | +    |    |      |   |    |   |    |
+|Attach Context                                |  |    | + | +    |    |      |   |    |   |    |
+|Detach Context                                |  |    | + | +    |    |      |   |    |   |    |
+|Get current Context                           |  |    | + | +    |    |      |   |    |   |    |
+|Composite Propagator                          |  |    | + | +    |    |      |   |    |   |    |
+|Global Propagator                             |  |    | + | +    |    |      |   |    |   |    |
+|TraceContext Propagator                       |  |    | + | +    |    |      |   |    |   |    |
+|B3 Propagator                                 |  |    | + | +    |    |      |   |    |   |    |
+|Jaeger Propagator                             |  |    | + | -    |    |      |   |    |   |    |
 |[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
-|Fields                                        |  |    |   |      |    |      |   |    |   |    |
-|Setter argument                               |  |    | + |      |    |      |   |    |   |    |
-|Getter argument                               |  |    | + |      |    |      |   |    |   |    |
-|Getter argument returning Keys                |  |    |   |      |    |      |   |    |   |    |
+|Fields                                        |  |    |   | -   |    |      |   |    |   |    |
+|Setter argument                               |  |    | + | +   |    |      |   |    |   |    |
+|Getter argument                               |  |    | + | +   |    |      |   |    |   |    |
+|Getter argument returning Keys                |  |    |   | -   |    |      |   |    |   |    |
 
 ## Error Handling
 
@@ -109,7 +109,7 @@ status of the feature is not known.
 |OTEL_BSP_*                                    |   |    |   | -    |    | -    |   |    | - | -  |
 |OTEL_EXPORTER_OTLP_*                          |   |    |   | -    |    | -    |   |    | - | -  |
 |OTEL_EXPORTER_JAEGER_*                        |   |    |   | -    |    | -    |   |    | - | -  |
-|OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | -    |    | -    |   |    | - | -  |
+|OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    |   |    | - | -  |
 
 ## Exporters
 
