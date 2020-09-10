@@ -205,7 +205,7 @@ instruments from asynchronous instrument callbacks is considered a
 side-effect, in this case.  SDKs SHOULD support processing synchronous
 instruments that are used in this way in the same collection period as
 the asynchronous instrument callbacks that caused the side-effect,
-provided the synchronous and asychronous instruments are being
+provided the synchronous and asynchronous instruments are being
 collected over the same interval.
 
 TODO: _Are there more Accumulator functional requirements?_
