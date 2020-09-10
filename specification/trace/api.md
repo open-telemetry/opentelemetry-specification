@@ -175,11 +175,10 @@ byte.
 TraceFlags are present in all traces. The current version of the specification
 only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
 
-`TraceState` carries system-specific configuration data, represented as a list
+`TraceState` carries vendor-specific trace identification data, represented as a list
 of key-value pairs. TraceState allows multiple tracing
-systems to participate in the same trace. Please review the [W3C
-specification](https://www.w3.org/TR/trace-context/#tracestate-header) for
-details on this field.
+systems to participate in the same trace. It is fully described in the [W3C Trace Context
+specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 
 ### Retrieving the TraceId and SpanId
 
@@ -195,16 +194,39 @@ The API should not expose details about how they are internally stored.
 
 ### IsValid
 
-An API that returns a boolean value, which is `true` if the SpanContext has a
-non-zero TraceID and a non-zero SpanID.
+An API called `IsValid`, that returns a boolean value, which is `true` if the SpanContext has a
+non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 ### IsRemote
 
-An API that returns a boolean value, which is `true` if the SpanContext was
-propagated from a remote parent. When extracting a `SpanContext` through the
-[Propagators API](../context/api-propagators.md#propagators-api), its `IsRemote`
-flag MUST be set to true, whereas the SpanContext of any child spans MUST have
-it set to false.
+An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanContext was
+propagated from a remote parent, MUST be provided.
+When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md#propagators-api),
+`IsRemote` MUST return true, whereas for the SpanContext of any child spans it MUST return false.
+
+### TraceState
+
+`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key/value pairs and
+formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
+Tracing API MUST provide at least the following operations on `TraceState`:
+
+* Get value for a given key
+* Add a new key/value pair
+* Update an existing value for a given key
+* Delete a key/value pair
+
+These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
+All mutating operations MUST return a new `TraceState` with the modifications applied.
+`TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
+Every mutating operations MUST validate input parameters.
+If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
+and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
+
+Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
+Such changes then make sense only right before
+[`SpanContext` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
+or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
+In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
 
 ## Span
 
