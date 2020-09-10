@@ -183,6 +183,31 @@ synchronous instrument updates.  The Accumulator SHOULD NOT hold an
 exclusive lock while calling an Aggregator (see below), since some
 Aggregators may have higher concurrency expectations.
 
+#### Accumulator Collect() function
+
+The Accumulator MUST implement a Collect method that builds and
+processes current Accumulation values for active instruments, meaning
+those that were updated since the prior collection.  The Collect
+method MUST call the Processor to process Accumulations corresponding
+to all metric events that happened before the call.
+
+Accumulations MUST be computed during Collect using a _synchronized
+move_ operation on the Aggregator.  This operation atomically copies
+the Aggregator and resets it to the zero state, so that each
+Aggregator immediately begins accumulating events for the next
+collection period while the current one is processed.  An Accumulation
+is defined as the synchronously-copied Aggregator combined with the
+LabelSet, Resource, and metric Descriptor.
+
+The Accumulator MUST permit synchronous metric instruments to be used
+during asynchronous instrument callbacks.  The use of synchronous
+instruments from asynchronous instrument callbacks is considered a
+side-effect, in this case.  SDKs SHOULD support processing synchronous
+instruments that are used in this way in the same collection period as
+the asynchronous instrument callbacks that caused the side-effect,
+provided the synchronous and asychronous instruments are being
+collected over the same interval.
+
 TODO: _Are there more Accumulator functional requirements?_
 
 ### Processor
