@@ -41,7 +41,7 @@ terms to describe the boundary between the SDK and the API, but from
 the API's perspective the SDK is opaque and without structure.
 
 This document specifies the internal structure of the default
-OpenTelemetry SDK in terms of its constituent parts, with terminologuy
+OpenTelemetry SDK in terms of its constituent parts, with terminology
 chosen to explain each part's role in exporting metric data from the
 input (API-level events) to the output (a metric exposition format).
 We use the term **Export Pipeline** as a functional description of the
@@ -140,17 +140,26 @@ collection periods): these are considered implementation details.
 
 ### Instrument Registration
 
-The OpenTelemetry SDK MUST ensure that an individual Meter
-implementation cannot report instruments with the same name and
-different instrument kind.
+The OpenTelemetry SDK is responsible for ensuring that an individual
+Meter implementation cannot report multiple instruments with the same
+name and different definitions.  To accomplish this, SDKs MUST reject
+duplicate registration of an instrument when another instrument has
+already been registered with same metric name to the same named Meter.
 
-For synchronous instruments, duplicate registration is permitted.  The
-SDK SHOULD return the same SDK instrument when correctly registered
-multiple times.
+Separate Meters, characterized by different instrumetation library
+names, are permitted to register instruments by the same name as used
+in different instrumentation libraries, in which case the SDK MUST
+consider these as separate instruments.  The requirement applies even
+for attempts to register an identical instrument definition.  We
+assume that a single instrumentation library can arrange to use a
+single instrument definition rather than rely on the SDK to support
+duplicate registration.
 
-For asynchronous instruments, duplicate registration is not permitted.
-The SDK MUST not permit registration of multiple callbacks with the same
-instrument name.
+The SDK is responsible for implementing any syntactic requirements for
+metric names included in the API specification.  TODO: link to this
+after [OTEP
+108](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0108-naming-guidelines.md)
+is written into the API specification.
 
 ### Accumulator
 
