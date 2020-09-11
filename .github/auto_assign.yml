@@ -10,9 +10,12 @@ useAssigneeGroups: true
 # A list of assignees, split into different groups, to be added to pull requests (GitHub user name)
 assigneeGroups:
     tc:
+        - arminru
         - bogdandrutu
         - carlosalberto
+        - jmacd
         - SergeyKanzhelev
+        - tigrannajaryan
         - yurishkuro
 
 # A number of assignees added to the pull request
