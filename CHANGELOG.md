@@ -15,17 +15,14 @@ New:
   ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
 - Add semantic conventions for outgoing Function as a Service (FaaS) invocations
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
+- Add resource semantic convention for deployment environment
+  ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
 - Add Span API and semantic conventions for recording exceptions
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
-- Spans have parent `Context`s instead of just `SpanContext`s
-  ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
-  * A full Context is the only way to specify a parent of a span
-    SpanContext or even Span are not allowed anymore.
-  * Readable spans MUST provide a way to retrieve the full parent context.
-  ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697),
-  [#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
+  * API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
+  * `exception.escaped` was added ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784))
 
 Updates:
 
@@ -55,9 +52,16 @@ Updates:
   ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
+- Use hex encoding for trace id and span id fields in OTLP JSON encoding:
+  ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
   ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
-
+- Spans have parent `Context`s instead of just `SpanContext`s
+  ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
+  * A full Context is the only way to specify a parent of a span
+    SpanContext or even Span are not allowed anymore.
+  * Readable spans MUST provide a way to retrieve the full parent context.
+  
 ## v0.6.0 (07-01-2020)
 
 New:
