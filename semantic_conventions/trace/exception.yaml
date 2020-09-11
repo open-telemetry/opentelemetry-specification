@@ -14,14 +14,17 @@ groups:
         examples: ["java.net.ConnectException","OSError"]
       - id: message
         type: string
-        brief: "The exception message"
+        brief: The exception message.
         examples: ["Division by zero","Can't convert 'int' object to str implicitly"]
       - id: stacktrace
         type: string
         brief: >
           A stacktrace as a string in the natural representation for the language runtime.
           The representation is to be determined and documented by each language SIG.
-        examples: "Exception in thread \"main\" java.lang.RuntimeException: Test exception\\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\\n at com.example.GenerateTrace.main(GenerateTrace.java:5)"
+        examples: 'Exception in thread "main" java.lang.RuntimeException: Test exception\n
+        at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n
+        at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n
+        at com.example.GenerateTrace.main(GenerateTrace.java:5)'
     constraints:
       - any_of:
         - "exception.type"
