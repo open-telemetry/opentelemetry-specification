@@ -13,12 +13,13 @@ Agreement](https://identity.linuxfoundation.org/projects/cncf).
 
 ## Proposing a change
 
-Significant changes should go through the [RFC process](https://github.com/open-telemetry/rfcs).
+Significant changes should go through the [OpenTelemetry Enhancement
+Proposal](https://github.com/open-telemetry/oteps) process.
 
 ## Writing specs
 
 Specification is written in markdown format. Please make sure files are rendered
-OK on GitHub.
+correctly on GitHub.
 
 Be sure to clearly define the specification requirements using the key words
 defined in [BCP 14](https://tools.ietf.org/html/bcp14)
@@ -30,7 +31,7 @@ sparing use of imperatives:
 > Imperatives of the type defined in this memo must be used with care
 > and sparingly.  In particular, they MUST only be used where it is
 > actually required for interoperation or to limit behavior which has
-> potential for causing harm (e.g., limiting retransmisssions)  For
+> potential for causing harm (e.g., limiting retransmissions)  For
 > example, they must not be used to try to impose a particular method
 > on implementors where the method is not required for
 > interoperability.

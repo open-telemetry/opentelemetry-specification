@@ -45,6 +45,8 @@ The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
 
+<a name="recording-sampled-reaction-table"></a>
+
 The following table summarizes the expected behavior for each combination of
 `IsRecording` and `SampledFlag`.
 
@@ -56,7 +58,13 @@ The following table summarizes the expected behavior for each combination of
 | false         | false          | false                         | false                        |
 
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
-[built-in samplers](#built-in-samplers).
+[built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
+
+When asked to create a Span, the SDK MUST query the `Sampler`'s [`ShouldSample`](#shouldsample) method before actually creating the span, and act accordingly:
+see description of [`ShouldSample`'s](#shouldsample) return value below for how to set `IsRecording` and `Sampled` on the Span,
+and the [table above](#recording-sampled-reaction-table) on whether to pass the `Span` to `SpanProcessor`s.
+A non-recording span MAY be implemented using the same mechanism as when a `Span` is created with no API-implementation installed
+(sometimes called a `NoOpSpan` or `DefaultSpan`).
 
 ### Sampler
 
@@ -303,19 +311,35 @@ therefore it should not block or throw an exception.
 Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
-Shutdown should be called only once for each `Processor` instance. After the
-call to shutdown subsequent calls to `onStart`, `onEnd`, or `forceFlush` are not allowed.
+`Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
+the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
+are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
 
-Shutdown should not block indefinitely. Language library authors can decide if
-they want to make the shutdown timeout configurable.
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` MUST include the effects of `ForceFlush`.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the shutdown timeout configurable.
 
 #### ForceFlush()
 
-Export all ended spans to the configured `Exporter` that have not yet been exported.
+Exports all spans that have not yet been exported to the configured `Exporter`.
 
-`ForceFlush` should only be called in cases where it is absolutely necessary, such as when using some FaaS providers that may suspend the process after an invocation, but before the `Processor` exports the completed spans.
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
 
-`ForceFlush` should not block indefinitely. Language library authors can decide if they want to make the flush timeout configurable.
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
+such as when using some FaaS providers that may suspend the process after an
+invocation, but before the `Processor` exports the completed spans.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the flush timeout configurable.
 
 ### Built-in span processors
 
