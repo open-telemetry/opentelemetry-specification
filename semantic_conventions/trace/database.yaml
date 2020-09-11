@@ -146,7 +146,7 @@ groups:
           type: string
           brief: >
             The connection string used to connect to the database.
-          note: It is recommended to remove embedded credentials.
+            It is recommended to remove embedded credentials.
           examples: 'Server=(localdb)\v11.0;Integrated Security=true;'
         - id: user
           tag: connection-level
