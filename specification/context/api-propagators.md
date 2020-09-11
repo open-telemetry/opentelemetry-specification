@@ -276,7 +276,7 @@ global accessors.
 **Note:** it is discouraged practice, but certain instrumentation libraries
 might use proprietary context propagation protocols or be hardcoded to use a
 specific one. In such cases, instrumentation library MAY choose not to use the
-API-provided propagators and instead hardcode the context extract and inject
+API-provided propagators and instead hardcode the context extraction and injection
 logic.
 
 The OpenTelemetry API MUST use no-op propagators when used unconfigured. Context
