@@ -9,19 +9,20 @@ creating instruments not explicitly defined in the specification.
 
 <!-- toc -->
 
-- [Semantic Conventions](#semantic-conventions)
-  * [Instrument Names](#instrument-names)
-  * [Units](#units)
-- [Metric Instruments](#metric-instruments)
-  * [Standard System Metrics - `system.`](#standard-system-metrics---system)
-    + [`system.cpu.`](#systemcpu)
-    + [`system.memory.`](#systemmemory)
-    + [`system.swap.`](#systemswap)
-    + [`system.disk.`](#systemdisk)
-    + [`system.filesystem.`](#systemfilesystem)
-    + [`system.network.`](#systemnetwork)
-    + [`system.process.`](#systemprocess)
-    + [OS Specific System Metrics - `system.{os}.`](#os-specific-system-metrics---systemos)
+- [Semantic Conventions for System Metrics](#semantic-conventions-for-system-metrics)
+  - [Semantic Conventions](#semantic-conventions)
+    - [Instrument Names](#instrument-names)
+    - [Units](#units)
+  - [Metric Instruments](#metric-instruments)
+    - [Standard System Metrics - `system.`](#standard-system-metrics---system)
+      - [`system.cpu.`](#systemcpu)
+      - [`system.memory.`](#systemmemory)
+      - [`system.swap.`](#systemswap)
+      - [`system.disk.`](#systemdisk)
+      - [`system.filesystem.`](#systemfilesystem)
+      - [`system.network.`](#systemnetwork)
+      - [`system.process.`](#systemprocess)
+      - [OS Specific System Metrics - `system.{os}.`](#os-specific-system-metrics---systemos)
 
 <!-- tocstop -->
 
@@ -34,9 +35,9 @@ followed for other instruments not explicitly defined in this document.
 ### Instrument Names
 
 - **usage** - an instrument that measures an amount used out of a known total
-amount should be called `entity.usage`. For example,
-`system.filesystem.usage` for the amount of disk spaced used. A measure of
-the amount of an unlimited resource consumed is differentiated from
+amount should be called `entity.usage`. For example, `system.memory.usage`
+for the amount of memory used. A measure of the amount of an unlimited
+resource consumed is differentiated from
 **usage**. This may be time, data, etc.
 - **utilization** - an instrument that measures a *value ratio* of usage
 (like percent, but in the range `[0, 1]`) should be called
@@ -68,12 +69,12 @@ units like `packets`, `errors`, `faults`, etc.
 #### `system.cpu.`
 
 **Description:** System level processor metrics.
-| Name                   | Units   | Instrument Type   | Value Type | Label Key | Label Values                        |
-| ---------------------- | ------- | ----------------- | ---------- | --------- | ----------------------------------- |
-| system.cpu.time        | seconds | SumObserver       | Double     | state     | idle, user, system, interrupt, etc. |
-|                        |         |                   |            | cpu       | 1 - #cores                          |
-| system.cpu.utilization | 1       | UpDownSumObserver | Double     | state     | idle, user, system, interrupt, etc. |
-|                        |         |                   |            | cpu       | 1 - #cores                          |
+| Name                   | Units   | Instrument Type | Value Type | Label Key | Label Values                        |
+| ---------------------- | ------- | --------------- | ---------- | --------- | ----------------------------------- |
+| system.cpu.time        | seconds | SumObserver     | Double     | state     | idle, user, system, interrupt, etc. |
+|                        |         |                 |            | cpu       | 1 - #cores                          |
+| system.cpu.utilization | 1       | ValueObserver   | Double     | state     | idle, user, system, interrupt, etc. |
+|                        |         |                 |            | cpu       | 1 - #cores                          |
 
 #### `system.memory.`
 
@@ -139,9 +140,9 @@ units like `packets`, `errors`, `faults`, etc.
 
 **Description:** System level aggregate process metrics. For metrics at the
 individual process level, see [process metrics](process-metrics.md).
-| Name                 | Units     | Instrument Type | Value Type | Label Key | Label Values                                                                                   |
-| -------------------- | --------- | --------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
-| system.process.count | processes | UpDownSumObserver     | Int64      | status    | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
+| Name                 | Units     | Instrument Type   | Value Type | Label Key | Label Values                                                                                   |
+| -------------------- | --------- | ----------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
+| system.process.count | processes | UpDownSumObserver | Int64      | status    | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
 
 #### OS Specific System Metrics - `system.{os}.`
 
