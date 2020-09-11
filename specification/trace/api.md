@@ -9,9 +9,9 @@ Table of Contents
   * [Time](#time)
     * [Timestamp](#timestamp)
     * [Duration](#duration)
-* [Tracer Package](#trace-package)
 * [TracerProvider](#tracerprovider)
   * [TracerProvider operations](#tracerprovider-operations)
+* [Tracing Context Utilities](#tracing-context-utilities)
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
@@ -75,21 +75,6 @@ A duration is the elapsed time between two events.
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
 
-## Trace Package
-
-The `Trace Package` is the package containing the TracerProvider and Tracer
-API classes. In some languages, this may also be referred to as a module, or
-may be static methods on a class if the language exposes functionality purely
-by classes (such as Java).
-
-The `Trace Package` MUST provide the following functions:
-
-- Get the currently active span
-- Set the currently active span
-
-The `Trace Package` MUST delegate to the [`Context`](../context/context.md) to perform these tasks, i.e. the above methods MUST do the same as a single
-equivalent method of the Context management system.
-
 ## TracerProvider
 
 `Tracer`s can be accessed with a `TracerProvider`.
@@ -144,6 +129,22 @@ If configuration must be stored per-tracer (such as disabling a certain tracer),
 the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
+
+## Tracing Context Utilities
+
+`Tracing Context Utilities` contains all operations within tracing that
+modify the [`Context`](../context/context.md).
+
+As these utilities operate solely on the context API, they MAY be exposed
+as static methods on the trace module instead of a class.
+
+The `Tracing Context Utilities` MUST provide the following functions:
+
+- Get the currently active span
+- Set the currently active span
+
+The above methods MUST be equivalent to a single parameterized method call of
+the [`Context`](../context/context.md) management system.
 
 ## Tracer
 
