@@ -13,12 +13,13 @@ Agreement](https://identity.linuxfoundation.org/projects/cncf).
 
 ## Proposing a change
 
-Significant changes should go through the [RFC process](https://github.com/open-telemetry/rfcs).
+Significant changes should go through the [OpenTelemetry Enhancement
+Proposal](https://github.com/open-telemetry/oteps) process.
 
 ## Writing specs
 
 Specification is written in markdown format. Please make sure files are rendered
-OK on GitHub.
+correctly on GitHub.
 
 Be sure to clearly define the specification requirements using the key words
 defined in [BCP 14](https://tools.ietf.org/html/bcp14)

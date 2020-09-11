@@ -6,6 +6,18 @@
 
 The OpenTelemetry specification describes the cross-language requirements and expectations for all OpenTelemetry implementations. Substantive changes to the specification must be proposed using the [OpenTelemetry Enhancement Proposal](https://github.com/open-telemetry/oteps) process. Small changes, such as clarifications, wording changes, spelling/grammar corrections, etc. can be made directly via pull requests.
 
+Questions that needs additional attention can be brought to the regular
+specifications meeting. EU and US timezone friendly meeting is held every
+Tuesday at 8 AM pacific time. Meeting notes are held in this google
+doc:https://docs.google.com/document/d/1-bCYkN-DWJq4jw1ybaDZYYmx-WAe6HnwfWbkm8d57v8/edit?usp=sharing
+APAC timezone friendly meeting is held Tuesdays,⋅4PM pacific time. See
+[OpenTelemetry calendar](https://github.com/open-telemetry/community#calendar).
+
+Escalations to technical committee may be made over the
+[e-mail](https://github.com/open-telemetry/community#tc-technical-committee).
+Technical committee holds regular meetings, notes are held
+[here](https://docs.google.com/document/d/17v2RMZlJZkgoPYHZhIFTVdDqQMIAH8kzo8Sl2kP3cbY/edit?usp=sharing).
+
 ## Table of Contents
 
 - [Overview](specification/overview.md)
@@ -62,11 +74,7 @@ Please refrain from using "OT" in order to avoid confusion with the now deprecat
 
 ## Contributions
 
-The change process is still evolving. For the short term, please use [issues](https://github.com/open-telemetry/specification/issues) to suggest changes and [pull requests](https://github.com/open-telemetry/specification/pulls) to suggest implementations of changes that have been discussed in a relevant issue.
-
-We will be setting up a more complete RFC process to streamline the discussion of changes.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for more details on contribution process.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on contribution process.
 
 ## License
 
