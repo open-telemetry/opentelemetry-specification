@@ -279,7 +279,7 @@ specific one. In such cases, instrumentation library MAY choose not to use the
 API-provided propagators and instead hardcode the context extract and inject
 logic.
 
-OpenTelemetry API MUST use no-op propagators when used unconfigured. Context
+The OpenTelemetry API MUST use no-op propagators when used unconfigured. Context
 propagation may be used for various telemetry signals - traces, metrics, logging
 and more. So context propagation MAY be enabled for any of them. For instance,
 a span exporter may be left unconfigured, although the trace context is being propagated.
