@@ -32,7 +32,7 @@ zPages are uniquely useful in a couple of different ways. One is that they're mo
 
 ### Tracez
 
-Tracez shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. In addition to these counts, Tracez also keeps a set number of samples for error, running, and latency (including within each duration bucket) spans for each span name to allow users to look closer at span fields. This is particularly useful compared to external exporters that would otherwise likely sample them out.
+Tracez shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. Latency spans are spans that complete successfully without errors, and are bucketed according to their end time. Running spans are imcomplete spans, which should become latency or error spans at some point. Error spans are ones that complete with an error, which is encoded with a [non-Ok status](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#status). In addition to these counts, Tracez also keeps a set number of samples for each of these error, running, and latency (including within each duration bucket) buckets within each span name to allow users to look closer at span fields. This is particularly useful compared to external exporters that would otherwise likely sample them out.
 
 This zPage is also useful for debugging latency issues (slow parts of applications), deadlocks and instrumentation problems (running spans that don't end), and errors (where errors happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
 
@@ -54,7 +54,7 @@ Statsz is focused on metrics, as it displays metrics and measures for exported v
 
 ### Tracez Details
 
-For OpenTelemetry, a custom [span processor](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-processor) SHOULD be made to interface with the [Tracer API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer) to collect spans. This span processor collects references to running spans and exports completed spans to its own memory or directly to an aggregator. An alternative to a span processor is using some sort of profiler as a proxy shim layer.
+For OpenTelemetry, a custom [span processor](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-processor) SHOULD be made to interface with the [Tracer API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer) to collect spans. This span processor collects references to running spans and exports completed spans to its own memory or to an aggregator that can aggregate information from multiple span processors.
 
 There SHOULD be a `data aggregator` that tracks running, error, and latency buckets counts for spans grouped by their respective name. The aggregator MUST also hold some sampled spans to provide users with more information. To prevent memory overload, only some spans MUST be sampled for each bucket for each span name; for example, if that sampled span max number is set to 5, then only up to 55 pieces of span data can be kept for each span name in the aggregator (sampled_max * number of buckets = 5 * [running + error + 9 latency buckets] =  5 * 11 = 55). Aggregation work is recommended to do periodically in batches.
 
@@ -86,22 +86,23 @@ Each zPages implementation MUST create a wrapper class for zPages, since they al
 
 ### HTTP Server
 
-All zPages MUST have a HTTP Server to render information on a webpage when a host:port and endpoint is accessed. All zPages MUST be accessed from the same host:port. There SHOULD be handlers to group logic by type of zPage, and there SHOULD be a landing page (at `host:port/` and possibly any invalid endpoints) that links currently implemented zPages for a given repository. Note that HTTP server logic for different languages may differ in how URLs are resolved, so the developer should ensure that expected behavior is achieved. For example, `host:port/tracez`, `host:port/tracez/`, `host:port/tracez/index.html`, and `host:port/tracez/index.html/` should all resolve to the same information.
+All zPages MUST have a HTTP Server to render information on a webpage when a host:port and endpoint is accessed. All zPages MUST be accessed from the same host:port; For example, this means host1 should equal host2 and port1 should equal port2 for `host1:post1/tracez` adn `host2:port2/rpcz`. There SHOULD be handlers to group logic by type of zPage, and there SHOULD be a landing page. This landing page would be at the root `host:port/`, displaying links to currently implemented zPages for that repository. Similar behavior CAN be implemented for any invalid endpoints as well.
 
 Traditionally, zPages have approached this by rendering web pages purely on the server-side. This means the server would only serve static resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Based on the type of zPage and the server language used, a pure server-side approach would generate HTML pages using hardcoded strings from scratch or using a template; this would tightly couple the data and UI layer.
 
-The following endpoints SHOULD be used for serving files for any HTTP server approach for any zPage:
+The following endpoints SHOULD be used for serving files (which are ideally standardized, per the [Future Possibilities](#future-possibilities)) section, for any HTTP server approach for any zPage:
 
 - `host:port/{zpage}` display the main page and aggregations
 - `host:port/{zpage}/style.css` SHOULD contain the styling logic. This CAN also be embedded in the HTML, but SHOULD be separated and linked in the page head using `<link rel="stylesheet" href="/{zpage}/style.css">`
 - If server-side only:
-  - `host:port/{zpage}/{...}`, and other variants SHOULD display detailed information on the item described by the {...}
+  - `host:port/{zpage}/{...}`, and other variants SHOULD display detailed information on the data described by the {...}
+    - an example of this: If a user accesses `host:port/tracez?type=error&name=span1`, that Tracez page should display all currently sampled error spans with the name `span1`
 - If adding client-side:
   - `host:port/{zpage}/script.js` SHOULD return the frontend Javascript code if these zPages uses client-side interaction. This CAN also be embedded in the HTML, but SHOULD be separated and linked in the page head using `<script src="/{zpage}/script.js">`
 
-All zPages need some server-side rendering, but the data and UI layer MAY be separated by adding client-side functionality. This separation has benefits including 1.) allowing users to access isolated zPages data, such as when using wget on the endpoints serving JSON data, without HTML/CSS/Javascript and 2.) adding extensibility to zPages (e.g. the frontend can be centralized and used in multiple  OTel language repositories). This approach is detailed below.
+All zPages need some server-side rendering, but the data and UI layer MAY be separated by adding client-side functionality. This separation has benefits including 1.) allowing users to consume zPages data without a browser, styling, or Javascript, such as when using wget on the endpoints serving JSON data and 2.) adding extensibility to zPages (e.g. the frontend can be centralized and used in multiple  OTel language repositories). This approach is detailed below.
 
-Instead of directly translating native data structures to HTML strings based on the stored information, the data layer MUST do 2 things depending on the webpage endpoint accessed: 1. Serve the static HTML, JS, and CSS files, which are consistent, not server generated, and not data dependent and 2. Act like a web REST API by translating stored data to JSON. Whether the data layer does one or the other depends on which URL endpoint is accessed; the former is intended for the initial zPages load, and latter for user interactions. If the client requests the data via a request parameter or "Accept" HTTP header, that data should be available as a JSON-encoded response.
+Instead of directly translating native data structures to HTML strings based on the stored information, the data layer MUST do 2 things depending on the webpage endpoint accessed: 1. Serve the static HTML, JS, and CSS files, which are not not data dependent and 2. Act like a web REST API by translating stored data to JSON. Whether the data layer does one or the other depends on which URL endpoint is accessed; the former is intended for the initial zPages load, and latter for user interactions. If the client requests the data via a request parameter or "Accept" HTTP header, that data should be available as a JSON-encoded response.
 
 If using the server/client approach for the HTTP server, the following endpoints and data formatting (using proto3 definitions) SHOULD be used for serving JSON:
 
@@ -110,22 +111,22 @@ If using the server/client approach for the HTTP server, the following endpoints
 
     ```proto3
     message TracezCounts {
-          string name = 1;
-          repeated uint32 latency = 2;
+          string spanname = 1;
+          repeated uint32 latency = 2; // [A]
           uint32 running = 3;
           uint32 error = 4;
         }
     ```
 
-  - `host:post/tracez/api/latency/{bucket_index}/{span_name}` SHOULD return `repeated LatencyData`, which describes latency sampled spans with the name {span_name} at latency band index {bucket_index}. Latency bands are determined by the developer, but they MUST be increasing in duration and map to what is determined within Tracez. The array MUST be size sampled_max or less.
+  - `host:post/tracez/api/latency/{bucket_index}/{span_name}` SHOULD return `repeated LatencyData`, which describes latency sampled spans with the name {span_name} at latency band index {bucket_index}. Latency bands are determined by the developer, but they MUST be increasing in duration and map to what is determined within Tracez [A]. An example of latency buckets could be, as used in OTel C++ Tracez: [>0s, >10µs, >100µs, >1ms, >10ms, >100ms, >1s, >10s, >100s]. The array MUST be size sampled_max or less.
 
     ```proto3
     message LatencyData {
           bytes traceid = 1;
           bytes spanid = 2;
           bytes parentid = 3;
-          fixed64 start = 4;
-          fixed64 end = 5;
+          fixed64 starttime = 4;
+          fixed64 endtime = 5;
           repeated opentelemetry.proto.common.v1.KeyValue attributes = 6; // [1]
           repeated Event events = 7; // [2]
           repeated Link links = 8; // [3]
@@ -139,10 +140,10 @@ If using the server/client approach for the HTTP server, the following endpoints
           bytes traceid = 1;
           bytes spanid = 2;
           bytes parentid = 3;
-          fixed64 start = 4;
+          fixed64 starttime = 4;
           repeated opentelemetry.proto.common.v1.KeyValue attributes = 5; // [1]
-          repeated Event events = 7; // [2]
-          repeated Link links = 8; // [3]
+          repeated Event events = 6; // [2]
+          repeated Link links = 7; // [3]
     }
     ```
 
@@ -153,7 +154,7 @@ If using the server/client approach for the HTTP server, the following endpoints
           bytes traceid = 1;
           bytes spanid = 2;
           bytes parentid = 3;
-          fixed64 start = 4;
+          fixed64 starttime = 4;
           repeated opentelemetry.proto.common.v1.KeyValue attributes = 5; // [1]
           repeated Event events = 6; // [2]
           repeated Link links = 7; // [3]
@@ -163,7 +164,7 @@ If using the server/client approach for the HTTP server, the following endpoints
 
     Key: [[1]](https://github.com/open-telemetry/opentelemetry-proto/blob/ca6dcbbf390d8b3ce419a931eb351d189a3eb4fa/opentelemetry/proto/trace/v1/trace.proto#L152) attribute, [[2]](https://github.com/open-telemetry/opentelemetry-proto/blob/ca6dcbbf390d8b3ce419a931eb351d189a3eb4fa/opentelemetry/proto/trace/v1/trace.proto#L169) event, [[3]](https://github.com/open-telemetry/opentelemetry-proto/blob/ca6dcbbf390d8b3ce419a931eb351d189a3eb4fa/opentelemetry/proto/trace/v1/trace.proto#L196) link, [[4]](https://github.com/open-telemetry/opentelemetry-proto/blob/ca6dcbbf390d8b3ce419a931eb351d189a3eb4fa/opentelemetry/proto/trace/v1/trace.proto#L231) status
 
-> TODO: add more zPage endpoint specs (i.e. URL and data formatting, required/optional parameters)
+> TODO: add more zPage endpoint specs (i.e. URL and data formatting, required/optional parameters) and additional review of fields desired as we likely want many/all of the OTLP fields (e.g. SpanKind)
 
 The UI/frontend/rendering layer is the HTML, CSS, and Javascript itself, in contrast to the logic to serve those files. This frontend uses the data layer's API on the client-side within the browser with Javascript by accessing certain endpoints depending on the user's actions. The data returned interacts with the Javascript, which determines and executes the logic necessary to render updates to the HTML DOM. Modifying the HTML DOM means there are no unnecessary requesting and re-rendering static files, and only parts of the webpage are changed. This makes subsequent data queries quicker and requires no knowledge of client-side rendering for the zPages developer.
 
