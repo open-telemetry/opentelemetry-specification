@@ -269,7 +269,7 @@ Required arguments:
 
 OpenTelemetry API should provide a way to obtain a propagator for each supported
 `Propagator` type. Instrumentation library SHOULD call propagators to extract
-and inject context on all remote calls. Propagators depending on the language
+and inject the context on all remote calls. Propagators, depending on the language,
 MAY be set up using various dependency injection techniques or available as
 global accessors.
 
