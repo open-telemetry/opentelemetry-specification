@@ -287,7 +287,7 @@ trace exporter may not be configured while trace context is propagated.
 Platforms such as ASP.NET may pre-configure out-of-the-box
 propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` containing the W3C Trace Context Propagator and the Baggage
-`Propagator` specified in [api-baggage.md](../baggage/api.md#serialization). Platform MUST also allow to disable pre-configured propagators.
+`Propagator` specified in [api-baggage.md](../baggage/api.md#serialization). These platforms MUST also allow pre-configured propagators to be disabled.
 
 ### Get Global Propagator
 
