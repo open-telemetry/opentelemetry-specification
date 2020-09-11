@@ -282,7 +282,7 @@ logic.
 OpenTelemetry API MUST use no-op propagators when used unconfigured. Context
 propagation may be used for various telemetry signals - traces, metrics, logging
 and more. So context propagation MAY be enabled for any of them. For instance,
-trace exporter may not be configured while trace context is propagated.
+a span exporter may be left unconfigured, although the trace context is being propagated.
 
 Platforms such as ASP.NET may pre-configure out-of-the-box
 propagators. If pre-configured, `Propagator`s SHOULD default to a composite
