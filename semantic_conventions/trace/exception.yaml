@@ -25,7 +25,7 @@ groups:
         at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n
         at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n
         at com.example.GenerateTrace.main(GenerateTrace.java:5)'
-      - id: exception.escaped
+      - id: escaped
         type: boolean
         brief: >
           SHOULD be set to true if the exception event is recorded at a point where
