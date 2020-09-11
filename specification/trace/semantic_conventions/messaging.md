@@ -123,7 +123,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.message_payload_size_bytes` | number | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
 | `messaging.message_payload_compressed_size_bytes` | number | The compressed size of the message payload in bytes. | `2048` | No |
 
-**[1]:** Required only if the message destination is either a `queue` or `topic`
+**[1]:** Required only if the message destination is either a `queue` or `topic`.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 

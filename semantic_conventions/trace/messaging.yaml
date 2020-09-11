@@ -28,7 +28,7 @@ groups:
                 value: "topic"
                 brief: "A message broadcasted to the subscribers of the topic"
           required:
-            conditional: 'Required only if the message destination is either a `queue` or `topic`'
+            conditional: 'Required only if the message destination is either a `queue` or `topic`.'
           brief: 'The kind of message destination'
         - id: temp_destination
           type: boolean
