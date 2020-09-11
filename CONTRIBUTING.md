@@ -31,7 +31,7 @@ sparing use of imperatives:
 > Imperatives of the type defined in this memo must be used with care
 > and sparingly.  In particular, they MUST only be used where it is
 > actually required for interoperation or to limit behavior which has
-> potential for causing harm (e.g., limiting retransmisssions)  For
+> potential for causing harm (e.g., limiting retransmissions)  For
 > example, they must not be used to try to impose a particular method
 > on implementors where the method is not required for
 > interoperability.
