@@ -164,7 +164,7 @@ The `Tracer` MAY provide functions to:
 - Get the currently active span
 - Set the currently active span
 
-These functions MUST delegate to the `Trace Package`.
+These functions MUST delegate to the `Tracing Context Utilities`.
 
 ## SpanContext
 
