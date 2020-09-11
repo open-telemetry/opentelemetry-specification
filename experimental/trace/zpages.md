@@ -86,7 +86,7 @@ Each zPages implementation MUST create a wrapper class for zPages, since they al
 
 ### HTTP Server
 
-All zPages MUST have a HTTP Server to render information on a webpage when a host:port and endpoint is accessed. All zPages MUST be accessed from the same host:port; For example, this means host1 should equal host2 and port1 should equal port2 for `host1:post1/tracez` adn `host2:port2/rpcz`. There SHOULD be handlers to group logic by type of zPage, and there SHOULD be a landing page. This landing page would be at the root `host:port/`, displaying links to currently implemented zPages for that repository. Similar behavior CAN be implemented for any invalid endpoints as well.
+All zPages MUST have a HTTP Server to render information on a webpage when a host:port and endpoint is accessed. All zPages MUST be accessed from the same host:port; For example, host1 should equal host2 and port1 should equal port2 for `host1:post1/tracez` and `host2:port2/rpcz`. There SHOULD be handlers to group logic by type of zPage, and there SHOULD be a landing page. This landing page would be at the root `host:port/`, displaying links to currently implemented zPages for that repository. Similar behavior CAN be implemented for any invalid endpoints as well.
 
 Traditionally, zPages have approached this by rendering web pages purely on the server-side. This means the server would only serve static resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Based on the type of zPage and the server language used, a pure server-side approach would generate HTML pages using hardcoded strings from scratch or using a template; this would tightly couple the data and UI layer.
 
