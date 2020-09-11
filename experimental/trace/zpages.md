@@ -17,8 +17,8 @@
     - [Wrapper](#wrapper)
     - [HTTP Server](#http-server)
 - [Future possibilities / Exploration](#future-possibilities)
-  - [Out-process Implementation](#out-process)
   - [Shared Static Files](#shared-static-files)
+  - [Out-process Implementation](#out-process)
 
 ## Overview
 
@@ -90,7 +90,7 @@ All zPages MUST have a HTTP Server to render information on a webpage when a hos
 
 Traditionally, zPages have approached this by rendering web pages purely on the server-side. This means the server would only serve static resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Based on the type of zPage and the server language used, a pure server-side approach would generate HTML pages using hardcoded strings from scratch or using a template; this would tightly couple the data and UI layer.
 
-The following endpoints SHOULD be used for serving files (which are ideally standardized, per the [Future Possibilities](#future-possibilities)) section, for any HTTP server approach for any zPage:
+The following endpoints SHOULD be used for serving files (which are ideally standardized, per the [Shared Static Files](#shared-static-files) sections under future possibilities), for any HTTP server approach for any zPage:
 
 - `host:port/{zpage}` display the main page and aggregations
 - `host:port/{zpage}/style.css` SHOULD contain the styling logic. This CAN also be embedded in the HTML, but SHOULD be separated and linked in the page head using `<link rel="stylesheet" href="/{zpage}/style.css">`
@@ -174,15 +174,6 @@ In either case, a benefit of reasoning about the zPages HTTP server as a separat
 
 ## Future Possibilities
 
-### Out-process
-
-Out-process zPages are ones that are compatible across different languages, which executes the processing of tracing and metrics information outside of applications (as opposed to in-process zPages).
-
-- Pros
-  - zPages can be added to any OpenTelemetry repository, and future development can be completely focused there
-- Cons
-  - More complicated than using local methods since it require setup (i.e. RPC or exporters) to allow zPages and applications to communicate. This would make it similar to other tracing systems.
-
 ### Shared Static Files
 
 All HTML, CSS, and Javascript files would be used across different OTel language repositories for their in-process zPages
@@ -195,5 +186,14 @@ All HTML, CSS, and Javascript files would be used across different OTel language
   - Adds computation of converting native data structures into JSON strings and serving these static files. May need extra libraries
   - Some process has to be created to update the static files in a repository and serving them at the correct endpoints
   - Initial setup may be difficult (one way this can be achieved is with Github modules)
+
+### Out-process
+
+Out-process zPages are ones that are compatible across different languages, which executes the processing of tracing and metrics information outside of applications (as opposed to in-process zPages).
+
+- Pros
+  - zPages can be added to any OpenTelemetry repository, and future development can be completely focused there
+- Cons
+  - More complicated than using local methods since it require setup (i.e. RPC or exporters) to allow zPages and applications to communicate. This would make it similar to other tracing systems.
 
 > GENERAL TODO: Add pictures/figures/videos, proxy/shim layer, and design docs links
