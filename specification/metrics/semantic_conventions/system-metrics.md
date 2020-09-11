@@ -141,7 +141,7 @@ units like `packets`, `errors`, `faults`, etc.
 individual process level, see [process metrics](process-metrics.md).
 | Name                 | Units     | Instrument Type | Value Type | Label Key | Label Values                                                                                   |
 | -------------------- | --------- | --------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
-| system.process.count | processes | SumObserver     | Int64      | status    | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
+| system.process.count | processes | UpDownSumObserver     | Int64      | status    | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
 
 #### OS Specific System Metrics - `system.{os}.`
 
