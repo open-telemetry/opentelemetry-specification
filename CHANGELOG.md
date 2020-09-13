@@ -56,6 +56,8 @@ Updates:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
   ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
+- Move active span interaction in the Trace API to a separate class
+  ([#923](https://github.com/open-telemetry/opentelemetry-specification/pull/923))
 
 ## v0.6.0 (07-01-2020)
 
