@@ -98,7 +98,7 @@ number of `TracerProvider` instances.
 
 The `TracerProvider` MUST provide functions to:
 
-#### Get a `Tracer`
+- Get a `Tracer`
 
 That API MUST accept the following parameters:
 
