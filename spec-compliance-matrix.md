@@ -14,6 +14,8 @@ status of the feature is not known.
 |[TracerProvider](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracerprovider-operations)|
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
+|Set a collection limit                        |   |    |   |      |    |      |   |    |   |    |
+|Get a collection limit                        |   |    |   |      |    |      |   |    |   |    |
 |Safe for concurrent calls                     | + | +  | + |      | +  | +    | + | +  | + | +  |
 |[Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -37,6 +39,8 @@ status of the feature is not known.
 |IsRecording                                   | + | +  | + | +    | +  | +    | + |    | + | +  |
 |Set status                                    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + |      | +  | +    | + | +  | + | +  |
+|Set a collection limit                        |   |    |   |      |    |      |   |    |   |    |
+|Discard events greater than collection limit  |   |    |   |      |    |      |   |    |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |

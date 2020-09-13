@@ -236,7 +236,27 @@ Thus, the SDK specification defines sets of possible requirements for
   that the [span creation API](api.md#span-creation) returned (or will return) to the user
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
-  
+
+## Span Event Limits
+
+Erroneous code can add unintended events to a span. If these containers are
+unbounded, they can quickly exhaust available memory, resulting in crashes that
+are difficult to recover from safely.
+
+To protect against such errors, SDK Spans MUST discard attributes, links, and
+events that would increase the size of each collection beyond a limit configured
+in the `TracerProvider`, or for the span specifically.
+
+There MUST be a log message emitted by the SDK for each object discarded.
+
+The following interfaces MUST exist:
+
+- `TracerProvider`: a method to set a maximum collection size
+- `TracerProvider`: a method to retrieve the maximum collection size
+- `Span`: a method to set a maximum collection size for the span
+
+The default for this limit SHOULD be 1000. A value of 0 indicates no limit.
+
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
