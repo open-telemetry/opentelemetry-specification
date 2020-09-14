@@ -19,19 +19,25 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
+## OTLP Exporters
+
+| Name                        | Description                                     | Default |
+| --------------------------- | ----------------------------------------------- | ------- |
+| OTEL_EXPORTER_OTLP_ENDPOINT | Ingest endpoint for both OTLP spans and metrics | -       |
+
 ## OTLP Span Exporter
 
-| Name                             | Description                                | Default |
-| -------------------------------- | ------------------------------------------ | ------- |
-| OTEL_EXPORTER_OTLP_SPAN_TIMEOUT  | Max waiting time to export each span batch | -       |
-| OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Ingest endpoint for OTLP spans             | -       |
+| Name                             | Description                                | Default | Notes                                              |
+| -------------------------------- | ------------------------------------------ | ------- | -------------------------------------------------- |
+| OTEL_EXPORTER_OTLP_SPAN_TIMEOUT  | Max waiting time to export each span batch | -       |                                                    |
+| OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Ingest endpoint for OTLP spans             | -       | Overrides OTEL_EXPORTER_OTLP_ENDPOINT if non-empty |
 
 ## OTLP Metric Exporter
 
-| Name                               | Description                                  | Default |
-| ---------------------------------- | -------------------------------------------- | ------- |
-| OTEL_EXPORTER_OTLP_METRIC_TIMEOUT  | Max waiting time to export each metric batch | -       |
-| OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Ingest endpoint for OTLP metrics             | -       |
+| Name                               | Description                                  | Default | Notes                                              |
+| ---------------------------------- | -------------------------------------------- | ------- | -------------------------------------------------- |
+| OTEL_EXPORTER_OTLP_METRIC_TIMEOUT  | Max waiting time to export each metric batch | -       |                                                    |
+| OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Ingest endpoint for OTLP metrics             | -       | Overrides OTEL_EXPORTER_OTLP_ENDPOINT if non-empty |
 
 ## Jaeger Exporter
 
@@ -48,6 +54,12 @@ The goal of this specification is to unify the environment variable names betwee
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
+
+## Exporter Selection
+
+| Name          | Description                                                                  | Default | Notes                                                              |
+| ------------- | ---------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------ |
+| OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp"  | Other known values: "jaeger", "zipkin", "otlp_span", "otlp_metric" |
 
 ## Language Specific Environment Variables
 
