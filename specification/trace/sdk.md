@@ -255,7 +255,11 @@ The following interfaces MUST exist:
 - `TracerProvider`: a method to retrieve the maximum collection size
 - `Span`: a method to set a maximum collection size for the span
 
-The default for this limit SHOULD be 1000. A value of 0 indicates no limit.
+Implementations MAY additionally have configuration for limits on each
+collection, which would take precedence over the general collection limit.
+
+The default for this limit SHOULD be 1000. A value of -1 indicates no limit,
+while a value of 0 would result in no events being collected.
 
 ## Span processor
 
