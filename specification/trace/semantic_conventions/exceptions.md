@@ -78,7 +78,7 @@ grained information from a stacktrace, if necessary.
 
 ### Escaped exceptions
 
-An exception is considered to have escaped (aka left) the scope of a span,
+An exception is considered to have escaped (or left) the scope of a span,
 if that span is ended while the exception is still "in flight".
 
 While it is usually not possible to determine whether some exception thrown
