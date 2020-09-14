@@ -163,8 +163,8 @@ include attribute values like this:
 ### Unit of Time
 
 Zipkin times like `timestamp`, `duration` and `annotation.timestamp` MUST be
-reported in microseconds as whole numbers and rounded up. For example, `duration`
-of 234 nanoseconds will be represented as 1 microsecond.
+reported in microseconds as whole numbers. For example, `duration`
+of 1234 nanoseconds will be represented as 1 microsecond.
 
 ## Request Payload
 
