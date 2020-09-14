@@ -27,7 +27,8 @@ Span span = myTracer.startSpan(/*...*/);
 try {
   // Code that does the actual work which the Span represents
 } catch (Throwable e) {
-  span.recordException(e, Attributes.of("exception.escaped", true));
+  span.recordException(e, Attributes.of(
+    "exception.escaped", AttributeValue.booleanAttributeValue(true)));
   throw e;
 } finally {
   span.end();
