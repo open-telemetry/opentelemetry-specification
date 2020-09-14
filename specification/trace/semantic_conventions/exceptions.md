@@ -13,38 +13,25 @@ exceptions.
 
 ## Recording an Exception
 
-An exception that escapes the scope of a span SHOULD be recorded
-as an `Event` on that span
-(of course, other exceptions that are deemed relevant may also be recorded).
-An exception is considered to have escaped the scope if the span is ended
-while the exception is still "in flight". Note:
-
-* While it is usually not possible to determine whether some exception thrown
-  now *will* escape the scope of a span, it is trivial to know that an exception
-  will escape, if one checks for an active exception just before ending the span.
-  See the [example below](#exception-end-example).
-* Special considerations may apply for Go, where exception semantic conventions
-  might be used for non-exceptions.
-  See [issue #764](https://github.com/open-telemetry/opentelemetry-specification/issues/764).
-
 The name of the event MUST be `"exception"`.
 
 Note that multiple events (on the same or different Spans) might be logged
 for the same exception object instance.
 For example, one event might be logged in an instrumented exception constructor
-and another event might be logged when an exception leaves the scope of a span.
+and another event might be logged when an exception escapes the scope of a span.
 
 <a name="exception-end-example"></a>
 
 A typical template for an auto-instrumentation implementing this semantic convention
-could look like this:
+using an [API-provided `recordException` method](../api.md#record-exception)
+could look like this (pseudo-Java):
 
 ```java
 Span span = myTracer.startSpan(/*...*/);
 try {
   // original code
 } catch (Throwable e) {
- span.recordException(e); // We know that the exception is escaping here.
+ span.recordException(e, Attributes.of("exception.escaped", true));
  throw e;
 } finally {
  span.end();
@@ -61,7 +48,7 @@ their types.
 | exception.type       | String | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. E.g. "java.net.ConnectException", "OSError"                                                                                                                                                                                                     | One of `exception.type` or `exception.message` is required |
 | exception.message    | String | The exception message. E.g. `"Division by zero"`, `"Can't convert 'int' object to str implicitly"`                                                                                                                                                                                                                                                                                                                                  | One of `exception.type` or `exception.message` is required |
 | exception.stacktrace | String | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. E.g. `"Exception in thread \"main\" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)"`. | No                                                         |
-| exception.escaped | Bool | SHOULD be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span (e.g. if there is an exception active just before ending the span). Note that an exception may still leave the scope of the span even if this was not set or set to false, if the event was recorded at an earlier time. | No |
+| exception.escaped | Bool | SHOULD be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span. See [explanation below](#escaped-exceptions). | No |
 
 ### Stacktrace Representation
 
@@ -92,3 +79,16 @@ grained information from a stacktrace, if necessary.
 [csharp-stacktrace]: https://docs.microsoft.com/en-us/dotnet/api/system.exception.tostring
 [go-stacktrace]: https://golang.org/pkg/runtime/debug/#Stack
 [telemetry-sdk-resource]: https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#telemetry-sdk
+
+### Escaped exceptions
+
+An exception is considered to have escaped (aka left) the scope of a span,
+if that span is ended while the exception is still "in flight".
+
+While it is usually not possible to determine whether some exception thrown
+now *will* escape the scope of a span, it is trivial to know that an exception
+will escape, if one checks for an active exception just before ending the span.
+See the [example above](#exception-end-example). It follows that an exception
+may still escape the scope of the span even if the `exception.escaped` attribute
+was not set or set to false, since that event might have been recorded at a time
+where it was not clear whether the exception will escape.
