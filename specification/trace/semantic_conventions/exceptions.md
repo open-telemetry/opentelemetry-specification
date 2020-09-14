@@ -13,12 +13,8 @@ exceptions.
 
 ## Recording an Exception
 
+An exception SHOULD be recorded as an `Event` on the span during which it occurred.
 The name of the event MUST be `"exception"`.
-
-Note that multiple events (on the same or different Spans) might be logged
-for the same exception object instance.
-For example, one event might be logged in an instrumented exception constructor
-and another event might be logged when an exception escapes the scope of a span.
 
 <a name="exception-end-example"></a>
 
