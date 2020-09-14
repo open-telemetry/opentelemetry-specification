@@ -25,12 +25,12 @@ could look like this (pseudo-Java):
 ```java
 Span span = myTracer.startSpan(/*...*/);
 try {
-  // original code
+  // Code that does the actual work which the Span represents
 } catch (Throwable e) {
- span.recordException(e, Attributes.of("exception.escaped", true));
- throw e;
+  span.recordException(e, Attributes.of("exception.escaped", true));
+  throw e;
 } finally {
- span.end();
+  span.end();
 }
 ```
 
