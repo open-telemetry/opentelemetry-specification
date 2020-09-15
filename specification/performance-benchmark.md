@@ -11,33 +11,36 @@ OpenTelemetry API implementation in language libraries.
 
 Number of spans which could be created and exported to OTLP exporter in 1 second
 per logical core and average number over all logical cores, with each span
-containing 10 attributes with random string data with 20 random characters.
+containing 10 attributes, and each attribute containing two 20 characters
+strings, one as attribute name the other as value.
 
 ## Instrumentation Cost
 
 ### CPU Usage
 
-With given number of span throughput specified by user, or specify 10,000 spans
-per second as default if user doesn't input the number, measure and report the
-CPU usage for SDK with simple processor and OTLP exporter. The benchmark should
-listen on the exporting target in-process and return success immediately, so it
-does incur significant CPU overhead on the measurement. Because the benchmark
-doesn't contain user processing logic, the total CPU consumption of benchmark
-program could be used to approximate SDK CPU comsumption.  
-The total running time should be more than 1 minute, and the average and peak
-CPU usage should be reported.
+With given number of span throughput specified by user, or 10,000 spans per
+second as default if user does not input the number, measure and report the CPU
+usage for SDK with both simple and batching span processors together with OTLP
+exporter. The benchmark should create an OTLP receiver which listens on the
+exporting target in the same process, responds with success immediately and
+drops the data, so it does not incur significant CPU overhead on the measured
+result. Because the benchmark doesn't include user processing logic, the total
+CPU consumption of benchmark program could be considered as approximation of
+SDK's CPU consumption.  
+The total running time for one test iteration is suggested to be 15 seconds. The
+average and peak CPU usage should be reported.  
 
 ### Memory Usage
 
 Measure dynamic memory comsumption, e.g. heap, for the same scenario as [CPU
-Usage](#CPU-Usage) section with 1 miniute during.
+Usage](#CPU-Usage) section with 15 seconds duration.
 
 ## Report
 
 ### Report Format
 
 All the numbers above should be measured by multiple times (suggest 10 times at
-least) and reported with below statistic values:
+least) and reported with below statistic values:  
 
 - Mean   : Arithmetic mean of all measurements.
 - StdDev : Standard deviation of all measurements.
