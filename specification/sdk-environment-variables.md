@@ -47,6 +47,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 Known values for OTEL_EXPORTER are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
 
+Note: "otlp" is equivalent to "otlp_span,otlp_metric".
+
 ## Language Specific Environment Variables
 
 To ensure consistent naming across projects, this specification recommends that language specific environment variables are formed using the following convention:
