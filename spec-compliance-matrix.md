@@ -76,12 +76,12 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Create Context Key                            |  |    | + | +    |    |      |   |    |   |    |
-|Get value from Context                        |  |    | + | +    |    |      |   |    |   |    |
-|Set value for Context                         |  |    | + | +    |    |      |   |    |   |    |
-|Attach Context                                |  |    | + | +    |    |      |   |    |   |    |
-|Detach Context                                |  |    | + | +    |    |      |   |    |   |    |
-|Get current Context                           |  |    | + | +    |    |      |   |    |   |    |
+|Create Context Key                            |  |    | + | +    |    |      | + |    |   |    |
+|Get value from Context                        |  |    | + | +    |    |      | + |    |   |    |
+|Set value for Context                         |  |    | + | +    |    |      | + |    |   |    |
+|Attach Context                                |  |    | + | +    |    |      | + |    |   |    |
+|Detach Context                                |  |    | + | +    |    |      | + |    |   |    |
+|Get current Context                           |  |    | + | +    |    |      | + |    |   |    |
 |Composite Propagator                          |  |    | + | +    |    |      |   |    |   |    |
 |Global Propagator                             |  | +  | + | +    |    |      |   |    |   |    |
 |TraceContext Propagator                       |  | +  | + | +    |    |      |   |    |   |    |
@@ -103,13 +103,13 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    |    | -    |   |    | - | -  |
-|OTEL_LOG_LEVEL                                |   | -  | + | -    |    | -    |   |    | - | -  |
-|OTEL_PROPAGATORS                              |   |    |   | -    |    | -    |   |    | - | -  |
-|OTEL_BSP_*                                    |   | +  |   | -    |    | -    |   |    | - | -  |
-|OTEL_EXPORTER_OTLP_*                          |   |    |   | -    |    | -    |   |    | - | -  |
-|OTEL_EXPORTER_JAEGER_*                        |   |    |   | -    |    | -    |   |    | - | -  |
-|OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    |   |    | - | -  |
+|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    |    | -    | - |    | - | -  |
+|OTEL_LOG_LEVEL                                |   | -  | + | -    |    | -    | - |    | - | -  |
+|OTEL_PROPAGATORS                              |   |    |   | -    |    | -    | - |    | - | -  |
+|OTEL_BSP_*                                    |   | +  |   | -    |    | -    | - |    | - | -  |
+|OTEL_EXPORTER_OTLP_*                          |   |    |   | -    |    | -    | - |    | - | -  |
+|OTEL_EXPORTER_JAEGER_*                        |   |    |   | -    |    | -    | - |    | - | -  |
+|OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    | - |    | - | -  |
 
 ## Exporters
 
