@@ -56,10 +56,10 @@ Updates:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
   ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
--  A full `Context` is the only way to specify a parent of a `Span`
+- A full `Context` is the only way to specify a parent of a `Span`
   `SpanContext` or even `Span` are not allowed anymore.
   ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
-    
+
 ## v0.6.0 (07-01-2020)
 
 New:
