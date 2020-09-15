@@ -308,17 +308,15 @@ There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tr
 
 `Span` creation MUST NOT set the newly created `Span` as the currently
 active `Span` by default, but this functionality MAY be offered additionally
-as a separate operation. If that functionality is provided, it MUST ONLY accept a
-full [`Context`](../context/context.md) (or implicitly use the current `Context`)
-but it MUST NOT accept only a `Span` or `SpanContext`
-(that would be prone to lose information on the parent span's `Context`).
+as a separate operation.
 
 The API MUST accept the following parameters:
 
 - The span name. This is a required parameter.
 - The parent `Context` or an indication that the new `Span` should be a root `Span`.
   The API MAY also have an option for implicitly using
-  the current context as parent as a default behavior.
+  the current Context as parent as a default behavior.
+  This API MUST NOT accept only a `Span` or `SpanContext`.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
