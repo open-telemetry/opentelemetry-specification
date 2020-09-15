@@ -9,9 +9,9 @@ OpenTelemetry API implementation in language libraries.
 
 ### Create Spans
 
-Number of spans which could be created and exported via OTLP exporter in 1 second
-per logical core and average number over all logical cores, with each span
-containing 10 attributes, and each attribute containing two 20 characters
+Number of spans which could be created and exported via OTLP exporter in 1
+second per logical core and average number over all logical cores, with each
+span containing 10 attributes, and each attribute containing two 20 characters
 strings, one as attribute name the other as value.
 
 ## Instrumentation Cost
@@ -32,8 +32,8 @@ average and peak CPU usage should be reported.
 
 ### Memory Usage
 
-Measure dynamic memory comsumption, e.g. heap, for the same scenario as [CPU
-Usage](#CPU-Usage) section with 15 seconds duration.
+Measure dynamic memory comsumption, e.g. heap, for the same scenario as above
+CPU Usage section with 15 seconds duration.
 
 ## Report
 
