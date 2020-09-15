@@ -13,6 +13,8 @@ New:
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
   ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
+- Add semantic convention for source code attributes
+  ([#901](https://github.com/open-telemetry/opentelemetry-specification/pull/901))
 - Add semantic conventions for outgoing Function as a Service (FaaS) invocations
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
 - Add resource semantic convention for deployment environment
