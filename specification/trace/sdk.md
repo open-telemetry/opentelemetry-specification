@@ -93,7 +93,7 @@ Returns the sampling Decision for a `Span` to be created.
 It produces an output called `SamplingResult` which contains:
 
 * A sampling `Decision`. One of the following enum values:
-  * `IGNORE` - `IsRecording() == false`, span will not be recorded and all events and attributes
+  * `DROP` - `IsRecording() == false`, span will not be recorded and all events and attributes
   will be dropped.
   * `RECORD_ONLY` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
   * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
@@ -120,7 +120,7 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### AlwaysOff
 
-* Returns `IGNORE` always.
+* Returns `DROP` always.
 * Description MUST be `AlwaysOffSampler`.
 
 #### TraceIdRatioBased
