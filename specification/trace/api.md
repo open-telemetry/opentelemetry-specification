@@ -316,7 +316,10 @@ The API MUST accept the following parameters:
 - The parent `Context` or an indication that the new `Span` should be a root `Span`.
   The API MAY also have an option for implicitly using
   the current Context as parent as a default behavior.
-  This API MUST NOT accept only a `Span` or `SpanContext`.
+  This API MUST NOT accept a `Span` or `SpanContext` as parent, only a full `Context`.
+
+  The semantic parent of the Span MUST be determined according to the rules
+  described in the [Effective Span section](#effective-span).
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
