@@ -21,12 +21,21 @@ The name of the event MUST be `"exception"`.
 The table below indicates which attributes should be added to the `Event` and
 their types.
 
-| Attribute name       | Type   | Notes and examples                                                                                                                                                                                                                                                                                                                                                                                                                  | Required?                                                  |
-| :------------------- | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------- |
-| exception.type       | String | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. E.g. "java.net.ConnectException", "OSError"                                                                                                                                                                                                     | One of `exception.type` or `exception.message` is required |
-| exception.message    | String | The exception message. E.g. `"Division by zero"`, `"Can't convert 'int' object to str implicitly"`                                                                                                                                                                                                                                                                                                                                  | One of `exception.type` or `exception.message` is required |
-| exception.stacktrace | String | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. E.g. `"Exception in thread \"main\" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)"`. | No                                                         |
-| exception.escaped | Bool | SHOULD be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span (e.g. if there is an exception active just before ending the span). Note that an exception may still leave the scope of the span even if this was not set or set to false, if the event was recorded at an earlier time. | No |
+<!-- semconv exception -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.net.ConnectException`<br>`OSError` | See below |
+| `exception.message` | string | The exception message. | `Division by zero`<br>`Can't convert 'int' object to str implicitly` | See below |
+| `exception.stacktrace` | string | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. | `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` | No |
+| `exception.escaped` | boolean | SHOULD be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span (e.g. if there is an exception active just before ending the span). [1] |  | No |
+
+**[1]:** Note that an exception may still leave the scope of the span even if this was not set or set to false, if the event was recorded at an earlier time.
+
+**Additional attribute requirements:** At least one of the following sets of attributes is required:
+
+* `exception.type`
+* `exception.message`
+<!-- endsemconv -->
 
 ### Stacktrace Representation
 
