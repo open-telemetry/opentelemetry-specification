@@ -19,19 +19,9 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
-## OTLP Span Exporter
+## OTLP Exporter
 
-| Name                             | Description                                | Default |
-| -------------------------------- | ------------------------------------------ | ------- |
-| OTEL_EXPORTER_OTLP_SPAN_TIMEOUT  | Max waiting time to export each span batch | -       |
-| OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Ingest endpoint for OTLP spans             | -       |
-
-## OTLP Metric Exporter
-
-| Name                               | Description                                  | Default |
-| ---------------------------------- | -------------------------------------------- | ------- |
-| OTEL_EXPORTER_OTLP_METRIC_TIMEOUT  | Max waiting time to export each metric batch | -       |
-| OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Ingest endpoint for OTLP metrics             | -       |
+See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).
 
 ## Jaeger Exporter
 
@@ -48,6 +38,16 @@ The goal of this specification is to unify the environment variable names betwee
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
+
+## Exporter Selection
+
+| Name          | Description                                                                  | Default |
+| ------------- | ---------------------------------------------------------------------------- | ------- |
+| OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp"  |
+
+Known values for OTEL_EXPORTER are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
+
+Note: "otlp" is equivalent to "otlp_span,otlp_metric".
 
 ## Language Specific Environment Variables
 
