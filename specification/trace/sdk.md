@@ -7,6 +7,7 @@
 * [Sampling](#sampling)
 * [Tracer Creation](#tracer-creation)
 * [Additional Span Interfaces](#additional-span-interfaces)
+* [Limits on Span Collections](#limits-on-span-collections)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -215,7 +216,7 @@ Thus, the SDK specification defines sets of possible requirements for
   It must also be able to reliably determine whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
-  
+
   A function receiving this as argument might not be able to modify the Span.
 
   Note: Typically this will be implemented with a new interface or
@@ -237,29 +238,32 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
 
-## Span Event Limits
+## Limits on Span Collections
 
-Erroneous code can add unintended events to a span. If these containers are
-unbounded, they can quickly exhaust available memory, resulting in crashes that
-are difficult to recover from safely.
+Erroneous code can add unintended attributes, events, and links to a span. If
+these collections are unbounded, they can quickly exhaust available memory,
+resulting in crashes that are difficult to recover from safely.
 
 To protect against such errors, SDK Spans MUST discard attributes, links, and
 events that would increase the size of each collection beyond a limit configured
 in the `TracerProvider`, or for the span specifically.
 
-There MUST be a log message emitted by the SDK for each object discarded.
+There SHOULD be a log message emitted by the SDK for the first time a span has
+discarded a span due to a limit. This message should be emitted once for
+attributes, events, and links, and MUST be configurable on or off, with
+a default of on.
 
 The following interfaces MUST exist:
 
 - `TracerProvider`: a method to set a maximum collection size
 - `TracerProvider`: a method to retrieve the maximum collection size
-- `Span`: a method to set a maximum collection size for the span
-
-Implementations MAY additionally have configuration for limits on each
-collection, which would take precedence over the general collection limit.
 
 The default for this limit SHOULD be 1000. A value of -1 indicates no limit,
 while a value of 0 would result in no events being collected.
+
+Implementations MAY also enable configuration for the maximum size of individual
+collections: attributes, events, and links. These limits would take precedence
+over the general collection limit.
 
 ## Span processor
 
