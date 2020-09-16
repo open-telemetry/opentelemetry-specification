@@ -312,11 +312,17 @@ Required parameters:
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
-- [B3](https://github.com/openzipkin/b3-propagation)
-  - MUST support extracting context from both single and multi-header encodings
-  - MUST default to injecting context using the multi-header encoding, but
-    MAY provide configuration to change the default
-- [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
+* [B3](https://github.com/openzipkin/b3-propagation)
+* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
+
+### B3 Requirements
+
+B3 has both single and multi-header encodings. To ensure consistent behavior
+between OpenTelemetry libraries, B3 propagators:
+
+* MUST support extracting context from both single and multi-header encodings
+* MUST default to injecting context using the multi-header encoding, but
+  MAY provide configuration to change the default
 
 Additional `Propagator`s implementing vendor-specific protocols such as
 AWS X-Ray trace header protocol are encouraged to be maintained and distributed by
