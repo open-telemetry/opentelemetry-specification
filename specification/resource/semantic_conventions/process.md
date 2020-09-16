@@ -41,7 +41,7 @@ Java instrumentation should fill in the values by copying from system properties
 
 - `process.runtime.name` - Fill in the value of `java.runtime.name` as is
 - `process.runtime.version` - Fill in the value of `java.runtime.version` as is
-- `process.runtime.description` - Fill in the value of `java.vm.vendor`, followed by a space, followed by `java.vm.version` 
+- `process.runtime.description` - Fill in the value of `java.vm.vendor`, followed by a space, followed by `java.vm.version`
 
 Examples for some Java runtimes
 
