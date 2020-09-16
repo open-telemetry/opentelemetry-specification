@@ -14,7 +14,7 @@
 | process.owner | The username of the user that owns the process. | `root` | No |
 | process.runtime.name | The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler. | `OpenJDK Runtime Environment` | No |
 | process.runtime.version | The version of the runtime of this process, as returned by the runtime without modification. | `14.0.2` | No |
-| process.runtime.description | An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment. | `Ecilpse OpenJ9 openj9-0.21.0` | No |
+| process.runtime.description | An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment. | `Eclipse OpenJ9 openj9-0.21.0` | No |
 
 At least one of `process.executable.name`, `process.executable.path`, `process.command`, or `process.command_line` is required.
 
