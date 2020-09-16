@@ -110,6 +110,7 @@ status of the feature is not known.
 |OTEL_EXPORTER_OTLP_*                          |   |    |   | -    |    | -    | - |    | - | -  |
 |OTEL_EXPORTER_JAEGER_*                        |   |    |   | -    |    | -    | - |    | - | -  |
 |OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    | - |    | - | -  |
+|OTEL_EXPORTER                                 |   |    |   |      |    |      |   |    |   |    |
 
 ## Exporters
 
