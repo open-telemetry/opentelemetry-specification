@@ -62,7 +62,7 @@ Examples for some Java runtimes
 | `iojs` | io.js |
 | `graalvm` | GraalVM |
 
-When value is `browser`, `process.runtime.version` SHOULD be set to the user agent string.
+When the value is `browser`, `process.runtime.version` SHOULD be set to the User-Agent header.
 
 ***.NET Runtimes:***
 
