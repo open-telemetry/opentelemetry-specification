@@ -267,11 +267,11 @@ Required arguments:
 
 ## Global Propagators
 
-The OpenTelemetry API should provide a way to obtain a propagator for each supported
-`Propagator` type. Instrumentation libraries SHOULD call propagators to extract
-and inject the context on all remote calls. Propagators, depending on the language,
-MAY be set up using various dependency injection techniques or available as
-global accessors.
+The OpenTelemetry API MUST provide a way to obtain a propagator for each
+supported `Propagator` type. Instrumentation libraries SHOULD call propagators
+to extract and inject the context on all remote calls. Propagators, depending on
+the language, MAY be set up using various dependency injection techniques or
+available as global accessors.
 
 **Note:** it is a discouraged practice, but certain instrumentation libraries
 might use proprietary context propagation protocols or be hardcoded to use a
@@ -279,15 +279,16 @@ specific one. In such cases, instrumentation libraries MAY choose not to use the
 API-provided propagators and instead hardcode the context extraction and injection
 logic.
 
-The OpenTelemetry API MUST use no-op propagators when used unconfigured. Context
-propagation may be used for various telemetry signals - traces, metrics, logging
-and more. Therefore, context propagation MAY be enabled for any of them. For instance,
-a span exporter may be left unconfigured, although the trace context is being propagated.
+The OpenTelemetry API MUST use no-op propagators unless explicitly configured
+otherwise. Context propagation may be used for various telemetry signals -
+traces, metrics, logging and more. Therefore, context propagation MAY be enabled
+for any of them independently. For instance, a span exporter may be left
+unconfigured, although the trace context propagation was configured to enrich logs or metrics.
 
 Platforms such as ASP.NET may pre-configure out-of-the-box
 propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` containing the W3C Trace Context Propagator and the Baggage
-`Propagator` specified in [api-baggage.md](../baggage/api.md#serialization). These platforms MUST also allow pre-configured propagators to be disabled.
+`Propagator` specified in [api-baggage.md](../baggage/api.md#serialization). These platforms MUST also allow pre-configured propagators to be disabled or overridden.
 
 ### Get Global Propagator
 
