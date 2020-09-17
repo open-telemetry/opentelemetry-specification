@@ -273,7 +273,7 @@ to extract and inject the context on all remote calls. Propagators, depending on
 the language, MAY be set up using various dependency injection techniques or
 available as global accessors.
 
-**Note:** it is a discouraged practice, but certain instrumentation libraries
+**Note:** It is a discouraged practice, but certain instrumentation libraries
 might use proprietary context propagation protocols or be hardcoded to use a
 specific one. In such cases, instrumentation libraries MAY choose not to use the
 API-provided propagators and instead hardcode the context extraction and injection
