@@ -43,6 +43,8 @@ Updates:
   ([#669](https://github.com/open-telemetry/opentelemetry-specification/pull/669))
   * SpanProcessors must provide read/write access at least in OnStart.
 - Specify how `Probability` sampler is used with `ParentOrElse` sampler.
+- Clarify event timestamp origin and range
+  ([#839](https://github.com/open-telemetry/opentelemetry-specification/pull/839))
 - Clean up api-propagators.md, by extending documentation and removing redundant
   sections
   ([#577](https://github.com/open-telemetry/opentelemetry-specification/pull/577))
