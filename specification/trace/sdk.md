@@ -248,8 +248,8 @@ To protect against such errors, SDK Spans MUST discard attributes, links, and
 events that would increase the size of each collection beyond a limit configured
 in the `TracerProvider`, or for the span specifically.
 
-There SHOULD be a log message emitted by the SDK for the first time a span has
-discarded a span due to a limit. This message should be emitted once for
+There SHOULD be a log message emitted by the SDK for the first time a span is
+discarded due to a limit. This message should be emitted once for
 attributes, events, and links, and MUST be configurable on or off, with
 a default of on.
 
