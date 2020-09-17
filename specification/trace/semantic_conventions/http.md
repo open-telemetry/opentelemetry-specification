@@ -49,22 +49,19 @@ Don't set the span status description if the reason can be inferred from `http.s
 | HTTP code               | Span status code      |
 |-------------------------|-----------------------|
 | 100...299               | `Ok`                  |
-| 3xx redirect codes      | `DeadlineExceeded` in case of loop (see above) [1], otherwise `Ok` |
-| 401 Unauthorized ⚠      | `Unauthenticated` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
-| 403 Forbidden           | `PermissionDenied`    |
-| 404 Not Found           | `NotFound`            |
-| 429 Too Many Requests   | `ResourceExhausted`   |
-| 499 Client Closed       | `Cancelled` (Not an official HTTP status code, defined by [NGINX][nginx-http-499]) |
-| Other 4xx code          | `InvalidArgument` [1] |
-| 501 Not Implemented     | `Unimplemented`       |
-| 503 Service Unavailable | `Unavailable`         |
-| 504 Gateway Timeout     | `DeadlineExceeded`    |
-| Other 5xx code          | `Internal` [1]   |
-| Any status code the client fails to interpret (e.g., 093 or 573) | `Unknown` |
+| 3xx redirect codes      | `Error` in case of loop (see above), otherwise `Ok` |
+| 401 Unauthorized ⚠      | `Error` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
+| 403 Forbidden           | `Error`    |
+| 404 Not Found           | `Error`            |
+| 429 Too Many Requests   | `Error`   |
+| 499 Client Closed       | `Error` (Not an official HTTP status code, defined by [NGINX][nginx-http-499]) |
+| Other 4xx code          | `Error` |
+| 501 Not Implemented     | `Error`       |
+| 503 Service Unavailable | `Error`         |
+| 504 Gateway Timeout     | `Error`    |
+| Other 5xx code          | `Error`   |
+| Any status code the client fails to interpret (e.g., 093 or 573) | `Error` |
 
-Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
-
-[oc-http-status]: https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#mapping-from-http-status-codes-to-trace-status-codes
 [rfc-unauthorized]: https://tools.ietf.org/html/rfc7235#section-3.1
 [nginx-http-499]: https://httpstatuses.com/499
 
