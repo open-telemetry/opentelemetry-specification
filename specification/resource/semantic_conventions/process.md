@@ -23,7 +23,7 @@ If none of the listed values apply, a custom value best describing the runtime C
 
 ***Erlang Runtimes:***
 
-TODO(https://github.com/open-telemetry/opentelemetry-erlang/issues/96): Confirm the contents here
+TODO(open-telemetry/opentelemetry-erlang#96): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
@@ -32,7 +32,7 @@ TODO(https://github.com/open-telemetry/opentelemetry-erlang/issues/96): Confirm 
 
 ***Go Runtimes:***
 
-TODO(https://github.com/open-telemetry/opentelemetry-go/issues/1181): Confirm the contents here
+TODO(open-telemetry/opentelemetry-go#1181): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
@@ -59,7 +59,7 @@ Examples for some Java runtimes
 
 ***JavaScript runtimes:***
 
-TODO(https://github.com/open-telemetry/opentelemetry-js/issues/1544): Confirm the contents here
+TODO(open-telemetry/opentelemetry-js#1544): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
@@ -72,7 +72,7 @@ When the value is `browser`, `process.runtime.version` SHOULD be set to the User
 
 ***.NET Runtimes:***
 
-TODO(https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281): Confirm the contents here
+TODO(open-telemetry/opentelemetry-dotnet#1281): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
@@ -82,7 +82,7 @@ TODO(https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281): Confir
 
 ***Python Runtimes:***
 
-TODO(https://github.com/open-telemetry/opentelemetry-python/issues/1127): Confirm the contents here
+TODO(open-telemetry/opentelemetry-python#1127): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
@@ -95,7 +95,7 @@ TODO(https://github.com/open-telemetry/opentelemetry-python/issues/1127): Confir
 
 ***Ruby Runtimes:***
 
-TODO(https://github.com/open-telemetry/opentelemetry-ruby/issues/388): Confirm the contents here
+TODO(open-telemetry/opentelemetry-ruby#388): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
