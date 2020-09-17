@@ -23,12 +23,16 @@ If none of the listed values apply, a custom value best describing the runtime C
 
 ***Erlang Runtimes:***
 
+TODO(https://github.com/open-telemetry/opentelemetry-erlang/issues/96): Confirm the contents here
+
 | Value | Description |
 | --- | --- |
 | `beam` | BEAM |
 | `jam` | JAM |
 
 ***Go Runtimes:***
+
+TODO(https://github.com/open-telemetry/opentelemetry-go/issues/1181): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
@@ -55,6 +59,8 @@ Examples for some Java runtimes
 
 ***JavaScript runtimes:***
 
+TODO(https://github.com/open-telemetry/opentelemetry-js/issues/1544): Confirm the contents here
+
 | Value | Description |
 | --- | --- |
 | `nodejs` | NodeJS |
@@ -66,6 +72,8 @@ When the value is `browser`, `process.runtime.version` SHOULD be set to the User
 
 ***.NET Runtimes:***
 
+TODO(https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281): Confirm the contents here
+
 | Value | Description |
 | --- | --- |
 | `dotnet-core` | .NET Core, .NET 5+ |
@@ -73,6 +81,8 @@ When the value is `browser`, `process.runtime.version` SHOULD be set to the User
 | `mono` | Mono |
 
 ***Python Runtimes:***
+
+TODO(https://github.com/open-telemetry/opentelemetry-python/issues/1127): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
@@ -84,6 +94,8 @@ When the value is `browser`, `process.runtime.version` SHOULD be set to the User
 | `pythonnet` | PythonNet |
 
 ***Ruby Runtimes:***
+
+TODO(https://github.com/open-telemetry/opentelemetry-ruby/issues/388): Confirm the contents here
 
 | Value | Description |
 | --- | --- |
