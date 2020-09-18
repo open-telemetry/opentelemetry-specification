@@ -25,10 +25,15 @@ If none of the listed values apply, a custom value best describing the runtime C
 
 TODO(<https://github.com/open-telemetry/opentelemetry-erlang/issues/96>): Confirm the contents here
 
-| Value | Description |
-| --- | --- |
-| `beam` | BEAM |
-| `jam` | JAM |
+- `process.runtime.name` - The name of the Erlang runtime being used. Usually will be BEAM.
+- `process.runtime.version` - The ERTS (Erlang Runtime System) version. For BEAM this is found with `application:get_key(erts, vsn)`. 
+- `process.runtime.description` - The OTP version `erlang:system_info(otp_release)` and ERTS version combined.
+
+Example:
+
+| Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
+| --- | --- | --- | --- |
+| beam | BEAM | 11.0.3 | Erlang/OTP 24 erts-11.0.3 |
 
 ***Go Runtimes:***
 
