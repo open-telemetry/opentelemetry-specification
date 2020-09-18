@@ -308,9 +308,9 @@ Telemetry data is sent via HTTP POST request. The body of the POST request is a
 payload either in binary-encoded Protobuf format or in JSON-encoded Protobuf
 format.
 
-The default URL path for requests that carry trace data is `/v1/traces` (for
+The default URL path for requests that carry trace data is `/v1/trace` (for
 example the full URL when connecting to "example.com" server will be
-`https://example.com/v1/traces`). The request body is a Protobuf-encoded
+`https://example.com/v1/trace`). The request body is a Protobuf-encoded
 `ExportTraceServiceRequest` message.
 
 The default URL path for requests that carry metric data is `/v1/metrics` and
