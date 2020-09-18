@@ -95,17 +95,15 @@ TODO(<https://github.com/open-telemetry/opentelemetry-python/issues/1127>): Conf
 
 ***Ruby Runtimes:***
 
-TODO(<https://github.com/open-telemetry/opentelemetry-ruby/issues/388>): Confirm the contents here
+Ruby instrumentation should fill in the values by copying from built-in runtime constants.
 
-| Value | Description |
-| --- | --- |
-| `rubymri` | Ruby MRI |
-| `yarv` | YARV |
-| `graalvm` | GraalVM |
-| `ironruby` | IronRuby |
-| `jruby` | JRuby |
-| `macruby` | MacRuby |
-| `maglev` | MagLev |
-| `mruby` | Mruby |
-| `rubinius` | Rubinius |
-| `rubymotion` | RubyMotion |
+- `process.runtime.name` - Fill in the value of `RUBY_ENGINE` as is
+- `process.runtime.version` - Fill in the value of `RUBY_VERSION` as is
+- `process.runtime.description` - Fill in the value of `RUBY_DESCRIPTION`
+
+Examples for some Ruby runtimes
+
+| Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
+| --- | --- | --- | --- |
+| MRI | ruby | 2.7.1 | ruby 2.7.1p83 (2020-03-31 revision a0c7c23c9c) [x86_64-darwin19] |
+| TruffleRuby | truffleruby | 2.6.2 | truffleruby (Shopify) 20.0.0-dev-92ed3059, like ruby 2.6.2, GraalVM CE Native [x86_64-darwin] |
