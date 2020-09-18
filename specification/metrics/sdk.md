@@ -111,8 +111,9 @@ collection cycle.
 
 The Processor component is intended as the most customizable component
 in the export pipeline.  The Processor is responsible for selecting
-Aggregators to use for specific instruments, reducing dimensionality,
-and conversion between DELTA and CUMULATIVE data point representation.
+Aggregators to use for specific instruments, via an independent
+`AggregationSelector` interface, for reducing dimensionality, and for
+conversion between DELTA and CUMULATIVE data point representation.
 The Processor interface supports arbitrary protocol-independent data
 transformation, and Processors can be chained together to form more
 complex export pipelines.
@@ -172,7 +173,7 @@ instrument definition.  We assume that a single instrumentation
 library can arrange to use a single instrument definition rather than
 rely on the SDK to support duplicate registration.
 
-Separate Meters, characterized by different instrumetation library
+Separate Meters, characterized by different instrumentation library
 names, are permitted to register instruments by the same name as used
 in different instrumentation libraries, in which case the SDK MUST
 consider these as separate instruments.
