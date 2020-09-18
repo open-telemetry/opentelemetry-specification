@@ -44,7 +44,7 @@ In the case of an HTTP redirect, the request should normally be considered succe
 unless the client aborts following redirects due to hitting some limit (redirect loop).
 If following a (chain of) redirect(s) successfully, the status should be set according to the result of the final HTTP request.
 
-Don't set the span status description if the reason can be inferred from `http.status_code` and `http.status_text`.
+Don't set the span status description if the reason can be inferred from `http.status_code`.
 
 | HTTP code               | Span status code      |
 |-------------------------|-----------------------|
@@ -79,7 +79,6 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `http.host` | string | The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4). When the header is empty or not present, this attribute should be the same. | `www.example.org` | No |
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`<br>`https` | No |
 | `http.status_code` | number | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditional<br>If and only if one was received/sent. |
-| `http.status_text` | string | [HTTP reason phrase](https://tools.ietf.org/html/rfc7230#section-3.1.2). | `OK` | No |
 | `http.flavor` | string | Kind of HTTP protocol used [1] | `1.0` | No |
 | `http.user_agent` | string | Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | No |
 | `http.request_content_length` | number | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
@@ -240,7 +239,6 @@ Span name: `/webshop/articles/4` (NOTE: This is subject to change, see [open-tel
 | `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"`     |
 | `net.peer.ip`      | `"192.0.2.5"`                                           |
 | `http.status_code` | `200`                                                   |
-| `http.status_text` | `"OK"`                                                  |
 
 The corresponding server Span may look like this:
 
@@ -257,7 +255,6 @@ Span name: `/webshop/articles/:article_id`.
 | `http.scheme`      | `"https"`                                       |
 | `http.route`       | `"/webshop/articles/:article_id"`               |
 | `http.status_code` | `200`                                           |
-| `http.status_text` | `"OK"`                                          |
 | `http.client_ip`   | `"192.0.2.4"`                                   |
 | `net.peer.ip`      | `"192.0.2.5"` (the client goes through a proxy) |
 | `http.user_agent`  | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
