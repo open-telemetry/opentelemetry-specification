@@ -9,10 +9,14 @@ release.
 
 New:
 
+- Default propagators in un-configured API must be no-op
+  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
 - Define resource mapping for Jaeger exporters
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
   ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
+- Add semantic convention for source code attributes
+  ([#901](https://github.com/open-telemetry/opentelemetry-specification/pull/901))
 - Add semantic conventions for outgoing Function as a Service (FaaS) invocations
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
 - Add resource semantic convention for deployment environment
@@ -41,6 +45,8 @@ Updates:
   ([#669](https://github.com/open-telemetry/opentelemetry-specification/pull/669))
   * SpanProcessors must provide read/write access at least in OnStart.
 - Specify how `Probability` sampler is used with `ParentOrElse` sampler.
+- Clarify event timestamp origin and range
+  ([#839](https://github.com/open-telemetry/opentelemetry-specification/pull/839))
 - Clean up api-propagators.md, by extending documentation and removing redundant
   sections
   ([#577](https://github.com/open-telemetry/opentelemetry-specification/pull/577))
@@ -59,6 +65,10 @@ Updates:
 - A full `Context` is the only way to specify a parent of a `Span`.
   `SpanContext` or even `Span` are not allowed anymore.
   ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
+- SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
+  and `RECORD_AND_SAMPLE` for consistency
+  ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
+  [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
 
 ## v0.6.0 (07-01-2020)
 
