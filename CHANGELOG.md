@@ -9,10 +9,14 @@ release.
 
 New:
 
+- Default propagators in un-configured API must be no-op
+  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
 - Define resource mapping for Jaeger exporters
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
   ([#693](https://github.com/open-telemetry/opentelemetry-specification/pull/693))
+- Add semantic convention for source code attributes
+  ([#901](https://github.com/open-telemetry/opentelemetry-specification/pull/901))
 - Add semantic conventions for outgoing Function as a Service (FaaS) invocations
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
 - Add resource semantic convention for deployment environment
@@ -41,6 +45,8 @@ Updates:
   ([#669](https://github.com/open-telemetry/opentelemetry-specification/pull/669))
   * SpanProcessors must provide read/write access at least in OnStart.
 - Specify how `Probability` sampler is used with `ParentOrElse` sampler.
+- Clarify event timestamp origin and range
+  ([#839](https://github.com/open-telemetry/opentelemetry-specification/pull/839))
 - Clean up api-propagators.md, by extending documentation and removing redundant
   sections
   ([#577](https://github.com/open-telemetry/opentelemetry-specification/pull/577))
@@ -55,7 +61,11 @@ Updates:
 - Use hex encoding for trace id and span id fields in OTLP JSON encoding:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
-  ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
+  ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914)
+- SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
+  and `RECORD_AND_SAMPLE` for consistency
+  ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
+  [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
 - Move active span interaction in the Trace API to a separate class
   ([#923](https://github.com/open-telemetry/opentelemetry-specification/pull/923))
 

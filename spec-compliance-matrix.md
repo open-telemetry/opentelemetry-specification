@@ -58,7 +58,7 @@ status of the feature is not known.
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |[Span exceptions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#record-exception)|
 |RecordException                               | - | +  | + | +    | +  | -    |   | +  | - | +  |
-|RecordException with extra parameters         | - | -  | + | -    | -  | -    |   | +  | - | +  |
+|RecordException with extra parameters         | - | +  | + | -    | -  | -    |   | +  | - | +  |
 
 ## Metrics
 
@@ -70,31 +70,31 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|Create from Attributes                        | + |    | + | +    |    |      |   |    |   |    |
-|Create empty                                  | + |    | + | +    |    |      |   |    |   |    |
-|Merge                                         | + |    | + | +    |    |      |   |    |   |    |
-|Retrieve attributes                           | + |    | + | +    |    |      |   |    |   |    |
+|Create from Attributes                        | + | +  | + | +    |    |      |   |    |   |    |
+|Create empty                                  | + | +  | + | +    |    |      |   |    |   |    |
+|Merge                                         | + | +  | + | +    |    |      |   |    |   |    |
+|Retrieve attributes                           | + | +  | + | +    |    |      |   |    |   |    |
 
 ## Context Propagation
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Create Context Key                            |  |    | + | +    |    |      |   |    |   |    |
-|Get value from Context                        |  |    | + | +    |    |      |   |    |   |    |
-|Set value for Context                         |  |    | + | +    |    |      |   |    |   |    |
-|Attach Context                                |  |    | + | +    |    |      |   |    |   |    |
-|Detach Context                                |  |    | + | +    |    |      |   |    |   |    |
-|Get current Context                           |  |    | + | +    |    |      |   |    |   |    |
+|Create Context Key                            |  |    | + | +    |    |      | + |    |   |    |
+|Get value from Context                        |  |    | + | +    |    |      | + |    |   |    |
+|Set value for Context                         |  |    | + | +    |    |      | + |    |   |    |
+|Attach Context                                |  |    | + | +    |    |      | + |    |   |    |
+|Detach Context                                |  |    | + | +    |    |      | + |    |   |    |
+|Get current Context                           |  |    | + | +    |    |      | + |    |   |    |
 |Composite Propagator                          |  |    | + | +    |    |      |   |    |   |    |
-|Global Propagator                             |  |    | + | +    |    |      |   |    |   |    |
-|TraceContext Propagator                       |  |    | + | +    |    |      |   |    |   |    |
-|B3 Propagator                                 |  |    | + | +    |    |      |   |    |   |    |
-|Jaeger Propagator                             |  |    | + | -    |    |      |   |    |   |    |
+|Global Propagator                             |  | +  | + | +    |    |      |   |    |   |    |
+|TraceContext Propagator                       |  | +  | + | +    |    |      |   |    |   |    |
+|B3 Propagator                                 |  | +  | + | +    |    |      |   |    |   |    |
+|Jaeger Propagator                             |  | -  | + | -    |    |      |   |    |   |    |
 |[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
-|Fields                                        |  |    |   | -   |    |      |   |    |   |    |
-|Setter argument                               |  |    | + | +   |    |      |   |    |   |    |
-|Getter argument                               |  |    | + | +   |    |      |   |    |   |    |
-|Getter argument returning Keys                |  |    |   | -   |    |      |   |    |   |    |
+|Fields                                        |  | +  |   | -   |    |      |   |    |   |    |
+|Setter argument                               |  | +  | + | +   |    |      |   |    |   |    |
+|Getter argument                               |  | +  | + | +   |    |      |   |    |   |    |
+|Getter argument returning Keys                |  | -  |   | -   |    |      |   |    |   |    |
 
 ## Error Handling
 
@@ -106,13 +106,14 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|OTEL_RESOURCE_ATTRIBUTES                      | + |    | + | +    |    | -    |   |    | - | -  |
-|OTEL_LOG_LEVEL                                |   |    | + | -    |    | -    |   |    | - | -  |
-|OTEL_PROPAGATORS                              |   |    |   | -    |    | -    |   |    | - | -  |
-|OTEL_BSP_*                                    |   |    |   | -    |    | -    |   |    | - | -  |
-|OTEL_EXPORTER_OTLP_*                          |   |    |   | -    |    | -    |   |    | - | -  |
-|OTEL_EXPORTER_JAEGER_*                        |   |    |   | -    |    | -    |   |    | - | -  |
-|OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    |   |    | - | -  |
+|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    |    | -    | - |    | - | -  |
+|OTEL_LOG_LEVEL                                |   | -  | + | -    |    | -    | - |    | - | -  |
+|OTEL_PROPAGATORS                              |   |    |   | -    |    | -    | - |    | - | -  |
+|OTEL_BSP_*                                    |   | +  |   | -    |    | -    | - |    | - | -  |
+|OTEL_EXPORTER_OTLP_*                          |   |    |   | -    |    | -    | - |    | - | -  |
+|OTEL_EXPORTER_JAEGER_*                        |   |    |   | -    |    | -    | - |    | - | -  |
+|OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    | - |    | - | -  |
+|OTEL_EXPORTER                                 |   |    |   |      |    |      |   |    |   |    |
 
 ## Exporters
 
@@ -142,7 +143,7 @@ status of the feature is not known.
 |Array attributes                              | + | +  | + | -    |    | +    | + | +  |   |    |
 |Status mapping                                | + | -  | + | -    |    | +    | + | +  |   |    |
 |Event attributes mapping to Annotations       | + |    | + | +    |    | +    | + | +  |   |    |
-|Fractional microseconds in timestamps         | + | -  | + | -    |    | -    | - | -  |   |    |
+|Integer microseconds in timestamps            |   |    |   |      |    |      |   |    |   |    |
 |Jaeger|
 |TBD|
 |OpenCensus|

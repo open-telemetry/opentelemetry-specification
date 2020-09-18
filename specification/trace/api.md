@@ -468,9 +468,10 @@ with the moment when they are added to the `Span`.
 
 An `Event` is defined by the following properties:
 
-- (Required) Name of the event.
-- (Optional) [`Attributes`](../common/common.md#attributes).
-- (Optional) Timestamp for the event. If not provided, the current time when the event is added MUST be used.
+- Name of the event.
+- A timestamp for the event. Either the time at which the event was
+added or a custom timestamp provided by the user.
+- [`Attributes`](../common/common.md#attributes) further describing the event.
 
 The `Event` SHOULD be an immutable type.
 
@@ -478,9 +479,20 @@ The Span interface MUST provide:
 
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
+  This API takes the name of the event, optional `Attributes` and an optional
+  `Timestamp` which can be used to specify the time at which the event occurred.
+  If no custom timestamp is provided by the user, the implementation automatically
+  sets the time at which this API is called on the event.
 
-Events SHOULD preserve the order in which they're set. This will typically match
-the ordering of the events' timestamps.
+Events SHOULD preserve the order in which they are recorded.
+This will typically match the ordering of the events' timestamps,
+but events may be recorded out-of-order using custom timestamps.
+
+Consumers should be aware that an event's timestamp might be before the start or
+after the end of the span if custom timestamps were provided by the user for the
+event or when starting or ending the span.
+The specification does not require any normalization if provided timestamps are
+out of range.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
 keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
