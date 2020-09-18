@@ -33,7 +33,7 @@ The Metrics SDK provides an implementation of the Metrics API, which
 has terms that it uses to refer to the SDK:
 
 - **Meter**: An interface that supplies the OpenTelemetry Metric API, bound together with Resources and the Instrumentation Library
-- **Provider**: An interface for obtaining **Meter** instances given the Instrumentation Library.
+- **MeterProvider**: An interface for obtaining **Meter** instances given the Instrumentation Library.
 
 These terms are useful to describe the boundary between the API and
 the SDK, but they are API-level constructs.  We can use API-level
@@ -90,7 +90,7 @@ an instrument.
 ## Dataflow Diagram
 
 From an external perspective, the Metrics SDK implements the `Meter`
-and `Provider` interfaces described in the [Metrics API](api.md).
+and `MeterProvider` interfaces described in the [Metrics API](api.md).
 From an internal perspective, the Metrics SDK encapsulates an export
 pipeline for metric data.
 
@@ -299,7 +299,7 @@ SDK instruments.
 
 The user is generally interested in the [Metric API `Meter`
 interface](api.md#meter-interface), obtained through a [Metric API
-`Provider` interface](api.md#meter-provider).  The `Meter` interface can be
+`MeterProvider` interface](api.md#meter-provider).  The `Meter` interface can be
 constructed by wrapping the SDK `Meter` implementation:
 
 ```go
