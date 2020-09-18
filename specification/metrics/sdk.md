@@ -98,8 +98,22 @@ pipeline for metric data.
 
 ![Metrics SDK Design Diagram](img/metrics-sdk.png)
 
-The Accumulator component is where metric events leave the API and
-enter the export pipeline, and it is this component that is most
+For the `Meter` and `MeterProvider` interfaces, the SDK itself is
+required to manage the Resource and Instrumentation Library metadata,
+support synchronous and asynchronous instrument constructors, act as
+an instrument registry (detect conflicts), and implement `RecordBatch`
+functionality.
+
+To support the export pipeline internally, the SDK itself is required
+to implement a top-level `Collect()` API that runs collection on one
+or more Accumulator(s).  This specification deliberately avoids
+requiring a specific relationship between the SDK and Accumulator, it
+is considered an implementation detail whether a the SDK maintains one
+Accumulator, one Accumulator per instrument, or some configuration in
+between.
+
+The Accumulator component is where metric events are concurrently
+passed to an Aggregator, and it is this component that is most
 responsible for SDK performance.  The Accumulator is responsible for
 organizing bound and unbound instruments, updating and synchronized
 copying of Aggregator state, invoking Observer instruments, and the
@@ -140,7 +154,7 @@ Accumulator per instrument or it could be implemented using one
 Accumulator per collection period (assuming support for multiple
 collection periods): these are considered implementation details.
 
-### Instrument Registration
+### SDK: Instrument Registration
 
 The OpenTelemetry SDK is responsible for ensuring that an individual
 Meter implementation cannot report multiple instruments with the same
