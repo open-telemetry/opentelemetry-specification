@@ -64,6 +64,8 @@ Updates:
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
+- Define `null` as a valid span attribute value
+  ([#971](https://github.com/open-telemetry/opentelemetry-specification/pull/971))
 
 ## v0.6.0 (07-01-2020)
 

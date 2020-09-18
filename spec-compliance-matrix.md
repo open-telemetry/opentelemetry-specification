@@ -44,6 +44,7 @@ status of the feature is not known.
 |Boolean type                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Double floating-point type                    | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Signed int64 type                             | + | +  | + | +    | +  | +    | - | +  | + | +  |
+|Null values are recorded                      |   |    |   |      |    |      |   |    |   |    |
 |Array of primitives (homogeneous)             | + | +  | + | +    | +  | -    | + | +  | + | +  |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |[Span linking](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-links)|

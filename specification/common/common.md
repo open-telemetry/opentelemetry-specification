@@ -23,16 +23,19 @@ Attributes are a list of zero or more key-value pairs. An `Attribute` MUST have 
 
 Attributes SHOULD preserve the order in which they're set.
 
-Attribute values expressing a numerical value of zero, an empty string, or an
+Attribute values expressing `null`, a numerical value of zero, an empty string, or an
 empty array are considered meaningful and MUST be stored and passed on to
-processors / exporters. Attribute values of `null` are considered to be not set
-and get discarded as if that `Attribute` has never been created.
-As an exception to this, if overwriting of values is supported, this results in
-removing the attribute.
+processors / exporters.
+
+If exporters do not support exporting `null` values, they SHOULD discard the attribute as if it was
+never there in the first place.
+They SHOULD NOT replace it with any value that would be valid for some non-null attribute type (using
+default values like an empty string, `0` or a `false`, for example, could cause wrong interpretations
+on the consumer side more likely than not sending the attribute at all).
 
 `null` values within arrays MUST be preserved as-is (i.e., passed on to span
 processors / exporters as `null`). If exporters do not support exporting `null`
-values, they MAY replace those values by 0, `false`, or empty strings.
+values in arrays, they MAY replace those values by 0, `false`, or empty strings.
 This is required for map/dictionary structures represented as two arrays with
 indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
 both containing an array of strings to represent a mapping
