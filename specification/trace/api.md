@@ -158,7 +158,6 @@ the same `TracerProvider`.
 
 A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
-`SpanContext` MUST be a final (sealed) class.
 
 The OpenTelemetry `SpanContext` representation conforms to the [W3C TraceContext
 specification](https://www.w3.org/TR/trace-context/). It contains two
