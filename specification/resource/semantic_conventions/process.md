@@ -104,7 +104,7 @@ Ruby instrumentation should fill in the values by copying from built-in runtime 
 
 - `process.runtime.name` - Fill in the value of `RUBY_ENGINE` as is
 - `process.runtime.version` - Fill in the value of `RUBY_VERSION` as is
-- `process.runtime.description` - Fill in the value of `RUBY_DESCRIPTION`
+- `process.runtime.description` - Fill in the value of `RUBY_DESCRIPTION` as is
 
 Examples for some Ruby runtimes
 
