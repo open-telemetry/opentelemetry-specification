@@ -217,8 +217,8 @@ For a synchronous instrument, the accumulator will:
 1. Map each active Label Set to a record, consisting of two instances of the same type Aggregator
 2. Enter new records into the mapping, calling the AggregationSelector if needed
 3. Update the current Aggregator instance, responding to concurrent API events
-5. Call Aggregator.SynchronizedMove on the current Aggregator instance to copy its value into the snapshot Aggregator instance and reset itself
-6. Call Processor.Process for every resulting Accumulation (i.e., Instrument, Label Set, Resource, and Aggregator snapshot)
+4. Call Aggregator.SynchronizedMove on the current Aggregator instance to copy its value into the snapshot Aggregator instance and reset itself
+5. Call Processor.Process for every resulting Accumulation (i.e., Instrument, Label Set, Resource, and Aggregator snapshot)
 
 ![Metrics SDK Accumulator Detail Diagram](img/accumulator-detail.png)
 
