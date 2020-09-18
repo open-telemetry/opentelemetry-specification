@@ -5,6 +5,13 @@ OpenTelemetry API implementation in language libraries.
 
 **Status:** Draft
 
+## Benchmark Configuration
+
+### Span Configuration
+
+Spans for the tests in this spec should have empty resource, no parent `Span` and
+`SpanContext`. The `AlwaysOn` sampler should be enabled.
+
 ## Throughput
 
 ### Create Spans
@@ -32,7 +39,7 @@ average and peak CPU usage should be reported.
 
 ### Memory Usage
 
-Measure dynamic memory comsumption, e.g. heap, for the same scenario as above
+Measure dynamic memory consumption, e.g. heap, for the same scenario as above
 CPU Usage section with 15 seconds duration.
 
 ## Report
