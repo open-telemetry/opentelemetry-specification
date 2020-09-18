@@ -9,8 +9,11 @@ OpenTelemetry API implementation in language libraries.
 
 ### Span Configuration
 
-Spans for the tests in this spec should have empty resource, no parent `Span` and
-`SpanContext`. The `AlwaysOn` sampler should be enabled.
+- No parent `Span` and `SpanContext`.
+- Associated to a [resource](overview.md#resources) with attributes
+  `service.name`, `service.version`, `name`, and 10 characters string value for
+  each attribute.
+- The `AlwaysOn` sampler should be enabled.
 
 ## Throughput
 
@@ -31,7 +34,7 @@ usage for SDK with both simple and batching span processors together with OTLP
 exporter. The benchmark should create an OTLP receiver which listens on the
 exporting target in the same process, responds with success immediately and
 drops the data, so it does not incur significant CPU overhead on the measured
-result. Because the benchmark doesn't include user processing logic, the total
+result. Because the benchmark does not include user processing logic, the total
 CPU consumption of benchmark program could be considered as approximation of
 SDK's CPU consumption.  
 The total running time for one test iteration is suggested to be 15 seconds. The
