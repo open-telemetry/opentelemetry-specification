@@ -64,7 +64,8 @@ These terms are defined in the Metrics API specification:
 - **Collection Interval**: the period between calls to Accumulator.Collect()
 - **Label**: a key-value describing a property of the metric event
 - **Label Set**: a set of key-values with unique keys
-- **Measurement**: an integer or floating point number.
+- **Measurement**: an integer or floating point number from a synchronous instrument
+- **Observation**: an integer or floating point number from an asynchronous instrument.
 
 Defined in the [Resource SDK](../resource/sdk.md) specification:
 
@@ -74,10 +75,11 @@ Defined in the [Resource SDK](../resource/sdk.md) specification:
 These are the significant data types used in the model architecture:
 
 - **Aggregator**: aggregates one or more measurements in a useful way
+- **Aggregator snapshot**: copy of an synchronous instrument aggregator taken during collection
 - **AggregatorSelector**: chooses which Aggregator to assign to a metric instrument
-- **Aggregation**: the result of aggregating one or more events by a specific aggregator
+- **Accumulation**: consists of Instrument, Label Set, Resource, and Aggregator snapshot, output by Accumulator
+- **Aggregation**: the result of aggregating one or more events by a specific aggregator, output by Processor
 - **AggregationKind**: describes the kind of read API the Aggregation supports (e.g., Sum)
-- **Accumulation**: consists of Instrument, Label Set, Resource, and Aggregator snapshot
 - **Controller**: coordinates the Accumulator, Processor, and Exporter components in an export pipeline
 - **ExportKind**: one of Delta, Cumulative, or Pass-Through
 - **ExportKindSelector**: chooses which ExportKind to use for a metric instrument.
@@ -167,7 +169,17 @@ The Accumulator is the first component an OpenTelemetry Metric export
 pipeline, implementing the instrument-related APIs of the [`Meter`
 interface](api.md#meter-interface) and providing the SDK instrument.
 An SDK is assembled with an Accumulator and other parts, detailed
-below.
+below.  The diagram below shows the relationship between the API and the
+accumulator, with detail shown for synchronous instruments.  For a
+synchronous instrument, the accumulator will:
+
+1. Map each active Label Set to a record, consisting of two instances of the same type Aggregator
+2. Enter new records into the mapping, calling the AggregationSelector if needed
+3. Update the current Aggregator instance, responding to concurrent API events
+5. Call Aggregator.SynchronizedMove on the current Aggregator instance to copy its value into the snapshot Aggregator instance and reset itself
+6. Call Processor.Process for every resulting Accumulation (i.e., Instrument, Label Set, Resource, and Aggregator snapshot)
+
+![Metrics SDK Accumulator Detail Diagram](img/accumulator-detail.png)
 
 The Accumulator MUST provide the option to associate a
 [`Resource`](../resource/sdk.md) with the Accumulations that it
@@ -192,8 +204,8 @@ method MUST call the Processor to process Accumulations corresponding
 to all metric events that happened before the call.
 
 Accumulations MUST be computed during Collect using a _synchronized
-move_ operation on the Aggregator.  This operation atomically copies
-the Aggregator and resets it to the zero state, so that each
+move_ operation on the Aggregator.  This operation, using some kind of synchronization, copies
+the current Aggregator and resets it to the zero state, so that each
 Aggregator immediately begins accumulating events for the next
 collection period while the current one is processed.  An Accumulation
 is defined as the synchronously-copied Aggregator combined with the
