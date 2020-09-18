@@ -98,19 +98,9 @@ pipeline for metric data.
 
 ![Metrics SDK Design Diagram](img/metrics-sdk.png)
 
-For the `Meter` and `MeterProvider` interfaces, the SDK itself is
-required to manage the Resource and Instrumentation Library metadata,
-support synchronous and asynchronous instrument constructors, act as
-an instrument registry (detect conflicts), and implement `RecordBatch`
-functionality.
-
 To support the export pipeline internally, the SDK itself is required
 to implement a top-level `Collect()` API that runs collection on one
-or more Accumulator(s).  This specification deliberately avoids
-requiring a specific relationship between the SDK and Accumulator, it
-is considered an implementation detail whether a the SDK maintains one
-Accumulator, one Accumulator per instrument, or some configuration in
-between.
+or more Accumulator(s).
 
 The Accumulator component is where metric events are concurrently
 passed to an Aggregator, and it is this component that is most
@@ -133,6 +123,10 @@ guidelines](../library-guidelines.md), exporters are expected to
 contain contain minimal functionality and customization is preferably
 expressed through Processors.
 
+The Controller component coordinates the sequence of actions to
+collect, process, and export metric data over a collection interval,
+ensuring that access to the export pipeline is properly synchronized.
+
 ## Requirements
 
 Requirements are listed below for the major components of the
@@ -154,22 +148,34 @@ Accumulator per instrument or it could be implemented using one
 Accumulator per collection period (assuming support for multiple
 collection periods): these are considered implementation details.
 
-### SDK: Instrument Registration
+### SDK
+
+The SDK is the start an OpenTelemetry Metric export pipeline,
+implementing the instrument-related APIs of the [`Meter`
+interface](api.md#meter-interface) and providing the SDK instrument,
+the Resource, and managing Instrumentation Library metadata.
+
+An SDK is assembled with one or more Accumulators and other
+components, detailed below.  The diagram below shows the relationship
+between the API and the accumulator, with detail shown for synchronous
+instruments.
+
+#### SDK: Instrument Registration
 
 The OpenTelemetry SDK is responsible for ensuring that an individual
 Meter implementation cannot report multiple instruments with the same
 name and different definitions.  To accomplish this, SDKs MUST reject
 duplicate registration of an instrument when another instrument has
 already been registered with same metric name to the same named Meter.
+The requirement applies even for attempts to register an identical
+instrument definition.  We assume that a single instrumentation
+library can arrange to use a single instrument definition rather than
+rely on the SDK to support duplicate registration.
 
 Separate Meters, characterized by different instrumetation library
 names, are permitted to register instruments by the same name as used
 in different instrumentation libraries, in which case the SDK MUST
-consider these as separate instruments.  The requirement applies even
-for attempts to register an identical instrument definition.  We
-assume that a single instrumentation library can arrange to use a
-single instrument definition rather than rely on the SDK to support
-duplicate registration.
+consider these as separate instruments.
 
 The SDK is responsible for implementing any syntactic requirements for
 metric names included in the API specification.  TODO: link to this
@@ -177,15 +183,35 @@ after [OTEP
 108](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0108-naming-guidelines.md)
 is written into the API specification.
 
+#### SDK: RecordBatch() function
+
+TODO: _Add functional requirements for RecordBatch()_.
+
+#### SDK: Collect() function
+
+The SDK is responsible for implementing a `Collect()` function that
+calls through to one or more Accumulators.  This specification
+deliberately avoids requiring a specific relationship between the SDK
+and Accumulator; it is considered an implementation detail whether a
+the SDK maintains one Accumulator, one Accumulator per instrument, or
+some configuration in between.
+
+The SDK `Collect()` function MUST call through to the Processor with
+Accumulations from the active synchronous instruments as well as all
+the registered asynchronous instruments.
+
+The SDK MUST permit synchronous metric instruments to be used during
+evaluation of asynchronous instrument callbacks.  The use of
+synchronous instruments from asynchronous instrument callbacks is
+considered a side-effect, in this case.  SDKs SHOULD process
+synchronous instruments after asynchronous instruments, so that
+side-effect synchronous measurements are processed as part of the same
+collection interval that contains the corresponding asynchronous
+observations.
+
 ### Accumulator
 
-The Accumulator is the first component an OpenTelemetry Metric export
-pipeline, implementing the instrument-related APIs of the [`Meter`
-interface](api.md#meter-interface) and providing the SDK instrument.
-An SDK is assembled with an Accumulator and other parts, detailed
-below.  The diagram below shows the relationship between the API and the
-accumulator, with detail shown for synchronous instruments.  For a
-synchronous instrument, the accumulator will:
+For a synchronous instrument, the accumulator will:
 
 1. Map each active Label Set to a record, consisting of two instances of the same type Aggregator
 2. Enter new records into the mapping, calling the AggregationSelector if needed
@@ -209,7 +235,7 @@ synchronous instrument updates.  The Accumulator SHOULD NOT hold an
 exclusive lock while calling an Aggregator (see below), since some
 Aggregators may have higher concurrency expectations.
 
-#### Accumulator Collect() function
+#### Accumulator: Collect() function
 
 The Accumulator MUST implement a Collect method that builds and
 processes current Accumulation values for active instruments, meaning
@@ -224,15 +250,6 @@ Aggregator immediately begins accumulating events for the next
 collection period while the current one is processed.  An Accumulation
 is defined as the synchronously-copied Aggregator combined with the
 LabelSet, Resource, and metric Descriptor.
-
-The Accumulator MUST permit synchronous metric instruments to be used
-during asynchronous instrument callbacks.  The use of synchronous
-instruments from asynchronous instrument callbacks is considered a
-side-effect, in this case.  SDKs SHOULD support processing synchronous
-instruments that are used in this way in the same collection period as
-the asynchronous instrument callbacks that caused the side-effect,
-provided the synchronous and asynchronous instruments are being
-collected over the same interval.
 
 TODO: _Are there more Accumulator functional requirements?_
 
