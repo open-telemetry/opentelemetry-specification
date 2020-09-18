@@ -61,6 +61,7 @@ Examples for some Java runtimes
 | AdoptOpenJDK Hotspot | OpenJDK Runtime Environment | 11.0.8+10 | AdoptOpenJDK 11.0.8+10 |
 | SapMachine | OpenJDK Runtime Environment | 11.0.8+10-LTS-sapmachine | SAP SE 11.0.8+10-LTS-sapmachine |
 | Zulu OpenJDK | OpenJDK Runtime Environment | 11.0.8+10-LTS | Azul Systems, Inc Zulu11.41+23-CA |
+| Android 11 | Android Runtime | 0.9 | The Android Project 2.1.0 |
 
 ***JavaScript runtimes:***
 
