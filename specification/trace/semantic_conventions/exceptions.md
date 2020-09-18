@@ -47,16 +47,8 @@ their types.
 | `exception.stacktrace` | string | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. | `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` | No |
 | `exception.escaped` | boolean | SHOULD be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span. [1] |  | No |
 
-**[1]:** An exception is considered to have escaped (or left) the scope of a span,
-if that span is ended while the exception is still "in flight".
-
-While it is usually not possible to determine whether some exception thrown
-now *will* escape the scope of a span, it is trivial to know that an exception
-will escape, if one checks for an active exception just before ending the span.
-See the [example above](#exception-end-example). It follows that an exception
-may still escape the scope of the span even if the `exception.escaped` attribute
-was not set or set to false, since that event might have been recorded at a time
-where it was not clear whether the exception will escape.
+**[1]:** An exception is considered to have escaped (or left) the scope of a span, if that span is ended while the exception is still "in flight".
+While it is usually not possible to determine whether some exception thrown now *will* escape the scope of a span, it is trivial to know that an exception will escape, if one checks for an active exception just before ending the span. See the [example above](#exception-end-example). It follows that an exception may still escape the scope of the span even if the `exception.escaped` attribute was not set or set to false, since that event might have been recorded at a time where it was not clear whether the exception will escape.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -93,4 +85,3 @@ grained information from a stacktrace, if necessary.
 [csharp-stacktrace]: https://docs.microsoft.com/en-us/dotnet/api/system.exception.tostring
 [go-stacktrace]: https://golang.org/pkg/runtime/debug/#Stack
 [telemetry-sdk-resource]: https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#telemetry-sdk
-

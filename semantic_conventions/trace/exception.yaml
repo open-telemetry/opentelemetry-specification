@@ -29,11 +29,18 @@ groups:
         type: boolean
         brief: >
           SHOULD be set to true if the exception event is recorded at a point where
-          it is known that the exception is escaping the scope of the span (e.g. if
-          there is an exception active just before ending the span).
+          it is known that the exception is escaping the scope of the span.
         note: >
-          Note that an exception may still leave the scope of the span even if this
-          was not set or set to false, if the event was recorded at an earlier time.
+          An exception is considered to have escaped (or left) the scope of a span,
+          if that span is ended while the exception is still "in flight".
+
+          While it is usually not possible to determine whether some exception thrown
+          now *will* escape the scope of a span, it is trivial to know that an exception
+          will escape, if one checks for an active exception just before ending the span.
+          See the [example above](#exception-end-example). It follows that an exception
+          may still escape the scope of the span even if the `exception.escaped` attribute
+          was not set or set to false, since that event might have been recorded at a time
+          where it was not clear whether the exception will escape.
     constraints:
       - any_of:
         - "exception.type"
