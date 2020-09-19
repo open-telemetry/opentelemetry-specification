@@ -32,13 +32,15 @@ With given number of span throughput specified by user, or 10,000 spans per
 second as default if user does not input the number, measure and report the CPU
 usage for SDK with both simple and batching span processors together with OTLP
 exporter. The benchmark should create an OTLP receiver which listens on the
-exporting target in the same process, responds with success immediately and
-drops the data, so it does not incur significant CPU overhead on the measured
-result. Because the benchmark does not include user processing logic, the total
-CPU consumption of benchmark program could be considered as approximation of
-SDK's CPU consumption.  
-The total running time for one test iteration is suggested to be 15 seconds. The
-average and peak CPU usage should be reported.  
+exporting target in the same process or adopts existing OTLP exporter which runs
+out of process, responds with success status immediately and drops the data. The
+collector should not add significant CPU overhead to the measurement. Because
+the benchmark does not include user processing logic, the total CPU consumption
+of benchmark program could be considered as approximation of SDK's CPU
+consumption.
+
+The total running time for one test iteration is suggested to be at least 15
+seconds. The average and peak CPU usage should be reported.
 
 ### Memory Usage
 
