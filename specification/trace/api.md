@@ -240,7 +240,8 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - The span name
 - An immutable [`SpanContext`](#spancontext) that uniquely identifies the
   `Span`
-- A parent span in the form of a (possibly empty) [`Context`](../context/context.md)
+- A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
+  or null
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
