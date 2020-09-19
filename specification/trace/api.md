@@ -292,7 +292,7 @@ attributes.
 
 A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
-change the its name, set its `Attribute`s, and add `Link`s and `Event`s. These
+change its name, set its `Attribute`s, and add `Link`s and `Event`s. These
 MUST NOT be changed after the `Span`'s end time has been set.
 
 `Span`s are not meant to be used to propagate information within a process. To
