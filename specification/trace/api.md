@@ -19,8 +19,8 @@ Table of Contents
   * [IsRemote](#isremote)
 * [Span](#span)
   * [Span creation](#span-creation)
+    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
-  * [Effective Span](#effective-span)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecording](#isrecording)
@@ -319,7 +319,7 @@ The API MUST accept the following parameters:
   This API MUST NOT accept a `Span` or `SpanContext` as parent, only a full `Context`.
 
   The semantic parent of the Span MUST be determined according to the rules
-  described in the [Effective Span section](#effective-span).
+  described in [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context).
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
@@ -349,6 +349,21 @@ created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
 
+#### Determining the Parent Span from a Context
+
+When a new `Span` is created from a `Context`, the `Context` may contain:
+
+- A current `Span`
+- An extracted `SpanContext`
+- A current `Span` and an extracted `SpanContext`
+- Neither a current `Span` nor an extracted `Span` context
+
+The parent should be selected in the following order of precedence:
+
+- Use the current `Span`, if available.
+- Use the extracted `SpanContext`, if available.
+- There is no parent. Create a root `Span`.
+
 #### Add Links
 
 During the `Span` creation user MUST have the ability to record links to other `Span`s.
@@ -370,21 +385,6 @@ The Span creation API MUST provide:
   arguments. This MAY be called `AddLink`.
 
 Links SHOULD preserve the order in which they're set.
-
-### Effective Span
-
-The *effective span* of a [`Context`](../context/context.md) is the first of the
-following that is available in it (with the respective key if applicable):
-
-1. An actual `Span` object.
-2. An extracted `SpanContext`
-   (that MAY be wrapped in an otherwise empty non-recording `Span`).
-3. Nothing (which SHOULD be represented as a non-null empty `SpanContext` or `Span`).
-
-The API MUST provide functionality to get the effective Span from a `Context`.
-
-Given a `Span` with its parent `Context`, the semantic parent Span is the
-effective span in that parent `Context`.
 
 ### Span operations
 
