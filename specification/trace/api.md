@@ -186,7 +186,7 @@ a `SpanContext`
 - By generating a new `SpanId` and copying the `TraceId`, `TraceFlags`, and `TraceState` from
 an in-process parent.
 - By accepting values for the `SpanId`, `TraceId`, `TraceFlags`, and `TraceState` for a remote
-parent. In this case, the `SpanId`, `TraceId`, and `TraceFlags` must be used as is, and 
+parent. In this case, the `SpanId`, `TraceId`, and `TraceFlags` must be used as is, and
 `TraceState` may be modified based on the rules for modification described [below](#TraceState).
 
 ### Retrieving the TraceId and SpanId
