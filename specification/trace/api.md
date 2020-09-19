@@ -187,7 +187,7 @@ a `SpanContext`
 an in-process parent.
 - By accepting values for the `SpanId`, `TraceId`, `TraceFlags`, and `TraceState` for a remote
 parent. In this case, the `SpanId`, `TraceId`, and `TraceFlags` must be used as is, and
-`TraceState` may be modified based on the rules for modification described [below](#TraceState).
+`TraceState` may be modified based on the rules for modification described below.
 
 ### Retrieving the TraceId and SpanId
 
