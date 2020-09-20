@@ -32,7 +32,6 @@ Traces and metrics are sent to different collectors using different protocols:
 ```bash
 export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=collector:55680
 export OTEL_EXPORTER_OTLP_SPAN_PROTOCOL=grpc
-export OTEL_EXPORTER_OTLP_SPAN_INSECURE=true
 
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=collector.example.com/v1/metrics
 export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=http
