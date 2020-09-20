@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Clarify env variables in otlp exporter
+  ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
 - Default propagators in un-configured API must be no-op
   ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
 - Define resource mapping for Jaeger exporters
