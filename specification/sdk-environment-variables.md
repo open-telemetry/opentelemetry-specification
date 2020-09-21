@@ -10,6 +10,8 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage" |                                     |
 
+Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger"
+
 ## Batch Span Processor
 
 | Name                           | Description                                    | Default | Notes                                                 |
