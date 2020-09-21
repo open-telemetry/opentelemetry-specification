@@ -26,9 +26,9 @@ Attributes SHOULD preserve the order in which they're set.
 Attribute values expressing `null`, a numerical value of zero, an empty string, or an
 empty array are considered meaningful and MUST be stored and passed on to
 processors / exporters.
-In languages with type systems where `null` can be of different types (e.g., a string or an array with a value of null),
-the type of `null` values MAY be ignored by the API and different types of `null` MAY not be distinguished by implementations,
-including exporters.
+In languages with type systems where `null` can be of different types (e.g., a null-valued string or array),
+the type of `null` values MAY be ignored by implementations and different types of `null` SHOULD NOT be
+distinguished by exporters as they are not deemed semantically different by this specification.
 
 If exporters do not support exporting `null` values, they SHOULD discard the attribute as if it was
 never there in the first place.
