@@ -69,9 +69,9 @@ Updates:
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
 - Metrics SDK: Specify LastValue default aggregation for ValueObserver
-  ([#834](https://github.com/open-telemetry/opentelemetry-specification/pull/834)
+  ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
-  ([#625](https://github.com/open-telemetry/opentelemetry-specification/pull/625)
+  ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 
 ## v0.6.0 (07-01-2020)
 
