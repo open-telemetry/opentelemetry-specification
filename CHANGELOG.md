@@ -69,7 +69,7 @@ Updates:
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
 - Metrics API: Replace "Additive" with "Adding", "Non-Additive" with "Grouping"
-  ([#625](https://github.com/open-telemetry/opentelemetry-specification/pull/625)
+  ([#983](https://github.com/open-telemetry/opentelemetry-specification/pull/983)
 
 ## v0.6.0 (07-01-2020)
 
