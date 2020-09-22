@@ -23,10 +23,12 @@ New:
   ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
-- Add Span API and semantic conventions for recording exceptions
+- Add API and semantic conventions for recording exceptions as Span Events
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
   * API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
-  * `exception.escaped` was added ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784))
+  * `exception.escaped` semantic span event attribute was added
+    ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
+    [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
 
 Updates:
 
@@ -65,6 +67,8 @@ Updates:
 - A full `Context` is the only way to specify a parent of a `Span`.
   `SpanContext` or even `Span` are not allowed anymore.
   ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
+- Remove obsolete `http.status_text` from semantic conventions
+  ([#972](https://github.com/open-telemetry/opentelemetry-specification/pull/972))
 - SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
