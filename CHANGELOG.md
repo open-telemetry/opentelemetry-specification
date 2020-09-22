@@ -29,6 +29,8 @@ New:
   * `exception.escaped` semantic span event attribute was added
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
+- Update the header name for otel baggage, and version date
+  ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
 
 Updates:
 
