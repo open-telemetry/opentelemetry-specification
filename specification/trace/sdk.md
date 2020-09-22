@@ -99,6 +99,9 @@ It produces an output called `SamplingResult` which contains:
   * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
+* A `Tracestate` that will be assigned to `Span`. If non-empty `Tracestate` was
+  passed in `SpanContext`, it MUST be populated on the `SamplingResult` even if
+  tracestate was not changed by sampler.
 
 #### GetDescription
 
