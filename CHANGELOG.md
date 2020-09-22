@@ -29,6 +29,8 @@ New:
   * `exception.escaped` semantic span event attribute was added
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
+- Allow samplers to modify tracestate
+  ([#856](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
 
 Updates:
 
