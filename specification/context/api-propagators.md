@@ -315,6 +315,28 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [B3](https://github.com/openzipkin/b3-propagation)
 * [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
 
+### B3 Requirements
+
+B3 has both single and multi-header encodings. To maximize compatibility between
+implementations, the following guidelines have been established for B3
+propagation in OpenTelemetry.
+
+#### Extract
+
+Propagators MUST attempt to extract B3 encoded using single and multi-header
+formats. When extracting, the single-header variant takes precedence over
+the multi-header version.
+
+#### Inject
+
+When injecting B3, propagators:
+
+* MUST default to injecting B3 using the single-header format
+* MUST provide configuration to change the default injection format to B3
+  multi-header
+
+### Vendor-specific propagators
+
 Additional `Propagator`s implementing vendor-specific protocols such as
 AWS X-Ray trace header protocol are encouraged to be maintained and distributed by
 their respective vendors.
