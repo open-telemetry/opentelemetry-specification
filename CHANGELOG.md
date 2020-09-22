@@ -68,6 +68,8 @@ Updates:
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
+- Metrics SDK: Specify LastValue default aggregation for ValueObserver
+  ([#834](https://github.com/open-telemetry/opentelemetry-specification/pull/834)
 
 ## v0.6.0 (07-01-2020)
 
