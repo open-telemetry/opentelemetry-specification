@@ -144,7 +144,7 @@ the base [Inject](#inject) operation.
 
 Optional arguments:
 
-- A `Setter` invoked to set each propagation key/value pair. This is an additional
+- A `Setter` to set a propagation key/value pair every time it is invoked. This is an additional
   argument that languages are free to define to help inject data into the carrier.
 
 #### Setter argument
@@ -263,7 +263,7 @@ Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
-- The `Setter` invoked to set each propagation key/value pair.
+- The `Setter` to set a propagation key/value pair every time it is invoked.
 
 ## Global Propagators
 
