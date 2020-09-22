@@ -107,11 +107,11 @@ Until the [W3C Baggage](https://w3c.github.io/baggage/) specification is recomme
 
 #### Header Name
 
-`Baggage` implementations MUST use the header name `otcorrelations`.
+`Baggage` implementations MUST use the header name `otelbaggage`.
 
 #### Header Value
 
-`Baggage` MUST be serialized according to the [editor's draft of W3C Correlation Context as of March 27, 2020](https://github.com/w3c/correlation-context/blob/c974664b9ab4d33af6355f1f7f03a2d52c89a99e/correlation_context/HTTP_HEADER_FORMAT.md).
+`Baggage` MUST be serialized according to the [editor's draft of W3C Correlation Context as of September 21, 2020](https://github.com/w3c/baggage/blob/0573bd79c0d93a779145fd26a7b3e532c912c783/baggage/HTTP_HEADER_FORMAT.md).
 
 `Baggage` values MUST be serialized as Percent-Encoded UTF-8 strings according to [RFC 3986 Section 2.1](https://tools.ietf.org/html/rfc3986#section-2.1).
 
