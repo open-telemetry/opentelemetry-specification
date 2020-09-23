@@ -31,6 +31,7 @@ Table of Contents
     * [End](#end)
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
+  * [DefaultSpan creation](#defaultspan-creation)
 * [Status](#status)
   * [StatusCanonicalCode](#statuscanonicalcode)
   * [Status creation](#status-creation)
@@ -352,18 +353,13 @@ parent is remote.
 
 #### Determining the Parent Span from a Context
 
-When a new `Span` is created from a `Context`, the `Context` may contain:
+When a new `Span` is created from a `Context`, the `Context` may contain a `Span`
+representing the currently active instance, and will be used as parent.
+If there is no `Span` in the `Context`, the newly created `Span` will be a root instance.
 
-- A current `Span`
-- An extracted `SpanContext`
-- A current `Span` and an extracted `SpanContext`
-- Neither a current `Span` nor an extracted `Span` context
-
-The parent should be selected in the following order of precedence:
-
-- Use the current `Span`, if available.
-- Use the extracted `SpanContext`, if available.
-- There is no parent. Create a root `Span`.
+A `SpanContext` may set as the active instance in a `Context` (for example, by a `Propagator`
+performing context extraction) through the use of a [DefaultSpan](#defaultspan-creation)
+wrapping it.
 
 #### Add Links
 
@@ -565,6 +561,18 @@ timestamps to the Span object:
 
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API.
+
+### DefaultSpan creation
+
+The API MUST provide an operation for wrapping a `SpanContext` with an object
+implementing the `Span` interface, known as `DefaultSpan`. This is done in order to expose
+a `SpanContext` as a `Span` in operations such as in-process `Span` propagation.
+
+- `GetContext()` MUST return the wrapped `SpanContext`.
+- `IsRecording` MUST return `false` to signal that events, attributes and other elements
+  are not being recorded, i.e. they are being dropped.
+
+The remaining functionality of `Span` must be defined as no-op operations.
 
 ## Status
 
