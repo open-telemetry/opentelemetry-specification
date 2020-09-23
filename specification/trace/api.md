@@ -183,7 +183,7 @@ The API must provide methods to create `SpanContext`. There are three ways to cr
 a `SpanContext`
 
 - By generating a new `SpanId`, `TraceId`, and `TraceFlags` when there is no in-process or remote parent.
-- By generating a new `SpanId` and copying the `TraceId`, `TraceFlags`, and `TraceState` from
+- By generating a new `SpanId` and `TraceFlags` and copying the `TraceId` and `TraceState` from
 an in-process parent.
 - By accepting values for the `SpanId`, `TraceId`, `TraceFlags`, and `TraceState` for a remote
 parent. In this case, the `SpanId`, `TraceId`, and `TraceFlags` must be used as is, and
