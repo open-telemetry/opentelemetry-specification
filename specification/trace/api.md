@@ -578,6 +578,9 @@ The behavior is defined as follows:
 
 The remaining functionality of `Span` MUST be defined as no-op operations.
 
+Note: This is expected to be fully implemented in the API, and MUST NOT be overridable
+by the SDK.
+
 ## Status
 
 `Status` interface represents the status of a finished `Span`. It's composed of
