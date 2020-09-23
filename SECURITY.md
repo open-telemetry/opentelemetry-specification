@@ -27,11 +27,11 @@ No matter what channel you choose to communicate with us, we would prefer you to
 
     `gpg --keyserver pool.sks-keyservers.net --recv-keys 936EAAD588D07C19`
 
-1. Encrypt a "message.txt" file into "message.txt.asc":
+2. Encrypt a "message.txt" file into "message.txt.asc":
 
     `gpg -ea -r 936EAAD588D07C19 message.txt`
 
-1. Send us the resulting "message.txt.asc"
+3. Send us the resulting "message.txt.asc"
 
 **Our published key should match this one:**
 
