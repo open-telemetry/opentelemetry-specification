@@ -70,6 +70,9 @@ Updates:
   ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
 - Remove obsolete `http.status_text` from semantic conventions
   ([#972](https://github.com/open-telemetry/opentelemetry-specification/pull/972))
+- Define `null` as an invalid value for attributes and declare attempts to set
+  `null` as undefined behavior
+  ([#992](https://github.com/open-telemetry/opentelemetry-specification/pull/992))
 - SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
