@@ -304,7 +304,7 @@ attributes.
 
 A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
-change the its name, set its `Attribute`s, and add `Link`s and `Event`s. These
+change its name, set its `Attribute`s, and add `Link`s and `Event`s. These
 MUST NOT be changed after the `Span`'s end time has been set.
 
 `Span`s are not meant to be used to propagate information within a process. To
@@ -319,12 +319,6 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
 
-When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
-new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
-SHOULD create each new `Span` as a child of its active `Span`, unless an
-explicit parent is provided or the option to create a span without a parent is
-selected.
-
 `Span` creation MUST NOT set the newly created `Span` as the currently
 active `Span` by default, but this functionality MAY be offered additionally
 as a separate operation.
@@ -332,11 +326,13 @@ as a separate operation.
 The API MUST accept the following parameters:
 
 - The span name. This is a required parameter.
-- The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
-  and whether the new `Span` should be a root `Span`. API MAY also have an
-  option for implicit parenting from the current context as a default behavior.
-  See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-  for guidance on `Span` parenting from explicit and implicit `Context`s.
+- The parent `Context` or an indication that the new `Span` should be a root `Span`.
+  The API MAY also have an option for implicitly using
+  the current Context as parent as a default behavior.
+  This API MUST NOT accept a `Span` or `SpanContext` as parent, only a full `Context`.
+
+  The semantic parent of the Span MUST be determined according to the rules
+  described in [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context).
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
