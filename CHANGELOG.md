@@ -31,7 +31,7 @@ New:
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
 - Update the header name for otel baggage, and version date
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
-- Define DefaultSpan to simplify active Span logic in Context
+- Define PropagationOnly Span to simplify active Span logic in Context
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
 
 Updates:
