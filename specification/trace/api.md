@@ -31,7 +31,7 @@ Table of Contents
     * [End](#end)
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
-  * [DefaultSpan creation](#defaultspan-creation)
+  * [PropagationOnly Span creation](#propagationonly-span-creation)
 * [Status](#status)
   * [StatusCanonicalCode](#statuscanonicalcode)
   * [Status creation](#status-creation)
@@ -357,9 +357,9 @@ When a new `Span` is created from a `Context`, the `Context` may contain a `Span
 representing the currently active instance, and will be used as parent.
 If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
 
-A `SpanContext` cannot be set as active in a `Context` directly,
-but through the use of a [DefaultSpan](#defaultspan-creation) wrapping it.
-For example, a `Propagator` performing context extraction, may need this.
+A `SpanContext` cannot be set as active in a `Context` directly, but through the use
+of a [PropagationOnly Span](#propagationonly-span-creation) wrapping it.
+For example, a `Propagator` performing context extraction may need this.
 
 #### Add Links
 
@@ -562,17 +562,21 @@ timestamps to the Span object:
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API.
 
-### DefaultSpan creation
+### PropagationOnly Span creation
 
 The API MUST provide an operation for wrapping a `SpanContext` with an object
-implementing the `Span` interface, known as `DefaultSpan`. This is done in order to expose
-a `SpanContext` as a `Span` in operations such as in-process `Span` propagation.
+implementing the `Span` interface. This is done in order to expose a `SpanContext`
+as a `Span` in operations such as in-process `Span` propagation.
+
+If a new type is required for supporting this operation, it SHOULD be named `PropagatorOnlySpan`.
+
+The behavior is defined as follows:
 
 - `GetContext()` MUST return the wrapped `SpanContext`.
 - `IsRecording` MUST return `false` to signal that events, attributes and other elements
   are not being recorded, i.e. they are being dropped.
 
-The remaining functionality of `Span` must be defined as no-op operations.
+The remaining functionality of `Span` MUST be defined as no-op operations.
 
 ## Status
 
