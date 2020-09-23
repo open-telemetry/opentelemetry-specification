@@ -116,7 +116,7 @@ information.  These are measurements that you would naturally combine
 using arithmetic addition, usually real quantities of something
 (e.g., number of bytes).
 
-grouping measurements are used when the set of values, also known
+Grouping measurements are used when the set of values, also known
 as the population, is presumed to have useful information.  A
 grouping measurement is either one that you would not naturally
 combine using arithmetic addition (e.g., request latency), or it is a
@@ -124,7 +124,7 @@ measurement you would naturally add where the intention is to monitor
 the distribution of values (e.g., queue size).  The median value is
 considered useful information for grouping measurements.
 
-grouping instruments semantically capture more information than
+Grouping instruments semantically capture more information than
 adding instruments.  grouping measurements are more expensive
 than adding measurements, by this definition.  Users will choose
 adding instruments except when they expect to get value from the
@@ -457,7 +457,7 @@ are inexpensively aggregated into a single number per collection interval
 without loss of information.  This property makes adding instruments
 higher performance, in general, than grouping instruments.
 
-grouping instruments use a relatively inexpensive aggregation
+Grouping instruments use a relatively inexpensive aggregation
 method default (MinMaxSumCount), but still more expensive than the
 default for adding instruments (Sum).  Unlike adding instruments,
 where only the sum is of interest by definition, grouping
