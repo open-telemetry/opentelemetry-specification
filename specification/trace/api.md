@@ -182,7 +182,7 @@ specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 The API must provide methods to create `SpanContext`. There are three ways to create
 a `SpanContext`
 
-- By generating a new `SpanId` and `TraceId` when there is no in-process or remote parent.
+- By generating a new `SpanId`, `TraceId`, and `TraceFlags` when there is no in-process or remote parent.
 - By generating a new `SpanId` and copying the `TraceId`, `TraceFlags`, and `TraceState` from
 an in-process parent.
 - By accepting values for the `SpanId`, `TraceId`, `TraceFlags`, and `TraceState` for a remote
