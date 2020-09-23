@@ -355,7 +355,7 @@ parent is remote.
 
 When a new `Span` is created from a `Context`, the `Context` may contain a `Span`
 representing the currently active instance, and will be used as parent.
-If there is no `Span` in the `Context`, the newly created `Span` will be a root instance.
+If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
 
 A `SpanContext` may set as the active instance in a `Context` (for example, by a `Propagator`
 performing context extraction) through the use of a [DefaultSpan](#defaultspan-creation)
