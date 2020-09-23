@@ -68,6 +68,9 @@ Updates:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
   ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
+- A full `Context` is the only way to specify a parent of a `Span`.
+  `SpanContext` or even `Span` are not allowed anymore.
+  ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
 - Remove obsolete `http.status_text` from semantic conventions
   ([#972](https://github.com/open-telemetry/opentelemetry-specification/pull/972))
 - SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
