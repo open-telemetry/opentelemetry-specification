@@ -138,7 +138,7 @@ The following operations related to messages are defined for these semantic conv
 | `topic` | A message broadcasted to the subscribers of the topic |
 <!-- endsemconv -->
 
-Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
+Additionally `net.peer.port` from the [network attributes][] is recommended.
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
