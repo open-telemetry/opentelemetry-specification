@@ -4,7 +4,7 @@ This security policy applies to all projects under the [open-telemetry organizat
 
 ## Supported Versions
 
-The OpenTelemetry project provides community support only for last minor version: bug fixes are released either as part of the next minor version or as an on-demand patch version. Independent of which version is next, all patch versions are cumulative, meaning that they represent the state of our `master` branch at the moment of the release. For instance, if the latest version is 0.10.0, bug fixes are released either as part of 0.11.0 or 0.10.1.
+The OpenTelemetry project provides community support only for the last minor version: bug fixes are released either as part of the next minor version or as an on-demand patch version. Independent of which version is next, all patch versions are cumulative, meaning that they represent the state of our `master` branch at the moment of the release. For instance, if the latest version is 0.10.0, bug fixes are released either as part of 0.11.0 or 0.10.1.
 
 Security fixes are given priority and might be enough to cause a new version to be released.
 
@@ -15,13 +15,12 @@ If you find something suspicious and want to report it, we'd really appreciate!
 ### Ways to report
 
 * It is preferable to always encrypt your message, no matter the channel you choose to report the issue
-* Contact us on our open chat room on [Gitter][gitter-room]
-* If you can't use Gitter, send a message to [cncf-opentelemetry-tc@lists.cncf.io][mailing-list]
-* If you can't use Gitter nor send an email, open a merge request on GitHub: fork the affected repository and send us a pull request. We really prefer if you'd talk to us before, though, as our repositories are public and we would like to give a heads up to our users before disclosing it publicly
+* Send a message to [cncf-opentelemetry-tc@lists.cncf.io][mailing-list]
+* If you can't send an email, either open an issue on GitHub with the description or open a merge request on GitHub with a reproducer and/or fix. We really prefer if you'd talk to us per email, though, as our repositories are public and we would like to give a heads up to our users before disclosing it publicly.
 
 ### Our PGP key
 
-No matter what channel you choose to communicate with us, we would prefer you to encrypt your message using our [published key][published-key], available in all major key servers and which should match the one shown below. If you are new to PGP, you can run the following command to encrypt a file called "message.txt":
+No matter what channel you choose to communicate with us, we would prefer you to encrypt your message using our [published key][published-key], which is available on all major key servers and should match the one shown below. If you are new to PGP, you can run the following command to encrypt a file called "message.txt":
 
 1. Receive our keys from the key server:
 
