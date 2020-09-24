@@ -701,10 +701,10 @@ individual instruments is summarized in the table below.
 | ----------------------- | ----- | --------- | ------------- | --- |
 | **Counter**             | Synchronous adding monotonic | Add(increment) | Sum | Per-request, part of a monotonic sum |
 | **UpDownCounter**       | Synchronous adding | Add(increment) | Sum | Per-request, part of a non-monotonic sum |
-| **ValueRecorder**       | Synchronous grouping | Record(value) | MinMaxSumCount  | Per-request, any grouping measurement |
+| **ValueRecorder**       | Synchronous  | Record(value) | [TBD issue 636](https://github.com/open-telemetry/opentelemetry-specification/issues/636)  | Per-request, any grouping measurement |
 | **SumObserver**         | Asynchronous adding monotonic | Observe(sum) | Sum | Per-interval, reporting a monotonic sum |
 | **UpDownSumObserver**   | Asynchronous adding | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
-| **ValueObserver**       | Asynchronous grouping | Observe(value) | MinMaxSumCount  | Per-interval, any grouping measurement |
+| **ValueObserver**       | Asynchronous | Observe(value) | LastValue  | Per-interval, any grouping measurement |
 
 ### Constructors
 
