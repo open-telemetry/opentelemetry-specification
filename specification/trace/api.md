@@ -179,7 +179,7 @@ of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. It is fully described in the [W3C Trace Context
 specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 
-The API must provide methods to create a `SpanContext`. These methods SHOULD be the only way to
+The API must implement methods to create a `SpanContext`. These methods SHOULD be the only way to
 create a `SpanContext` There are three ways to create a `SpanContext`:
 
 - By generating a new `SpanId`, `TraceId`, and `TraceFlags` when there is no in-process or remote parent.
