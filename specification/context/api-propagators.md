@@ -288,7 +288,7 @@ unconfigured, although the trace context propagation was configured to enrich lo
 Platforms such as ASP.NET may pre-configure out-of-the-box
 propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` containing the W3C Trace Context Propagator and the Baggage
-`Propagator` specified in [api-baggage.md](../baggage/api.md#baggage-propagation).
+`Propagator` specified in the [Baggage API](../baggage/api.md#baggage-propagation).
 These platforms MUST also allow pre-configured propagators to be disabled or overridden.
 
 ### Get Global Propagator
