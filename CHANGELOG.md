@@ -77,6 +77,8 @@ Updates:
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
+- Move active span interaction in the Trace API to a separate class
+  ([#923](https://github.com/open-telemetry/opentelemetry-specification/pull/923))
 - Metrics SDK: Specify LastValue default aggregation for ValueObserver
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
