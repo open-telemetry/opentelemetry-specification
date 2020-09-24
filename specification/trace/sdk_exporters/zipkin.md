@@ -41,7 +41,6 @@ OpenTelemetry fields:
 Zipkin fields:
 
 - Local_endpoint
-- Remote_endpoint
 - debug
 - Shared
 
@@ -88,6 +87,36 @@ OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Zipk
 | `InstrumentationLibrary.name`|`otel.instrumentation_library.name`|
 | `InstrumentationLibrary.version`|`otel.instrumentation_library.version`|
 
+### Remote endpoint
+
+#### OTLP -> Zipkin
+
+If Zipkin `SpanKind` resolves to either `SpanKind.CLIENT` or `SpanKind.PRODUCER`
+then the service SHOULD specify remote endpoint otherwise Zipkin won't treat the
+Span as a dependency. `peer.service` is the preferred attribute but is not
+always available. The following table lists the possible attributes for
+`remoteEndpoint` by preferred ranking:
+
+|Rank|Attribute Name|Reason|
+|---|---|---|
+|1|peer.service|[OpenTelemetry adopted attribute for remote service.](../semantic_conventions/span-general.md#general-remote-service-attributes)|
+|2|net.peer.name|[OpenTelemetry adopted attribute for remote hostname, or similar.](../semantic_conventions/span-general.md#general-network-connection-attributes)|
+|3|net.peer.ip & net.peer.port|[OpenTelemetry adopted attribute for remote address of the peer.](../semantic_conventions/span-general.md#general-network-connection-attributes)|
+|4|peer.hostname|Remote hostname defined in OpenTracing specification.|
+|5|peer.address|Remote address defined in OpenTracing specification.|
+|6|http.host|Commonly used HTTP host header attribute for Http Spans.|
+|7|db.name|Commonly used database name attribute for DB Spans.|
+
+* Ranking should control the selection order. For example, `net.peer.name` (Rank
+  2) should be selected before `http.host` (Rank 6).
+* `net.peer.ip` can be used by itself as `remoteEndpoint` but should be combined
+  with `net.peer.port` if it is also present.
+
+#### Zipkin -> OTLP
+
+When mapping from Zipkin to OTLP set `peer.service` tag from `remoteEndpoint`
+unless there is a `peer.service` tag defined explicitly.
+
 ### Attribute
 
 OpenTelemetry Span and Resource `Attribute`(s) MUST be reported as `tags` to
@@ -115,10 +144,10 @@ The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
 | Status|Tag Key| Tag Value |
 |--|--|--|
-|Code | `ot.status_code` | Name of the code, for example: `OK` |
-|Message *(optional)* | `ot.status_description` | `{message}` |
+|Code | `otel.status_code` | Name of the code, for example: `OK` |
+|Message *(optional)* | `otel.status_description` | `{message}` |
 
-The `ot.status_code` tag value MUST follow the [Standard GRPC Code
+The `otel.status_code` tag value MUST follow the [Standard GRPC Code
 Names](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
 
 ### Events
@@ -134,8 +163,8 @@ include attribute values like this:
 ### Unit of Time
 
 Zipkin times like `timestamp`, `duration` and `annotation.timestamp` MUST be
-reported in microseconds with decimal accuracy. For example, `duration` of 1234
-nanoseconds will be represented as 1.234 microseconds.
+reported in microseconds as whole numbers. For example, `duration`
+of 1234 nanoseconds will be represented as 1 microsecond.
 
 ## Request Payload
 

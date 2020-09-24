@@ -24,18 +24,18 @@ latest sampling could happen on the Collector which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
-* `IsRecording` field of a `Span`. If `true` the current `Span` records
-  tracing events (attributes, events, status, etc.), otherwise all tracing
-  events are dropped. Users can use this property to determine if expensive
-  trace events can be avoided. [Span Processors](#span-processor) will receive
-  all spans with this flag set. However, [Span Exporter](#span-exporter) will
-  not receive them unless the `Sampled` flag was set.
+* `IsRecording` field of a `Span`. If `false` the current `Span` discards all
+  tracing data (attributes, events, status, etc.). Users can use this property
+  to determine if collecting expensive trace data can be avoided. [Span
+  Processor](#span-processor) MUST receive only those spans which have this
+  field set to `true`. However, [Span Exporter](#span-exporter) SHOULD NOT
+  receive them unless the `Sampled` flag was also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
-  specification][trace-flags]. This flag indicates that the `Span` has been
-  `sampled` and will be exported. [Span Processor](#span-processor) and [Span
-  Exporter](#span-exporter) will receive spans with the `Sampled` flag set for
-  processing.
+  specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
+  `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
+  receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
+  that do not.  
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
@@ -45,8 +45,26 @@ The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
 
+<a name="recording-sampled-reaction-table"></a>
+
+The following table summarizes the expected behavior for each combination of
+`IsRecording` and `SampledFlag`.
+
+| `IsRecording` | `Sampled` Flag | Span Processor receives Span? | Span Exporter receives Span? |
+| ------------- | -------------- | ----------------------------- | ---------------------------- |
+| true          | true           | true                          | true                         |
+| true          | false          | true                          | false                        |
+| false         | true           | Not allowed                   | Not allowed                  |
+| false         | false          | false                         | false                        |
+
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
-[built-in samplers](#built-in-samplers).
+[built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
+
+When asked to create a Span, the SDK MUST query the `Sampler`'s [`ShouldSample`](#shouldsample) method before actually creating the span, and act accordingly:
+see description of [`ShouldSample`'s](#shouldsample) return value below for how to set `IsRecording` and `Sampled` on the Span,
+and the [table above](#recording-sampled-reaction-table) on whether to pass the `Span` to `SpanProcessor`s.
+A non-recording span MAY be implemented using the same mechanism as when a `Span` is created with no API-implementation installed
+(sometimes called a `NoOpSpan` or `DefaultSpan`).
 
 ### Sampler
 
@@ -60,14 +78,12 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* [`Context`](../context/context.md) with parent `Span`.
-  Typically extracted from the wire. Can be `null`.
-* `TraceId` of the `Span` to be created. It can be different from the `TraceId`
-  in the `Context`. Typically in situations when the `Span` to be created
-  starts a new Trace.
+* [`Context`](../context/context.md) with parent `Span`. May be without a valid Span(Context) to indicate a root span.
+* `TraceId` of the `Span` to be created.
+  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
-* `SpanKind`
-* Initial set of `Attributes` for the `Span` being constructed
+* `SpanKind` of the `Span` to be created.
+* Initial set of `Attributes` of the `Span` to be created.
 * Collection of links that will be associated with the `Span` to be created.
   Typically useful for batch operations, see
   [Links Between Spans](../overview.md#links-between-spans).
@@ -77,10 +93,10 @@ Returns the sampling Decision for a `Span` to be created.
 It produces an output called `SamplingResult` which contains:
 
 * A sampling `Decision`. One of the following enum values:
-  * `NOT_RECORD` - `IsRecording() == false`, span will not be recorded and all events and attributes
+  * `DROP` - `IsRecording() == false`, span will not be recorded and all events and attributes
   will be dropped.
-  * `RECORD` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
-  * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
+  * `RECORD_ONLY` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
+  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 
@@ -99,12 +115,12 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### AlwaysOn
 
-* Returns `RECORD_AND_SAMPLED` always.
+* Returns `RECORD_AND_SAMPLE` always.
 * Description MUST be `AlwaysOnSampler`.
 
 #### AlwaysOff
 
-* Returns `NOT_RECORD` always.
+* Returns `DROP` always.
 * Description MUST be `AlwaysOffSampler`.
 
 #### TraceIdRatioBased
@@ -260,7 +276,7 @@ in the SDK:
 
 ### Interface definition
 
-#### OnStart(Span)
+#### OnStart
 
 `OnStart` is called when a span is started. This method is called synchronously
 on the thread that started the span, therefore it should not block or throw
@@ -268,11 +284,14 @@ exceptions.
 
 **Parameters:**
 
-* `Span` - a [read/write span object](#additional-span-interfaces) for the started span.
+* `span` - a [read/write span object](#additional-span-interfaces) for the started span.
   It SHOULD be possible to keep a reference to this span object and updates to the span
   SHOULD be reflected in it.
   For example, this is useful for creating a SpanProcessor that periodically
   evaluates/prints information about all active span from a background thread.
+* `parentContext` - the parent `Context` of the span that the SDK determined
+  (the explicitly passed `Context`, the current `Context` or an empty `Context`
+  if that was explicitly requested).
 
 **Returns:** `Void`
 
@@ -295,19 +314,35 @@ therefore it should not block or throw an exception.
 Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
-Shutdown should be called only once for each `Processor` instance. After the
-call to shutdown subsequent calls to `onStart`, `onEnd`, or `forceFlush` are not allowed.
+`Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
+the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
+are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
 
-Shutdown should not block indefinitely. Language library authors can decide if
-they want to make the shutdown timeout configurable.
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` MUST include the effects of `ForceFlush`.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the shutdown timeout configurable.
 
 #### ForceFlush()
 
-Export all ended spans to the configured `Exporter` that have not yet been exported.
+Exports all spans that have not yet been exported to the configured `Exporter`.
 
-`ForceFlush` should only be called in cases where it is absolutely necessary, such as when using some FaaS providers that may suspend the process after an invocation, but before the `Processor` exports the completed spans.
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
 
-`ForceFlush` should not block indefinitely. Language library authors can decide if they want to make the flush timeout configurable.
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
+such as when using some FaaS providers that may suspend the process after an
+invocation, but before the `Processor` exports the completed spans.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the flush timeout configurable.
 
 ### Built-in span processors
 
