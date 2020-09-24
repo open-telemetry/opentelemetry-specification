@@ -31,7 +31,7 @@ Table of Contents
     * [End](#end)
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
-  * [PropagationOnly Span creation](#propagationonly-span-creation)
+  * [Propagated Span creation](#propagated-span-creation)
 * [Status](#status)
   * [StatusCanonicalCode](#statuscanonicalcode)
   * [Status creation](#status-creation)
@@ -358,7 +358,7 @@ representing the currently active instance, and will be used as parent.
 If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
 
 A `SpanContext` cannot be set as active in a `Context` directly, but through the use
-of a [PropagationOnly Span](#propagationonly-span-creation) wrapping it.
+of a [Propagated Span](#propagated-span-creation) wrapping it.
 For example, a `Propagator` performing context extraction may need this.
 
 #### Add Links
@@ -562,13 +562,13 @@ timestamps to the Span object:
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API.
 
-### PropagationOnly Span creation
+### Propagated Span creation
 
 The API MUST provide an operation for wrapping a `SpanContext` with an object
 implementing the `Span` interface. This is done in order to expose a `SpanContext`
 as a `Span` in operations such as in-process `Span` propagation.
 
-If a new type is required for supporting this operation, it SHOULD be named `PropagatorOnlySpan`.
+If a new type is required for supporting this operation, it SHOULD be named `PropagatedSpan`.
 
 The behavior is defined as follows:
 
