@@ -180,7 +180,7 @@ systems to participate in the same trace. It is fully described in the [W3C Trac
 specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 
 The API must implement methods to create a `SpanContext`. These methods SHOULD be the only way to
-create a `SpanContext` There are three ways to create a `SpanContext`:
+create a `SpanContext`:
 
 - By generating a new `SpanId`, `TraceId`, and `TraceFlags` when there is no in-process or remote parent.
 - By generating a new `SpanId` and `TraceFlags` and copying the `TraceId` and `TraceState` from
