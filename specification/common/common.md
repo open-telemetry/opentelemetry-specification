@@ -29,8 +29,6 @@ processors / exporters.
 
 Attribute values of `null` are not valid and attempting to set a `null` value is
 undefined behavior.
-If `null` values may occur for the _value_ parameter of calls for setting attributes,
-users of the API MUST add `null` checks to prevent passing `null` values.
 
 `null` values within arrays MUST be preserved as-is (i.e., passed on to span
 processors / exporters as `null`). If exporters do not support exporting `null`
