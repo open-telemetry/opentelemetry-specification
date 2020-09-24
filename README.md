@@ -4,7 +4,7 @@
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
 
-_Curious about what OpenTelemetry? is Check out our [website](https://opentelemetry.io) for an explanation!_
+_Curious about what OpenTelemetry is? Check out our [website](https://opentelemetry.io) for an explanation!_
 
 The OpenTelemetry specification describes the cross-language requirements and expectations for all OpenTelemetry implementations. Substantive changes to the specification must be proposed using the [OpenTelemetry Enhancement Proposal](https://github.com/open-telemetry/oteps) process. Small changes, such as clarifications, wording changes, spelling/grammar corrections, etc. can be made directly via pull requests.
 
