@@ -50,9 +50,9 @@ export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=collector.example.com/v1/metrics
 export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=http
 ```
 
-### Specifying Headers via environment variables
+### Specifying headers via environment variables
 
-The OTEL_EXPORTER_OTLP_HEADERS, OTEL_EXPORTER_OTLP_SPAN_HEADERS, OTEL_EXPORTER_OTLP_METRIC_HEADERS environment variables will contain a list of key value pairs, and these are expected to be represented in a format matching to the [W3C Correlation-Context](https://github.com/w3c/baggage/blob/master/baggage/HTTP_HEADER_FORMAT.md), except that additional semi-colon delimited metadata is not supported, i.e.: key1=value1,key2=value2. All attribute values MUST be considered strings.
+The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_SPAN_HEADERS`, `OTEL_EXPORTER_OTLP_METRIC_HEADERS` environment variables will contain a list of key value pairs, and these are expected to be represented in a format matching to the [W3C Correlation-Context](https://github.com/w3c/baggage/blob/master/baggage/HTTP_HEADER_FORMAT.md), except that additional semi-colon delimited metadata is not supported, i.e.: key1=value1,key2=value2. All attribute values MUST be considered strings.
 
 ## Retry
 
