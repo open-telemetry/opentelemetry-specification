@@ -578,8 +578,7 @@ a canonical code, and an optional descriptive message.
 ### StatusCanonicalCode
 
 `StatusCanonicalCode` represents the canonical set of status codes of a finished
-`Span`, following the [Standard GRPC
-codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
+`Span`.
 
 - `Unset`
   - The default status.
@@ -626,10 +625,6 @@ Returns the `StatusCanonicalCode` of this `Status`.
 
 Returns the description of this `Status`.
 Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
-
-### GetIsError
-
-Returns true if the canonical code of this `Status` is `Error`, otherwise false.
 
 ## SpanKind
 
