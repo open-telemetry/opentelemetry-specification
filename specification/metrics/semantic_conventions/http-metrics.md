@@ -38,7 +38,6 @@ and whether they should be on server, client, or both types of HTTP metric event
 | `http.host`        | `client` & `server` | see [label alternatives](#label-alternatives) | The value of the [HTTP host header][]. When the header is empty or not present, this label should be the same. |
 | `http.scheme`      | `client` & `server` | see [label alternatives](#label-alternatives) | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"` |
 | `http.status_code` | `client` & `server` | Optional          | [HTTP response status code][]. E.g. `200` (String) |
-| `http.status_text` | `client` & `server` | Optional          | [HTTP reason phrase][]. E.g. `"OK"` |
 | `http.flavor`      | `client` & `server` | Optional          | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |
 | `net.peer.name`    | `client`            | see [1] in [label alternatives](#label-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
 | `net.peer.port`    | `client`            | see [1] in [label alternatives](#label-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |

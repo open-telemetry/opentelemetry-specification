@@ -37,36 +37,15 @@ default span name.
 
 ## Status
 
-Implementations MUST set the [span status](../api.md#status) if the HTTP communication failed
-or an HTTP error status code is returned (e.g. above 3xx).
+[Span Status](../api.md#status) MUST be left unset if HTTP status code was in the
+1xx, 2xx or 3xx ranges, unless there was another error (e.g., network error receiving
+the response body; or 3xx codes with max redirects exceeded), in which case status
+MUST be set to `Error`.
 
-In the case of an HTTP redirect, the request should normally be considered successful,
-unless the client aborts following redirects due to hitting some limit (redirect loop).
-If following a (chain of) redirect(s) successfully, the status should be set according to the result of the final HTTP request.
+For HTTP status codes in the 4xx and 5xx ranges, as well as any other code the client
+failed to interpret, status MUST be set to `Error`.
 
-Don't set the span status description if the reason can be inferred from `http.status_code` and `http.status_text`.
-
-| HTTP code               | Span status code      |
-|-------------------------|-----------------------|
-| 100...299               | `Ok`                  |
-| 3xx redirect codes      | `DeadlineExceeded` in case of loop (see above) [1], otherwise `Ok` |
-| 401 Unauthorized ⚠      | `Unauthenticated` ⚠ (Unauthorized actually means unauthenticated according to [RFC 7235][rfc-unauthorized])  |
-| 403 Forbidden           | `PermissionDenied`    |
-| 404 Not Found           | `NotFound`            |
-| 429 Too Many Requests   | `ResourceExhausted`   |
-| 499 Client Closed       | `Cancelled` (Not an official HTTP status code, defined by [NGINX][nginx-http-499]) |
-| Other 4xx code          | `InvalidArgument` [1] |
-| 501 Not Implemented     | `Unimplemented`       |
-| 503 Service Unavailable | `Unavailable`         |
-| 504 Gateway Timeout     | `DeadlineExceeded`    |
-| Other 5xx code          | `Internal` [1]   |
-| Any status code the client fails to interpret (e.g., 093 or 573) | `Unknown` |
-
-Note that the items marked with [1] are different from the mapping defined in the [OpenCensus semantic conventions][oc-http-status].
-
-[oc-http-status]: https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#mapping-from-http-status-codes-to-trace-status-codes
-[rfc-unauthorized]: https://tools.ietf.org/html/rfc7235#section-3.1
-[nginx-http-499]: https://httpstatuses.com/499
+Don't set the span status description if the reason can be inferred from `http.status_code`.
 
 ## Common Attributes
 
@@ -79,7 +58,6 @@ Note that the items marked with [1] are different from the mapping defined in th
 | `http.host` | string | The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4). When the header is empty or not present, this attribute should be the same. | `www.example.org` | No |
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`<br>`https` | No |
 | `http.status_code` | number | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditional<br>If and only if one was received/sent. |
-| `http.status_text` | string | [HTTP reason phrase](https://tools.ietf.org/html/rfc7230#section-3.1.2). | `OK` | No |
 | `http.flavor` | string | Kind of HTTP protocol used [1] | `1.0` | No |
 | `http.user_agent` | string | Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | No |
 | `http.request_content_length` | number | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
@@ -240,7 +218,6 @@ Span name: `/webshop/articles/4` (NOTE: This is subject to change, see [open-tel
 | `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"`     |
 | `net.peer.ip`      | `"192.0.2.5"`                                           |
 | `http.status_code` | `200`                                                   |
-| `http.status_text` | `"OK"`                                                  |
 
 The corresponding server Span may look like this:
 
@@ -257,7 +234,6 @@ Span name: `/webshop/articles/:article_id`.
 | `http.scheme`      | `"https"`                                       |
 | `http.route`       | `"/webshop/articles/:article_id"`               |
 | `http.status_code` | `200`                                           |
-| `http.status_text` | `"OK"`                                          |
 | `http.client_ip`   | `"192.0.2.4"`                                   |
 | `net.peer.ip`      | `"192.0.2.5"` (the client goes through a proxy) |
 | `http.user_agent`  | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |

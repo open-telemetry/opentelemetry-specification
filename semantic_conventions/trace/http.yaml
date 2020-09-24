@@ -37,10 +37,6 @@ groups:
           conditional: If and only if one was received/sent.
         brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
         examples: [200]
-      - id: status_text
-        type: string
-        brief: '[HTTP reason phrase](https://tools.ietf.org/html/rfc7230#section-3.1.2).'
-        examples: ['OK']
       - id: flavor
         type:
           # Default value: `true`. If false, it helps the code gen tool to
