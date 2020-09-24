@@ -100,9 +100,10 @@ It produces an output called `SamplingResult` which contains:
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 * A `Tracestate` that will be associated with the `Span` through the new
-  `SpanContext`. If non-empty `Tracestate` was passed in `SpanContext`,
-  it MUST be populated on the `SamplingResult` even if tracestate was not
-  changed by sampler.
+  `SpanContext`. 
+  Note: If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
+  so samplers should normally return the passed-in `Tracestate` if they do not intend
+  to change it.
 
 #### GetDescription
 
