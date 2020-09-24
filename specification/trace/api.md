@@ -11,6 +11,7 @@ Table of Contents
     * [Duration](#duration)
 * [TracerProvider](#tracerprovider)
   * [TracerProvider operations](#tracerprovider-operations)
+* [Tracing Context Utilities](#tracing-context-utilities)
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
@@ -36,7 +37,6 @@ Table of Contents
   * [Status creation](#status-creation)
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
-  * [GetIsOk](#getisok)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
@@ -129,6 +129,22 @@ the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
 
+## Tracing Context Utilities
+
+`Tracing Context Utilities` contains all operations within tracing that
+modify the [`Context`](../context/context.md).
+
+As these utilities operate solely on the context API, they MAY be exposed
+as static methods on the trace module instead of a class.
+
+The `Tracing Context Utilities` MUST provide the following functions:
+
+- Get the currently active span
+- Set the currently active span
+
+The above methods MUST be equivalent to a single parameterized method call of
+the [`Context`](../context/context.md) management system.
+
 ## Tracer
 
 The tracer is responsible for creating `Span`s.
@@ -142,17 +158,12 @@ The `Tracer` MUST provide functions to:
 
 - [Create a new `Span`](#span-creation) (see the section on `Span`)
 
-The `Tracer` SHOULD provide methods to:
+The `Tracer` MAY provide functions to:
 
-- Get the currently active `Span`
-- Mark a given `Span` as active
+- Get the currently active span
+- Set the currently active span
 
-The `Tracer` MUST delegate to the [`Context`](../context/context.md) to perform
-these tasks, i.e. the above methods MUST do the same as a single equivalent
-method of the Context management system.
-In particular, this implies that the active span MUST not depend on the `Tracer`
-that it is queried from/was set to, as long as the tracers were obtained from
-the same `TracerProvider`.
+These functions MUST delegate to the `Tracing Context Utilities`.
 
 ## SpanContext
 
@@ -307,12 +318,6 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
 
-When creating a new `Span`, the `Tracer` MUST allow the caller to specify the
-new `Span`'s parent in the form of a `Span` or `SpanContext`. The `Tracer`
-SHOULD create each new `Span` as a child of its active `Span`, unless an
-explicit parent is provided or the option to create a span without a parent is
-selected.
-
 `Span` creation MUST NOT set the newly created `Span` as the currently
 active `Span` by default, but this functionality MAY be offered additionally
 as a separate operation.
@@ -320,11 +325,13 @@ as a separate operation.
 The API MUST accept the following parameters:
 
 - The span name. This is a required parameter.
-- The parent `Span` or a `Context` containing a parent `Span` or `SpanContext`,
-  and whether the new `Span` should be a root `Span`. API MAY also have an
-  option for implicit parenting from the current context as a default behavior.
-  See [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-  for guidance on `Span` parenting from explicit and implicit `Context`s.
+- The parent `Context` or an indication that the new `Span` should be a root `Span`.
+  The API MAY also have an option for implicitly using
+  the current Context as parent as a default behavior.
+  This API MUST NOT accept a `Span` or `SpanContext` as parent, only a full `Context`.
+
+  The semantic parent of the Span MUST be determined according to the rules
+  described in [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context).
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
@@ -573,61 +580,37 @@ calling of corresponding API.
 ## Status
 
 `Status` interface represents the status of a finished `Span`. It's composed of
-a canonical code in conjunction with an optional descriptive message.
+a canonical code, and an optional descriptive message.
 
 ### StatusCanonicalCode
 
 `StatusCanonicalCode` represents the canonical set of status codes of a finished
-`Span`, following the [Standard GRPC
-codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
+`Span`.
 
+- `Unset`
+  - The default status.
+- `Error`
+  - The operation contains an error.
 - `Ok`
-  - The operation completed successfully.
-- `Cancelled`
-  - The operation was cancelled (typically by the caller).
-- `Unknown`
-  - An unknown error.
-- `InvalidArgument`
-  - Client specified an invalid argument. Note that this differs from
-    `FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
-    regardless of the state of the system.
-- `DeadlineExceeded`
-  - Deadline expired before operation could complete. For operations that change the
-    state of the system, this error may be returned even if the operation has
-    completed successfully.
-- `NotFound`
-  - Some requested entity (e.g., file or directory) was not found.
-- `AlreadyExists`
-  - Some entity that we attempted to create (e.g., file or directory) already exists.
-- `PermissionDenied`
-  - The caller does not have permission to execute the specified operation.
-    `PermissionDenied` must not be used if the caller cannot be identified (use
-    `Unauthenticated1` instead for those errors).
-- `ResourceExhausted`
-  - Some resource has been exhausted, perhaps a per-user quota, or perhaps the
-    entire file system is out of space.
-- `FailedPrecondition`
-  - Operation was rejected because the system is not in a state required for the
-    operation's execution.
-- `Aborted`
-  - The operation was aborted, typically due to a concurrency issue like sequencer
-    check failures, transaction aborts, etc.
-- `OutOfRange`
-  - Operation was attempted past the valid range. E.g., seeking or reading past end
-    of file. Unlike `InvalidArgument`, this error indicates a problem that may be
-    fixed if the system state changes.
-- `Unimplemented`
-  - Operation is not implemented or not supported/enabled in this service.
-- `Internal`
-  - Internal errors. Means some invariants expected by underlying system has been
-    broken.
-- `Unavailable`
-  - The service is currently unavailable. This is a most likely a transient
-    condition and may be corrected by retrying with a backoff.
-- `DataLoss`
-  - Unrecoverable data loss or corruption.
-- `Unauthenticated`
-  - The request does not have valid authentication credentials for the operation.
+  - The operation has been validated by an Application developers or Operator to
+    have completed successfully, or contain
+
+The status code SHOULD remain unset, except for the following circumstances:
+
+When the status is set to `ERROR` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `ERROR`
+according to the rules defined within the semantic conventions. For operations
+not covered by the semantic conventions, Instrumentation Libraries SHOULD
+publish their own conventions, including status codes.
+
+Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
+unless explicitly configured to do so. Instrumention libraries SHOULD leave the
+status code as `Unset` unless there is an error, as described above.
+
+Application developers and Operators may set the status code to `Ok`.
+
+Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
+would otherwise generate. For example, to suppress noisy errors such as 404s.
 
 ### Status creation
 
@@ -649,10 +632,6 @@ Returns the `StatusCanonicalCode` of this `Status`.
 
 Returns the description of this `Status`.
 Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
-
-### GetIsOk
-
-Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 
 ## SpanKind
 

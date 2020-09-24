@@ -250,11 +250,13 @@ distinction between synchronous and asynchronous instruments is
 crucial to specifying how exporters work, a topic that is covered in
 the [SDK specification (WIP)](https://github.com/open-telemetry/opentelemetry-specification/pull/347).
 
-The grouping instruments (`ValueRecorder`, `ValueObserver`) use
-a MinMaxSumCount aggregation, by default.  This aggregation keeps track
-of the minimum value, the maximum value, the sum of values, and the
-count of values.  These four values support monitoring the range of
-values, the rate of events, and the average event value.
+The `ValueRecorder` instrument uses [TBD issue
+636](https://github.com/open-telemetry/opentelemetry-specification/issues/636)
+aggregation by default.
+
+The `ValueObserver` instrument uses LastValue aggregation by default.
+This aggregation keeps track of the last value that was observed and
+its timestamp.
 
 Other standard aggregations are available, especially for grouping
 instruments, where we are generally interested in a variety of

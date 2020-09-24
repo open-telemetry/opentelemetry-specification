@@ -15,6 +15,9 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + |      | +  | +    | + | +  | + | +  |
+|[Tracing Context Utilities](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracing-context-utilities)|
+|Get active Span                               |   |    |   | +    |    |      |   |    |   |    |
+|Set active Span                               |   |    |   | +    |    |      |   |    |   |    |
 |[Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
