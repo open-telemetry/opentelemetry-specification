@@ -189,6 +189,8 @@ an in-process parent.
 parent. In this case, the `SpanId`, `TraceId`, and `TraceFlags` must be used as is, and
 `TraceState` may be modified based on the rules for modification described below.
 
+This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
+
 ### Retrieving the TraceId and SpanId
 
 The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
