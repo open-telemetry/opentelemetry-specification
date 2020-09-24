@@ -592,24 +592,24 @@ a canonical code, and an optional descriptive message.
 - `Error`
   - The operation contains an error.
 - `Ok`
-  - The operation has been validated by an Application developers or Operator to 
-    have completed successfully, or contain 
+  - The operation has been validated by an Application developers or Operator to
+    have completed successfully, or contain
 
 The status code SHOULD remain unset, except for the following circumstances:
 
-When the status is set to `ERROR` by Instrumentation Libraries, the status codes 
-SHOULD be documented and predictable. The status code should only be set to `ERROR` 
-according to the rules defined within the semantic conventions. For operations 
-not covered by the semantic conventions, Instrumentation Libraries SHOULD 
-publish their own conventions, including status codes. 
+When the status is set to `ERROR` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `ERROR`
+according to the rules defined within the semantic conventions. For operations
+not covered by the semantic conventions, Instrumentation Libraries SHOULD
+publish their own conventions, including status codes.
 
-Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`, 
-unless explicitly configured to do so. Instrumention libraries SHOULD leave the 
+Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
+unless explicitly configured to do so. Instrumention libraries SHOULD leave the
 status code as `Unset` unless there is an error, as described above.
 
-Application developers and Operators may set the status code to `Ok`. 
+Application developers and Operators may set the status code to `Ok`.
 
-Analysis tools SHOULD respond to an `Ok` status by supressing any errors they 
+Analysis tools SHOULD respond to an `Ok` status by supressing any errors they
 would otherwise generate. For example, to supress noisy errors such as 404s.
 
 ### Status creation
