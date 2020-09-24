@@ -8,7 +8,7 @@ The goal of this specification is to unify the environment variable names betwee
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
-| OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning. A warning MUST be generated if no `Propagator` was registered. |
+| OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning. |
 
 Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger". Additional values can be specified, in case third party `Propagator`s are supported, such as `aws` or `ot`.
 
