@@ -263,7 +263,7 @@ Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
-- The `Setter` to set a propagation key/value pair. It might be invoked multiple times in order to set multiple pairs.
+- The `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
 
 ## Global Propagators
 
