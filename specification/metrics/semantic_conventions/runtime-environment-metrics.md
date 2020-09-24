@@ -9,10 +9,9 @@ metrics](process-metrics.md) when instrumenting runtime environments.
 
 <!-- toc -->
 
-- [Semantic Conventions for Runtime Environment Metrics](#semantic-conventions-for-runtime-environment-metrics)
-  - [Metric Instruments](#metric-instruments)
-    - [Runtime Environment Metrics - `runtime.`](#runtime-environment-metrics---runtime)
-      - [Runtime Environment Specific Metrics - `runtime.{environment}.`](#runtime-environment-specific-metrics---runtimeenvironment)
+- [Metric Instruments](#metric-instruments)
+  * [Runtime Environment Metrics - `runtime.`](#runtime-environment-metrics---runtime)
+    + [Runtime Environment Specific Metrics - `runtime.{environment}.`](#runtime-environment-specific-metrics---runtimeenvironment)
 
 <!-- tocstop -->
 

@@ -9,20 +9,19 @@ creating instruments not explicitly defined in the specification.
 
 <!-- toc -->
 
-- [Semantic Conventions for System Metrics](#semantic-conventions-for-system-metrics)
-  - [Semantic Conventions](#semantic-conventions)
-    - [Instrument Naming](#instrument-naming)
-    - [Units](#units)
-  - [Metric Instruments](#metric-instruments)
-    - [Standard System Metrics - `system.`](#standard-system-metrics---system)
-      - [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
-      - [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
-      - [`system.swap.` - Swap/paging metrics](#systemswap---swappaging-metrics)
-      - [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
-      - [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
-      - [`system.network.` - Network metrics](#systemnetwork---network-metrics)
-      - [`system.process.` - Aggregate system process metrics](#systemprocess---aggregate-system-process-metrics)
-      - [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
+- [Semantic Conventions](#semantic-conventions)
+  * [Instrument Naming](#instrument-naming)
+  * [Units](#units)
+- [Metric Instruments](#metric-instruments)
+  * [Standard System Metrics - `system.`](#standard-system-metrics---system)
+    + [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
+    + [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
+    + [`system.swap.` - Swap/paging metrics](#systemswap---swappaging-metrics)
+    + [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
+    + [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
+    + [`system.network.` - Network metrics](#systemnetwork---network-metrics)
+    + [`system.process.` - Aggregate system process metrics](#systemprocess---aggregate-system-process-metrics)
+    + [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
 
 <!-- tocstop -->
 
