@@ -83,7 +83,7 @@ Updates:
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
- - SDK: Specify when to generate new IDs with sampling
+- SDK: Specify when to generate new IDs with sampling
   ([#998](https://github.com/open-telemetry/opentelemetry-specification/pull/998))
 
 ## v0.6.0 (07-01-2020)
