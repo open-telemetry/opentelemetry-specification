@@ -36,7 +36,6 @@ Table of Contents
   * [Status creation](#status-creation)
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
-  * [GetIsOk](#getisok)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
