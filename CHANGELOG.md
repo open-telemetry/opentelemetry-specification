@@ -64,6 +64,8 @@ Updates:
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
+- SDK: Specify when to generate new IDs with sampling
+  ([#998](https://github.com/open-telemetry/opentelemetry-specification/pull/998))
 
 ## v0.6.0 (07-01-2020)
 
