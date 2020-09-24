@@ -578,8 +578,7 @@ The behavior is defined as follows:
 
 The remaining functionality of `Span` MUST be defined as no-op operations.
 
-Note: This is expected to be fully implemented in the API, and MUST NOT be overridable
-by the SDK.
+This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
 
 ## Status
 
