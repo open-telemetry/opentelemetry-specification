@@ -15,6 +15,9 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + |      | +  | +    | + | +  | + | +  |
+|[Tracing Context Utilities](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracing-context-utilities)|
+|Get active Span                               |   |    |   | +    |    |      |   |    |   |    |
+|Set active Span                               |   |    |   | +    |    |      |   |    |   |    |
 |[Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -67,24 +70,24 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|Create from Attributes                        | + | +  | + | +    |    |      |   |    |   |    |
-|Create empty                                  | + | +  | + | +    |    |      |   |    |   |    |
-|Merge                                         | + | +  | + | +    |    |      |   |    |   |    |
-|Retrieve attributes                           | + | +  | + | +    |    |      |   |    |   |    |
+|Create from Attributes                        | + | +  | + | +    | +  |      |   |    |   |    |
+|Create empty                                  | + | +  | + | +    | +  |      |   |    |   |    |
+|Merge                                         | + | +  | + | +    | +  |      |   |    |   |    |
+|Retrieve attributes                           | + | +  | + | +    | +  |      |   |    |   |    |
 
 ## Context Propagation
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Create Context Key                            |  |    | + | +    |    |      | + |    |   |    |
-|Get value from Context                        |  |    | + | +    |    |      | + |    |   |    |
-|Set value for Context                         |  |    | + | +    |    |      | + |    |   |    |
-|Attach Context                                |  |    | + | +    |    |      | + |    |   |    |
-|Detach Context                                |  |    | + | +    |    |      | + |    |   |    |
-|Get current Context                           |  |    | + | +    |    |      | + |    |   |    |
-|Composite Propagator                          |  |    | + | +    |    |      |   |    |   |    |
-|Global Propagator                             |  | +  | + | +    |    |      |   |    |   |    |
-|TraceContext Propagator                       |  | +  | + | +    |    |      |   |    |   |    |
+|Create Context Key                            |  |    | + | +    | +  |      | + |    |   |    |
+|Get value from Context                        |  |    | + | +    | +  |      | + |    |   |    |
+|Set value for Context                         |  |    | + | +    | +  |      | + |    |   |    |
+|Attach Context                                |  |    | + | +    | +  |      | + |    |   |    |
+|Detach Context                                |  |    | + | +    | +  |      | + |    |   |    |
+|Get current Context                           |  |    | + | +    | +  |      | + |    |   |    |
+|Composite Propagator                          |  |    | + | +    | +  |      |   |    |   |    |
+|Global Propagator                             |  | +  | + | +    | +  |      |   |    |   |    |
+|TraceContext Propagator                       |  | +  | + | +    | +  |      |   |    |   |    |
 |B3 Propagator                                 |  | +  | + | +    |    |      |   |    |   |    |
 |Jaeger Propagator                             |  | -  | + | -    |    |      |   |    |   |    |
 |[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
@@ -103,12 +106,12 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    |    | -    | - |    | - | -  |
-|OTEL_LOG_LEVEL                                |   | -  | + | -    |    | -    | - |    | - | -  |
+|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | -    | - |    | - | -  |
+|OTEL_LOG_LEVEL                                |   | -  | + | -    | +  | -    | - |    | - | -  |
 |OTEL_PROPAGATORS                              |   |    |   | -    |    | -    | - |    | - | -  |
-|OTEL_BSP_*                                    |   | +  |   | -    |    | -    | - |    | - | -  |
-|OTEL_EXPORTER_OTLP_*                          |   |    |   | -    |    | -    | - |    | - | -  |
-|OTEL_EXPORTER_JAEGER_*                        |   |    |   | -    |    | -    | - |    | - | -  |
+|OTEL_BSP_*                                    |   | +  |   | -    | +  | -    | - |    | - | -  |
+|OTEL_EXPORTER_OTLP_*                          |   |    |   | -    | +  | -    | - |    | - | -  |
+|OTEL_EXPORTER_JAEGER_*                        |   |    |   | -    | +  | -    | - |    | - | -  |
 |OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    | - |    | - | -  |
 |OTEL_EXPORTER                                 |   |    |   |      |    |      |   |    |   |    |
 
@@ -120,13 +123,13 @@ status of the feature is not known.
 |In-memory (mock exporter)                     | + | +  | + | +    | +  | +    | - | -  | - | -  |
 |[OTLP](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/protocol/otlp.md)|
 |OTLP/gRPC Exporter                            | + | +  | + | +    |    | +    |   | +  | + | +  |
-|OTLP/HTTP binary Protobuf Exporter            | - | -  | + | -    |    | +    |   |    | + | +  |
+|OTLP/HTTP binary Protobuf Exporter            | - | -  | + | -    | +  | +    |   |    | + | +  |
 |OTLP/HTTP JSON Protobuf Exporter              | - | -  | + | -    |    | -    |   |    |   |    |
 |OTLP/HTTP gzip Content-Encoding support       | - | -  | + | -    |    | -    |   |    |   |    |
 |Concurrent sending                            | - |    | + | -    |    | -    |   | +  |   |    |
-|Honors retryable responses with backoff       | + |    | + | +    |    | -    |   |    |   |    |
-|Honors non-retryable responses                | + |    | - | +    |    | -    |   |    |   |    |
-|Honors throttling response                    | + |    | - | -    |    | -    |   |    |   |    |
+|Honors retryable responses with backoff       | + |    | + | +    | +  | -    |   |    |   |    |
+|Honors non-retryable responses                | + |    | - | +    | +  | -    |   |    |   |    |
+|Honors throttling response                    | + |    | - | -    | +  | -    |   |    |   |    |
 |Multi-destination spec compliance             | - |    |   | -    |    | -    |   |    |   |    |
 |[Zipkin](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk_exporters/zipkin.md)|
 |Zipkin V1 JSON                                |   |    |   | -    |    | -    | - | -  |   |    |
