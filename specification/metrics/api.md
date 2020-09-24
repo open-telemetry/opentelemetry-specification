@@ -125,7 +125,7 @@ the distribution of values (e.g., queue size).  The median value is
 considered useful information for grouping measurements.
 
 Grouping instruments semantically capture more information than
-adding instruments.  grouping measurements are more expensive
+adding instruments.  Grouping measurements are more expensive
 than adding measurements, by this definition.  Users will choose
 adding instruments except when they expect to get value from the
 additional cost of information about individual values.  None of this
@@ -149,7 +149,7 @@ Instruments are classified in several ways that distinguish them from
 one another.
 
 1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., Span context, Baggage). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
-2. Adding vs. Grouping: An adding instrument is one that records adding measurements, as opposed to a grouping instrument as described above. 
+2. Adding vs. Grouping: An adding instrument is one that records adding measurements, as opposed to a grouping instrument as described above.
 3. Monotonicity: A monotonic instrument is an adding instrument, where the progression of sums is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
 
 The metric instruments names are shown below along with whether they
