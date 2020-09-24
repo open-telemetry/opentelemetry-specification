@@ -609,8 +609,8 @@ status code as `Unset` unless there is an error, as described above.
 
 Application developers and Operators may set the status code to `Ok`.
 
-Analysis tools SHOULD respond to an `Ok` status by supressing any errors they
-would otherwise generate. For example, to supress noisy errors such as 404s.
+Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
+would otherwise generate. For example, to suppress noisy errors such as 404s.
 
 ### Status creation
 
