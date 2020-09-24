@@ -31,6 +31,8 @@ New:
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
 - Allow samplers to modify tracestate
   ([#856](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
+- Update the header name for otel baggage, and version date
+  ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
 
 Updates:
 
@@ -62,16 +64,27 @@ Updates:
   ([#611](https://github.com/open-telemetry/opentelemetry-specification/pull/611))
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
+- Add semantic conventions for process runtime
+  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882))
 - Use hex encoding for trace id and span id fields in OTLP JSON encoding:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
   ([#914](https://github.com/open-telemetry/opentelemetry-specification/pull/914))
+- A full `Context` is the only way to specify a parent of a `Span`.
+  `SpanContext` or even `Span` are not allowed anymore.
+  ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
 - Remove obsolete `http.status_text` from semantic conventions
   ([#972](https://github.com/open-telemetry/opentelemetry-specification/pull/972))
 - SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
+- Move active span interaction in the Trace API to a separate class
+  ([#923](https://github.com/open-telemetry/opentelemetry-specification/pull/923))
+- Metrics SDK: Specify LastValue default aggregation for ValueObserver
+  ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
+- Metrics SDK: Specify TBD default aggregation for ValueRecorder
+  ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 
 ## v0.6.0 (07-01-2020)
 

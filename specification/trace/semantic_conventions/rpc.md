@@ -48,17 +48,23 @@ Examples of span names:
 
 ### Attributes
 
-| Attribute name |                          Notes and examples                            | Required? |
-| -------------- | ---------------------------------------------------------------------- | --------- |
-| `rpc.system`   | A string identifying the remoting system, e.g., `"grpc"`, `"java_rmi"` or `"wcf"`.       | Yes |
-| `rpc.service`  | The full name of the service being called, including its package name, if applicable.    | No, but recommended |
-| `rpc.method`   | The name of the method being called, must be equal to the $method part in the span name. | No, but recommended |
-| `net.peer.ip`   | See [network attributes][]. | See below |
-| `net.peer.name` | See [network attributes][]. | See below |
-| `net.peer.port` | See [network attributes][]. | See below |
-| `net.transport` | See [network attributes][]. | See below |
+<!-- semconv rpc -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `rpc.system` | string | A string identifying the remoting system. | `grpc`<br>`java_rmi`<br>`wcf` | Yes |
+| `rpc.service` | string | The full name of the service being called, including its package name, if applicable. | `myservice.EchoService` | Conditional<br>No, but recommended |
+| `rpc.method` | string | The name of the method being called, must be equal to the $method part in the span name. | `exampleMethod` | Conditional<br>No, but recommended |
+| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below |
+| [`net.peer.port`](span-general.md) | number | Remote port number. | `80`<br>`8080`<br>`443` | Conditional<br>See below |
+| [`net.transport`](span-general.md) | string enum | Transport protocol used. See note below. | `IP.TCP` | Conditional<br>See below |
 
-At least one of [network attributes][] `net.peer.name` or `net.peer.ip` is required.
+**Additional attribute requirements:** At least one of the following sets of attributes is required:
+
+* [`net.peer.ip`](span-general.md)
+* [`net.peer.name`](span-general.md)
+<!-- endsemconv -->
+
 For client-side spans `net.peer.port` is required if the connection is IP-based and the port is available (it describes the server port they are connecting to).
 For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
 Furthermore, setting [net.transport][] is required for non-IP connection like named pipe bindings.
