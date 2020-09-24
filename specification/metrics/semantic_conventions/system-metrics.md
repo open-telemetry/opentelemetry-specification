@@ -11,18 +11,18 @@ creating instruments not explicitly defined in the specification.
 
 - [Semantic Conventions for System Metrics](#semantic-conventions-for-system-metrics)
   - [Semantic Conventions](#semantic-conventions)
-    - [Instrument Names](#instrument-names)
+    - [Instrument Naming](#instrument-naming)
     - [Units](#units)
   - [Metric Instruments](#metric-instruments)
     - [Standard System Metrics - `system.`](#standard-system-metrics---system)
-      - [`system.cpu.`](#systemcpu)
-      - [`system.memory.`](#systemmemory)
-      - [`system.swap.`](#systemswap)
-      - [`system.disk.`](#systemdisk)
-      - [`system.filesystem.`](#systemfilesystem)
-      - [`system.network.`](#systemnetwork)
-      - [`system.process.`](#systemprocess)
-      - [OS Specific System Metrics - `system.{os}.`](#os-specific-system-metrics---systemos)
+      - [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
+      - [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
+      - [`system.swap.` - Swap/paging metrics](#systemswap---swappaging-metrics)
+      - [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
+      - [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
+      - [`system.network.` - Network metrics](#systemnetwork---network-metrics)
+      - [`system.process.` - Aggregate system process metrics](#systemprocess---aggregate-system-process-metrics)
+      - [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
 
 <!-- tocstop -->
 
@@ -32,23 +32,40 @@ The following semantic conventions aim to keep naming consistent. They
 provide guidelines for most of the cases in this specification and should be
 followed for other instruments not explicitly defined in this document.
 
-### Instrument Names
+### Instrument Naming
+
+- **limit** - an instrument that measures the constant, known total amount of
+something should be called `entity.limit`. For example, `system.memory.limit`
+for the total amount of memory on a system.
 
 - **usage** - an instrument that measures an amount used out of a known total
-amount should be called `entity.usage`. For example, `system.memory.usage`
-for the amount of memory used. A measure of the amount of an unlimited
-resource consumed is differentiated from
-**usage**. This may be time, data, etc.
-- **utilization** - an instrument that measures a *value ratio* of usage
-(like percent, but in the range `[0, 1]`) should be called
-`entity.utilization`. For example, `system.memory.utilization` for the ratio
-of memory in use.
+(**limit**) amount should be called `entity.usage`. For example,
+`system.memory.usage` with label `state = used | cached | free | ...` for the
+amount of memory in a each state. In many cases, the sum of **usage** over
+all label values is equal to the **limit**.
+
+  A measure of the amount of an unlimited resource consumed is differentiated
+  from **usage**.
+
+- **utilization** - an instrument that measures the *fraction* of **usage**
+out of its **limit** should be called `entity.utilization`. For example,
+`system.memory.utilization` for the fraction of memory in use. Utilization
+values are in the range `[0, 1]`.
+
 - **time** - an instrument that measures passage of time should be called
-`entity.time`. For example, `system.cpu.time` with varying values of label
-`state` for idle, user, etc.
+`entity.time`. For example, `system.cpu.time` with label `state = idle | user
+| system | ...`. **time** measurements are not necessarily wall time and can be less than
+  or greater than the real wall time between measurements.
+
+  **time** instruments are a special case of **usage** metrics, where the
+  **limit** can usually be calculated as the sum of **time** over all label
+  values. **utilization** can also be calculated and useful, for example
+  `system.cpu.utilization`.
+
 - **io** - an instrument that measures bidirectional data flow should be
 called `entity.io` and have labels for direction. For example,
 `system.network.io`.
+
 - Other instruments that do not fit the above descriptions may be named more
 freely. For example, `system.swap.page_faults` and `system.network.packets`.
 Units do not need to be specified in the names since they are included during
@@ -56,17 +73,22 @@ instrument creation, but can be added if there is ambiguity.
 
 ### Units
 
-- Instruments for utilization metrics (that measure the ratio out of a total)
-SHOULD use units of `1`. Such values represent a *value ratio* and are always
-in the range `[0, 1]`.
-- Instruments that measure an integer count of something SHOULD use semantic
-units like `packets`, `errors`, `faults`, etc.
+Units should follow the [UCUM](http://unitsofmeasure.org/ucum.html) (need
+more clarification in
+[#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
+
+- Instruments for **utilization** metrics (that measure the fraction out of a total)
+SHOULD use units of `1`.
+- Instruments that measure an integer count of something have
+["non-units"](https://ucum.org/ucum.html#section-Examples-for-some-Non-Units.)
+and SHOULD use [annotations](https://ucum.org/ucum.html#para-curly) with curly
+braces. For example `{packets}`, `{errors}`, `{faults}`, etc.
 
 ## Metric Instruments
 
 ### Standard System Metrics - `system.`
 
-#### `system.cpu.`
+#### `system.cpu.` - Processor metrics
 
 **Description:** System level processor metrics.
 | Name                   | Units   | Instrument Type | Value Type | Label Key | Label Values                        |
@@ -76,7 +98,7 @@ units like `packets`, `errors`, `faults`, etc.
 | system.cpu.utilization | 1       | ValueObserver   | Double     | state     | idle, user, system, interrupt, etc. |
 |                        |         |                 |            | cpu       | 1 - #cores                          |
 
-#### `system.memory.`
+#### `system.memory.` - Memory metrics
 
 **Description:** System level memory metrics.
 | Name                      | Units | Instrument Type   | Value Type | Label Key | Label Values             |
@@ -84,7 +106,7 @@ units like `packets`, `errors`, `faults`, etc.
 | system.memory.usage       | bytes | UpDownSumObserver | Int64      | state     | used, free, cached, etc. |
 | system.memory.utilization | 1     | ValueObserver     | Double     | state     | used, free, cached, etc. |
 
-#### `system.swap.`
+#### `system.swap.` - Swap/paging metrics
 
 **Description:** System level swap/paging metrics.
 | Name                         | Units      | Instrument Type   | Value Type | Label Key | Label Values |
@@ -95,7 +117,7 @@ units like `packets`, `errors`, `faults`, etc.
 | system.swap.page\_operations | operations | SumObserver       | Int64      | type      | major, minor |
 |                              |            |                   |            | direction | in, out      |
 
-#### `system.disk.`
+#### `system.disk.` - Disk controller metrics
 
 **Description:** System level disk performance metrics.
 | Name                         | Units      | Instrument Type | Value Type | Label Key | Label Values |
@@ -109,7 +131,7 @@ units like `packets`, `errors`, `faults`, etc.
 | system.disk.merged           | 1          | SumObserver     | Int64      | device    | (identifier) |
 |                              |            |                 |            | direction | read, write  |
 
-#### `system.filesystem.`
+#### `system.filesystem.` - Filesystem metrics
 
 **Description:** System level filesystem metrics.
 | Name                          | Units | Instrument Type   | Value Type | Label Key | Label Values         |
@@ -119,7 +141,7 @@ units like `packets`, `errors`, `faults`, etc.
 | system.filesystem.utilization | 1     | ValueObserver     | Double     | device    | (identifier)         |
 |                               |       |                   |            | state     | used, free, reserved |
 
-#### `system.network.`
+#### `system.network.` - Network metrics
 
 **Description:** System level network metrics.
 | Name                            | Units       | Instrument Type   | Value Type | Label Key | Label Values                                                                                   |
@@ -136,7 +158,7 @@ units like `packets`, `errors`, `faults`, etc.
 |                                 |             |                   |            | protocol  | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
 |                                 |             |                   |            | state     | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
 
-#### `system.process.`
+#### `system.process.` - Aggregate system process metrics
 
 **Description:** System level aggregate process metrics. For metrics at the
 individual process level, see [process metrics](process-metrics.md).
@@ -144,7 +166,7 @@ individual process level, see [process metrics](process-metrics.md).
 | -------------------- | --------- | ----------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
 | system.process.count | processes | UpDownSumObserver | Int64      | status    | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
 
-#### OS Specific System Metrics - `system.{os}.`
+#### `system.{os}.` - OS Specific System Metrics
 
 Instrument names for system level metrics that have different and conflicting
 meaning across multiple OSes should be prefixed with `system.{os}.` and
