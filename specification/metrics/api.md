@@ -459,8 +459,8 @@ are inexpensively aggregated into a single number per collection interval
 without loss of information.  This property makes adding instruments
 higher performance, in general, than grouping instruments.
 
-Grouping instruments use a relatively inexpensive aggregation
-method default (MinMaxSumCount), but still more expensive than the
+Grouping instruments use a relatively inexpensive aggregation,
+by default, compared with recording full data, but still more expensive aggregation than the
 default for adding instruments (Sum).  Unlike adding instruments,
 where only the sum is of interest by definition, grouping
 instruments can be configured with even more expensive aggregators.
