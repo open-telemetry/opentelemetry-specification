@@ -421,7 +421,7 @@ etc.
 Note that after a span is ended, the Span usually becomes non-recording and thus
 IsRecording should consequently return false for ended Spans.
 
-There SHOULD be no parameter.
+`IsRecording` SHOULD NOT take any parameters.
 
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
 events in case when a Span is definitely not recorded. Note that any child
