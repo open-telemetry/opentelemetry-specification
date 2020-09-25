@@ -362,6 +362,11 @@ created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
 
+Any span that is created MUST also be ended, usually by calling [`End`](#end)
+on it. API implementations MAY leak memory or other resources
+(including, for example, CPU time for periodic work that iterates all spans)
+if the user forgot to end the span.
+
 #### Determining the Parent Span from a Context
 
 When a new `Span` is created from a `Context`, the `Context` may contain a `Span`
@@ -413,7 +418,10 @@ Returns true if this `Span` is recording information like events with the
 `AddEvent` operation, attributes using `SetAttributes`, status with `SetStatus`,
 etc.
 
-There should be no parameter.
+Note that after a span is ended, the Span usually becomes non-recording and thus
+IsRecording should consequently return false for ended Spans.
+
+There SHOULD be no parameter.
 
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
 events in case when a Span is definitely not recorded. Note that any child
@@ -526,12 +534,18 @@ Required parameters:
 #### End
 
 Finish the `Span`. This call will take the current timestamp to set as `Span`'s
-end time. Implementations MUST ignore all subsequent calls to `End` (there might
-be exceptions when Tracer is streaming event and has no mutable state associated
-with the `Span`).
+end time. Implementations SHOULD ignore all subsequent calls to `End` and
+any other Span methods, i.e. the Span becomes non-recording by being ended
+(there might be exceptions when Tracer is streaming events and has no mutable
+state associated with the `Span`).
 
-Call to `End` of a `Span` MUST not have any effects on child spans. Those may
+Call to `End` MUST NOT have any effects on child spans. Those may
 still be running and can be ended later.
+
+Calls to `End` MUST NOT inactivate the `Span` in any `Context` it is active in.
+It MUST still be possible to use an ended span as parent via a Context it is
+contained in. Also, any mechanisms for putting the Span into a Context MUST
+still work after the Span was ended.
 
 Parameters:
 
@@ -588,6 +602,8 @@ The behavior is defined as follows:
   are not being recorded, i.e. they are being dropped.
 
 The remaining functionality of `Span` MUST be defined as no-op operations.
+Note: This includes `End`, so as an exception from the general rule,
+it is not required (or even helpful) to end a Propagated Span.
 
 This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
 
