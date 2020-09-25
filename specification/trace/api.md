@@ -32,12 +32,12 @@ Table of Contents
     * [End](#end)
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
+  * [Propagated Span creation](#propagated-span-creation)
 * [Status](#status)
   * [StatusCanonicalCode](#statuscanonicalcode)
   * [Status creation](#status-creation)
   * [GetCanonicalCode](#getcanonicalcode)
   * [GetDescription](#getdescription)
-  * [GetIsOk](#getisok)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
@@ -364,18 +364,13 @@ parent is remote.
 
 #### Determining the Parent Span from a Context
 
-When a new `Span` is created from a `Context`, the `Context` may contain:
+When a new `Span` is created from a `Context`, the `Context` may contain a `Span`
+representing the currently active instance, and will be used as parent.
+If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
 
-- A current `Span`
-- An extracted `SpanContext`
-- A current `Span` and an extracted `SpanContext`
-- Neither a current `Span` nor an extracted `Span` context
-
-The parent should be selected in the following order of precedence:
-
-- Use the current `Span`, if available.
-- Use the extracted `SpanContext`, if available.
-- There is no parent. Create a root `Span`.
+A `SpanContext` cannot be set as active in a `Context` directly, but through the use
+of a [Propagated Span](#propagated-span-creation) wrapping it.
+For example, a `Propagator` performing context extraction may need this.
 
 #### Add Links
 
@@ -578,64 +573,58 @@ timestamps to the Span object:
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API.
 
+### Propagated Span creation
+
+The API MUST provide an operation for wrapping a `SpanContext` with an object
+implementing the `Span` interface. This is done in order to expose a `SpanContext`
+as a `Span` in operations such as in-process `Span` propagation.
+
+If a new type is required for supporting this operation, it SHOULD be named `PropagatedSpan`.
+
+The behavior is defined as follows:
+
+- `GetContext()` MUST return the wrapped `SpanContext`.
+- `IsRecording` MUST return `false` to signal that events, attributes and other elements
+  are not being recorded, i.e. they are being dropped.
+
+The remaining functionality of `Span` MUST be defined as no-op operations.
+
+This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
+
 ## Status
 
 `Status` interface represents the status of a finished `Span`. It's composed of
-a canonical code in conjunction with an optional descriptive message.
+a canonical code, and an optional descriptive message.
 
 ### StatusCanonicalCode
 
 `StatusCanonicalCode` represents the canonical set of status codes of a finished
-`Span`, following the [Standard GRPC
-codes](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md):
+`Span`.
 
+- `Unset`
+  - The default status.
+- `Error`
+  - The operation contains an error.
 - `Ok`
-  - The operation completed successfully.
-- `Cancelled`
-  - The operation was cancelled (typically by the caller).
-- `Unknown`
-  - An unknown error.
-- `InvalidArgument`
-  - Client specified an invalid argument. Note that this differs from
-    `FailedPrecondition`. `InvalidArgument` indicates arguments that are problematic
-    regardless of the state of the system.
-- `DeadlineExceeded`
-  - Deadline expired before operation could complete. For operations that change the
-    state of the system, this error may be returned even if the operation has
-    completed successfully.
-- `NotFound`
-  - Some requested entity (e.g., file or directory) was not found.
-- `AlreadyExists`
-  - Some entity that we attempted to create (e.g., file or directory) already exists.
-- `PermissionDenied`
-  - The caller does not have permission to execute the specified operation.
-    `PermissionDenied` must not be used if the caller cannot be identified (use
-    `Unauthenticated1` instead for those errors).
-- `ResourceExhausted`
-  - Some resource has been exhausted, perhaps a per-user quota, or perhaps the
-    entire file system is out of space.
-- `FailedPrecondition`
-  - Operation was rejected because the system is not in a state required for the
-    operation's execution.
-- `Aborted`
-  - The operation was aborted, typically due to a concurrency issue like sequencer
-    check failures, transaction aborts, etc.
-- `OutOfRange`
-  - Operation was attempted past the valid range. E.g., seeking or reading past end
-    of file. Unlike `InvalidArgument`, this error indicates a problem that may be
-    fixed if the system state changes.
-- `Unimplemented`
-  - Operation is not implemented or not supported/enabled in this service.
-- `Internal`
-  - Internal errors. Means some invariants expected by underlying system has been
-    broken.
-- `Unavailable`
-  - The service is currently unavailable. This is a most likely a transient
-    condition and may be corrected by retrying with a backoff.
-- `DataLoss`
-  - Unrecoverable data loss or corruption.
-- `Unauthenticated`
-  - The request does not have valid authentication credentials for the operation.
+  - The operation has been validated by an Application developers or Operator to
+    have completed successfully, or contain
+
+The status code SHOULD remain unset, except for the following circumstances:
+
+When the status is set to `ERROR` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `ERROR`
+according to the rules defined within the semantic conventions. For operations
+not covered by the semantic conventions, Instrumentation Libraries SHOULD
+publish their own conventions, including status codes.
+
+Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
+unless explicitly configured to do so. Instrumention libraries SHOULD leave the
+status code as `Unset` unless there is an error, as described above.
+
+Application developers and Operators may set the status code to `Ok`.
+
+Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
+would otherwise generate. For example, to suppress noisy errors such as 404s.
 
 ### Status creation
 
@@ -657,10 +646,6 @@ Returns the `StatusCanonicalCode` of this `Status`.
 
 Returns the description of this `Status`.
 Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
-
-### GetIsOk
-
-Returns true if the canonical code of this `Status` is `Ok`, otherwise false.
 
 ## SpanKind
 
