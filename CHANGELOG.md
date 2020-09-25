@@ -88,6 +88,9 @@ Updates:
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
+- SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
+  ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
+  ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
 
 ## v0.6.0 (07-01-2020)
 
