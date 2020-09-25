@@ -133,18 +133,25 @@ returned `Tracer`s and actively update their configuration if it changes.
 ## Tracing Context Utilities
 
 `Tracing Context Utilities` contains all operations within tracing that
-modify the [`Context`](../context/context.md).
+modify the [`Context`](../context/context.md). It also holds the reference to
+the `Context.Key`.
 
 As these utilities operate solely on the context API, they MAY be exposed
 as static methods on the trace module instead of a class.
 
 The `Tracing Context Utilities` MUST provide the following functions:
 
-- Get the currently active span
-- Set the currently active span
+- Get the currently active `Span`
+- Set the currently active `Span`
+- Extract the `Span` from a `Context` instance
+- Insert the `Span` to a `Context` instance
 
-The above methods MUST be equivalent to a single parameterized method call of
-the [`Context`](../context/context.md) management system.
+The above first two methods MUST be equivalent to a single parameterized method
+call of the [`Context`](../context/context.md) management system.
+
+The above last two methods are necessary because external API users don't have
+access to the `Context.Key` and they need to be able to insert/extract a `Span`
+to/from `Context` inside `Propagator` or `Tracer` implementations.
 
 ## Tracer
 
