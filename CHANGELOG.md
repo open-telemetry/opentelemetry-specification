@@ -82,6 +82,8 @@ Updates:
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
+- Metrics API: Replace "Additive" with "Adding", "Non-Additive" with "Grouping"
+  ([#983](https://github.com/open-telemetry/opentelemetry-specification/pull/983)
 - Move active span interaction in the Trace API to a separate class
   ([#923](https://github.com/open-telemetry/opentelemetry-specification/pull/923))
 - Metrics SDK: Specify LastValue default aggregation for ValueObserver
