@@ -533,23 +533,26 @@ Required parameters:
 
 #### End
 
-Finish the `Span`. This call will take the current timestamp to set as `Span`'s
-end time. Implementations SHOULD ignore all subsequent calls to `End` and
-any other Span methods, i.e. the Span becomes non-recording by being ended
-(there might be exceptions when Tracer is streaming events and has no mutable
-state associated with the `Span`).
+Signals that the operation described by this span has
+now (or at the time optionally specified) ended.
 
-Call to `End` MUST NOT have any effects on child spans. Those may
-still be running and can be ended later.
+Implementations SHOULD ignore all subsequent calls to `End` and any other Span methods,
+i.e. the Span becomes non-recording by being ended
+(there might be exceptions when Tracer is streaming events
+and has no mutable state associated with the `Span`).
 
-Calls to `End` MUST NOT inactivate the `Span` in any `Context` it is active in.
+`End` MUST NOT have any effects on child spans.
+Those may still be running and can be ended later.
+
+`End` MUST NOT inactivate the `Span` in any `Context` it is active in.
 It MUST still be possible to use an ended span as parent via a Context it is
 contained in. Also, any mechanisms for putting the Span into a Context MUST
 still work after the Span was ended.
 
 Parameters:
 
-- (Optional) Timestamp to explicitly set the end timestamp
+- (Optional) Timestamp to explicitly set the end timestamp.
+  If omitted, this MUST be treated equivalent to passing the current time.
 
 This API MUST be non-blocking.
 
