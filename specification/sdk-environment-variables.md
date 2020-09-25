@@ -11,7 +11,7 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning and be gracefully ignored. |
 
 Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger".
-Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "aws" or "ot".
+Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
 
 ## Batch Span Processor
 
