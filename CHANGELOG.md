@@ -75,6 +75,9 @@ Updates:
   ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
 - Remove obsolete `http.status_text` from semantic conventions
   ([#972](https://github.com/open-telemetry/opentelemetry-specification/pull/972))
+- Define `null` as an invalid value for attributes and declare attempts to set
+  `null` as undefined behavior
+  ([#992](https://github.com/open-telemetry/opentelemetry-specification/pull/992))
 - SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
@@ -85,6 +88,9 @@ Updates:
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
+- SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
+  ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
+  ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
 - Trace API: Clarifications for `Span.End`
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
 
