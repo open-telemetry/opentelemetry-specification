@@ -65,7 +65,7 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Use official header name                      |  |    |   |      |    |      |   |    |   |    |
+|Use official header name `baggage`            |  |    |   |      |    |      |   |    |   |    |
 
 ## Metrics
 
