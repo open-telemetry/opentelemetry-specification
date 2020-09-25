@@ -61,6 +61,12 @@ status of the feature is not known.
 |RecordException                               | - | +  | + | +    | +  | -    |   | +  | - | +  |
 |RecordException with extra parameters         | - | +  | + | -    | -  | -    |   | +  | - | +  |
 
+## Baggage
+
+|Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
+|----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
+|Use official header name                      |  |    |   |      |    |      |   |    |   |    |
+
 ## Metrics
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|

@@ -93,6 +93,8 @@ Updates:
 - SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
   ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
   ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
+- Remove custom header name for Baggage, use official header
+  ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 
 ## v0.6.0 (07-01-2020)
 
