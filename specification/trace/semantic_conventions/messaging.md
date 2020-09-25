@@ -27,16 +27,18 @@
 
 Although messaging systems are not as standardized as, e.g., HTTP, it is assumed that the following definitions are applicable to most of them that have similar concepts at all (names borrowed mostly from JMS):
 
-A *message* usually consists of headers (or properties, or meta information) and an optional body. It is sent by a single message *producer* to:
-
-* Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual routing, delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
-* Logically: some particular message *destination*.
+A *message* is an envelope around a potentially empty payload.
+This envelope may offer the possibility to convey additional metadata, often under the key/value form.
+Messages can be delivered to 0, 1, or multiple consumers depending on the dispatching semantic of the protocol.
+Traditional messaging brokers, such as JMS, use the concept of topics when a message is dispatched to potentially multiple consumers and queues when a message is dispatched to a single consumer.
+In a messaging system such as Apache Kafka, consumer groups are used. Each record, or message, is sent to a single consumer per consumer group.
+Whether a specific message is processed as if it was sent to a topic or queue entirely depends on the consumer groups and their composition.
 
 ### Destinations
 
-A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier.
-Two kinds of destinations are distinguished: *topic*s and *queue*s.
-A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all *subscribers* of the topic.
+A destination is usually identified by some name unique within the messaging system instance, which might look like a URL or a simple one-word identifier.
+Traditional messaging involves two kinds of destinations: *topic*s and *queue*s.
+A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all consumers that have *subscribed* to the topic.
 A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
 
 [idempotent]: https://en.wikipedia.org/wiki/Idempotence
@@ -47,11 +49,10 @@ The consumption of a message can happen in multiple steps.
 First, the lower-level receiving of a message at a consumer, and then the logical processing of the message.
 Often, the waiting for a message is not particularly interesting and hidden away in a framework that only invokes some handler function to process a message once one is received
 (in the same way that the listening on a TCP port for an incoming HTTP message is not particularly interesting).
-However, in a synchronous conversation, the wait time for a message is important.
 
 ### Conversations
 
-In some messaging systems, a message can receive a reply message that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*.
+In some messaging systems, a message can receive a reply message, or possibly multiple, that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*.
 The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit *conversation ID* (sometimes called *correlation ID*).
 Sometimes a conversation can span multiple message destinations (e.g. initiated via a topic, continued on a temporary one-to-one queue).
 
@@ -74,6 +75,7 @@ The span name SHOULD be set to the message destination name and the operation be
 
 The destination name SHOULD only be used for the span name if it is known to be of low cardinality (cf. [general span name guidelines](../api.md#span)).
 This can be assumed if it is statically derived from application code or configuration.
+Wherever possible, the preference is to use real destination names over logical or aliased names.
 If the destination name is dynamic, such as a [conversation ID](#conversations) or a value obtained from a `Reply-To` header, it SHOULD NOT be used for the span name.
 In these cases, an artificial destination name that best expresses the destination, or a generic, static fallback like `"(temporary)"` for [temporary destinations](#temporary-destinations) SHOULD be used instead.
 
@@ -118,6 +120,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.protocol` | string | The name of the transport protocol. | `AMQP`<br>`MQTT` | No |
 | `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
 | `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`<br>`https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
+| `messaging.service` | string | Name of the external broker, or name of the service being interacted with. See note below for a definition. | No |
 | `messaging.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
 | `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
 | `messaging.message_payload_size_bytes` | number | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
@@ -125,7 +128,7 @@ The following operations related to messages are defined for these semantic conv
 
 **[1]:** Required only if the message destination is either a `queue` or `topic`.
 
-**Additional attribute requirements:** At least one of the following sets of attributes is required:
+**Additional attribute recommendations:** At least one of the following sets of attributes is recommended:
 
 * [`net.peer.name`](span-general.md)
 * [`net.peer.ip`](span-general.md)
@@ -140,6 +143,7 @@ The following operations related to messages are defined for these semantic conv
 
 Additionally `net.peer.port` from the [network attributes][] is recommended.
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
+`messaging.service` refers to the logical name of the external broker or messaging system where a message was sent to, or received from. In an environment such as Kubernetes, it would be the Kubernetes Service Name.
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
 [network attributes]: span-general.md#general-network-connection-attributes
@@ -176,6 +180,17 @@ In RabbitMQ, the destination is defined by an _exchange_ and a _routing key_.
 `messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
 The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_key`, unless it is empty.
 
+#### Apache Kafka
+
+For Apache Kafka, the following additional attributes are defined:
+
+| Attribute name |                          Notes and examples                            |
+| -------------- | ---------------------------------------------------------------------- |
+| `messaging.kafka.message_key` | Differs from `messaging.message_id` in that it's not unique, and can be `null`. The type is a String representation of the type of the actual value. |
+| `messaging.kafka.consumer_group` | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. |
+| `messaging.kafka.client_id` | Client Id for the Consumer or Producer that is handling the message. |
+| `messaging.kafka.partition` | Partition the message is sent to. |
+
 ## Examples
 
 ### Topic with multiple consumers
@@ -197,17 +212,16 @@ Process CB:                 | Span CB1 |
 | Links |  |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` |
-| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` |
-| `net.peer.port` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination` | `"T"` | `"T"` | `"T"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.service` | `"ms"` | `"ms"` | `"ms"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
-| `messaging.message_id` | `"a1"` | `"a1"`| `"a1"` |
+| `messaging.kafka.message_key` | `"a1"` | `"a1"` | `"a1"` |
 
 ### Batch receiving
 
-Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span Recv1) and processes each message separately (Spans Proc1 and Proc2).
+Given is a process P, that sends two messages to a topic Q on messaging system MS, and a process C, which receives both of them in one batch (Span Recv1) and processes each message separately (Spans Proc1 and Proc2).
 
 Since a span can only have one parent and the propagated trace and span IDs are not known when the receiving span is started, the receiving span will have no parent and the processing spans are correlated with the producing spans using links.
 
@@ -226,17 +240,16 @@ Process C:                      | Span Recv1 |
 | Links |  |  |  | Span Prod1 | Span Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
-| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
-| `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
-| `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
+| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.service` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
 | `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
-| `messaging.message_id` | `"a1"` | `"a2"` | | `"a1"` | `"a2"` |
+| `messaging.kafka.message_key` | `"a1"` | `"a2"` |  | `"a1"` | `"a2"` |
 
 ### Batch processing
 
-Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them separately (Span Recv1 and Recv2) and processes both messages in one batch (Span Proc1).
+Given is a process P, that sends two messages to a topic Q on messaging system MS, and a process C, which receives both of them separately (Span Recv1 and Recv2) and processes both messages in one batch (Span Proc1).
 
 Since each span can only have one parent, C3 should not choose a random parent out of C1 and C2, but rather rely on the implicitly selected parent as defined by the [tracing API spec](../api.md).
 Similarly, only one value can be set as `message_id`, so C3 cannot report both `a1` and `a2` and therefore attribute is left out.
@@ -259,10 +272,9 @@ Process C:                              | Span Recv1 | Span Recv2 |
 | Links |  |  |  |  | Span Prod1 + Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
-| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
-| `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
-| `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
+| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.service` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
 | `messaging.operation` |  |  | `"receive"` | `"receive"` | `"process"` |
-| `messaging.message_id` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
+| `messaging.kafka.message_key` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
