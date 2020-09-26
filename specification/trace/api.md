@@ -170,7 +170,6 @@ These functions MUST delegate to the `Tracing Context Utilities`.
 
 A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
-`SpanContext` MUST be a final (sealed) class.
 
 The OpenTelemetry `SpanContext` representation conforms to the [W3C TraceContext
 specification](https://www.w3.org/TR/trace-context/). It contains two
@@ -191,6 +190,10 @@ only supports a single flag called [sampled](https://www.w3.org/TR/trace-context
 of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. It is fully described in the [W3C Trace Context
 specification](https://www.w3.org/TR/trace-context/#tracestate-header).
+
+The API MUST implement methods to create a `SpanContext`. These methods SHOULD be the only way to
+create a `SpanContext`. This functionality MUST be fully implemented in the API, and SHOULD NOT be
+overridable.
 
 ### Retrieving the TraceId and SpanId
 
