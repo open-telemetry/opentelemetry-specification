@@ -36,7 +36,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
-  that do not.  
+  that do not.
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
@@ -250,7 +250,7 @@ these collections are unbounded, they can quickly exhaust available memory,
 resulting in crashes that are difficult to recover from safely.
 
 To protect against such errors, SDK Spans MUST discard attributes, links, and
-events that would increase the number of elements of each collection beyond 
+events that would increase the number of elements of each collection beyond
 1000.
 
 There SHOULD be a log message emitted by the SDK for the first time a span is
