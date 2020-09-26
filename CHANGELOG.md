@@ -23,7 +23,7 @@ New:
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
   * API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
   * `exception.escaped` was added ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784))
-- Add default limits to the number of events in SDK Spans
+- Add limits to the number of attributes, events, and links in SDK Spans
   ([#942](https://github.com/open-telemetry/opentelemetry-specification/pull/942))
 
 Updates:

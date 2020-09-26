@@ -245,25 +245,13 @@ these collections are unbounded, they can quickly exhaust available memory,
 resulting in crashes that are difficult to recover from safely.
 
 To protect against such errors, SDK Spans MUST discard attributes, links, and
-events that would increase the number of elements of each collection beyond a
-limit configured in the `TracerProvider`.
+events that would increase the number of elements of each collection beyond 
+1000.
 
 There SHOULD be a log message emitted by the SDK for the first time a span is
 discarded due to a limit. This message should be emitted once for
 attributes, events, and links, and MUST be configurable on or off, with
 a default of on.
-
-The following interfaces MUST exist:
-
-- `TracerProvider`: a method to set a maximum collection count
-- `TracerProvider`: a method to retrieve the maximum collection count
-
-The default for this limit SHOULD be 1000 elements. A value of -1 indicates no
-limit, while a value of 0 would result in no events being collected.
-
-Implementations MAY also enable configuration for the maximum element count of
-individual collections: attributes, events, and links. These limits would take
-precedence over the general collection limit.
 
 ## Span processor
 
