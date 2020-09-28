@@ -25,10 +25,10 @@ Attributes SHOULD preserve the order in which they're set.
 
 Attribute values expressing a numerical value of zero, an empty string, or an
 empty array are considered meaningful and MUST be stored and passed on to
-processors / exporters. Attribute values of `null` are considered to be not set
-and get discarded as if that `Attribute` has never been created.
-As an exception to this, if overwriting of values is supported, this results in
-removing the attribute.
+processors / exporters.
+
+Attribute values of `null` are not valid and attempting to set a `null` value is
+undefined behavior.
 
 `null` values within arrays MUST be preserved as-is (i.e., passed on to span
 processors / exporters as `null`). If exporters do not support exporting `null`

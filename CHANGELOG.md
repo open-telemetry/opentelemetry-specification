@@ -29,8 +29,12 @@ New:
   * `exception.escaped` semantic span event attribute was added
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
+- Allow samplers to modify tracestate
+  ([#856](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
 - Update the header name for otel baggage, and version date
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
+- Define PropagationOnly Span to simplify active Span logic in Context
+  ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
 - Add semantic conventions for system metrics
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
 
@@ -75,16 +79,26 @@ Updates:
   ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
 - Remove obsolete `http.status_text` from semantic conventions
   ([#972](https://github.com/open-telemetry/opentelemetry-specification/pull/972))
+- Define `null` as an invalid value for attributes and declare attempts to set
+  `null` as undefined behavior
+  ([#992](https://github.com/open-telemetry/opentelemetry-specification/pull/992))
 - SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
+- Metrics API: Replace "Additive" with "Adding", "Non-Additive" with "Grouping"
+  ([#983](https://github.com/open-telemetry/opentelemetry-specification/pull/983)
 - Move active span interaction in the Trace API to a separate class
   ([#923](https://github.com/open-telemetry/opentelemetry-specification/pull/923))
 - Metrics SDK: Specify LastValue default aggregation for ValueObserver
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
+- SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
+  ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
+  ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
+- Remove custom header name for Baggage, use official header
+  ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 
 ## v0.6.0 (07-01-2020)
 
