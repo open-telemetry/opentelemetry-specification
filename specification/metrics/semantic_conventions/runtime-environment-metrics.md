@@ -2,7 +2,7 @@
 
 This document includes semantic conventions for runtime environment level
 metrics in OpenTelemetry. Also consider the general semantic conventions for
-[system metrics](system-metrics.md#semantic-conventions) and [process
+[system metrics](system-metrics.md) and [OS Process
 metrics](process-metrics.md) when instrumenting runtime environments.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
