@@ -195,6 +195,8 @@ The API MUST implement methods to create a `SpanContext`. These methods SHOULD b
 create a `SpanContext`. This functionality MUST be fully implemented in the API, and SHOULD NOT be
 overridable.
 
+The API MAY expose the functionality of `SpanContext` directly on the `Span` without a separate type.
+
 ### Retrieving the TraceId and SpanId
 
 The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
