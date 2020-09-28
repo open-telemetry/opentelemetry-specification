@@ -1020,6 +1020,10 @@ asynchronous instrument.
 
 ```golang
 func (s *server) registerObservers(.Context) {
+     s.observer1 = s.meter.NewSumObserver(...)
+     s.observer2 = s.meter.NewUpDownSumObserver(...)
+     s.observer3 = s.meter.NewValueObserver(...)
+
      batch := s.meter.NewBatchObserver(func (result BatchObserverResult) {
           result.Observe(
              []kv.KeyValue{
@@ -1031,10 +1035,6 @@ func (s *server) registerObservers(.Context) {
              s.observer3.Observation(value3),
           },
     )
-
-     s.observer1 = batch.NewSumObserver(...)
-     s.observer2 = batch.NewUpDownSumObserver(...)
-     s.observer3 = batch.NewValueObserver(...)
 }
 ```
 
