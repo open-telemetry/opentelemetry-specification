@@ -173,6 +173,27 @@ individual process level, see [process metrics](process-metrics.md).
 Instrument names for system level metrics that have different and conflicting
 meaning across multiple OSes should be prefixed with `system.{os}.` and
 follow the hierarchies listed above for different entities like CPU, memory,
-and network. For example, an instrument for measuring the load average on
-Linux could be named `system.linux.cpu.load`, reusing the `cpu` name proposed
-above.
+and network. This follows the rule of thumb that [aggregations over all the
+dimensions of a given metric SHOULD be
+meaningful.](https://prometheus.io/docs/practices/naming/#metric-names:~:text=As%20a%20rule%20of%20thumb%2C%20either,be%20meaningful%20(though%20not%20necessarily%20useful).)
+
+For example, [UNIX load
+average](https://en.wikipedia.org/wiki/Load_(computing)) over a given
+interval is not well standardized and its value across different UNIX like
+OSes may vary despite being under similar load:
+
+> Without getting into the vagaries of every Unix-like operating system in
+existence, the load average more or less represents the average number of
+processes that are in the running (using the CPU) or runnable (waiting for
+the CPU) states. One notable exception exists: Linux includes processes in
+uninterruptible sleep states, typically waiting for some I/O activity to
+complete. This can markedly increase the load average on Linux systems.
+
+([source of
+quote](https://github.com/torvalds/linux/blob/e4cbce4d131753eca271d9d67f58c6377f27ad21/kernel/sched/loadavg.c#L11-L18),
+[linux source
+code](https://github.com/torvalds/linux/blob/e4cbce4d131753eca271d9d67f58c6377f27ad21/kernel/sched/loadavg.c#L11-L18))
+
+An instrument for load average over 1 minute on Linux could be named
+`system.linux.cpu.load_1m`, reusing the `cpu` name proposed above and having
+an `{os}` prefix to split this metric across OSes.
