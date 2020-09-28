@@ -6,6 +6,7 @@
 
 * [Sampling](#sampling)
 * [Tracer Creation](#tracer-creation)
+* [Additional Span Interfaces](#additional-span-interfaces)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -23,18 +24,18 @@ latest sampling could happen on the Collector which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
-* `IsRecording` field of a `Span`. If `true` the current `Span` records
-  tracing events (attributes, events, status, etc.), otherwise all tracing
-  events are dropped. Users can use this property to determine if expensive
-  trace events can be avoided. [Span Processors](#span-processor) will receive
-  all spans with this flag set. However, [Span Exporter](#span-exporter) will
-  not receive them unless the `Sampled` flag was set.
+* `IsRecording` field of a `Span`. If `false` the current `Span` discards all
+  tracing data (attributes, events, status, etc.). Users can use this property
+  to determine if collecting expensive trace data can be avoided. [Span
+  Processor](#span-processor) MUST receive only those spans which have this
+  field set to `true`. However, [Span Exporter](#span-exporter) SHOULD NOT
+  receive them unless the `Sampled` flag was also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
-  specification][trace-flags]. This flag indicates that the `Span` has been
-  `sampled` and will be exported. [Span Processor](#span-processor) and [Span
-  Exporter](#span-exporter) will receive spans with the `Sampled` flag set for
-  processing.
+  specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
+  `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
+  receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
+  that do not.  
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
@@ -44,12 +45,30 @@ The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
 
+<a name="recording-sampled-reaction-table"></a>
+
+The following table summarizes the expected behavior for each combination of
+`IsRecording` and `SampledFlag`.
+
+| `IsRecording` | `Sampled` Flag | Span Processor receives Span? | Span Exporter receives Span? |
+| ------------- | -------------- | ----------------------------- | ---------------------------- |
+| true          | true           | true                          | true                         |
+| true          | false          | true                          | false                        |
+| false         | true           | Not allowed                   | Not allowed                  |
+| false         | false          | false                         | false                        |
+
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
-[built-in samplers](#built-in-samplers).
+[built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
+
+When asked to create a Span, the SDK MUST query the `Sampler`'s [`ShouldSample`](#shouldsample) method before actually creating the span, and act accordingly:
+see description of [`ShouldSample`'s](#shouldsample) return value below for how to set `IsRecording` and `Sampled` on the Span,
+and the [table above](#recording-sampled-reaction-table) on whether to pass the `Span` to `SpanProcessor`s.
+A non-recording span MAY be implemented using the same mechanism as when a `Span` is created with no API-implementation installed
+(sometimes called a `NoOpSpan` or `DefaultSpan`).
 
 ### Sampler
 
-`Sampler` interface allows to create custom samplers which will return a
+`Sampler` interface allows users to create custom samplers which will return a
 sampling `SamplingResult` based on information that is typically available just
 before the `Span` was created.
 
@@ -59,14 +78,12 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* `SpanContext` of a parent `Span`. Typically extracted from the wire. Can be
-  `null`.
-* `TraceId` of the `Span` to be created. It can be different from the `TraceId`
-  in the `SpanContext`. Typically in situations when the `Span` to be created
-  starts a new Trace.
+* Parent `SpanContext`. May be invalid to indicate a root span.
+* `TraceId` of the `Span` to be created.
+  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
-* `SpanKind`
-* Initial set of `Attributes` for the `Span` being constructed
+* `SpanKind` of the `Span` to be created.
+* Initial set of `Attributes` of the `Span` to be created.
 * Collection of links that will be associated with the `Span` to be created.
   Typically useful for batch operations, see
   [Links Between Spans](../overview.md#links-between-spans).
@@ -76,59 +93,92 @@ Returns the sampling Decision for a `Span` to be created.
 It produces an output called `SamplingResult` which contains:
 
 * A sampling `Decision`. One of the following enum values:
-  * `NOT_RECORD` - `IsRecording() == false`, span will not be recorded and all events and attributes
+  * `DROP` - `IsRecording() == false`, span will not be recorded and all events and attributes
   will be dropped.
-  * `RECORD` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
-  * `RECORD_AND_SAMPLED` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
-* A set of span Attributes that will also be added to the `Span`.
-  * The list of attributes returned by `SamplingResult` MUST be immutable.
-  Caller may call this method any number of times and can safely cache the
-  returned value.
+  * `RECORD_ONLY` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
+  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
+* A set of span Attributes that will also be added to the `Span`. The returned
+object must be immutable (multiple calls may return different immutable objects).
+* A `Tracestate` that will be associated with the `Span` through the new
+  `SpanContext`.
+  Note: If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
+  so samplers should normally return the passed-in `Tracestate` if they do not intend
+  to change it.
 
 #### GetDescription
 
 Returns the sampler name or short description with the configuration. This may
 be displayed on debug pages or in the logs. Example:
-`"ProbabilitySampler{0.000100}"`.
+`"TraceIdRatioBased{0.000100}"`.
 
 Description MUST NOT change over time and caller can cache the returned value.
 
 ### Built-in samplers
 
+OpenTelemetry supports a number of built-in samplers to choose from.
+The default sampler is `ParentBased(root=AlwaysOn)`.
+
 #### AlwaysOn
 
-* This is the default sampler.
-* Returns `RECORD_AND_SAMPLED` always.
+* Returns `RECORD_AND_SAMPLE` always.
 * Description MUST be `AlwaysOnSampler`.
 
 #### AlwaysOff
 
-* Returns `NOT_RECORD` always.
+* Returns `DROP` always.
 * Description MUST be `AlwaysOffSampler`.
 
-#### Probability
+#### TraceIdRatioBased
 
-* The `ProbabilitySampler` MUST ignore the parent `SampledFlag`.
-  To respect the parent `SampledFlag`, the `ProbabilitySampler` should be used as a delegate of the `ParentOrElse` sampler specified below.
-* Description MUST be `ProbabilitySampler{0.000100}`.
+* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
+parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
+the `ParentBased` sampler specified below.
+* Description MUST be `TraceIdRatioBased{0.000100}`.
 
-TODO: Add details about how the `ProbabilitySampler` is implemented as a function
+TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
 of the `TraceID`.
 
-#### ParentOrElse
+##### Requirements for `TraceIdRatioBased` sampler algorithm
 
-* This is a composite sampler. `ParentOrElse(delegateSampler)` either respects the parent span's sampling decision or delegates to  `delegateSampler` for root spans.
-* If parent exists:
-  * If parent's `SampledFlag` is set to `true` returns `RECORD_AND_SAMPLED`
-  * If parent's `SampledFlag` is set to `false` returns `NOT_RECORD`
-* If no parent (root span) exists returns the result of the `delegateSampler`.
-* Description MUST be `ParentOrElse{delegateSampler.getDescription()}`.
+* The sampling algorithm MUST be deterministic. A trace identified by a given
+`TraceId` is sampled or not independent of language, time, etc. To achieve this,
+implementations MUST use a deterministic hash of the `TraceId` when computing
+the sampling decision. By ensuring this, running the sampler on any child `Span`
+will produce the same decision.
+* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
+traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
+sample. This is important when a backend system may want to run with a higher
+sampling rate than the frontend system, this way all frontend traces will
+still be sampled and extra traces will be sampled on the backend only.
 
-|Parent|`ParentOrElse(delegateSampler)`
-|--|--|
-|Exists and `SampledFlag` is `true`|`RECORD_AND_SAMPLED`|
-|Exists and `SampledFlag` is `false`|`NOT_RECORD`|
-|No parent(root spans)|Result of `delegateSampler()`|
+#### ParentBased
+
+* This is a composite sampler. `ParentBased` helps distinguished between the
+following cases:
+  * No parent (root span).
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `false`
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `true`
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `false`
+
+Required parameters:
+
+* `root(Sampler)` - Sampler called for spans with no parent (root spans)
+
+Optional parameters:
+
+* `remoteParentSampled(Sampler)` (default: AlwaysOn)
+* `remoteParentNotSampled(Sampler)` (default: AlwaysOff)
+* `localParentSampled(Sampler)` (default: AlwaysOn)
+* `localParentNotSampled(Sampler)` (default: AlwaysOff)
+
+|Parent| parent.isRemote() | parent.IsSampled()| Invoke sampler|
+|--|--|--|--|
+|absent| n/a | n/a |`root()`|
+|present|true|true|`remoteParentSampled()`|
+|present|true|false|`remoteParentNotSampled()`|
+|present|false|true|`localParentSampled()`|
+|present|false|false|`localParentNotSampled()`|
 
 ## Tracer Creation
 
@@ -151,10 +201,47 @@ Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
 
-The readable representations of all `Span` instances created by a `Tracer` must
-provide a `getInstrumentationLibrary` method that returns the
-`InstrumentationLibrary` information held by the `Tracer`.
+## Additional Span Interfaces
 
+The [API-level definition for Span's interface](api.md#span-operations)
+only defines write-only access to the span.
+This is good because instrumentations and applications are not meant to use the data
+stored in a span for application logic.
+However, the SDK needs to eventually read back the data in some locations.
+Thus, the SDK specification defines sets of possible requirements for
+`Span`-like parameters:
+
+* **Readable span**: A function receiving this as argument MUST be able to
+  access all information that was added to the span,
+  as listed [in the API spec](api.md#span-data-members).
+  In particular, it MUST also be able to access
+  the `InstrumentationLibrary` and `Resource` information (implicitly)
+  associated with the span.
+  It must also be able to reliably determine whether the Span has ended
+  (some languages might implement this by having an end timestamp of `null`,
+  others might have an explicit `hasEnded` boolean).
+  
+  A function receiving this as argument might not be able to modify the Span.
+
+  Note: Typically this will be implemented with a new interface or
+  (immutable) value type.
+  In some languages SpanProcessors may have a different readable span type
+  than exporters (e.g. a `SpanData` type might contain an immutable snapshot and
+  a `ReadableSpan` interface might read information directly from the same
+  underlying data structure that the `Span` interface manipulates).
+
+* **Read/write span**: A function receiving this as argument must have access to
+  both the full span API as defined in the
+  [API-level definition for span's interface](api.md#span-operations) and
+  additionally must be able to retrieve all information that was added to the span
+  (as with *readable span*).
+
+  It MUST be possible for functions being called with this
+  to somehow obtain the same `Span` instance and type
+  that the [span creation API](api.md#span-creation) returned (or will return) to the user
+  (for example, the `Span` could be one of the parameters passed to such a function,
+  or a getter could be provided).
+  
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
@@ -194,7 +281,7 @@ in the SDK:
 
 ### Interface definition
 
-#### OnStart(Span)
+#### OnStart
 
 `OnStart` is called when a span is started. This method is called synchronously
 on the thread that started the span, therefore it should not block or throw
@@ -202,18 +289,28 @@ exceptions.
 
 **Parameters:**
 
-* `Span` - a readable span object.
+* `span` - a [read/write span object](#additional-span-interfaces) for the started span.
+  It SHOULD be possible to keep a reference to this span object and updates to the span
+  SHOULD be reflected in it.
+  For example, this is useful for creating a SpanProcessor that periodically
+  evaluates/prints information about all active span from a background thread.
+* `parentContext` - the parent `Context` of the span that the SDK determined
+  (the explicitly passed `Context`, the current `Context` or an empty `Context`
+  if that was explicitly requested).
 
 **Returns:** `Void`
 
 #### OnEnd(Span)
 
-`OnEnd` is called when a span is ended. This method is called synchronously on
-the execution thread, therefore it should not block or throw an exception.
+`OnEnd` is called after a span is ended (i.e., the end timestamp is already set).
+This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
+therefore it should not block or throw an exception.
 
 **Parameters:**
 
-* `Span` - a readable span object.
+* `Span` - a [readable span object](#additional-span-interfaces) for the ended span.
+  Note: Even if the passed Span may be technically writable,
+  since it's already ended at this point, modifying it is not allowed.
 
 **Returns:** `Void`
 
@@ -222,19 +319,35 @@ the execution thread, therefore it should not block or throw an exception.
 Shuts down the processor. Called when SDK is shut down. This is an opportunity
 for processor to do any cleanup required.
 
-Shutdown should be called only once for each `Processor` instance. After the
-call to shutdown subsequent calls to `onStart`, `onEnd`, or `forceFlush` are not allowed.
+`Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
+the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
+are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
 
-Shutdown should not block indefinitely. Language library authors can decide if
-they want to make the shutdown timeout configurable.
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` MUST include the effects of `ForceFlush`.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the shutdown timeout configurable.
 
 #### ForceFlush()
 
-Export all ended spans to the configured `Exporter` that have not yet been exported.
+Exports all spans that have not yet been exported to the configured `Exporter`.
 
-`ForceFlush` should only be called in cases where it is absolutely necessary, such as when using some FaaS providers that may suspend the process after an invocation, but before the `Processor` exports the completed spans.
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
 
-`ForceFlush` should not block indefinitely. Language library authors can decide if they want to make the flush timeout configurable.
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
+such as when using some FaaS providers that may suspend the process after an
+invocation, but before the `Processor` exports the completed spans.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the flush timeout configurable.
 
 ### Built-in span processors
 
@@ -289,7 +402,8 @@ interfaces, one that accepts spans (SpanExporter) and one that accepts metrics
 
 #### `Export(batch)`
 
-Exports a batch of telemetry data. Protocol exporters that will implement this
+Exports a batch of [readable spans](#additional-span-interfaces).
+Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
 destination.
 
@@ -306,15 +420,9 @@ and backend the spans are being sent to.
 
 **Parameters:**
 
-batch - a batch of telemetry data. The exact data type of the batch is language
-specific, typically it is a list of telemetry items, e.g. for spans in Java it
-will be typically `Collection<ExportableSpan>`.
-
-Note that the data type for a span for illustration purposes here is written as
-an imaginary type ExportableSpan (similarly for metrics it would be e.g.
-ExportableMetrics). The actual data type must be specified by language library
-authors, it should be able to represent the span data that can be read by the
-exporter.
+batch - a batch of [readable spans](#additional-span-interfaces). The exact data type of the batch is language
+specific, typically it is some kind of list,
+e.g. for spans in Java it will be typically `Collection<SpanData>`.
 
 **Returns:** ExportResult:
 
