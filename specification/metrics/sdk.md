@@ -73,12 +73,12 @@ These terms are defined in the Metrics API specification:
 Defined in the [Resource SDK](../resource/sdk.md) specification:
 
 - **Resource**: a set of key-values with unique keys describing the process
-- **Instrumentation Library**: the name and version associated with a package of instrumentation.
+- [**Instrumentation Library**](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/glossary.md#instrumentation-library): the name and version associated with a package of instrumentation.
 
 These are the significant data types used in the model architecture:
 
 - **Aggregator**: aggregates one or more measurements in a useful way
-- **Aggregator snapshot**: copy of an synchronous instrument aggregator taken during collection
+- **Aggregator Snapshot**: copy of an synchronous instrument aggregator taken during collection
 - **AggregatorSelector**: chooses which Aggregator to assign to a metric instrument
 - **Accumulation**: consists of Instrument, Label Set, Resource, and Aggregator snapshot, output by Accumulator
 - **Aggregation**: the result of aggregating one or more events by a specific aggregator, output by Processor
@@ -119,7 +119,7 @@ complex export pipelines.
 The Exporter component converts processed data into a specific
 protocol and exports it somewhere.  Following the [library
 guidelines](../library-guidelines.md), exporters are expected to
-contain contain minimal functionality and customization is preferably
+contain minimal functionality and customization is preferably
 expressed through Processors.
 
 The Controller component coordinates the sequence of actions to
@@ -129,7 +129,7 @@ ensuring that access to the export pipeline is properly synchronized.
 ## Requirements
 
 Requirements are listed below for the major components of the
-OpenTelemetry using the terminology outlined above.
+OpenTelemetry SDK using the terminology outlined above.
 
 The data flow diagram above is meant as an abstraction, for
 understanding how the standard component names used in this document
@@ -246,7 +246,7 @@ the current Aggregator and resets it to the zero state, so that each
 Aggregator immediately begins accumulating events for the next
 collection period while the current one is processed.  An Accumulation
 is defined as the synchronously-copied Aggregator combined with the
-LabelSet, Resource, and metric Descriptor.
+Label Set, Resource, and metric Descriptor.
 
 TODO: _Are there more Accumulator functional requirements?_
 
