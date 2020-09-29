@@ -732,15 +732,14 @@ The API layer MAY include the following `Propagator`s:
 
 In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
 This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
-is one important exception to this general rule, and that is related to propagation of a SpanContext.
-
-The following cases must be considered when a new Span is requested to be created, especially in relation to the
-requested parent SpanContext:
-
-* A `Context` containing a valid `SpanContext` (within a Propagation Span) is specified as the parent of the new `Span`:
-  The API MUST treat this parent context as the context for the newly created `Span`.
-  This means that a `SpanContext` that has been provided by a configured `Propagator`
-  will be propagated through to any child span, but that no new `SpanContext`s will be created.
-* A `Context` containing no valid `SpanContext` (within a Propagation Span) is specified as the parent of the new `Span`:
-  The API MUST create a [Propagated Span](#propagated-span-creation) with a non-valid `SpanContext`
-  (i.e., both SpanID and TraceID are equivalent to being all zeros) for use by the API caller.
+is one important exception to this general rule, and that is related to propagation of a `SpanContext`:
+The API MUST create a [Propagated Span](#propagated-span-creation) with the `SpanContext`
+that is in the `Span` in the parent `Context`
+(whether explicitly given or implicit current) or
+it MAY return the same parent Propagated Span instance back from the creation method, if the parent is a Propagated Span
+(which it usually always is if no SDK is present).
+If the parent `Context` contains no `Span`, an empty Propagated Span MUST be returend instead
+(having a SpanContext with all-zero span and trace ID, empty tracestate, unsampled trace flags)
+This means that a `SpanContext` that has been provided by a configured `Propagator`
+will be propagated through to any child span and ultimately also `Inject`,
+but that no new `SpanContext`s will be created.
