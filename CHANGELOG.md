@@ -37,6 +37,8 @@ New:
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
 - Define PropagationOnly Span to simplify active Span logic in Context
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
+- Add Metric SDK specification (partial): covering terminology and Accumulator component
+  ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
 
 Updates:
 
