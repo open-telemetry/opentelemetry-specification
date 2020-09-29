@@ -108,21 +108,37 @@ The following operations related to messages are defined for these semantic conv
 
 ## Messaging attributes
 
-| Attribute name |                          Notes and examples                            | Required? |
-| -------------- | ---------------------------------------------------------------------- | --------- |
-| `messaging.system` | A string identifying the messaging system such as `kafka`, `rabbitmq` or `activemq`. | Yes |
-| `messaging.destination` | The message destination name, e.g. `MyQueue` or `MyTopic`. This might be equal to the span name but is required nevertheless. | Yes |
-| `messaging.destination_kind` | The kind of message destination: Either `queue` or `topic`. | Yes, if either of them applies. |
-| `messaging.temp_destination` | A boolean that is `true` if the message destination is [temporary](#temporary-destinations). | If temporary (assumed to be `false` if missing). |
-| `messaging.protocol` | The name of the transport protocol such as `AMQP` or `MQTT`. | No |
-| `messaging.protocol_version` | The version of the transport protocol such as `0.9.1`. | No |
-| `messaging.url` | Connection string such as `tibjmsnaming://localhost:7222` or `https://queue.amazonaws.com/80398EXAMPLE/MyQueue`. | No |
-| `messaging.message_id` | A value used by the messaging system as an identifier for the message, represented as a string. | No |
-| `messaging.conversation_id` | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | No |
-| `messaging.message_payload_size_bytes` | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | No |
-| `messaging.message_payload_compressed_size_bytes` | The compressed size of the message payload in bytes. | No |
+<!-- semconv messaging -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `messaging.system` | string | A string identifying the messaging system. | `kafka`<br>`rabbitmq`<br>`activemq` | Yes |
+| `messaging.destination` | string | The message destination name. This might be equal to the span name but is required nevertheless. | `MyQueue`<br>`MyTopic` | Yes |
+| `messaging.destination_kind` | string enum | The kind of message destination | `queue` | Conditional [1] |
+| `messaging.temp_destination` | boolean | A boolean that is true if the message destination is temporary. |  | Conditional<br>If missing, it is assumed to be false. |
+| `messaging.protocol` | string | The name of the transport protocol. | `AMQP`<br>`MQTT` | No |
+| `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
+| `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`<br>`https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
+| `messaging.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
+| `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
+| `messaging.message_payload_size_bytes` | number | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
+| `messaging.message_payload_compressed_size_bytes` | number | The compressed size of the message payload in bytes. | `2048` | No |
 
-Additionally at least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
+**[1]:** Required only if the message destination is either a `queue` or `topic`.
+
+**Additional attribute requirements:** At least one of the following sets of attributes is required:
+
+* [`net.peer.name`](span-general.md)
+* [`net.peer.ip`](span-general.md)
+
+`messaging.destination_kind` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `queue` | A message sent to a queue |
+| `topic` | A message broadcasted to the subscribers of the topic |
+<!-- endsemconv -->
+
+Additionally `net.peer.port` from the [network attributes][] is recommended.
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
@@ -132,9 +148,18 @@ These attributes should be set to the broker to which the message is sent/from w
 
 For message consumers, the following additional attributes may be set:
 
-| Attribute name |                          Notes and examples                            | Required? |
-| -------------- | ---------------------------------------------------------------------- | --------- |
-| `messaging.operation` | A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. Only `"receive"` and `"process"` are used for this attribute. If the operation is `"send"`, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case. | No |
+<!-- semconv messaging.consumer -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `messaging.operation` | string enum | A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is "send", this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case. | `receive` | No |
+
+`messaging.operation` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `receive` | receive |
+| `process` | process |
+<!-- endsemconv -->
 
 The _receive_ span is be used to track the time used for receiving the message(s), whereas the _process_ span(s) track the time for processing the message(s).
 Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive`.
