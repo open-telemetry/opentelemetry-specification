@@ -84,8 +84,8 @@ OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Zipk
 
 | OpenTelemetry | Zipkin
 | ------------- | ------ |
-| `InstrumentationLibrary.name`|`otel.instrumentation_library.name`|
-| `InstrumentationLibrary.version`|`otel.instrumentation_library.version`|
+| `InstrumentationLibrary.name`|`otel.library.name`|
+| `InstrumentationLibrary.version`|`otel.library.version`|
 
 ### Remote endpoint
 
@@ -144,10 +144,10 @@ The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
 | Status|Tag Key| Tag Value |
 |--|--|--|
-|Code | `ot.status_code` | Name of the code, for example: `OK` |
-|Message *(optional)* | `ot.status_description` | `{message}` |
+|Code | `otel.status_code` | Name of the code, for example: `OK` |
+|Message *(optional)* | `otel.status_description` | `{message}` |
 
-The `ot.status_code` tag value MUST follow the [Standard GRPC Code
+The `otel.status_code` tag value MUST follow the [Standard GRPC Code
 Names](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
 
 ### Events
@@ -163,8 +163,8 @@ include attribute values like this:
 ### Unit of Time
 
 Zipkin times like `timestamp`, `duration` and `annotation.timestamp` MUST be
-reported in microseconds with decimal accuracy. For example, `duration` of 1234
-nanoseconds will be represented as 1.234 microseconds.
+reported in microseconds as whole numbers. For example, `duration`
+of 1234 nanoseconds will be represented as 1 microsecond.
 
 ## Request Payload
 

@@ -267,14 +267,29 @@ Required arguments:
 
 ## Global Propagators
 
-Implementations MAY provide global `Propagator`s for
-each supported `Propagator` type.
+The OpenTelemetry API MUST provide a way to obtain a propagator for each
+supported `Propagator` type. Instrumentation libraries SHOULD call propagators
+to extract and inject the context on all remote calls. Propagators, depending on
+the language, MAY be set up using various dependency injection techniques or
+available as global accessors.
 
-If offered, the global `Propagator`s should default to a composite `Propagator`
-containing the W3C Trace Context Propagator and the Baggage `Propagator`
-specified in [api-baggage.md](../baggage/api.md#serialization),
-in order to provide propagation even in the presence of no-op
-OpenTelemetry implementations.
+**Note:** It is a discouraged practice, but certain instrumentation libraries
+might use proprietary context propagation protocols or be hardcoded to use a
+specific one. In such cases, instrumentation libraries MAY choose not to use the
+API-provided propagators and instead hardcode the context extraction and injection
+logic.
+
+The OpenTelemetry API MUST use no-op propagators unless explicitly configured
+otherwise. Context propagation may be used for various telemetry signals -
+traces, metrics, logging and more. Therefore, context propagation MAY be enabled
+for any of them independently. For instance, a span exporter may be left
+unconfigured, although the trace context propagation was configured to enrich logs or metrics.
+
+Platforms such as ASP.NET may pre-configure out-of-the-box
+propagators. If pre-configured, `Propagator`s SHOULD default to a composite
+`Propagator` containing the W3C Trace Context Propagator and the Baggage
+`Propagator` specified in the [Baggage API](../baggage/api.md#baggage-propagation).
+These platforms MUST also allow pre-configured propagators to be disabled or overridden.
 
 ### Get Global Propagator
 
@@ -299,6 +314,28 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 
 * [B3](https://github.com/openzipkin/b3-propagation)
 * [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
+
+### B3 Requirements
+
+B3 has both single and multi-header encodings. To maximize compatibility between
+implementations, the following guidelines have been established for B3
+propagation in OpenTelemetry.
+
+#### Extract
+
+Propagators MUST attempt to extract B3 encoded using single and multi-header
+formats. When extracting, the single-header variant takes precedence over
+the multi-header version.
+
+#### Inject
+
+When injecting B3, propagators:
+
+* MUST default to injecting B3 using the single-header format
+* MUST provide configuration to change the default injection format to B3
+  multi-header
+
+### Vendor-specific propagators
 
 Additional `Propagator`s implementing vendor-specific protocols such as
 AWS X-Ray trace header protocol are encouraged to be maintained and distributed by
