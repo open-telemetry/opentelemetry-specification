@@ -149,15 +149,10 @@ collection periods): these are considered implementation details.
 
 ### SDK
 
-The SDK is the start an OpenTelemetry Metric export pipeline,
-implementing the instrument-related APIs of the [`Meter`
-interface](api.md#meter-interface) and providing the SDK instrument,
-the Resource, and managing Instrumentation Library metadata.
-
-An SDK is assembled with one or more Accumulators and other
-components, detailed below.  The diagram below shows the relationship
-between the API and the accumulator, with detail shown for synchronous
-instruments.
+The SDK encapsulates an OpenTelemetry Metric export pipeline,
+implementing the [`Meter` interface](api.md#meter-interface), and
+managing the SDK instrument, the Resource, and Instrumentation Library
+metadata.
 
 #### SDK: Instrument Registration
 
@@ -210,15 +205,18 @@ observations.
 
 ### Accumulator
 
-For a synchronous instrument, the accumulator will:
+The diagram below shows the relationship between the API and the
+Accumulator, with detail shown for synchronous instruments.
+
+![Metrics SDK Accumulator Detail Diagram](img/accumulator-detail.png)
+
+For a synchronous instrument, the Accumulator will:
 
 1. Map each active Label Set to a record, consisting of two instances of the same type Aggregator
 2. Enter new records into the mapping, calling the AggregationSelector if needed
 3. Update the current Aggregator instance, responding to concurrent API events
 4. Call Aggregator.SynchronizedMove on the current Aggregator instance to: (a) copy its value into the snapshot Aggregator instance and (b) reset the current Aggregator to the zero state
 5. Call Processor.Process for every resulting Accumulation (i.e., Instrument, Label Set, Resource, and Aggregator snapshot)
-
-![Metrics SDK Accumulator Detail Diagram](img/accumulator-detail.png)
 
 The Accumulator MUST provide the option to associate a
 [`Resource`](../resource/sdk.md) with the Accumulations that it
