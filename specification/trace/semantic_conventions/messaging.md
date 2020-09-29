@@ -120,7 +120,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.protocol` | string | The name of the transport protocol. | `AMQP`<br>`MQTT` | No |
 | `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
 | `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`<br>`https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
-| `messaging.service` | string | Name of the external broker, or name of the service being interacted with. See note below for a definition. | No |
+| `messaging.service` | string | Name of the external broker, or name of the service being interacted with. See note below for a definition. | `myKey` | No |
 | `messaging.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
 | `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
 | `messaging.message_payload_size_bytes` | number | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
