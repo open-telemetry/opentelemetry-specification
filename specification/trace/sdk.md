@@ -30,8 +30,8 @@ The OpenTelemetry API has two properties responsible for the data collection:
   Processor](#span-processor) MUST receive only those spans which have this
   field set to `true`. However, [Span Exporter](#span-exporter) SHOULD NOT
   receive them unless the `Sampled` flag was also set.
-* `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
-  the `SpanContext` to child Spans. For more details see the [W3C Trace Context
+* `Sampled` flag in `TraceFlags` on `Span`. This flag is propagated via
+  the `Context` to child Spans. For more details see the [W3C Trace Context
   specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
@@ -78,9 +78,9 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* Parent `SpanContext`. May be invalid to indicate a root span.
+* Parent `Span`. May be invalid to indicate a root span.
 * `TraceId` of the `Span` to be created.
-  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
+  If the parent `Span` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
 * `SpanKind` of the `Span` to be created.
 * Initial set of `Attributes` of the `Span` to be created.
@@ -99,8 +99,7 @@ It produces an output called `SamplingResult` which contains:
   * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
-* A `Tracestate` that will be associated with the `Span` through the new
-  `SpanContext`.
+* A `Tracestate` that will be associated with the `Span`.
   Note: If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
   so samplers should normally return the passed-in `Tracestate` if they do not intend
   to change it.
@@ -156,10 +155,10 @@ still be sampled and extra traces will be sampled on the backend only.
 * This is a composite sampler. `ParentBased` helps distinguished between the
 following cases:
   * No parent (root span).
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `false`
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `true`
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `false`
+  * Remote parent (`Span.IsRemote() == true`) with `SampledFlag` equals `true`
+  * Remote parent (`Span.IsRemote() == true`) with `SampledFlag` equals `false`
+  * Local parent (`Span.IsRemote() == false`) with `SampledFlag` equals `true`
+  * Local parent (`Span.IsRemote() == false`) with `SampledFlag` equals `false`
 
 Required parameters:
 
