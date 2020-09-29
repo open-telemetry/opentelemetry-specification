@@ -26,7 +26,6 @@ New:
 - Add API and semantic conventions for recording exceptions as Span Events
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
   * API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
-  * `exception.escaped` was added ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784))
   * `exception.escaped` semantic span event attribute was added
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
