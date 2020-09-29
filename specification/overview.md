@@ -119,7 +119,7 @@ and across process boundaries. These are propagated from parent to child **Spans
 
 ### Links between spans
 
-A **Span** may be linked to zero or more other **Spans** that are causally related. 
+A **Span** may be linked to zero or more other **Spans** that are causally related.
 **Links** can point to **Spans** inside a single **Trace** or across different **Traces**.
 **Links** can be used to represent batched operations where a **Span** was
 initiated by multiple initiating **Spans**, each representing a single incoming

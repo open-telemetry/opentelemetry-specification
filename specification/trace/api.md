@@ -23,7 +23,6 @@ Table of Contents
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
-    * [Get Context](#get-context)
     * [IsRecording](#isrecording)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
@@ -170,7 +169,7 @@ These functions MUST delegate to the `Tracing Context Utilities`.
 
 These parts of the span serve to identify it, both in-process and remotely. They are immutable
 pieces of the `Span`, as opposed to the data collecting [span operations](#span-operations).
-These identifiers conform to the [W3C TraceContext specification](https://www.w3.org/TR/trace-context/). 
+These identifiers conform to the [W3C TraceContext specification](https://www.w3.org/TR/trace-context/).
 It contains two identifiers - a `TraceId` and a `SpanId` - along with a set of common
 `TraceFlags` and system-specific `TraceState` values.
 
@@ -368,7 +367,7 @@ When a new `Span` is created from a `Context`, the `Context` may contain a `Span
 representing the currently active instance, and will be used as parent.
 If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
 
-A remote span's [span identifiers](#span-identifiers) can be set as active in a `Context`, 
+A remote span's [span identifiers](#span-identifiers) can be set as active in a `Context`,
 through the use of a [Propagated Span](#propagated-span-creation).
 For example, a `Propagator` performing context extraction may need this.
 
@@ -567,7 +566,7 @@ calling of corresponding API.
 ### Propagated Span creation
 
 The API MUST provide an operation for creating an object implementing the `Span` interface
-provided its identifiers. This is done in order to expose it in operations such as in-process 
+provided its identifiers. This is done in order to expose it in operations such as in-process
 `Span` propagation.
 
 If a new type is required for supporting this operation, it SHOULD be named `PropagatedSpan`.
