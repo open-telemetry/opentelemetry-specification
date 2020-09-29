@@ -12,7 +12,7 @@ OpenTelemetry API.
 In the second part, the architectural details of a model SDK
 implementation are described, using the OpenTelemetry-Go Metric SDK as
 an example.  This is meant to show how the requirements can be
-implemented, as guidance to implementors, not to mandate an exact
+implemented, as guidance for implementors, not to mandate an exact
 reproduction of the model architecture across languages.
 OpenTelemetry SDKs are of course free to use any idiomatic approach.
 
@@ -41,8 +41,8 @@ terms to describe the boundary between the SDK and the API, but from
 the API's perspective the SDK is opaque and without structure.
 
 This document specifies the internal structure of the default
-OpenTelemetry SDK in terms of its constituent parts, with terminology
-chosen to explain each part's role in exporting metric data from the
+OpenTelemetry SDK in terms of its major components, with terminology
+chosen to explain each component's role in exporting metric data from the
 input (API-level events) to the output (a metric exposition format).
 We use the term **Export Pipeline** as a functional description of the
 SDK at this level.
@@ -53,6 +53,9 @@ flows through, in order:
 1. **Accumulator**: Receives metric events from the API through Instruments, computes one Accumulation per active Instrument and Label Set pair
 2. **Processor**: Receives Accumulations from the Accumulator, transforms into ExportRecordSet
 3. **Exporter**: Receives ExportRecordSet, transforms into some protocol and sends it somewhere.
+
+The **Controller** component coordinates the Accumulator, Processor,
+and Exporter in an export pipeline.
 
 These terms are defined in the Metrics API specification:
 
@@ -80,7 +83,6 @@ These are the significant data types used in the model architecture:
 - **Accumulation**: consists of Instrument, Label Set, Resource, and Aggregator snapshot, output by Accumulator
 - **Aggregation**: the result of aggregating one or more events by a specific aggregator, output by Processor
 - **AggregationKind**: describes the kind of read API the Aggregation supports (e.g., Sum)
-- **Controller**: coordinates the Accumulator, Processor, and Exporter components in an export pipeline
 - **ExportKind**: one of Delta, Cumulative, or Pass-Through
 - **ExportKindSelector**: chooses which ExportKind to use for a metric instrument.
 - **ExportRecord**: consists of Instrument, Label Set, Resource, Timestamp(s), and Aggregation
@@ -94,13 +96,9 @@ an instrument.
 From an external perspective, the Metrics SDK implements the `Meter`
 and `MeterProvider` interfaces described in the [Metrics API](api.md).
 From an internal perspective, the Metrics SDK encapsulates an export
-pipeline for metric data.
+pipeline for metric data consisting of four major components.
 
 ![Metrics SDK Design Diagram](img/metrics-sdk.png)
-
-To support the export pipeline internally, the SDK itself is required
-to implement a top-level `Collect()` API that runs collection on one
-or more Accumulator(s).
 
 The Accumulator component is where metric events are concurrently
 passed to an Aggregator, and it is this component that is most
@@ -217,7 +215,7 @@ For a synchronous instrument, the accumulator will:
 1. Map each active Label Set to a record, consisting of two instances of the same type Aggregator
 2. Enter new records into the mapping, calling the AggregationSelector if needed
 3. Update the current Aggregator instance, responding to concurrent API events
-4. Call Aggregator.SynchronizedMove on the current Aggregator instance to copy its value into the snapshot Aggregator instance and reset itself
+4. Call Aggregator.SynchronizedMove on the current Aggregator instance to: (a) copy its value into the snapshot Aggregator instance and (b) reset the current Aggregator to the zero state
 5. Call Processor.Process for every resulting Accumulation (i.e., Instrument, Label Set, Resource, and Aggregator snapshot)
 
 ![Metrics SDK Accumulator Detail Diagram](img/accumulator-detail.png)
