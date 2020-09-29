@@ -251,7 +251,7 @@ resulting in crashes that are difficult to recover from safely.
 
 To protect against such errors, SDK Spans MUST discard attributes, links, and
 events that would increase the number of elements of each collection beyond
-1000. SDKs MAY provide a way to change this limit.
+the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
 
 There SHOULD be a log message emitted by the SDK for the first time a span is
 discarded due to a limit. This message should be emitted once for
