@@ -205,15 +205,16 @@ The API should not expose details about how they are internally stored.
 
 ### IsValid
 
-An API called `IsValid`, that returns a boolean value, which is `true` if the Span has a
+An API called `IsValid` on a `Span`, that returns a boolean value, which is `true` if the Span has a
 non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 ### IsRemote
 
-An API called `IsRemote`, that returns a boolean value, which is `true` if the Span was
+An API called `IsRemote` on a `Span`, that returns a boolean value, which is `true` if the Span was
 propagated from a remote parent, MUST be provided.
-When extracting span identifiers through the [Propagators API](../context/api-propagators.md#propagators-api),
+When extracting a propagated span through the [Propagators API](../context/api-propagators.md#propagators-api),
 `IsRemote` MUST return true, whereas for any child spans it MUST return false.
+When `IsRemote` is `true`, `IsRecording` is always `false`.
 
 ### TraceState
 
@@ -365,11 +366,8 @@ parent is remote.
 
 When a new `Span` is created from a `Context`, the `Context` may contain a `Span`
 representing the currently active instance, and will be used as parent.
+This may be a [Propagated Span](#propagated-span-creation) added by a `Propagator`.
 If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
-
-A remote span's [span identifiers](#span-identifiers) can be set as active in a `Context`,
-through the use of a [Propagated Span](#propagated-span-creation).
-For example, a `Propagator` performing context extraction may need this.
 
 #### Add Links
 
@@ -397,6 +395,12 @@ Links SHOULD preserve the order in which they're set.
 
 With the exception of the function to retrieve the `Span`'s identifiers and
 recording status, none of the below may be called after the `Span` is finished.
+
+#### Identifiers
+
+A `Span` must allow retrieving its [identifiers](#span-identifiers), as described in
+[Retrieving the TraceID and SpanID](#retrieving-the-traceid-and-spanid) for the Trace ID
+and Span ID or simple accessors for `TraceFlags` and `TraceState`.
 
 #### IsRecording
 
