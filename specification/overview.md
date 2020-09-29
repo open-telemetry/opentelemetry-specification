@@ -97,7 +97,7 @@ Each **Span** encapsulates the following state:
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
 - Identifiers of a Span. See below.
 
-A **Span** has the following identifiers which MUST be propagated to child Spans
+A **Span** has the following identifiers and the options which MUST be propagated to child Spans
 and across process boundaries. These are propagated from parent to child **Spans**.
 
 - **TraceId** is the identifier for a trace. It is worldwide unique with
