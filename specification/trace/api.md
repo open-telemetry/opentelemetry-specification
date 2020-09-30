@@ -134,7 +134,7 @@ returned `Tracer`s and actively update their configuration if it changes.
 
 `Tracing Context Utilities` contains all operations within tracing that
 modify the [`Context`](../context/context.md). It also holds the reference to
-the `Context.Key`.
+the `Context.Key` (the name MAY be `"span_context_key"`).
 
 As these utilities operate solely on the context API, they MAY be exposed
 as static methods on the trace module instead of a class.
