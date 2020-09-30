@@ -120,7 +120,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.protocol` | string | The name of the transport protocol. | `AMQP`<br>`MQTT` | No |
 | `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
 | `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`<br>`https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
-| `messaging.service` | string | Name of the external broker, or name of the service being interacted with. See note below for a definition. | `myKey` | No |
+| `messaging.service` | string | Name of the external broker, or name of the service being interacted with. See note below for a definition. | `kafkaService` | No |
 | `messaging.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
 | `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
 | `messaging.message_payload_size_bytes` | number | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
@@ -212,16 +212,49 @@ Process CB:                 | Span CB1 |
 | Links |  |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` |
-| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` |
+| `net.peer.port` | `1234` | `1234` | `1234` |
+| `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"T"` | `"T"` | `"T"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` |
-| `messaging.service` | `"ms"` | `"ms"` | `"ms"` |
+| `messaging.service` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
-| `messaging.kafka.message_key` | `"a1"` | `"a1"` | `"a1"` |
+
+### Apache Kafka
+
+Given is a process P, that publishes a message to a topic T1 on Apache Kafka.
+One process, CA, receives the message and publishes a new message to a topic T2 that is then received and processed by CB. 
+
+```
+Process P:  | Span Prod1 |
+--
+Process CA:              | Span Rcv1 |
+                                | Span Proc1 |
+                                  | Span Prod2 |
+--
+Process CB:                           | Span Rcv2 |
+```
+
+| Field or Attribute | Span Prod1 | Span Rcv1 | Span Proc1 | Span Prod2 | Span Rcv2
+|-|-|-|-|-|-|
+| Span name | `"T1 send"` | `"T1 receive"` | `"T1 process"` | `"T2 send"` | `"T2 receive`" |
+| Parent |  | Span Prod1 | Span Prod1 |  | Span Prod2 |
+| Links |  |  | Span Rcv1 | Span Prod1 |  |
+| SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` | `PRODUCER` | `CONSUMER` |
+| Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
+| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `messaging.destination` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
+| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.service` | `"myKafka"` | `"myKafka"` | `"myKafka"` | `"myKafka"` | `"myKafka"` |
+| `messaging.operation` |  | `"receive"` | `"process"` |  | `"receive"` |
+| `messaging.kafka.message_key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
+| `messaging.kafka.consumer_group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
+| `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
+| `messaging.kafka.partition` |  | `"1"` | `"1"` |  | `"3"` |
 
 ### Batch receiving
 
-Given is a process P, that sends two messages to a topic Q on messaging system MS, and a process C, which receives both of them in one batch (Span Recv1) and processes each message separately (Spans Proc1 and Proc2).
+Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span Recv1) and processes each message separately (Spans Proc1 and Proc2).
 
 Since a span can only have one parent and the propagated trace and span IDs are not known when the receiving span is started, the receiving span will have no parent and the processing spans are correlated with the producing spans using links.
 
@@ -240,16 +273,18 @@ Process C:                      | Span Recv1 |
 | Links |  |  |  | Span Prod1 | Span Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
-| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
+| `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
+| `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
-| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
-| `messaging.service` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
+| `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
+| `messaging.service` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` |
 | `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
-| `messaging.kafka.message_key` | `"a1"` | `"a2"` |  | `"a1"` | `"a2"` |
+| `messaging.message_id` | `"a1"` | `"a2"` | | `"a1"` | `"a2"` |
 
 ### Batch processing
 
-Given is a process P, that sends two messages to a topic Q on messaging system MS, and a process C, which receives both of them separately (Span Recv1 and Recv2) and processes both messages in one batch (Span Proc1).
+Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them separately (Span Recv1 and Recv2) and processes both messages in one batch (Span Proc1).
 
 Since each span can only have one parent, C3 should not choose a random parent out of C1 and C2, but rather rely on the implicitly selected parent as defined by the [tracing API spec](../api.md).
 Similarly, only one value can be set as `message_id`, so C3 cannot report both `a1` and `a2` and therefore attribute is left out.
@@ -272,9 +307,11 @@ Process C:                              | Span Recv1 | Span Recv2 |
 | Links |  |  |  |  | Span Prod1 + Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
-| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
+| `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
+| `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
-| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
-| `messaging.service` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
+| `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
+| `messaging.service` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` |
 | `messaging.operation` |  |  | `"receive"` | `"receive"` | `"process"` |
-| `messaging.kafka.message_key` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
+| `messaging.message_id` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
