@@ -51,7 +51,8 @@ CPU Usage section with 15 seconds duration.
 
 ### Report Format
 
-All the numbers above should be measured by multiple times (suggest 10 times at
+All the numbers above should be measured multiple times (suggest 10 times at
+
 least) and reported with below statistic values:  
 
 - Mean   : Arithmetic mean of all measurements.
