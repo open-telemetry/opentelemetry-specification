@@ -32,7 +32,7 @@ New:
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
 - Allow samplers to modify tracestate
-  ([#856](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
+  ([#988](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
 - Update the header name for otel baggage, and version date
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
 - Define PropagationOnly Span to simplify active Span logic in Context
