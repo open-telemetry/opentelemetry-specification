@@ -734,12 +734,11 @@ In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
 This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
 is one important exception to this general rule, and that is related to propagation of a `SpanContext`:
 The API MUST create a [Propagated Span](#propagated-span-creation) with the `SpanContext`
-that is in the `Span` in the parent `Context`
-(whether explicitly given or implicit current) or
+that is in the `Span` in the parent `Context` (whether explicitly given or implicit current) or,
 it MAY return the same parent Propagated Span instance back from the creation method, if the parent is a Propagated Span
 (which it usually always is if no SDK is present).
 If the parent `Context` contains no `Span`, an empty Propagated Span MUST be returned instead
-(having a SpanContext with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
+(i.e., having a SpanContext with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
 This means that a `SpanContext` that has been provided by a configured `Propagator`
 will be propagated through to any child span and ultimately also `Inject`,
 but that no new `SpanContext`s will be created.
