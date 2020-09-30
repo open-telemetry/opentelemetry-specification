@@ -146,11 +146,11 @@ The `Tracing Context Utilities` MUST provide the following functions:
 - Extract the `Span` from a `Context` instance
 - Insert the `Span` to a `Context` instance
 
-The above first two methods MUST be equivalent to a single parameterized method
-call of the [`Context`](../context/context.md) management system.
+The above methods MUST be equivalent to a single parameterized method call of
+the [`Context`](../context/context.md) management system.
 
-The above last two methods are necessary because external API users don't have
-access to the `Context.Key` and they need to be able to insert/extract a `Span`
+The above last two methods are necessary because API users don't have access to
+the `Context.Key` and they need to be able to insert/extract a `Span`
 to/from `Context` inside `Propagator` or `Tracer` implementations.
 
 ## Tracer
