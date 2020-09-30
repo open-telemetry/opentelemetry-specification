@@ -4,7 +4,7 @@ The conventions described in this section are HTTP specific. When HTTP operation
 metric events about those operations will be generated and reported to provide insight into the
 operations. By adding HTTP labels to metric events it allows for finely tuned filtering.
 
-**Discaimer:** These are initial HTTP metric instruments and labels but more may be added in the future.
+**Disclaimer:** These are initial HTTP metric instruments and labels but more may be added in the future.
 
 ## Metric Instruments
 
@@ -61,7 +61,7 @@ To avoid high cardinality the following labels SHOULD substitute any parameters 
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 
-Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
+Many REST APIs encode parameters into the URI path, e.g. `/api/users/123` where `123`
 is a user id, which creates high cardinality value space not suitable for labels on metric events.
 In case of HTTP servers, these endpoints are often mapped by the server
 frameworks to more concise _HTTP routes_, e.g. `/api/users/{user_id}`, which are
