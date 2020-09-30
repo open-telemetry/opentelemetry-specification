@@ -738,8 +738,8 @@ that is in the `Span` in the parent `Context`
 (whether explicitly given or implicit current) or
 it MAY return the same parent Propagated Span instance back from the creation method, if the parent is a Propagated Span
 (which it usually always is if no SDK is present).
-If the parent `Context` contains no `Span`, an empty Propagated Span MUST be returend instead
-(having a SpanContext with all-zero span and trace ID, empty tracestate, unsampled trace flags)
+If the parent `Context` contains no `Span`, an empty Propagated Span MUST be returned instead
+(having a SpanContext with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
 This means that a `SpanContext` that has been provided by a configured `Propagator`
 will be propagated through to any child span and ultimately also `Inject`,
 but that no new `SpanContext`s will be created.
