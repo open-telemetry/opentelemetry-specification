@@ -149,7 +149,7 @@ The `Tracing Context Utilities` MUST provide the following functions:
 The above methods MUST be equivalent to a single parameterized method call of
 the [`Context`](../context/context.md) management system.
 
-The above last two methods are necessary because API users don't have access to
+The last two methods listed above are necessary because API users don't have access to
 the `Context.Key` and they need to be able to insert/extract a `Span`
 to/from `Context` inside `Propagator` or `Tracer` implementations.
 
