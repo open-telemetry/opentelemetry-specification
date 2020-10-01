@@ -94,7 +94,7 @@ called `entity.io` and have labels for direction. For example,
 `system.network.io`.
 
 - Other instruments that do not fit the above descriptions may be named more
-freely. For example, `system.swap.page_faults` and `system.network.packets`.
+freely. For example, `system.paging.faults` and `system.network.packets`.
 Units do not need to be specified in the names since they are included during
 instrument creation, but can be added if there is ambiguity.
 

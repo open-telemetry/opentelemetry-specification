@@ -13,7 +13,7 @@ instruments not explicitly defined in the specification.
   * [Standard System Metrics - `system.`](#standard-system-metrics---system)
     + [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
     + [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
-    + [`system.swap.` - Swap/paging metrics](#systemswap---swappaging-metrics)
+    + [`system.paging.` - Paging/swap metrics](#systempaging---pagingswap-metrics)
     + [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
     + [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
     + [`system.network.` - Network metrics](#systemnetwork---network-metrics)
@@ -40,23 +40,23 @@ instruments not explicitly defined in the specification.
 #### `system.memory.` - Memory metrics
 
 **Description:** System level memory metrics. This does not include [paging/swap
-memory](#systemswap---swappaging-metrics).
+memory](#systempaging---pagingswap-metrics).
 
 | Name                      | Description | Units | Instrument Type   | Value Type | Label Key | Label Values             |
 | ------------------------- | ----------- | ----- | ----------------- | ---------- | --------- | ------------------------ |
 | system.memory.usage       |             | By    | UpDownSumObserver | Int64      | state     | used, free, cached, etc. |
 | system.memory.utilization |             | 1     | ValueObserver     | Double     | state     | used, free, cached, etc. |
 
-#### `system.swap.` - Swap/paging metrics
+#### `system.paging.` - Paging/swap metrics
 
 **Description:** System level paging/swap memory metrics.
-| Name                         | Description                         | Units        | Instrument Type   | Value Type | Label Key | Label Values |
-| ---------------------------- | ----------------------------------- | ------------ | ----------------- | ---------- | --------- | ------------ |
-| system.swap.usage            | Unix swap or windows pagefile usage | By           | UpDownSumObserver | Int64      | state     | used, free   |
-| system.swap.utilization      |                                     | 1            | ValueObserver     | Double     | state     | used, free   |
-| system.swap.page\_faults     |                                     | {faults}     | SumObserver       | Int64      | type      | major, minor |
-| system.swap.page\_operations |                                     | {operations} | SumObserver       | Int64      | type      | major, minor |
-|                              |                                     |              |                   |            | direction | in, out      |
+| Name                      | Description                         | Units        | Instrument Type   | Value Type | Label Key | Label Values |
+| ------------------------- | ----------------------------------- | ------------ | ----------------- | ---------- | --------- | ------------ |
+| system.paging.usage       | Unix swap or windows pagefile usage | By           | UpDownSumObserver | Int64      | state     | used, free   |
+| system.paging.utilization |                                     | 1            | ValueObserver     | Double     | state     | used, free   |
+| system.paging.faults      |                                     | {faults}     | SumObserver       | Int64      | type      | major, minor |
+| system.paging.operations  |                                     | {operations} | SumObserver       | Int64      | type      | major, minor |
+|                           |                                     |              |                   |            | direction | in, out      |
 
 #### `system.disk.` - Disk controller metrics
 
