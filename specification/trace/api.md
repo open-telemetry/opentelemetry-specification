@@ -307,7 +307,7 @@ attributes.
 
 A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
-change its name, set its `Attribute`s, and add `Link`s and `Event`s. These
+change its name, set its `Attribute`s, add `Event`s, and set the `Status`. These
 MUST NOT be changed after the `Span`'s end time has been set.
 
 `Span`s are not meant to be used to propagate information within a process. To
@@ -377,23 +377,24 @@ For example, a `Propagator` performing context extraction may need this.
 
 #### Add Links
 
-During the `Span` creation user MUST have the ability to record links to other `Span`s.
-Linked `Span`s can be from the same or a different trace. See [Links
+During the `Span` creation user MUST have the ability to record links to other
+`Span`s. Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
 
 `Link`s cannot be added after Span creation.
 
 A `Link` is defined by the following properties:
 
-- (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
+- `SpanContext` of the `Span` to link to.
+- One or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
 
 The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
-  arguments. This MAY be called `AddLink`.
+  arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
+  the `Span` to link to, optional `Attributes`
 
 Links SHOULD preserve the order in which they're set.
 
