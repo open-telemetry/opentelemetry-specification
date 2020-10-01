@@ -1,6 +1,6 @@
 # Security Policy
 
-This security policy applies to all projects under the [open-telemetry organization][gh-organization] on GitHub. Security reports involving specific projects should still be reported following the instructions on this document: the report will be shared by the technical steering committee to the project leads, who might not all have access to the private key required to decrypt your message.
+This security policy applies to all projects under the [open-telemetry organization][gh-organization] on GitHub. Security reports involving specific projects should still be reported following the instructions on this document: the report will be shared by the technical committee to the project leads, who might not all have access to the private key required to decrypt your message.
 
 ## Supported Versions
 
