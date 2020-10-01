@@ -226,7 +226,7 @@ Process CB:                 | Span CB1 |
 ### Apache Kafka Example
 
 Given is a process P, that publishes a message to a topic T1 on Apache Kafka.
-One process, CA, receives the message and publishes a new message to a topic T2 that is then received and processed by CB. 
+One process, CA, receives the message and publishes a new message to a topic T2 that is then received and processed by CB.
 
 ```
 Process P:  | Span Prod1 |
