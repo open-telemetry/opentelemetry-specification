@@ -1,17 +1,14 @@
 # Semantic Conventions for System Metrics
 
 This document describes instruments and labels for common system level
-metrics in OpenTelemetry. Also included are general semantic conventions for
-system, process, and runtime metrics, which should be considered when
-creating instruments not explicitly defined in the specification.
+metrics in OpenTelemetry. Consider the [General Metric Semantic
+Conventions](README.md#general-metric-semantic-conventions) when creating
+instruments not explicitly defined in the specification.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
 
-- [Semantic Conventions](#semantic-conventions)
-  * [Instrument Naming](#instrument-naming)
-  * [Units](#units)
 - [Metric Instruments](#metric-instruments)
   * [Standard System Metrics - `system.`](#standard-system-metrics---system)
     + [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
@@ -24,64 +21,6 @@ creating instruments not explicitly defined in the specification.
     + [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
 
 <!-- tocstop -->
-
-## Semantic Conventions
-
-The following semantic conventions aim to keep naming consistent. They
-provide guidelines for most of the cases in this specification and should be
-followed for other instruments not explicitly defined in this document.
-
-### Instrument Naming
-
-- **limit** - an instrument that measures the constant, known total amount of
-something should be called `entity.limit`. For example, `system.memory.limit`
-for the total amount of memory on a system.
-
-- **usage** - an instrument that measures an amount used out of a known total
-(**limit**) amount should be called `entity.usage`. For example,
-`system.memory.usage` with label `state = used | cached | free | ...` for the
-amount of memory in a each state. In many cases, the sum of **usage** over
-all label values is equal to the **limit**.
-
-  A measure of the amount of an unlimited resource consumed is differentiated
-  from **usage**.
-
-- **utilization** - an instrument that measures the *fraction* of **usage**
-out of its **limit** should be called `entity.utilization`. For example,
-`system.memory.utilization` for the fraction of memory in use. Utilization
-values are in the range `[0, 1]`.
-
-- **time** - an instrument that measures passage of time should be called
-`entity.time`. For example, `system.cpu.time` with label `state = idle | user
-| system | ...`. **time** measurements are not necessarily wall time and can be less than
-  or greater than the real wall time between measurements.
-
-  **time** instruments are a special case of **usage** metrics, where the
-  **limit** can usually be calculated as the sum of **time** over all label
-  values. **utilization** can also be calculated and useful, for example
-  `system.cpu.utilization`.
-
-- **io** - an instrument that measures bidirectional data flow should be
-called `entity.io` and have labels for direction. For example,
-`system.network.io`.
-
-- Other instruments that do not fit the above descriptions may be named more
-freely. For example, `system.swap.page_faults` and `system.network.packets`.
-Units do not need to be specified in the names since they are included during
-instrument creation, but can be added if there is ambiguity.
-
-### Units
-
-Units should follow the [UCUM](http://unitsofmeasure.org/ucum.html) (need
-more clarification in
-[#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
-
-- Instruments for **utilization** metrics (that measure the fraction out of a total)
-SHOULD use units of `1`.
-- Instruments that measure an integer count of something have
-["non-units"](https://ucum.org/ucum.html#section-Examples-for-some-Non-Units.)
-and SHOULD use [annotations](https://ucum.org/ucum.html#para-curly) with curly
-braces. For example `{packets}`, `{errors}`, `{faults}`, etc.
 
 ## Metric Instruments
 
