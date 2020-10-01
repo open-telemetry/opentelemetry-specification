@@ -75,12 +75,18 @@ memory](#systempaging---pagingswap-metrics).
 #### `system.filesystem.` - Filesystem metrics
 
 **Description:** System level filesystem metrics.
-| Name                          | Description | Units | Instrument Type   | Value Type | Label Key | Label Values         |
-| ----------------------------- | ----------- | ----- | ----------------- | ---------- | --------- | -------------------- |
-| system.filesystem.usage       |             | By    | UpDownSumObserver | Int64      | device    | (identifier)         |
-|                               |             |       |                   |            | state     | used, free, reserved |
-| system.filesystem.utilization |             | 1     | ValueObserver     | Double     | device    | (identifier)         |
-|                               |             |       |                   |            | state     | used, free, reserved |
+| Name                          | Description | Units | Instrument Type   | Value Type | Label Key  | Label Values         |
+| ----------------------------- | ----------- | ----- | ----------------- | ---------- | ---------- | -------------------- |
+| system.filesystem.usage       |             | By    | UpDownSumObserver | Int64      | device     | (identifier)         |
+|                               |             |       |                   |            | state      | used, free, reserved |
+|                               |             |       |                   |            | type       | ext4, tmpfs, etc.    |
+|                               |             |       |                   |            | mode       | rw, ro, etc.         |
+|                               |             |       |                   |            | mountpoint | (path)               |
+| system.filesystem.utilization |             | 1     | ValueObserver     | Double     | device     | (identifier)         |
+|                               |             |       |                   |            | state      | used, free, reserved |
+|                               |             |       |                   |            | type       | ext4, tmpfs, etc.    |
+|                               |             |       |                   |            | mode       | rw, ro, etc.         |
+|                               |             |       |                   |            | mountpoint | (path)               |
 
 #### `system.network.` - Network metrics
 
