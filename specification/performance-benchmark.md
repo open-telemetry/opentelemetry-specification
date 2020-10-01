@@ -52,8 +52,4 @@ CPU Usage section with 15 seconds duration.
 ### Report Format
 
 All the numbers above should be measured multiple times (suggest 10 times at
-
-least) and reported with below statistic values:  
-
-- Mean   : Arithmetic mean of all measurements.
-- StdDev : Standard deviation of all measurements.
+least) and reported.
