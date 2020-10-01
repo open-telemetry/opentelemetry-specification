@@ -47,10 +47,6 @@ groups:
           type: string
           brief: 'Connection string.'
           examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue']
-        - id: service
-          type: string
-          brief: 'Name of the external broker, or name of the service being interacted with. See note below for a definition.'
-          examples: ['kafkaService']
         - id: message_id
           type: string
           brief: 'A value used by the messaging system as an identifier for the message, represented as a string.'

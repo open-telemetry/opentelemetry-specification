@@ -16,8 +16,10 @@
 - [Messaging attributes](#messaging-attributes)
   * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
     + [RabbitMQ](#rabbitmq)
+    + [Apache Kafka](#apache-kafka)
 - [Examples](#examples)
   * [Topic with multiple consumers](#topic-with-multiple-consumers)
+  * [Apache Kafka Example](#apache-kafka-example)
   * [Batch receiving](#batch-receiving)
   * [Batch processing](#batch-processing)
 
@@ -120,7 +122,6 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.protocol` | string | The name of the transport protocol. | `AMQP`<br>`MQTT` | No |
 | `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
 | `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`<br>`https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
-| `messaging.service` | string | Name of the external broker, or name of the service being interacted with. See note below for a definition. | `kafkaService` | No |
 | `messaging.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
 | `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
 | `messaging.message_payload_size_bytes` | number | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
@@ -143,7 +144,6 @@ The following operations related to messages are defined for these semantic conv
 
 Additionally `net.peer.port` from the [network attributes][] is recommended.
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
-`messaging.service` refers to the logical name of the external broker or messaging system where a message was sent to, or received from. In an environment such as Kubernetes, it would be the Kubernetes Service Name.
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
 [network attributes]: span-general.md#general-network-connection-attributes
@@ -191,6 +191,9 @@ For Apache Kafka, the following additional attributes are defined:
 | `messaging.kafka.client_id` | Client Id for the Consumer or Producer that is handling the message. |
 | `messaging.kafka.partition` | Partition the message is sent to. |
 
+For Apache Kafka producers, `peer.service` should be set to the name of the broker or external service the message will be sent to.
+Consumers should set `service.name` as the Resource receiving the message. The value should match `peer.service` set by a Producer.
+
 ## Examples
 
 ### Topic with multiple consumers
@@ -220,7 +223,7 @@ Process CB:                 | Span CB1 |
 | `messaging.service` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
 
-### Apache Kafka
+### Apache Kafka Example
 
 Given is a process P, that publishes a message to a topic T1 on Apache Kafka.
 One process, CA, receives the message and publishes a new message to a topic T2 that is then received and processed by CB. 
@@ -238,14 +241,15 @@ Process CB:                           | Span Rcv2 |
 | Field or Attribute | Span Prod1 | Span Rcv1 | Span Proc1 | Span Prod2 | Span Rcv2
 |-|-|-|-|-|-|
 | Span name | `"T1 send"` | `"T1 receive"` | `"T1 process"` | `"T2 send"` | `"T2 receive`" |
-| Parent |  | Span Prod1 | Span Prod1 |  | Span Prod2 |
-| Links |  |  | Span Rcv1 | Span Prod1 |  |
+| Parent |  | Span Prod1 | Span Rcv1 |  | Span Prod2 |
+| Links |  |  | | Span Prod1 |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` | `PRODUCER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
+| `peer.service` | `"myKafka"` |  |  | `"myKafka"` |  |
+| `service.name` |  | `"myKafka"` | `"myKafka"` |  | `"myKafka"` |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
-| `messaging.service` | `"myKafka"` | `"myKafka"` | `"myKafka"` | `"myKafka"` | `"myKafka"` |
 | `messaging.operation` |  | `"receive"` | `"process"` |  | `"receive"` |
 | `messaging.kafka.message_key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
 | `messaging.kafka.consumer_group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
