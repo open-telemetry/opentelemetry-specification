@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Clarify env variables in otlp exporter
+  ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
 - Default propagators in un-configured API must be no-op
   ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
 - Define resource mapping for Jaeger exporters
@@ -30,11 +32,13 @@ New:
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
 - Allow samplers to modify tracestate
-  ([#856](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
+  ([#988](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
 - Update the header name for otel baggage, and version date
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
 - Define PropagationOnly Span to simplify active Span logic in Context
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
+- Add Metric SDK specification (partial): covering terminology and Accumulator component
+  ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
 - Add semantic conventions for system metrics
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
 
