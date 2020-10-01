@@ -32,10 +32,10 @@ discussion.
 
 Metrics specific to a certain runtime environment should be prefixed with
 `runtime.{environment}.` and follow the semantic conventions outlined in
-[semantic conventions for system
-metrics](system-metrics.md#semantic-conventions). Authors of runtime
-instrumentations are responsible for the choice of `{environment}` to avoid
-ambiguity when interpreting a metric's name or values.
+[general metric semantic
+conventions](README.md#general-metric-semantic-conventions). Authors of
+runtime instrumentations are responsible for the choice of `{environment}` to
+avoid ambiguity when interpreting a metric's name or values.
 
 For example, some programming languages have multiple runtime environments
 that vary significantly in their implementation, like [Python which has many
