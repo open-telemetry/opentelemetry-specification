@@ -1,8 +1,8 @@
 # Semantic Conventions for System Metrics
 
 This document describes instruments and labels for common system level
-metrics in OpenTelemetry. Consider the [General Metric Semantic
-Conventions](README.md#general-metric-semantic-conventions) when creating
+metrics in OpenTelemetry. Consider the [general metric semantic
+conventions](README.md#general-metric-semantic-conventions) when creating
 instruments not explicitly defined in the specification.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
