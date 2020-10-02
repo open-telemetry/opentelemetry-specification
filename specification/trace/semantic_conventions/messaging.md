@@ -184,15 +184,18 @@ The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_ke
 
 For Apache Kafka, the following additional attributes are defined:
 
+<!-- semconv messaging.kafka -->
 | Attribute name |                          Notes and examples                            |
 | -------------- | ---------------------------------------------------------------------- |
 | `messaging.kafka.message_key` | Differs from `messaging.message_id` in that it's not unique, and can be `null`. The type is a String representation of the type of the actual value. |
 | `messaging.kafka.consumer_group` | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. |
 | `messaging.kafka.client_id` | Client Id for the Consumer or Producer that is handling the message. |
 | `messaging.kafka.partition` | Partition the message is sent to. |
+<!-- endsemconv -->
 
-For Apache Kafka producers, `peer.service` should be set to the name of the broker or external service the message will be sent to.
-Consumers should set `service.name` as the Resource receiving the message. The value should match `peer.service` set by a Producer.
+For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or external service the message will be sent to.
+Consumers SHOULD identify the [Resource](../../resource/semantic_conventions/README.md#service) that received the message.
+The `service.name` of a Consumer's Resource SHOULD match the `peer.service` of the Producer.
 
 ## Examples
 
