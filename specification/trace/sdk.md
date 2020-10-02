@@ -100,8 +100,8 @@ It produces an output called `SamplingResult` which contains:
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 * A `Tracestate` that will be associated with the `Span`.
-  Note: If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
-  so samplers should normally return the passed-in `Tracestate` if they do not intend
+  If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
+  so samplers SHOULD normally return the passed-in `Tracestate` if they do not intend
   to change it.
 
 #### GetDescription
