@@ -365,8 +365,9 @@ created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
 
-Any span that is created MUST also be ended, usually by calling [`End`](#end)
-on it. API implementations MAY leak memory or other resources
+Any span that is created MUST also be ended.
+This is the responsibility of the user.
+API implementations MAY leak memory or other resources
 (including, for example, CPU time for periodic work that iterates all spans)
 if the user forgot to end the span.
 
@@ -543,6 +544,11 @@ Implementations SHOULD ignore all subsequent calls to `End` and any other Span m
 i.e. the Span becomes non-recording by being ended
 (there might be exceptions when Tracer is streaming events
 and has no mutable state associated with the `Span`).
+
+Language SIGs MAY provide methods other than `End` in the API that also end the
+span to support language-specific features like `with` statements in Python.
+However, all API implementations of such methods MUST internally call the `End`
+method and be documented to do so.
 
 `End` MUST NOT have any effects on child spans.
 Those may still be running and can be ended later.
