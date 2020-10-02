@@ -249,7 +249,7 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 ### TraceId and SpanId
 
-A `Span` has two identifiers associated with it:
+A `Span` has a two-part identifier associated with it, consisting of:
 
 - `TraceId` A valid trace identifier is a 16-byte array with at least one
 non-zero byte.
@@ -275,13 +275,13 @@ The API should not expose details about how they are internally stored.
 
 ### TraceFlags
 
-`TraceFlags` contain details about the trace. Unlike TraceState values,
-TraceFlags are present in all traces. The current version of the specification
+`TraceFlags` contain some additional propagated information about the span. Unlike TraceState values,
+TraceFlags are present in all spans. The current version of the specification
 only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
 
 ### TraceState
 
-`TraceState` carries vendor-specific trace identification data, represented as a list
+`TraceState` carries vendor-specific propagated data, represented as a list
 of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. It is fully described in the [W3C Trace Context
 specification](https://www.w3.org/TR/trace-context/#tracestate-header).
@@ -291,8 +291,8 @@ formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/
 Tracing API MUST provide at least the following operations on `TraceState`:
 
 * Get value for a given key
-* Add a new key/value pair
-* Update an existing value for a given key
+* Create a copy with an added key/value pair
+* Create a copy with an updated value for an existing key
 * Delete a key/value pair
 
 These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
@@ -317,7 +317,7 @@ non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 An API called `IsRemote` on a `Span`, that returns a boolean value, which is `true` if the Span was
 propagated from a remote parent, MUST be provided.
-When extracting a propagated span through the [Propagators API](../context/api-propagators.md#propagators-api),
+For a propagated span extracted through the [Propagators API](../context/api-propagators.md#propagators-api),
 `IsRemote` MUST return true, whereas for any child spans it MUST return false.
 When `IsRemote` is `true`, `IsRecording` is always `false`.
 
@@ -419,7 +419,7 @@ There should be no parameter.
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
 events in case when a Span is definitely not recorded. Note that any child
 span's recording is determined independently from the value of this flag
-(typically based on the `sampled` flag of a `TraceFlag` on [Span](#span)).
+(typically based on the `sampled` flag in the `TraceFlags` of the [Span](#span)).
 
 This flag may be `true` despite the entire trace being sampled out. This
 allows to record and process information about the individual Span without
