@@ -19,13 +19,13 @@ Table of Contents
     * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [TraceFlags](#traceflags)
   * [TraceState](#tracestate)
-  * [IsValid](#isvalid)
-  * [IsRemote](#isremote)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
     * [Accessors](#accessors)
+      * [IsValid](#isvalid)
+      * [IsRemote](#isremote)
     * [IsRecording](#isrecording)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
@@ -290,36 +290,23 @@ specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 Tracing API MUST provide at least the following operations on `TraceState`:
 
+* Return an empty `TraceState`
 * Get value for a given key
 * Add a new key/value pair
 * Update an existing value for a given key
-* Delete a key/value pair
+* Create a copy with a removed key/value pair
 
 These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
-All mutating operations MUST return a new `TraceState` with the modifications applied.
 `TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
 Every mutating operations MUST validate input parameters.
 If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
 and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
 
-Please note, since `TraceState` is immutable, it is not possible to update a span with a new `TraceState`.
+Please note, since `TraceState` is fixed during span creation, it is not possible to update a span with a new `TraceState`.
 Such changes then make sense only right before
 [`Context` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
 or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
 In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
-
-### IsValid
-
-An API called `IsValid` on a `Span`, that returns a boolean value, which is `true` if the Span has a
-non-zero TraceID and a non-zero SpanID, MUST be provided.
-
-### IsRemote
-
-An API called `IsRemote` on a `Span`, that returns a boolean value, which is `true` if the Span was
-propagated from a remote parent, MUST be provided.
-When extracting a propagated span through the [Propagators API](../context/api-propagators.md#propagators-api),
-`IsRemote` MUST return true, whereas for any child spans it MUST return false.
-When `IsRemote` is `true`, `IsRecording` is always `false`.
 
 ### Span Creation
 
@@ -385,7 +372,7 @@ description](../overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
 
-- (Required) the `Span` to link to or its `TraceId`, `SpanId`, `TraceFlags`, and `TraceState`
+- (Required) the `Span` to link to, or a `Context` containing the `Span` to link to, or the `TraceId`, `SpanId`, `TraceFlags`, and `TraceState` of the `Span` to link to
 - (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
@@ -407,6 +394,19 @@ the `Span` is finished.
 A `Span` must allow retrieving `TraceId` and `SpanId`, as described in
 [Retrieving the TraceID and SpanID](#retrieving-the-traceid-and-spanid) and provide simple accessors for
 `TraceFlags` and `TraceState`.
+
+#### IsValid
+
+An API called `IsValid` on a `Span`, that returns a boolean value, which is `true` if the Span has a
+non-zero TraceID and a non-zero SpanID, MUST be provided.
+
+#### IsRemote
+
+An API called `IsRemote` on a `Span`, that returns a boolean value, which is `true` if the Span was
+propagated from a remote parent, MUST be provided.
+When extracting a propagated span through the [Propagators API](../context/api-propagators.md#propagators-api),
+`IsRemote` MUST return true, whereas for any child spans it MUST return false.
+When `IsRemote` is `true`, `IsRecording` is always `false`.
 
 #### IsRecording
 
@@ -585,6 +585,7 @@ The behavior is defined as follows:
 
 - `IsRecording` MUST return `false` to signal that events, attributes and other elements
   are not being recorded, i.e. they are being dropped.
+- `IsRemote` MUST return `true` to signal the `Span` corresponds to a remote span.
 
 The remaining functionality of `Span` MUST be defined as no-op operations.
 
