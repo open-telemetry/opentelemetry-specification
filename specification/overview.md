@@ -95,9 +95,9 @@ Each **Span** encapsulates the following state:
 - A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
-- Identifiers of a Span. See below.
+- Span's propagated information. See below.
 
-A **Span** has the following identifiers and the options which MUST be propagated to child Spans
+A **Span** has the following identifiers and options which MUST be propagated to child Spans
 and across process boundaries. These are propagated from parent to child **Spans**.
 
 - **TraceId** is the identifier for a trace. It is worldwide unique with
