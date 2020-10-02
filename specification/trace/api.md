@@ -386,7 +386,7 @@ description](../overview.md#links-between-spans).
 A `Link` is defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
-- One or more `Attribute`s as defined [here](../common/common.md#attributes).
+- Zero or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
 
