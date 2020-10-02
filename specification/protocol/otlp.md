@@ -323,7 +323,7 @@ The client MUST set "Content-Type: application/x-protobuf" request header when
 sending binary-encoded Protobuf or "Content-Type: application/json" request
 header when sending JSON encoded Protobuf payload.
 
-The client MAY gzip the content and in that case SHOULD include
+The client MAY gzip the content and in that case MUST include
 "Content-Encoding: gzip" request header. The client MAY include
 "Accept-Encoding: gzip" request header if it can receive gzip-encoded responses.
 
