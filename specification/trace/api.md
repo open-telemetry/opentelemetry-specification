@@ -21,7 +21,7 @@ Table of Contents
 * [Span](#span)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-    * [Add Links](#add-links)
+    * [Specifying Links](#specifying-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecording](#isrecording)
@@ -261,7 +261,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A start timestamp
 - An end timestamp
 - [`Attributes`](../common/common.md#attributes)
-- A list of [`Link`s](#add-links) to other `Span`s
+- A list of [`Link`s](#specifying-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
@@ -345,8 +345,7 @@ The API MUST accept the following parameters:
   Whenever possible, users SHOULD set any already known attributes at span creation
   instead of calling `SetAttribute` later.
 
-- `Link`s - see API definition [here](#add-links). Empty list will be assumed if
-  not specified.
+- `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
   when span creation time has already passed. If API is called at a moment of
   a Span logical start, API user MUST not explicitly set this argument.
@@ -375,7 +374,7 @@ A `SpanContext` cannot be set as active in a `Context` directly, but through the
 of a [Propagated Span](#propagated-span-creation) wrapping it.
 For example, a `Propagator` performing context extraction may need this.
 
-#### Add Links
+#### Specifying links
 
 During the `Span` creation user MUST have the ability to record links to other
 `Span`s. Linked `Span`s can be from the same or a different trace. See [Links
