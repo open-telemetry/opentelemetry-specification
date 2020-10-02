@@ -732,14 +732,13 @@ The API layer MAY include the following `Propagator`s:
 
 In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
 This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
-is one important exception to this general rule, and that is related to propagation of a SpanContext.
-
-The following cases must be considered when a new Span is requested to be created, especially in relation to the
-requested parent SpanContext:
-
-* A valid `SpanContext` is specified as the parent of the new `Span`: The API MUST treat this parent context as the
-context for the newly created `Span`. This means that a `SpanContext` that has been provided by a configured `Propagator`
-will be propagated through to any child span, but that no new `SpanContext`s will be created.
-* No valid `SpanContext` is specified as the parent of the new `Span`: The API MUST create an non-valid
-(both SpanID and TradeID are equivalent to being all zeros) `Span` for use
-by the API caller. This means that both the `TraceID` and the `SpanID` should be invalid.
+is one important exception to this general rule, and that is related to propagation of a `SpanContext`:
+The API MUST create a [Propagated Span](#propagated-span-creation) with the `SpanContext`
+that is in the `Span` in the parent `Context` (whether explicitly given or implicit current) or,
+if the parent is a Propagated Span (which it usually always is if no SDK is present),
+it MAY return the same parent Propagated Span instance back from the creation method.
+If the parent `Context` contains no `Span`, an empty Propagated Span MUST be returned instead
+(i.e., having a SpanContext with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
+This means that a `SpanContext` that has been provided by a configured `Propagator`
+will be propagated through to any child span and ultimately also `Inject`,
+but that no new `SpanContext`s will be created.
