@@ -14,15 +14,18 @@ Table of Contents
 * [Tracing Context Utilities](#tracing-context-utilities)
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
-* [Span Identifiers](#span-identifiers)
-  * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
+* [Span](#span)
+  * [TraceId and SpanId](#traceid-and-spanid)
+    * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
+  * [TraceFlags](#traceflags)
+  * [TraceState](#tracestate)
   * [IsValid](#isvalid)
   * [IsRemote](#isremote)
-* [Span](#span)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
     * [Add Links](#add-links)
   * [Span operations](#span-operations)
+    * [Accessors](#accessors)
     * [IsRecording](#isrecording)
     * [Set Attributes](#set-attributes)
     * [Add Events](#add-events)
@@ -165,81 +168,6 @@ The `Tracer` MAY provide functions to:
 
 These functions MUST delegate to the `Tracing Context Utilities`.
 
-## Span Identifiers
-
-These parts of the span serve to identify it, both in-process and remotely. They are immutable
-pieces of the `Span`, as opposed to the data collecting [span operations](#span-operations).
-These identifiers conform to the [W3C TraceContext specification](https://www.w3.org/TR/trace-context/).
-It contains two identifiers - a `TraceId` and a `SpanId` - along with a set of common
-`TraceFlags` and system-specific `TraceState` values.
-
-`TraceId` A valid trace identifier is a 16-byte array with at least one
-non-zero byte.
-
-`SpanId` A valid span identifier is an 8-byte array with at least one non-zero
-byte.
-
-`TraceFlags` contain details about the trace. Unlike TraceState values,
-TraceFlags are present in all traces. The current version of the specification
-only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
-
-`TraceState` carries vendor-specific trace identification data, represented as a list
-of key-value pairs. TraceState allows multiple tracing
-systems to participate in the same trace. It is fully described in the [W3C Trace Context
-specification](https://www.w3.org/TR/trace-context/#tracestate-header).
-
-The API MUST allow creating a `Span` with these identifiers, either during [span creation](#span-creation)
-or when creating a [propagated span](#propagated-span-creation).
-
-### Retrieving the TraceId and SpanId
-
-The API MUST allow retrieving the `TraceId` and `SpanId` from a span in the following forms:
-
-* Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
-`TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
-(result MUST be a 16-hex-character lowercase string).
-* Binary - returns the binary representation of the `TraceId` (result MUST be a
-16-byte array) `SpanId` (result MUST be a 8-byte array).
-
-The API should not expose details about how they are internally stored.
-
-### IsValid
-
-An API called `IsValid` on a `Span`, that returns a boolean value, which is `true` if the Span has a
-non-zero TraceID and a non-zero SpanID, MUST be provided.
-
-### IsRemote
-
-An API called `IsRemote` on a `Span`, that returns a boolean value, which is `true` if the Span was
-propagated from a remote parent, MUST be provided.
-When extracting a propagated span through the [Propagators API](../context/api-propagators.md#propagators-api),
-`IsRemote` MUST return true, whereas for any child spans it MUST return false.
-When `IsRemote` is `true`, `IsRecording` is always `false`.
-
-### TraceState
-
-`TraceState` is a part of the [span's identifiers](#span-identifiers), represented by an immutable list of string key/value pairs and
-formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
-Tracing API MUST provide at least the following operations on `TraceState`:
-
-* Get value for a given key
-* Add a new key/value pair
-* Update an existing value for a given key
-* Delete a key/value pair
-
-These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
-All mutating operations MUST return a new `TraceState` with the modifications applied.
-`TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
-Every mutating operations MUST validate input parameters.
-If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
-and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
-
-Please note, since span identifiers are immutable, it is not possible to update a span with a new `TraceState`.
-Such changes then make sense only right before
-[`Context` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
-or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
-In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
-
 ## Span
 
 A `Span` represents a single operation within a trace. Spans can be nested to
@@ -249,9 +177,11 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 <a name="span-data-members"></a>
 `Span`s encapsulate:
 
+- TraceId
+- SpanId
+- TraceState
+- TraceFlags
 - The span name
-- Immutable [span identifiers](#span-identifiers) that uniquely identifies the
-  `Span`
 - A parent span in the form of a [`Span`](#span) that is stored in a [Context](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/context.md)
   or null
 - A [`SpanKind`](#spankind)
@@ -261,6 +191,8 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
+
+The TraceId, SpanId, TraceState, and TraceFlags are immutable and set on [creation](#span-creation).
 
 The _span name_ concisely identifies the work represented by the Span,
 for example, an RPC method name, a function name,
@@ -314,6 +246,80 @@ attributes besides its identifiers.
 Vendors may implement the `Span` interface to effect vendor-specific logic.
 However, alternative implementations MUST NOT allow callers to create `Span`s
 directly. All `Span`s MUST be created via a `Tracer`.
+
+### TraceId and SpanId
+
+A `Span` has two identifiers associated with it:
+
+- `TraceId` A valid trace identifier is a 16-byte array with at least one
+non-zero byte.
+
+- `SpanId` A valid span identifier is an 8-byte array with at least one non-zero
+byte.
+
+The TraceId is a globally unique identifier for the entire trace, while a SpanId is
+a unique identifier within a trace. The concatenation can be considered the global
+identifier of an individual `Span`.
+
+#### Retrieving the TraceId and SpanId
+
+The API MUST allow retrieving the `TraceId` and `SpanId` from a span in the following forms:
+
+* Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
+`TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
+(result MUST be a 16-hex-character lowercase string).
+* Binary - returns the binary representation of the `TraceId` (result MUST be a
+16-byte array) `SpanId` (result MUST be a 8-byte array).
+
+The API should not expose details about how they are internally stored.
+
+### TraceFlags
+
+`TraceFlags` contain details about the trace. Unlike TraceState values,
+TraceFlags are present in all traces. The current version of the specification
+only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
+
+### TraceState
+
+`TraceState` carries vendor-specific trace identification data, represented as a list
+of key-value pairs. TraceState allows multiple tracing
+systems to participate in the same trace. It is fully described in the [W3C Trace Context
+specification](https://www.w3.org/TR/trace-context/#tracestate-header).
+
+`TraceState` is represented by an immutable list of string key/value pairs and
+formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
+Tracing API MUST provide at least the following operations on `TraceState`:
+
+* Get value for a given key
+* Add a new key/value pair
+* Update an existing value for a given key
+* Delete a key/value pair
+
+These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
+All mutating operations MUST return a new `TraceState` with the modifications applied.
+`TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
+Every mutating operations MUST validate input parameters.
+If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
+and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
+
+Please note, since `TraceState` is immutable, it is not possible to update a span with a new `TraceState`.
+Such changes then make sense only right before
+[`Context` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
+or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
+In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
+
+### IsValid
+
+An API called `IsValid` on a `Span`, that returns a boolean value, which is `true` if the Span has a
+non-zero TraceID and a non-zero SpanID, MUST be provided.
+
+### IsRemote
+
+An API called `IsRemote` on a `Span`, that returns a boolean value, which is `true` if the Span was
+propagated from a remote parent, MUST be provided.
+When extracting a propagated span through the [Propagators API](../context/api-propagators.md#propagators-api),
+`IsRemote` MUST return true, whereas for any child spans it MUST return false.
+When `IsRemote` is `true`, `IsRecording` is always `false`.
 
 ### Span Creation
 
@@ -379,7 +385,7 @@ description](../overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
 
-- (Required) the `Span` to link to or its [span identifiers](#span-identifiers).
+- (Required) the `Span` to link to or its `TraceId`, `SpanId`, and `TraceState`
 - (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
@@ -393,14 +399,14 @@ Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
-With the exception of the function to retrieve the `Span`'s identifiers and
-recording status, none of the below may be called after the `Span` is finished.
+With the exception of the [accessors](#accessors) and recording status, none of the below may be called after 
+the `Span` is finished.
 
-#### Identifiers
+#### Accessors
 
-A `Span` must allow retrieving its [identifiers](#span-identifiers), as described in
-[Retrieving the TraceID and SpanID](#retrieving-the-traceid-and-spanid) for the Trace ID
-and Span ID or simple accessors for `TraceFlags` and `TraceState`.
+A `Span` must allow retrieving `TraceId` and `SpanId`, as described in
+[Retrieving the TraceID and SpanID](#retrieving-the-traceid-and-spanid) and provide simple accessors for 
+`TraceFlags` and `TraceState`.
 
 #### IsRecording
 
@@ -570,14 +576,13 @@ calling of corresponding API.
 ### Propagated Span creation
 
 The API MUST provide an operation for creating an object implementing the `Span` interface
-provided its identifiers. This is done in order to expose it in operations such as in-process
-`Span` propagation.
+provided `TraceId`, `SpanId`, `TraceFlags`, `TraceState`. This is done in order to expose it in operations such 
+as in-process `Span` propagation.
 
 If a new type is required for supporting this operation, it SHOULD be named `PropagatedSpan`.
 
 The behavior is defined as follows:
 
-- It MUST have accessors for all the [span identifiers](#span-identifiers).
 - `IsRecording` MUST return `false` to signal that events, attributes and other elements
   are not being recorded, i.e. they are being dropped.
 
