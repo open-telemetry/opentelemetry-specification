@@ -67,7 +67,6 @@ groups:
           type: number
           brief: 'The compressed size of the message payload in bytes.'
           examples: 2048
-      constraints:
         - ref: net.peer.name
           required:
             conditional: If available.
@@ -75,6 +74,7 @@ groups:
           tag: connection-level
           required:
             conditional: If available.
+      constraints:
         - include: network
 
     - id: messaging.producer
