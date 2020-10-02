@@ -11,6 +11,8 @@ New:
 
 - Clarify env variables in otlp exporter
   ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
+- Add Prometheus exporter environment variables
+  ([#2021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021)).
 - Default propagators in un-configured API must be no-op
   ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
 - Define resource mapping for Jaeger exporters
