@@ -385,7 +385,7 @@ description](../overview.md#links-between-spans).
 
 A `Link` is defined by the following properties:
 
-- (Required) the `Span` to link to or its `TraceId`, `SpanId`, and `TraceState`
+- (Required) the `Span` to link to or its `TraceId`, `SpanId`, `TraceFlags`, and `TraceState`
 - (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
@@ -399,13 +399,13 @@ Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
-With the exception of the [accessors](#accessors) and recording status, none of the below may be called after 
+With the exception of the [accessors](#accessors) and recording status, none of the below may be called after
 the `Span` is finished.
 
 #### Accessors
 
 A `Span` must allow retrieving `TraceId` and `SpanId`, as described in
-[Retrieving the TraceID and SpanID](#retrieving-the-traceid-and-spanid) and provide simple accessors for 
+[Retrieving the TraceID and SpanID](#retrieving-the-traceid-and-spanid) and provide simple accessors for
 `TraceFlags` and `TraceState`.
 
 #### IsRecording
@@ -576,7 +576,7 @@ calling of corresponding API.
 ### Propagated Span creation
 
 The API MUST provide an operation for creating an object implementing the `Span` interface
-provided `TraceId`, `SpanId`, `TraceFlags`, `TraceState`. This is done in order to expose it in operations such 
+provided `TraceId`, `SpanId`, `TraceFlags`, `TraceState`. This is done in order to expose it in operations such
 as in-process `Span` propagation.
 
 If a new type is required for supporting this operation, it SHOULD be named `PropagatedSpan`.
