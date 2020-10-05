@@ -126,13 +126,10 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
 | `messaging.message_payload_size_bytes` | number | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
 | `messaging.message_payload_compressed_size_bytes` | number | The compressed size of the message payload in bytes. | `2048` | No |
+| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Conditional<br>If available. |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | Conditional<br>If available. |
 
 **[1]:** Required only if the message destination is either a `queue` or `topic`.
-
-**Additional attribute recommendations:** At least one of the following sets of attributes is recommended:
-
-* [`net.peer.name`](span-general.md)
-* [`net.peer.ip`](span-general.md)
 
 `messaging.destination_kind` MUST be one of the following:
 
@@ -185,12 +182,14 @@ The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_ke
 For Apache Kafka, the following additional attributes are defined:
 
 <!-- semconv messaging.kafka -->
-| Attribute name |                          Notes and examples                            |
-| -------------- | ---------------------------------------------------------------------- |
-| `messaging.kafka.message_key` | Differs from `messaging.message_id` in that it's not unique, and can be `null`. The type is a String representation of the type of the actual value. |
-| `messaging.kafka.consumer_group` | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. |
-| `messaging.kafka.client_id` | Client Id for the Consumer or Producer that is handling the message. |
-| `messaging.kafka.partition` | Partition the message is sent to. |
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `messaging.kafka.message_key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message_id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | No |
+| `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | No |
+| `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `5` | No |
+| `messaging.kafka.partition` | string | Partition the message is sent to. | `2` | No |
+
+**[1]:** If the key type is not string, it's string representation has to be supplied for the attribute.
 <!-- endsemconv -->
 
 For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or external service the message will be sent to.
