@@ -32,7 +32,7 @@ groups:
         brief: "The execution id of the current function execution."
         examples: 'af9d5aa4-a685-4c5f-a22b-444f80b3cc28'
 
-  - id: faas.datasource
+  - id: faas_span.datasource
     prefix: faas.document
     extends: faas_span
     brief: >
@@ -78,7 +78,7 @@ groups:
           the file, and in Cosmos DB the table name.
         examples: ["myFile.txt", "myTableName"]
 
-  - id: faas.http
+  - id: faas_span.http
     extends: faas_span
     brief: >
       Semantic Convention for FaaS triggered as a response to some data
@@ -86,7 +86,7 @@ groups:
     constraints:
       - include: http.server
 
-  - id: faas.pubsub
+  - id: faas_span.pubsub
     extends: faas_span
     brief: >
       Semantic Convention for FaaS set to be executed when messages are
@@ -94,7 +94,7 @@ groups:
     constraints:
       - include: messaging
 
-  - id: faas.timer
+  - id: faas_span.timer
     extends: faas_span
     prefix: faas
     brief: >
@@ -115,7 +115,7 @@ groups:
           [Cron Expression](https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm).
         examples: "0/5 * * * ? *"
 
-  - id: faas.in
+  - id: faas_span.in
     extends: faas_span
     span_kind: server
     prefix: faas
@@ -129,7 +129,7 @@ groups:
           first time (aka cold-start).
         examples: 'true'
 
-  - id: faas.out
+  - id: faas_span.out
     extends: faas_span
     span_kind: client
     prefix: faas
@@ -151,10 +151,13 @@ groups:
           members:
             - id: AWS
               value: 'aws'
-            - id: GCP
-              value: 'gcp'
+              brief: 'Amazon Web Services'
             - id: Azure
               value: 'azure'
+              brief: 'Amazon Web Services'
+            - id: GCP
+              value: 'gcp'
+              brief: 'Google Cloud Platform'
         required: always
         brief: >
           The cloud provider of the invoked function.

@@ -80,7 +80,7 @@ This section describes incoming FaaS invocations as they are reported by the Faa
 
 For incoming FaaS spans, the span kind MUST be `Server`.
 
-<!-- semconv faas.in -->
+<!-- semconv faas_span.in -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
 | `faas.coldstart` | boolean | A boolean that is true if the serverless function is executed for the first time (aka cold-start). | `true` | No |
@@ -96,7 +96,7 @@ The values reported by the client for the attributes listed below SHOULD be equa
 the corresponding [FaaS resource attributes][] and [Cloud resource attributes][],
 which the invoked FaaS instance reports about itself, if it's instrumented.
 
-<!-- semconv faas.out -->
+<!-- semconv faas_span.out -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
 | `faas.invoked_name` | string | The name of the invoked function. [1] | `my-function` | Yes |
@@ -115,9 +115,9 @@ which the invoked FaaS instance reports about itself, if it's instrumented.
 
 | Value  | Description |
 |---|---|
-| `aws` | AWS |
-| `gcp` | GCP |
-| `azure` | Azure |
+| `aws` | Amazon Web Services |
+| `azure` | Amazon Web Services |
+| `gcp` | Google Cloud Platform |
 <!-- endsemconv -->
 
 For some cloud providers, like AWS or GCP, the region in which a function is hosted is essential
@@ -139,7 +139,7 @@ This section describes how to handle the span creation and additional attributes
 A datasource function is triggered as a response to some data source operation such as a database or filesystem read/write.
 For `faas` spans with trigger `datasource`, it is recommended to set the following attributes.
 
-<!-- semconv faas.datasource -->
+<!-- semconv faas_span.datasource -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
 | `faas.document.collection` | string | The name of the source on which the triggering operation was performed. [1] | `myBucketName`<br>`myDbName` | Yes |
@@ -175,7 +175,7 @@ This way, it is possible to correlate each individual message with its execution
 
 A function is scheduled to be executed regularly. The following additional attributes are recommended.
 
-<!-- semconv faas.timer -->
+<!-- semconv faas_span.timer -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
 | `faas.time` | string | A string containing the function invocation time in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format expressed in [UTC](https://www.w3.org/TR/NOTE-datetime). | `2020-01-23T13:47:06Z` | Yes |
