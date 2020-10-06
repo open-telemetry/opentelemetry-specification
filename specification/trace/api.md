@@ -11,7 +11,7 @@ Table of Contents
     * [Duration](#duration)
 * [TracerProvider](#tracerprovider)
   * [TracerProvider operations](#tracerprovider-operations)
-* [Tracing Context Utilities](#tracing-context-utilities)
+* [Context Interaction](#context-interaction)
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
@@ -130,21 +130,31 @@ the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
 
-## Tracing Context Utilities
+## Context Interaction
 
-`Tracing Context Utilities` contains all operations within tracing that
-modify the [`Context`](../context/context.md).
+This section defines all operations within trace module that interact with the
+[`Context`](../context/context.md).
 
-As these utilities operate solely on the context API, they MAY be exposed
-as static methods on the trace module instead of a class.
+The API MUST provide the following functionality to interact with a `Context`
+instance:
 
-The `Tracing Context Utilities` MUST provide the following functions:
+- Extract the `Span` from a `Context` instance
+- Insert the `Span` to a `Context` instance
+
+The functionality listed above is necessary because API users SHOULD NOT have
+access to the [Context's Key](../context/context.md#create-a-key).
+
+If the languages has support for implicitly propagated `Context`, see
+[here](../context/context.md#optional-global-operations). The API SHOULD provide
+the following functionality:
 
 - Get the currently active span
 - Set the currently active span
 
-The above methods MUST be equivalent to a single parameterized method call of
-the [`Context`](../context/context.md) management system.
+All the above functionalities operate solely on the context API, and they MAY be
+exposed as static methode on the trace module, as static methods on a class
+inside the trace module (it MAY be named `TracingContextUtilities`), or on the
+[`Tracer`](#tracer) class.
 
 ## Tracer
 
@@ -158,13 +168,6 @@ This should be the responsibility of the `TracerProvider` instead.
 The `Tracer` MUST provide functions to:
 
 - [Create a new `Span`](#span-creation) (see the section on `Span`)
-
-The `Tracer` MAY provide functions to:
-
-- Get the currently active span
-- Set the currently active span
-
-These functions MUST delegate to the `Tracing Context Utilities`.
 
 ## SpanContext
 
