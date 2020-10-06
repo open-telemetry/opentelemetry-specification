@@ -84,8 +84,8 @@ OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Zipk
 
 | OpenTelemetry | Zipkin
 | ------------- | ------ |
-| `InstrumentationLibrary.name`|`otel.instrumentation_library.name`|
-| `InstrumentationLibrary.version`|`otel.instrumentation_library.version`|
+| `InstrumentationLibrary.name`|`otel.library.name`|
+| `InstrumentationLibrary.version`|`otel.library.version`|
 
 ### Remote endpoint
 

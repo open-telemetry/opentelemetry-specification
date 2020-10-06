@@ -9,6 +9,10 @@ release.
 
 New:
 
+- Clarify env variables in otlp exporter
+  ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
+- Add Prometheus exporter environment variables
+  ([#2021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021)).
 - Default propagators in un-configured API must be no-op
   ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
 - Define resource mapping for Jaeger exporters
@@ -29,8 +33,14 @@ New:
   * `exception.escaped` semantic span event attribute was added
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
+- Allow samplers to modify tracestate
+  ([#988](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
 - Update the header name for otel baggage, and version date
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
+- Define PropagationOnly Span to simplify active Span logic in Context
+  ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
+- Add Metric SDK specification (partial): covering terminology and Accumulator component
+  ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
 
 Updates:
 
@@ -73,10 +83,15 @@ Updates:
   ([#875](https://github.com/open-telemetry/opentelemetry-specification/pull/875))
 - Remove obsolete `http.status_text` from semantic conventions
   ([#972](https://github.com/open-telemetry/opentelemetry-specification/pull/972))
+- Define `null` as an invalid value for attributes and declare attempts to set
+  `null` as undefined behavior
+  ([#992](https://github.com/open-telemetry/opentelemetry-specification/pull/992))
 - SDK: Rename the `Decision` values for `SamplingResult`s to `DROP`, `RECORD_ONLY`
   and `RECORD_AND_SAMPLE` for consistency
   ([#938](https://github.com/open-telemetry/opentelemetry-specification/pull/938),
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
+- Metrics API: Replace "Additive" with "Adding", "Non-Additive" with "Grouping"
+  ([#983](https://github.com/open-telemetry/opentelemetry-specification/pull/983)
 - Move active span interaction in the Trace API to a separate class
   ([#923](https://github.com/open-telemetry/opentelemetry-specification/pull/923))
 - Metrics SDK: Specify LastValue default aggregation for ValueObserver
@@ -85,6 +100,11 @@ Updates:
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Trace SDK: Sampler.ShouldSample gets parent Context instead of SpanContext
   ([#881](https://github.com/open-telemetry/opentelemetry-specification/pull/881))
+- SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
+  ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
+  ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
+- Remove custom header name for Baggage, use official header
+  ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 
 ## v0.6.0 (07-01-2020)
 
