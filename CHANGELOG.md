@@ -43,6 +43,8 @@ New:
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
+- Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation
+  ([TODO](https://gitnub.com/todo))
 
 Updates:
 

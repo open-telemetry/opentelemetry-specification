@@ -64,13 +64,16 @@ contains a `Baggage` with the new value.
 
 REQUIRED parameters:
 
-`Name` the name for which to set the value.
+`Name` The name for which to set the value. This is string-valued.
 
-`Value` the value to set.
+`Value` The value to set. This is string-valued.
 
 OPTIONAL parameters:
 
-`Context` the context containing the `Baggage` in which to set the baggage entry.
+`Metadata` Optional metadata associated with the name-value pair. An opaque string with no
+semantic meaning.
+
+`Context` The context containing the `Baggage` in which to set the baggage entry.
 
 ### Remove baggage
 
@@ -103,6 +106,10 @@ OPTIONAL parameters:
 The API layer MAY include the following `Propagator`s:
 
 * A `TextMapPropagator` implementing the [W3C Baggage Specification](https://w3c.github.io/baggage).
+
+Note: The W3C baggage specification does not currently assign semantic meaning to the optional metadata.
+On `extract`, the propagator should store all metadata per entry as a single opaque string. On `inject`,
+the propagator should append the metadata per the W3C specification format.
 
 ## Conflict Resolution
 
