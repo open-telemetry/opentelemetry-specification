@@ -11,12 +11,20 @@ measure and report the performance of OpenTelemetry SDKs.
 - Default Span [Kind](./trace/api.md#spankind) and
   [Status](./trace/api.md#set-status).
 - Associated to a [resource](overview.md#resources) with attributes
-  `service.name`, `service.version`, `name`, and 10 characters string value for
-  each attribute.
+  `service.name`, `service.version` and 10 characters string value for each
+  attribute, and attribute `service.instance.id` with a unique UUID. See
+  [Service](./resource/semantic_conventions/README.md#service) for details.
 - 1 [attribute](./common/common.md#attributes) with a signed 64-bit integer
   value.
 - 1 [event](./trace/api.md#add-events) without any attributes.
 - The `AlwaysOn` sampler should be enabled.
+- Each `Span` is created and immediately ended.
+
+### Measurement Configuration
+
+For the languages with bootstrap cost like JIT compilation, a warm-up phase is
+recommended to take place before the measurement, which runs under the same
+`Span` [configuration](#span-configuration).
 
 ## Throughput Measurement
 
@@ -33,14 +41,14 @@ strings, one as attribute name the other as value.
 
 With given number of span throughput specified by user, or 10,000 spans per
 second as default if user does not input the number, measure and report the CPU
-usage for SDK with both simple and batching span processors together with OTLP
-exporter. The benchmark should create an out-of-process OTLP receiver which
-listens on the exporting target or adopts existing OTLP exporter which runs
-out-of-process, responds with success status immediately and drops the data. The
-collector should not add significant CPU overhead to the measurement. Because
-the benchmark does not include user processing logic, the total CPU consumption
-of benchmark program could be considered as approximation of SDK's CPU
-consumption.
+usage for SDK with both default configured simple and batching span processors
+together with OTLP exporter. The benchmark should create an out-of-process OTLP
+receiver which listens on the exporting target or adopts existing OTLP exporter
+which runs out-of-process, responds with success status immediately and drops
+the data. The collector should not add significant CPU overhead to the
+measurement. Because the benchmark does not include user processing logic, the
+total CPU consumption of benchmark program could be considered as approximation
+of SDK's CPU consumption.
 
 The total running time for one test iteration is suggested to be at least 15
 seconds. The average and peak CPU usage should be reported.
