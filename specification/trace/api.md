@@ -21,7 +21,7 @@ Table of Contents
 * [Span](#span)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-    * [Add Links](#add-links)
+    * [Specifying Links](#specifying-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecording](#isrecording)
@@ -261,7 +261,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A start timestamp
 - An end timestamp
 - [`Attributes`](../common/common.md#attributes)
-- A list of [`Link`s](#add-links) to other `Span`s
+- A list of [`Link`s](#specifying-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
@@ -307,7 +307,7 @@ attributes.
 
 A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
-change its name, set its `Attribute`s, and add `Link`s and `Event`s. These
+change its name, set its `Attribute`s, add `Event`s, and set the `Status`. These
 MUST NOT be changed after the `Span`'s end time has been set.
 
 `Span`s are not meant to be used to propagate information within a process. To
@@ -345,8 +345,7 @@ The API MUST accept the following parameters:
   Whenever possible, users SHOULD set any already known attributes at span creation
   instead of calling `SetAttribute` later.
 
-- `Link`s - see API definition [here](#add-links). Empty list will be assumed if
-  not specified.
+- `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
   when span creation time has already passed. If API is called at a moment of
   a Span logical start, API user MUST not explicitly set this argument.
@@ -375,25 +374,26 @@ A `SpanContext` cannot be set as active in a `Context` directly, but through the
 of a [Propagated Span](#propagated-span-creation) wrapping it.
 For example, a `Propagator` performing context extraction may need this.
 
-#### Add Links
+#### Specifying links
 
-During the `Span` creation user MUST have the ability to record links to other `Span`s.
-Linked `Span`s can be from the same or a different trace. See [Links
+During the `Span` creation user MUST have the ability to record links to other
+`Span`s. Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
 
 `Link`s cannot be added after Span creation.
 
 A `Link` is defined by the following properties:
 
-- (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
+- `SpanContext` of the `Span` to link to.
+- Zero or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
 
 The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
-  arguments. This MAY be called `AddLink`.
+  arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
+  the `Span` to link to and optional `Attributes`.
 
 Links SHOULD preserve the order in which they're set.
 
