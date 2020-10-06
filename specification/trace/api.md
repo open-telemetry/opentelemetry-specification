@@ -379,7 +379,8 @@ Span creation.
 A `Link` is semantically defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
-- Zero or more `Attribute`s as defined [here](../common/common.md#attributes).
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the link.
 
 The Span creation API MUST provide:
 
@@ -458,8 +459,9 @@ An `Event` is semantically defined by the following properties:
 
 - Name of the event.
 - A timestamp for the event. Either the time at which the event was
-added or a custom timestamp provided by the user.
-- [`Attributes`](../common/common.md#attributes) further describing the event.
+  added or a custom timestamp provided by the user.
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the event.
 
 The Span interface MUST provide:
 
