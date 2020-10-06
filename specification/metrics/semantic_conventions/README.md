@@ -45,7 +45,8 @@ breadth of all existing metrics. For example, every garbage collected runtime
 has slightly different strategies and measures. Using a single set of metric
 names for GC, not divided by the runtime, could create dissimilar comparisons
 and confusion for end users. (For example, prefer `runtime.java.gc*` over
-`runtime.gc.*`.) Measures of many operating system metrics are similar.
+`runtime.gc.*`.) Measures of many operating system metrics are similarly
+ambiguous.
 
 For conventional metrics or metrics that have their units included in
 OpenTelemetry metadata (e.g. `metric.WithUnit` in Go), SHOULD NOT include the
@@ -81,8 +82,8 @@ values are in the range `[0, 1]`.
 
 - **time** - an instrument that measures passage of time should be called
 `entity.time`. For example, `system.cpu.time` with label `state = idle | user
-| system | ...`. **time** measurements are not necessarily wall time and can be less than
-  or greater than the real wall time between measurements.
+| system | ...`. **time** measurements are not necessarily wall time and can
+be less than or greater than the real wall time between measurements.
 
   **time** instruments are a special case of **usage** metrics, where the
   **limit** can usually be calculated as the sum of **time** over all label
@@ -104,9 +105,10 @@ Units should follow the [UCUM](http://unitsofmeasure.org/ucum.html) (need
 more clarification in
 [#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
 
-- Instruments for **utilization** metrics (that measure the fraction out of a total)
-SHOULD use the default unit `1` (the unity).
-- Instruments that measure an integer count of something have
-["non-units"](https://ucum.org/ucum.html#section-Examples-for-some-Non-Units.)
-and SHOULD use [annotations](https://ucum.org/ucum.html#para-curly) with curly
-braces. For example `{packets}`, `{errors}`, `{faults}`, etc.
+- Instruments for **utilization** metrics (that measure the fraction out of a
+total) are dimensionless and SHOULD use the default unit `1` (the unity).
+- Instruments that measure an integer count of something SHOULD use the
+default unit `1` (the unity) and
+[annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
+give additional meaning. For example `{packets}`, `{errors}`, `{faults}`,
+etc.

@@ -93,7 +93,7 @@ memory](#systempaging---pagingswap-metrics).
 **Description:** System level network metrics.
 | Name                            | Description | Units         | Instrument Type   | Value Type | Label Key | Label Values                                                                                   |
 | ------------------------------- | ----------- | ------------- | ----------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
-| system.network.dropped\_packets |             | {packets}     | SumObserver       | Int64      | device    | (identifier)                                                                                   |
+| system.network.dropped_packets  |             | {packets}     | SumObserver       | Int64      | device    | (identifier)                                                                                   |
 |                                 |             |               |                   |            | direction | transmit, receive                                                                              |
 | system.network.packets          |             | {packets}     | SumObserver       | Int64      | device    | (identifier)                                                                                   |
 |                                 |             |               |                   |            | direction | transmit, receive                                                                              |
@@ -118,9 +118,7 @@ individual process level, see [process metrics](process-metrics.md).
 Instrument names for system level metrics that have different and conflicting
 meaning across multiple OSes should be prefixed with `system.{os}.` and
 follow the hierarchies listed above for different entities like CPU, memory,
-and network. This follows the rule of thumb that [aggregations over all the
-dimensions of a given metric SHOULD be
-meaningful.](https://prometheus.io/docs/practices/naming/#metric-names:~:text=As%20a%20rule%20of%20thumb%2C%20either,be%20meaningful%20(though%20not%20necessarily%20useful).)
+and network.
 
 For example, [UNIX load
 average](https://en.wikipedia.org/wiki/Load_(computing)) over a given
