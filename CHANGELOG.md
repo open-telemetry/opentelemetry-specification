@@ -41,6 +41,8 @@ New:
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
+- Clarify context interaction for trace module
+  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))  
 
 Updates:
 
