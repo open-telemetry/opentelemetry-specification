@@ -511,9 +511,10 @@ status, which is `Unset`.
 
 The Span interface MUST provide:
 
-- An API to set the `Status` where the new `Status` properties are passed as
-  arguments. This SHOULD be called `SetStatus`. This API takes the
-  `StatusCanonicalCode`, and optional description.
+- An API to set the `Status`. This SHOULD be called `SetStatus`.
+  This API takes the `StatusCanonicalCode`, and optional `Description`, 
+  either as individual parameters or as an immutable object encapsulating them, 
+  whichever is most appropriate for the language.
 
 The status code SHOULD remain unset, except for the following circumstances:
 
