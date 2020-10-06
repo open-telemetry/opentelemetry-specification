@@ -105,7 +105,7 @@ more clarification in
 [#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
 
 - Instruments for **utilization** metrics (that measure the fraction out of a total)
-SHOULD use units of `1`.
+SHOULD use the default unit `1` (the unity).
 - Instruments that measure an integer count of something have
 ["non-units"](https://ucum.org/ucum.html#section-Examples-for-some-Non-Units.)
 and SHOULD use [annotations](https://ucum.org/ucum.html#para-curly) with curly
