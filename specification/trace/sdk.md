@@ -249,13 +249,16 @@ Erroneous code can add unintended attributes, events, and links to a span. If
 these collections are unbounded, they can quickly exhaust available memory,
 resulting in crashes that are difficult to recover from safely.
 
-To protect against such errors, SDK Spans MUST discard attributes, links, and
+To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
-the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
+the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit,
 
-There SHOULD be a log message emitted by the SDK for the first time a span is
-discarded due to a limit. This message should be emitted once for
-attributes, events, and links, and MUST be configurable on or off, with
+If there is a configurable limit, the SDK MAY honor the environment variables
+specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
+
+There SHOULD be a log message emitted by the SDK the first time per process where
+a span attribute, event, or link is discarded due to a limit. This message should be
+once per attributes, events, and links, and MUST be configurable on or off, with
 a default of on.
 
 ## Span processor

@@ -40,9 +40,6 @@ status of the feature is not known.
 |IsRecording                                   | + | +  | + | +    | +  | +    | + |    | + | +  |
 |Set status                                    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1157)    | +  | +    | + | +  | + | +  |
-|events collection size limit                  |   |    |   |      |    |      |   |    |   |    |
-|attribute collection size limit               |   |    |   |      |    |      |   |    |   |    |
-|links collection size limit                   |   |    |   |      |    |      |   |    |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
