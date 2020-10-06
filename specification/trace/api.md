@@ -496,8 +496,8 @@ status, which is `Unset`.
 
 `Status` is semantically defined by the following properties:
 
-- `StatusCanonicalCode` represents the canonical set of `Status` codes.
-- Description represents the descriptive message of the `Status`.
+- `StatusCanonicalCode` that represents the canonical set of `Status` codes.
+- Optional `Description` that provides a descriptive message of the `Status`.
 
 `StatusCanonicalCode` has the following values:
 
