@@ -83,6 +83,8 @@ Updates:
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
+- Trace SDK: Sampler.ShouldSample gets parent Context instead of SpanContext
+  ([#881](https://github.com/open-telemetry/opentelemetry-specification/pull/881))
 
 ## v0.6.0 (07-01-2020)
 
