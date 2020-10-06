@@ -78,7 +78,8 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* [`#`](../context/context.md) with parent `Span`. May be without a valid Span to indicate a root span.
+* [`Context`](../context/context.md) with parent `Span`.
+  The Span's SpanContext may be invalid to indicate a root span.
 * `TraceId` of the `Span` to be created.
   If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
