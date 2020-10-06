@@ -393,7 +393,7 @@ The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
-  the `Span` to link to, optional `Attributes`
+  the `Span` to link to and optional `Attributes`.
 
 Links SHOULD preserve the order in which they're set.
 
