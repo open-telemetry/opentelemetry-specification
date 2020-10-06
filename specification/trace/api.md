@@ -422,8 +422,10 @@ Returns true if this `Span` is recording information like events with the
 `AddEvent` operation, attributes using `SetAttributes`, status with `SetStatus`,
 etc.
 
-Note that after a span is ended, the Span usually becomes non-recording and thus
-IsRecording should consequently return false for ended Spans.
+After a `Span` is ended, it usually becomes non-recording and thus
+`IsRecording` SHOULD consequently return false for ended Spans.
+Note: Streaming implementations, where it is not known if a span is ended,
+are one expected case where `IsRecording` cannot change after ending a Span.
 
 `IsRecording` SHOULD NOT take any parameters.
 
