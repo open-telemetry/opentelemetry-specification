@@ -33,11 +33,6 @@ Table of Contents
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
   * [Propagated Span creation](#propagated-span-creation)
-* [Status](#status)
-  * [StatusCanonicalCode](#statuscanonicalcode)
-  * [Status creation](#status-creation)
-  * [GetCanonicalCode](#getcanonicalcode)
-  * [GetDescription](#getdescription)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
@@ -496,16 +491,52 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 
 #### Set Status
 
-Sets the [`Status`](#status) of the `Span`. If used, this will override the
-default `Span` status, which is `OK`.
+Sets the `Status` of the `Span`. If used, this will override the default `Span`
+status, which is `Unset`.
+
+`Status` is semantically defined by the following properties:
+
+- `StatusCanonicalCode` represents the canonical set of `Status` codes.
+- Description represents the descriptive message of the `Status`.
+
+`StatusCanonicalCode` has the following values:
+
+- `Unset`
+  - The default status.
+- `Ok`
+  - The operation has been validated by an Application developers or Operator to
+    have completed successfully, or contain
+- `Error`
+  - The operation contains an error.
+
+The Span interface MUST provide:
+
+- An API to set the `Status` where the new `Status` properties are passed as
+  arguments. This SHOULD be called `SetStatus`. This API takes the
+  `StatusCanonicalCode`, and optional description.
+
+The status code SHOULD remain unset, except for the following circumstances:
+
+When the status is set to `ERROR` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `ERROR`
+according to the rules defined within the semantic conventions. For operations
+not covered by the semantic conventions, Instrumentation Libraries SHOULD
+publish their own conventions, including status codes.
+
+Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
+unless explicitly configured to do so. Instrumention libraries SHOULD leave the
+status code as `Unset` unless there is an error, as described above.
+
+Application developers and Operators may set the status code to `Ok`.
+
+Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
+would otherwise generate. For example, to suppress noisy errors such as 404s.
 
 Only the value of the last call will be recorded, and implementations are free
 to ignore previous calls.
 
-The Span interface MUST provide:
-
-- An API to set the `Status` where the new status is the only argument. This
-  SHOULD be called `SetStatus`.
+Note that there are multiple ways to implement this API, such as: overloading,
+variadic arguments, or define an immutable object to be passed to the API calls.
 
 #### UpdateName
 
@@ -593,62 +624,6 @@ The behavior is defined as follows:
 The remaining functionality of `Span` MUST be defined as no-op operations.
 
 This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
-
-## Status
-
-`Status` interface represents the status of a finished `Span`. It's composed of
-a canonical code, and an optional descriptive message.
-
-### StatusCanonicalCode
-
-`StatusCanonicalCode` represents the canonical set of status codes of a finished
-`Span`.
-
-- `Unset`
-  - The default status.
-- `Error`
-  - The operation contains an error.
-- `Ok`
-  - The operation has been validated by an Application developers or Operator to
-    have completed successfully, or contain
-
-The status code SHOULD remain unset, except for the following circumstances:
-
-When the status is set to `ERROR` by Instrumentation Libraries, the status codes
-SHOULD be documented and predictable. The status code should only be set to `ERROR`
-according to the rules defined within the semantic conventions. For operations
-not covered by the semantic conventions, Instrumentation Libraries SHOULD
-publish their own conventions, including status codes.
-
-Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
-unless explicitly configured to do so. Instrumention libraries SHOULD leave the
-status code as `Unset` unless there is an error, as described above.
-
-Application developers and Operators may set the status code to `Ok`.
-
-Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
-would otherwise generate. For example, to suppress noisy errors such as 404s.
-
-### Status creation
-
-API MUST provide a way to create a new `Status`.
-
-Required parameters
-
-- `StatusCanonicalCode` of this `Status`.
-
-Optional parameters
-
-- Description of this `Status`.
-
-### GetCanonicalCode
-
-Returns the `StatusCanonicalCode` of this `Status`.
-
-### GetDescription
-
-Returns the description of this `Status`.
-Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
 
 ## SpanKind
 
