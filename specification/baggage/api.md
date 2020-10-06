@@ -70,8 +70,8 @@ REQUIRED parameters:
 
 OPTIONAL parameters:
 
-`Metadata` Optional metadata associated with the name-value pair. An opaque string with no
-semantic meaning.
+`Metadata` Optional metadata associated with the name-value pair. This should be an opaque wrapper
+for a string with no semantic meaning. Left opaque to allow for future functionality.
 
 `Context` The context containing the `Baggage` in which to set the baggage entry.
 
@@ -108,8 +108,8 @@ The API layer MAY include the following `Propagator`s:
 * A `TextMapPropagator` implementing the [W3C Baggage Specification](https://w3c.github.io/baggage).
 
 Note: The W3C baggage specification does not currently assign semantic meaning to the optional metadata.
-On `extract`, the propagator should store all metadata per entry as a single opaque string. On `inject`,
-the propagator should append the metadata per the W3C specification format.
+On `extract`, the propagator should store all metadata as a single metadata instance per entry.
+On `inject`, the propagator should append the metadata per the W3C specification format.
 
 ## Conflict Resolution
 
