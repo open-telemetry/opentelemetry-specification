@@ -373,16 +373,13 @@ For example, a `Propagator` performing context extraction may need this.
 
 During the `Span` creation user MUST have the ability to record links to other
 `Span`s. Linked `Span`s can be from the same or a different trace. See [Links
-description](../overview.md#links-between-spans).
+description](../overview.md#links-between-spans). `Link`s cannot be added after
+Span creation.
 
-`Link`s cannot be added after Span creation.
-
-A `Link` is defined by the following properties:
+A `Link` is semantically defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
 - Zero or more `Attribute`s as defined [here](../common/common.md#attributes).
-
-The `Link` SHOULD be an immutable type.
 
 The Span creation API MUST provide:
 
@@ -391,6 +388,9 @@ The Span creation API MUST provide:
   the `Span` to link to and optional `Attributes`.
 
 Links SHOULD preserve the order in which they're set.
+
+Note that there are multiple ways to implement this API, such as: overloading,
+variadic arguments, or define an immutable object to be passed to the API calls.
 
 ### Span operations
 
@@ -455,14 +455,12 @@ attributes, cannot change their decisions.
 A `Span` MUST have the ability to add events. Events have a time associated
 with the moment when they are added to the `Span`.
 
-An `Event` is defined by the following properties:
+An `Event` is semantically defined by the following properties:
 
 - Name of the event.
 - A timestamp for the event. Either the time at which the event was
 added or a custom timestamp provided by the user.
 - [`Attributes`](../common/common.md#attributes) further describing the event.
-
-The `Event` SHOULD be an immutable type.
 
 The Span interface MUST provide:
 
@@ -488,6 +486,9 @@ keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
 
 Note that [`RecordException`](#record-exception) is a specialized variant of
 `AddEvent` for recording exception events.
+
+Note that there are multiple ways to implement this API, such as: overloading,
+variadic arguments, or define an immutable object to be passed to the API calls.
 
 #### Set Status
 
