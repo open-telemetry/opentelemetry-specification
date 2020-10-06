@@ -42,6 +42,13 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
 
+## Prometheus Exporter
+
+| Name                          | Description                     | Default                      |
+| ----------------------------- | --------------------------------| ---------------------------- |
+| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
+| OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
+
 ## Exporter Selection
 
 | Name          | Description                                                                  | Default |
