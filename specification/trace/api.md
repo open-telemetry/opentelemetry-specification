@@ -505,15 +505,15 @@ status, which is `Unset`.
   - The default status.
 - `Ok`
   - The operation has been validated by an Application developers or Operator to
-    have completed successfully, or contain
+    have completed successfully.
 - `Error`
   - The operation contains an error.
 
 The Span interface MUST provide:
 
 - An API to set the `Status`. This SHOULD be called `SetStatus`.
-  This API takes the `StatusCanonicalCode`, and optional `Description`, 
-  either as individual parameters or as an immutable object encapsulating them, 
+  This API takes the `StatusCanonicalCode`, and optional `Description`,
+  either as individual parameters or as an immutable object encapsulating them,
   whichever is most appropriate for the language.
 
 The status code SHOULD remain unset, except for the following circumstances:
@@ -535,9 +535,6 @@ would otherwise generate. For example, to suppress noisy errors such as 404s.
 
 Only the value of the last call will be recorded, and implementations are free
 to ignore previous calls.
-
-Note that there are multiple ways to implement this API, such as: overloading,
-variadic arguments, or define an immutable object to be passed to the API calls.
 
 #### UpdateName
 
