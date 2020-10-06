@@ -385,12 +385,11 @@ The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
-  the `Span` to link to and optional `Attributes`.
+  the `Span` to link to and optional `Attributes`, either as individual
+  parameters or as an immutable object encapsulating them, whichever is most
+  appropriate for the language.
 
 Links SHOULD preserve the order in which they're set.
-
-Note that there are multiple ways to implement this API, such as: overloading,
-variadic arguments, or define an immutable object to be passed to the API calls.
 
 ### Span operations
 
@@ -467,9 +466,11 @@ The Span interface MUST provide:
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
   This API takes the name of the event, optional `Attributes` and an optional
-  `Timestamp` which can be used to specify the time at which the event occurred.
-  If no custom timestamp is provided by the user, the implementation automatically
-  sets the time at which this API is called on the event.
+  `Timestamp` which can be used to specify the time at which the event occurred,
+  either as individual parameters or as an immutable object encapsulating them,
+  whichever is most appropriate for the language. If no custom timestamp is
+  provided by the user, the implementation automatically sets the time at which
+  this API is called on the event.
 
 Events SHOULD preserve the order in which they are recorded.
 This will typically match the ordering of the events' timestamps,
@@ -486,9 +487,6 @@ keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
 
 Note that [`RecordException`](#record-exception) is a specialized variant of
 `AddEvent` for recording exception events.
-
-Note that there are multiple ways to implement this API, such as: overloading,
-variadic arguments, or define an immutable object to be passed to the API calls.
 
 #### Set Status
 
