@@ -256,10 +256,9 @@ the recommended limit of 1000 elements. SDKs MAY provide a way to change this li
 If there is a configurable limit, the SDK MAY honor the environment variables
 specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
 
-There SHOULD be a log message emitted by the SDK the first time per process where
-a span attribute, event, or link is discarded due to a limit. This message should be
-once per attributes, events, and links, and MUST be configurable on or off, with
-a default of on.
+There SHOULD be a log emitted to indicate to the user that an attribute, event,
+or link was discarded due to such a limit. To prevent excessive logging, the log
+should not be emitted once per span, or per discarded attribute, event, or links.
 
 ## Span processor
 
