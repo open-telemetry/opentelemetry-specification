@@ -144,8 +144,8 @@ instance:
 The functionality listed above is necessary because API users SHOULD NOT have
 access to the [Context Key](../context/context.md#create-a-key) used by the Tracing API implementation.
 
-If the language has support for implicitly propagated `Context`, see
-[here](../context/context.md#optional-global-operations). The API SHOULD provide
+If the language has support for implicitly propagated `Context` (see
+[here](../context/context.md#optional-global-operations)), the API SHOULD also provide
 the following functionality:
 
 - Get the currently active span
