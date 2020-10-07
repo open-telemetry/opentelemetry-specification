@@ -152,7 +152,7 @@ the following functionality:
 - Set the currently active span
 
 All the above functionalities operate solely on the context API, and they MAY be
-exposed as static methode on the trace module, as static methods on a class
+exposed as static methods on the trace module, as static methods on a class
 inside the trace module (it MAY be named `TracingContextUtilities`), or on the
 [`Tracer`](#tracer) class.
 
