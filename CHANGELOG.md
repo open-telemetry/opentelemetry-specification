@@ -7,6 +7,8 @@ release.
 
 ## Unreleased
 
+New:
+
 - Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation
   ([#1066](https://github.com/open-telemetry/opentelemetry-specification/pull/1066))
 
