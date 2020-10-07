@@ -132,7 +132,7 @@ returned `Tracer`s and actively update their configuration if it changes.
 
 ## Context Interaction
 
-This section defines all operations within trace module that interact with the
+This section defines all operations within the Tracing API that interact with the
 [`Context`](../context/context.md).
 
 The API MUST provide the following functionality to interact with a `Context`
