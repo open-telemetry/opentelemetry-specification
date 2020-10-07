@@ -504,7 +504,7 @@ status, which is `Unset`.
 - `Unset`
   - The default status.
 - `Ok`
-  - The operation has been validated by an Application developers or Operator to
+  - The operation has been validated by an Application developer or Operator to
     have completed successfully.
 - `Error`
   - The operation contains an error.
