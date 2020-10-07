@@ -64,9 +64,9 @@ contains a `Baggage` with the new value.
 
 REQUIRED parameters:
 
-`Name` The name for which to set the value. This is string-valued.
+`Name` The name for which to set the value, of type string.
 
-`Value` The value to set. This is string-valued.
+`Value` The value to set, of type string.
 
 OPTIONAL parameters:
 
