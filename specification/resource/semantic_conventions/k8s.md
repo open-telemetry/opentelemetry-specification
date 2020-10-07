@@ -49,6 +49,7 @@ containers on your cluster.
 |---|---|---|
 | k8s.pod.uid | The uid of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
 | k8s.pod.name | The name of the Pod. | `opentelemetry-pod-autoconf` |
+| k8s.pod.hostname | The hostname of the Pod, if set, or [name, otherwise](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-hostname-and-subdomain-fields). | `opentelemetry-pod-autoconf` |
 
 ## Container
 
@@ -65,7 +66,9 @@ to a running container.
 
 | Attribute  | Description  | Example  |
 |---|---|---|
+| k8s.container.image | The optional Container image (when not set using higher level config)| `redis` |
 | k8s.container.name | The name of the Container in a Pod template. | `redis` |
+| k8s.container.id | The Container ID | `docker://22b7d5e3a376c22dd2f7358b2f85bd6c2432c04294cd4cbbef17b6ae1ac40603` |
 
 ## ReplicaSet
 
