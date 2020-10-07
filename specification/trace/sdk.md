@@ -99,6 +99,11 @@ It produces an output called `SamplingResult` which contains:
   * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
+* A `Tracestate` that will be associated with the `Span` through the new
+  `SpanContext`.
+  If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
+  so samplers SHOULD normally return the passed-in `Tracestate` if they do not intend
+  to change it.
 
 #### GetDescription
 
@@ -276,7 +281,7 @@ in the SDK:
 
 ### Interface definition
 
-#### OnStart(Span)
+#### OnStart
 
 `OnStart` is called when a span is started. This method is called synchronously
 on the thread that started the span, therefore it should not block or throw
@@ -284,11 +289,14 @@ exceptions.
 
 **Parameters:**
 
-* `Span` - a [read/write span object](#additional-span-interfaces) for the started span.
+* `span` - a [read/write span object](#additional-span-interfaces) for the started span.
   It SHOULD be possible to keep a reference to this span object and updates to the span
   SHOULD be reflected in it.
   For example, this is useful for creating a SpanProcessor that periodically
   evaluates/prints information about all active span from a background thread.
+* `parentContext` - the parent `Context` of the span that the SDK determined
+  (the explicitly passed `Context`, the current `Context` or an empty `Context`
+  if that was explicitly requested).
 
 **Returns:** `Void`
 

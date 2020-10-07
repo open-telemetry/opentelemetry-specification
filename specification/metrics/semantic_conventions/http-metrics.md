@@ -4,7 +4,7 @@ The conventions described in this section are HTTP specific. When HTTP operation
 metric events about those operations will be generated and reported to provide insight into the
 operations. By adding HTTP labels to metric events it allows for finely tuned filtering.
 
-**Discaimer:** These are initial HTTP metric instruments and labels but more may be added in the future.
+**Disclaimer:** These are initial HTTP metric instruments and labels but more may be added in the future.
 
 ## Metric Instruments
 
@@ -38,7 +38,6 @@ and whether they should be on server, client, or both types of HTTP metric event
 | `http.host`        | `client` & `server` | see [label alternatives](#label-alternatives) | The value of the [HTTP host header][]. When the header is empty or not present, this label should be the same. |
 | `http.scheme`      | `client` & `server` | see [label alternatives](#label-alternatives) | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"` |
 | `http.status_code` | `client` & `server` | Optional          | [HTTP response status code][]. E.g. `200` (String) |
-| `http.status_text` | `client` & `server` | Optional          | [HTTP reason phrase][]. E.g. `"OK"` |
 | `http.flavor`      | `client` & `server` | Optional          | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |
 | `net.peer.name`    | `client`            | see [1] in [label alternatives](#label-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
 | `net.peer.port`    | `client`            | see [1] in [label alternatives](#label-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
@@ -62,7 +61,7 @@ To avoid high cardinality the following labels SHOULD substitute any parameters 
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 
-Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
+Many REST APIs encode parameters into the URI path, e.g. `/api/users/123` where `123`
 is a user id, which creates high cardinality value space not suitable for labels on metric events.
 In case of HTTP servers, these endpoints are often mapped by the server
 frameworks to more concise _HTTP routes_, e.g. `/api/users/{user_id}`, which are
