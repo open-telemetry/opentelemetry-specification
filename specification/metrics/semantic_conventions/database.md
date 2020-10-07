@@ -65,10 +65,22 @@ statement without variable arguments, operation name, etc.
 
 **[1]:** Required, if other than the default database (`0`).
 
+## Connection Pooling Metric Instruments
 
-## Connection-level Metric Instruments
+If possible, instrumentation should collect the following. They should have
+all [common](#common) labels applied to them.
 
-The following metric instruments should be collected every harvest interval. They should have all [common](#common) labels applied to them.
+| Name                      | Instrument | Units         | Description |
+|---------------------------|------------|---------------|-------------|
+| `db.connections.new`      | Counter	 | {connections} | The number of new connections created. |
+| `db.connections.taken`    | Counter	 | {connections} | The number of connections taken from the connection pool. |
+| `db.connections.returned` | Counter	 | {connections} | The number of connections returned to the connection pool. |
+| `db.connections.reused`   | Counter	 | {connections} | The number of connections reused. |
+| `db.connections.closed`   | Counter    | {connections} | The number of connections closed. |
+
+ 
+Otherwise, the following metric instruments should be collected. They should
+have all [common](#common) labels applied to them.
 
 | Name                      | Instrument    | Units        | Description |
 |---------------------------|---------------|--------------|-------------|
