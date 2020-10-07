@@ -37,7 +37,7 @@ default span name.
 
 ## Status
 
-[Span Status](../api.md#status) MUST be left unset if HTTP status code was in the
+[Span Status](../api.md#set-status) MUST be left unset if HTTP status code was in the
 1xx, 2xx or 3xx ranges, unless there was another error (e.g., network error receiving
 the response body; or 3xx codes with max redirects exceeded), in which case status
 MUST be set to `Error`.
