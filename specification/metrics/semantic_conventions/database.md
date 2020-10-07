@@ -43,24 +43,19 @@ applied to all database call-level metric instruments.
 
 | Attribute        | Type   | Description  | Example  | Required |
 |------------------|--------|--------------|----------|----------|
-| `db.name`        | string | If no [tech-specific label](#call-level-labels-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`<br>`main` | Conditional [2] |
-| `db.statement`   | string | The database statement being executed. [3][5] | `SELECT * FROM wuser_table`<br>`SET mykey "WuValue"` | Conditional.<br>Required if applicable. |
-| `db.operation`   | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`. [4][5] | `findAndModify`<br>`HMSET` | Conditional<br>Required, if `db.statement` is not applicable. |
-| `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.sql.SQLException`<br/>`psycopg2.OperationalError` | Conditional.<br>Required if applicable. |
+| `db.name`        | string | If no [tech-specific label](#call-level-labels-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`<br>`main` | Required if applicable. |
+| `db.operation`   | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`. [4][5] | `findAndModify`<br>`HMSET`<br>`SELECT` | Required if applicable. |
+| `db.table`       | string | The name of the primary table, collection, segment, etc... that the operation is acting upon. | `user_table` | Required if applicable. |
+| `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.sql.SQLException`<br/>`psycopg2.OperationalError` | Required if applicable. |
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name".
 
-**[2]:** Required, if applicable and no more-specific attribute is defined.
+**[4]:** For SQL operations, this should be set to the SQL keyword (example: `SELECT` or `INSERT`).
 
-**[3]:** The value may be sanitized to exclude sensitive information.
-
-**[4]:** While it would semantically make sense to set this, e.g., to a SQL keyword like `SELECT` or `INSERT`, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property (the back end can do that if required).
-
-**[5]:** To reduce cardinality, the values for `db.statement` and `db.operation`
-should have parameters removed or substituted. The resulting value should be a
-low-cardinality value represeting the statement or operation being executed on
-the database. It may be a stored procedure name (without arguments), SQL
-statement without variable arguments, operation name, etc.
+**[5]:** To reduce cardinality, the value for `db.operation` should have parameters
+removed or substituted. The resulting value should be a low-cardinality value
+represeting the statement or operation being executed on the database. It may be
+a stored procedure name (without arguments), operation name, etc.
 
 ### Call-level labels for specific technologies
 
