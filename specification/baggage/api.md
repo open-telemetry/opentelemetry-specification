@@ -108,8 +108,16 @@ The API layer MAY include the following `Propagator`s:
 * A `TextMapPropagator` implementing the [W3C Baggage Specification](https://w3c.github.io/baggage).
 
 Note: The W3C baggage specification does not currently assign semantic meaning to the optional metadata.
+
 On `extract`, the propagator should store all metadata as a single metadata instance per entry.
 On `inject`, the propagator should append the metadata per the W3C specification format.
+
+Notes:
+
+If the propagator is unable to parse the `baggage` header, `extract` MUST return a Context with no baggage entries in it.
+
+If the `baggage` header is present, but contains no entries, `extract` MUST return a Context with
+no baggage entries in it.
 
 ## Conflict Resolution
 
