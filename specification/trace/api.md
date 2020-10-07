@@ -144,7 +144,7 @@ instance:
 The functionality listed above is necessary because API users SHOULD NOT have
 access to the [Context's Key](../context/context.md#create-a-key).
 
-If the languages has support for implicitly propagated `Context`, see
+If the language has support for implicitly propagated `Context`, see
 [here](../context/context.md#optional-global-operations). The API SHOULD provide
 the following functionality:
 
