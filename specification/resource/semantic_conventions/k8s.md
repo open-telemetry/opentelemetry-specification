@@ -66,9 +66,7 @@ to a running container.
 
 | Attribute  | Description  | Example  |
 |---|---|---|
-| k8s.container.image | The optional Container image (when not set using higher level config)| `redis` |
 | k8s.container.name | The name of the Container in a Pod template. | `redis` |
-| k8s.container.id | The Container ID | `docker://22b7d5e3a376c22dd2f7358b2f85bd6c2432c04294cd4cbbef17b6ae1ac40603` |
 
 ## ReplicaSet
 
