@@ -192,9 +192,9 @@ For Apache Kafka, the following additional attributes are defined:
 **[1]:** If the key type is not string, it's string representation has to be supplied for the attribute.
 <!-- endsemconv -->
 
-For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or external service the message will be sent to.
-Consumers SHOULD identify the [Resource](../../resource/semantic_conventions/README.md#service) that received the message.
-The `service.name` of a Consumer's Resource SHOULD match the `peer.service` of the Producer.
+For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or service the message will be sent to.
+The `service.name` of a Consumer's Resource SHOULD match the `peer.service` of the Producer, when the message is directly passed to another service.
+If an intermediary broker is present, `service.name` and `peer.service` will not be the same.
 
 ## Examples
 
@@ -222,8 +222,8 @@ Process CB:                 | Span CB1 |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"T"` | `"T"` | `"T"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` |
-| `messaging.service` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
+| `messaging.message_id` | `"a1"` | `"a1"`| `"a1"` |
 
 ### Apache Kafka Example
 
@@ -248,7 +248,7 @@ Process CB:                           | Span Rcv2 |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` | `PRODUCER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `peer.service` | `"myKafka"` |  |  | `"myKafka"` |  |
-| `service.name` |  | `"myKafka"` | `"myKafka"` |  | `"myKafka"` |
+| `service.name` |  | `"myConsumer1"` | `"myConsumer1"` |  | `"myConsumer2"` |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
@@ -284,7 +284,6 @@ Process C:                      | Span Recv1 |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
 | `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
-| `messaging.service` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` |
 | `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
 | `messaging.message_id` | `"a1"` | `"a2"` | | `"a1"` | `"a2"` |
 
@@ -318,6 +317,5 @@ Process C:                              | Span Recv1 | Span Recv2 |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
 | `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
-| `messaging.service` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` | `"myRabbitMQ"` |
 | `messaging.operation` |  |  | `"receive"` | `"receive"` | `"process"` |
 | `messaging.message_id` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
