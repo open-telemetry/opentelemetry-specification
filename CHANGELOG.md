@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Change Status to be consistent with Link and Event
+  ([#1067](https://github.com/open-telemetry/opentelemetry-specification/pull/1067))
 - Clarify env variables in otlp exporter
   ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
 - Add Prometheus exporter environment variables
