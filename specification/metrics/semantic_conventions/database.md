@@ -10,16 +10,19 @@ The following labels SHOULD be applied to all database metric instruments.
 
 | Attribute              | Description  | Example  | Required |
 |------------------------|--------------|----------|----------|
-| `db.system`            | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Yes |
+| `db.system`            | An identifier for the database management system (DBMS) product being used. [1] | `other_sql` | Yes |
 | `db.connection_string` | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | No |
 | `db.user`              | Username for accessing the database. | `readonly_user`<br>`reporting_user` | No |
-| `net.transport`        | Transport protocol used. See note below. See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes). | `IP.TCP`<br>`Unix` | Conditional [1] |
+| `net.transport`        | Transport protocol used. See note below. See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes). | `IP.TCP`<br>`Unix` | Conditional [2] |
 | `net.peer.ip`          | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
 | `net.peer.port`        | Remote port number. | `80`<br>`8080`<br>`443` | No |
 | `net.peer.name`        | Remote hostname or similar, see note below. | `example.com` | No |
 
 
-**[1]:** Recommended in general, required for in-process databases (`"inproc"`).
+**[1]:** See the [database trace semantic conventions](../../trace/semantic_conventions/database.md#connection-level-attributes)
+for the list of well-known database system values.
+
+**[2]:** Recommended in general, required for in-process databases (`"inproc"`).
 
 ## Call-level Metric Instruments
 
