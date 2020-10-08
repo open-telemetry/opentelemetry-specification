@@ -1,7 +1,7 @@
 # Semantic Conventions for Database Metrics
 
 This document contains semantic conventions for database client metrics in
-OpenTelemetry. When instrumenting database clients, also consider the 
+OpenTelemetry. When instrumenting database clients, also consider the
 [general metric semantic conventions](README.md#general-metric-semantic-conventions).
 
 ## Common
@@ -17,7 +17,6 @@ The following labels SHOULD be applied to all database metric instruments.
 | `net.peer.ip`          | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
 | `net.peer.port`        | Remote port number. | `80`<br>`8080`<br>`443` | No |
 | `net.peer.name`        | Remote hostname or similar, see note below. | `example.com` | No |
-
 
 **[1]:** See the [database trace semantic conventions](../../trace/semantic_conventions/database.md#connection-level-attributes)
 for the list of well-known database system values.
@@ -78,7 +77,7 @@ For a client executing a query like this:
 SELECT * FROM public.user_table WHERE user_id = 301;
 ```
 
-while connected to a PostgreSQL database named "user_db" running on host 
+while connected to a PostgreSQL database named "user_db" running on host
 `postgres-server:5432`, the following instrument should result:
 
 ```json
@@ -106,24 +105,23 @@ For a client executing a query like this:
 SELECT * FROM orders WHERE order_id = 301;
 ```
 
-while connected to a MySQL database named "ShopDb" running on host 
+while connected to a MySQL database named "ShopDb" running on host
 `shopdb.example.com`, the following instrument should result:
-
 
 ```json
 {
   "name": "db.client.duration",
   "labels": {
-  	"db.operation": "SELECT",
-  	"db.table": "orders",
-  	"db.name": "ShopDb",
-  	"db.system": "mysql",
-  	"db.connection_string": "Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;",
-  	"db.user": "billing_user",
-  	"net.peer.name": "shopdb.example.com",
-  	"net.peer.ip": "192.0.2.12",
-  	"net.peer.port": "3306",
-  	"net.transport": "IP.TCP"
+    "db.operation": "SELECT",
+    "db.table": "orders",
+    "db.name": "ShopDb",
+    "db.system": "mysql",
+    "db.connection_string": "Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;",
+    "db.user": "billing_user",
+    "net.peer.name": "shopdb.example.com",
+    "net.peer.ip": "192.0.2.12",
+    "net.peer.port": "3306",
+    "net.transport": "IP.TCP"
   }
 }
 
@@ -144,13 +142,13 @@ should result:
 {
   "name": "db.client.duration",
   "labels": {
-  	"db.operation": "HMSET",
-  	"db.table": "myhash",
-  	"db.system": "redis",
-  	"db.user": "the_user",
-  	"net.peer.name": "/tmp/redis.sock",
-  	"net.transport": "Unix",
-  	"db.redis.database_index": "15"
+    "db.operation": "HMSET",
+    "db.table": "myhash",
+    "db.system": "redis",
+    "db.user": "the_user",
+    "net.peer.name": "/tmp/redis.sock",
+    "net.transport": "Unix",
+    "db.redis.database_index": "15"
   }
 }
 ```
@@ -175,15 +173,15 @@ at `mongodb.example.com`, the following instrument should result:
 {
   "name": "db.client.duration",
   "labels": {
-  	"db.operation": "findAndModify",
-  	"db.table": "people",
-  	"db.name": "userdatabase",
-  	"db.system": "mongodb",
-  	"db.user": "the_user",
-  	"net.peer.name": "mongodb.example.com",
-  	"net.peer.ip": "192.0.2.14",
-  	"net.peer.port": "27017",
-  	"net.transport": "IP.TCP"
+    "db.operation": "findAndModify",
+    "db.table": "people",
+    "db.name": "userdatabase",
+    "db.system": "mongodb",
+    "db.user": "the_user",
+    "net.peer.name": "mongodb.example.com",
+    "net.peer.ip": "192.0.2.14",
+    "net.peer.port": "27017",
+    "net.transport": "IP.TCP"
   }
 }
 ```
@@ -204,8 +202,8 @@ applied to them.
 
 | Name                      | Instrument | Units         | Description |
 |---------------------------|------------|---------------|-------------|
-| `db.connections.new`      | Counter	 | {connections} | The number of new connections created. |
-| `db.connections.taken`    | Counter	 | {connections} | The number of connections taken from the connection pool. |
-| `db.connections.returned` | Counter	 | {connections} | The number of connections returned to the connection pool. |
-| `db.connections.reused`   | Counter	 | {connections} | The number of connections reused. |
+| `db.connections.new`      | Counter   | {connections} | The number of new connections created. |
+| `db.connections.taken`    | Counter   | {connections} | The number of connections taken from the connection pool. |
+| `db.connections.returned` | Counter   | {connections} | The number of connections returned to the connection pool. |
+| `db.connections.reused`   | Counter   | {connections} | The number of connections reused. |
 | `db.connections.closed`   | Counter    | {connections} | The number of connections closed. |
