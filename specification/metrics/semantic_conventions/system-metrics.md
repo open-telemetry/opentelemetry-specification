@@ -31,11 +31,11 @@ instruments not explicitly defined in the specification.
 **Description:** System level processor metrics.
 
 | Name                   | Description | Units | Instrument Type | Value Type | Label Key(s) | Label Values                        |
-| ---------------------- | ----------- | ----- | --------------- | ---------- | --------- | ----------------------------------- |
-| system.cpu.time        |             | s     | SumObserver     | Double     | state     | idle, user, system, interrupt, etc. |
-|                        |             |       |                 |            | cpu       | CPU number [0..n-1]                   |
-| system.cpu.utilization |             | 1     | ValueObserver   | Double     | state     | idle, user, system, interrupt, etc. |
-|                        |             |       |                 |            | cpu       | CPU number (0..n)                   |
+| ---------------------- | ----------- | ----- | --------------- | ---------- | ------------ | ----------------------------------- |
+| system.cpu.time        |             | s     | SumObserver     | Double     | state        | idle, user, system, interrupt, etc. |
+|                        |             |       |                 |            | cpu          | CPU number [0..n-1]                 |
+| system.cpu.utilization |             | 1     | ValueObserver   | Double     | state        | idle, user, system, interrupt, etc. |
+|                        |             |       |                 |            | cpu          | CPU number (0..n)                   |
 
 #### `system.memory.` - Memory metrics
 
@@ -61,16 +61,30 @@ memory](#systempaging---pagingswap-metrics).
 #### `system.disk.` - Disk controller metrics
 
 **Description:** System level disk performance metrics.
-| Name                         | Description | Units        | Instrument Type | Value Type | Label Key | Label Values |
-| ---------------------------- | ----------- | ------------ | --------------- | ---------- | --------- | ------------ |
-| system.disk.io<!--notlink--> |             | By           | SumObserver     | Int64      | device    | (identifier) |
-|                              |             |              |                 |            | direction | read, write  |
-| system.disk.operations       |             | {operations} | SumObserver     | Int64      | device    | (identifier) |
-|                              |             |              |                 |            | direction | read, write  |
-| system.disk.time             |             | s            | SumObserver     | Double     | device    | (identifier) |
-|                              |             |              |                 |            | direction | read, write  |
-| system.disk.merged           |             | {operations} | SumObserver     | Int64      | device    | (identifier) |
-|                              |             |              |                 |            | direction | read, write  |
+| Name                                                      | Description                                        | Units        | Instrument Type | Value Type | Label Key | Label Values |
+| --------------------------------------------------------- | -------------------------------------------------- | ------------ | --------------- | ---------- | --------- | ------------ |
+| system.disk.io<!--notlink-->                              |                                                    | By           | SumObserver     | Int64      | device    | (identifier) |
+|                                                           |                                                    |              |                 |            | direction | read, write  |
+| system.disk.operations                                    |                                                    | {operations} | SumObserver     | Int64      | device    | (identifier) |
+|                                                           |                                                    |              |                 |            | direction | read, write  |
+| system.disk.io_time<sup>[1](#io_time)</sup>               | The actual time the queue and disks were busy      | s            | SumObserver     | Double     | device    | (identifier) |
+| system.disk.operation_time<sup>[2](#operation_time)</sup> | The sum of the time each request took to complete. | s            | SumObserver     | Double     | device    | (identifier) |
+|                                                           |                                                    |              |                 |            | direction | read, write  |
+| system.disk.merged                                        |                                                    | {operations} | SumObserver     | Int64      | device    | (identifier) |
+|                                                           |                                                    |              |                 |            | direction | read, write  |
+
+<a name="io_time">1</a>: I.e. the real elapsed time ("wall clock") used in the I/O
+path (time from operations running in parallel are not counted).
+- Linux: Field 13 from
+[procfs-diskstats](https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats)
+- Windows: Inverse of "Disk/% Idle Time" perf counter divided by elapsed time
+
+<a name="operation_time">2</a>: Because it is the sum of time each request
+took, parallel-issued requests each contribute to make the count grow.
+- Fields 7 & 11 from
+[procfs-diskstats](https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats)
+- Windows: "Avg. Disk sec/Read" perf counter multiplied by "Disk Reads/sec"
+perf counter (similar for Writes)
 
 #### `system.filesystem.` - Filesystem metrics
 
