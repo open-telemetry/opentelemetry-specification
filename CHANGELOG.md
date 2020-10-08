@@ -105,6 +105,8 @@ Updates:
   ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
 - Remove custom header name for Baggage, use official header
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
+- Rename SpanContext to SpanReference
+  ([#1075](https://github.com/open-telemetry/opentelemetry-specification/pull/1075))
 
 ## v0.6.0 (07-01-2020)
 
