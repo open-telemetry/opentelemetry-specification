@@ -646,7 +646,7 @@ In order for `SpanKind` to be meaningful, callers should arrange that
 a single Span does not serve more than one purpose.  For example, a
 server-side span should not be used directly as the parent of another
 remote span.  As a simple guideline, instrumentation should create a
-new Span prior to extracting and serializing the span context for a
+new Span prior to extracting and serializing the SpanReference for a
 remote call.
 
 These are the possible SpanKinds:
