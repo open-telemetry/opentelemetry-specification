@@ -21,7 +21,7 @@ Table of Contents
 * [Span](#span)
   * [Span creation](#span-creation)
     * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-    * [Add Links](#add-links)
+    * [Specifying Links](#specifying-links)
   * [Span operations](#span-operations)
     * [Get Context](#get-context)
     * [IsRecording](#isrecording)
@@ -33,11 +33,6 @@ Table of Contents
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
   * [Propagated Span creation](#propagated-span-creation)
-* [Status](#status)
-  * [StatusCanonicalCode](#statuscanonicalcode)
-  * [Status creation](#status-creation)
-  * [GetCanonicalCode](#getcanonicalcode)
-  * [GetDescription](#getdescription)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
@@ -261,7 +256,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A start timestamp
 - An end timestamp
 - [`Attributes`](../common/common.md#attributes)
-- A list of [`Link`s](#add-links) to other `Span`s
+- A list of [`Link`s](#specifying-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
@@ -307,7 +302,7 @@ attributes.
 
 A `Span`'s start time SHOULD be set to the current time on [span
 creation](#span-creation). After the `Span` is created, it SHOULD be possible to
-change its name, set its `Attribute`s, and add `Link`s and `Event`s. These
+change its name, set its `Attribute`s, add `Event`s, and set the `Status`. These
 MUST NOT be changed after the `Span`'s end time has been set.
 
 `Span`s are not meant to be used to propagate information within a process. To
@@ -345,8 +340,7 @@ The API MUST accept the following parameters:
   Whenever possible, users SHOULD set any already known attributes at span creation
   instead of calling `SetAttribute` later.
 
-- `Link`s - see API definition [here](#add-links). Empty list will be assumed if
-  not specified.
+- `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
   when span creation time has already passed. If API is called at a moment of
   a Span logical start, API user MUST not explicitly set this argument.
@@ -375,25 +369,26 @@ A `SpanContext` cannot be set as active in a `Context` directly, but through the
 of a [Propagated Span](#propagated-span-creation) wrapping it.
 For example, a `Propagator` performing context extraction may need this.
 
-#### Add Links
+#### Specifying links
 
-During the `Span` creation user MUST have the ability to record links to other `Span`s.
-Linked `Span`s can be from the same or a different trace. See [Links
+During the `Span` creation user MUST have the ability to record links to other
+`Span`s. Linked `Span`s can be from the same or a different trace. See [Links
 description](../overview.md#links-between-spans).
 
 `Link`s cannot be added after Span creation.
 
 A `Link` is defined by the following properties:
 
-- (Required) `SpanContext` of the `Span` to link to.
-- (Optional) One or more `Attribute`s as defined [here](../common/common.md#attributes).
+- `SpanContext` of the `Span` to link to.
+- Zero or more `Attribute`s as defined [here](../common/common.md#attributes).
 
 The `Link` SHOULD be an immutable type.
 
 The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
-  arguments. This MAY be called `AddLink`.
+  arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
+  the `Span` to link to and optional `Attributes`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -496,16 +491,50 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 
 #### Set Status
 
-Sets the [`Status`](#status) of the `Span`. If used, this will override the
-default `Span` status, which is `OK`.
+Sets the `Status` of the `Span`. If used, this will override the default `Span`
+status, which is `Unset`.
 
-Only the value of the last call will be recorded, and implementations are free
-to ignore previous calls.
+`Status` is semantically defined by the following properties:
+
+- `StatusCanonicalCode` that represents the canonical set of `Status` codes.
+- Optional `Description` that provides a descriptive message of the `Status`.
+
+`StatusCanonicalCode` has the following values:
+
+- `Unset`
+  - The default status.
+- `Ok`
+  - The operation has been validated by an Application developer or Operator to
+    have completed successfully.
+- `Error`
+  - The operation contains an error.
 
 The Span interface MUST provide:
 
-- An API to set the `Status` where the new status is the only argument. This
-  SHOULD be called `SetStatus`.
+- An API to set the `Status`. This SHOULD be called `SetStatus`.
+  This API takes the `StatusCanonicalCode`, and optional `Description`,
+  either as individual parameters or as an immutable object encapsulating them,
+  whichever is most appropriate for the language.
+
+The status code SHOULD remain unset, except for the following circumstances:
+
+When the status is set to `ERROR` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `ERROR`
+according to the rules defined within the semantic conventions. For operations
+not covered by the semantic conventions, Instrumentation Libraries SHOULD
+publish their own conventions, including status codes.
+
+Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
+unless explicitly configured to do so. Instrumention libraries SHOULD leave the
+status code as `Unset` unless there is an error, as described above.
+
+Application developers and Operators may set the status code to `Ok`.
+
+Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
+would otherwise generate. For example, to suppress noisy errors such as 404s.
+
+Only the value of the last call will be recorded, and implementations are free
+to ignore previous calls.
 
 #### UpdateName
 
@@ -594,62 +623,6 @@ The remaining functionality of `Span` MUST be defined as no-op operations.
 
 This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
 
-## Status
-
-`Status` interface represents the status of a finished `Span`. It's composed of
-a canonical code, and an optional descriptive message.
-
-### StatusCanonicalCode
-
-`StatusCanonicalCode` represents the canonical set of status codes of a finished
-`Span`.
-
-- `Unset`
-  - The default status.
-- `Error`
-  - The operation contains an error.
-- `Ok`
-  - The operation has been validated by an Application developers or Operator to
-    have completed successfully, or contain
-
-The status code SHOULD remain unset, except for the following circumstances:
-
-When the status is set to `ERROR` by Instrumentation Libraries, the status codes
-SHOULD be documented and predictable. The status code should only be set to `ERROR`
-according to the rules defined within the semantic conventions. For operations
-not covered by the semantic conventions, Instrumentation Libraries SHOULD
-publish their own conventions, including status codes.
-
-Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
-unless explicitly configured to do so. Instrumention libraries SHOULD leave the
-status code as `Unset` unless there is an error, as described above.
-
-Application developers and Operators may set the status code to `Ok`.
-
-Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
-would otherwise generate. For example, to suppress noisy errors such as 404s.
-
-### Status creation
-
-API MUST provide a way to create a new `Status`.
-
-Required parameters
-
-- `StatusCanonicalCode` of this `Status`.
-
-Optional parameters
-
-- Description of this `Status`.
-
-### GetCanonicalCode
-
-Returns the `StatusCanonicalCode` of this `Status`.
-
-### GetDescription
-
-Returns the description of this `Status`.
-Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
-
 ## SpanKind
 
 `SpanKind` describes the relationship between the Span, its parents,
@@ -732,14 +705,13 @@ The API layer MAY include the following `Propagator`s:
 
 In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
 This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
-is one important exception to this general rule, and that is related to propagation of a SpanContext.
-
-The following cases must be considered when a new Span is requested to be created, especially in relation to the
-requested parent SpanContext:
-
-* A valid `SpanContext` is specified as the parent of the new `Span`: The API MUST treat this parent context as the
-context for the newly created `Span`. This means that a `SpanContext` that has been provided by a configured `Propagator`
-will be propagated through to any child span, but that no new `SpanContext`s will be created.
-* No valid `SpanContext` is specified as the parent of the new `Span`: The API MUST create an non-valid
-(both SpanID and TradeID are equivalent to being all zeros) `Span` for use
-by the API caller. This means that both the `TraceID` and the `SpanID` should be invalid.
+is one important exception to this general rule, and that is related to propagation of a `SpanContext`:
+The API MUST create a [Propagated Span](#propagated-span-creation) with the `SpanContext`
+that is in the `Span` in the parent `Context` (whether explicitly given or implicit current) or,
+if the parent is a Propagated Span (which it usually always is if no SDK is present),
+it MAY return the same parent Propagated Span instance back from the creation method.
+If the parent `Context` contains no `Span`, an empty Propagated Span MUST be returned instead
+(i.e., having a SpanContext with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
+This means that a `SpanContext` that has been provided by a configured `Propagator`
+will be propagated through to any child span and ultimately also `Inject`,
+but that no new `SpanContext`s will be created.
