@@ -75,12 +75,14 @@ memory](#systempaging---pagingswap-metrics).
 
 <a name="io_time">1</a>: I.e. the real elapsed time ("wall clock") used in the I/O
 path (time from operations running in parallel are not counted).
+
 - Linux: Field 13 from
 [procfs-diskstats](https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats)
 - Windows: Inverse of "Disk/% Idle Time" perf counter divided by elapsed time
 
 <a name="operation_time">2</a>: Because it is the sum of time each request
 took, parallel-issued requests each contribute to make the count grow.
+
 - Fields 7 & 11 from
 [procfs-diskstats](https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats)
 - Windows: "Avg. Disk sec/Read" perf counter multiplied by "Disk Reads/sec"
@@ -120,13 +122,16 @@ perf counter (similar for Writes)
 |                                                                |                                                                      |               |                   |            | state     | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
 
 <a name="dropped_packets">1</a>: Measured on Windows as
-`InDiscards`/`OutDiscards`
-([source](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-mib_if_row2)).
+[`InDiscards`/`OutDiscards`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-mib_if_row2)
+from
+[`GetIfEntry2`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-getifentry2).
 On Linux, the `drop` column in `/proc/dev/net`
 ([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
 
-<a name="errors">2</a>: Measured on Windows as `InErrors`/`OutErrors`
-([source](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-mib_if_row2)).
+<a name="errors">2</a>: Measured on Windows as
+[`InErrors`/`OutErrors`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-mib_if_row2)
+from
+[`GetIfEntry2`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-getifentry2).
 On Linux, the `errs` column in `/proc/dev/net`
 ([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
 
