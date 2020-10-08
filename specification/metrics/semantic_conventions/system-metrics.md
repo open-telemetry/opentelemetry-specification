@@ -105,19 +105,30 @@ perf counter (similar for Writes)
 #### `system.network.` - Network metrics
 
 **Description:** System level network metrics.
-| Name                            | Description | Units         | Instrument Type   | Value Type | Label Key | Label Values                                                                                   |
-| ------------------------------- | ----------- | ------------- | ----------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
-| system.network.dropped_packets  |             | {packets}     | SumObserver       | Int64      | device    | (identifier)                                                                                   |
-|                                 |             |               |                   |            | direction | transmit, receive                                                                              |
-| system.network.packets          |             | {packets}     | SumObserver       | Int64      | device    | (identifier)                                                                                   |
-|                                 |             |               |                   |            | direction | transmit, receive                                                                              |
-| system.network.errors           |             | {errors}      | SumObserver       | Int64      | device    | (identifier)                                                                                   |
-|                                 |             |               |                   |            | direction | transmit, receive                                                                              |
-| system<!--notlink-->.network.io |             | By            | SumObserver       | Int64      | device    | (identifier)                                                                                   |
-|                                 |             |               |                   |            | direction | transmit, receive                                                                              |
-| system.network.connections      |             | {connections} | UpDownSumObserver | Int64      | device    | (identifier)                                                                                   |
-|                                 |             |               |                   |            | protocol  | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
-|                                 |             |               |                   |            | state     | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
+| Name                                                           | Description                                                          | Units         | Instrument Type   | Value Type | Label Key | Label Values                                                                                   |
+| -------------------------------------------------------------- | -------------------------------------------------------------------- | ------------- | ----------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
+| system.network.dropped_packets<sup>[1](#dropped_packets)</sup> | Packets that are dropped or discarded even though there was no error | {packets}     | SumObserver       | Int64      | device    | (identifier)                                                                                   |
+|                                                                |                                                                      |               |                   |            | direction | transmit, receive                                                                              |
+| system.network.packets                                         |                                                                      | {packets}     | SumObserver       | Int64      | device    | (identifier)                                                                                   |
+|                                                                |                                                                      |               |                   |            | direction | transmit, receive                                                                              |
+| system.network.errors<sup>[2](#errors)</sup>                   | Number of network errors detected                                    | {errors}      | SumObserver       | Int64      | device    | (identifier)                                                                                   |
+|                                                                |                                                                      |               |                   |            | direction | transmit, receive                                                                              |
+| system<!--notlink-->.network.io                                |                                                                      | By            | SumObserver       | Int64      | device    | (identifier)                                                                                   |
+|                                                                |                                                                      |               |                   |            | direction | transmit, receive                                                                              |
+| system.network.connections                                     |                                                                      | {connections} | UpDownSumObserver | Int64      | device    | (identifier)                                                                                   |
+|                                                                |                                                                      |               |                   |            | protocol  | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
+|                                                                |                                                                      |               |                   |            | state     | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
+
+<a name="dropped_packets">1</a>: Measured on Windows as
+`InDiscards`/`OutDiscards`
+([source](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-mib_if_row2)).
+On Linux, the `drop` column in `/proc/dev/net`
+([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
+
+<a name="errors">2</a>: Measured on Windows as `InErrors`/`OutErrors`
+([source](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-mib_if_row2)).
+On Linux, the `errs` column in `/proc/dev/net`
+([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
 
 #### `system.process.` - Aggregate system process metrics
 
