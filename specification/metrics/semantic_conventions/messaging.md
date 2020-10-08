@@ -42,10 +42,10 @@ The following metric instruments SHOULD be captured for every message send opera
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
-| `messaging.sent.messages` | Counter | messages | Sum of messages sent. |
-| `messaging.sent.duration` | ValueRecorder | milliseconds | Time spent sending a message. |
-| `messaging.sent.bytes` | ValueRecorder | bytes | The (uncompressed) size of the payload sent in bytes. Also use this metric if it is unknown whether the compressed or uncompressed payload size is reported. |
-| `messaging.sent.compressed.bytes` | ValueRecorder | bytes | The compressed size of the payload sent in bytes. |
+| `messaging.producer.messages` | Counter | messages | Sum of messages sent. |
+| `messaging.producer.duration` | ValueRecorder | milliseconds | Time spent sending a message. |
+| `messaging.producer.bytes` | ValueRecorder | bytes | The (uncompressed) size of the payload sent in bytes. Also use this metric if it is unknown whether the compressed or uncompressed payload size is reported. |
+| `messaging.producer.compressed.bytes` | ValueRecorder | bytes | The compressed size of the payload sent in bytes. |
 
 ## Receive Message Metric Instruments
 
@@ -53,10 +53,10 @@ The following metric instruments SHOULD be captured for every message receive op
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
-| `messaging.received.messages` | Counter | messages | Sum of messages received. |
-| `messaging.received.duration` | ValueRecorder | milliseconds | Time spent receiving a message or batch if batching messages. |
-| `messaging.received.bytes` | ValueRecorder | bytes | The (uncompressed) size of the message received in bytes. Also use this metric if it is unknown whether the compressed or uncompressed payload size is reported. |
-| `messaging.received.compressed.bytes` | ValueRecorder | bytes | The compressed size of the payload sent in bytes. |
+| `messaging.consumer.messages` | Counter | messages | Sum of messages received. |
+| `messaging.consumer.duration` | ValueRecorder | milliseconds | Time spent receiving a message or batch if batching messages. |
+| `messaging.consumer.bytes` | ValueRecorder | bytes | The (uncompressed) size of the message received in bytes. Also use this metric if it is unknown whether the compressed or uncompressed payload size is reported. |
+| `messaging.consumer.compressed.bytes` | ValueRecorder | bytes | The compressed size of the payload sent in bytes. |
 
 ## Process Message Metric Instruments
 
@@ -64,5 +64,5 @@ The following metric instruments SHOULD be captured for every message process op
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
-| `messaging.processed.messages` | Counter | messages | Sum of messages processed. |
-| `messaging.processed.duration` | ValueRecorder | milliseconds | Time spent processing a message. |
+| `messaging.consumer.processed.messages` | Counter | messages | Sum of messages processed. |
+| `messaging.consumer.processed.duration` | ValueRecorder | milliseconds | Time spent processing a message. |
