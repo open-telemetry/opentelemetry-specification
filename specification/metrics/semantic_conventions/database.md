@@ -68,6 +68,126 @@ a stored procedure name (without arguments), operation name, etc.
 
 **[1]:** Required, if other than the default database (`0`).
 
+### Examples
+
+#### PostgreSQL SELECT Query
+
+For a client executing a query like this:
+
+```SQL
+SELECT * FROM public.user_table WHERE user_id = 301;
+```
+
+while connected to a PostgreSQL database named "user_db" running on host 
+`postgres-server:5432`, the following instrument should result:
+
+```json
+{
+  "name": "db.client.duration",
+  "labels": {
+    "db.operation": "SELECT",
+    "db.table": "user_table",
+    "db.name": "user_db",
+    "db.system": "postgresql",
+    "db.connection_string": "postgresql://postgres-server:5432/user_db",
+    "db.user": "",
+    "net.peer.ip": "192.0.10.2",
+    "net.peer.port": 5432,
+    "net.peer.name": "postgres-server"
+  }
+}
+```
+
+#### MySQL SELECT Query
+
+For a client executing a query like this:
+
+```SQL
+SELECT * FROM orders WHERE order_id = 301;
+```
+
+while connected to a MySQL database named "ShopDb" running on host 
+`shopdb.example.com`, the following instrument should result:
+
+
+```json
+{
+  "name": "db.client.duration",
+  "labels": {
+  	"db.operation": "SELECT",
+  	"db.table": "orders",
+  	"db.name": "ShopDb",
+  	"db.system": "mysql",
+  	"db.connection_string": "Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;",
+  	"db.user": "billing_user",
+  	"net.peer.name": "shopdb.example.com",
+  	"net.peer.ip": "192.0.2.12",
+  	"net.peer.port": "3306",
+  	"net.transport": "IP.TCP"
+  }
+}
+
+```
+
+#### Redis HMSET
+
+For a client executing a Redis HMSET command like this:
+
+```redis
+HMSET myhash field1 'Hello' field2 'World
+```
+
+while connecting to a Redis instance over a Unix socket, the following instrument
+should result:
+
+```json
+{
+  "name": "db.client.duration",
+  "labels": {
+  	"db.operation": "HMSET",
+  	"db.table": "myhash",
+  	"db.system": "redis",
+  	"db.user": "the_user",
+  	"net.peer.name": "/tmp/redis.sock",
+  	"net.transport": "Unix",
+  	"db.redis.database_index": "15"
+  }
+}
+```
+
+#### MongoDB findAndModify
+
+For a mongo client executing the `findAndModify` command like this:
+
+```javascript
+{
+  findAndModify: "people",
+  query: { name: "Tom", state: "active", rating: { $gt: 10 } },
+  sort: { rating: 1 },
+  update: { $inc: { score: 1 } }
+}
+```
+
+against the database named "userdatabase" while connected to a MongoDB available
+at `mongodb.example.com`, the following instrument should result:
+
+```json
+{
+  "name": "db.client.duration",
+  "labels": {
+  	"db.operation": "findAndModify",
+  	"db.table": "people",
+  	"db.name": "userdatabase",
+  	"db.system": "mongodb",
+  	"db.user": "the_user",
+  	"net.peer.name": "mongodb.example.com",
+  	"net.peer.ip": "192.0.2.14",
+  	"net.peer.port": "27017",
+  	"net.transport": "IP.TCP"
+  }
+}
+```
+
 ## Connection Pooling Metric Instruments
 
 Otherwise, the following metric instruments SHOULD be collected. They SHOULD
