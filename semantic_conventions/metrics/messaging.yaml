@@ -1,0 +1,55 @@
+groups:
+    - id: messaging
+      prefix: messaging
+      brief: >
+          This document defines the lables used in
+          messaging systems.
+      attributes:
+        - id: system
+          type: string
+          required: always
+          brief: 'A string identifying the messaging system.'
+          examples: ['kafka', 'rabbitmq', 'activemq']
+        - id: destination
+          type: string
+          required: always
+          brief: >
+            The message destination name.
+          examples: ['MyQueue', 'MyTopic']
+        - id: destination_kind
+          type:
+            allow_custom_values: false
+            members:
+              - id: queue
+                value: "queue"
+                brief: "A message sent to a queue"
+              - id: topic
+                value: "topic"
+                brief: "A message broadcast to the subscribers of the topic"
+          required:
+            conditional: 'Required only if the message destination is either a `queue` or `topic`.'
+          brief: 'The kind of message destination'
+        - id: temp_destination
+          type: boolean
+          required:
+            conditional: 'If missing, it is assumed to be false.'
+          brief: 'A boolean that is true if the message destination is temporary.'
+        - id: protocol
+          type: string
+          brief: 'The name of the transport protocol.'
+          examples: ['AMQP', 'MQTT']
+        - id: protocol_version
+          type: string
+          brief: 'The version of the transport protocol.'
+          examples: '0.9.1'
+        - id: url
+          type: string
+          brief: 'Connection string.'
+          examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue']
+      constraints:
+        - any_of:
+          - 'net.peer.name'
+          - 'net.peer.ip'
+          - 'net.peer.port'
+          - 'net.transport'
+        - include: network

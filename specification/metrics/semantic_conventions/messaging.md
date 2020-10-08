@@ -15,23 +15,10 @@ The [Trace Messaging Semantic Conventions Definitions](../../trace/semantic_conv
 
 The following labels **SHOULD** be applied to all messaging metric instruments.
 
-| Label | Description  | Example  | Required |
-|---|---|---|---|
-| `messaging.system` | A string identifying the messaging system. | `kafka`<br>`rabbitmq`<br>`activemq` | Yes |
-| `messaging.destination` | The message destination name. | `MyQueue`<br>`MyTopic` | Yes |
-| `messaging.destination_kind` | The kind of message destination | `queue` | Conditional [1] |
-| `messaging.temp_destination` | A boolean that is true if the message destination is temporary. | true | Conditional<br>If missing, it is assumed to be false. |
-| `messaging.protocol` | The name of the transport protocol. | `AMQP`<br>`MQTT` | No |
-| `messaging.protocol_version` | The version of the transport protocol. | `0.9.1` | No |
-| `messaging.url` | Connection string. | `tibjmsnaming://localhost:7222`<br>`https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No [2] |
-| `net.peer.name`    | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) | kafka-pool-us-east | No [2] |
-| `net.peer.port`    | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) | 9092 | No [2] |
-| `net.peer.ip`      | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) | 127.0.0.1 | No [2] |
-| `net.transport`      | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) | IP.TCP | No [2] |
+<!-- semconv messaging -->
+<!-- endsemconv -->
 
-**[1]:** Required only if the message destination is either a `queue` or `topic`.
-
-**[2]** For messaging metric labels, one of the following sets of labels is RECOMMENDED (in order of usual preference unless for a particular messaging system it is known that some other set is preferable for some reason; all strings must be non-empty):
+For messaging metric labels, one of the following sets of labels is RECOMMENDED (in order of usual preference unless for a particular messaging system it is known that some other set is preferable for some reason; all strings must be non-empty):
 
 * `messaging.url`
 * `net.peer.name`, `net.peer.port`, `net.peer.ip`, `net.transport`
