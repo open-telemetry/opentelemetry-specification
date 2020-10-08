@@ -251,9 +251,9 @@ resulting in crashes that are difficult to recover from safely.
 
 To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
-the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit,
+the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
 
-If there is a configurable limit, the SDK MAY honor the environment variables
+If there is a configurable limit, the SDK SHOULD honor the environment variables
 specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
