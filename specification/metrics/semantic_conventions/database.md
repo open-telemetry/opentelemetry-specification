@@ -8,7 +8,7 @@ OpenTelemetry. When instrumenting database clients, also consider the
 
 The following labels SHOULD be applied to all database metric instruments.
 
-| Attribute              | Description  | Example  | Required |
+| Label Name             | Description  | Example  | Required |
 |------------------------|--------------|----------|----------|
 | `db.system`            | An identifier for the database management system (DBMS) product being used. [1] | `other_sql` | Yes |
 | `db.connection_string` | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | No |
@@ -41,10 +41,10 @@ databases), as well as connect operations.
 In addition to the [common](#common) labels, the following labels SHOULD be
 applied to all database call-level metric instruments.
 
-| Attribute        | Type   | Description  | Example  | Required |
+| Label Name       | Type   | Description  | Example  | Required |
 |------------------|--------|--------------|----------|----------|
 | `db.name`        | string | If no [tech-specific label](#call-level-labels-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`<br>`main` | Required if applicable. |
-| `db.operation`   | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`. [4][5] | `findAndModify`<br>`HMSET`<br>`SELECT` | Required if applicable. |
+| `db.operation`   | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`. [4][5] | `findAndModify`<br>`HMSET`<br>`SELECT`<br>`CONNECT` | Required if applicable. |
 | `db.table`       | string | The name of the primary table, collection, segment, etc... that the operation is acting upon. | `user_table` | Required if applicable. |
 | `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.sql.SQLException`<br/>`psycopg2.OperationalError` | Required if applicable. |
 
@@ -59,7 +59,7 @@ a stored procedure name (without arguments), operation name, etc.
 
 ### Call-level labels for specific technologies
 
-| Attribute                 | Description  | Example  | Required |
+| Label Name                | Description  | Example  | Required |
 |---------------------------|--------------|----------|----------|
 | `db.cassandra.keyspace`   | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
 | `db.hbase.namespace`      | The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute. | `default` | Yes |
