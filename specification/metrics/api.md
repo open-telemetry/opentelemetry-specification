@@ -358,6 +358,12 @@ other libraries.  The name of the `Meter` is explicitly not intended
 to be used as part of the instrument name, as that would prevent
 instrumentation libraries from capturing metrics by the same name.
 
+### Shutdown
+
+Exporting pending metrics.
+
+The `Shutdown` API MAY be implemented by invoking `Shutdown` within internal processors.
+
 ### Global Meter provider
 
 Use of a global instance may be seen as an anti-pattern in many

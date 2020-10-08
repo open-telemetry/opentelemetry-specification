@@ -91,11 +91,12 @@ number of `TracerProvider` instances.
 
 ### TracerProvider operations
 
-The `TracerProvider` MUST provide functions to:
+The `TracerProvider` MUST provide the following functions:
 
 - Get a `Tracer`
+- Shutdown the provider (exporting pending spans)
 
-That API MUST accept the following parameters:
+That `Tracer()` API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
   (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
@@ -124,6 +125,8 @@ If configuration must be stored per-tracer (such as disabling a certain tracer),
 the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
+
+The `Shutdown` API MAY be implemented by invoking `Shutdown` within internal processors.
 
 ## Tracing Context Utilities
 
