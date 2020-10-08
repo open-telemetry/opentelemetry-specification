@@ -30,10 +30,10 @@ instruments not explicitly defined in the specification.
 
 **Description:** System level processor metrics.
 
-| Name                   | Description | Units | Instrument Type | Value Type | Label Key | Label Values                        |
+| Name                   | Description | Units | Instrument Type | Value Type | Label Key(s) | Label Values                        |
 | ---------------------- | ----------- | ----- | --------------- | ---------- | --------- | ----------------------------------- |
 | system.cpu.time        |             | s     | SumObserver     | Double     | state     | idle, user, system, interrupt, etc. |
-|                        |             |       |                 |            | cpu       | CPU number (0..n)                   |
+|                        |             |       |                 |            | cpu       | CPU number [0..n-1]                   |
 | system.cpu.utilization |             | 1     | ValueObserver   | Double     | state     | idle, user, system, interrupt, etc. |
 |                        |             |       |                 |            | cpu       | CPU number (0..n)                   |
 
