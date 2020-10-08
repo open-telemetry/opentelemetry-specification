@@ -70,8 +70,17 @@ a stored procedure name (without arguments), operation name, etc.
 
 ## Connection Pooling Metric Instruments
 
-If possible, instrumentation SHOULD collect the following. They SHOULD have
-all [common](#common) labels applied to them.
+Otherwise, the following metric instruments SHOULD be collected. They SHOULD
+have all [common](#common) labels applied to them.
+
+| Name                      | Instrument    | Units        | Description |
+|---------------------------|---------------|--------------|-------------|
+| `db.connection_pool.limit` | ValueObserver | {connections} | The total number of database connections available in the connection pool. |
+| `db.connection_pool.usage` | ValueObserver | {connections} | The number of database connections _in use_. |
+
+If the following detailed information is available, instrumentation MAY collect
+the following metric instruments. They SHOULD have all [common](#common) labels
+applied to them.
 
 | Name                      | Instrument | Units         | Description |
 |---------------------------|------------|---------------|-------------|
@@ -80,13 +89,3 @@ all [common](#common) labels applied to them.
 | `db.connections.returned` | Counter	 | {connections} | The number of connections returned to the connection pool. |
 | `db.connections.reused`   | Counter	 | {connections} | The number of connections reused. |
 | `db.connections.closed`   | Counter    | {connections} | The number of connections closed. |
-
- 
-Otherwise, the following metric instruments SHOULD be collected. They SHOULD
-have all [common](#common) labels applied to them.
-
-| Name                      | Instrument    | Units        | Description |
-|---------------------------|---------------|--------------|-------------|
-| `db.connectionPool.limit` | ValueObserver | {connections} | The total number of database connections available in the connection pool. |
-| `db.connectionPool.usage` | ValueObserver | {connections} | The number of database connections _in use_. |
-
