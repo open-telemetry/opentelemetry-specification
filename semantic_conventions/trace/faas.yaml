@@ -7,7 +7,13 @@ groups:
         serverless) with spans.
     attributes:
       - id: trigger
-        required: always
+        required:
+          conditional: >
+            On FaaS instances, faas.trigger MUST be set on incoming invocations.
+            Clients invoking FaaS instances MUST set `faas.trigger` on outgoing
+            invocations, if it is known to the client. This is, for example, not
+            the case, when the transport layer is abstracted in a FaaS client
+            framework without access to its configuration.
         brief: 'Type of the trigger on which the function is executed.'
         type:
           allow_custom_values: false
@@ -26,10 +32,10 @@ groups:
               brief: 'A function is scheduled to be executed regularly.'
             - id: other
               value: 'other'
-              brief: 'If none of the other applies'
+              brief: 'If none of the others apply'
       - id: execution
         type: string
-        brief: "The execution id of the current function execution."
+        brief: 'The execution ID of the current function execution.'
         examples: 'af9d5aa4-a685-4c5f-a22b-444f80b3cc28'
 
   - id: faas_span.datasource
@@ -42,8 +48,8 @@ groups:
       - id: collection
         type: string
         required: always
-        brief: 'The name of the source on which the triggering operation was performed.'
-        note: >
+        brief: >
+          The name of the source on which the triggering operation was performed.
           For example, in Cloud Storage or S3 corresponds to the bucket name,
           and in Cosmos DB to the database name.
         examples: ['myBucketName', 'myDbName']
@@ -72,8 +78,8 @@ groups:
         examples: "2020-01-23T13:47:06Z"
       - id: name
         type: string
-        brief: 'The document name/table subjected to the operation.'
-        note: >
+        brief: >
+          The document name/table subjected to the operation.
           For example, in Cloud Storage or S3 is the name of
           the file, and in Cosmos DB the table name.
         examples: ["myFile.txt", "myTableName"]
@@ -127,7 +133,6 @@ groups:
         brief: >
           A boolean that is true if the serverless function is executed for the
           first time (aka cold-start).
-        examples: 'true'
 
   - id: faas_span.out
     extends: faas_span

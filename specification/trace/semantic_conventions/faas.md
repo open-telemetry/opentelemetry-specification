@@ -29,8 +29,10 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 <!-- semconv faas_span -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `faas.trigger` | string enum | Type of the trigger on which the function is executed. | `datasource` | Yes |
-| `faas.execution` | string | The execution id of the current function execution. | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
+| `faas.trigger` | string enum | Type of the trigger on which the function is executed. | `datasource` | Conditional [1] |
+| `faas.execution` | string | The execution ID of the current function execution. | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
+
+**[1]:** On FaaS instances, faas.trigger MUST be set on incoming invocations. Clients invoking FaaS instances MUST set `faas.trigger` on outgoing invocations, if it is known to the client. This is, for example, not the case, when the transport layer is abstracted in a FaaS client framework without access to its configuration.
 
 `faas.trigger` MUST be one of the following:
 
@@ -40,12 +42,9 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 | `http` | To provide an answer to an inbound HTTP request |
 | `pubsub` | A function is set to be executed when messages are sent to a messaging system. |
 | `timer` | A function is scheduled to be executed regularly. |
-| `other` | If none of the other applies |
+| `other` | If none of the others apply |
 <!-- endsemconv -->
 
-On FaaS instances, `faas.trigger` MUST be set on incoming invocations.
-Clients invoking FaaS instances MUST set `faas.trigger` on outgoing invocations, if it is known to the client.
-This is, for example, *not* the case, when the transport layer is abstracted in a FaaS client framework without access to its configuration.
 
 ### Function Name
 
@@ -83,7 +82,7 @@ For incoming FaaS spans, the span kind MUST be `Server`.
 <!-- semconv faas_span.in -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `faas.coldstart` | boolean | A boolean that is true if the serverless function is executed for the first time (aka cold-start). | `true` | No |
+| `faas.coldstart` | boolean | A boolean that is true if the serverless function is executed for the first time (aka cold-start). |  | No |
 <!-- endsemconv -->
 
 ## Outgoing Invocations
@@ -120,13 +119,6 @@ which the invoked FaaS instance reports about itself, if it's instrumented.
 | `gcp` | Google Cloud Platform |
 <!-- endsemconv -->
 
-For some cloud providers, like AWS or GCP, the region in which a function is hosted is essential
-to uniquely identify the function and also part of its endpoint.
-Since it's part of the endpoint being called, the region is always known to clients.
-In these cases, `faas.invoked_region` MUST be set accordingly.
-If the region is unknown to the client or not required for identifying the invoked function,
-setting `faas.invoked_region` is optional.
-
 [FaaS resource attributes]: ../../resource/semantic_conventions/faas.md
 [Cloud resource attributes]: ../../resource/semantic_conventions/cloud.md
 
@@ -142,14 +134,10 @@ For `faas` spans with trigger `datasource`, it is recommended to set the followi
 <!-- semconv faas_span.datasource -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `faas.document.collection` | string | The name of the source on which the triggering operation was performed. [1] | `myBucketName`<br>`myDbName` | Yes |
+| `faas.document.collection` | string | The name of the source on which the triggering operation was performed. For example, in Cloud Storage or S3 corresponds to the bucket name, and in Cosmos DB to the database name. | `myBucketName`<br>`myDbName` | Yes |
 | `faas.document.operation` | string | Describes the type of the operation that was performed on the data. | `insert` | Yes |
 | `faas.document.time` | string | A string containing the time when the data was accessed in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format expressed in [UTC](https://www.w3.org/TR/NOTE-datetime). | `2020-01-23T13:47:06Z` | Yes |
-| `faas.document.name` | string | The document name/table subjected to the operation. [2] | `myFile.txt`<br>`myTableName` | No |
-
-**[1]:** For example, in Cloud Storage or S3 corresponds to the bucket name, and in Cosmos DB to the database name.
-
-**[2]:** For example, in Cloud Storage or S3 is the name of the file, and in Cosmos DB the table name.
+| `faas.document.name` | string | The document name/table subjected to the operation. For example, in Cloud Storage or S3 is the name of the file, and in Cosmos DB the table name. | `myFile.txt`<br>`myTableName` | No |
 
 `faas.document.operation` MUST be one of the following or, if none of the listed values apply, a custom value:
 
