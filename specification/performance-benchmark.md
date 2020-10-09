@@ -3,6 +3,10 @@
 This document describes common performance benchmark guidelines on how to
 measure and report the performance of OpenTelemetry SDKs.
 
+The goal of this benchmark is to provide a tool to get the basic performance
+overhead of the OpenTelemetry SDK for given events throughput on the target
+platform.
+
 ## Benchmark Configuration
 
 ### Span Configuration
