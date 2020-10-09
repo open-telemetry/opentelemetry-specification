@@ -19,9 +19,11 @@ Kubernetes object, but "name" is usually more user friendly so can be also set.
 
 **Description:** A Kubernetes Cluster.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.cluster.name | The name of the cluster. | `opentelemetry-cluster` |
+<!-- semconv k8s.cluster -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.cluster.name` | string | The name of the cluster. | `opentelemetry-cluster` | No |
+<!-- endsemconv -->
 
 ## Namespace
 
@@ -32,9 +34,11 @@ a namespace, but not across namespaces.
 
 **Description:** A Kubernetes Namespace.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.namespace.name | The name of the namespace that the pod is running in. | `default` |
+<!-- semconv k8s.namespace -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.namespace.name` | string | The name of the namespace that the pod is running in. | `default` | No |
+<!-- endsemconv -->
 
 ## Pod
 
@@ -45,10 +49,12 @@ containers on your cluster.
 
 **Description:** A Kubernetes Pod object.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.pod.uid | The uid of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
-| k8s.pod.name | The name of the Pod. | `opentelemetry-pod-autoconf` |
+<!-- semconv k8s.pod -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.pod.uid` | string | The UID of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.pod.name` | string | The name of the Pod. | `opentelemetry-pod-autoconf` | No |
+<!-- endsemconv -->
 
 ## Container
 
@@ -63,9 +69,11 @@ to a running container.
 
 **Description:** A container in a [PodTemplate](https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates).
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.container.name | The name of the Container in a Pod template. | `redis` |
+<!-- semconv k8s.container -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.container.name` | string | The name of the Container in a Pod template. | `redis` | No |
+<!-- endsemconv -->
 
 ## ReplicaSet
 
@@ -76,10 +84,12 @@ any given time.
 
 **Description:** A Kubernetes ReplicaSet object.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.replicaset.uid | The uid of the ReplicaSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
-| k8s.replicaset.name | The name of the ReplicaSet. | `opentelemetry` |
+<!-- semconv k8s.replicaset -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.replicaset.uid` | string | The UID of the ReplicaSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.replicaset.name` | string | The name of the ReplicaSet. | `opentelemetry` | No |
+<!-- endsemconv -->
 
 ## Deployment
 
@@ -91,10 +101,12 @@ distributed among the nodes of a cluster.
 
 **Description:** A Kubernetes Deployment object.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.deployment.uid | The uid of the Deployment. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
-| k8s.deployment.name | The name of the Deployment. | `opentelemetry` |
+<!-- semconv k8s.deployment -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.deployment.uid` | string | The UID of the Deployment. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.deployment.name` | string | The name of the Deployment. | `opentelemetry` | No |
+<!-- endsemconv -->
 
 ## StatefulSet
 
@@ -105,10 +117,12 @@ about the ordering and uniqueness of these Pods.
 
 **Description:** A Kubernetes StatefulSet object.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.statefulset.uid | The uid of the StatefulSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
-| k8s.statefulset.name | The name of the StatefulSet. | `opentelemetry` |
+<!-- semconv k8s.statefulset -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.statefulset.uid` | string | The UID of the StatefulSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.statefulset.name` | string | The name of the StatefulSet. | `opentelemetry` | No |
+<!-- endsemconv -->
 
 ## DaemonSet
 
@@ -118,10 +132,12 @@ A DaemonSet ensures that all (or some) Nodes run a copy of a Pod.
 
 **Description:** A Kubernetes DaemonSet object.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.daemonset.uid | The uid of the DaemonSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
-| k8s.daemonset.name | The name of the DaemonSet. | `opentelemetry` |
+<!-- semconv k8s.daemonset -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.daemonset.uid` | string | The UID of the DaemonSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.daemonset.name` | string | The name of the DaemonSet. | `opentelemetry` | No |
+<!-- endsemconv -->
 
 ## Job
 
@@ -132,10 +148,12 @@ successfully terminate.
 
 **Description:** A Kubernetes Job object.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.job.uid | The uid of the Job. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
-| k8s.job.name | The name of the Job. | `opentelemetry` |
+<!-- semconv k8s.job -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.job.uid` | string | The UID of the Job. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.job.name` | string | The name of the Job. | `opentelemetry` | No |
+<!-- endsemconv -->
 
 ## CronJob
 
@@ -145,7 +163,9 @@ A CronJob creates Jobs on a repeating schedule.
 
 **Description:** A Kubernetes CronJob object.
 
-| Attribute  | Description  | Example  |
-|---|---|---|
-| k8s.cronjob.uid | The uid of the CronJob. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
-| k8s.cronjob.name | The name of the CronJob. | `opentelemetry` |
+<!-- semconv k8s.cronjob -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `k8s.cronjob.uid` | string | The UID of the CronJob. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.cronjob.name` | string | The name of the CronJob. | `opentelemetry` | No |
+<!-- endsemconv -->
