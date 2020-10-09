@@ -360,9 +360,9 @@ instrumentation libraries from capturing metrics by the same name.
 
 ### Shutdown
 
-Exporting pending metrics.
+Shuts down the provider.
 
-The `Shutdown` API MAY be implemented by invoking `Shutdown` within internal processors.
+The `Shutdown` API provides a way for provider to do any cleanup required.
 
 ### Global Meter provider
 

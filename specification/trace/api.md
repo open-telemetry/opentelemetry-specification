@@ -94,7 +94,7 @@ number of `TracerProvider` instances.
 The `TracerProvider` MUST provide the following functions:
 
 - Get a `Tracer`
-- Shutdown the provider (exporting pending spans)
+- Shuts down the provider
 
 That `Tracer()` API MUST accept the following parameters:
 
@@ -126,7 +126,7 @@ the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
 
-The `Shutdown` API MAY be implemented by invoking `Shutdown` within internal processors.
+The `Shutdown` API provides a way for provider to do any cleanup required.
 
 ## Tracing Context Utilities
 
