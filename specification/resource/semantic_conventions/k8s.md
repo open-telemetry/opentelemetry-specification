@@ -52,7 +52,7 @@ containers on your cluster.
 <!-- semconv k8s.pod -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `k8s.pod.uid` | string | The uid of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.pod.uid` | string | The UID of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.pod.name` | string | The name of the Pod. | `opentelemetry-pod-autoconf` | No |
 <!-- endsemconv -->
 
@@ -87,7 +87,7 @@ any given time.
 <!-- semconv k8s.replicaset -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `k8s.replicaset.uid` | string | The uid of the ReplicaSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.replicaset.uid` | string | The UID of the ReplicaSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.replicaset.name` | string | The name of the ReplicaSet. | `opentelemetry` | No |
 <!-- endsemconv -->
 
@@ -104,7 +104,7 @@ distributed among the nodes of a cluster.
 <!-- semconv k8s.deployment -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `k8s.deployment.uid` | string | The uid of the Deployment. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.deployment.uid` | string | The UID of the Deployment. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.deployment.name` | string | The name of the Deployment. | `opentelemetry` | No |
 <!-- endsemconv -->
 
@@ -120,7 +120,7 @@ about the ordering and uniqueness of these Pods.
 <!-- semconv k8s.statefulset -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `k8s.statefulset.uid` | string | The uid of the StatefulSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.statefulset.uid` | string | The UID of the StatefulSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.statefulset.name` | string | The name of the StatefulSet. | `opentelemetry` | No |
 <!-- endsemconv -->
 
@@ -135,7 +135,7 @@ A DaemonSet ensures that all (or some) Nodes run a copy of a Pod.
 <!-- semconv k8s.daemonset -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `k8s.daemonset.uid` | string | The uid of the DaemonSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.daemonset.uid` | string | The UID of the DaemonSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.daemonset.name` | string | The name of the DaemonSet. | `opentelemetry` | No |
 <!-- endsemconv -->
 
@@ -151,7 +151,7 @@ successfully terminate.
 <!-- semconv k8s.job -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `k8s.job.uid` | string | The uid of the Job. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.job.uid` | string | The UID of the Job. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.job.name` | string | The name of the Job. | `opentelemetry` | No |
 <!-- endsemconv -->
 
@@ -166,6 +166,6 @@ A CronJob creates Jobs on a repeating schedule.
 <!-- semconv k8s.cronjob -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `k8s.cronjob.uid` | string | The uid of the CronJob. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
+| `k8s.cronjob.uid` | string | The UID of the CronJob. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.cronjob.name` | string | The name of the CronJob. | `opentelemetry` | No |
 <!-- endsemconv -->
