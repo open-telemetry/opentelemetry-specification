@@ -376,7 +376,7 @@ During the `Span` creation user MUST have the ability to record links to other
 description](../overview.md#links-between-spans). `Link`s cannot be added after
 Span creation.
 
-A `Link` is semantically defined by the following properties:
+A `Link` is structurally defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
 - Zero or more [`Attributes`](../common/common.md#attributes) further describing
@@ -455,7 +455,7 @@ attributes, cannot change their decisions.
 A `Span` MUST have the ability to add events. Events have a time associated
 with the moment when they are added to the `Span`.
 
-An `Event` is semantically defined by the following properties:
+An `Event` is structurally defined by the following properties:
 
 - Name of the event.
 - A timestamp for the event. Either the time at which the event was
