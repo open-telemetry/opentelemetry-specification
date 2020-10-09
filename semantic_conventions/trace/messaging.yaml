@@ -135,7 +135,7 @@ groups:
             If the key is `null`, the attribute MUST NOT be set.
           note: >
             If the key type is not string, it's string representation has to be supplied for the attribute.
-            If the key can not be represented in string form, don't include its value.
+            If the key has no unambiguous, canonical string form, don't include its value.
           examples: 'myKey'
         - id: consumer_group
           type: string
