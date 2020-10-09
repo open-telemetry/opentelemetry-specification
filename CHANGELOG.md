@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation
+  ([#1066](https://github.com/open-telemetry/opentelemetry-specification/pull/1066))
 - Change Status to be consistent with Link and Event
   ([#1067](https://github.com/open-telemetry/opentelemetry-specification/pull/1067))
 - Clarify env variables in otlp exporter
