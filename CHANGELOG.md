@@ -39,6 +39,7 @@ New:
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
+- Add semantic conventions for Database metrics ([#1076](https://github.com/open-telemetry/opentelemetry-specification/pull/1076))
 
 Updates:
 
