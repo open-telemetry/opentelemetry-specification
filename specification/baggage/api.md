@@ -24,6 +24,15 @@ The Baggage API consists of:
 - the `Baggage`
 - functions to interact with the `Baggage` in a `Context`
 
+Please note: the functions described here are one way to approach interacting with the Baggage
+purely via the Context. Depending on language idioms, a language API may implement these functions
+by providing a struct or immutable object that represents the entire Baggage contents. This
+construct could then be added or removed from the Context with a single operation. For example,
+the [Clear](#clear) function could be implemented by having the user set an empty Baggage object/struct
+into the context. The [Get all](#get-all) function could be implemented by returning the Baggage
+object as a whole from the function call. If an idiom like this is implemented, the Baggage object/struct
+MUST be immutable, so that the containing Context also remains immutable.
+
 ### Baggage
 
 `Baggage` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
