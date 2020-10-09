@@ -8,7 +8,7 @@
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
 | `faas.name` | string | The name of the function being executed. | `my-function` | Yes |
-| `faas.id` | string | The unique name of the function being executed. [1] | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Yes |
+| `faas.id` | string | The unique ID of the function being executed. [1] | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Yes |
 | `faas.version` | string | The version string of the function being executed as defined in [Version Attributes](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#version-attributes). | `2.0.0` | No |
 | `faas.instance` | string | The execution environment ID as a string. | `my-function:instance-0001` | No |
 
