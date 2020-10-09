@@ -29,19 +29,29 @@
 
 Although messaging systems are not as standardized as, e.g., HTTP, it is assumed that the following definitions are applicable to most of them that have similar concepts at all (names borrowed mostly from JMS):
 
-A *message* is an envelope around a potentially empty payload.
-This envelope may offer the possibility to convey additional metadata, often under the key/value form.
+A *message* is an envelope with a potentially empty payload.
+This envelope may offer the possibility to convey additional metadata, often in key/value form.
+
+A message is sent by a message *producer* to:
+
+* Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
+With Apache Kafka, the physical broker a message is written to depends on the number of partitions, and which broker is the *leader* of the partition the record is written to.
+* Logically: some particular message *destination*.
+
 Messages can be delivered to 0, 1, or multiple consumers depending on the dispatching semantic of the protocol.
-Traditional messaging brokers, such as JMS, use the concept of topics when a message is dispatched to potentially multiple consumers and queues when a message is dispatched to a single consumer.
-In a messaging system such as Apache Kafka, consumer groups are used. Each record, or message, is sent to a single consumer per consumer group.
-Whether a specific message is processed as if it was sent to a topic or queue entirely depends on the consumer groups and their composition.
 
 ### Destinations
 
 A destination is usually identified by some name unique within the messaging system instance, which might look like a URL or a simple one-word identifier.
-Traditional messaging involves two kinds of destinations: *topic*s and *queue*s.
+Traditional messaging, such as JMS, involves two kinds of destinations: *topic*s and *queue*s.
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all consumers that have *subscribed* to the topic.
 A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
+
+In a messaging system such as Apache Kafka, all destinations are *topic*s.
+Each record, or message, is sent to a single consumer per consumer group.
+Consumer groups provide *deliver once* semantics for consumers of a topic within a group.
+Whether a specific message is processed as if it was sent to a topic or queue entirely depends on the consumer groups and their composition.
+For instance, there can be multiple consumer groups processing records from the same topic.
 
 [idempotent]: https://en.wikipedia.org/wiki/Idempotence
 
@@ -54,7 +64,7 @@ Often, the waiting for a message is not particularly interesting and hidden away
 
 ### Conversations
 
-In some messaging systems, a message can receive a reply message, or possibly multiple, that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*.
+In some messaging systems, a message can receive one or more reply messages that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*.
 The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit *conversation ID* (sometimes called *correlation ID*).
 Sometimes a conversation can span multiple message destinations (e.g. initiated via a topic, continued on a temporary one-to-one queue).
 
@@ -77,7 +87,7 @@ The span name SHOULD be set to the message destination name and the operation be
 
 The destination name SHOULD only be used for the span name if it is known to be of low cardinality (cf. [general span name guidelines](../api.md#span)).
 This can be assumed if it is statically derived from application code or configuration.
-Wherever possible, the preference is to use real destination names over logical or aliased names.
+Wherever possible, the real destination names after resolving logical or aliased names SHOULD be used.
 If the destination name is dynamic, such as a [conversation ID](#conversations) or a value obtained from a `Reply-To` header, it SHOULD NOT be used for the span name.
 In these cases, an artificial destination name that best expresses the destination, or a generic, static fallback like `"(temporary)"` for [temporary destinations](#temporary-destinations) SHOULD be used instead.
 

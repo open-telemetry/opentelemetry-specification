@@ -68,6 +68,8 @@ groups:
           brief: 'The compressed size of the message payload in bytes.'
           examples: 2048
         - ref: net.peer.name
+          note: >
+            This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
           required:
             conditional: If available.
         - ref: net.peer.ip
@@ -133,6 +135,7 @@ groups:
             If the key is `null`, the attribute MUST NOT be set.
           note: >
             If the key type is not string, it's string representation has to be supplied for the attribute.
+            If the key can not be represented in string form, don't include its value.
           examples: 'myKey'
         - id: consumer_group
           type: string
@@ -144,9 +147,9 @@ groups:
           type: string
           brief: >
             Client Id for the Consumer or Producer that is handling the message.
-          examples: '5'
+          examples: 'client-5'
         - id: partition
-          type: string
+          type: number
           brief: >
             Partition the message is sent to.
-          examples: '2'
+          examples: 2
