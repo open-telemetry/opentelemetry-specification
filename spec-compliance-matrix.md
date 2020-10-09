@@ -38,6 +38,7 @@ status of the feature is not known.
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | -  | + | +  |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + |    | + | +  |
+|IsRecording becomes false after End           |   |    |   |      |    |      |   |    |   |    |
 |Set status                                    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1157)    | +  | +    | + | +  | + | +  |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|

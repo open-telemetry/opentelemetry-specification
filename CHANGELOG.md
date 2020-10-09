@@ -101,7 +101,7 @@ Updates:
   ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
 - Remove custom header name for Baggage, use official header
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
-- Trace API: Clarifications for `Span.End`
+- Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
 
 ## v0.6.0 (07-01-2020)
