@@ -201,7 +201,7 @@ For Apache Kafka, the following additional attributes are defined:
 | `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | No |
 | `messaging.kafka.partition` | number | Partition the message is sent to. | `2` | No |
 
-**[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key can not be represented in string form, don't include its value.
+**[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
 <!-- endsemconv -->
 
 For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or service the message will be sent to.
