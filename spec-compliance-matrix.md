@@ -31,8 +31,7 @@ status of the feature is not known.
 |Create root span                              | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|Create with explicit parent Span              | + | +  | + | +    | +  | +    | + | -  | + | +  |
-|Create with explicit parent SpanContext       | - | +  | + | +    | +  | +    |   | -  | + | +  |
+|No explicit parent Span/SpanContext allowed   |   |    |   |      |    |      |   |    |   |    |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  |
