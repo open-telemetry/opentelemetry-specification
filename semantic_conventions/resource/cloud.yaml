@@ -18,22 +18,22 @@ groups:
               value: 'gcp'
               brief: 'Google Cloud Platform'
         brief: >
-             Name of the cloud provider.
+          Name of the cloud provider.
         examples: 'gcp'
       - id: account.id
         type: string
         brief: >
-           	The cloud account id used to identify different entities.
+          The cloud account ID used to identify different entities.
         examples: ['opentelemetry']
       - id: region
         type: string
         brief: >
-           	A specific geographical location where different entities can run.
+          A specific geographical location where different entities can run.
         examples: ['us-central1']
       - id: zone
         type: string
         brief: >
-           	Zones are a sub set of the region connected through low-latency links.
+          Zones are a sub set of the region connected through low-latency links.
         note: >
-            In AWS, this is called availability-zone.
+          In AWS, this is called availability-zone.
         examples: ['us-central1-a']
