@@ -29,7 +29,7 @@ groups:
       - id: uid
         type: string
         brief: >
-          The uid of the Pod.
+          The UID of the Pod.
         examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
       - id: name
         type: string
@@ -56,7 +56,7 @@ groups:
       - id: uid
         type: string
         brief: >
-          The uid of the ReplicaSet.
+          The UID of the ReplicaSet.
         examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
       - id: name
         type: string
@@ -72,7 +72,7 @@ groups:
       - id: uid
         type: string
         brief: >
-          The uid of the Deployment.
+          The UID of the Deployment.
         examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
       - id: name
         type: string
@@ -88,7 +88,7 @@ groups:
       - id: uid
         type: string
         brief: >
-          The uid of the StatefulSet.
+          The UID of the StatefulSet.
         examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
       - id: name
         type: string
@@ -104,7 +104,7 @@ groups:
       - id: uid
         type: string
         brief: >
-          The uid of the DaemonSet.
+          The UID of the DaemonSet.
         examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
       - id: name
         type: string
@@ -120,7 +120,7 @@ groups:
       - id: uid
         type: string
         brief: >
-          The uid of the Job.
+          The UID of the Job.
         examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
       - id: name
         type: string
@@ -136,7 +136,7 @@ groups:
       - id: uid
         type: string
         brief: >
-          The uid of the CronJob.
+          The UID of the CronJob.
         examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
       - id: name
         type: string
