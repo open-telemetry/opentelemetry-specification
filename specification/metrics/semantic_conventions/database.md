@@ -140,7 +140,7 @@ while connected to a MySQL database named "ShopDb" running on host
 For a client executing a Redis HMSET command like this:
 
 ```redis
-HMSET myhash field1 'Hello' field2 'World
+HMSET myhash field1 'Hello' field2 'World'
 ```
 
 while connecting to a Redis instance over a Unix socket, the following instrument
@@ -196,16 +196,17 @@ at `mongodb.example.com`, the following instrument should result:
 
 ## Connection Pooling Metric Instruments
 
-Otherwise, the following metric instruments SHOULD be collected. They SHOULD
-have all [common](#common) labels applied to them.
+The following metric instruments SHOULD be collected for database connection
+pools. They SHOULD have all [common](#common) labels applied to them.
 
 | Name                      | Instrument    | Units        | Description |
 |---------------------------|---------------|--------------|-------------|
 | `db.connection_pool.limit` | ValueObserver | {connections} | The total number of database connections available in the connection pool. |
 | `db.connection_pool.usage` | ValueObserver | {connections} | The number of database connections _in use_. |
 
-If the following detailed information is available, instrumentation MAY collect
-the following metric instruments. They SHOULD have all [common](#common) labels
+
+If the following detailed information is available, the following metric
+instruments MAY be collected. They SHOULD have all [common](#common) labels
 applied to them.
 
 | Name                      | Instrument | Units         | Description |
