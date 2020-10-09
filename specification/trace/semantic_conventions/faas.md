@@ -45,7 +45,6 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 | `other` | If none of the others apply |
 <!-- endsemconv -->
 
-
 ### Function Name
 
 There are 2 locations where the function's name can be recorded: the span name and the
