@@ -495,7 +495,7 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 Sets the `Status` of the `Span`. If used, this will override the default `Span`
 status, which is `Unset`.
 
-`Status` is semantically defined by the following properties:
+`Status` is structurally defined by the following properties:
 
 - `StatusCanonicalCode` that represents the canonical set of `Status` codes.
 - Optional `Description` that provides a descriptive message of the `Status`.
