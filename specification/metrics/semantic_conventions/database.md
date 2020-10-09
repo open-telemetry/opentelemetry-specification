@@ -1,5 +1,13 @@
 # Semantic Conventions for Database Metrics
 
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+Run the tool to have the TOC generated here
+
+<!-- tocstop -->
+
 This document contains semantic conventions for database client metrics in
 OpenTelemetry. When instrumenting database clients, also consider the
 [general metric semantic conventions](README.md#general-metric-semantic-conventions).
