@@ -373,22 +373,22 @@ For example, a `Propagator` performing context extraction may need this.
 
 During the `Span` creation user MUST have the ability to record links to other
 `Span`s. Linked `Span`s can be from the same or a different trace. See [Links
-description](../overview.md#links-between-spans).
+description](../overview.md#links-between-spans). `Link`s cannot be added after
+Span creation.
 
-`Link`s cannot be added after Span creation.
-
-A `Link` is defined by the following properties:
+A `Link` is structurally defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
-- Zero or more `Attribute`s as defined [here](../common/common.md#attributes).
-
-The `Link` SHOULD be an immutable type.
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the link.
 
 The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
-  the `Span` to link to and optional `Attributes`.
+  the `Span` to link to and optional `Attributes`, either as individual
+  parameters or as an immutable object encapsulating them, whichever is most
+  appropriate for the language.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -455,23 +455,24 @@ attributes, cannot change their decisions.
 A `Span` MUST have the ability to add events. Events have a time associated
 with the moment when they are added to the `Span`.
 
-An `Event` is defined by the following properties:
+An `Event` is structurally defined by the following properties:
 
 - Name of the event.
 - A timestamp for the event. Either the time at which the event was
-added or a custom timestamp provided by the user.
-- [`Attributes`](../common/common.md#attributes) further describing the event.
-
-The `Event` SHOULD be an immutable type.
+  added or a custom timestamp provided by the user.
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the event.
 
 The Span interface MUST provide:
 
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
   This API takes the name of the event, optional `Attributes` and an optional
-  `Timestamp` which can be used to specify the time at which the event occurred.
-  If no custom timestamp is provided by the user, the implementation automatically
-  sets the time at which this API is called on the event.
+  `Timestamp` which can be used to specify the time at which the event occurred,
+  either as individual parameters or as an immutable object encapsulating them,
+  whichever is most appropriate for the language. If no custom timestamp is
+  provided by the user, the implementation automatically sets the time at which
+  this API is called on the event.
 
 Events SHOULD preserve the order in which they are recorded.
 This will typically match the ordering of the events' timestamps,
@@ -494,7 +495,7 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 Sets the `Status` of the `Span`. If used, this will override the default `Span`
 status, which is `Unset`.
 
-`Status` is semantically defined by the following properties:
+`Status` is structurally defined by the following properties:
 
 - `StatusCanonicalCode` that represents the canonical set of `Status` codes.
 - Optional `Description` that provides a descriptive message of the `Status`.
