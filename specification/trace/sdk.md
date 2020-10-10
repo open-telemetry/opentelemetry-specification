@@ -205,9 +205,9 @@ reference.
 
 ### Shutdown
 
-`Shutdown` SHOULD be called only once for each `TracerProvider` instance. After
-the call to `Shutdown`, subsequent calls to get `Tracer` are not allowed. SDKs
-SHOULD ignore these calls gracefully, if possible.
+`Shutdown` MUST be called only once for each `TracerProvider` instance. After
+the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
+SHOULD return a valid no-op Tracer for these calls, if possible.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
@@ -217,7 +217,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. Language library authors can decide if they want to
 make the shutdown timeout configurable.
 
-The `Shutdown` API MAY be implemented by invoking `Shutdown` within internal processors.
+`Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
 
 ## Additional Span Interfaces
 

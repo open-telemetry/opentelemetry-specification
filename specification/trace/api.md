@@ -96,7 +96,9 @@ The `TracerProvider` MUST provide the following functions:
 - Get a `Tracer`
 - Shuts down the provider
 
-That `Tracer()` API MUST accept the following parameters:
+#### Get a Tracer
+
+This API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
   (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
@@ -126,7 +128,9 @@ the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
 
-The `Shutdown` API provides a way for provider to do any cleanup required.
+#### Shutdown
+
+This API provides a way for provider to do any cleanup required.
 
 ## Tracing Context Utilities
 
