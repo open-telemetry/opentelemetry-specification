@@ -204,7 +204,6 @@ pools. They SHOULD have all [common](#common) labels applied to them.
 | `db.connection_pool.limit` | ValueObserver | {connections} | The total number of database connections available in the connection pool. |
 | `db.connection_pool.usage` | ValueObserver | {connections} | The number of database connections _in use_. |
 
-
 If the following detailed information is available, the following metric
 instruments MAY be collected. They SHOULD have all [common](#common) labels
 applied to them.
