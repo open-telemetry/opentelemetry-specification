@@ -148,7 +148,7 @@ which is the user-facing entry point to the SDK.
 Instruments are classified in several ways that distinguish them from
 one another.
 
-1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., SpanReference, Baggage). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
+1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., with associated Span, Baggage, etc.). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
 2. Adding vs. Grouping: An adding instrument is one that records adding measurements, as opposed to a grouping instrument as described above.
 3. Monotonicity: A monotonic instrument is an adding instrument, where the progression of sums is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
 
