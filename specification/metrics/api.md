@@ -944,7 +944,7 @@ convention.
 
 Synchronous measurements are implicitly associated with the
 distributed [Context](../context/context.md) at runtime, which may
-include a SpanReference and Baggage entries.  The Metric SDK may use
+include a Span and Baggage entries. The Metric SDK may use
 this information in many ways, but one feature is of particular
 interest in OpenTelemetry.
 
