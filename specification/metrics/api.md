@@ -421,7 +421,7 @@ libraries may be written to generate this metric.
 ### Synchronous and asynchronous instruments compared
 
 Synchronous instruments are called inside a request, meaning they
-have an associated distributed [Context](../context/context.md) (i.e., SpanReference, Baggage).  Multiple metric events may occur for a
+have an associated distributed [Context](../context/context.md) (with Span, Baggage, etc.).  Multiple metric events may occur for a
 synchronous instrument within a given collection interval.
 
 Asynchronous instruments are reported by a callback, once per
