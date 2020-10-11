@@ -323,7 +323,7 @@ consist of:
 - [resources](../resource/sdk.md) associated with the SDK at startup.
 
 Synchronous events have one additional property, the distributed
-[Context](../context/context.md) (i.e., SpanReference, Baggage)
+[Context](../context/context.md) (containing Span, Baggage, etc.)
 that was active at the time.
 
 ## Meter provider
