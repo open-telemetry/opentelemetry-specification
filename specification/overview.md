@@ -280,7 +280,7 @@ See the [Context](context/context.md)
 ## Propagators
 
 OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
-such as `SpanReference` and `Baggage`. Different `Propagator` types define the restrictions
+such as `Span`s (usually only the `SpanReference` portion) and `Baggage`. Different `Propagator` types define the restrictions
 imposed by a specific transport and bound to a data type.
 
 The Propagators API currently defines one `Propagator` type:
