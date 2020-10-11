@@ -165,7 +165,7 @@ are synchronous, adding, and/or monotonic.
 | ValueObserver     | No  | No  | No  |
 
 The synchronous instruments are useful for measurements that are
-gathered in a distributed [Context](../context/context.md) (i.e., SpanReference, Baggage).  The asynchronous instruments are
+gathered in a distributed [Context](../context/context.md) (i.e., with associated Span, Baggage, etc.).  The asynchronous instruments are
 useful when measurements are expensive, therefore should be gathered
 periodically.  Read more [characteristics of synchronous and
 asynchronous instruments](#synchronous-and-asynchronous-instruments-compared) below.
