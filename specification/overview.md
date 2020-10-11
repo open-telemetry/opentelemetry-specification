@@ -127,7 +127,7 @@ propagated from parent to child **Spans**.
 
 A **Span** may be linked to zero or more other **Spans** (defined by
 **SpanReference**) that are causally related. **Links** can point to
-**SpanReferences** inside a single **Trace** or across different **Traces**.
+**Spans** inside a single **Trace** or across different **Traces**.
 **Links** can be used to represent batched operations where a **Span** was
 initiated by multiple initiating **Spans**, each representing a single incoming
 item being processed in the batch.
