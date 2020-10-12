@@ -48,8 +48,8 @@ and confusion for end users. (For example, prefer `runtime.java.gc*` over
 `runtime.gc.*`.) Measures of many operating system metrics are similarly
 ambiguous.
 
-For conventional metrics or metrics that have their units included in
-OpenTelemetry metadata (e.g. `metric.WithUnit` in Go), SHOULD NOT include the
+Conventional metrics or metrics that have their units included in
+OpenTelemetry metadata (e.g. `metric.WithUnit` in Go) SHOULD NOT include the
 units in the metric name. Units may be included when it provides additional
 meaning to the metric name. Metrics MUST, above all, be understandable and
 usable.

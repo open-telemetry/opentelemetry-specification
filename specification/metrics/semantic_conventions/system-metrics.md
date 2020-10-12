@@ -73,7 +73,7 @@ memory](#systempaging---pagingswap-metrics).
 | system.disk.merged                                        |                                                    | {operations} | SumObserver     | Int64      | device    | (identifier) |
 |                                                           |                                                    |              |                 |            | direction | read, write  |
 
-<a name="io_time">1</a>: I.e. the real elapsed time ("wall clock") used in the I/O
+<sup><a name="io_time">1</a></sup> i.e. the real elapsed time ("wall clock") used in the I/O
 path (time from operations running in parallel are not counted).
 
 - Linux: Field 13 from
@@ -83,7 +83,7 @@ path (time from operations running in parallel are not counted).
 <a name="operation_time">2</a>: Because it is the sum of time each request
 took, parallel-issued requests each contribute to make the count grow.
 
-- Fields 7 & 11 from
+- Linux: Fields 7 & 11 from
 [procfs-diskstats](https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats)
 - Windows: "Avg. Disk sec/Read" perf counter multiplied by "Disk Reads/sec"
 perf counter (similar for Writes)
