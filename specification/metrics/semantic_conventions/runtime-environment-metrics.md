@@ -11,14 +11,11 @@ semantic conventions when instrumenting runtime environments.
 <!-- toc -->
 
 - [Metric Instruments](#metric-instruments)
-  * [Runtime Environment Metrics - `runtime.`](#runtime-environment-metrics---runtime)
-    + [Runtime Environment Specific Metrics - `runtime.{environment}.`](#runtime-environment-specific-metrics---runtimeenvironment)
+  * [Runtime Environment Specific Metrics - `runtime.{environment}.`](#runtime-environment-specific-metrics---runtimeenvironment)
 
 <!-- tocstop -->
 
 ## Metric Instruments
-
-### Runtime Environment Metrics - `runtime.`
 
 Runtime environments vary widely in their terminology, implementation, and
 relative values for a given metric. For example, Go and Python are both
@@ -28,7 +25,7 @@ does not propose any standard top-level runtime metric instruments. See [OTEP
 108](https://github.com/open-telemetry/oteps/pull/108/files) for additional
 discussion.
 
-#### Runtime Environment Specific Metrics - `runtime.{environment}.`
+### Runtime Environment Specific Metrics - `runtime.{environment}.`
 
 Metrics specific to a certain runtime environment should be prefixed with
 `runtime.{environment}.` and follow the semantic conventions outlined in

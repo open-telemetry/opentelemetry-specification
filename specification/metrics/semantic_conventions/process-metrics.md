@@ -14,12 +14,9 @@ metrics](runtime-environment-metrics.md).
 <!-- toc -->
 
 - [Metric Instruments](#metric-instruments)
-  * [Standard Process Metrics - `process.`](#standard-process-metrics---process)
 
 <!-- tocstop -->
 
 ## Metric Instruments
-
-### Standard Process Metrics - `process.`
 
 TODO

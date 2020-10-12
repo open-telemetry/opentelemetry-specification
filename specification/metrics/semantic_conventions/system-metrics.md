@@ -10,23 +10,20 @@ instruments not explicitly defined in the specification.
 <!-- toc -->
 
 - [Metric Instruments](#metric-instruments)
-  * [Standard System Metrics - `system.`](#standard-system-metrics---system)
-    + [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
-    + [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
-    + [`system.paging.` - Paging/swap metrics](#systempaging---pagingswap-metrics)
-    + [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
-    + [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
-    + [`system.network.` - Network metrics](#systemnetwork---network-metrics)
-    + [`system.process.` - Aggregate system process metrics](#systemprocess---aggregate-system-process-metrics)
-    + [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
+  * [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
+  * [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
+  * [`system.paging.` - Paging/swap metrics](#systempaging---pagingswap-metrics)
+  * [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
+  * [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
+  * [`system.network.` - Network metrics](#systemnetwork---network-metrics)
+  * [`system.process.` - Aggregate system process metrics](#systemprocess---aggregate-system-process-metrics)
+  * [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
 
 <!-- tocstop -->
 
 ## Metric Instruments
 
-### Standard System Metrics - `system.`
-
-#### `system.cpu.` - Processor metrics
+### `system.cpu.` - Processor metrics
 
 **Description:** System level processor metrics.
 
@@ -37,7 +34,7 @@ instruments not explicitly defined in the specification.
 | system.cpu.utilization |             | 1     | ValueObserver   | Double     | state        | idle, user, system, interrupt, etc. |
 |                        |             |       |                 |            | cpu          | CPU number (0..n)                   |
 
-#### `system.memory.` - Memory metrics
+### `system.memory.` - Memory metrics
 
 **Description:** System level memory metrics. This does not include [paging/swap
 memory](#systempaging---pagingswap-metrics).
@@ -47,7 +44,7 @@ memory](#systempaging---pagingswap-metrics).
 | system.memory.usage       |             | By    | UpDownSumObserver | Int64      | state     | used, free, cached, etc. |
 | system.memory.utilization |             | 1     | ValueObserver     | Double     | state     | used, free, cached, etc. |
 
-#### `system.paging.` - Paging/swap metrics
+### `system.paging.` - Paging/swap metrics
 
 **Description:** System level paging/swap memory metrics.
 | Name                      | Description                         | Units        | Instrument Type   | Value Type | Label Key | Label Values |
@@ -58,37 +55,39 @@ memory](#systempaging---pagingswap-metrics).
 | system.paging.operations  |                                     | {operations} | SumObserver       | Int64      | type      | major, minor |
 |                           |                                     |              |                   |            | direction | in, out      |
 
-#### `system.disk.` - Disk controller metrics
+### `system.disk.` - Disk controller metrics
 
 **Description:** System level disk performance metrics.
-| Name                                                      | Description                                        | Units        | Instrument Type | Value Type | Label Key | Label Values |
-| --------------------------------------------------------- | -------------------------------------------------- | ------------ | --------------- | ---------- | --------- | ------------ |
-| system.disk.io<!--notlink-->                              |                                                    | By           | SumObserver     | Int64      | device    | (identifier) |
-|                                                           |                                                    |              |                 |            | direction | read, write  |
-| system.disk.operations                                    |                                                    | {operations} | SumObserver     | Int64      | device    | (identifier) |
-|                                                           |                                                    |              |                 |            | direction | read, write  |
-| system.disk.io_time<sup>[1](#io_time)</sup>               | The actual time the queue and disks were busy      | s            | SumObserver     | Double     | device    | (identifier) |
-| system.disk.operation_time<sup>[2](#operation_time)</sup> | The sum of the time each request took to complete. | s            | SumObserver     | Double     | device    | (identifier) |
-|                                                           |                                                    |              |                 |            | direction | read, write  |
-| system.disk.merged                                        |                                                    | {operations} | SumObserver     | Int64      | device    | (identifier) |
-|                                                           |                                                    |              |                 |            | direction | read, write  |
+| Name                                                      | Description                                     | Units        | Instrument Type | Value Type | Label Key | Label Values |
+| --------------------------------------------------------- | ----------------------------------------------- | ------------ | --------------- | ---------- | --------- | ------------ |
+| system.disk.io<!--notlink-->                              |                                                 | By           | SumObserver     | Int64      | device    | (identifier) |
+|                                                           |                                                 |              |                 |            | direction | read, write  |
+| system.disk.operations                                    |                                                 | {operations} | SumObserver     | Int64      | device    | (identifier) |
+|                                                           |                                                 |              |                 |            | direction | read, write  |
+| system.disk.io_time<sup>[1](#io_time)</sup>               | Time disk spent activated                       | s            | SumObserver     | Double     | device    | (identifier) |
+| system.disk.operation_time<sup>[2](#operation_time)</sup> | Sum of the time each operation took to complete | s            | SumObserver     | Double     | device    | (identifier) |
+|                                                           |                                                 |              |                 |            | direction | read, write  |
+| system.disk.merged                                        |                                                 | {operations} | SumObserver     | Int64      | device    | (identifier) |
+|                                                           |                                                 |              |                 |            | direction | read, write  |
 
-<sup><a name="io_time">1</a></sup> i.e. the real elapsed time ("wall clock") used in the I/O
-path (time from operations running in parallel are not counted).
+<sup><a name="io_time">1</a></sup> The real elapsed time ("wall clock")
+used in the I/O path (time from operations running in parallel are not
+counted). Measured as:
 
 - Linux: Field 13 from
 [procfs-diskstats](https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats)
 - Windows: Inverse of "Disk/% Idle Time" perf counter divided by elapsed time
 
-<a name="operation_time">2</a>: Because it is the sum of time each request
-took, parallel-issued requests each contribute to make the count grow.
+<sup><a name="operation_time">2</a></sup> Because it is the sum of time each
+request took, parallel-issued requests each contribute to make the count
+grow. Measured as:
 
 - Linux: Fields 7 & 11 from
 [procfs-diskstats](https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats)
 - Windows: "Avg. Disk sec/Read" perf counter multiplied by "Disk Reads/sec"
 perf counter (similar for Writes)
 
-#### `system.filesystem.` - Filesystem metrics
+### `system.filesystem.` - Filesystem metrics
 
 **Description:** System level filesystem metrics.
 | Name                          | Description | Units | Instrument Type   | Value Type | Label Key  | Label Values         |
@@ -104,7 +103,7 @@ perf counter (similar for Writes)
 |                               |             |       |                   |            | mode       | rw, ro, etc.         |
 |                               |             |       |                   |            | mountpoint | (path)               |
 
-#### `system.network.` - Network metrics
+### `system.network.` - Network metrics
 
 **Description:** System level network metrics.
 | Name                                           | Description                                                                   | Units         | Instrument Type   | Value Type | Label Key | Label Values                                                                                   |
@@ -121,21 +120,25 @@ perf counter (similar for Writes)
 |                                                |                                                                               |               |                   |            | protocol  | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
 |                                                |                                                                               |               |                   |            | state     | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
 
-<a name="dropped">1</a>: Measured on Windows as
+<sup><a name="dropped">1</a></sup> Measured as:
+
+- Linux: the `drop` column in `/proc/dev/net`
+([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
+- Windows:
 [`InDiscards`/`OutDiscards`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-mib_if_row2)
 from
 [`GetIfEntry2`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-getifentry2).
-On Linux, the `drop` column in `/proc/dev/net`
-([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
 
-<a name="errors">2</a>: Measured on Windows as
+<sup><a name="errors">2</a></sup> Measured as:
+
+- Linux: the `errs` column in `/proc/dev/net`
+([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
+- Windows:
 [`InErrors`/`OutErrors`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-mib_if_row2)
 from
 [`GetIfEntry2`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-getifentry2).
-On Linux, the `errs` column in `/proc/dev/net`
-([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
 
-#### `system.process.` - Aggregate system process metrics
+### `system.process.` - Aggregate system process metrics
 
 **Description:** System level aggregate process metrics. For metrics at the
 individual process level, see [process metrics](process-metrics.md).
@@ -143,7 +146,7 @@ individual process level, see [process metrics](process-metrics.md).
 | -------------------- | --------------------------------------- | ----------- | ----------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
 | system.process.count | Total number of processes in each state | {processes} | UpDownSumObserver | Int64      | status    | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
 
-#### `system.{os}.` - OS Specific System Metrics
+### `system.{os}.` - OS Specific System Metrics
 
 Instrument names for system level metrics that have different and conflicting
 meaning across multiple OSes should be prefixed with `system.{os}.` and

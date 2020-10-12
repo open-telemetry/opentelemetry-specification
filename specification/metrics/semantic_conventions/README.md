@@ -69,8 +69,8 @@ for the total amount of memory on a system.
 - **usage** - an instrument that measures an amount used out of a known total
 (**limit**) amount should be called `entity.usage`. For example,
 `system.memory.usage` with label `state = used | cached | free | ...` for the
-amount of memory in a each state. In many cases, the sum of **usage** over
-all label values is equal to the **limit**.
+amount of memory in a each state. Where appropriate, the sum of **usage**
+over all label values SHOULD be equal to the **limit**.
 
   A measure of the amount of an unlimited resource consumed is differentiated
   from **usage**.
