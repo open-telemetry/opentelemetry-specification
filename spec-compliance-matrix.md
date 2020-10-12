@@ -62,14 +62,14 @@ status of the feature is not known.
 |RecordException                               | - | +  | + | +    | +  | -    |   | +  | - | +  |
 |RecordException with extra parameters         | - | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1102)    | -  | -    |   | +  | - | +  |
 |[Sampling](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#sampling)|
-|Allow samplers to modify tracestate           |  |    |   |      |    |      |   |    |   |    |
+|Allow samplers to modify tracestate           |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1220)     |    |      |   |    |   |    |
 
 ## Baggage
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
 |Basic support                                 |  |    |   |      |    |      |   |    |   |    |
-|Use official header name `baggage`            |  |    |   |      |    |      |   |    |   |    |
+|Use official header name `baggage`            |  |    |   | +    |    |      |   |    |   |    |
 
 ## Metrics
 
