@@ -359,6 +359,12 @@ created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
 
+Any span that is created MUST also be ended.
+This is the responsibility of the user.
+API implementations MAY leak memory or other resources
+(including, for example, CPU time for periodic work that iterates all spans)
+if the user forgot to end the span.
+
 #### Determining the Parent Span from a Context
 
 When a new `Span` is created from a `Context`, the `Context` may contain a `Span`
@@ -373,22 +379,22 @@ For example, a `Propagator` performing context extraction may need this.
 
 During the `Span` creation user MUST have the ability to record links to other
 `Span`s. Linked `Span`s can be from the same or a different trace. See [Links
-description](../overview.md#links-between-spans).
+description](../overview.md#links-between-spans). `Link`s cannot be added after
+Span creation.
 
-`Link`s cannot be added after Span creation.
-
-A `Link` is defined by the following properties:
+A `Link` is structurally defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
-- Zero or more `Attribute`s as defined [here](../common/common.md#attributes).
-
-The `Link` SHOULD be an immutable type.
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the link.
 
 The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
-  the `Span` to link to and optional `Attributes`.
+  the `Span` to link to and optional `Attributes`, either as individual
+  parameters or as an immutable object encapsulating them, whichever is most
+  appropriate for the language.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -411,7 +417,12 @@ Returns true if this `Span` is recording information like events with the
 `AddEvent` operation, attributes using `SetAttributes`, status with `SetStatus`,
 etc.
 
-There should be no parameter.
+After a `Span` is ended, it usually becomes non-recording and thus
+`IsRecording` SHOULD consequently return false for ended Spans.
+Note: Streaming implementations, where it is not known if a span is ended,
+are one expected case where `IsRecording` cannot change after ending a Span.
+
+`IsRecording` SHOULD NOT take any parameters.
 
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
 events in case when a Span is definitely not recorded. Note that any child
@@ -455,23 +466,24 @@ attributes, cannot change their decisions.
 A `Span` MUST have the ability to add events. Events have a time associated
 with the moment when they are added to the `Span`.
 
-An `Event` is defined by the following properties:
+An `Event` is structurally defined by the following properties:
 
 - Name of the event.
 - A timestamp for the event. Either the time at which the event was
-added or a custom timestamp provided by the user.
-- [`Attributes`](../common/common.md#attributes) further describing the event.
-
-The `Event` SHOULD be an immutable type.
+  added or a custom timestamp provided by the user.
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the event.
 
 The Span interface MUST provide:
 
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
   This API takes the name of the event, optional `Attributes` and an optional
-  `Timestamp` which can be used to specify the time at which the event occurred.
-  If no custom timestamp is provided by the user, the implementation automatically
-  sets the time at which this API is called on the event.
+  `Timestamp` which can be used to specify the time at which the event occurred,
+  either as individual parameters or as an immutable object encapsulating them,
+  whichever is most appropriate for the language. If no custom timestamp is
+  provided by the user, the implementation automatically sets the time at which
+  this API is called on the event.
 
 Events SHOULD preserve the order in which they are recorded.
 This will typically match the ordering of the events' timestamps,
@@ -494,7 +506,7 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 Sets the `Status` of the `Span`. If used, this will override the default `Span`
 status, which is `Unset`.
 
-`Status` is semantically defined by the following properties:
+`Status` is structurally defined by the following properties:
 
 - `StatusCanonicalCode` that represents the canonical set of `Status` codes.
 - Optional `Description` that provides a descriptive message of the `Status`.
@@ -557,17 +569,31 @@ Required parameters:
 
 #### End
 
-Finish the `Span`. This call will take the current timestamp to set as `Span`'s
-end time. Implementations MUST ignore all subsequent calls to `End` (there might
-be exceptions when Tracer is streaming event and has no mutable state associated
-with the `Span`).
+Signals that the operation described by this span has
+now (or at the time optionally specified) ended.
 
-Call to `End` of a `Span` MUST not have any effects on child spans. Those may
-still be running and can be ended later.
+Implementations SHOULD ignore all subsequent calls to `End` and any other Span methods,
+i.e. the Span becomes non-recording by being ended
+(there might be exceptions when Tracer is streaming events
+and has no mutable state associated with the `Span`).
+
+Language SIGs MAY provide methods other than `End` in the API that also end the
+span to support language-specific features like `with` statements in Python.
+However, all API implementations of such methods MUST internally call the `End`
+method and be documented to do so.
+
+`End` MUST NOT have any effects on child spans.
+Those may still be running and can be ended later.
+
+`End` MUST NOT inactivate the `Span` in any `Context` it is active in.
+It MUST still be possible to use an ended span as parent via a Context it is
+contained in. Also, any mechanisms for putting the Span into a Context MUST
+still work after the Span was ended.
 
 Parameters:
 
-- (Optional) Timestamp to explicitly set the end timestamp
+- (Optional) Timestamp to explicitly set the end timestamp.
+  If omitted, this MUST be treated equivalent to passing the current time.
 
 This API MUST be non-blocking.
 
@@ -620,6 +646,8 @@ The behavior is defined as follows:
   are not being recorded, i.e. they are being dropped.
 
 The remaining functionality of `Span` MUST be defined as no-op operations.
+Note: This includes `End`, so as an exception from the general rule,
+it is not required (or even helpful) to end a Propagated Span.
 
 This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
 
