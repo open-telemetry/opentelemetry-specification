@@ -68,8 +68,9 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    note: this must be done before calling `ShouldSample`, because it expects
    a valid trace Id as input).
 2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
-3. If the decision is `DROP`, use the parent span ID or all-zero if there is none.
-   Otherwise (if the decision is not `DROP`) a new span ID MUST be generated.
+3. If the decision is `DROP` and there is a valid parent span ID, use it.
+   Otherwise (if the decision is not `DROP` or there was no valid parent span ID)
+   a new span ID MUST be generated.
 4. Create a span depending on the decision returned by `ShouldSample`:
    see description of [`ShouldSample`'s](#shouldsample) return value below
    for how to set `IsRecording` and `Sampled` on the Span,
