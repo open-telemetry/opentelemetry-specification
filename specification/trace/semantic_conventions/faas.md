@@ -1,6 +1,7 @@
 # Semantic conventions for FaaS spans
 
-This document defines how to describe an instance of a function that runs without provisioning or managing of servers (also known as serverless) with spans.
+This document defines how to describe an instance of a function that runs without provisioning
+or managing of servers (also known as serverless functions or Function as a Service (FaaS))) with spans.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
