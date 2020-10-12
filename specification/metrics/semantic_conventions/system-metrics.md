@@ -76,7 +76,9 @@ counted). Measured as:
 
 - Linux: Field 13 from
 [procfs-diskstats](https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats)
-- Windows: Inverse of "Disk/% Idle Time" perf counter divided by elapsed time
+- Windows: The complement of ["Disk\% Idle
+Time"](https://docs.microsoft.com/en-us/archive/blogs/askcore/windows-performance-monitor-disk-counters-explained#windows-performance-monitor-disk-counters-explained:~:text=%25%20Idle%20Time,Idle\)%20to%200%20(meaning%20always%20busy).)
+performance counter: `uptime * (100 - "Disk\% Idle Time") / 100`
 
 <sup><a name="operation_time">2</a></sup> Because it is the sum of time each
 request took, parallel-issued requests each contribute to make the count
