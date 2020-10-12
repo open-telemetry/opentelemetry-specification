@@ -32,7 +32,7 @@ The following metric instruments SHOULD be captured for every message send opera
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
 | `messaging.producer.messages` | Counter | messages | Sum of messages sent. |
-| `messaging.producer.duration` | ValueRecorder | milliseconds | Time spent sending a message. |
+| `messaging.producer.duration` | ValueRecorder | milliseconds | Time spent producing a message to a queue/topic. |
 | `messaging.producer.bytes` | ValueRecorder | bytes | The (uncompressed) size of the payload sent in bytes. Also use this metric if it is unknown whether the compressed or uncompressed payload size is reported. |
 | `messaging.producer.compressed.bytes` | ValueRecorder | bytes | The compressed size of the payload sent in bytes. |
 
@@ -44,7 +44,7 @@ be captured for every batch send operation.
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
 | `messaging.producer.batches` | Counter | batches | Sum of batches sent. |
-| `messaging.producer.batch.duration` | ValueRecorder | milliseconds | Time spent sending a batch. |
+| `messaging.producer.batch.duration` | ValueRecorder | milliseconds | Time spent prodcing a batch of messages to a queue/topic. |
 | `messaging.producer.batch.size` | ValueRecorder | messages | The number of messages in each batch if this producer/client is batching messages. |
 | `messaging.producer.batch.bytes` | ValueRecorder | bytes | The (uncompressed) size of the batch sent in bytes. Also use this metric if it is unknown whether the compressed or uncompressed batch size is reported. |
 | `messaging.producer.batch.compressed.bytes` | ValueRecorder | bytes | The compressed size of the batch sent in bytes. |
@@ -58,7 +58,7 @@ The following metric instruments SHOULD be captured for every message receive op
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
 | `messaging.consumer.messages` | Counter | messages | Sum of messages received. |
-| `messaging.consumer.duration` | ValueRecorder | milliseconds | Time spent receiving a message or batch if batching messages. |
+| `messaging.consumer.duration` | ValueRecorder | milliseconds | Time spent receiving a message from a queue/topic. |
 | `messaging.consumer.bytes` | ValueRecorder | bytes | The (uncompressed) size of the message received in bytes. Also use this metric if it is unknown whether the compressed or uncompressed payload size is reported. |
 | `messaging.consumer.compressed.bytes` | ValueRecorder | bytes | The compressed size of the payload sent in bytes. |
 
@@ -70,7 +70,7 @@ be captured for every batch receive operation.
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
 | `messaging.consumer.batches` | Counter | batches | Sum of batches received. |
-| `messaging.consumer.batch.duration` | ValueRecorder | milliseconds | Time spent receiving a batch. |
+| `messaging.consumer.batch.duration` | ValueRecorder | milliseconds | Time spent receiving a batch of messages from a queue/topic. |
 | `messaging.consumer.batch.size` | ValueRecorder | messages | The number of messages in each batch if messages are consumed in batches. |
 | `messaging.consumer.batch.bytes` | ValueRecorder | bytes | The (uncompressed) size of the batch received in bytes. Also use this metric if it is unknown whether the compressed or uncompressed batch size is reported. |
 | `messaging.consumer.batch.compressed.bytes` | ValueRecorder | bytes | The compressed size of the batch received in bytes. |
