@@ -32,6 +32,7 @@ status of the feature is not known.
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |No explicit parent Span/SpanContext allowed   |   | +  |   |      |    |      |   |    |   |    |
+|SpanProcessor.OnStart receives parent Context |   |    |   |      |    |      |   |    |   |    |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  |
