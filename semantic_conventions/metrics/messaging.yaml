@@ -46,10 +46,21 @@ groups:
           type: string
           brief: 'Connection string.'
           examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue']
-      constraints:
-        - any_of:
-          - 'net.peer.name'
-          - 'net.peer.ip'
-          - 'net.peer.port'
-          - 'net.transport'
-        - include: network
+        - ref: net.peer.name
+          note: >
+            This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+          required:
+            conditional: If available.
+        - ref: net.peer.ip
+          tag: connection-level
+          required:
+            conditional: If available.
+        - ref: net.peer.port
+          tag: connection-level
+          required:
+            conditional: If available.
+        - ref: net.transport
+          tag: connection-level
+          brief: 'Transport protocol used.'
+          required:
+            conditional: If available.
