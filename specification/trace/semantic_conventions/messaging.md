@@ -148,7 +148,7 @@ The following operations related to messages are defined for these semantic conv
 | Value  | Description |
 |---|---|
 | `queue` | A message sent to a queue |
-| `topic` | A message broadcasted to the subscribers of the topic |
+| `topic` | A message sent to a topic |
 <!-- endsemconv -->
 
 Additionally `net.peer.port` from the [network attributes][] is recommended.
