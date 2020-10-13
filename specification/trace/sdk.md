@@ -205,6 +205,8 @@ reference.
 
 ### Shutdown
 
+This method provides a way for provider to do any cleanup required.
+
 `Shutdown` MUST be called only once for each `TracerProvider` instance. After
 the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
 SHOULD return a valid no-op Tracer for these calls, if possible.

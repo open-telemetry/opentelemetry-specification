@@ -94,7 +94,6 @@ number of `TracerProvider` instances.
 The `TracerProvider` MUST provide the following functions:
 
 - Get a `Tracer`
-- Shuts down the provider
 
 #### Get a Tracer
 
@@ -127,10 +126,6 @@ If configuration must be stored per-tracer (such as disabling a certain tracer),
 the tracer could, for example, do a look-up with its name+version in a map in
 the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
 returned `Tracer`s and actively update their configuration if it changes.
-
-#### Shutdown
-
-This API provides a way for provider to do any cleanup required.
 
 ## Tracing Context Utilities
 
