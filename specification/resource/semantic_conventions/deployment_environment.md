@@ -4,6 +4,8 @@
 
 **Description:** The software deployment.
 
-| Attribute  | Description  | Example  | Required? |
-|---|---|---|---|
-| deployment.environment | Name of the [deployment environment](https://en.wikipedia.org/wiki/Deployment_environment) (aka deployment tier) | `staging` , `production` | No |
+<!-- semconv deployment -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `deployment.environment` | string | Name of the [deployment environment](https://en.wikipedia.org/wiki/Deployment_environment) (aka deployment tier). | `staging`<br>`production` | No |
+<!-- endsemconv -->
