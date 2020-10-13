@@ -97,7 +97,7 @@ Each **Span** encapsulates the following state:
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
   (via the **SpanReference** of those related **Spans**).
-- **SpanReference** identification of a Span. See below.
+- **SpanReference** information required to reference a Span. See below.
 
 ### SpanReference
 
