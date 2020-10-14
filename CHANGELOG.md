@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Rename "Canonical status code" to "Status code"
+  ([#1081](https://github.com/open-telemetry/opentelemetry-specification/pull/1081))
 - Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation
   ([#1066](https://github.com/open-telemetry/opentelemetry-specification/pull/1066))
 - Change Status to be consistent with Link and Event
@@ -45,6 +47,7 @@ New:
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
+- Add `Shutdown` function to `*Provider` SDK ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
 
 Updates:
 
@@ -111,6 +114,8 @@ Updates:
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 - Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
+- Rename SpanContext to SpanReference
+  ([#1075](https://github.com/open-telemetry/opentelemetry-specification/pull/1075))
 
 ## v0.6.0 (07-01-2020)
 
