@@ -5,7 +5,7 @@
 <summary>Table of Contents</summary>
 
 * [Sampling](#sampling)
-* [Tracer Creation](#tracer-creation)
+* [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
@@ -180,7 +180,9 @@ Optional parameters:
 |present|false|true|`localParentSampled()`|
 |present|false|false|`localParentNotSampled()`|
 
-## Tracer Creation
+## Tracer Provider
+
+### Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
 [API](api.md#tracerprovider)). The `name` and `version` arguments
@@ -200,6 +202,24 @@ the updated configuration MUST also apply to all already returned `Tracers`
 Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
+
+### Shutdown
+
+This method provides a way for provider to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `TracerProvider` instance. After
+the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
+SHOULD return a valid no-op Tracer for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the shutdown timeout configurable.
+
+`Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
 
 ## Additional Span Interfaces
 

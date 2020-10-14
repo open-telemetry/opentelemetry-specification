@@ -91,11 +91,13 @@ number of `TracerProvider` instances.
 
 ### TracerProvider operations
 
-The `TracerProvider` MUST provide functions to:
+The `TracerProvider` MUST provide the following functions:
 
 - Get a `Tracer`
 
-That API MUST accept the following parameters:
+#### Get a Tracer
+
+This API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
   (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
