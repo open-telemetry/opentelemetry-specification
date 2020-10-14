@@ -40,7 +40,7 @@ The OpenTracing Tracer operations MUST be implemented using the OpenTelemetry
 API:
 
 - An OpenTelemetry `Tracer` MUST be used to create `Span`s.
-- A `CorrelationContextManager` MUST be used to create the `CorrelationContext`
+- A `BaggageManager` MUST be used to create the `Baggage`
   objects used to implement the OpenTracing `Span` baggage.
 - A set of `Propagator` MUST be leveraged in order to perform inject and extract operations.
 
@@ -49,14 +49,14 @@ API:
 The operation MUST accept the following parameters:
 
 - An OpenTelemetry `Tracer`.
-- A `CorrelationContextManager`.
+- A `BaggageManager`.
 - A set of `Propagator`s of the supported types, usually `Composite Propagator`s.
 
 The API MUST return an OpenTracing `Tracer`.
 
 ### Inject
 
-Inject the underlying `SpanContext` using the registered `Propagator`s:
+Inject the underlying `SpanReference` using the registered `Propagator`s:
 
 - `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered `HTTPTextPropagator`, if any.
 
@@ -64,23 +64,23 @@ Errors MUST NOT be raised if the specified OpenTracing `Format` is `BINARY`.
 
 ### Extract
 
-Extract an OpenTelemetry `SpanContext` from a carrier using the registered `Propagator`s:
+Extract an OpenTelemetry `SpanReference` from a carrier using the registered `Propagator`s:
 
 - `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered `HTTPTextPropagator`, if any.
 
-Returns an OpenTracing `SpanContext` with the underlying extracted `SpanContext`, or null if
+Returns an OpenTracing `SpanContext` with the underlying extracted `SpanReference`, or null if
 either the OpenTracing `Format` is `BINARY` or no value could be extracted.
 
-## ScopeManager.
+## ScopeManager
 
 For OpenTracing languages implementing the `ScopeManager` interface,  its operations
 MUST be implemented using the OpenTelemetry context propagation API.
 
-### Activate a Span.
+### Activate a Span
 
 Sets the specified `Span` as active for the current `Context`.
 
-### Get the active Span.
+### Get the active Span
 
 Gets the active `Span` for the current `Context`. The API MUST return
 null if none exist.
@@ -88,13 +88,13 @@ null if none exist.
 ## Span
 
 The `Span` operations MUST be implemented using an underlying OpenTelemetry `Span`
-in conjunction with an associated `CorrelationContext` object used to implement its
+in conjunction with an associated `Baggage` object used to implement its
 baggage part.
 
 OpenTracing `SpanContext` shim objects MUST act as objects associating an
-underlying `SpanContext` with a `CorrelationContext`. Every invocation to the
+underlying `SpanReference` with a `Baggage` instance. Every invocation to the
 `Set Baggage Item` operation will result in a newly associated `SpanContext` shim object
-with a new `CorrelationContext` containing the specified name/value pair.
+with a new `Baggage` containing the specified name/value pair.
 
 Each underlying `Span` can only be associated with one `SpanContext` shim at a time
 for all the execution units.
@@ -109,12 +109,12 @@ Gets the currently associated `SpanContext` shim.
 
 ### Get Baggage Item
 
-Gets a value for the specified name in the `CorrelationContext` of the associated `SpanContext`
+Gets a value for the specified name in the `Baggage` of the associated `SpanContext`
 shim or null if none exists.
 
 ### Set Baggage Item
 
-Creates a newly associated `SpanContext` shim object with a new `CorrelationContext`
+Creates a newly associated `SpanContext` shim object with a new `Baggage`
 containing the specified name/value pair.
 
 ### Set Tag
@@ -128,21 +128,21 @@ to a string.
 
 Calls `Add Event` on the underlying `Span`.
 
-If an explicit timestamp is specified, a conversion MUST be done to match the OT and
-OTel units.
+If an explicit timestamp is specified, a conversion MUST be done to match the OpenTracing and
+OpenTelemetry units.
 
 ### Finish
 
 Calls `End` on the underlying `Span`.
 
-If an explicit timestamp is specified, a conversion MUST be done to match the OT and
-OTel units.
+If an explicit timestamp is specified, a conversion MUST be done to match the OpenTracing and
+OpenTelemetry units.
 
 ### SpanContext
 
-The `SpanContext` interface MUST be implemented using a OpenTelemetry `SpanContext`
-in conjunction with an associated `CorrelationContext`.
+The `SpanContext` interface MUST be implemented using an OpenTelemetry `SpanReference`
+in conjunction with an associated `Baggage`.
 
 #### Get Baggage Items
 
-Returns a shim exposing the associated `CorrelationContext` values.
+Returns a shim exposing the associated `Baggage` values.
