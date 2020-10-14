@@ -508,10 +508,10 @@ status, which is `Unset`.
 
 `Status` is structurally defined by the following properties:
 
-- `Code`, one of the values listed below.
+- `StatusCode`, one of the values listed below.
 - Optional `Description` that provides a descriptive message of the `Status`.
 
-`Code` is one of the following values:
+`StatusCode` is one of the following values:
 
 - `Unset`
   - The default status.
@@ -524,9 +524,9 @@ status, which is `Unset`.
 The Span interface MUST provide:
 
 - An API to set the `Status`. This SHOULD be called `SetStatus`.
-  This API takes the `Code`, and optional `Description`, either as individual
-  parameters or as an immutable object encapsulating them, whichever is most
-  appropriate for the language.
+  This API takes the `StatusCode`, and an optional `Description`, either as
+  individual parameters or as an immutable object encapsulating them, whichever
+  is most appropriate for the language.
 
 The status code SHOULD remain unset, except for the following circumstances:
 
