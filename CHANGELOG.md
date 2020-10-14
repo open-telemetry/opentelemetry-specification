@@ -45,6 +45,8 @@ New:
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
 - Define PropagationOnly Span to simplify active Span logic in Context
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
+- Add limits to the number of attributes, events, and links in SDK Spans
+  ([#942](https://github.com/open-telemetry/opentelemetry-specification/pull/942))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
 - Add `Shutdown` function to `*Provider` SDK ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
