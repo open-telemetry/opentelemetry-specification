@@ -43,6 +43,9 @@ status of the feature is not known.
 |IsRecording becomes false after End           |   |    |   |      |    |      |   |    |   |    |
 |Set status                                    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1157)    | +  | +    | + | +  | + | +  |
+|events collection size limit                  |   |    |   |      |    |      |   |    |   |    |
+|attribute collection size limit               |   |    |   |      |    |      |   |    |   |    |
+|links collection size limit                   |   |    |   |      |    |      |   |    |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
@@ -127,6 +130,9 @@ status of the feature is not known.
 |OTEL_EXPORTER_JAEGER_*                        |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1056)    | +  | -    | - |    | - | -  |
 |OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    | - |    | - | -  |
 |OTEL_EXPORTER                                 |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1155)    |    |      |   |    |   |    |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    |      |   |    |   |    |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   |      |    |      |   |    |   |    |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |
 
 ## Exporters
 

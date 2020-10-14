@@ -7,6 +7,7 @@
 * [Sampling](#sampling)
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
+* [Limits on Span Collections](#limits-on-span-collections)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -35,7 +36,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
-  that do not.  
+  that do not.
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
@@ -240,7 +241,7 @@ Thus, the SDK specification defines sets of possible requirements for
   It must also be able to reliably determine whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
-  
+
   A function receiving this as argument might not be able to modify the Span.
 
   Note: Typically this will be implemented with a new interface or
@@ -261,7 +262,24 @@ Thus, the SDK specification defines sets of possible requirements for
   that the [span creation API](api.md#span-creation) returned (or will return) to the user
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
-  
+
+## Limits on Span Collections
+
+Erroneous code can add unintended attributes, events, and links to a span. If
+these collections are unbounded, they can quickly exhaust available memory,
+resulting in crashes that are difficult to recover from safely.
+
+To protect against such errors, SDK Spans MAY discard attributes, links, and
+events that would increase the number of elements of each collection beyond
+the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
+
+If there is a configurable limit, the SDK SHOULD honor the environment variables
+specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
+
+There SHOULD be a log emitted to indicate to the user that an attribute, event,
+or link was discarded due to such a limit. To prevent excessive logging, the log
+should not be emitted once per span, or per discarded attribute, event, or links.
+
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
