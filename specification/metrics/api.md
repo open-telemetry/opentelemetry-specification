@@ -148,7 +148,7 @@ which is the user-facing entry point to the SDK.
 Instruments are classified in several ways that distinguish them from
 one another.
 
-1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., Span context, Baggage). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
+1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., with associated Span, Baggage, etc.). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
 2. Adding vs. Grouping: An adding instrument is one that records adding measurements, as opposed to a grouping instrument as described above.
 3. Monotonicity: A monotonic instrument is an adding instrument, where the progression of sums is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
 
@@ -165,7 +165,7 @@ are synchronous, adding, and/or monotonic.
 | ValueObserver     | No  | No  | No  |
 
 The synchronous instruments are useful for measurements that are
-gathered in a distributed [Context](../context/context.md) (i.e., Span context, Baggage).  The asynchronous instruments are
+gathered in a distributed [Context](../context/context.md) (i.e., with associated Span, Baggage, etc.).  The asynchronous instruments are
 useful when measurements are expensive, therefore should be gathered
 periodically.  Read more [characteristics of synchronous and
 asynchronous instruments](#synchronous-and-asynchronous-instruments-compared) below.
@@ -323,7 +323,7 @@ consist of:
 - [resources](../resource/sdk.md) associated with the SDK at startup.
 
 Synchronous events have one additional property, the distributed
-[Context](../context/context.md) (i.e., Span context, Baggage)
+[Context](../context/context.md) (containing Span, Baggage, etc.)
 that was active at the time.
 
 ## Meter provider
@@ -421,7 +421,7 @@ libraries may be written to generate this metric.
 ### Synchronous and asynchronous instruments compared
 
 Synchronous instruments are called inside a request, meaning they
-have an associated distributed [Context](../context/context.md) (i.e., Span context, Baggage).  Multiple metric events may occur for a
+have an associated distributed [Context](../context/context.md) (with Span, Baggage, etc.).  Multiple metric events may occur for a
 synchronous instrument within a given collection interval.
 
 Asynchronous instruments are reported by a callback, once per
@@ -944,7 +944,7 @@ convention.
 
 Synchronous measurements are implicitly associated with the
 distributed [Context](../context/context.md) at runtime, which may
-include a Span context and Baggage entries.  The Metric SDK may use
+include a Span and Baggage entries. The Metric SDK may use
 this information in many ways, but one feature is of particular
 interest in OpenTelemetry.
 
