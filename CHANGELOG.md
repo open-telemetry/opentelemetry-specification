@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Rename "Canonical status code" to "Status code"
+  ([#1081](https://github.com/open-telemetry/opentelemetry-specification/pull/1081))
 - Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation
   ([#1066](https://github.com/open-telemetry/opentelemetry-specification/pull/1066))
 - Change Status to be consistent with Link and Event
