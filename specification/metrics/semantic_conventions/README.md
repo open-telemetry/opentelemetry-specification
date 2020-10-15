@@ -87,8 +87,9 @@ be less than or greater than the real wall time between measurements.
 
   **time** instruments are a special case of **usage** metrics, where the
   **limit** can usually be calculated as the sum of **time** over all label
-  values. **utilization** can also be calculated and useful, for example
-  `system.cpu.utilization`.
+  values. **utilization** for time instruments can be derived automatically using
+  metric event timestamps. For example, `system.cpu.utilization` is defined as the difference
+  in `system.cpu.time` measurements divided by the elapsed time.
 
 - **io** - an instrument that measures bidirectional data flow should be
 called `entity.io` and have labels for direction. For example,
