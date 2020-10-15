@@ -84,7 +84,7 @@ registered OpenTelemetry `Propagator`s:
 - `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered OpenTelemetry
   `HTTPTextPropagator`, if any.
 
-Returns a `SpanContext` with the underlying extracted OpenTelemetry
+Returns a `SpanContext` Shim with the underlying extracted OpenTelemetry
 `SpanReference` and `Baggage`, or null if either the `Format` is `BINARY` or
 no value could be extracted.
 
@@ -99,12 +99,13 @@ Parameters:
 
 - A `Span`.
 
-Sets the specified `Span` as active for the current OpenTelemetry `Context`.
+Gets the underlying OpenTelemetry `Span` and sets it as active for the current
+OpenTelemetry `Context`.
 
 ### Get the active Span
 
-Gets the active `Span` for the current OpenTelemetry `Context`. The API MUST return
-null if none exist.
+Gets the active OpenTelemetry `Span` and returns a `Span` Shim wrapping it.
+The API MUST return null if none exist.
 
 ## Span Shim
 
