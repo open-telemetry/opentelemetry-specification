@@ -13,7 +13,7 @@ groups:
               brief: 'Amazon Web Services'
             - id: Azure
               value: 'azure'
-              brief: 'Amazon Web Services'
+              brief: 'Microsoft Azure'
             - id: GCP
               value: 'gcp'
               brief: 'Google Cloud Platform'
