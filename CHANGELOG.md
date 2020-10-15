@@ -49,7 +49,10 @@ New:
   ([#942](https://github.com/open-telemetry/opentelemetry-specification/pull/942))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
-- Add `Shutdown` function to `*Provider` SDK ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
+- Clarify context interaction for trace module
+  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))  
+- Add `Shutdown` function to `*Provider` SDK
+  ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
 
 Updates:
 
