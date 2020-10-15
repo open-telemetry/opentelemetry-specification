@@ -7,30 +7,14 @@ groups:
       attributes:
         - ref: faas.trigger
           required: always
-          type:
-            allow_custom_values: false
-            members:
-              - id: datasource
-                value: 'datasource'
-              - id: http
-                value: 'http'
-              - id: pubsub
-                value: 'pubsub'
-              - id: timer
-                value: 'timer'
-              - id: other
-                value: 'other'
-        - ref: faas.name
+        - ref: faas.invoked_name
           required: always
-          type: string
-        - ref: faas.provider
+        - ref: faas.invoked_provider
           required: always
-          type: string
-        - ref: faas.region
+        - ref: faas.invoked_region
           required: always
-          type: string
         - ref: faas.coldstart
           required: always
+        - id: faas.error
           type: boolean
-        - ref: faas.error
-          type: boolean
+          brief: 'Whether or not the function resulted in an error.'

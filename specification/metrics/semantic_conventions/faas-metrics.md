@@ -37,9 +37,9 @@ Naming conventions follow [FaaS Trace Semantics](/open-telemetry/opentelemetry-s
 | Name | Recommended | Notes and examples |
 |------|-------------|--------------------|
 | `faas.trigger` | Yes | Type of the trigger on which the function is invoked. SHOULD be one of: `datasource`, `http`, `pubsub`, `timer`, `other`. See: [Function Trigger Types](/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/faas.md) |
-| `faas.name` | Yes | Name of the invoked function. Example: `my-function` |
-| `faas.provider` | Yes | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws` |
-| `faas.region` | Yes | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1` |
+| `faas.invoked_name` | Yes | Name of the invoked function. Example: `my-function` |
+| `faas.invoked_provider` | Yes | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws` |
+| `faas.invoked_region` | Yes | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1` |
 | `faas.coldstart` | Yes | Whether or not the invocation was a cold start. |
 | `faas.error` | Yes | Whether or not the invocation resulted in an error. |
 
