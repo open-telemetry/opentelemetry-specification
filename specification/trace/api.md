@@ -154,8 +154,8 @@ the following functionality:
 All the above functionalities operate solely on the context API, and they MAY be
 exposed as static methods on the trace module, as static methods on a class
 inside the trace module (it MAY be named `TracingContextUtilities`), or on the
-[`Tracer`](#tracer) class. This functionality MUST be fully implemented in the API
-when possible.
+[`Tracer`](#tracer) class. This functionality SHOULD be fully implemented in the
+API when possible.
 
 ## Tracer
 
