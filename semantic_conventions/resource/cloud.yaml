@@ -1,0 +1,39 @@
+groups:
+  - id: cloud
+    prefix: cloud
+    brief: >
+      A cloud infrastructure (e.g. GCP, Azure, AWS)
+    attributes:
+      - id: provider
+        type:
+          allow_custom_values: true
+          members:
+            - id: AWS
+              value: 'aws'
+              brief: 'Amazon Web Services'
+            - id: Azure
+              value: 'azure'
+              brief: 'Amazon Web Services'
+            - id: GCP
+              value: 'gcp'
+              brief: 'Google Cloud Platform'
+        brief: >
+          Name of the cloud provider.
+        examples: 'gcp'
+      - id: account.id
+        type: string
+        brief: >
+          The cloud account ID used to identify different entities.
+        examples: ['opentelemetry']
+      - id: region
+        type: string
+        brief: >
+          A specific geographical location where different entities can run.
+        examples: ['us-central1']
+      - id: zone
+        type: string
+        brief: >
+          Zones are a sub set of the region connected through low-latency links.
+        note: >
+          In AWS, this is called availability-zone.
+        examples: ['us-central1-a']

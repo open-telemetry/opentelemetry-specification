@@ -18,7 +18,7 @@
 - [Instrument properties](#instrument-properties)
   * [Instrument naming requirements](#instrument-naming-requirements)
   * [Synchronous and asynchronous instruments compared](#synchronous-and-asynchronous-instruments-compared)
-  * [Additive and non-additive instruments compared](#additive-and-non-additive-instruments-compared)
+  * [Adding and grouping instruments compared](#adding-and-grouping-instruments-compared)
   * [Monotonic and non-monotonic instruments compared](#monotonic-and-non-monotonic-instruments-compared)
   * [Function names](#function-names)
 - [The instruments](#the-instruments)
@@ -39,7 +39,7 @@
     + [Direct instrument calling convention](#direct-instrument-calling-convention)
     + [RecordBatch calling convention](#recordbatch-calling-convention)
   * [Association with distributed context](#association-with-distributed-context)
-    + [Correlation context into metric labels](#correlation-context-into-metric-labels)
+    + [Baggage into metric labels](#baggage-into-metric-labels)
 - [Asynchronous instrument details](#asynchronous-instrument-details)
   * [Asynchronous calling conventions](#asynchronous-calling-conventions)
     + [Single-instrument observer](#single-instrument-observer)
@@ -89,6 +89,15 @@ logging systems.  For this reason, [OpenTelemetry requires a separation of the
 API from the SDK](../library-guidelines.md#requirements), so that different SDKs
 can be configured at run time.
 
+### Behavior of the API in the absence of an installed SDK
+
+In the absence of an installed Metrics SDK, the Metrics API MUST consist only
+of no-ops. None of the calls on any part of the API can have any side effects
+or do anything meaningful. Meters MUST return no-op implementations of any
+instruments. From a user's perspective, calls to these should be ignored without raising errors
+(i.e., *no* `null` references MUST be returned in languages where accessing these results in errors).
+The API MUST NOT throw exceptions on any calls made to it.
+
 ### Measurements
 
 The term _capture_ is used in this document to describe the action
@@ -101,24 +110,24 @@ has put effort into taking some kind of measurement.  For both
 performance and semantic reasons, the API let users choose between two
 kinds of measurement.
 
-The term _additive_ is used to specify a characteristic of some
+The term _adding_ is used to specify a characteristic of some
 measurements, meant to indicate that only the sum is considered useful
 information.  These are measurements that you would naturally combine
 using arithmetic addition, usually real quantities of something
 (e.g., number of bytes).
 
-Non-additive measurements are used when the set of values, also known
+Grouping measurements are used when the set of values, also known
 as the population, is presumed to have useful information.  A
-non-additive measurement is either one that you would not naturally
+grouping measurement is either one that you would not naturally
 combine using arithmetic addition (e.g., request latency), or it is a
 measurement you would naturally add where the intention is to monitor
 the distribution of values (e.g., queue size).  The median value is
-considered useful information for non-additive measurements.
+considered useful information for grouping measurements.
 
-Non-additive instruments semantically capture more information than
-additive instruments.  Non-additive measurements are more expensive
-than additive measurements, by this definition.  Users will choose
-additive instruments except when they expect to get value from the
+Grouping instruments semantically capture more information than
+adding instruments.  Grouping measurements are more expensive
+than adding measurements, by this definition.  Users will choose
+adding instruments except when they expect to get value from the
 additional cost of information about individual values.  None of this
 is to prevent an SDK from re-interpreting measurements based on
 configuration.  Anything can happen with any kind of measurement.
@@ -139,14 +148,14 @@ which is the user-facing entry point to the SDK.
 Instruments are classified in several ways that distinguish them from
 one another.
 
-1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., Span context, Correlation context). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
-2. Additivity: An additive instrument is one that records additive measurements, as described above.
-3. Monotonicity: A monotonic instrument is an additive instrument, where the progression of each sum is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
+1. Synchronicity: A synchronous instrument is called by the user in a distributed [Context](../context/context.md) (i.e., with associated Span, Baggage, etc.). An asynchronous instrument is called by the SDK once per collection interval, lacking a Context.
+2. Adding vs. Grouping: An adding instrument is one that records adding measurements, as opposed to a grouping instrument as described above.
+3. Monotonicity: A monotonic instrument is an adding instrument, where the progression of sums is non-decreasing.  Monotonic instruments are useful for monitoring rate information.
 
 The metric instruments names are shown below along with whether they
-are synchronous, additive, and/or monotonic.
+are synchronous, adding, and/or monotonic.
 
-| Name | Synchronous | Additive | Monotonic |
+| Name | Synchronous | Adding | Monotonic |
 | ---- | ----------- | -------- | --------- |
 | Counter           | Yes | Yes | Yes |
 | UpDownCounter     | Yes | Yes | No  |
@@ -156,18 +165,18 @@ are synchronous, additive, and/or monotonic.
 | ValueObserver     | No  | No  | No  |
 
 The synchronous instruments are useful for measurements that are
-gathered in a distributed [Context](../context/context.md) (i.e., Span context, Correlation context).  The asynchronous instruments are
+gathered in a distributed [Context](../context/context.md) (i.e., with associated Span, Baggage, etc.).  The asynchronous instruments are
 useful when measurements are expensive, therefore should be gathered
 periodically.  Read more [characteristics of synchronous and
 asynchronous instruments](#synchronous-and-asynchronous-instruments-compared) below.
 
-The synchronous and asynchronous additive instruments have a
+The synchronous and asynchronous adding instruments have a
 significant difference: synchronous instruments are used to capture
 changes in a sum, whereas asynchronous instruments are used to capture
-sums directly.  Read more [characteristics of additive
-instruments](#additive-and-non-additive-instruments-compared) below.
+sums directly.  Read more [characteristics of adding
+instruments](#adding-and-grouping-instruments-compared) below.
 
-The monotonic additive instruments are significant because they support rate
+The monotonic adding instruments are significant because they support rate
 calculations.  Read more information about [choosing metric
 instruments](#monotonic-and-non-monotonic-instruments-compared) below.
 
@@ -233,7 +242,7 @@ give users an understanding of how it is meant to be used.
 Instruments, in the absence of any configuration override, can be
 expected to deliver a useful, economical aggregation out of the box.
 
-The additive instruments (`Counter`, `UpDownCounter`, `SumObserver`,
+The adding instruments (`Counter`, `UpDownCounter`, `SumObserver`,
 `UpDownSumObserver`) use a Sum aggregation by default.  Details about
 computing a Sum aggregation vary, but from the user's perspective this
 means they will be able to monitor the sum of values captured.  The
@@ -241,13 +250,15 @@ distinction between synchronous and asynchronous instruments is
 crucial to specifying how exporters work, a topic that is covered in
 the [SDK specification (WIP)](https://github.com/open-telemetry/opentelemetry-specification/pull/347).
 
-The non-additive instruments (`ValueRecorder`, `ValueObserver`) use
-a MinMaxSumCount aggregation, by default.  This aggregation keeps track
-of the minimum value, the maximum value, the sum of values, and the
-count of values.  These four values support monitoring the range of
-values, the rate of events, and the average event value.
+The `ValueRecorder` instrument uses [TBD issue
+636](https://github.com/open-telemetry/opentelemetry-specification/issues/636)
+aggregation by default.
 
-Other standard aggregations are available, especially for non-additive
+The `ValueObserver` instrument uses LastValue aggregation by default.
+This aggregation keeps track of the last value that was observed and
+its timestamp.
+
+Other standard aggregations are available, especially for grouping
 instruments, where we are generally interested in a variety of
 different summaries, such as histograms, quantile summaries,
 cardinality estimates, and other kinds of sketch data structure.
@@ -312,7 +323,7 @@ consist of:
 - [resources](../resource/sdk.md) associated with the SDK at startup.
 
 Synchronous events have one additional property, the distributed
-[Context](../context/context.md) (i.e., Span context, Correlation context)
+[Context](../context/context.md) (containing Span, Baggage, etc.)
 that was active at the time.
 
 ## Meter provider
@@ -338,7 +349,7 @@ arguments:
   In case an invalid name (null or empty string) is specified, a working default `Meter` implementation is returned as a fallback
   rather than returning null or throwing an exception.
   A `MeterProvider` could also return a no-op `Meter` here if application owners configure the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library (e.g. `semver:1.0.0`).
+- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 
 Each distinctly named `Meter` establishes a separate namespace for its
 metric instruments, making it possible for multiple instrumentation
@@ -410,7 +421,7 @@ libraries may be written to generate this metric.
 ### Synchronous and asynchronous instruments compared
 
 Synchronous instruments are called inside a request, meaning they
-have an associated distributed [Context](../context/context.md) (i.e., Span context, Correlation context).  Multiple metric events may occur for a
+have an associated distributed [Context](../context/context.md) (with Span, Baggage, etc.).  Multiple metric events may occur for a
 synchronous instrument within a given collection interval.
 
 Asynchronous instruments are reported by a callback, once per
@@ -428,35 +439,35 @@ corresponding to the instrument and label set.  (For this reasons,
 SDKs SHOULD run asynchronous instrument callbacks near the end of the
 collection interval.)
 
-### Additive and non-additive instruments compared
+### Adding and grouping instruments compared
 
-Additive instruments are used to capture information about a sum,
+Adding instruments are used to capture information about a sum,
 where, by definition, only the sum is of interest.  Individual events
 are considered not meaningful for these instruments, the event count
 is not computed.  This means, for example, that two `Counter` events
 `Add(N)` and `Add(M)` are equivalent to one `Counter` event `Add(N +
 M)`.  This is the case because `Counter` is synchronous, and
-synchronous additive instruments are used to capture changes to a sum.
+synchronous adding instruments are used to capture changes to a sum.
 
-Asynchronous, additive instruments (e.g., `SumObserver`) are used to
+Asynchronous, adding instruments (e.g., `SumObserver`) are used to
 capture sums directly.  This means, for example, that in any sequence
 of `SumObserver` observations for a given instrument and label set,
 the Last Value defines the sum of the instrument.
 
-In both synchronous and asynchronous cases, the additive instruments
+In both synchronous and asynchronous cases, the adding instruments
 are inexpensively aggregated into a single number per collection interval
-without loss of information.  This property makes additive instruments
-higher performance, in general, than non-additive instruments.
+without loss of information.  This property makes adding instruments
+higher performance, in general, than grouping instruments.
 
-Non-additive instruments use a relatively inexpensive aggregation
-method default (MinMaxSumCount), but still more expensive than the
-default for additive instruments (Sum).  Unlike additive instruments,
-where only the sum is of interest by definition, non-additive
+Grouping instruments use a relatively inexpensive aggregation,
+by default, compared with recording full data, but still more expensive aggregation than the
+default for adding instruments (Sum).  Unlike adding instruments,
+where only the sum is of interest by definition, grouping
 instruments can be configured with even more expensive aggregators.
 
 ### Monotonic and non-monotonic instruments compared
 
-Monotonicity applies only to additive instruments.  `Counter` and
+Monotonicity applies only to adding instruments.  `Counter` and
 `SumObserver` instruments are defined as monotonic because the sum
 captured by either instrument is non-decreasing.  The `UpDown-`
 variations of these two instruments are non-monotonic, meaning the sum
@@ -472,10 +483,10 @@ Non-increasing sums are not considered a feature in the Metric API.
 Each instrument supports a single function, named to help convey the
 instrument's semantics.
 
-Synchronous additive instruments support an `Add()` function,
+Synchronous adding instruments support an `Add()` function,
 signifying that they add to a sum and do not directly capture a sum.
 
-Synchronous non-additive instruments support a `Record()` function,
+Synchronous grouping instruments support a `Record()` function,
 signifying that they capture individual events, not only a sum.
 
 Asynchronous instruments all support an `Observe()` function,
@@ -488,7 +499,7 @@ signifying that they capture only one value per measurement interval.
 `Counter` is the most common synchronous instrument.  This instrument
 supports an `Add(increment)` function for reporting a sum, and is
 restricted to non-negative increments.  The default aggregation is
-`Sum`, as for any additive instrument.
+`Sum`, as for any adding instrument.
 
 Example uses for `Counter`:
 
@@ -524,17 +535,17 @@ levels across a group of processes.
 
 ### ValueRecorder
 
-`ValueRecorder` is a non-additive synchronous instrument useful for
-recording any non-additive number, positive or negative.  Values
+`ValueRecorder` is a grouping synchronous instrument useful for
+recording any grouping number, positive or negative.  Values
 captured by a `Record(value)` are treated as individual events
 belonging to a distribution that is being summarized.  `ValueRecorder`
 should be chosen either when capturing measurements that do not
 contribute meaningfully to a sum, or when capturing numbers that are
-additive in nature, but where the distribution of individual
+adding in nature, but where the distribution of individual
 increments is considered interesting.
 
 One of the most common uses for `ValueRecorder` is to capture latency
-measurements.  Latency measurements are not additive in the sense that
+measurements.  Latency measurements are not adding in the sense that
 there is little need to know the latency-sum of all processed
 requests.  We use a `ValueRecorder` instrument to capture latency
 measurements typically because we are interested in knowing mean,
@@ -545,15 +556,15 @@ maximum values, the sum of event values, and the count of events,
 allowing the rate, the mean, and range of input values to be
 monitored.
 
-Example uses for `ValueRecorder` that are non-additive:
+Example uses for `ValueRecorder` that are grouping:
 
 - capture any kind of timing information
 - capture the acceleration experienced by a pilot
 - capture nozzle pressure of a fuel injector
 - capture the velocity of a MIDI key-press.
 
-Example _additive_ uses of `ValueRecorder` capture measurements that
-are additive, but where we may have an interest in the distribution of
+Example _adding_ uses of `ValueRecorder` capture measurements that
+are adding, but where we may have an interest in the distribution of
 values and not only the sum:
 
 - capture a request size
@@ -561,16 +572,16 @@ values and not only the sum:
 - capture a queue length
 - capture a number of board feet of lumber.
 
-These examples show that although they are additive in nature,
+These examples show that although they are adding in nature,
 choosing `ValueRecorder` as opposed to `Counter` or `UpDownCounter`
 implies an interest in more than the sum.  If you did not care to
 collect information about the distribution, you would have chosen one
-of the additive instruments instead.  Using `ValueRecorder` makes
+of the adding instruments instead.  Using `ValueRecorder` makes
 sense for capturing distributions that are likely to be important in
 an observability setting.
 
 Use these with caution because they naturally cost more than the use
-of additive measurements.
+of adding measurements.
 
 ### SumObserver
 
@@ -620,7 +631,7 @@ would be impractical to instrument them, use a `UpDownSumObserver`.
 ### ValueObserver
 
 `ValueObserver` is the asynchronous instrument corresponding to
-`ValueRecorder`, used to capture non-additive measurements with
+`ValueRecorder`, used to capture grouping measurements with
 `Observe(value)`.  These instruments are especially useful for
 capturing measurements that are expensive to compute, since it gives
 the SDK control over how often they are evaluated.
@@ -630,9 +641,9 @@ Example uses for `ValueObserver`:
 - capture CPU fan speed
 - capture CPU temperature.
 
-Note that these examples use non-additive measurements.  In the
+Note that these examples use grouping measurements.  In the
 `ValueRecorder` case above, example uses were given for capturing
-synchronous additive measurements during a request (e.g.,
+synchronous adding measurements during a request (e.g.,
 current queue size seen by a request).  In the asynchronous case,
 however, how should users decide whether to use `ValueObserver` as
 opposed to `UpDownSumObserver`?
@@ -669,7 +680,7 @@ How are the instruments fundamentally different, and why are there
 only three?  Why not one instrument?  Why not ten?
 
 As we have seen, the instruments are categorized as to whether
-they are synchronous, additive, and/or and monotonic.  This approach
+they are synchronous, adding, and/or and monotonic.  This approach
 gives each of the instruments unique semantics, in ways that
 meaningfully improve the performance and interpretation of metric
 events.
@@ -679,8 +690,8 @@ most cases it allows the SDK to provide good default functionality
 "out of the box", without requiring alternative behaviors to be
 configured.  The choice of instrument determines not only the meaning
 of the events but also the name of the function called by the user.
-The function names--`Add()` for additive instruments, `Record()` for
-non-additive instruments, and `Observe()` for asynchronous
+The function names--`Add()` for adding instruments, `Record()` for
+grouping instruments, and `Observe()` for asynchronous
 instruments--help convey the meaning of these actions.
 
 The properties and standard implementation described for the
@@ -688,12 +699,12 @@ individual instruments is summarized in the table below.
 
 | **Name** | Instrument kind | Function(argument) | Default aggregation | Notes |
 | ----------------------- | ----- | --------- | ------------- | --- |
-| **Counter**             | Synchronous additive monotonic | Add(increment) | Sum | Per-request, part of a monotonic sum |
-| **UpDownCounter**       | Synchronous additive | Add(increment) | Sum | Per-request, part of a non-monotonic sum |
-| **ValueRecorder**       | Synchronous  | Record(value) | MinMaxSumCount  | Per-request, any non-additive measurement |
-| **SumObserver**         | Asynchronous additive monotonic | Observe(sum) | Sum | Per-interval, reporting a monotonic sum |
-| **UpDownSumObserver**   | Asynchronous additive | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
-| **ValueObserver**       | Asynchronous | Observe(value) | MinMaxSumCount  | Per-interval, any non-additive measurement |
+| **Counter**             | Synchronous adding monotonic | Add(increment) | Sum | Per-request, part of a monotonic sum |
+| **UpDownCounter**       | Synchronous adding | Add(increment) | Sum | Per-request, part of a non-monotonic sum |
+| **ValueRecorder**       | Synchronous  | Record(value) | [TBD issue 636](https://github.com/open-telemetry/opentelemetry-specification/issues/636)  | Per-request, any grouping measurement |
+| **SumObserver**         | Asynchronous adding monotonic | Observe(sum) | Sum | Per-interval, reporting a monotonic sum |
+| **UpDownSumObserver**   | Asynchronous adding | Observe(sum) | Sum | Per-interval, reporting a non-monotonic sum |
+| **ValueObserver**       | Asynchronous | Observe(value) | LastValue  | Per-interval, any grouping measurement |
 
 ### Constructors
 
@@ -829,9 +840,14 @@ To bind an instrument, use the `Bind(labels...)` method to return an
 interface that supports the corresponding synchronous API (i.e.,
 `Add()` or `Record()`).  Bound instruments are invoked without labels;
 the corresponding metric event is associated with the labels that were
-bound to the instrument.  Bound instruments may consume SDK resources
-indefinitely until the user calls `Unbind()` to release the bound
-instrument.
+bound to the instrument.
+
+As a consequence of their performance advantage, bound instruments
+also consume resources in the SDK.  Bound instruments MUST support an
+`Unbind()` method for users to indicate they are finished with the
+binding and release the associated resources.  Note that `Unbind()`
+does not imply deletion of a timeseries, it only permits the SDK to
+forget the timeseries existed after there are no pending updates.
 
 For example, to repeatedly update a counter with the same labels:
 
@@ -928,25 +944,25 @@ convention.
 
 Synchronous measurements are implicitly associated with the
 distributed [Context](../context/context.md) at runtime, which may
-include a Span context and Correlation values.  The Metric SDK may use
+include a Span and Baggage entries. The Metric SDK may use
 this information in many ways, but one feature is of particular
 interest in OpenTelemetry.
 
-#### Correlation context into metric labels
+#### Baggage into metric labels
 
-Correlation context is supported in OpenTelemetry as a means for
+Baggage is supported in OpenTelemetry as a means for
 labels to propagate from one process to another in a distributed
 computation.  Sometimes it is useful to aggregate metric data using
-distributed correlation values as metric labels.
+distributed baggage entries as metric labels.
 
-The use of correlation context must be explicitly configured, using
+The use of Baggage must be explicitly configured, using
 the [Views API (WIP)](https://github.com/open-telemetry/oteps/pull/89)
-to select specific key correlation values that should be applied as
-labels.  The default SDK will not automatically use correlation
-context labels in the export pipeline, since using correlation labels
+to select specific key baggage entries that should be applied as
+labels.  The default SDK will not automatically use Baggage
+labels in the export pipeline, since using Baggage labels
 can be a significant expense.
 
-Configuring views for applying Correlation context labels is a [work in
+Configuring views for applying Baggage labels is a [work in
 progress](https://github.com/open-telemetry/oteps/pull/89).
 
 ## Asynchronous instrument details

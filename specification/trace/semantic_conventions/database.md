@@ -27,27 +27,78 @@ When it's otherwise impossible to get any meaningful span name, `db.name` or the
 These attributes will usually be the same for all operations performed over the same database connection.
 Some database systems may allow a connection to switch to a different `db.user`, for example, and other database systems may not even have the concept of a connection at all.
 
-| Attribute name | Notes and examples                                           | Required? |
-| :------------- | :----------------------------------------------------------- | --------- |
-| `db.system`    | An identifier for the database management system (DBMS) product being used. See below for a [list of well-known identifiers](#notes-and-well-known-identifiers-for-dbsystem). | Yes       |
-| `db.connection_string` | The connection string used to connect to the database. It is recommended to remove embedded credentials. | No       |
-| `db.user`      | Username for accessing the database, e.g., `"readonly_user"` or `"reporting_user"` | No        |
-| `net.peer.name` | Defined in the general [network attributes][]. | See below |
-| `net.peer.ip`   | Defined in the general [network attributes][]. | See below |
-| `net.peer.port` | Defined in the general [network attributes][]. | See below |
-| `net.transport` | Defined in the general [network attributes][]. | See below |
+<!-- semconv db(tag=connection-level) -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `db.system` | string | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Yes |
+| `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | No |
+| `db.user` | string | Username for accessing the database. | `readonly_user`<br>`reporting_user` | No |
+| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Conditional<br>See below. |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | Conditional<br>See below. |
+| [`net.peer.port`](span-general.md) | number | Remote port number. | `80`<br>`8080`<br>`443` | Conditional [1] |
+| [`net.transport`](span-general.md) | string enum | Transport protocol used. See note below. | `IP.TCP` | Conditional [2] |
 
-At least one of `net.peer.name` or `net.peer.ip` from the [network attributes][] is required and `net.peer.port` is recommended.
-If using a port other than the default port for this DBMS, `net.peer.port` is required.
-Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines.
-For in-process databases, `net.transport` MUST be set to `"inproc"`.
+**[1]:** Required if using a port other than the default port for this DBMS.
 
-[network attributes]: span-general.md#general-network-connection-attributes
-[`net.transport`]: span-general.md#nettransport-attribute
+**[2]:** Recommended in general, required for in-process databases (`"inproc"`).
+
+**Additional attribute requirements:** At least one of the following sets of attributes is required:
+
+* [`net.peer.name`](span-general.md)
+* [`net.peer.ip`](span-general.md)
+
+`db.system` MUST be one of the following or, if none of the listed values apply, a custom value:
+
+| Value  | Description |
+|---|---|
+| `other_sql` | Some other SQL database. Fallback only. See notes. |
+| `mssql` | Microsoft SQL Server |
+| `mysql` | MySQL |
+| `oracle` | Oracle Database |
+| `db2` | IBM Db2 |
+| `postgresql` | PostgreSQL |
+| `redshift` | Amazon Redshift |
+| `hive` | Apache Hive |
+| `cloudscape` | Cloudscape |
+| `hsqlsb` | HyperSQL DataBase |
+| `progress` | Progress Database |
+| `maxdb` | SAP MaxDB |
+| `hanadb` | SAP HANA |
+| `ingres` | Ingres |
+| `firstsql` | FirstSQL |
+| `edb` | EnterpriseDB |
+| `cache` | InterSystems Caché |
+| `adabas` | Adabas (Adaptable Database System) |
+| `firebird` | Firebird |
+| `derby` | Apache Derby |
+| `filemaker` | FileMaker |
+| `informix` | Informix |
+| `instantdb` | InstantDB |
+| `interbase` | InterBase |
+| `mariadb` | MariaDB |
+| `netezza` | Netezza |
+| `pervasive` | Pervasive PSQL |
+| `pointbase` | PointBase |
+| `sqlite` | SQLite |
+| `sybase` | Sybase |
+| `teradata` | Teradata |
+| `vertica` | Vertica |
+| `h2` | H2 |
+| `coldfusion` | ColdFusion IMQ |
+| `cassandra` | Apache Cassandra |
+| `hbase` | Apache HBase |
+| `mongodb` | MongoDB |
+| `redis` | Redis |
+| `couchbase` | Couchbase |
+| `couchdb` | CouchDB |
+| `cosmosdb` | Microsoft Azure Cosmos DB |
+| `dynamodb` | Amazon DynamoDB |
+| `neo4j` | Neo4j |
+<!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
 
-This is a non-exhaustive list of well-known identifiers to be specified for `db.system`.
+The list above is a non-exhaustive list of well-known identifiers to be specified for `db.system`.
 
 If a value defined in this list applies to the DBMS to which the request is sent, this value MUST be used.
 If no value defined in this list is suitable, a custom value MUST be provided.
@@ -59,60 +110,41 @@ This allows multiple instrumentations for the same database to be aligned and ea
 The value `other_sql` is intended as a fallback and MUST only be used if the DBMS is known to be SQL-compliant but the concrete product is not known to the instrumentation.
 If the concrete DBMS is known to the instrumentation, its specific identifier MUST be used.
 
-| Value for `db.system` | Product name              | Note                           |
-| :-------------------- | :------------------------ | :----------------------------- |
-| `"db2"`               | IBM Db2                   |                                |
-| `"derby"`             | Apache Derby              |                                |
-| `"hive"`              | Apache Hive               |                                |
-| `"mariadb"`           | MariaDB                   |                                |
-| `"mssql"`             | Microsoft SQL Server      |                                |
-| `"mysql"`             | MySQL                     |                                |
-| `"oracle"`            | Oracle Database           |                                |
-| `"postgresql"`        | PostgreSQL                |                                |
-| `"sqlite"`            | SQLite                    |                                |
-| `"teradata"`          | Teradata                  |                                |
-| `"other_sql"`         | Some other SQL Database   | Fallback only. See note above. |
-| `"cassandra"`         | Cassandra                 |                                |
-| `"cosmosdb"`          | Microsoft Azure Cosmos DB |                                |
-| `"couchbase"`         | Couchbase                 |                                |
-| `"couchdb"`           | CouchDB                   |                                |
-| `"dynamodb"`          | Amazon DynamoDB           |                                |
-| `"hbase"`             | HBase                     |                                |
-| `"mongodb"`           | MongoDB                   |                                |
-| `"neo4j"`             | Neo4j                     |                                |
-| `"redis"`             | Redis                     |                                |
-
 Back ends could, for example, use the provided identifier to determine the appropriate SQL dialect for parsing the `db.statement`.
 
 When additional attributes are added that only apply to a specific DBMS, its identifier SHOULD be used as a namespace in the attribute key as for the attributes in the sections below.
 
 ### Connection-level attributes for specific technologies
 
-| Technology | Attribute name | Notes and examples                                           | Required? |
-| ---------- | :------------- | :----------------------------------------------------------- | --------- |
-| Microsoft SQL Server | `db.mssql.instance_name` | The [instance name][] connecting to. This name is used to determine the port of a named instance. | See below. |
-| JDBC Clients | `db.jdbc.driver_classname` | The fully-qualified class name of the [Java Database Connectivity (JDBC)][jdbc] driver used to connect, e.g., `"org.postgresql.Driver"` or `"com.microsoft.sqlserver.jdbc.SQLServerDriver"`. | No |
+<!-- semconv db.mssql(tag=connection-level-tech-specific,remove_constraints) -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `db.jdbc.driver_classname` | string | The fully-qualified class name of the [Java Database Connectivity (JDBC)](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/) driver used to connect. | `org.postgresql.Driver`<br>`com.microsoft.sqlserver.jdbc.SQLServerDriver` | No |
+| `db.mssql.instance_name` | string | The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15) connecting to. This name is used to determine the port of a named instance. [1] | `MSSQLSERVER` | No |
 
-[instance name]: https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15
-[jdbc]: https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/
-
-- Microsoft SQL Server:
-  - If setting a `db.mssql.instance_name`, `net.peer.port` is no longer required (but still recommended if non-standard).
+**[1]:** If setting a `db.mssql.instance_name`, `net.peer.port` is no longer required (but still recommended if non-standard).
+<!-- endsemconv -->
 
 ## Call-level attributes
 
 These attributes may be different for each operation performed, even if the same connection is used for multiple operations.
 Usually only one `db.name` will be used per connection though.
 
-| Attribute name | Notes and examples                                           | Required? |
-| :------------- | :----------------------------------------------------------- | --------- |
-| `db.name`  | If no [tech-specific attribute](#call-level-attributes-for-specific-technologies) is defined in the list below, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). | Yes (if applicable and no more specific attribute is defined) |
-| `db.statement` | The database statement being executed. Note that the value may be sanitized to exclude sensitive information. E.g., for `db.system="other_sql"`, `"SELECT * FROM wuser_table"`; for `db.system="redis"`, `"SET mykey 'WuValue'"`. | Yes (if applicable)       |
-| `db.operation` | The name of the operation being executed, e.g. the [MongoDB command name][] such as `findAndModify`. While it would semantically make sense to set this, e.g., to an SQL keyword like `SELECT` or `INSERT`, it is *not* recommended to attempt any client-side parsing of `db.statement` just to get this property (the back end can do that if required). | Yes, if `db.statement` is not applicable.       |
+<!-- semconv db(tag=call-level,remove_constraints) -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `db.name` | string | If no [tech-specific attribute](#call-level-attributes-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`<br>`main` | Conditional [2] |
+| `db.statement` | string | The database statement being executed. [3] | `SELECT * FROM wuser_table`<br>`SET mykey "WuValue"` | Conditional<br>Required if applicable. |
+| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`. [4] | `findAndModify`<br>`HMSET` | Conditional<br>Required, if `db.statement` is not applicable. |
 
-[MongoDB command name]: https://docs.mongodb.com/manual/reference/command/#database-operations
+**[1]:** In some SQL databases, the database name to be used is called "schema name".
 
-In some **SQL** databases, the database name to be used for `db.name` is called "schema name".
+**[2]:** Required, if applicable and no more-specific attribute is defined.
+
+**[3]:** The value may be sanitized to exclude sensitive information.
+
+**[4]:** While it would semantically make sense to set this, e.g., to a SQL keyword like `SELECT` or `INSERT`, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property (the back end can do that if required).
+<!-- endsemconv -->
 
 For **Redis**, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.
 If, for example, the [`HMSET` command][] is invoked, `"HMSET myhash field1 'Hello' field2 'World'"` would be a suitable value for `db.statement`.
@@ -126,15 +158,16 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 
 ### Call-level attributes for specific technologies
 
-| Technology | Attribute name            | Notes and examples                                           | Required? |
-| ---------- | :------------------------ | :----------------------------------------------------------- | --------- |
-| Cassandra  | `db.cassandra.keyspace`   | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | Yes |
-| HBase      | `db.hbase.namespace`      | The [HBase namespace][] being accessed. To be used instead of the generic `db.name` attribute. | Yes |
-| Redis      | `db.redis.database_index` | The index of the database being accessed as used in the [`SELECT` command], provided as an integer. To be used instead of the generic `db.name` attribute. | Yes, if other than the default database (`0`) |
-| MongoDB    | `db.mongodb.collection`   | The collection being accessed within the database stated in `db.name`. | Yes |
+<!-- semconv db.tech(tag=call-level-tech-specific) -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
+| `db.hbase.namespace` | string | The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute. | `default` | Yes |
+| `db.redis.database_index` | number | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`<br>`1`<br>`15` | Conditional [1] |
+| `db.mongodb.collection` | string | The collection being accessed within the database stated in `db.name`. | `customers`<br>`products` | Yes |
 
-[HBase namespace]: https://hbase.apache.org/book.html#_namespace
-[`SELECT` command]: https://redis.io/commands/select
+**[1]:** Required, if other than the default database (`0`).
+<!-- endsemconv -->
 
 ## Examples
 

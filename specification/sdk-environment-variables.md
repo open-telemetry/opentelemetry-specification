@@ -4,11 +4,14 @@ The goal of this specification is to unify the environment variable names betwee
 
 ## General SDK Configuration
 
-| Name                 | Description                                      | Default                           | Notes                                                                                       |
-| -------------------- | ------------------------------------------------ | --------------------------------- | ------------------------------------------------------------------------------------------- |
-| OTEL_RESOURCE_LABELS | Key-value pairs to be used as resource labels    |                                   | Spec details TBD. Proposal in [OTEP-111](https://github.com/open-telemetry/oteps/pull/111). |
-| OTEL_LOG_LEVEL       | Log level used by the SDK logger                 | "info"                            |                                                                                             |
-| OTEL_PROPAGATORS     | Propagators to be used as a comma separated list | "tracecontext,correlationcontext" |                                                                                             |
+| Name                     | Description                                       | Default                           | Notes                               |
+| ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
+| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
+| OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
+| OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning and be gracefully ignored. |
+
+Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger".
+Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
 
 ## Batch Span Processor
 
@@ -19,19 +22,17 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
-## OTLP Span Exporter
+## Span Collection Limits
 
-| Name                             | Description                                | Default |
-| -------------------------------- | ------------------------------------------ | ------- |
-| OTEL_EXPORTER_OTLP_SPAN_TIMEOUT  | Max waiting time to export each span batch | -       |
-| OTEL_EXPORTER_OTLP_SPAN_ENDPOINT | Ingest endpoint for OTLP spans             | -       |
+| Name                            | Description                          | Default | Notes |
+| ------------------------------- | ------------------------------------ | ------- | ----- |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 1000    |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 1000    |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 1000    |       |
 
-## OTLP Metric Exporter
+## OTLP Exporter
 
-| Name                               | Description                                  | Default |
-| ---------------------------------- | -------------------------------------------- | ------- |
-| OTEL_EXPORTER_OTLP_METRIC_TIMEOUT  | Max waiting time to export each metric batch | -       |
-| OTEL_EXPORTER_OTLP_METRIC_ENDPOINT | Ingest endpoint for OTLP metrics             | -       |
+See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).
 
 ## Jaeger Exporter
 
@@ -48,6 +49,23 @@ The goal of this specification is to unify the environment variable names betwee
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
+
+## Prometheus Exporter
+
+| Name                          | Description                     | Default                      |
+| ----------------------------- | --------------------------------| ---------------------------- |
+| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
+| OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
+
+## Exporter Selection
+
+| Name          | Description                                                                  | Default |
+| ------------- | ---------------------------------------------------------------------------- | ------- |
+| OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp"  |
+
+Known values for OTEL_EXPORTER are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
+
+Note: "otlp" is equivalent to "otlp_span,otlp_metric".
 
 ## Language Specific Environment Variables
 
