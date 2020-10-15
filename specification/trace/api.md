@@ -145,8 +145,8 @@ If the language has support for implicitly propagated `Context` (see
 [here](../context/context.md#optional-global-operations)), the API SHOULD also provide
 the following functionality:
 
-- Get the currently active span
-- Set the currently active span
+- Get the currently active span from the implicit context. This is equivalent to getting the implicit context, then extracting the `Span` from the context.
+- Set the currently active span to the implicit context. This is equivalent to getting the implicit context, then inserting the `Span` to the context.
 
 All the above functionalities operate solely on the context API, and they MAY be
 exposed as static methods on the trace module, as static methods on a class
