@@ -1,0 +1,36 @@
+groups:
+    - id: faas-metrics
+      prefix: faas
+      brief: >
+          This document defines the attributes used in
+          faas (function as a service) metrics.
+      attributes:
+        - ref: faas.trigger
+          required: always
+          type:
+            allow_custom_values: false
+            members:
+              - id: datasource
+                value: 'datasource'
+              - id: http
+                value: 'http'
+              - id: pubsub
+                value: 'pubsub'
+              - id: timer
+                value: 'timer'
+              - id: other
+                value: 'other'
+        - ref: faas.name
+          required: always
+          type: string
+        - ref: faas.provider
+          required: always
+          type: string
+        - ref: faas.region
+          required: always
+          type: string
+        - ref: faas.coldstart
+          required: always
+          type: boolean
+        - ref: faas.error
+          type: boolean
