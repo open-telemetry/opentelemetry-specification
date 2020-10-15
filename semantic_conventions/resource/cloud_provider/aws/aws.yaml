@@ -1,0 +1,34 @@
+groups:
+  - id: aws
+    prefix: aws
+    brief: >
+      Resources specific to Amazon Web Services.
+    attributes:
+      - id: loggroup.name
+        type: string
+        brief: >
+          The name of the AWS log group an application is writing to.
+        examples: ['/aws/lambda/my-function', 'opentelemetry-service']
+      - id: loggroup.arn
+        type: string
+        brief: >
+          The Amazon Resource Name (ARN) of an AWS log group.
+        examples: ['arn:aws:logs:us-west-1:123456789012:log-group:/aws/my/group:*']
+        note: >
+          See the
+          [log group ARN format documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/iam-access-control-overview-cwl.html#CWL_ARN_Format).
+      - id: logstream.name
+        type: string
+        brief: >
+          The name of the AWS log stream an application is writing to.
+        examples: ['logs/main/10838bed-421f-43ef-870a-f43feacbbb5b']
+      - id: logstream.arn
+        type: string
+        brief: >
+          The ARN of the AWS log stream.
+        examples: ['arn:aws:logs:us-west-1:123456789012:log-group:/aws/my/group:log-stream:logs/main/10838bed-421f-43ef-870a-f43feacbbb5b']
+        note: >
+          See the
+          [log stream ARN format documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/iam-access-control-overview-cwl.html#CWL_ARN_Format).
+          One log group can contain several log streams, so this ARN necessarily identifies both a log
+          group and a log stream.
