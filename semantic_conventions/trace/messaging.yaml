@@ -153,3 +153,8 @@ groups:
           brief: >
             Partition the message is sent to.
           examples: 2
+        - id: tombstone
+          type: boolean
+          required:
+            conditional: 'If missing, it is assumed to be false.'
+          brief: 'A boolean that is true if the message is a tombstone.'

@@ -200,6 +200,7 @@ For Apache Kafka, the following additional attributes are defined:
 | `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | No |
 | `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | No |
 | `messaging.kafka.partition` | number | Partition the message is sent to. | `2` | No |
+| `messaging.kafka.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditional<br>If missing, it is assumed to be false. |
 
 **[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
 <!-- endsemconv -->
