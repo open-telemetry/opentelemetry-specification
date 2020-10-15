@@ -287,7 +287,8 @@ invocations. The span processors are invoked only when
 [`IsRecording`](api.md#isrecording) is true.
 
 Built-in span processors are responsible for batching and conversion of spans to
-exportable representation and passing batches to exporters.
+exportable representation and passing batches to exporters or alternatives to
+exporters such as [z-pages](../../experimental/trace/zpages.md).
 
 Span processors can be registered directly on SDK `TracerProvider` and they are
 invoked in the same order as they were registered.
