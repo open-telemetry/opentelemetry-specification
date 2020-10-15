@@ -400,6 +400,11 @@ This is an implementation of `SpanProcessor` which passes finished spans
 and the export-friendly span data representation to the configured
 `SpanExporter` as soon as they are finished.
 
+Typically, the simple processor will be most suitable for use in testing and/or
+in scenarios where creating multiple threads is not desirable, since batching
+span processors will typically be threaded in order to pass spans on to exporters
+in the background.
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
@@ -409,6 +414,9 @@ and the export-friendly span data representation to the configured
 This is an implementation of `SpanProcessor` which creates batches of finished
 spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
+
+Typically, the batching processor will be more suitable for production environments
+than the simple processor.
 
 **Configurable parameters:**
 
