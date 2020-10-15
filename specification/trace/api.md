@@ -14,7 +14,7 @@ Table of Contents
 * [Context Interaction](#context-interaction)
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
-* [SpanContext](#spancontext)
+* [SpanReference](#spanreference)
   * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [IsValid](#isvalid)
   * [IsRemote](#isremote)
@@ -33,11 +33,6 @@ Table of Contents
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
   * [Propagated Span creation](#propagated-span-creation)
-* [Status](#status)
-  * [StatusCanonicalCode](#statuscanonicalcode)
-  * [Status creation](#status-creation)
-  * [GetCanonicalCode](#getcanonicalcode)
-  * [GetDescription](#getdescription)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
@@ -96,11 +91,13 @@ number of `TracerProvider` instances.
 
 ### TracerProvider operations
 
-The `TracerProvider` MUST provide functions to:
+The `TracerProvider` MUST provide the following functions:
 
 - Get a `Tracer`
 
-That API MUST accept the following parameters:
+#### Get a Tracer
+
+This API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
   (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
@@ -170,12 +167,12 @@ The `Tracer` MUST provide functions to:
 
 - [Create a new `Span`](#span-creation) (see the section on `Span`)
 
-## SpanContext
+## SpanReference
 
-A `SpanContext` represents the portion of a `Span` which must be serialized and
-propagated along side of a distributed context. `SpanContext`s are immutable.
+A `SpanReference` represents the portion of a `Span` which must be serialized and
+propagated along side of a distributed context. `SpanReference`s are immutable.
 
-The OpenTelemetry `SpanContext` representation conforms to the [W3C TraceContext
+The OpenTelemetry `SpanReference` representation conforms to the [W3C TraceContext
 specification](https://www.w3.org/TR/trace-context/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
 `TraceFlags` and system-specific `TraceState` values.
@@ -195,8 +192,8 @@ of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. It is fully described in the [W3C Trace Context
 specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 
-The API MUST implement methods to create a `SpanContext`. These methods SHOULD be the only way to
-create a `SpanContext`. This functionality MUST be fully implemented in the API, and SHOULD NOT be
+The API MUST implement methods to create a `SpanReference`. These methods SHOULD be the only way to
+create a `SpanReference`. This functionality MUST be fully implemented in the API, and SHOULD NOT be
 overridable.
 
 ### Retrieving the TraceId and SpanId
@@ -213,19 +210,19 @@ The API should not expose details about how they are internally stored.
 
 ### IsValid
 
-An API called `IsValid`, that returns a boolean value, which is `true` if the SpanContext has a
+An API called `IsValid`, that returns a boolean value, which is `true` if the SpanReference has a
 non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 ### IsRemote
 
-An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanContext was
+An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanReference was
 propagated from a remote parent, MUST be provided.
-When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md#propagators-api),
-`IsRemote` MUST return true, whereas for the SpanContext of any child spans it MUST return false.
+When extracting a `SpanReference` through the [Propagators API](../context/api-propagators.md#propagators-api),
+`IsRemote` MUST return true, whereas for the SpanReference of any child spans it MUST return false.
 
 ### TraceState
 
-`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key/value pairs and
+`TraceState` is a part of [`SpanReference`](./api.md#spanreference), represented by an immutable list of string key/value pairs and
 formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 Tracing API MUST provide at least the following operations on `TraceState`:
 
@@ -241,9 +238,9 @@ Every mutating operations MUST validate input parameters.
 If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
 and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
 
-Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
+Please note, since `SpanReference` is immutable, it is not possible to update `SpanReference` with a new `TraceState`.
 Such changes then make sense only right before
-[`SpanContext` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
+[`SpanReference` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
 or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
 In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
 
@@ -257,9 +254,9 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 `Span`s encapsulate:
 
 - The span name
-- An immutable [`SpanContext`](#spancontext) that uniquely identifies the
+- An immutable [`SpanReference`](#spanreference) that uniquely identifies the
   `Span`
-- A parent span in the form of a [`Span`](#span), [`SpanContext`](#spancontext),
+- A parent span in the form of a [`Span`](#span), [`SpanReference`](#spanreference),
   or null
 - A [`SpanKind`](#spankind)
 - A start timestamp
@@ -316,7 +313,7 @@ MUST NOT be changed after the `Span`'s end time has been set.
 
 `Span`s are not meant to be used to propagate information within a process. To
 prevent misuse, implementations SHOULD NOT provide access to a `Span`'s
-attributes besides its `SpanContext`.
+attributes besides its `SpanReference`.
 
 Vendors may implement the `Span` interface to effect vendor-specific logic.
 However, alternative implementations MUST NOT allow callers to create `Span`s
@@ -336,7 +333,7 @@ The API MUST accept the following parameters:
 - The parent `Context` or an indication that the new `Span` should be a root `Span`.
   The API MAY also have an option for implicitly using
   the current Context as parent as a default behavior.
-  This API MUST NOT accept a `Span` or `SpanContext` as parent, only a full `Context`.
+  This API MUST NOT accept a `Span` or `SpanReference` as parent, only a full `Context`.
 
   The semantic parent of the Span MUST be determined according to the rules
   described in [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context).
@@ -365,8 +362,14 @@ Also, the child span MUST inherit all `TraceState` values of its parent by defau
 
 A `Span` is said to have a _remote parent_ if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
-`IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
+`IsRemote` to true on a parent `SpanReference` so `Span` creation knows if the
 parent is remote.
+
+Any span that is created MUST also be ended.
+This is the responsibility of the user.
+API implementations MAY leak memory or other resources
+(including, for example, CPU time for periodic work that iterates all spans)
+if the user forgot to end the span.
 
 #### Determining the Parent Span from a Context
 
@@ -374,7 +377,7 @@ When a new `Span` is created from a `Context`, the `Context` may contain a `Span
 representing the currently active instance, and will be used as parent.
 If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
 
-A `SpanContext` cannot be set as active in a `Context` directly, but through the use
+A `SpanReference` cannot be set as active in a `Context` directly, but through the use
 of a [Propagated Span](#propagated-span-creation) wrapping it.
 For example, a `Propagator` performing context extraction may need this.
 
@@ -382,35 +385,35 @@ For example, a `Propagator` performing context extraction may need this.
 
 During the `Span` creation user MUST have the ability to record links to other
 `Span`s. Linked `Span`s can be from the same or a different trace. See [Links
-description](../overview.md#links-between-spans).
+description](../overview.md#links-between-spans). `Link`s cannot be added after
+Span creation.
 
-`Link`s cannot be added after Span creation.
+A `Link` is structurally defined by the following properties:
 
-A `Link` is defined by the following properties:
-
-- `SpanContext` of the `Span` to link to.
-- Zero or more `Attribute`s as defined [here](../common/common.md#attributes).
-
-The `Link` SHOULD be an immutable type.
+- `SpanReference` of the `Span` to link to.
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the link.
 
 The Span creation API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
-  arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
-  the `Span` to link to and optional `Attributes`.
+  arguments. This MAY be called `AddLink`. This API takes the `SpanReference` of
+  the `Span` to link to and optional `Attributes`, either as individual
+  parameters or as an immutable object encapsulating them, whichever is most
+  appropriate for the language.
 
 Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
-With the exception of the function to retrieve the `Span`'s `SpanContext` and
+With the exception of the function to retrieve the `Span`'s `SpanReference` and
 recording status, none of the below may be called after the `Span` is finished.
 
 #### Get Context
 
 The Span interface MUST provide:
 
-- An API that returns the `SpanContext` for the given `Span`. The returned value
+- An API that returns the `SpanReference` for the given `Span`. The returned value
   may be used even after the `Span` is finished. The returned value MUST be the
   same for the entire Span lifetime. This MAY be called `GetContext`.
 
@@ -420,13 +423,18 @@ Returns true if this `Span` is recording information like events with the
 `AddEvent` operation, attributes using `SetAttributes`, status with `SetStatus`,
 etc.
 
-There should be no parameter.
+After a `Span` is ended, it usually becomes non-recording and thus
+`IsRecording` SHOULD consequently return false for ended Spans.
+Note: Streaming implementations, where it is not known if a span is ended,
+are one expected case where `IsRecording` cannot change after ending a Span.
+
+`IsRecording` SHOULD NOT take any parameters.
 
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
 events in case when a Span is definitely not recorded. Note that any child
 span's recording is determined independently from the value of this flag
 (typically based on the `sampled` flag of a `TraceFlag` on
-[SpanContext](#spancontext)).
+[SpanReference](#spanreference)).
 
 This flag may be `true` despite the entire trace being sampled out. This
 allows to record and process information about the individual Span without
@@ -464,23 +472,24 @@ attributes, cannot change their decisions.
 A `Span` MUST have the ability to add events. Events have a time associated
 with the moment when they are added to the `Span`.
 
-An `Event` is defined by the following properties:
+An `Event` is structurally defined by the following properties:
 
 - Name of the event.
 - A timestamp for the event. Either the time at which the event was
-added or a custom timestamp provided by the user.
-- [`Attributes`](../common/common.md#attributes) further describing the event.
-
-The `Event` SHOULD be an immutable type.
+  added or a custom timestamp provided by the user.
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the event.
 
 The Span interface MUST provide:
 
 - An API to record a single `Event` where the `Event` properties are passed as
   arguments. This MAY be called `AddEvent`.
   This API takes the name of the event, optional `Attributes` and an optional
-  `Timestamp` which can be used to specify the time at which the event occurred.
-  If no custom timestamp is provided by the user, the implementation automatically
-  sets the time at which this API is called on the event.
+  `Timestamp` which can be used to specify the time at which the event occurred,
+  either as individual parameters or as an immutable object encapsulating them,
+  whichever is most appropriate for the language. If no custom timestamp is
+  provided by the user, the implementation automatically sets the time at which
+  this API is called on the event.
 
 Events SHOULD preserve the order in which they are recorded.
 This will typically match the ordering of the events' timestamps,
@@ -500,16 +509,50 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 
 #### Set Status
 
-Sets the [`Status`](#status) of the `Span`. If used, this will override the
-default `Span` status, which is `OK`.
+Sets the `Status` of the `Span`. If used, this will override the default `Span`
+status, which is `Unset`.
 
-Only the value of the last call will be recorded, and implementations are free
-to ignore previous calls.
+`Status` is structurally defined by the following properties:
+
+- `StatusCode`, one of the values listed below.
+- Optional `Description` that provides a descriptive message of the `Status`.
+
+`StatusCode` is one of the following values:
+
+- `Unset`
+  - The default status.
+- `Ok`
+  - The operation has been validated by an Application developer or Operator to
+    have completed successfully.
+- `Error`
+  - The operation contains an error.
 
 The Span interface MUST provide:
 
-- An API to set the `Status` where the new status is the only argument. This
-  SHOULD be called `SetStatus`.
+- An API to set the `Status`. This SHOULD be called `SetStatus`.
+  This API takes the `StatusCode`, and an optional `Description`, either as
+  individual parameters or as an immutable object encapsulating them, whichever
+  is most appropriate for the language.
+
+The status code SHOULD remain unset, except for the following circumstances:
+
+When the status is set to `ERROR` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `ERROR`
+according to the rules defined within the semantic conventions. For operations
+not covered by the semantic conventions, Instrumentation Libraries SHOULD
+publish their own conventions, including status codes.
+
+Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
+unless explicitly configured to do so. Instrumention libraries SHOULD leave the
+status code as `Unset` unless there is an error, as described above.
+
+Application developers and Operators may set the status code to `Ok`.
+
+Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
+would otherwise generate. For example, to suppress noisy errors such as 404s.
+
+Only the value of the last call will be recorded, and implementations are free
+to ignore previous calls.
 
 #### UpdateName
 
@@ -532,17 +575,31 @@ Required parameters:
 
 #### End
 
-Finish the `Span`. This call will take the current timestamp to set as `Span`'s
-end time. Implementations MUST ignore all subsequent calls to `End` (there might
-be exceptions when Tracer is streaming event and has no mutable state associated
-with the `Span`).
+Signals that the operation described by this span has
+now (or at the time optionally specified) ended.
 
-Call to `End` of a `Span` MUST not have any effects on child spans. Those may
-still be running and can be ended later.
+Implementations SHOULD ignore all subsequent calls to `End` and any other Span methods,
+i.e. the Span becomes non-recording by being ended
+(there might be exceptions when Tracer is streaming events
+and has no mutable state associated with the `Span`).
+
+Language SIGs MAY provide methods other than `End` in the API that also end the
+span to support language-specific features like `with` statements in Python.
+However, all API implementations of such methods MUST internally call the `End`
+method and be documented to do so.
+
+`End` MUST NOT have any effects on child spans.
+Those may still be running and can be ended later.
+
+`End` MUST NOT inactivate the `Span` in any `Context` it is active in.
+It MUST still be possible to use an ended span as parent via a Context it is
+contained in. Also, any mechanisms for putting the Span into a Context MUST
+still work after the Span was ended.
 
 Parameters:
 
-- (Optional) Timestamp to explicitly set the end timestamp
+- (Optional) Timestamp to explicitly set the end timestamp.
+  If omitted, this MUST be treated equivalent to passing the current time.
 
 This API MUST be non-blocking.
 
@@ -582,77 +639,23 @@ calling of corresponding API.
 
 ### Propagated Span creation
 
-The API MUST provide an operation for wrapping a `SpanContext` with an object
-implementing the `Span` interface. This is done in order to expose a `SpanContext`
+The API MUST provide an operation for wrapping a `SpanReference` with an object
+implementing the `Span` interface. This is done in order to expose a `SpanReference`
 as a `Span` in operations such as in-process `Span` propagation.
 
 If a new type is required for supporting this operation, it SHOULD be named `PropagatedSpan`.
 
 The behavior is defined as follows:
 
-- `GetContext()` MUST return the wrapped `SpanContext`.
+- `GetContext()` MUST return the wrapped `SpanReference`.
 - `IsRecording` MUST return `false` to signal that events, attributes and other elements
   are not being recorded, i.e. they are being dropped.
 
 The remaining functionality of `Span` MUST be defined as no-op operations.
+Note: This includes `End`, so as an exception from the general rule,
+it is not required (or even helpful) to end a Propagated Span.
 
 This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
-
-## Status
-
-`Status` interface represents the status of a finished `Span`. It's composed of
-a canonical code, and an optional descriptive message.
-
-### StatusCanonicalCode
-
-`StatusCanonicalCode` represents the canonical set of status codes of a finished
-`Span`.
-
-- `Unset`
-  - The default status.
-- `Error`
-  - The operation contains an error.
-- `Ok`
-  - The operation has been validated by an Application developers or Operator to
-    have completed successfully, or contain
-
-The status code SHOULD remain unset, except for the following circumstances:
-
-When the status is set to `ERROR` by Instrumentation Libraries, the status codes
-SHOULD be documented and predictable. The status code should only be set to `ERROR`
-according to the rules defined within the semantic conventions. For operations
-not covered by the semantic conventions, Instrumentation Libraries SHOULD
-publish their own conventions, including status codes.
-
-Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
-unless explicitly configured to do so. Instrumention libraries SHOULD leave the
-status code as `Unset` unless there is an error, as described above.
-
-Application developers and Operators may set the status code to `Ok`.
-
-Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
-would otherwise generate. For example, to suppress noisy errors such as 404s.
-
-### Status creation
-
-API MUST provide a way to create a new `Status`.
-
-Required parameters
-
-- `StatusCanonicalCode` of this `Status`.
-
-Optional parameters
-
-- Description of this `Status`.
-
-### GetCanonicalCode
-
-Returns the `StatusCanonicalCode` of this `Status`.
-
-### GetDescription
-
-Returns the description of this `Status`.
-Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
 
 ## SpanKind
 
@@ -677,7 +680,7 @@ In order for `SpanKind` to be meaningful, callers should arrange that
 a single Span does not serve more than one purpose.  For example, a
 server-side span should not be used directly as the parent of another
 remote span.  As a simple guideline, instrumentation should create a
-new Span prior to extracting and serializing the span context for a
+new Span prior to extracting and serializing the SpanReference for a
 remote call.
 
 These are the possible SpanKinds:
@@ -736,13 +739,13 @@ The API layer MAY include the following `Propagator`s:
 
 In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
 This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
-is one important exception to this general rule, and that is related to propagation of a `SpanContext`:
-The API MUST create a [Propagated Span](#propagated-span-creation) with the `SpanContext`
+is one important exception to this general rule, and that is related to propagation of a `SpanReference`:
+The API MUST create a [Propagated Span](#propagated-span-creation) with the `SpanReference`
 that is in the `Span` in the parent `Context` (whether explicitly given or implicit current) or,
 if the parent is a Propagated Span (which it usually always is if no SDK is present),
 it MAY return the same parent Propagated Span instance back from the creation method.
 If the parent `Context` contains no `Span`, an empty Propagated Span MUST be returned instead
-(i.e., having a SpanContext with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
-This means that a `SpanContext` that has been provided by a configured `Propagator`
+(i.e., having a SpanReference with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
+This means that a `SpanReference` that has been provided by a configured `Propagator`
 will be propagated through to any child span and ultimately also `Inject`,
-but that no new `SpanContext`s will be created.
+but that no new `SpanReference`s will be created.

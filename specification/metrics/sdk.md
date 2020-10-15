@@ -154,6 +154,24 @@ implementing the [`Meter` interface](api.md#meter-interface), and
 managing the SDK instrument, the Resource, and Instrumentation Library
 metadata.
 
+#### MeterProvider
+
+##### Shutdown
+
+This method provides a way for provider to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `MeterProvider` instance. After
+the call to `Shutdown`, subsequent attempts to get a `Meter` are not allowed. SDKs
+SHOULD return a valid no-op Meter for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the shutdown timeout configurable.
+
 #### SDK: Instrument Registration
 
 The OpenTelemetry SDK is responsible for ensuring that an individual

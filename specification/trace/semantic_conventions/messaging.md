@@ -241,7 +241,7 @@ Given is a process P, that sends two messages to a queue Q on messaging system M
 Since each span can only have one parent, C3 should not choose a random parent out of C1 and C2, but rather rely on the implicitly selected parent as defined by the [tracing API spec](../api.md).
 Similarly, only one value can be set as `message_id`, so C3 cannot report both `a1` and `a2` and therefore attribute is left out.
 Depending on the implementation, the producing spans might still be available in the meta data of the messages and should be added to C3 as links.
-The client library or application could also add the receiver span's span context to the data structure it returns for each message. In this case, C3 could also add links to the receiver spans C1 and C2.
+The client library or application could also add the receiver span's SpanReference to the data structure it returns for each message. In this case, C3 could also add links to the receiver spans C1 and C2.
 
 The status of the batch processing span is selected by the application. Depending on the semantics of the operation. A span status `Ok` could, for example, be set only if all messages or if just at least one were properly processed.
 

@@ -76,7 +76,7 @@ Injects the value into a carrier. For example, into the headers of an HTTP reque
 Required arguments:
 
 - A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as
-`SpanContext`, `Baggage` or another cross-cutting concern context.
+`SpanReference`, `Baggage` or another cross-cutting concern context.
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
@@ -93,7 +93,7 @@ Required arguments:
 - The carrier that holds the propagation fields. For example, an incoming message or http response.
 
 Returns a new `Context` derived from the `Context` passed as argument,
-containing the extracted value, which can be a `SpanContext`,
+containing the extracted value, which can be a `SpanReference`,
 `Baggage` or another cross-cutting concern context.
 
 ## TextMap Propagator
@@ -144,8 +144,8 @@ the base [Inject](#inject) operation.
 
 Optional arguments:
 
-- A `Setter` invoked for each propagation key to add or remove. This is an additional
-  argument that languages are free to define to help inject data into the carrier.
+- A `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
+  This is an additional argument that languages are free to define to help inject data into the carrier.
 
 #### Setter argument
 
@@ -263,7 +263,7 @@ Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
-- The `Setter` invoked for each propagation key to add or remove.
+- The `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
 
 ## Global Propagators
 

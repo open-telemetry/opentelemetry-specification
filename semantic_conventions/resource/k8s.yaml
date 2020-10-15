@@ -1,0 +1,145 @@
+groups:
+  - id: k8s.cluster
+    prefix: k8s.cluster
+    brief: >
+      A Kubernetes Cluster.
+    attributes:
+      - id: name
+        type: string
+        brief: >
+          The name of the cluster.
+        examples: ['opentelemetry-cluster']
+
+  - id: k8s.namespace
+    prefix: k8s.namespace
+    brief: >
+      A Kubernetes Namespace.
+    attributes:
+      - id: name
+        type: string
+        brief: >
+          The name of the namespace that the pod is running in.
+        examples: ['default']
+
+  - id: k8s.pod
+    prefix: k8s.pod
+    brief: >
+      A Kubernetes Pod object.
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the Pod.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the Pod.
+        examples: ['opentelemetry-pod-autoconf']
+
+  - id: k8s.container
+    prefix: k8s.container
+    brief: >
+      A container in a [PodTemplate](https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates).
+    attributes:
+      - id: name
+        type: string
+        brief: >
+          The name of the Container in a Pod template.
+        examples: ['redis']
+
+  - id: k8s.replicaset
+    prefix: k8s.replicaset
+    brief: >
+      A Kubernetes ReplicaSet object.
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the ReplicaSet.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the ReplicaSet.
+        examples: ['opentelemetry']
+
+  - id: k8s.deployment
+    prefix: k8s.deployment
+    brief: >
+      A Kubernetes Deployment object.
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the Deployment.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the Deployment.
+        examples: ['opentelemetry']
+
+  - id: k8s.statefulset
+    prefix: k8s.statefulset
+    brief: >
+      A Kubernetes StatefulSet object.
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the StatefulSet.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the StatefulSet.
+        examples: ['opentelemetry']
+
+  - id: k8s.daemonset
+    prefix: k8s.daemonset
+    brief: >
+      A Kubernetes DaemonSet object.
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the DaemonSet.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the DaemonSet.
+        examples: ['opentelemetry']
+
+  - id: k8s.job
+    prefix: k8s.job
+    brief: >
+      A Kubernetes Job object.
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the Job.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the Job.
+        examples: ['opentelemetry']
+
+  - id: k8s.cronjob
+    prefix: k8s.cronjob
+    brief: >
+      A Kubernetes CronJob object.
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the CronJob.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the CronJob.
+        examples: ['opentelemetry']

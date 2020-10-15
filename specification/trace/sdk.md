@@ -5,8 +5,9 @@
 <summary>Table of Contents</summary>
 
 * [Sampling](#sampling)
-* [Tracer Creation](#tracer-creation)
+* [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
+* [Limits on Span Collections](#limits-on-span-collections)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -30,12 +31,12 @@ The OpenTelemetry API has two properties responsible for the data collection:
   Processor](#span-processor) MUST receive only those spans which have this
   field set to `true`. However, [Span Exporter](#span-exporter) SHOULD NOT
   receive them unless the `Sampled` flag was also set.
-* `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
-  the `SpanContext` to child Spans. For more details see the [W3C Trace Context
+* `Sampled` flag in `TraceFlags` on `SpanReference`. This flag is propagated via
+  the `SpanReference` to child Spans. For more details see the [W3C Trace Context
   specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
-  that do not.  
+  that do not.
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
@@ -78,9 +79,9 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* Parent `SpanContext`. May be invalid to indicate a root span.
+* Parent `SpanReference`. May be invalid to indicate a root span.
 * `TraceId` of the `Span` to be created.
-  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
+  If the parent `SpanReference` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
 * `SpanKind` of the `Span` to be created.
 * Initial set of `Attributes` of the `Span` to be created.
@@ -100,7 +101,7 @@ It produces an output called `SamplingResult` which contains:
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 * A `Tracestate` that will be associated with the `Span` through the new
-  `SpanContext`.
+  `SpanReference`.
   If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
   so samplers SHOULD normally return the passed-in `Tracestate` if they do not intend
   to change it.
@@ -156,10 +157,10 @@ still be sampled and extra traces will be sampled on the backend only.
 * This is a composite sampler. `ParentBased` helps distinguished between the
 following cases:
   * No parent (root span).
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `false`
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `true`
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `false`
+  * Remote parent (`SpanReference.IsRemote() == true`) with `SampledFlag` equals `true`
+  * Remote parent (`SpanReference.IsRemote() == true`) with `SampledFlag` equals `false`
+  * Local parent (`SpanReference.IsRemote() == false`) with `SampledFlag` equals `true`
+  * Local parent (`SpanReference.IsRemote() == false`) with `SampledFlag` equals `false`
 
 Required parameters:
 
@@ -180,7 +181,9 @@ Optional parameters:
 |present|false|true|`localParentSampled()`|
 |present|false|false|`localParentNotSampled()`|
 
-## Tracer Creation
+## Tracer Provider
+
+### Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
 [API](api.md#tracerprovider)). The `name` and `version` arguments
@@ -201,6 +204,24 @@ Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
 
+### Shutdown
+
+This method provides a way for provider to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `TracerProvider` instance. After
+the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
+SHOULD return a valid no-op Tracer for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. Language library authors can decide if they want to
+make the shutdown timeout configurable.
+
+`Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
+
 ## Additional Span Interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
@@ -220,7 +241,7 @@ Thus, the SDK specification defines sets of possible requirements for
   It must also be able to reliably determine whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
-  
+
   A function receiving this as argument might not be able to modify the Span.
 
   Note: Typically this will be implemented with a new interface or
@@ -241,7 +262,24 @@ Thus, the SDK specification defines sets of possible requirements for
   that the [span creation API](api.md#span-creation) returned (or will return) to the user
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
-  
+
+## Limits on Span Collections
+
+Erroneous code can add unintended attributes, events, and links to a span. If
+these collections are unbounded, they can quickly exhaust available memory,
+resulting in crashes that are difficult to recover from safely.
+
+To protect against such errors, SDK Spans MAY discard attributes, links, and
+events that would increase the number of elements of each collection beyond
+the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
+
+If there is a configurable limit, the SDK SHOULD honor the environment variables
+specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
+
+There SHOULD be a log emitted to indicate to the user that an attribute, event,
+or link was discarded due to such a limit. To prevent excessive logging, the log
+should not be emitted once per span, or per discarded attribute, event, or links.
+
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
