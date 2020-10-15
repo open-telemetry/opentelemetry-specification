@@ -34,6 +34,10 @@ This functionality will be provided as a bridge layer implementing the
 OpenTelemetry API. This layer MUST NOT rely on implementation specific details
 of any SDK.
 
+More specifically, the intention is to allow OpenTracing instrumentation to be
+recorded using the OpenTelemetry API. This Sim Layer MUST NOT allow older
+OpenTracing Tracing components to consume upstream OpenTelemetry functionality.
+
 This functionality MUST defined in its own OpenTracing Shim Layer, not in the
 OpenTracing nor the OpenTelemetry API or SDK.
 
