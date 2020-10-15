@@ -293,11 +293,11 @@ exporters such as [z-pages](../../experimental/trace/zpages.md).
 Span processors can be registered directly on SDK `TracerProvider` and they are
 invoked in the same order as they were registered.
 
-Each processor registered on `TracerProvider` is a start of pipeline that consist
-of span processor and optional exporter. SDK MUST allow to end each pipeline with
+Each processor registered on `TracerProvider` is a start of a pipeline that consists
+of a span processor and an optional exporter. The SDK MUST allow to end each pipeline with
 individual exporter.
 
-SDK MUST allow users to implement and configure custom processors and decorate
+The SDK MUST allow users to implement and configure custom processors and decorate
 built-in processors for advanced scenarios such as tagging or filtering.
 
 The following diagram shows `SpanProcessor`'s relationship to other components
@@ -392,13 +392,13 @@ make the flush timeout configurable.
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below. Other common processing scenarios should be first considered
-for implementation out-of-process in [OpenTelemetry Collector](../overview.md#collector)
+for implementation out-of-process in an [OpenTelemetry Collector](../overview.md#collector).
 
 #### Simple processor
 
 This is an implementation of `SpanProcessor` which passes finished spans
-and passes the export-friendly span data representation to the configured
-`SpanExporter`, as soon as they are finished.
+and the export-friendly span data representation to the configured
+`SpanExporter` as soon as they are finished.
 
 **Configurable parameters:**
 
@@ -406,21 +406,21 @@ and passes the export-friendly span data representation to the configured
 
 #### Batching processor
 
-This is an implementation of the `SpanProcessor` which create batches of finished
+This is an implementation of `SpanProcessor` which creates batches of finished
 spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
-* `maxQueueSize` - the maximum queue size. After the size is reached spans are
+* `maxQueueSize` - the maximum queue size. After this limit is reached, spans are
   dropped. The default value is `2048`.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
-  smaller or equal to `maxQueueSize`. The default value is `512`.
+  smaller than or equal to `maxQueueSize`. The default value is `512`.
 
 ## Span Exporter
 
