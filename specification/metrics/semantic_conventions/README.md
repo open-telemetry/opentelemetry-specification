@@ -7,9 +7,11 @@ The following semantic conventions surrounding metrics are defined:
 * [Process Metrics](process-metrics.md): Semantic conventions and instruments for standard process metrics.
 * [Runtime Environment Metrics](runtime-environment-metrics.md): Semantic conventions and instruments for runtime environment metrics.
 
-Apart from semantic conventions for metrics and [traces](../../trace/semantic_conventions/README.md),
-OpenTelemetry also defines the concept of overarching [Resources](../../resource/sdk.md) with their own
-[Resource Semantic Conventions](../../resource/semantic_conventions/README.md).
+Apart from semantic conventions for metrics and
+[traces](../../trace/semantic_conventions/README.md), OpenTelemetry also
+defines the concept of overarching [Resources](../../resource/sdk.md) with
+their own [Resource Semantic
+Conventions](../../resource/semantic_conventions/README.md).
 
 ## General Guidelines
 
@@ -87,9 +89,10 @@ be less than or greater than the real wall time between measurements.
 
   **time** instruments are a special case of **usage** metrics, where the
   **limit** can usually be calculated as the sum of **time** over all label
-  values. **utilization** for time instruments can be derived automatically using
-  metric event timestamps. For example, `system.cpu.utilization` is defined as the difference
-  in `system.cpu.time` measurements divided by the elapsed time.
+  values. **utilization** for time instruments can be derived automatically
+  using metric event timestamps. For example, `system.cpu.utilization` is
+  defined as the difference in `system.cpu.time` measurements divided by the
+  elapsed time.
 
 - **io** - an instrument that measures bidirectional data flow should be
 called `entity.io` and have labels for direction. For example,
