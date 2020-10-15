@@ -53,6 +53,8 @@ New:
   ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))  
 - Add `Shutdown` function to `*Provider` SDK
   ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
+- Add semantic conventions for system metrics
+  ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
 
 Updates:
 
