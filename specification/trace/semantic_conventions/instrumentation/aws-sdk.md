@@ -8,17 +8,18 @@ are found.
 Some descriptions are also provided for populating OpenTelemetry semantic conventions.
 
 ## General
+
 | Attribute | Type | Description | Examples |
 |---|---|---|---|
 |awssdk.service | string | The service name of the request, as returned by the AWS SDK | `DynamoDB`, `S3` |
 |awssdk.operation | string | The operation name of the request, as returned by the AWS SDK | `GetItem`, `PutObject` |
-
 
 The following attributes are all copied from parameters in the request or response of the SDK call.
 
 ## DynamoDB
 
 ### BatchGetItem
+
 | Attribute | Type | Description |
 | --- | --- | --- |
 | `awssdk.table_names` | string array | Extract the keys of the `RequestItems` object field in the request |
@@ -41,7 +42,6 @@ The following attributes are all copied from parameters in the request or respon
 | `awssdk.local_secondary_indexes` | string | JSON-serialize the `LocalSecondaryIndexes` request list field |
 | `awssdk.provisioned_throughput. | int | d_capacity_units` - Copy the `ProvisionedThroughput.ReadCapacityUnits` request parameter |
 | `awssdk.provisioned_throughput. | int | te_capacity_units` - Copy the `ProvisionedThroughput.ReadCapacityUnits` request parameter |
-
 
 ### DeleteItem
 
@@ -261,7 +261,7 @@ The following attributes are all copied from parameters in the request or respon
 | Attribute | Type | Description |
 | --- | --- | --- |
 | `messaging.url` | string | Copy the `QueueUrl` request field |
-| `awssdk.attribute_names` | string array | Copy the keys of the `Attributes` request object field | 
+| `awssdk.attribute_names` | string array | Copy the keys of the `Attributes` request object field |
 
 ## Lambda
 
@@ -394,7 +394,6 @@ Refer to the [FaaS] common attributes
 | Attribute | Type | Description |
 | --- | --- | --- |
 | `awssdk.bucket_name` | string | Copy the `BucketName` request field |
-
 
 ### HeadBucket
 
