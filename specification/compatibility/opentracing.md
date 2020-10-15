@@ -4,21 +4,21 @@
 <summary>Table of Contents</summary>
 
 * [Abstract](#abstract)
-* [OpenTracing Tracer](#opentracing-tracer)
-  * [Create a Tracer shim](#create-a-tracer-shim)
+* [Create an OpenTracing Tracer Shim](#create-an-opentracing-tracer-shim)
+* [OpenTracing Tracer Shim](#opentracing-tracer-shim)
   * [Inject](#inject)
   * [Extract](#extract)
-* [ScopeManager](#scopemanager)
+* [ScopeManager Shim](#scopemanager-shim)
   * [Activate a Span](#activate-a-span)
   * [Get the active Span](#get-the-active-span)
-* [Span](#span)
+* [Span Shim](#span-shim)
   * [Get Context](#get-context)
   * [Get Baggage Item](#get-baggage-item)
   * [Set Baggage Item](#set-baggage-item)
   * [Set Tag](#set-tag)
   * [Log](#log)
   * [Finish](#finish)
-  * [SpanContext](#spancontext)
+  * [SpanContext Shim](#spancontext-shim)
     * [Get Baggage Items](#get-baggage-items)
 
 </details>
@@ -34,10 +34,13 @@ This functionality will be provided as a bridge layer implementing the
 OpenTelemetry API. This layer MUST NOT rely on implementation specific details
 of any SDK.
 
-## Create a new OpenTracing Tracer Shim
+This functionality MUST defined in its own OpenTracing Shim Layer, not in the
+OpenTracing nor the OpenTelemetry API or SDK.
+
+## Create an OpenTracing Tracer Shim
 
 This operation is used to create a new OpenTracing `Tracer` Shim using the
-OpenTelemetry API. This operation MUST defined in the OpenTracing Shim Layer.
+OpenTelemetry API.
 
 This operation MUST accept the following parameters:
 
@@ -50,7 +53,7 @@ This operation MUST accept the following parameters:
 
 The API MUST return an OpenTracing `Tracer`.
 
-## OpenTracing Tracer
+## OpenTracing Tracer Shim
 
 ### Inject
 
@@ -85,7 +88,7 @@ Returns a `SpanContext` with the underlying extracted OpenTelemetry
 `SpanReference` and `Baggage`, or null if either the `Format` is `BINARY` or
 no value could be extracted.
 
-## ScopeManager
+## ScopeManager Shim
 
 For OpenTracing languages implementing the `ScopeManager` interface,  its operations
 MUST be implemented using the OpenTelemetry Context Propagation API.
@@ -103,7 +106,7 @@ Sets the specified `Span` as active for the current OpenTelemetry `Context`.
 Gets the active `Span` for the current OpenTelemetry `Context`. The API MUST return
 null if none exist.
 
-## Span
+## Span Shim
 
 The `Span` operations MUST be implemented using an underlying OpenTelemetry `Span`
 in conjunction with an associated `Baggage` object used to implement its
@@ -188,7 +191,7 @@ Calls `End` on the underlying OpenTelemetry `Span`.
 If an explicit timestamp is specified, a conversion MUST be done to match the
 OpenTracing and OpenTelemetry units.
 
-### SpanContext
+### SpanContext Shim
 
 The `SpanContext` interface MUST be implemented through a Shim object using an
 OpenTelemetry `SpanReference` in conjunction with an associated OpenTelemetry
