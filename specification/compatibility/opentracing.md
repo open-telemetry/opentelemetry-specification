@@ -9,8 +9,8 @@
   * [Inject](#inject)
   * [Extract](#extract)
 * [Span Shim](#span-shim)
-  * [Get SpanContext Shim](get-spancontext-shim-for-opentelemetry-span)
-  * [Set SpanContext Shim](set-spancontext-shim-for-opentelemetry-span)
+  * [Get SpanContext Shim](#get-spancontext-shim-for-opentelemetry-span)
+  * [Set SpanContext Shim](#et-spancontext-shim-for-opentelemetry-span)
   * [Get Context](#get-context)
   * [Get Baggage Item](#get-baggage-item)
   * [Set Baggage Item](#set-baggage-item)
@@ -37,7 +37,7 @@ OpenTelemetry API. This layer MUST NOT rely on implementation specific details
 of any SDK.
 
 More specifically, the intention is to allow OpenTracing instrumentation to be
-recorded using the OpenTelemetry API. This Sim Layer MUST NOT allow older
+recorded using the OpenTelemetry API. This Shim Layer MUST NOT allow older
 OpenTracing Tracing components to consume upstream OpenTelemetry functionality.
 
 This functionality MUST defined in its own OpenTracing Shim Layer, not in the
@@ -45,8 +45,7 @@ OpenTracing nor the OpenTelemetry API or SDK.
 
 ## Create an OpenTracing Tracer Shim
 
-This operation is used to create a new OpenTracing `Tracer` Shim using the
-OpenTelemetry API.
+This operation is used to create a new OpenTracing `Tracer`:
 
 This operation MUST accept the following parameters:
 
@@ -112,17 +111,19 @@ In order to satisfy the OpenTracing `Span` requirements:
 
 This is a simple graphical representation of the mentioned objects:
 
+```
   Span Shim
   +- OpenTelemetry Span
      +- SpanContext Shim
         +- OpenTelemetry Context
            +- OpenTelemetry Span
            +- OpenTelemetry Baggage
+```
 
 The OpenTelemetry `Span` is contained in `Span` Shim in order to easily
 get and set its currently associated `SpanContext` Shim through
-[Get Span Context Shim](get-spancontext-shim-for-opentelemetry-span) and
-[Set Span Context Shim](set-spancontext-shim-for-opentelemetry-span).
+[Get Span Context Shim](#get-spancontext-shim-for-opentelemetry-span) and
+[Set Span Context Shim](#set-spancontext-shim-for-opentelemetry-span).
 
 The OpenTelemetry `Span` is also contained in the related OpenTelemetry
 `Context` in order to simplify setting the active OpenTelemetry `Span` and
@@ -251,7 +252,7 @@ For OpenTracing languages implementing the `ScopeManager` interface,  its operat
 MUST be implemented using the OpenTelemetry Context Propagation API in order
 to get and set active `Context` instances.
 
-For each `Span` Shim there will be an associated `SpanContext`
+For every `Span` Shim there will be an associated `SpanContext`
 Shim with an OpenTelemetry `Context`, containing the underlying OpenTelemetry
 `Span` and `Bagagge` values. See [Span Shim](#span-shim) for details.
 
