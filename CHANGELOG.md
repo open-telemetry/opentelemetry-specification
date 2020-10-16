@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Semantic conventions for `up` metric on Resources.
+  ([#1102](https://github.com/open-telemetry/opentelemetry-specification/pull/1102))
 - Add performance benchmark specification
   ([#748](https://github.com/open-telemetry/opentelemetry-specification/pull/748))
 - Enforce that the Baggage API must be fully functional, even without an installed SDK.
