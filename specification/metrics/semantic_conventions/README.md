@@ -50,11 +50,28 @@ and confusion for end users. (For example, prefer `runtime.java.gc*` over
 `runtime.gc.*`.) Measures of many operating system metrics are similarly
 ambiguous.
 
+### Units
+
 Conventional metrics or metrics that have their units included in
 OpenTelemetry metadata (e.g. `metric.WithUnit` in Go) SHOULD NOT include the
 units in the metric name. Units may be included when it provides additional
 meaning to the metric name. Metrics MUST, above all, be understandable and
 usable.
+
+### Pluralization
+
+Metric names SHOULD NOT be pluralized, unless the value being recorded
+represents discrete instances of a
+[countable quantity](https://en.wikipedia.org/wiki/Count_noun).
+Generally, the name SHOULD be pluralized only if the unit of the metric in
+question is a pseudo-unit (like `{faults}` or `{operations}`).
+
+Examples:
+
+* `system.filesystem.utilization`, `http.server.duration`, and `system.cpu.time`
+should not be pluralized, even if many data points are recorded.
+* `system.paging.faults`, `system.disk.operations`, and `system.network.packets`
+should be pluralized, even if only a single data point is recorded.
 
 ## General Metric Semantic Conventions
 
