@@ -348,7 +348,7 @@ When extracting B3, propagators:
 * MUST preserve a debug trace flag, if received, and propagate
   it with subsequent requests. Internally, an OpenTelemetry implementation
   MUST convert this to a sampled trace flag.
-* MUST not reuse `X-B3-SpanId` as the id for the server-side span.
+* MUST NOT reuse `X-B3-SpanId` as the id for the server-side span.
 
 #### Inject
 
@@ -357,5 +357,5 @@ When injecting B3, propagators:
 * MUST default to injecting B3 using the single-header format
 * MUST provide configuration to change the default injection format to B3
   multi-header
-* MUST omit propagating `X-B3-ParentSpanId` as OpenTelemetry does not support
+* MUST NOT propagate `X-B3-ParentSpanId` as OpenTelemetry does not support
   reusing the same id for both sides of a request.
