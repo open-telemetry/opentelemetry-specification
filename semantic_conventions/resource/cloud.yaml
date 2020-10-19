@@ -37,12 +37,3 @@ groups:
         note: >
           In AWS, this is called availability-zone.
         examples: ['us-central1-a']
-      - id: infrastructure.service
-        type: string
-        brief: >
-          Description of cloud resource in use.
-        note: >
-          The first entry should generally be a cloud provider, followed by a product
-          category, then finally a particular piece of compute infrastructure. Each entry
-          is delimited by a double colon (::).
-        examples: ['AWS::EC2::Instance', 'Azure::Compute::VM', 'GCP::ComputeEngine::VM']
