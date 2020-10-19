@@ -112,12 +112,6 @@ status of the feature is not known.
 |Getter argument                               |  | +  | + | +   |    |      |   |    |   |    |
 |Getter argument returning Keys                |  | -  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1084)   |    |      |   |    |   |    |
 
-## Error Handling
-
-|Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
-|----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|TBD|
-
 ## Environment Variables
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
