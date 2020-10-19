@@ -1,12 +1,12 @@
 # Semantic conventions for messaging system metrics
 
 The conventions described in this section are specific to messaging systems. When interactions with messaging systems occur,
-metric events about those operations will be generated and reported, providing insight into those 
+metric events about those operations will be generated and reported, providing insight into those
 operations.
 
 **Disclaimer:** These are initial messaging system metric instruments and labels, more may be added
  in the future.
- 
+
 ## Definitions
 
 The [Trace Messaging Semantic Conventions Definitions](../../trace/semantic_conventions/messaging.md#definitions) is a resource for the messaging system terminology used in this document.
@@ -91,5 +91,3 @@ The following metric instruments SHOULD be captured for every message process op
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
 | `messaging.consumer.processed.duration` | ValueRecorder | milliseconds | Time spent processing a message. |
-
-Test
