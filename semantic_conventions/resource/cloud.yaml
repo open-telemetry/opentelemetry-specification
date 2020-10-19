@@ -37,3 +37,55 @@ groups:
         note: >
           In AWS, this is called availability-zone.
         examples: ['us-central1-a']
+      - id: infrastructure.service
+        type:
+          allow_custom_values: true
+          members:
+            - id: EC2
+              value: 'EC2'
+              brief: AWS Elastic Compute Cloud
+            - id: ECS
+              value: 'ECS'
+              brief: AWS Elastic Container Service
+            - id: EKS
+              value: 'EKS'
+              brief: AWS Elastic Kubernetes Service
+            - id: Lambda
+              value: 'Lambda'
+              brief: AWS Lambda
+            - id: ElasticBeanstalk
+              value: 'ElasticBeanstalk'
+              brief: AWS Elastic Beanstalk
+            - id: VM
+              value: 'VM'
+              brief: Azure Virtual Machines
+            - id: ContainerInstances
+              value: 'ContainerInstances'
+              brief: Azure Container Instances
+            - id: AKS
+              value: 'AKS'
+              brief: Azure Kubernetes Service
+            - id: Functions
+              value: 'Functions'
+              brief: Azure Functions
+            - id: AppService
+              value: 'AppService'
+              brief: Azure App Service
+            - id: ComputeEngine
+              value: 'ComputeEngine'
+              brief: GCP Compute Engine
+            - id: CloudRun
+              value: 'CloudRun'
+              brief: GCP Cloud Run
+            - id: GKE
+              value: 'GKE'
+              brief: Google Kubernetes Engine
+            - id: CloudFunctions
+              value: 'CloudFunctions'
+              brief: GCP Cloud Functions
+            - id: AppEngine
+              value: 'AppEngine'
+              brief: GCP App Engine
+        brief: >
+          The cloud infrastructure resource in use.
+        examples: ['EC2', 'VM', 'ComputeEngine']
