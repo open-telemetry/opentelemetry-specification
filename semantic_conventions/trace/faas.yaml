@@ -2,7 +2,7 @@ groups:
   - id: faas_span
     prefix: faas
     brief: >
-        This defines how to describe an instance of a function that
+        This semantic convention describes an instance of a function that
         runs without provisioning or managing of servers (also known as
         serverless functions or Function as a Service (FaaS)) with spans.
     attributes:
