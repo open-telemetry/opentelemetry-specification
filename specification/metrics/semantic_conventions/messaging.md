@@ -18,17 +18,17 @@ The following labels **SHOULD** be applied to all messaging metric instruments.
 <!-- semconv metrics-messaging -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `messaging.destination` | string | The message destination name. This might be equal to the span name but is required nevertheless. | `MyQueue`<br>`MyTopic` | Yes |
-| `messaging.destination_kind` | string enum | The kind of message destination | `queue` | Yes |
-| `messaging.protocol` | string | The name of the transport protocol. | `AMQP`<br>`MQTT` | No |
-| `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
-| `messaging.system` | string | A string identifying the messaging system. | `kafka`<br>`rabbitmq`<br>`activemq` | Yes |
-| `messaging.temp_destination` | boolean | A boolean that is true if the message destination is temporary. |  | No |
-| `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`<br>`https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
-| `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
-| `net.peer.name` | string | Remote hostname or similar, see note below. | `example.com` | No |
-| `net.peer.port` | number | Remote port number. | `80`<br>`8080`<br>`443` | No |
-| `net.transport` | string enum | Transport protocol used. See note below. | `IP.TCP` | No |
+| [`messaging.destination`](../../trace/semantic_conventions/messaging.md) | string | The message destination name. This might be equal to the span name but is required nevertheless. | `MyQueue`<br>`MyTopic` | Yes |
+| [`messaging.destination_kind`](../../trace/semantic_conventions/messaging.md) | string enum | The kind of message destination | `queue` | Yes |
+| [`messaging.protocol`](../../trace/semantic_conventions/messaging.md) | string | The name of the transport protocol. | `AMQP`<br>`MQTT` | No |
+| [`messaging.protocol_version`](../../trace/semantic_conventions/messaging.md) | string | The version of the transport protocol. | `0.9.1` | No |
+| [`messaging.system`](../../trace/semantic_conventions/messaging.md) | string | A string identifying the messaging system. | `kafka`<br>`rabbitmq`<br>`activemq` | Yes |
+| [`messaging.temp_destination`](../../trace/semantic_conventions/messaging.md) | boolean | A boolean that is true if the message destination is temporary. |  | No |
+| [`messaging.url`](../../trace/semantic_conventions/messaging.md) | string | Connection string. | `tibjmsnaming://localhost:7222`<br>`https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
+| [`net.peer.ip`](../../trace/semantic_conventions/span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
+| [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | No |
+| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | number | Remote port number. | `80`<br>`8080`<br>`443` | No |
+| [`net.transport`](../../trace/semantic_conventions/span-general.md) | string enum | Transport protocol used. See note below. | `IP.TCP` | No |
 <!-- endsemconv -->
 
 For messaging metric labels, one of the following sets of labels is RECOMMENDED (in order of usual preference unless for a particular messaging system it is known that some other set is preferable for some reason; all strings must be non-empty):
