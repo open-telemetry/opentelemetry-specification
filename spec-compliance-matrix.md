@@ -127,7 +127,11 @@ status of the feature is not known.
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    |      |   |    |   |    |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   |      |    |      |   |    |   |    |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |
+<<<<<<< HEAD
 |OTEL_TRACE_SAMPLER                            |   |    |   |      |    |      |   |    |   |    |
+=======
+|OTEL_SAMPLING_PROBABILITY                     |   |    |   |      |    |      |   |    |   |    |
+>>>>>>> Add OTEL_SAMPLING_PROBABILITY env variable definition
 
 ## Exporters
 
