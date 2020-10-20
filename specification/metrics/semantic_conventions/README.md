@@ -1,5 +1,18 @@
 # Metrics Semantic Conventions
 
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [General Guidelines](#general-guidelines)
+  * [Units](#units)
+  * [Pluralization](#pluralization)
+- [General Metric Semantic Conventions](#general-metric-semantic-conventions)
+  * [Instrument Naming](#instrument-naming)
+  * [Units](#units-1)
+
+<!-- tocstop -->
+
 The following semantic conventions surrounding metrics are defined:
 
 * [HTTP Metrics](http-metrics.md): Semantic conventions and instruments for HTTP metrics.
