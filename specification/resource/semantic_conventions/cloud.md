@@ -23,7 +23,7 @@
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
 
-`cloud.infrastructure_service` MUST be one of the following or, if none of the listed values apply, a custom value:
+`cloud.infrastructure.service` MUST be one of the following or, if none of the listed values apply, a custom value:
 
 | Value  | Description |
 |---|---|
