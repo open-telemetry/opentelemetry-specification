@@ -41,8 +41,7 @@ status of the feature is not known.
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | -  | + | +  |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + |    | + | +  |
 |IsRecording becomes false after End           |   |    |   |      |    |      |   |    |   |    |
-|Set status                                    | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|Set status takes StatusCode (Unset, Ok, Error)|   |    |   |      |    |      |   |    |   |    |
+|Set status with StatusCode (Unset, Ok, Error) |   |    |   |      |    |      |   |    |   |    |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1157)    | +  | +    | + | +  | + | +  |
 |events collection size limit                  |   |    |   |      |    |      |   |    |   |    |
 |attribute collection size limit               |   |    |   |      |    |      |   |    |   |    |
