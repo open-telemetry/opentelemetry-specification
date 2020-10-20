@@ -9,11 +9,8 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning and be gracefully ignored. |
-<<<<<<< HEAD
-| OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
-=======
-| OTEL_SAMPLING_PROBABILITY| Sampling probability, a number in the [0..1] range| 1                                 |                                     |
->>>>>>> Add OTEL_SAMPLING_PROBABILITY env variable definition
+| OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"           | See [Sampling](./trace/sdk.md#sampling) |
+| OTEL_TRACE_SAMPLING_PROBABILITY| Sampling probability, a number in the [0..1] range, e.g. 0.25| 1                |                                     |
 
 Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger".
 Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
