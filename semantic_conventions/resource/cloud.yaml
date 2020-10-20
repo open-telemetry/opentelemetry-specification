@@ -37,7 +37,7 @@ groups:
         note: >
           In AWS, this is called availability-zone.
         examples: ['us-central1-a']
-      - id: infrastructure.service
+      - id: infrastructure_service
         type:
           allow_custom_values: true
           members:

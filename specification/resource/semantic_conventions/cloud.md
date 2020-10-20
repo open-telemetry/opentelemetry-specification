@@ -11,7 +11,7 @@
 | `cloud.account.id` | string | The cloud account ID used to identify different entities. | `opentelemetry` | No |
 | `cloud.region` | string | A specific geographical location where different entities can run. | `us-central1` | No |
 | `cloud.zone` | string | Zones are a sub set of the region connected through low-latency links. [1] | `us-central1-a` | No |
-| `cloud.infrastructure.service` | string | The cloud infrastructure resource in use. | `EC2`<br>`VM`<br>`ComputeEngine` | No |
+| `cloud.infrastructure_service` | string | The cloud infrastructure resource in use. | `EC2`<br>`VM`<br>`ComputeEngine` | No |
 
 **[1]:** In AWS, this is called availability-zone.
 
@@ -23,7 +23,7 @@
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
 
-`cloud.infrastructure.service` MUST be one of the following or, if none of the listed values apply, a custom value:
+`cloud.infrastructure_service` MUST be one of the following or, if none of the listed values apply, a custom value:
 
 | Value  | Description |
 |---|---|
