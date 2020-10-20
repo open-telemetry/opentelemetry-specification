@@ -1,5 +1,7 @@
 # Tracing API
 
+**Status**: [Pre-approved](../document-status.md).
+
 <details>
 <summary>
 Table of Contents
