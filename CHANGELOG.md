@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Enforce that the Baggage API must be fully functional, even without an installed SDK.
+  ([#1103](https://github.com/open-telemetry/opentelemetry-specification/pull/1103))
 - Rename "Canonical status code" to "Status code"
   ([#1081](https://github.com/open-telemetry/opentelemetry-specification/pull/1081))
 - Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation

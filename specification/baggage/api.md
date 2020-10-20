@@ -33,6 +33,10 @@ into the context. The [Get all](#get-all) function could be implemented by retur
 object as a whole from the function call. If an idiom like this is implemented, the Baggage object/struct
 MUST be immutable, so that the containing Context also remains immutable.
 
+The Baggage API MUST be fully functional in the absence of an installed SDK. This is required in
+order to enable transparent cross-process Baggage propagation. If a Baggage propagator is installed
+into the API, it will work with or without an installed SDK.
+
 ### Baggage
 
 `Baggage` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
