@@ -32,7 +32,11 @@ Table of Contents
     * [End](#end)
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
-  * [Propagated Span creation](#propagated-span-creation)
+* [Status](#status)
+  * [StatusCanonicalCode](#statuscanonicalcode)
+  * [Status creation](#status-creation)
+  * [GetCanonicalCode](#getcanonicalcode)
+  * [GetDescription](#getdescription)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
@@ -373,13 +377,18 @@ if the user forgot to end the span.
 
 #### Determining the Parent Span from a Context
 
-When a new `Span` is created from a `Context`, the `Context` may contain a `Span`
-representing the currently active instance, and will be used as parent.
-If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
+When a new `Span` is created from a `Context`, the `Context` may contain:
 
-A `SpanReference` cannot be set as active in a `Context` directly, but through the use
-of a [Propagated Span](#propagated-span-creation) wrapping it.
-For example, a `Propagator` performing context extraction may need this.
+- A current `Span`
+- An extracted `SpanContext`
+- A current `Span` and an extracted `SpanContext`
+- Neither a current `Span` nor an extracted `Span` context
+
+The parent should be selected in the following order of precedence:
+
+- Use the current `Span`, if available.
+- Use the extracted `SpanContext`, if available.
+- There is no parent. Create a root `Span`.
 
 #### Specifying links
 
@@ -637,25 +646,61 @@ timestamps to the Span object:
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API.
 
-### Propagated Span creation
+## Status
 
-The API MUST provide an operation for wrapping a `SpanReference` with an object
-implementing the `Span` interface. This is done in order to expose a `SpanReference`
-as a `Span` in operations such as in-process `Span` propagation.
+`Status` interface represents the status of a finished `Span`. It's composed of
+a canonical code, and an optional descriptive message.
 
-If a new type is required for supporting this operation, it SHOULD be named `PropagatedSpan`.
+### StatusCanonicalCode
 
-The behavior is defined as follows:
+`StatusCanonicalCode` represents the canonical set of status codes of a finished
+`Span`.
 
-- `GetContext()` MUST return the wrapped `SpanReference`.
-- `IsRecording` MUST return `false` to signal that events, attributes and other elements
-  are not being recorded, i.e. they are being dropped.
+- `Unset`
+  - The default status.
+- `Error`
+  - The operation contains an error.
+- `Ok`
+  - The operation has been validated by an Application developers or Operator to
+    have completed successfully, or contain
 
-The remaining functionality of `Span` MUST be defined as no-op operations.
-Note: This includes `End`, so as an exception from the general rule,
-it is not required (or even helpful) to end a Propagated Span.
+The status code SHOULD remain unset, except for the following circumstances:
 
-This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
+When the status is set to `ERROR` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `ERROR`
+according to the rules defined within the semantic conventions. For operations
+not covered by the semantic conventions, Instrumentation Libraries SHOULD
+publish their own conventions, including status codes.
+
+Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
+unless explicitly configured to do so. Instrumention libraries SHOULD leave the
+status code as `Unset` unless there is an error, as described above.
+
+Application developers and Operators may set the status code to `Ok`.
+
+Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
+would otherwise generate. For example, to suppress noisy errors such as 404s.
+
+### Status creation
+
+API MUST provide a way to create a new `Status`.
+
+Required parameters
+
+- `StatusCanonicalCode` of this `Status`.
+
+Optional parameters
+
+- Description of this `Status`.
+
+### GetCanonicalCode
+
+Returns the `StatusCanonicalCode` of this `Status`.
+
+### GetDescription
+
+Returns the description of this `Status`.
+Languages should follow their usual conventions on whether to return `null` or an empty string here if no description was given.
 
 ## SpanKind
 
