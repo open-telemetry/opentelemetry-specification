@@ -16,8 +16,10 @@
 - [Messaging attributes](#messaging-attributes)
   * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
     + [RabbitMQ](#rabbitmq)
+    + [Apache Kafka](#apache-kafka)
 - [Examples](#examples)
   * [Topic with multiple consumers](#topic-with-multiple-consumers)
+  * [Apache Kafka Example](#apache-kafka-example)
   * [Batch receiving](#batch-receiving)
   * [Batch processing](#batch-processing)
 
@@ -27,17 +29,29 @@
 
 Although messaging systems are not as standardized as, e.g., HTTP, it is assumed that the following definitions are applicable to most of them that have similar concepts at all (names borrowed mostly from JMS):
 
-A *message* usually consists of headers (or properties, or meta information) and an optional body. It is sent by a single message *producer* to:
+A *message* is an envelope with a potentially empty payload.
+This envelope may offer the possibility to convey additional metadata, often in key/value form.
 
-* Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual routing, delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
+A message is sent by a message *producer* to:
+
+* Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
+With Apache Kafka, the physical broker a message is written to depends on the number of partitions, and which broker is the *leader* of the partition the record is written to.
 * Logically: some particular message *destination*.
+
+Messages can be delivered to 0, 1, or multiple consumers depending on the dispatching semantic of the protocol.
 
 ### Destinations
 
-A destination is usually identified by some name unique within the messaging system instance, which might look like an URL or a simple one-word identifier.
-Two kinds of destinations are distinguished: *topic*s and *queue*s.
-A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all *subscribers* of the topic.
+A destination is usually identified by some name unique within the messaging system instance, which might look like a URL or a simple one-word identifier.
+Traditional messaging, such as JMS, involves two kinds of destinations: *topic*s and *queue*s.
+A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all consumers that have *subscribed* to the topic.
 A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
+
+In a messaging system such as Apache Kafka, all destinations are *topic*s.
+Each record, or message, is sent to a single consumer per consumer group.
+Consumer groups provide *deliver once* semantics for consumers of a topic within a group.
+Whether a specific message is processed as if it was sent to a topic or queue entirely depends on the consumer groups and their composition.
+For instance, there can be multiple consumer groups processing records from the same topic.
 
 [idempotent]: https://en.wikipedia.org/wiki/Idempotence
 
@@ -47,11 +61,10 @@ The consumption of a message can happen in multiple steps.
 First, the lower-level receiving of a message at a consumer, and then the logical processing of the message.
 Often, the waiting for a message is not particularly interesting and hidden away in a framework that only invokes some handler function to process a message once one is received
 (in the same way that the listening on a TCP port for an incoming HTTP message is not particularly interesting).
-However, in a synchronous conversation, the wait time for a message is important.
 
 ### Conversations
 
-In some messaging systems, a message can receive a reply message that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*.
+In some messaging systems, a message can receive one or more reply messages that answers a particular other message that was sent earlier. All messages that are grouped together by such a reply-relationship are called a *conversation*.
 The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit *conversation ID* (sometimes called *correlation ID*).
 Sometimes a conversation can span multiple message destinations (e.g. initiated via a topic, continued on a temporary one-to-one queue).
 
@@ -74,6 +87,7 @@ The span name SHOULD be set to the message destination name and the operation be
 
 The destination name SHOULD only be used for the span name if it is known to be of low cardinality (cf. [general span name guidelines](../api.md#span)).
 This can be assumed if it is statically derived from application code or configuration.
+Wherever possible, the real destination names after resolving logical or aliased names SHOULD be used.
 If the destination name is dynamic, such as a [conversation ID](#conversations) or a value obtained from a `Reply-To` header, it SHOULD NOT be used for the span name.
 In these cases, an artificial destination name that best expresses the destination, or a generic, static fallback like `"(temporary)"` for [temporary destinations](#temporary-destinations) SHOULD be used instead.
 
@@ -122,20 +136,19 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
 | `messaging.message_payload_size_bytes` | number | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
 | `messaging.message_payload_compressed_size_bytes` | number | The compressed size of the message payload in bytes. | `2048` | No |
+| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Conditional<br>If available. |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [2] | `example.com` | Conditional<br>If available. |
 
 **[1]:** Required only if the message destination is either a `queue` or `topic`.
 
-**Additional attribute requirements:** At least one of the following sets of attributes is required:
-
-* [`net.peer.name`](span-general.md)
-* [`net.peer.ip`](span-general.md)
+**[2]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
 `messaging.destination_kind` MUST be one of the following:
 
 | Value  | Description |
 |---|---|
 | `queue` | A message sent to a queue |
-| `topic` | A message broadcasted to the subscribers of the topic |
+| `topic` | A message sent to a topic |
 <!-- endsemconv -->
 
 Additionally `net.peer.port` from the [network attributes][] is recommended.
@@ -176,6 +189,26 @@ In RabbitMQ, the destination is defined by an _exchange_ and a _routing key_.
 `messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
 The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_key`, unless it is empty.
 
+#### Apache Kafka
+
+For Apache Kafka, the following additional attributes are defined:
+
+<!-- semconv messaging.kafka -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `messaging.kafka.message_key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message_id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | No |
+| `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | No |
+| `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | No |
+| `messaging.kafka.partition` | number | Partition the message is sent to. | `2` | No |
+| `messaging.kafka.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditional<br>If missing, it is assumed to be false. |
+
+**[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
+<!-- endsemconv -->
+
+For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or service the message will be sent to.
+The `service.name` of a Consumer's Resource SHOULD match the `peer.service` of the Producer, when the message is directly passed to another service.
+If an intermediary broker is present, `service.name` and `peer.service` will not be the same.
+
 ## Examples
 
 ### Topic with multiple consumers
@@ -199,11 +232,44 @@ Process CB:                 | Span CB1 |
 | Status | `Ok` | `Ok` | `Ok` |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` |
-| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"T"` | `"T"` | `"T"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
 | `messaging.message_id` | `"a1"` | `"a1"`| `"a1"` |
+
+### Apache Kafka Example
+
+Given is a process P, that publishes a message to a topic T1 on Apache Kafka.
+One process, CA, receives the message and publishes a new message to a topic T2 that is then received and processed by CB.
+
+```
+Process P:  | Span Prod1 |
+--
+Process CA:              | Span Rcv1 |
+                                | Span Proc1 |
+                                  | Span Prod2 |
+--
+Process CB:                           | Span Rcv2 |
+```
+
+| Field or Attribute | Span Prod1 | Span Rcv1 | Span Proc1 | Span Prod2 | Span Rcv2
+|-|-|-|-|-|-|
+| Span name | `"T1 send"` | `"T1 receive"` | `"T1 process"` | `"T2 send"` | `"T2 receive`" |
+| Parent |  | Span Prod1 | Span Rcv1 |  | Span Prod2 |
+| Links |  |  | | Span Prod1 |  |
+| SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` | `PRODUCER` | `CONSUMER` |
+| Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
+| `peer.service` | `"myKafka"` |  |  | `"myKafka"` |  |
+| `service.name` |  | `"myConsumer1"` | `"myConsumer1"` |  | `"myConsumer2"` |
+| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `messaging.destination` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
+| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.operation` |  | `"receive"` | `"process"` |  | `"receive"` |
+| `messaging.kafka.message_key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
+| `messaging.kafka.consumer_group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
+| `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
+| `messaging.kafka.partition` |  | `"1"` | `"1"` |  | `"3"` |
 
 ### Batch receiving
 
@@ -228,7 +294,7 @@ Process C:                      | Span Recv1 |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
-| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
 | `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
 | `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
@@ -261,7 +327,7 @@ Process C:                              | Span Recv1 | Span Recv2 |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
-| `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
+| `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
 | `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
 | `messaging.operation` |  |  | `"receive"` | `"receive"` | `"process"` |
