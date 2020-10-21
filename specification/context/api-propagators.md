@@ -76,7 +76,7 @@ Injects the value into a carrier. For example, into the headers of an HTTP reque
 Required arguments:
 
 - A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as
-`SpanReference`, `Baggage` or another cross-cutting concern context.
+`SpanContext`, `Baggage` or another cross-cutting concern context.
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
@@ -93,7 +93,7 @@ Required arguments:
 - The carrier that holds the propagation fields. For example, an incoming message or http response.
 
 Returns a new `Context` derived from the `Context` passed as argument,
-containing the extracted value, which can be a `SpanReference`,
+containing the extracted value, which can be a `SpanContext`,
 `Baggage` or another cross-cutting concern context.
 
 ## TextMap Propagator
