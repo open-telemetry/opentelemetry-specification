@@ -26,7 +26,7 @@ groups:
                 brief: "A message sent to a queue"
               - id: topic
                 value: "topic"
-                brief: "A message broadcasted to the subscribers of the topic"
+                brief: "A message sent to a topic"
           required:
             conditional: 'Required only if the message destination is either a `queue` or `topic`.'
           brief: 'The kind of message destination'
@@ -67,10 +67,16 @@ groups:
           type: number
           brief: 'The compressed size of the message payload in bytes.'
           examples: 2048
+        - ref: net.peer.name
+          note: >
+            This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+          required:
+            conditional: If available.
+        - ref: net.peer.ip
+          tag: connection-level
+          required:
+            conditional: If available.
       constraints:
-        - any_of:
-          - 'net.peer.name'
-          - 'net.peer.ip'
         - include: network
 
     - id: messaging.producer
@@ -114,3 +120,41 @@ groups:
       brief: >
         Semantic convention for servers that consume messages received from messaging systems
         and always send back replies directed to the producers of these messages.
+
+    - id: messaging.kafka
+      prefix: messaging.kafka
+      extends: messaging
+      brief: >
+        Attributes for Apache Kafka
+      attributes:
+        - id: message_key
+          type: string
+          brief: >
+            Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition.
+            They differ from `messaging.message_id` in that they're not unique.
+            If the key is `null`, the attribute MUST NOT be set.
+          note: >
+            If the key type is not string, it's string representation has to be supplied for the attribute.
+            If the key has no unambiguous, canonical string form, don't include its value.
+          examples: 'myKey'
+        - id: consumer_group
+          type: string
+          brief: >
+            Name of the Kafka Consumer Group that is handling the message.
+            Only applies to consumers, not producers.
+          examples: 'my-group'
+        - id: client_id
+          type: string
+          brief: >
+            Client Id for the Consumer or Producer that is handling the message.
+          examples: 'client-5'
+        - id: partition
+          type: number
+          brief: >
+            Partition the message is sent to.
+          examples: 2
+        - id: tombstone
+          type: boolean
+          required:
+            conditional: 'If missing, it is assumed to be false.'
+          brief: 'A boolean that is true if the message is a tombstone.'
