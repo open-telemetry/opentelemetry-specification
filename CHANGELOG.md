@@ -20,9 +20,9 @@ New:
 - Clarify env variables in otlp exporter
   ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
 - Add Prometheus exporter environment variables
-  ([#1021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021)).
+  ([#1021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021))
 - Default propagators in un-configured API must be no-op
-  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
+  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930))
 - Define resource mapping for Jaeger exporters
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
@@ -33,6 +33,8 @@ New:
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
 - Add resource semantic convention for deployment environment
   ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
+- Refine semantic conventions for messaging systems and add specific attributes for Kafka
+  ([#1027](https://github.com/open-telemetry/opentelemetry-specification/pull/1027))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
 - Add API and semantic conventions for recording exceptions as Span Events
@@ -52,7 +54,7 @@ New:
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
 - Clarify context interaction for trace module
-  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))  
+  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))
 - Add `Shutdown` function to `*Provider` SDK
   ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
 - Add semantic conventions for system metrics
