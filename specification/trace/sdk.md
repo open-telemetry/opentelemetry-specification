@@ -1,6 +1,6 @@
 # Tracing SDK
 
-**Status**: [Pre-approved](../document-status.md).
+**Status**: [Feature-complete](../document-status.md).
 
 <details>
 

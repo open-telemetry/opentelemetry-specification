@@ -1,6 +1,6 @@
 # OpenTelemetry to Jaeger Transformation
 
-**Status**: [Pre-approved](../../document-status.md).
+**Status**: [Feature-complete](../../document-status.md).
 
 This document defines the transformation between OpenTelemetry and Jaeger Spans.
 Jaeger's v2 API is defined in the
