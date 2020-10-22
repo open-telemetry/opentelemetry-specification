@@ -343,7 +343,7 @@ been established for B3 context propagation.
 When extracting B3, propagators:
 
 * MUST attempt to extract B3 encoded using single and multi-header
-  formats. When extracting, the single-header variant takes precedence over
+  formats. The single-header variant takes precedence over
   the multi-header version.
 * MUST preserve a debug trace flag, if received, and propagate
   it with subsequent requests. Internally, an OpenTelemetry implementation
