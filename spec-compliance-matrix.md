@@ -15,10 +15,10 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/392)    | +  | +    | + | +  | + | +  |
-|Shutdown                                      |   |    |   |      |    |      |   |    |   |    |
+|Shutdown                                      |   |    | + |      |    |      |   |    |   |    |
 |[Tracing Context Utilities](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracing-context-utilities)|
-|Get active Span                               |   |    |   | +    |    |      |   |    |   |    |
-|Set active Span                               |   |    |   | +    |    |      |   |    |   |    |
+|Get active Span                               |   |    | + | +    |    |      |   |    |   |    |
+|Set active Span                               |   |    | + | +    |    |      |   |    |   |    |
 |[Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -43,9 +43,9 @@ status of the feature is not known.
 |IsRecording becomes false after End           |   |    |   |      |    |      |   |    |   |    |
 |Set status with StatusCode (Unset, Ok, Error) |   |    |   |      |    |      |   |    |   |    |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1157)    | +  | +    | + | +  | + | +  |
-|events collection size limit                  |   |    |   |      |    |      |   |    |   |    |
-|attribute collection size limit               |   |    |   |      |    |      |   |    |   |    |
-|links collection size limit                   |   |    |   |      |    |      |   |    |   |    |
+|events collection size limit                  |   |    | + |      |    |      |   |    |   |    |
+|attribute collection size limit               |   |    | + |      |    |      |   |    |   |    |
+|links collection size limit                   |   |    | + |      |    |      |   |    |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
@@ -74,8 +74,8 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Basic support                                 |  |    |   |      |    |      |   |    |   |    |
-|Use official header name `baggage`            |  |    |   | +    |    |      |   |    |   |    |
+|Basic support                                 |  |    | + |      |    |      |   |    |   |    |
+|Use official header name `baggage`            |  |    | + | +    |    |      |   |    |   |    |
 
 ## Metrics
 
@@ -108,10 +108,10 @@ status of the feature is not known.
 |B3 Propagator                                 |  | +  | + | +    |    |      |   |    |   |    |
 |Jaeger Propagator                             |  | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    |      |   |    |   |    |
 |[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
-|Fields                                        |  | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   |    |   |    |
+|Fields                                        |  | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1615) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   |    |   |    |
 |Setter argument                               |  | +  | + | +   |    |      |   |    |   |    |
 |Getter argument                               |  | +  | + | +   |    |      |   |    |   |    |
-|Getter argument returning Keys                |  | -  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1084)   |    |      |   |    |   |    |
+|Getter argument returning Keys                |  | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1084)   |    |      |   |    |   |    |
 
 ## Environment Variables
 
