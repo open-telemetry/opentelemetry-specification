@@ -23,9 +23,9 @@ Below is a table of FaaS invocation metric instruments.
 | `faas.init_duration` | ValueRecorder | milliseconds | Measures the duration of the function's initialization, such as a cold start |
 | `faas.coldstarts` | Counter | number of cold starts | Number of invocation cold starts. |
 | `faas.errors` | Counter | number of errors | Number of invocation errors. |
-| `faas.executions` | counter | number of invocations | number of successful invocations. |
-| `faas.timeouts` | counter | number of timeouts | number of invocation timeouts. A timeout is an execution that reaches or exceeds configured execution time limits. |
-| `faas.throttles` | counter | number of throttles | number of invocation throttles. A throttle is an invocation rejected when concurrrency limits are reached or exceeded. |
+| `faas.executions` | Counter | number of invocations | number of successful invocations. |
+| `faas.timeouts` | Counter | number of timeouts | number of invocation timeouts. A timeout is an execution that reaches or exceeds configured execution time limits. |
+| `faas.throttles` | Counter | number of throttles | number of invocation throttles. A throttle is an invocation rejected when concurrrency limits are reached or exceeded. |
 | `faas.concurrent_executions` | UpDownCounter | number of concurrent executions | The current number of function instances that are processing events. |
 
 ## Labels
