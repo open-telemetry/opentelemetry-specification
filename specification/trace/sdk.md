@@ -64,9 +64,9 @@ The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 
 When asked to create a Span, the SDK MUST act as if doing the following in order:
 
-1. If there is a valid parent trace ID, use it. Otherwise generate a new one (
-   note: this must be done before calling `ShouldSample`, because it expects
-   a valid trace Id as input).
+1. If there is a valid parent trace ID, use it. Otherwise generate a new one
+   (note: this must be done before calling `ShouldSample`, because it expects
+   a valid trace ID as input).
 2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
 3. If the decision is `DROP` and there is a valid parent span ID, use it.
    Otherwise (if the decision is not `DROP` or there was no valid parent span ID)
