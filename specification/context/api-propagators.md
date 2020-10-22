@@ -312,7 +312,7 @@ Required parameters:
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
-* [W3C TraceContext](https://www.w3.org/TR/trace-context/), MAY alternatively
+* [W3C TraceContext](https://www.w3.org/TR/trace-context/). MAY alternatively
   be distributed as part of the OpenTelemetry API.
 * [W3c Baggage](https://w3c.github.io/baggage), MAY alternatively
   be distributed as part of the OpenTelemetry API.
