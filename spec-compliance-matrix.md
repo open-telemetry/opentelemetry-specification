@@ -63,6 +63,7 @@ status of the feature is not known.
 |RecordException with extra parameters         | - | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1102)    | -  | -    |   | +  | - | +  |
 |[Sampling](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#sampling)|
 |Allow samplers to modify tracestate           |  |    |   |      |    |      |   |    |   |    |
+|[Span IDs wrt. sampling generated is compliant](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#sdk-span-creation) |  |    |   |      |    |      |   |    |   |    |
 
 ## Baggage
 
