@@ -24,6 +24,19 @@ The Baggage API consists of:
 - the `Baggage`
 - functions to interact with the `Baggage` in a `Context`
 
+The functions described here are one way to approach interacting with the Baggage
+purely via the Context. Depending on language idioms, a language API MAY implement these functions
+by providing a struct or immutable object that represents the entire Baggage contents. This
+construct could then be added or removed from the Context with a single operation. For example,
+the [Clear](#clear) function could be implemented by having the user set an empty Baggage object/struct
+into the context. The [Get all](#get-all) function could be implemented by returning the Baggage
+object as a whole from the function call. If an idiom like this is implemented, the Baggage object/struct
+MUST be immutable, so that the containing Context also remains immutable.
+
+The Baggage API MUST be fully functional in the absence of an installed SDK. This is required in
+order to enable transparent cross-process Baggage propagation. If a Baggage propagator is installed
+into the API, it will work with or without an installed SDK.
+
 ### Baggage
 
 `Baggage` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
@@ -64,13 +77,16 @@ contains a `Baggage` with the new value.
 
 REQUIRED parameters:
 
-`Name` the name for which to set the value.
+`Name` The name for which to set the value, of type string.
 
-`Value` the value to set.
+`Value` The value to set, of type string.
 
 OPTIONAL parameters:
 
-`Context` the context containing the `Baggage` in which to set the baggage entry.
+`Metadata` Optional metadata associated with the name-value pair. This should be an opaque wrapper
+for a string with no semantic meaning. Left opaque to allow for future functionality.
+
+`Context` The context containing the `Baggage` in which to set the baggage entry.
 
 ### Remove baggage
 
@@ -103,6 +119,18 @@ OPTIONAL parameters:
 The API layer MAY include the following `Propagator`s:
 
 * A `TextMapPropagator` implementing the [W3C Baggage Specification](https://w3c.github.io/baggage).
+
+Note: The W3C baggage specification does not currently assign semantic meaning to the optional metadata.
+
+On `extract`, the propagator should store all metadata as a single metadata instance per entry.
+On `inject`, the propagator should append the metadata per the W3C specification format.
+
+Notes:
+
+If the propagator is unable to parse the `baggage` header, `extract` MUST return a Context with no baggage entries in it.
+
+If the `baggage` header is present, but contains no entries, `extract` MUST return a Context with
+no baggage entries in it.
 
 ## Conflict Resolution
 

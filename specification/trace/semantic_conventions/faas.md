@@ -1,6 +1,7 @@
 # Semantic conventions for FaaS spans
 
-This document defines how to describe an instance of a function that runs without provisioning or managing of servers (also known as serverless) with spans.
+This document defines how to describe an instance of a function that runs without provisioning
+or managing of servers (also known as serverless functions or Function as a Service (FaaS)) with spans.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
@@ -26,14 +27,24 @@ Span `name` should be set to the function name being executed. Depending on the 
 
 If Spans following this convention are produced, a Resource of type `faas` MUST exist following the [Resource semantic convention](../../resource/semantic_conventions/faas.md#function-as-a-service).
 
-| Attribute name  | Notes  and examples  | Required? |
-|---|---|--|
-| `faas.trigger` | Type of the trigger on which the function is executed. <br > It SHOULD be one of the following strings: "datasource", "http", "pubsub", "timer", or "other". | See below. |
-| `faas.execution` | String containing the execution id of the function. E.g. `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
+<!-- semconv faas_span -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `faas.trigger` | string enum | Type of the trigger on which the function is executed. | `datasource` | Conditional [1] |
+| `faas.execution` | string | The execution ID of the current function execution. | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
 
-On FaaS instances, `faas.trigger` MUST be set on incoming invocations.
-Clients invoking FaaS instances MUST set `faas.trigger` on outgoing invocations, if it is known to the client.
-This is, for example, *not* the case, when the transport layer is abstracted in a FaaS client framework without access to its configuration.
+**[1]:** On FaaS instances, faas.trigger MUST be set on incoming invocations. Clients invoking FaaS instances MUST set `faas.trigger` on outgoing invocations, if it is known to the client. This is, for example, not the case, when the transport layer is abstracted in a FaaS client framework without access to its configuration.
+
+`faas.trigger` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `datasource` | A response to some data source operation such as a database or filesystem read/write. |
+| `http` | To provide an answer to an inbound HTTP request |
+| `pubsub` | A function is set to be executed when messages are sent to a messaging system. |
+| `timer` | A function is scheduled to be executed regularly. |
+| `other` | If none of the others apply |
+<!-- endsemconv -->
 
 ### Function Name
 
@@ -68,9 +79,11 @@ This section describes incoming FaaS invocations as they are reported by the Faa
 
 For incoming FaaS spans, the span kind MUST be `Server`.
 
-| Attribute | Type | Description | Required |
-|---|---|---|---|
-| `faas.coldstart` | boolean | Indicates that the serverless function is executed for the first time (aka cold start). | No |
+<!-- semconv faas_span.in -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `faas.coldstart` | boolean | A boolean that is true if the serverless function is executed for the first time (aka cold-start). |  | No |
+<!-- endsemconv -->
 
 ## Outgoing Invocations
 
@@ -82,18 +95,29 @@ The values reported by the client for the attributes listed below SHOULD be equa
 the corresponding [FaaS resource attributes][] and [Cloud resource attributes][],
 which the invoked FaaS instance reports about itself, if it's instrumented.
 
-| Attribute | Corresponding resource attribute | Type | Description | Example | Required |
-|---|---|---|---|---|---|
-| `faas.invoked_name` | `faas.name` | string | The name of the invoked function. | `my-function` | Yes |
-| `faas.invoked_provider` | `cloud.provider` | string | The cloud provider of the invoked function. | `aws` | Yes |
-| `faas.invoked_region` | `cloud.region` | string | The cloud region of the invoked function. | `eu-central-1` | See below |
+<!-- semconv faas_span.out -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `faas.invoked_name` | string | The name of the invoked function. [1] | `my-function` | Yes |
+| `faas.invoked_provider` | string | The cloud provider of the invoked function. [2] | `aws` | Yes |
+| `faas.invoked_region` | string | The cloud region of the invoked function. [3] | `eu-central-1` | Conditional [4] |
 
-For some cloud providers, like AWS or GCP, the region in which a function is hosted is essential
-to uniquely identify the function and also part of its endpoint.
-Since it's part of the endpoint being called, the region is always known to clients.
-In these cases, `faas.invoked_region` MUST be set accordingly.
-If the region is unknown to the client or not required for identifying the invoked function,
-setting `faas.invoked_region` is optional.
+**[1]:** SHOULD be equal to the `faas.name` resource attribute of the invoked function.
+
+**[2]:** SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+
+**[3]:** SHOULD be equal to the `cloud.region` resource attribute of the invoked function.
+
+**[4]:** For some cloud providers, like AWS or GCP, the region in which a function is hosted is essential to uniquely identify the function and also part of its endpoint. Since it's part of the endpoint being called, the region is always known to clients. In these cases, `faas.invoked_region` MUST be set accordingly. If the region is unknown to the client or not required for identifying the invoked function, setting `faas.invoked_region` is optional.
+
+`faas.invoked_provider` MUST be one of the following or, if none of the listed values apply, a custom value:
+
+| Value  | Description |
+|---|---|
+| `aws` | Amazon Web Services |
+| `azure` | Amazon Web Services |
+| `gcp` | Google Cloud Platform |
+<!-- endsemconv -->
 
 [FaaS resource attributes]: ../../resource/semantic_conventions/faas.md
 [Cloud resource attributes]: ../../resource/semantic_conventions/cloud.md
@@ -107,12 +131,22 @@ This section describes how to handle the span creation and additional attributes
 A datasource function is triggered as a response to some data source operation such as a database or filesystem read/write.
 For `faas` spans with trigger `datasource`, it is recommended to set the following attributes.
 
-| Attribute name  | Notes  and examples  | Required? |
-|---|---|--|
-| `faas.document.collection` | The name of the source on which the operation was perfomed. For example, in Cloud Storage or S3 corresponds to the bucket name, and in Cosmos DB to the database name. | Yes |
-| `faas.document.operation`  | Describes the type of the operation that was performed on the data.<br /> It SHOULD be one of the following strings: "insert", "edit", "delete". | Yes |
-| `faas.document.time`       | A string containing the time when the data was accessed in the [ISO 8601] format expressed in [UTC]. E.g. `"2020-01-23T13:47:06Z"` | Yes |
-| `faas.document.name`       | The document name/table subjected to the operation.<br /> For example, in Cloud Storage or S3 is the name of the file, and in Cosmos DB the table name.  | No |
+<!-- semconv faas_span.datasource -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `faas.document.collection` | string | The name of the source on which the triggering operation was performed. For example, in Cloud Storage or S3 corresponds to the bucket name, and in Cosmos DB to the database name. | `myBucketName`<br>`myDbName` | Yes |
+| `faas.document.operation` | string | Describes the type of the operation that was performed on the data. | `insert` | Yes |
+| `faas.document.time` | string | A string containing the time when the data was accessed in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format expressed in [UTC](https://www.w3.org/TR/NOTE-datetime). | `2020-01-23T13:47:06Z` | Yes |
+| `faas.document.name` | string | The document name/table subjected to the operation. For example, in Cloud Storage or S3 is the name of the file, and in Cosmos DB the table name. | `myFile.txt`<br>`myTableName` | No |
+
+`faas.document.operation` MUST be one of the following or, if none of the listed values apply, a custom value:
+
+| Value  | Description |
+|---|---|
+| `insert` | When a new object is created. |
+| `edit` | When an object is modified. |
+| `delete` | When an object is deleted. |
+<!-- endsemconv -->
 
 ### HTTP
 
@@ -129,14 +163,12 @@ This way, it is possible to correlate each individual message with its execution
 
 A function is scheduled to be executed regularly. The following additional attributes are recommended.
 
-| Attribute name  | Notes  and examples  | Required? |
-|---|---|--|
-| `faas.time` | A string containing the function invocation time in the [ISO 8601] format expressed in [UTC]. E.g. `"2020-01-23T13:47:06Z"`| Yes |
-| `faas.cron` | A string containing the schedule period as [Cron Expression]. E.g. `"0/5 * * * ? *"`| No |
-
-[Cron Expression]: https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm
-[ISO 8601]: https://www.iso.org/iso-8601-date-and-time-format.html
-[UTC]: https://www.w3.org/TR/NOTE-datetime
+<!-- semconv faas_span.timer -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `faas.time` | string | A string containing the function invocation time in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format expressed in [UTC](https://www.w3.org/TR/NOTE-datetime). | `2020-01-23T13:47:06Z` | Yes |
+| `faas.cron` | string | A string containing the schedule period as [Cron Expression](https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm). | `0/5 * * * ? *` | No |
+<!-- endsemconv -->
 
 ### Other
 

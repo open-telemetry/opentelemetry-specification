@@ -1,7 +1,7 @@
 ---
-name: CorrelationContext
-about: Issues related to the specification/correlationcontext directory
-labels: spec:correlationcontext
+name: Baggage
+about: Issues related to the specification/baggage directory
+labels: spec:baggage
 ---
 
 **What are you trying to achieve?**

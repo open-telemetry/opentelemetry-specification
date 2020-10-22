@@ -22,6 +22,14 @@ Additional values can be specified in the respective SDK's documentation, in cas
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
+## Span Collection Limits
+
+| Name                            | Description                          | Default | Notes |
+| ------------------------------- | ------------------------------------ | ------- | ----- |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 1000    |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 1000    |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 1000    |       |
+
 ## OTLP Exporter
 
 See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).
@@ -41,6 +49,13 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
+
+## Prometheus Exporter
+
+| Name                          | Description                     | Default                      |
+| ----------------------------- | --------------------------------| ---------------------------- |
+| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
+| OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
 
 ## Exporter Selection
 

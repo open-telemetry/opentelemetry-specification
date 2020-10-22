@@ -1,0 +1,160 @@
+groups:
+    - id: messaging
+      prefix: messaging
+      brief: >
+          This document defines the attributes used in
+          messaging systems.
+      attributes:
+        - id: system
+          type: string
+          required: always
+          brief: 'A string identifying the messaging system.'
+          examples: ['kafka', 'rabbitmq', 'activemq']
+        - id: destination
+          type: string
+          required: always
+          brief: >
+            The message destination name. This might be equal to the span name
+            but is required nevertheless.
+          examples: ['MyQueue', 'MyTopic']
+        - id: destination_kind
+          type:
+            allow_custom_values: false
+            members:
+              - id: queue
+                value: "queue"
+                brief: "A message sent to a queue"
+              - id: topic
+                value: "topic"
+                brief: "A message sent to a topic"
+          required:
+            conditional: 'Required only if the message destination is either a `queue` or `topic`.'
+          brief: 'The kind of message destination'
+        - id: temp_destination
+          type: boolean
+          required:
+            conditional: 'If missing, it is assumed to be false.'
+          brief: 'A boolean that is true if the message destination is temporary.'
+        - id: protocol
+          type: string
+          brief: 'The name of the transport protocol.'
+          examples: ['AMQP', 'MQTT']
+        - id: protocol_version
+          type: string
+          brief: 'The version of the transport protocol.'
+          examples: '0.9.1'
+        - id: url
+          type: string
+          brief: 'Connection string.'
+          examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue']
+        - id: message_id
+          type: string
+          brief: 'A value used by the messaging system as an identifier for the message, represented as a string.'
+          examples: '452a7c7c7c7048c2f887f61572b18fc2'
+        - id: conversation_id
+          type: string
+          brief: >
+            The [conversation ID](#conversations) identifying the conversation to which the message belongs,
+            represented as a string. Sometimes called "Correlation ID".
+          examples: 'MyConversationId'
+        - id: message_payload_size_bytes
+          type: number
+          brief: >
+            The (uncompressed) size of the message payload in bytes.
+            Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
+          examples: 2738
+        - id: message_payload_compressed_size_bytes
+          type: number
+          brief: 'The compressed size of the message payload in bytes.'
+          examples: 2048
+        - ref: net.peer.name
+          note: >
+            This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+          required:
+            conditional: If available.
+        - ref: net.peer.ip
+          tag: connection-level
+          required:
+            conditional: If available.
+      constraints:
+        - include: network
+
+    - id: messaging.producer
+      prefix: messaging
+      extends: messaging
+      span_kind: producer
+      brief: 'Semantic convention for producers of messages sent to a messaging systems.'
+
+    - id: messaging.producer.synchronous
+      prefix: messaging
+      extends: messaging
+      span_kind: client
+      brief: >
+        Semantic convention for clients of messaging systems that produce messages
+        and synchronously wait for responses.
+
+    - id: messaging.consumer
+      prefix: messaging
+      extends: messaging
+      span_kind: consumer
+      brief: 'Semantic convention for a consumer of messages received from a messaging system'
+      attributes:
+        - id: operation
+          type:
+            allow_custom_values: false
+            members:
+              - id: receive
+                value: "receive"
+              - id: process
+                value: "process"
+          brief: >
+            A string identifying the kind of message consumption as defined in the
+            [Operation names](#operation-names) section above.
+            If the operation is "send", this attribute MUST NOT be set, since the
+            operation can be inferred from the span kind in that case.
+
+    - id: messaging.consumer.synchronous
+      prefix: messaging
+      extends: messaging.consumer
+      span_kind: server
+      brief: >
+        Semantic convention for servers that consume messages received from messaging systems
+        and always send back replies directed to the producers of these messages.
+
+    - id: messaging.kafka
+      prefix: messaging.kafka
+      extends: messaging
+      brief: >
+        Attributes for Apache Kafka
+      attributes:
+        - id: message_key
+          type: string
+          brief: >
+            Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition.
+            They differ from `messaging.message_id` in that they're not unique.
+            If the key is `null`, the attribute MUST NOT be set.
+          note: >
+            If the key type is not string, it's string representation has to be supplied for the attribute.
+            If the key has no unambiguous, canonical string form, don't include its value.
+          examples: 'myKey'
+        - id: consumer_group
+          type: string
+          brief: >
+            Name of the Kafka Consumer Group that is handling the message.
+            Only applies to consumers, not producers.
+          examples: 'my-group'
+        - id: client_id
+          type: string
+          brief: >
+            Client Id for the Consumer or Producer that is handling the message.
+          examples: 'client-5'
+        - id: partition
+          type: number
+          brief: >
+            Partition the message is sent to.
+          examples: 2
+        - id: tombstone
+          type: boolean
+          required:
+            conditional: 'If missing, it is assumed to be false.'
+          brief: 'A boolean that is true if the message is a tombstone.'

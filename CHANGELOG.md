@@ -9,8 +9,22 @@ release.
 
 New:
 
+- Add performance benchmark specification
+  ([#748](https://github.com/open-telemetry/opentelemetry-specification/pull/748))
+- Enforce that the Baggage API must be fully functional, even without an installed SDK.
+  ([#1103](https://github.com/open-telemetry/opentelemetry-specification/pull/1103))
+- Rename "Canonical status code" to "Status code"
+  ([#1081](https://github.com/open-telemetry/opentelemetry-specification/pull/1081))
+- Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation
+  ([#1066](https://github.com/open-telemetry/opentelemetry-specification/pull/1066))
+- Change Status to be consistent with Link and Event
+  ([#1067](https://github.com/open-telemetry/opentelemetry-specification/pull/1067))
+- Clarify env variables in otlp exporter
+  ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
+- Add Prometheus exporter environment variables
+  ([#1021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021))
 - Default propagators in un-configured API must be no-op
-  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
+  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930))
 - Define resource mapping for Jaeger exporters
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
@@ -21,6 +35,8 @@ New:
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
 - Add resource semantic convention for deployment environment
   ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
+- Refine semantic conventions for messaging systems and add specific attributes for Kafka
+  ([#1027](https://github.com/open-telemetry/opentelemetry-specification/pull/1027))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
 - Add API and semantic conventions for recording exceptions as Span Events
@@ -30,13 +46,21 @@ New:
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
 - Allow samplers to modify tracestate
-  ([#856](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
+  ([#988](https://github.com/open-telemetry/opentelemetry-specification/pull/988/))
 - Update the header name for otel baggage, and version date
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
 - Define PropagationOnly Span to simplify active Span logic in Context
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
-- Add performance benchmark specification
-  ([#748](https://github.com/open-telemetry/opentelemetry-specification/pull/748))
+- Add limits to the number of attributes, events, and links in SDK Spans
+  ([#942](https://github.com/open-telemetry/opentelemetry-specification/pull/942))
+- Add Metric SDK specification (partial): covering terminology and Accumulator component
+  ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
+- Clarify context interaction for trace module
+  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))
+- Add `Shutdown` function to `*Provider` SDK
+  ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
+- Add semantic conventions for system metrics
+  ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
 
 Updates:
 
@@ -94,11 +118,17 @@ Updates:
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
+- Trace SDK: Sampler.ShouldSample gets parent Context instead of SpanContext
+  ([#881](https://github.com/open-telemetry/opentelemetry-specification/pull/881))
 - SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
   ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
   ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
 - Remove custom header name for Baggage, use official header
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
+- Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
+  ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
+- Rename SpanContext to SpanReference
+  ([#1075](https://github.com/open-telemetry/opentelemetry-specification/pull/1075))
 
 ## v0.6.0 (07-01-2020)
 

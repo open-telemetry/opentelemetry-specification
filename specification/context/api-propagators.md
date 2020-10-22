@@ -76,7 +76,7 @@ Injects the value into a carrier. For example, into the headers of an HTTP reque
 Required arguments:
 
 - A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as
-`SpanContext`, `Baggage` or another cross-cutting concern context.
+`SpanReference`, `Baggage` or another cross-cutting concern context.
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
@@ -93,7 +93,7 @@ Required arguments:
 - The carrier that holds the propagation fields. For example, an incoming message or http response.
 
 Returns a new `Context` derived from the `Context` passed as argument,
-containing the extracted value, which can be a `SpanContext`,
+containing the extracted value, which can be a `SpanReference`,
 `Baggage` or another cross-cutting concern context.
 
 ## TextMap Propagator
@@ -144,8 +144,8 @@ the base [Inject](#inject) operation.
 
 Optional arguments:
 
-- A `Setter` invoked for each propagation key to add or remove. This is an additional
-  argument that languages are free to define to help inject data into the carrier.
+- A `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
+  This is an additional argument that languages are free to define to help inject data into the carrier.
 
 #### Setter argument
 
@@ -263,7 +263,7 @@ Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
-- The `Setter` invoked for each propagation key to add or remove.
+- The `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
 
 ## Global Propagators
 
@@ -315,6 +315,21 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [B3](https://github.com/openzipkin/b3-propagation)
 * [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
 
+Additional `Propagator`s implementing vendor-specific protocols such as AWS
+X-Ray (Note, AWS is used as an example, not as a requirement) trace header
+protocol can be either maintained and distributed by their respective vendors or
+as part of the OpenTelemetry organization. The reasons for maintaining those as
+a community are:
+
+- Propagators are small pieces of code and their functionality is often publicly
+  documented (unlike exporters).
+- People will often need to use propagators that are not specific to their
+  tracing or metrics vendor. For example, customers of tracing vendor may still
+  want to use an Cloud vendor-specific propagator for requests to the services
+  of this cloud vendor.
+- Only a small number of propagators will need to exist, and this number will
+  shrink as vendors and users shift to W3C TraceContext.
+
 ### B3 Requirements
 
 B3 has both single and multi-header encodings. To maximize compatibility between
@@ -334,9 +349,3 @@ When injecting B3, propagators:
 * MUST default to injecting B3 using the single-header format
 * MUST provide configuration to change the default injection format to B3
   multi-header
-
-### Vendor-specific propagators
-
-Additional `Propagator`s implementing vendor-specific protocols such as
-AWS X-Ray trace header protocol are encouraged to be maintained and distributed by
-their respective vendors.

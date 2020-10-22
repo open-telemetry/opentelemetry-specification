@@ -1,0 +1,54 @@
+groups:
+  - id: os
+    prefix: os
+    brief: >
+        The operating system (OS) on which the process represented by this resource is running.
+    note: >
+        In case of virtualized environments, this is the operating system as it is observed by
+        the process, i.e., the virtualized guest rather than the underlying host.
+    attributes:
+      - id: type
+        type:
+          allow_custom_values: true
+          members:
+            - id: WINDOWS
+              value: 'WINDOWS'
+              brief: "Microsoft Windows"
+            - id: LINUX
+              value: 'LINUX'
+              brief: "Linux"
+            - id: DARWIN
+              value: 'DARWIN'
+              brief: "Apple Darwin"
+            - id: FREEBSD
+              value: 'FREEBSD'
+              brief: "FreeBSD"
+            - id: NETBSD
+              value: 'NETBSD'
+              brief: "NetBSD"
+            - id: OPENBSD
+              value: 'OPENBSD'
+              brief: "OpenBSD"
+            - id: DRAGONFLYBSD
+              value: 'DRAGONFLYBSD'
+              brief: "DragonFly BSD"
+            - id: HPUX
+              value: 'HPUX'
+              brief: "HP-UX (Hewlett Packard Unix)"
+            - id: AIX
+              value: 'AIX'
+              brief: "AIX (Advanced Interactive eXecutive)"
+            - id: SOLARIS
+              value: 'SOLARIS'
+              brief: "Oracle Solaris"
+            - id: ZOS
+              value: 'ZOS'
+              brief: "IBM z/OS"
+        required: always
+        brief: 'The operating system type.'
+      - id: description
+        type: string
+        brief: >
+            Human readable (not intended to be parsed) OS version information,
+            like e.g. reported by `ver` or `lsb_release -a` commands.
+        examples: ['Microsoft Windows [Version 10.0.18363.778]', 'Ubuntu 18.04.1 LTS']
