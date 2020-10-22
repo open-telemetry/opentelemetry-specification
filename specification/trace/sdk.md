@@ -279,10 +279,11 @@ To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
 the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
 
-Similarly SDK Spans can be configured to truncate attribute values. By default,
-no attribute values are truncated, however, a limit, if set, will be applied to
-truncate attribute value expressed as a string of characters, so that its length
-does not exceed the limit.
+Similarly, SDKs MAY be configured to truncate attribute values. By default, attribute
+values SHOULD NOT be truncated. If an SDK provides a way to set this limit and the
+limit is set, then for each span attribute value, serialized into a string,
+if it exceeds that limit, SDK Spans SHOULD truncate that value, so that its length
+is at most equal to the limit.
 
 If there is a configurable limit, the SDK SHOULD honor the environment variables
 specified in [SDK environment variables](../sdk-environment-variables.md#span-limits).
