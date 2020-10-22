@@ -33,7 +33,7 @@ a permalink.
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count  | 1000    |       |
 | OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count      | 1000    |       |
 | OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count       | 1000    |       |
-| OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT  | Maximum allowed span attribute length | -1      | -1 is treated as infinity, any other negative value is invalid. Non-integer values are invalid. |
+| OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT  | Maximum allowed span attribute length |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
 
 ## OTLP Exporter
 
