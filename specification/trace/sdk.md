@@ -8,6 +8,7 @@
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
 * [Limits on Span Collections](#limits-on-span-collections)
+* [Limits on Span Collections and Attributes](#limits-on-span-collections-and-attributes)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -265,6 +266,10 @@ Thus, the SDK specification defines sets of possible requirements for
   or a getter could be provided).
 
 ## Limits on Span Collections
+Moved [here](#limits-on-span-collections-and-attributes). This section serves as
+a permalink.
+
+## Limits on Span Collections and Attributes
 
 Erroneous code can add unintended attributes, events, and links to a span. If
 these collections are unbounded, they can quickly exhaust available memory,
@@ -274,8 +279,13 @@ To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
 the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
 
+Similarly SDK Spans can be configured to truncate attribute values. By default,
+no attribute values are truncated, however, a limit, if set, will be applied to
+truncate attribute value expressed as a string of characters, so that its length
+does not exceed the limit.
+
 If there is a configurable limit, the SDK SHOULD honor the environment variables
-specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
+specified in [SDK environment variables](../sdk-environment-variables.md#span-limits).
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log

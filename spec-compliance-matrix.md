@@ -48,6 +48,7 @@ status of the feature is not known.
 |links collection size limit                   |   |    | + |      |    |      |   |    |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
+|Span attribute size limit                     |   | +  |   |      |    |      |   |    |   |    |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
 |String type                                   | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Boolean type                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -128,6 +129,7 @@ status of the feature is not known.
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    |      |   |    |   |    |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   |      |    |      |   |    |   |    |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |
+|OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT                |   |    |   |      |    |      |   |    |   |    |
 
 ## Exporters
 

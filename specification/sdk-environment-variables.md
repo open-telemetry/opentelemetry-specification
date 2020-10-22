@@ -23,12 +23,17 @@ Additional values can be specified in the respective SDK's documentation, in cas
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
 ## Span Collection Limits
+Moved [here](#span-limits). This section serves as
+a permalink.
 
-| Name                            | Description                          | Default | Notes |
-| ------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 1000    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 1000    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 1000    |       |
+## Span Limits
+
+| Name                            | Description                           | Default | Notes |
+| ------------------------------- | ------------------------------------- | ------- | ----- |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count  | 1000    |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count      | 1000    |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count       | 1000    |       |
+| OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT  | Maximum allowed span attribute length | -1      | -1 is treated as infinity, any other negative value is invalid. Non-integer values are invalid. |
 
 ## OTLP Exporter
 
