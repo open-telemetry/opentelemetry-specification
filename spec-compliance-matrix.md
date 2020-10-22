@@ -15,15 +15,17 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/392)    | +  | +    | + | +  | + | +  |
+|Shutdown                                      |   |    | + |      |    |      |   |    |   |    |
 |[Tracing Context Utilities](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracing-context-utilities)|
-|Get active Span                               |   |    |   | +    |    |      |   |    |   |    |
-|Set active Span                               |   |    |   | +    |    |      |   |    |   |    |
+|Get active Span                               |   |    | + | +    |    |      |   |    |   |    |
+|Set active Span                               |   |    | + | +    |    |      |   |    |   |    |
 |[Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | -  |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1156)    | +  | +    | + | +  | + | +  |
-|[SpanContext](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#spancontext)|
+|[SpanReference](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#spanreference)|
+|Use SpanReference instead of SpanContext      |   |    |   |      |    |      |   |    |   |    |
 |IsValid                                       | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRemote                                      | - | +  | + | +    | +  | +    | + | +  | + | +  |
 |Conforms to the W3C TraceContext spec         | + | +  | + | +    | +  | +    |   | -  | + | +  |
@@ -31,16 +33,19 @@ status of the feature is not known.
 |Create root span                              | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|Create with explicit parent Span              | + | +  | + | +    | +  | +    | + | -  | + | +  |
-|Create with explicit parent SpanContext       | - | +  | + | +    | +  | +    |   | -  | + | +  |
+|No explicit parent Span/SpanReference allowed |   | +  |   |      |    |      |   |    |   |    |
+|SpanProcessor.OnStart receives parent Context |   |    |   |      |    |      |   |    |   |    |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | -  | + | +  |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + |    | + | +  |
 |IsRecording becomes false after End           |   |    |   |      |    |      |   |    |   |    |
-|Set status                                    | + | +  | + | +    | +  | +    | + | +  | + | +  |
+|Set status with StatusCode (Unset, Ok, Error) |   |    |   |      |    |      |   |    |   |    |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1157)    | +  | +    | + | +  | + | +  |
+|events collection size limit                  |   |    | + |      |    |      |   |    |   |    |
+|attribute collection size limit               |   |    | + |      |    |      |   |    |   |    |
+|links collection size limit                   |   |    | + |      |    |      |   |    |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
@@ -64,13 +69,15 @@ status of the feature is not known.
 |[Sampling](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#sampling)|
 |Allow samplers to modify tracestate           |  |    |   |      |    |      |   |    |   |    |
 |[Span IDs wrt. sampling generated is compliant](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#sdk-span-creation) |  |    |   |      |    |      |   |    |   |    |
+|Allow samplers to modify tracestate           |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1220)     |    |      |   |    |   |    |
+|ShouldSample gets full parent Context         |   |    |   |      |    |      |   |    |   |    |
 
 ## Baggage
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Basic support                                 |  |    |   |      |    |      |   |    |   |    |
-|Use official header name `baggage`            |  |    |   |      |    |      |   |    |   |    |
+|Basic support                                 |  |    | + |      |    |      |   |    |   |    |
+|Use official header name `baggage`            |  |    | + | +    |    |      |   |    |   |    |
 
 ## Metrics
 
@@ -103,16 +110,10 @@ status of the feature is not known.
 |B3 Propagator                                 |  | +  | + | +    |    |      |   |    |   |    |
 |Jaeger Propagator                             |  | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    |      |   |    |   |    |
 |[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
-|Fields                                        |  | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   |    |   |    |
+|Fields                                        |  | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1615) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   |    |   |    |
 |Setter argument                               |  | +  | + | +   |    |      |   |    |   |    |
 |Getter argument                               |  | +  | + | +   |    |      |   |    |   |    |
-|Getter argument returning Keys                |  | -  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1084)   |    |      |   |    |   |    |
-
-## Error Handling
-
-|Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
-|----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|TBD|
+|Getter argument returning Keys                |  | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1084)   |    |      |   |    |   |    |
 
 ## Environment Variables
 
@@ -126,6 +127,9 @@ status of the feature is not known.
 |OTEL_EXPORTER_JAEGER_*                        |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1056)    | +  | -    | - |    | - | -  |
 |OTEL_EXPORTER_ZIPKIN_*                        |   |    |   | +    |    | -    | - |    | - | -  |
 |OTEL_EXPORTER                                 |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1155)    |    |      |   |    |   |    |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    |      |   |    |   |    |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   |      |    |      |   |    |   |    |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |
 
 ## Exporters
 

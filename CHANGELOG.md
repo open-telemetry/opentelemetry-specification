@@ -9,6 +9,10 @@ release.
 
 New:
 
+- Enforce that the Baggage API must be fully functional, even without an installed SDK.
+  ([#1103](https://github.com/open-telemetry/opentelemetry-specification/pull/1103))
+- Rename "Canonical status code" to "Status code"
+  ([#1081](https://github.com/open-telemetry/opentelemetry-specification/pull/1081))
 - Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation
   ([#1066](https://github.com/open-telemetry/opentelemetry-specification/pull/1066))
 - Change Status to be consistent with Link and Event
@@ -43,8 +47,16 @@ New:
   ([#981](https://github.com/open-telemetry/opentelemetry-specification/pull/981))
 - Define PropagationOnly Span to simplify active Span logic in Context
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
+- Add limits to the number of attributes, events, and links in SDK Spans
+  ([#942](https://github.com/open-telemetry/opentelemetry-specification/pull/942))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
+- Clarify context interaction for trace module
+  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))  
+- Add `Shutdown` function to `*Provider` SDK
+  ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
+- Add semantic conventions for system metrics
+  ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
 
 Updates:
 
@@ -102,6 +114,8 @@ Updates:
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
+- Trace SDK: Sampler.ShouldSample gets parent Context instead of SpanContext
+  ([#881](https://github.com/open-telemetry/opentelemetry-specification/pull/881))
 - SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
   ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
   ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
@@ -111,6 +125,8 @@ Updates:
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 - Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
+- Rename SpanContext to SpanReference
+  ([#1075](https://github.com/open-telemetry/opentelemetry-specification/pull/1075))
 
 ## v0.6.0 (07-01-2020)
 

@@ -11,7 +11,7 @@ Table of Contents
 - [Distributed Tracing](#distributed-tracing)
   * [Trace](#trace)
   * [Span](#span)
-  * [SpanContext](#spancontext)
+  * [SpanReference](#spanreference)
   * [Links between spans](#links-between-spans)
 - [Metrics](#metrics)
   * [Recording raw measurements](#recording-raw-measurements)
@@ -96,14 +96,14 @@ Each **Span** encapsulates the following state:
 - A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
-  (via the **SpanContext** of those related **Spans**).
-- **SpanContext** identification of a Span. See below.
+  (via the **SpanReference** of those related **Spans**).
+- **SpanReference** information required to reference a Span. See below.
 
-### SpanContext
+### SpanReference
 
 Represents all the information that identifies **Span** in the **Trace** and
 MUST be propagated to child Spans and across process boundaries. A
-**SpanContext** contains the tracing identifiers and the options that are
+**SpanReference** contains the tracing identifiers and the options that are
 propagated from parent to child **Spans**.
 
 - **TraceId** is the identifier for a trace. It is worldwide unique with
@@ -126,8 +126,8 @@ propagated from parent to child **Spans**.
 ### Links between spans
 
 A **Span** may be linked to zero or more other **Spans** (defined by
-**SpanContext**) that are causally related. **Links** can point to
-**SpanContexts** inside a single **Trace** or across different **Traces**.
+**SpanReference**) that are causally related. **Links** can point to
+**Spans** inside a single **Trace** or across different **Traces**.
 **Links** can be used to represent batched operations where a **Span** was
 initiated by multiple initiating **Spans**, each representing a single incoming
 item being processed in the batch.
@@ -280,7 +280,7 @@ See the [Context](context/context.md)
 ## Propagators
 
 OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
-such as `SpanContext` and `Baggage`. Different `Propagator` types define the restrictions
+such as `Span`s (usually only the `SpanReference` portion) and `Baggage`. Different `Propagator` types define the restrictions
 imposed by a specific transport and bound to a data type.
 
 The Propagators API currently defines one `Propagator` type:
