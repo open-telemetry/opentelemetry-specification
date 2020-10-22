@@ -312,8 +312,12 @@ Required parameters:
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
-* [B3](https://github.com/openzipkin/b3-propagation)
-* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
+* [W3C TraceContext](https://www.w3.org/TR/trace-context/), MAY alternatively
+  be distributed as part of the OpenTelemetry API.
+* [W3c Baggage](https://w3c.github.io/baggage), MAY alternatively
+  be distributed as part of the OpenTelemetry API.
+* [B3](https://github.com/openzipkin/b3-propagation).
+* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray (Note, AWS is used as an example, not as a requirement) trace header
