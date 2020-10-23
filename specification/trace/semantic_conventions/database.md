@@ -135,7 +135,8 @@ Usually only one `db.name` will be used per connection though.
 |---|---|---|---|---|
 | `db.name` | string | If no [tech-specific attribute](#call-level-attributes-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`<br>`main` | Conditional [2] |
 | `db.statement` | string | The database statement being executed. [3] | `SELECT * FROM wuser_table`<br>`SET mykey "WuValue"` | Conditional<br>Required if applicable. |
-| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`. [4] | `findAndModify`<br>`HMSET` | Conditional<br>Required, if `db.statement` is not applicable. |
+| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [4] | `findAndModify`<br>`HMSET`<br>`SELECT` | Conditional<br>Required, if `db.statement` is not applicable. |
+| `db.table` | string | The name of the primary table, collection, segment, etc... that the operation is acting upon, including the schema name (if applicable). [5] | `public.users`<br>`customers` | Conditional<br>Recommended if available. |
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name".
 
@@ -143,7 +144,9 @@ Usually only one `db.name` will be used per connection though.
 
 **[3]:** The value may be sanitized to exclude sensitive information.
 
-**[4]:** While it would semantically make sense to set this, e.g., to a SQL keyword like `SELECT` or `INSERT`, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property (the back end can do that if required).
+**[4]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if  the operation name is provided by the library being instrumented. If the statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
+
+**[5]:** It is not recommended to attempt any  client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value may be omitted.
 <!-- endsemconv -->
 
 For **Redis**, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.

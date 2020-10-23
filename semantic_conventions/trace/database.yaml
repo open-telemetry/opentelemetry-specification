@@ -191,12 +191,27 @@ groups:
             conditional: Required, if `db.statement` is not applicable.
           brief: >
             The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations)
-            such as `findAndModify`.
+            such as `findAndModify`, or the SQL keyword.
           note: >
-            While it would semantically make sense to set this, e.g., to a SQL keyword like `SELECT` or `INSERT`,
-            it is not recommended to attempt any client-side parsing of `db.statement` just to get this property
-            (the back end can do that if required).
-          examples: ['findAndModify', 'HMSET']
+            It is not recommended to attempt any client-side parsing of
+            `db.statement` just to get this property, but it should be set if 
+            the operation name is provided by the library being instrumented.
+            If the statement has an ambiguous operation, or performs more than
+            one operation, this value may be omitted.
+          examples: ['findAndModify', 'HMSET', 'SELECT']
+        - id: table
+          tag: call-level
+          type: string
+          required:
+            conditional: Recommended if available.
+          brief: The name of the primary table, collection, segment, etc... that the operation is acting upon, including the schema name (if applicable).
+          note: >
+            It is not recommended to attempt any  client-side parsing of
+            `db.statement` just to get this property, but it should be set if
+            it is provided by the library being instrumented.
+            If the operation is acting upon an anonymous table, or more than one
+            table, this value may be omitted.
+          examples: ['public.users', 'customers']
         - ref: net.peer.name
           tag: connection-level
           required:
