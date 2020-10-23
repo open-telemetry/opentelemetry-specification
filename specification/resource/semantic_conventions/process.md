@@ -13,9 +13,6 @@
 | process.command_line | The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead. | `C:\cmd\otecol --config="my directory\config.yaml"` | See below |
 | process.command_args | All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`. | `[ cmd/otecol, --config=config.yaml ]` | See below |
 | process.owner | The username of the user that owns the process. | `root` | No |
-| process.runtime.name | The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler. | `OpenJDK Runtime Environment` | No |
-| process.runtime.version | The version of the runtime of this process, as returned by the runtime without modification. | `14.0.2` | No |
-| process.runtime.description | An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment. | `Eclipse OpenJ9 openj9-0.21.0` | No |
 
 Between `process.command_args` and `process.command_line`, usually `process.command_args` should be preferred.
 On Windows and other systems where the native format of process commands is a single string,
