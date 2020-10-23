@@ -421,7 +421,7 @@ than the simple processor.
 
 * `exporter` - the exporter where the spans are pushed.
 * `maxQueueSize` - the maximum queue size. After this limit is reached, spans are
-  dropped. The default value is `2048`.
+  skipped by this BatchSpanProcessor. The default value is `2048`.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
