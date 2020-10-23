@@ -21,6 +21,10 @@ Between `process.command_args` and `process.command_line`, usually `process.comm
 On Windows and other systems where the native format of process commands is a single string,
 `process.command_args` can additionally (or instead) be used.
 
+For backwards compatibility with older versions of this semantic convention,
+it is possible but deprecated to use an array as type for `process.command_line`.
+In that case it MUST be interpreted as if it was `process.command_args`.
+
 At least one of `process.executable.name`, `process.executable.path`, `process.command`, `process.command_line` or `process.command_args` is required.
 
 ## Process runtimes
