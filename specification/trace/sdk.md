@@ -411,9 +411,8 @@ in the background.
 
 #### Batching processor
 
-This is an implementation of `SpanProcessor` which creates batches of finished
-spans and passes the export-friendly span data representations to the
-configured `SpanExporter`.
+This is an implementation of `SpanProcessor` which collects finished spans into batches
+and passes the export-friendly span data representations to the associated `SpanExporter`.
 
 Typically, the batching processor will be more suitable for production environments
 than the simple processor.
