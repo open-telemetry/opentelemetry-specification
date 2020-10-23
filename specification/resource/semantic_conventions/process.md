@@ -25,7 +25,7 @@ For backwards compatibility with older versions of this semantic convention,
 it is possible but deprecated to use an array as type for `process.command_line`.
 In that case it MUST be interpreted as if it was `process.command_args`.
 
-At least one of `process.executable.name`, `process.executable.path`, `process.command`, `process.command_line` or `process.command_args` is required.
+At least one of `process.executable.name`, `process.executable.path`, `process.command`, `process.command_line` or `process.command_args` is required to allow back ends to identify the executable.
 
 ## Process runtimes
 
