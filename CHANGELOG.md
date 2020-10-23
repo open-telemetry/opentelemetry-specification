@@ -125,8 +125,6 @@ Updates:
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 - Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
-- Rename SpanContext to SpanReference
-  ([#1075](https://github.com/open-telemetry/opentelemetry-specification/pull/1075))
 
 ## v0.6.0 (07-01-2020)
 
