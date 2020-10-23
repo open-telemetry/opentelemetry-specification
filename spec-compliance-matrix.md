@@ -82,7 +82,7 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|TBD|
+|Metric label value size limit                 |  |    |   |      |    |      |   |    |   |    |
 
 ## Resource
 
@@ -130,6 +130,7 @@ status of the feature is not known.
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   |      |    |      |   |    |   |    |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |
 |OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT                |   |    |   |      |    |      |   |    |   |    |
+|OTEL_METRIC_LABEL_SIZE_LIMIT                  |   |    |   |      |    |      |   |    |   |    |
 
 ## Exporters
 
