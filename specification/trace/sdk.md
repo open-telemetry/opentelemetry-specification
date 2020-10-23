@@ -7,7 +7,6 @@
 * [Sampling](#sampling)
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
-* [Limits on Span Collections](#limits-on-span-collections)
 * [Limits on Span Collections and Attributes](#limits-on-span-collections-and-attributes)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
@@ -265,9 +264,7 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
 
-## Limits on Span Collections
-Moved [here](#limits-on-span-collections-and-attributes). This section serves as
-a permalink.
+<a name="limits-on-span-collections"/></a>
 
 ## Limits on Span Collections and Attributes
 
@@ -282,7 +279,7 @@ the recommended limit of 1000 elements. SDKs MAY provide a way to change this li
 Similarly, SDKs MAY be configured to truncate attribute values. By default, attribute
 values SHOULD NOT be truncated. If an SDK provides a way to set this limit and the
 limit is set, then for each span attribute value, serialized into a string,
-if it exceeds that limit, SDK Spans SHOULD truncate that value, so that its length
+if it exceeds that limit, SDKs SHOULD truncate that value, so that its length
 is at most equal to the limit.
 
 If there is a configurable limit, the SDK SHOULD honor the environment variables

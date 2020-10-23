@@ -497,14 +497,14 @@ instrument default aggregation.
 
 ## Limits on Metrics
 
-Erroneous code can add unintended labels to a span. If they are unbounded, they 
+Erroneous code can add unintended labels to a metric. If they are unbounded, they 
 can quickly exhaust available memory, resulting in crashes that are difficult to
 recover from safely.
 
 To protect against such errors, SDKs MAY be configured to truncate label values.
 By default, label values SHOULD NOT be truncated. If an SDK provides a way to set
 this limit and the limit is set, then for each Metric label value, if its length
-exceeds that limit, SDK Spans SHOULD truncate that value, so that its length is 
+exceeds that limit, SDKs SHOULD truncate that value, so that its length is 
 at most equal to the limit.
 
 If there is a configurable limit, the SDK SHOULD honor the environment variables

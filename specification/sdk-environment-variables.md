@@ -22,9 +22,7 @@ Additional values can be specified in the respective SDK's documentation, in cas
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
-## Span Collection Limits
-Moved [here](#span-limits). This section serves as
-a permalink.
+<a name="span-collection-limits"/></a>
 
 ## Span Limits
 
