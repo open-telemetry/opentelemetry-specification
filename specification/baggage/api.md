@@ -120,7 +120,8 @@ The API layer MAY include the following `Propagator`s:
 
 * A `TextMapPropagator` implementing the [W3C Baggage Specification](https://w3c.github.io/baggage).
 
-See [propagators distribution](../context/api-propagators.md#propagators-distribution).
+See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
+for how propagators are to be distributed.
 
 Note: The W3C baggage specification does not currently assign semantic meaning to the optional metadata.
 
