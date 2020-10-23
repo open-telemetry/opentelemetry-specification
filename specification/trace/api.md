@@ -735,7 +735,8 @@ The API layer MAY include the following `Propagator`s:
 
 * A `TextMapPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
 
-See [propagators distribution](../context/api-propagators.md#propagators-distribution).
+See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
+for how propagators are to be distributed.
 
 ## Behavior of the API in the absence of an installed SDK
 
