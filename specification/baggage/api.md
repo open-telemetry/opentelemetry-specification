@@ -116,7 +116,7 @@ OPTIONAL parameters:
 `Baggage` MAY be propagated across process boundaries or across any arbitrary boundaries
 (process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
 
-The API layer MAY include the following `Propagator`s:
+The API layer or an extension package MUST include the following `Propagator`s:
 
 * A `TextMapPropagator` implementing the [W3C Baggage Specification](https://w3c.github.io/baggage).
 
