@@ -14,7 +14,15 @@ The goal of this specification is to unify the environment variable names betwee
 Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger".
 Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
 
-Known values for OTEL_TRACE_SAMPLER are: "always_on", "always_off", "traceidratio", "parentbased_traceidratio".
+Known values for `OTEL_TRACE_SAMPLER` are:
+
+- `"always_on"`: `AlwaysOnSampler`
+- `"always_off"`: `AlwaysOffSampler`
+- `"traceidratio"`: `TraceIdRatioBased`
+- `"parentbased_always_on"`: `ParentBased(root=AlwaysOnSampler)`
+- `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
+- `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
+
 
 ## Batch Span Processor
 
