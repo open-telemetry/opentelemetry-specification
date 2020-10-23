@@ -645,7 +645,7 @@ as a `Span` in operations such as in-process `Span` propagation.
 
 If a new type is required for supporting this operation, it SHOULD not be exposed
 publicly if possible (e.g. by only exposing a function that returns something
-with the Span interface type). If a new type is required to be publicly exposed
+with the Span interface type). If a new type is required to be publicly exposed,
 it SHOULD be named `NonRecordingSpan`.
 
 The behavior is defined as follows:
