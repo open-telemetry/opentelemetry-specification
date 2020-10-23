@@ -23,9 +23,8 @@ status of the feature is not known.
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | -  |
-|Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|[SpanReference](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#spanreference)|
-|Use SpanReference instead of SpanContext      |   |    |   |      |    |      |   |    |   |    |
+|Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1156)    | +  | +    | + | +  | + | +  |
+|[SpanContext](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#spancontext)|
 |IsValid                                       | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRemote                                      | - | +  | + | +    | +  | +    | + | +  | + | +  |
 |Conforms to the W3C TraceContext spec         | + | +  | + | +    | +  | +    |   | -  | + | +  |
@@ -33,8 +32,8 @@ status of the feature is not known.
 |Create root span                              | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|No explicit parent Span/SpanReference allowed |   | +  |   | +    |    |      |   |    |   |    |
-|SpanProcessor.OnStart receives parent Context |   |    |   | +    |    |      |   |    |   |    |
+|No explicit parent Span/SpanContext allowed   |   | +  |   |      |    |      |   |    |   |    |
+|SpanProcessor.OnStart receives parent Context |   |    |   |      |    |      |   |    |   |    |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  |
