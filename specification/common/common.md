@@ -7,6 +7,9 @@ Table of Contents
 
 - [Attributes](#attributes)
   - [Attribute and Label Naming](#attribute-and-label-naming)
+    - [Name Pluralization Guidelines](#name-pluralization-guidelines)
+    - [Recommendations for OpenTelemetry Authors](#recommendations-for-opentelemetry-authors)
+    - [Recommendations for Application Developers](#recommendations-for-application-developers)
 
 </details>
 
@@ -74,6 +77,17 @@ Names SHOULD follow these rules:
   name prohibits existence of an equally named namespace in the future, and vice
   versa: any existing namespace prohibits existence of an equally named
   attribute or label key in the future.
+  
+### Name Pluralization guidelines
+
+- When attribute represents a single entity, the attribute name SHOULD BE singular.
+
+- When attribute can represent multiple entities, the attribute name SHOULD BE pluralized
+  and the value type SHOULD BE an array.
+
+- When attribute represents a measurement,
+  [Metric Name Pluralization Guidelines](https://github.com/pmm-sumo/opentelemetry-specification/blob/master/specification/metrics/semantic_conventions/README.md#pluralization)
+  SHOULD BE followed for the attribute name.
 
 ### Recommendations for OpenTelemetry Authors
 
