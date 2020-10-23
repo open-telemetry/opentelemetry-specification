@@ -494,3 +494,22 @@ and Sketch.
 
 TODO: T.B.D.: DDSketch considered a good choice for ValueRecorder
 instrument default aggregation.
+
+## Limits on Metrics
+
+Erroneous code can add unintended labels to a span. If they are unbounded, they 
+can quickly exhaust available memory, resulting in crashes that are difficult to
+recover from safely.
+
+To protect against such errors, SDKs MAY be configured to truncate label values.
+By default, label values SHOULD NOT be truncated. If an SDK provides a way to set
+this limit and the limit is set, then for each Metric label value, if its length
+exceeds that limit, SDK Spans SHOULD truncate that value, so that its length is 
+at most equal to the limit.
+
+If there is a configurable limit, the SDK SHOULD honor the environment variables
+specified in [SDK environment variables](../sdk-environment-variables.md#metric-limits).
+
+There SHOULD be a log emitted to indicate to the user that any value was discarded
+or truncated due to such a limit. To prevent excessive logging, the log should 
+not be emitted more than once per metric or value.

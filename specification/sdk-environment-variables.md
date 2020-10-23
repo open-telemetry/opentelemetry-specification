@@ -35,6 +35,12 @@ a permalink.
 | OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count       | 1000    |       |
 | OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT  | Maximum allowed span attribute length |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
 
+## Metric Limits
+
+| Name                         | Description                         | Default | Notes |
+| ---------------------------- | ----------------------------------- | ------- | ----- |
+| OTEL_METRIC_LABEL_SIZE_LIMIT | Maximum allowed metric value length |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+
 ## OTLP Exporter
 
 See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).

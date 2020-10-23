@@ -290,7 +290,7 @@ specified in [SDK environment variables](../sdk-environment-variables.md#span-li
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
-should not be emitted once per span, or per discarded attribute, event, or links.
+should not be emitted more than once per span, attribute, event, or link.
 
 ## Span processor
 
