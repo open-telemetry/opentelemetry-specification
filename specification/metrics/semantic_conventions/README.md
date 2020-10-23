@@ -2,6 +2,7 @@
 
 The following semantic conventions surrounding metrics are defined:
 
+* [Timing](timing-metrics.md): General semantic conventions for timed operations.
 * [HTTP Metrics](http-metrics.md): Semantic conventions and instruments for HTTP metrics.
 * [System Metrics](system-metrics.md): Semantic conventions and instruments for standard system metrics.
 * [Process Metrics](process-metrics.md): Semantic conventions and instruments for standard process metrics.
