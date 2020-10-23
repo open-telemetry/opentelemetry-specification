@@ -23,7 +23,6 @@ Known values for `OTEL_TRACE_SAMPLER` are:
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
 
-
 ## Batch Span Processor
 
 | Name                           | Description                                    | Default | Notes                                                 |
