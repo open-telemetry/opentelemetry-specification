@@ -4,7 +4,16 @@
 
 <!-- toc -->
 
-Run the tool to have the TOC generated here
+- [Common](#common)
+- [Call-level Metric Instruments](#call-level-metric-instruments)
+  * [Labels](#labels)
+  * [Call-level labels for specific technologies](#call-level-labels-for-specific-technologies)
+  * [Examples](#examples)
+    + [PostgreSQL SELECT Query](#postgresql-select-query)
+    + [MySQL SELECT Query](#mysql-select-query)
+    + [Redis HMSET](#redis-hmset)
+    + [MongoDB findAndModify](#mongodb-findandmodify)
+- [Connection Pooling Metric Instruments](#connection-pooling-metric-instruments)
 
 <!-- tocstop -->
 
