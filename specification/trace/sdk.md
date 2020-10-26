@@ -399,11 +399,11 @@ This is an implementation of `SpanProcessor` which passes finished spans
 and the export-friendly span data representation to the configured
 `SpanExporter` as soon as they are finished.
 
-Typically, the simple processor will be most suitable for use in testing. Exceptions to this
-include scenarios where creating multiple threads is not desirable (since batching
-span processors will typically be threaded in order to pass spans on to exporters
-in the background) and scenarios where different custom attributes should be added to individual
-spans based on code scopes.
+Typically, the simple processor will be most suitable for use in testing; it should be used with
+caution in production. It may be appropriate for production use in scenarios where creating
+multiple threads is not desirable (since batching span processors will typically be threaded
+in order to pass spans on to exporters in the background) as well as scenarios where different
+custom attributes should be added to individual spans based on code scopes.
 
 **Configurable parameters:**
 
