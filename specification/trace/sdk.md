@@ -279,7 +279,7 @@ the recommended limit of 1000 elements. SDKs MAY provide a way to change this li
 Similarly, SDKs MAY be configured to truncate attribute values. By default, attribute
 values SHOULD NOT be truncated. If an SDK provides a way to set this limit and the
 limit is set, then for each span attribute value, serialized into a string,
-if it exceeds that limit, SDKs SHOULD truncate that value, so that its length
+if it exceeds that limit, SDKs MUST truncate that value, so that its length
 is at most equal to the limit.
 
 If there is a configurable limit, the SDK SHOULD honor the environment variables
