@@ -21,17 +21,20 @@ groups:
         examples:
           - GetItem
           - PutItem
-  - id: DynamoDB.BatchGetItem
+
+  - id: dynamodb.batchgetitem
+    brief: DynamoDB.BatchGetItem
     extends: awssdk
     attributes:
       - id: table_names
         type: string
-        brief: ray | Extract the keys of the `RequestItems` object field in the request
+        brief: Extract the keys of the `RequestItems` object field in the request
       - id: consumed_capacity
         type: string
         brief: JSON-serialize the `ConsumedCapacity` response list field
 
-  - id: DynamoDB.BatchWriteItem
+  - id: dynamodb.batchwriteitem
+    brief: DynamoDB.BatchWriteItem
     extends: awssdk
     attributes:
       - id: table_names
@@ -44,7 +47,8 @@ groups:
         type: string
         brief: JSON-serialize the `ItemCollectionMetrics` response object field
 
-  - id: DynamoDB.CreateTable
+  - id: dynamodb.createtable
+    brief: DynamoDB.CreateTable
     extends: awssdk
     attributes:
       - id: db.name
@@ -63,7 +67,8 @@ groups:
         type: number
         brief: Copy the `ProvisionedThroughput.WriteCapacityUnits` request parameter
 
-  - id: DynamoDB.DeleteItem
+  - id: dynamodb.deleteitem
+    brief: DynamoDB.DeleteItem
     extends: awssdk
     attributes:
       - id: db.name
@@ -76,21 +81,24 @@ groups:
         type: string
         brief: JSON-serialize the `ItemCollectionMetrics` response object field
 
-  - id: DynamoDB.DeleteTable
+  - id: dynamodb.deletetable
+    brief: DynamoDB.DeleteTable
     extends: awssdk
     attributes:
       - id: db.name
         type: string
         brief: Copy the `TableName` request parameter
 
-        - id: DynamoDB.DescribeTable
-          extends: awssdk
-          attributes:
+  - id: dynamodb.describetable
+    brief: DynamoDB.DescribeTable
+    extends: awssdk
+    attributes:
       - id: db.name
         type: string
         brief: Copy the `TableName` request parameter
 
-  - id: DynamoDB.GetItem
+  - id: dynamodb.getitem
+    brief: DynamoDB.GetItem
     extends: awssdk
     attributes:
       - id: db.name
@@ -106,7 +114,8 @@ groups:
         type: string
         brief: JSON-serialize the `ConsumedCapacity` response list field
 
-  - id: DynamoDB.ListTables
+  - id: dynamodb.listtables
+    brief: DynamoDB.ListTables
     extends: awssdk
     attributes:
       - id: exclusive_start_table_name
@@ -119,7 +128,8 @@ groups:
         type: number
         brief: Fill in the number of elements in the `TableNames` response list parameter
 
-  - id: DynamoDB.PutItem
+  - id: dynamodb.putitem
+    brief: DynamoDB.PutItem
     extends: awssdk
     attributes:
       - id: db.name
@@ -132,7 +142,8 @@ groups:
         type: string
         brief: JSON-serialize the `ItemCollectionMetrics` response object field
 
-  - id: DynamoDB.Query
+  - id: dynamodb.query
+    brief: DynamoDB.Query
     extends: awssdk
     attributes:
       - id: db.name
@@ -163,7 +174,8 @@ groups:
         type: string
         brief: JSON-serialize the `ConsumedCapacity` response list field
 
-  - id: DynamoDB.Scan
+  - id: dynamodb.scan
+    brief: DynamoDB.Scan
     extends: awssdk
     attributes:
       - id: db.name
@@ -203,7 +215,8 @@ groups:
         type: number
         brief: Copy the `ScannedCount` response parameter
 
-  - id: DynamoDB.UpdateItem
+  - id: dynamodb.updateitem
+    brief: DynamoDB.UpdateItem
     extends: awssdk
     attributes:
       - id: db.name
@@ -216,7 +229,8 @@ groups:
         type: string
         brief: JSON-serialize the `ItemCollectionMetrics` response object field
 
-  - id: DynamoDB.UpdateTable
+  - id: dynamodb.updatetable
+    brief: DynamoDB.UpdateTable
     extends: awssdk
     attributes:
       - id: db.name
@@ -235,7 +249,8 @@ groups:
         type: number
         brief: Copy the `ProvisionedThroughput.WriteCapacityUnits` request parameter
 
-  - id: SQS.AddPermission
+  - id: sqs.addpermission
+    brief: SQS.AddPermission
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -245,7 +260,8 @@ groups:
         type: string
         brief: Copy the `Label` request field
 
-  - id: SQS.ChangeMessageVisibility
+  - id: sqs.changemessagevisibility
+    brief: SQS.ChangeMessageVisibility
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -255,14 +271,16 @@ groups:
         type: number
         brief: Copy the `VisibilityTimeout` request field
 
-  - id: SQS.ChangeMessageVisibilityBatch
+  - id: sqs.changemessagevisibilitybatch
+    brief: SQS.ChangeMessageVisibilityBatch
     extends: awssdk
     attributes:
       - id: messaging.url
         type: string
         brief: Copy the `QueueUrl` request field
 
-  - id: SQS.CreateQueue
+  - id: sqs.createqueue
+    brief: SQS.CreateQueue
     extends: awssdk
     attributes:
       - id: attributes
@@ -272,28 +290,32 @@ groups:
         type: string
         brief: Copy the `QueueName` request field
 
-  - id: SQS.DeleteMessage
+  - id: sqs.deletemessage
+    brief: SQS.DeleteMessage
     extends: awssdk
     attributes:
       - id: messaging.url
         type: string
         brief: Copy the `QueueUrl` request field
 
-  - id: SQS.DeleteMessageBatch
+  - id: sqs.deletemessagebatch
+    brief: SQS.DeleteMessageBatch
     extends: awssdk
     attributes:
       - id: messaging.url
         type: string
         brief: Copy the `QueueUrl` request field
 
-  - id: SQS.DeleteQueue
+  - id: sqs.deletequeue
+    brief: SQS.DeleteQueue
     extends: awssdk
     attributes:
       - id: messaging.url
         type: string
         brief: Copy the `QueueUrl` request field
 
-  - id: SQS.GetQueueAttributes
+  - id: sqs.getqueueattributes
+    brief: SQS.GetQueueAttributes
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -303,7 +325,8 @@ groups:
         type: string
         brief: JSON serialize the `Attributes` response field. If `Attributes` is a list of key/value pairs, pack them into an object before serializing.
 
-  - id: SQS.GetQueueUrl
+  - id: sqs.getqueueurl
+    brief: SQS.GetQueueUrl
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -316,7 +339,8 @@ groups:
         type: string
         brief: Copy the `QueueOwnerAWSAccountId` request field
 
-  - id: SQS.ListDeadLetterSourceQueues
+  - id: sqs.listdeadlettersourcequeues
+    brief: SQS.ListDeadLetterSourceQueues
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -326,7 +350,8 @@ groups:
         type: string
         brief: ray | Copy the `QueueUrls` response field
 
-  - id: SQS.ListQueues
+  - id: sqs.listqueues
+    brief: SQS.ListQueues
     extends: awssdk
     attributes:
       - id: queue_name_prefix
@@ -336,14 +361,16 @@ groups:
         type: number
         brief: Fill in the number of elements in the `QueueUrls` response list field
 
-  - id: SQS.PurgeQueue
+  - id: sqs.purgequeue
+    brief: SQS.PurgeQueue
     extends: awssdk
     attributes:
       - id: messaging.url
         type: string
         brief: Copy the `QueueUrl` request field
 
-  - id: SQS.ReceiveMessage
+  - id: sqs.receivemessage
+    brief: SQS.ReceiveMessage
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -371,14 +398,16 @@ groups:
         type: number
         brief: Fill in the number of elements in the `Messages` response list field
 
-  - id: SQS.RemovePermission
+  - id: sqs.removepermission
+    brief: SQS.RemovePermission
     extends: awssdk
     attributes:
       - id: messaging.url
         type: string
         brief: Copy the `QueueUrl` request field
 
-  - id: SQS.SendMessage
+  - id: sqs.sendmessage
+    brief: SQS.SendMessage
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -397,7 +426,8 @@ groups:
         type: string
         brief: ray | Copy the keys of the `MessageAttributes` request object field
 
-  - id: SQS.SendMessageBatch
+  - id: sqs.sendmessagebatch
+    brief: SQS.SendMessageBatch
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -410,7 +440,8 @@ groups:
         type: number
         brief: Fill in the number of elements in the `Messages` request list field
 
-  - id: SQS.SetQueueAttributes
+  - id: sqs.setqueueattributes
+    brief: SQS.SetQueueAttributes
     extends: awssdk
     attributes:
       - id: messaging.url
@@ -421,7 +452,8 @@ groups:
         brief: ray | Copy the keys of the `Attributes` request object field
 
 
-  - id: Lambda.Invoke
+  - id: lambda.invoke
+    brief: Lambda.Invoke
     extends: awssdk
     attributes:
       - id: faas.invoked_name
@@ -446,7 +478,8 @@ groups:
         type: string
         brief: Copy the `X-Amz-Function-Error` response header. SDKs may present this as a `FunctionError` field
 
-  - id: Lambda.InvokeAsync
+  - id: lambda.invokeasync
+    brief: Lambda.InvokeAsync
     extends: awssdk
     attributes:
       - id: faas.invoked_name
@@ -459,7 +492,8 @@ groups:
         type: string
         brief: Fill in the value of the region from the API endpoint (SDKs should provide this separate from the request)
 
-  - id: S3.CopyObject
+  - id: s3.copyobject
+    brief: S3.CopyObject
     extends: awssdk
     attributes:
       - id: source_bucket_name
@@ -475,7 +509,8 @@ groups:
         type: string
         brief: Copy the `DestinationKey` request field
 
-  - id: S3.CopyPart
+  - id: s3.copypart
+    brief: S3.CopyPart
     extends: awssdk
     attributes:
       - id: source_bucket_name
@@ -491,7 +526,8 @@ groups:
         type: string
         brief: Copy the `DestinationKey` request field
 
-  - id: S3.GetObject
+  - id: s3.getobject
+    brief: S3.GetObject
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -504,7 +540,8 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.PutObject
+  - id: s3.putobject
+    brief: S3.PutObject
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -514,7 +551,8 @@ groups:
         type: string
         brief: Copy the `Key` request field
 
-  - id: S3.GetObjectAcl
+  - id: s3.getobjectacl
+    brief: S3.GetObjectAcl
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -527,14 +565,16 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.CreateBucket
+  - id: s3.createbucket
+    brief: S3.CreateBucket
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.ListObjectsV2
+  - id: s3.listobjectsv2
+    brief: S3.ListObjectsV2
     extends: awssdk
     attributes:
       - id: prefix
@@ -544,7 +584,8 @@ groups:
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.ListObjects
+  - id: s3.listobjects
+    brief: S3.ListObjects
     extends: awssdk
     attributes:
       - id: prefix
@@ -554,7 +595,8 @@ groups:
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetObjectTagging
+  - id: s3.getobjecttagging
+    brief: S3.GetObjectTagging
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -567,7 +609,8 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.SetObjectTagging
+  - id: s3.setobjecttagging
+    brief: S3.SetObjectTagging
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -580,7 +623,8 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.ListVersions
+  - id: s3.listversions
+    brief: S3.ListVersions
     extends: awssdk
     attributes:
       - id: prefix
@@ -590,7 +634,8 @@ groups:
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetObjectAcl
+  - id: s3.setobjectacl
+    brief: S3.SetObjectAcl
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -603,38 +648,32 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.GetBucketAcl
+  - id: s3.getbucketacl
+    brief: S3.GetBucketAcl
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetBucketAcl
+  - id: s3.setbucketacl
+    brief: S3.SetBucketAcl
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.HeadBucket
+  - id: s3.headbucket
+    brief: S3.HeadBucket
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.UploadPart
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-      - id: key
-        type: string
-        brief: Copy the `Key` request field
-
-  - id: S3.DeleteObject
+  - id: s3.uploadpart
+    brief: S3.UploadPart
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -644,48 +683,8 @@ groups:
         type: string
         brief: Copy the `Key` request field
 
-  - id: S3.DeleteBucket
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteObjects
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteVersion
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-      - id: key
-        type: string
-        brief: Copy the `Key` request field
-      - id: version_id
-        type: string
-        brief: Copy the `VersionId` request field
-
-  - id: S3.GetBucketPolicy
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.SetBucketPolicy
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.ListParts
+  - id: s3.deleteobject
+    brief: S3.DeleteObject
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -695,7 +694,24 @@ groups:
         type: string
         brief: Copy the `Key` request field
 
-  - id: S3.RestoreObject
+  - id: s3.deletebucket
+    brief: S3.DeleteBucket
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.deleteobjects
+    brief: S3.DeleteObjects
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.deleteversion
+    brief: S3.DeleteVersion
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -708,7 +724,35 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.RestoreObjectV2
+  - id: s3.getbucketpolicy
+    brief: S3.GetBucketPolicy
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.setbucketpolicy
+    brief: S3.SetBucketPolicy
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.listparts
+    brief: S3.ListParts
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+      - id: key
+        type: string
+        brief: Copy the `Key` request field
+
+  - id: s3.restoreobject
+    brief: S3.RestoreObject
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -721,98 +765,8 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.SetBucketNotificationConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteBucketLifecycleConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.GetBucketNotificationConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteBucketCrossOriginConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.SetBucketCrossOriginConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.GetBucketCrossOriginConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.ListBucketInventoryConfigurations
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.GetBucketReplicationConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.SetBucketReplicationConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteBucketReplicationConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteBucketAnalyticsConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteBucketInventoryConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.ListBucketAnalyticsConfigurations
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteObjectTagging
+  - id: s3.restoreobjectv2
+    brief: S3.RestoreObjectV2
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -825,56 +779,112 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.SetBucketVersioningConfiguration
+  - id: s3.setbucketnotificationconfiguration
+    brief: S3.SetBucketNotificationConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetBucketVersioningConfiguration
+  - id: s3.deletebucketlifecycleconfiguration
+    brief: S3.DeleteBucketLifecycleConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetBucketWebsiteConfiguration
+  - id: s3.getbucketnotificationconfiguration
+    brief: S3.GetBucketNotificationConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetBucketLifecycleConfiguration
+  - id: s3.deletebucketcrossoriginconfiguration
+    brief: S3.DeleteBucketCrossOriginConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetBucketLifecycleConfiguration
+  - id: s3.setbucketcrossoriginconfiguration
+    brief: S3.SetBucketCrossOriginConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetBucketTaggingConfiguration
+  - id: s3.getbucketcrossoriginconfiguration
+    brief: S3.GetBucketCrossOriginConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetBucketTaggingConfiguration
+  - id: s3.listbucketinventoryconfigurations
+    brief: S3.ListBucketInventoryConfigurations
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetObjectMetadata
+  - id: s3.getbucketreplicationconfiguration
+    brief: S3.GetBucketReplicationConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.setbucketreplicationconfiguration
+    brief: S3.SetBucketReplicationConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.deletebucketreplicationconfiguration
+    brief: S3.DeleteBucketReplicationConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.deletebucketanalyticsconfiguration
+    brief: S3.DeleteBucketAnalyticsConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.deletebucketinventoryconfiguration
+    brief: S3.DeleteBucketInventoryConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.listbucketanalyticsconfigurations
+    brief: S3.ListBucketAnalyticsConfigurations
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.deleteobjecttagging
+    brief: S3.DeleteObjectTagging
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -887,21 +897,94 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.GetBucketLocation
+  - id: s3.setbucketversioningconfiguration
+    brief: S3.SetBucketVersioningConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetBucketLoggingConfiguration
+  - id: s3.getbucketversioningconfiguration
+    brief: S3.GetBucketVersioningConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.ListMultipartUploads
+  - id: s3.getbucketwebsiteconfiguration
+    brief: S3.GetBucketWebsiteConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.getbucketlifecycleconfiguration
+    brief: S3.GetBucketLifecycleConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.setbucketlifecycleconfiguration
+    brief: S3.SetBucketLifecycleConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.getbuckettaggingconfiguration
+    brief: S3.GetBucketTaggingConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.setbuckettaggingconfiguration
+    brief: S3.SetBucketTaggingConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.getobjectmetadata
+    brief: S3.GetObjectMetadata
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+      - id: key
+        type: string
+        brief: Copy the `Key` request field
+      - id: version_id
+        type: string
+        brief: Copy the `VersionId` request field
+
+  - id: s3.getbucketlocation
+    brief: S3.GetBucketLocation
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.getbucketloggingconfiguration
+    brief: S3.GetBucketLoggingConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.listmultipartuploads
+    brief: S3.ListMultipartUploads
     extends: awssdk
     attributes:
       - id: prefix
@@ -911,83 +994,40 @@ groups:
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.DeleteBucketPolicy
+  - id: s3.deletebucketpolicy
+    brief: S3.DeleteBucketPolicy
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.DeleteBucketEncryption
+  - id: s3.deletebucketencryption
+    brief: S3.DeleteBucketEncryption
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetBucketAccelerateConfiguration
+  - id: s3.setbucketaccelerateconfiguration
+    brief: S3.SetBucketAccelerateConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetBucketWebsiteConfiguration
+  - id: s3.setbucketwebsiteconfiguration
+    brief: S3.SetBucketWebsiteConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.CompleteMultipartUpload
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-      - id: key
-        type: string
-        brief: Copy the `Key` request field
-
-  - id: S3.InitiateMultipartUpload
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-      - id: key
-        type: string
-        brief: Copy the `Key` request field
-
-  - id: S3.SetBucketEncryption
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.SetBucketLoggingConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.DeleteBucketWebsiteConfiguration
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.GetBucketEncryption
-    extends: awssdk
-    attributes:
-      - id: bucket_name
-        type: string
-        brief: Copy the `BucketName` request field
-
-  - id: S3.AbortMultipartUpload
+  - id: s3.completemultipartupload
+    brief: S3.CompleteMultipartUpload
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -997,7 +1037,62 @@ groups:
         type: string
         brief: Copy the `Key` request field
 
-  - id: S3.GeneratePresignedUrl
+  - id: s3.initiatemultipartupload
+    brief: S3.InitiateMultipartUpload
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+      - id: key
+        type: string
+        brief: Copy the `Key` request field
+
+  - id: s3.setbucketencryption
+    brief: S3.SetBucketEncryption
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.setbucketloggingconfiguration
+    brief: S3.SetBucketLoggingConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.deletebucketwebsiteconfiguration
+    brief: S3.DeleteBucketWebsiteConfiguration
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.getbucketencryption
+    brief: S3.GetBucketEncryption
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+
+  - id: s3.abortmultipartupload
+    brief: S3.AbortMultipartUpload
+    extends: awssdk
+    attributes:
+      - id: bucket_name
+        type: string
+        brief: Copy the `BucketName` request field
+      - id: key
+        type: string
+        brief: Copy the `Key` request field
+
+  - id: s3.generatepresignedurl
+    brief: S3.GeneratePresignedUrl
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -1010,70 +1105,80 @@ groups:
         type: string
         brief: Copy the `VersionId` request field
 
-  - id: S3.DeleteBucketTaggingConfiguration
+  - id: s3.deletebuckettaggingconfiguration
+    brief: S3.DeleteBucketTaggingConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3GetBucketAccelerateConfiguration
+  - id: s3getbucketaccelerateconfiguration
+    brief: S3GetBucketAccelerateConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetBucketMetricsConfiguration
+  - id: s3.getbucketmetricsconfiguration
+    brief: S3.GetBucketMetricsConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.ListBucketMetricsConfigurations
+  - id: s3.listbucketmetricsconfigurations
+    brief: S3.ListBucketMetricsConfigurations
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetBucketInventoryConfiguration
+  - id: s3.setbucketinventoryconfiguration
+    brief: S3.SetBucketInventoryConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetBucketMetricsConfiguration
+  - id: s3.setbucketmetricsconfiguration
+    brief: S3.SetBucketMetricsConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.SetBucketAnalyticsConfiguration
+  - id: s3.setbucketanalyticsconfiguration
+    brief: S3.SetBucketAnalyticsConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.DeleteBucketMetricsConfiguration
+  - id: s3.deletebucketmetricsconfiguration
+    brief: S3.DeleteBucketMetricsConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetBucketAnalyticsConfiguration
+  - id: s3.getbucketanalyticsconfiguration
+    brief: S3.GetBucketAnalyticsConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
         type: string
         brief: Copy the `BucketName` request field
 
-  - id: S3.GetBucketInventoryConfiguration
+  - id: s3.getbucketinventoryconfiguration
+    brief: S3.GetBucketInventoryConfiguration
     extends: awssdk
     attributes:
       - id: bucket_name
@@ -1081,7 +1186,8 @@ groups:
         brief: Copy the `BucketName` request field
 
 
-  - id: SageMakerRuntime.InvokeEndpoint
+  - id: sagemakerruntime.invokeendpoint
+    brief: SageMakerRuntime.InvokeEndpoint
     extends: awssdk
     attributes:
       - id: endpoint_name

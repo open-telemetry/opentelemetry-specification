@@ -7,7 +7,7 @@ generation of semantics-related code.
 ## Generation
 
 These YAML files are used by the make target `table-generation` to generate consistently
-formattted Markdown tables for all semantic conventions in the specification. Run it from the root of this repository using the command
+formatted Markdown tables for all semantic conventions in the specification. Run it from the root of this repository using the command
 
 ```
 make table-generation
