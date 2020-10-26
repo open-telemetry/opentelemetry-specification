@@ -297,8 +297,7 @@ Each processor registered on `TracerProvider` is a start of a pipeline that cons
 of one or more span processors and, optionally, one or more exporters. The SDK MUST
 allow ending each pipeline with an individual exporter.
 
-The SDK MUST allow users to implement and configure custom processors and decorate
-built-in processors for advanced scenarios such as tagging or filtering.
+The SDK MUST allow users to implement and configure custom processors.
 
 The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
