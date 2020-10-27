@@ -80,14 +80,14 @@ Names SHOULD follow these rules:
   
 ### Name Pluralization guidelines
 
-- When attribute represents a single entity, the attribute name SHOULD BE singular.
+- When an attribute represents a single entity, the attribute name SHOULD be singular.
 
-- When attribute can represent multiple entities, the attribute name SHOULD BE pluralized
-  and the value type SHOULD BE an array.
+- When attribute can represent multiple entities, the attribute name SHOULD be pluralized
+  and the value type SHOULD be an array.
 
-- When attribute represents a measurement,
+- When an attribute represents a measurement,
   [Metric Name Pluralization Guidelines](https://github.com/pmm-sumo/opentelemetry-specification/blob/master/specification/metrics/semantic_conventions/README.md#pluralization)
-  SHOULD BE followed for the attribute name.
+  SHOULD be followed for the attribute name.
 
 ### Recommendations for OpenTelemetry Authors
 
