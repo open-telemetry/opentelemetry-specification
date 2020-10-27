@@ -7,7 +7,7 @@
 * [Sampling](#sampling)
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
-* [Limits on Span Collections and Attributes](#limits-on-span-collections-and-attributes)
+* [Limits on Span Collections](#limits-on-span-collections)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -264,9 +264,7 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
 
-<a name="limits-on-span-collections"/></a>
-
-## Limits on Span Collections and Attributes
+## Limits on Span Collections
 
 Erroneous code can add unintended attributes, events, and links to a span. If
 these collections are unbounded, they can quickly exhaust available memory,
@@ -276,18 +274,12 @@ To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
 the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
 
-Similarly, SDKs MAY be configured to truncate attribute values. By default, attribute
-values SHOULD NOT be truncated. If an SDK provides a way to set this limit and the
-limit is set, then for each span attribute value, serialized into a string,
-if it exceeds that limit, SDKs MUST truncate that value, so that its length
-is at most equal to the limit.
-
 If there is a configurable limit, the SDK SHOULD honor the environment variables
-specified in [SDK environment variables](../sdk-environment-variables.md#span-limits).
+specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
-should not be emitted more than once per span, attribute, event, or link.
+should not be emitted once per span, or per discarded attribute, event, or links.
 
 ## Span processor
 

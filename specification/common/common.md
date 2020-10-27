@@ -6,6 +6,7 @@ Table of Contents
 </summary>
 
 - [Attributes](#attributes)
+  - [Attribute Limits](#attribute-limits)
   - [Attribute and Label Naming](#attribute-and-label-naming)
 
 </details>
@@ -37,6 +38,41 @@ This is required for map/dictionary structures represented as two arrays with
 indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
+
+### Attribute Limits
+
+Execution of erroneous code can result in unintended attributes. If there is no 
+limits placed on attributes, they can quickly exhaust available memory, resulting 
+in crashes that are difficult to recover from safely.
+
+SDKs MAY be configured to truncate attribute values. By default, attribute values 
+SHOULD NOT be truncated. If an SDK provides a way to set an attribute value size
+limit and the limit is set, then for each attribute value, serialized into a string,
+if it exceeds that limit, SDK Spans SHOULD truncate that value, so that its length
+is at most equal to the limit. However if a serialized value does not exceed the
+size limit, then it shouldn't be serialized.
+
+SDKs SHOULD choose any serialization protocol, which is performant and appropriate
+for the language and/or environment they are implemented in. Please note that the
+aforementioned behavior MAY yield a previously unexpected type. For example, if 
+an attribute was set and its value was an array, then after serialization, due to
+an exceeded size limit, its value SHOULD be a string. 
+
+There SHOULD be a log emitted to indicate to the user that an attribute was truncated.
+To prevent excessive logging, the log MUST NOT be emitted more than once per item
+on which an attribute is set.
+
+To define a limit SDKs SHOULD honor the environment variables specified in 
+[SDK environment variables](../sdk-environment-variables.md#attribute-limits). If an
+SDK does not implement truncation mechanism for all implementations of attributes,
+then it SHOULD NOT offer a single global environment variable for such a limit.
+SDKs SHOULD only offer environment variables for these types of attributes, for
+which that SDK implements truncation mechanism.
+
+Due to a possible increased implementation complexity, attribute value size limit
+MUST NOT be set to any number lower than 32. Please note that certain very low limits
+could even result in truncation of small numbers or booleans, and such a behavior
+is not valuable for preventing SDKs from exhausting large amounts of memory.
 
 ## Attribute and Label Naming
 

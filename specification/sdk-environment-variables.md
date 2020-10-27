@@ -22,8 +22,13 @@ Additional values can be specified in the respective SDK's documentation, in cas
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
-<a name="span-collection-limits"/></a>
+## Attribute Limits
 
+| Name                            | Description                          | Default | Notes |
+| ------------------------------- | ------------------------------------ | ------- | ----- |
+| OTEL_ATTRIBUTE_VALUE_SIZE_LIMIT | Maximum allowed attribute value size |         | Empty value is treated as infinity. Non-integer and negative values are invalid. MUST not be lower than 32. |
+
+<a name="span-collection-limits"></a>
 ## Span Limits
 
 | Name                            | Description                           | Default | Notes |
@@ -31,13 +36,13 @@ Additional values can be specified in the respective SDK's documentation, in cas
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count  | 1000    |       |
 | OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count      | 1000    |       |
 | OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count       | 1000    |       |
-| OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT  | Maximum allowed span attribute length |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT  | Maximum allowed span attribute length |         | See notes for OTEL_ATTRIBUTE_VALUE_SIZE_LIMIT |
 
 ## Metric Limits
 
 | Name                         | Description                         | Default | Notes |
 | ---------------------------- | ----------------------------------- | ------- | ----- |
-| OTEL_METRIC_LABEL_SIZE_LIMIT | Maximum allowed metric value length |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_METRIC_LABEL_SIZE_LIMIT | Maximum allowed metric value length |         | See notes for OTEL_ATTRIBUTE_VALUE_SIZE_LIMIT |
 
 ## OTLP Exporter
 
