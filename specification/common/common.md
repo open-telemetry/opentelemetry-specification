@@ -86,7 +86,7 @@ Names SHOULD follow these rules:
   and the value type SHOULD be an array.
 
 - When an attribute represents a measurement,
-  [Metric Name Pluralization Guidelines](https://github.com/pmm-sumo/opentelemetry-specification/blob/master/specification/metrics/semantic_conventions/README.md#pluralization)
+  [Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
   SHOULD be followed for the attribute name.
 
 ### Recommendations for OpenTelemetry Authors
