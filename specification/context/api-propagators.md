@@ -346,8 +346,8 @@ When extracting B3, propagators:
   formats. The single-header variant takes precedence over
   the multi-header version.
 * MUST preserve a debug trace flag, if received, and propagate
-  it with subsequent requests. Internally, an OpenTelemetry implementation
-  MUST convert this to a sampled trace flag.
+  it with subsequent requests. Additionally, an OpenTelemetry implementation
+  MUST set the sampled trace flag when the debug flag is set.
 * MUST NOT reuse `X-B3-SpanId` as the id for the server-side span.
 
 #### Inject
