@@ -194,7 +194,7 @@ groups:
             such as `findAndModify`, or the SQL keyword.
           note: >
             It is not recommended to attempt any client-side parsing of
-            `db.statement` just to get this property, but it should be set if 
+            `db.statement` just to get this property, but it should be set if
             the operation name is provided by the library being instrumented.
             If the statement has an ambiguous operation, or performs more than
             one operation, this value may be omitted.
@@ -206,11 +206,11 @@ groups:
             conditional: Recommended if available.
           brief: The name of the primary table, collection, segment, etc... that the operation is acting upon, including the schema name (if applicable).
           note: >
-            It is not recommended to attempt any  client-side parsing of
+            It is not recommended to attempt any client-side parsing of
             `db.statement` just to get this property, but it should be set if
             it is provided by the library being instrumented.
-            If the operation is acting upon an anonymous table, or more than one
-            table, this value may be omitted.
+            If the operation is acting upon an anonymous table, or more than one table, this
+            value may be omitted.
           examples: ['public.users', 'customers']
         - ref: net.peer.name
           tag: connection-level

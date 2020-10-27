@@ -144,9 +144,9 @@ Usually only one `db.name` will be used per connection though.
 
 **[3]:** The value may be sanitized to exclude sensitive information.
 
-**[4]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if  the operation name is provided by the library being instrumented. If the statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
+**[4]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
 
-**[5]:** It is not recommended to attempt any  client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value may be omitted.
+**[5]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value may be omitted.
 <!-- endsemconv -->
 
 For **Redis**, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.
