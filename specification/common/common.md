@@ -48,9 +48,9 @@ in crashes that are difficult to recover from safely.
 SDKs MAY be configured to truncate attribute values. By default, attribute values 
 SHOULD NOT be truncated. If an SDK provides a way to set an attribute value size
 limit and the limit is set, then for each attribute value, serialized into a string,
-if it exceeds that limit, SDK Spans SHOULD truncate that value, so that its length
+if it exceeds that limit, SDK Spans MUST truncate that value, so that its length
 is at most equal to the limit. However if a serialized value does not exceed the
-size limit, then it shouldn't be serialized.
+size limit, then it SHOULD NOT be serialized.
 
 SDKs SHOULD choose any serialization protocol, which is performant and appropriate
 for the language and/or environment they are implemented in. Please note that the
