@@ -31,12 +31,12 @@ Additional values can be specified in the respective SDK's documentation, in cas
 <a name="span-collection-limits"></a>
 ## Span Limits
 
-| Name                            | Description                           | Default | Notes |
-| ------------------------------- | ------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count  | 1000    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count      | 1000    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count       | 1000    |       |
-| OTEL_SPAN_ATTRIBUTE_SIZE_LIMIT  | Maximum allowed span attribute length |         | See notes for OTEL_ATTRIBUTE_VALUE_SIZE_LIMIT |
+| Name                                  | Description                           | Default | Notes |
+| ------------------------------------- | ------------------------------------- | ------- | ----- |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed span attribute count  | 1000    |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT           | Maximum allowed span event count      | 1000    |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT            | Maximum allowed span link count       | 1000    |       |
+| OTEL_SPAN_ATTRIBUTE_VALUE_SIZE_LIMIT  | Maximum allowed span attribute length |         | See notes for OTEL_ATTRIBUTE_VALUE_SIZE_LIMIT |
 
 ## Metric Limits
 
