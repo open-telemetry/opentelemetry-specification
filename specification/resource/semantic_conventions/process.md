@@ -16,7 +16,7 @@
 
 Between `process.command_args` and `process.command_line`, usually `process.command_args` should be preferred.
 On Windows and other systems where the native format of process commands is a single string,
-`process.command_args` can additionally (or instead) be used.
+`process.command_line` can additionally (or instead) be used.
 
 For backwards compatibility with older versions of this semantic convention,
 it is possible but deprecated to use an array as type for `process.command_line`.
