@@ -7,13 +7,13 @@ groups:
       - id: container.arn
         type: string
         brief: >
-          The ARN of an [ECS container instance](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_instances.html).
+          The Amazon Resource Name (ARN) of an [ECS container instance](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_instances.html).
         examples: ['arn:aws:ecs:us-west-1:123456789123:container/32624152-9086-4f0e-acae-1a75b14fe4d9']
-      - id: cluster
+      - id: cluster.arn
         type: string
         brief: >
-          The name of an [ECS cluster](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/clusters.html).
-        examples: ['opentelemetry-cluster']
+          The ARN of an [ECS cluster](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/clusters.html).
+        examples: ['arn:aws:ecs:us-west-2:123456789123:cluster/my-cluster']
       - id: launchtype
         type:
           allow_custom_values: false
