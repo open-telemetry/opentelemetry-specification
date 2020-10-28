@@ -78,7 +78,8 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    and the [table above](#recording-sampled-reaction-table) on whether
    to pass the `Span` to `SpanProcessor`s.
    A non-recording span MAY be implemented using the same mechanism as when a
-   `Span` is created with no API-implementation installed (i.e., a [Propagated Span](api.md#propagated-span-creation)).
+   `Span` is created with no API-implementation installed or as described in
+   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
 
 ### Sampler
 
