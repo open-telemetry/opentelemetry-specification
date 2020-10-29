@@ -19,7 +19,7 @@
 At least one of `process.executable.name`, `process.executable.path`, `process.command`, or `process.command_line` is required.
 
 `process.runtime.name` SHOULD be set to one of the values listed below, unless more detailed instructions are provided.
-If none of the listed values apply, a custom value best describing the runtime CAN be used.
+If none of the listed values apply, a custom value best describing the runtime MAY be used.
 
 ***Erlang Runtimes:***
 
