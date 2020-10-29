@@ -11,11 +11,19 @@ Prometheus exposition format in two ways:
 * OpenTelemetry may need to expose OpenTelemetry generated metrics in the
   OpenMetrics exposition format.
 
-### Name and Label Keys
+### OpenMetrics to OpenTelemetry
 
-This is primarily problematic for metric and label _naming_; the OpenMetrics
-exposition format expressly forbits some characters that are allowed in
-OpenTelemetry.
+The OpenTelemetry collector implements a Prometheus receiver, which reads
+metrics in the OpenMetrics exposition format. For more information, refer to the
+[Prometheus Receiver Design Document](https://github.com/open-telemetry/opentelemetry-collector/blob/master/receiver/prometheusreceiver/DESIGN.md).
+
+### OpenTelemetry to OpenMetrics
+
+#### Name and Label Keys
+
+Exposting OpenTelemetry metrics in the OpenMetrics format is primarily
+problematic for metric and label naming; the OpenMetrics exposition format
+expressly forbits some characters that are allowed in OpenTelemetry.
 
 When converting OpenTelemetry metric events to the OpenMetrics exposition
 format, the name field and all label keys MUST be sanitized by replacing
