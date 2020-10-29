@@ -17,6 +17,6 @@
 
 | Value  | Description |
 |---|---|
-| `EC2` | EC2 |
-| `Fargate` | Fargate |
+| `EC2` | ec2 |
+| `Fargate` | fargate |
 <!-- endsemconv -->

@@ -18,9 +18,9 @@ groups:
         type:
           allow_custom_values: false
           members:
-            - id: EC2
+            - id: ec2
               value: "EC2"
-            - id: Fargate
+            - id: fargate
               value: "Fargate"
         brief: >
           The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
