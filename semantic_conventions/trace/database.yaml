@@ -199,19 +199,6 @@ groups:
             If the statement has an ambiguous operation, or performs more than
             one operation, this value may be omitted.
           examples: ['findAndModify', 'HMSET', 'SELECT']
-        - id: table
-          tag: call-level
-          type: string
-          required:
-            conditional: Recommended if available.
-          brief: The name of the primary table, collection, segment, etc... that the operation is acting upon, including the schema name (if applicable).
-          note: >
-            It is not recommended to attempt any client-side parsing of
-            `db.statement` just to get this property, but it should be set if
-            it is provided by the library being instrumented.
-            If the operation is acting upon an anonymous table, or more than one table, this
-            value may be omitted.
-          examples: ['public.users', 'customers']
         - ref: net.peer.name
           tag: connection-level
           required:
@@ -309,6 +296,27 @@ groups:
             The collection being accessed within the database stated in `db.name`.
           examples: [ 'customers', 'products' ]
 
+    - id: db.sql
+      prefix: 'db.sql'
+      extends: 'db'
+      brief: >
+        Call-level attrbiutes for SQL databases
+      attributes:
+        - id: table
+          tag: call-level-tech-specific
+          type: string
+          required:
+            conditional: Recommended if available.
+          brief: The name of the primary table that the operation is acting upon, including the schema name (if applicable).
+          note: >
+            It is not recommended to attempt any client-side parsing of
+            `db.statement` just to get this property, but it should be set if
+            it is provided by the library being instrumented.
+            If the operation is acting upon an anonymous table, or more than one table, this
+            value may be omitted.
+          examples: ['public.users', 'customers']
+
+
     - id: db.tech
       brief: "Semantic convention group for specific technologies"
       constraints:
@@ -316,3 +324,4 @@ groups:
         - include: 'db.hbase'
         - include: 'db.redis'
         - include: 'db.mongodb'
+        - include: 'db.sql'
