@@ -326,6 +326,60 @@ Synchronous events have one additional property, the distributed
 [Context](../context/context.md) (containing Span, Baggage, etc.)
 that was active at the time.
 
+### Units of Measure
+
+All unit strings used in OpenTelemetry are expected to be valid according to The
+[Unified Code for Units of Measure](https://ucum.org/ucum.html) (UCUM)
+specification using the case-insensitive form.
+
+Metric instruments SHOULD NOT validate that the unit string passed to them is a
+valid value. The default unit to be used by a metric instrument when unit is not
+provided SHOULD be the non-annotated unity unit (that is: `1`).
+
+OpenTelemetry Metrics SDKs SHOULD NOT attempt to reaggregate metrics of
+dissimilar units, even if they are commensurable.
+
+The OpenTelemetry API MUST provide a convenient mechanism for creating
+instruments with the following units:
+
+| Name        | Kind of Quantity         | Unit String   |
+| ------------| ----------------         | -----------   |
+| percent     | fraction of a total      | %             |
+| nanosecond  | time                     | NS            |
+| microsecond | time                     | US            |
+| millisecond | time                     | MS            |
+| second      | time                     | S             |
+| byte        | amount of information    | BY            |
+| kilobyte    | amount of information    | KIBBY         |
+| megabyte    | amount of information    | MIBBY         |
+| gigabyte    | amount of information    | GIBBY         |
+| terabyte    | amount of information    | TIBBY         |
+| bit         | amount of information    | BIT           |
+| kilobit     | amount of information    | KIBBIT        |
+| megabit     | amount of information    | MIBBIT        |
+| gigabit     | amount of information    | GIBBIT        |
+| terabit     | amount of information    | TIBBIT        |
+| baud        | signal transmission rate | BD            |
+| kilobaud    | signal transmission rate | KIBBD         |
+| megabaud    | signal transmission rate | MIBBD         |
+| gigabaud    | signal transmission rate | GIBBD         |
+| terabaud    | signal transmission rate | TIBBD         |
+| connections | connections              | {connections} |
+| errors      | errors                   | {errors}      |
+| faults      | faults                   | {faults}      |
+| operations  | operations               | {operations}  |
+| packets     | packets                  | {packets}     |
+| processes   | processes                | {processes}   |
+| threads     | threads                  | {threads}     |
+
+The API MAY provide constants for each of the above required units. If it is
+more idiomatic for the implementation language, the API MAY provide convenience
+functions to compose these unit strings from a prefix, base unit, and
+annotation.
+
+The OpenTelemetry Metrics API MAY also provide convenience functions to build
+custom [non-units](https://ucum.org/ucum.html#para-50).
+
 ## Meter provider
 
 A concrete `MeterProvider` implementation can be obtained by initializing and

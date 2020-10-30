@@ -105,14 +105,28 @@ instrument creation, but can be added if there is ambiguity.
 
 ### Units
 
-Units should follow the [UCUM](http://unitsofmeasure.org/ucum.html) (need
-more clarification in
-[#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
+The unit string MUST follow the
+[Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html) (UCUM)
+case-insensitive specification.
 
-- Instruments for **utilization** metrics (that measure the fraction out of a
-total) are dimensionless and SHOULD use the default unit `1` (the unity).
-- Instruments that measure an integer count of something SHOULD use the
-default unit `1` (the unity) and
-[annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
-give additional meaning. For example `{packets}`, `{errors}`, `{faults}`,
-etc.
+Instruments that measure the fraction out of a total and whose values are in
+the range `[0, 1]` SHOULD use the default unity unit (`1`).
+Instruments that measure the fraction out of a total as a percentage, whose
+values are in the range `[0, 100]` SHOULD use the percent unit (`%`).
+
+Instruments that represent the number of discrete instances of a countable
+quantity SHOULD use either the default unity unit (`1`) or a
+[non-unit](https://ucum.org/ucum.html#para-50) (example: `{errors}` or
+`{packets}`)
+
+Implementors may choose the correct prefix to use for the scale of values being
+measured. The choice of prefix may affect the value type to be recorded.
+
+> Example: it may be reasonable to record time as an integer when using an
+> instrument with a unit of nanosecond, when the same duration would be recorded
+> as a floating point on an instrument with a unit of second.
+
+OpenTelemetry APIs provide constants for all units used in the semantic
+conventions in these specifications (including
+[non-units](https://ucum.org/ucum.html#para-50)). When new units are added to
+semantic conventions, the APIs should be updated to include them as constants.
