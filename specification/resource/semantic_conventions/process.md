@@ -104,7 +104,7 @@ Python instrumentation should fill in the values as follows:
   vinfo = sys.implementation.version
   result = '.'.join(map(str, vinfo[:3])) + (
       '' if vinfo.releaselevel == "final" and not vinfo.serial
-      else vinfo.releaselevel + str(vinfo.serial))
+      else vinfo.releaselevel + '.' + str(vinfo.serial))
   ```
 
 - `process.runtime.description` - Fill in the value of [`sys.version`](https://docs.python.org/3/library/sys.html#sys.version) as-is.
