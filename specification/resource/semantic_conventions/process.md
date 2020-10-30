@@ -92,10 +92,8 @@ Python instrumentation should fill in the values as follows:
 
 - `process.runtime.name` -
   Fill in the value of [`sys.implementation.name`][py_impl]
-  (fall back to [`platform.python_implementation().lower()`](https://docs.python.org/3/library/platform.html#platform.python_implementation) if `sys.implementation` is not available)
 - `process.runtime.version` -
   Fill in the [`sys.implementation.version`][py_impl] values separated by dots.
-  Fall back to using [`sys.version_info`](https://docs.python.org/3/library/sys.html#sys.version_info) if that is not available.
   Leave out the release level and serial if the release level
   equals `final` and the serial equals zero
   (leave out either both or none).
@@ -120,14 +118,11 @@ Examples for some Python runtimes:
 | CPython 3.7.3 on Windows | cpython | 3.7.3 | 3.7.3 (v3.7.3:ef4ec6ed12, Mar 25 2019, 22:22:05) [MSC v.1916 64 bit (AMD64)] |
 | CPython 3.8.6 on Linux | cpython | 3.8.6 | 3.8.6 (default, Sep 30 2020, 04:00:38) <br>[GCC 10.2.0] |
 | PyPy 3 7.3.2 on Linux | pypy | 3.7.4 | 3.7.4 (?, Sep 27 2020, 15:12:26)<br>[PyPy 7.3.2-alpha0 with GCC 10.2.0] |
-| Jython 2.7.2 on Linux | jython | 2.7.2 | 2.7.2 (v2.7.2:925a3cc3b49d, Mar 21 2020, 10:03:58)<br>[Java HotSpot(TM) 64-Bit Server VM (Oracle Corporation)] |
 
 Note that on Linux, there is an actual newline in the `sys.version` string,
 and the CPython string had a trailing space in the first line.
 
 Pypy provided a CPython-compatible version in `sys.implementation.version` instead of the actual implementation version which is available in `sys.version`.
-
-Jython does not support Python 3, so there the fallbacks without `sys.implementation` were used.
 
 ***Ruby Runtimes:***
 
