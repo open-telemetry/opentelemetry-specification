@@ -15,7 +15,7 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/392)    | +  | +    | + | +  | + | +  |
-|Shutdown                                      |   | + (SDK only) | + | +    |    |      |   |    |   |    |
+|Shutdown (SDK only required)                  |   | +  | + | +    |    |      |   |    |   |    |
 |[Tracing Context Utilities](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracing-context-utilities)|
 |Get active Span                               |   | +  | + | +    |    |      |   |    |   |    |
 |Set active Span                               |   | +  | + | +    |    |      |   |    |   |    |
@@ -155,7 +155,7 @@ status of the feature is not known.
 |InstrumentationLibrary mapping                |   | +  | - | +    |    | -    | - | -  |   |    |
 |Boolean attributes                            | + | +  | + | +    |    | +    | + | +  |   |    |
 |Array attributes                              | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110)    |    | +    | + | +  |   |    |
-|Status mapping                                | + | -  | + | +    |    | +    | + | +  |   |    |
+|Status mapping                                | + | +  | + | +    |    | +    | + | +  |   |    |
 |Event attributes mapping to Annotations       | + | +  | + | +    |    | +    | + | +  |   |    |
 |Integer microseconds in timestamps            |   | +  |   | +    |    |      |   |    |   |    |
 |Jaeger|
