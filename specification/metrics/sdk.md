@@ -110,7 +110,7 @@ collection cycle.
 The Processor component is intended as the most customizable component
 in the export pipeline.  The Processor is responsible for selecting
 Aggregators to use for specific instruments, via an independent
-`AggregationSelector` interface, for reducing dimensionality, and for
+`AggregatorSelector` interface, for reducing dimensionality, and for
 conversion between DELTA and CUMULATIVE data point representation.
 The Processor interface supports arbitrary protocol-independent data
 transformation, and Processors can be chained together to form more
@@ -231,7 +231,7 @@ Accumulator, with detail shown for synchronous instruments.
 For a synchronous instrument, the Accumulator will:
 
 1. Map each active Label Set to a record, consisting of two instances of the same type Aggregator
-2. Enter new records into the mapping, calling the AggregationSelector if needed
+2. Enter new records into the mapping, calling the AggregatorSelector if needed
 3. Update the current Aggregator instance, responding to concurrent API events
 4. Call Aggregator.SynchronizedMove on the current Aggregator instance to: (a) copy its value into the snapshot Aggregator instance and (b) reset the current Aggregator to the zero state
 5. Call Processor.Process for every resulting Accumulation (i.e., Instrument, Label Set, Resource, and Aggregator snapshot)
@@ -256,7 +256,10 @@ The Accumulator MUST implement a Collect method that builds and
 processes current Accumulation values for active instruments, meaning
 those that were updated since the prior collection.  The Collect
 method MUST call the Processor to process Accumulations corresponding
-to all metric events that happened before the call.
+to all metric events that happened since the prior collection.
+
+Accumulations from a single instrument MUST be input to the Processor
+during a single [Processor checkpoint interval](#processor-checkpoint-interval).
 
 Accumulations MUST be computed during Collect using a _synchronized
 move_ operation on the Aggregator.  This operation, using some kind of synchronization, copies
@@ -266,11 +269,32 @@ collection period while the current one is processed.  An Accumulation
 is defined as the synchronously-copied Aggregator combined with the
 Label Set, Resource, and metric Descriptor.
 
+#### Accumulator: Asynchronous instrument state
+
+The set of asynchronous instruments registered through a Meter
+implementation each MUST be associated with single, non-null callback
+with either a single- or batch-instrument calling signature.
+
+The Accumulator MUST implement [single-value per label set restriction
+specified by the API](api.md#asynchronous-calling-conventions) for
+asynchronous instruments.  The Accumulator MUST ensure the
+last-observed value is the output value, after eliminating duplicate
+values.
+
 TODO: _Are there more Accumulator functional requirements?_
+- e.g., do callbacks run with timeouts? what should SDKs do if they do not return?
 
 ### Processor
 
 TODO _Processor functional requirements_
+
+### Processor checkpoint interval
+
+The Processor checkpoint interval brackets Accumulations into a single
+unit of data.  The Processor checkpoint interval starts and finishes
+before and after calling Accumulator.Collect to process Acumulations
+from one or more instruments.  An `ExportRecordSet` is computed when
+the Processor checkpoint interval is finished.
 
 ### Controller
 
@@ -371,7 +395,7 @@ Optional to this method:
 
 - the instrumentation library version of the named Meter in use.
 
-To help with instrumentat registration:
+To help with instrument registration:
 
 ```go
 // NewUniqueInstrumentMeterImpl returns a wrapped metric.MeterImpl with
@@ -452,9 +476,47 @@ considered language-specific details.
 
 ### Export pipeline detail
 
-TODO: define AggregatorSelector, Aggregator, Accumulation, ExportKind,
-ExportKindSelector, Aggregation, AggregationKind ExportRecord,
-ExportRecordSet
+#### Export pipeline data types
+
+**Accumulation**: Passed from the Accumulator to the Processor, this
+consists of the Instrument, the Label Set, the Resource, and a
+snapshot of the Aggregator state (i.e., the Aggregation).
+
+**Aggregation**: Output by an Aggregator, this represents state from
+one or more metric events.  These have various types (e.g., Sum,
+Histogram).
+
+**ExportRecord**: Passed from the Processor to the Exporter, this
+consists of the same metadata as the Accumulation, with the
+Aggregation corrected for ExportKind, with the associated start and
+end timestamps.
+
+**ExportRecordSet**: The set of ExportRecords computed during a
+Processor checkpoint interval.
+
+#### Export pipeline configuration
+
+**AggregationKind**: This is determined by the Aggregation, which is
+returned by an Aggregator, chosen by an AggregatorSelector.
+Aggregation kinds determine what data can be read from an Aggregation
+(i.e., the format).
+
+**ExportKind**: This is determined by the ExportKindSelector and may
+be cumulative or delta.  Note that the term ExportKind is used in the
+SDK to refer to this choice, while the same concept is called
+AggregationTemporality when stored as a field in the OpenTelemetry
+protocol.  TODO: rename ExportKind to AggregationTemporality?
+
+#### Export pipeline policies
+
+**AggregatorSelector**: This selector is associated with the
+Processor and called by the Accumulator to allocate new Aggregations.
+This selector determines the kind of aggregate information available
+to the exporter.
+
+**ExportKindSelector**: This selector is assocaited with the Exporter
+and called by the Processor to determine whether to allocate memory
+for ExportKind conversion (e.g., delta to cumulative conversion).
 
 ### Processor Detail
 
