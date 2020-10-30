@@ -42,7 +42,7 @@ Examples of span names:
 
 - `grpc.test.EchoService/Echo`
 - `com.example.ExampleRmiService/exampleMethod`
-- `MyCalcService.Calculator/Add` reported by the server and  
+- `MyCalcService.Calculator/Add` reported by the server and
   `MyServiceReference.ICalculator/Add` reported by the client for .NET WCF calls
 - `MyServiceWithNoPackage/theMethod`
 
@@ -96,15 +96,13 @@ Note that _method_ in this context is about the called remote procedure and _not
 For remote procedure calls via [gRPC][], additional conventions are described in this section.
 
 `rpc.system` MUST be set to `"grpc"`.
+`rpc.grpc.status_code` MUST be set to the status code of the gRPC operation.
 
 [gRPC]: https://grpc.io/
 
 ### Status
 
-Implementations MUST set status which MUST be the same as the gRPC client/server
-status. The mapping between gRPC canonical codes and OpenTelemetry status codes
-is 1:1 as OpenTelemetry canonical codes is just a snapshot of grpc codes which
-can be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
+The [Span Status](../api.md#set-status) MUST be left unset for an OK gRPC status code, and `Error` for all others.
 
 ### Events
 
