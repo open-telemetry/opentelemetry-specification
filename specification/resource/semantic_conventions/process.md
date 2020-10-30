@@ -103,7 +103,7 @@ Python instrumentation should fill in the values as follows:
   ```python
   vinfo = sys.implementation.version
   result = '.'.join(map(str, vinfo[:3])) + (
-      '' if vinfo.releaselevel == "final" and not vinfo.serial
+      '' if vinfo.releaselevel == 'final' and not vinfo.serial
       else vinfo.releaselevel + '.' + str(vinfo.serial))
   ```
 
