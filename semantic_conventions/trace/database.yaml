@@ -193,11 +193,12 @@ groups:
             The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations)
             such as `findAndModify`, or the SQL keyword.
           note: >
-            It is not recommended to attempt any client-side parsing of
-            `db.statement` just to get this property, but it should be set if
-            the operation name is provided by the library being instrumented.
-            If the statement has an ambiguous operation, or performs more than
-            one operation, this value may be omitted.
+            When setting this to an SQL keyword, it is not recommended to
+            attempt any client-side parsing of `db.statement` just to get this
+            property, but it should be set if the operation name is provided by
+            the library being instrumented.
+            If the SQL statement has an ambiguous operation, or performs more
+            than one operation, this value may be omitted.
           examples: ['findAndModify', 'HMSET', 'SELECT']
         - ref: net.peer.name
           tag: connection-level
