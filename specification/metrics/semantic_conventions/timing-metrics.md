@@ -59,7 +59,7 @@ If there is a corresponding span for the operation with defined trace semantic
 conventions, the labels should follow the attribute guidelines found in those
 semantic conventions, with the following caveats:
 
-1. Do not include any high-cardinality attributes, or replace them with a
+1. Avoid including any high-cardinality attributes, or replace them with a
 low-cardinality substitution.
 2. Replace non-string values with reasonable string representations when
 possible, and do not include attributes that cannot be easily represented as a
