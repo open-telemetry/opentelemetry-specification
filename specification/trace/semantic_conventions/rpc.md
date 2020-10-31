@@ -96,7 +96,7 @@ Note that _method_ in this context is about the called remote procedure and _not
 For remote procedure calls via [gRPC][], additional conventions are described in this section.
 
 `rpc.system` MUST be set to `"grpc"`.
-`rpc.grpc.status_code` MUST be set to the status code of the gRPC operation.
+`rpc.grpc.status_code` MUST be set to the status code number of the gRPC operation.
 
 [gRPC]: https://grpc.io/
 
