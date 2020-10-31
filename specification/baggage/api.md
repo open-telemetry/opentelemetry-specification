@@ -26,56 +26,53 @@ The Baggage API consists of:
 - the `Baggage`
 - functions to interact with the `Baggage` in a `Context`
 
-The functions described here are one way to approach interacting with the Baggage
-purely via the Context. Depending on language idioms, a language API MAY implement these functions
-by providing a struct or immutable object that represents the entire Baggage contents. This
-construct could then be added or removed from the Context with a single operation. For example,
-the [Clear](#clear) function could be implemented by having the user set an empty Baggage object/struct
-into the context. The [Get all](#get-all) function could be implemented by returning the Baggage
-object as a whole from the function call. If an idiom like this is implemented, the Baggage object/struct
-MUST be immutable, so that the containing Context also remains immutable.
+The functions described here are one way to approach interacting with the
+`Baggage` via having struct/object that represents the entire Baggage content.
+Depending on language idioms, a language API MAY implement these functions by
+providing the defined functionality interacting purely via the Context.
 
-The Baggage API MUST be fully functional in the absence of an installed SDK. This is required in
-order to enable transparent cross-process Baggage propagation. If a Baggage propagator is installed
-into the API, it will work with or without an installed SDK.
+The Baggage API MUST be fully functional in the absence of an installed SDK.
+This is required in order to enable transparent cross-process Baggage
+propagation. If a Baggage propagator is installed into the API, it will work
+with or without an installed SDK.
 
-### Baggage
+## Baggage
 
-`Baggage` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
-It is an abstract data type represented by a set of name/value pairs describing user-defined properties.
-Each name in `Baggage` MUST be associated with exactly one value.
+`Baggage` is used to annotate telemetry, adding context and information to
+metrics, traces, and logs. It is a struct/object type defined by a set of
+name/value pairs describing user-defined properties. Each name in `Baggage` MUST
+be associated with exactly one value.
 
-### Get all
+The `Baggage` struct/object/ MUST be immutable, so that the containing Context
+also remains immutable.
 
-Returns the name/value pairs in the `Baggage`. The order of name/value pairs MUST NOT be
-significant. Based on the language specification, the returned value can be
-either an immutable collection or an immutable iterator to the collection of
-name/value pairs in the `Baggage`.
+### Baggage operations
 
-OPTIONAL parameters:
+#### Get Value
 
-`Context` the context containing the `Baggage` from which to get the baggages.
-
-### Get baggage
-
-To access the value for a name/value pair by a prior event, the Baggage API
-MUST provide a function that takes a context and a name as input, and returns a
-value. Returns the value associated with the given name, or null
-if the given name is not present.
+To access the value for a name/value pair set by a prior event, the Baggage API
+MUST provide a function that takes the name as input, and returns a value.
+Returns the value associated with the given name, or null if the given name is
+not present.
 
 REQUIRED parameters:
 
 `Name` the name to return the value for.
 
-OPTIONAL parameters:
+#### Get All Values
 
-`Context` the context containing the `Baggage` from which to get the baggage entry.
+Returns the name/value pairs in the `Baggage`. The order of name/value pairs
+MUST NOT be significant. Based on the language specifics, the returned
+value can be either an immutable collection or an immutable iterator to the
+collection of name/value pairs in the `Baggage`.
 
-### Set baggage
+#### Set Value
 
-To record the value for a name/value pair, the Baggage API MUST provide a function which
-takes a context, a name, and a value as input. Returns a new `Context` which
-contains a `Baggage` with the new value.
+To record the value for a name/value pair, the Baggage API SHOULD provide a
+function which takes a a name, and a value as input. Returns a new `Baggage`
+that contains the new value. Depending on language idioms, a language API MAY
+implement these functions by using a `Builder` pattern and exposing a way to
+construct a `Builder` from a `Baggage`.
 
 REQUIRED parameters:
 
@@ -85,35 +82,63 @@ REQUIRED parameters:
 
 OPTIONAL parameters:
 
-`Metadata` Optional metadata associated with the name-value pair. This should be an opaque wrapper
-for a string with no semantic meaning. Left opaque to allow for future functionality.
+`Metadata` Optional metadata associated with the name-value pair. This should be
+an opaque wrapper for a string with no semantic meaning. Left opaque to allow
+for future functionality.
 
-`Context` The context containing the `Baggage` in which to set the baggage entry.
+#### Remove Name/Value
 
-### Remove baggage
-
-To delete a name/value pair, the Baggage API MUST provide a function which takes a context
-and a name as input. Returns a new `Context` which no longer contains the selected name.
+To delete a name/value pair, the Baggage API SHOULD provide a function which
+takes a name as input. Returns a new `Baggage` which no longer contains the
+selected name. Depending on language idioms, a language API MAY
+implement these functions by using a `Builder` pattern and exposing a way to
+construct a `Builder` from a `Baggage`.
 
 REQUIRED parameters:
 
 `Name` the name to remove.
 
-OPTIONAL parameters:
+### Clear Baggage in the Context
 
-`Context` the context containing the `Baggage` from which to remove the baggage entry.
+To avoid sending any name/value pairs to an untrusted process, the Baggage API
+MUST provide a way to remove all baggage entries from a context.
 
-### Clear
+This functionality can be implemented by having the user set an empty `Baggage`
+object/struct into the context, or by providing an API that takes a `Context` as
+input, and returns a new `Context` with no `Baggage` associated.
 
-To avoid sending any name/value pairs to an untrusted process, the Baggage API MUST provide
-a function to remove all baggage entries from a context. Returns a new `Context`
-with no `Baggage`.
+### Context Interaction
 
-OPTIONAL parameters:
+This section defines all operations within the Baggage API that interact with
+the [`Context`](../context/context.md).
 
-`Context` the context containing the `Baggage` from which to remove all baggage entries.
+The API MUST provide the following functionality to interact with a `Context`
+instance:
 
-## Baggage Propagation
+- Extract the `Baggage` from a `Context` instance
+- Insert the `Baggage` to a `Context` instance
+
+The functionality listed above is necessary because API users SHOULD NOT have
+access to the [Context Key](../context/context.md#create-a-key) used by the
+Baggage API implementation.
+
+If the language has support for implicitly propagated `Context` (see
+[here](../context/context.md#optional-global-operations)), the API SHOULD also
+provide the following functionality:
+
+- Get the currently active `Baggage` from the implicit context. This is
+equivalent to getting the implicit context, then extracting the `Baggage` from
+the context.
+- Set the currently active `Baggage` to the implicit context. This is equivalent
+to getting the implicit context, then inserting the `Baggage` to the context.
+
+All the above functionalities operate solely on the context API, and they MAY be
+exposed as static methods on the baggage module, as static methods on a class
+inside the baggage module (it MAY be named `BaggageUtilities`), or on the
+[`Baggage`](#baggage) class. This functionality SHOULD be fully implemented in
+the API when possible.
+
+### Propagation
 
 `Baggage` MAY be propagated across process boundaries or across any arbitrary boundaries
 (process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
@@ -137,7 +162,7 @@ If the propagator is unable to parse the `baggage` header, `extract` MUST return
 If the `baggage` header is present, but contains no entries, `extract` MUST return a Context with
 no baggage entries in it.
 
-## Conflict Resolution
+### Conflict Resolution
 
 If a new name/value pair is added and its name is the same as an existing name, than the new pair MUST take precedence. The value
 is replaced with the added value (regardless if it is locally generated or received from a remote peer).
