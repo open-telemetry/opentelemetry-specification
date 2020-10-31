@@ -83,7 +83,7 @@ Names SHOULD follow these rules:
 - When coming up with a new semantic convention make sure to check existing
   namespaces for
   [Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
-  [Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
+  [Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/tracing/semantic_conventions),
   and
   [Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions)
   to see if the new name fits.
@@ -112,7 +112,7 @@ Names SHOULD follow these rules:
 As an application developer when you need to record an attribute or a label
 first consult existing semantic conventions for
 [Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
-[Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
+[Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/tracing/semantic_conventions),
 and
 [Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions).
 If an appropriate name does not exists you will need to come up with a new name.

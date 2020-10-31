@@ -16,8 +16,8 @@
 *   @open-telemetry/technical-committee @open-telemetry/specs-approvers
 
 # Trace owners (global + trace)
-experimental/trace/     @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
-specification/trace/    @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
+experimental/tracing/     @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
+specification/tracing/    @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
 
 # Metrics owners (global + metrics)
 experimental/metrics/   @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-metrics-approvers

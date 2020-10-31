@@ -400,7 +400,7 @@ field, which is fixed for a particular source, `Attributes` can vary for each
 occurrence of the event coming from the same source. Can contain information
 about the request context (other than TraceId/SpanId). SHOULD follow
 OpenTelemetry
-[semantic conventions for Attributes](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions).
+[semantic conventions for Attributes](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/tracing/semantic_conventions).
 This field is optional.
 
 ## Example Log Records

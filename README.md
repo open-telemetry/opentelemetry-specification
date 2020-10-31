@@ -29,10 +29,10 @@ Technical committee holds regular meetings, notes are held
 - API Specification
   - [Baggage](specification/baggage/api.md)
     - [Propagators](specification/context/api-propagators.md)
-  - [Tracing](specification/trace/api.md)
+  - [Tracing](specification/tracing/api.md)
   - [Metrics](specification/metrics/api.md)
 - SDK Specification
-  - [Tracing](specification/trace/sdk.md)
+  - [Tracing](specification/tracing/sdk.md)
   - [Metrics](specification/metrics/sdk.md)
   - [Resource](specification/resource/sdk.md)
   - [Configuration](specification/sdk-configuration.md)

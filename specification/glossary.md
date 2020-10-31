@@ -82,7 +82,7 @@ Synonyms: *Instrumenting Library*.
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meter-interface)).
+creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](tracing/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meter-interface)).
 The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
 
 ## Logs
@@ -104,8 +104,8 @@ additional qualifiers should be used (e.g. `Log Record`).
 
 ### Embedded Log
 
-`Log Records` embedded inside a [Span](trace/api.md#span)
-object, in the [Events](trace/api.md#add-events) list.
+`Log Records` embedded inside a [Span](tracing/api.md#span)
+object, in the [Events](tracing/api.md#add-events) list.
 
 ### Standalone Log
 

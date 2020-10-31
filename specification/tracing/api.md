@@ -241,7 +241,7 @@ and MUST follow the [general error handling guidelines](../error-handling.md) (e
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
 [`SpanContext` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
-or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
+or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/tracing/sdk.md#span-exporter).
 In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
 
 ## Span

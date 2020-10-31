@@ -334,7 +334,7 @@ OpenTelemetry defines standard names and values of Resource attributes and
 Span attributes.
 
 * [Resource Conventions](resource/semantic_conventions/README.md)
-* [Span Conventions](trace/semantic_conventions/README.md)
+* [Span Conventions](tracing/semantic_conventions/README.md)
 * [Metrics Conventions](metrics/semantic_conventions/README.md)
 
 The type of the attribute SHOULD be specified in the semantic convention

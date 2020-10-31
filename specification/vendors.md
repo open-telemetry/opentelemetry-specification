@@ -17,7 +17,7 @@ The OpenTelemetry project consists of both a
 for the API, SDK, protocol and semantic conventions, as well as an
 implementation of each for a number of languages. The default SDK implementation
 is [highly configurable](sdk-configuration.md) and extendable, for example
-through [Span Processors](trace/sdk.md#span-processor), to allow for additional
+through [Span Processors](tracing/sdk.md#span-processor), to allow for additional
 logic needed by particular vendors to be added without having to implement a
 custom SDK. By not requiring a custom SDK means for most languages a user will
 already find an implementation to use and if not they'll have a well documented

@@ -38,13 +38,13 @@ This directory describes the Metrics API that can be used to record application 
 This directory describes the Baggage API that can be used to manage context propagation
 and metrics-related labeling.
 
-### [/trace](trace/api.md)
+### [/trace](tracing/api.md)
 
 This API consist of a few main classes:
 
-- `Tracer` is used for all operations. See [Tracer](trace/api.md#tracer) section.
+- `Tracer` is used for all operations. See [Tracer](tracing/api.md#tracer) section.
 - `Span` is a mutable object storing information about the current operation
-   execution. See [Span](trace/api.md#span) section.
+   execution. See [Span](tracing/api.md#span) section.
 
 ### `/internal` (_Optional_)
 
@@ -90,7 +90,7 @@ and container name.
 
 ### `/sdk/baggage`
 
-### [/sdk/trace](trace/sdk.md)
+### [/sdk/trace](tracing/sdk.md)
 
 This directory describes the SDK implementation for api/trace.
 

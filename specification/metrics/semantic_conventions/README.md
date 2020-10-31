@@ -8,7 +8,7 @@ The following semantic conventions surrounding metrics are defined:
 * [Runtime Environment Metrics](runtime-environment-metrics.md): Semantic conventions and instruments for runtime environment metrics.
 
 Apart from semantic conventions for metrics and
-[traces](../../trace/semantic_conventions/README.md), OpenTelemetry also
+[traces](../../tracing/semantic_conventions/README.md), OpenTelemetry also
 defines the concept of overarching [Resources](../../resource/sdk.md) with
 their own [Resource Semantic
 Conventions](../../resource/semantic_conventions/README.md).

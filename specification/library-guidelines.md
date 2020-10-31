@@ -70,15 +70,15 @@ SDK implements core functionality that is required for translating API calls int
 
 ![Full Operation Diagram](../internal/img/library-full.png)
 
-SDK defines an [Exporter interface](trace/sdk.md#span-exporter). Protocol-specific exporters that are responsible for sending telemetry data to backends must implement this interface.
+SDK defines an [Exporter interface](tracing/sdk.md#span-exporter). Protocol-specific exporters that are responsible for sending telemetry data to backends must implement this interface.
 
 SDK also includes optional helper exporters that can be composed for additional functionality if needed.
 
-Library designers need to define the language-specific `Exporter` interface based on [this generic specification](trace/sdk.md#span-exporter).
+Library designers need to define the language-specific `Exporter` interface based on [this generic specification](tracing/sdk.md#span-exporter).
 
 #### Protocol Exporters
 
-Telemetry backend vendors are expected to implement [Exporter interface](trace/sdk.md#span-exporter). Data received via Export() function should be serialized and sent to the backend in a vendor-specific way.
+Telemetry backend vendors are expected to implement [Exporter interface](tracing/sdk.md#span-exporter). Data received via Export() function should be serialized and sent to the backend in a vendor-specific way.
 
 Vendors are encouraged to keep protocol-specific exporters as simple as possible and achieve desirable additional functionality such as queuing and retrying using helpers provided by SDK.
 
@@ -129,4 +129,4 @@ Please refer to individual API specification for guidelines on what concurrency
 safeties should API implementations provide and how they should be documented:
 
 * [Metrics API](./metrics/api.md#concurrency)
-* [Tracing API](./trace/api.md#concurrency)
+* [Tracing API](./tracing/api.md#concurrency)

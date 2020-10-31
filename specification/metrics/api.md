@@ -190,7 +190,7 @@ data that it produces.
 
 _Label_ is the term used to refer to a key-value attribute associated
 with a metric event, similar to a [Span
-attribute](../trace/api.md#span) in the tracing API.  Each label
+attribute](../tracing/api.md#span) in the tracing API.  Each label
 categorizes the metric event, allowing events to be filtered and
 grouped for analysis.
 
@@ -227,7 +227,7 @@ instrumenting library (optionally, the version) when obtaining a `Meter`
 implementation.  The library name is meant to be used for identifying
 instrumentation produced from that library, for such purposes as disabling
 instrumentation, configuring aggregation, and applying sampling policies.  See
-the specification on [TracerProvider](../trace/api.md#tracerprovider) for more
+the specification on [TracerProvider](../tracing/api.md#tracerprovider) for more
 details.
 
 ### Aggregations
