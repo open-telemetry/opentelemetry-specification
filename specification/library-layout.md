@@ -15,7 +15,7 @@ api
    ├── context
    │   └── propagation
    ├── metrics
-   ├── trace
+   ├── tracing
    │   └── propagation
    ├── baggage
    │   └── propagation
@@ -38,7 +38,7 @@ This directory describes the Metrics API that can be used to record application 
 This directory describes the Baggage API that can be used to manage context propagation
 and metrics-related labeling.
 
-### [/trace](tracing/api.md)
+### [/tracing](tracing/api.md)
 
 This API consist of a few main classes:
 
@@ -65,7 +65,7 @@ sdk
    ├── context
    ├── metrics
    ├── resource
-   ├── trace
+   ├── tracing
    ├── baggage
    ├── internal
    └── logs
@@ -90,9 +90,9 @@ and container name.
 
 ### `/sdk/baggage`
 
-### [/sdk/trace](tracing/sdk.md)
+### [/sdk/tracing](tracing/sdk.md)
 
-This directory describes the SDK implementation for api/trace.
+This directory describes the SDK implementation for api/tracing.
 
 ### `/sdk/internal` (_Optional_)
 

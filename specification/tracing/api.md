@@ -150,7 +150,7 @@ the following functionality:
 
 All the above functionalities operate solely on the context API, and they MAY be
 exposed as static methods on the trace module, as static methods on a class
-inside the trace module (it MAY be named `TracingContextUtilities`), or on the
+inside the tracing module (it MAY be named `TracingContextUtilities`), or on the
 [`Tracer`](#tracer) class. This functionality SHOULD be fully implemented in the
 API when possible.
 
@@ -743,7 +743,7 @@ for how propagators are to be distributed.
 
 ## Behavior of the API in the absence of an installed SDK
 
-In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
+In general, in the absence of an installed SDK, the Tracing API is a "no-op" API.
 This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
 is one important exception to this general rule, and that is related to propagation of a `SpanContext`:
 The API MUST create a [non-recording Span](#wrapping-a-spancontext-in-a-span) with the `SpanContext`

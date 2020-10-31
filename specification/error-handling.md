@@ -118,5 +118,7 @@ public class IgnoreExportErrorsFilter implements Filter {
 
 ```properties
 ## Registering the custom filter on the BatchSpanProcessor
-io.opentelemetry.sdk.trace.export.BatchSpanProcessor = io.opentelemetry.extensions.logging.IgnoreExportErrorsFilter
+io.opentelemetry.sdk.tracing.export.BatchSpanProcessor = io.opentelemetry.extensions.logging.IgnoreExportErrorsFilter
 ```
+
+Please refer to [opentelemetry-java](https://github.com/open-telemetry/opentelemetry-java) for the exact syntax and names.

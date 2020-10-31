@@ -35,7 +35,7 @@ New:
   ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
 - Refine semantic conventions for messaging systems and add specific attributes for Kafka
   ([#1027](https://github.com/open-telemetry/opentelemetry-specification/pull/1027))
-- Clarification of the behavior of the Trace API, re: context propagation, in
+- Clarification of the behavior of the Tracing API, re: context propagation, in
   the absence of an installed SDK
 - Add API and semantic conventions for recording exceptions as Span Events
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
@@ -112,20 +112,20 @@ Updates:
   [#956](https://github.com/open-telemetry/opentelemetry-specification/pull/956))
 - Metrics API: Replace "Additive" with "Adding", "Non-Additive" with "Grouping"
   ([#983](https://github.com/open-telemetry/opentelemetry-specification/pull/983)
-- Move active span interaction in the Trace API to a separate class
+- Move active span interaction in the Tracing API to a separate class
   ([#923](https://github.com/open-telemetry/opentelemetry-specification/pull/923))
 - Metrics SDK: Specify LastValue default aggregation for ValueObserver
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
-- Trace SDK: Sampler.ShouldSample gets parent Context instead of SpanContext
+- Tracing SDK: Sampler.ShouldSample gets parent Context instead of SpanContext
   ([#881](https://github.com/open-telemetry/opentelemetry-specification/pull/881))
 - SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
   ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
   ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
 - Remove custom header name for Baggage, use official header
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
-- Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
+- Tracing API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
 
 ## v0.6.0 (07-01-2020)

@@ -1,7 +1,7 @@
 ---
-name: Trace
-about: Issues related to the specification/trace directory
-labels: spec:trace
+name: Tracing
+about: Issues related to the specification/tracing directory
+labels: spec:tracing
 ---
 
 **What are you trying to achieve?**

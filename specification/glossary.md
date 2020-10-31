@@ -37,7 +37,7 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 In OpenTelemetry we refer to **in-band data** as data that is passed
 between components of a distributed system as part of business messages,
-for example, when trace or baggages are included
+for example, when trace data or baggages are included
 in the HTTP requests in the form of HTTP headers.
 Such data usually does not contain the telemetry,
 but is used to correlate and join the telemetry produced by various components.
