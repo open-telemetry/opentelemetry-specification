@@ -73,8 +73,8 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Basic support                                 |  | +  | + | +    |    |      |   |    |   |    |
-|Use official header name `baggage`            |  | +  | + | +    |    |      |   |    |   |    |
+|Basic support                                 |  | +  | + | +    |    |      |   | +  |   |    |
+|Use official header name `baggage`            |  | +  | + | +    |    |      |   | +  |   |    |
 
 ## Metrics
 
