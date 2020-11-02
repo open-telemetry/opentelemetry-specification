@@ -100,6 +100,9 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 ### Attributes
 
 <!-- semconv rpc.grpc -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `rpc.grpc.status_code` | number | The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0`<br>`1`<br>`16` | Yes |
 <!-- endsemconv -->
 
 [gRPC]: https://grpc.io/

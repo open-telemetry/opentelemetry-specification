@@ -41,6 +41,5 @@ groups:
         - id: status_code
           type: number
           required: always
-          tag: call-level-tech-specific
           brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."
           examples: [0, 1, 16]
