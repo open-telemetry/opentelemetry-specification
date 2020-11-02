@@ -60,13 +60,12 @@ applied to all database call-level metric instruments.
 | Label Name       | Type   | Description  | Example  | Required |
 |------------------|--------|--------------|----------|----------|
 | `db.name`        | string | If no [tech-specific label](#call-level-labels-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`<br>`main` | Required if applicable. |
-| `db.operation`   | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`. [4][5] | `findAndModify`<br>`HMSET`<br>`SELECT`<br>`CONNECT` | Required if applicable. |
-| `db.table`       | string | The name of the primary table, collection, segment, etc... that the operation is acting upon. | `user_table` | Required if applicable. |
+| `db.operation`   | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [4][5] | `findAndModify`<br>`HMSET`<br>`SELECT`<br>`CONNECT` | Required if applicable. |
 | `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.sql.SQLException`<br/>`psycopg2.OperationalError` | Required if applicable. |
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name".
 
-**[4]:** For SQL operations, this should be set to the SQL keyword (example: `SELECT` or `INSERT`).
+**[4]:** When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
 
 **[5]:** To reduce cardinality, the value for `db.operation` should have parameters
 removed or substituted. The resulting value should be a low-cardinality value
@@ -81,8 +80,11 @@ a stored procedure name (without arguments), operation name, etc.
 | `db.hbase.namespace`      | The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute. | `default` | Yes |
 | `db.redis.database_index` | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` label. | `0`<br>`1`<br>`15` | Conditional [1] |
 | `db.mongodb.collection`   | The collection being accessed within the database stated in `db.name`. | `customers`<br>`products` | Yes |
+| `db.sql.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [2] | `public.users`<br>`customers` | Conditional<br>Recommended if available. |
 
 **[1]:** Required, if other than the default database (`0`).
+
+**[2]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value may be omitted.
 
 ### Examples
 
