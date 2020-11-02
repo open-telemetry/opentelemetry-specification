@@ -221,8 +221,10 @@ applied to them.
 
 | Name                      | Instrument | Units         | Description |
 |---------------------------|------------|---------------|-------------|
-| `db.connections.new`      | Counter   | {connections} | The number of new connections created. |
-| `db.connections.taken`    | Counter   | {connections} | The number of connections taken from the connection pool. |
-| `db.connections.returned` | Counter   | {connections} | The number of connections returned to the connection pool. |
-| `db.connections.reused`   | Counter   | {connections} | The number of connections reused. |
-| `db.connections.closed`   | Counter    | {connections} | The number of connections closed. |
+| `db.connections.taken`    | Counter    | {connections} | Incremented when a connection is requested and returned from the pool.  |
+| `db.connections.new`      | Counter    | {connections} | Incremented when a connection is requested and returned from the pool only if the connection pool returns a newly created connection. |
+| `db.connections.reused`   | Counter    | {connections} | Incremented when a connection is requested and returned from the pool only if the connection pool returns a previously used connection. |
+| `db.connections.returned` | Counter    | {connections} | Incremented when the application is finished using a connection and returns it to the pool. |
+| `db.connections.closed`   | Counter    | {connections} | Incremented when the pool closes a connection. [1] |
+
+**[1]:** Connection pools sometimes close connections after some pre-configured time has elapsed, or when the application is shutting down. The `db.connections.closed` instrument should be incremented for each connection closed. It should _eventually_ be true that `db.connections.new - db.connections.closed = 0`.
