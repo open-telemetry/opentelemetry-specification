@@ -36,11 +36,11 @@ groups:
     - id: rpc.grpc
       prefix: rpc.grpc
       extends: rpc
-      brief: 'Call-level attributes for gRPC'
+      brief: 'Tech-specific attributes for gRPC.'
       attributes:
         - id: status_code
           type: number
           required: always
           tag: call-level-tech-specific
-          brief: "the status code number of the gRPC request."
-          examples: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+          brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."
+          examples: [0, 1, 16]
