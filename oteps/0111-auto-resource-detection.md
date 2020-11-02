@@ -33,7 +33,7 @@ A default implementation of a detector that reads resource data from the
 `OTEL_RESOURCE` environment variable will be included in the SDK. The
 environment variable will contain of a list of key value pairs, and these are
 expected to be represented in a format similar to the [W3C
-Correlation-Context](https://github.com/w3c/correlation-context/blob/master/correlation_context/HTTP_HEADER_FORMAT.md#header-value),
+Baggage](https://github.com/w3c/baggage/blob/master/baggage/HTTP_HEADER_FORMAT.md#header-content),
 except that additional semi-colon delimited metadata is not supported, i.e.:
 `key1=value1,key2=value2`. If the user does not specify any resource, this
 detector will be run by default.
