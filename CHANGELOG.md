@@ -61,6 +61,7 @@ New:
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
 - Add OTEL_TRACE_SAMPLER env variable definition
   ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
+- Add specification of Metric Instrument units ([1177](https://github.com/open-telemetry/opentelemetry-specification/pull/1177))
 
 Updates:
 
