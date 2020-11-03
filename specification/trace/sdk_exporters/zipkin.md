@@ -147,9 +147,6 @@ The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 |Code | `otel.status_code` | Name of the code, for example: `OK` |
 |Message *(optional)* | `otel.status_description` | `{message}` |
 
-The `otel.status_code` tag value MUST follow the [Standard GRPC Code
-Names](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
-
 ### Events
 
 OpenTelemetry `Event` has an optional `Attribute`(s) which is not supported by
