@@ -314,7 +314,7 @@ groups:
             `db.statement` just to get this property, but it should be set if
             it is provided by the library being instrumented.
             If the operation is acting upon an anonymous table, or more than one table, this
-            value may be omitted.
+            value MUST NOT be set.
           examples: ['public.users', 'customers']
 
 

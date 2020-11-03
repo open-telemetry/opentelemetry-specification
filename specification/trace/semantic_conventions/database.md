@@ -169,7 +169,7 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 
 **[1]:** Required, if other than the default database (`0`).
 
-**[2]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value may be omitted.
+**[2]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
 
 ## Examples
