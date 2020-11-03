@@ -119,7 +119,7 @@ unless there is a `peer.service` tag defined explicitly.
 
 ### Attribute
 
-OpenTelemetry Span and Resource `Attribute`(s) MUST be reported as `tags` to
+OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to
 Zipkin.
 
 Some attributes defined in [semantic
