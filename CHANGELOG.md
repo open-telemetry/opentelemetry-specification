@@ -64,6 +64,8 @@ New:
 
 Updates:
 
+- Make `process.pid` optional, split `process.command_args` from `command_line`
+  ([#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Renamed `CorrelationContext` to `Baggage`:
   ([#857](https://github.com/open-telemetry/opentelemetry-specification/pull/857))
 - Add semantic convention for NGINX custom HTTP 499 status code.
@@ -93,7 +95,8 @@ Updates:
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
 - Add semantic conventions for process runtime
-  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882))
+  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882),
+   [#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Use hex encoding for trace id and span id fields in OTLP JSON encoding:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
