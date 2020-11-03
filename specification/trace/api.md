@@ -1,6 +1,6 @@
 # Tracing API
 
-**Status**: [Feature-complete](../document-status.md).
+**Status**: [Feature-freeze](../document-status.md).
 
 <details>
 <summary>
