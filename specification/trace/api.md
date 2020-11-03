@@ -150,7 +150,7 @@ the following functionality:
 
 All the above functionalities operate solely on the context API, and they MAY be
 exposed as either static methods on the trace module, as static methods on a class
-inside the trace module, or on the [`Tracer`](#tracer) class. This functionality
+inside the trace module. This functionality
 SHOULD be fully implemented in the API when possible.
 
 ## Tracer
