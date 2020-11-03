@@ -67,7 +67,7 @@ Carriers used at [Inject](#inject) are expected to be mutable.
 
 `Propagator`s MUST define `Inject` and `Extract` operations, in order to write
 values to and read values from carriers respectively. Each `Propagator` type MUST define the specific carrier type
-and CAN define additional parameters.
+and MAY define additional parameters.
 
 #### Inject
 
@@ -76,7 +76,7 @@ Injects the value into a carrier. For example, into the headers of an HTTP reque
 Required arguments:
 
 - A `Context`. The Propagator MUST retrieve the appropriate value from the `Context` first, such as
-`SpanReference`, `Baggage` or another cross-cutting concern context.
+`SpanContext`, `Baggage` or another cross-cutting concern context.
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
@@ -93,7 +93,7 @@ Required arguments:
 - The carrier that holds the propagation fields. For example, an incoming message or http response.
 
 Returns a new `Context` derived from the `Context` passed as argument,
-containing the extracted value, which can be a `SpanReference`,
+containing the extracted value, which can be a `SpanContext`,
 `Baggage` or another cross-cutting concern context.
 
 ## TextMap Propagator
@@ -312,8 +312,12 @@ Required parameters:
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
-* [B3](https://github.com/openzipkin/b3-propagation)
-* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
+* [W3C TraceContext](https://www.w3.org/TR/trace-context/). MAY alternatively
+  be distributed as part of the OpenTelemetry API.
+* [W3C Baggage](https://w3c.github.io/baggage). MAY alternatively
+  be distributed as part of the OpenTelemetry API.
+* [B3](https://github.com/openzipkin/b3-propagation).
+* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray (Note, AWS is used as an example, not as a requirement) trace header
@@ -332,15 +336,23 @@ a community are:
 
 ### B3 Requirements
 
-B3 has both single and multi-header encodings. To maximize compatibility between
-implementations, the following guidelines have been established for B3
-propagation in OpenTelemetry.
+B3 has both single and multi-header encodings. It also has semantics that do not
+map directly to OpenTelemetry such as a debug trace flag, and allowing spans
+from both sides of request to share the same id. To maximize compatibility
+between OpenTelemetry and Zipkin implementations, the following guidelines have
+been established for B3 context propagation.
 
 #### Extract
 
-Propagators MUST attempt to extract B3 encoded using single and multi-header
-formats. When extracting, the single-header variant takes precedence over
-the multi-header version.
+When extracting B3, propagators:
+
+* MUST attempt to extract B3 encoded using single and multi-header
+  formats. The single-header variant takes precedence over
+  the multi-header version.
+* MUST preserve a debug trace flag, if received, and propagate
+  it with subsequent requests. Additionally, an OpenTelemetry implementation
+  MUST set the sampled trace flag when the debug flag is set.
+* MUST NOT reuse `X-B3-SpanId` as the id for the server-side span.
 
 #### Inject
 
@@ -349,3 +361,5 @@ When injecting B3, propagators:
 * MUST default to injecting B3 using the single-header format
 * MUST provide configuration to change the default injection format to B3
   multi-header
+* MUST NOT propagate `X-B3-ParentSpanId` as OpenTelemetry does not support
+  reusing the same id for both sides of a request.

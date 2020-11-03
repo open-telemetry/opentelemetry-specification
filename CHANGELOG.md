@@ -20,9 +20,9 @@ New:
 - Clarify env variables in otlp exporter
   ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
 - Add Prometheus exporter environment variables
-  ([#1021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021)).
+  ([#1021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021))
 - Default propagators in un-configured API must be no-op
-  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
+  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930))
 - Define resource mapping for Jaeger exporters
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
@@ -33,6 +33,8 @@ New:
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
 - Add resource semantic convention for deployment environment
   ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
+- Refine semantic conventions for messaging systems and add specific attributes for Kafka
+  ([#1027](https://github.com/open-telemetry/opentelemetry-specification/pull/1027))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
 - Add API and semantic conventions for recording exceptions as Span Events
@@ -52,14 +54,18 @@ New:
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
 - Clarify context interaction for trace module
-  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))  
+  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))
 - Add `Shutdown` function to `*Provider` SDK
   ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
 - Add semantic conventions for system metrics
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
+- Add OTEL_TRACE_SAMPLER env variable definition
+  ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
 
 Updates:
 
+- Make `process.pid` optional, split `process.command_args` from `command_line`
+  ([#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Renamed `CorrelationContext` to `Baggage`:
   ([#857](https://github.com/open-telemetry/opentelemetry-specification/pull/857))
 - Add semantic convention for NGINX custom HTTP 499 status code.
@@ -89,7 +95,8 @@ Updates:
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
 - Add semantic conventions for process runtime
-  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882))
+  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882),
+   [#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Use hex encoding for trace id and span id fields in OTLP JSON encoding:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
@@ -125,8 +132,6 @@ Updates:
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 - Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
-- Rename SpanContext to SpanReference
-  ([#1075](https://github.com/open-telemetry/opentelemetry-specification/pull/1075))
 
 ## v0.6.0 (07-01-2020)
 
