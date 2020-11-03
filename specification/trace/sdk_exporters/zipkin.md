@@ -138,7 +138,8 @@ TBD: add examples
 
 ### Status
 
-Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin.
+Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin, unless it is `UNSET`.
+In the latter case it MUST NOT be reported.
 
 The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
