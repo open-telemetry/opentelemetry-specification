@@ -70,7 +70,7 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    a valid trace ID as input).
 2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method
    (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
-   use the sampling decison of the parent,
+   use the sampling decision of the parent,
    translating a set SampledFlag to RECORD and an unset one to DROP).
 3. If the decision is `DROP` and there is a valid parent span ID, reuse it as the new `Span`'s span ID.
    Otherwise (if the decision is not `DROP` or there was no valid parent span ID)
