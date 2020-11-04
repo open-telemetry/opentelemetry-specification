@@ -14,7 +14,7 @@ groups:
         type: string
         required: always
         brief: >
-          The unique ID of the function 
+          The unique ID of the function
           being executed.
         note: >
           For example, in AWS Lambda this field corresponds to the
