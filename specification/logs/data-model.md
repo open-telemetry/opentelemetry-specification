@@ -387,7 +387,7 @@ infrastructure where the application runs. Data formats that represent this data
 model may be designed in a manner that allows the `Resource` field to be
 recorded only once per batch of log records that come from the same source.
 SHOULD follow OpenTelemetry
-[semantic conventions for Resources](../resource/semantic_conventions).
+[semantic conventions for Resources](../resource/semantic_conventions/README.md).
 This field is optional.
 
 ### Field: `Attributes`
@@ -400,7 +400,7 @@ field, which is fixed for a particular source, `Attributes` can vary for each
 occurrence of the event coming from the same source. Can contain information
 about the request context (other than TraceId/SpanId). SHOULD follow
 OpenTelemetry
-[semantic conventions for Attributes](../trace/semantic_conventions).
+[semantic conventions for Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
 
 ## Example Log Records
@@ -1215,7 +1215,7 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
 \* Not yet formalized into ECS.
 
 \*\* A resource that doesn’t exist in the
-[OpenTelemetry resource semantic convention](../resource/semantic_conventions).
+[OpenTelemetry resource semantic convention](../resource/semantic_conventions/README.md).
 
 This is a selection of the most relevant fields. See
 [for the full reference](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html)
