@@ -82,10 +82,10 @@ Names SHOULD follow these rules:
 
 - When coming up with a new semantic convention make sure to check existing
   namespaces for
-  [Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
-  [Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
+  [Resources](../resource/semantic_conventions/README.md),
+  [Spans](../trace/semantic_conventions/README.md),
   and
-  [Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions)
+  [Metrics](../metrics/semantic_conventions/README.md)
   to see if the new name fits.
 
 - When a new namespace is necessary consider whether it should be a top-level
@@ -111,10 +111,10 @@ Names SHOULD follow these rules:
 
 As an application developer when you need to record an attribute or a label
 first consult existing semantic conventions for
-[Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
-[Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
+[Resources](../resource/semantic_conventions/README.md),
+[Spans](../trace/semantic_conventions/README.md),
 and
-[Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions).
+[Metrics](../metrics/semantic_conventions/README.md).
 If an appropriate name does not exists you will need to come up with a new name.
 To do that consider a few options:
 
