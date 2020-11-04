@@ -16,7 +16,7 @@ status of the feature is not known.
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Shutdown (SDK only required)                  |   | +  | + | +    | +  |      |   | +  |   |    |
-|[Tracing Context Utilities](specification/trace/api.md#tracing-context-utilities)|
+|[Trace / Context interaction](specification/trace/api.md#context-interaction)|
 |Get active Span                               |   | +  | + | +    | +  |      |   | +  |   |    |
 |Set active Span                               |   | +  | + | +    | +  |      |   | +  |   |    |
 |[Tracer](specification/trace/api.md#tracer-operations)|
@@ -55,7 +55,7 @@ status of the feature is not known.
 |Array of primitives (homogeneous)             | + | +  | + | +    | +  | -    | + | +  | + | +  |
 |`null` values documented as invalid/undefined |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)     |    |      |   |    |   |    |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|[Span linking](specification/trace/api.md#add-links)|
+|[Span linking](specification/trace/api.md#specifying-links)|
 |AddLink                                       | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |[Span events](specification/trace/api.md#add-events)|
