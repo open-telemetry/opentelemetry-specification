@@ -15,10 +15,10 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|Shutdown (SDK only required)                  |   | +  | + | +    |    |      |   | +  |   |    |
+|Shutdown (SDK only required)                  |   | +  | + | +    | +  |      |   | +  |   |    |
 |[Tracing Context Utilities](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracing-context-utilities)|
-|Get active Span                               |   | +  | + | +    |    |      |   | +  |   |    |
-|Set active Span                               |   | +  | + | +    |    |      |   | +  |   |    |
+|Get active Span                               |   | +  | + | +    | +  |      |   | +  |   |    |
+|Set active Span                               |   | +  | + | +    | +  |      |   | +  |   |    |
 |[Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -32,19 +32,19 @@ status of the feature is not known.
 |Create root span                              | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|No explicit parent Span/SpanContext allowed   |   | +  |   | +    |    |      |   | +  |   |    |
-|SpanProcessor.OnStart receives parent Context |   | +  |   | +    |    |      |   | +  |   |    |
+|No explicit parent Span/SpanContext allowed   |   | +  |   | +    | +  |      |   | +  |   |    |
+|SpanProcessor.OnStart receives parent Context |   | +  |   | +    | +  |      |   | +  |   |    |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRecording becomes false after End           |   | +  |   | +    |    |      |   |    |   |    |
-|Set status with StatusCode (Unset, Ok, Error) |   | +  |   | +    |    |      |   | +  |   |    |
+|Set status with StatusCode (Unset, Ok, Error) |   | +  |   | +    | +  |      |   | +  |   |    |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|events collection size limit                  |   | +  | + | +    |    |      |   | +  |   |    |
-|attribute collection size limit               |   | +  | + | +    |    |      |   | +  |   |    |
-|links collection size limit                   |   | +  | + | +    |    |      |   | +  |   |    |
+|events collection size limit                  |   | +  | + | +    | +  |      |   | +  |   |    |
+|attribute collection size limit               |   | +  | + | +    | +  |      |   | +  |   |    |
+|links collection size limit                   |   | +  | + | +    | +  |      |   | +  |   |    |
 |[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
@@ -73,8 +73,8 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Basic support                                 |  | +  | + | +    |    |      |   | +  |   |    |
-|Use official header name `baggage`            |  | +  | + | +    |    |      |   | +  |   |    |
+|Basic support                                 |  | +  | + | +    | +  |      |   | +  |   |    |
+|Use official header name `baggage`            |  | +  | + | +    | +  |      |   | +  |   |    |
 
 ## Metrics
 
@@ -104,7 +104,7 @@ status of the feature is not known.
 |Composite Propagator                          |  | +  | + | +    | +  |      |   | +  |   |    |
 |Global Propagator                             |  | +  | + | +    | +  |      |   | +  |   |    |
 |TraceContext Propagator                       |  | +  | + | +    | +  |      |   | +  |   |    |
-|B3 Propagator                                 |  | +  | + | +    |    |      |   | +  |   |    |
+|B3 Propagator                                 |  | +  | + | +    | +  |      |   | +  |   |    |
 |Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    |      |   | +  |   |    |
 |[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
 |Fields                                        |  | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1615) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   | +  |   |    |
