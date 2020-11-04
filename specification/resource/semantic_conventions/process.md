@@ -141,12 +141,12 @@ Examples for some Ruby runtimes
 | Attribute  | Description  | Example  | Required |
 |---|---|---|--|
 | process.middleware.type | Standardized attribute, specifying the type of middleware on the runtime. This attribute adds value to traces, giving the opportunity to visualise different kind of middleware using different representation in server-side. The supported values of type are `as` (application server), `ws` (web server), `dbs` (database server) or `mom` (message-oriented middleware). | `as` | No |
-| process.middleware.name | The name of the middleware running on this process. | `Tomcat` | No |
-| process.middleware.version | The version of the middleware of this process, as returned by the middleware (preferably during runtime) without modification. | `9.0.39` | No |
-| process.middleware.description | An additional description about the middleware of the process. | `Apache Tomcat/9.0.39` | No |
+| process.middleware.name | The name of the middleware running on this process. | `WildFly` | No |
+| process.middleware.version | The version of the middleware of this process, as returned by the middleware (preferably during runtime) without modification. | `21.0.0` | No |
+| process.middleware.description | An additional description about the middleware of the process. | `WildFly Full 21.0.0.Final (WildFly Core 13.0.1.Final) - 2.2.2.Final` | No |
 
-`process.middleware.type` MUST be set to one of the values listed below. 
-`process.middleware.name` SHOULD be set to one of the values listed below. If none of the listed values apply, a custom value best describing the runtime MAY be used.
+`process.middleware.type` MUST be set to one of the values from `as` (application server), `ws` (web server), `dbs` (database server) or `mom` (message-oriented middleware).
+`process.middleware.name` SHOULD be set to the values listed in examples below. If none of the listed values apply, a custom value best describing the runtime MAY be used.
 
 ***Application server middlewares:***
 
