@@ -11,24 +11,24 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|[TracerProvider](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracerprovider-operations)|
+|[TracerProvider](specification/trace/api.md#tracerprovider-operations)|
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Shutdown (SDK only required)                  |   | +  | + | +    | +  |      |   | +  |   |    |
-|[Tracing Context Utilities](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracing-context-utilities)|
+|[Trace / Context interaction](specification/trace/api.md#context-interaction)|
 |Get active Span                               |   | +  | + | +    | +  |      |   | +  |   |    |
 |Set active Span                               |   | +  | + | +    | +  |      |   | +  |   |    |
-|[Tracer](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer-operations)|
+|[Tracer](specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | -  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|[SpanContext](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#spancontext)|
+|[SpanContext](specification/trace/api.md#spancontext)|
 |IsValid                                       | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRemote                                      | - | +  | + | +    | +  | +    | + | +  | + | +  |
 |Conforms to the W3C TraceContext spec         | + | +  | + | +    | +  | +    |   | +  | + | +  |
-|[Span](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#span)|
+|[Span](specification/trace/api.md#span)|
 |Create root span                              | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -45,7 +45,7 @@ status of the feature is not known.
 |events collection size limit                  |   | +  | + | +    | +  |      |   | +  |   |    |
 |attribute collection size limit               |   | +  | + | +    | +  |      |   | +  |   |    |
 |links collection size limit                   |   | +  | + | +    | +  |      |   | +  |   |    |
-|[Span attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#set-attributes)|
+|[Span attributes](specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
 |String type                                   | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -55,17 +55,17 @@ status of the feature is not known.
 |Array of primitives (homogeneous)             | + | +  | + | +    | +  | -    | + | +  | + | +  |
 |`null` values documented as invalid/undefined |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)     |    |      |   |    |   |    |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|[Span linking](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-links)|
+|[Span linking](specification/trace/api.md#specifying-links)|
 |AddLink                                       | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | - | +  |
-|[Span events](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-events)|
+|[Span events](specification/trace/api.md#add-events)|
 |AddEvent                                      | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |Add order preserved                           | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | - | +  |
-|[Span exceptions](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#record-exception)|
+|[Span exceptions](specification/trace/api.md#record-exception)|
 |RecordException                               | - | +  | + | +    | +  | -    |   | +  | - | +  |
 |RecordException with extra parameters         | - | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1102)    | -  | -    |   | +  | - | +  |
-|[Sampling](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#sampling)|
+|[Sampling](specification/trace/sdk.md#sampling)|
 |Allow samplers to modify tracestate           |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1220)     |    |      |   | +  |   |    |
 |ShouldSample gets full parent Context         |   | +  |   | +    |    |      |   |    |   |    |
 
@@ -106,7 +106,7 @@ status of the feature is not known.
 |TraceContext Propagator                       |  | +  | + | +    | +  |      |   | +  |   |    |
 |B3 Propagator                                 |  | +  | + | +    | +  |      |   | +  |   |    |
 |Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    |      |   | +  |   |    |
-|[TextMapPropagator](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md#textmap-propagator)|
+|[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)|
 |Fields                                        |  | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1615) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   | +  |   |    |
 |Setter argument                               |  | +  | + | +   |    |      |   |    |   |    |
 |Getter argument                               |  | +  | + | +   |    |      |   |    |   |    |
@@ -135,7 +135,7 @@ status of the feature is not known.
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
 |Standard output (logging)                     | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |In-memory (mock exporter)                     | + | +  | + | +    | +  | +    | - | -  | - | -  |
-|[OTLP](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/protocol/otlp.md)|
+|[OTLP](specification/protocol/otlp.md)|
 |OTLP/gRPC Exporter                            | + | +  | + | +    |    | +    |   | +  | + | +  |
 |OTLP/HTTP binary Protobuf Exporter            | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106)    | +  | +    |   |    | + | +  |
 |OTLP/HTTP JSON Protobuf Exporter              | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1003)    |    | -    |   |    |   |    |
@@ -145,7 +145,7 @@ status of the feature is not known.
 |Honors non-retryable responses                | + |    | - | +    | +  | -    |   |    |   |    |
 |Honors throttling response                    | + |    | - | +    | +  | -    |   |    |   |    |
 |Multi-destination spec compliance             | - |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1109)    |    | -    |   |    |   |    |
-|[Zipkin](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk_exporters/zipkin.md)|
+|[Zipkin](specification/trace/sdk_exporters/zipkin.md)|
 |Zipkin V1 JSON                                |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173)    |    | -    | - | -  |   |    |
 |Zipkin V1 Thrift                              |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174)    |    | -    | - | -  |   |    |
 |Zipkin V2 JSON                                | + |    |   | +    |    | -    | + | +  |   |    |
