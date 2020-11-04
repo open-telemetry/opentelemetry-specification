@@ -1,4 +1,22 @@
-# Process
+# Process and process runtime resources
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Process](#process)
+- [Process runtimes](#process-runtimes)
+  * [Erlang Runtimes](#erlang-runtimes)
+  * [Go Runtimes](#go-runtimes)
+  * [Java runtimes](#java-runtimes)
+  * [JavaScript runtimes](#javascript-runtimes)
+  * [.NET Runtimes](#net-runtimes)
+  * [Python Runtimes](#python-runtimes)
+  * [Ruby Runtimes](#ruby-runtimes)
+
+<!-- tocstop -->
+
+## Process
 
 **type:** `process`
 
@@ -39,7 +57,7 @@ At least one of `process.executable.name`, `process.executable.path`, `process.c
 `process.runtime.name` SHOULD be set to one of the values listed below, unless more detailed instructions are provided.
 If none of the listed values apply, a custom value best describing the runtime MAY be used.
 
-***Erlang Runtimes:***
+### Erlang Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-erlang/issues/96>): Confirm the contents here
 
@@ -53,7 +71,7 @@ Example:
 | --- | --- | --- | --- |
 | beam | BEAM | 11.0.3 | Erlang/OTP 24 erts-11.0.3 |
 
-***Go Runtimes:***
+### Go Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm the contents here
 
@@ -62,7 +80,7 @@ TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm 
 | `gc` | Go compiler |
 | `gccgo` | GCC Go frontend |
 
-***Java runtimes:***
+### Java runtimes
 
 Java instrumentation should fill in the values by copying from system properties.
 
@@ -81,7 +99,7 @@ Examples for some Java runtimes
 | Zulu OpenJDK | OpenJDK Runtime Environment | 11.0.8+10-LTS | Azul Systems, Inc Zulu11.41+23-CA |
 | Android 11 | Android Runtime | 0.9 | The Android Project 2.1.0 |
 
-***JavaScript runtimes:***
+### JavaScript runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-js/issues/1544>): Confirm the contents here
 
@@ -94,7 +112,7 @@ TODO(<https://github.com/open-telemetry/opentelemetry-js/issues/1544>): Confirm 
 
 When the value is `browser`, `process.runtime.version` SHOULD be set to the User-Agent header.
 
-***.NET Runtimes:***
+### .NET Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281>): Confirm the contents here
 
@@ -104,7 +122,7 @@ TODO(<https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281>): Conf
 | `dotnet-framework` | .NET Framework |
 | `mono` | Mono |
 
-***Python Runtimes:***
+### Python Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-python/issues/1127>): Confirm the contents here
 
@@ -117,7 +135,7 @@ TODO(<https://github.com/open-telemetry/opentelemetry-python/issues/1127>): Conf
 | `pypy` | PyPy|
 | `pythonnet` | PythonNet |
 
-***Ruby Runtimes:***
+### Ruby Runtimes
 
 Ruby instrumentation should fill in the values by copying from built-in runtime constants.
 
