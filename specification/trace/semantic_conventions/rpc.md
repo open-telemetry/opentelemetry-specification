@@ -109,7 +109,7 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 ### Status
 
-The [Span Status](../api.md#set-status) MUST be left unset for an OK gRPC status code, and `Error` for all others.
+The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
 
 ### Events
 
