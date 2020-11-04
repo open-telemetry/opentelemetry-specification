@@ -13,7 +13,8 @@ This document defines how to describe remote procedure calls
     + [Service name](#service-name)
   * [Distinction from HTTP spans](#distinction-from-http-spans)
 - [gRPC](#grpc)
-  * [Status](#status)
+  * [gRPC Attributes](#grpc-attributes)
+  * [gRPC Status](#grpc-status)
   * [Events](#events)
 
 <!-- tocstop -->
@@ -97,7 +98,7 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 `rpc.system` MUST be set to `"grpc"`.
 
-### Attributes
+### gRPC Attributes
 
 <!-- semconv rpc.grpc -->
 | Attribute  | Type | Description  | Example  | Required |
@@ -107,7 +108,7 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 [gRPC]: https://grpc.io/
 
-### Status
+### gRPC Status
 
 The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
 
