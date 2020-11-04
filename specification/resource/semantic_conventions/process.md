@@ -136,7 +136,7 @@ Examples for some Ruby runtimes
 
 **type:** `process.middleware`
 
-**Description:** The single middleware instance which is monitored on the runtime in this process.
+**Description:** The single middleware instance which is monitored on this process.
 
 | Attribute  | Description  | Example  | Required |
 |---|---|---|--|
