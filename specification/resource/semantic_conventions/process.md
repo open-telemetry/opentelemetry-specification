@@ -131,3 +131,59 @@ Examples for some Ruby runtimes
 | --- | --- | --- | --- |
 | MRI | ruby | 2.7.1 | ruby 2.7.1p83 (2020-03-31 revision a0c7c23c9c) [x86_64-darwin19] |
 | TruffleRuby | truffleruby | 2.6.2 | truffleruby (Shopify) 20.0.0-dev-92ed3059, like ruby 2.6.2, GraalVM CE Native [x86_64-darwin] |
+
+## Process middlewares
+
+**type:** `process.middleware`
+
+**Description:** The single middleware instance which is monitored on the runtime in this process.
+
+| Attribute  | Description  | Example  | Required |
+|---|---|---|--|
+| process.middleware.type | Standardized attribute, specifying the type of middleware on the runtime. This attribute adds value to traces, giving the opportunity to visualise different kind of middleware using different representation in server-side. The supported values of type are `as` (application server), `ws` (web server), `dbs` (database server) or `mom` (message-oriented middleware). | `as` | No |
+| process.middleware.name | The name of the middleware running on this process. | `Tomcat` | No |
+| process.middleware.version | The version of the middleware of this process, as returned by the middleware (preferably during runtime) without modification. | `9.0.39` | No |
+| process.middleware.description | An additional description about the middleware of the process. | `Apache Tomcat/9.0.39` | No |
+
+`process.middleware.type` MUST be set to one of the values listed below. 
+`process.middleware.name` SHOULD be set to one of the values listed below. If none of the listed values apply, a custom value best describing the runtime MAY be used.
+
+***Application server middlewares:***
+
+Information describing the application server should be captured using the values acquired from the middleware specific API, preferably during runtime. As an example - for Java application servers this information can be captured by invoking `ServletContext.getServerInfo()` during runtime and parsing the result.
+
+Examples for some application server middlewares:
+
+| Name | `process.middleware.name` | `process.middleware.version` | `process.middleware.description` |
+| --- | --- | --- | --- |
+| Apache Tomcat | `Tomcat` | `9.0.39` | `Apache Tomcat/9.0.39` |
+| Eclipse Jetty | `Jetty` | `9.4.33` | `jetty/9.4.33.v20201020` |
+| Eclipse GlassFish | `GlassFish` | `5.0` | `GlassFish Server Open Source Edition  5.0` |
+| WildFly | `WildFly` | `21.0.0` | `WildFly Full 21.0.0.Final (WildFly Core 13.0.1.Final) - 2.2.2.Final` |
+
+***Web server middlewares:***
+
+Examples for some web server middlewares:
+
+| Name | `process.middleware.name` | `process.middleware.version` | `process.middleware.description` |
+| --- | --- | --- | --- |
+| nginx | `nginx` | `1.19.3` | `nginx version: nginx/1.19.3` |
+| Apache HTTP Server | `apache` | `2.4.41` | `Apache/2.4.41 (Ubuntu) OpenSSL/1.1.1f` |
+
+***Message-oriented middlewares:***
+
+Examples for some message-oriented middlewares:
+
+| Name | `process.middleware.name` | `process.middleware.version` | `process.middleware.description` |
+| --- | --- | --- | --- |
+| Apache Kafka | `Kafka` | `2.6.0` | `2.6.0 (Commit:62abe01bee039651)` |
+
+***Database middlewares:***
+
+Examples for some database middlewares:
+
+| Name | `process.middleware.name` | `process.middleware.version` | `process.middleware.description` |
+| --- | --- | --- | --- |
+| Apache Druid | `Druid` | `0.15.0` | `0.15.0-incubating` |
+| MySQL | `MySQL` | `5.7.28` | `5.7.28-0ubuntu0.19.04.2` |
+
