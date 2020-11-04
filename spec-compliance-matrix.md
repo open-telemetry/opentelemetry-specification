@@ -32,15 +32,15 @@ status of the feature is not known.
 |Create root span                              | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|No explicit parent Span/SpanContext allowed   |   | +  |   | +    | +  |      |   | +  |   |    |
-|SpanProcessor.OnStart receives parent Context |   | +  |   | +    | +  |      |   | +  |   |    |
+|No explicit parent Span/SpanContext allowed   |   | +  | + | +    | +  |      |   | +  |   |    |
+|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  |      |   | +  |   |    |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|IsRecording becomes false after End           |   | +  |   | +    |    |      |   |    |   |    |
-|Set status with StatusCode (Unset, Ok, Error) |   | +  |   | +    | +  |      |   | +  |   |    |
+|IsRecording becomes false after End           |   | +  | + | +    |    |      |   |    |   |    |
+|Set status with StatusCode (Unset, Ok, Error) |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1644) | +    | +  |      |   | +  |   |    |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |events collection size limit                  |   | +  | + | +    | +  |      |   | +  |   |    |
 |attribute collection size limit               |   | +  | + | +    | +  |      |   | +  |   |    |
@@ -53,7 +53,7 @@ status of the feature is not known.
 |Double floating-point type                    | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Signed int64 type                             | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Array of primitives (homogeneous)             | + | +  | + | +    | +  | -    | + | +  | + | +  |
-|`null` values documented as invalid/undefined |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)     |    |      |   |    |   |    |
+|`null` values documented as invalid/undefined |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/issues/1614) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)     |    |      |   |    |   |    |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |[Span linking](specification/trace/api.md#specifying-links)|
 |AddLink                                       | + | +  | + | +    | +  | +    | + | +  | - | +  |
@@ -67,7 +67,7 @@ status of the feature is not known.
 |RecordException with extra parameters         | - | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1102)    | -  | -    |   | +  | - | +  |
 |[Sampling](specification/trace/sdk.md#sampling)|
 |Allow samplers to modify tracestate           |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1220)     |    |      |   | +  |   |    |
-|ShouldSample gets full parent Context         |   | +  |   | +    |    |      |   |    |   |    |
+|ShouldSample gets full parent Context         |   | +  | + | +    |    |      |   |    |   |    |
 
 ## Baggage
 
@@ -107,7 +107,7 @@ status of the feature is not known.
 |B3 Propagator                                 |  | +  | + | +    | +  |      |   | +  |   |    |
 |Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    |      |   | +  |   |    |
 |[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)|
-|Fields                                        |  | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1615) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   | +  |   |    |
+|Fields                                        |  | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   | +  |   |    |
 |Setter argument                               |  | +  | + | +   |    |      |   |    |   |    |
 |Getter argument                               |  | +  | + | +   |    |      |   |    |   |    |
 |Getter argument returning Keys                |  | +  | + | +   |    |      |   |    |   |    |
