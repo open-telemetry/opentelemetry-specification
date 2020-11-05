@@ -250,6 +250,14 @@ synchronous instrument updates.  The Accumulator SHOULD NOT hold an
 exclusive lock while calling an Aggregator (see below), since some
 Aggregators may have higher concurrency expectations.
 
+State managed in the Accumulator MUST be transient.  This requirement
+ensures that export pipelines written constructed for stateless
+exporters (e.g. Statsd, OTLP with a stateless ExportKindSelector) are
+not penalized by permanent state in the Accumulator.  This implies
+that the use of long-term state in a Metrics export pipeline should be
+elective, and such state if present should be managed in the Processor
+component.
+
 #### Accumulator: Collect() function
 
 The Accumulator MUST implement a Collect method that builds and
@@ -268,9 +276,75 @@ Label Set, Resource, and metric Descriptor.
 
 TODO: _Are there more Accumulator functional requirements?_
 
-### Processor
+### Processor: Component interface
 
-TODO _Processor functional requirements_
+The Processor component interface supports interaction from the
+Controller and Accumulator.  The Controller, responsible for
+initiating a new round of collection, informs the Processor when a
+collection interval starts and finishes.  After finishing the
+collection interval, the Controller gets the ExportRecordSet before
+calling the Exporter to export data.
+
+The Accumulator interacts with the Processor during the call to its
+`Collect()` method, during which it calls `Process()` once per
+ExportRecord on the Processor.
+
+The Processor component is meant to be used for managing long-term
+state; it is also one of the locations in the Metrics export pipeline
+where we can impemlement control over cardinality.  There are two
+reasons that long-term state is typically required in a Metric export
+pipeline:
+
+1. Because the Exporter requests Cumulative aggregation temporality for Sum and/or Histogram data points
+2. Because the Exporter requests keeping Memory about all metric label sets, regardless of the requested aggregation temporality.
+
+Note that both of these behaviors are typically required for a
+Prometheus exporter and that when none of these behaviors are
+configured, the Metrics export pipeline can be expected not to develop
+long-term state.
+
+#### Basic Processor
+
+The basic Processor supports two standard ExportKindSelectors and the
+independent Memory behavior described above.  The default
+OpenTelemetry Metrics SDK MUST provide a basic Processor meeting these
+requirements.
+
+##### Basic Processor: CumulativeExportKindSelector
+
+CumulativeExportKindSelector is the default behavior, which requests
+exporting Cumulative aggregation temporality for Sums and Histograms
+and implies that label sets used with synchronous instruments will be
+remembered indefinitely in the SDK.  This ExportKindSelector is the
+default in order support downstream Prometheus exporters "out of the
+box".
+
+##### Basic Processor: StatelessExportKindSelector
+
+The StatelessExportKindSelector configures a Metric export pipeline
+with no long-term memory requirements.  In this selector, the Counter,
+UpDownCounter, ValueRecorder, and ValueObserver instruments are
+configured for Delta aggregation temporality while SumObserver and
+UpDownSumObserver instruments are configured for Cumulative
+aggregation temporality.  This basic Processor configuration has no
+long-term memory requirements because each instrument is
+passed-through without any conversion.
+
+##### Basic Processor: Memory
+
+Some metrics exporter configurations request that the Metric export
+pipeline maintain long-term state about historically reported Metric
+timeseries.  This option is a simple boolean that, when set, requires
+the Processor to retain memory about all timeseries it has ever
+exported.  This option is only meaningful when reporting Cumulative
+aggregation temporality.
+
+#### Reducing Processor
+
+The reducing Processor is a Processor interface implementation used in
+conjunction with another (e.g., basic) Processor to drop labels in a
+Metric export pipeline.  The default OpenTelemetry SDK SHOULD provide
+a Reducing Processor implementation.
 
 ### Controller
 
