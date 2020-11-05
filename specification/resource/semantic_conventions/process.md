@@ -150,7 +150,7 @@ Examples for some Ruby runtimes
 
 ***Application server middlewares:***
 
-Information describing the application server should be captured using the values acquired from the middleware specific API, preferably during runtime. As an example - for Java application servers this information can be captured by invoking `ServletContext.getServerInfo()` during runtime and parsing the result.
+Information describing the application server should be captured using the values acquired from the middleware specific API, preferably during runtime. As an example - for Java application servers supporting Servlet API this information can be captured by invoking `ServletContext.getServerInfo()` during runtime and parsing the result.
 
 Examples for some application server middlewares:
 
