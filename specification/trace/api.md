@@ -149,10 +149,8 @@ the following functionality:
 - Set the currently active span to the implicit context. This is equivalent to getting the implicit context, then inserting the `Span` to the context.
 
 All the above functionalities operate solely on the context API, and they MAY be
-exposed as static methods on the trace module, as static methods on a class
-inside the trace module (it MAY be named `TracingContextUtilities`), or on the
-[`Tracer`](#tracer) class. This functionality SHOULD be fully implemented in the
-API when possible.
+exposed as either static methods on the trace module, or as static methods on a class
+inside the trace module. This functionality SHOULD be fully implemented in the API when possible.
 
 ## Tracer
 
