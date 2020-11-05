@@ -125,8 +125,3 @@ measured. The choice of prefix may affect the value type to be recorded.
 > Example: it may be reasonable to record time as an integer when using an
 > instrument with a unit of nanosecond, when the same duration would be recorded
 > as a floating point on an instrument with a unit of second.
-
-OpenTelemetry APIs provide constants for all units used in the semantic
-conventions in these specifications (including
-[non-units](https://ucum.org/ucum.html#para-50)). When new units are added to
-semantic conventions, the APIs should be updated to include them as constants.
