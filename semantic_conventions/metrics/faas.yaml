@@ -15,6 +15,6 @@ groups:
           required: always
         - ref: faas.coldstart
           required: always
-        - id: faas.error
+        - id: error
           type: boolean
           brief: 'Whether or not the function resulted in an error.'
