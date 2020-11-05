@@ -73,7 +73,7 @@ These terms are defined in the Metrics API specification:
 Defined in the [Resource SDK](../resource/sdk.md) specification:
 
 - **Resource**: a set of key-values with unique keys describing the process
-- [**Instrumentation Library**](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/glossary.md#instrumentation-library): the name and version associated with a package of instrumentation.
+- [**Instrumentation Library**](../glossary.md#instrumentation-library): the name and version associated with a package of instrumentation.
 
 These are the significant data types used in the model architecture:
 
