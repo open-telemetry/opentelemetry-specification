@@ -15,10 +15,10 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|Shutdown (SDK only required)                  |   | +  | + | +    | +  |      |   | +  |   |    |
+|Shutdown (SDK only required)                  |   | +  | + | +    | +  | -    |   | +  |   |    |
 |[Trace / Context interaction](specification/trace/api.md#context-interaction)|
-|Get active Span                               |   | +  | + | +    | +  |      |   | +  |   |    |
-|Set active Span                               |   | +  | + | +    | +  |      |   | +  |   |    |
+|Get active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   |    |
+|Set active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   |    |
 |[Tracer](specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -32,19 +32,19 @@ status of the feature is not known.
 |Create root span                              | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|No explicit parent Span/SpanContext allowed   |   | +  | + | +    | +  |      |   | +  |   |    |
-|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  |      |   | +  |   |    |
+|No explicit parent Span/SpanContext allowed   |   | +  | + | +    | +  | +    |   | +  |   |    |
+|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  | +    |   | +  |   |    |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|IsRecording becomes false after End           |   | +  | + | +    |    |      |   |    |   |    |
-|Set status with StatusCode (Unset, Ok, Error) |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1644) | +    | +  |      |   | +  |   |    |
+|IsRecording becomes false after End           |   | +  | + | +    |    | +    |   |    |   |    |
+|Set status with StatusCode (Unset, Ok, Error) |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1644) | +    | +  | -    |   | +  |   |    |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|events collection size limit                  |   | +  | + | +    | +  |      |   | +  |   |    |
-|attribute collection size limit               |   | +  | + | +    | +  |      |   | +  |   |    |
-|links collection size limit                   |   | +  | + | +    | +  |      |   | +  |   |    |
+|events collection size limit                  |   | +  | + | +    | +  | -    |   | +  |   |    |
+|attribute collection size limit               |   | +  | + | +    | +  | -    |   | +  |   |    |
+|links collection size limit                   |   | +  | + | +    | +  | -    |   | +  |   |    |
 |[Span attributes](specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
@@ -52,8 +52,8 @@ status of the feature is not known.
 |Boolean type                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Double floating-point type                    | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Signed int64 type                             | + | +  | + | +    | +  | +    | - | +  | + | +  |
-|Array of primitives (homogeneous)             | + | +  | + | +    | +  | -    | + | +  | + | +  |
-|`null` values documented as invalid/undefined |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/issues/1614) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)     |    |      |   |    |   |    |
+|Array of primitives (homogeneous)             | + | +  | + | +    | +  | +    | + | +  | + | +  |
+|`null` values documented as invalid/undefined   |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/issues/1614) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)    |    | N/A  |   |    |   |    |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |[Span linking](specification/trace/api.md#specifying-links)|
 |AddLink                                       | + | +  | + | +    | +  | +    | + | +  | - | +  |
@@ -66,15 +66,15 @@ status of the feature is not known.
 |RecordException                               | - | +  | + | +    | +  | -    |   | +  | - | +  |
 |RecordException with extra parameters         | - | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1102)    | -  | -    |   | +  | - | +  |
 |[Sampling](specification/trace/sdk.md#sampling)|
-|Allow samplers to modify tracestate           |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1220)     |    |      |   | +  |   |    |
-|ShouldSample gets full parent Context         |   | +  | + | +    |    |      |   |    |   |    |
+|Allow samplers to modify tracestate           |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1220)    |    | +    |   | +  |   |    |
+|ShouldSample gets full parent Context         |   | +  | + | +    |    | +    |   |    |   |    |
 
 ## Baggage
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Basic support                                 |  | +  | + | +    | +  |      |   | +  |   |    |
-|Use official header name `baggage`            |  | +  | + | +    | +  |      |   | +  |   |    |
+|Basic support                                 |  | +  | + | +    | +  | +    |   | +  |   |    |
+|Use official header name `baggage`              |  | +  | + | +    | +  | +    |   | +  |   |    |
 
 ## Metrics
 
@@ -86,31 +86,31 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|Create from Attributes                        | + | +  | + | +    | +  |      |   | +  |   |    |
-|Create empty                                  | + | +  | + | +    | +  |      |   | +  |   |    |
-|Merge                                         | + | +  | + | +    | +  |      |   | +  |   |    |
-|Retrieve attributes                           | + | +  | + | +    | +  |      |   | +  |   |    |
+|Create from Attributes                        | + | +  | + | +    | +  | +    |   | +  |   |    |
+|Create empty                                  | + | +  | + | +    | +  | +    |   | +  |   |    |
+|Merge                                         | + | +  | + | +    | +  | +    |   | +  |   |    |
+|Retrieve attributes                           | + | +  | + | +    | +  | +    |   | +  |   |    |
 
 ## Context Propagation
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Create Context Key                            |  | +  | + | +    | +  |      | + | +  |   |    |
-|Get value from Context                        |  | +  | + | +    | +  |      | + | +  |   |    |
-|Set value for Context                         |  | +  | + | +    | +  |      | + | +  |   |    |
-|Attach Context                                |  | +  | + | +    | +  |      | + | +  |   |    |
-|Detach Context                                |  | +  | + | +    | +  |      | + | +  |   |    |
-|Get current Context                           |  | +  | + | +    | +  |      | + | +  |   |    |
-|Composite Propagator                          |  | +  | + | +    | +  |      |   | +  |   |    |
-|Global Propagator                             |  | +  | + | +    | +  |      |   | +  |   |    |
-|TraceContext Propagator                       |  | +  | + | +    | +  |      |   | +  |   |    |
-|B3 Propagator                                 |  | +  | + | +    | +  |      |   | +  |   |    |
-|Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    |      |   | +  |   |    |
+|Create Context Key                            |  | +  | + | +    | +  | +    | + | +  |   |    |
+|Get value from Context                        |  | +  | + | +    | +  | +    | + | +  |   |    |
+|Set value for Context                         |  | +  | + | +    | +  | +    | + | +  |   |    |
+|Attach Context                                |  | +  | + | +    | +  | +    | + | +  |   |    |
+|Detach Context                                |  | +  | + | +    | +  | +    | + | +  |   |    |
+|Get current Context                           |  | +  | + | +    | +  | +    | + | +  |   |    |
+|Composite Propagator                          |  | +  | + | +    | +  | N/A  |   | +  |   |    |
+|Global Propagator                             |  | +  | + | +    | +  | +    |   | +  |   |    |
+|TraceContext Propagator                       |  | +  | + | +    | +  | +    |   | +  |   |    |
+|B3 Propagator                                 |  | +  | + | +    | +  | +    |   | +  |   |    |
+|Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    | +    |   | +  |   |    |
 |[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)|
-|Fields                                        |  | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)   |    |      |   | +  |   |    |
-|Setter argument                               |  | +  | + | +   |    |      |   |    |   |    |
-|Getter argument                               |  | +  | + | +   |    |      |   |    |   |    |
-|Getter argument returning Keys                |  | +  | + | +   |    |      |   |    |   |    |
+|Fields                                        |  | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)    |    | +    |   | +  |   |    |
+|Setter argument                               |  | +  | + | +    |    | +    |   |    |   |    |
+|Getter argument                               |  | +  | + | +    |    | +    |   |    |   |    |
+|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |    |
 
 ## Environment Variables
 
