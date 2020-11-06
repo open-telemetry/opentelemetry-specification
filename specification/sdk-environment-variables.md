@@ -10,6 +10,7 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning and be gracefully ignored. |
 | OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
+| OTEL_TRACE_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACE_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST NOT result in an error.  |
 
 Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger".
 Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
@@ -22,6 +23,10 @@ Known values for `OTEL_TRACE_SAMPLER` are:
 - `"parentbased_always_on"`: `ParentBased(root=AlwaysOnSampler)`
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
+
+Known values for `OTEL_TRACE_SAMPLER_ARG` are:
+
+- `traceidratio` and `parentbased_traceidratio`: A number in the [0..1] range, e.g. 0.25.
 
 ## Batch Span Processor
 
