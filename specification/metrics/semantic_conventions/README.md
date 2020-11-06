@@ -77,7 +77,7 @@ Metric names SHOULD NOT be pluralized, unless the value being recorded
 represents discrete instances of a
 [countable quantity](https://en.wikipedia.org/wiki/Count_noun).
 Generally, the name SHOULD be pluralized only if the unit of the metric in
-question is a pseudo-unit (like `{faults}` or `{operations}`).
+question is a non-unit (like `{faults}` or `{operations}`).
 
 Examples:
 
