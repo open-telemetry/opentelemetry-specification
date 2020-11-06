@@ -61,6 +61,8 @@ New:
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
 - Add OTEL_TRACE_SAMPLER env variable definition
   ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
+- Add OTEL_TRACE_SAMPLER_ARG env variable definition
+  ([#1202](https://github.com/open-telemetry/opentelemetry-specification/pull/1202))
 
 Updates:
 
