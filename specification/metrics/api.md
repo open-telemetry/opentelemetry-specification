@@ -344,6 +344,7 @@ instruments with the following units:
 
 | Name        | Kind of Quantity         | Unit String   |
 | ------------| ----------------         | -----------   |
+| unity       | unitless count or ratio  |               |
 | percent     | fraction of a total      | %             |
 | nanosecond  | time                     | NS            |
 | microsecond | time                     | US            |
