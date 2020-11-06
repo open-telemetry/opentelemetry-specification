@@ -1,4 +1,4 @@
-# Semantic conventions for messaging system metrics
+# Semantic conventions for messaging systems
 
 The conventions described in this section are specific to messaging systems. When interactions with messaging systems occur,
 metric events about those operations will be generated and reported, providing insight into those
@@ -13,7 +13,7 @@ The [Trace Messaging Semantic Conventions Definitions](../../trace/semantic_conv
 
 ## Common Labels
 
-The following labels **SHOULD** be applied to all messaging metric instruments.
+The following labels SHOULD be applied to all messaging metric instruments.
 
 <!-- semconv metrics-messaging -->
 | Attribute  | Type | Description  | Example  | Required |
@@ -31,62 +31,61 @@ The following labels **SHOULD** be applied to all messaging metric instruments.
 | [`net.transport`](../../trace/semantic_conventions/span-general.md) | string enum | Transport protocol used. See note below. | `IP.TCP` | No |
 <!-- endsemconv -->
 
-For messaging metric labels, one of the following sets of labels is RECOMMENDED (in order of usual preference unless for a particular messaging system it is known that some other set is preferable for some reason; all strings must be non-empty):
+For messaging system metric event labels, one of the following sets of labels is RECOMMENDED (in order of usual preference unless for a particular messaging system it is known that some other set is preferable for some reason; all strings must be non-empty):
 
 * `messaging.url`
 * `net.peer.name`, `net.peer.port`, `net.peer.ip`, `net.transport`
 
 ## Send Message Metric Instruments
 
-The following metric instruments SHOULD be captured for every message send operation
- unless the producer is batching. If the producer is batching some metrics may be
- omitted (e.g. `messaging.producer.duration` and `messaging.producer.compressed.bytes`).
+The following metric instruments SHOULD be used to capture metric events for every message send operation
+ unless the producer is batching. If the producer is batching any metric instruments
+within this section MAY be omitted.
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
 | `messaging.producer.duration` | ValueRecorder | milliseconds | Time spent producing a message to a queue/topic. |
-| `messaging.producer.bytes` | ValueRecorder | bytes | The (uncompressed) size of the payload sent in bytes. Also use this metric if it is unknown whether the compressed or uncompressed payload size is reported. |
+| `messaging.producer.bytes` | ValueRecorder | bytes | The (uncompressed) size of the payload sent in bytes. Also use this metric instrument if it is unknown whether the compressed or uncompressed payload size is reported. |
 | `messaging.producer.compressed.bytes` | ValueRecorder | bytes | The compressed size of the payload sent in bytes. |
 
 ### Send Batch Metric Instruments
 
 When a message system uses batching the following metric instruments SHOULD
-be captured for every batch send operation.
+be used to capture metric events for every batch send operation.
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
-| `messaging.producer.batch.duration` | ValueRecorder | milliseconds | Time spent prodcing a batch of messages to a queue/topic. |
+| `messaging.producer.batch.duration` | ValueRecorder | milliseconds | Time spent producing a batch of messages to a queue/topic. |
 | `messaging.producer.batch.size` | ValueRecorder | messages | The number of messages in each batch if this producer/client is batching messages. |
-| `messaging.producer.batch.bytes` | ValueRecorder | bytes | The (uncompressed) size of the batch sent in bytes. Also use this metric if it is unknown whether the compressed or uncompressed batch size is reported. |
+| `messaging.producer.batch.bytes` | ValueRecorder | bytes | The (uncompressed) size of the batch sent in bytes. Also use this metric instrument if it is unknown whether the compressed or uncompressed batch size is reported. |
 | `messaging.producer.batch.compressed.bytes` | ValueRecorder | bytes | The compressed size of the batch sent in bytes. |
 
 ## Receive Message Metric Instruments
 
-The following metric instruments SHOULD be captured for every message receive operation
- unless the consumer is receiving batches. If the consumer is receiving batches some metrics
- may be omitted (e.g. `messaging.consumer.duration` and `messaging.consumer.compressed.bytes`).
+The following metric instruments SHOULD be used to capture metric events for every message receive operation
+ unless the consumer is receiving batches. If the consumer is receiving batches any metric instruments within this section MAY be omitted.
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
 | `messaging.consumer.received.duration` | ValueRecorder | milliseconds | Time spent receiving a message from a queue/topic. |
-| `messaging.consumer.received.bytes` | ValueRecorder | bytes | The (uncompressed) size of the message received in bytes. Also use this metric if it is unknown whether the compressed or uncompressed payload size is reported. |
+| `messaging.consumer.received.bytes` | ValueRecorder | bytes | The (uncompressed) size of the message received in bytes. Also use this metric instrument if it is unknown whether the compressed or uncompressed payload size is reported. |
 | `messaging.consumer.received.compressed.bytes` | ValueRecorder | bytes | The compressed size of the payload sent in bytes. |
 
 ### Receive Batch Metric Instruments
 
 When a message system uses batching the following metric instruments SHOULD
-be captured for every batch receive operation.
+be used to capture metric events for every batch receive operation.
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
 | `messaging.consumer.received.batch.duration` | ValueRecorder | milliseconds | Time spent receiving a batch of messages from a queue/topic. |
 | `messaging.consumer.received.batch.size` | ValueRecorder | messages | The number of messages in each batch if messages are consumed in batches. |
-| `messaging.consumer.received.batch.bytes` | ValueRecorder | bytes | The (uncompressed) size of the batch received in bytes. Also use this metric if it is unknown whether the compressed or uncompressed batch size is reported. |
+| `messaging.consumer.received.batch.bytes` | ValueRecorder | bytes | The (uncompressed) size of the batch received in bytes. Also use this metric instrument if it is unknown whether the compressed or uncompressed batch size is reported. |
 | `messaging.consumer.received.batch.compressed.bytes` | ValueRecorder | bytes | The compressed size of the batch received in bytes. |
 
 ## Process Message Metric Instruments
 
-The following metric instruments SHOULD be captured for every message process operation.
+The following metric instruments SHOULD be used to capture metric events for every message processing operation.
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|

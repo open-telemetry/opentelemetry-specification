@@ -3,7 +3,7 @@ groups:
       prefix: messaging
       brief: >
           This document defines the attributes used in
-          messaging system metrics.
+          messaging system metric instruments.
       attributes:
         - ref: messaging.system
           required: always
