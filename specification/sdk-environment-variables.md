@@ -26,7 +26,7 @@ Known values for `OTEL_TRACE_SAMPLER` are:
 
 Known values for `OTEL_TRACE_SAMPLER_ARG` are:
 
-- `traceidratio` and `parentbased_traceidratio`: A number in the [0..1] range, e.g. 0.25.
+- `traceidratio` and `parentbased_traceidratio`: Sampling probability, a number in the [0..1] range, e.g. "0.25".
 
 ## Batch Span Processor
 
