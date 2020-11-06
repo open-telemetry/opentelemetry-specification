@@ -53,7 +53,7 @@ status of the feature is not known.
 |Double floating-point type                    | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Signed int64 type                             | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Array of primitives (homogeneous)             | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|`null` values documented as invalid/undefined   |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/issues/1614) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)    |    | N/A  |   |    |   |    |
+|`null` values documented as invalid/undefined |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/issues/1614) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)    |    | N/A  |   |    |   |    |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |[Span linking](specification/trace/api.md#specifying-links)|
 |AddLink                                       | + | +  | + | +    | +  | +    | + | +  | - | +  |
@@ -74,7 +74,7 @@ status of the feature is not known.
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
 |Basic support                                 |  | +  | + | +    | +  | +    |   | +  |   |    |
-|Use official header name `baggage`              |  | +  | + | +    | +  | +    |   | +  |   |    |
+|Use official header name `baggage`            |  | +  | + | +    | +  | +    |   | +  |   |    |
 
 ## Metrics
 
