@@ -75,7 +75,7 @@ Often such destinations are unnamed or have an auto-generated name.
 
 ## Conventions
 
-Given these definitions, the remainder of this section describes the semantic conventions that shall be followed for Spans describing interactions with messaging systems.
+Given these definitions, the remainder of this section describes the semantic conventions for Spans describing interactions with messaging systems.
 
 ### Span name
 
