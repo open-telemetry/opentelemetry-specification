@@ -49,51 +49,51 @@ Some database systems may allow a connection to switch to a different `db.user`,
 
 `db.system` MUST be one of the following or, if none of the listed values apply, a custom value:
 
-| Value  | Description |
-|---|---|
-| `other_sql` | Some other SQL database. Fallback only. See notes. |
-| `mssql` | Microsoft SQL Server |
-| `mysql` | MySQL |
-| `oracle` | Oracle Database |
-| `db2` | IBM Db2 |
-| `postgresql` | PostgreSQL |
-| `redshift` | Amazon Redshift |
-| `hive` | Apache Hive |
-| `cloudscape` | Cloudscape |
-| `hsqlsb` | HyperSQL DataBase |
-| `progress` | Progress Database |
-| `maxdb` | SAP MaxDB |
-| `hanadb` | SAP HANA |
-| `ingres` | Ingres |
+| Value  | Description | Default port
+|---|---|---|
+| `other_sql` | Some other SQL database. Fallback only. See notes. | -
+| `mssql` | Microsoft SQL Server | 1433
+| `mysql` | MySQL | 3306
+| `oracle` | Oracle Database | 1521
+| `db2` | IBM Db2 | 50000
+| `postgresql` | PostgreSQL | 5432
+| `redshift` | Amazon Redshift | 5439
+| `hive` | Apache Hive | 10000
+| `cloudscape` | Cloudscape | 1099
+| `hsqlsb` | HyperSQL DataBase | 9001
+| `progress` | Progress Database | 6718 
+| `maxdb` | SAP MaxDB | 9876
+| `hanadb` | SAP HANA | 30015 
+| `ingres` | Ingres | 
 | `firstsql` | FirstSQL |
-| `edb` | EnterpriseDB |
-| `cache` | InterSystems Caché |
-| `adabas` | Adabas (Adaptable Database System) |
-| `firebird` | Firebird |
-| `derby` | Apache Derby |
-| `filemaker` | FileMaker |
-| `informix` | Informix |
-| `instantdb` | InstantDB |
-| `interbase` | InterBase |
-| `mariadb` | MariaDB |
-| `netezza` | Netezza |
-| `pervasive` | Pervasive PSQL |
+| `edb` | EnterpriseDB | 5432
+| `cache` | InterSystems Caché | 56772 
+| `adabas` | Adabas (Adaptable Database System) | 
+| `firebird` | Firebird | 3050
+| `derby` | Apache Derby | 1527 
+| `filemaker` | FileMaker | 2399
+| `informix` | Informix | 1526
+| `instantdb` | InstantDB | 
+| `interbase` | InterBase | 3050
+| `mariadb` | MariaDB | 3306
+| `netezza` | Netezza | 5480
+| `pervasive` | Pervasive PSQL | 1583
 | `pointbase` | PointBase |
-| `sqlite` | SQLite |
-| `sybase` | Sybase |
-| `teradata` | Teradata |
-| `vertica` | Vertica |
-| `h2` | H2 |
+| `sqlite` | SQLite | NA
+| `sybase` | Sybase | 5000
+| `teradata` | Teradata | 1025
+| `vertica` | Vertica | 5433
+| `h2` | H2 | 9092 
 | `coldfusion` | ColdFusion IMQ |
-| `cassandra` | Apache Cassandra |
+| `cassandra` | Apache Cassandra | 9042
 | `hbase` | Apache HBase |
-| `mongodb` | MongoDB |
-| `redis` | Redis |
-| `couchbase` | Couchbase |
-| `couchdb` | CouchDB |
+| `mongodb` | MongoDB | 27017
+| `redis` | Redis | 6379
+| `couchbase` | Couchbase | 11210
+| `couchdb` | CouchDB | 5984
 | `cosmosdb` | Microsoft Azure Cosmos DB |
 | `dynamodb` | Amazon DynamoDB |
-| `neo4j` | Neo4j |
+| `neo4j` | Neo4j | 7474
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
