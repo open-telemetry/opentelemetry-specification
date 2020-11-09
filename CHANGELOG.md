@@ -59,10 +59,15 @@ New:
   ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
 - Add semantic conventions for system metrics
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
-- Add `db.table` and `db.operation` to semantic conventions ([#1141](https://github.com/open-telemetry/opentelemetry-specification/pull/1141))
+- Add `db.table` and `db.operation` to semantic conventions
+  ([#1141](https://github.com/open-telemetry/opentelemetry-specification/pull/1141))
+- Add OTEL_TRACE_SAMPLER env variable definition
+  ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
 
 Updates:
 
+- Make `process.pid` optional, split `process.command_args` from `command_line`
+  ([#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Renamed `CorrelationContext` to `Baggage`:
   ([#857](https://github.com/open-telemetry/opentelemetry-specification/pull/857))
 - Add semantic convention for NGINX custom HTTP 499 status code.
@@ -92,7 +97,8 @@ Updates:
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
 - Add semantic conventions for process runtime
-  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882))
+  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882),
+   [#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Use hex encoding for trace id and span id fields in OTLP JSON encoding:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
@@ -126,8 +132,8 @@ Updates:
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 - Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
-- Rename SpanContext to SpanReference
-  ([#1075](https://github.com/open-telemetry/opentelemetry-specification/pull/1075))
+- Update semantic conventions for gRPC for new Span Status
+  ([#1156](https://github.com/open-telemetry/opentelemetry-specification/pull/1156))
 
 ## v0.6.0 (07-01-2020)
 
