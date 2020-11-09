@@ -64,6 +64,7 @@ New:
 
 Updates:
 
+- Remove ordering SHOULD-requirement for attributes.
 - Make `process.pid` optional, split `process.command_args` from `command_line`
   ([#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Renamed `CorrelationContext` to `Baggage`:
