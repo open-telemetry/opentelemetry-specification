@@ -24,9 +24,9 @@ Known values for `OTEL_TRACE_SAMPLER` are:
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
 
-Known values for `OTEL_TRACE_SAMPLER_ARG` are:
+Depending on the value of `OTEL_TRACE_SAMPLER`, `OTEL_TRACE_SAMPLER_ARG` may be set as follows:
 
-- `traceidratio` and `parentbased_traceidratio`: Sampling probability, a number in the [0..1] range, e.g. "0.25".
+- For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25".
 
 ## Batch Span Processor
 
