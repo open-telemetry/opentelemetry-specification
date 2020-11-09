@@ -1,7 +1,5 @@
 # OpenTelemetry to Jaeger Transformation
 
-**Status**: [Feature-freeze](../../document-status.md).
-
 This document defines the transformation between OpenTelemetry and Jaeger Spans.
 Jaeger's v2 API is defined in the
 [jaeger model.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/model.proto)
