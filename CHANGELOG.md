@@ -59,6 +59,8 @@ New:
   ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
 - Add semantic conventions for system metrics
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
+- Add `db.table` and `db.operation` to semantic conventions
+  ([#1141](https://github.com/open-telemetry/opentelemetry-specification/pull/1141))
 - Add OTEL_TRACE_SAMPLER env variable definition
   ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
 
