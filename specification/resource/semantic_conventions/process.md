@@ -124,16 +124,44 @@ TODO(<https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281>): Conf
 
 ### Python Runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-python/issues/1127>): Confirm the contents here
+Python instrumentation should fill in the values as follows:
 
-| Value | Description |
-| --- | --- |
-| `cpython` | CPython |
-| `graalvm` | GraalVM |
-| `ironpython` | IronPython |
-| `jython` | Jython |
-| `pypy` | PyPy|
-| `pythonnet` | PythonNet |
+- `process.runtime.name` -
+  Fill in the value of [`sys.implementation.name`][py_impl]
+- `process.runtime.version` -
+  Fill in the [`sys.implementation.version`][py_impl] values separated by dots.
+  Leave out the release level and serial if the release level
+  equals `final` and the serial equals zero
+  (leave out either both or none).
+
+  This can be implemented with the following Python snippet:
+
+  ```python
+  vinfo = sys.implementation.version
+  result =  ".".join(map(
+      str,
+      vinfo[:3]
+      if vinfo.releaselevel == "final" and not vinfo.serial
+      else vinfo
+  ))
+  ```
+
+- `process.runtime.description` - Fill in the value of [`sys.version`](https://docs.python.org/3/library/sys.html#sys.version) as-is.
+
+[py_impl]: https://docs.python.org/3/library/sys.html#sys.implementation
+
+Examples for some Python runtimes:
+
+| Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
+| --- | --- | --- | --- |
+| CPython 3.7.3 on Windows | cpython | 3.7.3 | 3.7.3 (v3.7.3:ef4ec6ed12, Mar 25 2019, 22:22:05) [MSC v.1916 64 bit (AMD64)] |
+| CPython 3.8.6 on Linux | cpython | 3.8.6 | 3.8.6 (default, Sep 30 2020, 04:00:38) <br>[GCC 10.2.0] |
+| PyPy 3 7.3.2 on Linux | pypy | 3.7.4 | 3.7.4 (?, Sep 27 2020, 15:12:26)<br>[PyPy 7.3.2-alpha0 with GCC 10.2.0] |
+
+Note that on Linux, there is an actual newline in the `sys.version` string,
+and the CPython string had a trailing space in the first line.
+
+Pypy provided a CPython-compatible version in `sys.implementation.version` instead of the actual implementation version which is available in `sys.version`.
 
 ### Ruby Runtimes
 
