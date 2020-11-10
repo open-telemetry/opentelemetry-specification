@@ -251,6 +251,49 @@ groups:
           brief: >
             The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute.
           examples: 'mykeyspace'
+        - id: page_size
+          type: number
+          tag: call-level-tech-specific
+          brief: >
+            The page size of the query.
+          examples: [5000]
+        - id: consistency_level
+          type: string
+          tag: call-level-tech-specific
+          brief: >
+            The consistency level of the query.
+          examples: 'LOCAL_QUORUM'
+        - id: table
+          type: string
+          tag: call-level-tech-specific
+          brief: >
+            The table being queried.
+          examples: 'mytable'
+        - id: idempotence
+          type: boolean
+          tag: call-level-tech-specific
+          brief: >
+            Whether or not the query is idempotent.
+          examples: [true, false]
+        - id: speculative_execution_count
+          type: number
+          required: always
+          tag: call-level-tech-specific
+          brief: >
+            The number of times a query was speculatively executed. A query that was not speculatively executed will have a value of 0.
+          examples: [0, 2]
+        - id: host.id
+          type: string
+          tag: call-level-tech-specific
+          brief: >
+            The host id reported by the coordinating node for a query.
+          examples: 'be13faa2-8574-4d71-926d-27f16cf8a7af'
+        - id: host.dc
+          type: string
+          tag: call-level-tech-specific
+          brief: >
+            The host dc reported by the coordinating node for a query.
+          examples: 'us-west-2'
 
     - id: db.hbase
       prefix: db.hbase
@@ -316,7 +359,6 @@ groups:
             If the operation is acting upon an anonymous table, or more than one table, this
             value MUST NOT be set.
           examples: ['public.users', 'customers']
-
 
     - id: db.tech
       brief: "Semantic convention group for specific technologies"
