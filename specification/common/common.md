@@ -81,9 +81,11 @@ Names SHOULD follow these rules:
 ### Name Pluralization guidelines
 
 - When an attribute represents a single entity, the attribute name SHOULD be singular.
+  Examples: `host.name`, `db.user`, `container.id`.
 
 - When attribute can represent multiple entities, the attribute name SHOULD be pluralized
-  and the value type SHOULD be an array.
+  and the value type SHOULD be an array. E.g. `process.command_args` might include multiple
+  values: the executable name and command arguments.
 
 - When an attribute represents a measurement,
   [Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
