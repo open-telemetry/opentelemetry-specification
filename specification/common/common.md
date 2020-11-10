@@ -63,6 +63,10 @@ Names SHOULD follow these rules:
 - Namespaces can be nested. For example `telemetry.sdk` is a namespace inside
   top-level `telemetry` namespace and `telemetry.sdk.name` is an attribute
   inside `telemetry.sdk` namespace.
+  Note: the fact that an entity is located within another entity is typically
+  not a sufficient reason for forming nested namespaces. The purpose of a
+  namespace is to avoid name clashes, not to indicate entity hierarchies. This
+  purpose should primarily drive the decision about forming nested namespaces.
 
 - For each multi-word dot-delimited component of the attribute name separate the
   words by underscores (i.e. use snake_case). For example `http.status_code`
