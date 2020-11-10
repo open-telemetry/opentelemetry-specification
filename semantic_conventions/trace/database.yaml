@@ -191,12 +191,15 @@ groups:
             conditional: Required, if `db.statement` is not applicable.
           brief: >
             The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations)
-            such as `findAndModify`.
+            such as `findAndModify`, or the SQL keyword.
           note: >
-            While it would semantically make sense to set this, e.g., to a SQL keyword like `SELECT` or `INSERT`,
-            it is not recommended to attempt any client-side parsing of `db.statement` just to get this property
-            (the back end can do that if required).
-          examples: ['findAndModify', 'HMSET']
+            When setting this to an SQL keyword, it is not recommended to
+            attempt any client-side parsing of `db.statement` just to get this
+            property, but it should be set if the operation name is provided by
+            the library being instrumented.
+            If the SQL statement has an ambiguous operation, or performs more
+            than one operation, this value may be omitted.
+          examples: ['findAndModify', 'HMSET', 'SELECT']
         - ref: net.peer.name
           tag: connection-level
           required:
@@ -294,6 +297,27 @@ groups:
             The collection being accessed within the database stated in `db.name`.
           examples: [ 'customers', 'products' ]
 
+    - id: db.sql
+      prefix: 'db.sql'
+      extends: 'db'
+      brief: >
+        Call-level attrbiutes for SQL databases
+      attributes:
+        - id: table
+          tag: call-level-tech-specific
+          type: string
+          required:
+            conditional: Recommended if available.
+          brief: The name of the primary table that the operation is acting upon, including the schema name (if applicable).
+          note: >
+            It is not recommended to attempt any client-side parsing of
+            `db.statement` just to get this property, but it should be set if
+            it is provided by the library being instrumented.
+            If the operation is acting upon an anonymous table, or more than one table, this
+            value MUST NOT be set.
+          examples: ['public.users', 'customers']
+
+
     - id: db.tech
       brief: "Semantic convention group for specific technologies"
       constraints:
@@ -301,3 +325,4 @@ groups:
         - include: 'db.hbase'
         - include: 'db.redis'
         - include: 'db.mongodb'
+        - include: 'db.sql'

@@ -128,6 +128,7 @@ status of the feature is not known.
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   |      |    |      |   |    |   |    |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   |      |    |      |   |    |   |    |
 |OTEL_TRACE_SAMPLER                            |   | -  |   |      |    |      |   |    |   |    |
+|OTEL_TRACE_SAMPLER_ARG                        |   |    |   |      |    |      |   |    |   |    |
 
 ## Exporters
 
