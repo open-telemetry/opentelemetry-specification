@@ -274,7 +274,6 @@ groups:
           tag: call-level-tech-specific
           brief: >
             Whether or not the query is idempotent.
-          examples: [true, false]
         - id: speculative_execution_count
           type: number
           tag: call-level-tech-specific
