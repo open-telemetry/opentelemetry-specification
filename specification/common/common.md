@@ -7,6 +7,9 @@ Table of Contents
 
 - [Attributes](#attributes)
   - [Attribute and Label Naming](#attribute-and-label-naming)
+    - [Name Pluralization Guidelines](#name-pluralization-guidelines)
+    - [Recommendations for OpenTelemetry Authors](#recommendations-for-opentelemetry-authors)
+    - [Recommendations for Application Developers](#recommendations-for-application-developers)
 
 </details>
 
@@ -72,6 +75,19 @@ Names SHOULD follow these rules:
   name prohibits existence of an equally named namespace in the future, and vice
   versa: any existing namespace prohibits existence of an equally named
   attribute or label key in the future.
+  
+### Name Pluralization guidelines
+
+- When an attribute represents a single entity, the attribute name SHOULD be singular.
+  Examples: `host.name`, `db.user`, `container.id`.
+
+- When attribute can represent multiple entities, the attribute name SHOULD be pluralized
+  and the value type SHOULD be an array. E.g. `process.command_args` might include multiple
+  values: the executable name and command arguments.
+
+- When an attribute represents a measurement,
+  [Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
+  SHOULD be followed for the attribute name.
 
 ### Recommendations for OpenTelemetry Authors
 
