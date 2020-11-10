@@ -21,8 +21,6 @@ Attributes are a list of zero or more key-value pairs. An `Attribute` MUST have 
     i.e. it MUST NOT contain values of different types. For protocols that do
     not natively support array values such values SHOULD be represented as JSON strings.
 
-Attributes SHOULD preserve the order in which they're set.
-
 Attribute values expressing a numerical value of zero, an empty string, or an
 empty array are considered meaningful and MUST be stored and passed on to
 processors / exporters.
