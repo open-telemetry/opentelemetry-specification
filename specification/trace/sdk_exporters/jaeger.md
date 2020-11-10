@@ -18,8 +18,12 @@ and Jaeger.
 
 ### Resource
 
-OpenTelemetry resources MUST be mapped to Jaeger process tags. Multiple resources can exist for a
+OpenTelemetry resources MUST be mapped to Jaeger's `Span.Process` tags. Multiple resources can exist for a
 single process and exporters need to handle this case accordingly.
+
+Critically, Jaeger backend depends on `Span.Process.ServiceName` to identify the service
+that produced the spans. That field MUST be populated from the `service.name` attribute
+of the [`service` resource](../../../resource/semantic_conventions#service).
 
 ### InstrumentationLibrary
 
