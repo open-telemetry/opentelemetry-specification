@@ -3,7 +3,7 @@
 Specification documents (files) may explicitly define a "Status", typically
 shown immediately after the document title. When present, the "Status" applies
 to the individual document only and not to the entire specification or any other
-documents. The following table describes what the statuses means.
+documents. The following table describes what the statuses mean.
 
 |Status              |Explanation|
 |--------------------|-----------|
