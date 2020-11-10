@@ -11,6 +11,8 @@ New:
 
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
+- Add performance benchmark specification
+  ([#748](https://github.com/open-telemetry/opentelemetry-specification/pull/748))
 - Enforce that the Baggage API must be fully functional, even without an installed SDK.
   ([#1103](https://github.com/open-telemetry/opentelemetry-specification/pull/1103))
 - Rename "Canonical status code" to "Status code"
@@ -61,7 +63,7 @@ New:
   ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
 - Add semantic conventions for system metrics
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
-- Add `db.table` and `db.operation` to semantic conventions
+- Add `db.sql.table` to semantic conventions, allow `db.operation` for SQL
   ([#1141](https://github.com/open-telemetry/opentelemetry-specification/pull/1141))
 - Add OTEL_TRACE_SAMPLER env variable definition
   ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
@@ -70,6 +72,8 @@ New:
 
 Updates:
 
+- Remove ordering SHOULD-requirement for attributes
+  ([#1212](https://github.com/open-telemetry/opentelemetry-specification/pull/1212))
 - Make `process.pid` optional, split `process.command_args` from `command_line`
   ([#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Renamed `CorrelationContext` to `Baggage`:
