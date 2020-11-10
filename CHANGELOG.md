@@ -9,6 +9,8 @@ release.
 
 New:
 
+- Additional Cassandra semantic attributes
+  ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
 - Enforce that the Baggage API must be fully functional, even without an installed SDK.
   ([#1103](https://github.com/open-telemetry/opentelemetry-specification/pull/1103))
 - Rename "Canonical status code" to "Status code"
