@@ -277,10 +277,9 @@ groups:
           examples: [true, false]
         - id: speculative_execution_count
           type: number
-          required: always
           tag: call-level-tech-specific
           brief: >
-            The number of times a query was speculatively executed. A query that was not speculatively executed will have a value of 0.
+            The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively.
           examples: [0, 2]
         - id: host.id
           type: string
