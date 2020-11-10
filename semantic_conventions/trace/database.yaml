@@ -290,7 +290,7 @@ groups:
           type: string
           tag: call-level-tech-specific
           brief: >
-            The host dc reported by the coordinating node for a query.
+            The host data center reported by the coordinating node for a query.
           examples: 'us-west-2'
 
     - id: db.hbase
