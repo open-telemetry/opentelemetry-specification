@@ -1,5 +1,18 @@
 # Metrics Semantic Conventions
 
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [General Guidelines](#general-guidelines)
+  * [Units](#units)
+  * [Pluralization](#pluralization)
+- [General Metric Semantic Conventions](#general-metric-semantic-conventions)
+  * [Instrument Naming](#instrument-naming)
+  * [Units](#units-1)
+
+<!-- tocstop -->
+
 The following semantic conventions surrounding metrics are defined:
 
 * [HTTP Metrics](http-metrics.md): Semantic conventions and instruments for HTTP metrics.
@@ -50,11 +63,28 @@ and confusion for end users. (For example, prefer `runtime.java.gc*` over
 `runtime.gc.*`.) Measures of many operating system metrics are similarly
 ambiguous.
 
+### Units
+
 Conventional metrics or metrics that have their units included in
 OpenTelemetry metadata (e.g. `metric.WithUnit` in Go) SHOULD NOT include the
 units in the metric name. Units may be included when it provides additional
 meaning to the metric name. Metrics MUST, above all, be understandable and
 usable.
+
+### Pluralization
+
+Metric names SHOULD NOT be pluralized, unless the value being recorded
+represents discrete instances of a
+[countable quantity](https://en.wikipedia.org/wiki/Count_noun).
+Generally, the name SHOULD be pluralized only if the unit of the metric in
+question is a non-unit (like `{faults}` or `{operations}`).
+
+Examples:
+
+* `system.filesystem.utilization`, `http.server.duration`, and `system.cpu.time`
+should not be pluralized, even if many data points are recorded.
+* `system.paging.faults`, `system.disk.operations`, and `system.network.packets`
+should be pluralized, even if only a single data point is recorded.
 
 ## General Metric Semantic Conventions
 
