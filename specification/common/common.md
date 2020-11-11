@@ -31,6 +31,9 @@ processors / exporters.
 Attribute values of `null` are not valid and attempting to set a `null` value is
 undefined behavior.
 
+`null` values SHOULD NOT be allowed in arrays. However, if it is impossible to
+make sure that no `null` values are accepted
+(e.g. in languages that do not have appropriate compile-time type checking),
 `null` values within arrays MUST be preserved as-is (i.e., passed on to span
 processors / exporters as `null`). If exporters do not support exporting `null`
 values, they MAY replace those values by 0, `false`, or empty strings.

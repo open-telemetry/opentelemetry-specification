@@ -70,6 +70,8 @@ New:
 
 Updates:
 
+- Clarify null SHOULD NOT be allowed even in arrays
+  ([#1214](https://github.com/open-telemetry/opentelemetry-specification/pull/1214))
 - Remove ordering SHOULD-requirement for attributes
   ([#1212](https://github.com/open-telemetry/opentelemetry-specification/pull/1212))
 - Make `process.pid` optional, split `process.command_args` from `command_line`
