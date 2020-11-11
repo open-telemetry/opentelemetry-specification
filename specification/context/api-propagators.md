@@ -320,7 +320,7 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
-X-Ray trace header protocol MUST NOT be maintained nor distributed as part of
+X-Ray trace header protocol MUST NOT be maintained or distributed as part of
 the core OpenTelemetry repositories.
 
 Note: AWS is used as an example, not as a requirement.
