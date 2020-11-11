@@ -21,7 +21,8 @@
 The **span name** SHOULD be set to a low cardinality value representing the statement executed on the database.
 It MAY be a stored procedure name (without arguments), DB statement without variable arguments, operation name, etc.
 Since SQL statements may have very high cardinality even without arguments, SQL spans SHOULD be named the
-following way: `<db.operation> <db.name>.<db.sql.table>`, provided that `db.operation` and `db.sql.table` are available.
+following way, unless the statement is known to be of low cardinality:
+`<db.operation> <db.name>.<db.sql.table>`, provided that `db.operation` and `db.sql.table` are available.
 If `db.sq.table` is not available due to its semantics, the span SHOULD be named `<db.operation> <db.name>`.
 When it's otherwise impossible to get any meaningful span name, `db.name` or the tech-specific database name MAY be used.
 
