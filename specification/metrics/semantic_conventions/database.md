@@ -30,10 +30,10 @@ The following labels SHOULD be applied to all database metric instruments.
 | `db.system`            | An identifier for the database management system (DBMS) product being used. [1] | `other_sql` | Yes |
 | `db.connection_string` | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | No |
 | `db.user`              | Username for accessing the database. | `readonly_user`<br>`reporting_user` | No |
-| `net.transport`        | Transport protocol used. See note below. See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes). | `IP.TCP`<br>`Unix` | Conditional [2] |
 | `net.peer.ip`          | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
-| `net.peer.port`        | Remote port number. | `80`<br>`8080`<br>`443` | No |
 | `net.peer.name`        | Remote hostname or similar, see note below. | `example.com` | No |
+| `net.peer.port`        | Remote port number. | `80`<br>`8080`<br>`443` | No |
+| `net.transport`        | Transport protocol used. See note below. See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes). | `IP.TCP`<br>`Unix` | Conditional [2] |
 
 **[1]:** See the [database trace semantic conventions](../../trace/semantic_conventions/database.md#connection-level-attributes)
 for the list of well-known database system values.
@@ -48,8 +48,8 @@ The following metric instruments SHOULD be iterated for every database operation
 |----------------------|---------------|--------------|-------------|
 | `db.client.duration` | ValueRecorder | milliseconds | The duration of the database operation. |
 
-Database operations SHOULD include execution of queries, including DDL, DML,
-DCL, and TCL SQL statements (and the corresponding operations in non-SQL
+Measured database operations SHOULD include execution of queries, including DDL,
+DML, DCL, and TCL SQL statements (and the corresponding operations in non-SQL
 databases), as well as connect operations.
 
 ### Labels
@@ -65,12 +65,17 @@ applied to all database call-level metric instruments.
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name".
 
-**[4]:** When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
+**[4]:** When setting this to an SQL keyword, it is not recommended to attempt
+any client-side parsing of `db.statement` just to get this property, but it
+should be set if the operation name is provided by the library being
+instrumented. If the SQL statement has an ambiguous operation, or performs more
+than one operation, this value may be omitted.
 
-**[5]:** To reduce cardinality, the value for `db.operation` should have parameters
-removed or substituted. The resulting value should be a low-cardinality value
-represeting the statement or operation being executed on the database. It may be
-a stored procedure name (without arguments), operation name, etc.
+**[5]:** To reduce cardinality, the value for `db.operation` should include
+placeholders instead of actual parameter values. The resulting value should be
+low-cardinality and represent the statement or operation being executed on
+the database. It may be a stored procedure name (without arguments),
+operation name, etc.
 
 ### Call-level labels for specific technologies
 
@@ -104,11 +109,11 @@ while connected to a PostgreSQL database named "user_db" running on host
   "name": "db.client.duration",
   "labels": {
     "db.operation": "SELECT",
-    "db.table": "user_table",
     "db.name": "user_db",
     "db.system": "postgresql",
     "db.connection_string": "postgresql://postgres-server:5432/user_db",
     "db.user": "",
+    "db.sql.table": "public.user_table",
     "net.peer.ip": "192.0.10.2",
     "net.peer.port": 5432,
     "net.peer.name": "postgres-server"
@@ -132,11 +137,11 @@ while connected to a MySQL database named "ShopDb" running on host
   "name": "db.client.duration",
   "labels": {
     "db.operation": "SELECT",
-    "db.table": "orders",
     "db.name": "ShopDb",
     "db.system": "mysql",
     "db.connection_string": "Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;",
     "db.user": "billing_user",
+    "db.sql.table": "orders",
     "net.peer.name": "shopdb.example.com",
     "net.peer.ip": "192.0.2.12",
     "net.peer.port": "3306",
@@ -162,9 +167,9 @@ should result:
   "name": "db.client.duration",
   "labels": {
     "db.operation": "HMSET",
-    "db.table": "myhash",
     "db.system": "redis",
     "db.user": "the_user",
+    "db.redis.database_index": "0",
     "net.peer.name": "/tmp/redis.sock",
     "net.transport": "Unix",
     "db.redis.database_index": "15"
@@ -193,7 +198,7 @@ at `mongodb.example.com`, the following instrument should result:
   "name": "db.client.duration",
   "labels": {
     "db.operation": "findAndModify",
-    "db.table": "people",
+    "db.mongo.collection": "people",
     "db.name": "userdatabase",
     "db.system": "mongodb",
     "db.user": "the_user",
@@ -207,7 +212,7 @@ at `mongodb.example.com`, the following instrument should result:
 
 ## Connection Pooling Metric Instruments
 
-The following metric instruments SHOULD be collected for database connection
+The following metric instruments SHOULD be used for database connection
 pools. They SHOULD have all [common](#common) labels applied to them.
 
 | Name                      | Instrument    | Units        | Description |
