@@ -321,7 +321,7 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
-the core OpenTelemetry repositories.
+the Core OpenTelemetry repositories.
 
 Note: AWS is used as an example, not as a requirement.
 
