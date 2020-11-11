@@ -22,7 +22,7 @@ status of the feature is not known.
 |[Tracer](specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | -  |
+|Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |[SpanContext](specification/trace/api.md#spancontext)|
 |IsValid                                       | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -40,7 +40,7 @@ status of the feature is not known.
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRecording becomes false after End           |   | +  | + | +    |    | +    |   |    |   |    |
-|Set status with StatusCode (Unset, Ok, Error) |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1644) | +    | +  | -    |   | +  |   |    |
+|Set status with StatusCode (Unset, Ok, Error) |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1644) | +    | +  | -    |   | +  |   | + |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |events collection size limit                  |   | +  | + | +    | +  | -    |   | +  |   |    |
 |attribute collection size limit               |   | +  | + | +    | +  | -    |   | +  |   |    |
@@ -73,8 +73,8 @@ status of the feature is not known.
 
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Basic support                                 |  | +  | + | +    | +  | +    |   | +  |   |    |
-|Use official header name `baggage`            |  | +  | + | +    | +  | +    |   | +  |   |    |
+|Basic support                                 |  | +  | + | +    | +  | +    |   | +  |   | +  |
+|Use official header name `baggage`            |  | +  | + | +    | +  | +    |   | +  |   | +  |
 
 ## Metrics
 
@@ -86,10 +86,10 @@ status of the feature is not known.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|Create from Attributes                        | + | +  | + | +    | +  | +    |   | +  |   |    |
-|Create empty                                  | + | +  | + | +    | +  | +    |   | +  |   |    |
-|Merge                                         | + | +  | + | +    | +  | +    |   | +  |   |    |
-|Retrieve attributes                           | + | +  | + | +    | +  | +    |   | +  |   |    |
+|Create from Attributes                        | + | +  | + | +    | +  | +    |   | +  |   | +  |
+|Create empty                                  | + | +  | + | +    | +  | +    |   | +  |   | +  |
+|Merge                                         | + | +  | + | +    | +  | +    |   | +  |   | +  |
+|Retrieve attributes                           | + | +  | + | +    | +  | +    |   | +  |   | +  |
 
 ## Context Propagation
 
@@ -124,18 +124,18 @@ status of the feature is not known.
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  |
 |OTEL_EXPORTER                                 |   | -  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1155)    |    |      |   |    |   |    |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   |      |    |      |   |    |   |    |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   |      |    |      |   |    |   |    |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   |      |    |      |   |    |   |    |
-|OTEL_TRACE_SAMPLER                            |   | -  |   |      |    |      |   |    |   |    |
-|OTEL_TRACE_SAMPLER_ARG                        |   |    |   |      |    |      |   |    |   |    |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   |      |    |      |   |    |   | -  |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   |      |    |      |   |    |   | -  |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   |      |    |      |   |    |   | -  |
+|OTEL_TRACE_SAMPLER                            |   | -  |   |      |    |      |   |    |   | -  |
+|OTEL_TRACE_SAMPLER_ARG                        |   |    |   |      |    |      |   |    |   | -  |
 
 ## Exporters
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
 |Standard output (logging)                     | + | +  | + | +    | +  | +    | - | +  | + | +  |
-|In-memory (mock exporter)                     | + | +  | + | +    | +  | +    | - | -  | - | -  |
+|In-memory (mock exporter)                     | + | +  | + | +    | +  | +    | - | -  | - | +  |
 |[OTLP](specification/protocol/otlp.md)|
 |OTLP/gRPC Exporter                            | + | +  | + | +    |    | +    |   | +  | + | +  |
 |OTLP/HTTP binary Protobuf Exporter            | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106)    | +  | +    |   |    | + | +  |
