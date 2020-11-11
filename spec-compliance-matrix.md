@@ -40,7 +40,7 @@ status of the feature is not known.
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |IsRecording becomes false after End           |   | +  | + | +    |    | +    |   |    |   |    |
-|Set status with StatusCode (Unset, Ok, Error) |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/pull/1644) | +    | +  | -    |   | +  |   | + |
+|Set status with StatusCode (Unset, Ok, Error) |   | +  | + | +    | +  | -    |   | +  |   | + |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |events collection size limit                  |   | +  | + | +    | +  | -    |   | +  |   |    |
 |attribute collection size limit               |   | +  | + | +    | +  | -    |   | +  |   |    |
@@ -53,7 +53,7 @@ status of the feature is not known.
 |Double floating-point type                    | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Signed int64 type                             | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Array of primitives (homogeneous)             | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|`null` values documented as invalid/undefined |   | +  | [-](https://github.com/open-telemetry/opentelemetry-js/issues/1614) | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)    |    | N/A  |   |    |   |    |
+|`null` values documented as invalid/undefined |   | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)    |    | N/A  |   |    |   |    |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |[Span linking](specification/trace/api.md#specifying-links)|
 |AddLink                                       | + | +  | + | +    | +  | +    | + | +  | - | +  |
