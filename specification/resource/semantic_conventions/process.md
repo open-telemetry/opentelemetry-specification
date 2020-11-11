@@ -1,4 +1,22 @@
-# Process
+# Process and process runtime resources
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Process](#process)
+- [Process runtimes](#process-runtimes)
+  * [Erlang Runtimes](#erlang-runtimes)
+  * [Go Runtimes](#go-runtimes)
+  * [Java runtimes](#java-runtimes)
+  * [JavaScript runtimes](#javascript-runtimes)
+  * [.NET Runtimes](#net-runtimes)
+  * [Python Runtimes](#python-runtimes)
+  * [Ruby Runtimes](#ruby-runtimes)
+
+<!-- tocstop -->
+
+## Process
 
 **type:** `process`
 
@@ -39,7 +57,7 @@ At least one of `process.executable.name`, `process.executable.path`, `process.c
 `process.runtime.name` SHOULD be set to one of the values listed below, unless more detailed instructions are provided.
 If none of the listed values apply, a custom value best describing the runtime MAY be used.
 
-***Erlang Runtimes:***
+### Erlang Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-erlang/issues/96>): Confirm the contents here
 
@@ -53,7 +71,7 @@ Example:
 | --- | --- | --- | --- |
 | beam | BEAM | 11.0.3 | Erlang/OTP 24 erts-11.0.3 |
 
-***Go Runtimes:***
+### Go Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm the contents here
 
@@ -62,7 +80,7 @@ TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm 
 | `gc` | Go compiler |
 | `gccgo` | GCC Go frontend |
 
-***Java runtimes:***
+### Java runtimes
 
 Java instrumentation should fill in the values by copying from system properties.
 
@@ -81,7 +99,7 @@ Examples for some Java runtimes
 | Zulu OpenJDK | OpenJDK Runtime Environment | 11.0.8+10-LTS | Azul Systems, Inc Zulu11.41+23-CA |
 | Android 11 | Android Runtime | 0.9 | The Android Project 2.1.0 |
 
-***JavaScript runtimes:***
+### JavaScript runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-js/issues/1544>): Confirm the contents here
 
@@ -94,7 +112,7 @@ TODO(<https://github.com/open-telemetry/opentelemetry-js/issues/1544>): Confirm 
 
 When the value is `browser`, `process.runtime.version` SHOULD be set to the User-Agent header.
 
-***.NET Runtimes:***
+### .NET Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281>): Confirm the contents here
 
@@ -104,20 +122,48 @@ TODO(<https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281>): Conf
 | `dotnet-framework` | .NET Framework |
 | `mono` | Mono |
 
-***Python Runtimes:***
+### Python Runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-python/issues/1127>): Confirm the contents here
+Python instrumentation should fill in the values as follows:
 
-| Value | Description |
-| --- | --- |
-| `cpython` | CPython |
-| `graalvm` | GraalVM |
-| `ironpython` | IronPython |
-| `jython` | Jython |
-| `pypy` | PyPy|
-| `pythonnet` | PythonNet |
+- `process.runtime.name` -
+  Fill in the value of [`sys.implementation.name`][py_impl]
+- `process.runtime.version` -
+  Fill in the [`sys.implementation.version`][py_impl] values separated by dots.
+  Leave out the release level and serial if the release level
+  equals `final` and the serial equals zero
+  (leave out either both or none).
 
-***Ruby Runtimes:***
+  This can be implemented with the following Python snippet:
+
+  ```python
+  vinfo = sys.implementation.version
+  result =  ".".join(map(
+      str,
+      vinfo[:3]
+      if vinfo.releaselevel == "final" and not vinfo.serial
+      else vinfo
+  ))
+  ```
+
+- `process.runtime.description` - Fill in the value of [`sys.version`](https://docs.python.org/3/library/sys.html#sys.version) as-is.
+
+[py_impl]: https://docs.python.org/3/library/sys.html#sys.implementation
+
+Examples for some Python runtimes:
+
+| Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
+| --- | --- | --- | --- |
+| CPython 3.7.3 on Windows | cpython | 3.7.3 | 3.7.3 (v3.7.3:ef4ec6ed12, Mar 25 2019, 22:22:05) [MSC v.1916 64 bit (AMD64)] |
+| CPython 3.8.6 on Linux | cpython | 3.8.6 | 3.8.6 (default, Sep 30 2020, 04:00:38) <br>[GCC 10.2.0] |
+| PyPy 3 7.3.2 on Linux | pypy | 3.7.4 | 3.7.4 (?, Sep 27 2020, 15:12:26)<br>[PyPy 7.3.2-alpha0 with GCC 10.2.0] |
+
+Note that on Linux, there is an actual newline in the `sys.version` string,
+and the CPython string had a trailing space in the first line.
+
+Pypy provided a CPython-compatible version in `sys.implementation.version` instead of the actual implementation version which is available in `sys.version`.
+
+### Ruby Runtimes
 
 Ruby instrumentation should fill in the values by copying from built-in runtime constants.
 

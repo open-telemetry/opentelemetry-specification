@@ -7,6 +7,9 @@ Table of Contents
 
 - [Attributes](#attributes)
   - [Attribute and Label Naming](#attribute-and-label-naming)
+    - [Name Pluralization Guidelines](#name-pluralization-guidelines)
+    - [Recommendations for OpenTelemetry Authors](#recommendations-for-opentelemetry-authors)
+    - [Recommendations for Application Developers](#recommendations-for-application-developers)
 
 </details>
 
@@ -21,8 +24,6 @@ Attributes are a list of zero or more key-value pairs. An `Attribute` MUST have 
     i.e. it MUST NOT contain values of different types. For protocols that do
     not natively support array values such values SHOULD be represented as JSON strings.
 
-Attributes SHOULD preserve the order in which they're set.
-
 Attribute values expressing a numerical value of zero, an empty string, or an
 empty array are considered meaningful and MUST be stored and passed on to
 processors / exporters.
@@ -30,6 +31,9 @@ processors / exporters.
 Attribute values of `null` are not valid and attempting to set a `null` value is
 undefined behavior.
 
+`null` values SHOULD NOT be allowed in arrays. However, if it is impossible to
+make sure that no `null` values are accepted
+(e.g. in languages that do not have appropriate compile-time type checking),
 `null` values within arrays MUST be preserved as-is (i.e., passed on to span
 processors / exporters as `null`). If exporters do not support exporting `null`
 values, they MAY replace those values by 0, `false`, or empty strings.
@@ -62,6 +66,10 @@ Names SHOULD follow these rules:
 - Namespaces can be nested. For example `telemetry.sdk` is a namespace inside
   top-level `telemetry` namespace and `telemetry.sdk.name` is an attribute
   inside `telemetry.sdk` namespace.
+  Note: the fact that an entity is located within another entity is typically
+  not a sufficient reason for forming nested namespaces. The purpose of a
+  namespace is to avoid name clashes, not to indicate entity hierarchies. This
+  purpose should primarily drive the decision about forming nested namespaces.
 
 - For each multi-word dot-delimited component of the attribute name separate the
   words by underscores (i.e. use snake_case). For example `http.status_code`
@@ -74,6 +82,19 @@ Names SHOULD follow these rules:
   name prohibits existence of an equally named namespace in the future, and vice
   versa: any existing namespace prohibits existence of an equally named
   attribute or label key in the future.
+  
+### Name Pluralization guidelines
+
+- When an attribute represents a single entity, the attribute name SHOULD be singular.
+  Examples: `host.name`, `db.user`, `container.id`.
+
+- When attribute can represent multiple entities, the attribute name SHOULD be pluralized
+  and the value type SHOULD be an array. E.g. `process.command_args` might include multiple
+  values: the executable name and command arguments.
+
+- When an attribute represents a measurement,
+  [Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
+  SHOULD be followed for the attribute name.
 
 ### Recommendations for OpenTelemetry Authors
 
@@ -82,10 +103,10 @@ Names SHOULD follow these rules:
 
 - When coming up with a new semantic convention make sure to check existing
   namespaces for
-  [Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
-  [Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
+  [Resources](../resource/semantic_conventions/README.md),
+  [Spans](../trace/semantic_conventions/README.md),
   and
-  [Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions)
+  [Metrics](../metrics/semantic_conventions/README.md)
   to see if the new name fits.
 
 - When a new namespace is necessary consider whether it should be a top-level
@@ -111,10 +132,10 @@ Names SHOULD follow these rules:
 
 As an application developer when you need to record an attribute or a label
 first consult existing semantic conventions for
-[Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
-[Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
+[Resources](../resource/semantic_conventions/README.md),
+[Spans](../trace/semantic_conventions/README.md),
 and
-[Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions).
+[Metrics](../metrics/semantic_conventions/README.md).
 If an appropriate name does not exists you will need to come up with a new name.
 To do that consider a few options:
 
