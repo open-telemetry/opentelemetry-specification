@@ -323,8 +323,6 @@ Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
 the Core OpenTelemetry repositories.
 
-Note: AWS is used as an example, not as a requirement.
-
 ### B3 Requirements
 
 B3 has both single and multi-header encodings. It also has semantics that do not
