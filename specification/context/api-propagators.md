@@ -67,7 +67,7 @@ Carriers used at [Inject](#inject) are expected to be mutable.
 
 `Propagator`s MUST define `Inject` and `Extract` operations, in order to write
 values to and read values from carriers respectively. Each `Propagator` type MUST define the specific carrier type
-and CAN define additional parameters.
+and MAY define additional parameters.
 
 #### Inject
 
@@ -327,15 +327,23 @@ Note: AWS is used as an example, not as a requirement.
 
 ### B3 Requirements
 
-B3 has both single and multi-header encodings. To maximize compatibility between
-implementations, the following guidelines have been established for B3
-propagation in OpenTelemetry.
+B3 has both single and multi-header encodings. It also has semantics that do not
+map directly to OpenTelemetry such as a debug trace flag, and allowing spans
+from both sides of request to share the same id. To maximize compatibility
+between OpenTelemetry and Zipkin implementations, the following guidelines have
+been established for B3 context propagation.
 
 #### Extract
 
-Propagators MUST attempt to extract B3 encoded using single and multi-header
-formats. When extracting, the single-header variant takes precedence over
-the multi-header version.
+When extracting B3, propagators:
+
+* MUST attempt to extract B3 encoded using single and multi-header
+  formats. The single-header variant takes precedence over
+  the multi-header version.
+* MUST preserve a debug trace flag, if received, and propagate
+  it with subsequent requests. Additionally, an OpenTelemetry implementation
+  MUST set the sampled trace flag when the debug flag is set.
+* MUST NOT reuse `X-B3-SpanId` as the id for the server-side span.
 
 #### Inject
 
@@ -344,3 +352,5 @@ When injecting B3, propagators:
 * MUST default to injecting B3 using the single-header format
 * MUST provide configuration to change the default injection format to B3
   multi-header
+* MUST NOT propagate `X-B3-ParentSpanId` as OpenTelemetry does not support
+  reusing the same id for both sides of a request.

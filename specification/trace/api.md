@@ -32,7 +32,7 @@ Table of Contents
     * [End](#end)
     * [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
-  * [Propagated Span creation](#propagated-span-creation)
+  * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
 * [Included Propagators](#included-propagators)
@@ -149,10 +149,8 @@ the following functionality:
 - Set the currently active span to the implicit context. This is equivalent to getting the implicit context, then inserting the `Span` to the context.
 
 All the above functionalities operate solely on the context API, and they MAY be
-exposed as static methods on the trace module, as static methods on a class
-inside the trace module (it MAY be named `TracingContextUtilities`), or on the
-[`Tracer`](#tracer) class. This functionality SHOULD be fully implemented in the
-API when possible.
+exposed as either static methods on the trace module, or as static methods on a class
+inside the trace module. This functionality SHOULD be fully implemented in the API when possible.
 
 ## Tracer
 
@@ -240,8 +238,8 @@ and MUST follow the [general error handling guidelines](../error-handling.md) (e
 
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
-[`SpanContext` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
-or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
+[`SpanContext` propagation](../context/api-propagators.md)
+or [telemetry data exporting](sdk.md#span-exporter).
 In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
 
 ## Span
@@ -377,8 +375,8 @@ When a new `Span` is created from a `Context`, the `Context` may contain a `Span
 representing the currently active instance, and will be used as parent.
 If there is no `Span` in the `Context`, the newly created `Span` will be a root span.
 
-A `SpanContext` cannot be set as active in a `Context` directly, but through the use
-of a [Propagated Span](#propagated-span-creation) wrapping it.
+A `SpanContext` cannot be set as active in a `Context` directly, but by
+[wrapping it into a Span](#wrapping-a-spancontext-in-a-span).
 For example, a `Propagator` performing context extraction may need this.
 
 #### Specifying links
@@ -637,13 +635,16 @@ timestamps to the Span object:
 Start and end time as well as Event's timestamps MUST be recorded at a time of a
 calling of corresponding API.
 
-### Propagated Span creation
+### Wrapping a SpanContext in a Span
 
 The API MUST provide an operation for wrapping a `SpanContext` with an object
 implementing the `Span` interface. This is done in order to expose a `SpanContext`
 as a `Span` in operations such as in-process `Span` propagation.
 
-If a new type is required for supporting this operation, it SHOULD be named `PropagatedSpan`.
+If a new type is required for supporting this operation, it SHOULD not be exposed
+publicly if possible (e.g. by only exposing a function that returns something
+with the Span interface type). If a new type is required to be publicly exposed,
+it SHOULD be named `NonRecordingSpan`.
 
 The behavior is defined as follows:
 
@@ -653,7 +654,7 @@ The behavior is defined as follows:
 
 The remaining functionality of `Span` MUST be defined as no-op operations.
 Note: This includes `End`, so as an exception from the general rule,
-it is not required (or even helpful) to end a Propagated Span.
+it is not required (or even helpful) to end such a Span.
 
 This functionality MUST be fully implemented in the API, and SHOULD NOT be overridable.
 
@@ -743,12 +744,12 @@ for how propagators are to be distributed.
 In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
 This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
 is one important exception to this general rule, and that is related to propagation of a `SpanContext`:
-The API MUST create a [Propagated Span](#propagated-span-creation) with the `SpanContext`
+The API MUST create a [non-recording Span](#wrapping-a-spancontext-in-a-span) with the `SpanContext`
 that is in the `Span` in the parent `Context` (whether explicitly given or implicit current) or,
-if the parent is a Propagated Span (which it usually always is if no SDK is present),
-it MAY return the same parent Propagated Span instance back from the creation method.
-If the parent `Context` contains no `Span`, an empty Propagated Span MUST be returned instead
-(i.e., having a SpanContext with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
+if the parent is a non-recording Span (which it usually always is if no SDK is present),
+it MAY return the parent Span back from the creation method.
+If the parent `Context` contains no `Span`, an empty non-recording Span MUST be returned instead
+(i.e., having a `SpanContext` with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
 This means that a `SpanContext` that has been provided by a configured `Propagator`
 will be propagated through to any child span and ultimately also `Inject`,
 but that no new `SpanContext`s will be created.

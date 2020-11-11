@@ -14,7 +14,8 @@ groups:
         type: string
         required: always
         brief: >
-          The unique ID of the function being executed.
+          The unique ID of the function
+          being executed.
         note: >
           For example, in AWS Lambda this field corresponds to the
           [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
@@ -26,7 +27,7 @@ groups:
         type: string
         brief: >
           The version string of the function being executed as defined in
-          [Version Attributes](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#version-attributes).
+          [Version Attributes](../../resource/semantic_conventions/README.md#version-attributes).
         examples: ['2.0.0']
       - id: instance
         type: string
