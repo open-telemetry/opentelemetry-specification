@@ -1,5 +1,8 @@
 # Guidance for Interoperating with OpenMetrics
 
+**Note:** This document is work in progress and will be updated as the
+OpenMetrics specification further develops.
+
 ## Overview
 
 OpenTelemetry will need to interoperate with systems using the OpenMetrics or
