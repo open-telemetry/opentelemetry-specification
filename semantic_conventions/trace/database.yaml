@@ -255,7 +255,7 @@ groups:
           type: number
           tag: call-level-tech-specific
           brief: >
-            The page size of the query.
+            The fetch size used for paging, i.e. how many rows will be returned at once.
           examples: [5000]
         - id: consistency_level
           tag: call-level-tech-specific

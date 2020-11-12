@@ -162,7 +162,7 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
 | `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
-| `db.cassandra.page_size` | number | The page size of the query. | `5000` | No |
+| `db.cassandra.page_size` | number | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
 | `db.cassandra.consistency_level` | string enum | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `ALL` | No |
 | `db.cassandra.table` | string | The table being queried. | `mytable` | No |
 | `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
