@@ -15,4 +15,4 @@ telemetry.
 
 | Name                 | Instrument    | Units        | Description |
 |----------------------|---------------|--------------|-------------|
-| `resource.up` | ValueRecorder | 1 | A value of `1` indicates the Resource is healthy, `0` if the Resource is unhealthy. |
+| `resource.up` | UpDownSumObserver | 1 | A value of `1` indicates the Resource is healthy, `0` if the Resource is unhealthy. |
