@@ -163,12 +163,12 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 |---|---|---|---|---|
 | `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
 | `db.cassandra.page_size` | number | The page size of the query. | `5000` | No |
-| `db.cassandra.consistency_level` | string enum | The consistency level of the query. Based on consistency values from [cql](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `ALL` | No |
+| `db.cassandra.consistency_level` | string enum | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `ALL` | No |
 | `db.cassandra.table` | string | The table being queried. | `mytable` | No |
 | `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
 | `db.cassandra.speculative_execution_count` | number | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`<br>`2` | No |
-| `db.cassandra.host.id` | string | The host id reported by the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | No |
-| `db.cassandra.host.dc` | string | The host data center reported by the coordinating node for a query. | `us-west-2` | No |
+| `db.cassandra.coordinator.id` | string | The (node's) id of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | No |
+| `db.cassandra.coordinator.dc` | string | The data center of the coordinating node for a query. | `us-west-2` | No |
 | `db.hbase.namespace` | string | The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute. | `default` | Yes |
 | `db.redis.database_index` | number | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`<br>`1`<br>`15` | Conditional [1] |
 | `db.mongodb.collection` | string | The collection being accessed within the database stated in `db.name`. | `customers`<br>`products` | Yes |

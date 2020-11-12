@@ -302,17 +302,17 @@ groups:
           brief: >
             The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively.
           examples: [0, 2]
-        - id: host.id
+        - id: coordinator.id
           type: string
           tag: call-level-tech-specific
           brief: >
-            The host id reported by the coordinating node for a query.
+            The (node's) id of the coordinating node for a query.
           examples: 'be13faa2-8574-4d71-926d-27f16cf8a7af'
-        - id: host.dc
+        - id: coordinator.dc
           type: string
           tag: call-level-tech-specific
           brief: >
-            The host data center reported by the coordinating node for a query.
+            The data center of the coordinating node for a query.
           examples: 'us-west-2'
 
     - id: db.hbase
