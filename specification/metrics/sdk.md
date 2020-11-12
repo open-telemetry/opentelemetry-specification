@@ -479,7 +479,7 @@ considered language-specific details.
 #### Export pipeline data types
 
 **Accumulation**: Passed from the Accumulator to the Processor, this
-consists of the Instrument, the Label Set, the Resource, and a
+consists of the Metric Descriptor, the Label Set, the Resource, and a
 snapshot of the Aggregator state (i.e., the Aggregation).
 
 **Aggregation**: Output by an Aggregator, this represents state from
@@ -496,10 +496,7 @@ Processor checkpoint interval.
 
 #### Export pipeline configuration
 
-**AggregationKind**: This is determined by the Aggregation, which is
-returned by an Aggregator, chosen by an AggregatorSelector.
-Aggregation kinds determine what data can be read from an Aggregation
-(i.e., the format).
+**AggregationKind**: The format which an Aggregator aggregates data into and ultimately sends it as.
 
 **ExportKind**: This is determined by the ExportKindSelector and may
 be cumulative or delta.  Note that the term ExportKind is used in the
