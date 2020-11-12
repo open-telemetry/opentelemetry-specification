@@ -260,7 +260,7 @@ groups:
         - id: consistency_level
           tag: call-level-tech-specific
           brief: >
-            The consistency level of the query. Based on consistency values from [cql](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+            The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
           type:
             members:
               - id: ALL
