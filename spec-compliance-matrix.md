@@ -68,7 +68,7 @@ status of the feature is not known.
 |[Sampling](specification/trace/sdk.md#sampling)|
 |Allow samplers to modify tracestate           |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1220)    |    | +    |   | +  |   |    |
 |ShouldSample gets full parent Context         |   | +  | + | +    |    | +    |   |    |   |    |
-|[Span/Trace ID creation wrt. sampling is compliant](specification/trace/sdk.md#sdk-span-creation) |   |    |   |      |    |      |   |    |   |    |
+|[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |   |    |   |      |    |      |   |    |   |    |
 
 ## Baggage
 
