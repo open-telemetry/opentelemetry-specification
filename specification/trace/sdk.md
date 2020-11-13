@@ -72,9 +72,9 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
    use the sampling decision of the parent,
    translating a set SampledFlag to RECORD and an unset one to DROP).
-3. If the decision is `DROP` and there is a valid parent span ID, reuse it as the new `Span`'s span ID.
-   Otherwise (if the decision is not `DROP` or there was no valid parent span ID)
-   a new span ID MUST be generated.
+3. Generate a new span ID for the `Span`, independently of the sampling decision.
+   This is done so other components (such as logs or exception handling) can rely on
+   a unique span ID, even if the `Span` is a non-recording instance.
 4. Create a span depending on the decision returned by `ShouldSample`:
    see description of [`ShouldSample`'s](#shouldsample) return value below
    for how to set `IsRecording` and `Sampled` on the Span,
