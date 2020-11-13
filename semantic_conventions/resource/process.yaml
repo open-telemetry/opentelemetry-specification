@@ -29,7 +29,7 @@ groups:
           The command used to launch the process (i.e. the command name). On Linux
           based systems, can be set to the zeroth string in `proc/[pid]/cmdline`.
           On Windows, can be set to the first parameter extracted from `GetCommandLineW`.
-        examples: ['cmd/otelcol	']
+        examples: ['cmd/otelcol']
       - id: command_line
         type: string
         brief: >
@@ -46,7 +46,7 @@ groups:
           systems supporting procfs), can be set according to the list of
           null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based
           executables, this would be the full argv vector passed to `main`.
-        examples: ['cmd/otecol', '--config=config.yaml ']
+        examples: ['cmd/otecol', '--config=config.yaml']
       - id: owner
         type: string
         brief: >
