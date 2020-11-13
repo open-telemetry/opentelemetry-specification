@@ -306,7 +306,7 @@ groups:
           type: string
           tag: call-level-tech-specific
           brief: >
-            The (node's) id of the coordinating node for a query.
+            The ID of the coordinating node for a query.
           examples: 'be13faa2-8574-4d71-926d-27f16cf8a7af'
         - id: coordinator.dc
           type: string
