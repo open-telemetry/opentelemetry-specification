@@ -24,6 +24,8 @@ Since SQL statements may have very high cardinality even without arguments, SQL 
 following way, unless the statement is known to be of low cardinality:
 `<db.operation> <db.name>.<db.sql.table>`, provided that `db.operation` and `db.sql.table` are available.
 If `db.sql.table` is not available due to its semantics, the span SHOULD be named `<db.operation> <db.name>`.
+It is not recommended to attempt any client-side parsing of `db.statement` just to get these properties,
+they should be used if the library being instrumented provides them.
 When it's otherwise impossible to get any meaningful span name, `db.name` or the tech-specific database name MAY be used.
 
 ## Connection-level attributes
