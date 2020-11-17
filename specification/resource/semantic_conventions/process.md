@@ -54,8 +54,9 @@ At least one of `process.executable.name`, `process.executable.path`, `process.c
 | process.runtime.version | The version of the runtime of this process, as returned by the runtime without modification. | `14.0.2` | No |
 | process.runtime.description | An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment. | `Eclipse OpenJ9 openj9-0.21.0` | No |
 
-`process.runtime.name` SHOULD be set to one of the values listed below, unless more detailed instructions are provided.
-If none of the listed values apply, a custom value best describing the runtime MAY be used.
+How to set these attributes for particular runtime kinds is described in the following subsections.
+
+In addition to these attributes, [`telemetry.sdk.language`](README.md#telemetry-sdk) can be used to determine the general kind of runtime used.
 
 ### Erlang Runtimes
 
