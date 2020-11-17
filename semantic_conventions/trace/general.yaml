@@ -104,7 +104,7 @@ groups:
         type: string
         brief: >
           The method or function name, or equivalent (usually rightmost part of the code unit's name).
-        examples: serverRequest
+        examples: serveRequest
       - id: namespace
         type: string
         brief: >
