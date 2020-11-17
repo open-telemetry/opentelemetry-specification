@@ -39,6 +39,8 @@ Updates:
 
 New:
 
+- Allow OTLP/HTTP endpoint to include scheme
+  ([1234](https://github.com/open-telemetry/opentelemetry-specification/pull/1234))
 - Document service name mapping for Jaeger exporters
   ([1222](https://github.com/open-telemetry/opentelemetry-specification/pull/1222))
 - Change default OTLP port number
