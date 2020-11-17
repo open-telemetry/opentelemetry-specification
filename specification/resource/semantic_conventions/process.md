@@ -1,4 +1,22 @@
-# Process
+# Process and process runtime resources
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Process](#process)
+- [Process runtimes](#process-runtimes)
+  * [Erlang Runtimes](#erlang-runtimes)
+  * [Go Runtimes](#go-runtimes)
+  * [Java runtimes](#java-runtimes)
+  * [JavaScript runtimes](#javascript-runtimes)
+  * [.NET Runtimes](#net-runtimes)
+  * [Python Runtimes](#python-runtimes)
+  * [Ruby Runtimes](#ruby-runtimes)
+
+<!-- tocstop -->
+
+## Process
 
 **type:** `process`
 
@@ -6,22 +24,40 @@
 
 | Attribute  | Description  | Example  | Required |
 |---|---|---|--|
-| process.pid | Process identifier (PID). | `1234` | Yes |
+| process.pid | Process identifier (PID). | `1234` | No |
 | process.executable.name | The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | See below |
 | process.executable.path | The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | See below |
 | process.command | The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | See below |
-| process.command_line | The full command used to launch the process. The value can be either a list of strings representing the ordered list of arguments, or a single string representing the full command. On Linux based systems, can be set to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. On Windows, can be set to the result of `GetCommandLineW`. | Linux: `[ cmd/otecol, --config=config.yaml ]`, Windows: `cmd/otecol --config=config.yaml` | See below |
+| process.command_line | The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead. | `C:\cmd\otecol --config="my directory\config.yaml"` | See below |
+| process.command_args | All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`. | `[ cmd/otecol, --config=config.yaml ]` | See below |
 | process.owner | The username of the user that owns the process. | `root` | No |
+
+Between `process.command_args` and `process.command_line`, usually `process.command_args` should be preferred.
+On Windows and other systems where the native format of process commands is a single string,
+`process.command_line` can additionally (or instead) be used.
+
+For backwards compatibility with older versions of this semantic convention,
+it is possible but deprecated to use an array as type for `process.command_line`.
+In that case it MUST be interpreted as if it was `process.command_args`.
+
+At least one of `process.executable.name`, `process.executable.path`, `process.command`, `process.command_line` or `process.command_args` is required to allow back ends to identify the executable.
+
+## Process runtimes
+
+**type:** `process.runtime`
+
+**Description:** The single (language) runtime instance which is monitored.
+
+| Attribute  | Description  | Example  | Required |
+|---|---|---|--|
 | process.runtime.name | The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler. | `OpenJDK Runtime Environment` | No |
 | process.runtime.version | The version of the runtime of this process, as returned by the runtime without modification. | `14.0.2` | No |
 | process.runtime.description | An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment. | `Eclipse OpenJ9 openj9-0.21.0` | No |
 
-At least one of `process.executable.name`, `process.executable.path`, `process.command`, or `process.command_line` is required.
-
 `process.runtime.name` SHOULD be set to one of the values listed below, unless more detailed instructions are provided.
 If none of the listed values apply, a custom value best describing the runtime MAY be used.
 
-***Erlang Runtimes:***
+### Erlang Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-erlang/issues/96>): Confirm the contents here
 
@@ -35,7 +71,7 @@ Example:
 | --- | --- | --- | --- |
 | beam | BEAM | 11.0.3 | Erlang/OTP 24 erts-11.0.3 |
 
-***Go Runtimes:***
+### Go Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm the contents here
 
@@ -44,7 +80,7 @@ TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm 
 | `gc` | Go compiler |
 | `gccgo` | GCC Go frontend |
 
-***Java runtimes:***
+### Java runtimes
 
 Java instrumentation should fill in the values by copying from system properties.
 
@@ -63,7 +99,7 @@ Examples for some Java runtimes
 | Zulu OpenJDK | OpenJDK Runtime Environment | 11.0.8+10-LTS | Azul Systems, Inc Zulu11.41+23-CA |
 | Android 11 | Android Runtime | 0.9 | The Android Project 2.1.0 |
 
-***JavaScript runtimes:***
+### JavaScript runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-js/issues/1544>): Confirm the contents here
 
@@ -76,7 +112,7 @@ TODO(<https://github.com/open-telemetry/opentelemetry-js/issues/1544>): Confirm 
 
 When the value is `browser`, `process.runtime.version` SHOULD be set to the User-Agent header.
 
-***.NET Runtimes:***
+### .NET Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281>): Confirm the contents here
 
@@ -86,20 +122,48 @@ TODO(<https://github.com/open-telemetry/opentelemetry-dotnet/issues/1281>): Conf
 | `dotnet-framework` | .NET Framework |
 | `mono` | Mono |
 
-***Python Runtimes:***
+### Python Runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-python/issues/1127>): Confirm the contents here
+Python instrumentation should fill in the values as follows:
 
-| Value | Description |
-| --- | --- |
-| `cpython` | CPython |
-| `graalvm` | GraalVM |
-| `ironpython` | IronPython |
-| `jython` | Jython |
-| `pypy` | PyPy|
-| `pythonnet` | PythonNet |
+- `process.runtime.name` -
+  Fill in the value of [`sys.implementation.name`][py_impl]
+- `process.runtime.version` -
+  Fill in the [`sys.implementation.version`][py_impl] values separated by dots.
+  Leave out the release level and serial if the release level
+  equals `final` and the serial equals zero
+  (leave out either both or none).
 
-***Ruby Runtimes:***
+  This can be implemented with the following Python snippet:
+
+  ```python
+  vinfo = sys.implementation.version
+  result =  ".".join(map(
+      str,
+      vinfo[:3]
+      if vinfo.releaselevel == "final" and not vinfo.serial
+      else vinfo
+  ))
+  ```
+
+- `process.runtime.description` - Fill in the value of [`sys.version`](https://docs.python.org/3/library/sys.html#sys.version) as-is.
+
+[py_impl]: https://docs.python.org/3/library/sys.html#sys.implementation
+
+Examples for some Python runtimes:
+
+| Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
+| --- | --- | --- | --- |
+| CPython 3.7.3 on Windows | cpython | 3.7.3 | 3.7.3 (v3.7.3:ef4ec6ed12, Mar 25 2019, 22:22:05) [MSC v.1916 64 bit (AMD64)] |
+| CPython 3.8.6 on Linux | cpython | 3.8.6 | 3.8.6 (default, Sep 30 2020, 04:00:38) <br>[GCC 10.2.0] |
+| PyPy 3 7.3.2 on Linux | pypy | 3.7.4 | 3.7.4 (?, Sep 27 2020, 15:12:26)<br>[PyPy 7.3.2-alpha0 with GCC 10.2.0] |
+
+Note that on Linux, there is an actual newline in the `sys.version` string,
+and the CPython string had a trailing space in the first line.
+
+Pypy provided a CPython-compatible version in `sys.implementation.version` instead of the actual implementation version which is available in `sys.version`.
+
+### Ruby Runtimes
 
 Ruby instrumentation should fill in the values by copying from built-in runtime constants.
 

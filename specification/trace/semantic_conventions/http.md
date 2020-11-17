@@ -106,20 +106,6 @@ from the `net.peer.name`
 used to look up the `net.peer.ip` that is actually connected to.
 In that case it is strongly recommended to set the `net.peer.name` attribute in addition to `http.host`.
 
-For status, the following special cases have canonical error codes assigned:
-
-| Client error                | Trace status code  |
-|-----------------------------|--------------------|
-| DNS resolution failed       | `Unknown`     |
-| Request cancelled by caller | `Cancelled`        |
-| URL cannot be parsed        | `InvalidArgument`  |
-| Request timed out           | `DeadlineExceeded` |
-
-This is not meant to be an exhaustive list
-but if there is no clear mapping for some error conditions,
-instrumentation developers are encouraged to use `Unknown`
-and open a PR or issue in the specification repository.
-
 ## HTTP server
 
 To understand the attributes defined in this section, it is helpful to read the "Definitions" subsection.
