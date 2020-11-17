@@ -71,6 +71,10 @@ units in the metric name. Units may be included when it provides additional
 meaning to the metric name. Metrics MUST, above all, be understandable and
 usable.
 
+When building components that interoperate between OpenTelemetry and a system
+using the OpenMetrics exposition format, use the
+[OpenMetrics Guidelines](./openmetrics-guidelines.md).
+
 ### Pluralization
 
 Metric names SHOULD NOT be pluralized, unless the value being recorded
