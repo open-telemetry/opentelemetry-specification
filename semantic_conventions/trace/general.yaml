@@ -103,7 +103,7 @@ groups:
       - id: function
         type: string
         brief: >
-          The method or function name, or equivalent (usually rightmost part of the code unit's name)
+          The method or function name, or equivalent (usually rightmost part of the code unit's name).
         examples: serverRequest
       - id: namespace
         type: string
