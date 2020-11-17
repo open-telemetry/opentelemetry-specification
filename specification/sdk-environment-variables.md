@@ -14,6 +14,7 @@ The goal of this specification is to unify the environment variable names betwee
 
 Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "b3multi", "jaeger".
 Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
+See [B3 propagation](./context/api-propagators.md#b3-requirements) for details regarding single and multi encoding.
 
 Known values for `OTEL_TRACE_SAMPLER` are:
 
