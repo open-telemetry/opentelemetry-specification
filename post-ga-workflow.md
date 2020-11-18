@@ -24,7 +24,8 @@ OTEPs are used as a mean to add entirely new components (such as logging) or to 
 
 ## Releases
 
-Minor releases are expected to approximately happen every 6 months, containing additive, non-breaking changes in the API, as mentioned above.
+Minor releases are expected to happen ad-hoc, containing additive, non-breaking changes in the API, as mentioned above.
+Releases with regular cadence will be considered in the future.
 
 Major releases are allowed to contain breaking changes in the API.
 
