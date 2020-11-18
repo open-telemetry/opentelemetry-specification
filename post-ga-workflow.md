@@ -11,7 +11,7 @@ The following changes to the Specification v1.x will be allowed after GA:
 - SDK changes.
 - Semantic conventions for new libraries.
 
-The `master` branch will always contain the latest changes, and branches will be used to track published releases.
+The `main` branch will always contain the latest changes, and branches will be used to track published releases.
 
 API-breaking changes can be accepted under `experimental` subdirectories.
 
