@@ -15,10 +15,10 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|Shutdown (SDK only required)                  |   | +  | + | +    | +  | -    |   | +  |   |    |
+|Shutdown (SDK only required)                  |   | +  | + | +    | +  | -    |   | +  |   | +  |
 |[Trace / Context interaction](specification/trace/api.md#context-interaction)|
-|Get active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   |    |
-|Set active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   |    |
+|Get active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   | +  |
+|Set active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   | +  |
 |[Tracer](specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  |
@@ -42,9 +42,9 @@ status of the feature is not known.
 |IsRecording becomes false after End           |   | +  | + | +    |    | +    |   |    |   |    |
 |Set status with StatusCode (Unset, Ok, Error) |   | +  | + | +    | +  | -    |   | +  |   | + |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|events collection size limit                  |   | +  | + | +    | +  | -    |   | +  |   |    |
-|attribute collection size limit               |   | +  | + | +    | +  | -    |   | +  |   |    |
-|links collection size limit                   |   | +  | + | +    | +  | -    |   | +  |   |    |
+|events collection size limit                  |   | +  | + | +    | +  | -    |   | +  |   | -  |
+|attribute collection size limit               |   | +  | + | +    | +  | -    |   | +  |   | -  |
+|links collection size limit                   |   | +  | + | +    | +  | -    |   | +  |   | -  |
 |[Span attributes](specification/trace/api.md#set-attributes)|
 |SetAttribute                                  | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |Set order preserved                           | + | -  | + | +    | +  | +    | + | +  | + | +  |
@@ -102,29 +102,29 @@ status of the feature is not known.
 |Attach Context                                |  | +  | + | +    | +  | +    | + | +  |   |    |
 |Detach Context                                |  | +  | + | +    | +  | +    | + | +  |   |    |
 |Get current Context                           |  | +  | + | +    | +  | +    | + | +  |   |    |
-|Composite Propagator                          |  | +  | + | +    | +  | N/A  |   | +  |   |    |
-|Global Propagator                             |  | +  | + | +    | +  | +    |   | +  |   |    |
-|TraceContext Propagator                       |  | +  | + | +    | +  | +    |   | +  |   |    |
-|B3 Propagator                                 |  | +  | + | +    | +  | +    |   | +  |   |    |
+|Composite Propagator                          |  | +  | + | +    | +  | N/A  |   | +  |   |  + |
+|Global Propagator                             |  | +  | + | +    | +  | +    |   | +  |   |  + |
+|TraceContext Propagator                       |  | +  | + | +    | +  | +    |   | +  |   |  + |
+|B3 Propagator                                 |  | +  | + | +    | +  | +    |   | +  |   |  + |
 |Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    | +    |   | +  |   |    |
 |[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)|
-|Fields                                        |  | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)    |    | +    |   | +  |   |    |
-|Setter argument                               |  | +  | + | +    |    | +    |   |    |   |    |
-|Getter argument                               |  | +  | + | +    |    | +    |   |    |   |    |
-|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |    |
+|Fields                                        |  | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)    |    | +    |   | +  |   |  + |
+|Setter argument                               |  | +  | + | +    |    | +    |   |    |   |  + |
+|Getter argument                               |  | +  | + | +    |    | +    |   |    |   |  + |
+|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |  - |
 
 ## Environment Variables
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|
-|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | -    | - | +  | - | -  |
+|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | -    | - | +  | - | +  |
 |OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | -    | - |    | - | -  |
 |OTEL_PROPAGATORS                              |   | -  |   | +    |    | -    | - |    | - | -  |
 |OTEL_BSP_*                                    |   | +  |   | +    | +  | -    | - | +  | - | -  |
 |OTEL_EXPORTER_OTLP_*                          |   | +  |   | +    | +  | -    | - |    | - | -  |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  |
-|OTEL_EXPORTER                                 |   | -  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1155)    |    |      |   |    |   |    |
+|OTEL_EXPORTER                                 |   | -  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1155)    |    |      |   |    |   |  - |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   |      |    |      |   |    |   | -  |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   |      |    |      |   |    |   | -  |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   |      |    |      |   |    |   | -  |
