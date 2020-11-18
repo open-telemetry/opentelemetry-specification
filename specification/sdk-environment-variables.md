@@ -12,8 +12,9 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
 | OTEL_TRACE_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACE_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACE_SAMPLER_ARG is not set.  |
 
-Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger".
+Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "b3multi", "jaeger".
 Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
+See [B3 propagation](./context/api-propagators.md#b3-requirements) for details regarding single and multi encoding.
 
 Known values for `OTEL_TRACE_SAMPLER` are:
 
