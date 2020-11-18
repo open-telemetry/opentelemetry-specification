@@ -155,6 +155,7 @@ SpanId         |Request span id.
 TraceFlags     |W3C trace flag.
 SeverityText   |The severity text (also known as log level).
 SeverityNumber |Numerical value of the severity.
+LoggerName     |Name of the logger that is used for producing the log record.
 Name           |Short event identifier.
 Body           |The body of the log record.
 Resource       |Describes the source of the log.
@@ -354,6 +355,13 @@ comparisons `SeverityNumber` field should be used. `SeverityNumber` can be
 compared to another `SeverityNumber` or to numbers in the 1..24 range (or to the
 corresponding short names).
 
+### Field: `LoggerName`
+
+The name of the logger that is used for producing the log record. The logger
+name is typically chosen by the developer to group related log records. Often
+the class name, package name, module name or other logical unit of the
+application is selected as the logger name.
+
 ### Field: `Name`
 
 Type: string.
@@ -434,7 +442,8 @@ Example 1
   "SpanId": "43222c2d51a7abe3",
   "SeverityText": "INFO",
   "SeverityNumber": 9,
-  "Body": "20200415T072306-0700 INFO I like donuts"
+  "Body": "20200415T072306-0700 INFO I like donuts",
+  "LoggerName": "com.example.App.MyClass"
 }
 ```
 
@@ -717,6 +726,12 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>Severity</td>
   </tr>
   <tr>
+    <td>Logger</td>
+    <td>string</td>
+    <td>Logger name.</td>
+    <td>LoggerName</td>
+  </tr>
+  <tr>
     <td>Message</td>
     <td>string</td>
     <td>Human readable message.</td>
@@ -890,7 +905,7 @@ Field            | Type               | Description                             
 -----------------|--------------------| ------------------------------------------------------- | ---------------------------
 timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
 resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
-log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Name
+log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | LoggerName
 json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
 proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
 text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
