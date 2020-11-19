@@ -13,10 +13,10 @@ Table of Contents
     - [Extract](#extract)
 - [TextMap Propagator](#textmap-propagator)
   - [Fields](#fields)
-  - [Inject](#inject-1)
+  - [Inject](#textmap-inject)
     - [Setter argument](#setter-argument)
       - [Set](#set)
-  - [Extract](#extract-1)
+  - [Extract](#textmap-extract)
     - [Getter argument](#getter-argument)
       - [Keys](#keys)
       - [Get](#get)
@@ -137,7 +137,7 @@ Observe that some `Propagator`s may define, besides the returned values, additio
 variable names. To get a full list of fields for a specific carrier object, use the
 [Keys](#keys) operation.
 
-### Inject
+### TextMap Inject
 
 Injects the value into a carrier. The required arguments are the same as defined by
 the base [Inject](#inject) operation.
@@ -167,7 +167,7 @@ Required arguments:
 
 The implementation SHOULD preserve casing (e.g. it should not transform `Content-Type` to `content-type`) if the used protocol is case insensitive, otherwise it MUST preserve casing.
 
-### Extract
+### TextMap Extract
 
 Extracts the value from an incoming request. The required arguments are the same as defined by
 the base [Extract](#extract) operation.
@@ -249,7 +249,7 @@ Required arguments:
 
 Returns a new composite `Propagator` with the specified `Propagator`s.
 
-### Extract
+### Composite Extract
 
 Required arguments:
 
@@ -257,7 +257,7 @@ Required arguments:
 - The carrier that holds propagation fields.
 - The instance of `Getter` invoked for each propagation key to get.
 
-### Inject
+### Composite Inject
 
 Required arguments:
 
@@ -331,7 +331,7 @@ from both sides of request to share the same id. To maximize compatibility
 between OpenTelemetry and Zipkin implementations, the following guidelines have
 been established for B3 context propagation.
 
-#### Extract
+#### B3 Extract
 
 When extracting B3, propagators:
 
@@ -343,7 +343,7 @@ When extracting B3, propagators:
   MUST set the sampled trace flag when the debug flag is set.
 * MUST NOT reuse `X-B3-SpanId` as the id for the server-side span.
 
-#### Inject
+#### B3 Inject
 
 When injecting B3, propagators:
 
