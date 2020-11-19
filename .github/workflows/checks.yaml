@@ -1,4 +1,4 @@
-name: Markdown Check
+name: Checks
 
 on:
   push:
@@ -9,7 +9,6 @@ on:
 jobs:
   markdownlint:
     runs-on: ubuntu-latest
-
     steps:
     - name: check out code
       uses: actions/checkout@v2
@@ -19,9 +18,9 @@ jobs:
 
     - name: run markdownlint
       run: make markdownlint
+
   markdown-link-check:
     runs-on: ubuntu-latest
-
     steps:
     - name: check out code
       uses: actions/checkout@v2
@@ -31,3 +30,15 @@ jobs:
 
     - name: run markdown-link-check
       run: make markdown-link-check
+
+  misspell:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: install misspell
+      run: sudo make install-misspell
+
+    - name: run misspell
+      run: make misspell
