@@ -14,6 +14,8 @@
     + [Redis HMSET](#redis-hmset)
     + [MongoDB findAndModify](#mongodb-findandmodify)
 - [Connection Pooling Metric Instruments](#connection-pooling-metric-instruments)
+- [Additional metric instruments for specific technologies](#additional-metric-instruments-for-specific-technologies)
+  * [Examples](#examples-1)
 
 <!-- tocstop -->
 
@@ -220,16 +222,25 @@ pools. They SHOULD have all [common](#common) labels applied to them.
 | `db.connection_pool.limit` | ValueObserver | {connections} | The total number of database connections available in the connection pool. |
 | `db.connection_pool.usage` | ValueObserver | {connections} | The number of database connections _in use_. |
 
-If the following detailed information is available, the following metric
-instruments MAY be collected. They SHOULD have all [common](#common) labels
-applied to them.
+## Additional metric instruments for specific technologies
 
-| Name                      | Instrument | Units         | Description |
-|---------------------------|------------|---------------|-------------|
-| `db.connections.taken`    | Counter    | {connections} | Incremented when a connection is requested and returned from the pool.  |
-| `db.connections.new`      | Counter    | {connections} | Incremented when a connection is requested and returned from the pool only if the connection pool returns a newly created connection. |
-| `db.connections.reused`   | Counter    | {connections} | Incremented when a connection is requested and returned from the pool only if the connection pool returns a previously used connection. |
-| `db.connections.returned` | Counter    | {connections} | Incremented when the application is finished using a connection and returns it to the pool. |
-| `db.connections.closed`   | Counter    | {connections} | Incremented when the pool closes a connection. [1] |
+Additional metric instruments MAY be used for technology-specific measurements. Such
+instruments SHOULD have all [common](#common) labels applied to them, and their names
+should follow the pattern (in which `{db.system}` is one of the allowed values for the
+db.system trace attribute):
 
-**[1]:** Connection pools sometimes close connections after some pre-configured time has elapsed, or when the application is shutting down. The `db.connections.closed` instrument should be incremented for each connection closed. It should _eventually_ be true that `db.connections.new - db.connections.closed = 0`.
+```
+db.{db.system}.*
+```
+
+### Examples
+
+* `db.redis.connections.taken`
+* `db.redis.connections.new`
+* `db.redis.connections.reused`
+* `db.redis.connections.returned`
+* `db.redis.connections.closed`
+* `db.mongo.average_object_size`
+* `db.mongo.write_lock_percentage`
+* `db.mongo.object_count`
+* `db.postgresql.cache_hits`
