@@ -28,11 +28,11 @@ install-markdown-link-check:
 markdown-link-check:
 	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f; done
 
-.PHONY: install-markdown-lint
+.PHONY: install-markdownlint
 install-markdown-lint:
 	npm install -g markdownlint-cli
 
-.PHONY: markdown-lint
+.PHONY: markdownlint
 markdown-lint:
 	@echo $(ALL_DOCS)
 	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
