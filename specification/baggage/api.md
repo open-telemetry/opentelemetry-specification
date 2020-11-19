@@ -13,8 +13,9 @@ Table of Contents
   - [Get baggage](#get-baggage)
   - [Set baggage](#set-baggage)
   - [Remove baggage](#remove-baggage)
-  - [Clear](#clear)
-- [Baggage Propagation](#baggage-propagation)
+- [Context Interaction](#propagation)
+  - [Clear Baggage in the Context](#clear-baggage-in-the-context)
+- [Baggage Propagation](#propagation)
 - [Conflict Resolution](#conflict-resolution)
 
 </details>
@@ -98,15 +99,6 @@ REQUIRED parameters:
 
 `Name` the name to remove.
 
-### Clear Baggage in the Context
-
-To avoid sending any name/value pairs to an untrusted process, the Baggage API
-MUST provide a way to remove all baggage entries from a context.
-
-This functionality can be implemented by having the user set an empty `Baggage`
-object/struct into the context, or by providing an API that takes a `Context` as
-input, and returns a new `Context` with no `Baggage` associated.
-
 ### Context Interaction
 
 This section defines all operations within the Baggage API that interact with
@@ -137,6 +129,15 @@ exposed as static methods on the baggage module, as static methods on a class
 inside the baggage module (it MAY be named `BaggageUtilities`), or on the
 [`Baggage`](#baggage) class. This functionality SHOULD be fully implemented in
 the API when possible.
+
+#### Clear Baggage in the Context
+
+To avoid sending any name/value pairs to an untrusted process, the Baggage API
+MUST provide a way to remove all baggage entries from a context.
+
+This functionality can be implemented by having the user set an empty `Baggage`
+object/struct into the context, or by providing an API that takes a `Context` as
+input, and returns a new `Context` with no `Baggage` associated.
 
 ### Propagation
 
