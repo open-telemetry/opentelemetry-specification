@@ -8,15 +8,15 @@ Table of Contents
 </summary>
 
 - [Overview](#overview)
-  - [Baggage](#baggage)
-  - [Get baggages](#get-all)
-  - [Get baggage](#get-baggage)
-  - [Set baggage](#set-baggage)
-  - [Remove baggage](#remove-baggage)
-- [Context Interaction](#propagation)
-  - [Clear Baggage in the Context](#clear-baggage-in-the-context)
-- [Baggage Propagation](#propagation)
-- [Conflict Resolution](#conflict-resolution)
+- [Baggage](#baggage)
+  - [Get Value](#get-value)
+  - [Get All Values](#get-all-values)
+  - [Set Value](#set-value)
+  - [Remove Name/Value](#remove-name/value)
+  - [Context Interaction](#context-interaction)
+    - [Clear Baggage in the Context](#clear-baggage-in-the-context)
+  - [Propagation](#propagation)
+  - [Conflict Resolution](#conflict-resolution)
 
 </details>
 
@@ -47,9 +47,7 @@ be associated with exactly one value.
 The `Baggage` struct/object/ MUST be immutable, so that the containing Context
 also remains immutable.
 
-### Baggage operations
-
-#### Get Value
+### Get Value
 
 To access the value for a name/value pair set by a prior event, the Baggage API
 MUST provide a function that takes the name as input, and returns a value.
@@ -60,14 +58,14 @@ REQUIRED parameters:
 
 `Name` the name to return the value for.
 
-#### Get All Values
+### Get All Values
 
 Returns the name/value pairs in the `Baggage`. The order of name/value pairs
 MUST NOT be significant. Based on the language specifics, the returned
 value can be either an immutable collection or an immutable iterator to the
 collection of name/value pairs in the `Baggage`.
 
-#### Set Value
+### Set Value
 
 To record the value for a name/value pair, the Baggage API SHOULD provide a
 function which takes a a name, and a value as input. Returns a new `Baggage`
@@ -87,7 +85,7 @@ OPTIONAL parameters:
 an opaque wrapper for a string with no semantic meaning. Left opaque to allow
 for future functionality.
 
-#### Remove Name/Value
+### Remove Name/Value
 
 To delete a name/value pair, the Baggage API SHOULD provide a function which
 takes a name as input. Returns a new `Baggage` which no longer contains the
