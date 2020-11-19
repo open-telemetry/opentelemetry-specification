@@ -1,0 +1,33 @@
+name: Markdown Check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: install markdownlint
+      run: sudo make install-markdownlint
+
+    - name: run markdownlint
+      run: make markdownlint
+  markdown-link-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: install markdown-link-check
+      run: sudo make install-markdown-link-check
+
+    - name: run markdown-link-check
+      run: make markdown-link-check
