@@ -7,6 +7,8 @@ release.
 
 ## Unreleased
 
+## v0.7.0 (11-18-2020)
+
 New:
 
 - Document service name mapping for Jaeger exporters
