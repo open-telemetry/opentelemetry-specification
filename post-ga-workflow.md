@@ -15,7 +15,7 @@ The `main` branch will always contain the latest changes, and branches will be u
 
 API-breaking changes can be accepted under `experimental` subdirectories.
 
-## OTEPS
+## OTEPs
 
 OTEPs are used as a mean to add entirely new components (such as logging) or to introduce API-breaking changes. They will have similar rules as Specification PRs regarding their lifetime:
 
