@@ -12,7 +12,7 @@ Table of Contents
   - [Get Value](#get-value)
   - [Get All Values](#get-all-values)
   - [Set Value](#set-value)
-  - [Remove Name/Value](#remove-name/value)
+  - [Remove Value](#remove-value)
   - [Context Interaction](#context-interaction)
     - [Clear Baggage in the Context](#clear-baggage-in-the-context)
   - [Propagation](#propagation)
@@ -85,7 +85,7 @@ OPTIONAL parameters:
 an opaque wrapper for a string with no semantic meaning. Left opaque to allow
 for future functionality.
 
-### Remove Name/Value
+### Remove Value
 
 To delete a name/value pair, the Baggage API SHOULD provide a function which
 takes a name as input. Returns a new `Baggage` which no longer contains the
