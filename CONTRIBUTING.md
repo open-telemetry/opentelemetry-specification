@@ -44,7 +44,7 @@ one that is needlessly restrictive and complex.
 Markdown files should be properly formatted before a pull request is sent out.
 In this repository we follow the
 [markdownlint rules](https://github.com/DavidAnson/markdownlint#rules--aliases)
-with some customizations. See [markdownlint](.markdownlint.yaml) or
+with some customizations. See [markdownlint](internal/markdownlint.yaml) or
 [settings](.vscode/settings.json) for details.
 
 We highly encourage to use line breaks in markdown files at `80` characters

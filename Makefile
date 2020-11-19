@@ -27,7 +27,7 @@ install-markdown-link-check:
 
 .PHONY: markdown-link-check
 markdown-link-check:
-	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f; done
+	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet --config ./internal/markdown_link_check_config.json $$f; done
 
 .PHONY: install-markdownlint
 install-markdownlint:
@@ -36,7 +36,7 @@ install-markdownlint:
 .PHONY: markdownlint
 markdownlint:
 	@echo $(ALL_DOCS)
-	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
+	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c ./internal/markdownlint.yaml $$f || exit 1;	done
 
 .PHONY: table-generation
 table-generation:
