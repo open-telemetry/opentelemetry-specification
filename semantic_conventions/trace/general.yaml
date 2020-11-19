@@ -95,3 +95,29 @@ groups:
           with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3)
           or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html).
         examples: 'read:message, write:files'
+  - id: code
+    prefix: code
+    brief: >
+      These attributes allow to report this unit of code and therefore to provide more context about the span.
+    attributes:
+      - id: function
+        type: string
+        brief: >
+          The method or function name, or equivalent (usually rightmost part of the code unit's name).
+        examples: serveRequest
+      - id: namespace
+        type: string
+        brief: >
+          The "namespace" within which `code.function` is defined. Usually the qualified class or module name,
+          such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit.
+        examples: com.example.MyHttpService
+      - id: filepath
+        type: string
+        brief: >
+          The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path).
+        examples: /usr/local/MyApplication/content_root/app/index.php
+      - id: lineno
+        type: number
+        brief: >
+          The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`.
+        examples: 42
