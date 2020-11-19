@@ -2,23 +2,24 @@
 ALL_DOCS := $(shell find . -name '*.md' -not -path './.github/*' -type f | grep -v ^./node_modules | sort)
 PWD := $(shell pwd)
 
-TOOLS_DIR := ./.tools
-MISSPELL_BINARY=$(TOOLS_DIR)/misspell
+TOOLS_DIR := ./internal/tools
+MISSPELL_BINARY=bin/misspell
+MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 MARKDOWN_LINK_CHECK=markdown-link-check
 MARKDOWN_LINT=markdownlint
 
 
 .PHONY: install-misspell
 install-misspell:
-	go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
+	cd $(TOOLS_DIR) && go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
 
 .PHONY: misspell
 misspell:
-	$(MISSPELL_BINARY) -error $(ALL_DOCS)
+	$(MISSPELL) -error $(ALL_DOCS)
 
 .PHONY: misspell-correction
 misspell-correction:
-	$(MISSPELL_BINARY) -w $(ALL_DOCS)
+	$(MISSPELL) -w $(ALL_DOCS)
 
 .PHONY: install-markdown-link-check
 install-markdown-link-check:
