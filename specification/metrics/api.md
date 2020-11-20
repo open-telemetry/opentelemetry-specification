@@ -328,43 +328,45 @@ that was active at the time.
 
 ### Units of Measure
 
-All unit strings used in OpenTelemetry are expected to be valid according to The
+Units of measure used in OpenTelemetry are a subset of the
 [Unified Code for Units of Measure](https://ucum.org/ucum.html) (UCUM)
-specification using the case-insensitive form.
+specification, expressed using the case-insensitive form.
 
-Metric instruments SHOULD NOT validate that the unit string passed to them is a
-valid value. The default unit to be used by a metric instrument when unit is not
-provided SHOULD be the non-annotated unity unit (that is: `1`).
+Metric instruments SHOULD NOT:
 
-OpenTelemetry Metrics SDKs SHOULD NOT attempt to reaggregate metrics of
-dissimilar units, even if they are commensurable.
+- validate that the unit string passed to them is a valid value
+- attempt to reaggregate values of dissimilar units, even if they are commensurable
+- attempt to reaggregate values of units that differ only in casing
+
+The default unit used by a metric instrument when unit is not provided MUST be
+the _none_ unit (that is: `1`).
 
 The OpenTelemetry API MUST provide a convenient mechanism for creating
 instruments with the following units:
 
 | Name        | Kind of Quantity         | Unit String   |
 | ------------| ----------------         | -----------   |
-| unity       | unitless count or ratio  |               |
+| unity       | unitless count or ratio  | 1             |
 | percent     | fraction of a total      | %             |
-| nanosecond  | time                     | NS            |
-| microsecond | time                     | US            |
-| millisecond | time                     | MS            |
-| second      | time                     | S             |
-| byte        | amount of information    | BY            |
-| kilobyte    | amount of information    | KIBBY         |
-| megabyte    | amount of information    | MIBBY         |
-| gigabyte    | amount of information    | GIBBY         |
-| terabyte    | amount of information    | TIBBY         |
-| bit         | amount of information    | BIT           |
-| kilobit     | amount of information    | KIBBIT        |
-| megabit     | amount of information    | MIBBIT        |
-| gigabit     | amount of information    | GIBBIT        |
-| terabit     | amount of information    | TIBBIT        |
-| baud        | signal transmission rate | BD            |
-| kilobaud    | signal transmission rate | KIBBD         |
-| megabaud    | signal transmission rate | MIBBD         |
-| gigabaud    | signal transmission rate | GIBBD         |
-| terabaud    | signal transmission rate | TIBBD         |
+| nanosecond  | time                     | ns            |
+| microsecond | time                     | us            |
+| millisecond | time                     | ms            |
+| second      | time                     | s             |
+| byte        | amount of information    | by            |
+| kilobyte    | amount of information    | kibby         |
+| megabyte    | amount of information    | mibby         |
+| gigabyte    | amount of information    | gibby         |
+| terabyte    | amount of information    | tibby         |
+| bit         | amount of information    | bit           |
+| kilobit     | amount of information    | kibbit        |
+| megabit     | amount of information    | mibbit        |
+| gigabit     | amount of information    | gibbit        |
+| terabit     | amount of information    | tibbit        |
+| baud        | signal transmission rate | bd            |
+| kilobaud    | signal transmission rate | kibbd         |
+| megabaud    | signal transmission rate | mibbd         |
+| gigabaud    | signal transmission rate | gibbd         |
+| terabaud    | signal transmission rate | tibbd         |
 | connections | connections              | {connections} |
 | errors      | errors                   | {errors}      |
 | faults      | faults                   | {faults}      |

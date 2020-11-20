@@ -107,10 +107,10 @@ instrument creation, but can be added if there is ambiguity.
 
 The unit string MUST follow the
 [Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html) (UCUM)
-case-insensitive specification.
+case-insensitive specification. All unit strings SHOULD be lowercase.
 
 Instruments that measure the fraction out of a total and whose values are in
-the range `[0, 1]` SHOULD use the default unity unit (`1`).
+the range `[0, 1]` SHOULD use the default unit (`1`).
 Instruments that measure the fraction out of a total as a percentage, whose
 values are in the range `[0, 100]` SHOULD use the percent unit (`%`).
 
