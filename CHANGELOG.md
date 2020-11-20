@@ -7,6 +7,11 @@ release.
 
 ## Unreleased
 
+Updates:
+
+- `process.runtime.description` resource convention: Add `java.vm.name`
+  ([#1242](https://github.com/open-telemetry/opentelemetry-specification/pull/1242))
+  
 ## v0.7.0 (11-18-2020)
 
 New:
