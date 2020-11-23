@@ -139,29 +139,35 @@ status of the feature is not known.
 |In-memory (mock exporter)                     | + | +  | + | +    | +  | +    | - | -  | - | +  |
 |[OTLP](specification/protocol/otlp.md)|
 |OTLP/gRPC Exporter                            | + | +  | + | +    |    | +    |   | +  | + | +  |
-|OTLP/HTTP binary Protobuf Exporter            | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106)    | +  | +    |   |    | + | +  |
-|OTLP/HTTP JSON Protobuf Exporter              | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1003)    |    | -    |   |    |   |    |
-|OTLP/HTTP gzip Content-Encoding support       | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1107)    |    | -    |   |    |   |    |
-|Concurrent sending                            | - |    | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1108)    |    | -    |   | +  |   |    |
-|Honors retryable responses with backoff       | + |    | + | +    | +  | -    |   |    |   |    |
-|Honors non-retryable responses                | + |    | - | +    | +  | -    |   |    |   |    |
-|Honors throttling response                    | + |    | - | +    | +  | -    |   |    |   |    |
-|Multi-destination spec compliance             | - |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1109)    |    | -    |   |    |   |    |
+|OTLP/HTTP binary Protobuf Exporter            | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106)    | +  | +    |   |    | + | -  |
+|OTLP/HTTP JSON Protobuf Exporter              | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1003)    |    | -    |   |    |   | -  |
+|OTLP/HTTP gzip Content-Encoding support       | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1107)    |    | -    |   |    |   | -  |
+|Concurrent sending                            | - |    | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1108)    |    | -    |   | +  |   | -  |
+|Honors retryable responses with backoff       | + |    | + | +    | +  | -    |   |    |   | -  |
+|Honors non-retryable responses                | + |    | - | +    | +  | -    |   |    |   | -  |
+|Honors throttling response                    | + |    | - | +    | +  | -    |   |    |   | -  |
+|Multi-destination spec compliance             | - |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1109)    |    | -    |   |    |   | -  |
 |[Zipkin](specification/trace/sdk_exporters/zipkin.md)|
-|Zipkin V1 JSON                                |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173)    |    | -    | - | -  |   |    |
-|Zipkin V1 Thrift                              |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174)    |    | -    | - | -  |   |    |
-|Zipkin V2 JSON                                | + |    |   | +    |    | -    | + | +  |   |    |
-|Zipkin V2 Protobuf                            |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1175)    |    | +    |   | -  |   |    |
-|Service name mapping                          | + | +  | + | +    |    | +    | + | +  |   |    |
-|SpanKind mapping                              | + | +  | + | +    |    | +    | + | +  |   |    |
-|InstrumentationLibrary mapping                |   | +  | - | +    |    | -    | - | +  |   |    |
-|Boolean attributes                            | + | +  | + | +    |    | +    | + | +  |   |    |
+|Zipkin V1 JSON                                |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173)    |    | -    | - | -  |   | -  |
+|Zipkin V1 Thrift                              |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174)    |    | -    | - | -  |   | -  |
+|Zipkin V2 JSON                                | + |    |   | +    |    | -    | + | +  |   | +  |
+|Zipkin V2 Protobuf                            |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1175)    |    | +    |   | -  |   | -  |
+|Service name mapping                          | + | +  | + | +    |    | +    | + | +  |   | +  |
+|SpanKind mapping                              | + | +  | + | +    |    | +    | + | +  |   | +  |
+|InstrumentationLibrary mapping                |   | +  | - | +    |    | -    | - | +  |   | +  |
+|Boolean attributes                            | + | +  | + | +    |    | +    | + | +  |   | +  |
 |Array attributes                              | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110)    |    | +    | + | +  |   |    |
-|Status mapping                                | + | +  | + | +    |    | +    | + | +  |   |    |
-|Event attributes mapping to Annotations       | + | +  | + | +    |    | +    | + | +  |   |    |
-|Integer microseconds in timestamps            |   | +  |   | +    |    |      |   |    |   |    |
-|Jaeger|
-|TBD|
+|Status mapping                                | + | +  | + | +    |    | +    | + | +  |   | +  |
+|Event attributes mapping to Annotations       | + | +  | + | +    |    | +    | + | +  |   | +  |
+|Integer microseconds in timestamps            |   | +  |   | +    |    |      |   |    |   | +  |
+|[Jaeger](specification/trace/sdk_exporters/jaeger.md)|
+|Jaeger Thrift over UDP                        |   |    |   |      |    |      |   |    |   | +  |
+|Jaeger Protobuf via gRPC                      |   |    |   |      |    |      |   |    |   | -  |
+|Jaeger Thrift over HTTP                       |   |    |   |      |    |      |   |    |   | -  |
+|Service name mapping                          |   |    |   |      |    |      |   |    |   | +  |
+|Resource to Process mapping                   |   |    |   |      |    |      |   |    |   | +  |
+|InstrumentationLibrary mapping                |   |    |   |      |    |      |   |    |   | +  |
+|Events converted to Logs                      |   |    |   |      |    |      |   |    |   | +  |
 |OpenCensus|
 |TBD|
 |Prometheus|
