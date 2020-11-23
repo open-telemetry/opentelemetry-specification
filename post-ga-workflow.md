@@ -4,12 +4,12 @@
 
 The following changes to the Specification v1.x will be allowed after GA:
 
-- Editorial changes.
-- API: additive, non-breaking changes. This is done in order to stay
+- API **additive** changes. This is done in order to stay
   compatible with previous versions. Adding entirely new API components,
   such as logging, is thus allowed.
 - SDK changes.
-- Semantic conventions for new libraries.
+- Editorial changes.
+- Semantic conventions additions.
 
 The `main` branch will always contain the latest changes, and branches will be used to track published releases.
 
