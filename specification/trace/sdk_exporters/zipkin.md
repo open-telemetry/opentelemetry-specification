@@ -138,15 +138,21 @@ TBD: add examples
 
 ### Status
 
-Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin, unless it is `UNSET`.
+Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin, unless it is `Unset`.
 In the latter case it MUST NOT be reported.
 
 The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
 | Status|Tag Key| Tag Value |
 |--|--|--|
-|Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
+|Code | `otel.status_code` | Name of the code, either `Ok` or `Error`. MUST NOT be set if the code is `Unset`. |
 |Message *(optional)* | `otel.status_description` | `{message}` |
+
+### Error flag
+
+When Span `Status` is set to `Error` an `error` tag SHOULD be added with the
+string value `true` (eg. `{"error":"true"}`). The added `error` tag MAY override
+any previous value.
 
 ### Events
 
