@@ -7,6 +7,8 @@ release.
 
 ## Unreleased
 
+## v0.7.0 (11-18-2020)
+
 New:
 
 - Document service name mapping for Jaeger exporters
@@ -69,6 +71,8 @@ New:
   ([#1141](https://github.com/open-telemetry/opentelemetry-specification/pull/1141))
 - Add OTEL_TRACE_SAMPLER env variable definition
   ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
+- Add guidelines for OpenMetrics interoperability
+  ([#1154](https://github.com/open-telemetry/opentelemetry-specification/pull/1154))
 - Add OTEL_TRACE_SAMPLER_ARG env variable definition
   ([#1202](https://github.com/open-telemetry/opentelemetry-specification/pull/1202))
 
