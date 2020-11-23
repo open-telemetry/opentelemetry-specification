@@ -156,7 +156,7 @@ status of the feature is not known.
 |SpanKind mapping                              | + | +  | + | +    |    | +    | + | +  |   | +  |
 |InstrumentationLibrary mapping                |   | +  | - | +    |    | -    | - | +  |   | +  |
 |Boolean attributes                            | + | +  | + | +    |    | +    | + | +  |   | +  |
-|Array attributes                              | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110)    |    | +    | + | +  |   |    |
+|Array attributes                              | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110)    |    | +    | + | +  |   | +  |
 |Status mapping                                | + | +  | + | +    |    | +    | + | +  |   | +  |
 |Error Status mapping                          |   |    |   |      |    |      |   |    |   | +  |
 |Event attributes mapping to Annotations       | + | +  | + | +    |    | +    | + | +  |   | +  |
