@@ -150,9 +150,9 @@ The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
 ### Error flag
 
-When Span `Status` is set to `Error` an `error` tag SHOULD be added with the
-string value `true` (eg. `{"error":"true"}`). The added `error` tag MAY override
-any previous value.
+When Span `Status` is set to `Error` an `error` tag SHOULD be added with an
+empty string value (eg. `{"error":""}`). The added `error` tag MAY override any
+previous value.
 
 ### Events
 
