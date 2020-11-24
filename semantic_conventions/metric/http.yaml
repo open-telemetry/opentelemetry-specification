@@ -6,37 +6,37 @@ groups:
       These conventions can be used for http and https schemes
       and various HTTP versions like 1.1, 2 and SPDY.
     labels:
-      - id: http.method
+      - id: method
         type: string
         example: 'GET'
         brief: 'The HTTP request method'
-      - id: http.host
+      - id: host
         type: string
         example: 'www.example.com'
         brief: 'The value of the HTTP host header. When the header is empty or not present, this label should be the same.'
-      - id: http.scheme
+      - id: scheme
         type: string
         example: 'https'
         brief: 'The URI scheme identifying the used protocol in lowercase'
-      - id: http.status_code
+      - id: status_code
         type: string
         example: '200'
         brief: 'HTTP response status code'
-      - id: http.flavor
+      - id: flavor
         type: string
         example: [ '1.0', '1.1', '2', 'SPDY', 'QUIC' ]
         brief: 'Kind of HTTP protocol used'
     parameterizedLabels: # To avoid high cardinality the following labels SHOULD substitute any parameters when added as labels to http metric events
-      - id: http.url
+      - id: url
         type: string
         example: "api/users/{user_id}"
         brief: 'The originally requested URL'
-      - id: http.target
+      - id: target
         type: string
         example: "/path/{id}?q={}"
         brief: 'The full request target as passed in a HTTP request line or equivalent'
 
-  - id: http.client
+  - id: metric.http.client
     prefix: http
     extends: http
     brief: 'HTTP client metric instruments'
@@ -68,7 +68,7 @@ groups:
     brief: 'HTTP server metric instruments'
     note:
     labels:
-      - id: http.server_name
+      - id: server_name
         type: string
         example: 'localhost'
         brief: 'The primary server name of the matched virtual host'
