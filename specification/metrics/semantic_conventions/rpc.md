@@ -5,7 +5,6 @@ occur, metric events about those operations will be generated and reported to
 provide insight into those operations. By adding RPC labels to metric events
 it allows for finely tuned filtering.
 
-
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
