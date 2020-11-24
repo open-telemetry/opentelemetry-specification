@@ -11,7 +11,9 @@ Updates:
 
 - `process.runtime.description` resource convention: Add `java.vm.name`
   ([#1242](https://github.com/open-telemetry/opentelemetry-specification/pull/1242))
-  
+- Refine span name guideline for SQL database spans
+  ([#1219](https://github.com/open-telemetry/opentelemetry-specification/pull/1219))
+
 ## v0.7.0 (11-18-2020)
 
 New:
