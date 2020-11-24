@@ -289,7 +289,7 @@ some in beta.
 
 #### Default Port
 
-The default network port for OTLP/gRPC is 55680.
+The default network port for OTLP/gRPC is 4317.
 
 ### OTLP/HTTP
 
@@ -445,10 +445,7 @@ connections SHOULD be configurable.
 
 #### Default Port
 
-The default network port for OTLP/HTTP is 55681. There is currently an [open
-issue](https://github.com/open-telemetry/opentelemetry-collector/issues/1256) to
-use the same port for OTLP/gRPC and OTLP/HTTP. In that case this spec will be
-updated to use the same default port for OTLP/gRPC and OTLP/HTTP.
+The default network port for OTLP/HTTP is 4317.
 
 ## Implementation Recommendations
 

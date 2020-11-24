@@ -31,8 +31,8 @@ The OpenTelemetry API has two properties responsible for the data collection:
   Processor](#span-processor) MUST receive only those spans which have this
   field set to `true`. However, [Span Exporter](#span-exporter) SHOULD NOT
   receive them unless the `Sampled` flag was also set.
-* `Sampled` flag in `TraceFlags` on `SpanReference`. This flag is propagated via
-  the `SpanReference` to child Spans. For more details see the [W3C Trace Context
+* `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
+  the `SpanContext` to child Spans. For more details see the [W3C Trace Context
   specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
@@ -61,11 +61,28 @@ The following table summarizes the expected behavior for each combination of
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
 
-When asked to create a Span, the SDK MUST query the `Sampler`'s [`ShouldSample`](#shouldsample) method before actually creating the span, and act accordingly:
-see description of [`ShouldSample`'s](#shouldsample) return value below for how to set `IsRecording` and `Sampled` on the Span,
-and the [table above](#recording-sampled-reaction-table) on whether to pass the `Span` to `SpanProcessor`s.
-A non-recording span MAY be implemented using the same mechanism as when a `Span` is created with no API-implementation installed
-(sometimes called a `NoOpSpan` or `DefaultSpan`).
+### SDK Span creation
+
+When asked to create a Span, the SDK MUST act as if doing the following in order:
+
+1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
+   (note: this must be done before calling `ShouldSample`, because it expects
+   a valid trace ID as input).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method
+   (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
+   use the sampling decision of the parent,
+   translating a set SampledFlag to RECORD and an unset one to DROP).
+3. Generate a new span ID for the `Span`, independently of the sampling decision.
+   This is done so other components (such as logs or exception handling) can rely on
+   a unique span ID, even if the `Span` is a non-recording instance.
+4. Create a span depending on the decision returned by `ShouldSample`:
+   see description of [`ShouldSample`'s](#shouldsample) return value below
+   for how to set `IsRecording` and `Sampled` on the Span,
+   and the [table above](#recording-sampled-reaction-table) on whether
+   to pass the `Span` to `SpanProcessor`s.
+   A non-recording span MAY be implemented using the same mechanism as when a
+   `Span` is created without an SDK installed or as described in
+   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
 
 ### Sampler
 
@@ -79,9 +96,10 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* Parent `SpanReference`. May be invalid to indicate a root span.
+* [`Context`](../context/context.md) with parent `Span`.
+  The Span's SpanContext may be invalid to indicate a root span.
 * `TraceId` of the `Span` to be created.
-  If the parent `SpanReference` contains a valid `TraceId`, they MUST always match.
+  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
 * `SpanKind` of the `Span` to be created.
 * Initial set of `Attributes` of the `Span` to be created.
@@ -101,7 +119,7 @@ It produces an output called `SamplingResult` which contains:
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 * A `Tracestate` that will be associated with the `Span` through the new
-  `SpanReference`.
+  `SpanContext`.
   If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
   so samplers SHOULD normally return the passed-in `Tracestate` if they do not intend
   to change it.
@@ -157,10 +175,10 @@ still be sampled and extra traces will be sampled on the backend only.
 * This is a composite sampler. `ParentBased` helps distinguished between the
 following cases:
   * No parent (root span).
-  * Remote parent (`SpanReference.IsRemote() == true`) with `SampledFlag` equals `true`
-  * Remote parent (`SpanReference.IsRemote() == true`) with `SampledFlag` equals `false`
-  * Local parent (`SpanReference.IsRemote() == false`) with `SampledFlag` equals `true`
-  * Local parent (`SpanReference.IsRemote() == false`) with `SampledFlag` equals `false`
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `false`
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `true`
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `false`
 
 Required parameters:
 
