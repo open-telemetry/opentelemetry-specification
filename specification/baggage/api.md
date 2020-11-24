@@ -1,5 +1,7 @@
 # Baggage API
 
+**Status**: [Feature-freeze](../document-status.md).
+
 <details>
 <summary>
 Table of Contents
@@ -33,6 +35,10 @@ into the context. The [Get all](#get-all) function could be implemented by retur
 object as a whole from the function call. If an idiom like this is implemented, the Baggage object/struct
 MUST be immutable, so that the containing Context also remains immutable.
 
+The Baggage API MUST be fully functional in the absence of an installed SDK. This is required in
+order to enable transparent cross-process Baggage propagation. If a Baggage propagator is installed
+into the API, it will work with or without an installed SDK.
+
 ### Baggage
 
 `Baggage` is used to annotate telemetry, adding context and information to metrics, traces, and logs.
@@ -53,7 +59,7 @@ OPTIONAL parameters:
 ### Get baggage
 
 To access the value for a name/value pair by a prior event, the Baggage API
-SHALL provide a function that takes a context and a name as input, and returns a
+MUST provide a function that takes a context and a name as input, and returns a
 value. Returns the value associated with the given name, or null
 if the given name is not present.
 
@@ -67,7 +73,7 @@ OPTIONAL parameters:
 
 ### Set baggage
 
-To record the value for a name/value pair, the Baggage API SHALL provide a function which
+To record the value for a name/value pair, the Baggage API MUST provide a function which
 takes a context, a name, and a value as input. Returns a new `Context` which
 contains a `Baggage` with the new value.
 
@@ -86,7 +92,7 @@ for a string with no semantic meaning. Left opaque to allow for future functiona
 
 ### Remove baggage
 
-To delete a name/value pair, the Baggage API SHALL provide a function which takes a context
+To delete a name/value pair, the Baggage API MUST provide a function which takes a context
 and a name as input. Returns a new `Context` which no longer contains the selected name.
 
 REQUIRED parameters:
@@ -99,7 +105,7 @@ OPTIONAL parameters:
 
 ### Clear
 
-To avoid sending any name/value pairs to an untrusted process, the Baggage API SHALL provide
+To avoid sending any name/value pairs to an untrusted process, the Baggage API MUST provide
 a function to remove all baggage entries from a context. Returns a new `Context`
 with no `Baggage`.
 
@@ -112,9 +118,12 @@ OPTIONAL parameters:
 `Baggage` MAY be propagated across process boundaries or across any arbitrary boundaries
 (process, $OTHER_BOUNDARY1, $OTHER_BOUNDARY2, etc) for various reasons.
 
-The API layer MAY include the following `Propagator`s:
+The API layer or an extension package MUST include the following `Propagator`s:
 
 * A `TextMapPropagator` implementing the [W3C Baggage Specification](https://w3c.github.io/baggage).
+
+See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
+for how propagators are to be distributed.
 
 Note: The W3C baggage specification does not currently assign semantic meaning to the optional metadata.
 

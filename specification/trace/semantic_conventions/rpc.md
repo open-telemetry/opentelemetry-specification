@@ -13,7 +13,8 @@ This document defines how to describe remote procedure calls
     + [Service name](#service-name)
   * [Distinction from HTTP spans](#distinction-from-http-spans)
 - [gRPC](#grpc)
-  * [Status](#status)
+  * [gRPC Attributes](#grpc-attributes)
+  * [gRPC Status](#grpc-status)
   * [Events](#events)
 
 <!-- tocstop -->
@@ -42,7 +43,7 @@ Examples of span names:
 
 - `grpc.test.EchoService/Echo`
 - `com.example.ExampleRmiService/exampleMethod`
-- `MyCalcService.Calculator/Add` reported by the server and  
+- `MyCalcService.Calculator/Add` reported by the server and
   `MyServiceReference.ICalculator/Add` reported by the client for .NET WCF calls
 - `MyServiceWithNoPackage/theMethod`
 
@@ -97,14 +98,41 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 `rpc.system` MUST be set to `"grpc"`.
 
+### gRPC Attributes
+
+<!-- semconv rpc.grpc -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `rpc.grpc.status_code` | number enum | The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0`<br>`1`<br>`16` | Yes |
+
+`rpc.grpc.status_code` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `0` | OK |
+| `1` | CANCELLED |
+| `2` | UNKNOWN |
+| `3` | INVALID_ARGUMENT |
+| `4` | DEADLINE_EXCEEDED |
+| `5` | NOT_FOUND |
+| `6` | ALREADY_EXISTS |
+| `7` | PERMISSION_DENIED |
+| `8` | RESOURCE_EXHAUSTED |
+| `9` | FAILED_PRECONDITION |
+| `10` | ABORTED |
+| `11` | OUT_OF_RANGE |
+| `12` | UNIMPLEMENTED |
+| `13` | INTERNAL |
+| `14` | UNAVAILABLE |
+| `15` | DATA_LOSS |
+| `16` | UNAUTHENTICATED |
+<!-- endsemconv -->
+
 [gRPC]: https://grpc.io/
 
-### Status
+### gRPC Status
 
-Implementations MUST set status which MUST be the same as the gRPC client/server
-status. The mapping between gRPC canonical codes and OpenTelemetry status codes
-is 1:1 as OpenTelemetry canonical codes is just a snapshot of grpc codes which
-can be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
+The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
 
 ### Events
 
