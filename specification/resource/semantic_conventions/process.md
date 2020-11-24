@@ -58,8 +58,9 @@ At least one of `process.executable.name`, `process.executable.path`, `process.c
 | `process.runtime.description` | string | An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment. | `Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0` | No |
 <!-- endsemconv -->
 
-`process.runtime.name` SHOULD be set to one of the values listed below, unless more detailed instructions are provided.
-If none of the listed values apply, a custom value best describing the runtime MAY be used.
+How to set these attributes for particular runtime kinds is described in the following subsections.
+
+In addition to these attributes, [`telemetry.sdk.language`](README.md#telemetry-sdk) can be used to determine the general kind of runtime used.
 
 ### Erlang Runtimes
 
@@ -90,18 +91,21 @@ Java instrumentation should fill in the values by copying from system properties
 
 - `process.runtime.name` - Fill in the value of `java.runtime.name` as is
 - `process.runtime.version` - Fill in the value of `java.runtime.version` as is
-- `process.runtime.description` - Fill in the value of `java.vm.vendor`, followed by a space, followed by `java.vm.version`
+- `process.runtime.description` - Fill in the values of `java.vm.vendor`, `java.vm.name`, `java.vm.version`
+  in that order, separated by spaces.
 
 Examples for some Java runtimes
 
 | Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
 | --- | --- | --- | --- |
-| OpenJDK | OpenJDK Runtime Environment | 11.0.8+10 | Oracle Corporation 11.0.8+10 |
-| AdoptOpenJDK Eclipse J9 | OpenJDK Runtime Environment | 11.0.8+10 | Eclipse OpenJ9 openj9-0.21.0 |
-| AdoptOpenJDK Hotspot | OpenJDK Runtime Environment | 11.0.8+10 | AdoptOpenJDK 11.0.8+10 |
-| SapMachine | OpenJDK Runtime Environment | 11.0.8+10-LTS-sapmachine | SAP SE 11.0.8+10-LTS-sapmachine |
-| Zulu OpenJDK | OpenJDK Runtime Environment | 11.0.8+10-LTS | Azul Systems, Inc Zulu11.41+23-CA |
-| Android 11 | Android Runtime | 0.9 | The Android Project 2.1.0 |
+| OpenJDK | OpenJDK Runtime Environment | 11.0.8+10 | Oracle Corporation OpenJDK 64-Bit Server VM 11.0.8+10 |
+| AdoptOpenJDK Eclipse J9 | OpenJDK Runtime Environment | 11.0.8+10 | Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0 |
+| AdoptOpenJDK Hotspot | OpenJDK Runtime Environment | 11.0.8+10 | AdoptOpenJDK OpenJDK 64-Bit Server VM 11.0.8+10 |
+| SapMachine | OpenJDK Runtime Environment | 11.0.8+10-LTS-sapmachine | SAP SE OpenJDK 64-Bit Server VM 11.0.8+10-LTS-sapmachine |
+| Zulu OpenJDK | OpenJDK Runtime Environment | 11.0.8+10-LTS | Azul Systems, Inc OpenJDK 64-Bit Server VM Zulu11.41+23-CA |
+| Oracle Hotspot 8 (32 bit) | Java(TM) SE Runtime Environment | 1.8.0_221-b11 | Oracle Corporation Java HotSpot(TM) Client VM 25.221-b11 |
+| IBM J9 8 | Java(TM) SE Runtime Environment | 8.0.5.25 - pwa6480sr5fp25-20181030_01(SR5 FP25) | IBM Corporation IBM J9 VM 2.9 |
+| Android 11 | Android Runtime | 0.9 | The Android Project Dalvik 2.1.0 |
 
 ### JavaScript runtimes
 
