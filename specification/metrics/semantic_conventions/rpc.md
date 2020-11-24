@@ -1,12 +1,23 @@
 # General RPC conventions
 
-The conventions described in this section are RPC specific.  When RPC operations
+The conventions described in this section are RPC specific. When RPC operations
 occur, metric events about those operations will be generated and reported to
-provide insight into those operations.   By adding RPC labels to metric events
+provide insight into those operations. By adding RPC labels to metric events
 it allows for finely tuned filtering.
 
-**Disclaimer:** These are initial RPC metric instruments and labels but more may
-be added in the future.
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Metric instruments](#metric-instruments)
+  * [RPC Server](#rpc-server)
+  * [RPC Client](#rpc-client)
+- [Labels](#labels)
+  * [Service name](#service-name)
+- [gRPC conventions](#grpc-conventions)
+
+<!-- tocstop -->
 
 ## Metric instruments
 
