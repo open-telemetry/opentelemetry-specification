@@ -1,5 +1,5 @@
 groups:
-  - id: http
+  - id: metric.http
     prefix: http
     brief: 'This document defines semantic conventions for HTTP client and server Metrics.'
     note: >
