@@ -84,4 +84,4 @@ groups:
         brief: >
           An additional description about the runtime of the process, for example
           a specific vendor customization of the runtime environment.
-        examples: 'Eclipse OpenJ9 openj9-0.21.0'
+        examples: 'Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0'
