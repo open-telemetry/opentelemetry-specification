@@ -40,19 +40,19 @@ TBD
 
 ### Status
 
-Span `Status` MUST be reported as a key-value pair in `tags` to Jaeger, unless it is `Unset`.
+Span `Status` MUST be reported as a key-value pair in `tags` to Jaeger, unless it is `UNSET`.
 In the latter case it MUST NOT be reported.
 
 The following table defines the OpenTelemetry `Status` to Jaeger `tags` mapping.
 
 | Status|Tag Key| Tag Value |
 |--|--|--|
-|Code | `otel.status_code` | Name of the code, either `Ok` or `Error`. MUST NOT be set if the code is `Unset`. |
+|Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
 |Message *(optional)* | `otel.status_description` | `{message}` |
 
 ### Error flag
 
-When Span `Status` is set to `Error` an `error` tag SHOULD be added with the
+When Span `Status` is set to `ERROR` an `error` tag SHOULD be added with the
 `BOOL` value (`vBool`) set to `true`. The added `error` tag MAY override any
 previous value.
 
