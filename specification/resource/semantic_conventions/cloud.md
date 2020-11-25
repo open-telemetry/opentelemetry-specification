@@ -11,7 +11,7 @@
 | `cloud.account.id` | string | The cloud account ID used to identify different entities. | `opentelemetry` | No |
 | `cloud.region` | string | A specific geographical location where different entities can run. | `us-central1` | No |
 | `cloud.zone` | string | Zones are a sub set of the region connected through low-latency links. [1] | `us-central1-a` | No |
-| `cloud.infrastructure_service` | string | The cloud infrastructure resource in use. | `EC2`<br>`VM`<br>`ComputeEngine` | No |
+| `cloud.infrastructure_service` | string | The cloud infrastructure resource in use. | `AWS_EC2`<br>`Azure_VM`<br>`GCP_ComputeEngine` | No |
 
 **[1]:** In AWS, this is called availability-zone.
 
@@ -27,19 +27,19 @@
 
 | Value  | Description |
 |---|---|
-| `EC2` | AWS Elastic Compute Cloud |
-| `ECS` | AWS Elastic Container Service |
-| `EKS` | AWS Elastic Kubernetes Service |
-| `Lambda` | AWS Lambda |
-| `ElasticBeanstalk` | AWS Elastic Beanstalk |
-| `VM` | Azure Virtual Machines |
-| `ContainerInstances` | Azure Container Instances |
-| `AKS` | Azure Kubernetes Service |
-| `Functions` | Azure Functions |
-| `AppService` | Azure App Service |
-| `ComputeEngine` | GCP Compute Engine |
-| `CloudRun` | GCP Cloud Run |
-| `GKE` | Google Kubernetes Engine |
-| `CloudFunctions` | GCP Cloud Functions |
-| `AppEngine` | GCP App Engine |
+| `AWS_EC2` | AWS Elastic Compute Cloud |
+| `AWS_ECS` | AWS Elastic Container Service |
+| `AWS_EKS` | AWS Elastic Kubernetes Service |
+| `AWS_Lambda` | AWS Lambda |
+| `AWS_ElasticBeanstalk` | AWS Elastic Beanstalk |
+| `Azure_VM` | Azure Virtual Machines |
+| `Azure_ContainerInstances` | Azure Container Instances |
+| `Azure_AKS` | Azure Kubernetes Service |
+| `Azure_Functions` | Azure Functions |
+| `Azure_AppService` | Azure App Service |
+| `GCP_ComputeEngine` | GCP Compute Engine |
+| `GCP_CloudRun` | GCP Cloud Run |
+| `GCP_GKE` | Google Kubernetes Engine |
+| `GCP_CloudFunctions` | GCP Cloud Functions |
+| `GCP_AppEngine` | GCP App Engine |
 <!-- endsemconv -->

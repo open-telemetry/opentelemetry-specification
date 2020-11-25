@@ -41,51 +41,51 @@ groups:
         type:
           allow_custom_values: true
           members:
-            - id: EC2
-              value: 'EC2'
+            - id: AWS_EC2
+              value: 'AWS_EC2'
               brief: AWS Elastic Compute Cloud
-            - id: ECS
-              value: 'ECS'
+            - id: AWS_ECS
+              value: 'AWS_ECS'
               brief: AWS Elastic Container Service
-            - id: EKS
-              value: 'EKS'
+            - id: AWS_EKS
+              value: 'AWS_EKS'
               brief: AWS Elastic Kubernetes Service
-            - id: Lambda
-              value: 'Lambda'
+            - id: AWS_Lambda
+              value: 'AWS_Lambda'
               brief: AWS Lambda
-            - id: ElasticBeanstalk
-              value: 'ElasticBeanstalk'
+            - id: AWS_ElasticBeanstalk
+              value: 'AWS_ElasticBeanstalk'
               brief: AWS Elastic Beanstalk
-            - id: VM
-              value: 'VM'
+            - id: Azure_VM
+              value: 'Azure_VM'
               brief: Azure Virtual Machines
-            - id: ContainerInstances
-              value: 'ContainerInstances'
+            - id: Azure_ContainerInstances
+              value: 'Azure_ContainerInstances'
               brief: Azure Container Instances
-            - id: AKS
-              value: 'AKS'
+            - id: Azure_AKS
+              value: 'Azure_AKS'
               brief: Azure Kubernetes Service
-            - id: Functions
-              value: 'Functions'
+            - id: Azure_Functions
+              value: 'Azure_Functions'
               brief: Azure Functions
-            - id: AppService
-              value: 'AppService'
+            - id: Azure_AppService
+              value: 'Azure_AppService'
               brief: Azure App Service
-            - id: ComputeEngine
-              value: 'ComputeEngine'
+            - id: GCP_ComputeEngine
+              value: 'GCP_ComputeEngine'
               brief: GCP Compute Engine
-            - id: CloudRun
-              value: 'CloudRun'
+            - id: GCP_CloudRun
+              value: 'GCP_CloudRun'
               brief: GCP Cloud Run
-            - id: GKE
-              value: 'GKE'
+            - id: GCP_GKE
+              value: 'GCP_GKE'
               brief: Google Kubernetes Engine
-            - id: CloudFunctions
-              value: 'CloudFunctions'
+            - id: GCP_CloudFunctions
+              value: 'GCP_CloudFunctions'
               brief: GCP Cloud Functions
-            - id: AppEngine
-              value: 'AppEngine'
+            - id: GCP_AppEngine
+              value: 'GCP_AppEngine'
               brief: GCP App Engine
         brief: >
           The cloud infrastructure resource in use.
-        examples: ['EC2', 'VM', 'ComputeEngine']
+        examples: ['AWS_EC2', 'Azure_VM', 'GCP_ComputeEngine']
