@@ -13,6 +13,8 @@ Updates:
   ([#1242](https://github.com/open-telemetry/opentelemetry-specification/pull/1242))
 - Refine span name guideline for SQL database spans
   ([#1219](https://github.com/open-telemetry/opentelemetry-specification/pull/1219))
+- Add RPC semantic conventions for metrics
+  ([#1162](https://github.com/open-telemetry/opentelemetry-specification/pull/1162))
 
 ## v0.7.0 (11-18-2020)
 
