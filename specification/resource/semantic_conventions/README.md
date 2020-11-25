@@ -135,3 +135,14 @@ Attributes defining a running environment (e.g. Operating System, Cloud, Data Ce
 Version attributes, such as `service.version`, are values of type `string`. They are
 the exact version used to identify an artifact. This may be a semantic version, e.g., `1.2.3`, git hash, e.g.,
 `8ae73a`, or an arbitrary version string, e.g., `0.1.2.20210101`, whatever was used when building the artifact.
+
+## Cloud-Provider-Specific Attributes
+
+Attributes that are only applicable to resources from a specific cloud provider. Currently, these
+resources can only be defined for providers listed as a valid `cloud.provider` in
+[Cloud](./cloud.md) and below. Provider-specific attributes all reside in the `cloud_provider` directory.
+Valid cloud providers are:
+
+- [Amazon Web Services](https://aws.amazon.com/) ([`aws`](cloud_provider/aws/README.md))
+- [Google Cloud Platform](https://cloud.google.com/) (`gcp`)
+- [Microsoft Azure](https://azure.microsoft.com/) (`azure`)
