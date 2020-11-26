@@ -95,6 +95,21 @@ groups:
           with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3)
           or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html).
         examples: 'read:message, write:files'
+  - id: thread
+    prefix: thread
+    brief: >
+      These attributes may be used for any operation to store information about a thread that started a span.
+    attributes:
+      - id: id
+        type: number
+        brief: >
+          Current "managed" thread ID (as opposed to OS thread ID).
+        examples: 42
+      - id: name
+        type: string
+        brief: >
+          Current thread name.
+        examples: main
   - id: code
     prefix: code
     brief: >
