@@ -144,10 +144,12 @@ information is required and would not violate any policies or regulations.
 These attributes may be used for any operation to store information about
 a thread that started a span.
 
-| Attribute name | Notes and examples                                                  |
-|----------------|---------------------------------------------------------------------|
-| `thread.id`    | Current "managed" thread ID (as opposed to OS thread ID). E.g. `42` |
-| `thread.name`  | Current thread name. E.g. `main`                                    |
+<!-- semconv thread -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `thread.id` | number | Current "managed" thread ID (as opposed to OS thread ID). | `42` | No |
+| `thread.name` | string | Current thread name. | `main` | No |
+<!-- endsemconv -->
 
 Examples of where `thread.id` and `thread.name` can be extracted from:
 
