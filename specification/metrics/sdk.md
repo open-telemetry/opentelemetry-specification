@@ -83,8 +83,8 @@ These are the significant data types used in the model architecture:
 - **Accumulation**: consists of Instrument, Label Set, Resource, and Aggregator snapshot, output by Accumulator
 - **Aggregation**: the result of aggregating one or more events by a specific aggregator, output by Processor
 - **AggregationKind**: describes the kind of read API the Aggregation supports (e.g., Sum)
-- **AggregationTemporality**: one of Delta, Cumulative
-- **AggregationTemporalitySelector**: chooses which AggregationTemporality to use for a metric instrument.
+- **ExportKind**: one of Delta, Cumulative, or Pass-Through
+- **ExportKindSelector**: chooses which ExportKind to use for a metric instrument.
 - **ExportRecord**: consists of Instrument, Label Set, Resource, Timestamp(s), and Aggregation
 - **ExportRecordSet**: a set of export records.
 
@@ -252,7 +252,7 @@ Aggregators may have higher concurrency expectations.
 
 State managed in the Accumulator MUST be transient.  This requirement
 ensures that export pipelines written constructed for stateless
-exporters (e.g. Statsd, OTLP with a stateless AggregationTemporalitySelector) are
+exporters (e.g. Statsd, OTLP with a stateless ExportKindSelector) are
 not penalized by permanent state in the Accumulator.  This implies
 that the use of long-term state in a Metrics export pipeline should be
 elective, and such state if present should be managed in the Processor
@@ -305,30 +305,30 @@ long-term state.
 
 #### Basic Processor
 
-The basic Processor supports two standard AggregationTemporalitySelectors and the
+The basic Processor supports two standard ExportKindSelectors and the
 independent Memory behavior described above.  The default
 OpenTelemetry Metrics SDK MUST provide a basic Processor meeting these
 requirements.
 
-##### Basic Processor: CumulativeAggregationTemporalitySelector
+##### Basic Processor: CumulativeExportKindSelector
 
-CumulativeAggregationTemporalitySelector is the default behavior, which requests
+CumulativeExportKindSelector is the default behavior, which requests
 exporting Cumulative aggregation temporality for Sums and Histograms
 and implies that label sets used with synchronous instruments will be
-remembered indefinitely in the SDK.  This AggregationTemporalitySelector is the
+remembered indefinitely in the SDK.  This ExportKindSelector is the
 default in order support downstream Prometheus exporters "out of the
 box".
 
-##### Basic Processor: StatelessAggregationTemporalitySelector
+##### Basic Processor: StatelessExportKindSelector
 
-The StatelessAggregationTemporalitySelector configures a Metric export
-pipeline with no long-term memory requirements.  In this selector, the
-Counter, UpDownCounter, ValueRecorder, and ValueObserver instruments
-are configured for Delta aggregation temporality while SumObserver and
+The StatelessExportKindSelector configures a Metric export pipeline
+with no long-term memory requirements.  In this selector, the Counter,
+UpDownCounter, ValueRecorder, and ValueObserver instruments are
+configured for Delta aggregation temporality while SumObserver and
 UpDownSumObserver instruments are configured for Cumulative
 aggregation temporality.  This basic Processor configuration has no
-long-term memory requirements since the Exporter directly uses the
-output of the Accumulator for every kind of instrument.
+long-term memory requirements because each instrument is
+passed-through without any conversion.
 
 ##### Basic Processor: Memory
 
@@ -526,8 +526,8 @@ considered language-specific details.
 
 ### Export pipeline detail
 
-TODO: define AggregatorSelector, Aggregator, Accumulation, AggregationTemporality,
-AggregationTemporalitySelector, Aggregation, AggregationKind ExportRecord,
+TODO: define AggregatorSelector, Aggregator, Accumulation, ExportKind,
+ExportKindSelector, Aggregation, AggregationKind ExportRecord,
 ExportRecordSet
 
 ### Processor Detail
@@ -536,7 +536,7 @@ TODO: define the Processor interface
 
 #### Basic Processor
 
-TODO: define how AggregationTemporality conversion works (delta->cumulative
+TODO: define how ExportKind conversion works (delta->cumulative
 required, cumulative->delta optional), Memory option (to not forget
 prior collection state).
 
