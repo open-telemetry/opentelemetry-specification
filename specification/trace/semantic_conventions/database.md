@@ -19,7 +19,13 @@
 **Span kind:** MUST always be `CLIENT`.
 
 The **span name** SHOULD be set to a low cardinality value representing the statement executed on the database.
-It may be a stored procedure name (without arguments), SQL statement without variable arguments, operation name, etc.
+It MAY be a stored procedure name (without arguments), DB statement without variable arguments, operation name, etc.
+Since SQL statements may have very high cardinality even without arguments, SQL spans SHOULD be named the
+following way, unless the statement is known to be of low cardinality:
+`<db.operation> <db.name>.<db.sql.table>`, provided that `db.operation` and `db.sql.table` are available.
+If `db.sql.table` is not available due to its semantics, the span SHOULD be named `<db.operation> <db.name>`.
+It is not recommended to attempt any client-side parsing of `db.statement` just to get these properties,
+they should only be used if the library being instrumented already provides them.
 When it's otherwise impossible to get any meaningful span name, `db.name` or the tech-specific database name MAY be used.
 
 ## Connection-level attributes
@@ -178,7 +184,7 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 
 | Key | Value |
 | :---------------------- | :----------------------------------------------------------- |
-| Span name               | `"SELECT * FROM orders WHERE order_id = ?"` |
+| Span name               | `"SELECT ShopDb.orders"` |
 | `db.system`             | `"mysql"` |
 | `db.connection_string`  | `"Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;"` |
 | `db.user`               | `"billing_user"` |
@@ -188,7 +194,8 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 | `net.transport`         | `"IP.TCP"` |
 | `db.name`               | `"ShopDb"` |
 | `db.statement`          | `"SELECT * FROM orders WHERE order_id = 'o4711'"` |
-| `db.operation`          | not set |
+| `db.operation`          | `"SELECT"` |
+| `db.sql.table`          | `"orders"` |
 
 ### Redis
 
