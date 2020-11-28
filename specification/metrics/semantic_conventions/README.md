@@ -9,7 +9,7 @@
   * [Pluralization](#pluralization)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
-  * [Units](#instrument-units)
+  * [Instrument Units](#instrument-units)
 
 <!-- tocstop -->
 
