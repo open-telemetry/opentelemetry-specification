@@ -87,7 +87,7 @@ operation name, etc.
 | `db.hbase.namespace`      | The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute. | `default` | Yes |
 | `db.redis.database_index` | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` label. | `0`<br>`1`<br>`15` | Conditional [1] |
 | `db.mongodb.collection`   | The collection being accessed within the database stated in `db.name`. | `customers`<br>`products` | Yes |
-| `db.sql.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [2] | `public.users`<br>`customers` | Conditional<br>Recommended if available. |
+| `db.sql.table`            | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [2] | `public.users`<br>`customers` | Conditional<br>Recommended if available. |
 
 **[1]:** Required, if other than the default database (`0`).
 
