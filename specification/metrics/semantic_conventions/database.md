@@ -240,7 +240,7 @@ db.{db.system}.*
 * `db.redis.connections.reused`
 * `db.redis.connections.returned`
 * `db.redis.connections.closed`
-* `db.mongo.average_object_size`
-* `db.mongo.write_lock_percentage`
-* `db.mongo.object_count`
+* `db.mongodb.average_object_size`
+* `db.mongodb.write_lock_percentage`
+* `db.mongodb.object_count`
 * `db.postgresql.cache_hits`
