@@ -124,8 +124,8 @@ to getting the implicit context, then inserting the `Baggage` to the context.
 All the above functionalities operate solely on the context API, and they MAY be
 exposed as static methods on the baggage module, as static methods on a class
 inside the baggage module (it MAY be named `BaggageUtilities`), or on the
-[`Baggage`](#baggage) class. This functionality SHOULD be fully implemented in
-the API when possible.
+`Baggage` class. This functionality SHOULD be fully implemented in the API when
+possible.
 
 ### Clear Baggage in the Context
 
