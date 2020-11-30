@@ -9,7 +9,7 @@
   * [Pluralization](#pluralization)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
-  * [Units](#units-1)
+  * [Instrument Units](#instrument-units)
 
 <!-- tocstop -->
 
@@ -137,7 +137,7 @@ freely. For example, `system.paging.faults` and `system.network.packets`.
 Units do not need to be specified in the names since they are included during
 instrument creation, but can be added if there is ambiguity.
 
-### Units
+### Instrument Units
 
 Units should follow the [UCUM](http://unitsofmeasure.org/ucum.html) (need
 more clarification in
