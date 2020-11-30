@@ -4,36 +4,38 @@ OpenTelemetry Protocol (OTLP) specification describes the encoding, transport,
 and delivery mechanism of telemetry data between telemetry sources, intermediate
 nodes such as collectors and telemetry backends.
 
-## Table of Contents
+<details>
+<summary>
+Table of Contents
+</summary>
 
-* [Table of Contents](#table-of-contents)
-* [Protocol Details](#protocol-details)
+- [Protocol Details](#protocol-details)
   * [OTLP/gRPC](#otlpgrpc)
-    * [Concurrent Requests](#otlpgrpc-concurrent-requests)
-    * [Response](#otlpgrpc-response)
-    * [Throttling](#otlpgrpc-throttling)
-    * [gRPC Service and Protobuf Definitions](#otlpgrpc-service-and-protobuf-definitions)
-    * [Default Port](#otlphttp-default-port)
+    + [OTLP/gRPC Concurrent Requests](#otlpgrpc-concurrent-requests)
+    + [OTLP/gRPC Response](#otlpgrpc-response)
+    + [OTLP/gRPC Throttling](#otlpgrpc-throttling)
+    + [OTLP/gRPC Service and Protobuf Definitions](#otlpgrpc-service-and-protobuf-definitions)
+    + [OTLP/gRPC Default Port](#otlpgrpc-default-port)
   * [OTLP/HTTP](#otlphttp)
-    * [Request](#otlphttp-request)
-    * [Response](#otlphttp-response)
-      * [Success](#success)
-      * [Failures](#failures)
-      * [Bad Data](#bad-data)
-      * [Throttling](#otlphttp-throttling)
-      * [All Other Responses](#all-other-responses)
-    * [Connection](#otlphttp-connection)
-    * [Concurrent Requests](#otlphttp-concurrent-requests)
-    * [Default Port](#otlphttp-default-port)
-* [Implementation Recommendations](#implementation-recommendations)
+    + [OTLP/HTTP Request](#otlphttp-request)
+    + [OTLP/HTTP Response](#otlphttp-response)
+      - [Success](#success)
+      - [Failures](#failures)
+      - [Bad Data](#bad-data)
+      - [OTLP/HTTP Throttling](#otlphttp-throttling)
+      - [All Other Responses](#all-other-responses)
+    + [OTLP/HTTP Connection](#otlphttp-connection)
+    + [OTLP/HTTP Concurrent Requests](#otlphttp-concurrent-requests)
+    + [OTLP/HTTP Default Port](#otlphttp-default-port)
+- [Implementation Recommendations](#implementation-recommendations)
   * [Multi-Destination Exporting](#multi-destination-exporting)
-* [Known Limitations](#known-limitations)
+- [Known Limitations](#known-limitations)
   * [Request Acknowledgements](#request-acknowledgements)
-    * [Duplicate Data](#duplicate-data)
+    + [Duplicate Data](#duplicate-data)
   * [Partial Success](#partial-success)
-* [Future Versions and Interoperability](#future-versions-and-interoperability)
-* [Glossary](#glossary)
-* [References](#references)
+- [Future Versions and Interoperability](#future-versions-and-interoperability)
+- [Glossary](#glossary)
+- [References](#references)
 
 OTLP is a general-purpose telemetry data delivery protocol designed in the scope
 of OpenTelemetry project.
