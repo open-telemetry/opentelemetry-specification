@@ -22,3 +22,7 @@
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
 <!-- endsemconv -->
+
+Note: When used in serverless function, all `cloud` resource attributes MAY also be used as span attributes.
+Some FaaS APIs do not provide a way to detect those attributes from the environment - they are passed as function
+parameters, available after the TracerProvider is instantiated; that makes it impossible to use them in a Resource.
