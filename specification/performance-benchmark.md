@@ -11,7 +11,7 @@ platform.
 
 ### Span Configuration
 
-- No parent `Span` and `SpanContext`.
+- No parent `Span` or parent `SpanContext`.
 - Default Span [Kind](./trace/api.md#spankind) and
   [Status](./trace/api.md#set-status).
 - Associated to a [resource](overview.md#resources) with attributes
