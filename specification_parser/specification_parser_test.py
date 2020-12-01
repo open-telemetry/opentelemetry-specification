@@ -8,6 +8,9 @@ from specification_parser import (
 
 
 class TestSpecificationParser(TestCase):
+    """
+    Tests for the specification parser
+    """
 
     @classmethod
     def setUpClass(cls):
