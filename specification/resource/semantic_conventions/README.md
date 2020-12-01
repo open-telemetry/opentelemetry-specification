@@ -47,7 +47,7 @@ Certain attribute groups in this document have a **Required** column. For these 
 | `service.version` | string | The version string of the service API or implementation. | `2.0.0` | No |
 
 **[1]:** MUST be the same for all instances of horizontally scaled services.
-Although this is a required attribute, if the value could not be specified SDKs
+Although this is a required attribute, if the value was not specified, SDKs
 MUST fallback to a language-specific name based on the running service.
 If this fallback fails, the name MUST default to `unknown_service`.
 
