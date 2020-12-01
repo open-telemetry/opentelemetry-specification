@@ -17,6 +17,6 @@
 
 Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/faas.md#difference-between-execution-and-instance).
 
-Note: All `faas` resource attributes MAY also be used as span attributes.
+Some or all `faas` resource attributes MAY also be used as span attributes.
 Some FaaS APIs do not provide a way to detect those attributes from the environment - they are passed as function
 parameters, available after the TracerProvider is instantiated; that makes it impossible to use them in a Resource.
