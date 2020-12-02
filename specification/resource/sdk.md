@@ -34,6 +34,10 @@ The interface MUST provide a way to create a new resource, from [`Attributes`](.
 Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
 
+Note that certain **required** `Resource` specific attributes
+MUST have fallback values if they were not specified, e.g. `service.name`.
+See [Resource standard attributes]((semantic_conventions/README.md)).
+
 Required parameters:
 
 - [`Attributes`](../common/common.md#attributes)
