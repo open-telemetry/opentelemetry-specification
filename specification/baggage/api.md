@@ -85,8 +85,8 @@ REQUIRED parameters:
 
 OPTIONAL parameters:
 
-`Metadata` Optional metadata associated with the name-value pair. This should be an opaque wrapper
-for a string with no semantic meaning. Left opaque to allow for future functionality.
+`Metadata` Optional metadata associated with the name-value pair. This should be a wrapper
+for a string with no semantic meaning. We use a wrapper to allow for future functionality.
 
 `Context` The context containing the `Baggage` in which to set the baggage entry.
 
