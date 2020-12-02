@@ -11,6 +11,10 @@ groups:
           Logical name of the service.
         note: >
           MUST be the same for all instances of horizontally scaled services.
+          Although this is a required attribute, if the value was not specified, SDKs
+          MUST fallback to a language-specific name based on the running service
+          (typically inferred from process name, language, plaform, etc).
+          If this fallback fails, the name MUST default to `unknown_service`.
         examples: ["shoppingcart"]
       - id: namespace
         type: string
