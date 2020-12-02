@@ -251,10 +251,10 @@ exclusive lock while calling an Aggregator (see below), since some
 Aggregators may have higher concurrency expectations.
 
 State managed in the Accumulator MUST be transient.  This requirement
-ensures that export pipelines written constructed for stateless
-exporters (e.g. Statsd, OTLP with a stateless ExportKindSelector) are
-not penalized by permanent state in the Accumulator.  This implies
-that the use of long-term state in a Metrics export pipeline should be
+ensures that export pipelines constructed for stateless exporters
+(e.g. Statsd, OTLP with a stateless ExportKindSelector) are not forced
+into the use of permanent state in the Accumulator.  This implies that
+the use of long-term state in a Metrics export pipeline should be
 elective, and such state if present should be managed in the Processor
 component.
 
