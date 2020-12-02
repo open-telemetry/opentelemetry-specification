@@ -36,7 +36,7 @@ object. A factory method is recommended to enable support for cached objects.
 
 Note that certain **required** `Resource` specific attributes
 MUST have fallback values if they were not specified, e.g. `service.name`.
-See [Resource standard attributes]((semantic_conventions/README.md)).
+See [Resource standard attributes](semantic_conventions/README.md).
 
 Required parameters:
 
