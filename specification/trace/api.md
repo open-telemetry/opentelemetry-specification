@@ -1,5 +1,7 @@
 # Tracing API
 
+**Status**: [Feature-freeze](../document-status.md).
+
 <details>
 <summary>
 Table of Contents

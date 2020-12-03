@@ -7,22 +7,31 @@ Table of Contents
 
 - [Overview](#overview)
 - [Propagator Types](#propagator-types)
-  - [Carrier](#carrier)
-  - [Operations](#operations)
-    - [Inject](#inject)
-    - [Extract](#extract)
+  * [Carrier](#carrier)
+  * [Operations](#operations)
+    + [Inject](#inject)
+    + [Extract](#extract)
 - [TextMap Propagator](#textmap-propagator)
-  - [Fields](#fields)
-  - [Inject](#inject-1)
-    - [Setter argument](#setter-argument)
+  * [Fields](#fields)
+  * [TextMap Inject](#textmap-inject)
+    + [Setter argument](#setter-argument)
       - [Set](#set)
-  - [Extract](#extract-1)
-    - [Getter argument](#getter-argument)
+  * [TextMap Extract](#textmap-extract)
+    + [Getter argument](#getter-argument)
       - [Keys](#keys)
       - [Get](#get)
+- [Injectors and Extractors as Separate Interfaces](#injectors-and-extractors-as-separate-interfaces)
 - [Composite Propagator](#composite-propagator)
+  * [Create a Composite Propagator](#create-a-composite-propagator)
+  * [Composite Extract](#composite-extract)
+  * [Composite Inject](#composite-inject)
 - [Global Propagators](#global-propagators)
+  * [Get Global Propagator](#get-global-propagator)
+  * [Set Global Propagator](#set-global-propagator)
 - [Propagators Distribution](#propagators-distribution)
+  * [B3 Requirements](#b3-requirements)
+    + [B3 Extract](#b3-extract)
+    + [B3 Inject](#b3-inject)
 
 </details>
 
@@ -137,7 +146,7 @@ Observe that some `Propagator`s may define, besides the returned values, additio
 variable names. To get a full list of fields for a specific carrier object, use the
 [Keys](#keys) operation.
 
-### Inject
+### TextMap Inject
 
 Injects the value into a carrier. The required arguments are the same as defined by
 the base [Inject](#inject) operation.
@@ -167,7 +176,7 @@ Required arguments:
 
 The implementation SHOULD preserve casing (e.g. it should not transform `Content-Type` to `content-type`) if the used protocol is case insensitive, otherwise it MUST preserve casing.
 
-### Extract
+### TextMap Extract
 
 Extracts the value from an incoming request. The required arguments are the same as defined by
 the base [Extract](#extract) operation.
@@ -249,7 +258,7 @@ Required arguments:
 
 Returns a new composite `Propagator` with the specified `Propagator`s.
 
-### Extract
+### Composite Extract
 
 Required arguments:
 
@@ -257,7 +266,7 @@ Required arguments:
 - The carrier that holds propagation fields.
 - The instance of `Getter` invoked for each propagation key to get.
 
-### Inject
+### Composite Inject
 
 Required arguments:
 
@@ -320,19 +329,8 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
-X-Ray (Note, AWS is used as an example, not as a requirement) trace header
-protocol can be either maintained and distributed by their respective vendors or
-as part of the OpenTelemetry organization. The reasons for maintaining those as
-a community are:
-
-- Propagators are small pieces of code and their functionality is often publicly
-  documented (unlike exporters).
-- People will often need to use propagators that are not specific to their
-  tracing or metrics vendor. For example, customers of tracing vendor may still
-  want to use an Cloud vendor-specific propagator for requests to the services
-  of this cloud vendor.
-- Only a small number of propagators will need to exist, and this number will
-  shrink as vendors and users shift to W3C TraceContext.
+X-Ray trace header protocol MUST NOT be maintained or distributed as part of
+the Core OpenTelemetry repositories.
 
 ### B3 Requirements
 
@@ -342,7 +340,7 @@ from both sides of request to share the same id. To maximize compatibility
 between OpenTelemetry and Zipkin implementations, the following guidelines have
 been established for B3 context propagation.
 
-#### Extract
+#### B3 Extract
 
 When extracting B3, propagators:
 
@@ -354,7 +352,7 @@ When extracting B3, propagators:
   MUST set the sampled trace flag when the debug flag is set.
 * MUST NOT reuse `X-B3-SpanId` as the id for the server-side span.
 
-#### Inject
+#### B3 Inject
 
 When injecting B3, propagators:
 

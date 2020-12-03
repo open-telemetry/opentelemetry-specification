@@ -9,7 +9,7 @@
   * [Pluralization](#pluralization)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
-  * [Units](#units-1)
+  * [Instrument Units](#instrument-units)
 
 <!-- tocstop -->
 
@@ -70,6 +70,10 @@ OpenTelemetry metadata (e.g. `metric.WithUnit` in Go) SHOULD NOT include the
 units in the metric name. Units may be included when it provides additional
 meaning to the metric name. Metrics MUST, above all, be understandable and
 usable.
+
+When building components that interoperate between OpenTelemetry and a system
+using the OpenMetrics exposition format, use the
+[OpenMetrics Guidelines](./openmetrics-guidelines.md).
 
 ### Pluralization
 
@@ -133,7 +137,7 @@ freely. For example, `system.paging.faults` and `system.network.packets`.
 Units do not need to be specified in the names since they are included during
 instrument creation, but can be added if there is ambiguity.
 
-### Units
+### Instrument Units
 
 Units should follow the [UCUM](http://unitsofmeasure.org/ucum.html) (need
 more clarification in
