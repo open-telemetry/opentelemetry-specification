@@ -88,6 +88,9 @@ These are the significant data types used in the model architecture:
 - **ExportRecord**: consists of Instrument, Label Set, Resource, Timestamp(s), and Aggregation
 - **ExportRecordSet**: a set of export records.
 
+TODO(jmacd): rename ExportKind to AggregationTemporality,
+ExportKindSelector to AggregationTemporalitySelector.
+
 The term **SDK instrument** refers to the underlying implementation of
 an instrument.
 
@@ -228,17 +231,32 @@ Accumulator, with detail shown for synchronous instruments.
 
 ![Metrics SDK Accumulator Detail Diagram](img/accumulator-detail.png)
 
-For a synchronous instrument, the Accumulator will:
+The Accumulator's primary tasks are to aggregate synchronous metric
+events over a collection interval, and then at end of the interval, to
+evaluate asynchronous callbacks and finally snapshot current
+Aggregators for passing to the Processor.
 
-1. Map each active Label Set to a record, consisting of two instances of the same type Aggregator
-2. Enter new records into the mapping, calling the AggregationSelector if needed
-3. Update the current Aggregator instance, responding to concurrent API events
-4. Call Aggregator.SynchronizedMove on the current Aggregator instance to: (a) copy its value into the snapshot Aggregator instance and (b) reset the current Aggregator to the zero state
-5. Call Processor.Process for every resulting Accumulation (i.e., Instrument, Label Set, Resource, and Aggregator snapshot)
+The Accumulator MUST be configured with an AggregatorSelector
+interface that is used to assign new Aggregators to instruments as
+they are needed.
 
-The Accumulator MUST provide the option to associate a
-[`Resource`](../resource/sdk.md) with the Accumulations that it
+The Accumulator MUST ensure that metric events for a given instrument
+and identical label set that occur within a single collection interval
+are passed to the same Aggregator.
+
+The Accumulator MUST snapshot the current value and reset the state of
+every Aggregator that was used during a collection interval.  The
+Aggregator snapshot, together with the instrument descriptor, label
+set, and Resource, define an Accumulation and are passed to the
+Processor.
+
+The Accumulator MUST provide the option to configure the
+[`Resource`](../resource/sdk.md) associated with Accumulations that it
 produces.
+
+Aggregators that are not used during a collection interval MUST not
+yield Accumulations for that collection interval, when no events or
+observations happen.
 
 Synchronous metric instruments are expected to be used concurrently.
 Unless concurrency is not a feature of the source language, the SDK
@@ -250,13 +268,17 @@ synchronous instrument updates.  The Accumulator SHOULD NOT hold an
 exclusive lock while calling an Aggregator (see below), since some
 Aggregators may have higher concurrency expectations.
 
-State managed in the Accumulator MUST be transient.  This requirement
-ensures that export pipelines constructed for stateless exporters
-(e.g. Statsd, OTLP with a stateless ExportKindSelector) are not forced
-into the use of permanent state in the Accumulator.  This implies that
-the use of long-term state in a Metrics export pipeline should be
-elective, and such state if present should be managed in the Processor
-component.
+The Accumulator MUST eliminate from memory (i.e. "forget") state
+associated with label sets used in earlier collection intervals, after
+they are not for a suitable amount of time.  A "suitable amount of
+time" is intentionally not specific, since implementations may wish to
+optimize memory management and have to contend with concurrent access.
+This requirement ensures that export pipelines constructed for
+stateless exporters (e.g. Statsd, OTLP with a stateless
+ExportKindSelector) are not forced into the use of permanent state in
+the Accumulator.  This implies that the use of long-term state in a
+Metrics export pipeline should be elective, and such state if present
+should be managed in the Processor component.
 
 #### Accumulator: Collect() function
 
