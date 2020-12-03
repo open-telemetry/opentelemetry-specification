@@ -181,7 +181,7 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 
 #### Cassandra
 
-Seperated for clarity.
+Separated for clarity.
 
 <!-- semconv db.tech(tag=call-level-tech-specific-cassandra) -->
 | Attribute  | Type | Description  | Example  | Required |
