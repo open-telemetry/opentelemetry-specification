@@ -349,8 +349,10 @@ UpDownCounter, ValueRecorder, and ValueObserver instruments are
 configured for Delta aggregation temporality while SumObserver and
 UpDownSumObserver instruments are configured for Cumulative
 aggregation temporality.  This basic Processor configuration has no
-long-term memory requirements because each instrument is
-passed-through without any conversion.
+long-term memory requirements because the instrument temporality
+matches the aggregation temporality, meaning Accumulations "pass
+through" the Processor without requiring additional memory for
+temporality conversion.
 
 ##### Basic Processor: Memory
 
