@@ -144,13 +144,7 @@ The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 | Status|Tag Key| Tag Value |
 |--|--|--|
 |Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
-|Message *(optional)* | `otel.status_description` | `{message}` |
-
-### Error flag
-
-When Span `Status` is set to `ERROR` an `error` tag SHOULD be added with an
-empty string value (eg. `{"error":""}`). The added `error` tag MAY override any
-previous value.
+|Description| `error` | Description of the `Status`. MUST be set if the code is `ERROR`, use an empty string if Description has no value. MUST NOT be set for `OK` and `UNSET` codes. |
 
 ### Events
 

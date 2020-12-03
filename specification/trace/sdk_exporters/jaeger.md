@@ -48,7 +48,7 @@ The following table defines the OpenTelemetry `Status` to Jaeger `tags` mapping.
 | Status|Tag Key| Tag Value |
 |--|--|--|
 |Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
-|Message *(optional)* | `otel.status_description` | `{message}` |
+|Description | `otel.status_description` | Description of the `Status` if it has a value otherwise not set. |
 
 ### Error flag
 
