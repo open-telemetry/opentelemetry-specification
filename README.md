@@ -26,6 +26,7 @@ Technical committee holds regular meetings, notes are held
 - [Glossary](specification/glossary.md)
 - [Library Guidelines](specification/library-guidelines.md)
   - [Package/Library Layout](specification/library-layout.md)
+  - [General error handling guidelines](specification/error-handling.md)
 - API Specification
   - [Baggage](specification/baggage/api.md)
     - [Propagators](specification/context/api-propagators.md)

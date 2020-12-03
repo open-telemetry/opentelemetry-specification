@@ -7,8 +7,25 @@ release.
 
 ## Unreleased
 
+Updates:
+
+- `process.runtime.description` resource convention: Add `java.vm.name`
+  ([#1242](https://github.com/open-telemetry/opentelemetry-specification/pull/1242))
+- Refine span name guideline for SQL database spans
+  ([#1219](https://github.com/open-telemetry/opentelemetry-specification/pull/1219))
+- Add RPC semantic conventions for metrics
+  ([#1162](https://github.com/open-telemetry/opentelemetry-specification/pull/1162))
+
+## v0.7.0 (11-18-2020)
+
 New:
 
+- Document service name mapping for Jaeger exporters
+  ([1222](https://github.com/open-telemetry/opentelemetry-specification/pull/1222))
+- Change default OTLP port number
+  ([#1221](https://github.com/open-telemetry/opentelemetry-specification/pull/1221))
+- Add performance benchmark specification
+  ([#748](https://github.com/open-telemetry/opentelemetry-specification/pull/748))
 - Enforce that the Baggage API must be fully functional, even without an installed SDK.
   ([#1103](https://github.com/open-telemetry/opentelemetry-specification/pull/1103))
 - Rename "Canonical status code" to "Status code"
@@ -59,11 +76,21 @@ New:
   ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
 - Add semantic conventions for system metrics
   ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
+- Add `db.sql.table` to semantic conventions, allow `db.operation` for SQL
+  ([#1141](https://github.com/open-telemetry/opentelemetry-specification/pull/1141))
 - Add OTEL_TRACE_SAMPLER env variable definition
   ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
+- Add guidelines for OpenMetrics interoperability
+  ([#1154](https://github.com/open-telemetry/opentelemetry-specification/pull/1154))
+- Add OTEL_TRACE_SAMPLER_ARG env variable definition
+  ([#1202](https://github.com/open-telemetry/opentelemetry-specification/pull/1202))
 
 Updates:
 
+- Clarify null SHOULD NOT be allowed even in arrays
+  ([#1214](https://github.com/open-telemetry/opentelemetry-specification/pull/1214))
+- Remove ordering SHOULD-requirement for attributes
+  ([#1212](https://github.com/open-telemetry/opentelemetry-specification/pull/1212))
 - Make `process.pid` optional, split `process.command_args` from `command_line`
   ([#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Renamed `CorrelationContext` to `Baggage`:
@@ -126,10 +153,14 @@ Updates:
 - SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
   ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
   ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
+- SDK: Specify when to generate new IDs with sampling
+  ([#1225](https://github.com/open-telemetry/opentelemetry-specification/pull/1225))
 - Remove custom header name for Baggage, use official header
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 - Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
+- Update semantic conventions for gRPC for new Span Status
+  ([#1156](https://github.com/open-telemetry/opentelemetry-specification/pull/1156))
 
 ## v0.6.0 (07-01-2020)
 

@@ -10,9 +10,11 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning and be gracefully ignored. |
 | OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
+| OTEL_TRACE_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACE_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACE_SAMPLER_ARG is not set.  |
 
-Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "jaeger".
+Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "b3multi", "jaeger".
 Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
+See [B3 propagation](./context/api-propagators.md#b3-requirements) for details regarding single and multi encoding.
 
 Known values for `OTEL_TRACE_SAMPLER` are:
 
@@ -22,6 +24,10 @@ Known values for `OTEL_TRACE_SAMPLER` are:
 - `"parentbased_always_on"`: `ParentBased(root=AlwaysOnSampler)`
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
+
+Depending on the value of `OTEL_TRACE_SAMPLER`, `OTEL_TRACE_SAMPLER_ARG` may be set as follows:
+
+- For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25".
 
 ## Batch Span Processor
 
