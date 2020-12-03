@@ -53,7 +53,7 @@ status of the feature is not known.
 |Double floating-point type                    | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Signed int64 type                             | + | +  | + | +    | +  | +    | - | +  | + | +  |
 |Array of primitives (homogeneous)             | + | +  | + | +    | +  | +    | + | +  | + | +  |
-|`null` values documented as invalid/undefined |   | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1304)    |    | N/A  |   |    |   |    |
+|`null` values documented as invalid/undefined |   | +  | + | +    |    | N/A  |   |    |   |    |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  |
 |[Span linking](specification/trace/api.md#specifying-links)|
 |AddLink                                       | + | +  | + | +    | +  | +    | + | +  | - | +  |
@@ -64,11 +64,11 @@ status of the feature is not known.
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | - | +  |
 |[Span exceptions](specification/trace/api.md#record-exception)|
 |RecordException                               | - | +  | + | +    | +  | -    |   | +  | - | +  |
-|RecordException with extra parameters         | - | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1102)    | -  | -    |   | +  | - | +  |
+|RecordException with extra parameters         | - | +  | + | +    | -  | -    |   | +  | - | +  |
 |[Sampling](specification/trace/sdk.md#sampling)|
-|Allow samplers to modify tracestate           |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1220)    |    | +    |   | +  |   |    |
+|Allow samplers to modify tracestate           |   | +  |   | +    |    | +    |   | +  |   |    |
 |ShouldSample gets full parent Context         |   | +  | + | +    |    | +    |   |    |   |    |
-|[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |   |    |   |      |    |      |   |    |   |    |
+|[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1398)    |    |      |   |    |   |    |
 
 ## Baggage
 
@@ -141,7 +141,7 @@ status of the feature is not known.
 |OTLP/gRPC Exporter                            | + | +  | + | +    |    | +    |   | +  | + | +  |
 |OTLP/HTTP binary Protobuf Exporter            | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106)    | +  | +    |   |    | + | -  |
 |OTLP/HTTP JSON Protobuf Exporter              | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1003)    |    | -    |   |    |   | -  |
-|OTLP/HTTP gzip Content-Encoding support       | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1107)    |    | -    |   |    |   | -  |
+|OTLP/HTTP gzip Content-Encoding support       | - | -  | + | +   |    | -    |   |    |   | -  |
 |Concurrent sending                            | - |    | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1108)    |    | -    |   | +  |   | -  |
 |Honors retryable responses with backoff       | + |    | + | +    | +  | -    |   |    |   | -  |
 |Honors non-retryable responses                | + |    | - | +    | +  | -    |   |    |   | -  |
@@ -151,7 +151,7 @@ status of the feature is not known.
 |Zipkin V1 JSON                                |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173)    |    | -    | - | -  |   | -  |
 |Zipkin V1 Thrift                              |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174)    |    | -    | - | -  |   | -  |
 |Zipkin V2 JSON                                | + |    |   | +    |    | -    | + | +  |   | +  |
-|Zipkin V2 Protobuf                            |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1175)    |    | +    |   | -  |   | -  |
+|Zipkin V2 Protobuf                            |   |    |   | +    |    | +    |   | -  |   | -  |
 |Service name mapping                          | + | +  | + | +    |    | +    | + | +  |   | +  |
 |SpanKind mapping                              | + | +  | + | +    |    | +    | + | +  |   | +  |
 |InstrumentationLibrary mapping                |   | +  | - | +    |    | -    | - | +  |   | +  |
@@ -162,15 +162,15 @@ status of the feature is not known.
 |Event attributes mapping to Annotations       | + | +  | + | +    |    | +    | + | +  |   | +  |
 |Integer microseconds in timestamps            |   | +  |   | +    |    |      |   |    |   | +  |
 |[Jaeger](specification/trace/sdk_exporters/jaeger.md)|
-|Jaeger Thrift over UDP                        |   |    |   |      |    |      |   |    |   | +  |
-|Jaeger Protobuf via gRPC                      |   |    |   |      |    |      |   |    |   | -  |
-|Jaeger Thrift over HTTP                       |   |    |   |      |    |      |   |    |   | -  |
-|Service name mapping                          |   |    |   |      |    |      |   |    |   | +  |
-|Resource to Process mapping                   |   |    |   |      |    |      |   |    |   | +  |
-|InstrumentationLibrary mapping                |   |    |   |      |    |      |   |    |   | +  |
+|Jaeger Thrift over UDP                        |   |    |   | +    |    |      |   |    |   | +  |
+|Jaeger Protobuf via gRPC                      |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1437)    |    |      |   |    |   | -  |
+|Jaeger Thrift over HTTP                       |   |    |   | +    |    |      |   |    |   | -  |
+|Service name mapping                          |   |    |   | +    |    |      |   |    |   | +  |
+|Resource to Process mapping                   |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1436)    |    |      |   |    |   | +  |
+|InstrumentationLibrary mapping                |   |    |   | +    |    |      |   |    |   | +  |
 |Status mapping                                |   |    |   |      |    |      |   |    |   | +  |
 |Error Status mapping                          |   |    |   |      |    |      |   |    |   | +  |
-|Events converted to Logs                      |   |    |   |      |    |      |   |    |   | +  |
+|Events converted to Logs                      |   |    |   | +    |    |      |   |    |   | +  |
 |OpenCensus|
 |TBD|
 |Prometheus|
