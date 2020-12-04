@@ -3,7 +3,6 @@
 [![Checks](https://github.com/open-telemetry/opentelemetry-specification/workflows/Checks/badge.svg?branch=master)](https://github.com/open-telemetry/opentelemetry-specification/actions?query=workflow%3A%22Checks%22+branch%3Amaster)
 [![Semantic Conventions Check](https://github.com/open-telemetry/opentelemetry-specification/workflows/Semantic%20Conventions%20Check/badge.svg?branch=master)](https://github.com/open-telemetry/opentelemetry-specification/actions?query=workflow%3A%22Semantic+Conventions+Check%22+branch%3Amaster)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/open-telemetry/specification.svg)
-![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/tag-pre/open-telemetry/specification.svg)
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
 
