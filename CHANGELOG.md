@@ -15,6 +15,8 @@ Updates:
   ([#1219](https://github.com/open-telemetry/opentelemetry-specification/pull/1219))
 - Add RPC semantic conventions for metrics
   ([#1162](https://github.com/open-telemetry/opentelemetry-specification/pull/1162))
+- Clarify what it will mean for a vendor of instrumented services to "support
+  OpenTelemetry" ([#1277](https://github.com/open-telemetry/opentelemetry-specification/pull/1277)).
 
 ## v0.7.0 (11-18-2020)
 

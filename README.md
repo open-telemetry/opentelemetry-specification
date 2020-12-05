@@ -47,6 +47,7 @@ Technical committee holds regular meetings, notes are held
   - [Acronym](#acronym)
   - [Contributions](#contributions)
   - [License](#license)
+- [Vendor Guidelines](specification/vendors.md)
 
 ## Project Timeline
 

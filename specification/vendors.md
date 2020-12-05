@@ -27,16 +27,30 @@ The goal is for users to be able to easily switch between vendors while also
 ensuring that any language with an OpenTelemetry SDK implementation is able to
 work with any vendor who claims support for OpenTelemetry.
 
+Vendor means both services and applications which provide observability related
+functionality, like accepting and analyzing traces, as well as services and
+applications that are instrumented and propagate context, like an HTTP load
+balancer.
+
 This document will explain what is required of a vendor to be considered to
 "Support OpenTelemetry" or "Implements OpenTelemetry".
 
 ## Supports OpenTelemetry
+
+### Observability Services and Applications
 
 "Supports OpenTelemetry" means the vendor must accept the output of the default
 SDK through one of two mechanisms:
 
 - By providing an exporter for the [OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector/) and / or the OpenTelemetry SDKs
 - By building a receiver for the [OpenTelemetry protocol](https://github.com/open-telemetry/opentelemetry-proto)
+
+### Instrumented Services and Applications
+
+A service or application can be said to "Support OpenTelemetry" if its
+instrumentation supports the W3C Trace Context propagation. The propagation used
+can be configurable, but when text based propagation is used then at least the
+W3C Trace Context must be offered.
 
 ## Implements OpenTelemetry
 
