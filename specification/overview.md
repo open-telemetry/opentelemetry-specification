@@ -43,7 +43,7 @@ You can find additional definitions for these terms in the [glossary](glossary.m
 A distributed trace is a set of events that are triggered as a result of a single
 logical operation and consolidated across various components of an application. A
 distributed trace contains events that cross process, network, and security
-boundaries. For example, a distributed trace might be initiated when someone 
+boundaries. For example, a distributed trace might be initiated when someone
 presses a button to start an action on a website. The trace represents
 calls made between the downstream services that handled the chain of requests
 initiated by the button being pressed.
@@ -126,7 +126,7 @@ propagated from parent to child spans.
 ### Links between spans
 
 A span can be linked to zero or more causally-related spans, defined by
-SpanContext. Links can point to spans inside a single trace or across 
+SpanContext. Links can point to spans inside a single trace or across
 different traces. You can use links to represent batched operations where a span was
 initiated by multiple initiating spans, each representing a single incoming
 item being processed in the batch.
@@ -142,7 +142,7 @@ When you use the scatter/gather (or fork/join) pattern, the root
 operation starts multiple downstream processing operations that are
 aggregated back into a single span. The last span is linked to many
 operations that it aggregates. All the spans are from the same trace and are
-similar to the parent field of a span. However, in this scenario it's a best 
+similar to the parent field of a span. However, in this scenario it's a best
 practice to not set the parent of the spans, because semantically the parent field
 represents a single-parent scenario. In many cases the parent span fully
 encloses the child spans, which is not the case in scatter/gather and batch
@@ -155,22 +155,22 @@ aggregation and set of labels.
 
 By recording raw measurements using the OpenTelemetry API, you can leave
 the decision of what aggregation algorithm to apply to the metric, as
-well as what labels (dimensions) to define, up to the end user. The API 
-is used in client libraries like gRPC to record raw measurements like 
-"server_latency" or "received_bytes". The end user decides what type of 
-aggregated values to collect from these raw measurements. It can be a 
+well as what labels (dimensions) to define, up to the end user. The API
+is used in client libraries like gRPC to record raw measurements like
+"server_latency" or "received_bytes". The end user decides what type of
+aggregated values to collect from these raw measurements. It can be a
 simple average or an elaborate histogram calculation.
 
-You can also record metrics with the OpenTelemetry API using the predefined 
-aggregation. This strategy lets you collect values like CPU and memory 
+You can also record metrics with the OpenTelemetry API using the predefined
+aggregation. This strategy lets you collect values like CPU and memory
 usage, or simple metrics like queue length.
 
 ### Recording raw measurements
 
 The main classes that record raw measurements are **Measure** and
 **Measurement**. A list of measurements alongside the additional context can be
-recorded using OpenTelemetry API. A user can aggregate those measurements and 
-use the context passed alongside them to define additional dimensions of 
+recorded using OpenTelemetry API. A user can aggregate those measurements and
+use the context passed alongside them to define additional dimensions of
 the resulting metric.
 
 #### Measure
@@ -194,7 +194,7 @@ Metric define their aggregation type as well as a structure of individual
 measurements or points. The API defines the following types of pre-aggregated
 metrics:
 
-- A counter metric to report instantaneous measurement. Counter values can 
+- A counter metric to report instantaneous measurement. Counter values can
   increase or stay the same, but can never decrease. Counter values cannot be
   negative. There are two types of counter metric values - `double` and `long`.
 - A gauge metric to report instantaneous measurement of a numeric value. Gauges can
@@ -235,10 +235,10 @@ OpenTelemetry.
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
 name/value pairs called **Baggage**. Baggage indexes observability events in one service
-with attributes provided by a prior service in the same transaction. This process 
+with attributes provided by a prior service in the same transaction. This process
 helps establish a causal relationship between the related events.
 
-While you can use Baggage to prototype other cross-cutting concerns, it's 
+While you can use Baggage to prototype other cross-cutting concerns, it's
 primarily intended to convey values for the OpenTelemetry observability systems.
 
 These values can be consumed by Baggage and used as additional dimensions for metrics,
@@ -280,7 +280,7 @@ For more information, see [Context](context/context.md).
 ## Propagators
 
 OpenTelemetry uses **Propagators** to serialize and deserialize cross-cutting concern values
-such as Spans (usually only the SpanContext portion) and Baggage. Different Propagator types 
+such as Spans (usually only the SpanContext portion) and Baggage. Different Propagator types
 define the restrictions imposed by a specific transport and bound to a data type.
 
 The Propagators API currently defines one Propagator type:
@@ -292,8 +292,8 @@ The Propagators API currently defines one Propagator type:
 The OpenTelemetry collector is a set of components that can collect traces,
 metrics, and eventually other telemetry data such as logs from processes
 instrumented by OpenTelementry or other monitoring/tracing libraries like Jaeger
-and Prometheus. The components perform aggregation and smart sampling, and 
-export traces and metrics to one or more monitoring/tracing backends. The collector 
+and Prometheus. The components perform aggregation and smart sampling, and
+export traces and metrics to one or more monitoring/tracing backends. The collector
 lets you enrich and transform collected telemetry. For example, you could add additional
 attributes or scrub personal information.
 
@@ -308,8 +308,8 @@ Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/do
 
 The inspiration of the OpenTelemetry project is to make every library and application
 observable out of the box by having them call the OpenTelemetry API directly. However,
-many libraries don't have this integration. Therefore, you need a separate library to 
-inject such calls using mechanisms like wrapping interfaces, subscribing to 
+many libraries don't have this integration. Therefore, you need a separate library to
+inject such calls using mechanisms like wrapping interfaces, subscribing to
 library-specific callbacks, or translating existing telemetry into the OpenTelemetry model.
 
 A library that enables OpenTelemetry observability for another library is called
