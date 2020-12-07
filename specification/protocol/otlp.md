@@ -37,6 +37,8 @@ Table of Contents
 - [Glossary](#glossary)
 - [References](#references)
 
+</details>
+
 OTLP is a general-purpose telemetry data delivery protocol designed in the scope
 of OpenTelemetry project.
 
