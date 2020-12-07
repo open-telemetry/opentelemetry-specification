@@ -36,7 +36,7 @@ Table of Contents
 This document provides an overview of the pillars of telemetry that
 OpenTelemetry supports and defines important fundamental terms.
 
-You can find additional definitions for the terms in this document in the [glossary](glossary.md).
+You can find additional definitions for these terms in the [glossary](glossary.md).
 
 ## Distributed tracing
 
@@ -55,7 +55,7 @@ particular, you can think of a trace as a directed acyclic graph (DAG) of
 spans, where the edges between spans are defined as parent/child
 relationship.
 
-For example, the following is an example trace made up of 6 spans:
+For example, the following is an example trace made up of six spans:
 
 ```
 Causal relationships between spans in a single trace
@@ -71,8 +71,7 @@ Causal relationships between spans in a single trace
            [Span E]    [Span F]
 ```
 
-Sometimes it's easier to visualize traces with a time axis as in the diagram
-below:
+Sometimes it's easier to visualize traces with a time axis like in the following diagram:
 
 ```
 Temporal relationships between spans in a single trace
@@ -106,12 +105,12 @@ It must be propagated to child spans and across process boundaries. A
 SpanContext contains the tracing identifiers and the options that are
 propagated from parent to child spans.
 
-- **TraceId** is the identifier for a trace. It's worldwide unique with
-  practically sufficient probability by being made as 16 randomly generated
+- **TraceId** is the identifier for a trace. It is worldwide unique with
+  practically sufficient probability by consisting of 16 randomly-generated
   bytes. TraceId is used to group all spans for a specific trace together across
   all processes.
-- **SpanId** is the identifier for a span. It's globally unique with
-  practically sufficient probability by being made as 8 randomly generated
+- **SpanId** is the identifier for a span. It is globally unique with
+  practically sufficient probability by consisting of 8 randomly-generated
   bytes. When passed to a child Span, this identifier becomes the parent span ID
   for the child span.
 - **TraceFlags** represent the options for a trace. They're represented as one
@@ -126,16 +125,15 @@ propagated from parent to child spans.
 
 ### Links between spans
 
-A span can be linked to zero or more other spans (defined by
-SpanContext) that are causally related. Links can point to
-spans inside a single trace or across different traces.
-You can use links to represent batched operations where a span was
+A span can be linked to zero or more causally-related spans, defined by
+SpanContext. Links can point to spans inside a single trace or across 
+different traces. You can use links to represent batched operations where a span was
 initiated by multiple initiating spans, each representing a single incoming
 item being processed in the batch.
 
 Another example of using a link is to declare the relationship between
-the originating and following trace. This functionality is useful when a span
-enters trusted boundaries of a service and service policy requires the generation of a new
+the original and subsequent trace. This functionality is useful when a span
+enters trusted boundaries of a service whose policy requires the generation of a new
 trace rather than trusting the incoming trace context. The new linked trace can
 also represent a long-running asynchronous data processing operation
 initiated by one of many fast incoming requests.
@@ -145,7 +143,7 @@ operation starts multiple downstream processing operations that are
 aggregated back into a single span. The last span is linked to many
 operations that it aggregates. All the spans are from the same trace and are
 similar to the parent field of a span. However, in this scenario it's a best 
-practice to not set the parent of the spans because semantically the parent field
+practice to not set the parent of the spans, because semantically the parent field
 represents a single-parent scenario. In many cases the parent span fully
 encloses the child spans, which is not the case in scatter/gather and batch
 scenarios.
@@ -155,73 +153,74 @@ scenarios.
 OpenTelemetry let you record raw measurements or metrics with a predefined
 aggregation and set of labels.
 
-Recording raw measurements using OpenTelemetry API allows to defer to end-user
-the decision on what aggregation algorithm should be applied for this metric as
-well as defining labels (dimensions). It will be used in client libraries like
-gRPC to record raw measurements "server_latency" or "received_bytes". So end
-user will decide what type of aggregated values should be collected out of these
-raw measurements. It may be simple average or elaborate histogram calculation.
+By recording raw measurements using the OpenTelemetry API, you can leave
+the decision of what aggregation algorithm to apply to the metric, as
+well as what labels (dimensions) to define, up to the end user. The API 
+is used in client libraries like gRPC to record raw measurements like 
+"server_latency" or "received_bytes". The end user decides what type of 
+aggregated values to collect from these raw measurements. It can be a 
+simple average or an elaborate histogram calculation.
 
-Recording of metrics with the pre-defined aggregation using OpenTelemetry API is
-not less important. It allows to collect values like cpu and memory usage, or
-simple metrics like "queue length".
+You can also record metrics with the OpenTelemetry API using the predefined 
+aggregation. This strategy lets you collect values like CPU and memory 
+usage, or simple metrics like queue length.
 
 ### Recording raw measurements
 
-The main classes used to record raw measurements are `Measure` and
-`Measurement`. List of `Measurement`s alongside the additional context can be
-recorded using OpenTelemetry API. So user may define to aggregate those
-`Measurement`s and use the context passed alongside to define additional
-dimensions of the resulting metric.
+The main classes that record raw measurements are **Measure** and
+**Measurement**. A list of measurements alongside the additional context can be
+recorded using OpenTelemetry API. A user can aggregate those measurements and 
+use the context passed alongside them to define additional dimensions of 
+the resulting metric.
 
 #### Measure
 
-`Measure` describes the type of the individual values recorded by a library. It
-defines a contract between the library exposing the measurements and an
-application that will aggregate those individual measurements into a `Metric`.
-`Measure` is identified by name, description and a unit of values.
+**Measure** describes the type of individual values recorded by a library. It
+defines a contract between the library exposing the Measurement and an
+application that aggregates those individual measurements into a **Metric**.
+Measure is identified by a name, description, and a unit of values.
 
 #### Measurement
 
-`Measurement` describes a single value to be collected for a `Measure`.
-`Measurement` is an empty interface in API surface. This interface is defined in
-SDK.
+**Measurement** describes a single value to be collected for a measure.
+Measurement is an empty interface on the API surface. This interface is defined in
+the SDK.
 
 ### Recording metrics with predefined aggregation
 
-The base class for all types of pre-aggregated metrics is called `Metric`. It
+The base class for all types of pre-aggregated metrics is called **Metric**. It
 defines basic metric properties like a name and labels. Classes inheriting from
-the `Metric` define their aggregation type as well as a structure of individual
-measurements or Points. API defines the following types of pre-aggregated
+Metric define their aggregation type as well as a structure of individual
+measurements or points. The API defines the following types of pre-aggregated
 metrics:
 
-- Counter metric to report instantaneous measurement. Counter values can go
-  up or stay the same, but can never go down. Counter values cannot be
+- A counter metric to report instantaneous measurement. Counter values can 
+  increase or stay the same, but can never decrease. Counter values cannot be
   negative. There are two types of counter metric values - `double` and `long`.
-- Gauge metric to report instantaneous measurement of a numeric value. Gauges can
-  go both up and down. The gauges values can be negative. There are two types of
+- A gauge metric to report instantaneous measurement of a numeric value. Gauges can
+  increase and decrease. The gauges values can be negative. There are two types of
   gauge metric values - `double` and `long`.
 
-API allows to construct the `Metric` of a chosen type. SDK defines the way to
-query the current value of a `Metric` to be exported.
+The API lets you construct the metric of a chosen type. The SDK defines how to
+query the current value of a metric to be exported.
 
-Every type of a `Metric` has it's API to record values to be aggregated. API
-supports both - push and pull model of setting the `Metric` value.
+Each type of metric has its API to record values to be aggregated. The API
+supports both push and pull models of setting the metric value.
 
 ### Metrics data model and SDK
 
-Metrics data model is defined in SDK and is based on
+The metrics data model is defined in the SDK and is based on
 [metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
 This data model is used by all the OpenTelemetry exporters as an input.
-Different exporters have different capabilities (e.g. which data types are
-supported) and different constraints (e.g. which characters are allowed in label
-keys). Metrics is intended to be a superset of what's possible, not a lowest
+Different exporters have different capabilities, such as which data types are
+supported. They also have different constraints, such as which characters are allowed in label
+keys. Metrics are intended to be a superset of what's possible, not a lowest
 common denominator that's supported everywhere. All exporters consume data from
-Metrics Data Model via a Metric Producer interface defined in OpenTelemetry SDK.
+the metrics data model via a Metric Producer interface defined in OpenTelemetry SDK.
 
-Because of this, Metrics puts minimal constraints on the data (e.g. which
-characters are allowed in keys), and code dealing with Metrics should avoid
-validation and sanitization of the Metrics data. Instead, pass the data to the
+Because of this, Metric puts minimal constraints on the data (e.g. which
+characters are allowed in keys), and code dealing with metrics should avoid
+validation and sanitization of the metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
@@ -229,43 +228,43 @@ from the backend.
 
 ### Data model
 
-[Log Data Model](logs/data-model.md) defines how logs and events are understood by
+The [Log Data Model](logs/data-model.md) defines how logs and events are understood by
 OpenTelemetry.
 
 ## Baggage
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
-name/value pairs, called `Baggage`. `Baggage` is intended for
-indexing observability events in one service with attributes provided by a prior service in
-the same transaction. This helps to establish a causal relationship between these events.
+name/value pairs called **Baggage**. Baggage indexes observability events in one service
+with attributes provided by a prior service in the same transaction. This process 
+helps establish a causal relationship between the related events.
 
-While `Baggage` can be used to prototype other cross-cutting concerns, this mechanism is primarily intended
-to convey values for the OpenTelemetry observability systems.
+While you can use Baggage to prototype other cross-cutting concerns, it's 
+primarily intended to convey values for the OpenTelemetry observability systems.
 
-These values can be consumed from `Baggage` and used as additional dimensions for metrics,
-or additional context for logs and traces. Some examples:
+These values can be consumed by Baggage and used as additional dimensions for metrics,
+or additional context for logs and traces. Here are some examples:
 
-- a web service can benefit from including context around what service has sent the request
-- a SaaS provider can include context about the API user or token that is responsible for that request
-- determining that a particular browser version is associated with a failure in an image processing service
+- A web service can benefit from including context around what service sent the request.
+- A SaaS provider can include context about the API user or token responsible for that request.
+- You can determine that a particular browser version is associated with a failure in an image processing service.
 
-For backward compatibility with OpenTracing, Baggage is propagated as `Baggage` when
-using the OpenTracing bridge. New concerns with different criteria should consider creating a new
-cross-cutting concern to cover their use-case; they may benefit from the W3C encoding format but
+For backwards compatibility with OpenTracing, Baggage is propagated as `Baggage` when
+using the OpenTracing bridge. If you have concerns about different criteria, consider creating a new
+cross-cutting concern to cover your use case. You might benefit from the W3C encoding format, but
 use a new HTTP header to convey data throughout a distributed trace.
 
 ## Resources
 
-`Resource` captures information about the entity for which telemetry is
-recorded. For example, metrics exposed by a Kubernetes container can be linked
+**Resource** captures information about the entity for which telemetry is
+recorded. For example, metrics exposed by a Kubernetes container might be linked
 to a resource that specifies the cluster, namespace, pod, and container name.
 
-`Resource` may capture an entire hierarchy of entity identification. It may
-describe the host in the cloud and specific container or an application running
+Resource may capture an entire hierarchy of entity identification. It may
+describe the host in the cloud and a specific container or application running
 in the process.
 
-Note, that some of the process identification information can be associated with
-telemetry automatically by OpenTelemetry SDK or specific exporter. See
+Some of the process identification information can be associated with
+telemetry automatically by OpenTelemetry SDK or a specific exporter. See
 OpenTelemetry
 [proto](https://github.com/open-telemetry/opentelemetry-proto/blob/a46c815aa5e85a52deb6cb35b8bc182fb3ca86a0/src/opentelemetry/proto/agent/common/v1/common.proto#L28-L96)
 for an example.
@@ -273,70 +272,69 @@ for an example.
 ## Context Propagation
 
 All of OpenTelemetry cross-cutting concerns, such as traces and metrics,
-share an underlying `Context` mechanism for storing state and
+share an underlying **Context** mechanism for storing state and
 accessing data across the lifespan of a distributed transaction.
 
-See the [Context](context/context.md)
+For more information, see [Context](context/context.md).
 
 ## Propagators
 
-OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
-such as `Span`s (usually only the `SpanContext` portion) and `Baggage`. Different `Propagator` types define the restrictions
-imposed by a specific transport and bound to a data type.
+OpenTelemetry uses **Propagators** to serialize and deserialize cross-cutting concern values
+such as Spans (usually only the SpanContext portion) and Baggage. Different Propagator types 
+define the restrictions imposed by a specific transport and bound to a data type.
 
-The Propagators API currently defines one `Propagator` type:
+The Propagators API currently defines one Propagator type:
 
-- `TextMapPropagator` injects values into and extracts values from carriers as text.
+- **TextMapPropagator** injects values into and extracts values from carriers as text.
 
 ## Collector
 
 The OpenTelemetry collector is a set of components that can collect traces,
-metrics and eventually other telemetry data (e.g. logs) from processes
-instrumented by OpenTelementry or other monitoring/tracing libraries (Jaeger,
-Prometheus, etc.), do aggregation and smart sampling, and export traces and
-metrics to one or more monitoring/tracing backends. The collector will allow to
-enrich and transform collected telemetry (e.g. add additional attributes or
-scrub personal information).
+metrics, and eventually other telemetry data such as logs from processes
+instrumented by OpenTelementry or other monitoring/tracing libraries like Jaeger
+and Prometheus. The components perform aggregation and smart sampling, and 
+export traces and metrics to one or more monitoring/tracing backends. The collector 
+lets you enrich and transform collected telemetry. For example, you could add additional
+attributes or scrub personal information.
 
 The OpenTelemetry collector has two primary modes of operation: Agent (a daemon
 running locally with the application) and Collector (a standalone running
 service).
 
-Read more at OpenTelemetry Service [Long-term
+For more information, see the OpenTelemetry Service [Long-term
 Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/docs/vision.md).
 
 ## Instrumentation Libraries
 
-See [Instrumentation Library](glossary.md#instrumentation-library)
-
-The inspiration of the project is to make every library and application
-observable out of the box by having them call OpenTelemetry API directly. However,
-many libraries will not have such integration, and as such there is a need for
-a separate library which would inject such calls, using mechanisms such as
-wrapping interfaces, subscribing to library-specific callbacks, or translating
-existing telemetry into the OpenTelemetry model.
+The inspiration of the OpenTelemetry project is to make every library and application
+observable out of the box by having them call the OpenTelemetry API directly. However,
+many libraries don't have this integration. Therefore, you need a separate library to 
+inject such calls using mechanisms like wrapping interfaces, subscribing to 
+library-specific callbacks, or translating existing telemetry into the OpenTelemetry model.
 
 A library that enables OpenTelemetry observability for another library is called
 an [Instrumentation Library](glossary.md#instrumentation-library).
 
-An instrumentation library should be named to follow any naming conventions of
+You should name an instrumentation library to follow any naming conventions of
 the instrumented library (e.g. 'middleware' for a web framework).
 
-If there is no established name, the recommendation is to prefix packages
+If there's no established name, the recommendation is to prefix packages
 with "opentelemetry-instrumentation", followed by the instrumented library
 name itself. Examples include:
 
 * opentelemetry-instrumentation-flask (Python)
 * @opentelemetry/instrumentation-grpc (Javascript)
 
+See [Instrumentation Library](glossary.md#instrumentation-library)
+
 ## Semantic Conventions
 
-OpenTelemetry defines standard names and values of Resource attributes and
-Span attributes.
+OpenTelemetry defines standard names and values of resources attributes and
+span attributes:
 
 * [Resource Conventions](resource/semantic_conventions/README.md)
 * [Span Conventions](trace/semantic_conventions/README.md)
 * [Metrics Conventions](metrics/semantic_conventions/README.md)
 
 The type of the attribute SHOULD be specified in the semantic convention
-for that attribute. See more details about [Attributes](./common/common.md#attributes).
+for that attribute. For more information, see [Attributes](./common/common.md#attributes).
