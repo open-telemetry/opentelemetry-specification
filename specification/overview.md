@@ -36,29 +36,29 @@ Table of Contents
 This document provides an overview of the pillars of telemetry that
 OpenTelemetry supports and defines important fundamental terms.
 
-Additional term definitions can be found in the [glossary](glossary.md).
+You can find additional definitions for the terms in this document in the [glossary](glossary.md).
 
-## Distributed Tracing
+## Distributed tracing
 
-A distributed trace is a set of events, triggered as a result of a single
-logical operation, consolidated across various components of an application. A
-distributed trace contains events that cross process, network and security
-boundaries. A distributed trace may be initiated when someone presses a button
-to start an action on a website - in this example, the trace will represent
+A distributed trace is a set of events that are triggered as a result of a single
+logical operation and consolidated across various components of an application. A
+distributed trace contains events that cross process, network, and security
+boundaries. For example, a distributed trace might be initiated when someone 
+presses a button to start an action on a website. The trace represents
 calls made between the downstream services that handled the chain of requests
-initiated by this button being pressed.
+initiated by the button being pressed.
 
 ### Trace
 
-**Traces** in OpenTelemetry are defined implicitly by their **Spans**. In
-particular, a **Trace** can be thought of as a directed acyclic graph (DAG) of
-**Spans**, where the edges between **Spans** are defined as parent/child
+**Traces** in OpenTelemetry are defined implicitly by their spans. In
+particular, you can think of a trace as a directed acyclic graph (DAG) of
+spans, where the edges between spans are defined as parent/child
 relationship.
 
-For example, the following is an example **Trace** made up of 6 **Spans**:
+For example, the following is an example trace made up of 6 spans:
 
 ```
-Causal relationships between Spans in a single Trace
+Causal relationships between spans in a single trace
 
         [Span A]  ←←←(the root span)
             |
@@ -71,11 +71,11 @@ Causal relationships between Spans in a single Trace
            [Span E]    [Span F]
 ```
 
-Sometimes it's easier to visualize **Traces** with a time axis as in the diagram
+Sometimes it's easier to visualize traces with a time axis as in the diagram
 below:
 
 ```
-Temporal relationships between Spans in a single Trace
+Temporal relationships between spans in a single trace
 
 ––|–––––––|–––––––|–––––––|–––––––|–––––––|–––––––|–––––––|–> time
 
@@ -93,65 +93,66 @@ Each **Span** encapsulates the following state:
 - An operation name
 - A start and finish timestamp
 - [**Attributes**](./common/common.md#attributes): A list of key-value pairs.
-- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
-- Parent's **Span** identifier.
-- [**Links**](#links-between-spans) to zero or more causally-related **Spans**
-  (via the **SpanContext** of those related **Spans**).
-- **SpanContext** information required to reference a Span. See below.
+- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be a string.
+- The parent's span identifier.
+- [**Links**](#links-between-spans) to zero or more causally-related spans
+  (via the **SpanContext** of those related spans).
+- **SpanContext** information required to reference a span. See the next section for more information.
 
 ### SpanContext
 
-Represents all the information that identifies **Span** in the **Trace** and
-MUST be propagated to child Spans and across process boundaries. A
-**SpanContext** contains the tracing identifiers and the options that are
-propagated from parent to child **Spans**.
+**SpanContext** represents all the information that identifies a span in the trace.
+It must be propagated to child spans and across process boundaries. A
+SpanContext contains the tracing identifiers and the options that are
+propagated from parent to child spans.
 
-- **TraceId** is the identifier for a trace. It is worldwide unique with
+- **TraceId** is the identifier for a trace. It's worldwide unique with
   practically sufficient probability by being made as 16 randomly generated
   bytes. TraceId is used to group all spans for a specific trace together across
   all processes.
-- **SpanId** is the identifier for a span. It is globally unique with
+- **SpanId** is the identifier for a span. It's globally unique with
   practically sufficient probability by being made as 8 randomly generated
-  bytes. When passed to a child Span this identifier becomes the parent span id
-  for the child **Span**.
-- **TraceFlags** represents the options for a trace. It is represented as 1
+  bytes. When passed to a child Span, this identifier becomes the parent span ID
+  for the child span.
+- **TraceFlags** represent the options for a trace. They're represented as one
   byte (bitmap).
-  - Sampling bit -  Bit to represent whether trace is sampled or not (mask
+  - Sampling bit -  Bit to represent whether a trace is sampled or not (mask
     `0x1`).
-- **Tracestate** carries tracing-system specific context in a list of key value
-  pairs. **Tracestate** allows different vendors propagate additional
-  information and inter-operate with their legacy Id formats. For more details
-  see [this](https://w3c.github.io/trace-context/#tracestate-field).
+- **Tracestate** carries tracing system-specific context in a list of key-value
+  pairs. Tracestate lets different vendors propagate additional
+  information and interoperate with their legacy ID formats. For more information,
+  see [Trace Context Level 2](https://w3c.github.io/trace-context/#tracestate-field)
+  in the W3C Editor's Draft.
 
 ### Links between spans
 
-A **Span** may be linked to zero or more other **Spans** (defined by
-**SpanContext**) that are causally related. **Links** can point to
-**Spans** inside a single **Trace** or across different **Traces**.
-**Links** can be used to represent batched operations where a **Span** was
-initiated by multiple initiating **Spans**, each representing a single incoming
+A span can be linked to zero or more other spans (defined by
+SpanContext) that are causally related. Links can point to
+spans inside a single trace or across different traces.
+You can use links to represent batched operations where a span was
+initiated by multiple initiating spans, each representing a single incoming
 item being processed in the batch.
 
-Another example of using a **Link** is to declare the relationship between
-the originating and following trace. This can be used when a **Trace** enters trusted
-boundaries of a service and service policy requires the generation of a new
-Trace rather than trusting the incoming Trace context. The new linked Trace may
-also represent a long running asynchronous data processing operation that was
+Another example of using a link is to declare the relationship between
+the originating and following trace. This functionality is useful when a span
+enters trusted boundaries of a service and service policy requires the generation of a new
+trace rather than trusting the incoming trace context. The new linked trace can
+also represent a long-running asynchronous data processing operation
 initiated by one of many fast incoming requests.
 
-When using the scatter/gather (also called fork/join) pattern, the root
-operation starts multiple downstream processing operations and all of them are
-aggregated back in a single **Span**. This last **Span** is linked to many
-operations it aggregates. All of them are the **Spans** from the same Trace. And
-similar to the Parent field of a **Span**. It is recommended, however, to not
-set parent of the **Span** in this scenario as semantically the parent field
-represents a single parent scenario, in many cases the parent **Span** fully
-encloses the child **Span**. This is not the case in scatter/gather and batch
+When you use the scatter/gather (or fork/join) pattern, the root
+operation starts multiple downstream processing operations that are
+aggregated back into a single span. The last span is linked to many
+operations that it aggregates. All the spans are from the same trace and are
+similar to the parent field of a span. However, in this scenario it's a best 
+practice to not set the parent of the spans because semantically the parent field
+represents a single-parent scenario. In many cases the parent span fully
+encloses the child spans, which is not the case in scatter/gather and batch
 scenarios.
 
 ## Metrics
 
-OpenTelemetry allows to record raw measurements or metrics with predefined
+OpenTelemetry let you record raw measurements or metrics with a predefined
 aggregation and set of labels.
 
 Recording raw measurements using OpenTelemetry API allows to defer to end-user
