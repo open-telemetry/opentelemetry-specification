@@ -55,3 +55,10 @@ jobs:
     - name: run .\docfx.cmd
       shell: cmd
       run: .\docfx.cmd
+
+  test-markdown:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Verify that semantic convention tables are up-to-date
+      run: docker run --rm -v $(pwd)/semantic_conventions:/source -v $(pwd)/specification:/spec otel/semconvgen -f /source markdown -md /spec --md-check
