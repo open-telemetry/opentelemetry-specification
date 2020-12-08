@@ -60,5 +60,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Verify that semantic convention tables are up-to-date
+    - name: verify semantic convention tables
       run: docker run --rm -v $(pwd)/semantic_conventions:/source -v $(pwd)/specification:/spec otel/semconvgen -f /source markdown -md /spec --md-check
