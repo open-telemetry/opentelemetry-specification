@@ -37,7 +37,7 @@ Certain attribute groups in this document have a **Required** column. For these 
 
 The SDK MUST set a default value for the following attributes if they were not specified:
 
-- (`service.name`)[#service]
+- [`service.name`](#service)
 
 ## Service
 
