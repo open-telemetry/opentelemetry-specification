@@ -7,10 +7,13 @@ release.
 
 ## Unreleased
 
-Updates:
+New:
 
 - Add `cloud.infrastructure_service` resource attribute
   ([#1112](https://github.com/open-telemetry/opentelemetry-specification/pull/1112))
+  
+Updates:
+
 - `process.runtime.description` resource convention: Add `java.vm.name`
   ([#1242](https://github.com/open-telemetry/opentelemetry-specification/pull/1242))
 - Refine span name guideline for SQL database spans
