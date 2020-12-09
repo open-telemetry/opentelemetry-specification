@@ -88,4 +88,6 @@ groups:
               brief: GCP App Engine
         brief: >
           The cloud infrastructure resource in use.
+        note: >
+          The prefix of the service SHOULD match a `cloud.provider`.
         examples: ['AWS_EC2', 'Azure_VM', 'GCP_ComputeEngine']
