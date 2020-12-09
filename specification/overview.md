@@ -40,7 +40,7 @@ You can find additional definitions for these terms in the [glossary](glossary.m
 
 ## Distributed tracing
 
-A distributed trace is a set of events that are triggered as a result of a single
+A distributed trace is a set of events triggered as a result of a single
 logical operation and consolidated across various components of an application. A
 distributed trace contains events that cross process, network, and security
 boundaries. For example, a distributed trace might be initiated when someone
@@ -87,22 +87,21 @@ Temporal relationships between spans in a single trace
 
 ### Span
 
-Each **Span** encapsulates the following state:
+Each span encapsulates the following state:
 
 - An operation name
-- A start and finish timestamp
-- [**Attributes**](./common/common.md#attributes): A list of key-value pairs.
-- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be a string.
+- A start and end timestamp
+- [**Attributes**](./common/common.md#attributes) as a list of key-value pairs
+- A set of zero or more **Events**, each of which is itself a tuple with a timestamp, name, and [**Attributes**](./common/common.md#attributes)). The name must be a string.
 - The parent's span identifier.
-- [**Links**](#links-between-spans) to zero or more causally-related spans
-  (via the **SpanContext** of those related spans).
-- **SpanContext** information required to reference a span. See the next section for more information.
+- [**Links**](#links-between-spans) to zero or more causally-related spans via the SpanContext of those related spans.
+- **SpanContext**, which is information required to reference a span. See the next section for more information.
 
 ### SpanContext
 
-**SpanContext** represents all the information that identifies a span in the trace.
-It must be propagated to child spans and across process boundaries. A
-SpanContext contains the tracing identifiers and the options that are
+SpanContext represents all the information that identifies a span in the trace.
+SpanContext must be propagated to child spans and across process boundaries. A
+SpanContext contains the tracing identifiers and options that are
 propagated from parent to child spans.
 
 - **TraceId** is the identifier for a trace. It is worldwide unique with
@@ -111,11 +110,11 @@ propagated from parent to child spans.
   all processes.
 - **SpanId** is the identifier for a span. It is globally unique with
   practically sufficient probability by consisting of 8 randomly-generated
-  bytes. When passed to a child Span, this identifier becomes the parent span ID
+  bytes. When passed to a child span, this identifier becomes the parent span ID
   for the child span.
-- **TraceFlags** represent the options for a trace. They're represented as one
+- **TraceFlags** represent the options for a trace, represented as one
   byte (bitmap).
-  - Sampling bit -  Bit to represent whether a trace is sampled or not (mask
+  - Sampling bit - Bit to represent whether a trace is sampled or not (mask
     `0x1`).
 - **Tracestate** carries tracing system-specific context in a list of key-value
   pairs. Tracestate lets different vendors propagate additional
@@ -150,15 +149,15 @@ scenarios.
 
 ## Metrics
 
-OpenTelemetry let you record raw measurements or metrics with a predefined
+OpenTelemetry lets you record raw measurements or metrics with a predefined
 aggregation and set of labels.
 
-By recording raw measurements using the OpenTelemetry API, you can leave
-the decision of what aggregation algorithm to apply to the metric, as
-well as what labels (dimensions) to define, up to the end user. The API
+By recording raw measurements using the OpenTelemetry API, you allow the
+end user to determine which aggregation algorithm to apply to the metric, as
+well as what labels (dimensions) to define. The API
 is used in client libraries like gRPC to record raw measurements like
 "server_latency" or "received_bytes". The end user decides what type of
-aggregated values to collect from these raw measurements. It can be a
+aggregated values to collect from these raw measurements. Metrics can be a
 simple average or an elaborate histogram calculation.
 
 You can also record metrics with the OpenTelemetry API using the predefined
@@ -175,14 +174,14 @@ the resulting metric.
 
 #### Measure
 
-**Measure** describes the type of individual values recorded by a library. It
+Measure describes the type of individual values recorded by a library. It
 defines a contract between the library exposing the Measurement and an
-application that aggregates those individual measurements into a **Metric**.
+application that aggregates those individual measurements into a metric.
 Measure is identified by a name, description, and a unit of values.
 
 #### Measurement
 
-**Measurement** describes a single value to be collected for a measure.
+Measurement describes a single value to be collected for a measure.
 Measurement is an empty interface on the API surface. This interface is defined in
 the SDK.
 
@@ -329,7 +328,7 @@ See [Instrumentation Library](glossary.md#instrumentation-library)
 
 ## Semantic Conventions
 
-OpenTelemetry defines standard names and values of resources attributes and
+OpenTelemetry defines standard names and values of resource and
 span attributes:
 
 * [Resource Conventions](resource/semantic_conventions/README.md)
