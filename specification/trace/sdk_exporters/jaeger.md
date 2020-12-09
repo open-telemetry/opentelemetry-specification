@@ -53,7 +53,7 @@ The following table defines the OpenTelemetry `Status` to Jaeger `tags` mapping.
 ### Error flag
 
 When Span `Status` is set to `ERROR` an `error` tag SHOULD be added with the
-`BOOL` value (`vBool`) set to `true`. The added `error` tag MAY override any
+Boolean value of `true`. The added `error` tag MAY override any
 previous value.
 
 ### Events
