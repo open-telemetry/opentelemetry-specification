@@ -516,6 +516,7 @@ status, which is `Unset`.
 
 - `StatusCode`, one of the values listed below.
 - Optional `Description` that provides a descriptive message of the `Status`.
+  `Description` MUST only be used with the `Error` `StatusCode` value.
 
 `StatusCode` is one of the following values:
 
@@ -529,10 +530,11 @@ status, which is `Unset`.
 
 The Span interface MUST provide:
 
-- An API to set the `Status`. This SHOULD be called `SetStatus`.
-  This API takes the `StatusCode`, and an optional `Description`, either as
-  individual parameters or as an immutable object encapsulating them, whichever
-  is most appropriate for the language.
+- An API to set the `Status`. This SHOULD be called `SetStatus`. This API takes
+  the `StatusCode`, and an optional `Description`, either as individual
+  parameters or as an immutable object encapsulating them, whichever is most
+  appropriate for the language. `Description` MUST be IGNORED for `StatusCode`
+  `Ok` & `Unset` values.
 
 The status code SHOULD remain unset, except for the following circumstances:
 

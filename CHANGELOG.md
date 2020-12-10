@@ -9,12 +9,18 @@ release.
 
 Updates:
 
+- Additional Cassandra semantic attributes
+  ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
 - `process.runtime.description` resource convention: Add `java.vm.name`
   ([#1242](https://github.com/open-telemetry/opentelemetry-specification/pull/1242))
 - Refine span name guideline for SQL database spans
   ([#1219](https://github.com/open-telemetry/opentelemetry-specification/pull/1219))
 - Add RPC semantic conventions for metrics
   ([#1162](https://github.com/open-telemetry/opentelemetry-specification/pull/1162))
+- Clarify `Description` usage on `Status` API
+  ([#1257](https://github.com/open-telemetry/opentelemetry-specification/pull/1257))
+- Add/Update `Status` + `error` mapping for Jaeger & Zipkin Exporters
+  ([#1257](https://github.com/open-telemetry/opentelemetry-specification/pull/1257))
 
 ## v0.7.0 (11-18-2020)
 

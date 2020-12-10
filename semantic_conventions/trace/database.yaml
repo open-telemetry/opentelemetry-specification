@@ -247,10 +247,81 @@ groups:
         - id: keyspace
           type: string
           required: always
-          tag: call-level-tech-specific
+          tag: call-level-tech-specific-cassandra
           brief: >
             The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute.
           examples: 'mykeyspace'
+        - id: page_size
+          type: number
+          tag: call-level-tech-specific-cassandra
+          brief: >
+            The fetch size used for paging, i.e. how many rows will be returned at once.
+          examples: [5000]
+        - id: consistency_level
+          tag: call-level-tech-specific-cassandra
+          brief: >
+            The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+          type:
+            members:
+              - id: ALL
+                value: 'ALL'
+              - id: EACH_QUORUM
+                value: 'EACH_QUORUM'
+              - id: QUORUM
+                value: 'QUORUM'
+              - id: LOCAL_QUORUM
+                value: 'LOCAL_QUORUM'
+              - id: ONE
+                value: 'ONE'
+              - id: TWO
+                value: 'TWO'
+              - id: THREE
+                value: 'THREE'
+              - id: LOCAL_ONE
+                value: 'LOCAL_ONE'
+              - id: ANY
+                value: 'ANY'
+              - id: SERIAL
+                value: 'SERIAL'
+              - id: LOCAL_SERIAL
+                value: 'LOCAL_SERIAL'
+        - id: table
+          type: string
+          tag: call-level-tech-specific-cassandra
+          required:
+            conditional: Recommended if available.
+          brief: The name of the primary table that the operation is acting upon, including the schema name (if applicable).
+          note: >
+            This mirrors the db.sql.table attribute but references cassandra rather than sql.
+            It is not recommended to attempt any client-side parsing of
+            `db.statement` just to get this property, but it should be set if
+            it is provided by the library being instrumented.
+            If the operation is acting upon an anonymous table, or more than one table, this
+            value MUST NOT be set.
+          examples: 'mytable'
+        - id: idempotence
+          type: boolean
+          tag: call-level-tech-specific-cassandra
+          brief: >
+            Whether or not the query is idempotent.
+        - id: speculative_execution_count
+          type: number
+          tag: call-level-tech-specific-cassandra
+          brief: >
+            The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively.
+          examples: [0, 2]
+        - id: coordinator.id
+          type: string
+          tag: call-level-tech-specific-cassandra
+          brief: >
+            The ID of the coordinating node for a query.
+          examples: 'be13faa2-8574-4d71-926d-27f16cf8a7af'
+        - id: coordinator.dc
+          type: string
+          tag: call-level-tech-specific-cassandra
+          brief: >
+            The data center of the coordinating node for a query.
+          examples: 'us-west-2'
 
     - id: db.hbase
       prefix: db.hbase
@@ -316,7 +387,6 @@ groups:
             If the operation is acting upon an anonymous table, or more than one table, this
             value MUST NOT be set.
           examples: ['public.users', 'customers']
-
 
     - id: db.tech
       brief: "Semantic convention group for specific technologies"

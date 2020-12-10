@@ -4,15 +4,17 @@
 
 <!-- toc -->
 
-- [Connection-level attributes](#connection-level-attributes)
-  * [Notes and well-known identifiers for `db.system`](#notes-and-well-known-identifiers-for-dbsystem)
-  * [Connection-level attributes for specific technologies](#connection-level-attributes-for-specific-technologies)
-- [Call-level attributes](#call-level-attributes)
-  * [Call-level attributes for specific technologies](#call-level-attributes-for-specific-technologies)
-- [Examples](#examples)
-  * [MySQL](#mysql)
-  * [Redis](#redis)
-  * [MongoDB](#mongodb)
+- [Semantic conventions for database client calls](#semantic-conventions-for-database-client-calls)
+  - [Connection-level attributes](#connection-level-attributes)
+    - [Notes and well-known identifiers for `db.system`](#notes-and-well-known-identifiers-for-dbsystem)
+    - [Connection-level attributes for specific technologies](#connection-level-attributes-for-specific-technologies)
+  - [Call-level attributes](#call-level-attributes)
+    - [Call-level attributes for specific technologies](#call-level-attributes-for-specific-technologies)
+      - [Cassandra](#cassandra)
+  - [Examples](#examples)
+    - [MySQL](#mysql)
+    - [Redis](#redis)
+    - [MongoDB](#mongodb)
 
 <!-- tocstop -->
 
@@ -167,7 +169,6 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 <!-- semconv db.tech(tag=call-level-tech-specific) -->
 | Attribute  | Type | Description  | Example  | Required |
 |---|---|---|---|---|
-| `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
 | `db.hbase.namespace` | string | The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute. | `default` | Yes |
 | `db.redis.database_index` | number | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`<br>`1`<br>`15` | Conditional [1] |
 | `db.mongodb.collection` | string | The collection being accessed within the database stated in `db.name`. | `customers`<br>`products` | Yes |
@@ -176,6 +177,25 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 **[1]:** Required, if other than the default database (`0`).
 
 **[2]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
+<!-- endsemconv -->
+
+#### Cassandra
+
+Separated for clarity.
+
+<!-- semconv db.tech(tag=call-level-tech-specific-cassandra) -->
+| Attribute  | Type | Description  | Example  | Required |
+|---|---|---|---|---|
+| `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
+| `db.cassandra.page_size` | number | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
+| `db.cassandra.consistency_level` | string enum | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `ALL` | No |
+| `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [1] | `mytable` | Conditional<br>Recommended if available. |
+| `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
+| `db.cassandra.speculative_execution_count` | number | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`<br>`2` | No |
+| `db.cassandra.coordinator.id` | string | The ID of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | No |
+| `db.cassandra.coordinator.dc` | string | The data center of the coordinating node for a query. | `us-west-2` | No |
+
+**[1]:** This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
 
 ## Examples
