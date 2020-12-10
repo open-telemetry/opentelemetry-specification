@@ -158,6 +158,7 @@ status of the feature is not known.
 |Boolean attributes                            | + | +  | + | +    |    | +    | + | +  |   | +  |
 |Array attributes                              | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110)    |    | +    | + | +  |   | +  |
 |Status mapping                                | + | +  | + | +    |    | +    | + | +  |   | +  |
+|Error Status mapping                          |   |    |   |      |    |      |   |    |   | +  |
 |Event attributes mapping to Annotations       | + | +  | + | +    |    | +    | + | +  |   | +  |
 |Integer microseconds in timestamps            |   | +  |   | +    |    |      |   |    |   | +  |
 |[Jaeger](specification/trace/sdk_exporters/jaeger.md)|
@@ -167,6 +168,8 @@ status of the feature is not known.
 |Service name mapping                          |   |    |   | +    |    |      |   |    |   | +  |
 |Resource to Process mapping                   |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1436)    |    |      |   |    |   | +  |
 |InstrumentationLibrary mapping                |   |    |   | +    |    |      |   |    |   | +  |
+|Status mapping                                |   |    |   |      |    |      |   |    |   | +  |
+|Error Status mapping                          |   |    |   |      |    |      |   |    |   | +  |
 |Events converted to Logs                      |   |    |   | +    |    |      |   |    |   | +  |
 |OpenCensus|
 |TBD|
