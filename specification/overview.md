@@ -50,12 +50,14 @@ initiated by the button being pressed.
 
 ### Trace
 
-**Traces** in OpenTelemetry are defined implicitly by their spans. In
+**Traces** in OpenTelemetry are defined implicitly by their **Spans**. A span is
+the building block of a trace and is a named, timed operation that 
+represents a piece of the workflow in a distributed system. In
 particular, you can think of a trace as a directed acyclic graph (DAG) of
 spans, where the edges between spans are defined as parent/child
 relationship.
 
-For example, the following is an example trace made up of six spans:
+For example, the following example shows a trace made up of six spans:
 
 ```
 Causal relationships between spans in a single trace
@@ -87,11 +89,13 @@ Temporal relationships between spans in a single trace
 
 ### Span
 
-Each span encapsulates the following state:
+A span is the primary building block of a distributed trace,
+representing an individual unit of work done in a distributed
+system. Each span encapsulates the following state:
 
-- An operation name
-- A start and end timestamp
-- [**Attributes**](./common/common.md#attributes) as a list of key-value pairs
+- An operation name.
+- A start timestamp and an end timestamp. 
+- [**Attributes**](./common/common.md#attributes) as a list of key-value pairs.
 - A set of zero or more **Events**, each of which is itself a tuple with a timestamp, name, and [**Attributes**](./common/common.md#attributes)). The name must be a string.
 - The parent's span identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related spans via the SpanContext of those related spans.
@@ -103,6 +107,8 @@ SpanContext represents all the information that identifies a span in the trace.
 SpanContext must be propagated to child spans and across process boundaries. A
 SpanContext contains the tracing identifiers and options that are
 propagated from parent to child spans.
+
+SpanContext includes the following elements:
 
 - **TraceId** is the identifier for a trace. It is worldwide unique with
   practically sufficient probability by consisting of 16 randomly-generated
@@ -156,7 +162,7 @@ By recording raw measurements using the OpenTelemetry API, you allow the
 end user to determine which aggregation algorithm to apply to the metric, as
 well as what labels (dimensions) to define. The API
 is used in client libraries like gRPC to record raw measurements like
-"server_latency" or "received_bytes". The end user decides what type of
+`server_latency` or `received_bytes`. The end user decides what type of
 aggregated values to collect from these raw measurements. Metrics can be a
 simple average or an elaborate histogram calculation.
 
