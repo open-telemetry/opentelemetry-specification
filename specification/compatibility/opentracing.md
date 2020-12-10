@@ -22,6 +22,7 @@
 * [ScopeManager Shim](#scopemanager-shim)
   * [Activate a Span](#activate-a-span)
   * [Get the active Span](#get-the-active-span)
+* [Semantic conventions mapping](#semantic-conventions-mapping)
 
 </details>
 
@@ -203,8 +204,8 @@ Parameters:
 Calls `Set Attribute` on the underlying OpenTelemetry `Span` with the specified
 key/value pair.
 
-The value MUST be mapped to the respective OpenTelemetry `Attribute`,
-or converted to a string if the value type is not supported.
+The value MUST be [mapped](#semantic-conventions-mapping) to the respective
+OpenTelemetry `Attribute`, or converted to a string if the value type is not supported.
 
 If the type of the specified value is not supported, the value MUST be converted
 to a string.
@@ -222,8 +223,8 @@ key/value pair set.
 The `Add Event`'s `name` parameter MUST be the value with the `event` key in
 the pair set, or else fallback to use the `log` literal string.
 
-The set of values MUST be mapped to the respective OpenTelemetry `Attribute`,
-or converted to a string if the value type is not supported.
+The set of values MUST be [mapped](#semantic-conventions-mapping) to the respective
+OpenTelemetry `Attribute`, or converted to a string if the value type is not supported.
 
 If an explicit timestamp is specified, a conversion MUST be done to match the
 OpenTracing and OpenTelemetry units.
@@ -271,3 +272,15 @@ and sets its OpenTelemetry `Context` as the active instance.
 Gets the active OpenTelemetry `Span` and returns a `Span` Shim wrapping it.
 
 The API MUST return null if none exist.
+
+## Semantic Conventions Mapping
+
+The OpenTracing Shim MUST map certain elements when calling the underlying
+OpenTelemetry API.
+
+[OpenTracing Span Tags](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#standard-span-tags-and-log-fields):
+
+- `error` maps to [StatusCode](../trace/api.md##set-status):
+  - `true` maps to `Error`.
+  - `false` maps to `Ok`.
+  - no value being set maps to `Unset`.
