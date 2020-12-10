@@ -51,7 +51,7 @@ initiated by the button being pressed.
 ### Trace
 
 **Traces** in OpenTelemetry are defined implicitly by their **Spans**. A span is
-the building block of a trace and is a named, timed operation that 
+the building block of a trace and is a named, timed operation that
 represents a piece of the workflow in a distributed system. In
 particular, you can think of a trace as a directed acyclic graph (DAG) of
 spans, where the edges between spans are defined as parent/child
@@ -94,7 +94,7 @@ representing an individual unit of work done in a distributed
 system. Each span encapsulates the following state:
 
 - An operation name.
-- A start timestamp and an end timestamp. 
+- A start timestamp and an end timestamp.
 - [**Attributes**](./common/common.md#attributes) as a list of key-value pairs.
 - A set of zero or more **Events**, each of which is itself a tuple with a timestamp, name, and [**Attributes**](./common/common.md#attributes)). The name must be a string.
 - The parent's span identifier.
