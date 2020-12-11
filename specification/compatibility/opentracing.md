@@ -55,8 +55,6 @@ This operation is used to create a new OpenTracing `Tracer`:
 This operation MUST accept the following parameters:
 
 - An OpenTelemetry `Tracer`, used to create `Span`s.
-- An OpenTelemetry `BaggageManager`, used to create OpenTelemetry `Baggage`
-  objects, required to implement the OpenTracing `Span` baggage notion.
 - A set of OpenTelemetry `Propagator`s of the supported types, used to perform
   context injection and extraction. Usually these are the global
   `Composite Propagator`s.
