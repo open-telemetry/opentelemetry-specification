@@ -38,11 +38,15 @@ OpenTelemetry API. This layer MUST NOT rely on implementation specific details
 of any SDK.
 
 More specifically, the intention is to allow OpenTracing instrumentation to be
-recorded using the OpenTelemetry API. This Shim Layer MUST NOT allow older
-OpenTracing Tracing components to consume upstream OpenTelemetry functionality.
+recorded using OpenTelemetry. This Shim Layer MUST NOT publicly expose any
+upstream OpenTelemetry API.
 
 This functionality MUST be defined in its own OpenTracing Shim Layer, not in the
 OpenTracing nor the OpenTelemetry API or SDK.
+
+The OpenTracing Shim and the OpenTelemetry API/SDK are expected to be consumed
+simultaneously in a running service, in order to ease migration from the former
+to the latter.
 
 ## Create an OpenTracing Tracer Shim
 
@@ -104,7 +108,7 @@ In order to satisfy the OpenTracing `Span` requirements:
 - The associated `SpanContext` Shim object will contain a `Context`, which
   will contain the OpenTelemetry `Span` and `Baggage` values.
   This `SpanContext` Shim MUST be immutable and MUST be replaced every time
-  baggage is updated through `SetBaggageItem`.
+  baggage is updated through [Set Baggage Item](#set-baggage-item).
 - An underlying OpenTelemetry `Span` MUST be associated with only one
   `SpanContext` Shim at a time for all execution units. This is done in order
   to keep its baggage values consistent across all execution units at all
