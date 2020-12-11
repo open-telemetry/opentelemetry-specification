@@ -115,7 +115,7 @@ Instruments that measure the fraction out of a total as a percentage, whose
 values are in the range `[0, 100]` SHOULD use the percent unit (`%`).
 
 Instruments that represent the number of discrete instances of a countable
-quantity SHOULD use either the default unity unit (`1`) or a
+quantity SHOULD use either the default unitless unit (`1`) or a
 [non-unit](https://ucum.org/ucum.html#para-50) (example: `{errors}` or
 `{packets}`)
 

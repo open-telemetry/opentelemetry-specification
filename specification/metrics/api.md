@@ -339,14 +339,14 @@ Metric instruments SHOULD NOT:
 - attempt to reaggregate values of units that differ only in casing
 
 The default unit used by a metric instrument when unit is not provided MUST be
-the _none_ unit (that is: `1`).
+the _unitless_ unit (that is: `1`).
 
 The OpenTelemetry API MUST provide a convenient mechanism for creating
 instruments with the following units:
 
 | Name        | Kind of Quantity         | Unit String   |
 | ------------| ----------------         | -----------   |
-| unity       | unitless count or ratio  | 1             |
+| unitless    | unitless count or ratio  | 1             |
 | percent     | fraction of a total      | %             |
 | nanosecond  | time                     | ns            |
 | microsecond | time                     | us            |
