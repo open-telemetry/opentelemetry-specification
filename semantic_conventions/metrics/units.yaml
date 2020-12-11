@@ -1,0 +1,89 @@
+groups:
+  - id: units
+    type: units 
+    brief: Specification of commonly used units.
+    members:
+    - id: unitless
+      brief: unitless count or ratio
+      value: "1"
+    - id: percent
+      brief: fraction of a total
+      value: "%"
+    - id: nanosecond
+      brief: time
+      value: ns
+    - id: microsecond
+      brief: time
+      value: us
+    - id: millisecond
+      brief: time
+      value: ms
+    - id: second
+      brief: time
+      value: s
+    - id: byte
+      brief: amount of information
+      value: by
+    - id: kilobyte
+      brief: amount of information
+      value: kibby
+    - id: megabyte
+      brief: amount of information
+      value: mibby
+    - id: gigabyte
+      brief: amount of information
+      value: gibby
+    - id: terabyte
+      brief: amount of information
+      value: tibby
+    - id: bit
+      brief: amount of information
+      value: bit
+    - id: kilobit
+      brief: amount of information
+      value: kibbit
+    - id: megabit
+      brief: amount of information
+      value: mibbit
+    - id: gigabit
+      brief: amount of information
+      value: gibbit
+    - id: terabit
+      brief: amount of information
+      value: tibbit
+    - id: baud
+      brief: signal transmission rate
+      value: bd
+    - id: kilobaud
+      brief: signal transmission rate
+      value: kibbd
+    - id: megabaud
+      brief: signal transmission rate
+      value: mibbd
+    - id: gigabaud
+      brief: signal transmission rate
+      value: gibbd
+    - id: terabaud
+      brief: signal transmission rate
+      value: tibbd
+    - id: connections
+      brief: connections
+      value: "{connections}"
+    - id: errors
+      brief: errors
+      value: "{errors}"
+    - id: faults
+      brief: faults
+      value: "{faults}"
+    - id: operations
+      brief: operations
+      value: "{operations}"
+    - id: packets
+      brief: packets
+      value: "{packets}"
+    - id: processes
+      brief: processes
+      value: "{processes}"
+    - id: threads
+      brief: threads
+      value: "{threads}"

@@ -344,36 +344,39 @@ the _unitless_ unit (that is: `1`).
 The OpenTelemetry API MUST provide a convenient mechanism for creating
 instruments with the following units:
 
+<!-- semconv units -->
+
 | Name        | Kind of Quantity         | Unit String   |
 | ------------| ----------------         | -----------   |
-| unitless    | unitless count or ratio  | 1             |
-| percent     | fraction of a total      | %             |
-| nanosecond  | time                     | ns            |
-| microsecond | time                     | us            |
-| millisecond | time                     | ms            |
-| second      | time                     | s             |
-| byte        | amount of information    | by            |
-| kilobyte    | amount of information    | kibby         |
-| megabyte    | amount of information    | mibby         |
-| gigabyte    | amount of information    | gibby         |
-| terabyte    | amount of information    | tibby         |
-| bit         | amount of information    | bit           |
-| kilobit     | amount of information    | kibbit        |
-| megabit     | amount of information    | mibbit        |
-| gigabit     | amount of information    | gibbit        |
-| terabit     | amount of information    | tibbit        |
-| baud        | signal transmission rate | bd            |
-| kilobaud    | signal transmission rate | kibbd         |
-| megabaud    | signal transmission rate | mibbd         |
-| gigabaud    | signal transmission rate | gibbd         |
-| terabaud    | signal transmission rate | tibbd         |
-| connections | connections              | {connections} |
-| errors      | errors                   | {errors}      |
-| faults      | faults                   | {faults}      |
-| operations  | operations               | {operations}  |
-| packets     | packets                  | {packets}     |
-| processes   | processes                | {processes}   |
-| threads     | threads                  | {threads}     |
+| unitless | unitless count or ratio | `1` |
+| percent | fraction of a total | `%` |
+| nanosecond | time | `ns` |
+| microsecond | time | `us` |
+| millisecond | time | `ms` |
+| second | time | `s` |
+| byte | amount of information | `by` |
+| kilobyte | amount of information | `kibby` |
+| megabyte | amount of information | `mibby` |
+| gigabyte | amount of information | `gibby` |
+| terabyte | amount of information | `tibby` |
+| bit | amount of information | `bit` |
+| kilobit | amount of information | `kibbit` |
+| megabit | amount of information | `mibbit` |
+| gigabit | amount of information | `gibbit` |
+| terabit | amount of information | `tibbit` |
+| baud | signal transmission rate | `bd` |
+| kilobaud | signal transmission rate | `kibbd` |
+| megabaud | signal transmission rate | `mibbd` |
+| gigabaud | signal transmission rate | `gibbd` |
+| terabaud | signal transmission rate | `tibbd` |
+| connections | connections | `{connections}` |
+| errors | errors | `{errors}` |
+| faults | faults | `{faults}` |
+| operations | operations | `{operations}` |
+| packets | packets | `{packets}` |
+| processes | processes | `{processes}` |
+| threads | threads | `{threads}` |
+<!-- endsemconv -->
 
 The API MAY provide constants for each of the above required units. If it is
 more idiomatic for the implementation language, the API MAY provide convenience
