@@ -68,7 +68,7 @@ status of the feature is not known.
 |[Sampling](specification/trace/sdk.md#sampling)|
 |Allow samplers to modify tracestate           |   | +  |   | +    |    | +    |   | +  |   |    |
 |ShouldSample gets full parent Context         |   | +  | + | +    |    | +    |   |    |   |    |
-|[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1398)    |    |      |   |    |   |    |
+|[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |   |    |   | +    |    |      |   |    |   |    |
 
 ## Baggage
 
@@ -106,9 +106,9 @@ status of the feature is not known.
 |Global Propagator                             |  | +  | + | +    | +  | +    |   | +  |   |  + |
 |TraceContext Propagator                       |  | +  | + | +    | +  | +    |   | +  |   |  + |
 |B3 Propagator                                 |  | +  | + | +    | +  | +    |   | +  |   |  + |
-|Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1103)    |    | +    |   | +  |   |    |
+|Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | +    |    | +    |   | +  |   |    |
 |[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)|
-|Fields                                        |  | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1104)    |    | +    |   | +  |   |  + |
+|Fields                                        |  | +  | + | +    |    | +    |   | +  |   |  + |
 |Setter argument                               |  | +  | + | +    |    | +    |   |    |   |  + |
 |Getter argument                               |  | +  | + | +    |    | +    |   |    |   |  + |
 |Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |  - |
@@ -124,10 +124,10 @@ status of the feature is not known.
 |OTEL_EXPORTER_OTLP_*                          |   | +  |   | +    | +  | -    | - |    | - | -  |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  |
-|OTEL_EXPORTER                                 |   | -  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1155)    |    |      |   |    |   |  - |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   |      |    |      |   |    |   | -  |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   |      |    |      |   |    |   | -  |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   |      |    |      |   |    |   | -  |
+|OTEL_EXPORTER                                 |   | -  |   | +    |    |      |   |    |   |  - |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   | +    |    |      |   |    |   | -  |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   | +    |    |      |   |    |   | -  |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   | +    |    |      |   |    |   | -  |
 |OTEL_TRACE_SAMPLER                            |   | -  |   |      |    |      |   |    |   | -  |
 |OTEL_TRACE_SAMPLER_ARG                        |   |    |   |      |    |      |   |    |   | -  |
 
@@ -158,6 +158,7 @@ status of the feature is not known.
 |Boolean attributes                            | + | +  | + | +    |    | +    | + | +  |   | +  |
 |Array attributes                              | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110)    |    | +    | + | +  |   | +  |
 |Status mapping                                | + | +  | + | +    |    | +    | + | +  |   | +  |
+|Error Status mapping                          |   |    |   |      |    |      |   |    |   | +  |
 |Event attributes mapping to Annotations       | + | +  | + | +    |    | +    | + | +  |   | +  |
 |Integer microseconds in timestamps            |   | +  |   | +    |    |      |   |    |   | +  |
 |[Jaeger](specification/trace/sdk_exporters/jaeger.md)|
@@ -167,6 +168,8 @@ status of the feature is not known.
 |Service name mapping                          |   |    |   | +    |    |      |   |    |   | +  |
 |Resource to Process mapping                   |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1436)    |    |      |   |    |   | +  |
 |InstrumentationLibrary mapping                |   |    |   | +    |    |      |   |    |   | +  |
+|Status mapping                                |   |    |   |      |    |      |   |    |   | +  |
+|Error Status mapping                          |   |    |   |      |    |      |   |    |   | +  |
 |Events converted to Logs                      |   |    |   | +    |    |      |   |    |   | +  |
 |OpenCensus|
 |TBD|
