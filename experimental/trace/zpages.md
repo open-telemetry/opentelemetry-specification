@@ -32,7 +32,7 @@ zPages are uniquely useful in a couple of different ways. One is that they're mo
 
 ### Tracez
 
-Tracez shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. Latency spans are spans that complete successfully without errors, and are bucketed according to their end time. Running spans are incomplete spans, which should become latency or error spans at some point. Error spans are ones that complete with an error, which is encoded with a [non-Ok status](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#status). In addition to these counts, Tracez also keeps a set number of samples for each of these error, running, and latency (including within each duration bucket) buckets within each span name to allow users to look closer at span fields. This is particularly useful compared to external exporters that would otherwise likely sample them out.
+Tracez shows information on tracing, including aggregation counts for latency, running, and errors for spans grouped by name. Latency spans are spans that complete successfully without errors, and are bucketed according to their end time. Running spans are incomplete spans, which should become latency or error spans at some point. Error spans are ones that complete with an error, which is encoded with a [non-Ok status](../../specification/trace/api.md#set-status). In addition to these counts, Tracez also keeps a set number of samples for each of these error, running, and latency (including within each duration bucket) buckets within each span name to allow users to look closer at span fields. This is particularly useful compared to external exporters that would otherwise likely sample them out.
 
 This zPage is also useful for debugging latency issues (slow parts of applications), deadlocks and instrumentation problems (running spans that don't end), and errors (where errors happen and what types). They're also good for spotting patterns by showing which latency speeds are typical for operations with a given span name.
 
@@ -54,7 +54,7 @@ Statsz is focused on metrics, as it displays metrics and measures for exported v
 
 ### Tracez Details
 
-For OpenTelemetry, a custom [span processor](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-processor) SHOULD be made to interface with the [Tracer API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#tracer) to collect spans. This span processor collects references to running spans and exports completed spans to its own memory or to an aggregator that can aggregate information from multiple span processors.
+For OpenTelemetry, a custom [span processor](../../specification/trace/sdk.md#span-processor) SHOULD be made to interface with the [Tracer API](../../specification/trace/api.md#tracer) to collect spans. This span processor collects references to running spans and exports completed spans to its own memory or to an aggregator that can aggregate information from multiple span processors.
 
 There SHOULD be a `data aggregator` that tracks running, error, and latency buckets counts for spans grouped by their respective name. The aggregator MUST also hold some sampled spans to provide users with more information. To prevent memory overload, only some spans MUST be sampled for each bucket for each span name; for example, if that sampled span max number is set to 5, then only up to 55 pieces of span data can be kept for each span name in the aggregator (sampled_max * number of buckets = 5 * [running + error + 9 latency buckets] =  5 * 11 = 55). Aggregation work is recommended to do periodically in batches.
 
@@ -86,19 +86,19 @@ Each zPages implementation MUST create a wrapper class for zPages, since they al
 
 ### HTTP Server
 
-All zPages MUST have a HTTP Server to render information on a webpage when a host:port and endpoint is accessed. All zPages MUST be accessed from the same host:port; For example, host1 should equal host2 and port1 should equal port2 for `host1:post1/tracez` and `host2:port2/rpcz`. There SHOULD be handlers to group logic by type of zPage, and there SHOULD be a landing page. This landing page would be at the root `host:port/`, displaying links to currently implemented zPages for that repository. Similar behavior CAN be implemented for any invalid endpoints as well.
+All zPages MUST have a HTTP Server to render information on a webpage when a host:port and endpoint is accessed. All zPages MUST be accessed from the same host:port; For example, host1 should equal host2 and port1 should equal port2 for `host1:post1/tracez` and `host2:port2/rpcz`. There SHOULD be handlers to group logic by type of zPage, and there SHOULD be a landing page. This landing page would be at the root `host:port/`, displaying links to currently implemented zPages for that repository. Similar behavior MAY be implemented for any invalid endpoints as well.
 
 Traditionally, zPages have approached this by rendering web pages purely on the server-side. This means the server would only serve static resources (HTML, CSS and possibly Javascript) when the user accesses a given endpoint. Based on the type of zPage and the server language used, a pure server-side approach would generate HTML pages using hardcoded strings from scratch or using a template; this would tightly couple the data and UI layer.
 
 The following endpoints SHOULD be used for serving files (which are ideally standardized, per the [Shared Static Files](#shared-static-files) sections under future possibilities), for any HTTP server approach for any zPage:
 
 - `host:port/{zpage}` display the main page and aggregations
-- `host:port/{zpage}/style.css` SHOULD contain the styling logic. This CAN also be embedded in the HTML, but SHOULD be separated and linked in the page head using `<link rel="stylesheet" href="/{zpage}/style.css">`
+- `host:port/{zpage}/style.css` SHOULD contain the styling logic. This MAY also be embedded in the HTML, but SHOULD be separated and linked in the page head using `<link rel="stylesheet" href="/{zpage}/style.css">`
 - If server-side only:
   - `host:port/{zpage}/{...}`, and other variants SHOULD display detailed information on the data described by the {...}
     - an example of this: If a user accesses `host:port/tracez?type=error&name=span1`, that Tracez page should display all currently sampled error spans with the name `span1`
 - If adding client-side:
-  - `host:port/{zpage}/script.js` SHOULD return the frontend Javascript code if these zPages uses client-side interaction. This CAN also be embedded in the HTML, but SHOULD be separated and linked in the page head using `<script src="/{zpage}/script.js">`
+  - `host:port/{zpage}/script.js` SHOULD return the frontend Javascript code if these zPages uses client-side interaction. This MAY also be embedded in the HTML, but SHOULD be separated and linked in the page head using `<script src="/{zpage}/script.js">`
 
 All zPages need some server-side rendering, but the data and UI layer MAY be separated by adding client-side functionality. This separation has benefits including 1.) allowing users to consume zPages data without a browser, styling, or Javascript, such as when using wget on the endpoints serving JSON data and 2.) adding extensibility to zPages (e.g. the frontend can be centralized and used in multiple  OTel language repositories). This approach is detailed below.
 

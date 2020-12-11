@@ -50,7 +50,7 @@ A request consists of two fields: `resource` and an optional
 `last_known_fingerprint`.
 
 `resource` is an OpenTelemetry
-[Resource](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/overview.md#resources)
+[Resource](../../specification/overview.md#resources)
 that describes a source of telemetry data. All requests SHOULD have a nonempty
 `resource` field.
 

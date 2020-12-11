@@ -1,0 +1,64 @@
+name: Checks
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: install markdownlint
+      run: sudo make install-markdownlint
+
+    - name: run markdownlint
+      run: make markdownlint
+
+  markdown-link-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: install markdown-link-check
+      run: sudo make install-markdown-link-check
+
+    - name: run markdown-link-check
+      run: make markdown-link-check
+
+  misspell:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: install misspell
+      run: sudo make install-misspell
+
+    - name: run misspell
+      run: make misspell
+
+  docfx:
+    runs-on: windows-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: install docfx
+      run: choco install docfx -y
+
+    - name: run .\docfx.cmd
+      shell: cmd
+      run: .\docfx.cmd
+
+  semantic-conventions:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: verify semantic convention tables
+      run: docker run --rm -v $(pwd)/semantic_conventions:/source -v $(pwd)/specification:/spec otel/semconvgen -f /source markdown -md /spec --md-check
