@@ -18,8 +18,12 @@ and Jaeger.
 
 ### Resource
 
-OpenTelemetry resources MUST be mapped to Jaeger process tags. Multiple resources can exist for a
+OpenTelemetry resources MUST be mapped to Jaeger's `Span.Process` tags. Multiple resources can exist for a
 single process and exporters need to handle this case accordingly.
+
+Critically, Jaeger backend depends on `Span.Process.ServiceName` to identify the service
+that produced the spans. That field MUST be populated from the `service.name` attribute
+of the [`service` resource](../../resource/semantic_conventions/README.md#service).
 
 ### InstrumentationLibrary
 
@@ -36,7 +40,20 @@ TBD
 
 ### Status
 
-TBD
+Span `Status` MUST be reported as a key-value pair in `tags` to Jaeger, unless it is `UNSET`.
+In the latter case it MUST NOT be reported.
+
+The following table defines the OpenTelemetry `Status` to Jaeger `tags` mapping.
+
+| Status|Tag Key| Tag Value |
+|--|--|--|
+|Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
+|Description | `otel.status_description` | Description of the `Status` if it has a value otherwise not set. |
+
+### Error flag
+
+When Span `Status` is set to `ERROR` an `error` tag MUST be added with the
+Boolean value of `true`. The added `error` tag MAY override any previous value.
 
 ### Events
 

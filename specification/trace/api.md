@@ -1,5 +1,7 @@
 # Tracing API
 
+**Status**: [Feature-freeze](../document-status.md).
+
 <details>
 <summary>
 Table of Contents
@@ -149,10 +151,8 @@ the following functionality:
 - Set the currently active span to the implicit context. This is equivalent to getting the implicit context, then inserting the `Span` to the context.
 
 All the above functionalities operate solely on the context API, and they MAY be
-exposed as static methods on the trace module, as static methods on a class
-inside the trace module (it MAY be named `TracingContextUtilities`), or on the
-[`Tracer`](#tracer) class. This functionality SHOULD be fully implemented in the
-API when possible.
+exposed as either static methods on the trace module, or as static methods on a class
+inside the trace module. This functionality SHOULD be fully implemented in the API when possible.
 
 ## Tracer
 
@@ -240,8 +240,8 @@ and MUST follow the [general error handling guidelines](../error-handling.md) (e
 
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
-[`SpanContext` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
-or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
+[`SpanContext` propagation](../context/api-propagators.md)
+or [telemetry data exporting](sdk.md#span-exporter).
 In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
 
 ## Span
@@ -516,6 +516,7 @@ status, which is `Unset`.
 
 - `StatusCode`, one of the values listed below.
 - Optional `Description` that provides a descriptive message of the `Status`.
+  `Description` MUST only be used with the `Error` `StatusCode` value.
 
 `StatusCode` is one of the following values:
 
@@ -529,10 +530,11 @@ status, which is `Unset`.
 
 The Span interface MUST provide:
 
-- An API to set the `Status`. This SHOULD be called `SetStatus`.
-  This API takes the `StatusCode`, and an optional `Description`, either as
-  individual parameters or as an immutable object encapsulating them, whichever
-  is most appropriate for the language.
+- An API to set the `Status`. This SHOULD be called `SetStatus`. This API takes
+  the `StatusCode`, and an optional `Description`, either as individual
+  parameters or as an immutable object encapsulating them, whichever is most
+  appropriate for the language. `Description` MUST be IGNORED for `StatusCode`
+  `Ok` & `Unset` values.
 
 The status code SHOULD remain unset, except for the following circumstances:
 

@@ -127,9 +127,7 @@ convention](../semantic_conventions/README.md)
 document maps to the strongly-typed fields of Zipkin spans.
 
 Primitive types MUST be converted to string using en-US culture settings.
-Boolean values must use lower case strings `"true"` and `"false"`, except an
-attribute named `error`. In case if value of the attribute is `false`, Zipkin
-tag needs to be omitted.
+Boolean values MUST use lower case strings `"true"` and `"false"`.
 
 Array values MUST be serialized to string like a JSON list as mentioned in
 [semantic conventions](../../overview.md#semantic-conventions).
@@ -138,17 +136,19 @@ TBD: add examples
 
 ### Status
 
-Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin.
+Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin, unless it is `UNSET`.
+In the latter case it MUST NOT be reported.
 
 The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
 | Status|Tag Key| Tag Value |
 |--|--|--|
-|Code | `otel.status_code` | Name of the code, for example: `OK` |
-|Message *(optional)* | `otel.status_description` | `{message}` |
+|Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
+|Description| `error` | Description of the `Status`. MUST be set if the code is `ERROR`, use an empty string if Description has no value. MUST NOT be set for `OK` and `UNSET` codes. |
 
-The `otel.status_code` tag value MUST follow the [Standard GRPC Code
-Names](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
+Note: The `error` tag should only be set if `Status` is `Error`. If a boolean
+version (`{"error":false}` or `{"error":"false"}`) is present, it SHOULD be
+removed. Zipkin will treat any span with `error` sent as failed.
 
 ### Events
 
