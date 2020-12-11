@@ -78,9 +78,10 @@ status of the feature is not known.
 
 ## Metrics
 
-|Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
-|----------------------------------------------|--|----|---|------|----|------|---|----|---|----|
-|Provide commonly used units                   |  |    |   |      |    |      |   |    |   |    |
+|Feature                                                                |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|
+|-----------------------------------------------------------------------|--|----|---|------|----|------|---|----|---|----|
+|Provide commonly used units                                            |  |    |   |      |    |      |   |    |   |    |
+|Metric SDK Accumulator differentiates aggregations based on unit value |  |    |   |      |    |      |   |    |   |    |
 
 ## Resource
 
