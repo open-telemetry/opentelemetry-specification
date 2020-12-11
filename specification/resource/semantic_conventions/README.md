@@ -35,7 +35,7 @@ Certain attribute groups in this document have a **Required** column. For these 
 
 ## Attributes with Default Value
 
-The SDK MUST set a default value for the following attributes if they were not specified:
+The SDK MUST set a default value for the following attributes if they were not specified, even if the resource would otherwise not be present at all:
 
 - [`service.name`](#service)
 
