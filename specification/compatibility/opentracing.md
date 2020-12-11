@@ -10,7 +10,7 @@
   * [Extract](#extract)
 * [Span Shim](#span-shim)
   * [Get SpanContext Shim](#get-spancontext-shim-for-opentelemetry-span)
-  * [Set SpanContext Shim](#et-spancontext-shim-for-opentelemetry-span)
+  * [Set SpanContext Shim](#set-spancontext-shim-for-opentelemetry-span)
   * [Get Context](#get-context)
   * [Get Baggage Item](#get-baggage-item)
   * [Set Baggage Item](#set-baggage-item)
