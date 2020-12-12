@@ -104,8 +104,7 @@ has higher priority.
 
 The `OTEL_RESOURCE_ATTRIBUTES` environment variable will contain of a list of
 key value pairs, and these are expected to be represented in a format matching
-to the [W3C
-Correlation-Context](https://github.com/w3c/correlation-context/blob/master/correlation_context/HTTP_HEADER_FORMAT.md#header-value),
+to the [W3C Baggage](https://github.com/w3c/baggage/blob/fdc7a5c4f4a31ba2a36717541055e551c2b032e4/baggage/HTTP_HEADER_FORMAT.md#header-content),
 except that additional semi-colon delimited metadata is not supported, i.e.:
 `key1=value1,key2=value2`. All attribute values MUST be considered strings.
 
