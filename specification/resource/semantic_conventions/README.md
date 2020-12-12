@@ -50,7 +50,7 @@ The SDK MUST set a default value for the following attributes if they were not s
 |---|---|---|---|---|
 | `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Yes |
 | `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | No |
-| `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | Yes |
+| `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | No |
 | `service.version` | string | The version string of the service API or implementation. | `2.0.0` | No |
 
 **[1]:** MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.

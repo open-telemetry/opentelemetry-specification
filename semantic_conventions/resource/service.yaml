@@ -30,7 +30,6 @@ groups:
         examples: ["Shop"]
       - id: instance.id
         type: string
-        required: always
         brief: >
           The string ID of the service instance.
         note: >
