@@ -417,9 +417,9 @@ so that they include the Request Context information in the emitted logs.
 trace context should be recorded in logs. To summarize, the following field
 names should be used in legacy formats:
 
-- "traceid" for [TraceId](data-model.md#field-traceid), hex-encoded.
-- "spanid" for [SpanId](data-model.md#field-spanid), hex-encoded.
-- "traceflags" for [trace flags](data-model.md#field-traceflags), formatted
+- "trace_id" for [TraceId](data-model.md#field-traceid), hex-encoded.
+- "span_id" for [SpanId](data-model.md#field-spanid), hex-encoded.
+- "trace_flags" for [trace flags](data-model.md#field-traceflags), formatted
   according to W3C traceflags format.
 
 All 3 fields are optional (see the [data model](data-model.md) for details of
@@ -432,7 +432,7 @@ Trace id, span id and traceflags SHOULD be recorded via SD-ID "opentelemetry".
 For example:
 
 ```
-[opentelemetry traceid="102981ABCD2901" spanid="abcdef1010" traceflags="01"]
+[opentelemetry trace_id="102981ABCD2901" span_id="abcdef1010" trace_flags="01"]
 ```
 
 ### Plain Text Formats
@@ -441,7 +441,7 @@ The fields should be recorded according to the customary approach used for a
 particular format (e.g. field:value format for LTSV). For example:
 
 ```
-host:192.168.0.1<TAB>traceid:102981ABCD2901<TAB>spanid:abcdef1010<TAB>time:[01/Jan/2010:10:11:23 -0400]<TAB>req:GET /health HTTP/1.0<TAB>status:200
+host:192.168.0.1<TAB>trace_id:102981ABCD2901<TAB>span_id:abcdef1010<TAB>time:[01/Jan/2010:10:11:23 -0400]<TAB>req:GET /health HTTP/1.0<TAB>status:200
 ```
 
 ### JSON Formats
@@ -452,8 +452,8 @@ The fields should be recorded as top-level fields in the JSON structure. For exa
 {
   "timestamp":1581385157.14429,
   "body":"Incoming request",
-  "traceid":"102981ABCD2901",
-  "spanid":"abcdef1010"
+  "trace_id":"102981ABCD2901",
+  "span_id":"abcdef1010"
 }
 ```
 
