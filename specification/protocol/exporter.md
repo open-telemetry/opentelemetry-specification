@@ -8,7 +8,7 @@ The following configuration options MUST be available to configure the OTLP expo
 
 | Configuration Option | Description                                                  | Default           | Env variable                                                 |
 | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
-| Endpoint             | Target to which the exporter is going to send spans or metrics. This MAY be configured to include a path (e.g. `example.com/v1/traces`). | `localhost:55680` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_SPAN_ENDPOINT` `OTEL_EXPORTER_OTLP_METRIC_ENDPOINT` |
+| Endpoint             | Target to which the exporter is going to send spans or metrics. This MAY be configured to include a path (e.g. `example.com/v1/traces`). | `localhost:4317` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_SPAN_ENDPOINT` `OTEL_EXPORTER_OTLP_METRIC_ENDPOINT` |
 | Protocol             | The protocol used to transmit the data. One of `grpc`,`http/json`,`http/protobuf`. | `grpc`               | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_SPAN_PROTOCOL` `OTEL_EXPORTER_OTLP_METRIC_PROTOCOL` |
 | Insecure             | Whether to enable client transport security for the exporter's `grpc` or `http` connection. | `false`           | `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_SPAN_INSECURE` `OTEL_EXPORTER_OTLP_METRIC_INSECURE` |
 | Certificate File     | Path to certificate file for TLS credentials of gRPC client. Should only be used if `insecure` is set to `false`. | n/a               | `OTEL_EXPORTER_OTLP_CERTIFICATE` `OTEL_EXPORTER_OTLP_SPAN_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRIC_CERTIFICATE` |
@@ -26,7 +26,7 @@ Example 1
 The following configuration sends all signals to the same collector:
 
 ```bash
-export OTEL_EXPORTER_OTLP_ENDPOINT=collector:55680
+export OTEL_EXPORTER_OTLP_ENDPOINT=collector:4317
 export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 ```
 
@@ -35,7 +35,7 @@ Example 2
 Traces and metrics are sent to different collectors using different protocols:
 
 ```bash
-export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=collector:55680
+export OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=collector:4317
 export OTEL_EXPORTER_OTLP_SPAN_PROTOCOL=grpc
 export OTEL_EXPORTER_OTLP_SPAN_INSECURE=true
 
@@ -48,7 +48,7 @@ Example 3
 Traces are configured using the generic configuration, metrics are configured using specific configuration:
 
 ```bash
-export OTEL_EXPORTER_OTLP_ENDPOINT=collector:55680
+export OTEL_EXPORTER_OTLP_ENDPOINT=collector:4317
 export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=collector.example.com/v1/metrics

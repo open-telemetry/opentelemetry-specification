@@ -11,6 +11,9 @@ groups:
           Logical name of the service.
         note: >
           MUST be the same for all instances of horizontally scaled services.
+          If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated
+          with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`.
+          If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
         examples: ["shoppingcart"]
       - id: namespace
         type: string
@@ -27,7 +30,6 @@ groups:
         examples: ["Shop"]
       - id: instance.id
         type: string
-        required: always
         brief: >
           The string ID of the service instance.
         note: >
