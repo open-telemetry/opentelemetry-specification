@@ -8,6 +8,11 @@ Table of Contents
 
 <!-- toc -->
 
+- [OpenTelemetry Architecture](#opentelemetry-architecture)
+  * [API](#api)
+  * [SDK](#sdk)
+  * [Semantic Conventions](#semantic-conventions)
+  * [Contrib Packages](#contrib-packages)
 - [Distributed Tracing](#distributed-tracing)
   * [Trace](#trace)
   * [Span](#span)
@@ -27,7 +32,7 @@ Table of Contents
 - [Propagators](#propagators)
 - [Collector](#collector)
 - [Instrumentation Libraries](#instrumentation-libraries)
-- [Semantic Conventions](#semantic-conventions)
+- [Semantic Conventions](#semantic-conventions-1)
 
 <!-- tocstop -->
 
@@ -37,6 +42,32 @@ This document provides an overview of the pillars of telemetry that
 OpenTelemetry supports and defines important fundamental terms.
 
 Additional term definitions can be found in the [glossary](glossary.md).
+
+## OpenTelemetry Architecture
+
+![Cross cutting concerns](../internal/img/architecture.png)
+
+At the highest architectural level, OpenTelemetry is organized into **signals**. Each signal provides a specialized form of observability. For example, tracing, metrics, and baggage are three separate signals. Signals share a common subsystem – context propagation – but they function independently from each other.
+
+Each signal provides a mechanism for software to describe itself. A codebase, such as an API handler or a database client, takes a dependency on various signals in order to describe itself. OpenTelemetry instrumentation code is then mixed into the other code within that codebase. This makes OpenTelemetry a **cross-cutting concern** - a piece of software which must be mixed into many other pieces of software in order to provide value. Cross-cutting concerns, by their very nature, violate a core design principle – separation of concerns. As a result, OpenTelemetry requires extra care and attention to avoid creating issues for the codebase which depend upon these cross-cutting APIs.
+
+OpenTelemetry is designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions of OpenTelemetry which can be managed independently. OpenTelemetry is also designed to be an extensible framework. To accomplish this these goals, each signal consists of four types of packages.
+
+### API
+
+API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of OpenTelemetry which 3rd-party libraries and application code depend upon. To manage different levels of stability, every signal has its own, independent API package. These individual APIs may also be bundled up into a shared global API, for convenience.
+
+### SDK
+
+The implementation of the API. The SDK is managed by the application owner. Note that the SDKs includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as **constructors** and **plugin interfaces**. Application owners may interact with SDK constructors; plugin authors may interact with SDK plugin interfaces. Instrumentation authors must never directly reference any SDK package of any kind, only the API.
+
+### Semantic Conventions
+
+A schema defining the attributes which describe common concepts and operations which the signal observes. Note that unlike the API or SDK, stable conventions for all signals may be placed in the same package, as they are often useful across different signals.
+
+### Contrib Packages
+
+Plugins and instrumentation that make use of the API or SDK interfaces, but are not part of the core packages necessary for running OTel, are referred to as Contrib packages. The term "contrib" specifically refers to the plugins and instrumentation maintained by the OpenTelemetry organization; it does not refer to third party plugins hosted elsewhere.
 
 ## Distributed Tracing
 
