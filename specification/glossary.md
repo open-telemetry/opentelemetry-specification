@@ -8,7 +8,13 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 <!-- toc -->
 
+- [User Roles](#user-roles)
+  * [Application Owner](#application-owner)
+  * [Library Author](#library-author)
+  * [Instrumentation Author](#instrumentation-author)
+  * [Plugin Author](#plugin-author)
 - [Common](#common)
+  * [Signals](#signals)
   * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
   * [Telemetry SDK](#telemetry-sdk)
   * [Exporter Library](#exporter-library)
@@ -26,7 +32,29 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 <!-- tocstop -->
 
+## User Roles
+
+### Application Owner
+
+The maintainer of an application or service, responsible for configuring and managing the lifecycle of the OpenTelemetry SDK.
+
+### Library Author
+
+The maintainer of a shared library which is depended upon by many applications, and targeted by OpenTelemetry instrumentation.
+
+### Instrumentation Author
+
+The maintainer of OpenTelemetry instrumentation written against the OpenTelemetry API. This may be instrumentation written within application code, within a shared library, or within an instrumentation library.
+
+### Plugin Author
+
+The maintainer of and OpenTelemetry Plugin, written against OpenTelemetry SDK plugin interfaces.
+
 ## Common
+
+### Signals
+
+OpenTelemetry is structured around signals. Each signal represents a coherent, stand-alone set of functionality. Each signal follows a sperate lifecycle defining its current stability level.
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>
