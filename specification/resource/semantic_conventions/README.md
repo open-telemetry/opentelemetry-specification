@@ -9,6 +9,7 @@ This document defines standard attributes for resources. These attributes are ty
 
 - [TODOs](#todos)
 - [Document Conventions](#document-conventions)
+- [Attributes with Default Value](#attributes-with-default-value)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
@@ -32,6 +33,12 @@ Attributes are grouped logically by the type of the concept that they described.
 
 Certain attribute groups in this document have a **Required** column. For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource. However it is also valid if the entire attribute group is omitted (i.e. none of the attributes from the particular group are present even though some of them are marked as Required in this document).
 
+## Attributes with Default Value
+
+The SDK MUST set a default value for the following attributes if they were not specified, even if the resource would otherwise not be present at all:
+
+- [`service.name`](#service)
+
 ## Service
 
 **type:** `service`
@@ -43,10 +50,10 @@ Certain attribute groups in this document have a **Required** column. For these 
 |---|---|---|---|---|
 | `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Yes |
 | `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | No |
-| `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | Yes |
+| `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | No |
 | `service.version` | string | The version string of the service API or implementation. | `2.0.0` | No |
 
-**[1]:** MUST be the same for all instances of horizontally scaled services.
+**[1]:** MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
 
 **[2]:** A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
 

@@ -21,6 +21,9 @@ Updates:
   ([#1257](https://github.com/open-telemetry/opentelemetry-specification/pull/1257))
 - Add/Update `Status` + `error` mapping for Jaeger & Zipkin Exporters
   ([#1257](https://github.com/open-telemetry/opentelemetry-specification/pull/1257))
+- Resource's service.name MUST have a default value, service.instance.id is not
+  required.
+  ([#1269](https://github.com/open-telemetry/opentelemetry-specification/pull/1269))
 
 ## v0.7.0 (11-18-2020)
 
