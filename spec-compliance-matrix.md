@@ -91,6 +91,7 @@ status of the feature is not known.
 |Create empty                                  | + | +  | + | +    | +  | +    |   | +  |   | +  |     |
 |Merge                                         | + | +  | + | +    | +  | +    |   | +  |   | +  |     |
 |Retrieve attributes                           | + | +  | + | +    | +  | +    |   | +  |   | +  |     |
+|Default value for service.name                |   |    |   |      |    |      |   |    |   |    |     |
 
 ## Context Propagation
 
