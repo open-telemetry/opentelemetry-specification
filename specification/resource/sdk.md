@@ -24,14 +24,12 @@ When associated with a [`MeterProvider`](../metrics/api.md#meter-interface),
 all metrics produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
-
 Certain **required** `Resource` attributes MUST be set to a default value if they were not specified when
 the Resource is associate with a `TracerProvider` or `MeterProvider`
 (this will result in a new `Resource` being associated, as the original `Resource` is immutable).
 See [Attributes with Default Value](semantic_conventions/README.md#attributes-with-default-value).
 
-Note that the OpenTelemetry project documents certain ["standard
-attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
+Note that there are certain ["standard attributes"](semantic_conventions/README.md) that have prescribed meanings.
 
 ## Resource creation
 
