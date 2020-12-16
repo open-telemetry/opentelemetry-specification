@@ -24,6 +24,15 @@ When associated with a [`MeterProvider`](../metrics/api.md#meter-interface),
 all metrics produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
+
+Certain **required** `Resource` attributes MUST be set to a default value if they were not specified when
+the Resource is associate with a `TracerProvider` or `MeterProvider`
+(this will result in a new `Resource` being associated, as the original `Resource` is immutable).
+See [Attributes with Default Value](semantic_conventions/README.md#attributes-with-default-value).
+
+Note that the OpenTelemetry project documents certain ["standard
+attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
+
 ## Resource creation
 
 The SDK must support two ways to instantiate new resources. Those are:
@@ -33,9 +42,6 @@ The SDK must support two ways to instantiate new resources. Those are:
 The interface MUST provide a way to create a new resource, from [`Attributes`](../common/common.md#attributes).
 Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
-
-Note that certain **required** `Resource` attributes MUST be set to a default value if they were not specified.
-See [Attributes with Default Value](semantic_conventions/README.md#attributes-with-default-value).
 
 Required parameters:
 
@@ -69,9 +75,6 @@ Required parameters:
 
 It is recommended, but not required, to provide a way to quickly create an empty
 resource.
-
-Note that the OpenTelemetry project documents certain ["standard
-attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
 ### Detecting resource information from the environment
 
