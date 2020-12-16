@@ -73,7 +73,7 @@ Backward-incompatible changes to API packages MUST NOT be made unless the major 
 ABI compatibility for the API is RECOMMENDED, and MAY be offered on a language by language basis.
 
 **SDK Stability -**
-Public portions of SDK packages MUST remain backwards compatible. There are two categories of public features: **plugin interfaces** and **constructors**. Examples of plugin include the SpanProcessor, Exporter, and Sampler interfaces. Examples of constructors include configuration objects, environment variables, and SDK builders.
+Public portions of SDK packages MUST remain backwards compatible. There are two categories of public features: **plugin interfaces** and **constructors**. Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces. Examples of constructors include configuration objects, environment variables, and SDK builders.
 
 ABI compatibility for public portions of the SDK are RECOMMENDED, and MAY be offered on a language by language basis.
 
@@ -87,7 +87,7 @@ Public portions of contrib packages (constructors, configuration, interfaces) MU
 
 ABI compatibility for public portions of contrib packages is RECOMMENDED, and MAY be offered on a language by language basis.
 
-Telemetry produced by contrib instrumentation MUST remain stable and backwards compatible, to avoid breaking alerts and dashboard. Existing telemetry MUST NOT be mutated or removed without a major version bump. Additional telemetry MAY be added. This includes additional spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
+Telemetry produced by contrib instrumentation MUST remain stable and backwards compatible, to avoid breaking alerts and dashboards. Existing telemetry MUST NOT be mutated or removed without a major version bump. Additional telemetry MAY be added. This includes additional spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
 
 ### Deprecation
 
