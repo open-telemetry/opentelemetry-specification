@@ -67,7 +67,7 @@ The implementation of the API. The SDK is managed by the application owner. Note
 
 ### Contrib Packages
 
-Plugins and instrumentation that make use of the API or SDK interfaces, but are not part of the core packages necessary for running OTel, are referred to as Contrib packages. The term "contrib" specifically refers to the plugins and instrumentation maintained by the OpenTelemetry organization; it does not refer to third party plugins hosted elsewhere. **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
+Plugins and instrumentation that make use of the API or SDK interfaces, but are not part of the core packages necessary for running OTel, are referred to as Contrib packages. The term "contrib" specifically refers to the plugins and instrumentation maintained by the OpenTelemetry organization outside of the SDK; it does not refer to third party plugins hosted elsewhere, or core plugins which are required to be part of the SDK release, such as OTLP Exporters and TraceContext Propagators. **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
 
 ## Distributed Tracing
 
