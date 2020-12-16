@@ -57,7 +57,7 @@ OpenTelemetry is structured around signals. Each signal represents a coherent, s
 
 **Removed -** a deprecated signal is no longer supported, and MUST be removed from the release.
 
-All signal components MAY become stable together, or MAY transition to stability component-by-component in the following order: API, SDK, Semantic Conventions, Contrib.
+All signal components MAY become stable together, or MAY transition to stability component-by-component in the following order: API, Semantic Conventions, API Contrib, SDK, SDK Contrib.
 
 When transitioning from experimental to stable to deprecated, signals MUST NOT move or otherwise break how they are imported by users. Terms which denote stability, such as "experimental," MUST NOT be used as part of a directory or import name.
 
