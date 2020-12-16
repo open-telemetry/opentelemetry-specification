@@ -24,6 +24,8 @@ Updates:
 - Resource's service.name MUST have a default value, service.instance.id is not
   required.
   ([#1269](https://github.com/open-telemetry/opentelemetry-specification/pull/1269))
+- Add requirement that the SDK allow custom generation of Trace IDs and Span IDs
+  ([#1006](https://github.com/open-telemetry/opentelemetry-specification/pull/1006))
 
 ## v0.7.0 (11-18-2020)
 
