@@ -1,0 +1,22 @@
+groups:
+  - id: engine_resource
+    prefix: engine
+    brief: >
+       Resource describing the packaged software running the application code. Engines are executed using process.runtime.
+    attributes:
+      - id: name
+        type: string
+        required: always
+        brief: >
+          The name of the engine.
+        examples: ['FildFly']
+      - id: version
+        type: string
+        brief: >
+          The version of the engine, as returned by the engine (preferably during runtime) without modification.
+        examples: ['21.0.0']
+      - id: description
+        type: string
+        brief: >
+          Additional description about the engine.
+        examples: ['WildFly Full 21.0.0.Final (WildFly Core 13.0.1.Final) - 2.2.2.Final']
