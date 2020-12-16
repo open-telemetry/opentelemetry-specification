@@ -59,7 +59,7 @@ API packages consist of the cross-cutting public interfaces used for instrumenta
 
 ### SDK
 
-The implementation of the API. The SDK is managed by the application owner. Note that the SDKs includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as **constructors** and **plugin interfaces**. Application owners may interact with SDK constructors; plugin authors may interact with SDK plugin interfaces. Instrumentation authors must never directly reference any SDK package of any kind, only the API.
+The implementation of the API. The SDK is managed by the application owner. Note that the SDKs includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as **constructors** and **plugin interfaces**. Examples of plugin interfaces include the SpanProcessor, Exporter, and Sampler interfaces. Examples of constructors include configuration objects, environment variables, and SDK builders. Application owners may interact with SDK constructors; plugin authors may interact with SDK plugin interfaces. Instrumentation authors must never directly reference any SDK package of any kind, only the API.
 
 ### Semantics
 
