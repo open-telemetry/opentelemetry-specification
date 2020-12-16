@@ -55,7 +55,7 @@ OpenTelemetry is designed to separate the portion of each signal which must be i
 
 ### API
 
-API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of OpenTelemetry which 3rd-party libraries and application code depend upon. To manage different levels of stability, every signal has its own, independent API package. These individual APIs may also be bundled up into a shared global API, for convenience.
+API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of OpenTelemetry which 3rd-party libraries and application code depend upon is considered part of the API. To manage different levels of stability, every signal has its own, independent API package. These individual APIs may also be bundled up into a shared global API, for convenience.
 
 ### SDK
 
@@ -67,7 +67,7 @@ The implementation of the API. The SDK is managed by the application owner. Note
 
 ### Contrib Packages
 
-Plugins and instrumentation that make use of the API or SDK interfaces, but are not part of the core packages necessary for running OTel, are referred to as Contrib packages. The term "contrib" specifically refers to the plugins and instrumentation maintained by the OpenTelemetry organization; it does not refer to third party plugins hosted elsewhere.
+Plugins and instrumentation that make use of the API or SDK interfaces, but are not part of the core packages necessary for running OTel, are referred to as Contrib packages. The term "contrib" specifically refers to the plugins and instrumentation maintained by the OpenTelemetry organization; it does not refer to third party plugins hosted elsewhere. **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
 
 ## Distributed Tracing
 
