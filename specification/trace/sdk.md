@@ -222,6 +222,23 @@ Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
 
+The SDK MUST by default randomly generate the bytes for both the `TraceId` and
+the `SpanId`.
+
+The SDK MUST provide a mechanism for customizing the way IDs are generated for
+both the `TraceId` and the `SpanId`.
+
+The SDK MAY provide this functionality by allowing custom implementations of
+an interface like `IdsGenerator` below, which provides extension points for two
+methods, one to generate a `SpanID` and one to generate a `TraceId`.
+
+```
+IdsGenerator {
+  String generateSpanId()
+  String generateTraceId()
+}
+```
+
 ### Shutdown
 
 This method provides a way for provider to do any cleanup required.
