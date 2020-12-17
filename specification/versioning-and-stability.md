@@ -78,7 +78,7 @@ Public portions of SDK packages MUST remain backwards compatible. There are two 
 ABI compatibility for public portions of the SDK are RECOMMENDED, and MAY be offered on a language by language basis.
 
 **Semantic Conventions Stability -**
-Semantic Conventions MUST NOT be removed once they are stable. New conventions MAY be added to replace usage of older conventions, but the older conventions MUST NOT be removed. Older conventions MUST be marked as deprecated when they are replaces by newer conventions.
+Semantic Conventions MUST NOT be removed once they are stable. New conventions MAY be added to replace usage of older conventions, but the older conventions MUST NOT be removed. Older conventions MUST be marked as deprecated when they are replaced by newer conventions.
 
 **Contrib Stability -**
 Plugins and instrumentation MUST be kept up to date, and MUST released simultaneously (or shortly after) the latest release of the API. The goal is to ensure users can update to the latest version of OpenTelemetry, and not be held back by the plugins that they depend on.
@@ -93,7 +93,7 @@ Telemetry produced by contrib instrumentation MUST remain stable and backwards c
 
 Signals MAY eventually be replaced. When this happens, they are marked as deprecated.
 
-Signals SHALL only marked as deprecated when the replacement becomes stable. Deprecated code MUST abide by the same support guarantees as stable code.
+Signals SHALL only be marked as deprecated when the replacement becomes stable. Deprecated code MUST abide by the same support guarantees as stable code.
 
 ### Removal
 
@@ -169,7 +169,7 @@ Contrib packages available when the API is versioned MUST continue to be maintai
 
 ### SDK Support
 
-SDK stability, as defined above, will be maintained for a minimum of **one year** after after the release of the next major SDK version.
+SDK stability, as defined above, will be maintained for a minimum of **one year** after the release of the next major SDK version.
 
 ### Contrib Support
 
