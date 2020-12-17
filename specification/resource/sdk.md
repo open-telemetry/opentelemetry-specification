@@ -8,7 +8,6 @@ part of a Deployment which also has a name. All three of these attributes can be
 included in the `Resource`. Note that there are certain
 ["standard attributes"](semantic_conventions/README.md) that have prescribed meanings.
 
-
 The primary purpose of resources as a first-class concept in the SDK is
 decoupling of discovery of resource information from exporters. This allows for
 independent development and easy customization for users that need to integrate
