@@ -89,7 +89,7 @@ Languages which ship binary artifacts SHOULD offer ABI compatibility for public 
 
 Telemetry produced by contrib instrumentation MUST remain stable and backwards compatible, to avoid breaking alerts and dashboards. Existing telemetry MUST NOT be mutated or removed without a major version bump. Additional telemetry MAY be added. This includes additional spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
 
-**Exception:** Contrib packages MAY break stability when a required downstream dependency breaks stability. For example, a database integration may break stability if the required database client breaks stability.
+**Exception:** Contrib packages MAY break stability when a required downstream dependency breaks stability. For example, a database integration may break stability if the required database client breaks stability. However, it is strongly RECOMMENDED that older contrib packages remain stable. A new, incompatible version of an integration SHOULD be released as separate contrib package, rather than break the existing contrib package.
 
 ### Deprecation
 
