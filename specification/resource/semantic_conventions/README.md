@@ -33,9 +33,10 @@ Attributes are grouped logically by the type of the concept that they described.
 
 Certain attribute groups in this document have a **Required** column. For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource. However it is also valid if the entire attribute group is omitted (i.e. none of the attributes from the particular group are present even though some of them are marked as Required in this document).
 
-## Attributes with Default Value
+## Semantic Attributes with SDK-provided Default Value
 
-The SDK MUST set a default value for the following attributes if they were not specified, even if the resource would otherwise not be present at all:
+These are the the attributes which MUST be set by the SDK as specified in the
+[Resource SDK specification](../sdk.md#):
 
 - [`service.name`](#service)
 

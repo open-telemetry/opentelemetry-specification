@@ -1,10 +1,13 @@
 # Resource SDK
 
 A [Resource](../overview.md#resources) is an immutable representation of the entity producing
-telemetry. For example, a process producing telemetry that is running in a
+telemetry as [Attributes](../common/common.md#attributes).
+For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
-included in the `Resource`.
+included in the `Resource`. Note that there are certain
+["standard attributes"](semantic_conventions/README.md) that have prescribed meanings.
+
 
 The primary purpose of resources as a first-class concept in the SDK is
 decoupling of discovery of resource information from exporters. This allows for
@@ -24,12 +27,20 @@ When associated with a [`MeterProvider`](../metrics/api.md#meter-interface),
 all metrics produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
-Certain **required** `Resource` attributes MUST be set to a default value if they were not specified when
-the Resource is associate with a `TracerProvider` or `MeterProvider`
-(this will result in a new `Resource` being associated, as the original `Resource` is immutable).
-See [Attributes with Default Value](semantic_conventions/README.md#attributes-with-default-value).
+## SDK-provided resource attributes
 
-Note that there are certain ["standard attributes"](semantic_conventions/README.md) that have prescribed meanings.
+The SDK MUST provide access to a Resource with at least the attributes listed at
+[Semantic Attributes with SDK-provided Default Value](semantic_conventions/README.md#semantic-attributes-with-default-value).
+This resource MUST be associated with a `TracerProvider` or `MeterProvider`
+if another resource was not explicitly specified.
+
+Note: This means that it is possible to create and associate a resource that
+does not have all or any of the SDK-provided attributes present. However, that
+does not happen by default. If a user wants to combine custom attributes with
+the default resource, they can use [`Merge`](#merge) with their custom resource
+or specify their attributes by implementing
+[Custom resource detectors](#detecting-resource-information-from-the-environment)
+instead of explicitly associating a resource.
 
 ## Resource creation
 
