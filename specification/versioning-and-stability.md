@@ -24,9 +24,9 @@
 
 This document defines the stability guarantees offered by the OpenTelemetry clients, along with the rules and procedures for meeting those guarantees.
 
-In this document, the term OpenTelemetry specifically refers to the OpenTelemetry clients. It does not refer to the specification or the Collector.
+In this document, the terms "OpenTelemetry" and "language implementations" both specifically refer to the OpenTelemetry clients. These terms do not refer to the specification or the Collector in this document.
 
-Language implementations MUST take this cross-language proposal, and produce a language-specific proposal which details how these requirements will be met. This proposal shall be placed in the root of each repo and named `VERSIONING.MD`.
+Each language implementation MUST take these versioning and stability requirements, and produce a language-specific document which details how these requirements will be met. This document SHALL be placed in the root of each repo and named `VERSIONING.MD`.
 
 ## Design goals
 
