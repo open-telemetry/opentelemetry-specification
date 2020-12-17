@@ -9,13 +9,14 @@ This document defines standard attributes for resources. These attributes are ty
 
 - [TODOs](#todos)
 - [Document Conventions](#document-conventions)
-- [Attributes with Default Value](#attributes-with-default-value)
+- [Semantic Attributes with SDK-provided Default Value](#semantic-attributes-with-sdk-provided-default-value)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
 - [Compute Instance](#compute-instance)
 - [Environment](#environment)
 - [Version attributes](#version-attributes)
+- [Cloud-Provider-Specific Attributes](#cloud-provider-specific-attributes)
 
 <!-- tocstop -->
 
