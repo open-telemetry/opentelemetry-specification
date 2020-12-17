@@ -54,7 +54,7 @@ The maintainer of an OpenTelemetry SDK Plugin, written against OpenTelemetry SDK
 
 ### Signals
 
-OpenTelemetry is structured around signals. Each signal represents a coherent, stand-alone set of functionality. Each signal follows a sperate lifecycle defining its current stability level.
+OpenTelemetry is structured around signals, or categories of telemetry. Metrics, logs, traces, and baggage are examples of signals. Each signal represents a coherent, stand-alone set of functionality. Each signal follows a separate lifecycle defining its current stability level.
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>
