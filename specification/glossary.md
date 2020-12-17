@@ -48,7 +48,7 @@ The maintainer of OpenTelemetry instrumentation written against the OpenTelemetr
 
 ### Plugin Author
 
-The maintainer of and OpenTelemetry Plugin, written against OpenTelemetry SDK plugin interfaces.
+The maintainer of an OpenTelemetry SDK Plugin, written against OpenTelemetry SDK plugin interfaces.
 
 ## Common
 
@@ -82,9 +82,17 @@ Denotes the library that implements the *OpenTelemetry API*.
 See [Library Guidelines](library-guidelines.md#sdk-implementation) and
 [Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk).
 
+### Constructors
+
+Constructors are public code used by Application Owners to initialize and configure the OpenTelemetry SDK and contrib packages. Examples of constructors include configuration objects, environment variables, and builders.
+
+### SDK Plugins
+
+Plugins are libraries which extend the OpenTelemetry SDK Examples of plugin interfaces include the `SpanProcessor`, `Exporter`, and `Sampler` interfaces.
+
 ### Exporter Library
 
-Libraries which are compatible with the [Telemetry SDK](#telemetry-sdk) and provide functionality to emit telemetry to consumers.
+Exporters are SDK Plugins which implement the `Exporter` interface, and emit telemetry to consumers.
 
 ### Instrumented Library
 
