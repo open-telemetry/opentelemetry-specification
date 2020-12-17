@@ -92,7 +92,7 @@ status of the feature is not known.
 |Create empty                                  | + | +  | + | +    | +  | +    |   | +  |   | +  | +   |
 |Merge                                         | + | +  | + | +    | +  | +    |   | +  |   | +  | +   |
 |Retrieve attributes                           | + | +  | + | +    | +  | +    |   | +  |   | +  | +   |
-|[Default value](specification/resource/semantic_conventions/README.md#attributes-with-default-value) for service.name |   |    |   |      |    |      |   |    |   |    |     |
+|[Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |   |    |   |      |    |      |   |    |   |    |     |
 
 ## Context Propagation
 
