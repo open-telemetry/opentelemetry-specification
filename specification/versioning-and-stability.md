@@ -70,12 +70,12 @@ Once a signal component is marked as stable, the following rules MUST apply unti
 **API Stability -**
 Backward-incompatible changes to API packages MUST NOT be made unless the major version number is incremented. All existing API calls MUST continue to compile and function against all future minor versions of the same major version.
 
-ABI compatibility for the API is RECOMMENDED, and MAY be offered on a language by language basis.
+Languages which ship binary artifacts SHOULD offer ABI compatibility for the API.
 
 **SDK Stability -**
 Public portions of SDK packages MUST remain backwards compatible. There are two categories of public features: **plugin interfaces** and **constructors**. Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces. Examples of constructors include configuration objects, environment variables, and SDK builders.
 
-ABI compatibility for public portions of the SDK are RECOMMENDED, and MAY be offered on a language by language basis.
+Languages which ship binary artifacts SHOULD offer ABI compatibility for public portions of the SDK.
 
 **Semantic Conventions Stability -**
 Semantic Conventions MUST NOT be removed once they are stable. New conventions MAY be added to replace usage of older conventions, but the older conventions MUST NOT be removed. Older conventions MUST be marked as deprecated when they are replaced by newer conventions.
@@ -85,7 +85,7 @@ Plugins and instrumentation MUST be kept up to date, and MUST released simultane
 
 Public portions of contrib packages (constructors, configuration, interfaces) MUST remain backwards compatible.
 
-ABI compatibility for public portions of contrib packages is RECOMMENDED, and MAY be offered on a language by language basis.
+Languages which ship binary artifacts SHOULD offer ABI compatibility for public portions of contrib packages.
 
 Telemetry produced by contrib instrumentation MUST remain stable and backwards compatible, to avoid breaking alerts and dashboards. Existing telemetry MUST NOT be mutated or removed without a major version bump. Additional telemetry MAY be added. This includes additional spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
 
