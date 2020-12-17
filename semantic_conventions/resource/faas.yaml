@@ -37,7 +37,7 @@ groups:
       - id: max_memory
         type: number
         brief: >
-          The amount of memory available to the serverless function in MB.
+          The amount of memory available to the serverless function in MiB.
         note: >
           On AWS Lambda, the environment variable `AWS_LAMBDA_FUNCTION_MEMORY_SIZE`
           provides this information.
