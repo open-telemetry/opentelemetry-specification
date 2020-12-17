@@ -127,7 +127,6 @@ For the purposes of versioning, all code within a component MUST treated as if i
 * Different language implementations are NOT REQUIRED to have matching version numbers. For example, it is fine to have `opentelemetry-python-api` at v1.2.8 when `opentelemetry-java-api` is at v1.3.2.
 * Language implementations are NOT REQUIRED to match the version of the specification they implement. For example, it is fine for v1.8.2 of `opentelemetry-python-api` to implement v1.1.1 of the specification.
 
-
 **Exception:** in some languages, package managers may react poorly to experimental packages having a version higher than 0.X. In these cases, experimental signals MAY version independently from stable signals, in order to retain a 0.X version number. When a signal becomes stable, the version MUST be bumped to match the other stable signals in the release.
 
 ### Major version bump
