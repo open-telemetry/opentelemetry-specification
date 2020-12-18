@@ -37,7 +37,7 @@ Certain attribute groups in this document have a **Required** column. For these 
 ## Semantic Attributes with SDK-provided Default Value
 
 These are the the attributes which MUST be provided by the SDK
-as specified in the [Resource SDK specification](../sdk.md#):
+as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource-attributes):
 
 - [`service.name`](#service)
 
