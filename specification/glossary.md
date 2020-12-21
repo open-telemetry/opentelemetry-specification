@@ -88,7 +88,7 @@ Constructors are public code used by Application Owners to initialize and config
 
 ### SDK Plugins
 
-Plugins are libraries which extend the OpenTelemetry SDK Examples of plugin interfaces include the `SpanProcessor`, `Exporter`, and `Sampler` interfaces.
+Plugins are libraries which extend the OpenTelemetry SDK. Examples of plugin interfaces are the `SpanProcessor`, `Exporter`, and `Sampler` interfaces.
 
 ### Exporter Library
 
