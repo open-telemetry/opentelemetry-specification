@@ -131,7 +131,7 @@ For the purposes of versioning, all code within a component MUST treated as if i
 
 ### Major version bump
 
-Major version bumps MUST only occur when there is a breaking change to a stable interface, or the removal of a deprecated signal. Major version bumps MUST NOT occur for any other reason.
+Major version bumps MUST occur when there is a breaking change to a stable interface, the removal of a deprecated signal, or a drop in support for a language or runtime version. Major version bumps SHOULD NOT occur for changes which do not result in a drop in support of some form.
 
 ### Minor version bump
 
