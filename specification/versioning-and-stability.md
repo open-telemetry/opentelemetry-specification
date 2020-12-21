@@ -81,7 +81,7 @@ Languages which ship binary artifacts SHOULD offer ABI compatibility for public 
 Semantic Conventions MUST NOT be removed once they are stable. New conventions MAY be added to replace usage of older conventions, but the older conventions MUST NOT be removed. Older conventions MUST be marked as deprecated when they are replaced by newer conventions.
 
 **Contrib Stability -**
-Plugins and instrumentation MUST be kept up to date, and MUST released simultaneously (or shortly after) the latest release of the API. The goal is to ensure users can update to the latest version of OpenTelemetry, and not be held back by the plugins that they depend on.
+Plugins and instrumentation MUST be kept up to date, and compatible versions of contrib packages MUST be released in a timely fashion after a new version of the API, SDK, or Semantic Conventions is released. The goal is to ensure users can update to the latest version of OpenTelemetry, and not be held back by the plugins that they depend on.
 
 Public portions of contrib packages (constructors, configuration, interfaces) MUST remain backwards compatible.
 
