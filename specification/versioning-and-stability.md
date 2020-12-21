@@ -33,17 +33,17 @@ Each language implementation MUST take these versioning and stability requiremen
 Versioning and stability procedures are designed to meet the following goals.
 
 **Ensure that application owners stay up to date with the latest release of the SDK.**
-We want all users to stay up to date with the latest version of OpenTelemetry. We do not want to create hard breaks in support, of any kind, which leave users stranded on older versions. It must always be possible to upgrade to the latest minor version of OpenTelemetry, without creating compilation or runtime errors.
+We want all users to stay up to date with the latest version of the OpenTelemetry SDK. We do not want to create hard breaks in support, of any kind, which leave users stranded on older versions. It MUST always be possible to upgrade to the latest minor version of the OpenTelemetry SDK, without creating compilation or runtime errors.
 
 **Never create a dependency conflict between packages which rely on different versions of OpenTelemetry. Avoid breaking all stable public APIs.**
-Backwards compatibility is a strict requirement. Instrumentation APIs cannot create a version conflict, ever. Otherwise, OpenTelemetry cannot be embedded in widely shared libraries, such as web frameworks. Code written against older versions of the API must work with all newer versions of the API. Transitive dependencies of the API cannot create a version conflict. The OpenTelemetry API cannot depend on "foo" if there is any chance that any library or application may require a different, incompatible version of "foo." A library using OpenTelemetry should never become incompatible with other libraries due to a version conflict in one of OpenTelemetry's dependencies. Theoretically, APIs can be deprecated and eventually removed, but this is a process measured in years and we have no plans to do so.
+Backwards compatibility is a strict requirement. Instrumentation APIs cannot create a version conflict, ever. Otherwise, the OpenTelemetry API cannot be embedded in widely shared libraries, such as web frameworks. Code written against older versions of the API MUST work with all newer versions of the API. Transitive dependencies of the API cannot create a version conflict. The OpenTelemetry API cannot depend on "foo" if there is any chance that any library or application may require a different, incompatible version of "foo." A library that imports the OpenTelemetry API should never become incompatible with other libraries due to a version conflict in one of OpenTelemetry's dependencies. Theoretically, APIs can be deprecated and eventually removed, but this is a process measured in years and we have no plans to do so.
 
-**Allow for multiple levels of package stability within the same release.**
-Provide maintainers a clear process for developing new, experimental APIs alongside stable APIs. DIfferent packages within the same release may have different levels of stability. This means that an implementation wishing to release stable tracing today must ensure that experimental metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
+**Allow for multiple levels of package stability within the same release of an OpenTelemetry component.**
+Provide maintainers a clear process for developing new, experimental signals alongside stable signals. Different packages within the same release may have different levels of stability. This means that an implementation wishing to release stable tracing today MUST ensure that experimental metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
 
 ## Signal lifecycle
 
-OpenTelemetry is structured around signals. Each signal represents a coherent, stand-alone set of functionality. Each signal follows a lifecycle.
+OpenTelemetry clients are structured around **signals**. Each signal represents a coherent, stand-alone set of functionality. Each signal follows a lifecycle.
 
 ![API Lifecycle](../internal/img/api-lifecycle.png)
 
@@ -113,7 +113,7 @@ This is not actually a theoretical example. OpenTelemetry already supports two t
 
 ## Version numbers
 
-OpenTelemetry follows [semver 2.0](https://semver.org/) conventions, with the following distinctions.
+OpenTelemetry clients follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
 
 OpenTelemetry clients have four components: API, SDK, Semantic Conventions, and Contrib.
 
@@ -123,9 +123,9 @@ For the purposes of versioning, all code within a component MUST treated as if i
 * SDK packages for all signals MUST version together, across all signals. Signals MUST NOT have separate version numbers. There is one version number that applies to all signals that are included in the SDK release that is labeled with that particular version number.
 * Semantic Conventions are a single package with a single version number.
 * Each contrib package MAY have it's own version number.
-* The API, SDK, Semantic Conventions, and contrib components are NOT REQUIRED to share a version number. For example, the latest version of `opentelemetry-python-api` may be at v1.2.3, while the latest version of `opentelemetry-python-sdk` may be at v2.3.1.
-* Different language implementations are NOT REQUIRED to have matching version numbers. For example, it is fine to have `opentelemetry-python-api` at v1.2.8 when `opentelemetry-java-api` is at v1.3.2.
-* Language implementations are NOT REQUIRED to match the version of the specification they implement. For example, it is fine for v1.8.2 of `opentelemetry-python-api` to implement v1.1.1 of the specification.
+* The API, SDK, Semantic Conventions, and contrib components have independent version numbers. For example, the latest version of `opentelemetry-python-api` MAY be at v1.2.3 while the latest version of `opentelemetry-python-sdk` is at v2.3.1.
+* Different language implementations have independent version numbers. For example, it is fine to have `opentelemetry-python-api` at v1.2.8 when `opentelemetry-java-api` is at v1.3.2.
+* Language implementations have version numbers which are independent of the specification they implement. For example, it is fine for v1.8.2 of `opentelemetry-python-api` to implement v1.1.1 of the specification.
 
 **Exception:** in some languages, package managers may react poorly to experimental packages having a version higher than 0.X. In these cases, experimental signals MAY version independently from stable signals, in order to retain a 0.X version number. When a signal becomes stable, the version MUST be bumped to match the other stable signals in the release.
 
@@ -135,7 +135,7 @@ Major version bumps MUST only occur when there is a breaking change to a stable 
 
 ### Minor version bump
 
-Most changes to OpenTelemetry result in a minor version bump.
+Most changes to OpenTelemetry clients result in a minor version bump.
 
 * New backward-compatible functionality added to any component.
 * Breaking changes to internal SDK components.
@@ -152,7 +152,7 @@ Patch versions make no changes which would require recompilation or potentially 
 * Security fixes.
 * Documentation.
 
-Currently, OpenTelemetry does NOT have plans to backport bug and security fixes to prior minor versions. Security and bug fixes MAY only applied to the latest minor version. We are committed to making it feasible for end users to stay up to date with the latest version of OpenTelemetry.
+Currently, the OpenTelemetry project does NOT have plans to backport bug and security fixes to prior minor versions of the SDK. Security and bug fixes MAY only applied to the latest minor version. We are committed to making it feasible for end users to stay up to date with the latest version of the OpenTelemetry SDK.
 
 ## Long Term Support
 
