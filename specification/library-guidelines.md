@@ -4,7 +4,7 @@ This document defines common principles that will help designers create language
 
 The language libraries are expected to provide full features out of the box and allow for innovation and experimentation through extensibility points.
 
-The document does not attempt to describe a OpenTelemetry client API. For API specs see [specification](../README.md).
+The document does not attempt to describe an OpenTelemetry client API. For API specs see [specification](../README.md).
 
 _Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK implementation guidelines are work in progress. If you notice incomplete or missing information, contradictions, inconsistent styling and other defects please let specification writers know by creating an issue in this repository or posting in [Gitter](https://gitter.im/open-telemetry/opentelemetry-specification). As implementors of the specification you will often have valuable insights into how the specification can be improved. The Specification SIG and members of Technical Committee highly value your opinion and welcome your feedback.
 
@@ -30,9 +30,9 @@ _Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK
 
     Other vendor-specific exporters (exporters that implement vendor protocols) should not be included in language libraries and should be placed elsewhere (the exact approach for storing and maintaining vendor-specific exporters will be defined in the future).
 
-## OpenTelemetry client Generic Design
+## OpenTelemetry Client Generic Design
 
-Here is a generic design for a OpenTelemetry client (arrows indicate calls):
+Here is a generic design for an OpenTelemetry client (arrows indicate calls):
 
 ![OpenTelemetry client Design Diagram](../internal/img/library-design.png)
 
