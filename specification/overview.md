@@ -63,7 +63,7 @@ Stable APIs may then be bundled up into a unified API which provides additional 
 
 ### SDK
 
-The implementation of the API. The SDK is managed by the [application owner](glossary.md#application-owner).
+The SDK is the implementation of the API provided by the OpenTelemetry project. Within an application, the SDK is installed and managed by the [application owner](glossary.md#application-owner).
 Note that the SDK includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as [constructors](glossary.md#constructors) and [plugin interfaces](glossary.md#sdk-plugins).
 Examples of plugin interfaces are the `SpanProcessor`, `Exporter`, and `Sampler` interfaces.
 Examples of constructors are **configuration objects**, **environment variables**, and **SDK builders**.
