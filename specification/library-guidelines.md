@@ -1,8 +1,8 @@
 # OpenTelemetry Client Design Principles
 
-This document defines common principles that will help designers create language libraries that are easy to use, are uniform across all supported languages, yet allow enough flexibility for language-specific expressiveness.
+This document defines common principles that will help designers create OpenTelemetry clients that are easy to use, are uniform across all supported languages, yet allow enough flexibility for language-specific expressiveness.
 
-The language libraries are expected to provide full features out of the box and allow for innovation and experimentation through extensibility points.
+The OpenTelemetry clients are expected to provide full features out of the box and allow for innovation and experimentation through extensibility points.
 
 The document does not attempt to describe an OpenTelemetry client API. For API specs see [specification](../README.md).
 
@@ -28,7 +28,7 @@ _Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK
 
     Note: some of these support multiple protocols (e.g. gRPC, Thrift, etc). The exact list of protocols to implement in the exporters is TBD.
 
-    Other vendor-specific exporters (exporters that implement vendor protocols) should not be included in language libraries and should be placed elsewhere (the exact approach for storing and maintaining vendor-specific exporters will be defined in the future).
+    Other vendor-specific exporters (exporters that implement vendor protocols) should not be included in OpenTelemetry clients and should be placed elsewhere (the exact approach for storing and maintaining vendor-specific exporters will be defined in the future).
 
 ## OpenTelemetry Client Generic Design
 
