@@ -16,6 +16,7 @@ Some other fundamental terms are documented in the [overview document](overview.
 - [Common](#common)
   * [Signals](#signals)
   * [Packages](#packages)
+  * [ABI Compatibility](#abi-compatibility)
   * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
   * [Telemetry SDK](#telemetry-sdk)
   * [Constructors](#constructors)
@@ -68,6 +69,12 @@ Each signal follows a separate lifecycle defining its current stability level.
 In this specification, the term **package** describes a set of code which represents a single dependency, which may be imported into a program independently from other packages.
 This concept may map to a different term in some languages, such as "module."
 Note that in some languages, the term "package" refers to a different concept.
+
+### ABI Compatibility
+
+An ABI (application binary interface) is an interface which defines interactions between software components at the machine code level, for example between an application executable and a compiled binary of a shared object library. ABI compatibility means that a new compiled version of a library may be correctly linked to a target executable without the need for that executable to be recompiled.
+
+ABI compatibility is important for most languages which produce compiled binary executables. For interpreted languages which do not produce binary executables, ABI compatibility is a non-existent requirement.
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>

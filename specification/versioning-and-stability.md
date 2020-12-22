@@ -94,7 +94,7 @@ Once a signal component is marked as stable, the following rules MUST apply unti
 Backward-incompatible changes to API packages MUST NOT be made unless the major version number is incremented.
 All existing API calls MUST continue to compile and function against all future minor versions of the same major version.
 
-Languages which ship binary artifacts SHOULD offer ABI compatibility for the API.
+Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for API packages.
 
 #### SDK Stability
 
@@ -103,7 +103,7 @@ There are two categories of public features: **plugin interfaces** and **constru
 Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
 Examples of constructors include configuration objects, environment variables, and SDK builders.
 
-Languages which ship binary artifacts SHOULD offer ABI compatibility for public portions of the SDK.
+Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
 
 #### Semantic Conventions Stability
 
@@ -119,7 +119,7 @@ The goal is to ensure users can update to the latest version of OpenTelemetry, a
 
 Public portions of contrib packages (constructors, configuration, interfaces) SHOULD remain backwards compatible.
 
-Languages which ship binary artifacts SHOULD offer ABI compatibility for public portions of contrib packages.
+Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for contrib packages.
 
 **Exception:** Contrib packages MAY break stability when a required downstream dependency breaks stability.
 For example, a database integration may break stability if the required database client breaks stability.
