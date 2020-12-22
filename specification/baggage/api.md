@@ -67,7 +67,7 @@ collection of name/value pairs in the `Baggage`.
 ### Set Value
 
 To record the value for a name/value pair, the Baggage API MUST provide a
-function which takes a a name, and a value as input. Returns a new `Baggage`
+function which takes a name, and a value as input. Returns a new `Baggage`
 that contains the new value. Depending on language idioms, a language API MAY
 implement these functions by using a `Builder` pattern and exposing a way to
 construct a `Builder` from a `Baggage`.
