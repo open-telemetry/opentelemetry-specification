@@ -62,7 +62,7 @@ The implementation of the API. The SDK is managed by the application owner. Note
 
 ### Semantics
 
-The **Semantic Conventions** define the keys and values which describe commonly observed concepts and operations within cloud computing. See details [below](#semantic-conventions).
+The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications. See details [below](#semantic-conventions).
 
 ### Contrib Packages
 
