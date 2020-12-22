@@ -2,9 +2,11 @@
 
 This document defines common principles that will help designers create OpenTelemetry clients that are easy to use, are uniform across all supported languages, yet allow enough flexibility for language-specific expressiveness.
 
-The OpenTelemetry clients are expected to provide full features out of the box and allow for innovation and experimentation through extensibility points.
+OpenTelemetry clients are expected to provide full features out of the box and allow for innovation and experimentation through extensibility.
 
-The document does not attempt to describe an OpenTelemetry client API. For API specs see [specification](../README.md).
+Please read the [overview](overview.md) first, to understand the fundamental architecture of OpenTelemetry.
+
+The document does not attempt to describe the details or functionality of the OpenTelemetry client API. For API specs see the [API specifications](../README.md).
 
 _Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK implementation guidelines are work in progress. If you notice incomplete or missing information, contradictions, inconsistent styling and other defects please let specification writers know by creating an issue in this repository or posting in [Gitter](https://gitter.im/open-telemetry/opentelemetry-specification). As implementors of the specification you will often have valuable insights into how the specification can be improved. The Specification SIG and members of Technical Committee highly value your opinion and welcome your feedback.
 
@@ -38,15 +40,14 @@ Here is a generic design for an OpenTelemetry client (arrows indicate calls):
 
 ### Expected Usage
 
-The OpenTelemetry client is composed of 2 packages: API package and SDK package.
-In this specification, _package_ is used as a conceptual separation and does not prescribe the exact structure of the artifacts making up the language implementations.
-Whether the API and SDK packages are bundled as two all-in-one artifacts or split across multiple ones (e.g. one for api-trace, one for api-metric, one for sdk-trace, one for sdk-metric) is considered an implementation detail as long as the API artifact(s) stay separate from the SDK artifact(s).
+The OpenTelemetry client is composed of 4 types of [packages](glossary.md#packages): API packages, SDK packages, a Semantic Conventions package, and plugin packages.
+The API and the SDK are split into multiple packages, based on signal type (e.g. one for api-trace, one for api-metric, one for sdk-trace, one for sdk-metric) is considered an implementation detail as long as the API artifact(s) stay separate from the SDK artifact(s).
 
-Third-party libraries and frameworks that want to be instrumented in OpenTelemetry-compatible way will have a dependency on the API package. The developers of these third-party libraries will add calls to telemetry API to produce telemetry data.
+Libraries, frameworks, and applications that want to be instrumented with OpenTelemetry take a dependency only on the API packages. The developers of these third-party libraries will make calls to the API to produce telemetry data.
 
-Applications that use third-party libraries that are instrumented with OpenTelemetry API will have a choice to enable or not enable the actual delivery of telemetry data. The application can also call telemetry API directly to produce additional telemetry data.
+Applications that use third-party libraries that are instrumented with OpenTelemetry API control whether or not to install the SDK and generate of telemetry data. When the SDK is not installed, the API calls should be no-ops which generate minimal overhead.
 
-In order to enable telemetry the application must take a dependency on the OpenTelemetry SDK, which implements the delivery of the telemetry. The application must also configure exporters so that the SDK knows where and how to deliver the telemetry. The details of how exporters are enabled and configured are language specific.
+In order to enable telemetry the application must take a dependency on the OpenTelemetry SDK. The application must also configure exporters and other plugins so that telemetry can be correctly generated and delivered to their analysis tool of choice. The details of how plugins are enabled and configured are language specific.
 
 ### API and Minimal Implementation
 

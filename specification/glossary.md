@@ -15,8 +15,11 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Plugin Author](#plugin-author)
 - [Common](#common)
   * [Signals](#signals)
+  * [Packages](#packages)
   * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
   * [Telemetry SDK](#telemetry-sdk)
+  * [Constructors](#constructors)
+  * [SDK Plugins](#sdk-plugins)
   * [Exporter Library](#exporter-library)
   * [Instrumented Library](#instrumented-library)
   * [Instrumentation Library](#instrumentation-library)
@@ -55,6 +58,10 @@ The maintainer of an OpenTelemetry SDK Plugin, written against OpenTelemetry SDK
 ### Signals
 
 OpenTelemetry is structured around signals, or categories of telemetry. Metrics, logs, traces, and baggage are examples of signals. Each signal represents a coherent, stand-alone set of functionality. Each signal follows a separate lifecycle defining its current stability level.
+
+### Packages
+
+In this specification, the term **package** describes a set of code which represents a single dependency, which may be imported into a program independently from other packages. This concept may map to a different term in some languages, such as "module." Note that in some languages, the term "package" refers to a different concept.
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>
