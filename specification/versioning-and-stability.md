@@ -7,6 +7,11 @@
 - [Signal lifecycle](#signal-lifecycle)
   * [Lifecycle stages](#lifecycle-stages)
   * [Stability](#stability)
+    + [API Stability](#api-stability)
+    + [SDK Stability](#sdk-stability)
+    + [Semantic Conventions Stability](#semantic-conventions-stability)
+    + [Contrib Stability](#contrib-stability)
+    + [NOT DEFINED: Telemetry Stability](#not-defined-telemetry-stability)
   * [Deprecation](#deprecation)
   * [Removal](#removal)
   * [A note on replacing signals](#a-note-on-replacing-signals)
@@ -84,13 +89,15 @@ Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or
 
 Once a signal component is marked as stable, the following rules MUST apply until the end of that signal’s existence.
 
-**API Stability -**
+#### API Stability
+
 Backward-incompatible changes to API packages MUST NOT be made unless the major version number is incremented.
 All existing API calls MUST continue to compile and function against all future minor versions of the same major version.
 
 Languages which ship binary artifacts SHOULD offer ABI compatibility for the API.
 
-**SDK Stability -**
+#### SDK Stability
+
 Public portions of SDK packages MUST remain backwards compatible.
 There are two categories of public features: **plugin interfaces** and **constructors**.
 Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
@@ -98,27 +105,35 @@ Examples of constructors include configuration objects, environment variables, a
 
 Languages which ship binary artifacts SHOULD offer ABI compatibility for public portions of the SDK.
 
-**Semantic Conventions Stability -**
+#### Semantic Conventions Stability
+
 Semantic Conventions MUST NOT be removed once they are stable.
 New conventions MAY be added to replace usage of older conventions, but the older conventions MUST NOT be removed.
 Older conventions MUST be marked as deprecated when they are replaced by newer conventions.
 
-**Contrib Stability -**
-Plugins and instrumentation MUST be kept up to date, and compatible versions of contrib packages MUST be released in a timely fashion after a new version of the API, SDK, or Semantic Conventions is released.
+#### Contrib Stability
+
+Plugins, instrumentation, and other contrib packages SHOULD be kept up to date and compatible with the latest versions of the API, SDK, and Semantic Conventions.
+If a release of the API, SDK, or Semantic Conventions contains changes which are relevant to a contrib package, that package SHOULD be updated and released in a timely fashion.
 The goal is to ensure users can update to the latest version of OpenTelemetry, and not be held back by the plugins that they depend on.
 
-Public portions of contrib packages (constructors, configuration, interfaces) MUST remain backwards compatible.
+Public portions of contrib packages (constructors, configuration, interfaces) SHOULD remain backwards compatible.
 
 Languages which ship binary artifacts SHOULD offer ABI compatibility for public portions of contrib packages.
-
-Telemetry produced by contrib instrumentation MUST remain stable and backwards compatible, to avoid breaking alerts and dashboards.
-Existing telemetry MUST NOT be mutated or removed without a major version bump.
-Additional telemetry MAY be added. This includes additional spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
 
 **Exception:** Contrib packages MAY break stability when a required downstream dependency breaks stability.
 For example, a database integration may break stability if the required database client breaks stability.
 However, it is strongly RECOMMENDED that older contrib packages remain stable.
 A new, incompatible version of an integration SHOULD be released as separate contrib package, rather than break the existing contrib package.
+
+#### NOT DEFINED: Telemetry Stability
+
+**Telemetry stability guarantees are TBD.**
+
+Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid breaking analysis tools, such as dashboards and alerts.
+However, it is not clear at this time what type of instrumentation changes (for example, adding additional spans and labels) would actually cause a breaking change.
+
+**Until telemetry stability is defined, Contrib instrumentation MUST NOT be marked as stable.**
 
 ### Deprecation
 
