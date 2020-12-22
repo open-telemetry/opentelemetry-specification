@@ -24,34 +24,50 @@
 
 This document defines the stability guarantees offered by the OpenTelemetry clients, along with the rules and procedures for meeting those guarantees.
 
-In this document, the terms "OpenTelemetry" and "language implementations" both specifically refer to the OpenTelemetry clients. These terms do not refer to the specification or the Collector in this document.
+In this document, the terms "OpenTelemetry" and "language implementations" both specifically refer to the OpenTelemetry clients.
+These terms do not refer to the specification or the Collector in this document.
 
-Each language implementation MUST take these versioning and stability requirements, and produce a language-specific document which details how these requirements will be met. This document SHALL be placed in the root of each repo and named `VERSIONING`.
+Each language implementation MUST take these versioning and stability requirements, and produce a language-specific document which details how these requirements will be met.
+This document SHALL be placed in the root of each repo and named `VERSIONING`.
 
 ## Design goals
 
 Versioning and stability procedures are designed to meet the following goals.
 
 **Ensure that application owners stay up to date with the latest release of the SDK.**
-We want all users to stay up to date with the latest version of the OpenTelemetry SDK. We do not want to create hard breaks in support, of any kind, which leave users stranded on older versions. It MUST always be possible to upgrade to the latest minor version of the OpenTelemetry SDK, without creating compilation or runtime errors.
+We want all users to stay up to date with the latest version of the OpenTelemetry SDK.
+We do not want to create hard breaks in support, of any kind, which leave users stranded on older versions.
+It MUST always be possible to upgrade to the latest minor version of the OpenTelemetry SDK, without creating compilation or runtime errors.
 
 **Never create a dependency conflict between packages which rely on different versions of OpenTelemetry. Avoid breaking all stable public APIs.**
-Backwards compatibility is a strict requirement. Instrumentation APIs cannot create a version conflict, ever. Otherwise, the OpenTelemetry API cannot be embedded in widely shared libraries, such as web frameworks. Code written against older versions of the API MUST work with all newer versions of the API. Transitive dependencies of the API cannot create a version conflict. The OpenTelemetry API cannot depend on "foo" if there is any chance that any library or application may require a different, incompatible version of "foo." A library that imports the OpenTelemetry API should never become incompatible with other libraries due to a version conflict in one of OpenTelemetry's dependencies. Theoretically, APIs can be deprecated and eventually removed, but this is a process measured in years and we have no plans to do so.
+Backwards compatibility is a strict requirement.
+Instrumentation APIs cannot create a version conflict, ever. Otherwise, the OpenTelemetry API cannot be embedded in widely shared libraries, such as web frameworks.
+Code written against older versions of the API MUST work with all newer versions of the API.
+Transitive dependencies of the API cannot create a version conflict. The OpenTelemetry API cannot depend on "foo" if there is any chance that any library or application may require a different, incompatible version of "foo."
+A library that imports the OpenTelemetry API should never become incompatible with other libraries due to a version conflict in one of OpenTelemetry's dependencies.
+Theoretically, APIs can be deprecated and eventually removed, but this is a process measured in years and we have no plans to do so.
 
 **Allow for multiple levels of package stability within the same release of an OpenTelemetry component.**
-Provide maintainers a clear process for developing new, experimental signals alongside stable signals. Different packages within the same release may have different levels of stability. This means that an implementation wishing to release stable tracing today MUST ensure that experimental metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
+Provide maintainers a clear process for developing new, experimental signals alongside stable signals.
+Different packages within the same release may have different levels of stability.
+This means that an implementation wishing to release stable tracing today MUST ensure that experimental metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
 
 ## Signal lifecycle
 
-OpenTelemetry clients are structured around **signals**. Each signal represents a coherent, stand-alone set of functionality. Each signal follows a lifecycle.
+OpenTelemetry clients are structured around **signals**.
+Each signal represents a coherent, stand-alone set of functionality.
+Each signal follows a lifecycle.
 
 ![API Lifecycle](../internal/img/api-lifecycle.png)
 
 ### Lifecycle stages
 
-**Experimental –** Breaking changes and performance issues MAY occur. Components may not be feature-complete. The experiment MAY be discarded and removed.
+**Experimental –** Breaking changes and performance issues MAY occur.
+Components may not be feature-complete.
+The experiment MAY be discarded and removed.
 
-**Stable –** Stability guarantees, as defined by component type below, MUST now apply to all changes within this signal. Long-term dependencies MAY now be taken against this signal.
+**Stable –** Stability guarantees, as defined by component type below, MUST now apply to all changes within this signal.
+Long-term dependencies MAY now be taken against this signal.
 
 **Deprecated –** this signal has been replaced, but MUST maintain the same stability guarantees.
 
@@ -59,7 +75,8 @@ OpenTelemetry clients are structured around **signals**. Each signal represents 
 
 All signal components MAY become stable together, or MAY transition to stability component-by-component in the following order: API, Semantic Conventions, API Contrib, SDK, SDK Contrib.
 
-When transitioning from experimental to stable to deprecated, signals MUST NOT move or otherwise break how they are imported by users. Terms which denote stability, such as "experimental," MUST NOT be used as part of a directory or import name.
+When transitioning from experimental to stable to deprecated, signals MUST NOT move or otherwise break how they are imported by users.
+Terms which denote stability, such as "experimental," MUST NOT be used as part of a directory or import name.
 
 Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or -experimental, to differentiate stable and experimental packages.
 
@@ -68,38 +85,52 @@ Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or
 Once a signal component is marked as stable, the following rules MUST apply until the end of that signal’s existence.
 
 **API Stability -**
-Backward-incompatible changes to API packages MUST NOT be made unless the major version number is incremented. All existing API calls MUST continue to compile and function against all future minor versions of the same major version.
+Backward-incompatible changes to API packages MUST NOT be made unless the major version number is incremented.
+All existing API calls MUST continue to compile and function against all future minor versions of the same major version.
 
 Languages which ship binary artifacts SHOULD offer ABI compatibility for the API.
 
 **SDK Stability -**
-Public portions of SDK packages MUST remain backwards compatible. There are two categories of public features: **plugin interfaces** and **constructors**. Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces. Examples of constructors include configuration objects, environment variables, and SDK builders.
+Public portions of SDK packages MUST remain backwards compatible.
+There are two categories of public features: **plugin interfaces** and **constructors**.
+Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
+Examples of constructors include configuration objects, environment variables, and SDK builders.
 
 Languages which ship binary artifacts SHOULD offer ABI compatibility for public portions of the SDK.
 
 **Semantic Conventions Stability -**
-Semantic Conventions MUST NOT be removed once they are stable. New conventions MAY be added to replace usage of older conventions, but the older conventions MUST NOT be removed. Older conventions MUST be marked as deprecated when they are replaced by newer conventions.
+Semantic Conventions MUST NOT be removed once they are stable.
+New conventions MAY be added to replace usage of older conventions, but the older conventions MUST NOT be removed.
+Older conventions MUST be marked as deprecated when they are replaced by newer conventions.
 
 **Contrib Stability -**
-Plugins and instrumentation MUST be kept up to date, and compatible versions of contrib packages MUST be released in a timely fashion after a new version of the API, SDK, or Semantic Conventions is released. The goal is to ensure users can update to the latest version of OpenTelemetry, and not be held back by the plugins that they depend on.
+Plugins and instrumentation MUST be kept up to date, and compatible versions of contrib packages MUST be released in a timely fashion after a new version of the API, SDK, or Semantic Conventions is released.
+The goal is to ensure users can update to the latest version of OpenTelemetry, and not be held back by the plugins that they depend on.
 
 Public portions of contrib packages (constructors, configuration, interfaces) MUST remain backwards compatible.
 
 Languages which ship binary artifacts SHOULD offer ABI compatibility for public portions of contrib packages.
 
-Telemetry produced by contrib instrumentation MUST remain stable and backwards compatible, to avoid breaking alerts and dashboards. Existing telemetry MUST NOT be mutated or removed without a major version bump. Additional telemetry MAY be added. This includes additional spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
+Telemetry produced by contrib instrumentation MUST remain stable and backwards compatible, to avoid breaking alerts and dashboards.
+Existing telemetry MUST NOT be mutated or removed without a major version bump.
+Additional telemetry MAY be added. This includes additional spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
 
-**Exception:** Contrib packages MAY break stability when a required downstream dependency breaks stability. For example, a database integration may break stability if the required database client breaks stability. However, it is strongly RECOMMENDED that older contrib packages remain stable. A new, incompatible version of an integration SHOULD be released as separate contrib package, rather than break the existing contrib package.
+**Exception:** Contrib packages MAY break stability when a required downstream dependency breaks stability.
+For example, a database integration may break stability if the required database client breaks stability.
+However, it is strongly RECOMMENDED that older contrib packages remain stable.
+A new, incompatible version of an integration SHOULD be released as separate contrib package, rather than break the existing contrib package.
 
 ### Deprecation
 
 Signals MAY eventually be replaced. When this happens, they are marked as deprecated.
 
-Signals SHALL only be marked as deprecated when the replacement becomes stable. Deprecated code MUST abide by the same support guarantees as stable code.
+Signals SHALL only be marked as deprecated when the replacement becomes stable.
+Deprecated code MUST abide by the same support guarantees as stable code.
 
 ### Removal
 
-Support is ended by the removal of a signal from the release. The release MUST make a major version bump when this happens.
+Support is ended by the removal of a signal from the release.
+The release MUST make a major version bump when this happens.
 
 ### A note on replacing signals
 
@@ -107,9 +138,16 @@ Note that we currently have no plans for creating a major version of OpenTelemet
 
 For clarity, it is still possible to create new, backwards incompatible versions of existing signals without actually moving to v2.0 and breaking support.
 
-For example, imagine we develop a new, better tracing API - let's call it AwesomeTrace. We will never mutate the current tracing API into AwesomeTrace. Instead, AwesomeTrace would be added as an entirely new signal which coexists and interoperates with the current tracing signal. This would make adding AwesomeTrace a minor version bump, *not* v2.0. v2.0 would mark the end of support for current tracing, not the addition of AwesomeTrace. And we don't want to ever end that support, if we can help it.
+For example, imagine we develop a new, better tracing API - let's call it AwesomeTrace.
+We will never mutate the current tracing API into AwesomeTrace.
+Instead, AwesomeTrace would be added as an entirely new signal which coexists and interoperates with the current tracing signal.
+This would make adding AwesomeTrace a minor version bump, *not* v2.0.
+v2.0 would mark the end of support for current tracing, not the addition of AwesomeTrace.
+And we don't want to ever end that support, if we can help it.
 
-This is not actually a theoretical example. OpenTelemetry already supports two tracing APIs: OpenTelemetry and OpenTracing. We invented a new tracing API, but continue to support the old one.
+This is not actually a theoretical example.
+OpenTelemetry already supports two tracing APIs: OpenTelemetry and OpenTracing.
+We invented a new tracing API, but continue to support the old one.
 
 ## Version numbers
 
@@ -117,21 +155,32 @@ OpenTelemetry clients follow [Semantic Versioning 2.0.0](https://semver.org/spec
 
 OpenTelemetry clients have four components: API, SDK, Semantic Conventions, and Contrib.
 
-For the purposes of versioning, all code within a component MUST treated as if it were part of a single package, and versioned with the same version number, except for Contrib, which may be a collection of packages versioned separately.
+For the purposes of versioning, all code within a component MUST treated as if it were part of a single package, and versioned with the same version number,
+except for Contrib, which may be a collection of packages versioned separately.
 
-* API packages for all signals MUST version together, across all signals. Signals MUST NOT have separate version numbers. There is one version number that applies to all signals that are included in the API release that is labeled with that particular version number.
-* SDK packages for all signals MUST version together, across all signals. Signals MUST NOT have separate version numbers. There is one version number that applies to all signals that are included in the SDK release that is labeled with that particular version number.
+* API packages for all signals MUST version together, across all signals.
+Signals MUST NOT have separate version numbers.
+There is one version number that applies to all signals that are included in the API release that is labeled with that particular version number.
+* SDK packages for all signals MUST version together, across all signals.
+Signals MUST NOT have separate version numbers.
+There is one version number that applies to all signals that are included in the SDK release that is labeled with that particular version number.
 * Semantic Conventions are a single package with a single version number.
 * Each contrib package MAY have it's own version number.
-* The API, SDK, Semantic Conventions, and contrib components have independent version numbers. For example, the latest version of `opentelemetry-python-api` MAY be at v1.2.3 while the latest version of `opentelemetry-python-sdk` is at v2.3.1.
-* Different language implementations have independent version numbers. For example, it is fine to have `opentelemetry-python-api` at v1.2.8 when `opentelemetry-java-api` is at v1.3.2.
-* Language implementations have version numbers which are independent of the specification they implement. For example, it is fine for v1.8.2 of `opentelemetry-python-api` to implement v1.1.1 of the specification.
+* The API, SDK, Semantic Conventions, and contrib components have independent version numbers.
+For example, the latest version of `opentelemetry-python-api` MAY be at v1.2.3 while the latest version of `opentelemetry-python-sdk` is at v2.3.1.
+* Different language implementations have independent version numbers.
+For example, it is fine to have `opentelemetry-python-api` at v1.2.8 when `opentelemetry-java-api` is at v1.3.2.
+* Language implementations have version numbers which are independent of the specification they implement.
+For example, it is fine for v1.8.2 of `opentelemetry-python-api` to implement v1.1.1 of the specification.
 
-**Exception:** in some languages, package managers may react poorly to experimental packages having a version higher than 0.X. In these cases, experimental signals MAY version independently from stable signals, in order to retain a 0.X version number. When a signal becomes stable, the version MUST be bumped to match the other stable signals in the release.
+**Exception:** in some languages, package managers may react poorly to experimental packages having a version higher than 0.X.
+In these cases, experimental signals MAY version independently from stable signals, in order to retain a 0.X version number.
+When a signal becomes stable, the version MUST be bumped to match the other stable signals in the release.
 
 ### Major version bump
 
-Major version bumps MUST occur when there is a breaking change to a stable interface, the removal of a deprecated signal, or a drop in support for a language or runtime version. Major version bumps SHOULD NOT occur for changes which do not result in a drop in support of some form.
+Major version bumps MUST occur when there is a breaking change to a stable interface, the removal of a deprecated signal, or a drop in support for a language or runtime version.
+Major version bumps SHOULD NOT occur for changes which do not result in a drop in support of some form.
 
 ### Minor version bump
 
@@ -146,13 +195,16 @@ Most changes to OpenTelemetry clients result in a minor version bump.
 
 ### Patch version bump
 
-Patch versions make no changes which would require recompilation or potentially break application code. The following are examples of patch fixes.
+Patch versions make no changes which would require recompilation or potentially break application code.
+The following are examples of patch fixes.
 
 * Bug fixes which don't require minor version bump per rules above.
 * Security fixes.
 * Documentation.
 
-Currently, the OpenTelemetry project does NOT have plans to backport bug and security fixes to prior minor versions of the SDK. Security and bug fixes MAY only applied to the latest minor version. We are committed to making it feasible for end users to stay up to date with the latest version of the OpenTelemetry SDK.
+Currently, the OpenTelemetry project does NOT have plans to backport bug and security fixes to prior minor versions of the SDK.
+Security and bug fixes MAY only applied to the latest minor version.
+We are committed to making it feasible for end users to stay up to date with the latest version of the OpenTelemetry SDK.
 
 ## Long Term Support
 
@@ -160,13 +212,17 @@ Currently, the OpenTelemetry project does NOT have plans to backport bug and sec
 
 ### API support
 
-Major versions of the API MUST be supported for a minimum of **three years** after the release of the next major API version. API support is defined as follows.
+Major versions of the API MUST be supported for a minimum of **three years** after the release of the next major API version.
+API support is defined as follows.
 
-API stability, as defined above, MUST be maintained.
+* API stability, as defined above, MUST be maintained.
 
-A version of the SDK which supports the latest minor version of the last major version of the API will continue to be maintained during LTS. Bug and security fixes MUST be backported. Additional feature development is NOT RECOMMENDED.
+* A version of the SDK which supports the latest minor version of the last major version of the API will continue to be maintained during LTS.
+Bug and security fixes MUST be backported. Additional feature development is NOT RECOMMENDED.
 
-Contrib packages available when the API is versioned MUST continue to be maintained for the duration of LTS. Bug and security fixes will be backported. Additional feature development is NOT RECOMMENDED.
+* Contrib packages available when the API is versioned MUST continue to be maintained for the duration of LTS.
+Bug and security fixes will be backported.
+Additional feature development is NOT RECOMMENDED.
 
 ### SDK Support
 
@@ -178,7 +234,8 @@ Contrib stability, as defined above, will be maintained for a minimum of **one y
 
 ## OpenTelemetry GA
 
-The term “OpenTelemetry GA” refers to the point at which OpenTracing and OpenCensus will be fully deprecated. The **minimum requirements** for declaring GA are as followed.
+The term “OpenTelemetry GA” refers to the point at which OpenTracing and OpenCensus will be fully deprecated.
+The **minimum requirements** for declaring GA are as followed.
 
 * A stable version of both tracing and metrics MUST be released in at least four languages.
 * CI/CD, performance, and integration tests MUST be implemented for these languages.

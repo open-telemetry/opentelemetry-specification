@@ -47,7 +47,8 @@ The maintainer of a shared library which is depended upon by many applications, 
 
 ### Instrumentation Author
 
-The maintainer of OpenTelemetry instrumentation written against the OpenTelemetry API. This may be instrumentation written within application code, within a shared library, or within an instrumentation library.
+The maintainer of OpenTelemetry instrumentation written against the OpenTelemetry API.
+This may be instrumentation written within application code, within a shared library, or within an instrumentation library.
 
 ### Plugin Author
 
@@ -57,11 +58,16 @@ The maintainer of an OpenTelemetry SDK Plugin, written against OpenTelemetry SDK
 
 ### Signals
 
-OpenTelemetry is structured around signals, or categories of telemetry. Metrics, logs, traces, and baggage are examples of signals. Each signal represents a coherent, stand-alone set of functionality. Each signal follows a separate lifecycle defining its current stability level.
+OpenTelemetry is structured around signals, or categories of telemetry.
+Metrics, logs, traces, and baggage are examples of signals.
+Each signal represents a coherent, stand-alone set of functionality.
+Each signal follows a separate lifecycle defining its current stability level.
 
 ### Packages
 
-In this specification, the term **package** describes a set of code which represents a single dependency, which may be imported into a program independently from other packages. This concept may map to a different term in some languages, such as "module." Note that in some languages, the term "package" refers to a different concept.
+In this specification, the term **package** describes a set of code which represents a single dependency, which may be imported into a program independently from other packages.
+This concept may map to a different term in some languages, such as "module."
+Note that in some languages, the term "package" refers to a different concept.
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>

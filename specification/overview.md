@@ -46,31 +46,45 @@ Additional term definitions can be found in the [glossary](glossary.md).
 
 ![Cross cutting concerns](../internal/img/architecture.png)
 
-At the highest architectural level, OpenTelemetry clients are organized into **signals**. Each signal provides a specialized form of observability. For example, tracing, metrics, and baggage are three separate signals. Signals share a common subsystem – **context propagation** – but they function independently from each other.
+At the highest architectural level, OpenTelemetry clients are organized into **signals**.
+Each signal provides a specialized form of observability. For example, tracing, metrics, and baggage are three separate signals.
+Signals share a common subsystem – **context propagation** – but they function independently from each other.
 
-Each signal provides a mechanism for software to describe itself. A codebase, such as web framework or a database client, takes a dependency on various signals in order to describe itself. OpenTelemetry instrumentation code can then be mixed into the other code within that codebase. This makes OpenTelemetry a **cross-cutting concern** - a piece of software which is be mixed into many other pieces of software in order to provide value. Cross-cutting concerns, by their very nature, violate a core design principle – separation of concerns. As a result, OpenTelemetry client design requires extra care and attention to avoid creating issues for the codebase which depend upon these cross-cutting APIs.
+Each signal provides a mechanism for software to describe itself. A codebase, such as web framework or a database client, takes a dependency on various signals in order to describe itself. OpenTelemetry instrumentation code can then be mixed into the other code within that codebase.
+This makes OpenTelemetry a **cross-cutting concern** - a piece of software which is be mixed into many other pieces of software in order to provide value. Cross-cutting concerns, by their very nature, violate a core design principle – separation of concerns. As a result, OpenTelemetry client design requires extra care and attention to avoid creating issues for the codebase which depend upon these cross-cutting APIs.
 
-OpenTelemetry clients are designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions which can be managed independently. OpenTelemetry clients are also designed to be an extensible framework. To accomplish this these goals, each signal consists of four types of packages.
+OpenTelemetry clients are designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions which can be managed independently. OpenTelemetry clients are also designed to be an extensible framework.
+To accomplish this these goals, each signal consists of four types of packages: API, SDK, Semantic Conventions, and Contrib.
 
 ### API
 
-API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into 3rd-party libraries and application code is considered part of the API. To manage different levels of stability, every signal has its own, independent API package. Stable APIs may then be bundled up into a unified API which provides additional convenience methods.
+API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into 3rd-party libraries and application code is considered part of the API.
+To manage different levels of stability, every signal has its own, independent API package.
+Stable APIs may then be bundled up into a unified API which provides additional convenience methods.
 
 ### SDK
 
-The implementation of the API. The SDK is managed by the application owner. Note that the SDK includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as [constructors](glossary.md#constructors) and [plugin interfaces](glossary.md#sdk-plugins). Examples of plugin interfaces are the `SpanProcessor`, `Exporter`, and `Sampler` interfaces. Examples of constructors are **configuration objects**, **environment variables**, and **SDK builders**. Application owners use the SDK constructors; plugin authors use the SDK plugin interfaces. Instrumentation authors must never directly reference any SDK package of any kind, only the API.
+The implementation of the API. The SDK is managed by the [application owner](glossary.md#application-owner).
+Note that the SDK includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as [constructors](glossary.md#constructors) and [plugin interfaces](glossary.md#sdk-plugins).
+Examples of plugin interfaces are the `SpanProcessor`, `Exporter`, and `Sampler` interfaces.
+Examples of constructors are **configuration objects**, **environment variables**, and **SDK builders**.
+Application owners use the SDK constructors; [plugin authors](glossary.md#plugin-author) use the SDK plugin interfaces.
+[Instrumentation authors](glossary.md#instrumentation-author) must never directly reference any SDK package of any kind, only the API.
 
-### Semantics
+### Semantic Conventions
 
 The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications. See details [below](#semantic-conventions).
 
 ### Contrib Packages
 
-The OpenTelemetry project maintains integrations with popular OSS projects which have been identified as important for observing modern web services. Example API integrations include instrumentation for web frameworks, database clients, and message queues. Example SDK integrations include plugins for exporting telemetry to popular analysis tools and telemetry storage systems.
+The OpenTelemetry project maintains integrations with popular OSS projects which have been identified as important for observing modern web services.
+Example API integrations include instrumentation for web frameworks, database clients, and message queues.
+Example SDK integrations include plugins for exporting telemetry to popular analysis tools and telemetry storage systems.
 
 Some plugins, such as OTLP Exporters and TraceContext Propagators, are required by the OpenTelemetry specification. These required plugins are included as part of the SDK.
 
-Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages. **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
+Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
+**API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
 
 The term Contrib specifically refers to the collection of plugins and instrumentation maintained by the OpenTelemetry project; it does not refer to third party plugins hosted elsewhere.
 
