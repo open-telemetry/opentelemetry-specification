@@ -54,7 +54,7 @@ OpenTelemetry clients are designed to separate the portion of each signal which 
 
 ### API
 
-API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which imported into 3rd-party libraries and application code is considered part of the API. To manage different levels of stability, every signal has its own, independent API package. Stable APIs may then be bundled up into a unified API which provides additional convenience methods.
+API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into 3rd-party libraries and application code is considered part of the API. To manage different levels of stability, every signal has its own, independent API package. Stable APIs may then be bundled up into a unified API which provides additional convenience methods.
 
 ### SDK
 
