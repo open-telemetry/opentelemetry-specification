@@ -11,7 +11,7 @@ Table of Contents
 - [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
   * [API](#api)
   * [SDK](#sdk)
-  * [Semantics](#semantics)
+  * [Semantic Conventions](#semantic-conventions)
   * [Contrib Packages](#contrib-packages)
 - [Tracing Signal](#tracing-signal)
   * [Traces](#traces)
@@ -32,7 +32,6 @@ Table of Contents
 - [Propagators](#propagators)
 - [Collector](#collector)
 - [Instrumentation Libraries](#instrumentation-libraries)
-- [Semantic Conventions](#semantic-conventions)
 
 <!-- tocstop -->
 
@@ -73,7 +72,11 @@ Application owners use the SDK constructors; [plugin authors](glossary.md#plugin
 
 ### Semantic Conventions
 
-The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications. See details [below](#semantic-conventions).
+The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications.
+
+* [Resource Conventions](resource/semantic_conventions/README.md)
+* [Span Conventions](trace/semantic_conventions/README.md)
+* [Metrics Conventions](metrics/semantic_conventions/README.md)
 
 ### Contrib Packages
 
@@ -378,15 +381,3 @@ name itself. Examples include:
 
 * opentelemetry-instrumentation-flask (Python)
 * @opentelemetry/instrumentation-grpc (Javascript)
-
-## Semantic Conventions
-
-OpenTelemetry defines standard names and values of Resource attributes and
-Span attributes.
-
-* [Resource Conventions](resource/semantic_conventions/README.md)
-* [Span Conventions](trace/semantic_conventions/README.md)
-* [Metrics Conventions](metrics/semantic_conventions/README.md)
-
-The type of the attribute SHOULD be specified in the semantic convention
-for that attribute. See more details about [Attributes](./common/common.md#attributes).
