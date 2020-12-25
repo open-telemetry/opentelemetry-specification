@@ -204,7 +204,7 @@ The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
 `TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
 (result MUST be a 16-hex-character lowercase string).
 * Binary - returns the binary representation of the `TraceId` (result MUST be a
-16-byte array) `SpanId` (result MUST be a 8-byte array).
+16-byte array) or `SpanId` (result MUST be a 8-byte array).
 
 The API should not expose details about how they are internally stored.
 
