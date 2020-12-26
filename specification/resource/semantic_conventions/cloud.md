@@ -19,6 +19,6 @@
 | Value  | Description |
 |---|---|
 | `aws` | Amazon Web Services |
-| `azure` | Microsoft Azure |
+| `azure` | Amazon Web Services |
 | `gcp` | Google Cloud Platform |
 <!-- endsemconv -->
