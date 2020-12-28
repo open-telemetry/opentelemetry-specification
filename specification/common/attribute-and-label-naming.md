@@ -49,6 +49,10 @@ Names SHOULD follow these rules:
   name prohibits existence of an equally named namespace in the future, and vice
   versa: any existing namespace prohibits existence of an equally named
   attribute or label key in the future.
+
+- Names should not contain unit names; neither should it contain a fraction of
+  the name's unit. For example, `http.request_content_length` does not have
+  bytes in its name.
   
 ## Name Pluralization guidelines
 

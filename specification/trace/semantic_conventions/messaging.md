@@ -181,6 +181,8 @@ For batch receiving and processing (see the [Batch receiving](#batch-receiving) 
 Even though in that case one might think that the processing span's kind should be `INTERNAL`, that kind MUST NOT be used.
 Instead span kind should be set to either `CONSUMER` or `SERVER` according to the rules defined above.
 
+**Note:** The payload size names (`message_payload_compressed_size_bytes` and `message_payload_size_bytes`) don't comply with the [Attribute and Label Naming](../../common/attribute-and-label-naming.md), it should not contain `bytes`. This is due to historical reasons.
+
 ### Attributes specific to certain messaging systems
 
 #### RabbitMQ
