@@ -22,9 +22,9 @@ A resource can be attributed to at most one engine. To illustrate, let's look at
 
 ## Java Engines:
 
-Java engines are often but not always packaged as application servers. For Java application servers supporting Servlet API the required information can be captured by invoking ServletContext.getServerInfo() during runtime and parsing the result.
+Java engines are often but not always packaged as application servers. For Java application servers supporting Servlet API the required information MAY be captured by invoking `ServletContext.getServerInfo()` during runtime and parsing the result.
 
-Java engines SHOULD use the following for engine.name attribute If none of the listed values apply, custom value MAY be used:
+Java engines SHOULD use the following for `engine.name` attribute. If none of the listed values apply, custom value MAY be used:
 
 | Name | `engine.name` |
 |---|---|
