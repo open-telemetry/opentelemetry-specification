@@ -85,7 +85,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | ------------- | ---------------------------------------------------------------------------- | ------- |
 | OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp"  |
 
-Known values for OTEL_EXPORTER are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
+Known values for OTEL_EXPORTER are:
 
 - `"otlp"`: [OTLP Trace and Metrics](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
