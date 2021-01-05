@@ -2,6 +2,8 @@
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
+For variables which accept a known value out of a set (i.e., an enum value), SDK implementations MAY support additional values not listed here.
+
 ## General SDK Configuration
 
 | Name                     | Description                                       | Default                           | Notes                               |
