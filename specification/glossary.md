@@ -74,7 +74,7 @@ Note that in some languages, the term "package" refers to a different concept.
 
 An ABI (application binary interface) is an interface which defines interactions between software components at the machine code level, for example between an application executable and a compiled binary of a shared object library. ABI compatibility means that a new compiled version of a library may be correctly linked to a target executable without the need for that executable to be recompiled.
 
-ABI compatibility is important for most languages which produce compiled binary executables. For interpreted languages which do not produce binary executables, ABI compatibility is a non-existent requirement.
+ABI compatibility is important for some languages, especially those which provide a form of machine code. For other languages, ABI compatibility may not be a relevant requirement.
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>
