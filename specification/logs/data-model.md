@@ -890,6 +890,7 @@ Field            | Type               | Description                             
 -----------------|--------------------| ------------------------------------------------------- | ---------------------------
 timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
 resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
+http_request     | HttpRequest        | The HTTP request associated with the log entry, if any. | Resource
 log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Name
 json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
 proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
