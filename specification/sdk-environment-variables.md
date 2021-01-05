@@ -9,7 +9,7 @@ The goal of this specification is to unify the environment variable names betwee
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning and be gracefully ignored. |
-| OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
+| OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling). Unrecognized values MUST generate a warning and be gracefully ignored. |
 | OTEL_TRACE_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACE_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACE_SAMPLER_ARG is not set.  |
 
 Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "b3multi", "jaeger".
@@ -75,9 +75,9 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 ## Exporter Selection
 
-| Name          | Description                                                                  | Default |
-| ------------- | ---------------------------------------------------------------------------- | ------- |
-| OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp"  |
+| Name          | Description                                                                  | Default | Notes |
+| ------------- | ---------------------------------------------------------------------------- | ------- | ----- |
+| OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp" | Unrecognized values MUST generate a warning and be gracefully ignored. |
 
 Known values for OTEL_EXPORTER are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
 
