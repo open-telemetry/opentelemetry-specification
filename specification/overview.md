@@ -50,14 +50,14 @@ Each signal provides a specialized form of observability. For example, tracing, 
 Signals share a common subsystem – **context propagation** – but they function independently from each other.
 
 Each signal provides a mechanism for software to describe itself. A codebase, such as web framework or a database client, takes a dependency on various signals in order to describe itself. OpenTelemetry instrumentation code can then be mixed into the other code within that codebase.
-This makes OpenTelemetry a **cross-cutting concern** - a piece of software which is be mixed into many other pieces of software in order to provide value. Cross-cutting concerns, by their very nature, violate a core design principle – separation of concerns. As a result, OpenTelemetry client design requires extra care and attention to avoid creating issues for the codebase which depend upon these cross-cutting APIs.
+This makes OpenTelemetry a **cross-cutting concern** - a piece of software which is be mixed into many other pieces of software in order to provide value. Cross-cutting concerns, by their very nature, violate a core design principle – separation of concerns. As a result, OpenTelemetry client design requires extra care and attention to avoid creating issues for the codebases which depend upon these cross-cutting APIs.
 
 OpenTelemetry clients are designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions which can be managed independently. OpenTelemetry clients are also designed to be an extensible framework.
-To accomplish this these goals, each signal consists of four types of packages: API, SDK, Semantic Conventions, and Contrib.
+To accomplish these goals, each signal consists of four types of packages: API, SDK, Semantic Conventions, and Contrib.
 
 ### API
 
-API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into 3rd-party libraries and application code is considered part of the API.
+API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into third-party libraries and application code is considered part of the API.
 To manage different levels of stability, every signal has its own, independent API package.
 Stable APIs may then be bundled up into a unified API which provides additional convenience methods.
 
@@ -89,7 +89,7 @@ Some plugins, such as OTLP Exporters and TraceContext Propagators, are required 
 Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
 **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
 
-The term Contrib specifically refers to the collection of plugins and instrumentation maintained by the OpenTelemetry project; it does not refer to third party plugins hosted elsewhere.
+The term Contrib specifically refers to the collection of plugins and instrumentation maintained by the OpenTelemetry project; it does not refer to third-party plugins hosted elsewhere.
 
 ## Tracing Signal
 

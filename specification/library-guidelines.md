@@ -45,9 +45,9 @@ The API and the SDK are split into multiple packages, based on signal type (e.g.
 
 Libraries, frameworks, and applications that want to be instrumented with OpenTelemetry take a dependency only on the API packages. The developers of these third-party libraries will make calls to the API to produce telemetry data.
 
-Applications that use third-party libraries that are instrumented with OpenTelemetry API control whether or not to install the SDK and generate of telemetry data. When the SDK is not installed, the API calls should be no-ops which generate minimal overhead.
+Applications that use third-party libraries that are instrumented with OpenTelemetry API control whether or not to install the SDK and generate telemetry data. When the SDK is not installed, the API calls should be no-ops which generate minimal overhead.
 
-In order to enable telemetry the application must take a dependency on the OpenTelemetry SDK. The application must also configure exporters and other plugins so that telemetry can be correctly generated and delivered to their analysis tool of choice. The details of how plugins are enabled and configured are language specific.
+In order to enable telemetry the application must take a dependency on the OpenTelemetry SDK. The application must also configure exporters and other plugins so that telemetry can be correctly generated and delivered to their analysis tool(s) of choice. The details of how plugins are enabled and configured are language specific.
 
 ### API and Minimal Implementation
 
@@ -103,9 +103,9 @@ The end-user application may decide to take a dependency on alternative implemen
 
 SDK provides flexibility and extensibility that may be used by many implementations. Before developing an alternative implementation, please, review extensibility points provided by OpenTelemetry.
 
-An example use case for alternate implementations is automated testing. A mock implementation can be plugged in during automated tests. For example it can store all generated telemetry data in memory and provide a capability to inspect this stored data. This will allow the tests to verify that the telemetry is generated correctly. OpenTelemetry client authors are encouraged to provide such mock implementation.
+An example use-case for alternate implementations is automated testing. A mock implementation can be plugged in during automated tests. For example, it can store all generated telemetry data in memory and provide a capability to inspect this stored data. This will allow the tests to verify that the telemetry is generated correctly. OpenTelemetry client authors are encouraged to provide such a mock implementation.
 
-Note that mocking is also possible by using SDK and a Mock `Exporter` without needed to swap out the entire SDK.
+Note that mocking is also possible by using SDK and a Mock `Exporter` without needing to swap out the entire SDK.
 
 The mocking approach chosen will depend on the testing goals and at which point exactly it is desirable to intercept the telemetry data path during the test.
 
@@ -117,7 +117,7 @@ This decoupling of version numbers allows OpenTelemetry client authors to make A
 
 Because API and SDK package version numbers are not coupled, every API and SDK package release MUST clearly mention the Specification version number that they implement. In addition, if a particular version of SDK package is only compatible with a specific version of API package, then this compatibility information must be also published by OpenTelemetry client authors. OpenTelemetry client authors MUST include this information in the release notes. For example, the SDK package release notes may say: "SDK 0.3.4, use with API 0.1.0, implements OpenTelemetry Specification 0.1.0".
 
-_TODO: How should third party library authors who use OpenTelemetry for instrumentation guide their end users to find the correct SDK package?_
+_TODO: How should third-party library authors who use OpenTelemetry for instrumentation guide their end users to find the correct SDK package?_
 
 ### Performance and Blocking
 
