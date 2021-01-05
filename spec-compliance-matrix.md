@@ -126,7 +126,7 @@ status of the feature is not known.
 |OTEL_EXPORTER_OTLP_*                          |   | +  |   | +    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
-|OTEL_EXPORTER                                 |   | -  |   | +    |    |      |   |    |   |  - | -   |
+|OTEL_EXPORTERS                                |   | -  |   | -    |    |      |   |    |   | -  | -   |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   | +    | +  |      |   |    |   | -  | -   |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   | +    | +  |      |   |    |   | -  | -   |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   | +    | +  |      |   |    |   | -  | -   |

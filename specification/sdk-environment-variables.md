@@ -77,9 +77,9 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 | Name          | Description                                                                  | Default |
 | ------------- | ---------------------------------------------------------------------------- | ------- |
-| OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp"  |
+| OTEL_EXPORTERS | Exporters to be used as a comma separated list | "otlp"  |
 
-Known values for OTEL_EXPORTER are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
+Known values for OTEL_EXPORTERS are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
 
 Note: "otlp" is equivalent to "otlp_span,otlp_metric".
 
