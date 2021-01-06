@@ -75,13 +75,24 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 ## Exporter Selection
 
+We define environment variables for setting a single exporter per signal. SDKs SHOULD provide a means to
+set multiple exporters for a signal programmatically.
+
 | Name          | Description                                                                  | Default |
 | ------------- | ---------------------------------------------------------------------------- | ------- |
-| OTEL_EXPORTERS | Exporters to be used as a comma separated list | "otlp"  |
+| OTEL_TRACE_EXPORTER | Trace exporter to be used | "otlp"  |
+| OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  |
 
-Known values for OTEL_EXPORTERS are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
+Known values for OTEL_TRACE_EXPORTER are:
 
-Note: "otlp" is equivalent to "otlp_span,otlp_metric".
+- `"otlp"`: [OTLP](./protocol/otlp.md)
+- `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
+- `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
+
+Known values for OTEL_METRICS_EXPORTER are:
+
+- `"otlp"`: [OTLP](./protocol/otlp.md)
+- `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 
 ## Language Specific Environment Variables
 
