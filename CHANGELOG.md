@@ -34,13 +34,13 @@ Updates:
 - Add default ratio when TraceIdRatioSampler is specified by environment variable but
   no ratio is.
   ([#1322](https://github.com/open-telemetry/opentelemetry-specification/pull/1322))
+- Require schemed endpoints for OTLP exporters
+  ([1234](https://github.com/open-telemetry/opentelemetry-specification/pull/1234))
 
 ## v0.7.0 (11-18-2020)
 
 New:
 
-- Allow OTLP/HTTP endpoint to include scheme
-  ([1234](https://github.com/open-telemetry/opentelemetry-specification/pull/1234))
 - Document service name mapping for Jaeger exporters
   ([1222](https://github.com/open-telemetry/opentelemetry-specification/pull/1222))
 - Change default OTLP port number
