@@ -2,6 +2,22 @@
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
+## Special configuration types
+
+### Duration
+
+Any value that represents a duration, for example a timeout, MUST interpret a purely numeric value as a number of
+milliseconds. Formatted strings with an integer followed immediately by a unit string MAY be interpreted for the
+following units:
+
+- `"ms"` - milliseconds
+- `"s"` - seconds
+- `"m"` - minutes
+- `"h"` - hours
+- `"d"` - days
+
+For example, the value `12000` indicates 12000 milliseconds, which is equivalent to specifying `12s`.
+
 ## General SDK Configuration
 
 | Name                     | Description                                       | Default                           | Notes                               |
@@ -33,8 +49,8 @@ Depending on the value of `OTEL_TRACE_SAMPLER`, `OTEL_TRACE_SAMPLER_ARG` may be 
 
 | Name                           | Description                                    | Default | Notes                                                 |
 | ------------------------------ | ---------------------------------------------- | ------- | ----------------------------------------------------- |
-| OTEL_BSP_SCHEDULE_DELAY_MILLIS | Delay interval between two consecutive exports | 5000    |                                                       |
-| OTEL_BSP_EXPORT_TIMEOUT_MILLIS | Maximum allowed time to export data            | 30000   |                                                       |
+| OTEL_BSP_SCHEDULE_DELAY        | Delay interval between two consecutive exports | 5000    |                                                       |
+| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time to export data            | 30000   |                                                       |
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
