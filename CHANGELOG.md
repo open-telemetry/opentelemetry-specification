@@ -7,6 +7,11 @@ release.
 
 ## Unreleased
 
+New:
+
+- Add `cloud.infrastructure_service` resource attribute
+  ([#1112](https://github.com/open-telemetry/opentelemetry-specification/pull/1112))
+  
 Updates:
 
 - Additional Cassandra semantic attributes

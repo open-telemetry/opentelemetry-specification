@@ -115,7 +115,7 @@ It produces an output called `SamplingResult` which contains:
   * `DROP` - `IsRecording() == false`, span will not be recorded and all events and attributes
   will be dropped.
   * `RECORD_ONLY` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
-  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
+  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 * A `Tracestate` that will be associated with the `Span` through the new
