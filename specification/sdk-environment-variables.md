@@ -75,8 +75,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 ## Exporter Selection
 
-We define environment variables for setting a single exporter per signal. SDKs SHOULD provide a means to
-set multiple exporters for a signal programmatically.
+We define environment variables for setting a single exporter per signal.
 
 | Name          | Description                                                                  | Default |
 | ------------- | ---------------------------------------------------------------------------- | ------- |
