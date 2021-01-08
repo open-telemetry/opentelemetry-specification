@@ -39,8 +39,8 @@ groups:
               - id: cloudscape
                 value: 'cloudscape'
                 brief: 'Cloudscape'
-              - id: hsqlsb
-                value: 'hsqlsb'
+              - id: hsqldb
+                value: 'hsqldb'
                 brief: 'HyperSQL DataBase'
               - id: progress
                 value: 'progress'
@@ -141,6 +141,9 @@ groups:
               - id: neo4j
                 value: 'neo4j'
                 brief: 'Neo4j'
+              - id: geode
+                value: 'geode'
+                brief: 'Apache Geode'
         - id: connection_string
           tag: connection-level
           type: string
