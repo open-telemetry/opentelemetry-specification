@@ -44,23 +44,37 @@ Additionally, for tracing there are the following goals:
 1. Maintain parent-child span relationship from applications and libraries
 2. Maintain unscoped span relationships from applications and libraries
 
-
-
-
-
 # Trace
 
+OpenTelemetry will provide an OpenCensus-Trace-Shim component that can be
+added as a dependency to ensure compatibility with OpenCensus.
 
-
+This component MUST be an optional dependency.
 
 ## Creating Spans in OpenCensus
 
-When the shim is in place, all OpenCensus Spans should be sent through an
+When the shim is in place, all OpenCensus Spans MUST be sent through an
 OpenTelemetry `Tracer` as specified for the OpenTelemetry API.
 
+This mechanism SHOULD be seamless to the user in languages that allow discovery
+and auto injection of dependencies.
+
+### Known Incompatibilities
+
+Spans that do not start a scope, i.e. any child span created have to add an
+`.addParent(span)` in its builder to be exported as a child span of these spans, 
+are not in scope for this project. For these it is not possible for the user
+applications to migrate without the users modifying their code manually
+themselves, as OpenTelemetry has different rules for [parent spans at
+span creation](../trace/api.md#span-creation).
+
+Links added to spans after the spans are created. This is [not supported in
+OpenTelemetry](../api.md#specifying-links), therefore OpenCensus spans that
+have links added to them after creation will be mapped to OpenTelemetry spans
+without the links.
 
 
-TODO - more.
+TODO - other span operations in OpenCensus.
 
 
 ## Context Propogation
