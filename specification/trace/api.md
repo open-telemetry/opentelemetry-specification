@@ -102,10 +102,13 @@ The `TracerProvider` MUST provide the following functions:
 This API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
-  (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
-  In case an invalid name (null or empty string) is specified, a working
-  default Tracer implementation as a fallback is returned rather than returning
-  null or throwing an exception.
+  (e.g. `io.opentelemetry.contrib.mongodb`). [Instrumented library](../glossary.md#instrumented-library)
+  and [Instrumentation library](../glossary.md#instrumentation-library) may be
+  the same library if application or library has built-in OpenTelemetry instrumentation.
+  In that scenario the `name` denotes a module name or component name within the library
+  or application being instrumented. In case an invalid name (null or empty string)
+  is specified, a working default Tracer implementation as a fallback is returned
+  rather than returning null or throwing an exception.
   A library, implementing the OpenTelemetry API *may* also ignore this name and
   return a default instance for all calls, if it does not support "named"
   functionality (e.g. an implementation which is not even observability-related).
