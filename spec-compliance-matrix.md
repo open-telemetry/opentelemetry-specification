@@ -69,7 +69,7 @@ status of the feature is not known.
 |Allow samplers to modify tracestate           |   | +  |   | +    | +  | +    |   | +  |   |    |  +  |
 |ShouldSample gets full parent Context         |   | +  | + | +    | +  | +    |   |    |   |    |  +  |
 |[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |   |    |   | +    | +  |      |   |    |   |    | +   |
-|SDK Trace & Span ID generation is customizable| + | +  | + |  +   | +  |      |   |    |   | +  |     |
+|SDK Trace & Span ID generation is customizable| + | +  | + |  +   | +  |      |   |    |   | -  |     |
 
 ## Baggage
 
