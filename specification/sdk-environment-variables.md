@@ -3,6 +3,8 @@
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
 If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
+For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
+For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
 
 ## General SDK Configuration
 
@@ -10,13 +12,19 @@ If an SDK chooses to support an integer-valued environment variable, it SHOULD s
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
-| OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. Unrecognized values MUST generate a warning and be gracefully ignored. |
+| OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
 | OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
 | OTEL_TRACE_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACE_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACE_SAMPLER_ARG is not set.  |
 
-Known values for OTEL_PROPAGATORS are: "tracecontext", "baggage", "b3", "b3multi", "jaeger".
-Additional values can be specified in the respective SDK's documentation, in case third party `Propagator`s are supported, such as "xray" or "ottracer".
-See [B3 propagation](./context/api-propagators.md#b3-requirements) for details regarding single and multi encoding.
+Known values for OTEL_PROPAGATORS are:
+
+- `"tracecontext"`: [W3C Trace Context](https://www.w3.org/TR/trace-context/)
+- `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
+- `"b3"`: [B3 Single](https://github.com/openzipkin/b3-propagation#single-header)
+- `"b3multi"`: [B3 Multi](https://github.com/openzipkin/b3-propagation#multiple-headers)
+- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
+- `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
+- `"ottracer"`: [Lightstep](https://github.com/lightstep/lightstep-tracer-java-common/blob/master/common/src/main/java/com/lightstep/tracer/shared/TextMapPropagator.java) (_third party_)
 
 Known values for `OTEL_TRACE_SAMPLER` are:
 
@@ -29,7 +37,7 @@ Known values for `OTEL_TRACE_SAMPLER` are:
 
 Depending on the value of `OTEL_TRACE_SAMPLER`, `OTEL_TRACE_SAMPLER_ARG` may be set as follows:
 
-- For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25".
+- For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25". Default is 1.0 if unset.
 
 ## Batch Span Processor
 
@@ -81,7 +89,14 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | ------------- | ---------------------------------------------------------------------------- | ------- |
 | OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp"  |
 
-Known values for OTEL_EXPORTER are: "otlp", "jaeger", "zipkin", "prometheus", "otlp_span", "otlp_metric".
+Known values for OTEL_EXPORTER are:
+
+- `"otlp"`: [OTLP Trace and Metrics](./protocol/otlp.md)
+- `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
+- `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
+- `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
+- `"otlp_span"`: [OTLP Trace](./protocol/otlp.md)
+- `"otlp_metric"`: [OTLP Metrics](./protocol/otlp.md)
 
 Note: "otlp" is equivalent to "otlp_span,otlp_metric".
 
