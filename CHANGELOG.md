@@ -7,6 +7,11 @@ release.
 
 ## Unreleased
 
+New:
+
+- Add `cloud.infrastructure_service` resource attribute
+  ([#1112](https://github.com/open-telemetry/opentelemetry-specification/pull/1112))
+  
 Updates:
 
 - Additional Cassandra semantic attributes
@@ -26,6 +31,9 @@ Updates:
   ([#1269](https://github.com/open-telemetry/opentelemetry-specification/pull/1269))
 - Add requirement that the SDK allow custom generation of Trace IDs and Span IDs
   ([#1006](https://github.com/open-telemetry/opentelemetry-specification/pull/1006))
+- Add default ratio when TraceIdRatioSampler is specified by environment variable but
+  no ratio is.
+  ([#1322](https://github.com/open-telemetry/opentelemetry-specification/pull/1322))
 
 ## v0.7.0 (11-18-2020)
 

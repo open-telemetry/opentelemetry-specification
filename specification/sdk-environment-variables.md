@@ -36,7 +36,7 @@ Known values for `OTEL_TRACE_SAMPLER` are:
 
 Depending on the value of `OTEL_TRACE_SAMPLER`, `OTEL_TRACE_SAMPLER_ARG` may be set as follows:
 
-- For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25".
+- For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25". Default is 1.0 if unset.
 
 ## Batch Span Processor
 

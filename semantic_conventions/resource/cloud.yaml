@@ -37,3 +37,57 @@ groups:
         note: >
           In AWS, this is called availability-zone.
         examples: ['us-central1-a']
+      - id: infrastructure_service
+        type:
+          allow_custom_values: true
+          members:
+            - id: AWS_EC2
+              value: 'aws_ec2'
+              brief: AWS Elastic Compute Cloud
+            - id: AWS_ECS
+              value: 'aws_ecs'
+              brief: AWS Elastic Container Service
+            - id: AWS_EKS
+              value: 'aws_eks'
+              brief: AWS Elastic Kubernetes Service
+            - id: AWS_Lambda
+              value: 'aws_lambda'
+              brief: AWS Lambda
+            - id: AWS_ElasticBeanstalk
+              value: 'aws_elastic_beanstalk'
+              brief: AWS Elastic Beanstalk
+            - id: Azure_VM
+              value: 'azure_vm'
+              brief: Azure Virtual Machines
+            - id: Azure_ContainerInstances
+              value: 'azure_container_instances'
+              brief: Azure Container Instances
+            - id: Azure_AKS
+              value: 'azure_aks'
+              brief: Azure Kubernetes Service
+            - id: Azure_Functions
+              value: 'azure_functions'
+              brief: Azure Functions
+            - id: Azure_AppService
+              value: 'azure_app_service'
+              brief: Azure App Service
+            - id: GCP_ComputeEngine
+              value: 'gcp_compute_engine'
+              brief: GCP Compute Engine
+            - id: GCP_CloudRun
+              value: 'gcp_cloud_run'
+              brief: GCP Cloud Run
+            - id: GCP_GKE
+              value: 'gcp_gke'
+              brief: Google Kubernetes Engine
+            - id: GCP_CloudFunctions
+              value: 'gcp_cloud_functions'
+              brief: GCP Cloud Functions
+            - id: GCP_AppEngine
+              value: 'gcp_app_engine'
+              brief: GCP App Engine
+        brief: >
+          The cloud infrastructure resource in use.
+        note: >
+          The prefix of the service SHOULD match the one specified in `cloud.provider`.
+        examples: ['aws_ec2', 'azure_vm', 'gcp_compute_engine']

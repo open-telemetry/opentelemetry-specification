@@ -68,7 +68,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `redshift` | Amazon Redshift |
 | `hive` | Apache Hive |
 | `cloudscape` | Cloudscape |
-| `hsqlsb` | HyperSQL DataBase |
+| `hsqldb` | HyperSQL DataBase |
 | `progress` | Progress Database |
 | `maxdb` | SAP MaxDB |
 | `hanadb` | SAP HANA |
@@ -102,6 +102,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `cosmosdb` | Microsoft Azure Cosmos DB |
 | `dynamodb` | Amazon DynamoDB |
 | `neo4j` | Neo4j |
+| `geode` | Apache Geode |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
