@@ -1,6 +1,5 @@
 # OpenCensus Compatibility
 
-
 ## Abstract
 
 The OpenTelemetry project aims to provide backwards compatibility with the
@@ -8,7 +7,7 @@ The OpenTelemetry project aims to provide backwards compatibility with the
 instrumented codebases.
 
 This functionality will be provided as a bridge layer implementing the
-[OpenCensus API](https://github.com/census-instrumentation/opencensus-specs) 
+[OpenCensus API](https://github.com/census-instrumentation/opencensus-specs)
 using the OpenTelemetry API. This layer MUST NOT rely on implementation specific
 details of the OpenTelemetry SDK.
 
@@ -30,8 +29,7 @@ Compatibility for these is defined separately.
 > libraries and applications need make *no change* to their API usage in order
 > to use OpenTelemetry.   All changes should be solely configuration / setup.
 
-
-## Goals 
+## Goals
 
 OpenTelemetry<->OpenCensus tracing compatibility has the following goals:
 
@@ -44,14 +42,14 @@ Additionally, for tracing there are the following goals:
 1. Maintain parent-child span relationship from applications and libraries
 2. Maintain unscoped span relationships from applications and libraries
 
-# Trace
+## Trace
 
 OpenTelemetry will provide an OpenCensus-Trace-Shim component that can be
 added as a dependency to ensure compatibility with OpenCensus.
 
 This component MUST be an optional dependency.
 
-## Creating Spans in OpenCensus
+### Creating Spans in OpenCensus
 
 When the shim is in place, all OpenCensus Spans MUST be sent through an
 OpenTelemetry `Tracer` as specified for the OpenTelemetry API.
@@ -59,66 +57,90 @@ OpenTelemetry `Tracer` as specified for the OpenTelemetry API.
 This mechanism SHOULD be seamless to the user in languages that allow discovery
 and auto injection of dependencies.
 
-### Known Incompatibilities
+### Methods on Spans
 
-Spans that do not start a scope, i.e. any child span created have to add an
-`.addParent(span)` in its builder to be exported as a child span of these spans, 
-are not in scope for this project. For these it is not possible for the user
-applications to migrate without the users modifying their code manually
-themselves, as OpenTelemetry has different rules for [parent spans at
-span creation](../trace/api.md#span-creation).
+All specified methods in OpenCensus will delegate to the underlying `Span` of
+OpenTelemetry.
 
-Links added to spans after the spans are created. This is [not supported in
-OpenTelemetry](../api.md#specifying-links), therefore OpenCensus spans that
-have links added to them after creation will be mapped to OpenTelemetry spans
-without the links.
+#### Known Incompatibilities
 
+Below are listed known incompatibilities between OpenTelemetry and OpenCensus
+specifications.   Applications leveraging unspecified behavior from OpenCensus
+that *is* specified incompatibly within OpenTelemetry are not eligble for
+using the OpenCensus <-> OpenTelemetry bridge.
 
-TODO - other span operations in OpenCensus.
+1. In OpenCensus, there is [no specification](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/Span.md#span-creation)
+   when parent spans can be specified on a child span.   OpenTelemetry specifies
+   that [parent spans must be specified during span creation](../trace/api.md#span-creation).
+   This leads to some issues with OpenCensus APIs that allowed flexible
+   speciifcaiton of parent spans post-initialization.
+2. Links added to spans after the spans are created. This is [not supported in
+   OpenTelemetry](../api.md#specifying-links), therefore OpenCensus spans that
+   have links added to them after creation will be mapped to OpenTelemetry spans
+   without the links.
+3. OpenTelemetry specifies that samplers are
+   [attached to an entire Trace provider](../trace/sdk.md#sampling)
+   while [OpenCensus allows custom samplers per span](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/Sampling.md#how-can-users-control-the-sampler-that-is-used-for-sampling).
+4. TraceFlags in both OpenCensus and OpenTelemetry only specify the single
+   `sampled` flag ([OpenTelemetry](../trace/api.md#spancontext),
+   [OpenCensus](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/TraceConfig.md#traceparams)).
+   Some OpenCensus APIs support "debug" and "defer" tracing flags in additon to
+   "sampled".  In this case, the OpenCensus bridge will do its best to support
+   and translate unspecified flags into the closest OpenTelemetry equivalent.
 
-
-## Context Propogation
+### Context Propagation
 
 The shim will provide an OpenCensus `PropogationComponent` implementation which
 maps OpenCenus binary and text progation to OpenTelemetry context.
 
-### Text Context
+#### Text Context
 
 This adapter MUST use an OpenTelemetry `TextMapPropogator` to implement the
 OpenCensus `TextFormat`.
 
 This adapter SHOULD use configured OpenTelemetry `TextMapPropogator` on the
-OpenTelemetry `TraceProvider` for text format propogation.
+OpenTelemetry `TraceProvider` for text format propagation.
 
 This adapter MUST provide a default `W3CTraceContextPropogator` in lieu of a
 propogator defined against the `TraceProvider`.
 
-### B3 Context
+#### B3 Context
 
 This adapter SHOULD use an contributed OpenTelemetry `B3Propogator` for the
 B3 text format.
 
-### OpenCensus Binary Context
+#### OpenCensus Binary Context
 
 This adapter MUST implement OpenCensus `BinaryPropogator` to write OpenCensus
 binary format using OpenTelemetry's context.
 
-## Resources
+### Resources
 
 Note: resources appear not to be usable in the "API" section of OpenCensus.
 
-## Semantic Convention Mappings
+### Semantic Convention Mappings
 
 Where possible, the tracing shim should provide mappings of labels defined
 within the OpenTelemetry semantic convetions.  
 
-TODO - Define
-
 > The principle is to ensure OpenTelemetry exporters, which use these semantic
 > conventions, are likely to export the correct data.
 
+#### HTTP Attributes
 
-# Metrics / Stats
+OpenCensus specifies the following [HTTP Attributes](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#attributes):
+
+| OpenCensus Name    | OpenTelemetry Name | Comments             |
+| ------------------ | ------------------ |----------------------|
+| `http.host`        | `http.host`        |                      |
+| `http.method`      | `http.method`      |                      |
+| `http.user_agent`  | `http.user_agent`  |                      |
+| `http.status_code` | `http.status_code` |                      |
+| `http.url`         | `http.url`         |                      |
+| `http.path`        | `http.target`      | key-name change only |
+| `http.route`       | N/A                | Pass through ok      |
+
+## Metrics / Stats
 
 Metric compatibility with OpenCensus remains unspecified as the OpenTelemetry
 metrics specification solidifies for GA.   Once GA on metrics is declared,
