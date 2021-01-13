@@ -10,6 +10,9 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 - [Common](#common)
   * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
+  * [Instrumentation](#instrumentation)
+  * [Manual Instrumentation](#manual-instrumentation)
+  * [Automatic Instrumentation](#automatic-instrumentation)
   * [Telemetry SDK](#telemetry-sdk)
   * [Exporter Library](#exporter-library)
   * [Instrumented Library](#instrumented-library)
@@ -58,9 +61,11 @@ Refers to OpenTelemetry enablement via code, which typically includes:
 - Importing the OpenTelemetry [tracing SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md), [metrics SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/sdk.md), or [logging SDK](https://github.com/open-telemetry/opentelemetry-specification/issues/894)
 - Importing and/or configuring one or more [exporter libraries](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/glossary.md#exporter-library)
 
-### Automatic [Auto-] Instrumentation
+### Automatic Instrumentation
 
 Refers to OpenTelemetry enablement via NON-code configuration and automatic telemetry collection.
+
+Synonym: *Auto-instrumentation*.
 
 ### Telemetry SDK
 
