@@ -16,6 +16,9 @@ Updates:
 
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
+- OTEL_EXPORTER environment variable replaced with OTEL_TRACE_EXPORTER and
+  OTEL_METRICS_EXPORTER which each accept only a single value, not a list.
+  ([#1318](https://github.com/open-telemetry/opentelemetry-specification/pull/1318))
 - `process.runtime.description` resource convention: Add `java.vm.name`
   ([#1242](https://github.com/open-telemetry/opentelemetry-specification/pull/1242))
 - Refine span name guideline for SQL database spans
