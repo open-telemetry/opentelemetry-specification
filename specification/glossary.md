@@ -52,7 +52,7 @@ Metrics, logs, and traces exported to telemetry backends are examples of out-of-
 
 ### Instrumentation
 
-In the narrowest sense, coding against the OpenTelemetry [Tracing API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md) or [Metrics API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md).
+In the narrowest sense, coding against the OpenTelemetry [Tracing API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md) or [Metrics API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md), to collect telemetry from end user code or from shared frameworks.
 
 ### Manual Instrumentation
 
