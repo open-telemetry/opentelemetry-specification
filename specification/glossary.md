@@ -47,6 +47,21 @@ usually asynchronously by background routines
 rather than from the critical path of the business logic.
 Metrics, logs, and traces exported to telemetry backends are examples of out-of-band data.
 
+### Instrumentation
+
+In the narrowest sense, coding against the OpenTelemetry [Tracing API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md) or [Metrics API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md).
+
+### Manual Instrumentation
+
+Refers to OpenTelemetry enablement via code, which typically includes:
+- Importing the OpenTelemetry [Tracing API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md) or [Metrics API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md)
+- Importing the OpenTelemetry [tracing SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md), [metrics SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/sdk.md), or [logging SDK](https://github.com/open-telemetry/opentelemetry-specification/issues/894)
+- Importing and/or configuring one or more [exporter libraries](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/glossary.md#exporter-library)
+
+### Automatic [Auto-] Instrumentation
+
+Refers to OpenTelemetry enablement via NON-code configuration and automatic telemetry collection.
+
 ### Telemetry SDK
 
 Denotes the library that implements the *OpenTelemetry API*.
