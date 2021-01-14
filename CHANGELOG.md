@@ -11,6 +11,8 @@ New:
 
 - Add `cloud.infrastructure_service` resource attribute
   ([#1112](https://github.com/open-telemetry/opentelemetry-specification/pull/1112))
+- Add `k8s.node` resource attributes
+  ([#1341](https://github.com/open-telemetry/opentelemetry-specification/pull/1341))
   
 Updates:
 
