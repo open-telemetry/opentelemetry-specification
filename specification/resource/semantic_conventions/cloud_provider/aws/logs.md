@@ -5,12 +5,12 @@
 **Description:** Log attributes for Amazon Web Services.
 
 <!-- semconv aws.log -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `aws.log.group.names` | string[] | The name(s) of the AWS log group(s) an application is writing to. [1] | `/aws/lambda/my-function`<br>`opentelemetry-service` | No |
-| `aws.log.group.arns` | string[] | The Amazon Resource Name(s) (ARN) of the AWS log group(s). [2] | `arn:aws:logs:us-west-1:123456789012:log-group:/aws/my/group:*` | No |
-| `aws.log.stream.names` | string[] | The name(s) of the AWS log stream(s) an application is writing to. | `logs/main/10838bed-421f-43ef-870a-f43feacbbb5b` | No |
-| `aws.log.stream.arns` | string[] | The ARN(s) of the AWS log stream(s). [3] | `arn:aws:logs:us-west-1:123456789012:log-group:/aws/my/group:log-stream:logs/main/10838bed-421f-43ef-870a-f43feacbbb5b` | No |
+| `aws.log.group.names` | string[] | The name(s) of the AWS log group(s) an application is writing to. [1] | `[/aws/lambda/my-function, opentelemetry-service]` | No |
+| `aws.log.group.arns` | string[] | The Amazon Resource Name(s) (ARN) of the AWS log group(s). [2] | `[arn:aws:logs:us-west-1:123456789012:log-group:/aws/my/group:*]` | No |
+| `aws.log.stream.names` | string[] | The name(s) of the AWS log stream(s) an application is writing to. | `[logs/main/10838bed-421f-43ef-870a-f43feacbbb5b]` | No |
+| `aws.log.stream.arns` | string[] | The ARN(s) of the AWS log stream(s). [3] | `[arn:aws:logs:us-west-1:123456789012:log-group:/aws/my/group:log-stream:logs/main/10838bed-421f-43ef-870a-f43feacbbb5b]` | No |
 
 **[1]:** Multiple log groups must be supported for cases like multi-container applications, where a single application has sidecar containers, and each write to their own log group.
 
