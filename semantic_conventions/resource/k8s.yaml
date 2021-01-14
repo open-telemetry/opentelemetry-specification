@@ -10,6 +10,22 @@ groups:
           The name of the cluster.
         examples: ['opentelemetry-cluster']
 
+  - id: k8s.node
+    prefix: k8s.node
+    brief: >
+      A Kubernetes Node.
+    attributes:
+      - id: name
+        type: string
+        brief: >
+          The name of the node.
+        examples: ['opentelemetry-node']
+      - id: ip
+        type: string
+        brief: >
+          The address of the node (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6.
+        examples: ['127.0.0.1']
+
   - id: k8s.namespace
     prefix: k8s.namespace
     brief: >

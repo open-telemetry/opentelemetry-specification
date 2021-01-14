@@ -5,13 +5,13 @@
 **Description:** A cloud infrastructure (e.g. GCP, Azure, AWS).
 
 <!-- semconv cloud -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `cloud.provider` | string | Name of the cloud provider. | `gcp` | No |
 | `cloud.account.id` | string | The cloud account ID used to identify different entities. | `opentelemetry` | No |
 | `cloud.region` | string | A specific geographical location where different entities can run. | `us-central1` | No |
 | `cloud.zone` | string | Zones are a sub set of the region connected through low-latency links. [1] | `us-central1-a` | No |
-| `cloud.infrastructure_service` | string | The cloud infrastructure resource in use. [2] | `aws_ec2`<br>`azure_vm`<br>`gcp_compute_engine` | No |
+| `cloud.infrastructure_service` | string | The cloud infrastructure resource in use. [2] | `aws_ec2`; `azure_vm`; `gcp_compute_engine` | No |
 
 **[1]:** In AWS, this is called availability-zone.
 
