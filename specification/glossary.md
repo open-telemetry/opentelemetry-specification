@@ -51,7 +51,7 @@ Metrics, logs, and traces exported to telemetry backends are examples of out-of-
 
 ### Manual Instrumentation
 
-Coding against the OpenTelemetry API such as [Tracing API](trace/api.md) and [Metrics API](metrics/api.md) to collect telemetry from end-user code or shared frameworks (e.g. MongoDB, Redis, etc.).
+Coding against the OpenTelemetry API such as the [Tracing API](trace/api.md) and/or [Metrics API](metrics/api.md) to collect telemetry from end-user code or shared frameworks (e.g. MongoDB, Redis, etc.).
 
 ### Automatic Instrumentation
 
