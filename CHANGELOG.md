@@ -39,6 +39,8 @@ Updates:
 - Add default ratio when TraceIdRatioSampler is specified by environment variable but
   no ratio is.
   ([#1322](https://github.com/open-telemetry/opentelemetry-specification/pull/1322))
+- Require schemed endpoints for OTLP exporters
+  ([1234](https://github.com/open-telemetry/opentelemetry-specification/pull/1234))
 
 ## v0.7.0 (11-18-2020)
 
