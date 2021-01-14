@@ -10,6 +10,8 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 - [Common](#common)
   * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
+  * [Manual Instrumentation](#manual-instrumentation)
+  * [Automatic Instrumentation](#automatic-instrumentation)
   * [Telemetry SDK](#telemetry-sdk)
   * [Exporter Library](#exporter-library)
   * [Instrumented Library](#instrumented-library)
@@ -46,6 +48,16 @@ it is transmitted from applications via dedicated messages,
 usually asynchronously by background routines
 rather than from the critical path of the business logic.
 Metrics, logs, and traces exported to telemetry backends are examples of out-of-band data.
+
+### Manual Instrumentation
+
+Coding against the OpenTelemetry API such as the [Tracing API](trace/api.md), [Metrics API](metrics/api.md), or others to collect telemetry from end-user code or shared frameworks (e.g. MongoDB, Redis, etc.).
+
+### Automatic Instrumentation
+
+Refers to telemetry collection methods that do not require the end-user to write or access application code to use the OpenTelemetry APIs. Methods vary by programming language, and examples include bytecode injection or monkey patching.
+
+Synonym: *Auto-instrumentation*.
 
 ### Telemetry SDK
 
