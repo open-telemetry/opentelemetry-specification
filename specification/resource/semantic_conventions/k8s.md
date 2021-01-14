@@ -20,7 +20,7 @@ Kubernetes object, but "name" is usually more user friendly so can be also set.
 **Description:** A Kubernetes Cluster.
 
 <!-- semconv k8s.cluster -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.cluster.name` | string | The name of the cluster. | `opentelemetry-cluster` | No |
 <!-- endsemconv -->
@@ -35,7 +35,7 @@ a namespace, but not across namespaces.
 **Description:** A Kubernetes Namespace.
 
 <!-- semconv k8s.namespace -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.namespace.name` | string | The name of the namespace that the pod is running in. | `default` | No |
 <!-- endsemconv -->
@@ -50,7 +50,7 @@ containers on your cluster.
 **Description:** A Kubernetes Pod object.
 
 <!-- semconv k8s.pod -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.pod.uid` | string | The UID of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.pod.name` | string | The name of the Pod. | `opentelemetry-pod-autoconf` | No |
@@ -70,7 +70,7 @@ to a running container.
 **Description:** A container in a [PodTemplate](https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates).
 
 <!-- semconv k8s.container -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.container.name` | string | The name of the Container in a Pod template. | `redis` | No |
 <!-- endsemconv -->
@@ -85,7 +85,7 @@ any given time.
 **Description:** A Kubernetes ReplicaSet object.
 
 <!-- semconv k8s.replicaset -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.replicaset.uid` | string | The UID of the ReplicaSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.replicaset.name` | string | The name of the ReplicaSet. | `opentelemetry` | No |
@@ -102,7 +102,7 @@ distributed among the nodes of a cluster.
 **Description:** A Kubernetes Deployment object.
 
 <!-- semconv k8s.deployment -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.deployment.uid` | string | The UID of the Deployment. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.deployment.name` | string | The name of the Deployment. | `opentelemetry` | No |
@@ -118,7 +118,7 @@ about the ordering and uniqueness of these Pods.
 **Description:** A Kubernetes StatefulSet object.
 
 <!-- semconv k8s.statefulset -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.statefulset.uid` | string | The UID of the StatefulSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.statefulset.name` | string | The name of the StatefulSet. | `opentelemetry` | No |
@@ -133,7 +133,7 @@ A DaemonSet ensures that all (or some) Nodes run a copy of a Pod.
 **Description:** A Kubernetes DaemonSet object.
 
 <!-- semconv k8s.daemonset -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.daemonset.uid` | string | The UID of the DaemonSet. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.daemonset.name` | string | The name of the DaemonSet. | `opentelemetry` | No |
@@ -149,7 +149,7 @@ successfully terminate.
 **Description:** A Kubernetes Job object.
 
 <!-- semconv k8s.job -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.job.uid` | string | The UID of the Job. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.job.name` | string | The name of the Job. | `opentelemetry` | No |
@@ -164,7 +164,7 @@ A CronJob creates Jobs on a repeating schedule.
 **Description:** A Kubernetes CronJob object.
 
 <!-- semconv k8s.cronjob -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.cronjob.uid` | string | The UID of the CronJob. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.cronjob.name` | string | The name of the CronJob. | `opentelemetry` | No |
