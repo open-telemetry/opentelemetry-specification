@@ -50,14 +50,14 @@ Don't set the span status description if the reason can be inferred from `http.s
 ## Common Attributes
 
 <!-- semconv http -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `http.method` | string | HTTP request method. | `GET`<br>`POST`<br>`HEAD` | Yes |
+| `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Yes |
 | `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | No |
 | `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/path/12314/?q=ddds#123` | No |
 | `http.host` | string | The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4). When the header is empty or not present, this attribute should be the same. | `www.example.org` | No |
-| `http.scheme` | string | The URI scheme identifying the used protocol. | `http`<br>`https` | No |
-| `http.status_code` | number | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditional<br>If and only if one was received/sent. |
+| `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | No |
+| `http.status_code` | number | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | If and only if one was received/sent. |
 | `http.flavor` | string | Kind of HTTP protocol used [1] | `1.0` | No |
 | `http.user_agent` | string | Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | No |
 | `http.request_content_length` | number | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
@@ -166,7 +166,7 @@ If the route does not include the application root, it SHOULD be prepended to th
 If the route cannot be determined, the `name` attribute MUST be set as defined in the general semantic conventions for HTTP.
 
 <!-- semconv http.server -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `http.server_name` | string | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). [1] | `example.com` | See below |
 | `http.route` | string | The matched route (path template). | `/users/:userID?` | No |
