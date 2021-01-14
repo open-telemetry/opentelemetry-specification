@@ -5,7 +5,7 @@
 **Description:** A serverless instance.
 
 <!-- semconv faas_resource -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `faas.name` | string | The name of the function being executed. | `my-function` | Yes |
 | `faas.id` | string | The unique ID of the function being executed. [1] | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Yes |

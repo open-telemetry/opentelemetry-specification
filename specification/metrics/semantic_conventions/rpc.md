@@ -56,15 +56,15 @@ Below is a table of labels that SHOULD be included on metric events and whether
 or not they should be on the server, client or both.
 
 <!-- semconv rpc -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. | `grpc`<br>`java_rmi`<br>`wcf` | Yes |
-| [`rpc.service`](../../trace/semantic_conventions/rpc.md) | string | The full name of the service being called, including its package name, if applicable. | `myservice.EchoService` | Conditional<br>No, but recommended |
-| [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the method being called, must be equal to the $method part in the span name. | `exampleMethod` | Conditional<br>No, but recommended |
+| [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. | `grpc`; `java_rmi`; `wcf` | Yes |
+| [`rpc.service`](../../trace/semantic_conventions/rpc.md) | string | The full name of the service being called, including its package name, if applicable. | `myservice.EchoService` | No, but recommended |
+| [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the method being called, must be equal to the $method part in the span name. | `exampleMethod` | No, but recommended |
 | [`net.peer.ip`](../../trace/semantic_conventions/span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
 | [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below |
-| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | number | Remote port number. | `80`<br>`8080`<br>`443` | Conditional<br>See below |
-| [`net.transport`](../../trace/semantic_conventions/span-general.md) | string enum | Transport protocol used. See note below. | `IP.TCP` | Conditional<br>See below |
+| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | number | Remote port number. | `80`; `8080`; `443` | See below |
+| [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below. | `IP.TCP` | See below |
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
