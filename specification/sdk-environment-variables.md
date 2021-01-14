@@ -75,7 +75,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | Name                                      | Description                           | Default                                                                                                       |
 | -----------------------------             | --------------------------            | ------------------------------------------------------------------------------------------------------------  |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT             | Endpoint for Zipkin traces            | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable -->  |
-| OTEL_EXPORTER_ZIPKIN_TRANSPORT_FORMAT     | Transport format for Zipkin traces    | V2_JSON                                                                                                       |
+| OTEL_EXPORTER_ZIPKIN_TRANSPORT_FORMAT     | Transport format for Zipkin traces    | V2_PROTOBUF                                                                                                   |
 
 Known values for OTEL_EXPORTER_ZIPKIN_TRANSPORT_FORMAT are:
 
