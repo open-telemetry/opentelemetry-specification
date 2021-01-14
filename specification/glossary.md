@@ -10,7 +10,6 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 - [Common](#common)
   * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
-  * [Instrumentation](#instrumentation)
   * [Manual Instrumentation](#manual-instrumentation)
   * [Automatic Instrumentation](#automatic-instrumentation)
   * [Telemetry SDK](#telemetry-sdk)
