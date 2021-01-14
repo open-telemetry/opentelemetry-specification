@@ -50,20 +50,13 @@ usually asynchronously by background routines
 rather than from the critical path of the business logic.
 Metrics, logs, and traces exported to telemetry backends are examples of out-of-band data.
 
-### Instrumentation
-
-In the narrowest sense, coding against the OpenTelemetry [Tracing API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md) or [Metrics API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md), to collect telemetry from end user code or from shared frameworks.
-
 ### Manual Instrumentation
 
-Refers to OpenTelemetry enablement via code, which typically includes:
-- Importing the OpenTelemetry [Tracing API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md) or [Metrics API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md)
-- Importing the OpenTelemetry [tracing SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md), [metrics SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/sdk.md), or [logging SDK](https://github.com/open-telemetry/opentelemetry-specification/issues/894)
-- Importing and/or configuring one or more [exporter libraries](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/glossary.md#exporter-library)
+Coding against the OpenTelemetry [Tracing API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md) or [Metrics API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md), to collect telemetry from end-user code or shared frameworks (e.g. MongoDB, Redis, etc.).
 
 ### Automatic Instrumentation
 
-Refers to OpenTelemetry enablement via NON-code configuration and automatic telemetry collection.
+Refers to telemetry collection methods that do not require the end-user to write or access application code to use the OpenTelemetry APIs. Methods that vary by programming language, and examples include bytecode injection or monkey patching.
 
 Synonym: *Auto-instrumentation*.
 
