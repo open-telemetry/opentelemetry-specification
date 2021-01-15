@@ -9,9 +9,9 @@
   * [Stability](#stability)
     + [API Stability](#api-stability)
     + [SDK Stability](#sdk-stability)
-    + [Semantic Conventions Stability](#semantic-conventions-stability)
     + [Contrib Stability](#contrib-stability)
     + [NOT DEFINED: Telemetry Stability](#not-defined-telemetry-stability)
+    + [NOT DEFINED: Semantic Conventions Stability](#not-defined-semantic-conventions-stability)
   * [Deprecation](#deprecation)
   * [Removal](#removal)
   * [A note on replacing signals](#a-note-on-replacing-signals)
@@ -105,13 +105,9 @@ Examples of constructors include configuration objects, environment variables, a
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
 
-#### Semantic Conventions Stability
-
-Semantic Conventions MUST NOT be removed once they are stable.
-New conventions MAY be added to replace usage of older conventions, but the older conventions MUST NOT be removed.
-Older conventions MUST be marked as deprecated when they are replaced by newer conventions.
-
 #### Contrib Stability
+
+**NOTE: Until telemetry stability is defined, Contrib instrumentation MUST NOT be marked as stable. See below.**
 
 Plugins, instrumentation, and other contrib packages SHOULD be kept up to date and compatible with the latest versions of the API, SDK, and Semantic Conventions.
 If a release of the API, SDK, or Semantic Conventions contains changes which are relevant to a contrib package, that package SHOULD be updated and released in a timely fashion.
@@ -133,7 +129,13 @@ A new, incompatible version of an integration SHOULD be released as separate con
 Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid breaking analysis tools, such as dashboards and alerts.
 However, it is not clear at this time what type of instrumentation changes (for example, adding additional spans and labels) would actually cause a breaking change.
 
-**Until telemetry stability is defined, Contrib instrumentation MUST NOT be marked as stable.**
+#### NOT DEFINED: Semantic Conventions Stability
+
+Telemetry stability, including semantic conventions, is not currently defined. The following practices are recommended.
+
+Semantic Conventions SHOULD NOT be removed once they are added.
+New conventions MAY be added to replace usage of older conventions, but the older conventions SHOULD NOT be removed.
+Older conventions SHOULD be marked as deprecated when they are replaced by newer conventions.
 
 ### Deprecation
 
