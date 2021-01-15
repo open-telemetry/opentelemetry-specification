@@ -5,9 +5,11 @@ The goal of this specification is to unify the environment variable names betwee
 ## Special configuration types
 
 ### Numeric value
+
 If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
 
 ### Enum value
+
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
 
