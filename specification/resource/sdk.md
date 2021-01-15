@@ -43,7 +43,7 @@ Required parameters:
 
 ### Merge
 
-The interface MUST provide a way for a old resource and a
+The interface MUST provide a way for an old resource and an
 updating resource to be merged into a new resource.
 
 Note: This is intended to be utilized for merging of resources whose attributes
