@@ -41,7 +41,7 @@ Updates:
   ([1234](https://github.com/open-telemetry/opentelemetry-specification/pull/1234))
 - Resource SDK: Reverse (suggested) order of Resource.Merge parameters, remove
   special case for empty strings
-  ([#????](https://github.com/open-telemetry/opentelemetry-specification/pull/????))
+  ([#1345](https://github.com/open-telemetry/opentelemetry-specification/pull/1345))
 
 ## v0.7.0 (11-18-2020)
 
