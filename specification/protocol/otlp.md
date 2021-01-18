@@ -29,7 +29,7 @@ Table of Contents
     + [OTLP/HTTP Default Port](#otlphttp-default-port)
 - [Implementation Recommendations](#implementation-recommendations)
   * [Multi-Destination Exporting](#multi-destination-exporting)
-  * [Create New gRPC Client](#create new gRPC client)
+  * [Creating New gRPC Client](#creating new gRPC client)
 - [Known Limitations](#known-limitations)
   * [Request Acknowledgements](#request-acknowledgements)
     + [Duplicate Data](#duplicate-data)
@@ -473,7 +473,7 @@ This ensures that all destination servers receive the data regardless of their
 speed of reception (within the available limits imposed by the size of the
 client-side queue).
 
-### create new gRPC client
+### creating new gRPC client
 
 Please refer to the [opentelemetry-proto](https://github.com/open-telemetry/opentelemetry-proto)
 
