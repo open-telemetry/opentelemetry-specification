@@ -5,15 +5,15 @@
 
 - [Design goals](#design-goals)
 - [Signal lifecycle](#signal-lifecycle)
-  * [Lifecycle stages](#lifecycle-stages)
-  * [Stability](#stability)
+  * [Experimental](#experimental)
+  * [Stable](#stable)
     + [API Stability](#api-stability)
     + [SDK Stability](#sdk-stability)
     + [Contrib Stability](#contrib-stability)
     + [NOT DEFINED: Telemetry Stability](#not-defined-telemetry-stability)
     + [NOT DEFINED: Semantic Conventions Stability](#not-defined-semantic-conventions-stability)
-  * [Deprecation](#deprecation)
-  * [Removal](#removal)
+  * [Deprecated](#deprecated)
+  * [Removed](#removed)
   * [A note on replacing signals](#a-note-on-replacing-signals)
 - [Version numbers](#version-numbers)
   * [Major version bump](#major-version-bump)
@@ -53,39 +53,39 @@ A library that imports the OpenTelemetry API should never become incompatible wi
 Theoretically, APIs can be deprecated and eventually removed, but this is a process measured in years and we have no plans to do so.
 
 **Allow for multiple levels of package stability within the same release of an OpenTelemetry component.**
-Provide maintainers a clear process for developing new, experimental signals alongside stable signals.
+Provide maintainers a clear process for developing new, experimental [signals](glossary.md#signals) alongside stable signals.
 Different packages within the same release may have different levels of stability.
 This means that an implementation wishing to release stable tracing today MUST ensure that experimental metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
 
 ## Signal lifecycle
 
-OpenTelemetry clients are structured around **signals**.
-Each signal represents a coherent, stand-alone set of functionality.
-Each signal follows a lifecycle.
+The development of each signal follows a lifecycle: experimental, stable, deprecated, removed.
+
+The infographic below shows an example of the lifecycle of an API component.
 
 ![API Lifecycle](../internal/img/api-lifecycle.png)
 
-### Lifecycle stages
+### Experimental
 
-**Experimental –** Breaking changes and performance issues MAY occur.
-Components may not be feature-complete.
-The experiment MAY be discarded and removed.
+Signals start as **experimental**, which covers alpha, beta, and release candidate versions of the signal.
+While signals are experimental, breaking changes and performance issues MAY occur.
+Components SHOULD NOT be expected to be feature-complete.
+In some cases, the experiment MAY be discarded and removed entirely.
+Long-term dependencies SHOULD NOT be taken against experimental signals.
 
-**Stable –** Stability guarantees, as defined by component type below, MUST now apply to all changes within this signal.
-Long-term dependencies MAY now be taken against this signal.
+OpenTelemetry clients MUST be designed in a manner that allows experimental signals to be created without breaking the stability guarantees of existing signals.
 
-**Deprecated –** this signal has been replaced, but MUST maintain the same stability guarantees.
+OpenTelemetry clients MUST NOT be designed in a manner that breaks existing users when a signal transitions from experimental to stable. This would punish users of the release candidate, and hinder adoption.
 
-**Removed -** a deprecated signal is no longer supported, and MUST be removed from the release.
-
-All signal components MAY become stable together, or MAY transition to stability component-by-component in the following order: API, Semantic Conventions, API Contrib, SDK, SDK Contrib.
-
-When transitioning from experimental to stable to deprecated, signals MUST NOT move or otherwise break how they are imported by users.
 Terms which denote stability, such as "experimental," MUST NOT be used as part of a directory or import name.
-
 Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or -experimental, to differentiate stable and experimental packages.
 
-### Stability
+### Stable
+
+Once an experimental signal has gone through rigorous beta testing, it MAY transition to **stable**.
+Long-term dependencies MAY now be taken against this signal.
+
+All signal components MAY become stable together, or MAY transition to stability component-by-component in the following order: API, Semantic Conventions, API Contrib, SDK, SDK Contrib.
 
 Once a signal component is marked as stable, the following rules MUST apply until the end of that signal’s existence.
 
@@ -137,14 +137,14 @@ Semantic Conventions SHOULD NOT be removed once they are added.
 New conventions MAY be added to replace usage of older conventions, but the older conventions SHOULD NOT be removed.
 Older conventions SHOULD be marked as deprecated when they are replaced by newer conventions.
 
-### Deprecation
+### Deprecated
 
 Signals MAY eventually be replaced. When this happens, they are marked as deprecated.
 
 Signals SHALL only be marked as deprecated when the replacement becomes stable.
 Deprecated code MUST abide by the same support guarantees as stable code.
 
-### Removal
+### Removed
 
 Support is ended by the removal of a signal from the release.
 The release MUST make a major version bump when this happens.
