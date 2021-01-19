@@ -15,14 +15,14 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|Shutdown (SDK only required)                  |   | +  | + | +    | +  | -    |   | +  |   | +  | -   |
+|Shutdown (SDK only required)                  |   | +  | + | +    | +  | -    |   | +  |   | +  | +   |
 |[Trace / Context interaction](specification/trace/api.md#context-interaction)|
 |Get active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   | +  | +   |
 |Set active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   | +  | +   |
 |[Tracer](specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | +  | -   |
+|Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | +  | +   |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |[SpanContext](specification/trace/api.md#spancontext)|
 |IsValid                                       | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
@@ -33,13 +33,13 @@ status of the feature is not known.
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |No explicit parent Span/SpanContext allowed   |   | +  | + | +    | +  | +    |   | +  |   |    | +   |
-|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  | +    |   | +  |   |    | -   |
+|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  | +    |   | +  |   |    | +   |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  | +   |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|IsRecording becomes false after End           |   | +  | + | +    | +  | +    |   |    |   |    | -   |
+|IsRecording becomes false after End           |   | +  | + | +    | +  | +    |   |    |   |    | +   |
 |Set status with StatusCode (Unset, Ok, Error) |   | +  | + | +    | +  | -    |   | +  |   | +  | +   |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |events collection size limit                  |   | +  | + | +    | +  | -    |   | +  |   | -  | +   |
@@ -76,7 +76,7 @@ status of the feature is not known.
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|-----|
 |Basic support                                 |  | +  | + | +    | +  | +    |   | +  |   | +  | +   |
-|Use official header name `baggage`            |  | +  | + | +    | +  | +    |   | +  |   | +  | -   |
+|Use official header name `baggage`            |  | +  | + | +    | +  | +    |   | +  |   | +  | +   |
 
 ## Metrics
 
@@ -113,7 +113,7 @@ status of the feature is not known.
 |Fields                                        |  | +  | + | +    |    | +    |   | +  |   |  + | +   |
 |Setter argument                               |  | +  | + | +    | +  | +    |   |    |   |  + | +   |
 |Getter argument                               |  | +  | + | +    | +  | +    |   |    |   |  + | +   |
-|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |  - | -   |
+|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |  - | +   |
 
 ## Environment Variables
 
