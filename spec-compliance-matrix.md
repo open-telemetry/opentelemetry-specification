@@ -22,7 +22,7 @@ status of the feature is not known.
 |[Tracer](specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | +  | -   |
+|Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | +  | +   |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |[SpanContext](specification/trace/api.md#spancontext)|
 |IsValid                                       | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
