@@ -13,6 +13,7 @@ Table of Contents
   * [SDK](#sdk)
   * [Semantic Conventions](#semantic-conventions)
   * [Contrib Packages](#contrib-packages)
+  * [Versioning and Stability](#versioning-and-stability)
 - [Tracing Signal](#tracing-signal)
   * [Traces](#traces)
   * [Spans](#spans)
@@ -58,8 +59,6 @@ To accomplish these goals, each signal consists of four types of packages: API, 
 ### API
 
 API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into third-party libraries and application code is considered part of the API.
-To manage different levels of stability, every signal has its own, independent API package.
-Stable APIs may then be bundled up into a unified API which provides additional convenience methods.
 
 ### SDK
 
@@ -90,6 +89,10 @@ Plugins and instrumentation packages which are optional and separate from the SD
 **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
 
 The term Contrib specifically refers to the collection of plugins and instrumentation maintained by the OpenTelemetry project; it does not refer to third-party plugins hosted elsewhere.
+
+### Versioning and Stability
+
+OpenTelemetry values stability and backwards compatibility. Please see the [versioning and stability guide](./versioning-and-stability.md) for details.
 
 ## Tracing Signal
 
