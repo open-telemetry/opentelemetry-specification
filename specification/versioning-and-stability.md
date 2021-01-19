@@ -48,7 +48,7 @@ It MUST always be possible to upgrade to the latest minor version of the OpenTel
 Backwards compatibility is a strict requirement.
 Instrumentation APIs cannot create a version conflict, ever. Otherwise, the OpenTelemetry API cannot be embedded in widely shared libraries, such as web frameworks.
 Code written against older versions of the API MUST work with all newer versions of the API.
-Transitive dependencies of the API cannot create a version conflict. The OpenTelemetry API cannot depend on "foo" if there is any chance that any library or application may require a different, incompatible version of "foo."
+Transitive dependencies of the API cannot create a version conflict. The OpenTelemetry API cannot depend on a particular package if there is any chance that any library or application may require a different, incompatible version of that package.
 A library that imports the OpenTelemetry API should never become incompatible with other libraries due to a version conflict in one of OpenTelemetry's dependencies.
 Theoretically, APIs can be deprecated and eventually removed, but this is a process measured in years and we have no plans to do so.
 
@@ -85,7 +85,7 @@ Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or
 Once an experimental signal has gone through rigorous beta testing, it MAY transition to **stable**.
 Long-term dependencies MAY now be taken against this signal.
 
-All signal components MAY become stable together, or MAY transition to stability component-by-component in the following order: API, Semantic Conventions, API Contrib, SDK, SDK Contrib.
+All signal components MAY become stable together, or MAY transition to stability component-by-component. The API MUST become stable before the other components.
 
 Once a signal component is marked as stable, the following rules MUST apply until the end of that signal’s existence.
 
@@ -120,7 +120,7 @@ Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.
 **Exception:** Contrib packages MAY break stability when a required downstream dependency breaks stability.
 For example, a database integration may break stability if the required database client breaks stability.
 However, it is strongly RECOMMENDED that older contrib packages remain stable.
-A new, incompatible version of an integration SHOULD be released as separate contrib package, rather than break the existing contrib package.
+A new, incompatible version of an integration SHOULD be released as a separate contrib package, rather than break the existing contrib package.
 
 #### NOT DEFINED: Telemetry Stability
 
@@ -175,8 +175,8 @@ OpenTelemetry clients have four components: API, SDK, Semantic Conventions, and 
 For the purposes of versioning, all code within a component MUST treated as if it were part of a single package, and versioned with the same version number,
 except for Contrib, which may be a collection of packages versioned separately.
 
-* API packages for all signals MUST version together, across all signals.
-Signals MUST NOT have separate version numbers.
+* All stable API packages MUST version together, across all signals.
+Stable signals MUST NOT have separate version numbers.
 There is one version number that applies to all signals that are included in the API release that is labeled with that particular version number.
 * SDK packages for all signals MUST version together, across all signals.
 Signals MUST NOT have separate version numbers.
@@ -220,7 +220,7 @@ The following are examples of patch fixes.
 * Documentation.
 
 Currently, the OpenTelemetry project does NOT have plans to backport bug and security fixes to prior minor versions of the SDK.
-Security and bug fixes MAY only applied to the latest minor version.
+Security and bug fixes MAY only be applied to the latest minor version.
 We are committed to making it feasible for end users to stay up to date with the latest version of the OpenTelemetry SDK.
 
 ## Long Term Support
@@ -247,7 +247,7 @@ SDK stability, as defined above, will be maintained for a minimum of **one year*
 
 ### Contrib Support
 
-Contrib stability, as defined above, will be maintained for a minimum of **one year** after after the release of the next major version of a contrib package.
+Contrib stability, as defined above, will be maintained for a minimum of **one year** after the release of the next major version of a contrib package.
 
 ## OpenTelemetry GA
 
