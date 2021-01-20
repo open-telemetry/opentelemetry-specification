@@ -97,10 +97,8 @@ usage in Zipkin Exporter configuration:
 - `OTEL_EXPORTER_ZIPKIN_PROTOCOL`
 
 This will be used to specify whether or not the exporter uses v1 or v2, json,
-thrift or protobuf.  As of 1.0 of the specification, there 
+thrift or protobuf.  As of 1.0 of the specification, there
 *is no specified default, or configuration via environment variables*.
-
-
 
 ## Prometheus Exporter
 
