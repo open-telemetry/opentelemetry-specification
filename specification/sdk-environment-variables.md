@@ -2,6 +2,7 @@
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
+If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
 
@@ -84,20 +85,23 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 ## Exporter Selection
 
+We define environment variables for setting a single exporter per signal.
+
 | Name          | Description                                                                  | Default |
 | ------------- | ---------------------------------------------------------------------------- | ------- |
-| OTEL_EXPORTER | Exporter to be used, can be a comma-separated list to use multiple exporters | "otlp"  |
+| OTEL_TRACE_EXPORTER | Trace exporter to be used | "otlp"  |
+| OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  |
 
-Known values for OTEL_EXPORTER are:
+Known values for OTEL_TRACE_EXPORTER are:
 
-- `"otlp"`: [OTLP Trace and Metrics](./protocol/otlp.md)
+- `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
-- `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
-- `"otlp_span"`: [OTLP Trace](./protocol/otlp.md)
-- `"otlp_metric"`: [OTLP Metrics](./protocol/otlp.md)
 
-Note: "otlp" is equivalent to "otlp_span,otlp_metric".
+Known values for OTEL_METRICS_EXPORTER are:
+
+- `"otlp"`: [OTLP](./protocol/otlp.md)
+- `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 
 ## Language Specific Environment Variables
 

@@ -15,14 +15,14 @@ status of the feature is not known.
 |Create TracerProvider                         | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Get a Tracer                                  | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|Shutdown (SDK only required)                  |   | +  | + | +    | +  | -    |   | +  |   | +  | -   |
+|Shutdown (SDK only required)                  |   | +  | + | +    | +  | -    |   | +  |   | +  | +   |
 |[Trace / Context interaction](specification/trace/api.md#context-interaction)|
 |Get active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   | +  | +   |
 |Set active Span                               |   | +  | + | +    | +  | N/A  |   | +  |   | +  | +   |
 |[Tracer](specification/trace/api.md#tracer-operations)|
 |Create a new Span                             | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Get active Span                               | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | +  | -   |
+|Mark Span active                              | + | +  | + | +    | +  | +    | + | +  | - | +  | +   |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |[SpanContext](specification/trace/api.md#spancontext)|
 |IsValid                                       | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
@@ -33,13 +33,13 @@ status of the feature is not known.
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |No explicit parent Span/SpanContext allowed   |   | +  | + | +    | +  | +    |   | +  |   |    | +   |
-|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  | +    |   | +  |   |    | -   |
+|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  | +    |   | +  |   |    | +   |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | - | +  | +   |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|IsRecording becomes false after End           |   | +  | + | +    | +  | +    |   |    |   |    | -   |
+|IsRecording becomes false after End           |   | +  | + | +    | +  | +    |   |    |   |    | +   |
 |Set status with StatusCode (Unset, Ok, Error) |   | +  | + | +    | +  | -    |   | +  |   | +  | +   |
 |Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |events collection size limit                  |   | +  | + | +    | +  | -    |   | +  |   | -  | +   |
@@ -76,7 +76,7 @@ status of the feature is not known.
 |Feature                                       |Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
 |----------------------------------------------|--|----|---|------|----|------|---|----|---|----|-----|
 |Basic support                                 |  | +  | + | +    | +  | +    |   | +  |   | +  | +   |
-|Use official header name `baggage`            |  | +  | + | +    | +  | +    |   | +  |   | +  | -   |
+|Use official header name `baggage`            |  | +  | + | +    | +  | +    |   | +  |   | +  | +   |
 
 ## Metrics
 
@@ -113,7 +113,7 @@ status of the feature is not known.
 |Fields                                        |  | +  | + | +    |    | +    |   | +  |   |  + | +   |
 |Setter argument                               |  | +  | + | +    | +  | +    |   |    |   |  + | +   |
 |Getter argument                               |  | +  | + | +    | +  | +    |   |    |   |  + | +   |
-|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |  - | -   |
+|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |  - | +   |
 
 ## Environment Variables
 
@@ -121,17 +121,18 @@ status of the feature is not known.
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | -    | - | +  | - | +  | -   |
 |OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | -    | - |    | - | -  | -   |
-|OTEL_PROPAGATORS                              |   | -  |   | +    |    | -    | - |    | - | -  | -   |
+|OTEL_PROPAGATORS                              |   | +  |   | +    |    | -    | - |    | - | -  | -   |
 |OTEL_BSP_*                                    |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_OTLP_*                          |   | +  |   | +    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
-|OTEL_EXPORTER                                 |   | -  |   | +    |    |      |   |    |   |  - | -   |
+|OTEL_TRACE_EXPORTER                           |   | +  |   | -    |    |      |   |    |   | -  | -   |
+|OTEL_METRICS_EXPORTER                         |   | +  |   | -    |    |      |   |    |   | -  | -   |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   | +    | +  |      |   |    |   | -  | -   |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   | +    | +  |      |   |    |   | -  | -   |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   | +    | +  |      |   |    |   | -  | -   |
-|OTEL_TRACE_SAMPLER                            |   | -  |   |      | +  |      |   |    |   | -  | -   |
-|OTEL_TRACE_SAMPLER_ARG                        |   |    |   |      | +  |      |   |    |   | -  | -   |
+|OTEL_TRACE_SAMPLER                            |   | +  |   |      | +  |      |   |    |   | -  | -   |
+|OTEL_TRACE_SAMPLER_ARG                        |   | +  |   |      | +  |      |   |    |   | -  | -   |
 
 ## Exporters
 
@@ -150,29 +151,29 @@ status of the feature is not known.
 |Honors throttling response                    | + |    | - | +    | +  | -    |   |    |   | -  | -   |
 |Multi-destination spec compliance             | - |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1109)    |    | -    |   |    |   | -  | -   |
 |[Zipkin](specification/trace/sdk_exporters/zipkin.md)|
-|Zipkin V1 JSON                                |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173)    |    | -    | - | -  |   | -  | -   |
-|Zipkin V1 Thrift                              |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174)    |    | -    | - | -  |   | -  | -   |
-|Zipkin V2 JSON                                | + |    |   | +    |    | -    | + | +  |   | +  | +   |
-|Zipkin V2 Protobuf                            |   |    |   | +    |    | +    |   | -  |   | -  | -   |
+|Zipkin V1 JSON                                |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173)    |    | -    | - | -  |   | -  | -   |
+|Zipkin V1 Thrift                              |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174)    |    | -    | - | -  |   | -  | -   |
+|Zipkin V2 JSON                                | + | +  |   | +    |    | -    | + | +  |   | +  | +   |
+|Zipkin V2 Protobuf                            |   | +  |   | +    |    | +    |   | -  |   | -  | -   |
 |Service name mapping                          | + | +  | + | +    |    | +    | + | +  |   | +  | +   |
 |SpanKind mapping                              | + | +  | + | +    |    | +    | + | +  |   | +  | +   |
 |InstrumentationLibrary mapping                |   | +  | - | +    |    | -    | - | +  |   | +  | +   |
 |Boolean attributes                            | + | +  | + | +    |    | +    | + | +  |   | +  | +   |
 |Array attributes                              | + | +  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110)    |    | +    | + | +  |   | +  | +   |
 |Status mapping                                | + | +  | + | +    |    | +    | + | +  |   | +  | +   |
-|Error Status mapping                          |   |    |   |      |    |      |   |    |   | +  | -   |
+|Error Status mapping                          |   | +  |   |      |    |      |   |    |   | +  | -   |
 |Event attributes mapping to Annotations       | + | +  | + | +    |    | +    | + | +  |   | +  | +   |
 |Integer microseconds in timestamps            |   | +  |   | +    |    |      |   |    |   | +  | +   |
 |[Jaeger](specification/trace/sdk_exporters/jaeger.md)|
 |Jaeger Thrift over UDP                        |   |    |   | +    | +  |      |   |    |   | +  | +   |
-|Jaeger Protobuf via gRPC                      |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1437)    |    |      |   |    |   | -  | -   |
-|Jaeger Thrift over HTTP                       |   |    |   | +    | +  |      |   |    |   | -  | -   |
-|Service name mapping                          |   |    |   | +    | +  |      |   |    |   | +  | +   |
-|Resource to Process mapping                   |   |    |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1436)    | +  |      |   |    |   | +  | -   |
-|InstrumentationLibrary mapping                |   |    |   | +    | +  |      |   |    |   | +  | -   |
-|Status mapping                                |   |    |   |      | +  |      |   |    |   | +  | +   |
-|Error Status mapping                          |   |    |   |      | +  |      |   |    |   | +  | -   |
-|Events converted to Logs                      |   |    |   | +    | +  |      |   |    |   | +  | +   |
+|Jaeger Protobuf via gRPC                      |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1437)    |    |      |   |    |   | -  | -   |
+|Jaeger Thrift over HTTP                       |   | +  |   | +    | +  |      |   |    |   | -  | -   |
+|Service name mapping                          |   | [-](https://github.com/open-telemetry/opentelemetry-java/issues/2557)  |   | +    | +  |      |   |    |   | +  | +   |
+|Resource to Process mapping                   |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1436)    | +  |      |   |    |   | +  | -   |
+|InstrumentationLibrary mapping                |   | +  |   | +    | +  |      |   |    |   | +  | -   |
+|Status mapping                                |   | +  |   |      | +  |      |   |    |   | +  | +   |
+|Error Status mapping                          |   | +  |   |      | +  |      |   |    |   | +  | -   |
+|Events converted to Logs                      |   | +  |   | +    | +  |      |   |    |   | +  | +   |
 |OpenCensus|
 |TBD|
 |Prometheus|
