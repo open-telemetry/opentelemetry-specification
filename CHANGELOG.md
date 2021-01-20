@@ -9,6 +9,7 @@ release.
 
 Updates:
 
+- Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
 - `process.runtime.description` resource convention: Add `java.vm.name`
