@@ -89,7 +89,7 @@ that is not yet acknowledged by the server.
 Sequential operation is recommended when simplicity of implementation is
 desirable and when the client and the server are connected via very low-latency
 network, such as for example when the client is an instrumented application and
-the server is a OpenTelemetry Collector running as a local daemon (agent).
+the server is an OpenTelemetry Collector running as a local daemon (agent).
 
 The implementations that need to achieve high throughput SHOULD support
 concurrent Unary calls to achieve higher throughput. The client SHOULD send new

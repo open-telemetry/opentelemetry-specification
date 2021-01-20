@@ -14,6 +14,7 @@ New:
   
 Updates:
 
+- Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
 - OTEL_EXPORTER environment variable replaced with OTEL_TRACE_EXPORTER and
