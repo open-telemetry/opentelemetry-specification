@@ -48,7 +48,7 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 **Description:** A service instance.
 
 <!-- semconv service -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Yes |
 | `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | No |
@@ -92,7 +92,7 @@ The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
 The identifier SHOULD be stable across different versions of an implementation.
 
 <!-- semconv telemetry -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | No |
 | `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | No |
