@@ -14,6 +14,7 @@ New:
   
 Updates:
 
+- Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
 - OTEL_EXPORTER environment variable replaced with OTEL_TRACE_EXPORTER and
@@ -39,6 +40,9 @@ Updates:
   ([#1322](https://github.com/open-telemetry/opentelemetry-specification/pull/1322))
 - Require schemed endpoints for OTLP exporters
   ([1234](https://github.com/open-telemetry/opentelemetry-specification/pull/1234))
+- Resource SDK: Reverse (suggested) order of Resource.Merge parameters, remove
+  special case for empty strings
+  ([#1345](https://github.com/open-telemetry/opentelemetry-specification/pull/1345))
 
 ## v0.7.0 (11-18-2020)
 
