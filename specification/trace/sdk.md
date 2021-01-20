@@ -115,7 +115,7 @@ It produces an output called `SamplingResult` which contains:
   * `DROP` - `IsRecording() == false`, span will not be recorded and all events and attributes
   will be dropped.
   * `RECORD_ONLY` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
-  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
+  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 * A `Tracestate` that will be associated with the `Span` through the new
@@ -221,6 +221,23 @@ the updated configuration MUST also apply to all already returned `Tracers`
 Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
+
+The SDK MUST by default randomly generate the bytes for both the `TraceId` and
+the `SpanId`.
+
+The SDK MUST provide a mechanism for customizing the way IDs are generated for
+both the `TraceId` and the `SpanId`.
+
+The SDK MAY provide this functionality by allowing custom implementations of
+an interface like `IdsGenerator` below, which provides extension points for two
+methods, one to generate a `SpanID` and one to generate a `TraceId`.
+
+```
+IdsGenerator {
+  String generateSpanId()
+  String generateTraceId()
+}
+```
 
 ### Shutdown
 
