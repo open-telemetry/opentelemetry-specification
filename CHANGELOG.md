@@ -14,6 +14,7 @@ New:
   
 Updates:
 
+- Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
 - OTEL_EXPORTER environment variable replaced with OTEL_TRACE_EXPORTER and
@@ -32,6 +33,7 @@ Updates:
 - Resource's service.name MUST have a default value, service.instance.id is not
   required.
   ([#1269](https://github.com/open-telemetry/opentelemetry-specification/pull/1269))
+  - Clarified in [#1294](https://github.com/open-telemetry/opentelemetry-specification/pull/1294)
 - Add requirement that the SDK allow custom generation of Trace IDs and Span IDs
   ([#1006](https://github.com/open-telemetry/opentelemetry-specification/pull/1006))
 - Add default ratio when TraceIdRatioSampler is specified by environment variable but
@@ -39,6 +41,9 @@ Updates:
   ([#1322](https://github.com/open-telemetry/opentelemetry-specification/pull/1322))
 - Require schemed endpoints for OTLP exporters
   ([1234](https://github.com/open-telemetry/opentelemetry-specification/pull/1234))
+- Resource SDK: Reverse (suggested) order of Resource.Merge parameters, remove
+  special case for empty strings
+  ([#1345](https://github.com/open-telemetry/opentelemetry-specification/pull/1345))
 
 ## v0.7.0 (11-18-2020)
 

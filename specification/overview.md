@@ -8,37 +8,91 @@ Table of Contents
 
 <!-- toc -->
 
-- [Distributed Tracing](#distributed-tracing)
-  * [Trace](#trace)
-  * [Span](#span)
+- [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
+  * [API](#api)
+  * [SDK](#sdk)
+  * [Semantic Conventions](#semantic-conventions)
+  * [Contrib Packages](#contrib-packages)
+  * [Versioning and Stability](#versioning-and-stability)
+- [Tracing Signal](#tracing-signal)
+  * [Traces](#traces)
+  * [Spans](#spans)
   * [SpanContext](#spancontext)
   * [Links between spans](#links-between-spans)
-- [Metrics](#metrics)
+- [Metric Signal](#metric-signal)
   * [Recording raw measurements](#recording-raw-measurements)
     + [Measure](#measure)
     + [Measurement](#measurement)
   * [Recording metrics with predefined aggregation](#recording-metrics-with-predefined-aggregation)
   * [Metrics data model and SDK](#metrics-data-model-and-sdk)
-- [Logs](#logs)
+- [Log Signal](#log-signal)
   * [Data model](#data-model)
-- [Baggage](#baggage)
+- [Baggage Signal](#baggage-signal)
 - [Resources](#resources)
 - [Context Propagation](#context-propagation)
 - [Propagators](#propagators)
 - [Collector](#collector)
 - [Instrumentation Libraries](#instrumentation-libraries)
-- [Semantic Conventions](#semantic-conventions)
 
 <!-- tocstop -->
 
 </details>
 
-This document provides an overview of the pillars of telemetry that
-OpenTelemetry supports and defines important fundamental terms.
+This document provides an overview of the OpenTelemetry project and defines important fundamental terms.
 
 Additional term definitions can be found in the [glossary](glossary.md).
 
-## Distributed Tracing
+## OpenTelemetry Client Architecture
+
+![Cross cutting concerns](../internal/img/architecture.png)
+
+At the highest architectural level, OpenTelemetry clients are organized into [**signals**](glossary.md#signals).
+Each signal provides a specialized form of observability. For example, tracing, metrics, and baggage are three separate signals.
+Signals share a common subsystem – **context propagation** – but they function independently from each other.
+
+Each signal provides a mechanism for software to describe itself. A codebase, such as web framework or a database client, takes a dependency on various signals in order to describe itself. OpenTelemetry instrumentation code can then be mixed into the other code within that codebase.
+This makes OpenTelemetry a **cross-cutting concern** - a piece of software which is mixed into many other pieces of software in order to provide value. Cross-cutting concerns, by their very nature, violate a core design principle – separation of concerns. As a result, OpenTelemetry client design requires extra care and attention to avoid creating issues for the codebases which depend upon these cross-cutting APIs.
+
+OpenTelemetry clients are designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions which can be managed independently. OpenTelemetry clients are also designed to be an extensible framework.
+To accomplish these goals, each signal consists of four types of packages: API, SDK, Semantic Conventions, and Contrib.
+
+### API
+
+API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into third-party libraries and application code is considered part of the API.
+
+### SDK
+
+The SDK is the implementation of the API provided by the OpenTelemetry project. Within an application, the SDK is installed and managed by the [application owner](glossary.md#application-owner).
+Note that the SDK includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as [constructors](glossary.md#constructors) and [plugin interfaces](glossary.md#sdk-plugins).
+Application owners use the SDK constructors; [plugin authors](glossary.md#plugin-author) use the SDK plugin interfaces.
+[Instrumentation authors](glossary.md#instrumentation-author) MUST NOT directly reference any SDK package of any kind, only the API.
+
+### Semantic Conventions
+
+The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications.
+
+* [Resource Conventions](resource/semantic_conventions/README.md)
+* [Span Conventions](trace/semantic_conventions/README.md)
+* [Metrics Conventions](metrics/semantic_conventions/README.md)
+
+### Contrib Packages
+
+The OpenTelemetry project maintains integrations with popular OSS projects which have been identified as important for observing modern web services.
+Example API integrations include instrumentation for web frameworks, database clients, and message queues.
+Example SDK integrations include plugins for exporting telemetry to popular analysis tools and telemetry storage systems.
+
+Some plugins, such as OTLP Exporters and TraceContext Propagators, are required by the OpenTelemetry specification. These required plugins are included as part of the SDK.
+
+Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
+**API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
+
+The term Contrib specifically refers to the collection of plugins and instrumentation maintained by the OpenTelemetry project; it does not refer to third-party plugins hosted elsewhere.
+
+### Versioning and Stability
+
+OpenTelemetry values stability and backwards compatibility. Please see the [versioning and stability guide](./versioning-and-stability.md) for details.
+
+## Tracing Signal
 
 A distributed trace is a set of events, triggered as a result of a single
 logical operation, consolidated across various components of an application. A
@@ -48,7 +102,7 @@ to start an action on a website - in this example, the trace will represent
 calls made between the downstream services that handled the chain of requests
 initiated by this button being pressed.
 
-### Trace
+### Traces
 
 **Traces** in OpenTelemetry are defined implicitly by their **Spans**. In
 particular, a **Trace** can be thought of as a directed acyclic graph (DAG) of
@@ -86,9 +140,10 @@ Temporal relationships between Spans in a single Trace
          [Span E·······]        [Span F··]
 ```
 
-### Span
+### Spans
 
-Each **Span** encapsulates the following state:
+A span represents an operation within a transaction. Each **Span** encapsulates
+the following state:
 
 - An operation name
 - A start and finish timestamp
@@ -149,7 +204,7 @@ represents a single parent scenario, in many cases the parent **Span** fully
 encloses the child **Span**. This is not the case in scatter/gather and batch
 scenarios.
 
-## Metrics
+## Metric Signal
 
 OpenTelemetry allows to record raw measurements or metrics with predefined
 aggregation and set of labels.
@@ -224,14 +279,14 @@ validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
-## Logs
+## Log Signal
 
 ### Data model
 
 [Log Data Model](logs/data-model.md) defines how logs and events are understood by
 OpenTelemetry.
 
-## Baggage
+## Baggage Signal
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for propagating
 name/value pairs, called `Baggage`. `Baggage` is intended for
@@ -327,15 +382,3 @@ name itself. Examples include:
 
 * opentelemetry-instrumentation-flask (Python)
 * @opentelemetry/instrumentation-grpc (Javascript)
-
-## Semantic Conventions
-
-OpenTelemetry defines standard names and values of Resource attributes and
-Span attributes.
-
-* [Resource Conventions](resource/semantic_conventions/README.md)
-* [Span Conventions](trace/semantic_conventions/README.md)
-* [Metrics Conventions](metrics/semantic_conventions/README.md)
-
-The type of the attribute SHOULD be specified in the semantic convention
-for that attribute. See more details about [Attributes](./common/common.md#attributes).

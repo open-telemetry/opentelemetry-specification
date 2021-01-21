@@ -25,6 +25,7 @@ Technical committee holds regular meetings, notes are held
 
 - [Overview](specification/overview.md)
 - [Glossary](specification/glossary.md)
+- [Versioning and stability for OpenTelemetry clients](specification/versioning-and-stability.md)
 - [Library Guidelines](specification/library-guidelines.md)
   - [Package/Library Layout](specification/library-layout.md)
   - [General error handling guidelines](specification/error-handling.md)
@@ -44,7 +45,7 @@ Technical committee holds regular meetings, notes are held
 - About the Project
   - [Timeline](#project-timeline)
   - [Notation Conventions and Compliance](#notation-conventions-and-compliance)
-  - [Versioning](#versioning)
+  - [Versioning the Specification](#versioning-the-specification)
   - [Acronym](#acronym)
   - [Contributions](#contributions)
   - [License](#license)
@@ -64,7 +65,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 An implementation of the [specification](./specification/overview.md) is not compliant if it fails to satisfy one or more of the "MUST", "MUST NOT", "REQUIRED", "SHALL", or "SHALL NOT" requirements defined in the [specification](./specification/overview.md).
 Conversely, an implementation of the [specification](./specification/overview.md) is compliant if it satisfies all the "MUST", "MUST NOT", "REQUIRED", "SHALL", and "SHALL NOT" requirements defined in the [specification](./specification/overview.md).
 
-## Versioning
+## Versioning the Specification
 
 Changes to the [specification](./specification/overview.md) are versioned according to [Semantic Versioning 2.0](https://semver.org/spec/v2.0.0.html) and described in [CHANGELOG.md](CHANGELOG.md). Layout changes are not versioned. Specific implementations of the specification should specify which version they implement.
 
