@@ -16,8 +16,8 @@ For variables accepting an enum value, if the user provides a value the SDK does
 ### Duration
 
 Any value that represents a duration, for example a timeout, MUST be an integer representing a number of
-milliseconds. The value is non-negative - if a negative value is provided, the SDK MUST generate a warning and
-gracefully ignore the setting.
+milliseconds. The value is non-negative - if a negative value is provided, the SDK MUST generate a warning,
+gracefully ignore the setting and use the default value if it is defined.
 
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
