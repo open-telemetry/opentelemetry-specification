@@ -167,7 +167,6 @@ status of the feature is not known.
 |[Jaeger](specification/trace/sdk_exporters/jaeger.md)|
 |Jaeger Thrift over UDP                        |   |    |   | +    | +  |      |   |    |   | +  | +   |
 |Jaeger Protobuf via gRPC                      |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1437)    |    |      |   |    |   | -  | -   |
-|Jaeger Thrift over HTTP                       |   | +  |   | +    | +  |      |   |    |   | -  | -   |
 |Service name mapping                          |   | [-](https://github.com/open-telemetry/opentelemetry-java/issues/2557)  |   | +    | +  |      |   |    |   | +  | +   |
 |Resource to Process mapping                   |   | +  |   | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1436)    | +  |      |   |    |   | +  | -   |
 |InstrumentationLibrary mapping                |   | +  |   | +    | +  |      |   |    |   | +  | -   |
