@@ -14,6 +14,8 @@ New:
   
 Updates:
 
+- Remove Jaeger Thrift HTTP exporter from compliance matrix([#1359](https://github.com/open-telemetry/opentelemetry-specification/pull/1359))
+  SDKs are free to provide support for it if they'd like.
 - Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
