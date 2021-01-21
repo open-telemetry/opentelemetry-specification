@@ -1,10 +1,12 @@
 # Resource SDK
 
 A [Resource](../overview.md#resources) is an immutable representation of the entity producing
-telemetry. For example, a process producing telemetry that is running in a
+telemetry as [Attributes](../common/common.md#attributes).
+For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
-included in the `Resource`.
+included in the `Resource`. Note that there are certain
+["standard attributes"](semantic_conventions/README.md) that have prescribed meanings.
 
 The primary purpose of resources as a first-class concept in the SDK is
 decoupling of discovery of resource information from exporters. This allows for
@@ -24,6 +26,21 @@ When associated with a [`MeterProvider`](../metrics/api.md#meter-interface),
 all metrics produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
+## SDK-provided resource attributes
+
+The SDK MUST provide access to a Resource with at least the attributes listed at
+[Semantic Attributes with SDK-provided Default Value](semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value).
+This resource MUST be associated with a `TracerProvider` or `MeterProvider`
+if another resource was not explicitly specified.
+
+Note: This means that it is possible to create and associate a resource that
+does not have all or any of the SDK-provided attributes present. However, that
+does not happen by default. If a user wants to combine custom attributes with
+the default resource, they can use [`Merge`](#merge) with their custom resource
+or specify their attributes by implementing
+[Custom resource detectors](#detecting-resource-information-from-the-environment)
+instead of explicitly associating a resource.
+
 ## Resource creation
 
 The SDK must support two ways to instantiate new resources. Those are:
@@ -33,9 +50,6 @@ The SDK must support two ways to instantiate new resources. Those are:
 The interface MUST provide a way to create a new resource, from [`Attributes`](../common/common.md#attributes).
 Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
-
-Note that certain **required** `Resource` attributes MUST be set to a default value if they were not specified.
-See [Attributes with Default Value](semantic_conventions/README.md#attributes-with-default-value).
 
 Required parameters:
 
@@ -63,9 +77,6 @@ Required parameters:
 
 It is recommended, but not required, to provide a way to quickly create an empty
 resource.
-
-Note that the OpenTelemetry project documents certain ["standard
-attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
 ### Detecting resource information from the environment
 

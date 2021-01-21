@@ -33,6 +33,7 @@ Updates:
 - Resource's service.name MUST have a default value, service.instance.id is not
   required.
   ([#1269](https://github.com/open-telemetry/opentelemetry-specification/pull/1269))
+  - Clarified in [#1294](https://github.com/open-telemetry/opentelemetry-specification/pull/1294)
 - Add requirement that the SDK allow custom generation of Trace IDs and Span IDs
   ([#1006](https://github.com/open-telemetry/opentelemetry-specification/pull/1006))
 - Add default ratio when TraceIdRatioSampler is specified by environment variable but
