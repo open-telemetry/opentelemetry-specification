@@ -8,11 +8,21 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 <!-- toc -->
 
+- [User Roles](#user-roles)
+  * [Application Owner](#application-owner)
+  * [Library Author](#library-author)
+  * [Instrumentation Author](#instrumentation-author)
+  * [Plugin Author](#plugin-author)
 - [Common](#common)
+  * [Signals](#signals)
+  * [Packages](#packages)
+  * [ABI Compatibility](#abi-compatibility)
   * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
   * [Manual Instrumentation](#manual-instrumentation)
   * [Automatic Instrumentation](#automatic-instrumentation)
   * [Telemetry SDK](#telemetry-sdk)
+  * [Constructors](#constructors)
+  * [SDK Plugins](#sdk-plugins)
   * [Exporter Library](#exporter-library)
   * [Instrumented Library](#instrumented-library)
   * [Instrumentation Library](#instrumentation-library)
@@ -28,7 +38,45 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 <!-- tocstop -->
 
+## User Roles
+
+### Application Owner
+
+The maintainer of an application or service, responsible for configuring and managing the lifecycle of the OpenTelemetry SDK.
+
+### Library Author
+
+The maintainer of a shared library which is depended upon by many applications, and targeted by OpenTelemetry instrumentation.
+
+### Instrumentation Author
+
+The maintainer of OpenTelemetry instrumentation written against the OpenTelemetry API.
+This may be instrumentation written within application code, within a shared library, or within an instrumentation library.
+
+### Plugin Author
+
+The maintainer of an OpenTelemetry SDK Plugin, written against OpenTelemetry SDK plugin interfaces.
+
 ## Common
+
+### Signals
+
+OpenTelemetry is structured around signals, or categories of telemetry.
+Metrics, logs, traces, and baggage are examples of signals.
+Each signal represents a coherent, stand-alone set of functionality.
+Each signal follows a separate lifecycle, defining its current stability level.
+
+### Packages
+
+In this specification, the term **package** describes a set of code which represents a single dependency, which may be imported into a program independently from other packages.
+This concept may map to a different term in some languages, such as "module."
+Note that in some languages, the term "package" refers to a different concept.
+
+### ABI Compatibility
+
+An ABI (application binary interface) is an interface which defines interactions between software components at the machine code level, for example between an application executable and a compiled binary of a shared object library. ABI compatibility means that a new compiled version of a library may be correctly linked to a target executable without the need for that executable to be recompiled.
+
+ABI compatibility is important for some languages, especially those which provide a form of machine code. For other languages, ABI compatibility may not be a relevant requirement.
 
 <a name="in-band"></a>
 <a name="out-of-band"></a>
@@ -66,9 +114,17 @@ Denotes the library that implements the *OpenTelemetry API*.
 See [Library Guidelines](library-guidelines.md#sdk-implementation) and
 [Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk).
 
+### Constructors
+
+Constructors are public code used by Application Owners to initialize and configure the OpenTelemetry SDK and contrib packages. Examples of constructors include configuration objects, environment variables, and builders.
+
+### SDK Plugins
+
+Plugins are libraries which extend the OpenTelemetry SDK. Examples of plugin interfaces are the `SpanProcessor`, `Exporter`, and `Sampler` interfaces.
+
 ### Exporter Library
 
-Libraries which are compatible with the [Telemetry SDK](#telemetry-sdk) and provide functionality to emit telemetry to consumers.
+Exporters are SDK Plugins which implement the `Exporter` interface, and emit telemetry to consumers.
 
 ### Instrumented Library
 
