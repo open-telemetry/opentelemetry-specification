@@ -54,7 +54,7 @@ export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=http/json
 
 ### Specify Protocol
 
-Currently, OTLP haas more than one transport protocol it can support, e.g.
+Currently, OTLP has more than one transport protocol it can support, e.g.
 `grpc`,  `http/json`, `http/protobuf`.   As of 1.0 of the specification, there
 *is no specified default, or configuration via environment variables*.  We
 reserve the following environment variables for configuration of protocols in
