@@ -9,13 +9,14 @@ This document defines standard attributes for resources. These attributes are ty
 
 - [TODOs](#todos)
 - [Document Conventions](#document-conventions)
-- [Attributes with Default Value](#attributes-with-default-value)
+- [Semantic Attributes with SDK-provided Default Value](#semantic-attributes-with-sdk-provided-default-value)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
 - [Compute Instance](#compute-instance)
 - [Environment](#environment)
 - [Version attributes](#version-attributes)
+- [Cloud-Provider-Specific Attributes](#cloud-provider-specific-attributes)
 
 <!-- tocstop -->
 
@@ -33,9 +34,10 @@ Attributes are grouped logically by the type of the concept that they described.
 
 Certain attribute groups in this document have a **Required** column. For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource. However it is also valid if the entire attribute group is omitted (i.e. none of the attributes from the particular group are present even though some of them are marked as Required in this document).
 
-## Attributes with Default Value
+## Semantic Attributes with SDK-provided Default Value
 
-The SDK MUST set a default value for the following attributes if they were not specified, even if the resource would otherwise not be present at all:
+These are the the attributes which MUST be provided by the SDK
+as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource-attributes):
 
 - [`service.name`](#service)
 
@@ -46,7 +48,7 @@ The SDK MUST set a default value for the following attributes if they were not s
 **Description:** A service instance.
 
 <!-- semconv service -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Yes |
 | `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | No |
@@ -90,7 +92,7 @@ The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
 The identifier SHOULD be stable across different versions of an implementation.
 
 <!-- semconv telemetry -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | No |
 | `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | No |

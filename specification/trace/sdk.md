@@ -252,7 +252,7 @@ failed or timed out.
 
 `Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. Language library authors can decide if they want to
+via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the shutdown timeout configurable.
 
 `Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
@@ -403,7 +403,7 @@ failed or timed out.
 
 `Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. Language library authors can decide if they want to
+via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the shutdown timeout configurable.
 
 #### ForceFlush()
@@ -419,7 +419,7 @@ invocation, but before the `Processor` exports the completed spans.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. Language library authors can decide if they want to
+via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the flush timeout configurable.
 
 ### Built-in span processors
@@ -520,7 +520,7 @@ call to `Shutdown` subsequent calls to `Export` are not allowed and should
 return a `Failure` result.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
-and the destination is unavailable). Language library authors can decide if they
+and the destination is unavailable). OpenTelemetry client authors can decide if they
 want to make the shutdown timeout configurable.
 
 ### Further Language Specialization
@@ -541,7 +541,7 @@ telemetry data generation.
 #### Examples
 
 These are examples on what the `Exporter` interface can look like in specific
-languages. Examples are for illustration purposes only. Language library authors
+languages. Examples are for illustration purposes only. OpenTelemetry client authors
 are free to deviate from these provided that their design remain true to the
 spirit of `Exporter` concept.
 
