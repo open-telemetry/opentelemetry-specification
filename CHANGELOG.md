@@ -7,6 +7,8 @@ release.
 
 ## Unreleased
 
+## v1.0.0 (12-22-2021)
+
 New:
 
 - Add `cloud.infrastructure_service` resource attribute
