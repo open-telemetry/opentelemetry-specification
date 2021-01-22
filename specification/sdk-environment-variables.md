@@ -2,9 +2,24 @@
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
+## Special configuration types
+
+### Numeric value
+
 If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
+
+### Enum value
+
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
+
+### Duration
+
+Any value that represents a duration, for example a timeout, MUST be an integer representing a number of
+milliseconds. The value is non-negative - if a negative value is provided, the SDK MUST generate a warning,
+gracefully ignore the setting and use the default value if it is defined.
+
+For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 ## General SDK Configuration
 
@@ -43,8 +58,8 @@ Depending on the value of `OTEL_TRACE_SAMPLER`, `OTEL_TRACE_SAMPLER_ARG` may be 
 
 | Name                           | Description                                    | Default | Notes                                                 |
 | ------------------------------ | ---------------------------------------------- | ------- | ----------------------------------------------------- |
-| OTEL_BSP_SCHEDULE_DELAY_MILLIS | Delay interval between two consecutive exports | 5000    |                                                       |
-| OTEL_BSP_EXPORT_TIMEOUT_MILLIS | Maximum allowed time to export data            | 30000   |                                                       |
+| OTEL_BSP_SCHEDULE_DELAY        | Delay interval between two consecutive exports | 5000    |                                                       |
+| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time to export data            | 30000   |                                                       |
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
