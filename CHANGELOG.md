@@ -44,6 +44,8 @@ Updates:
 - Resource SDK: Reverse (suggested) order of Resource.Merge parameters, remove
   special case for empty strings
   ([#1345](https://github.com/open-telemetry/opentelemetry-specification/pull/1345))
+- Change environment variable `OTEL_PROPAGATORS` to `OTEL_TEXT_MAP_PROPAGATORS`
+  ([#1365](https://github.com/open-telemetry/opentelemetry-specification/pull/1365))
 
 ## v0.7.0 (11-18-2020)
 

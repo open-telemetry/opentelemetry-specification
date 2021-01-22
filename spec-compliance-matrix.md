@@ -121,7 +121,7 @@ status of the feature is not known.
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | -    | - | +  | - | +  | -   |
 |OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | -    | - |    | - | -  | -   |
-|OTEL_PROPAGATORS                              |   | +  |   | +    |    | -    | - |    | - | -  | -   |
+|OTEL_TEXT_MAP_PROPAGATORS                     |   | +  |   | +    |    | -    | - |    | - | -  | -   |
 |OTEL_BSP_*                                    |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_OTLP_*                          |   | +  |   | +    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
