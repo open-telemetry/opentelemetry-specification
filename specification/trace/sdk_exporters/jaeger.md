@@ -2,8 +2,9 @@
 
 This document defines the transformation between OpenTelemetry and Jaeger Spans.
 Jaeger accepts spans in two formats:
-  * Thrift `Batch`, defined in [jaeger-idl/.../jaeger.thrift](https://github.com/jaegertracing/jaeger-idl/blob/master/thrift/jaeger.thrift)
-  * Protobuf `Batch`, defined in [jaeger-idl/.../model.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/model.proto)
+
+* Thrift `Batch`, defined in [jaeger-idl/.../jaeger.thrift](https://github.com/jaegertracing/jaeger-idl/blob/master/thrift/jaeger.thrift)
+* Protobuf `Batch`, defined in [jaeger-idl/.../model.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/model.proto)
 
 ## Summary
 
