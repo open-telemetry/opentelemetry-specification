@@ -229,7 +229,8 @@ This object MUST be immutable.
 
 #### Get Baggage Items
 
-Returns a Shim object exposing the associated OpenTelemetry `Baggage` values.
+Returns a dictionary, collection, or iterator (depending on the requirements of the OpenTracing API for a specific language)
+backed by the associated OpenTelemetry `Baggage` values.
 
 ## ScopeManager Shim
 
