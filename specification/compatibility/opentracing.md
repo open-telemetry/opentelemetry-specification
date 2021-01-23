@@ -97,7 +97,7 @@ no value could be extracted.
 
 ## Span Shim
 
-The `Span` operations MUST be implemented using underlying OpenTelemetry `Span`
+The OpenTracing `Span` operations MUST be implemented using underlying OpenTelemetry `Span`
 and `Baggage` values through a `SpanContext` Shim.
 
 In order to satisfy the OpenTracing `Span` requirements:
