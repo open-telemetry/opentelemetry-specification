@@ -61,7 +61,7 @@ reserve the following environment variables for configuration of protocols in
 the future:
 
 - `OTEL_EXPORTER_OTLP_PROTOCOL`
-- `OTEL_EXPORTER_OTLP_SPAN_PROTOCOL`
+- `OTEL_EXPORTER_OTLP_TRACE_PROTOCOL`
 - `OTEL_EXPORTER_OTLP_METRIC_PROTOCOL`
 
 SDKs are free to choose a default, if no configuration is provided.
