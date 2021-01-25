@@ -3,15 +3,29 @@
 This document defines the transformation between OpenTelemetry and Jaeger Spans.
 Jaeger accepts spans in two formats:
 
-* Thrift `Batch`, defined in [jaeger-idl/.../jaeger.thrift](https://github.com/jaegertracing/jaeger-idl/blob/master/thrift/jaeger.thrift)
-* Protobuf `Batch`, defined in [jaeger-idl/.../model.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/model.proto)
+* Thrift `Batch`, defined in [jaeger-idl/.../jaeger.thrift](https://github.com/jaegertracing/jaeger-idl/blob/master/thrift/jaeger.thrift), accepted via UDP or HTTP
+* Protobuf `Batch`, defined in [jaeger-idl/.../model.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/model.proto), accepted via gRPC
+
+See also: [Jaeger APIs](https://www.jaegertracing.io/docs/latest/apis/).
 
 ## Summary
 
 The following table summarizes the major transformations between OpenTelemetry
 and Jaeger.
 
-TBD
+| OpenTelemetry            | Jaeger Thrift    | Jaeger Proto     | Notes |
+| ------------------------ | ---------------- | ---------------- | ----- |
+| Span.TraceID             | Span.traceIdLow/High | Span.trace_id |      |
+| Span.ParentID            | Span.parentSpanId | as SpanReference | See [Parent ID](#parent-id)     |
+| Span.SpanID              | Span.spanId       | Span.span_id     |      |
+| Span.Name                | Span.operationName | Span.operation_name |  |
+| Span.Kind                | Span.tags["span.kind"] | same | See [SpanKind](#spankind) for values mapping |
+| Span.StartTime           | Span.startTime | Span.start_time | See [Unit of time](#unit-of-time) |
+| Span.EndTime             | Span.duration | same | Calculated as EndTime - StartTime. See also [Unit of time](#unit-of-time) |
+| Span.Attributes          | Span.tags | same | See [Attributes](#attributes) for data types for the mapping.            |
+| Span.Events              | Span.logs | same | See [Events](#events) for the mapping format. |
+| Span.Links               | Span.references | same | See [Links](#links) |
+| Span.Status              | Add to Span.tags | same | See [Status](#status) for tag names to use. |
 
 ## Mappings
 
@@ -36,9 +50,41 @@ OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as span `tags` to
 | `InstrumentationLibrary.name`|`otel.library.name`|
 | `InstrumentationLibrary.version`|`otel.library.version`|
 
-### Attribute
+### Parent ID
 
-TBD
+Jaeger Thrift format allows capturing parent ID in a top-level Span field.
+Jaeger Proto format does not support parent ID field; instead the parent
+must be recorded as a `SpanReference` of type `CHILD_OF`, e.g.:
+
+```python
+    SpanReference(
+        ref_type=opentracing.CHILD_OF,
+        trace_id=span.context.trace_id,
+        span_id=parent_id,
+    )
+```
+
+### SpanKind
+
+OpenTelemetry `SpanKind` field MUST be encoded as `span.kind` tag in Jaeger span.
+
+| OpenTelemetry | Jaeger |
+| ------------- | ------ |
+| `SpanKind.CLIENT`|`"client"`|
+| `SpanKind.SERVER`|`"server"`|
+| `SpanKind.CONSUMER`|`"consumer"`|
+| `SpanKind.PRODUCER`|`"producer"` |
+| `SpanKind.INTERNAL`| do not add `span.kind` tag |
+
+### Unit of time
+
+In Jaeger Thrift format the timestamps and durations MUST be represented in
+microseconds (since epoch for timestamps). If the original value in OpenTelemetry
+is expressed in nanoseconds, it MUST be rounded to microseconds.
+
+In Jaeger Proto format the timestamps and durations MUST be represented
+with nanosecond precision using `google.protobuf.Timestamp` and
+`google.protobuf.Duration` types.
 
 ### Status
 
@@ -54,8 +100,27 @@ The following table defines the OpenTelemetry `Status` to Jaeger `tags` mapping.
 
 ### Error flag
 
-When Span `Status` is set to `ERROR` an `error` tag MUST be added with the
+When Span `Status` is set to `ERROR`, an `error` span tag MUST be added with the
 Boolean value of `true`. The added `error` tag MAY override any previous value.
+
+### Attributes
+
+OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to Jaeger.
+
+Primitive types MUST be represented by the corresponding types of Jaeger tags.
+
+Array values MUST be serialized to string like a JSON list as mentioned in
+[semantic conventions](../../overview.md#semantic-conventions).
+
+### Links
+
+OpenTelemetry `Link`(s) MUST be converted to `SpanReference`(s) in Jaeger,
+using `FOLLOWS_FROM` reference type. The Link's attributes cannot be represented
+in Jaeger explicitly. The exporter MAY convert link attributes to span `Log`(s):
+  * use Span start time as the timestamp of the Log
+  * set Log tag `event=link`
+  * set Log tags `trace_id` and `span_id` from `SpanContext`'s fields
+  * store `Link`'s attributes and Log tags
 
 ### Events
 
