@@ -22,6 +22,11 @@ Table of Contents
 
 ## Overview
 
+`Baggage` is used to annotate telemetry, adding context and information to
+metrics, traces, and logs. It is a set of name/value pairs describing
+user-defined properties. Each name in `Baggage` MUST be associated with
+exactly one value.
+
 The Baggage API consists of:
 
 - the `Baggage`
@@ -36,11 +41,6 @@ The Baggage API MUST be fully functional in the absence of an installed SDK.
 This is required in order to enable transparent cross-process Baggage
 propagation. If a Baggage propagator is installed into the API, it will work
 with or without an installed SDK.
-
-`Baggage` is used to annotate telemetry, adding context and information to
-metrics, traces, and logs. It is a set of name/value pairs describing
-user-defined properties. Each name in `Baggage` MUST be associated with
-exactly one value.
 
 The `Baggage` container MUST be immutable, so that the containing `Context`
 also remains immutable.
@@ -157,10 +157,10 @@ On `inject`, the propagator should append the metadata per the W3C specification
 
 Notes:
 
-If the propagator is unable to parse the `baggage` header, `extract` MUST return
+If the propagator is unable to parse the incoming `baggage`, `extract` MUST return
 a `Context` with no baggage entries in it.
 
-If the `baggage` header is present, but contains no entries, `extract` MUST
+If the incoming `baggage` is present, but contains no entries, `extract` MUST
 return a `Context` with no baggage entries in it.
 
 ## Conflict Resolution
