@@ -47,7 +47,7 @@ status of the feature is not known.
 | links collection size limit                                                                      |          |    | +    | +  | +      | +    | -      |     | +    |     | -    | +     |
 | [Span attributes](specification/trace/api.md#set-attributes)                                     |          |    |      |    |        |      |        |     |      |     |      |       |
 | SetAttribute                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Set order preserved                                                                              |          | +  | -    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Set order preserved                                                                              | X        | +  | -    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | String type                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Boolean type                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Double floating-point type                                                                       |          | +  | +    | +  | +      | +    | +      | -   | +    | +   | +    | +     |
