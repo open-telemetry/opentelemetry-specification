@@ -14,6 +14,7 @@ New:
   
 Updates:
 
+- Add `http.server.requests` to count in-flight HTTP requests([#1378](https://github.com/open-telemetry/opentelemetry-specification/pull/1378))
 - Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
