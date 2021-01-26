@@ -26,7 +26,7 @@ metrics in the OpenMetrics exposition format. For more information, refer to the
 
 Exposting OpenTelemetry metrics in the OpenMetrics format is primarily
 problematic for metric and label naming; the OpenMetrics exposition format
-expressly forbits some characters that are allowed in OpenTelemetry.
+expressly forbids some characters that are allowed in OpenTelemetry.
 
 When converting OpenTelemetry metric events to the OpenMetrics exposition
 format, the name field and all label keys MUST be sanitized by replacing
