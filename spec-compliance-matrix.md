@@ -32,8 +32,8 @@ status of the feature is not known.
 |Create root span                              | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Create with default parent (active span)      | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |Create with parent from Context               | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|No explicit parent Span/SpanContext allowed   |   | +  | + | +    | +  | +    |   | +  | + |    | +   |
-|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  | +    |   | +  | + |    | +   |
+|No explicit parent Span/SpanContext allowed   |   | +  | + | +    | +  | +    |   | +  |   |    | +   |
+|SpanProcessor.OnStart receives parent Context |   | +  | + | +    | +  | +    |   | +  |   |    | +   |
 |UpdateName                                    | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |User-defined start timestamp                  | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |End                                           | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
@@ -41,7 +41,7 @@ status of the feature is not known.
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |IsRecording becomes false after End           |   | +  | + | +    | +  | +    |   |    | + |    | +   |
 |Set status with StatusCode (Unset, Ok, Error) |   | +  | + | +    | +  | -    |   | +  | + | +  | +   |
-|Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
+|Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | - | +  | +   |
 |events collection size limit                  |   | +  | + | +    | +  | -    |   | +  | - | -  | +   |
 |attribute collection size limit               |   | +  | + | +    | +  | -    |   | +  | - | -  | +   |
 |links collection size limit                   |   | +  | + | +    | +  | -    |   | +  | - | -  | +   |
@@ -53,7 +53,7 @@ status of the feature is not known.
 |Double floating-point type                    | + | +  | + | +    | +  | +    | - | +  | + | +  | +   |
 |Signed int64 type                             | + | +  | + | +    | +  | +    | - | +  | + | +  | +   |
 |Array of primitives (homogeneous)             | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
-|`null` values documented as invalid/undefined |   | +  | + | +    |    | N/A  |   |    |   |    | N/A |
+|`null` values documented as invalid/undefined |   | +  | + | +    |    | N/A  |   |    | + |    | N/A |
 |Unicode support for keys and string values    | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |[Span linking](specification/trace/api.md#specifying-links)|
 |AddLink                                       | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
@@ -90,9 +90,9 @@ status of the feature is not known.
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |Create from Attributes                        | + | +  | + | +    | +  | +    |   | +  | + | +  | +   |
 |Create empty                                  | + | +  | + | +    | +  | +    |   | +  | + | +  | +   |
-|[Merge (v2)](specification/resource/sdk.md#merge) |   |    |   |      |    |      |    |   |    |     |     |
+|[Merge (v2)](specification/resource/sdk.md#merge) |   |    |   |      |    |      |    |   | +  |     |     |
 |Retrieve attributes                           | + | +  | + | +    | +  | +    |   | +  | + | +  | +   |
-|[Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |   |    |   |      |    |      |   |    |   |    |     |
+|[Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |   |    |   |      |    |      |   |    | + |    |     |
 
 ## Context Propagation
 
@@ -111,9 +111,9 @@ status of the feature is not known.
 |Jaeger Propagator                             |  | [-](https://github.com/open-telemetry/opentelemetry-java/pull/1549)  | + | +    |    | +    |   | +  |   |    |  -  |
 |[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)|
 |Fields                                        |  | +  | + | +    |    | +    |   | +  |   |  + | +   |
-|Setter argument                               |  | +  | + | +    | +  | +    |   |    | + |  + | +   |
-|Getter argument                               |  | +  | + | +    | +  | +    |   |    | + |  + | +   |
-|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    | + |  - | +   |
+|Setter argument                               |  | +  | + | +    | +  | +    |   |    |   |  + | +   |
+|Getter argument                               |  | +  | + | +    | +  | +    |   |    |   |  + | +   |
+|Getter argument returning Keys                |  | +  | + | +    |    | +    |   |    |   |  - | +   |
 
 ## Environment Variables
 
