@@ -102,7 +102,7 @@ OpenTelemetry `SpanKind` field MUST be encoded as `span.kind` tag in Jaeger span
 
 In Jaeger Thrift format the timestamps and durations MUST be represented in
 microseconds (since epoch for timestamps). If the original value in OpenTelemetry
-is expressed in nanoseconds, it MUST be rounded to microseconds.
+is expressed in nanoseconds, it MUST be rounded or truncated to microseconds.
 
 In Jaeger Proto format the timestamps and durations MUST be represented
 with nanosecond precision using `google.protobuf.Timestamp` and
@@ -138,12 +138,12 @@ Array values MUST be serialized to string like a JSON list as mentioned in
 
 OpenTelemetry `Link`(s) MUST be converted to `SpanReference`(s) in Jaeger,
 using `FOLLOWS_FROM` reference type. The Link's attributes cannot be represented
-in Jaeger explicitly. The exporter MAY convert link attributes to span `Log`(s):
+in Jaeger explicitly. The exporter MAY additionally convert `Link`(s) to span `Log`(s):
 
 * use Span start time as the timestamp of the Log
 * set Log tag `event=link`
-* set Log tags `trace_id` and `span_id` from `SpanContext`'s fields
-* store `Link`'s attributes and Log tags
+* set Log tags `trace_id` and `span_id` from the respective `SpanContext`'s fields
+* store `Link`'s attributes as Log tags
 
 ### Events
 
