@@ -86,9 +86,12 @@ MUST be recorded as a `SpanReference` of type `CHILD_OF`, e.g.:
     )
 ```
 
+This span reference MUST be the first in the list of references.
+
 ### SpanKind
 
-OpenTelemetry `SpanKind` field MUST be encoded as `span.kind` tag in Jaeger span.
+OpenTelemetry `SpanKind` field MUST be encoded as `span.kind` tag in Jaeger span,
+except for `SpanKind.INTERNAL`, which SHOULD NOT be translated to a tag.
 
 | OpenTelemetry | Jaeger |
 | ------------- | ------ |
@@ -144,6 +147,9 @@ in Jaeger explicitly. The exporter MAY additionally convert `Link`(s) to span `L
 * set Log tag `event=link`
 * set Log tags `trace_id` and `span_id` from the respective `SpanContext`'s fields
 * store `Link`'s attributes as Log tags
+
+Span references generated from `Link`(s) MUST be added _after_ the span reference
+generated from [Parent ID](#parent-id), if any.
 
 ### Events
 
