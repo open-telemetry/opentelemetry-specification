@@ -11,7 +11,7 @@ New:
 
 - Add `cloud.infrastructure_service` resource attribute
   ([#1112](https://github.com/open-telemetry/opentelemetry-specification/pull/1112))
-  
+
 Updates:
 
 - Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
@@ -47,6 +47,8 @@ Updates:
 - Resource attributes: lowerecased the allowed values of the `aws.ecs.launchtype`
   attribute
   ([#1339](https://github.com/open-telemetry/opentelemetry-specification/pull/1339))
+- Trace Exporters: Fix TODOs in Jaeger exporter spec
+  ([#1374](https://github.com/open-telemetry/opentelemetry-specification/pull/1374))
 
 ## v0.7.0 (11-18-2020)
 
