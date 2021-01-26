@@ -71,7 +71,6 @@ status of the feature is not known.
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     |      | +     |
 | SDK Trace & Span ID generation is customizable                                                   |          | +  | +    | +  | +      | +    |        |     |      |     | -    |       |
 
-
 ## Baggage
 
 | Feature                            | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
