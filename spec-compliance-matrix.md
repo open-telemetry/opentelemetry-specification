@@ -40,8 +40,8 @@ status of the feature is not known.
 |End with timestamp                            | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |IsRecording                                   | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |IsRecording becomes false after End           |   | +  | + | +    | +  | +    |   |    | + |    | +   |
-|Set status with StatusCode (Unset, Ok, Error) |   | +  | + | +    | +  | -    |   | +  | + | +  | +   |
-|Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | - | +  | +   |
+|Set status with StatusCode (Unset, Ok, Error) |   | +  | + | +    | +  | -    |   | +  |   | +  | +   |
+|Safe for concurrent calls                     | + | +  | + | +    | +  | +    | + | +  | + | +  | +   |
 |events collection size limit                  |   | +  | + | +    | +  | -    |   | +  | - | -  | +   |
 |attribute collection size limit               |   | +  | + | +    | +  | -    |   | +  | - | -  | +   |
 |links collection size limit                   |   | +  | + | +    | +  | -    |   | +  | - | -  | +   |
