@@ -15,7 +15,7 @@ and Jaeger.
 
 | OpenTelemetry            | Jaeger Thrift    | Jaeger Proto     | Notes |
 | ------------------------ | ---------------- | ---------------- | ----- |
-| Span.TraceID             | Span.traceIdLow/High | Span.trace_id |      |
+| Span.TraceID             | Span.traceIdLow/High | Span.trace_id | See [IDs](#ids)     |
 | Span.ParentID            | Span.parentSpanId | as SpanReference | See [Parent ID](#parent-id)     |
 | Span.SpanID              | Span.spanId       | Span.span_id     |      |
 | Span.Name                | Span.operationName | Span.operation_name |  |
@@ -50,11 +50,33 @@ OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as span `tags` to
 | `InstrumentationLibrary.name`|`otel.library.name`|
 | `InstrumentationLibrary.version`|`otel.library.version`|
 
+### IDs
+
+Trace and span IDs in Jaeger are random sequences of bytes. However, Thrft model
+represents IDs using `i64` type, or in case of a 128-bit wide Trace ID as two `i64`
+fields `traceIdLow` and `traceIdHigh`. The bytes MUST be converted to/from unsigned
+ints using Big Endian byte order, e.g. `[0x10, 0x00, 0x00, 0x00] == 268435456`.
+The unsigned ints MUST be converted to `i64` by re-interpreting the existing
+64bit value as signed `i64`. For example (in Go):
+
+```go
+	var (
+		id       []byte = []byte{0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+		unsigned uint64 = binary.BigEndian.Uint64(id)
+		signed   int64  = int64(unsigned)
+	)
+	fmt.Println("unsigned:", unsigned)
+	fmt.Println("  signed:", signed)
+	// Output:
+	// unsigned: 18374686479671623680
+	//   signed: -72057594037927936
+```
+
 ### Parent ID
 
 Jaeger Thrift format allows capturing parent ID in a top-level Span field.
 Jaeger Proto format does not support parent ID field; instead the parent
-must be recorded as a `SpanReference` of type `CHILD_OF`, e.g.:
+MUST be recorded as a `SpanReference` of type `CHILD_OF`, e.g.:
 
 ```python
     SpanReference(
