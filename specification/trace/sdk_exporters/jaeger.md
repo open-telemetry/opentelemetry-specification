@@ -60,16 +60,16 @@ The unsigned ints MUST be converted to `i64` by re-interpreting the existing
 64bit value as signed `i64`. For example (in Go):
 
 ```go
-	var (
-		id       []byte = []byte{0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
-		unsigned uint64 = binary.BigEndian.Uint64(id)
-		signed   int64  = int64(unsigned)
-	)
-	fmt.Println("unsigned:", unsigned)
-	fmt.Println("  signed:", signed)
-	// Output:
-	// unsigned: 18374686479671623680
-	//   signed: -72057594037927936
+var (
+    id       []byte = []byte{0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+    unsigned uint64 = binary.BigEndian.Uint64(id)
+    signed   int64  = int64(unsigned)
+)
+fmt.Println("unsigned:", unsigned)
+fmt.Println("  signed:", signed)
+// Output:
+// unsigned: 18374686479671623680
+//   signed: -72057594037927936
 ```
 
 ### Parent ID
