@@ -44,6 +44,9 @@ Updates:
 - Resource SDK: Reverse (suggested) order of Resource.Merge parameters, remove
   special case for empty strings
   ([#1345](https://github.com/open-telemetry/opentelemetry-specification/pull/1345))
+- Resource attributes: lowerecased the allowed values of the `aws.ecs.launchtype`
+  attribute
+  ([#1339](https://github.com/open-telemetry/opentelemetry-specification/pull/1339))
 
 ## v0.7.0 (11-18-2020)
 
