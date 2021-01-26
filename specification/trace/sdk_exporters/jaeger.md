@@ -6,7 +6,10 @@ Jaeger accepts spans in two formats:
 * Thrift `Batch`, defined in [jaeger-idl/.../jaeger.thrift](https://github.com/jaegertracing/jaeger-idl/blob/master/thrift/jaeger.thrift), accepted via UDP or HTTP
 * Protobuf `Batch`, defined in [jaeger-idl/.../model.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/model.proto), accepted via gRPC
 
-See also: [Jaeger APIs](https://www.jaegertracing.io/docs/latest/apis/).
+See also:
+
+* [Jaeger APIs](https://www.jaegertracing.io/docs/latest/apis/)
+* [Reference implementation of this translation in the OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector/blob/master/translator/trace/jaeger/traces_to_jaegerproto.go)
 
 ## Summary
 
