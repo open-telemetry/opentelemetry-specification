@@ -14,7 +14,7 @@ New:
   
 Updates:
 
-- Rename signal-specific variables for `OTLP_EXPORTER_*` to `OTLP_EXPORTER_TRACE_*` and `OTLP_EXPORTER_METRICS_*`([#1362](https://github.com/open-telemetry/opentelemetry-specification/pull/1362))
+- Rename signal-specific variables for `OTLP_EXPORTER_*` to `OTLP_EXPORTER_TRACES_*` and `OTLP_EXPORTER_METRICS_*`([#1362](https://github.com/open-telemetry/opentelemetry-specification/pull/1362))
 - Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
