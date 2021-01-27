@@ -550,6 +550,6 @@ document when referring to either one.
 
 ## References
 
-- [OTEP 0035](https://github.com/open-telemetry/oteps/blob/master/text/0035-opentelemetry-protocol.md) OpenTelemetry Protocol Specification
-- [OTEP 0099](https://github.com/open-telemetry/oteps/blob/master/text/0099-otlp-http.md) OTLP/HTTP: HTTP Transport Extension for OTLP
-- [OTEP 0122](https://github.com/open-telemetry/oteps/blob/master/text/0122-otlp-http-json.md) OTLP: JSON Encoding for OTLP/HTTP
+- [OTEP 0035](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md) OpenTelemetry Protocol Specification
+- [OTEP 0099](https://github.com/open-telemetry/oteps/blob/main/text/0099-otlp-http.md) OTLP/HTTP: HTTP Transport Extension for OTLP
+- [OTEP 0122](https://github.com/open-telemetry/oteps/blob/main/text/0122-otlp-http-json.md) OTLP: JSON Encoding for OTLP/HTTP
