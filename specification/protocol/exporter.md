@@ -1,6 +1,6 @@
 # OpenTelemetry Protocol Exporter
 
-This document specifies the configuration options available to the OpenTelemetry Protocol ([OTLP](https://github.com/open-telemetry/oteps/blob/master/text/0035-opentelemetry-protocol.md)) Exporter as well as the retry behavior.
+This document specifies the configuration options available to the OpenTelemetry Protocol ([OTLP](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md)) Exporter as well as the retry behavior.
 
 ## Configuration Options
 
@@ -82,6 +82,6 @@ Transient errors are errors which expect the backend to recover. The following s
 | 15 | Data Loss |
 | 16 | Unauthenticated |
 
-Additional details on transient errors can be found in [otep-35](https://github.com/open-telemetry/oteps/blob/master/text/0035-opentelemetry-protocol.md#export-response) for gRPC and [otep-99](https://github.com/open-telemetry/oteps/blob/master/text/0099-otlp-http.md#failures) for HTTP
+Additional details on transient errors can be found in [otep-35](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md#export-response) for gRPC and [otep-99](https://github.com/open-telemetry/oteps/blob/main/text/0099-otlp-http.md#failures) for HTTP
 
 [otlphttp-req]: otlp.md#otlphttp-request
