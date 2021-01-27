@@ -192,7 +192,7 @@ consider these as separate instruments.
 The SDK is responsible for implementing any syntactic requirements for
 metric names included in the API specification.  TODO: link to this
 after [OTEP
-108](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0108-naming-guidelines.md)
+108](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0108-naming-guidelines.md)
 is written into the API specification.
 
 #### SDK: RecordBatch() function
