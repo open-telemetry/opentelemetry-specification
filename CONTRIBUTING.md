@@ -3,7 +3,7 @@
 Welcome to OpenTelemetry specifications repository!
 
 Before you start - see OpenTelemetry general
-[contributing](https://github.com/open-telemetry/community/blob/master/CONTRIBUTING.md)
+[contributing](https://github.com/open-telemetry/community/blob/main/CONTRIBUTING.md)
 requirements and recommendations.
 
 ## Sign the CLA
@@ -139,7 +139,7 @@ A PR is considered to be **ready to merge** when:
   wait for two days.
 
 Any [spec
-maintainer](https://github.com/open-telemetry/community/blob/master/community-members.md#specifications-and-proto) can
+maintainer](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto) can
 merge the PR once it is **ready to merge**.
 
 If a PR has been stuck (e.g. there are lots of debates and people couldn't agree

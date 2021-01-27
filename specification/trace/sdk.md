@@ -580,4 +580,4 @@ public interface SpanExporter {
 ```
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
-[otep-83]: https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md
+[otep-83]: https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md
