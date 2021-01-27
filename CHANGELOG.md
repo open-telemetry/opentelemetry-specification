@@ -11,7 +11,7 @@ New:
 
 - Add `cloud.infrastructure_service` resource attribute
   ([#1112](https://github.com/open-telemetry/opentelemetry-specification/pull/1112))
-  
+
 Updates:
 
 - Rename signal-specific variables for `OTLP_EXPORTER_*` to `OTLP_EXPORTER_TRACES_*` and `OTLP_EXPORTER_METRICS_*`([#1362](https://github.com/open-telemetry/opentelemetry-specification/pull/1362))
@@ -45,6 +45,8 @@ Updates:
 - Resource SDK: Reverse (suggested) order of Resource.Merge parameters, remove
   special case for empty strings
   ([#1345](https://github.com/open-telemetry/opentelemetry-specification/pull/1345))
+- Trace Exporters: Fix TODOs in Jaeger exporter spec
+  ([#1374](https://github.com/open-telemetry/opentelemetry-specification/pull/1374))
 
 ## v0.7.0 (11-18-2020)
 
