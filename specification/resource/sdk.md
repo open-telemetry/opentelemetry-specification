@@ -1,5 +1,7 @@
 # Resource SDK
 
+**Status**: [Stable](../document-status.md)
+
 A [Resource](../overview.md#resources) is an immutable representation of the entity producing
 telemetry as [Attributes](../common/common.md#attributes).
 For example, a process producing telemetry that is running in a

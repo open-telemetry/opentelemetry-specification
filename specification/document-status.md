@@ -5,7 +5,19 @@ shown immediately after the document title. When present, the "Status" applies
 to the individual document only and not to the entire specification or any other
 documents. The following table describes what the statuses mean.
 
+## Lifecycle status
+
+The support guarantees and allowed changes are governed by the lifecycle of the document.Lifecycle stages are defined in the [Versioning and Stability](versioning-and-stability.md) document.
+
 |Status              |Explanation|
 |--------------------|-----------|
-|No explicit "Status"|Working draft, can change any time.|
-|Feature-freeze      |Document is no longer accepting new substantial changes, except when such changes are necessary to resolve a fundamental problem or inconsistency in the specification. Editorial changes are accepted. The document and the area it describes are considered feature-complete for the version of the specification the document targets. The document in this status is ready for implementation.|
+|No explicit "Status"|Equivalent to Experimental.|
+|Experimental        |Breaking changes are allowed.|
+|Stable              |Breaking changes are not longer allowed. See [stability guarantees](versioning-and-stability.md#stable) for details.|
+|Deprecated          |Changes are no longer allowed, except for editorial changes.|
+
+## Feature freeze
+
+In addition to the statuses above, documents may be marked as `Feature-freeze`. These documents are not currently accepting new feature requests, to allow the Technical Committee time to focus on other areas of the specification. Editorial changes are still accepted. Changes that address production issues with existing features are still accepted.
+
+Feature freeze is separate from a lifecycle status. The lifecycle represents the support requirements for the document, feature freeze only indicates the current focus of the specification community. The feature freeze label may be applied to a document at any lifecycle stage. By definition, deprecated documents have a feature freeze in place.

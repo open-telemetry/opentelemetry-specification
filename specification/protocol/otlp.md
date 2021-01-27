@@ -1,5 +1,7 @@
 # OpenTelemetry Protocol Specification
 
+**Status**: [Stable](../document-status.md)
+
 OpenTelemetry Protocol (OTLP) specification describes the encoding, transport,
 and delivery mechanism of telemetry data between telemetry sources, intermediate
 nodes such as collectors and telemetry backends.
