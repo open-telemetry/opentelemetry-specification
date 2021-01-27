@@ -19,12 +19,12 @@ groups:
           allow_custom_values: false
           members:
             - id: ec2
-              value: "EC2"
+              value: "ec2"
             - id: fargate
-              value: "Fargate"
+              value: "fargate"
         brief: >
           The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
-        examples: ['EC2', 'Fargate']
+        examples: ['ec2', 'fargate']
       - id: task.arn
         type: string
         brief: >
