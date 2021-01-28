@@ -64,9 +64,6 @@ span to improve Zipkin user experience.
 *Note*, the attribute `service.namespace` must not be used for the Zipkin
 service name and should be sent as a Zipkin tag.
 
-*Note*, exporter to Zipkin MUST allow to configure the default "fall back" name
-to use as a Zipkin service name.
-
 ### SpanKind
 
 The following table lists all the `SpanKind` mappings between OpenTelemetry and
