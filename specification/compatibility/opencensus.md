@@ -22,6 +22,45 @@ process towards OpenTelemetry via the shim and adding new telemetry information
 via OpenTelemetry.  Slowly, libraries and integrations will also migrate
 towards opentelemetry until the shim is no longer necessary.
 
+For example, an applciation may have traces today of the following variety:
+
+```
+|-- Applicaiton - Configured OpenCenus --------------------------------- |
+    |--  gRPC -> Using OpenCensus to genereate Trace A  --------- |
+      |--  Application -> Using OpenCensus to generate a sub Trace B-- |
+```
+
+In this case, the application should be able to update its outer layer to
+OpenTelemetry, without having to wait for all downstream dependencies to
+have updated to OpenTelemetry (or deal with incompatibilities therein). The
+Application also doesn't need to rewrite any of its own instrumentation.
+
+```
+|-- Applicaiton - Configured Otel w/ OpenCensus Shim ------------------- |
+    |--  gRPC -> Using OpenCensus to genereate Trace A  --------- |
+      |--  Application -> Using OpenCensus to generate a sub Trace B-- |
+```
+
+Next, the application can update its own instrumentation in a piecemeal fashion:
+
+```
+|-- Applicaiton - Configured Otel w/ OpenCensus Shim ---------------------- |
+    |--  gRPC -> Using OpenCensus to genereate Trace A  --------- |
+      |--  Application -> Using OpenTelemetry to generate a sub Trace B-- |
+```
+
+> This layer of Otel -> OpenCensus -> Otel tracing can be thought of as the
+> "OpenTelemetry sandwhich" problem, and is the key motivating factor for
+> this specification.
+
+Finally, the APplication would update all usages of OpenCensus to OpenTelemetry.
+
+```
+|-- Applicaiton - Configured Otel standalong ----------------------------- |
+    |--  gRPC -> Using Otel to genereate Trace A  --------- |
+      |--  Application -> Using OpenTelemetry to generate a sub Trace B-- |
+```
+
 OpenCensus supports two primary types of telemetry: Traces and Stats (Metrics).
 Compatibility for these is defined separately.
 
