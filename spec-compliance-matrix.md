@@ -181,5 +181,5 @@ Note: Support for environment variables is optional.
 | Prometheus                                            |          |    |                                                                       |    |                                                                         |      |        |     |      |     |      |       |
 | TBD                                                   |          |    |                                                                       |    |                                                                         |      |        |     |      |     |      |       |
 
-* For each type of exporter, OTLP, Zipkin, and Jaeger, implementing one of the supported formats is required,
-  while other formats can be considered optional.
+* For each type of exporter, OTLP, Zipkin, and Jaeger, implementing at least one of the supported formats is required.
+Implementing more than one formats is optional.
