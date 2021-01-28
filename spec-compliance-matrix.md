@@ -15,14 +15,14 @@ status of the feature is not known.
 | Create TracerProvider                                                                            |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Shutdown (SDK only required)                                                                     |          |    | +    | +  | +      | +    | -      |     | +    |     | +    | +     |
+| Shutdown (SDK only required)                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
-| Get active Span                                                                                  |          |    | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
-| Set active Span                                                                                  |          |    | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
+| Get active Span                                                                                  |          |    | +    | +  | +      | +    | N/A    |     | +    | +   | +    | +     |
+| Set active Span                                                                                  |          |    | +    | +  | +      | +    | N/A    |     | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get active Span                                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Mark Span active                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | +    | +     |
+| Mark Span active                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [SpanContext](specification/trace/api.md#spancontext)                                            |          |    |      |    |        |      |        |     |      |     |      |       |
 | IsValid                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -34,17 +34,17 @@ status of the feature is not known.
 | Create with parent from Context                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | No explicit parent Span/SpanContext allowed                                                      |          |    | +    | +  | +      | +    | +      |     | +    |     |      | +     |
 | SpanProcessor.OnStart receives parent Context                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     |      | +     |
-| UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | +    | +     |
+| UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | User-defined start timestamp                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End                                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End with timestamp                                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRecording becomes false after End                                                              |          |    | +    | +  | +      | +    | +      |     |      |     |      | +     |
+| IsRecording becomes false after End                                                              |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
 | Set status with StatusCode (Unset, Ok, Error)                                                    |          |    | +    | +  | +      | +    | -      |     | +    |     | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| events collection size limit                                                                     |          |    | +    | +  | +      | +    | -      |     | +    |     | -    | +     |
-| attribute collection size limit                                                                  |          |    | +    | +  | +      | +    | -      |     | +    |     | -    | +     |
-| links collection size limit                                                                      |          |    | +    | +  | +      | +    | -      |     | +    |     | -    | +     |
+| events collection size limit                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
+| attribute collection size limit                                                                  |          |    | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
+| links collection size limit                                                                      |          |    | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
 | [Span attributes](specification/trace/api.md#set-attributes)                                     |          |    |      |    |        |      |        |     |      |     |      |       |
 | SetAttribute                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set order preserved                                                                              | X        | +  | -    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -53,21 +53,21 @@ status of the feature is not known.
 | Double floating-point type                                                                       |          | +  | +    | +  | +      | +    | +      | -   | +    | +   | +    | +     |
 | Signed int64 type                                                                                |          | +  | +    | +  | +      | +    | +      | -   | +    | +   | +    | +     |
 | Array of primitives (homogeneous)                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| `null` values documented as invalid/undefined                                                    |          |    | +    | +  | +      |      | N/A    |     |      |     |      | N/A   |
+| `null` values documented as invalid/undefined                                                    |          |    | +    | +  | +      |      | N/A    |     |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      |          |    |      |    |        |      |        |     |      |     |      |       |
 | AddLink                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | +    | +     |
-| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | +    | +     |
-| [Span events](specification/trace/api.md#add-events)                                             |          |    |      |    |        |      |        |     |      |     |      |       |
-| AddEvent                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | +    | +     |
-| Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | +    | +     |
-| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | +    | +     |
+| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| [Span events](specification/trace/api.md#add-events)                                             |          |    |      |    |        |      |        |     |      | +   |      |       |
+| AddEvent                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span exceptions](specification/trace/api.md#record-exception)                                   |          |    |      |    |        |      |        |     |      |     |      |       |
 | RecordException                                                                                  |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | RecordException with extra parameters                                                            |          | -  | +    | +  | +      | -    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     |      | +     |
-| ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      |     |      | +     |
+| ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     |      | +     |
 | SDK Trace & Span ID generation is customizable                                                   |          | +  | +    | +  | +      | +    |        |     |      |     | -    |       |
 
@@ -88,25 +88,25 @@ status of the feature is not known.
 
 | Feature                                                                                                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        |      |        |     |      |     |      |       |
-| Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        |      |        |     |      |     |      |       |
+| Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        |      |        |     |      | +   |      |       |
+| Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        |      |        |     |      | +   |      |       |
 
 ## Context Propagation
 
 | Feature                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |----------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    |     |      | +     |
-| Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    |     |      | +     |
-| Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    |     |      | +     |
-| Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    |     |      | -     |
-| Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    |     |      | -     |
-| Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    |     |      | +     |
+| Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
+| Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
+| Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
+| Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
+| Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
+| Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
 | Composite Propagator                                                             |          |    | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
 | Global Propagator                                                                |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | Jaeger Propagator                                                                |          |    | +    | +  | +      |      | +      |     | +    |     |      | -     |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          |    |      |    |        |      |        |     |      |     |      |       |
@@ -125,7 +125,7 @@ Note: Support for environment variables is optional.
 |OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | -    | - |    | - | -  | -   |        |
 |OTEL_PROPAGATORS                              |   | +  |   | +    |    | -    | - |    | - | -  | -   |
 |OTEL_BSP_*                                    |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          |   | +  |   | +    | +  | -    | - |    | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          |   | -  |   | -    | -  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
 |OTEL_TRACE_EXPORTER                           |   | +  |   | -    |    |      |   |    |   | -  | -   |
@@ -141,10 +141,10 @@ Note: Support for environment variables is optional.
 | Feature                                               | Optional | Go | Java                                                                  | JS | Python                                                                  | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |-------------------------------------------------------|----------|----|-----------------------------------------------------------------------|----|-------------------------------------------------------------------------|------|--------|-----|------|-----|------|-------|
 | Standard output (logging)                             |          | +  | +                                                                     | +  | +                                                                       | +    | +      | -   | +    | +   | +    | +     |
-| In-memory (mock exporter)                             |          | +  | +                                                                     | +  | +                                                                       | +    | +      | -   | -    | -   | +    | +     |
+| In-memory (mock exporter)                             |          | +  | +                                                                     | +  | +                                                                       | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                |          |    |                                                                       |    |                                                                         |      |        |     |      |     |      |       |
 | OTLP/gRPC Exporter                                    |          | +  | +                                                                     | +  | +                                                                       |      | +      |     | +    | +   | +    | +     |
-| OTLP/HTTP binary Protobuf Exporter                    | X        | -  | -                                                                     | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106) | +    | +      |     |      | +   | -    | -     |
+| OTLP/HTTP binary Protobuf Exporter                    | X        | -  | -                                                                     | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106) | +    | +      |     |      |     | -    | -     |
 | OTLP/HTTP JSON Protobuf Exporter                      | X        | -  | -                                                                     | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1003) |      | -      |     |      |     | -    | -     |
 | OTLP/HTTP gzip Content-Encoding support               | X        | -  | -                                                                     | +  | +                                                                       | +    | -      |     |      |     | -    | -     |
 | Concurrent sending                                    |          | -  |                                                                       | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1108) |      | -      |     | +    |     | -    | -     |
