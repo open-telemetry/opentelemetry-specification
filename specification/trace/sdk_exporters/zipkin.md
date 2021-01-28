@@ -53,7 +53,7 @@ and Zipkin.
 
 Zipkin service name MUST be set to the value of the
 [resource attribute](../../resource/semantic_conventions/README.md):
-`service.name`. If no `service.name` was specified, it MUST be populated from the
+`service.name`. If no `service.name` is contained in a Span's Resource, it MUST be populated from the
 [default](../../resource/sdk.md#sdk-provided-resource-attributes) `Resource`.
 In Zipkin it is important that the service name is consistent
 for all spans in a local root. Otherwise service graph and aggregations would
