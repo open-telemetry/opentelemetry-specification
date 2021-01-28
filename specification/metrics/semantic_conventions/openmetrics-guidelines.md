@@ -1,6 +1,6 @@
 # Guidance for Interoperating with OpenMetrics
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../document-status.md)
 
 **Note:** This document is work in progress and will be updated as the
 OpenMetrics specification further develops.

@@ -1,6 +1,6 @@
 # General
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../document-status.md)
 
 The conventions described in this section are HTTP specific. When HTTP operations occur,
 metric events about those operations will be generated and reported to provide insight into the

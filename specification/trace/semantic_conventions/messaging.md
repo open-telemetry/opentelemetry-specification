@@ -1,6 +1,6 @@
 # Messaging systems
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../document-status.md)
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 

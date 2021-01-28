@@ -1,6 +1,6 @@
 # Semantic Conventions for System Metrics
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../document-status.md)
 
 This document describes instruments and labels for common system level
 metrics in OpenTelemetry. Consider the [general metric semantic

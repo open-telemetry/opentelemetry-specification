@@ -1,6 +1,6 @@
 # General attributes
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../document-status.md)
 
 The attributes described in this section are not specific to a particular operation but rather generic.
 They may be used in any Span they apply to.

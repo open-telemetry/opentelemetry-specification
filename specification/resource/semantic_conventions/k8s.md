@@ -1,6 +1,6 @@
 # Kubernetes
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../document-status.md)
 
 Useful resources to understand Kubernetes objects and metadata:
 

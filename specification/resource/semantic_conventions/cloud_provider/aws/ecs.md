@@ -1,6 +1,6 @@
 # AWS ECS
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../../../document-status.md)
 
 **type:** `aws.ecs`
 

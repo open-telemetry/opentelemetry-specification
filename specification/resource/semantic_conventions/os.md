@@ -1,6 +1,6 @@
 # Operating System
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../document-status.md)
 
 **type:** `os`
 

@@ -1,6 +1,6 @@
 # OpenTelemetry to Jaeger Transformation
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 This document defines the transformation between OpenTelemetry and Jaeger Spans.
 Jaeger accepts spans in two formats:

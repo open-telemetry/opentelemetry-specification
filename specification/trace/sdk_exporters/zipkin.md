@@ -1,6 +1,6 @@
 # OpenTelemetry to Zipkin Transformation
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
 Zipkin's v2 API is defined in the

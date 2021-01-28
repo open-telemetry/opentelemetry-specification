@@ -1,6 +1,6 @@
 # Function as a Service
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../../document-status.md)
 
 **type:** `faas`
 
