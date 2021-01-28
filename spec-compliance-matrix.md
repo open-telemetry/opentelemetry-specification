@@ -138,6 +138,9 @@ Note: Support for environment variables is optional.
 
 ## Exporters
 
+For each type of exporter, OTLP, Zipkin, and Jaeger, implementing one of the supported formats is required,
+while other formats can be considered optional.
+
 | Feature                                               | Optional | Go | Java                                                                  | JS | Python                                                                  | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |-------------------------------------------------------|----------|----|-----------------------------------------------------------------------|----|-------------------------------------------------------------------------|------|--------|-----|------|-----|------|-------|
 | Standard output (logging)                             |          | +  | +                                                                     | +  | +                                                                       | +    | +      | -   | +    | +   | +    | +     |
