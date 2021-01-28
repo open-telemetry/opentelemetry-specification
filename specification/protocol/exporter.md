@@ -64,7 +64,7 @@ the future:
 - `OTEL_EXPORTER_OTLP_TRACE_PROTOCOL`
 - `OTEL_EXPORTER_OTLP_METRIC_PROTOCOL`
 
-SDKs are free to choose a default, if no configuration is provided.
+SDKs have an unspecified default, if no configuration is provided.
 
 ### Specifying headers via environment variables
 
