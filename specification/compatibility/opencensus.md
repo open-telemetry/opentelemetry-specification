@@ -25,7 +25,7 @@ towards opentelemetry until the shim is no longer necessary.
 For example, an application may have traces today of the following variety:
 
 ```
-|-- Applicaiton - Configured OpenCenus --------------------------------- |
+|-- Application - Configured OpenCenus --------------------------------- |
     |--  gRPC -> Using OpenCensus to generate Trace A  --------- |
       |--  Application -> Using OpenCensus to generate a sub Trace B-- |
 ```
@@ -50,7 +50,7 @@ Next, the application can update its own instrumentation in a piecemeal fashion:
 ```
 
 > This layer of Otel -> OpenCensus -> Otel tracing can be thought of as the
-> "OpenTelemetry sandwhich" problem, and is the key motivating factor for
+> "OpenTelemetry sandwich" problem, and is the key motivating factor for
 > this specification.
 
 Finally, the Application would update all usages of OpenCensus to OpenTelemetry.
