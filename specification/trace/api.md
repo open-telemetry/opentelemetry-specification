@@ -101,7 +101,7 @@ The `TracerProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-- `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
+- `name` : This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
   (e.g. `io.opentelemetry.contrib.mongodb`).
   If an application or library has built-in OpenTelemetry instrumentation, both
   [Instrumented library](../glossary.md#instrumented-library) and
@@ -116,7 +116,7 @@ This API MUST accept the following parameters:
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
+- `version` : Specifies the version of the instrumentation library (e.g. `1.0.0`).
 
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
