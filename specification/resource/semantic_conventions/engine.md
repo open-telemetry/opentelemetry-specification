@@ -14,10 +14,9 @@
 
 Information describing the engine SHOULD be captured using the values acquired from the API provided by the engine, preferably during runtime, to avoid maintenance burden on engine version upgrades. As an example - Java engines are often but not always packaged as application servers. For Java application servers supporting Servlet API the required information MAY be captured by invoking `ServletContext.getServerInfo()` during runtime and parsing the result.
 
-A resource can be attributed to at most one engine. 
+A resource can be attributed to at most one engine.
 
 The situations where there are multiple candidates, it is up to instrumentation library authors to choose the engine. To illustrate, let's look at a Python application using Apache HTTP Server with mod_wsgi as the server and Django as the web framework. In this case:
 
 * Either Apache HTTP Server or `mod_wsgi` MAY be chosen as `engine`, depending on the decision made by the instrumentation authors.
 * Django would SHOULD NOT be set as an engine as the required information is already available in insrumentation library and setting this into `engine` would duplicate the information.
-
