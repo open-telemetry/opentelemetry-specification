@@ -26,7 +26,7 @@ For example, an applciation may have traces today of the following variety:
 
 ```
 |-- Applicaiton - Configured OpenCenus --------------------------------- |
-    |--  gRPC -> Using OpenCensus to genereate Trace A  --------- |
+    |--  gRPC -> Using OpenCensus to generate Trace A  --------- |
       |--  Application -> Using OpenCensus to generate a sub Trace B-- |
 ```
 
@@ -36,16 +36,16 @@ have updated to OpenTelemetry (or deal with incompatibilities therein). The
 Application also doesn't need to rewrite any of its own instrumentation.
 
 ```
-|-- Applicaiton - Configured Otel w/ OpenCensus Shim ------------------- |
-    |--  gRPC -> Using OpenCensus to genereate Trace A  --------- |
+|-- Application - Configured Otel w/ OpenCensus Shim ------------------- |
+    |--  gRPC -> Using OpenCensus to generate Trace A  --------- |
       |--  Application -> Using OpenCensus to generate a sub Trace B-- |
 ```
 
 Next, the application can update its own instrumentation in a piecemeal fashion:
 
 ```
-|-- Applicaiton - Configured Otel w/ OpenCensus Shim ---------------------- |
-    |--  gRPC -> Using OpenCensus to genereate Trace A  --------- |
+|-- Application - Configured Otel w/ OpenCensus Shim ---------------------- |
+    |--  gRPC -> Using OpenCensus to generate Trace A  --------- |
       |--  Application -> Using OpenTelemetry to generate a sub Trace B-- |
 ```
 
@@ -53,11 +53,11 @@ Next, the application can update its own instrumentation in a piecemeal fashion:
 > "OpenTelemetry sandwhich" problem, and is the key motivating factor for
 > this specification.
 
-Finally, the APplication would update all usages of OpenCensus to OpenTelemetry.
+Finally, the Application would update all usages of OpenCensus to OpenTelemetry.
 
 ```
-|-- Applicaiton - Configured Otel standalong ----------------------------- |
-    |--  gRPC -> Using Otel to genereate Trace A  --------- |
+|-- Application - Configured Otel standalong ----------------------------- |
+    |--  gRPC -> Using Otel to generate Trace A  --------- |
       |--  Application -> Using OpenTelemetry to generate a sub Trace B-- |
 ```
 
@@ -66,11 +66,11 @@ Compatibility for these is defined separately.
 
 > The overridding philosophy for compatibility is that OpenCensus instrumented
 > libraries and applications need make *no change* to their API usage in order
-> to use OpenTelemetry.   All changes should be solely configuration / setup.
+> to use OpenTelemetry. All changes should be solely configuration / setup.
 
 ## Goals
 
-OpenTelemetry<->OpenCensus tracing compatibility has the following goals:
+OpenTelemetry<->OpenCensus compatibility has the following goals:
 
 1. OpenCensus has no hard dependency on OpenTelemetry
 2. Minimal changes to OpenCensus for implementation
@@ -79,7 +79,7 @@ OpenTelemetry<->OpenCensus tracing compatibility has the following goals:
 Additionally, for tracing there are the following goals:
 
 1. Maintain parent-child span relationship from applications and libraries
-2. Maintain unscoped span relationships from applications and libraries
+2. Maintain span link relationships from applications and libraries
 
 ## Trace
 
@@ -129,29 +129,30 @@ using the OpenCensus <-> OpenTelemetry bridge.
 
 ### Context Propagation
 
-The shim will provide an OpenCensus `PropogationComponent` implementation which
+The shim will provide an OpenCensus `PropagationComponent` implementation which
 maps OpenCenus binary and text progation to OpenTelemetry context.
 
 #### Text Context
 
-This adapter MUST use an OpenTelemetry `TextMapPropogator` to implement the
+This adapter MUST use an OpenTelemetry `TextMapPropagator` to implement the
 OpenCensus `TextFormat`.
 
-This adapter SHOULD use configured OpenTelemetry `TextMapPropogator` on the
+This adapter SHOULD use configured OpenTelemetry `TextMapPropagator` on the
 OpenTelemetry `TraceProvider` for text format propagation.
 
-This adapter MUST provide a default `W3CTraceContextPropogator` in lieu of a
-propogator defined against the `TraceProvider`.
+This adapter MUST provide a default `W3CTraceContextPropagator` in lieu of a
+propagator defined against the `TraceProvider`.
 
 #### B3 Context
 
-This adapter SHOULD use an contributed OpenTelemetry `B3Propogator` for the
+This adapter SHOULD use a contributed OpenTelemetry `B3Propagator` for the
 B3 text format.
 
 #### OpenCensus Binary Context
 
-This adapter MUST implement OpenCensus `BinaryPropogator` to write OpenCensus
-binary format using OpenTelemetry's context.
+This adapter MUST provide an implementation of OpenCensus `BinaryPropogator` to
+write OpenCensus binary format using OpenTelemetry's context.  This
+implementation may be drawn from OpenCensus if applicable.
 
 ### Resources
 
