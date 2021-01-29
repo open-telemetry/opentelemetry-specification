@@ -55,6 +55,7 @@ Updates:
 - Clarify that Jaeger/Zipkin exporters must rely on the default Resource to
   get service.name if none was specified.
   ([#1386](https://github.com/open-telemetry/opentelemetry-specification/pull/1386))
+- Add `k8s.node` semantic conventions ([#1390](https://github.com/open-telemetry/opentelemetry-specification/pull/1390))
 
 ## v0.7.0 (11-18-2020)
 
