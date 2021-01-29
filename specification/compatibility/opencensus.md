@@ -22,7 +22,7 @@ process towards OpenTelemetry via the shim and adding new telemetry information
 via OpenTelemetry.  Slowly, libraries and integrations will also migrate
 towards opentelemetry until the shim is no longer necessary.
 
-For example, an applciation may have traces today of the following variety:
+For example, an application may have traces today of the following variety:
 
 ```
 |-- Applicaiton - Configured OpenCenus --------------------------------- |
@@ -78,8 +78,8 @@ OpenTelemetry<->OpenCensus compatibility has the following goals:
 
 Additionally, for tracing there are the following goals:
 
-1. Maintain parent-child span relationship from applications and libraries
-2. Maintain span link relationships from applications and libraries
+1. Maintain parent-child span relationship between applications and libraries
+2. Maintain span link relationships between applications and libraries
 
 ## Trace
 
@@ -130,7 +130,7 @@ using the OpenCensus <-> OpenTelemetry bridge.
 ### Context Propagation
 
 The shim will provide an OpenCensus `PropagationComponent` implementation which
-maps OpenCenus binary and text progation to OpenTelemetry context.
+maps OpenCenus binary and text propagation to OpenTelemetry context.
 
 #### Text Context
 
