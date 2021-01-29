@@ -38,8 +38,6 @@ install-markdownlint:
 
 .PHONY: markdownlint
 markdownlint:
-    # Limit output for clearer error messages
-	# @echo $(ALL_DOCS)
 	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
 
 .PHONY: table-generation
