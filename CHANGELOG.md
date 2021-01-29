@@ -52,6 +52,9 @@ Updates:
   ([#1339](https://github.com/open-telemetry/opentelemetry-specification/pull/1339))
 - Trace Exporters: Fix TODOs in Jaeger exporter spec
   ([#1374](https://github.com/open-telemetry/opentelemetry-specification/pull/1374))
+- Clarify that Jaeger/Zipkin exporters must rely on the default Resource to
+  get service.name if none was specified.
+  ([#1386](https://github.com/open-telemetry/opentelemetry-specification/pull/1386))
 
 ## v0.7.0 (11-18-2020)
 
