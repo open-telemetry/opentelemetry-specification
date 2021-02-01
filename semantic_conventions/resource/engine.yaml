@@ -9,7 +9,7 @@ groups:
         required: always
         brief: >
           The name of the engine.
-        examples: ['FildFly']
+        examples: ['WildFly']
       - id: version
         type: string
         brief: >
