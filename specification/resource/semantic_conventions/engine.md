@@ -5,7 +5,7 @@
 **Description:** Resource describing the packaged software running the application code. Engines are executed using process.runtime.
 
 <!-- semconv engine_resource -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `engine.name` | string | The name of the engine. | `FildFly` | Yes |
 | `engine.version` | string | The version of the engine, as returned by the engine (preferably during runtime) without modification. | `21.0.0` | No |
