@@ -32,7 +32,7 @@ status of the feature is not known.
 | Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with parent from Context                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| No explicit parent Span/SpanContext allowed                                                      |          |    | +    | +  | +      | +    | +      |     | +    |     |      | +     |
+| No explicit parent Span/SpanContext allowed                                                      |          |    | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
 | SpanProcessor.OnStart receives parent Context                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     |      | +     |
 | UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | User-defined start timestamp                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -66,9 +66,9 @@ status of the feature is not known.
 | RecordException                                                                                  |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | RecordException with extra parameters                                                            |          | -  | +    | +  | +      | -    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
-| Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     |      | +     |
+| Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
-| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     |      | +     |
+| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     | -    | +     |
 | SDK Trace & Span ID generation is customizable                                                   |          | +  | +    | +  | +      | +    |        |     |      |     | -    |       |
 
 ## Baggage
@@ -98,9 +98,9 @@ status of the feature is not known.
 
 | Feature                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |----------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
-| Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
-| Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
+| Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
 | Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
 | Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
@@ -108,7 +108,7 @@ status of the feature is not known.
 | Global Propagator                                                                |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Jaeger Propagator                                                                |          |    | +    | +  | +      |      | +      |     | +    |     |      | -     |
+| Jaeger Propagator                                                                |          |    | +    | +  | +      |      | +      |     | +    |     | -    | -     |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          |    |      |    |        |      |        |     |      |     |      |       |
 | Fields                                                                           |          |    | +    | +  | +      |      | +      |     | +    |     | +    | +     |
 | Setter argument                                                                  |          |    | +    | +  | +      | +    | +      |     |      |     | +    | +     |
