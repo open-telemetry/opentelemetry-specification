@@ -7,7 +7,7 @@
 <!-- semconv engine_resource -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `engine.name` | string | The name of the engine. | `FildFly` | Yes |
+| `engine.name` | string | The name of the engine. | `WildFly` | Yes |
 | `engine.version` | string | The version of the engine, as returned by the engine (preferably during runtime) without modification. | `21.0.0` | No |
 | `engine.description` | string | Additional description about the engine. | `WildFly Full 21.0.0.Final (WildFly Core 13.0.1.Final) - 2.2.2.Final` | No |
 <!-- endsemconv -->
