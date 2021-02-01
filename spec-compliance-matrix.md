@@ -64,7 +64,7 @@ status of the feature is not known.
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span exceptions](specification/trace/api.md#record-exception)                                   |          |    |      |    |        |      |        |     |      |     |      |       |
 | RecordException                                                                                  |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
-| RecordException with extra parameters                                                            |          | -  | +    | +  | +      | -    | -      |     | +    | -   | +    | -     |
+| RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
@@ -90,9 +90,9 @@ status of the feature is not known.
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        |      |        |     |      | +   |      |       |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        | +    |        |     |      | +   |      |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        |      |        |     |      | +   |      |       |
+| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        | +    |        |     |      | +   |      |       |
 
 ## Context Propagation
 
@@ -125,7 +125,7 @@ Note: Support for environment variables is optional.
 |OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | -    | - |    | - | -  | -   |        |
 |OTEL_PROPAGATORS                              |   | +  |   | +    |    | -    | - |    | - | -  | -   |
 |OTEL_BSP_*                                    |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          |   | -  |   | -    | -  | -    | - |    | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          |   | -  |   | -    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
 |OTEL_TRACE_EXPORTER                           |   | +  |   | -    |    |      |   |    |   | -  | -   |
