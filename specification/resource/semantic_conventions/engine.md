@@ -2,7 +2,7 @@
 
 **type:** `engine`
 
-**Description:** Resource describing the packaged software running the application code. Engines are executed using process.runtime.
+**Description:** Resource describing the packaged software running the application code. Engines are typically executed using process.runtime.
 
 <!-- semconv engine_resource -->
 | Attribute  | Type | Description  | Examples  | Required |
