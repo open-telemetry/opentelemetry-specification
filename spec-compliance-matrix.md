@@ -32,7 +32,7 @@ status of the feature is not known.
 | Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with parent from Context                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| No explicit parent Span/SpanContext allowed                                                      |          |    | +    | +  | +      | +    | +      |     | +    |     |      | +     |
+| No explicit parent Span/SpanContext allowed                                                      |          |    | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
 | SpanProcessor.OnStart receives parent Context                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     |      | +     |
 | UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | User-defined start timestamp                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -64,11 +64,11 @@ status of the feature is not known.
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span exceptions](specification/trace/api.md#record-exception)                                   |          |    |      |    |        |      |        |     |      |     |      |       |
 | RecordException                                                                                  |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
-| RecordException with extra parameters                                                            |          | -  | +    | +  | +      | -    | -      |     | +    | -   | +    | -     |
+| RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
-| Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     |      | +     |
+| Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
-| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     |      | +     |
+| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     | -    | +     |
 | SDK Trace & Span ID generation is customizable                                                   |          | +  | +    | +  | +      | +    |        |     |      |     | -    |       |
 
 ## Baggage
@@ -90,17 +90,17 @@ status of the feature is not known.
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        |      |        |     |      | +   |      |       |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        | +    |        |     |      | +   |      |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        |      |        |     |      | +   |      |       |
+| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        | +    |        |     |      | +   |      |       |
 
 ## Context Propagation
 
 | Feature                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |----------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
-| Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
-| Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
+| Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
 | Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
 | Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
@@ -108,7 +108,7 @@ status of the feature is not known.
 | Global Propagator                                                                |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Jaeger Propagator                                                                |          |    | +    | +  | +      |      | +      |     | +    |     |      | -     |
+| Jaeger Propagator                                                                |          |    | +    | +  | +      |      | +      |     | +    |     | -    | -     |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          |    |      |    |        |      |        |     |      |     |      |       |
 | Fields                                                                           |          |    | +    | +  | +      |      | +      |     | +    |     | +    | +     |
 | Setter argument                                                                  |          |    | +    | +  | +      | +    | +      |     |      |     | +    | +     |
@@ -125,7 +125,7 @@ Note: Support for environment variables is optional.
 |OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | -    | - |    | - | -  | -   |        |
 |OTEL_PROPAGATORS                              |   | +  |   | +    |    | -    | - |    | - | -  | -   |
 |OTEL_BSP_*                                    |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          |   | -  |   | -    | -  | -    | - |    | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          |   | -  |   | -    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
 |OTEL_TRACE_EXPORTER                           |   | +  |   | -    |    |      |   |    |   | -  | -   |
