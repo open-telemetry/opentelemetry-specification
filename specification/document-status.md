@@ -21,3 +21,6 @@ The support guarantees and allowed changes are governed by the lifecycle of the 
 In addition to the statuses above, documents may be marked as `Feature-freeze`. These documents are not currently accepting new feature requests, to allow the Technical Committee time to focus on other areas of the specification. Editorial changes are still accepted. Changes that address production issues with existing features are still accepted.
 
 Feature freeze is separate from a lifecycle status. The lifecycle represents the support requirements for the document, feature freeze only indicates the current focus of the specification community. The feature freeze label may be applied to a document at any lifecycle stage. By definition, deprecated documents have a feature freeze in place.
+
+## Mixed
+Some documents have individual sections with different statues. These documents are marked with the status `Mixed` at the top, for clarity.
