@@ -33,7 +33,7 @@ status of the feature is not known.
 | Create with default parent (active span)                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with parent from Context                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | No explicit parent Span/SpanContext allowed                                                      |          |    | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
-| SpanProcessor.OnStart receives parent Context                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     |      | +     |
+| SpanProcessor.OnStart receives parent Context                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
 | UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | User-defined start timestamp                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End                                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -67,7 +67,7 @@ status of the feature is not known.
 | RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
-| ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
+| ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     | -    | +     |
 | SDK Trace & Span ID generation is customizable                                                   |          | +  | +    | +  | +      | +    |        |     |      |     | -    |       |
 
@@ -101,9 +101,9 @@ status of the feature is not known.
 | Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
-| Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
-| Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
+| Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
+| Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
+| Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Composite Propagator                                                             |          |    | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
 | Global Propagator                                                                |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
