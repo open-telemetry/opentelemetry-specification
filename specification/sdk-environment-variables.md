@@ -28,8 +28,8 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
-| OTEL_TRACE_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
-| OTEL_TRACE_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACE_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACE_SAMPLER_ARG is not set.  |
+| OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
+| OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.  |
 
 Known values for OTEL_PROPAGATORS are:
 
@@ -41,7 +41,7 @@ Known values for OTEL_PROPAGATORS are:
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottracer"`: [Lightstep](https://github.com/lightstep/lightstep-tracer-java-common/blob/master/common/src/main/java/com/lightstep/tracer/shared/TextMapPropagator.java) (_third party_)
 
-Known values for `OTEL_TRACE_SAMPLER` are:
+Known values for `OTEL_TRACES_SAMPLER` are:
 
 - `"always_on"`: `AlwaysOnSampler`
 - `"always_off"`: `AlwaysOffSampler`
@@ -50,7 +50,7 @@ Known values for `OTEL_TRACE_SAMPLER` are:
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
 
-Depending on the value of `OTEL_TRACE_SAMPLER`, `OTEL_TRACE_SAMPLER_ARG` may be set as follows:
+Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may be set as follows:
 
 - For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25". Default is 1.0 if unset.
 
@@ -113,10 +113,10 @@ We define environment variables for setting a single exporter per signal.
 
 | Name          | Description                                                                  | Default |
 | ------------- | ---------------------------------------------------------------------------- | ------- |
-| OTEL_TRACE_EXPORTER | Trace exporter to be used | "otlp"  |
+| OTEL_TRACES_EXPORTER | Trace exporter to be used | "otlp"  |
 | OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  |
 
-Known values for OTEL_TRACE_EXPORTER are:
+Known values for OTEL_TRACES_EXPORTER are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
