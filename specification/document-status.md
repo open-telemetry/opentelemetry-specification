@@ -13,7 +13,7 @@ The support guarantees and allowed changes are governed by the lifecycle of the 
 |--------------------|-----------|
 |No explicit "Status"|Equivalent to Experimental.|
 |Experimental        |Breaking changes are allowed.|
-|Stable              |Breaking changes are not longer allowed. See [stability guarantees](versioning-and-stability.md#stable) for details.|
+|Stable              |Breaking changes are no longer allowed. See [stability guarantees](versioning-and-stability.md#stable) for details.|
 |Deprecated          |Changes are no longer allowed, except for editorial changes.|
 
 ## Feature freeze
