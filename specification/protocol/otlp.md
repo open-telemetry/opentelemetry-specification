@@ -59,6 +59,7 @@ server replies with corresponding responses. This document defines one requests
 and response type: `Export`.
 
 ### OTLP/gRPC
+
 **Status**: [Stable](../document-status.md)
 
 After establishing the underlying gRPC transport the client starts sending
@@ -299,6 +300,7 @@ some in beta.
 The default network port for OTLP/gRPC is 4317.
 
 ### OTLP/HTTP
+
 **Status**: [Experimental](../document-status.md)
 
 OTLP/HTTP uses Protobuf payloads encoded either in binary format or in JSON
