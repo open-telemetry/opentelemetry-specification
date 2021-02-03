@@ -91,6 +91,15 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
 
+Addtionally, the following environment variables are reserved for future
+usage in Zipkin Exporter configuration:
+
+- `OTEL_EXPORTER_ZIPKIN_PROTOCOL`
+
+This will be used to specify whether or not the exporter uses v1 or v2, json,
+thrift or protobuf.  As of 1.0 of the specification, there
+*is no specified default, or configuration via environment variables*.
+
 ## Prometheus Exporter
 
 | Name                          | Description                     | Default                      |
