@@ -39,7 +39,7 @@ status of the feature is not known.
 | End                                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End with timestamp                                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRecording becomes false after End                                                              |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
+| IsRecording becomes false after End                                                              |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | Set status with StatusCode (Unset, Ok, Error)                                                    |          |    | +    | +  | +      | +    | -      |     | +    |     | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | events collection size limit                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
@@ -90,9 +90,9 @@ status of the feature is not known.
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        | +    |        |     |      | +   |      |       |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        | +    |        |     |      | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        | +    |        |     |      | +   |      |       |
+| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        | +    |        |     |      | +   | +    |       |
 
 ## Context Propagation
 
