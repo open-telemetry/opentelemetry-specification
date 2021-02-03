@@ -33,13 +33,13 @@ status of the feature is not known.
 | Create with default parent (active span)                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with parent from Context                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | No explicit parent Span/SpanContext allowed                                                      |          |    | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
-| SpanProcessor.OnStart receives parent Context                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     |      | +     |
+| SpanProcessor.OnStart receives parent Context                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
 | UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | User-defined start timestamp                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End                                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End with timestamp                                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRecording becomes false after End                                                              |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
+| IsRecording becomes false after End                                                              |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | Set status with StatusCode (Unset, Ok, Error)                                                    |          |    | +    | +  | +      | +    | -      |     | +    |     | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | events collection size limit                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
@@ -67,7 +67,7 @@ status of the feature is not known.
 | RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
-| ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   |      | +     |
+| ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     | -    | +     |
 | SDK Trace & Span ID generation is customizable                                                   |          | +  | +    | +  | +      | +    |        |     |      |     | -    |       |
 
@@ -90,9 +90,9 @@ status of the feature is not known.
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        | +    |        |     |      | +   |      |       |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        | +    |        |     |      | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        | +    |        |     |      | +   |      |       |
+| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        | +    |        |     |      | +   | +    |       |
 
 ## Context Propagation
 
@@ -101,9 +101,9 @@ status of the feature is not known.
 | Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
-| Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | -     |
-| Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    | +   |      | +     |
+| Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
+| Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
+| Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Composite Propagator                                                             |          |    | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
 | Global Propagator                                                                |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
