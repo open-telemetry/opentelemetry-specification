@@ -1,5 +1,7 @@
 # Semantic Conventions for Exceptions
 
+**Status**: [Experimental](../../document-status.md)
+
 This document defines semantic conventions for recording application
 exceptions.
 

@@ -1,5 +1,7 @@
 # Kubernetes
 
+**Status**: [Experimental](../../document-status.md)
+
 Useful resources to understand Kubernetes objects and metadata:
 
 * [Namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)

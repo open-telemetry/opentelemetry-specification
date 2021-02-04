@@ -1,5 +1,7 @@
 # Propagators API
 
+**Status**: [Stable, Feature-Freeze](../document-status.md)
+
 <details>
 <summary>
 Table of Contents

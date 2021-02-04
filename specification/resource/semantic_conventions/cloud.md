@@ -1,5 +1,7 @@
 # Cloud
 
+**Status**: [Experimental](../../document-status.md)
+
 **type:** `cloud`
 
 **Description:** A cloud infrastructure (e.g. GCP, Azure, AWS).
