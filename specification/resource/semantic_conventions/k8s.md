@@ -27,6 +27,19 @@ Kubernetes object, but "name" is usually more user friendly so can be also set.
 | `k8s.cluster.name` | string | The name of the cluster. | `opentelemetry-cluster` | No |
 <!-- endsemconv -->
 
+## Node
+
+**type:** `k8s.node`
+
+**Description:** A Kubernetes Node.
+
+<!-- semconv k8s.node -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `k8s.node.name` | string | The name of the Node. | `node-1` | No |
+| `k8s.node.uid` | string | The UID of the Node. | `1eb3a0c6-0477-4080-a9cb-0cb7db65c6a2` | No |
+<!-- endsemconv -->
+
 ## Namespace
 
 Namespaces provide a scope for names. Names of objects need to be unique within
