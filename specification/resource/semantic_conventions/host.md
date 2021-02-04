@@ -1,5 +1,7 @@
 # Host
 
+**Status**: [Experimental](../../document-status.md)
+
 **type:** `host`
 
 **Description:** A host is defined as a general computing instance.
