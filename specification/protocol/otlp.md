@@ -11,6 +11,7 @@ nodes such as collectors and telemetry backends.
 Table of Contents
 </summary>
 
+- [Signal Status](#signal-status)
 - [Protocol Details](#protocol-details)
   * [OTLP/gRPC](#otlpgrpc)
     + [OTLP/gRPC Concurrent Requests](#otlpgrpc-concurrent-requests)
@@ -43,6 +44,16 @@ Table of Contents
 
 OTLP is a general-purpose telemetry data delivery protocol designed in the scope
 of OpenTelemetry project.
+
+## Signal Status
+
+Each signal has different support and stability in OTLP, described through its
+own status, which in turn applies to **all** the OTLP Transports listed below,
+e.g. OTLP/gRPC.
+
+* Tracing: [Stable](../document-status.md)
+* Metrics: [Experimental](../document-status.md)
+* Logs: [Experimental](../document-status.md)
 
 ## Protocol Details
 
