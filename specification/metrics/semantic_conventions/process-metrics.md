@@ -1,5 +1,7 @@
 # Semantic Conventions for OS Process Metrics
 
+**Status**: [Experimental](../../document-status.md)
+
 This document describes instruments and labels for common OS process level
 metrics in OpenTelemetry. Also consider the [general metric semantic
 conventions](README.md#general-metric-semantic-conventions) when creating

@@ -1,5 +1,7 @@
 # AWS ECS
 
+**Status**: [Experimental](../../../../document-status.md)
+
 **type:** `aws.ecs`
 
 **Description:** Resources used by AWS Elastic Container Service (ECS).
