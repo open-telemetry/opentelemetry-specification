@@ -48,8 +48,7 @@ of OpenTelemetry project.
 ## Signals Maturity Level
 
 Each signal has different support and stability in OTLP, described through its
-own maturity level, which in turn applies to **all** the OTLP Transports listed below,
-e.g. OTLP/gRPC.
+own maturity level, which in turn applies to **all** the OTLP Transports listed below.
 
 * Tracing: **Stable**
 * Metrics: **Beta**
