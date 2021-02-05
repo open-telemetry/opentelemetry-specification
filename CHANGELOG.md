@@ -14,6 +14,8 @@ New:
 
 Updates:
 
+- Rename OTEL_EXPORTER_OTLP_CERTIFICATE to OTEL_EXPORTER_OTLP_TLS_TRUSTED_CERTIFICATE and add _TLS_CERTIFICATE _TLS_PRIVATE_KEY
+  to allow configuring mTLS([#1375](https://github.com/open-telemetry/opentelemetry-specification/pull/1375)).
 - Rename OTEL_TRACE_SAMPLER and OTEL_TRACE_SAMPLER_ARG env variables to OTEL_TRACES_SAMPLER and OTEL_TRACES_SAMPLER_ARG
   ([#1382](https://github.com/open-telemetry/opentelemetry-specification/pull/1382))
 - Mark some entries in compliance matrix as optional([#1359](https://github.com/open-telemetry/opentelemetry-specification/pull/1359))
