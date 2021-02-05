@@ -1,5 +1,7 @@
 # Metrics SDK
 
+**Status**: [Experimental](../document-status.md)
+
 TODO: TOC
 
 ## Purpose

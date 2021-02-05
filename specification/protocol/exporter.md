@@ -1,5 +1,7 @@
 # OpenTelemetry Protocol Exporter
 
+**Status**: [Stable](../document-status.md)
+
 This document specifies the configuration options available to the OpenTelemetry Protocol ([OTLP](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md)) Exporter as well as the retry behavior.
 
 ## Configuration Options
@@ -27,32 +29,31 @@ The following configuration sends all signals to the same collector:
 
 ```bash
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317
-export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 ```
 
 Example 2
 
-Traces and metrics are sent to different collectors using different protocols:
+Traces and metrics are sent to different collectors:
 
 ```bash
 export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://collector:4317
-export OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=grpc
 
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics
-export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=http/protobuf
 ```
 
-Example 3
+### Specify Protocol
 
-Traces are configured using the generic configuration, metrics are configured using specific configuration:
+Currently, OTLP has more than one transport protocol it can support, e.g.
+`grpc`,  `http/json`, `http/protobuf`.   As of 1.0 of the specification, there
+*is no specified default, or configuration via environment variables*.  We
+reserve the following environment variables for configuration of protocols in
+the future:
 
-```bash
-export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317
-export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+- `OTEL_EXPORTER_OTLP_PROTOCOL`
+- `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`
+- `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL`
 
-export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://collector.example.com/v1/metrics
-export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=http/json
-```
+SDKs have an unspecified default, if no configuration is provided.
 
 ### Specifying headers via environment variables
 

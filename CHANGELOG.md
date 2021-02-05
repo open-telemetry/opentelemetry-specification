@@ -14,11 +14,15 @@ New:
 
 Updates:
 
+- Rename OTEL_TRACE_SAMPLER and OTEL_TRACE_SAMPLER_ARG env variables to OTEL_TRACES_SAMPLER and OTEL_TRACES_SAMPLER_ARG
+  ([#1382](https://github.com/open-telemetry/opentelemetry-specification/pull/1382))
+- Mark some entries in compliance matrix as optional([#1359](https://github.com/open-telemetry/opentelemetry-specification/pull/1359))
+  SDKs are free to provide support at their discretion.
 - Rename signal-specific variables for `OTLP_EXPORTER_*` to `OTLP_EXPORTER_TRACES_*` and `OTLP_EXPORTER_METRICS_*`([#1362](https://github.com/open-telemetry/opentelemetry-specification/pull/1362))
 - Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
 - Additional Cassandra semantic attributes
   ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
-- OTEL_EXPORTER environment variable replaced with OTEL_TRACE_EXPORTER and
+- OTEL_EXPORTER environment variable replaced with OTEL_TRACES_EXPORTER and
   OTEL_METRICS_EXPORTER which each accept only a single value, not a list.
   ([#1318](https://github.com/open-telemetry/opentelemetry-specification/pull/1318))
 - `process.runtime.description` resource convention: Add `java.vm.name`
@@ -50,6 +54,12 @@ Updates:
   ([#1339](https://github.com/open-telemetry/opentelemetry-specification/pull/1339))
 - Trace Exporters: Fix TODOs in Jaeger exporter spec
   ([#1374](https://github.com/open-telemetry/opentelemetry-specification/pull/1374))
+- Clarify that Jaeger/Zipkin exporters must rely on the default Resource to
+  get service.name if none was specified.
+  ([#1386](https://github.com/open-telemetry/opentelemetry-specification/pull/1386))
+- Modify OTLP/Zipkin Exporter format variables for 1.0 (allowing further specification post 1.0)
+  ([#1358](https://github.com/open-telemetry/opentelemetry-specification/pull/1358))
+- Add `k8s.node` semantic conventions ([#1390](https://github.com/open-telemetry/opentelemetry-specification/pull/1390))
 
 ## v0.7.0 (11-18-2020)
 

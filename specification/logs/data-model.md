@@ -1,5 +1,7 @@
 # Log Data Model
 
+**Status**: [Experimental](../document-status.md)
+
 * [Design Notes](#design-notes)
   * [Requirements](#requirements)
   * [Field Kinds](#field-kinds)

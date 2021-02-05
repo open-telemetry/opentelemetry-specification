@@ -1,5 +1,7 @@
 # Metrics API
 
+**Status**: [Experimental](../document-status.md)
+
 <!-- toc -->
 
 - [Overview](#overview)

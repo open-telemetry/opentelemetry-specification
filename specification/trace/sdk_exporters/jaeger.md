@@ -1,5 +1,7 @@
 # OpenTelemetry to Jaeger Transformation
 
+**Status**: [Stable](../../document-status.md)
+
 This document defines the transformation between OpenTelemetry and Jaeger Spans.
 Jaeger accepts spans in two formats:
 
@@ -43,6 +45,8 @@ single process and exporters need to handle this case accordingly.
 Critically, Jaeger backend depends on `Span.Process.ServiceName` to identify the service
 that produced the spans. That field MUST be populated from the `service.name` attribute
 of the [`service` resource](../../resource/semantic_conventions/README.md#service).
+If no `service.name` is contained in a Span's Resource, that field MUST be populated from the
+[default](../../resource/sdk.md#sdk-provided-resource-attributes) `Resource`.
 
 ### InstrumentationLibrary
 
