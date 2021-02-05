@@ -15,10 +15,10 @@ type and units.
 
 Below is a table of HTTP server metric instruments.
 
-| Name                   | Instrument    | Units        | Description |
-|------------------------|---------------|--------------|-------------|
-| `http.server.duration` | ValueRecorder | milliseconds | measures the duration of the inbound HTTP request |
-| `http.server.requests` | ValueObserver | requests     | measures the number of concurrent HTTP requests handled |
+| Name                          | Instrument    | Units        | Description |
+|-------------------------------|---------------|--------------|-------------|
+| `http.server.duration`        | ValueRecorder | milliseconds | measures the duration of the inbound HTTP request |
+| `http.server.active_requests` | ValueObserver | requests     | measures the number of concurrent HTTP requests handled |
 
 ### HTTP Client
 
