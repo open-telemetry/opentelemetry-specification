@@ -60,6 +60,8 @@ Updates:
 - Modify OTLP/Zipkin Exporter format variables for 1.0 (allowing further specification post 1.0)
   ([#1358](https://github.com/open-telemetry/opentelemetry-specification/pull/1358))
 - Add `k8s.node` semantic conventions ([#1390](https://github.com/open-telemetry/opentelemetry-specification/pull/1390))
+- Clarify stability for both OTLP/HTTP and signals in OTLP.
+  ([#1400](https://github.com/open-telemetry/opentelemetry-specification/pull/1400/files))
 
 ## v0.7.0 (11-18-2020)
 
