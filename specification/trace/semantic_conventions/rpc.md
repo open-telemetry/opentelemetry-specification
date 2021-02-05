@@ -37,7 +37,7 @@ The _span name_ MUST be the full RPC method name formatted as:
 $package.$service/$method
 ```
 
-(where $service must not contain dots and $method must not contain slashes)
+(where $service MUST NOT contain dots and $method MUST NOT contain slashes)
 
 If there is no package name or if it is unknown, the `$package.` part (including the period) is omitted.
 

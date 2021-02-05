@@ -211,7 +211,7 @@ The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
 * Binary - returns the binary representation of the `TraceId` (result MUST be a
 16-byte array) or `SpanId` (result MUST be an 8-byte array).
 
-The API should not expose details about how they are internally stored.
+The API SHOULD NOT expose details about how they are internally stored.
 
 ### IsValid
 
@@ -241,7 +241,7 @@ All mutating operations MUST return a new `TraceState` with the modifications ap
 `TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
 Every mutating operations MUST validate input parameters.
 If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
-and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
+and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually should not return null or throw an exception).
 
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
@@ -354,7 +354,7 @@ The API MUST accept the following parameters:
 - `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
   when span creation time has already passed. If API is called at a moment of
-  a Span logical start, API user MUST not explicitly set this argument.
+  a Span logical start, API user MUST NOT explicitly set this argument.
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -650,7 +650,7 @@ The API MUST provide an operation for wrapping a `SpanContext` with an object
 implementing the `Span` interface. This is done in order to expose a `SpanContext`
 as a `Span` in operations such as in-process `Span` propagation.
 
-If a new type is required for supporting this operation, it SHOULD not be exposed
+If a new type is required for supporting this operation, it SHOULD NOT be exposed
 publicly if possible (e.g. by only exposing a function that returns something
 with the Span interface type). If a new type is required to be publicly exposed,
 it SHOULD be named `NonRecordingSpan`.
@@ -686,9 +686,9 @@ circumstances.  It can be useful for tracing systems to know this
 property, since synchronous Spans may contribute to the overall trace
 latency. Asynchronous scenarios can be remote or local.
 
-In order for `SpanKind` to be meaningful, callers should arrange that
+In order for `SpanKind` to be meaningful, callers SHOULD arrange that
 a single Span does not serve more than one purpose.  For example, a
-server-side span should not be used directly as the parent of another
+server-side span SHOULD NOT be used directly as the parent of another
 remote span.  As a simple guideline, instrumentation should create a
 new Span prior to extracting and serializing the SpanContext for a
 remote call.
