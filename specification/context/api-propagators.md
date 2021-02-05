@@ -334,7 +334,8 @@ This a list of additional propagators that MAY be maintained and distributed
 as OpenTelemetry extension packages:
 
 * [OT Trace](https://github.com/opentracing?q=basic&type=&language=). Propagation format
-  specifically used by the OpenTracing Basic Tracers.
+  used by the OpenTracing Basic Tracers. It MUST not use `OpenTracing` in the resulting
+  propagator name as it is not wide adopted format in the OpenTracing ecosystem.
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
