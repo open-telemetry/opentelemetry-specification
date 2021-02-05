@@ -1,5 +1,7 @@
 # OpenTelemetry to Zipkin Transformation
 
+**Status**: [Stable](../../document-status.md)
+
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
 Zipkin's v2 API is defined in the
 [zipkin.proto](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto)
@@ -53,7 +55,9 @@ and Zipkin.
 
 Zipkin service name MUST be set to the value of the
 [resource attribute](../../resource/semantic_conventions/README.md):
-`service.name`. In Zipkin it is important that the service name is consistent
+`service.name`. If no `service.name` is contained in a Span's Resource, it MUST be populated from the
+[default](../../resource/sdk.md#sdk-provided-resource-attributes) `Resource`.
+In Zipkin it is important that the service name is consistent
 for all spans in a local root. Otherwise service graph and aggregations would
 not work properly. OpenTelemetry doesn't provide this consistency guarantee.
 Exporter may chose to override the value for service name based on a local root
@@ -61,9 +65,6 @@ span to improve Zipkin user experience.
 
 *Note*, the attribute `service.namespace` must not be used for the Zipkin
 service name and should be sent as a Zipkin tag.
-
-*Note*, exporter to Zipkin MUST allow to configure the default "fall back" name
-to use as a Zipkin service name.
 
 ### SpanKind
 

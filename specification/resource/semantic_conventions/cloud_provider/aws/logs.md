@@ -1,5 +1,7 @@
 # AWS Logs
 
+**Status**: [Experimental](../../../../document-status.md)
+
 **Type:** `aws.log`
 
 **Description:** Log attributes for Amazon Web Services.

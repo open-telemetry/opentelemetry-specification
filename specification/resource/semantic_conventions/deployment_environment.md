@@ -1,5 +1,7 @@
 # Deployment
 
+**Status**: [Experimental](../../document-status.md)
+
 **type:** `deployment`
 
 **Description:** The software deployment.

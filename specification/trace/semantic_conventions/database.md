@@ -1,5 +1,7 @@
 # Semantic conventions for database client calls
 
+**Status**: [Experimental](../../document-status.md)
+
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
