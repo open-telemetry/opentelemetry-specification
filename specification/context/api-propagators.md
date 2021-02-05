@@ -330,6 +330,12 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [B3](https://github.com/openzipkin/b3-propagation).
 * [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
 
+This a list of additional propagators that MAY be maintained and distributed
+as OpenTelemetry extension packages:
+
+* [OT Trace](https://github.com/opentracing?q=basic&type=&language=). Propagation format
+  specifically used by the OpenTracing Basic Tracers.
+
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
 the Core OpenTelemetry repositories.
