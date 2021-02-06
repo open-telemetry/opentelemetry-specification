@@ -56,7 +56,7 @@ Next, the application can update its own instrumentation in a piecemeal fashion:
 Finally, the Application would update all usages of OpenCensus to OpenTelemetry.
 
 ```
-|-- Application - Configured Otel standalong ----------------------------- |
+|-- Application - Configured Otel standalone ----------------------------- |
     |--  gRPC -> Using Otel to generate Trace A  --------- |
       |--  Application -> Using OpenTelemetry to generate a sub Trace B-- |
 ```
