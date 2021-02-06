@@ -14,6 +14,9 @@ New:
 
 Updates:
 
+- Remove Metrics SDK specification to avoid confusion, clarify that Metrics API
+  specification is not recommended for client implementation
+  ([#1401](https://github.com/open-telemetry/opentelemetry-specification/pull/1401))
 - Rename OTEL_TRACE_SAMPLER and OTEL_TRACE_SAMPLER_ARG env variables to OTEL_TRACES_SAMPLER and OTEL_TRACES_SAMPLER_ARG
   ([#1382](https://github.com/open-telemetry/opentelemetry-specification/pull/1382))
 - Mark some entries in compliance matrix as optional([#1359](https://github.com/open-telemetry/opentelemetry-specification/pull/1359))
