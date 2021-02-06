@@ -485,7 +485,7 @@ destination.
 Export() will never be called concurrently for the same exporter instance.
 Export() can be called again only after the current call returns.
 
-Export() must not block indefinitely, there must be a reasonable upper limit
+Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
 
 Any retry logic that is required by the exporter is the responsibility
