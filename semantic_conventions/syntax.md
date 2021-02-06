@@ -191,7 +191,7 @@ examples:
 
 ### Ref
 
-`ref` MUST have an id of an existing attribute. When it is set, `id` and `type` MUST not be present.
+`ref` MUST have an id of an existing attribute. When it is set, `id` and `type` MUST NOT be present.
 `ref` is useful for specifying that an existing attribute of another semantic convention is part of
 the current semantic convention and inherit its `brief`, `note`, and `example` values. However, if these
 fields are present in the current attribute definition, they override the inherited values.
