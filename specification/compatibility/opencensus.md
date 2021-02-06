@@ -25,7 +25,7 @@ towards opentelemetry until the shim is no longer necessary.
 For example, an application may have traces today of the following variety:
 
 ```
-|-- Application - Configured OpenCenus --------------------------------- |
+|-- Application - Configured OpenCensus --------------------------------- |
     |--  gRPC -> Using OpenCensus to generate Trace A  --------- |
       |--  Application -> Using OpenCensus to generate a sub Trace B-- |
 ```
