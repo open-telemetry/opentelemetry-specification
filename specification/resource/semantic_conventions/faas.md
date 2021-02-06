@@ -1,5 +1,7 @@
 # Function as a Service
 
+**Status**: [Experimental](../../document-status.md)
+
 **type:** `faas`
 
 **Description:** A serverless instance.

@@ -1,5 +1,7 @@
 # Attribute and Label Naming
 
+**Status**: [Experimental](../document-status.md)
+
 <details>
 <summary>
 Table of Contents
