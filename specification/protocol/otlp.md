@@ -11,6 +11,7 @@ nodes such as collectors and telemetry backends.
 Table of Contents
 </summary>
 
+- [Signals Maturity Level](#signals-maturity-level)
 - [Protocol Details](#protocol-details)
   * [OTLP/gRPC](#otlpgrpc)
     + [OTLP/gRPC Concurrent Requests](#otlpgrpc-concurrent-requests)
@@ -43,6 +44,17 @@ Table of Contents
 
 OTLP is a general-purpose telemetry data delivery protocol designed in the scope
 of OpenTelemetry project.
+
+## Signals Maturity Level
+
+Each signal has different support and stability in OTLP, described through its
+own maturity level, which in turn applies to **all** the OTLP Transports listed below.
+
+* Tracing: **Stable**
+* Metrics: **Beta**
+* Logs: **Alpha**
+
+See [OTLP Maturity Level](https://github.com/open-telemetry/opentelemetry-proto#maturity-level).
 
 ## Protocol Details
 
@@ -301,7 +313,8 @@ The default network port for OTLP/gRPC is 4317.
 
 ### OTLP/HTTP
 
-**Status**: [Experimental](../document-status.md)
+**Binary Format Status**: [Stable](../document-status.md)
+**JSON Format Status**: [Experimental](../document-status.md)
 
 OTLP/HTTP uses Protobuf payloads encoded either in binary format or in JSON
 format. The Protobuf schema of the messages is the same for OTLP/HTTP and

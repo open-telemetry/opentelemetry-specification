@@ -63,7 +63,7 @@ not work properly. OpenTelemetry doesn't provide this consistency guarantee.
 Exporter may chose to override the value for service name based on a local root
 span to improve Zipkin user experience.
 
-*Note*, the attribute `service.namespace` must not be used for the Zipkin
+*Note*, the attribute `service.namespace` MUST NOT be used for the Zipkin
 service name and should be sent as a Zipkin tag.
 
 ### SpanKind

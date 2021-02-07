@@ -16,6 +16,9 @@ New:
 
 Updates:
 
+- Remove Metrics SDK specification to avoid confusion, clarify that Metrics API
+  specification is not recommended for client implementation
+  ([#1401](https://github.com/open-telemetry/opentelemetry-specification/pull/1401))
 - Rename OTEL_TRACE_SAMPLER and OTEL_TRACE_SAMPLER_ARG env variables to OTEL_TRACES_SAMPLER and OTEL_TRACES_SAMPLER_ARG
   ([#1382](https://github.com/open-telemetry/opentelemetry-specification/pull/1382))
 - Mark some entries in compliance matrix as optional([#1359](https://github.com/open-telemetry/opentelemetry-specification/pull/1359))
@@ -62,6 +65,8 @@ Updates:
 - Modify OTLP/Zipkin Exporter format variables for 1.0 (allowing further specification post 1.0)
   ([#1358](https://github.com/open-telemetry/opentelemetry-specification/pull/1358))
 - Add `k8s.node` semantic conventions ([#1390](https://github.com/open-telemetry/opentelemetry-specification/pull/1390))
+- Clarify stability for both OTLP/HTTP and signals in OTLP.
+  ([#1400](https://github.com/open-telemetry/opentelemetry-specification/pull/1400/files))
 
 ## v0.7.0 (11-18-2020)
 
