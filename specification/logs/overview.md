@@ -1,5 +1,7 @@
 # OpenTelemetry Logging Overview
 
+**Status**: [Experimental](../document-status.md)
+
 * [Introduction](#introduction)
 * [Limitations of non-OpenTelemetry Solutions](#limitations-of-non-opentelemetry-solutions)
 * [OpenTelemetry Solution](#opentelemetry-solution)

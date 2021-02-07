@@ -1,5 +1,7 @@
 # General
 
+**Status**: [Experimental](../../document-status.md)
+
 The conventions described in this section are HTTP specific. When HTTP operations occur,
 metric events about those operations will be generated and reported to provide insight into the
 operations. By adding HTTP labels to metric events it allows for finely tuned filtering.

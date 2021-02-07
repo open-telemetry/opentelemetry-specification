@@ -1,5 +1,7 @@
 # Resource SDK
 
+**Status**: [Stable](../document-status.md)
+
 A [Resource](../overview.md#resources) is an immutable representation of the entity producing
 telemetry as [Attributes](../common/common.md#attributes).
 For example, a process producing telemetry that is running in a
@@ -121,8 +123,7 @@ only the following operations should be provided:
 ### Retrieve attributes
 
 The SDK should provide a way to retrieve a read only collection of attributes
-associated with a resource. The attributes should consist of the name and values,
-both of which should be strings.
+associated with a resource.
 
 There is no need to guarantee the order of the attributes.
 
