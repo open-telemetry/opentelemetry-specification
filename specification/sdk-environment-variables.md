@@ -39,7 +39,7 @@ Known values for OTEL_PROPAGATORS are:
 - `"b3multi"`: [B3 Multi](https://github.com/openzipkin/b3-propagation#multiple-headers)
 - `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
-- `"ottrace"`: [OT Trace]https://github.com/opentracing?q=basic&type=&language=) (_third party_)
+- `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
 
 Known values for `OTEL_TRACES_SAMPLER` are:
 
