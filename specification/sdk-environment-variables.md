@@ -1,5 +1,7 @@
 # OpenTelemetry Environment Variable Specification
 
+**Status**: [Stable](document-status.md)
+
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
 ## Special configuration types
