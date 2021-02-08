@@ -315,7 +315,7 @@ an interface like the java example below (name of the interface MAY be
 extension points for two methods, one to generate a `SpanID` and one for `TraceId`.
 
 ```java
-public interface IdsGenerator {
+public interface IdGenerator {
   byte[] generateSpanIdBytes();
   byte[] generateTraceIdBytes();
 }
