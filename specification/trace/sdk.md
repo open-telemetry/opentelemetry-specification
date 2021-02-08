@@ -10,6 +10,7 @@
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
 * [Limits on Span Collections](#limits-on-span-collections)
+* [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -211,9 +212,9 @@ supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.
 
-Configuration (i.e., [Span processors](#span-processor) and [`Sampler`](#sampling))
-MUST be managed solely by the `TracerProvider` and it MUST provide some way to
-configure them, at least when creating or initializing it.
+Configuration (i.e., [Span processors](#span-processor), [IdGenerator](#id-generators),
+and [`Sampler`](#sampling)) MUST be managed solely by the `TracerProvider` and it
+MUST provide some way to configure them, at least when creating or initializing it.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -223,23 +224,6 @@ the updated configuration MUST also apply to all already returned `Tracers`
 Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
-
-The SDK MUST by default randomly generate the bytes for both the `TraceId` and
-the `SpanId`.
-
-The SDK MUST provide a mechanism for customizing the way IDs are generated for
-both the `TraceId` and the `SpanId`.
-
-The SDK MAY provide this functionality by allowing custom implementations of
-an interface like `IdsGenerator` below, which provides extension points for two
-methods, one to generate a `SpanID` and one to generate a `TraceId`.
-
-```
-IdsGenerator {
-  String generateSpanId()
-  String generateTraceId()
-}
-```
 
 ### Shutdown
 
@@ -316,6 +300,30 @@ specified in [SDK environment variables](../sdk-environment-variables.md#span-co
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
 should not be emitted once per span, or per discarded attribute, event, or links.
+
+## Id Generators
+
+The SDK MUST by default randomly generate both the `TraceId` and the `SpanId`.
+
+The SDK MUST provide a mechanism for customizing the way IDs are generated for
+both the `TraceId` and the `SpanId`.
+
+The SDK MAY provide this functionality by allowing custom implementations of
+an interface like the java example below (name of the interface MAY be
+`IdGenerator`, name of the methods MUST be consistent with
+[SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
+extension points for two methods, one to generate a `SpanID` and one for `TraceId`.
+
+```java
+public interface IdGenerator {
+  byte[] generateSpanIdBytes();
+  byte[] generateTraceIdBytes();
+}
+```
+
+Additional `IdGenerator` implementing vendor-specific protocols such as AWS
+X-Ray trace id generator MUST NOT be maintained or distributed as part of the
+Core OpenTelemetry repositories.
 
 ## Span processor
 
