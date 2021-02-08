@@ -14,7 +14,9 @@ New:
 
 Updates:
 
-- Add `http.server.active_requests` to count in-flight HTTP requests([#1378](https://github.com/open-telemetry/opentelemetry-specification/pull/1378))
+- Add `http.server.active_requests` to count in-flight HTTP requests
+  ([#1378](https://github.com/open-telemetry/opentelemetry-specification/pull/1378))
+- Update OT Trace propagator environment variable to match latest name([#1406](https://github.com/open-telemetry/opentelemetry-specification/pull/1406))
 - Remove Metrics SDK specification to avoid confusion, clarify that Metrics API
   specification is not recommended for client implementation
   ([#1401](https://github.com/open-telemetry/opentelemetry-specification/pull/1401))
