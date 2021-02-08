@@ -321,7 +321,7 @@ public interface IdGenerator {
 }
 ```
 
-Additional `IdsGenerator` implementing vendor-specific protocols such as AWS
+Additional `IdGenerator` implementing vendor-specific protocols such as AWS
 X-Ray trace id generator MUST NOT be maintained or distributed as part of the
 Core OpenTelemetry repositories.
 
