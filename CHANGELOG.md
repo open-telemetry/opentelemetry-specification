@@ -14,6 +14,7 @@ New:
 
 Updates:
 
+- Update OT Trace propagator environment variable to match latest name
 - Remove Metrics SDK specification to avoid confusion, clarify that Metrics API
   specification is not recommended for client implementation
   ([#1401](https://github.com/open-telemetry/opentelemetry-specification/pull/1401))
