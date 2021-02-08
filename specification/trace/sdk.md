@@ -10,7 +10,7 @@
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
 * [Limits on Span Collections](#limits-on-span-collections)
-* [Ids Generator](#ids-generator)
+* [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -212,7 +212,7 @@ supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.
 
-Configuration (i.e., [Span processors](#span-processor), [IdsGenerator](#ids-generator),
+Configuration (i.e., [Span processors](#span-processor), [IdGenerator](#id-generators),
 and [`Sampler`](#sampling)) MUST be managed solely by the `TracerProvider` and it
 MUST provide some way to configure them, at least when creating or initializing it.
 
