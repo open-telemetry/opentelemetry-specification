@@ -1,6 +1,8 @@
 # Tracing SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Mixed](../document-status.md)
+
+**Status of everything not marked otherwise**: [Stable](../document-status.md)
 
 <details>
 
@@ -151,6 +153,8 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 * Description MUST be `AlwaysOffSampler`.
 
 #### TraceIdRatioBased
+
+**Status**: [Experimental](../document-status.md)
 
 * The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
 parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
