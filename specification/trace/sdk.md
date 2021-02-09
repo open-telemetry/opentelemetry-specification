@@ -312,7 +312,7 @@ The SDK MAY provide this functionality by allowing custom implementations of
 an interface like the java example below (name of the interface MAY be
 `IdGenerator`, name of the methods MUST be consistent with
 [SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
-extension points for two methods, one to generate a `SpanID` and one for `TraceId`.
+extension points for two methods, one to generate a `SpanId` and one for `TraceId`.
 
 ```java
 public interface IdGenerator {
