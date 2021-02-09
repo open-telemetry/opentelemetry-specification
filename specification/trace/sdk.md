@@ -136,20 +136,27 @@ the `ParentBased` sampler specified below.
 * Description MUST be `TraceIdRatioBased{0.000100}`.
 
 TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`.
+of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
 
 ##### Requirements for `TraceIdRatioBased` sampler algorithm
 
 * The sampling algorithm MUST be deterministic. A trace identified by a given
-`TraceId` is sampled or not independent of language, time, etc. To achieve this,
-implementations MUST use a deterministic hash of the `TraceId` when computing
-the sampling decision. By ensuring this, running the sampler on any child `Span`
-will produce the same decision.
+  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
+  implementations MUST use a deterministic hash of the `TraceId` when computing
+  the sampling decision. By ensuring this, running the sampler on any child `Span`
+  will produce the same decision.
 * A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
-sample. This is important when a backend system may want to run with a higher
-sampling rate than the frontend system, this way all frontend traces will
-still be sampled and extra traces will be sampled on the backend only.
+  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
+  sample. This is important when a backend system may want to run with a higher
+  sampling rate than the frontend system, this way all frontend traces will
+  still be sampled and extra traces will be sampled on the backend only.
+* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
+  there will probably be be breaking changes to it in any language SDK once it is.
+  Only the configuration and creation APIs can be considered stable.
+  It is recommended to use this sampler algorithm only for root spans
+  (in combination with [`ParentBased`](#ParentBased)) because different language
+  SDKs or even different versions of the same language SDKs may produce inconsistent
+  results for the same input.
 
 #### ParentBased
 
