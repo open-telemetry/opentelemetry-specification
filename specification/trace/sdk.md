@@ -151,7 +151,7 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
   sampling rate than the frontend system, this way all frontend traces will
   still be sampled and extra traces will be sampled on the backend only.
 * **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
-  there will probably be be breaking changes to it in any language SDK once it is.
+  there will probably be breaking changes to it in any language SDK once it is specified.
   Only the configuration and creation APIs can be considered stable.
   It is recommended to use this sampler algorithm only for root spans
   (in combination with [`ParentBased`](#ParentBased)) because different language
