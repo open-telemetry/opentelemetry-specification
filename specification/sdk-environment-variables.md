@@ -73,7 +73,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Span Collection Limits
 
-**Status**: [Stable](document-status.md)
+**Status**: [Experimental](document-status.md)
 
 | Name                            | Description                          | Default | Notes |
 | ------------------------------- | ------------------------------------ | ------- | ----- |
