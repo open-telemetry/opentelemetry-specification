@@ -10,6 +10,7 @@
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
 * [Limits on Span Collections](#limits-on-span-collections)
+* [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -157,20 +158,28 @@ the `ParentBased` sampler specified below.
 * Description MUST be `TraceIdRatioBased{0.000100}`.
 
 TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`.
+of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
 
 ##### Requirements for `TraceIdRatioBased` sampler algorithm
 
 * The sampling algorithm MUST be deterministic. A trace identified by a given
-`TraceId` is sampled or not independent of language, time, etc. To achieve this,
-implementations MUST use a deterministic hash of the `TraceId` when computing
-the sampling decision. By ensuring this, running the sampler on any child `Span`
-will produce the same decision.
+  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
+  implementations MUST use a deterministic hash of the `TraceId` when computing
+  the sampling decision. By ensuring this, running the sampler on any child `Span`
+  will produce the same decision.
 * A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
-sample. This is important when a backend system may want to run with a higher
-sampling rate than the frontend system, this way all frontend traces will
-still be sampled and extra traces will be sampled on the backend only.
+  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
+  sample. This is important when a backend system may want to run with a higher
+  sampling rate than the frontend system, this way all frontend traces will
+  still be sampled and extra traces will be sampled on the backend only.
+* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
+  there will probably be changes to it in any language SDK once it is, which
+  would break code that relies on the algorithm results.
+  Only the configuration and creation APIs can be considered stable.
+  It is recommended to use this sampler algorithm only for root spans
+  (in combination with [`ParentBased`](#parentbased)) because different language
+  SDKs or even different versions of the same language SDKs may produce inconsistent
+  results for the same input.
 
 #### ParentBased
 
@@ -211,9 +220,9 @@ supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.
 
-Configuration (i.e., [Span processors](#span-processor) and [`Sampler`](#sampling))
-MUST be managed solely by the `TracerProvider` and it MUST provide some way to
-configure them, at least when creating or initializing it.
+Configuration (i.e., [Span processors](#span-processor), [IdGenerator](#id-generators),
+and [`Sampler`](#sampling)) MUST be managed solely by the `TracerProvider` and it
+MUST provide some way to configure them, at least when creating or initializing it.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -223,23 +232,6 @@ the updated configuration MUST also apply to all already returned `Tracers`
 Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
-
-The SDK MUST by default randomly generate the bytes for both the `TraceId` and
-the `SpanId`.
-
-The SDK MUST provide a mechanism for customizing the way IDs are generated for
-both the `TraceId` and the `SpanId`.
-
-The SDK MAY provide this functionality by allowing custom implementations of
-an interface like `IdsGenerator` below, which provides extension points for two
-methods, one to generate a `SpanID` and one to generate a `TraceId`.
-
-```
-IdsGenerator {
-  String generateSpanId()
-  String generateTraceId()
-}
-```
 
 ### Shutdown
 
@@ -316,6 +308,30 @@ specified in [SDK environment variables](../sdk-environment-variables.md#span-co
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
 should not be emitted once per span, or per discarded attribute, event, or links.
+
+## Id Generators
+
+The SDK MUST by default randomly generate both the `TraceId` and the `SpanId`.
+
+The SDK MUST provide a mechanism for customizing the way IDs are generated for
+both the `TraceId` and the `SpanId`.
+
+The SDK MAY provide this functionality by allowing custom implementations of
+an interface like the java example below (name of the interface MAY be
+`IdGenerator`, name of the methods MUST be consistent with
+[SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
+extension points for two methods, one to generate a `SpanId` and one for `TraceId`.
+
+```java
+public interface IdGenerator {
+  byte[] generateSpanIdBytes();
+  byte[] generateTraceIdBytes();
+}
+```
+
+Additional `IdGenerator` implementing vendor-specific protocols such as AWS
+X-Ray trace id generator MUST NOT be maintained or distributed as part of the
+Core OpenTelemetry repositories.
 
 ## Span processor
 
