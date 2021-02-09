@@ -154,7 +154,7 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
   there will probably be breaking changes to it in any language SDK once it is specified.
   Only the configuration and creation APIs can be considered stable.
   It is recommended to use this sampler algorithm only for root spans
-  (in combination with [`ParentBased`](#ParentBased)) because different language
+  (in combination with `ParentBased`) because different language
   SDKs or even different versions of the same language SDKs may produce inconsistent
   results for the same input.
 
