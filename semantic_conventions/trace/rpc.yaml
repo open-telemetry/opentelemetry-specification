@@ -33,3 +33,48 @@ groups:
           - net.peer.ip
           - net.peer.name
         - include: network
+    - id: rpc.grpc
+      prefix: rpc.grpc
+      extends: rpc
+      brief: 'Tech-specific attributes for gRPC.'
+      attributes:
+        - id: status_code
+          type:
+            members:
+              - id: OK
+                value: 0
+              - id: CANCELLED
+                value: 1
+              - id: UNKNOWN
+                value: 2
+              - id: INVALID_ARGUMENT
+                value: 3
+              - id: DEADLINE_EXCEEDED
+                value: 4
+              - id: NOT_FOUND
+                value: 5
+              - id: ALREADY_EXISTS
+                value: 6
+              - id: PERMISSION_DENIED
+                value: 7
+              - id: RESOURCE_EXHAUSTED
+                value: 8
+              - id: FAILED_PRECONDITION
+                value: 9
+              - id: ABORTED
+                value: 10
+              - id: OUT_OF_RANGE
+                value: 11
+              - id: UNIMPLEMENTED
+                value: 12
+              - id: INTERNAL
+                value: 13
+              - id: UNAVAILABLE
+                value: 14
+              - id: DATA_LOSS
+                value: 15
+              - id: UNAUTHENTICATED
+                value: 16
+          required: always
+          brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."
+          examples: [0, 1, 16]

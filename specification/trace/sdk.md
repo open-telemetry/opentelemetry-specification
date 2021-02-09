@@ -1,12 +1,16 @@
 # Tracing SDK
 
+**Status**: [Stable](../document-status.md)
+
 <details>
 
 <summary>Table of Contents</summary>
 
 * [Sampling](#sampling)
-* [Tracer Creation](#tracer-creation)
+* [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
+* [Limits on Span Collections](#limits-on-span-collections)
+* [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
@@ -35,7 +39,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
-  that do not.  
+  that do not.
 
 The flag combination `SampledFlag == false` and `IsRecording == true`
 means that the current `Span` does record information, but most likely the child
@@ -60,11 +64,28 @@ The following table summarizes the expected behavior for each combination of
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
 
-When asked to create a Span, the SDK MUST query the `Sampler`'s [`ShouldSample`](#shouldsample) method before actually creating the span, and act accordingly:
-see description of [`ShouldSample`'s](#shouldsample) return value below for how to set `IsRecording` and `Sampled` on the Span,
-and the [table above](#recording-sampled-reaction-table) on whether to pass the `Span` to `SpanProcessor`s.
-A non-recording span MAY be implemented using the same mechanism as when a `Span` is created with no API-implementation installed
-(sometimes called a `NoOpSpan` or `DefaultSpan`).
+### SDK Span creation
+
+When asked to create a Span, the SDK MUST act as if doing the following in order:
+
+1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
+   (note: this must be done before calling `ShouldSample`, because it expects
+   a valid trace ID as input).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method
+   (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
+   use the sampling decision of the parent,
+   translating a set SampledFlag to RECORD and an unset one to DROP).
+3. Generate a new span ID for the `Span`, independently of the sampling decision.
+   This is done so other components (such as logs or exception handling) can rely on
+   a unique span ID, even if the `Span` is a non-recording instance.
+4. Create a span depending on the decision returned by `ShouldSample`:
+   see description of [`ShouldSample`'s](#shouldsample) return value below
+   for how to set `IsRecording` and `Sampled` on the Span,
+   and the [table above](#recording-sampled-reaction-table) on whether
+   to pass the `Span` to `SpanProcessor`s.
+   A non-recording span MAY be implemented using the same mechanism as when a
+   `Span` is created without an SDK installed or as described in
+   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
 
 ### Sampler
 
@@ -78,7 +99,8 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* Parent `SpanContext`. May be invalid to indicate a root span.
+* [`Context`](../context/context.md) with parent `Span`.
+  The Span's SpanContext may be invalid to indicate a root span.
 * `TraceId` of the `Span` to be created.
   If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
 * Name of the `Span` to be created.
@@ -96,7 +118,7 @@ It produces an output called `SamplingResult` which contains:
   * `DROP` - `IsRecording() == false`, span will not be recorded and all events and attributes
   will be dropped.
   * `RECORD_ONLY` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
-  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
+  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 * A `Tracestate` that will be associated with the `Span` through the new
@@ -188,7 +210,9 @@ Optional parameters:
 |present|false|true|`localParentSampled()`|
 |present|false|false|`localParentNotSampled()`|
 
-## Tracer Creation
+## Tracer Provider
+
+### Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
 [API](api.md#tracerprovider)). The `name` and `version` arguments
@@ -196,9 +220,9 @@ supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.
 
-Configuration (i.e., [Span processors](#span-processor) and [`Sampler`](#sampling))
-MUST be managed solely by the `TracerProvider` and it MUST provide some way to
-configure them, at least when creating or initializing it.
+Configuration (i.e., [Span processors](#span-processor), [IdGenerator](#id-generators),
+and [`Sampler`](#sampling)) MUST be managed solely by the `TracerProvider` and it
+MUST provide some way to configure them, at least when creating or initializing it.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -208,6 +232,24 @@ the updated configuration MUST also apply to all already returned `Tracers`
 Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
+
+### Shutdown
+
+This method provides a way for provider to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `TracerProvider` instance. After
+the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
+SHOULD return a valid no-op Tracer for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want to
+make the shutdown timeout configurable.
+
+`Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
 
 ## Additional Span Interfaces
 
@@ -228,7 +270,7 @@ Thus, the SDK specification defines sets of possible requirements for
   It must also be able to reliably determine whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
-  
+
   A function receiving this as argument might not be able to modify the Span.
 
   Note: Typically this will be implemented with a new interface or
@@ -249,7 +291,48 @@ Thus, the SDK specification defines sets of possible requirements for
   that the [span creation API](api.md#span-creation) returned (or will return) to the user
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
-  
+
+## Limits on Span Collections
+
+Erroneous code can add unintended attributes, events, and links to a span. If
+these collections are unbounded, they can quickly exhaust available memory,
+resulting in crashes that are difficult to recover from safely.
+
+To protect against such errors, SDK Spans MAY discard attributes, links, and
+events that would increase the number of elements of each collection beyond
+the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
+
+If there is a configurable limit, the SDK SHOULD honor the environment variables
+specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
+
+There SHOULD be a log emitted to indicate to the user that an attribute, event,
+or link was discarded due to such a limit. To prevent excessive logging, the log
+should not be emitted once per span, or per discarded attribute, event, or links.
+
+## Id Generators
+
+The SDK MUST by default randomly generate both the `TraceId` and the `SpanId`.
+
+The SDK MUST provide a mechanism for customizing the way IDs are generated for
+both the `TraceId` and the `SpanId`.
+
+The SDK MAY provide this functionality by allowing custom implementations of
+an interface like the java example below (name of the interface MAY be
+`IdGenerator`, name of the methods MUST be consistent with
+[SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
+extension points for two methods, one to generate a `SpanId` and one for `TraceId`.
+
+```java
+public interface IdGenerator {
+  byte[] generateSpanIdBytes();
+  byte[] generateTraceIdBytes();
+}
+```
+
+Additional `IdGenerator` implementing vendor-specific protocols such as AWS
+X-Ray trace id generator MUST NOT be maintained or distributed as part of the
+Core OpenTelemetry repositories.
+
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
@@ -338,7 +421,7 @@ failed or timed out.
 
 `Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. Language library authors can decide if they want to
+via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the shutdown timeout configurable.
 
 #### ForceFlush()
@@ -354,7 +437,7 @@ invocation, but before the `Processor` exports the completed spans.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. Language library authors can decide if they want to
+via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the flush timeout configurable.
 
 ### Built-in span processors
@@ -418,7 +501,7 @@ destination.
 Export() will never be called concurrently for the same exporter instance.
 Export() can be called again only after the current call returns.
 
-Export() must not block indefinitely, there must be a reasonable upper limit
+Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
 
 Any retry logic that is required by the exporter is the responsibility
@@ -455,7 +538,7 @@ call to `Shutdown` subsequent calls to `Export` are not allowed and should
 return a `Failure` result.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
-and the destination is unavailable). Language library authors can decide if they
+and the destination is unavailable). OpenTelemetry client authors can decide if they
 want to make the shutdown timeout configurable.
 
 ### Further Language Specialization
@@ -476,7 +559,7 @@ telemetry data generation.
 #### Examples
 
 These are examples on what the `Exporter` interface can look like in specific
-languages. Examples are for illustration purposes only. Language library authors
+languages. Examples are for illustration purposes only. OpenTelemetry client authors
 are free to deviate from these provided that their design remain true to the
 spirit of `Exporter` concept.
 
@@ -515,4 +598,4 @@ public interface SpanExporter {
 ```
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
-[otep-83]: https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md
+[otep-83]: https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md

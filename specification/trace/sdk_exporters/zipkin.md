@@ -1,5 +1,7 @@
 # OpenTelemetry to Zipkin Transformation
 
+**Status**: [Stable](../../document-status.md)
+
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
 Zipkin's v2 API is defined in the
 [zipkin.proto](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto)
@@ -53,17 +55,16 @@ and Zipkin.
 
 Zipkin service name MUST be set to the value of the
 [resource attribute](../../resource/semantic_conventions/README.md):
-`service.name`. In Zipkin it is important that the service name is consistent
+`service.name`. If no `service.name` is contained in a Span's Resource, it MUST be populated from the
+[default](../../resource/sdk.md#sdk-provided-resource-attributes) `Resource`.
+In Zipkin it is important that the service name is consistent
 for all spans in a local root. Otherwise service graph and aggregations would
 not work properly. OpenTelemetry doesn't provide this consistency guarantee.
 Exporter may chose to override the value for service name based on a local root
 span to improve Zipkin user experience.
 
-*Note*, the attribute `service.namespace` must not be used for the Zipkin
+*Note*, the attribute `service.namespace` MUST NOT be used for the Zipkin
 service name and should be sent as a Zipkin tag.
-
-*Note*, exporter to Zipkin MUST allow to configure the default "fall back" name
-to use as a Zipkin service name.
 
 ### SpanKind
 
@@ -119,7 +120,7 @@ unless there is a `peer.service` tag defined explicitly.
 
 ### Attribute
 
-OpenTelemetry Span and Resource `Attribute`(s) MUST be reported as `tags` to
+OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to
 Zipkin.
 
 Some attributes defined in [semantic
@@ -127,9 +128,7 @@ convention](../semantic_conventions/README.md)
 document maps to the strongly-typed fields of Zipkin spans.
 
 Primitive types MUST be converted to string using en-US culture settings.
-Boolean values must use lower case strings `"true"` and `"false"`, except an
-attribute named `error`. In case if value of the attribute is `false`, Zipkin
-tag needs to be omitted.
+Boolean values MUST use lower case strings `"true"` and `"false"`.
 
 Array values MUST be serialized to string like a JSON list as mentioned in
 [semantic conventions](../../overview.md#semantic-conventions).
@@ -138,17 +137,19 @@ TBD: add examples
 
 ### Status
 
-Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin.
+Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin, unless it is `UNSET`.
+In the latter case it MUST NOT be reported.
 
 The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
 | Status|Tag Key| Tag Value |
 |--|--|--|
-|Code | `otel.status_code` | Name of the code, for example: `OK` |
-|Message *(optional)* | `otel.status_description` | `{message}` |
+|Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
+|Description| `error` | Description of the `Status`. MUST be set if the code is `ERROR`, use an empty string if Description has no value. MUST NOT be set for `OK` and `UNSET` codes. |
 
-The `otel.status_code` tag value MUST follow the [Standard GRPC Code
-Names](https://github.com/grpc/grpc/blob/master/doc/statuscodes.md).
+Note: The `error` tag should only be set if `Status` is `Error`. If a boolean
+version (`{"error":false}` or `{"error":"false"}`) is present, it SHOULD be
+removed. Zipkin will treat any span with `error` sent as failed.
 
 ### Events
 

@@ -1,10 +1,14 @@
 # Resource SDK
 
+**Status**: [Stable](../document-status.md)
+
 A [Resource](../overview.md#resources) is an immutable representation of the entity producing
-telemetry. For example, a process producing telemetry that is running in a
+telemetry as [Attributes](../common/common.md#attributes).
+For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
-included in the `Resource`.
+included in the `Resource`. Note that there are certain
+["standard attributes"](semantic_conventions/README.md) that have prescribed meanings.
 
 The primary purpose of resources as a first-class concept in the SDK is
 decoupling of discovery of resource information from exporters. This allows for
@@ -24,6 +28,21 @@ When associated with a [`MeterProvider`](../metrics/api.md#meter-interface),
 all metrics produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
+## SDK-provided resource attributes
+
+The SDK MUST provide access to a Resource with at least the attributes listed at
+[Semantic Attributes with SDK-provided Default Value](semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value).
+This resource MUST be associated with a `TracerProvider` or `MeterProvider`
+if another resource was not explicitly specified.
+
+Note: This means that it is possible to create and associate a resource that
+does not have all or any of the SDK-provided attributes present. However, that
+does not happen by default. If a user wants to combine custom attributes with
+the default resource, they can use [`Merge`](#merge) with their custom resource
+or specify their attributes by implementing
+[Custom resource detectors](#detecting-resource-information-from-the-environment)
+instead of explicitly associating a resource.
+
 ## Resource creation
 
 The SDK must support two ways to instantiate new resources. Those are:
@@ -40,35 +59,26 @@ Required parameters:
 
 ### Merge
 
-The interface MUST provide a way for a primary resource and a
-secondary resource to be merged into a new resource.
+The interface MUST provide a way for an old resource and an
+updating resource to be merged into a new resource.
 
 Note: This is intended to be utilized for merging of resources whose attributes
 come from different sources,
 such as environment variables, or metadata extracted from the host or container.
 
 The resulting resource MUST have all attributes that are on any of the two input resources.
-Conflicts (i.e. a key for which attributes exist on both the primary and secondary resource)
-MUST be handled as follows:
-
-* If the value on the primary resource is an empty string, the result has the value of the secondary resource.
-* Otherwise, the value of the primary resource is used.
-
-Attribute key namespacing SHOULD be used to prevent collisions across different
-resource detection steps.
+If a key exists on both the old and updating resource, the value of the updating
+resource MUST be picked (even if the updated value is empty).
 
 Required parameters:
 
-- the primary resource whose attributes take precedence.
-- the secondary resource whose attributes will be merged in.
+- the old resource
+- the updating resource whose attributes take precedence
 
 ### The empty resource
 
 It is recommended, but not required, to provide a way to quickly create an empty
 resource.
-
-Note that the OpenTelemetry project documents certain ["standard
-attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
 
 ### Detecting resource information from the environment
 
@@ -101,8 +111,7 @@ has higher priority.
 
 The `OTEL_RESOURCE_ATTRIBUTES` environment variable will contain of a list of
 key value pairs, and these are expected to be represented in a format matching
-to the [W3C
-Correlation-Context](https://github.com/w3c/correlation-context/blob/master/correlation_context/HTTP_HEADER_FORMAT.md#header-value),
+to the [W3C Baggage](https://github.com/w3c/baggage/blob/fdc7a5c4f4a31ba2a36717541055e551c2b032e4/baggage/HTTP_HEADER_FORMAT.md#header-content),
 except that additional semi-colon delimited metadata is not supported, i.e.:
 `key1=value1,key2=value2`. All attribute values MUST be considered strings.
 
@@ -114,8 +123,7 @@ only the following operations should be provided:
 ### Retrieve attributes
 
 The SDK should provide a way to retrieve a read only collection of attributes
-associated with a resource. The attributes should consist of the name and values,
-both of which should be strings.
+associated with a resource.
 
 There is no need to guarantee the order of the attributes.
 
