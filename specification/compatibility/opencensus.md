@@ -112,7 +112,7 @@ using the OpenCensus <-> OpenTelemetry bridge.
    when parent spans can be specified on a child span.   OpenTelemetry specifies
    that [parent spans must be specified during span creation](../trace/api.md#span-creation).
    This leads to some issues with OpenCensus APIs that allowed flexible
-   speciifcaiton of parent spans post-initialization.
+   specification of parent spans post-initialization.
 2. Links added to spans after the spans are created. This is [not supported in
    OpenTelemetry](../api.md#specifying-links), therefore OpenCensus spans that
    have links added to them after creation will be mapped to OpenTelemetry spans
@@ -140,8 +140,9 @@ OpenCensus `TextFormat`.
 This adapter SHOULD use configured OpenTelemetry `TextMapPropagator` on the
 OpenTelemetry `TraceProvider` for text format propagation.
 
-This adapter MUST provide a default `W3CTraceContextPropagator` in lieu of a
-propagator defined against the `TraceProvider`.
+This adapter MUST provide a default `W3CTraceContextPropagator`.  If
+OpenTelemetry defines a global TextMapPropogator, OpenCensus SHOULD use this
+for OpenCensus `traceContextFormat` propagation.
 
 #### B3 Context
 
