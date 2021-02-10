@@ -70,6 +70,7 @@ status of the feature is not known.
 | ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators) ]                                       |          |    |      |    |        |      |        |     |      |     |      |       |
+| [SpanLimits](specification/trace/sdk.md#span-limits) ]                                           |          |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
