@@ -20,9 +20,9 @@ and Jaeger.
 
 | OpenTelemetry            | Jaeger Thrift    | Jaeger Proto     | Notes |
 | ------------------------ | ---------------- | ---------------- | ----- |
-| Span.TraceID             | Span.traceIdLow/High | Span.trace_id | See [IDs](#ids)     |
-| Span.ParentID            | Span.parentSpanId | as SpanReference | See [Parent ID](#parent-id)     |
-| Span.SpanID              | Span.spanId       | Span.span_id     |      |
+| Span.TraceId             | Span.traceIdLow/High | Span.trace_id | See [IDs](#ids)     |
+| Span.ParentId            | Span.parentSpanId | as SpanReference | See [Parent ID](#parent-id)     |
+| Span.SpanId              | Span.spanId       | Span.span_id     |      |
 | Span.Name                | Span.operationName | Span.operation_name |  |
 | Span.Kind                | Span.tags["span.kind"] | same | See [SpanKind](#spankind) for values mapping |
 | Span.StartTime           | Span.startTime | Span.start_time | See [Unit of time](#unit-of-time) |
