@@ -73,13 +73,15 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Span Collection Limits
 
-**Status**: [Experimental](document-status.md)
+**Status**: [Stable](document-status.md)
+
+See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition of the limits.
 
 | Name                            | Description                          | Default | Notes |
 | ------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 1000    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 1000    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 1000    |       |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 128     |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 128     |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 128     |       |
 
 ## OTLP Exporter
 

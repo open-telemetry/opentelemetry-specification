@@ -27,7 +27,7 @@ status of the feature is not known.
 | [SpanContext](specification/trace/api.md#spancontext)                                            |          |    |      |    |        |      |        |     |      |     |      |       |
 | IsValid                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRemote                                                                                         |          | -  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Conforms to the W3C TraceContext spec                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| Conforms to the W3C TraceContext spec                                                            |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Span](specification/trace/api.md#span)                                                          |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -69,7 +69,8 @@ status of the feature is not known.
 | Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     | -    | +     |
-| SDK Trace & Span ID generation is customizable                                                   |          | +  | +    | +  | +      | +    |        |     |      |     | -    |       |
+| [IdGenerators](specification/trace/sdk.md#id-generators) ]                                       |          |    |      |    |        |      |        |     |      |     |      |       |
+| [SpanLimits](specification/trace/sdk.md#span-limits) ]                                           | X        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -128,13 +129,13 @@ Note: Support for environment variables is optional.
 |OTEL_EXPORTER_OTLP_*                          |   | -  |   | -    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
-|OTEL_TRACE_EXPORTER                           |   | +  |   | -    |    |      |   |    |   | -  | -   |
+|OTEL_TRACES_EXPORTER                          |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_METRICS_EXPORTER                         |   | +  |   | -    |    |      |   |    |   | -  | -   |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   | +    | +  |      |   |    |   | -  | -   |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   | +    | +  |      |   |    |   | -  | -   |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   | +    | +  |      |   |    |   | -  | -   |
-|OTEL_TRACE_SAMPLER                            |   | +  |   |      | +  |      |   |    |   | -  | -   |
-|OTEL_TRACE_SAMPLER_ARG                        |   | +  |   |      | +  |      |   |    |   | -  | -   |
+|OTEL_TRACES_SAMPLER                           |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER_ARG                       |   |    |   |      |    |      |   |    |   |    |     |
 
 ## Exporters
 

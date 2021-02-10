@@ -6,15 +6,98 @@
 
 <summary>Table of Contents</summary>
 
-* [Sampling](#sampling)
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
-* [Limits on Span Collections](#limits-on-span-collections)
+* [Sampling](#sampling)
+* [Span Limits](#span-limits)
 * [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
 </details>
+
+## Tracer Provider
+
+### Tracer Creation
+
+New `Tracer` instances are always created through a `TracerProvider` (see
+[API](api.md#tracerprovider)). The `name` and `version` arguments
+supplied to the `TracerProvider` must be used to create an
+[`InstrumentationLibrary`][otep-83] instance which is stored on the created
+`Tracer`.
+
+Configuration (i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators),
+[SpanLimits](#span-limits) and [`Sampler`](#sampling)) MUST be managed solely by
+the `TracerProvider` and it MUST provide some way to configure all of them that
+are implemented in the SDK, at least when creating or initializing it.
+
+The TracerProvider MAY provide methods to update the configuration. If
+configuration is updated (e.g., adding a `SpanProcessor`),
+the updated configuration MUST also apply to all already returned `Tracers`
+(i.e. it MUST NOT matter whether a `Tracer` was obtained from the
+`TracerProvider` before or after the configuration change).
+Note: Implementation-wise, this could mean that `Tracer` instances have a
+reference to their `TracerProvider` and access configuration only via this
+reference.
+
+### Shutdown
+
+This method provides a way for provider to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `TracerProvider` instance. After
+the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
+SHOULD return a valid no-op Tracer for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want to
+make the shutdown timeout configurable.
+
+`Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
+
+## Additional Span Interfaces
+
+The [API-level definition for Span's interface](api.md#span-operations)
+only defines write-only access to the span.
+This is good because instrumentations and applications are not meant to use the data
+stored in a span for application logic.
+However, the SDK needs to eventually read back the data in some locations.
+Thus, the SDK specification defines sets of possible requirements for
+`Span`-like parameters:
+
+* **Readable span**: A function receiving this as argument MUST be able to
+  access all information that was added to the span,
+  as listed [in the API spec](api.md#span-data-members).
+  In particular, it MUST also be able to access
+  the `InstrumentationLibrary` and `Resource` information (implicitly)
+  associated with the span.
+  It must also be able to reliably determine whether the Span has ended
+  (some languages might implement this by having an end timestamp of `null`,
+  others might have an explicit `hasEnded` boolean).
+
+  A function receiving this as argument might not be able to modify the Span.
+
+  Note: Typically this will be implemented with a new interface or
+  (immutable) value type.
+  In some languages SpanProcessors may have a different readable span type
+  than exporters (e.g. a `SpanData` type might contain an immutable snapshot and
+  a `ReadableSpan` interface might read information directly from the same
+  underlying data structure that the `Span` interface manipulates).
+
+* **Read/write span**: A function receiving this as argument must have access to
+  both the full span API as defined in the
+  [API-level definition for span's interface](api.md#span-operations) and
+  additionally must be able to retrieve all information that was added to the span
+  (as with *readable span*).
+
+  It MUST be possible for functions being called with this
+  to somehow obtain the same `Span` instance and type
+  that the [span creation API](api.md#span-creation) returned (or will return) to the user
+  (for example, the `Span` could be one of the parameters passed to such a function,
+  or a getter could be provided).
 
 ## Sampling
 
@@ -210,89 +293,7 @@ Optional parameters:
 |present|false|true|`localParentSampled()`|
 |present|false|false|`localParentNotSampled()`|
 
-## Tracer Provider
-
-### Tracer Creation
-
-New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api.md#tracerprovider)). The `name` and `version` arguments
-supplied to the `TracerProvider` must be used to create an
-[`InstrumentationLibrary`][otep-83] instance which is stored on the created
-`Tracer`.
-
-Configuration (i.e., [Span processors](#span-processor), [IdGenerator](#id-generators),
-and [`Sampler`](#sampling)) MUST be managed solely by the `TracerProvider` and it
-MUST provide some way to configure them, at least when creating or initializing it.
-
-The TracerProvider MAY provide methods to update the configuration. If
-configuration is updated (e.g., adding a `SpanProcessor`),
-the updated configuration MUST also apply to all already returned `Tracers`
-(i.e. it MUST NOT matter whether a `Tracer` was obtained from the
-`TracerProvider` before or after the configuration change).
-Note: Implementation-wise, this could mean that `Tracer` instances have a
-reference to their `TracerProvider` and access configuration only via this
-reference.
-
-### Shutdown
-
-This method provides a way for provider to do any cleanup required.
-
-`Shutdown` MUST be called only once for each `TracerProvider` instance. After
-the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
-SHOULD return a valid no-op Tracer for these calls, if possible.
-
-`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out.
-
-`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
-implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. OpenTelemetry client authors can decide if they want to
-make the shutdown timeout configurable.
-
-`Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
-
-## Additional Span Interfaces
-
-The [API-level definition for Span's interface](api.md#span-operations)
-only defines write-only access to the span.
-This is good because instrumentations and applications are not meant to use the data
-stored in a span for application logic.
-However, the SDK needs to eventually read back the data in some locations.
-Thus, the SDK specification defines sets of possible requirements for
-`Span`-like parameters:
-
-* **Readable span**: A function receiving this as argument MUST be able to
-  access all information that was added to the span,
-  as listed [in the API spec](api.md#span-data-members).
-  In particular, it MUST also be able to access
-  the `InstrumentationLibrary` and `Resource` information (implicitly)
-  associated with the span.
-  It must also be able to reliably determine whether the Span has ended
-  (some languages might implement this by having an end timestamp of `null`,
-  others might have an explicit `hasEnded` boolean).
-
-  A function receiving this as argument might not be able to modify the Span.
-
-  Note: Typically this will be implemented with a new interface or
-  (immutable) value type.
-  In some languages SpanProcessors may have a different readable span type
-  than exporters (e.g. a `SpanData` type might contain an immutable snapshot and
-  a `ReadableSpan` interface might read information directly from the same
-  underlying data structure that the `Span` interface manipulates).
-
-* **Read/write span**: A function receiving this as argument must have access to
-  both the full span API as defined in the
-  [API-level definition for span's interface](api.md#span-operations) and
-  additionally must be able to retrieve all information that was added to the span
-  (as with *readable span*).
-
-  It MUST be possible for functions being called with this
-  to somehow obtain the same `Span` instance and type
-  that the [span creation API](api.md#span-creation) returned (or will return) to the user
-  (for example, the `Span` could be one of the parameters passed to such a function,
-  or a getter could be provided).
-
-## Limits on Span Collections
+## Span Limits
 
 Erroneous code can add unintended attributes, events, and links to a span. If
 these collections are unbounded, they can quickly exhaust available memory,
@@ -300,10 +301,36 @@ resulting in crashes that are difficult to recover from safely.
 
 To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
-the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
+the configured limit.
 
-If there is a configurable limit, the SDK SHOULD honor the environment variables
-specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
+It the SDK implements the limits above it MUST provide a way to change these
+limits, via a configuration to the TracerProvider, by allowing users to
+configure individual limits like in the Java example bellow.
+
+The name of the configuration options SHOULD be `AttributeCountLimit`,
+`EventCountLimit` and `LinkCountLimit`. The options MAY be bundled in a class,
+which then SHOULD be called `SpanLimits`. Implementations MAY provide additional
+configuration such as `AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
+
+```java
+public final class SpanLimits {
+  SpanLimits(int attributeCountLimit, int linkCountLimit, int eventCountLimit);
+
+  public int getAttributeCountLimit();
+
+  public int getEventCountLimit();
+
+  public int getLinkCountLimit();
+}
+```
+
+**Configurable parameters:**
+
+* `AttributeCountLimit` (Default=1000) - Maximum allowed span attribute count;
+* `EventCountLimit` (Default=1000) - Maximum allowed span event count;
+* `LinkCountLimit` (Default=1000) - Maximum allowed span link count;
+* `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
+* `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
