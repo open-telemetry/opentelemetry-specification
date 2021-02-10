@@ -158,7 +158,7 @@ These attributes correspond to multiple request types and are referenced from in
 * [`db.name`](../database.md), `aws.consumed_capacity`, `aws.item_collection_metrics`
 <!-- endsemconv -->
 
-### DynamoDB.UpdateItem
+### DynamoDB.UpdateTable
 
 <!-- semconv dynamodb.updatetable -->
 | Attribute  | Type | Description  | Examples  | Required |
