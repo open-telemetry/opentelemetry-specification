@@ -307,10 +307,10 @@ It the SDK implements the limits above it MUST provide a way to change these
 limits, via a configuration to the TracerProvider, by allowing users to
 configure individual limits like in the Java example bellow.
 
-The name of the configuration class MAY be `SpanLimits`, and the
-name of the properties SHOULD be `AttributeCountLimit`, `EventCountLimit` and
-`LinkCountLimit`. Implementations MAY provide additional configuration such as
-`AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
+The name of the configuration options SHOULD be `AttributeCountLimit`,
+`EventCountLimit` and `LinkCountLimit`. The options MAY be bundled in a class,
+which then SHOULD be called `SpanLimits`. Implementations MAY provide additional
+configuration such as `AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
 
 ```java
 public final class SpanLimits {
@@ -331,9 +331,6 @@ public final class SpanLimits {
 * `LinkCountLimit` (Default=1000) - Maximum allowed span link count;
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
 * `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
-
-If there is a configuration provided, the SDK SHOULD honor the environment variables
-specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
