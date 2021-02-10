@@ -13,9 +13,9 @@ and Zipkin.
 
 | OpenTelemetry            | Zipkin           | Notes                                                                                         |
 | ------------------------ | ---------------- | --------------------------------------------------------------------------------------------- |
-| Span.TraceID             | Span.TraceID     |                                                                                               |
-| Span.ParentID            | Span.ParentID    |                                                                                               |
-| Span.SpanID              | Span.ID          |                                                                                               |
+| Span.TraceId             | Span.TraceID     |                                                                                               |
+| Span.ParentId            | Span.ParentID    |                                                                                               |
+| Span.SpanId              | Span.ID          |                                                                                               |
 | Span.TraceState          | TBD              | TBD                                                                                           |
 | Span.Name                | Span.Name        |                                                                                               |
 | Span.Kind                | Span.Kind        | See [SpanKind](#spankind) for values mapping                                                  |
