@@ -303,12 +303,12 @@ To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
 the configured limit.
 
-The SDKs MUST provide a way to change these limits, via a configuration to the
-TracerProvider, by allowing users to configure individual limits like the java
-example bellow. The name of the cofiguration class MAY be `SpanLimits`, and the
-name of the properties SHOULD be `AttributeCountLimit`, `EventCountLimit`,
-`LinkCountLimit`. Implementation MAY provide additional configuration such as
-`AttributePerEventCountLimit`, `AttributePerLinkCountLimit`.
+It the SDK implements the limits above it MUST provide a way to change these limits, via a configuration to the
+TracerProvider, by allowing users to configure individual limits like in the Java
+example bellow. The name of the configuration class MAY be `SpanLimits`, and the
+name of the properties SHOULD be `AttributeCountLimit`, `EventCountLimit` and
+`LinkCountLimit`. Implementations MAY provide additional configuration such as
+`AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
 
 ```java
 public final class SpanLimits {
