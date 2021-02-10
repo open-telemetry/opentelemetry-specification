@@ -155,7 +155,7 @@ groups:
     attributes:
       - id: global_secondary_indexes
         type: string[]
-        brief: "The JSON-serialized value of each item of the`GlobalSecondaryIndexes` request field"
+        brief: "The JSON-serialized value of each item of the `GlobalSecondaryIndexes` request field"
         examples:
           - '{
               "IndexName": "string",
