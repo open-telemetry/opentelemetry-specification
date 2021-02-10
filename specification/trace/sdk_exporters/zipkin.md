@@ -13,18 +13,18 @@ and Zipkin.
 
 | OpenTelemetry            | Zipkin           | Notes                                                                                         |
 | ------------------------ | ---------------- | --------------------------------------------------------------------------------------------- |
-| Span.TraceID             | Span.TraceID     |                                                                                               |
-| Span.ParentID            | Span.ParentID    |                                                                                               |
-| Span.SpanID              | Span.ID          |                                                                                               |
+| Span.TraceId             | Span.trace_id     |                                                                                               |
+| Span.ParentId            | Span.parent_id    |                                                                                               |
+| Span.SpanId              | Span.id          |                                                                                               |
 | Span.TraceState          | TBD              | TBD                                                                                           |
-| Span.Name                | Span.Name        |                                                                                               |
-| Span.Kind                | Span.Kind        | See [SpanKind](#spankind) for values mapping                                                  |
-| Span.StartTime           | Span.Timestamp   | See [Unit of time](#unit-of-time)                                                             |
-| Span.EndTime             | Span.Duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
-| Span.Attributes          | Span.Tags        | See [Attributes](../../common/common.md#attributes) for data types for the mapping.            |
-| Span.Events              | Span.Annotations | See [Events](#events) for the mapping format.                                                 |
+| Span.Name                | Span.name        |                                                                                               |
+| Span.Kind                | Span.kind        | See [SpanKind](#spankind) for values mapping                                                  |
+| Span.StartTime           | Span.timestamp   | See [Unit of time](#unit-of-time)                                                             |
+| Span.EndTime             | Span.duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
+| Span.Attributes          | Span.tags        | See [Attributes](../../common/common.md#attributes) for data types for the mapping.            |
+| Span.Events              | Span.annotations | See [Events](#events) for the mapping format.                                                 |
 | Span.Links               | TBD              | TBD                                                                                           |
-| Span.Status              | Add to Span.Tags | See [Status](#status) for tag names to use.                                                   |
+| Span.Status              | Add to Span.tags | See [Status](#status) for tag names to use.                                                   |
 | Span.LocalChildSpanCount | TBD              | TBD                                                                                           |
 
 TBD : This is work in progress document and it is currently doesn't specify
@@ -42,9 +42,9 @@ OpenTelemetry fields:
 
 Zipkin fields:
 
-- Local_endpoint
+- local_endpoint
 - debug
-- Shared
+- shared
 
 ## Mappings
 
