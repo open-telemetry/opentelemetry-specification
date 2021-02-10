@@ -9,6 +9,76 @@ release.
 
 New:
 
+- Add `cloud.infrastructure_service` resource attribute
+  ([#1112](https://github.com/open-telemetry/opentelemetry-specification/pull/1112))
+
+Updates:
+
+- Update OT Trace propagator environment variable to match latest name([#1406](https://github.com/open-telemetry/opentelemetry-specification/pull/1406))
+- Remove Metrics SDK specification to avoid confusion, clarify that Metrics API
+  specification is not recommended for client implementation
+  ([#1401](https://github.com/open-telemetry/opentelemetry-specification/pull/1401))
+- Rename OTEL_TRACE_SAMPLER and OTEL_TRACE_SAMPLER_ARG env variables to OTEL_TRACES_SAMPLER and OTEL_TRACES_SAMPLER_ARG
+  ([#1382](https://github.com/open-telemetry/opentelemetry-specification/pull/1382))
+- Mark some entries in compliance matrix as optional([#1359](https://github.com/open-telemetry/opentelemetry-specification/pull/1359))
+  SDKs are free to provide support at their discretion.
+- Rename signal-specific variables for `OTLP_EXPORTER_*` to `OTLP_EXPORTER_TRACES_*` and `OTLP_EXPORTER_METRICS_*`([#1362](https://github.com/open-telemetry/opentelemetry-specification/pull/1362))
+- Versioning and stability guarantees for OpenTelemetry clients([#1291](https://github.com/open-telemetry/opentelemetry-specification/pull/1291))
+- Additional Cassandra semantic attributes
+  ([#1217](https://github.com/open-telemetry/opentelemetry-specification/pull/1217))
+- OTEL_EXPORTER environment variable replaced with OTEL_TRACES_EXPORTER and
+  OTEL_METRICS_EXPORTER which each accept only a single value, not a list.
+  ([#1318](https://github.com/open-telemetry/opentelemetry-specification/pull/1318))
+- `process.runtime.description` resource convention: Add `java.vm.name`
+  ([#1242](https://github.com/open-telemetry/opentelemetry-specification/pull/1242))
+- Refine span name guideline for SQL database spans
+  ([#1219](https://github.com/open-telemetry/opentelemetry-specification/pull/1219))
+- Add RPC semantic conventions for metrics
+  ([#1162](https://github.com/open-telemetry/opentelemetry-specification/pull/1162))
+- Clarify `Description` usage on `Status` API
+  ([#1257](https://github.com/open-telemetry/opentelemetry-specification/pull/1257))
+- Add/Update `Status` + `error` mapping for Jaeger & Zipkin Exporters
+  ([#1257](https://github.com/open-telemetry/opentelemetry-specification/pull/1257))
+- Resource's service.name MUST have a default value, service.instance.id is not
+  required.
+  ([#1269](https://github.com/open-telemetry/opentelemetry-specification/pull/1269))
+  - Clarified in [#1294](https://github.com/open-telemetry/opentelemetry-specification/pull/1294)
+- Add requirement that the SDK allow custom generation of Trace IDs and Span IDs
+  ([#1006](https://github.com/open-telemetry/opentelemetry-specification/pull/1006))
+- Add default ratio when TraceIdRatioSampler is specified by environment variable but
+  no ratio is.
+  ([#1322](https://github.com/open-telemetry/opentelemetry-specification/pull/1322))
+- Require schemed endpoints for OTLP exporters
+  ([1234](https://github.com/open-telemetry/opentelemetry-specification/pull/1234))
+- Resource SDK: Reverse (suggested) order of Resource.Merge parameters, remove
+  special case for empty strings
+  ([#1345](https://github.com/open-telemetry/opentelemetry-specification/pull/1345))
+- Resource attributes: lowerecased the allowed values of the `aws.ecs.launchtype`
+  attribute
+  ([#1339](https://github.com/open-telemetry/opentelemetry-specification/pull/1339))
+- Trace Exporters: Fix TODOs in Jaeger exporter spec
+  ([#1374](https://github.com/open-telemetry/opentelemetry-specification/pull/1374))
+- Clarify that Jaeger/Zipkin exporters must rely on the default Resource to
+  get service.name if none was specified.
+  ([#1386](https://github.com/open-telemetry/opentelemetry-specification/pull/1386))
+- Modify OTLP/Zipkin Exporter format variables for 1.0 (allowing further specification post 1.0)
+  ([#1358](https://github.com/open-telemetry/opentelemetry-specification/pull/1358))
+- Add `k8s.node` semantic conventions ([#1390](https://github.com/open-telemetry/opentelemetry-specification/pull/1390))
+- Clarify stability for both OTLP/HTTP and signals in OTLP.
+  ([#1400](https://github.com/open-telemetry/opentelemetry-specification/pull/1400/files))
+
+## v0.7.0 (11-18-2020)
+
+New:
+
+- Document service name mapping for Jaeger exporters
+  ([1222](https://github.com/open-telemetry/opentelemetry-specification/pull/1222))
+- Change default OTLP port number
+  ([#1221](https://github.com/open-telemetry/opentelemetry-specification/pull/1221))
+- Add performance benchmark specification
+  ([#748](https://github.com/open-telemetry/opentelemetry-specification/pull/748))
+- Enforce that the Baggage API must be fully functional, even without an installed SDK.
+  ([#1103](https://github.com/open-telemetry/opentelemetry-specification/pull/1103))
 - Rename "Canonical status code" to "Status code"
   ([#1081](https://github.com/open-telemetry/opentelemetry-specification/pull/1081))
 - Add Metadata for Baggage entries, and clarify W3C Baggage Propagator implementation
@@ -18,9 +88,9 @@ New:
 - Clarify env variables in otlp exporter
   ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
 - Add Prometheus exporter environment variables
-  ([#1021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021)).
+  ([#1021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021))
 - Default propagators in un-configured API must be no-op
-  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930)).
+  ([#930](https://github.com/open-telemetry/opentelemetry-specification/pull/930))
 - Define resource mapping for Jaeger exporters
   ([#891](https://github.com/open-telemetry/opentelemetry-specification/pull/891))
 - Add resource semantic conventions for operating systems
@@ -31,6 +101,8 @@ New:
   ([#862](https://github.com/open-telemetry/opentelemetry-specification/pull/862))
 - Add resource semantic convention for deployment environment
   ([#606](https://github.com/open-telemetry/opentelemetry-specification/pull/606/))
+- Refine semantic conventions for messaging systems and add specific attributes for Kafka
+  ([#1027](https://github.com/open-telemetry/opentelemetry-specification/pull/1027))
 - Clarification of the behavior of the Trace API, re: context propagation, in
   the absence of an installed SDK
 - Add API and semantic conventions for recording exceptions as Span Events
@@ -49,10 +121,29 @@ New:
   ([#942](https://github.com/open-telemetry/opentelemetry-specification/pull/942))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
-- Add `Shutdown` function to `*Provider` SDK ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
+- Clarify context interaction for trace module
+  ([#1063](https://github.com/open-telemetry/opentelemetry-specification/pull/1063))
+- Add `Shutdown` function to `*Provider` SDK
+  ([#1074](https://github.com/open-telemetry/opentelemetry-specification/pull/1074))
+- Add semantic conventions for system metrics
+  ([#937](https://github.com/open-telemetry/opentelemetry-specification/pull/937))
+- Add `db.sql.table` to semantic conventions, allow `db.operation` for SQL
+  ([#1141](https://github.com/open-telemetry/opentelemetry-specification/pull/1141))
+- Add OTEL_TRACE_SAMPLER env variable definition
+  ([#1136](https://github.com/open-telemetry/opentelemetry-specification/pull/1136/))
+- Add guidelines for OpenMetrics interoperability
+  ([#1154](https://github.com/open-telemetry/opentelemetry-specification/pull/1154))
+- Add OTEL_TRACE_SAMPLER_ARG env variable definition
+  ([#1202](https://github.com/open-telemetry/opentelemetry-specification/pull/1202))
 
 Updates:
 
+- Clarify null SHOULD NOT be allowed even in arrays
+  ([#1214](https://github.com/open-telemetry/opentelemetry-specification/pull/1214))
+- Remove ordering SHOULD-requirement for attributes
+  ([#1212](https://github.com/open-telemetry/opentelemetry-specification/pull/1212))
+- Make `process.pid` optional, split `process.command_args` from `command_line`
+  ([#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Renamed `CorrelationContext` to `Baggage`:
   ([#857](https://github.com/open-telemetry/opentelemetry-specification/pull/857))
 - Add semantic convention for NGINX custom HTTP 499 status code.
@@ -82,7 +173,8 @@ Updates:
 - Version attributes no longer have a prefix such as semver:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
 - Add semantic conventions for process runtime
-  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882))
+  ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882),
+   [#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Use hex encoding for trace id and span id fields in OTLP JSON encoding:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
@@ -107,15 +199,19 @@ Updates:
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
 - Metrics SDK: Specify TBD default aggregation for ValueRecorder
   ([#984](https://github.com/open-telemetry/opentelemetry-specification/pull/984)
+- Trace SDK: Sampler.ShouldSample gets parent Context instead of SpanContext
+  ([#881](https://github.com/open-telemetry/opentelemetry-specification/pull/881))
 - SDK: Specify known values, as well as basic error handling for OTEL_PROPAGATORS.
   ([#962](https://github.com/open-telemetry/opentelemetry-specification/pull/962))
   ([#995](https://github.com/open-telemetry/opentelemetry-specification/pull/995))
+- SDK: Specify when to generate new IDs with sampling
+  ([#1225](https://github.com/open-telemetry/opentelemetry-specification/pull/1225))
 - Remove custom header name for Baggage, use official header
   ([#993](https://github.com/open-telemetry/opentelemetry-specification/pull/993))
 - Trace API: Clarifications for `Span.End`, e.g. IsRecording becomes false after End
   ([#1011](https://github.com/open-telemetry/opentelemetry-specification/pull/1011))
-- Rename SpanContext to SpanReference
-  ([#1075](https://github.com/open-telemetry/opentelemetry-specification/pull/1075))
+- Update semantic conventions for gRPC for new Span Status
+  ([#1156](https://github.com/open-telemetry/opentelemetry-specification/pull/1156))
 
 ## v0.6.0 (07-01-2020)
 
@@ -168,19 +264,19 @@ Updates:
 
 ## v0.4.0 (05-12-2020)
 
-- [OTEP-83](https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md)
+- [OTEP-83](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
   Introduce the notion of InstrumentationLibrary.
-- [OTEP-88](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0088-metric-instrument-optional-refinements.md)
+- [OTEP-88](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0088-metric-instrument-optional-refinements.md)
   Metrics API instrument foundation.
-- [OTEP-91](https://github.com/open-telemetry/oteps/blob/master/text/logs/0091-logs-vocabulary.md)
+- [OTEP-91](https://github.com/open-telemetry/oteps/blob/main/text/logs/0091-logs-vocabulary.md)
   Logs vocabulary.
-- [OTEP-92](https://github.com/open-telemetry/oteps/blob/master/text/logs/0092-logs-vision.md)
+- [OTEP-92](https://github.com/open-telemetry/oteps/blob/main/text/logs/0092-logs-vision.md)
   Logs Vision.
-- [OTEP-90](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0090-remove-labelset-from-metrics-api.md)
+- [OTEP-90](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0090-remove-labelset-from-metrics-api.md)
   Remove LabelSet from the metrics API.
-- [OTEP-98](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0098-metric-instruments-explained.md)
+- [OTEP-98](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0098-metric-instruments-explained.md)
   Explain the metric instruments.
-- [OTEP-99](https://github.com/open-telemetry/oteps/blob/master/text/0099-otlp-http.md)
+- [OTEP-99](https://github.com/open-telemetry/oteps/blob/main/text/0099-otlp-http.md)
   OTLP/HTTP: HTTP Transport Extension for OTLP.
 - Define handling of null and empty attribute values.
 - Rename Setter.put to Setter.set
@@ -200,15 +296,15 @@ Updates:
 
 ## v0.3.0 (02-21-2020)
 
-- [OTEP-0059](https://github.com/open-telemetry/oteps/blob/master/text/trace/0059-otlp-trace-data-format.md)
+- [OTEP-0059](https://github.com/open-telemetry/oteps/blob/main/text/trace/0059-otlp-trace-data-format.md)
   Add OTLP Trace Data Format specification.
-- [OTEP-0066](https://github.com/open-telemetry/oteps/blob/master/text/0066-separate-context-propagation.md)
+- [OTEP-0066](https://github.com/open-telemetry/oteps/blob/main/text/0066-separate-context-propagation.md)
   Separate Layer for Context Propagation.
-- [OTEP-0070](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0070-metric-bound-instrument.md)
+- [OTEP-0070](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0070-metric-bound-instrument.md)
   Rename metric instrument "Handles" to "Bound Instruments".
-- [OTEP-0072](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0072-metric-observer.md)
+- [OTEP-0072](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0072-metric-observer.md)
   Metric Observer instrument specification (refinement).
-- [OTEP-0080](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0080-remove-metric-gauge.md)
+- [OTEP-0080](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0080-remove-metric-gauge.md)
   Remove the Metric Gauge instrument, recommend use of other instruments.
 - Update 0003-measure-metric-type to match current Specification.
 - Update 0009-metric-handles to match current Specification.
@@ -228,23 +324,23 @@ Updates:
 
 ## v0.2.0 (10-22-2019)
 
-- [OTEP-0001](https://github.com/open-telemetry/oteps/blob/master/text/0001-telemetry-without-manual-instrumentation.md)
+- [OTEP-0001](https://github.com/open-telemetry/oteps/blob/main/text/0001-telemetry-without-manual-instrumentation.md)
   Added Auto-Instrumentation.
-- [OTEP-0002](https://github.com/open-telemetry/oteps/blob/master/text/trace/0002-remove-spandata.md):
+- [OTEP-0002](https://github.com/open-telemetry/oteps/blob/main/text/trace/0002-remove-spandata.md):
   Removed SpanData interface in favor of Span Start and End options.
-- [OTEP-0003](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0003-measure-metric-type.md)
+- [OTEP-0003](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0003-measure-metric-type.md)
   Consolidatesd pre-aggregated and raw metrics APIs.
-- [OTEP-0008](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0008-metric-observer.md)
+- [OTEP-0008](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0008-metric-observer.md)
   Added Metrics Observers API.
-- [OTEP-0009](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0009-metric-handles.md)
+- [OTEP-0009](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0009-metric-handles.md)
   Added Metrics Handle API.
-- [OTEP-0010](https://github.com/open-telemetry/oteps/blob/master/text/metrics/0010-cumulative-to-counter.md)
+- [OTEP-0010](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0010-cumulative-to-counter.md)
   Rename "Cumulative" to "Counter" in the Metrics API.
-- [OTEP-006](https://github.com/open-telemetry/oteps/blob/master/text/trace/0006-sampling.md)
+- [OTEP-006](https://github.com/open-telemetry/oteps/blob/main/text/trace/0006-sampling.md)
   Moved sampling from the API tp the SDK.
-- [OTEP-0007](https://github.com/open-telemetry/oteps/blob/master/text/0007-no-out-of-band-reporting.md)
+- [OTEP-0007](https://github.com/open-telemetry/oteps/blob/main/text/0007-no-out-of-band-reporting.md)
   Moved support for out-of-band telemetry from the API to the SDK.
-- [OTEP-0016](https://github.com/open-telemetry/oteps/blob/master/text/0016-named-tracers.md)
+- [OTEP-0016](https://github.com/open-telemetry/oteps/blob/main/text/0016-named-tracers.md)
   Added named providers for Tracers and Meters.
 - Added design goals and requirements for a telemetry data exchange protocol.
 - Added a Span Processor interface for intercepting span start and end

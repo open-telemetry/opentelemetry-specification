@@ -1,185 +1,20 @@
 # Tracing SDK
 
+**Status**: [Stable](../document-status.md)
+
 <details>
 
 <summary>Table of Contents</summary>
 
-* [Sampling](#sampling)
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
+* [Sampling](#sampling)
 * [Limits on Span Collections](#limits-on-span-collections)
+* [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
 </details>
-
-## Sampling
-
-Sampling is a mechanism to control the noise and overhead introduced by
-OpenTelemetry by reducing the number of samples of traces collected and sent to
-the backend.
-
-Sampling may be implemented on different stages of a trace collection. The
-earliest sampling could happen before the trace is actually created, and the
-latest sampling could happen on the Collector which is out of process.
-
-The OpenTelemetry API has two properties responsible for the data collection:
-
-* `IsRecording` field of a `Span`. If `false` the current `Span` discards all
-  tracing data (attributes, events, status, etc.). Users can use this property
-  to determine if collecting expensive trace data can be avoided. [Span
-  Processor](#span-processor) MUST receive only those spans which have this
-  field set to `true`. However, [Span Exporter](#span-exporter) SHOULD NOT
-  receive them unless the `Sampled` flag was also set.
-* `Sampled` flag in `TraceFlags` on `SpanReference`. This flag is propagated via
-  the `SpanReference` to child Spans. For more details see the [W3C Trace Context
-  specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
-  `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
-  receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
-  that do not.
-
-The flag combination `SampledFlag == false` and `IsRecording == true`
-means that the current `Span` does record information, but most likely the child
-`Span` will not.
-
-The flag combination `SampledFlag == true` and `IsRecording == false`
-could cause gaps in the distributed trace, and because of this OpenTelemetry API
-MUST NOT allow this combination.
-
-<a name="recording-sampled-reaction-table"></a>
-
-The following table summarizes the expected behavior for each combination of
-`IsRecording` and `SampledFlag`.
-
-| `IsRecording` | `Sampled` Flag | Span Processor receives Span? | Span Exporter receives Span? |
-| ------------- | -------------- | ----------------------------- | ---------------------------- |
-| true          | true           | true                          | true                         |
-| true          | false          | true                          | false                        |
-| false         | true           | Not allowed                   | Not allowed                  |
-| false         | false          | false                         | false                        |
-
-The SDK defines the interface [`Sampler`](#sampler) as well as a set of
-[built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
-
-When asked to create a Span, the SDK MUST query the `Sampler`'s [`ShouldSample`](#shouldsample) method before actually creating the span, and act accordingly:
-see description of [`ShouldSample`'s](#shouldsample) return value below for how to set `IsRecording` and `Sampled` on the Span,
-and the [table above](#recording-sampled-reaction-table) on whether to pass the `Span` to `SpanProcessor`s.
-A non-recording span MAY be implemented using the same mechanism as when a `Span` is created with no API-implementation installed
-(sometimes called a `NoOpSpan` or `DefaultSpan`).
-
-### Sampler
-
-`Sampler` interface allows users to create custom samplers which will return a
-sampling `SamplingResult` based on information that is typically available just
-before the `Span` was created.
-
-#### ShouldSample
-
-Returns the sampling Decision for a `Span` to be created.
-
-**Required arguments:**
-
-* Parent `SpanReference`. May be invalid to indicate a root span.
-* `TraceId` of the `Span` to be created.
-  If the parent `SpanReference` contains a valid `TraceId`, they MUST always match.
-* Name of the `Span` to be created.
-* `SpanKind` of the `Span` to be created.
-* Initial set of `Attributes` of the `Span` to be created.
-* Collection of links that will be associated with the `Span` to be created.
-  Typically useful for batch operations, see
-  [Links Between Spans](../overview.md#links-between-spans).
-
-**Return value:**
-
-It produces an output called `SamplingResult` which contains:
-
-* A sampling `Decision`. One of the following enum values:
-  * `DROP` - `IsRecording() == false`, span will not be recorded and all events and attributes
-  will be dropped.
-  * `RECORD_ONLY` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
-  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag` MUST be set.
-* A set of span Attributes that will also be added to the `Span`. The returned
-object must be immutable (multiple calls may return different immutable objects).
-* A `Tracestate` that will be associated with the `Span` through the new
-  `SpanReference`.
-  If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
-  so samplers SHOULD normally return the passed-in `Tracestate` if they do not intend
-  to change it.
-
-#### GetDescription
-
-Returns the sampler name or short description with the configuration. This may
-be displayed on debug pages or in the logs. Example:
-`"TraceIdRatioBased{0.000100}"`.
-
-Description MUST NOT change over time and caller can cache the returned value.
-
-### Built-in samplers
-
-OpenTelemetry supports a number of built-in samplers to choose from.
-The default sampler is `ParentBased(root=AlwaysOn)`.
-
-#### AlwaysOn
-
-* Returns `RECORD_AND_SAMPLE` always.
-* Description MUST be `AlwaysOnSampler`.
-
-#### AlwaysOff
-
-* Returns `DROP` always.
-* Description MUST be `AlwaysOffSampler`.
-
-#### TraceIdRatioBased
-
-* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
-parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
-the `ParentBased` sampler specified below.
-* Description MUST be `TraceIdRatioBased{0.000100}`.
-
-TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`.
-
-##### Requirements for `TraceIdRatioBased` sampler algorithm
-
-* The sampling algorithm MUST be deterministic. A trace identified by a given
-`TraceId` is sampled or not independent of language, time, etc. To achieve this,
-implementations MUST use a deterministic hash of the `TraceId` when computing
-the sampling decision. By ensuring this, running the sampler on any child `Span`
-will produce the same decision.
-* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
-sample. This is important when a backend system may want to run with a higher
-sampling rate than the frontend system, this way all frontend traces will
-still be sampled and extra traces will be sampled on the backend only.
-
-#### ParentBased
-
-* This is a composite sampler. `ParentBased` helps distinguished between the
-following cases:
-  * No parent (root span).
-  * Remote parent (`SpanReference.IsRemote() == true`) with `SampledFlag` equals `true`
-  * Remote parent (`SpanReference.IsRemote() == true`) with `SampledFlag` equals `false`
-  * Local parent (`SpanReference.IsRemote() == false`) with `SampledFlag` equals `true`
-  * Local parent (`SpanReference.IsRemote() == false`) with `SampledFlag` equals `false`
-
-Required parameters:
-
-* `root(Sampler)` - Sampler called for spans with no parent (root spans)
-
-Optional parameters:
-
-* `remoteParentSampled(Sampler)` (default: AlwaysOn)
-* `remoteParentNotSampled(Sampler)` (default: AlwaysOff)
-* `localParentSampled(Sampler)` (default: AlwaysOn)
-* `localParentNotSampled(Sampler)` (default: AlwaysOff)
-
-|Parent| parent.isRemote() | parent.IsSampled()| Invoke sampler|
-|--|--|--|--|
-|absent| n/a | n/a |`root()`|
-|present|true|true|`remoteParentSampled()`|
-|present|true|false|`remoteParentNotSampled()`|
-|present|false|true|`localParentSampled()`|
-|present|false|false|`localParentNotSampled()`|
 
 ## Tracer Provider
 
@@ -191,9 +26,9 @@ supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.
 
-Configuration (i.e., [Span processors](#span-processor) and [`Sampler`](#sampling))
-MUST be managed solely by the `TracerProvider` and it MUST provide some way to
-configure them, at least when creating or initializing it.
+Configuration (i.e., [Span processors](#span-processor), [IdGenerator](#id-generators),
+and [`Sampler`](#sampling)) MUST be managed solely by the `TracerProvider` and it
+MUST provide some way to configure them, at least when creating or initializing it.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -217,7 +52,7 @@ failed or timed out.
 
 `Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. Language library authors can decide if they want to
+via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the shutdown timeout configurable.
 
 `Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
@@ -263,6 +98,200 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
 
+## Sampling
+
+Sampling is a mechanism to control the noise and overhead introduced by
+OpenTelemetry by reducing the number of samples of traces collected and sent to
+the backend.
+
+Sampling may be implemented on different stages of a trace collection. The
+earliest sampling could happen before the trace is actually created, and the
+latest sampling could happen on the Collector which is out of process.
+
+The OpenTelemetry API has two properties responsible for the data collection:
+
+* `IsRecording` field of a `Span`. If `false` the current `Span` discards all
+  tracing data (attributes, events, status, etc.). Users can use this property
+  to determine if collecting expensive trace data can be avoided. [Span
+  Processor](#span-processor) MUST receive only those spans which have this
+  field set to `true`. However, [Span Exporter](#span-exporter) SHOULD NOT
+  receive them unless the `Sampled` flag was also set.
+* `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
+  the `SpanContext` to child Spans. For more details see the [W3C Trace Context
+  specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
+  `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
+  receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
+  that do not.
+
+The flag combination `SampledFlag == false` and `IsRecording == true`
+means that the current `Span` does record information, but most likely the child
+`Span` will not.
+
+The flag combination `SampledFlag == true` and `IsRecording == false`
+could cause gaps in the distributed trace, and because of this OpenTelemetry API
+MUST NOT allow this combination.
+
+<a name="recording-sampled-reaction-table"></a>
+
+The following table summarizes the expected behavior for each combination of
+`IsRecording` and `SampledFlag`.
+
+| `IsRecording` | `Sampled` Flag | Span Processor receives Span? | Span Exporter receives Span? |
+| ------------- | -------------- | ----------------------------- | ---------------------------- |
+| true          | true           | true                          | true                         |
+| true          | false          | true                          | false                        |
+| false         | true           | Not allowed                   | Not allowed                  |
+| false         | false          | false                         | false                        |
+
+The SDK defines the interface [`Sampler`](#sampler) as well as a set of
+[built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
+
+### SDK Span creation
+
+When asked to create a Span, the SDK MUST act as if doing the following in order:
+
+1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
+   (note: this must be done before calling `ShouldSample`, because it expects
+   a valid trace ID as input).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method
+   (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
+   use the sampling decision of the parent,
+   translating a set SampledFlag to RECORD and an unset one to DROP).
+3. Generate a new span ID for the `Span`, independently of the sampling decision.
+   This is done so other components (such as logs or exception handling) can rely on
+   a unique span ID, even if the `Span` is a non-recording instance.
+4. Create a span depending on the decision returned by `ShouldSample`:
+   see description of [`ShouldSample`'s](#shouldsample) return value below
+   for how to set `IsRecording` and `Sampled` on the Span,
+   and the [table above](#recording-sampled-reaction-table) on whether
+   to pass the `Span` to `SpanProcessor`s.
+   A non-recording span MAY be implemented using the same mechanism as when a
+   `Span` is created without an SDK installed or as described in
+   [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
+
+### Sampler
+
+`Sampler` interface allows users to create custom samplers which will return a
+sampling `SamplingResult` based on information that is typically available just
+before the `Span` was created.
+
+#### ShouldSample
+
+Returns the sampling Decision for a `Span` to be created.
+
+**Required arguments:**
+
+* [`Context`](../context/context.md) with parent `Span`.
+  The Span's SpanContext may be invalid to indicate a root span.
+* `TraceId` of the `Span` to be created.
+  If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.
+* Name of the `Span` to be created.
+* `SpanKind` of the `Span` to be created.
+* Initial set of `Attributes` of the `Span` to be created.
+* Collection of links that will be associated with the `Span` to be created.
+  Typically useful for batch operations, see
+  [Links Between Spans](../overview.md#links-between-spans).
+
+**Return value:**
+
+It produces an output called `SamplingResult` which contains:
+
+* A sampling `Decision`. One of the following enum values:
+  * `DROP` - `IsRecording() == false`, span will not be recorded and all events and attributes
+  will be dropped.
+  * `RECORD_ONLY` - `IsRecording() == true`, but `Sampled` flag MUST NOT be set.
+  * `RECORD_AND_SAMPLE` - `IsRecording() == true` AND `Sampled` flag MUST be set.
+* A set of span Attributes that will also be added to the `Span`. The returned
+object must be immutable (multiple calls may return different immutable objects).
+* A `Tracestate` that will be associated with the `Span` through the new
+  `SpanContext`.
+  If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
+  so samplers SHOULD normally return the passed-in `Tracestate` if they do not intend
+  to change it.
+
+#### GetDescription
+
+Returns the sampler name or short description with the configuration. This may
+be displayed on debug pages or in the logs. Example:
+`"TraceIdRatioBased{0.000100}"`.
+
+Description MUST NOT change over time and caller can cache the returned value.
+
+### Built-in samplers
+
+OpenTelemetry supports a number of built-in samplers to choose from.
+The default sampler is `ParentBased(root=AlwaysOn)`.
+
+#### AlwaysOn
+
+* Returns `RECORD_AND_SAMPLE` always.
+* Description MUST be `AlwaysOnSampler`.
+
+#### AlwaysOff
+
+* Returns `DROP` always.
+* Description MUST be `AlwaysOffSampler`.
+
+#### TraceIdRatioBased
+
+* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
+parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
+the `ParentBased` sampler specified below.
+* Description MUST be `TraceIdRatioBased{0.000100}`.
+
+TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
+of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
+
+##### Requirements for `TraceIdRatioBased` sampler algorithm
+
+* The sampling algorithm MUST be deterministic. A trace identified by a given
+  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
+  implementations MUST use a deterministic hash of the `TraceId` when computing
+  the sampling decision. By ensuring this, running the sampler on any child `Span`
+  will produce the same decision.
+* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
+  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
+  sample. This is important when a backend system may want to run with a higher
+  sampling rate than the frontend system, this way all frontend traces will
+  still be sampled and extra traces will be sampled on the backend only.
+* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
+  there will probably be changes to it in any language SDK once it is, which
+  would break code that relies on the algorithm results.
+  Only the configuration and creation APIs can be considered stable.
+  It is recommended to use this sampler algorithm only for root spans
+  (in combination with [`ParentBased`](#parentbased)) because different language
+  SDKs or even different versions of the same language SDKs may produce inconsistent
+  results for the same input.
+
+#### ParentBased
+
+* This is a composite sampler. `ParentBased` helps distinguished between the
+following cases:
+  * No parent (root span).
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `false`
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `true`
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `false`
+
+Required parameters:
+
+* `root(Sampler)` - Sampler called for spans with no parent (root spans)
+
+Optional parameters:
+
+* `remoteParentSampled(Sampler)` (default: AlwaysOn)
+* `remoteParentNotSampled(Sampler)` (default: AlwaysOff)
+* `localParentSampled(Sampler)` (default: AlwaysOn)
+* `localParentNotSampled(Sampler)` (default: AlwaysOff)
+
+|Parent| parent.isRemote() | parent.IsSampled()| Invoke sampler|
+|--|--|--|--|
+|absent| n/a | n/a |`root()`|
+|present|true|true|`remoteParentSampled()`|
+|present|true|false|`remoteParentNotSampled()`|
+|present|false|true|`localParentSampled()`|
+|present|false|false|`localParentNotSampled()`|
+
 ## Limits on Span Collections
 
 Erroneous code can add unintended attributes, events, and links to a span. If
@@ -279,6 +308,30 @@ specified in [SDK environment variables](../sdk-environment-variables.md#span-co
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
 should not be emitted once per span, or per discarded attribute, event, or links.
+
+## Id Generators
+
+The SDK MUST by default randomly generate both the `TraceId` and the `SpanId`.
+
+The SDK MUST provide a mechanism for customizing the way IDs are generated for
+both the `TraceId` and the `SpanId`.
+
+The SDK MAY provide this functionality by allowing custom implementations of
+an interface like the java example below (name of the interface MAY be
+`IdGenerator`, name of the methods MUST be consistent with
+[SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
+extension points for two methods, one to generate a `SpanId` and one for `TraceId`.
+
+```java
+public interface IdGenerator {
+  byte[] generateSpanIdBytes();
+  byte[] generateTraceIdBytes();
+}
+```
+
+Additional `IdGenerator` implementing vendor-specific protocols such as AWS
+X-Ray trace id generator MUST NOT be maintained or distributed as part of the
+Core OpenTelemetry repositories.
 
 ## Span processor
 
@@ -368,7 +421,7 @@ failed or timed out.
 
 `Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. Language library authors can decide if they want to
+via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the shutdown timeout configurable.
 
 #### ForceFlush()
@@ -384,7 +437,7 @@ invocation, but before the `Processor` exports the completed spans.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. Language library authors can decide if they want to
+via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the flush timeout configurable.
 
 ### Built-in span processors
@@ -448,7 +501,7 @@ destination.
 Export() will never be called concurrently for the same exporter instance.
 Export() can be called again only after the current call returns.
 
-Export() must not block indefinitely, there must be a reasonable upper limit
+Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
 
 Any retry logic that is required by the exporter is the responsibility
@@ -485,7 +538,7 @@ call to `Shutdown` subsequent calls to `Export` are not allowed and should
 return a `Failure` result.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
-and the destination is unavailable). Language library authors can decide if they
+and the destination is unavailable). OpenTelemetry client authors can decide if they
 want to make the shutdown timeout configurable.
 
 ### Further Language Specialization
@@ -506,7 +559,7 @@ telemetry data generation.
 #### Examples
 
 These are examples on what the `Exporter` interface can look like in specific
-languages. Examples are for illustration purposes only. Language library authors
+languages. Examples are for illustration purposes only. OpenTelemetry client authors
 are free to deviate from these provided that their design remain true to the
 spirit of `Exporter` concept.
 
@@ -545,4 +598,4 @@ public interface SpanExporter {
 ```
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
-[otep-83]: https://github.com/open-telemetry/oteps/blob/master/text/0083-component.md
+[otep-83]: https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md

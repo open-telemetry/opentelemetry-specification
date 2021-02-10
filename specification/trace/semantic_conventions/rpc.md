@@ -1,5 +1,7 @@
 # Semantic conventions for RPC spans
 
+**Status**: [Experimental](../../document-status.md)
+
 This document defines how to describe remote procedure calls
 (also called "remote method invocations" / "RMI") with spans.
 
@@ -13,7 +15,8 @@ This document defines how to describe remote procedure calls
     + [Service name](#service-name)
   * [Distinction from HTTP spans](#distinction-from-http-spans)
 - [gRPC](#grpc)
-  * [Status](#status)
+  * [gRPC Attributes](#grpc-attributes)
+  * [gRPC Status](#grpc-status)
   * [Events](#events)
 
 <!-- tocstop -->
@@ -34,7 +37,7 @@ The _span name_ MUST be the full RPC method name formatted as:
 $package.$service/$method
 ```
 
-(where $service must not contain dots and $method must not contain slashes)
+(where $service MUST NOT contain dots and $method MUST NOT contain slashes)
 
 If there is no package name or if it is unknown, the `$package.` part (including the period) is omitted.
 
@@ -42,22 +45,22 @@ Examples of span names:
 
 - `grpc.test.EchoService/Echo`
 - `com.example.ExampleRmiService/exampleMethod`
-- `MyCalcService.Calculator/Add` reported by the server and  
+- `MyCalcService.Calculator/Add` reported by the server and
   `MyServiceReference.ICalculator/Add` reported by the client for .NET WCF calls
 - `MyServiceWithNoPackage/theMethod`
 
 ### Attributes
 
 <!-- semconv rpc -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `rpc.system` | string | A string identifying the remoting system. | `grpc`<br>`java_rmi`<br>`wcf` | Yes |
-| `rpc.service` | string | The full name of the service being called, including its package name, if applicable. | `myservice.EchoService` | Conditional<br>No, but recommended |
-| `rpc.method` | string | The name of the method being called, must be equal to the $method part in the span name. | `exampleMethod` | Conditional<br>No, but recommended |
+| `rpc.system` | string | A string identifying the remoting system. | `grpc`; `java_rmi`; `wcf` | Yes |
+| `rpc.service` | string | The full name of the service being called, including its package name, if applicable. | `myservice.EchoService` | No, but recommended |
+| `rpc.method` | string | The name of the method being called, must be equal to the $method part in the span name. | `exampleMethod` | No, but recommended |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below |
-| [`net.peer.port`](span-general.md) | number | Remote port number. | `80`<br>`8080`<br>`443` | Conditional<br>See below |
-| [`net.transport`](span-general.md) | string enum | Transport protocol used. See note below. | `IP.TCP` | Conditional<br>See below |
+| [`net.peer.port`](span-general.md) | number | Remote port number. | `80`; `8080`; `443` | See below |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `IP.TCP` | See below |
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -97,14 +100,41 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 `rpc.system` MUST be set to `"grpc"`.
 
+### gRPC Attributes
+
+<!-- semconv rpc.grpc -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `rpc.grpc.status_code` | number | The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0`; `1`; `16` | Yes |
+
+`rpc.grpc.status_code` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `0` | OK |
+| `1` | CANCELLED |
+| `2` | UNKNOWN |
+| `3` | INVALID_ARGUMENT |
+| `4` | DEADLINE_EXCEEDED |
+| `5` | NOT_FOUND |
+| `6` | ALREADY_EXISTS |
+| `7` | PERMISSION_DENIED |
+| `8` | RESOURCE_EXHAUSTED |
+| `9` | FAILED_PRECONDITION |
+| `10` | ABORTED |
+| `11` | OUT_OF_RANGE |
+| `12` | UNIMPLEMENTED |
+| `13` | INTERNAL |
+| `14` | UNAVAILABLE |
+| `15` | DATA_LOSS |
+| `16` | UNAUTHENTICATED |
+<!-- endsemconv -->
+
 [gRPC]: https://grpc.io/
 
-### Status
+### gRPC Status
 
-Implementations MUST set status which MUST be the same as the gRPC client/server
-status. The mapping between gRPC canonical codes and OpenTelemetry status codes
-is 1:1 as OpenTelemetry canonical codes is just a snapshot of grpc codes which
-can be found [here](https://github.com/grpc/grpc-go/blob/master/codes/codes.go).
+The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
 
 ### Events
 

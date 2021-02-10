@@ -1,5 +1,12 @@
 # Metrics API
 
+**Status**: [Experimental](../document-status.md)
+
+Note: this specification is subject to major changes. To avoid thrusting
+language client maintainers, we don't recommend OpenTelemetry clients to start
+the implementation unless explicitly communicated via
+[OTEP](https://github.com/open-telemetry/oteps#opentelemetry-enhancement-proposal-otep).
+
 <!-- toc -->
 
 - [Overview](#overview)
@@ -365,7 +372,7 @@ situations, but in most cases it is the correct pattern for telemetry
 data, in order to combine telemetry data from inter-dependent
 libraries _without use of dependency injection_.  OpenTelemetry
 language APIs SHOULD offer a global instance for this reason.
-Languges that offer a global instance MUST ensure that `Meter`
+Languages that offer a global instance MUST ensure that `Meter`
 instances allocated through the global `MeterProvider` and instruments
 allocated through those `Meter` instances have their initialization
 deferred until the a global SDK is first initialized.

@@ -35,5 +35,5 @@ groups:
         type: string
         brief: >
           The version string of the VM image as defined in
-          [Version Attributes](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions#version-attributes).
+          [Version Attributes](README.md#version-attributes).
         examples: ['0.1']
