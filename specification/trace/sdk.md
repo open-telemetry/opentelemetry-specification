@@ -303,9 +303,11 @@ To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
 the configured limit.
 
-It the SDK implements the limits above it MUST provide a way to change these limits, via a configuration to the
-TracerProvider, by allowing users to configure individual limits like in the Java
-example bellow. The name of the configuration class MAY be `SpanLimits`, and the
+It the SDK implements the limits above it MUST provide a way to change these
+limits, via a configuration to the TracerProvider, by allowing users to
+configure individual limits like in the Java example bellow.
+
+The name of the configuration class MAY be `SpanLimits`, and the
 name of the properties SHOULD be `AttributeCountLimit`, `EventCountLimit` and
 `LinkCountLimit`. Implementations MAY provide additional configuration such as
 `AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
@@ -324,13 +326,13 @@ public final class SpanLimits {
 
 **Configurable parameters:**
 
-* `AttributeCountLimit` - Maximum allowed span attribute count;
-* `EventCountLimit` - Maximum allowed span event count;
-* `LinkCountLimit` - Maximum allowed span link count;
-* `AttributePerEventCountLimit` - Maximum allowed attribute per span event count;
-* `AttributePerLinkCountLimit` - Maximum allowed attribute per span link count;
+* `AttributeCountLimit` (Default=1000) - Maximum allowed span attribute count;
+* `EventCountLimit` (Default=1000) - Maximum allowed span event count;
+* `LinkCountLimit` (Default=1000) - Maximum allowed span link count;
+* `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
+* `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
-If there is a configurable provided, the SDK SHOULD honor the environment variables
+If there is a configuration provided, the SDK SHOULD honor the environment variables
 specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
