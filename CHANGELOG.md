@@ -7,6 +7,10 @@ release.
 
 ## Unreleased
 
+## v1.0.1 (02-10-2021)
+
+- Fix rebase issue for span limit default values ([#1429](https://github.com/open-telemetry/opentelemetry-specification/pull/1429))
+
 ## v1.0.0 (02-10-2021)
 
 New:
