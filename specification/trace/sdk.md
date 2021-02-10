@@ -9,7 +9,7 @@
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
 * [Sampling](#sampling)
-* [Limits on Span Collections](#limits-on-span-collections)
+* [Span Limits](#span-limits)
 * [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
@@ -26,9 +26,10 @@ supplied to the `TracerProvider` must be used to create an
 [`InstrumentationLibrary`][otep-83] instance which is stored on the created
 `Tracer`.
 
-Configuration (i.e., [Span processors](#span-processor), [IdGenerator](#id-generators),
-and [`Sampler`](#sampling)) MUST be managed solely by the `TracerProvider` and it
-MUST provide some way to configure them, at least when creating or initializing it.
+Configuration (i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators),
+[SpanLimits](#span-limits) and [`Sampler`](#sampling)) MUST be managed solely by
+the `TracerProvider` and it MUST provide some way to configure all of them that
+are implemented in the SDK, at least when creating or initializing it.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -292,7 +293,7 @@ Optional parameters:
 |present|false|true|`localParentSampled()`|
 |present|false|false|`localParentNotSampled()`|
 
-## Limits on Span Collections
+## Span Limits
 
 Erroneous code can add unintended attributes, events, and links to a span. If
 these collections are unbounded, they can quickly exhaust available memory,
@@ -300,10 +301,36 @@ resulting in crashes that are difficult to recover from safely.
 
 To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
-the recommended limit of 128 elements. SDKs MAY provide a way to change this limit.
+the configured limit.
 
-If there is a configurable limit, the SDK SHOULD honor the environment variables
-specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
+It the SDK implements the limits above it MUST provide a way to change these
+limits, via a configuration to the TracerProvider, by allowing users to
+configure individual limits like in the Java example bellow.
+
+The name of the configuration options SHOULD be `AttributeCountLimit`,
+`EventCountLimit` and `LinkCountLimit`. The options MAY be bundled in a class,
+which then SHOULD be called `SpanLimits`. Implementations MAY provide additional
+configuration such as `AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
+
+```java
+public final class SpanLimits {
+  SpanLimits(int attributeCountLimit, int linkCountLimit, int eventCountLimit);
+
+  public int getAttributeCountLimit();
+
+  public int getEventCountLimit();
+
+  public int getLinkCountLimit();
+}
+```
+
+**Configurable parameters:**
+
+* `AttributeCountLimit` (Default=1000) - Maximum allowed span attribute count;
+* `EventCountLimit` (Default=1000) - Maximum allowed span event count;
+* `LinkCountLimit` (Default=1000) - Maximum allowed span link count;
+* `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
+* `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log

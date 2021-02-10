@@ -11,6 +11,7 @@ New:
 
 - Add `cloud.infrastructure_service` resource attribute
   ([#1112](https://github.com/open-telemetry/opentelemetry-specification/pull/1112))
+- Add `SpanLimits` as a configuration for the TracerProvider([#1416](https://github.com/open-telemetry/opentelemetry-specification/pull/1416))
 
 Updates:
 
