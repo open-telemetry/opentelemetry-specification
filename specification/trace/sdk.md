@@ -326,9 +326,9 @@ public final class SpanLimits {
 
 **Configurable parameters:**
 
-* `AttributeCountLimit` (Default=1000) - Maximum allowed span attribute count;
-* `EventCountLimit` (Default=1000) - Maximum allowed span event count;
-* `LinkCountLimit` (Default=1000) - Maximum allowed span link count;
+* `AttributeCountLimit` (Default=128) - Maximum allowed span attribute count;
+* `EventCountLimit` (Default=128) - Maximum allowed span event count;
+* `LinkCountLimit` (Default=128) - Maximum allowed span link count;
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
 * `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
