@@ -30,8 +30,9 @@ Technical committee holds regular meetings, notes are held
   - [Package/Library Layout](specification/library-layout.md)
   - [General error handling guidelines](specification/error-handling.md)
 - API Specification
-  - [Baggage](specification/baggage/api.md)
+  - [Context](specification/context/context.md)
     - [Propagators](specification/context/api-propagators.md)
+  - [Baggage](specification/baggage/api.md)
   - [Tracing](specification/trace/api.md)
   - [Metrics](specification/metrics/api.md)
 - SDK Specification
