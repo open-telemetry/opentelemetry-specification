@@ -141,13 +141,13 @@ Known values for OTEL_TRACES_EXPORTER are:
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
-- `"none"`: Disables export of traces.
+- `"none"`: No automatically configured exporter for traces.
 
 Known values for OTEL_METRICS_EXPORTER are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
-- `"none"`: Disables export of metrics.
+- `"none"`: No automatically configured exporter for metrics.
 
 ## Language Specific Environment Variables
 
