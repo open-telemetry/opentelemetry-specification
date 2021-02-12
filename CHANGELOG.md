@@ -7,11 +7,11 @@ release.
 
 ## Unreleased
 
-## v1.0.1 (02-11-2021)
+## v1.0.1 (2021-02-11)
 
 - Fix rebase issue for span limit default values ([#1429](https://github.com/open-telemetry/opentelemetry-specification/pull/1429))
 
-## v1.0.0 (02-10-2021)
+## v1.0.0 (2021-02-10)
 
 New:
 
@@ -221,7 +221,7 @@ Updates:
 - Update semantic conventions for gRPC for new Span Status
   ([#1156](https://github.com/open-telemetry/opentelemetry-specification/pull/1156))
 
-## v0.6.0 (07-01-2020)
+## v0.6.0 (2020-07-01)
 
 New:
 
@@ -270,7 +270,7 @@ Updates:
 - Normalize Instrumentation term for instrumentations.
 - Change w3c correlation context to custom header.
 
-## v0.4.0 (05-12-2020)
+## v0.4.0 (2020-05-12)
 
 - [OTEP-83](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
   Introduce the notion of InstrumentationLibrary.
@@ -302,7 +302,7 @@ Updates:
 - Add an explanation on why Context Restore operation is needed.
 - Document special Zipkin conversion cases.
 
-## v0.3.0 (02-21-2020)
+## v0.3.0 (2020-02-21)
 
 - [OTEP-0059](https://github.com/open-telemetry/oteps/blob/main/text/trace/0059-otlp-trace-data-format.md)
   Add OTLP Trace Data Format specification.
@@ -330,7 +330,7 @@ Updates:
 - SDK Tracer: Replace TracerFactory with TracerProvider.
 - Update Resource to be in the SDK.
 
-## v0.2.0 (10-22-2019)
+## v0.2.0 (2019-10-22)
 
 - [OTEP-0001](https://github.com/open-telemetry/oteps/blob/main/text/0001-telemetry-without-manual-instrumentation.md)
   Added Auto-Instrumentation.
@@ -358,7 +358,7 @@ Updates:
 - Added clarifications and adjustments to improve cross-language applicability.
 - Added a specification for SDK configuration.
 
-## v0.1.0 (06-21-2019)
+## v0.1.0 (2019-06-21)
 
 - Added API proposal for the converged OpenTracing/OpenCensus project is
   complete.
