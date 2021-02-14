@@ -7,7 +7,8 @@ release.
 
 ## Unreleased
 
-- Adds `none` as a possible value for OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to disable export([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
+- Adds `none` as a possible value for OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to disable export
+  ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
 
 ## v1.0.1 (2021-02-11)
 
