@@ -20,26 +20,6 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 
 ## DynamoDB
 
-### Shared Attributes
-
-These attributes correspond to multiple request types and are referenced from individual methods below.
-
-<!-- semconv dynamodb.shared -->
-| Attribute  | Type | Description  | Examples  | Required |
-|---|---|---|---|---|
-| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
-| `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
-| `aws.dynamodb.provisioned_throughput.read_capacity_units` | number | The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter. | `1`; `2` | No |
-| `aws.dynamodb.provisioned_throughput.write_capacity_units` | number | The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter. | `1`; `2` | No |
-| `aws.dynamodb.consistent_read` | boolean | The value of the `ConsistentRead` request parameter. |  | No |
-| `aws.dynamodb.projection_expression` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
-| `aws.dynamodb.limit` | number | The value of the `Limit` request parameter. | `10` | No |
-| `aws.dynamodb.attributes_to_get` | string[] | The value of the `AttributesToGet` request parameter. | `[lives, id]` | No |
-| `aws.dynamodb.index_name` | string | The value of the `IndexName` request parameter. | `name_to_group` | No |
-| `aws.dynamodb.select` | string | The value of the `Select` request parameter. | `ALL_ATTRIBUTES`; `COUNT` | No |
-<!-- endsemconv -->
-
 ### DynamoDB.BatchGetItem
 
 <!-- semconv dynamodb.batchgetitem -->
