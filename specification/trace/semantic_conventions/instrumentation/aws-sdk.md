@@ -2,6 +2,13 @@
 
 **Status**: [Experimental](../../../document-status.md)
 
+This document defines semantic conventions to apply when instrumenting the AWS SDK. They map request or response
+parameters in AWS SDK API calls to attributes on a Span. The conventions have been collected over time based
+on feedback from AWS users of tracing and will continue to increase as new interesting conventions
+are found.
+
+Some descriptions are also provided for populating general OpenTelemetry semantic conventions based on these APIs.
+
 ## Common Attributes
 
 <!-- semconv aws -->

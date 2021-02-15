@@ -7,7 +7,8 @@ groups:
       on feedback from AWS users of tracing and will continue to increase as new interesting conventions
       are found.
 
-      Some descriptions are also provided for populating OpenTelemetry semantic conventions.
+      Some descriptions are also provided for populating general OpenTelemetry semantic conventions based on
+      these APIs.
     attributes:
       - id: service
         type: string
