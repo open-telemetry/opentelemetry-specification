@@ -69,8 +69,8 @@ status of the feature is not known.
 | Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     | -    | +     |
-| [IdGenerators](specification/trace/sdk.md#id-generators) ]                                       |          |    |      |    |        |      |        |     |      |     |      |       |
-| [SpanLimits](specification/trace/sdk.md#span-limits) ]                                           | X        |    |      |    |        |      |        |     |      |     |      |       |
+| [IdGenerators](specification/trace/sdk.md#id-generators) ]                                       |          |    |      |    |        | +    |        |     |      |     |      |       |
+| [SpanLimits](specification/trace/sdk.md#span-limits) ]                                           | X        |    |      |    |        | +    |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -91,9 +91,9 @@ status of the feature is not known.
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    |        | +    |        |     |      | +   | +    |       |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    | +      | +    |        |     |      | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    |        | +    |        |     |      | +   | +    |       |
+| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    | +      | +    |        |     |      | +   | +    |       |
 
 ## Context Propagation
 
@@ -129,13 +129,13 @@ Note: Support for environment variables is optional.
 |OTEL_EXPORTER_OTLP_*                          |   | -  |   | -    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
-|OTEL_TRACES_EXPORTER                          |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_METRICS_EXPORTER                         |   | +  |   | -    |    |      |   |    |   | -  | -   |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER                           |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER_ARG                       |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_TRACES_EXPORTER                          |   |    |   | +    |    |      |   |    |   |    |     |
+|OTEL_METRICS_EXPORTER                         |   | +  |   | +    |    |      |   |    |   | -  | -   |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   |    |   | +    | +  |      |   |    |   |    |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   | +    | +  |      |   |    |   |    |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   | +    | +  |      |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER                           |   |    |   | +    | +  |      |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER_ARG                       |   |    |   | +    | +  |      |   |    |   |    |     |
 
 ## Exporters
 
@@ -182,5 +182,5 @@ Note: Support for environment variables is optional.
 | Prometheus                                            |          |    |                                                                       |    |                                                                         |      |        |     |      |     |      |       |
 | TBD                                                   |          |    |                                                                       |    |                                                                         |      |        |     |      |     |      |       |
 
-* For each type of exporter, OTLP, Zipkin, and Jaeger, implementing at least one of the supported formats is required.
+`*` For each type of exporter, OTLP, Zipkin, and Jaeger, implementing at least one of the supported formats is required.
 Implementing more than one formats is optional.
