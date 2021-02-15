@@ -49,7 +49,7 @@ and whether they should be on server, client, or both types of HTTP metric event
 | `net.host.name`    | `server`            | see [2] in [label alternatives](#label-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
 | `net.host.port`    | `server`            | see [2] in [label alternatives](#label-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
 
-The following labels SHOULD be included in the `http.server.requests` observation:
+The following labels SHOULD be included in the `http.server.active_requests` observation:
 
 | Name               | Recommended | Notes and examples |
 |--------------------|-------------|--------------------|
