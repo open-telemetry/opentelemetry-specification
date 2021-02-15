@@ -23,7 +23,8 @@ groups:
           - PutItem
 
   - id: dynamodb.shared
-    prefix: aws
+    extends: aws
+    prefix: aws.dynamodb
     brief: "Attributes that exist for multiple DynamoDB request types."
     attributes:
       - id: table_names
@@ -137,21 +138,25 @@ groups:
 
   - id: dynamodb.batchgetitem
     brief: DynamoDB.BatchGetItem
-    prefix: aws
-    constraints:
-      - any_of:
-        - [aws.table_names, aws.consumed_capacity]
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
 
   - id: dynamodb.batchwriteitem
     brief: DynamoDB.BatchWriteItem
-    prefix: aws
-    constraints:
-      - any_of:
-        - [ aws.table_names, aws.consumed_capacity, aws.item_collection_metrics ]
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
 
   - id: dynamodb.createtable
     brief: DynamoDB.CreateTable
-    prefix: aws
+    extends: aws
+    prefix: aws.dynamodb
     attributes:
       - id: global_secondary_indexes
         type: string[]
@@ -194,41 +199,52 @@ groups:
                 "ProjectionType": "string"
               }
             }'
-    constraints:
-      - any_of:
-        - [ db.name, aws.consumed_capacity, aws.item_collection_metrics, aws.provisioned_throughput.read_capacity_units, aws.provisioned_throughput.write_capacity_units ]
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
+      - ref: aws.dynamodb.provisioned_throughput.read_capacity_units
+      - ref: aws.dynamodb.provisioned_throughput.write_capacity_units
 
   - id: dynamodb.deleteitem
     brief: DynamoDB.DeleteItem
-    prefix: aws
-    constraints:
-      - any_of:
-        - [ db.name, aws.consumed_capacity, aws.item_collection_metrics ]
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
 
   - id: dynamodb.deletetable
     brief: DynamoDB.DeleteTable
-    prefix: aws
-    constraints:
-      - any_of:
-        - [ db.name ]
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: db.name
+        brief: "The value of the TableName request parameter."
 
   - id: dynamodb.describetable
     brief: DynamoDB.DescribeTable
-    prefix: aws
-    constraints:
-      - any_of:
-        - [ db.name ]
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: db.name
+        brief: "The value of the TableName request parameter."
 
   - id: dynamodb.getitem
     brief: DynamoDB.GetItem
-    prefix: aws
-    constraints:
-      - any_of:
-        - [ db.name, aws.consumed_capacity, aws.consistent_read, aws.projection_expression ]
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: db.name
+        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.consistent_read
+      - ref: aws.dynamodb.projection_expression
 
   - id: dynamodb.listtables
     brief: DynamoDB.ListTables
-    prefix: aws
+    extends: aws
+    prefix: aws.dynamodb
     attributes:
       - id: exclusive_start_table_name
         type: string
@@ -241,31 +257,39 @@ groups:
         brief: "The the number of items in the `TableNames` response parameter."
         examples:
           - 20
-    constraints:
-      - any_of:
-        - [ aws.limit ]
+      - ref: aws.dynamodb.limit
 
   - id: dynamodb.putitem
     brief: DynamoDB.PutItem
-    prefix: aws
-    constraints:
-      - any_of:
-        - [ db.name, aws.consumed_capacity, aws.item_collection_metrics ]
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
 
   - id: dynamodb.query
     brief: DynamoDB.Query
-    prefix: aws
+    extends: aws
+    prefix: aws.dynamodb
     attributes:
       - id: scan_index_forward
         type: boolean
         brief: "The value of the `ScanIndexForward` request parameter."
-    constraints:
-      - any_of:
-        - [ db.name, aws.consumed_capacity, aws.consistent_read, aws.limit, aws.projection_expression, aws.attributes_to_get, aws.index_name, aws.select ]
+      - ref: db.name
+        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.consistent_read
+      - ref: aws.dynamodb.limit
+      - ref: aws.dynamodb.projection_expression
+      - ref: aws.dynamodb.attributes_to_get
+      - ref: aws.dynamodb.index_name
+      - ref: aws.dynamodb.select
 
   - id: dynamodb.scan
     brief: DynamoDB.Scan
-    prefix: aws
+    extends: aws
+    prefix: aws.dynamodb
     attributes:
       - id: segment
         type: number
@@ -287,20 +311,29 @@ groups:
         brief: "The value of the `ScannedCount` response parameter."
         examples:
           - 50
-    constraints:
-      - any_of:
-        - [ db.name, aws.consumed_capacity, aws.consistent_read, aws.limit, aws.projection_expression, aws.attributes_to_get, aws.index_name, aws.select ]
+      - ref: db.name
+        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.consistent_read
+      - ref: aws.dynamodb.limit
+      - ref: aws.dynamodb.projection_expression
+      - ref: aws.dynamodb.attributes_to_get
+      - ref: aws.dynamodb.index_name
+      - ref: aws.dynamodb.select
 
   - id: dynamodb.updateitem
     brief: DynamoDB.UpdateItem
-    prefix: aws
-    constraints:
-      - any_of:
-        - [ db.name, aws.consumed_capacity, aws.item_collection_metrics ]
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
 
   - id: dynamodb.updatetable
     brief: DynamoDB.UpdateTable
-    prefix: aws
+    extends: aws
+    prefix: aws.dynamodb
     attributes:
       - id: attribute_definitions
         type: string[]
@@ -332,6 +365,8 @@ groups:
                   "WriteCapacityUnits": number
                 }
               }'
-    constraints:
-      - any_of:
-        - [ db.name, aws.consumed_capacity, aws.provisioned_throughput.read_capacity_units, aws.provisioned_throughput.write_capacity_units ]
+      - ref: db.name
+        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.provisioned_throughput.read_capacity_units
+      - ref: aws.dynamodb.provisioned_throughput.write_capacity_units
