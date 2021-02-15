@@ -1,8 +1,12 @@
 # OpenTelemetry Environment Variable Specification
 
+**Status**: [Mixed](document-status.md)
+
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
 ## Special configuration types
+
+**Status**: [Stable](document-status.md)
 
 ### Numeric value
 
@@ -22,6 +26,8 @@ gracefully ignore the setting and use the default value if it is defined.
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 ## General SDK Configuration
+
+**Status**: [Stable](document-status.md)
 
 | Name                     | Description                                       | Default                           | Notes                               |
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
@@ -56,6 +62,8 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
+**Status**: [Stable](document-status.md)
+
 | Name                           | Description                                    | Default | Notes                                                 |
 | ------------------------------ | ---------------------------------------------- | ------- | ----------------------------------------------------- |
 | OTEL_BSP_SCHEDULE_DELAY        | Delay interval between two consecutive exports | 5000    |                                                       |
@@ -65,17 +73,23 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Span Collection Limits
 
+**Status**: [Stable](document-status.md)
+
+See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition of the limits.
+
 | Name                            | Description                          | Default | Notes |
 | ------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 1000    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 1000    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 1000    |       |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 128     |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 128     |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 128     |       |
 
 ## OTLP Exporter
 
 See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).
 
 ## Jaeger Exporter
+
+**Status**: [Stable](document-status.md)
 
 | Name                            | Description                                       | Default                                                                                          |
 | ------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -86,6 +100,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication | -                                                                                                |
 
 ## Zipkin Exporter
+
+**Status**: [Stable](document-status.md)
 
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -102,12 +118,16 @@ thrift or protobuf.  As of 1.0 of the specification, there
 
 ## Prometheus Exporter
 
+**Status**: [Experimental](document-status.md)
+
 | Name                          | Description                     | Default                      |
 | ----------------------------- | --------------------------------| ---------------------------- |
 | OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
 | OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
 
 ## Exporter Selection
+
+**Status**: [Stable](document-status.md)
 
 We define environment variables for setting a single exporter per signal.
 
