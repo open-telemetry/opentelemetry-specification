@@ -4,6 +4,10 @@ The YAML descriptions of semantic convention contained in this directory are int
 be used by the various OpenTelemetry language implementations to aid in automatic
 generation of semantics-related code.
 
+## Writing semantic conventions
+
+Refer to the [syntax](./syntax.md) for how to write the YAML files for semantic conventions.
+
 ## Generation
 
 These YAML files are used by the make target `table-generation` to generate consistently
