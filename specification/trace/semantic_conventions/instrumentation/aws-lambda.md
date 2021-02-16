@@ -1,6 +1,6 @@
 # Instrumenting AWS Lambda
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Experimental](../../../document-status.md)
 
 This document defines how to fill semantic conventions when instrumenting an AWS Lambda request handler. AWS
 Lambda largely follows the conventions for [FaaS](../faas.md) while [HTTP](../http.md) conventions are also
