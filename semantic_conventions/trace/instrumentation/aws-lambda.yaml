@@ -1,0 +1,61 @@
+groups:
+  - id: aws.lambda
+    brief: "Lambda function invocation spans."
+    attributes:
+      - ref: faas.execution
+        brief: "The value of the AWS Request ID from the Lambda `Context`."
+        examples:
+          - 943ad105-7543-11e6-a9ac-65e093327849
+      - ref: faas.id
+        brief: "The value of the invocation arn for the function from the Lambda `Context`."
+        examples:
+          - arn:aws:lambda:us-east-2:123456789012:function:my-function:1
+      - ref: cloud.account.id
+        brief: "The account ID for the function. If not provided on Lambda `Context`, it SHOULD be parsed from the value of `faas.id` as the fifth item when splitting on `:`."
+  - id: aws.lambda.api-gateway-proxy
+    brief: >
+      These conventions apply to AWS Lambda requests that are served by the API Gateway in proxy mode. All the
+      information about the underlying HTTP request is available.
+    attributes:
+      - ref: faas.trigger
+        brief: "MUST be `http`."
+        examples:
+          - http
+      - ref: http.method
+      - ref: http.status_code
+      - ref: http.url
+      - ref: http.user_agent
+  - id: aws.lambda.sqs-event
+    brief: "These conventions apply to an SQS event."
+    attributes:
+      - ref: faas.trigger
+        brief: "MUST be `pubsub`."
+        examples:
+          - pubsub
+      - ref: messaging.system
+        brief: "MUST be `AmazonSQS`."
+        examples:
+          - AmazonSQS
+      - ref: messaging.operation
+        brief: "MUST be `process`."
+        examples:
+          - process
+  - id: aws.lambda.sqs-message
+    brief: "These conventions apply to an SQS message."
+    attributes:
+      - ref: faas.trigger
+        brief: "MUST be `pubsub`."
+        examples:
+          - pubsub
+      - ref: messaging.system
+        brief: "MUST be `AmazonSQS`."
+        examples:
+          - AmazonSQS
+      - ref: messaging.operation
+        brief: "MUST be `process`."
+        examples:
+          - process
+      - ref: messaging.message_id
+        brief: "The value of the message ID for the message."
+      - ref: messaging.destination
+        brief: "The value of the event source for the message."
