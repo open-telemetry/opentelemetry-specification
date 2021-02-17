@@ -15,24 +15,30 @@ groups:
         note: >
           If not provided on Lambda `Context`, it SHOULD be parsed from the
           value of `faas.id` as the fifth item when splitting on `:`.
-  - id: aws.lambda.api-gateway-proxy
+        examples:
+          - "123456789012"
+  - id: aws.lambda.api_gateway_proxy
     brief: >
       These conventions apply to AWS Lambda requests that are served by the API Gateway in proxy mode. All the
       information about the underlying HTTP request is available.
     attributes:
       - ref: faas.trigger
         brief: "MUST be `http`."
+        required: always
         examples:
           - http
       - ref: http.method
       - ref: http.status_code
       - ref: http.url
       - ref: http.user_agent
-  - id: aws.lambda.sqs-event
+      - ref: http.route
+        brief: "The `Resource` from the proxy request event."
+  - id: aws.lambda.sqs_event
     brief: "These conventions apply to an SQS event."
     attributes:
       - ref: faas.trigger
         brief: "MUST be `pubsub`."
+        required: always
         examples:
           - pubsub
       - ref: messaging.system
@@ -43,11 +49,12 @@ groups:
         brief: "MUST be `process`."
         examples:
           - process
-  - id: aws.lambda.sqs-message
+  - id: aws.lambda.sqs_message
     brief: "These conventions apply to an SQS message."
     attributes:
       - ref: faas.trigger
         brief: "MUST be `pubsub`."
+        required: always
         examples:
           - pubsub
       - ref: messaging.system

@@ -2,7 +2,7 @@
 
 **Status**: [Experimental](../../../document-status.md)
 
-This document defines how to fill semantic conventions when instrumenting an AWS Lambda request handler. AWS
+This document defines how to apply semantic conventions when instrumenting an AWS Lambda request handler. AWS
 Lambda largely follows the conventions for [FaaS](../faas.md) while [HTTP](../http.md) conventions are also
 applicable when handlers are for HTTP requests.
 
@@ -17,11 +17,13 @@ stated otherwise below, the name of the span MUST be set to the function name fr
 <!-- semconv aws.lambda -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`cloud.account.id`](../../../resource/semantic_conventions/cloud.md) | string | The account ID for the function. If not provided on Lambda `Context`, it SHOULD be parsed from the value of `faas.id` as the fifth item when splitting on `:`. | `opentelemetry` | No |
+| [`cloud.account.id`](../../../resource/semantic_conventions/cloud.md) | string | The account ID for the function. [1] | `123456789012` | No |
 | [`faas.execution`](../faas.md) | string | The value of the AWS Request ID from the Lambda `Context`. | `943ad105-7543-11e6-a9ac-65e093327849` | No |
-| [`faas.id`](../../../resource/semantic_conventions/faas.md) | string | The value of the invocation arn for the function from the Lambda `Context`. [1] | `arn:aws:lambda:us-east-2:123456789012:function:my-function:1` | No |
+| [`faas.id`](../../../resource/semantic_conventions/faas.md) | string | The value of the invocation arn for the function from the Lambda `Context`. [2] | `arn:aws:lambda:us-east-2:123456789012:function:my-function:1` | No |
 
-**[1]:** For example, in AWS Lambda this field corresponds to the [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) value, in GCP to the URI of the resource, and in Azure to the [FunctionDirectory](https://github.com/Azure/azure-functions-host/wiki/Retrieving-information-about-the-currently-running-function) field.
+**[1]:** If not provided on Lambda `Context`, it SHOULD be parsed from the value of `faas.id` as the fifth item when splitting on `:`.
+
+**[2]:** For example, in AWS Lambda this field corresponds to the [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) value, in GCP to the URI of the resource, and in Azure to the [FunctionDirectory](https://github.com/Azure/azure-functions-host/wiki/Retrieving-information-about-the-currently-running-function) field.
 <!-- endsemconv -->
 
 The parent of the span MUST be determined by considering both the environment and any headers or attributes
@@ -47,11 +49,12 @@ the information about the HTTP request in the form of an API Gateway Proxy Reque
 The Lambda span name SHOULD be set to the `Resource` from the proxy request event, which corresponds to the user
 configured HTTP route instead of the function name.
 
-<!-- semconv aws.lambda.api-gateway-proxy -->
+<!-- semconv aws.lambda.api_gateway_proxy -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`faas.trigger`](../faas.md) | string | MUST be `http`. | `http` | No |
+| [`faas.trigger`](../faas.md) | string | MUST be `http`. | `http` | Yes |
 | [`http.method`](../http.md) | string | HTTP request method. | `GET`; `POST`; `HEAD` | No |
+| [`http.route`](../http.md) | string | The `Resource` from the proxy request event. | `/users/:userID?` | No |
 | [`http.status_code`](../http.md) | number | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | No |
 | [`http.url`](../http.md) | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | No |
 | [`http.user_agent`](../http.md) | string | Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | No |
@@ -74,10 +77,10 @@ the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an O
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span. This means the span may have as many links as messages in the batch.
 
-<!-- semconv aws.lambda.sqs-event -->
+<!-- semconv aws.lambda.sqs_event -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`faas.trigger`](../faas.md) | string | MUST be `pubsub`. | `pubsub` | No |
+| [`faas.trigger`](../faas.md) | string | MUST be `pubsub`. | `pubsub` | Yes |
 | [`messaging.operation`](../messaging.md) | string | MUST be `process`. | `process` | No |
 | [`messaging.system`](../messaging.md) | string | MUST be `AmazonSQS`. | `AmazonSQS` | No |
 <!-- endsemconv -->
@@ -88,10 +91,10 @@ the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an O
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span.
 
-<!-- semconv aws.lambda.sqs-message -->
+<!-- semconv aws.lambda.sqs_message -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`faas.trigger`](../faas.md) | string | MUST be `pubsub`. | `pubsub` | No |
+| [`faas.trigger`](../faas.md) | string | MUST be `pubsub`. | `pubsub` | Yes |
 | [`messaging.destination`](../messaging.md) | string | The value of the event source for the message. | `MyQueue`; `MyTopic` | No |
 | [`messaging.message_id`](../messaging.md) | string | The value of the message ID for the message. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
 | [`messaging.operation`](../messaging.md) | string | MUST be `process`. | `process` | No |
