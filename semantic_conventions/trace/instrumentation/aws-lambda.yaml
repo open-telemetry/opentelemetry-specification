@@ -11,7 +11,10 @@ groups:
         examples:
           - arn:aws:lambda:us-east-2:123456789012:function:my-function:1
       - ref: cloud.account.id
-        brief: "The account ID for the function. If not provided on Lambda `Context`, it SHOULD be parsed from the value of `faas.id` as the fifth item when splitting on `:`."
+        brief: "The account ID for the function."
+        note: >
+          If not provided on Lambda `Context`, it SHOULD be parsed from the
+          value of `faas.id` as the fifth item when splitting on `:`.
   - id: aws.lambda.api-gateway-proxy
     brief: >
       These conventions apply to AWS Lambda requests that are served by the API Gateway in proxy mode. All the
