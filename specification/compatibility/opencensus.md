@@ -1,5 +1,7 @@
 # OpenCensus Compatibility
 
+**Status**: [Experimental](../document-status.md), Unless otherwise specified.
+
 ## Abstract
 
 The OpenTelemetry project aims to provide backwards compatibility with the
@@ -82,6 +84,8 @@ Additionally, for tracing there are the following goals:
 2. Maintain span link relationships between applications and libraries
 
 ## Trace
+
+**Status**: [Experimental, Feature Freeze](../document-status.md)
 
 OpenTelemetry will provide an OpenCensus-Trace-Shim component that can be
 added as a dependency to ensure compatibility with OpenCensus.
