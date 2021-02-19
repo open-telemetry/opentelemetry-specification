@@ -47,7 +47,7 @@ Technical Committee Sponsor(s) MUST:
 ensure specification conformance.
 * Ensure conformance with the versioning and stability document.
 * Ensure consistent names across implementations (e.g. TraceId vs GlobalId)
-* Avoid confusions across implementation (e.g same public API has different behaviors)
+* Avoid confusions across implementation (e.g. same public API has different behaviors)
 * Ensure no experimental features (signals) are part of the released packages (e.g. api, sdk, etc.).
 
 The OpenTelemetry Technical Committee MUST attend one of the language SIG
