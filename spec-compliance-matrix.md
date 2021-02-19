@@ -18,8 +18,8 @@ status of the feature is not known.
 | Shutdown (SDK only required)                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
 | ForceFlush (SDK only required)                                                                   |          |    | +    | -  | -      | -    | -      |     | -    | -   | +    | -     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
-| Get active Span                                                                                  |          |    | +    | +  | +      | +    | N/A    |     | +    | +   | +    | +     |
-| Set active Span                                                                                  |          |    | +    | +  | +      | +    | N/A    |     | +    | +   | +    | +     |
+| Get active Span                                                                                  |          |    | +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
+| Set active Span                                                                                  |          |    | +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get active Span                                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -69,7 +69,7 @@ status of the feature is not known.
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
-| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    |        |     |      |     | -    | +     |
+| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    |      |    | +      | +    | +      |     |      |     | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          |    |      |    |        | +    |        |     |      |     |      |       |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        |    |      |    |        | +    |        |     |      |     |      |       |
 
@@ -92,9 +92,9 @@ status of the feature is not known.
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    | +      | +    |        |     |      | +   | +    |       |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          |    |      |    | +      | +    | +      |     |      | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    | +      | +    |        |     |      | +   | +    |       |
+| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          |    |      |    | +      | +    | +      |     |      | +   | +    |       |
 
 ## Context Propagation
 
@@ -123,20 +123,20 @@ Note: Support for environment variables is optional.
 
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
-|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | -    | - | +  | - | +  | -   |
-|OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | -    | - |    | - | -  | -   |        |
-|OTEL_PROPAGATORS                              |   | +  |   | +    | +  | -    | - |    | - | -  | -   |
-|OTEL_BSP_*                                    |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
+|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | - | +  | -   |
+|OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | +    | - |    | - | -  | -   |        |
+|OTEL_PROPAGATORS                              |   | +  |   | +    | +  | +    | - |    | - | -  | -   |
+|OTEL_BSP_*                                    |   | +  |   | +    | +  | +    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_OTLP_*                          |   | -  |   | -    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
-|OTEL_TRACES_EXPORTER                          |   |    |   | +    | +  |      |   |    |   |    |     |
-|OTEL_METRICS_EXPORTER                         |   | +  |   | +    |    |      |   |    |   | -  | -   |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   |    |   | +    | +  |      |   |    |   |    |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   | +    | +  |      |   |    |   |    |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   | +    | +  |      |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER                           |   |    |   | +    | +  |      |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER_ARG                       |   |    |   | +    | +  |      |   |    |   |    |     |
+|OTEL_TRACES_EXPORTER                          |   |    |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_METRICS_EXPORTER                         |   | +  |   | +    |    | -    |   |    |   | -  | -   |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   |    |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   |    |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    |   |    |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER                           |   |    |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER_ARG                       |   |    |   | +    | +  | +    |   |    |   |    |     |
 
 ## Exporters
 
