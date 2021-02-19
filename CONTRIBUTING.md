@@ -194,5 +194,5 @@ If none of the above worked and the PR has been stuck for more than 2 weeks, the
 owner should bring it to the [OpenTelemetry Specification SIG
 meeting](https://github.com/open-telemetry/community#cross-language-specification).
 
-New signal release reviews are subject to different rules that and do not follow
+New signal release reviews are subject to different rules and do not follow
 the above process. For that please see [here](releases/new-signal-release-process.md).
