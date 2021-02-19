@@ -16,6 +16,7 @@ status of the feature is not known.
 | Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
+| ForceFlush (SDK only required)                                                                   |          |    | +    | -  | -      | -    | -      |     | -    | -   | +    | -     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
 | Get active Span                                                                                  |          |    | +    | +  | +      | +    | N/A    |     | +    | +   | +    | +     |
 | Set active Span                                                                                  |          |    | +    | +  | +      | +    | N/A    |     | +    | +   | +    | +     |
