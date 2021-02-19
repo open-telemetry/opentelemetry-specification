@@ -9,6 +9,7 @@ release.
 
 - Adds `none` as a possible value for OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to disable export
   ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
+- Add `ForceFlush` to [Tracing SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#shutdown) ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
 
 ## v1.0.1 (2021-02-11)
 
