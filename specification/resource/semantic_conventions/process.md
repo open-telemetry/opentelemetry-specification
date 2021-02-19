@@ -70,6 +70,12 @@ In addition to these attributes, [`telemetry.sdk.language`](README.md#telemetry-
 - `process.runtime.version` -  The version of the runtime (ERTS - Erlang Runtime System), i.e., `erlang:system_info(version)`.
 - `process.runtime.description` - string | An additional description about the runtime made by combining the OTP version, i.e., `erlang:system_info(otp_release)`, and ERTS version.
 
+Example:
+
+| `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
+| --- | --- | --- |
+| BEAM | 11.1 |  Erlang/OTP 23 erts-11.1 |
+
 ### Go Runtimes
 
 TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm the contents here
