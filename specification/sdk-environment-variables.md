@@ -99,6 +99,21 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication | -                                                                                                |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication | -                                                                                                |
 
+Addtionally, the following environment variables are reserved for future
+usage in Jaeger Exporter configuration:
+
+- `OTEL_EXPORTER_JAEGER_CERTIFICATE`
+
+This will be used to specify path to certificate file for TLS credentials of gRPC client.
+Should only be used for a secure connection.
+
+- `OTEL_EXPORTER_JAEGER_PROTOCOL`
+
+Jaeger exporter has more than one transport protocol it can support, e.g. grpc, http/thrift, udp/thrift.
+
+As of 1.0 of the specification, there
+*is no specified default, or configuration via environment variables*.
+
 ## Zipkin Exporter
 
 **Status**: [Stable](document-status.md)
