@@ -109,7 +109,7 @@ Should only be used for a secure connection.
 
 - `OTEL_EXPORTER_JAEGER_PROTOCOL`
 
-Jaeger exporter has more than one transport protocol it can support, e.g. grpc, http/thrift, udp/thrift.
+Defines protocol to be used by the Jaeger exporter: `grpc`, `http/thrift`, `udp/thrift`.
 
 As of 1.0 of the specification, there
 *is no specified default, or configuration via environment variables*.
