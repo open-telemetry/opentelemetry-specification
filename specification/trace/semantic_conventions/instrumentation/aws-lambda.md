@@ -11,8 +11,9 @@ use cases.
 
 ## All triggers
 
-For all events, a span with kind `SERVER` MUST be created corresponding to the function invocation. Unless
-stated otherwise below, the name of the span MUST be set to the function name from the Lambda `Context`.
+For all events, a span with kind `SERVER` MUST be created corresponding to the function invocation unless stated
+otherwise below. Unless stated otherwise below, the name of the span MUST be set to the function name from the
+Lambda `Context`.
 
 <!-- semconv aws.lambda -->
 | Attribute  | Type | Description  | Examples  | Required |
@@ -62,9 +63,12 @@ configured HTTP route instead of the function name.
 
 ## SQS
 
-SQS is a message queue that triggers a Lambda function with a batch of messages. In addition to the span for the
-function invocation, two spans SHOULD be generated, one for the batch of messages, called an SQS event, and one
-for each individual message, called an SQS message.
+SQS is a message queue that triggers a Lambda function with a batch of messages. So we consider processing both
+of a batch and of each individual message. The function invocation span MUST correspond to the SQS event, which
+is the batch of messages. For each message, an additional span SHOULD be created to correspond with the handling
+of the SQS message. Because handling of a message will be inside user business logic, not the Lambda framework,
+automatic instrumentation mechanisms without code change will often not be able to be able to instrument the
+processing of the individual messages.
 
 The span kind for both spans MUST be `CONSUMER`.
 
