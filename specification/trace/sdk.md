@@ -58,6 +58,20 @@ make the shutdown timeout configurable.
 
 `Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
 
+### ForceFlush
+
+This method provides a way for provider to immediately export all spans that have not yet been exported for all the internal processors.
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want to
+make the flush timeout configurable.
+
+`ForceFlush` MUST invoke `ForceFlush` on all registered `SpanProcessors`.
+
 ## Additional Span Interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
