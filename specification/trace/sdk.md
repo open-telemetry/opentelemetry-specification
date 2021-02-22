@@ -6,14 +6,112 @@
 
 <summary>Table of Contents</summary>
 
-* [Sampling](#sampling)
 * [Tracer Provider](#tracer-provider)
 * [Additional Span Interfaces](#additional-span-interfaces)
-* [Limits on Span Collections](#limits-on-span-collections)
+* [Sampling](#sampling)
+* [Span Limits](#span-limits)
+* [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
 
 </details>
+
+## Tracer Provider
+
+### Tracer Creation
+
+New `Tracer` instances are always created through a `TracerProvider` (see
+[API](api.md#tracerprovider)). The `name` and `version` arguments
+supplied to the `TracerProvider` must be used to create an
+[`InstrumentationLibrary`][otep-83] instance which is stored on the created
+`Tracer`.
+
+Configuration (i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators),
+[SpanLimits](#span-limits) and [`Sampler`](#sampling)) MUST be managed solely by
+the `TracerProvider` and it MUST provide some way to configure all of them that
+are implemented in the SDK, at least when creating or initializing it.
+
+The TracerProvider MAY provide methods to update the configuration. If
+configuration is updated (e.g., adding a `SpanProcessor`),
+the updated configuration MUST also apply to all already returned `Tracers`
+(i.e. it MUST NOT matter whether a `Tracer` was obtained from the
+`TracerProvider` before or after the configuration change).
+Note: Implementation-wise, this could mean that `Tracer` instances have a
+reference to their `TracerProvider` and access configuration only via this
+reference.
+
+### Shutdown
+
+This method provides a way for provider to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `TracerProvider` instance. After
+the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
+SHOULD return a valid no-op Tracer for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want to
+make the shutdown timeout configurable.
+
+`Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
+
+### ForceFlush
+
+This method provides a way for provider to immediately export all spans that have not yet been exported for all the internal processors.
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want to
+make the flush timeout configurable.
+
+`ForceFlush` MUST invoke `ForceFlush` on all registered `SpanProcessors`.
+
+## Additional Span Interfaces
+
+The [API-level definition for Span's interface](api.md#span-operations)
+only defines write-only access to the span.
+This is good because instrumentations and applications are not meant to use the data
+stored in a span for application logic.
+However, the SDK needs to eventually read back the data in some locations.
+Thus, the SDK specification defines sets of possible requirements for
+`Span`-like parameters:
+
+* **Readable span**: A function receiving this as argument MUST be able to
+  access all information that was added to the span,
+  as listed [in the API spec](api.md#span-data-members).
+  In particular, it MUST also be able to access
+  the `InstrumentationLibrary` and `Resource` information (implicitly)
+  associated with the span.
+  It must also be able to reliably determine whether the Span has ended
+  (some languages might implement this by having an end timestamp of `null`,
+  others might have an explicit `hasEnded` boolean).
+
+  A function receiving this as argument might not be able to modify the Span.
+
+  Note: Typically this will be implemented with a new interface or
+  (immutable) value type.
+  In some languages SpanProcessors may have a different readable span type
+  than exporters (e.g. a `SpanData` type might contain an immutable snapshot and
+  a `ReadableSpan` interface might read information directly from the same
+  underlying data structure that the `Span` interface manipulates).
+
+* **Read/write span**: A function receiving this as argument must have access to
+  both the full span API as defined in the
+  [API-level definition for span's interface](api.md#span-operations) and
+  additionally must be able to retrieve all information that was added to the span
+  (as with *readable span*).
+
+  It MUST be possible for functions being called with this
+  to somehow obtain the same `Span` instance and type
+  that the [span creation API](api.md#span-creation) returned (or will return) to the user
+  (for example, the `Span` could be one of the parameters passed to such a function,
+  or a getter could be provided).
 
 ## Sampling
 
@@ -157,20 +255,28 @@ the `ParentBased` sampler specified below.
 * Description MUST be `TraceIdRatioBased{0.000100}`.
 
 TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`.
+of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
 
 ##### Requirements for `TraceIdRatioBased` sampler algorithm
 
 * The sampling algorithm MUST be deterministic. A trace identified by a given
-`TraceId` is sampled or not independent of language, time, etc. To achieve this,
-implementations MUST use a deterministic hash of the `TraceId` when computing
-the sampling decision. By ensuring this, running the sampler on any child `Span`
-will produce the same decision.
+  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
+  implementations MUST use a deterministic hash of the `TraceId` when computing
+  the sampling decision. By ensuring this, running the sampler on any child `Span`
+  will produce the same decision.
 * A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
-sample. This is important when a backend system may want to run with a higher
-sampling rate than the frontend system, this way all frontend traces will
-still be sampled and extra traces will be sampled on the backend only.
+  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
+  sample. This is important when a backend system may want to run with a higher
+  sampling rate than the frontend system, this way all frontend traces will
+  still be sampled and extra traces will be sampled on the backend only.
+* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
+  there will probably be changes to it in any language SDK once it is, which
+  would break code that relies on the algorithm results.
+  Only the configuration and creation APIs can be considered stable.
+  It is recommended to use this sampler algorithm only for root spans
+  (in combination with [`ParentBased`](#parentbased)) because different language
+  SDKs or even different versions of the same language SDKs may produce inconsistent
+  results for the same input.
 
 #### ParentBased
 
@@ -201,106 +307,7 @@ Optional parameters:
 |present|false|true|`localParentSampled()`|
 |present|false|false|`localParentNotSampled()`|
 
-## Tracer Provider
-
-### Tracer Creation
-
-New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api.md#tracerprovider)). The `name` and `version` arguments
-supplied to the `TracerProvider` must be used to create an
-[`InstrumentationLibrary`][otep-83] instance which is stored on the created
-`Tracer`.
-
-Configuration (i.e., [Span processors](#span-processor) and [`Sampler`](#sampling))
-MUST be managed solely by the `TracerProvider` and it MUST provide some way to
-configure them, at least when creating or initializing it.
-
-The TracerProvider MAY provide methods to update the configuration. If
-configuration is updated (e.g., adding a `SpanProcessor`),
-the updated configuration MUST also apply to all already returned `Tracers`
-(i.e. it MUST NOT matter whether a `Tracer` was obtained from the
-`TracerProvider` before or after the configuration change).
-Note: Implementation-wise, this could mean that `Tracer` instances have a
-reference to their `TracerProvider` and access configuration only via this
-reference.
-
-The SDK MUST by default randomly generate the bytes for both the `TraceId` and
-the `SpanId`.
-
-The SDK MUST provide a mechanism for customizing the way IDs are generated for
-both the `TraceId` and the `SpanId`.
-
-The SDK MAY provide this functionality by allowing custom implementations of
-an interface like `IdsGenerator` below, which provides extension points for two
-methods, one to generate a `SpanID` and one to generate a `TraceId`.
-
-```
-IdsGenerator {
-  String generateSpanId()
-  String generateTraceId()
-}
-```
-
-### Shutdown
-
-This method provides a way for provider to do any cleanup required.
-
-`Shutdown` MUST be called only once for each `TracerProvider` instance. After
-the call to `Shutdown`, subsequent attempts to get a `Tracer` are not allowed. SDKs
-SHOULD return a valid no-op Tracer for these calls, if possible.
-
-`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out.
-
-`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
-implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. OpenTelemetry client authors can decide if they want to
-make the shutdown timeout configurable.
-
-`Shutdown` MUST be implemented at least by invoking `Shutdown` within all internal processors.
-
-## Additional Span Interfaces
-
-The [API-level definition for Span's interface](api.md#span-operations)
-only defines write-only access to the span.
-This is good because instrumentations and applications are not meant to use the data
-stored in a span for application logic.
-However, the SDK needs to eventually read back the data in some locations.
-Thus, the SDK specification defines sets of possible requirements for
-`Span`-like parameters:
-
-* **Readable span**: A function receiving this as argument MUST be able to
-  access all information that was added to the span,
-  as listed [in the API spec](api.md#span-data-members).
-  In particular, it MUST also be able to access
-  the `InstrumentationLibrary` and `Resource` information (implicitly)
-  associated with the span.
-  It must also be able to reliably determine whether the Span has ended
-  (some languages might implement this by having an end timestamp of `null`,
-  others might have an explicit `hasEnded` boolean).
-
-  A function receiving this as argument might not be able to modify the Span.
-
-  Note: Typically this will be implemented with a new interface or
-  (immutable) value type.
-  In some languages SpanProcessors may have a different readable span type
-  than exporters (e.g. a `SpanData` type might contain an immutable snapshot and
-  a `ReadableSpan` interface might read information directly from the same
-  underlying data structure that the `Span` interface manipulates).
-
-* **Read/write span**: A function receiving this as argument must have access to
-  both the full span API as defined in the
-  [API-level definition for span's interface](api.md#span-operations) and
-  additionally must be able to retrieve all information that was added to the span
-  (as with *readable span*).
-
-  It MUST be possible for functions being called with this
-  to somehow obtain the same `Span` instance and type
-  that the [span creation API](api.md#span-creation) returned (or will return) to the user
-  (for example, the `Span` could be one of the parameters passed to such a function,
-  or a getter could be provided).
-
-## Limits on Span Collections
+## Span Limits
 
 Erroneous code can add unintended attributes, events, and links to a span. If
 these collections are unbounded, they can quickly exhaust available memory,
@@ -308,14 +315,64 @@ resulting in crashes that are difficult to recover from safely.
 
 To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
-the recommended limit of 1000 elements. SDKs MAY provide a way to change this limit.
+the configured limit.
 
-If there is a configurable limit, the SDK SHOULD honor the environment variables
-specified in [SDK environment variables](../sdk-environment-variables.md#span-collection-limits).
+It the SDK implements the limits above it MUST provide a way to change these
+limits, via a configuration to the TracerProvider, by allowing users to
+configure individual limits like in the Java example bellow.
+
+The name of the configuration options SHOULD be `AttributeCountLimit`,
+`EventCountLimit` and `LinkCountLimit`. The options MAY be bundled in a class,
+which then SHOULD be called `SpanLimits`. Implementations MAY provide additional
+configuration such as `AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
+
+```java
+public final class SpanLimits {
+  SpanLimits(int attributeCountLimit, int linkCountLimit, int eventCountLimit);
+
+  public int getAttributeCountLimit();
+
+  public int getEventCountLimit();
+
+  public int getLinkCountLimit();
+}
+```
+
+**Configurable parameters:**
+
+* `AttributeCountLimit` (Default=128) - Maximum allowed span attribute count;
+* `EventCountLimit` (Default=128) - Maximum allowed span event count;
+* `LinkCountLimit` (Default=128) - Maximum allowed span link count;
+* `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
+* `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
 should not be emitted once per span, or per discarded attribute, event, or links.
+
+## Id Generators
+
+The SDK MUST by default randomly generate both the `TraceId` and the `SpanId`.
+
+The SDK MUST provide a mechanism for customizing the way IDs are generated for
+both the `TraceId` and the `SpanId`.
+
+The SDK MAY provide this functionality by allowing custom implementations of
+an interface like the java example below (name of the interface MAY be
+`IdGenerator`, name of the methods MUST be consistent with
+[SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
+extension points for two methods, one to generate a `SpanId` and one for `TraceId`.
+
+```java
+public interface IdGenerator {
+  byte[] generateSpanIdBytes();
+  byte[] generateTraceIdBytes();
+}
+```
+
+Additional `IdGenerator` implementing vendor-specific protocols such as AWS
+X-Ray trace id generator MUST NOT be maintained or distributed as part of the
+Core OpenTelemetry repositories.
 
 ## Span processor
 

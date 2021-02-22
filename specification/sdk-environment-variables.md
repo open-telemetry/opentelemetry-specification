@@ -1,8 +1,12 @@
 # OpenTelemetry Environment Variable Specification
 
+**Status**: [Mixed](document-status.md)
+
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
 ## Special configuration types
+
+**Status**: [Stable](document-status.md)
 
 ### Numeric value
 
@@ -23,6 +27,8 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 ## General SDK Configuration
 
+**Status**: [Stable](document-status.md)
+
 | Name                     | Description                                       | Default                           | Notes                               |
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
@@ -39,7 +45,7 @@ Known values for OTEL_PROPAGATORS are:
 - `"b3multi"`: [B3 Multi](https://github.com/openzipkin/b3-propagation#multiple-headers)
 - `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
-- `"ottracer"`: [Lightstep](https://github.com/lightstep/lightstep-tracer-java-common/blob/master/common/src/main/java/com/lightstep/tracer/shared/TextMapPropagator.java) (_third party_)
+- `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
 
 Known values for `OTEL_TRACES_SAMPLER` are:
 
@@ -56,6 +62,8 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
+**Status**: [Stable](document-status.md)
+
 | Name                           | Description                                    | Default | Notes                                                 |
 | ------------------------------ | ---------------------------------------------- | ------- | ----------------------------------------------------- |
 | OTEL_BSP_SCHEDULE_DELAY        | Delay interval between two consecutive exports | 5000    |                                                       |
@@ -65,17 +73,23 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Span Collection Limits
 
+**Status**: [Stable](document-status.md)
+
+See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition of the limits.
+
 | Name                            | Description                          | Default | Notes |
 | ------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 1000    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 1000    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 1000    |       |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | Maximum allowed span attribute count | 128     |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT     | Maximum allowed span event count     | 128     |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT      | Maximum allowed span link count      | 128     |       |
 
 ## OTLP Exporter
 
 See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).
 
 ## Jaeger Exporter
+
+**Status**: [Stable](document-status.md)
 
 | Name                            | Description                                       | Default                                                                                          |
 | ------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -86,6 +100,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication | -                                                                                                |
 
 ## Zipkin Exporter
+
+**Status**: [Stable](document-status.md)
 
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -102,12 +118,16 @@ thrift or protobuf.  As of 1.0 of the specification, there
 
 ## Prometheus Exporter
 
+**Status**: [Experimental](document-status.md)
+
 | Name                          | Description                     | Default                      |
 | ----------------------------- | --------------------------------| ---------------------------- |
 | OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
 | OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
 
 ## Exporter Selection
+
+**Status**: [Stable](document-status.md)
 
 We define environment variables for setting a single exporter per signal.
 
@@ -121,11 +141,13 @@ Known values for OTEL_TRACES_EXPORTER are:
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
+- `"none"`: No automatically configured exporter for traces.
 
 Known values for OTEL_METRICS_EXPORTER are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
+- `"none"`: No automatically configured exporter for metrics.
 
 ## Language Specific Environment Variables
 

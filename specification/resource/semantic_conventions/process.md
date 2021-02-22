@@ -66,17 +66,15 @@ In addition to these attributes, [`telemetry.sdk.language`](README.md#telemetry-
 
 ### Erlang Runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-erlang/issues/96>): Confirm the contents here
-
-- `process.runtime.name` - The name of the Erlang runtime being used. Usually will be BEAM.
-- `process.runtime.version` - The ERTS (Erlang Runtime System) version. For BEAM this is found with `application:get_key(erts, vsn)`.
-- `process.runtime.description` - The OTP version `erlang:system_info(otp_release)` and ERTS version combined.
+- `process.runtime.name` - The name of the Erlang VM being used, i.e., `erlang:system_info(machine)`.
+- `process.runtime.version` -  The version of the runtime (ERTS - Erlang Runtime System), i.e., `erlang:system_info(version)`.
+- `process.runtime.description` - string | An additional description about the runtime made by combining the OTP version, i.e., `erlang:system_info(otp_release)`, and ERTS version.
 
 Example:
 
-| Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
-| --- | --- | --- | --- |
-| beam | BEAM | 11.0.3 | Erlang/OTP 24 erts-11.0.3 |
+| `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
+| --- | --- | --- |
+| BEAM | 11.1 |  Erlang/OTP 23 erts-11.1 |
 
 ### Go Runtimes
 
