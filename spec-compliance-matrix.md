@@ -7,6 +7,11 @@ language implementation.
 the feature is not applicable to the particular language, blank cell means the
 status of the feature is not known.
 
+For `Optional` column, `X` means the feature is optional, `*` means for each
+type of exporter, OTLP, Zipkin, and Jaeger, implementing at least one of the
+supported formats is required. Implementing more than one formats is optional.
+Blank cell means the feature is required.
+
 ## Traces
 
 | Feature                                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
@@ -182,6 +187,3 @@ Note: Support for environment variables is optional.
 | TBD                                                   |          |    |                                                                       |    |                                                                         |      |        |     |      |     |      |       |
 | Prometheus                                            |          |    |                                                                       |    |                                                                         |      |        |     |      |     |      |       |
 | TBD                                                   |          |    |                                                                       |    |                                                                         |      |        |     |      |     |      |       |
-
-`*` For each type of exporter, OTLP, Zipkin, and Jaeger, implementing at least one of the supported formats is required.
-Implementing more than one formats is optional.
