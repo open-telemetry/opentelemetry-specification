@@ -1,5 +1,7 @@
 # OpenTelemetry Protocol Specification
 
+**Status**: [Mixed](../document-status.md)
+
 OpenTelemetry Protocol (OTLP) specification describes the encoding, transport,
 and delivery mechanism of telemetry data between telemetry sources, intermediate
 nodes such as collectors and telemetry backends.
@@ -9,6 +11,7 @@ nodes such as collectors and telemetry backends.
 Table of Contents
 </summary>
 
+- [Signals Maturity Level](#signals-maturity-level)
 - [Protocol Details](#protocol-details)
   * [OTLP/gRPC](#otlpgrpc)
     + [OTLP/gRPC Concurrent Requests](#otlpgrpc-concurrent-requests)
@@ -42,6 +45,17 @@ Table of Contents
 OTLP is a general-purpose telemetry data delivery protocol designed in the scope
 of OpenTelemetry project.
 
+## Signals Maturity Level
+
+Each signal has different support and stability in OTLP, described through its
+own maturity level, which in turn applies to **all** the OTLP Transports listed below.
+
+* Tracing: **Stable**
+* Metrics: **Beta**
+* Logs: **Alpha**
+
+See [OTLP Maturity Level](https://github.com/open-telemetry/opentelemetry-proto#maturity-level).
+
 ## Protocol Details
 
 OTLP defines the encoding of telemetry data and the protocol used to exchange
@@ -57,6 +71,8 @@ server replies with corresponding responses. This document defines one requests
 and response type: `Export`.
 
 ### OTLP/gRPC
+
+**Status**: [Stable](../document-status.md)
 
 After establishing the underlying gRPC transport the client starts sending
 telemetry data using unary requests using
@@ -89,7 +105,7 @@ that is not yet acknowledged by the server.
 Sequential operation is recommended when simplicity of implementation is
 desirable and when the client and the server are connected via very low-latency
 network, such as for example when the client is an instrumented application and
-the server is a OpenTelemetry Collector running as a local daemon (agent).
+the server is an OpenTelemetry Collector running as a local daemon (agent).
 
 The implementations that need to achieve high throughput SHOULD support
 concurrent Unary calls to achieve higher throughput. The client SHOULD send new
@@ -296,6 +312,9 @@ some in beta.
 The default network port for OTLP/gRPC is 4317.
 
 ### OTLP/HTTP
+
+**Binary Format Status**: [Stable](../document-status.md)
+**JSON Format Status**: [Experimental](../document-status.md)
 
 OTLP/HTTP uses Protobuf payloads encoded either in binary format or in JSON
 format. The Protobuf schema of the messages is the same for OTLP/HTTP and
@@ -550,6 +569,6 @@ document when referring to either one.
 
 ## References
 
-- [OTEP 0035](https://github.com/open-telemetry/oteps/blob/master/text/0035-opentelemetry-protocol.md) OpenTelemetry Protocol Specification
-- [OTEP 0099](https://github.com/open-telemetry/oteps/blob/master/text/0099-otlp-http.md) OTLP/HTTP: HTTP Transport Extension for OTLP
-- [OTEP 0122](https://github.com/open-telemetry/oteps/blob/master/text/0122-otlp-http-json.md) OTLP: JSON Encoding for OTLP/HTTP
+- [OTEP 0035](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md) OpenTelemetry Protocol Specification
+- [OTEP 0099](https://github.com/open-telemetry/oteps/blob/main/text/0099-otlp-http.md) OTLP/HTTP: HTTP Transport Extension for OTLP
+- [OTEP 0122](https://github.com/open-telemetry/oteps/blob/main/text/0122-otlp-http-json.md) OTLP: JSON Encoding for OTLP/HTTP

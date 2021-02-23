@@ -1,5 +1,7 @@
 # Propagators API
 
+**Status**: [Stable, Feature-Freeze](../document-status.md)
+
 <details>
 <summary>
 Table of Contents
@@ -92,7 +94,7 @@ Required arguments:
 
 Extracts the value from an incoming request. For example, from the headers of an HTTP request.
 
-If a value can not be parsed from the carrier for a cross-cutting concern,
+If a value can not be parsed from the carrier, for a cross-cutting concern,
 the implementation MUST NOT throw an exception and MUST NOT store a new value in the `Context`,
 in order to preserve any previously existing valid value.
 
@@ -297,7 +299,7 @@ unconfigured, although the trace context propagation was configured to enrich lo
 Platforms such as ASP.NET may pre-configure out-of-the-box
 propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` containing the W3C Trace Context Propagator and the Baggage
-`Propagator` specified in the [Baggage API](../baggage/api.md#baggage-propagation).
+`Propagator` specified in the [Baggage API](../baggage/api.md#propagation).
 These platforms MUST also allow pre-configured propagators to be disabled or overridden.
 
 ### Get Global Propagator
@@ -327,6 +329,13 @@ organization and MUST be distributed as OpenTelemetry extension packages:
   be distributed as part of the OpenTelemetry API.
 * [B3](https://github.com/openzipkin/b3-propagation).
 * [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
+
+This is a list of additional propagators that MAY be maintained and distributed
+as OpenTelemetry extension packages:
+
+* [OT Trace](https://github.com/opentracing?q=basic&type=&language=). Propagation format
+  used by the OpenTracing Basic Tracers. It MUST NOT use `OpenTracing` in the resulting
+  propagator name as it is not widely adopted format in the OpenTracing ecosystem.
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of

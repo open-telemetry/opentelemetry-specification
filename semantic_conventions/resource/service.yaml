@@ -34,7 +34,7 @@ groups:
           The string ID of the service instance.
         note: >
           MUST be unique for each instance of the same `service.namespace,service.name` pair
-          (in other words `service.namespace,service.name,service.id` triplet MUST be globally unique).
+          (in other words `service.namespace,service.name,service.instance.id` triplet MUST be globally unique).
           The ID helps to distinguish instances of the same service that exist at the same time
           (e.g. instances of a horizontally scaled service). It is preferable for the ID to be persistent
           and stay the same for the lifetime of the service instance, however it is acceptable that

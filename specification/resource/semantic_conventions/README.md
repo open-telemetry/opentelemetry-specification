@@ -1,5 +1,7 @@
 # Resource Semantic Conventions
 
+**Status**: [Experimental](../../document-status.md)
+
 This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
 
@@ -9,13 +11,14 @@ This document defines standard attributes for resources. These attributes are ty
 
 - [TODOs](#todos)
 - [Document Conventions](#document-conventions)
-- [Attributes with Default Value](#attributes-with-default-value)
+- [Semantic Attributes with SDK-provided Default Value](#semantic-attributes-with-sdk-provided-default-value)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
 - [Compute Unit](#compute-unit)
 - [Compute Instance](#compute-instance)
 - [Environment](#environment)
 - [Version attributes](#version-attributes)
+- [Cloud-Provider-Specific Attributes](#cloud-provider-specific-attributes)
 
 <!-- tocstop -->
 
@@ -33,9 +36,10 @@ Attributes are grouped logically by the type of the concept that they described.
 
 Certain attribute groups in this document have a **Required** column. For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource. However it is also valid if the entire attribute group is omitted (i.e. none of the attributes from the particular group are present even though some of them are marked as Required in this document).
 
-## Attributes with Default Value
+## Semantic Attributes with SDK-provided Default Value
 
-The SDK MUST set a default value for the following attributes if they were not specified, even if the resource would otherwise not be present at all:
+These are the the attributes which MUST be provided by the SDK
+as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource-attributes):
 
 - [`service.name`](#service)
 
@@ -46,7 +50,7 @@ The SDK MUST set a default value for the following attributes if they were not s
 **Description:** A service instance.
 
 <!-- semconv service -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Yes |
 | `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | No |
@@ -57,7 +61,7 @@ The SDK MUST set a default value for the following attributes if they were not s
 
 **[2]:** A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
 
-**[3]:** MUST be unique for each instance of the same `service.namespace,service.name` pair (in other words `service.namespace,service.name,service.id` triplet MUST be globally unique). The ID helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). It is preferable for the ID to be persistent and stay the same for the lifetime of the service instance, however it is acceptable that the ID is ephemeral and changes during important lifetime events for the service (e.g. service restarts). If the service has no inherent unique ID that can be used as the value of this attribute it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122 for more recommendations).
+**[3]:** MUST be unique for each instance of the same `service.namespace,service.name` pair (in other words `service.namespace,service.name,service.instance.id` triplet MUST be globally unique). The ID helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). It is preferable for the ID to be persistent and stay the same for the lifetime of the service instance, however it is acceptable that the ID is ephemeral and changes during important lifetime events for the service (e.g. service restarts). If the service has no inherent unique ID that can be used as the value of this attribute it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122 for more recommendations).
 <!-- endsemconv -->
 
 Note: `service.namespace` and `service.name` are not intended to be concatenated for the purpose of forming a single globally unique name for the service. For example the following 2 sets of attributes actually describe 2 different services (despite the fact that the concatenation would result in the same string):
@@ -90,7 +94,7 @@ The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
 The identifier SHOULD be stable across different versions of an implementation.
 
 <!-- semconv telemetry -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | No |
 | `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | No |

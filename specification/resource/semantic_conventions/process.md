@@ -1,5 +1,7 @@
 # Process and process runtime resources
 
+**Status**: [Experimental](../../document-status.md)
+
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
@@ -23,14 +25,14 @@
 **Description:** An operating system process.
 
 <!-- semconv process -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `process.pid` | number | Process identifier (PID). | `1234` | No |
-| `process.executable.name` | string | The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | Conditional<br>See below |
-| `process.executable.path` | string | The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | Conditional<br>See below |
-| `process.command` | string | The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | Conditional<br>See below |
-| `process.command_line` | string | The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead. | `C:\cmd\otecol --config="my directory\config.yaml"` | Conditional<br>See below |
-| `process.command_args` | string[] | All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`. | `cmd/otecol`<br>`--config=config.yaml` | Conditional<br>See below |
+| `process.executable.name` | string | The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | See below |
+| `process.executable.path` | string | The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | See below |
+| `process.command` | string | The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | See below |
+| `process.command_line` | string | The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead. | `C:\cmd\otecol --config="my directory\config.yaml"` | See below |
+| `process.command_args` | string[] | All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`. | `[cmd/otecol, --config=config.yaml]` | See below |
 | `process.owner` | string | The username of the user that owns the process. | `root` | No |
 <!-- endsemconv -->
 
@@ -51,7 +53,7 @@ At least one of `process.executable.name`, `process.executable.path`, `process.c
 **Description:** The single (language) runtime instance which is monitored.
 
 <!-- semconv process.runtime -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `process.runtime.name` | string | The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler. | `OpenJDK Runtime Environment` | No |
 | `process.runtime.version` | string | The version of the runtime of this process, as returned by the runtime without modification. | `14.0.2` | No |
@@ -64,17 +66,15 @@ In addition to these attributes, [`telemetry.sdk.language`](README.md#telemetry-
 
 ### Erlang Runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-erlang/issues/96>): Confirm the contents here
-
-- `process.runtime.name` - The name of the Erlang runtime being used. Usually will be BEAM.
-- `process.runtime.version` - The ERTS (Erlang Runtime System) version. For BEAM this is found with `application:get_key(erts, vsn)`.
-- `process.runtime.description` - The OTP version `erlang:system_info(otp_release)` and ERTS version combined.
+- `process.runtime.name` - The name of the Erlang VM being used, i.e., `erlang:system_info(machine)`.
+- `process.runtime.version` -  The version of the runtime (ERTS - Erlang Runtime System), i.e., `erlang:system_info(version)`.
+- `process.runtime.description` - string | An additional description about the runtime made by combining the OTP version, i.e., `erlang:system_info(otp_release)`, and ERTS version.
 
 Example:
 
-| Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
-| --- | --- | --- | --- |
-| beam | BEAM | 11.0.3 | Erlang/OTP 24 erts-11.0.3 |
+| `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
+| --- | --- | --- |
+| BEAM | 11.1 |  Erlang/OTP 23 erts-11.1 |
 
 ### Go Runtimes
 

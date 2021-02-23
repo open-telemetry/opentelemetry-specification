@@ -1,11 +1,13 @@
 # Container
 
+**Status**: [Experimental](../../document-status.md)
+
 **type:** `container`
 
 **Description:** A container instance.
 
 <!-- semconv container -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `container.name` | string | Container name. | `opentelemetry-autoconf` | No |
 | `container.id` | string | Container id. Usually a UUID, as for example used to [identify Docker containers](https://docs.docker.com/engine/reference/run/#container-identification). The UUID might be abbreviated. | `a3bf90e006b2` | No |
