@@ -6,12 +6,12 @@ Expected Release Date: February 26, 2021
 
 Expected Version Number: v1.0.0
 
-Spec Compliance Matrix is up to date: (https://github.com/open-telemetry/opentelemetry-specification/pull/1464)
+Spec Compliance Matrix is up to date: [PR](https://github.com/open-telemetry/opentelemetry-specification/pull/1464)
 
-Versioning And Stability Document: (https://github.com/open-telemetry/opentelemetry-java/blob/main/VERSIONING.md)
+Versioning And Stability Document: [Versioning doc](https://github.com/open-telemetry/opentelemetry-java/blob/main/VERSIONING.md)
 
-Public Code Documentation: (https://javadoc.io/doc/io.opentelemetry)
+Public Code Documentation: [Javadoc.io](https://javadoc.io/doc/io.opentelemetry)
 
-Public Examples: (https://github.com/open-telemetry/opentelemetry-java/tree/main/examples)
+Public Examples: [Examples](https://github.com/open-telemetry/opentelemetry-java/tree/main/examples)
 
 Discovered Issues: [List of filed issues by the TC members during the review process]
