@@ -63,7 +63,7 @@ groups:
               "TableName": "string",
               "WriteCapacityUnits": number
             }'
-      - id: item_collection_metrics
+      - id: item_collection
         type: string
         brief: "The JSON-serialized value of the `ItemCollectionmetrics` response field."
         examples:
@@ -92,13 +92,13 @@ groups:
                  }
               ]
              }'
-      - id: provisioned_throughput.read_capacity_units
+      - id: provisioned_read_capacity
         type: number
         brief: "The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter."
         examples:
           - 1
           - 2
-      - id: provisioned_throughput.write_capacity_units
+      - id: provisioned_write_capacity
         type: number
         brief: "The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter."
         examples:
@@ -107,7 +107,7 @@ groups:
       - id: consistent_read
         type: boolean
         brief: "The value of the `ConsistentRead` request parameter."
-      - id: projection_expression
+      - id: projection
         type: string
         brief: "The value of the `ProjectionExpression` request parameter."
         examples:
@@ -152,7 +152,7 @@ groups:
     attributes:
       - ref: aws.dynamodb.table_names
       - ref: aws.dynamodb.consumed_capacity
-      - ref: aws.dynamodb.item_collection_metrics
+      - ref: aws.dynamodb.item_collection
 
   - id: dynamodb.createtable
     brief: DynamoDB.CreateTable
@@ -202,9 +202,9 @@ groups:
             }'
       - ref: aws.dynamodb.table_names
       - ref: aws.dynamodb.consumed_capacity
-      - ref: aws.dynamodb.item_collection_metrics
-      - ref: aws.dynamodb.provisioned_throughput.read_capacity_units
-      - ref: aws.dynamodb.provisioned_throughput.write_capacity_units
+      - ref: aws.dynamodb.item_collection
+      - ref: aws.dynamodb.provisioned_read_capacity
+      - ref: aws.dynamodb.provisioned_write_capacity
 
   - id: dynamodb.deleteitem
     brief: DynamoDB.DeleteItem
@@ -213,41 +213,41 @@ groups:
     attributes:
       - ref: aws.dynamodb.table_names
       - ref: aws.dynamodb.consumed_capacity
-      - ref: aws.dynamodb.item_collection_metrics
+      - ref: aws.dynamodb.item_collection
 
   - id: dynamodb.deletetable
     brief: DynamoDB.DeleteTable
     extends: aws
     prefix: aws.dynamodb
     attributes:
-      - ref: db.name
-        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.table_names
+        brief: "A single item with the value of the TableName request parameter."
 
   - id: dynamodb.describetable
     brief: DynamoDB.DescribeTable
     extends: aws
     prefix: aws.dynamodb
     attributes:
-      - ref: db.name
-        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.table_names
+        brief: "A single item with the value of the TableName request parameter."
 
   - id: dynamodb.getitem
     brief: DynamoDB.GetItem
     extends: aws
     prefix: aws.dynamodb
     attributes:
-      - ref: db.name
-        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.table_names
+        brief: "A single item with the value of the TableName request parameter."
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.consistent_read
-      - ref: aws.dynamodb.projection_expression
+      - ref: aws.dynamodb.projection
 
   - id: dynamodb.listtables
     brief: DynamoDB.ListTables
     extends: aws
     prefix: aws.dynamodb
     attributes:
-      - id: exclusive_start_table_name
+      - id: exclusive_start_table
         type: string
         brief: "The value of the `ExclusiveStartTableName` request parameter."
         examples:
@@ -267,22 +267,22 @@ groups:
     attributes:
       - ref: aws.dynamodb.table_names
       - ref: aws.dynamodb.consumed_capacity
-      - ref: aws.dynamodb.item_collection_metrics
+      - ref: aws.dynamodb.item_collection
 
   - id: dynamodb.query
     brief: DynamoDB.Query
     extends: aws
     prefix: aws.dynamodb
     attributes:
-      - id: scan_index_forward
+      - id: scan_forward
         type: boolean
         brief: "The value of the `ScanIndexForward` request parameter."
-      - ref: db.name
-        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.table_names
+        brief: "A single item with the value of the TableName request parameter."
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.consistent_read
       - ref: aws.dynamodb.limit
-      - ref: aws.dynamodb.projection_expression
+      - ref: aws.dynamodb.projection
       - ref: aws.dynamodb.attributes_to_get
       - ref: aws.dynamodb.index_name
       - ref: aws.dynamodb.select
@@ -312,12 +312,12 @@ groups:
         brief: "The value of the `ScannedCount` response parameter."
         examples:
           - 50
-      - ref: db.name
-        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.table_names
+        brief: "A single item with the value of the TableName request parameter."
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.consistent_read
       - ref: aws.dynamodb.limit
-      - ref: aws.dynamodb.projection_expression
+      - ref: aws.dynamodb.projection
       - ref: aws.dynamodb.attributes_to_get
       - ref: aws.dynamodb.index_name
       - ref: aws.dynamodb.select
@@ -329,7 +329,7 @@ groups:
     attributes:
       - ref: aws.dynamodb.table_names
       - ref: aws.dynamodb.consumed_capacity
-      - ref: aws.dynamodb.item_collection_metrics
+      - ref: aws.dynamodb.item_collection
 
   - id: dynamodb.updatetable
     brief: DynamoDB.UpdateTable
@@ -366,8 +366,8 @@ groups:
                   "WriteCapacityUnits": number
                 }
               }'
-      - ref: db.name
-        brief: "The value of the TableName request parameter."
+      - ref: aws.dynamodb.table_names
+        brief: "A single item with the value of the TableName request parameter."
       - ref: aws.dynamodb.consumed_capacity
-      - ref: aws.dynamodb.provisioned_throughput.read_capacity_units
-      - ref: aws.dynamodb.provisioned_throughput.write_capacity_units
+      - ref: aws.dynamodb.provisioned_read_capacity
+      - ref: aws.dynamodb.provisioned_write_capacity

@@ -35,7 +35,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
+| `aws.dynamodb.item_collection` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
 | `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
@@ -47,9 +47,9 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 | `aws.dynamodb.global_secondary_indexes` | string[] | The JSON-serialized value of each item of the `GlobalSecondaryIndexes` request field | `[{ "IndexName": "string", "KeySchema": [ { "AttributeName": "string", "KeyType": "string" } ], "Projection": { "NonKeyAttributes": [ "string" ], "ProjectionType": "string" }, "ProvisionedThroughput": { "ReadCapacityUnits": number, "WriteCapacityUnits": number } }]` | No |
 | `aws.dynamodb.local_secondary_indexes` | string[] | The JSON-serialized value of each item of the `LocalSecondaryIndexes` request field. | `[{ "IndexArn": "string", "IndexName": "string", "IndexSizeBytes": number, "ItemCount": number, "KeySchema": [ { "AttributeName": "string", "KeyType": "string" } ], "Projection": { "NonKeyAttributes": [ "string" ], "ProjectionType": "string" } }]` | No |
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
-| `aws.dynamodb.provisioned_throughput.read_capacity_units` | number | The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter. | `1`; `2` | No |
-| `aws.dynamodb.provisioned_throughput.write_capacity_units` | number | The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter. | `1`; `2` | No |
+| `aws.dynamodb.item_collection` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
+| `aws.dynamodb.provisioned_read_capacity` | number | The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter. | `1`; `2` | No |
+| `aws.dynamodb.provisioned_write_capacity` | number | The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter. | `1`; `2` | No |
 | `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
@@ -59,7 +59,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
+| `aws.dynamodb.item_collection` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
 | `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
@@ -68,9 +68,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 <!-- semconv dynamodb.deletetable -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`db.name`](../database.md) | string | The value of the TableName request parameter. [1] | `customers`; `main` | No |
-
-**[1]:** In some SQL databases, the database name to be used is called "schema name".
+| `aws.dynamodb.table_names` | string[] | A single item with the value of the TableName request parameter. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.DescribeTable
@@ -78,9 +76,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 <!-- semconv dynamodb.describetable -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`db.name`](../database.md) | string | The value of the TableName request parameter. [1] | `customers`; `main` | No |
-
-**[1]:** In some SQL databases, the database name to be used is called "schema name".
+| `aws.dynamodb.table_names` | string[] | A single item with the value of the TableName request parameter. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.GetItem
@@ -90,10 +86,8 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 |---|---|---|---|---|
 | `aws.dynamodb.consistent_read` | boolean | The value of the `ConsistentRead` request parameter. |  | No |
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.projection_expression` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
-| [`db.name`](../database.md) | string | The value of the TableName request parameter. [1] | `customers`; `main` | No |
-
-**[1]:** In some SQL databases, the database name to be used is called "schema name".
+| `aws.dynamodb.projection` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
+| `aws.dynamodb.table_names` | string[] | A single item with the value of the TableName request parameter. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.ListTables
@@ -101,7 +95,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 <!-- semconv dynamodb.listtables -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `aws.dynamodb.exclusive_start_table_name` | string | The value of the `ExclusiveStartTableName` request parameter. | `Users`; `CatsTable` | No |
+| `aws.dynamodb.exclusive_start_table` | string | The value of the `ExclusiveStartTableName` request parameter. | `Users`; `CatsTable` | No |
 | `aws.dynamodb.table_count` | number | The the number of items in the `TableNames` response parameter. | `20` | No |
 | `aws.dynamodb.limit` | number | The value of the `Limit` request parameter. | `10` | No |
 <!-- endsemconv -->
@@ -112,7 +106,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
+| `aws.dynamodb.item_collection` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
 | `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
@@ -121,17 +115,15 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 <!-- semconv dynamodb.query -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `aws.dynamodb.scan_index_forward` | boolean | The value of the `ScanIndexForward` request parameter. |  | No |
+| `aws.dynamodb.scan_forward` | boolean | The value of the `ScanIndexForward` request parameter. |  | No |
 | `aws.dynamodb.attributes_to_get` | string[] | The value of the `AttributesToGet` request parameter. | `[lives, id]` | No |
 | `aws.dynamodb.consistent_read` | boolean | The value of the `ConsistentRead` request parameter. |  | No |
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
 | `aws.dynamodb.index_name` | string | The value of the `IndexName` request parameter. | `name_to_group` | No |
 | `aws.dynamodb.limit` | number | The value of the `Limit` request parameter. | `10` | No |
-| `aws.dynamodb.projection_expression` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
+| `aws.dynamodb.projection` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
 | `aws.dynamodb.select` | string | The value of the `Select` request parameter. | `ALL_ATTRIBUTES`; `COUNT` | No |
-| [`db.name`](../database.md) | string | The value of the TableName request parameter. [1] | `customers`; `main` | No |
-
-**[1]:** In some SQL databases, the database name to be used is called "schema name".
+| `aws.dynamodb.table_names` | string[] | A single item with the value of the TableName request parameter. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.Scan
@@ -148,11 +140,9 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
 | `aws.dynamodb.index_name` | string | The value of the `IndexName` request parameter. | `name_to_group` | No |
 | `aws.dynamodb.limit` | number | The value of the `Limit` request parameter. | `10` | No |
-| `aws.dynamodb.projection_expression` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
+| `aws.dynamodb.projection` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
 | `aws.dynamodb.select` | string | The value of the `Select` request parameter. | `ALL_ATTRIBUTES`; `COUNT` | No |
-| [`db.name`](../database.md) | string | The value of the TableName request parameter. [1] | `customers`; `main` | No |
-
-**[1]:** In some SQL databases, the database name to be used is called "schema name".
+| `aws.dynamodb.table_names` | string[] | A single item with the value of the TableName request parameter. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.UpdateItem
@@ -161,7 +151,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
+| `aws.dynamodb.item_collection` | string | The JSON-serialized value of the `ItemCollectionmetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
 | `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
@@ -173,9 +163,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 | `aws.dynamodb.attribute_definitions` | string[] | The JSON-serialized value of each item in the `AttributeDefinitions` request field. | `[{ "AttributeName": "string", "AttributeType": "string" }]` | No |
 | `aws.dynamodb.global_secondary_index_updates` | string[] | The JSON-serialized value of each item in the the `GlobalSecondaryIndexUpdates` request field. | `[{ "Create": { "IndexName": "string", "KeySchema": [ { "AttributeName": "string", "KeyType": "string" } ], "Projection": { "NonKeyAttributes": [ "string" ], "ProjectionType": "string" }, "ProvisionedThroughput": { "ReadCapacityUnits": number, "WriteCapacityUnits": number } }]` | No |
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.provisioned_throughput.read_capacity_units` | number | The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter. | `1`; `2` | No |
-| `aws.dynamodb.provisioned_throughput.write_capacity_units` | number | The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter. | `1`; `2` | No |
-| [`db.name`](../database.md) | string | The value of the TableName request parameter. [1] | `customers`; `main` | No |
-
-**[1]:** In some SQL databases, the database name to be used is called "schema name".
+| `aws.dynamodb.provisioned_read_capacity` | number | The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter. | `1`; `2` | No |
+| `aws.dynamodb.provisioned_write_capacity` | number | The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter. | `1`; `2` | No |
+| `aws.dynamodb.table_names` | string[] | A single item with the value of the TableName request parameter. | `[Users, Cats]` | No |
 <!-- endsemconv -->
