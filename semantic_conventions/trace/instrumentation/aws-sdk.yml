@@ -10,14 +10,12 @@ groups:
       Some descriptions are also provided for populating general OpenTelemetry semantic conventions based on
       these APIs.
     attributes:
-      - id: service
-        type: string
+      - ref: rpc.service
         brief: "The name of the service to which a request is made, as returned by the AWS SDK."
         examples:
           - DynamoDB
           - S3
-      - id: operation
-        type: string
+      - ref: rpc.method
         brief: "The name of the operation corresponding to the request, as returned by the AWS SDK"
         examples:
           - GetItem

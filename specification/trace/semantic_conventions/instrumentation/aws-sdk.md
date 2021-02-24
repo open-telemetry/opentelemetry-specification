@@ -14,8 +14,8 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 <!-- semconv aws -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `aws.service` | string | The name of the service to which a request is made, as returned by the AWS SDK. | `DynamoDB`; `S3` | No |
-| `aws.operation` | string | The name of the operation corresponding to the request, as returned by the AWS SDK | `GetItem`; `PutItem` | No |
+| [`rpc.method`](../rpc.md) | string | The name of the operation corresponding to the request, as returned by the AWS SDK | `GetItem`; `PutItem` | No |
+| [`rpc.service`](../rpc.md) | string | The name of the service to which a request is made, as returned by the AWS SDK. | `DynamoDB`; `S3` | No |
 <!-- endsemconv -->
 
 ## DynamoDB
