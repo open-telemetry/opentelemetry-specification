@@ -12,6 +12,7 @@ groups:
     attributes:
       - ref: rpc.system
         brief: "The value `aws-api`."
+        required: always
         examples:
           - aws-api
       - ref: rpc.service

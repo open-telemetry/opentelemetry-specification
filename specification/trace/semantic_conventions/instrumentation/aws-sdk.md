@@ -16,7 +16,7 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 |---|---|---|---|---|
 | [`rpc.method`](../rpc.md) | string | The name of the operation corresponding to the request, as returned by the AWS SDK | `GetItem`; `PutItem` | No |
 | [`rpc.service`](../rpc.md) | string | The name of the service to which a request is made, as returned by the AWS SDK. | `DynamoDB`; `S3` | No |
-| [`rpc.system`](../rpc.md) | string | The value `aws-api`. | `aws-api` | No |
+| [`rpc.system`](../rpc.md) | string | The value `aws-api`. | `aws-api` | Yes |
 <!-- endsemconv -->
 
 ## DynamoDB
