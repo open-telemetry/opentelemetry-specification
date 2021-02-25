@@ -590,7 +590,7 @@ want to make the shutdown timeout configurable.
 
 #### `ForceFlush()`
 
-This is a hint to ensure that any `Spans` passed to the exporter prior to the
+This is a hint to ensure that the export of any `Spans` passed to the exporter prior to the
 call to `ForceFlush` SHOULD be completed as soon as possible, preferably before
 returning from this method.
 
