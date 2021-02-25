@@ -142,6 +142,8 @@ Note: Support for environment variables is optional.
 
 | Feature                                               | Optional | Go | Java                                                                  | JS | Python                                                                  | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |-------------------------------------------------------|----------|----|-----------------------------------------------------------------------|----|-------------------------------------------------------------------------|------|--------|-----|------|-----|------|-------|
+| Exporter interface                                    |          |    | + |    | +                                                                       |      |        |     |      |     | +    |       |
+| Exporter interface has `ForceFlush`                   |          |    | + |    |                                                                         |      |        |     |      |     |      |       |
 | Standard output (logging)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
