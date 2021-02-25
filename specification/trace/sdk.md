@@ -70,7 +70,8 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the flush timeout configurable.
 
-`ForceFlush` MUST invoke `ForceFlush` on all registered `SpanProcessors`.
+`ForceFlush` MUST invoke `ForceFlush` on all registered `SpanProcessors` of the
+Tracer(s) the TracerProvider has created.
 
 ## Additional Span Interfaces
 
