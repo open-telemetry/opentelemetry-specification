@@ -16,7 +16,7 @@ status of the feature is not known.
 | Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
-| ForceFlush (SDK only required)                                                                   |          |    | +    | -  | -      | -    | -      |     | -    | -   | +    | -     |
+| ForceFlush (SDK only required)                                                                   |          |    | +    | -  | -      | -    | -      |     | -    | -   | +    | +     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
 | Get active Span                                                                                  |          |    | +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
 | Set active Span                                                                                  |          |    | +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
@@ -70,8 +70,8 @@ status of the feature is not known.
 | Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    | +    |    | +      | +    | +      |     |      |     | -    | +     |
-| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          |    | +    |    |        | +    |        |     |      |     |      |       |
-| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        |    | +    |    |        | +    |        |     |      |     |      |       |
+| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          |    | +    |    |        | +    |        |     |      |     |      | +     |
+| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        |    | +    |    |        | +    |        |     |      |     |      | +     |
 
 ## Baggage
 
