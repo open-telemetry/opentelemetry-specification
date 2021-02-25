@@ -599,7 +599,7 @@ failed or timed out.
 
 `ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
 such as when using some FaaS providers that may suspend the process after an
-invocation, but before the `Processor` exports the completed spans.
+invocation, but before the exporter exports the completed spans.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
