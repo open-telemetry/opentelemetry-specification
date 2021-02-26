@@ -15,8 +15,8 @@ status of the feature is not known.
 | Create TracerProvider                                                                            |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Shutdown (SDK only required)                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
-| ForceFlush (SDK only required)                                                                   |          |    | +    | -  | -      | +    | -      |     | -    | -   | +    | +     |
+| Shutdown (SDK only required)                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
+| ForceFlush (SDK only required)                                                                   |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1606)  | +    | -  | -      | +    | -      |     | -    | -   | +    | +     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
 | Get active Span                                                                                  |          |    | +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
 | Set active Span                                                                                  |          |    | +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
