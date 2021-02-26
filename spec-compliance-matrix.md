@@ -72,6 +72,56 @@ status of the feature is not known.
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    | +    |    | +      | +    | +      |     |      |     | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          |    | +    |    |        | +    |        |     |      |     |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        |    | +    |    |        | +    |        |     |      |     |      | +     |
+| [SpanProcessor](specification/trace/sdk.md#span-processor)                                       |          |    |      |    |        |      |        |     |      |     |      |       |
+| Only invoked for recorded Spans                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Supports user defined SpanProcessor                                                              |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Invoked in order registered                                                                      |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` called when span is started                                                            |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` called synchronously                                                                   |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd` called after span ended                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd` called synchronously called within `Span.End()`                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` is called once for each registered SpanProcessor                                      |          | +  |      |    |        |      |        |     |      |     |      |       |
+| [Simple Span Processor](specification/trace/sdk.md#simple-processor)                             |          |    |      |    |        |      |        |     |      |     |      |       |
+| Configurable parameter SpanExporter                                                              |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Exports Span data immediately                                                                    |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` does not block or throw exceptions                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` accepts a read/write span object                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` accepts the parent `Context`                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` returns void or nothing                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd` does not block or throw exceptions                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd` returns void or nothing                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` releases processor resources                                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd`, `OnStart`, or `ForceFlush` gracefully ignored post `Shutdown`                           |          | [-](https://github.com/open-telemetry/opentelemetry-go/pull/1612)  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` communicates failure or timeout                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` includes the effects of `ForceFlush`                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` aborts after configured timeout                                                       |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1616)  |      |    |        |      |        |     |      |     |      |       |
+| `ForceFlush` communicates failure of timeout                                                     |          | N/A|      |    |        |      |        |     |      |     |      |       |
+| `ForceFlush` aborts after configured timeout                                                     |          | N/A|      |    |        |      |        |     |      |     |      |       |
+| [Batching Span Processor](specification/trace/sdk.md#batching-processor)                         |          |    |      |    |        |      |        |     |      |     |      |       |
+| Configurable parameter SpanExporter                                                              |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Configurable parameter max queue size                                                            |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Default max queue size 2048                                                                      |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Configurable parameter scheduled delay                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Default scheduled delay 5 seconds                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Configurable parameter export timeout                                                            |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1613)  |      |    |        |      |        |     |      |     |      |       |
+| Default export timeout 30 seconds                                                                |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1613)  |      |    |        |      |        |     |      |     |      |       |
+| Configurable parameter max batch size                                                            |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Default max batch size 512                                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Exports Span data as configured batches                                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` does not block or throw exceptions                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` accepts a read/write span object                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` accepts the parent `Context`                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` returns void or nothing                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd` does not block or throw exceptions                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd` returns void or nothing                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` releases processor resources                                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd`, `OnStart`, or `ForceFlush` gracefully ignored post `Shutdown`                           |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1617)  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` communicates failure or timeout                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` includes the effects of `ForceFlush`                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` aborts after configured timeout                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `ForceFlush` exports all unexported spans                                                        |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `ForceFlush` communicates failure of timeout                                                     |          | [-](https://github.com/open-telemetry/opentelemetry-go/pull/1608)  |      |    |        |      |        |     |      |     |      |       |
+| `ForceFlush` aborts after configured timeout                                                     |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1618)  |      |    |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
