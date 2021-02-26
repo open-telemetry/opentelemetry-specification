@@ -471,9 +471,13 @@ This is a hint to ensure that any tasks associated with `Spans` for which the
 `SpanProcessor` had already received events prior to the call to `ForceFlush` SHOULD
 be completed as soon as possible, preferably before returning from this method.
 
-In particular, if the `SpanProcessor` has any associated exporters, it MUST call
-the exporter's `Export` with all spans for which this was not already done and
-then invoke `ForceFlush` on it.
+In particular, if any `SpanProcessor` has any associated exporter, it SHOULD
+try to call the exporter's `Export` with all spans for which this was not
+already done and then invoke `ForceFlush` on it.
+The [built-in SpanProcessors](#built-in-span-processors) MUST do so.
+If a timeout is specified (see below), the SpanProcessor MUST prioritize honoring the timeout over
+finishing all calls. It MAY skip or abort some or all Export or ForceFlush
+calls it has made to achieve this goal.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
