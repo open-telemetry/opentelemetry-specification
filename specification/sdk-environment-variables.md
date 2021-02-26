@@ -98,6 +98,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                   | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication | -                                                                                                |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication | -                                                                                                |
+| OTEL_EXPORTER_JAEGER_AGENT_SPLIT_OVERSIZED_BATCHES  | Split jaeger exporter UDP batches if they exceed the UDP packet limit | false                                                                                                |
 
 ## Zipkin Exporter
 
