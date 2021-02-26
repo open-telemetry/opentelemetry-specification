@@ -20,20 +20,22 @@ Table of Contents
 
 ## Overview
 
-A `Context` is a propagation mechanism which carries execution-scoped values
-across API boundaries and between logically associated execution units.
-Cross-cutting concerns access their data in-process using the same shared
-`Context` object.
-
-A `Context` MUST be immutable, and its write operations MUST
-result in the creation of a new `Context` containing the original
-values and the specified values updated.
+A `Context` is an in-process propagation mechanism which carries 
+execution-scoped values across API boundaries and between logically associated 
+execution units. Cross-cutting concerns access their data in-process using the
+same shared `Context` object.
 
 Languages are expected to use the single, widely used `Context` implementation
 if one exists for them. In the cases where an extremely clear, pre-existing
 option is not available, OpenTelemetry MUST provide its own `Context`
-implementation. Depending on the language, its usage may be either explicit
-or implicit.
+implementation. If a language has a pre-existing `Context` implementation that
+is incompatible with OpenTelemetry, OpenTelemetry MUST provide
+its own `Context` implementation. Depending on the language, `Context` can 
+either be explicit or implicit. OpenTelemetry allows both options.
+
+A `Context` MUST be immutable, and its write operations MUST
+result in the creation of a new `Context` containing the original
+values and the specified values updated.
 
 Users writing instrumentation in languages that use `Context` implicitly are
 discouraged from using the `Context` API directly. In those cases, users will
