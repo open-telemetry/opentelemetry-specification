@@ -462,6 +462,11 @@ The Span interface MUST provide:
   as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
   implementations may offer a separate API for each of the possible value types.
 
+The Span interface MAY provide:
+
+- An API to set multiple `Attributes` at once, where all `Attributes` are passed as a
+  single argument. This MAY be called `SetAllAttributes`.
+
 Setting an attribute with the same key as an existing attribute SHOULD overwrite
 the existing attribute's value.
 
