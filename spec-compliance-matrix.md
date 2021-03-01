@@ -90,7 +90,7 @@ status of the feature is not known.
 | `OnStart` returns void or nothing                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd` does not block or throw exceptions                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd` returns void or nothing                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `Shutdown` releases processor resources                                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` is implemented                                                                        |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd`, `OnStart`, or `ForceFlush` gracefully ignored post `Shutdown`                           |          | [-](https://github.com/open-telemetry/opentelemetry-go/pull/1612)  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` communicates failure or timeout                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` includes the effects of `ForceFlush`                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
@@ -114,7 +114,7 @@ status of the feature is not known.
 | `OnStart` returns void or nothing                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd` does not block or throw exceptions                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd` returns void or nothing                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `Shutdown` releases processor resources                                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `Shutdown` is implemented                                                                        |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd`, `OnStart`, or `ForceFlush` gracefully ignored post `Shutdown`                           |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1617)  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` communicates failure or timeout                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` includes the effects of `ForceFlush`                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
