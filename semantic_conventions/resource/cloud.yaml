@@ -23,20 +23,26 @@ groups:
       - id: account.id
         type: string
         brief: >
-          The cloud account ID used to identify different entities.
-        examples: ['opentelemetry']
+          The cloud account ID the resource is created in.
+        examples: ['opentelemetry', '111111111111']
       - id: region
         type: string
         brief: >
-          A specific geographical location where different entities can run.
-        examples: ['us-central1']
+          The geographical region the resource is running. Refer to your
+          provider's docs to see the available regions. See
+          [AWS regions](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html#Concepts.RegionsAndAvailabilityZones.Regions), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), and
+          [Google Cloud regions](https://cloud.google.com/about/locations)
+          for more.
+        examples: ['us-central1', 'us-east-1']
       - id: zone
         type: string
         brief: >
-          Zones are a sub set of the region connected through low-latency links.
+          Cloud regions often has multiple, isolated locations known as zones
+          to increase availability. Zone represents the zone where the resource 
+          is running.
         note: >
-          In AWS, this is called availability-zone.
-        examples: ['us-central1-a']
+          AWS and Azure calls them availability zones or AZs.
+        examples: ['us-central1-a', 'us-east-1c']
       - id: infrastructure_service
         type:
           allow_custom_values: true
