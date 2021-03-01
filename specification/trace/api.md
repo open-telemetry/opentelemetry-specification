@@ -522,6 +522,7 @@ status, which is `Unset`.
 - `StatusCode`, one of the values listed below.
 - Optional `Description` that provides a descriptive message of the `Status`.
   `Description` MUST only be used with the `Error` `StatusCode` value.
+  An empty `Description` is equivalent with a not present one.
 
 `StatusCode` is one of the following values:
 
