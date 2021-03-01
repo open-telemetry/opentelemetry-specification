@@ -21,6 +21,11 @@ groups:
         brief: >
           Type of host. For Cloud, this must be the machine type.
         examples: ['n1-standard-1']
+      - id: arch
+        type: string
+        brief: >
+            The CPU architecture the host system is running on.
+        examples: ['arm_64', 'amd_64', 'powerpc_32', 'x86_32']
       - id: image.name
         type: string
         brief: >
