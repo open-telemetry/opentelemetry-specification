@@ -19,8 +19,8 @@ groups:
       - id: runtime
         type: string
         brief: >
-          Container runtime running the container.
-        examples: ['docker', 'containerd', rkt']
+          The container runtime managing this container.
+        examples: ['docker', 'containerd', 'rkt']
       - id: image.name
         type: string
         brief: >
