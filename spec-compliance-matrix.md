@@ -78,18 +78,18 @@ status of the feature is not known.
 | Invoked in order registered                                                                      |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnStart` called when span is started                                                            |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnStart` called synchronously                                                                   |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` accepts a read/write span object                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` accepts the parent `Context`                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnStart` returns void or nothing                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd` called after span ended                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd` called synchronously called within `Span.End()`                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `OnEnd` returns void or nothing                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` is called once for each registered SpanProcessor                                      |          | +  |      |    |        |      |        |     |      |     |      |       |
 | [Simple Span Processor](specification/trace/sdk.md#simple-processor)                             |          |    |      |    |        |      |        |     |      |     |      |       |
 | Configurable parameter SpanExporter                                                              |          | +  |      |    |        |      |        |     |      |     |      |       |
 | Exports Span data immediately                                                                    |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnStart` does not block or throw exceptions                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `OnStart` accepts a read/write span object                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `OnStart` accepts the parent `Context`                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `OnStart` returns void or nothing                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd` does not block or throw exceptions                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `OnEnd` returns void or nothing                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` is implemented                                                                        |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd`, `OnStart`, or `ForceFlush` gracefully ignored post `Shutdown`                           |          | [-](https://github.com/open-telemetry/opentelemetry-go/pull/1612)  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` communicates failure or timeout                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
@@ -109,11 +109,7 @@ status of the feature is not known.
 | Default max batch size 512                                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
 | Exports Span data as configured batches                                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnStart` does not block or throw exceptions                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `OnStart` accepts a read/write span object                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `OnStart` accepts the parent `Context`                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `OnStart` returns void or nothing                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd` does not block or throw exceptions                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `OnEnd` returns void or nothing                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` is implemented                                                                        |          | +  |      |    |        |      |        |     |      |     |      |       |
 | `OnEnd`, `OnStart`, or `ForceFlush` gracefully ignored post `Shutdown`                           |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1617)  |      |    |        |      |        |     |      |     |      |       |
 | `Shutdown` communicates failure or timeout                                                       |          | +  |      |    |        |      |        |     |      |     |      |       |
