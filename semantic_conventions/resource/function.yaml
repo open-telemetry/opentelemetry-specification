@@ -1,8 +1,8 @@
 groups:
-  - id: faas_resource
-    prefix: faas
+  - id: function_resource
+    prefix: function
     brief: >
-      A serverless instance.
+      A serverless function.
     attributes:
       - id: name
         type: string
