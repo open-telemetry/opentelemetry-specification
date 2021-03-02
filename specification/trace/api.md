@@ -405,7 +405,8 @@ The Span creation API MUST provide:
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
   the `Span` to link to and optional `Attributes`, either as individual
   parameters or as an immutable object encapsulating them, whichever is most
-  appropriate for the language.
+  appropriate for the language. If the `SpanContext` is not [valid](#isvalid), the
+  call SHOULD be ignored.
 
 Links SHOULD preserve the order in which they're set.
 
