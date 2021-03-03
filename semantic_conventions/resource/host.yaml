@@ -22,10 +22,26 @@ groups:
           Type of host. For Cloud, this must be the machine type.
         examples: ['n1-standard-1']
       - id: arch
-        type: string
+        type:
+          allow_custom_values: true
+          members:
+            - id: ARM_64
+              value: 'ARM_64'
+              brief: "ARM 64-bit"
+            - id: ARM_32
+              value: 'ARM_32'
+              brief: "ARM 32-bit"
+            - id: AMD_64
+              value: 'AMD_64'
+              brief: "AMD 64-bit"
+            - id: x86
+              value: 'x86'
+              brief: "x86 32-bit"
+            - id: x86_64
+              value: 'x86_64'
+              brief: "x86 64-bit"
         brief: >
             The CPU architecture the host system is running on.
-        examples: ['arm_64', 'amd_64', 'powerpc_32', 'x86_32']
       - id: image.name
         type: string
         brief: >
