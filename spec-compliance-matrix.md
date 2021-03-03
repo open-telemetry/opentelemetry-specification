@@ -18,8 +18,8 @@ status of the feature is not known.
 | Shutdown (SDK only required)                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
 | ForceFlush (SDK only required)                                                                   |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1606)  | +    | -  | -      | +    | -      |     | -    | -   | +    | +     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
-| Get active Span                                                                                  |          |    | +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
-| Set active Span                                                                                  |          |    | +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
+| Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
+| Set active Span                                                                                  |          | N/A| +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get active Span                                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -31,21 +31,21 @@ status of the feature is not known.
 | Conforms to the W3C TraceContext spec                                                            |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Span](specification/trace/api.md#span)                                                          |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Create with default parent (active span)                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Create with default parent (active span)                                                         |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with parent from Context                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| No explicit parent Span/SpanContext allowed                                                      |          |    | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
-| SpanProcessor.OnStart receives parent Context                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
+| No explicit parent Span/SpanContext allowed                                                      |          | +  | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
+| SpanProcessor.OnStart receives parent Context                                                    |          | +  | +    | +  | +      | +    | +      |     | +    |     | -    | +     |
 | UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | User-defined start timestamp                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End                                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End with timestamp                                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRecording becomes false after End                                                              |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
-| Set status with StatusCode (Unset, Ok, Error)                                                    |          |    | +    | +  | +      | +    | -      |     | +    |     | +    | +     |
+| IsRecording becomes false after End                                                              |          | +  | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
+| Set status with StatusCode (Unset, Ok, Error)                                                    |          | +  | +    | +  | +      | +    | -      |     | +    |     | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| events collection size limit                                                                     |          |    | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
-| attribute collection size limit                                                                  |          |    | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
-| links collection size limit                                                                      |          |    | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
+| events collection size limit                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
+| attribute collection size limit                                                                  |          | +  | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
+| links collection size limit                                                                      |          | +  | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
 | [Span attributes](specification/trace/api.md#set-attributes)                                     |          |    |      |    |        |      |        |     |      |     |      |       |
 | SetAttribute                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set order preserved                                                                              | X        | +  | -    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
