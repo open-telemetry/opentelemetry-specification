@@ -1,5 +1,13 @@
 # OpenTelemetry Protocol
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This is the specification of new OpenTelemetry protocol (OTLP).
 
 - [Design Goals](design-goals.md).

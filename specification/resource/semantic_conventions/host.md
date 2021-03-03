@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 **type:** `host`
 
 **Description:** A host is defined as a general computing instance.

@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 **Note:** This document is work in progress and will be updated as the
 OpenMetrics specification further develops.
 

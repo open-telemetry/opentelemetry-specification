@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 In OpenTelemetry spans can be created freely and it’s up to the implementor to
 annotate them with attributes specific to the represented operation. Spans
 represent specific operations in and between systems. Some of these operations

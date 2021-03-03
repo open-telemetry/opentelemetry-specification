@@ -2,6 +2,14 @@
 
 **Status**: [Stable](../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This document specifies the configuration options available to the OpenTelemetry Protocol ([OTLP](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md)) Exporter as well as the retry behavior.
 
 ## Configuration Options

@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 **type:** `aws.ecs`
 
 **Description:** Resources used by AWS Elastic Container Service (ECS).

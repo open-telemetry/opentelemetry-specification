@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This document defines semantic conventions for recording application
 exceptions.
 

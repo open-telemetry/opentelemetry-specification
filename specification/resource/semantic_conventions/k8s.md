@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 Useful resources to understand Kubernetes objects and metadata:
 
 * [Namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)

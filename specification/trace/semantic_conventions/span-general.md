@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 The attributes described in this section are not specific to a particular operation but rather generic.
 They may be used in any Span they apply to.
 Particular operations may refer to or require some of these attributes.

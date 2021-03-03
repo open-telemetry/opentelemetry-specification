@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 **type:** `cloud`
 
 **Description:** A cloud infrastructure (e.g. GCP, Azure, AWS).

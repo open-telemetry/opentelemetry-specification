@@ -2,6 +2,14 @@
 
 **Status**: [Stable](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
 Zipkin's v2 API is defined in the
 [zipkin.proto](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto)

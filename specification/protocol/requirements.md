@@ -1,5 +1,13 @@
 # OpenTelemetry Protocol Requirements
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This document will drive OpenTelemetry Protocol design and RFC.
 
 ## Goals

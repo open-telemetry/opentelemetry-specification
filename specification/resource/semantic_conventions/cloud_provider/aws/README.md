@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This directory defines standards for resource attributes that only apply to Amazon
 Web Services (AWS) resources. If an attribute could apply to resources from more than one cloud
 provider (like account ID, operating system, etc), it belongs in the parent

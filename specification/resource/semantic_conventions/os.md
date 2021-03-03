@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 **type:** `os`
 
 **Description**: The operating system (OS) on which the process represented by this resource is running.

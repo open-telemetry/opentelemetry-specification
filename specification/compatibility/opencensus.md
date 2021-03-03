@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../document-status.md), Unless otherwise specified.
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 ## Abstract
 
 The OpenTelemetry project aims to provide backwards compatibility with the

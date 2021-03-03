@@ -2,6 +2,16 @@
 
 **Status**: [Experimental](../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
+**Table of Contents:**
+
 * [Introduction](#introduction)
 * [Limitations of non-OpenTelemetry Solutions](#limitations-of-non-opentelemetry-solutions)
 * [OpenTelemetry Solution](#opentelemetry-solution)

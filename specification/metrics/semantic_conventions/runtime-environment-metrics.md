@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This document includes semantic conventions for runtime environment level
 metrics in OpenTelemetry. Also consider the [general
 metric](README.md#general-metric-semantic-conventions), [system

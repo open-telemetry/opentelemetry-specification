@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 **Type:** `aws.log`
 
 **Description:** Log attributes for Amazon Web Services.

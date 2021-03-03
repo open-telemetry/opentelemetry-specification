@@ -1,5 +1,13 @@
 # Design Goals for OpenTelemetry Wire Protocol
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 We want to design a telemetry data exchange protocol that has the following characteristics:
 
 - Be suitable for use between all of the following node types: instrumented applications, telemetry backends, local agents, stand-alone collectors/forwarders.

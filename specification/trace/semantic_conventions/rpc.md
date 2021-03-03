@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This document defines how to describe remote procedure calls
 (also called "remote method invocations" / "RMI") with spans.
 

@@ -2,6 +2,14 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**Owner:**
+
+* TBD
+
+**Domain Experts:**
+
+* TBD
+
 This document describes instruments and labels for common system level
 metrics in OpenTelemetry. Consider the [general metric semantic
 conventions](README.md#general-metric-semantic-conventions) when creating
