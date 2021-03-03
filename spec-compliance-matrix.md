@@ -56,6 +56,9 @@ status of the feature is not known.
 | Array of primitives (homogeneous)                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | `null` values documented as invalid/undefined                                                    |          |    | +    | +  | +      | +    | N/A    |     |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| [Span linking](specification/trace/api.md#specifying-links)                                      |          |    |      |    |        |      |        |     |      |     |      |       |
+| Links can be recorded on span creation                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Links order is preserved                                                                         |          | +  |      |    |        |      |        |     |      |     |      |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |    |      |    |        |      |        |     |      | +   |      |       |
 | AddEvent                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
