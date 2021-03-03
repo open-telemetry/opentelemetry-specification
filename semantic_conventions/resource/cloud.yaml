@@ -37,7 +37,7 @@ groups:
         type: string
         brief: >
           Cloud regions often have multiple, isolated locations known as zones
-          to increase availability. Availability zone represents the isolated
+          to increase availability. Availability zone represents the
           zone where the resource is running.
         note: >
           Google Cloud calls availability zones zones.
