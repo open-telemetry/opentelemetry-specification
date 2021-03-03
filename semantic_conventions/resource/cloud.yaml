@@ -40,7 +40,7 @@ groups:
           to increase availability. Availability zone represents the
           zone where the resource is running.
         note: >
-          Google Cloud calls availability zones zones.
+          Google Cloud calls availability zones just "zones".
         examples: ['us-east-1c']
       - id: infrastructure_service
         type:
