@@ -1,6 +1,9 @@
 # Default state for all rules
 default: true
 
+# heading-increment"
+MD001: false
+
 # ul-style
 MD004: false
 
@@ -15,9 +18,14 @@ MD024:
 MD029:
   style: ordered
 
+# no-blanks-blockquote
+MD028: false
+
 # no-inline-html
 MD033: false
 
+# no-space-in-code
+MD038: false
+
 # fenced-code-language
 MD040: false
-

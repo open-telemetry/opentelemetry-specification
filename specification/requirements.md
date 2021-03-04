@@ -94,7 +94,7 @@ After the concept is described, its specifc requirements are written in requirem
 
 The idea behind writing the requirements in this manner is to make it easy for the reader to find all the
 requirements included in an OpenTelemetry specification document. In this way, it is also easy to find all
-the requirements a certain implementaiton must comply with. With all the requirements available for the
+the requirements a certain implementation must comply with. With all the requirements available for the
 implementation developer, it is easy to make a list of test cases, one for every requirement section, and
 to test the implementation against these test cases to measure compliance with the specification. This is
 why the key must be unique, so that it can be used to form a name for the particular testing function for
