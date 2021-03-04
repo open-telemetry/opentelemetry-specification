@@ -277,10 +277,12 @@ describe the host and infrastructure as well as application-level attributes
 (such as the application name, version, name of the database - if it is a DBMS,
 etc).
 
-OpenTelemetry recommends to collect logs from application logs using FluentBit
-or a similar agent,
+OpenTelemetry recommends to collect application logs using Collector's
+[filelog receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver).
+Alternatively, another log collection agent, such as FluentBit, can collect
+logs,
 [then send](https://github.com/open-telemetry/opentelemetry-collector/tree/master/receiver/fluentforwardreceiver)
-to OpenTelemetry Collector where they can be further processed and enriched.
+to OpenTelemetry Collector where the logs can be further processed and enriched.
 
 ### Legacy First-Party Applications Logs
 
@@ -315,6 +317,8 @@ the additional log record enrichment in these components.
 
 There are typically 2 ways to collect logs from these applications.
 
+#### Via File or Stdout Logs
+
 The first approach, assuming the logs are written to files or to standard
 output, requires ability to read file logs, tail then, work correctly when log
 rotation is used, optionally also parse the logs to convert them into more
@@ -322,21 +326,27 @@ structured formats. Parings requires support for different parser types, which
 can also be configured to parse custom formats as well as ability to add custom
 parsers. Examples of common formats that parsers need to support are: CSV,
 Common Log Format, Labeled Tab-separated Values (LTSV), Key/Value Pair format,
-JSON, etc. To support this approach OpenTelemetry recommends using FluentBit or
-similar agent to read the logs,
+JSON, etc. To support this approach OpenTelemetry recommends to collect logs
+using OpenTelemetry
+[Collector](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver).
+
+![Application to File Logs](img/app-to-file-logs-otelcol.png)
+
+Alternatively, if the Collector does not have the necessary file reading and
+parsing capabilities, another log collection agent, such as FluentBit can
+collect the logs,
 [then send the logs](https://github.com/open-telemetry/opentelemetry-collector/tree/master/receiver/fluentforwardreceiver)
 to OpenTelemetry Collector.
 
-![Application to File Logs](img/app-to-file-logs.png)
+![Application to File Logs](img/app-to-file-logs-fb.png)
 
-The benefit of this approach is that how logs are produced and where they are
-written by the application requires no or minimal changes. The downside is that
-it requires the often non-trivial log file reading and parsing functionality.
-Parsing may also be not reliable if the output format is not well-defined.
+The benefit of using an intermediary medium is that how logs are produced and
+where they are written by the application requires no or minimal changes. The
+downside is that it requires the often non-trivial log file reading and parsing
+functionality. Parsing may also be not reliable if the output format is not
+well-defined.
 
-As mentioned earlier OpenTelemetry does not intend to implement parsers and log
-file reading functionality, so if this approach is chosen then an external log
-collection agent such as FluentBit must be used to collect the logs.
+#### Direct to Collector
 
 The second approach is to modify the application so that the logs are output via
 a network protocol, e.g. via
@@ -403,17 +413,21 @@ Collector.
 The following functionality exists to enable log collection:
 
 - Support for log data type and log pipelines based on the
-  [log data model](data-model.md).
+  [log data model](data-model.md). This includes processors such as
+  [attributesprocessor](https://github.com/open-telemetry/opentelemetry-collector/tree/main/processor/attributesprocessor)
+  that can operate on log data.
 
 - Ability to read logs from text files, tail the files, understand common log
   rotation schemes, watch directories for log file creation, ability to
   checkpoint file positions and resume reading from checkpoints. This ability is
-  implemented by using an externally running FluentBit process (or any other
-  similar external log collection agent).
+  implemented by using Collector's
+  [filelog receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver)
+  or using an externally running agent (such as FluentBit).
 
 - Ability to parse logs in common text formats and to allow end users to
-  customize parsing formats and add custom parsers as needed. FluentBit or
-  similar agent is used for this.
+  customize parsing formats and add custom parsers as needed. Collector's
+  [parsers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver#operators)
+  or parsing in the external agent is used for this.
 
 - Ability to receive logs via common network protocols for logs, such as Syslog
   and interpret them according to semantic conventions defined in this
