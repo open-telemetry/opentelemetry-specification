@@ -105,6 +105,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `dynamodb` | Amazon DynamoDB |
 | `neo4j` | Neo4j |
 | `geode` | Apache Geode |
+| `elasticsearch` | Elasticsearch |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
