@@ -10,14 +10,15 @@ and various HTTP versions like 1.1, 2 and SPDY.
 
 <!-- toc -->
 
-- [Name](#name)
-- [Status](#status)
-- [Common Attributes](#common-attributes)
-- [HTTP client](#http-client)
-- [HTTP server](#http-server)
-  * [HTTP server definitions](#http-server-definitions)
-  * [HTTP Server semantic conventions](#http-server-semantic-conventions)
-- [HTTP client-server example](#http-client-server-example)
+- [Semantic conventions for HTTP spans](#semantic-conventions-for-http-spans)
+  - [Name](#name)
+  - [Status](#status)
+  - [Common Attributes](#common-attributes)
+  - [HTTP client](#http-client)
+  - [HTTP server](#http-server)
+    - [HTTP server definitions](#http-server-definitions)
+    - [HTTP Server semantic conventions](#http-server-semantic-conventions)
+  - [HTTP client-server example](#http-client-server-example)
 
 <!-- tocstop -->
 
@@ -67,7 +68,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `http.response_content_length` | number | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
 | `http.response_content_length_uncompressed` | number | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
 
-**[1]:** `http.url` MUST NOT contain the password if it is passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value can be set as `https://username:@www.example.com/` or `https://www.example.com/`.
+**[1]:** `http.url` MUST NOT contain any credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
 **[2]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 

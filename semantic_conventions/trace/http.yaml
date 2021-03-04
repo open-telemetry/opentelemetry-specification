@@ -17,8 +17,8 @@ groups:
             Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
             Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
         note: >
-          `http.url` MUST NOT contain the password if it is passed via URL in form of `https://username:password@www.example.com/`.
-          In such case the attribute's value can be set as `https://username:@www.example.com/` or `https://www.example.com/`.
+          `http.url` MUST NOT contain any credentials passed via URL in form of `https://username:password@www.example.com/`.
+          In such case the attribute's value should be `https://www.example.com/`.
         examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
       - id: target
         type: string
