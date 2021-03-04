@@ -28,5 +28,4 @@
 | `ppc32` | 32-bit PowerPC |
 | `ppc64` | 64-bit PowerPC |
 | `x86` | 32-bit x86 |
-| `other` | Indistinguishable or unknown |
 <!-- endsemconv -->

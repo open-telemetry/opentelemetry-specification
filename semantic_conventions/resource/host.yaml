@@ -46,9 +46,6 @@ groups:
             - id: x86
               value: 'x86'
               brief: "32-bit x86"
-            - id: other
-              value: 'other'
-              brief: 'Indistinguishable or unknown'
         brief: >
             The CPU architecture the host system is running on.
       - id: image.name
