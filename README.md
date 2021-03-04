@@ -1,6 +1,6 @@
 # OpenTelemetry Specification
 
-[![Checks](https://github.com/open-telemetry/opentelemetry-specification/workflows/Checks/badge.svg?branch=master)](https://github.com/open-telemetry/opentelemetry-specification/actions?query=workflow%3A%22Checks%22+branch%3Amaster)
+[![Checks](https://github.com/open-telemetry/opentelemetry-specification/workflows/Checks/badge.svg?branch=main)](https://github.com/open-telemetry/opentelemetry-specification/actions?query=workflow%3A%22Checks%22+branch%3Amain)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/open-telemetry/specification.svg)
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
@@ -30,13 +30,13 @@ Technical committee holds regular meetings, notes are held
   - [Package/Library Layout](specification/library-layout.md)
   - [General error handling guidelines](specification/error-handling.md)
 - API Specification
-  - [Baggage](specification/baggage/api.md)
+  - [Context](specification/context/context.md)
     - [Propagators](specification/context/api-propagators.md)
+  - [Baggage](specification/baggage/api.md)
   - [Tracing](specification/trace/api.md)
   - [Metrics](specification/metrics/api.md)
 - SDK Specification
   - [Tracing](specification/trace/sdk.md)
-  - [Metrics](specification/metrics/sdk.md)
   - [Resource](specification/resource/sdk.md)
   - [Configuration](specification/sdk-configuration.md)
 - Data Specification
@@ -83,4 +83,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details on contribution process.
 
 ## License
 
-By contributing to OpenTelemetry Specification repository, you agree that your contributions will be licensed under its [Apache 2.0 License](https://github.com/open-telemetry/specification/blob/master/LICENSE).
+By contributing to OpenTelemetry Specification repository, you agree that your contributions will be licensed under its [Apache 2.0 License](https://github.com/open-telemetry/specification/blob/main/LICENSE).

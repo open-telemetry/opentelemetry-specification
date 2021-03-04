@@ -1,5 +1,7 @@
 # Semantic conventions for RPC spans
 
+**Status**: [Experimental](../../document-status.md)
+
 This document defines how to describe remote procedure calls
 (also called "remote method invocations" / "RMI") with spans.
 
@@ -35,7 +37,7 @@ The _span name_ MUST be the full RPC method name formatted as:
 $package.$service/$method
 ```
 
-(where $service must not contain dots and $method must not contain slashes)
+(where $service MUST NOT contain dots and $method MUST NOT contain slashes)
 
 If there is no package name or if it is unknown, the `$package.` part (including the period) is omitted.
 

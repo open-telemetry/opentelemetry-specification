@@ -1,5 +1,7 @@
 # Semantic conventions for database client calls
 
+**Status**: [Experimental](../../document-status.md)
+
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
@@ -103,6 +105,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `dynamodb` | Amazon DynamoDB |
 | `neo4j` | Neo4j |
 | `geode` | Apache Geode |
+| `elasticsearch` | Elasticsearch |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
