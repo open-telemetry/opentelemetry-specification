@@ -41,9 +41,9 @@
 | `azure_aks` | Azure Kubernetes Service |
 | `azure_functions` | Azure Functions |
 | `azure_app_service` | Azure App Service |
-| `gcp_compute_engine` | Google Compute Engine |
+| `gcp_compute_engine` | Google Cloud Compute Engine (GCE) |
 | `gcp_cloud_run` | Google Cloud Run |
-| `gcp_kubernetes_engine` | Google Kubernetes Engine |
-| `gcp_cloud_functions` | Google Cloud Functions |
-| `gcp_app_engine` | Google Cloud App Engine |
+| `gcp_kubernetes_engine` | Google Cloud Kubernetes Engine (GKE) |
+| `gcp_cloud_functions` | Google Cloud Functions (GCF) |
+| `gcp_app_engine` | Google Cloud App Engine (GAE) |
 <!-- endsemconv -->
