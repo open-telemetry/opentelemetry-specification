@@ -144,6 +144,9 @@ groups:
               - id: geode
                 value: 'geode'
                 brief: 'Apache Geode'
+              - id: elasticsearch
+                value: 'elasticsearch'
+                brief: 'Elasticsearch'
         - id: connection_string
           tag: connection-level
           type: string
