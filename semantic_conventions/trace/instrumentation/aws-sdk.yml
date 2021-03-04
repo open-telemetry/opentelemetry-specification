@@ -31,6 +31,15 @@ groups:
     prefix: aws.dynamodb
     brief: "Attributes that exist for multiple DynamoDB request types."
     attributes:
+      - ref: db.system
+        brief: "The value `dynamodb`."
+        examples:
+          - dynamodb
+      - ref: db.operation
+        brief: "The same value as `rpc.method`."
+        examples:
+          - GetItem
+          - PutItem
       - id: table_names
         type: string[]
         brief: The keys in the `RequestItems` object field in a request operating on multiple tables.
@@ -68,7 +77,7 @@ groups:
             }'
       - id: item_collection_metrics
         type: string
-        brief: "The JSON-serialized value of the `ItemCollectionmetrics` response field."
+        brief: "The JSON-serialized value of the `ItemCollectionMetrics` response field."
         examples:
           - '{
               "string" : [
