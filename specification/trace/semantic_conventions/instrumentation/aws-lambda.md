@@ -17,9 +17,11 @@ Lambda `Context`.
 
 The following attributes SHOULD be set.
 
-- [`faas.execution`](../faas.md) - This is always available through an accessor on the Lambda `Context`
-- [`faas.id`](../../../resource/semantic_conventions/faas.md) - This is always available through an accessor on the Lambda `Context`
+- [`faas.execution`](../faas.md) - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`
+- [`faas.id`](../../../resource/semantic_conventions/faas.md) - The value of the invocation arn for the function, which is always available through an accessor on the Lambda `Context`
 - [`cloud.account.id`](../../../resource/semantic_conventions/cloud.md) - In some languages, this is available as an accessor on the Lambda `Context`. Otherwise, it can be parsed from the value of `faas.id` as the fifth item when splitting on `:`
+
+### Determining the parent of a span
 
 The parent of the span MUST be determined by considering both the environment and any headers or attributes
 available from the event.
@@ -41,8 +43,8 @@ configuration for a REST API, in which case only a deserialized body payload is 
 gateway is configured to proxy to the Lambda function, the instrumented request handler will have access to all
 the information about the HTTP request in the form of an API Gateway Proxy Request Event.
 
-The Lambda span name SHOULD be set to the `Resource` from the proxy request event, which corresponds to the user
-configured HTTP route instead of the function name.
+The Lambda span name and the [`http.route` span attribute](../http.md) SHOULD be set to the `Resource` from the
+proxy request event, which corresponds to the user configured HTTP route instead of the function name.
 
 [`faas.trigger`](../faas.md) MUST be set to `http`. [HTTP attributes](../http.md) SHOULD be set based on the
 available information in the proxy request event.
@@ -53,10 +55,12 @@ SQS is a message queue that triggers a Lambda function with a batch of messages.
 of a batch and of each individual message. The function invocation span MUST correspond to the SQS event, which
 is the batch of messages. For each message, an additional span SHOULD be created to correspond with the handling
 of the SQS message. Because handling of a message will be inside user business logic, not the Lambda framework,
-automatic instrumentation mechanisms without code change will often not be able to be able to instrument the
-processing of the individual messages.
+automatic instrumentation mechanisms without code change will often not be able to instrument the processing of
+the individual messages.
 
 The span kind for both spans MUST be `CONSUMER`.
+
+### SQS Event
 
 For the SQS event span, if all the messages in the event have the same event source, the name of the span MUST
 be `<event source> process`. If there are multiple sources in the batch, the name MUST be
@@ -70,6 +74,8 @@ added as a link to the span. This means the span may have as many links as messa
 [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
 [`messaging.operation`](../messaging.md) MUST be set to `process`.
 [`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
+
+### SQS Message
 
 For the SQS message span, the name MUST be `<event source> process`.  The parent MUST be the `CONSUMER` span
 corresponding to the SQS event. The message's system attributes (not message attributes, which are provided by
