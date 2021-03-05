@@ -15,6 +15,7 @@ release.
 - Add `runtime` to `container` semantic conventions ([#1482](https://github.com/open-telemetry/opentelemetry-specification/pull/1482))
 - Rename `gcp_gke` to `gcp_kubernetes_engine` to have consistency with other
 Google products under `cloud.infrastructure_service` ([#1496](https://github.com/open-telemetry/opentelemetry-specification/pull/1496))
+- `http.url` MUST NOT contain credentials ([#1502](https://github.com/open-telemetry/opentelemetry-specification/pull/1502))
 
 ## v1.0.1 (2021-02-11)
 
