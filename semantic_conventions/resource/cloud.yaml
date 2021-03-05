@@ -78,19 +78,19 @@ groups:
               brief: Azure App Service
             - id: GCP_ComputeEngine
               value: 'gcp_compute_engine'
-              brief: GCP Compute Engine
+              brief: Google Cloud Compute Engine (GCE)
             - id: GCP_CloudRun
               value: 'gcp_cloud_run'
-              brief: GCP Cloud Run
-            - id: GCP_GKE
-              value: 'gcp_gke'
-              brief: Google Kubernetes Engine
+              brief: Google Cloud Run
+            - id: GCP_KubernetesEngine
+              value: 'gcp_kubernetes_engine'
+              brief: Google Cloud Kubernetes Engine (GKE)
             - id: GCP_CloudFunctions
               value: 'gcp_cloud_functions'
-              brief: GCP Cloud Functions
+              brief: Google Cloud Functions (GCF)
             - id: GCP_AppEngine
               value: 'gcp_app_engine'
-              brief: GCP App Engine
+              brief: Google Cloud App Engine (GAE)
         brief: >
           The cloud infrastructure resource in use.
         note: >
