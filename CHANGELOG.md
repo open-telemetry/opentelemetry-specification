@@ -7,6 +7,7 @@ release.
 
 ## Unreleased
 
+- Adds note that implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
 - Adds `none` as a possible value for OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to disable export
   ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
 - Add [`ForceFlush`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
@@ -14,6 +15,7 @@ release.
 - Add `runtime` to `container` semantic conventions ([#1482](https://github.com/open-telemetry/opentelemetry-specification/pull/1482))
 - Rename `gcp_gke` to `gcp_kubernetes_engine` to have consistency with other
 Google products under `cloud.infrastructure_service` ([#1496](https://github.com/open-telemetry/opentelemetry-specification/pull/1496))
+- `http.url` MUST NOT contain credentials ([#1502](https://github.com/open-telemetry/opentelemetry-specification/pull/1502))
 
 ## v1.0.1 (2021-02-11)
 
