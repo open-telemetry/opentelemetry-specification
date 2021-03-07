@@ -55,11 +55,27 @@ This operation is used to create a new OpenTracing `Tracer`:
 This operation MUST accept the following parameters:
 
 - An OpenTelemetry `Tracer`, used to create `Span`s.
-- A set of OpenTelemetry `Propagator`s of the supported types, used to perform
-  context injection and extraction. Usually these are the global
-  `Composite Propagator`s.
+- OpenTelemetry `Propagator`s to be used to perform injection and extraction
+  for the the OpenTracing `TextMap` and `HTTPHeaders` formats.
+  If not specified, no `Propagator` values will be stored in the Shim, and
+  the global OpenTelemetry `TextMap` propagator will be used for both OpenTracing
+  `TextMap` and `HTTPHeaders` formats.
 
 The API MUST return an OpenTracing `Tracer`.
+
+```java
+// Create a Tracer Shim relying on the global propagators.
+createTracerShim(Tracer tracer);
+
+// Create a Tracer Shim with the specified propagators.
+createTracerShim(Tracer tracer, OTPropagatorsBuilder()
+  .setTextMap(customTextMapPropagator)
+  .setHttpHeaders(anotherCustomTextMapPropagator)
+  .build());
+```
+
+See OpenTracing Propagation
+[Formats](https://github.com/opentracing/specification/blob/master/specification.md#extract-a-spancontext-from-a-carrier).
 
 ## Tracer Shim
 
