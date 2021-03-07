@@ -270,8 +270,8 @@ Parameters:
 
 Gets the [associated](#opentelemetry-span-and-spancontext-relationship)
 `SpanContext` Shim for the specified `Span` and puts its OpenTelemetry
-`Span` and `Bagagge` in a new `Context`, which is then set as the
-currently active instance.
+`Span`, `Baggage` and `Span` Shim objects in a new `Context`,
+which is then set as the currently active instance.
 
 ```java
 Scope activate(Span span) {
@@ -280,21 +280,35 @@ Scope activate(Span span) {
   // Put the associated Span and Baggage in the used Context.
   Context context = Context.current()
     .withValue(spanContextShim.getSpan())
-    .withValue(spanContextShim.getBaggage());
+    .withValue(spanContextShim.getBaggage())
+    .withValue((SpanShim)spanShim);
 
-  // Set the Context as the current instance.
+  // Set context as the current instance.
   return context.makeCurrent();
 }
 ```
 
 ### Get the active Span
 
-Gets the active OpenTelemetry `Span` and returns a `Span` Shim wrapping it.
+Returns a `Span` Shim wrapping the currently active OpenTelemetry `Span`.
 
-The API MUST return null if none exist.
+If there are related OpenTelemetry `Span` and `Span` Shim objects in the
+current `Context`, the `Span` Shim MUST be returned. Else, a new `Span` Shim
+referencing the OpenTelemetry `Span` MUST be created and returned.
+
+The API MUST return null if no actual OpenTelemetry `Span` is set.
 
 ```java
 Span active() {
+  io.opentelemetry.api.trace.Span span = Span.fromContext(Context.current());
+  SpanShim spanShim = SpanShim.fromContext(Context.current());
+
+  // Span was activated through the Shim layer, re-use it.
+  if (spanShim != null && spanShim.getSpan() == span) {
+    return spanShim;
+  }
+
+  // Span was NOT activated through the Shim layer.
   new SpanShim(Span.current());
 }
 ```
