@@ -229,7 +229,7 @@ Parameters:
 - A set of key/value pairs, where keys must be strings, and the values may have
   any type.
 
-Calls `Add Event` on the underlying OpenTelemetry `Span` with the specified
+Calls `Add Events` on the underlying OpenTelemetry `Span` with the specified
 key/value pair set.
 
 The `Add Event`'s `name` parameter MUST be the value with the `event` key in
@@ -258,7 +258,7 @@ backed by the associated OpenTelemetry `Baggage` values.
 
 ## ScopeManager Shim
 
-For OpenTracing languages implementing the `ScopeManager` interface,  its operations
+For OpenTracing languages implementing the `ScopeManager` interface, its operations
 MUST be implemented using the OpenTelemetry Context Propagation API in order
 to get and set active `Context` instances.
 
@@ -312,4 +312,3 @@ Span active() {
   new SpanShim(Span.current());
 }
 ```
-
