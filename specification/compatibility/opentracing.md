@@ -18,12 +18,11 @@
   * [Set Tag](#set-tag)
   * [Log](#log)
   * [Finish](#finish)
-  * [SpanContext Shim](#spancontext-shim)
-    * [Get Baggage Items](#get-baggage-items)
+* [SpanContext Shim](#spancontext-shim)
+  * [Get Baggage Items](#get-baggage-items)
 * [ScopeManager Shim](#scopemanager-shim)
   * [Activate a Span](#activate-a-span)
   * [Get the active Span](#get-the-active-span)
-* [Semantic conventions mapping](#semantic-conventions-mapping)
 
 </details>
 
@@ -169,6 +168,12 @@ This is accomplished by getting the
 `SpanContext` Shim and do a lookup for the specified key in the OpenTelemetry
 `Baggage` instance.
 
+```java
+String getBaggageItem(String key) {
+  getSpanContextShim().getBaggage().getEntryValue(key);
+}
+```
+
 ### Set Baggage Item
 
 Parameters:
@@ -181,6 +186,20 @@ the specified `Baggage` key/value pair. The resulting `SpanContext` Shim is then
 [associated](#opentelemetry-span-and-spancontext-relationship) to the underlying
 OpenTelemetry `Span`.
 
+```java
+void setBaggageItem(String key, String value) {
+  SpanContextShim spanContextShim = getSpanContextShim();
+
+  // Add value/key to the existing Baggage.
+  Baggage newBaggage = spanContextShim.getBaggage().toBuilder()
+    .put(key, value)
+    .build();
+
+  // Set a new SpanContext Shim object with the updated Baggage.
+  setSpanContextShim(spanContextShim.newWithBaggage(newBaggage));
+}
+```
+
 ### Set Tag
 
 Parameters:
@@ -191,11 +210,17 @@ Parameters:
 Calls `Set Attribute` on the underlying OpenTelemetry `Span` with the specified
 key/value pair.
 
-The value MUST be [mapped](#semantic-conventions-mapping) to the respective
-OpenTelemetry `Attribute`, or converted to a string if the value type is not supported.
+Certain values MUST be mapped from
+[OpenTracing Span Tags](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#standard-span-tags-and-log-fields)
+to the respective OpenTelemetry `Attribute`:
 
-If the type of the specified value is not supported, the value MUST be converted
-to a string.
+- `error` maps to [StatusCode](../trace/api.md##set-status):
+  - `true` maps to `Error`.
+  - `false` maps to `Ok`.
+  - no value being set maps to `Unset`.
+
+If the type of the specified value is not supported by the OTel API, the value
+MUST be converted to a string.
 
 ### Log
 
@@ -210,9 +235,6 @@ key/value pair set.
 The `Add Event`'s `name` parameter MUST be the value with the `event` key in
 the pair set, or else fallback to use the `log` literal string.
 
-The set of values MUST be [mapped](#semantic-conventions-mapping) to the respective
-OpenTelemetry `Attribute`, or converted to a string if the value type is not supported.
-
 If an explicit timestamp is specified, a conversion MUST be done to match the
 OpenTracing and OpenTelemetry units.
 
@@ -223,13 +245,13 @@ Calls `End` on the underlying OpenTelemetry `Span`.
 If an explicit timestamp is specified, a conversion MUST be done to match the
 OpenTracing and OpenTelemetry units.
 
-### SpanContext Shim
+## SpanContext Shim
 
 The `SpanContext` Shim MUST contain the associated `Span` and `Baggage` values.
 
 This object MUST be immutable.
 
-#### Get Baggage Items
+### Get Baggage Items
 
 Returns a dictionary, collection, or iterator (depending on the requirements of the OpenTracing API for a specific language)
 backed by the associated OpenTelemetry `Baggage` values.
@@ -248,8 +270,22 @@ Parameters:
 
 Gets the [associated](#opentelemetry-span-and-spancontext-relationship)
 `SpanContext` Shim for the specified `Span` and puts its OpenTelemetry
-`SpanContext` and `Bagagge` in a new `Context`, which is then set as the
+`Span` and `Bagagge` in a new `Context`, which is then set as the
 currently active instance.
+
+```java
+Scope activate(Span span) {
+  SpanContextShim spanContextShim = getSpanContextShim(span);
+
+  // Put the associated Span and Baggage in the used Context.
+  Context context = Context.current()
+    .withValue(spanContextShim.getSpan())
+    .withValue(spanContextShim.getBaggage());
+
+  // Set the Context as the current instance.
+  return context.makeCurrent();
+}
+```
 
 ### Get the active Span
 
@@ -257,14 +293,9 @@ Gets the active OpenTelemetry `Span` and returns a `Span` Shim wrapping it.
 
 The API MUST return null if none exist.
 
-## Semantic Conventions Mapping
+```java
+Span active() {
+  new SpanShim(Span.current());
+}
+```
 
-The OpenTracing Shim MUST map certain elements when calling the underlying
-OpenTelemetry API.
-
-[OpenTracing Span Tags](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#standard-span-tags-and-log-fields):
-
-- `error` maps to [StatusCode](../trace/api.md##set-status):
-  - `true` maps to `Error`.
-  - `false` maps to `Ok`.
-  - no value being set maps to `Unset`.
