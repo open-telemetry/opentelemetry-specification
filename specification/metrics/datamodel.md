@@ -144,7 +144,7 @@ these models.
 The OpenTelemetry data model for metrics includes four basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
-same kind. [^otlppointkindcaveat]
+same kind. <sup>[1](#otlpdatapointfn)</sup>
 
 The basic point kinds are:
 
@@ -184,4 +184,8 @@ Pending
 
 Pending
 
-[^otlppointkindcaveat]: OTLP supports data point kinds that do not satisfy these conditions; they are well-defined but do not support standard metric data transformations.
+## Footnotes
+
+<a name="otlpdatapointfn">1</a>: OTLP supports data point kinds that do not
+satisfy these conditions; they are well-defined but do not support standard
+metric data transformations.
