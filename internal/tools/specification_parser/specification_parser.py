@@ -2,6 +2,7 @@ from re import finditer, findall
 from json import dumps
 from os.path import curdir, abspath, join, splitext
 from os import walk
+from ipdb import set_trace
 
 
 def find_markdown_file_paths(root):
@@ -31,9 +32,9 @@ def parse_requirements(markdown_file_paths):
             requirement_matches = [
                 requirement_match.groupdict() for requirement_match in (
                     finditer(
-                        r"###### requirement:\s(?P<key>[_\w]+)\n"
-                        r"(?P<description>(>.*\n?)+)",
-                        text
+                        r"###### requirement:\s(?P<key>[_\w]+)\n\n"
+                        r"(?P<description>(>.*\n)+)",
+                        text,
                     )
                 )
             ]
@@ -42,6 +43,8 @@ def parse_requirements(markdown_file_paths):
             continue
 
         json_file_path = "".join([splitext(markdown_file_path)[0], ".json"])
+
+        set_trace()
 
         requirements[json_file_path] = {}
 
@@ -61,11 +64,23 @@ def parse_requirements(markdown_file_paths):
             BCP_14_keyword_matches = []
 
             for BCP_14_keyword_regex in [
+                # 2. MUST NOT
                 r"MUST NOT",
+                r"SHALL NOT",
+                # 1. MUST
                 r"MUST(?! NOT)",
+                r"REQUIRED",
+                r"SHALL(?! NOT)",
+                # 4. SHOULD NOT
                 r"SHOULD NOT",
+                r"NOT RECOMMENDED",
+                # 3. SHOULD
                 r"SHOULD(?! NOT)",
-                r"MAY"
+                r"(?>!NOT )RECOMMENDED",
+                # 5. MAY
+                r"MAY",
+                r"OPTIONAL",
+
             ]:
                 BCP_14_keyword_matches.extend(
                     findall(
@@ -81,12 +96,6 @@ def parse_requirements(markdown_file_paths):
             assert (
                 len(BCP_14_keyword_matches) != 0
             ), "No BCP 14 keywords were found in {}".format(
-                requirement_key_path
-            )
-
-            assert (
-                len(BCP_14_keyword_matches) == 1
-            ), "Repeated BCP 14 keywords were found in {}".format(
                 requirement_key_path
             )
 

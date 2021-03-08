@@ -18,6 +18,9 @@ class TestSpecificationParser(TestCase):
         cls.test_specification_md_path = join(
             cls.current_directory_path, "test_specification.md"
         )
+        cls.parsed_requirements = parse_requirements(
+            [cls.test_specification_md_path]
+        )
 
     def test_find_markdown_file_paths(self):
 
@@ -26,7 +29,7 @@ class TestSpecificationParser(TestCase):
             [self.test_specification_md_path]
         )
 
-    def test_parse_requirements(self):
+    def test_parse_section_0(self):
 
         assert parse_requirements([self.test_specification_md_path]) == {
             (
