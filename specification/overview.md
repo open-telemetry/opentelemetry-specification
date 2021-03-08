@@ -75,6 +75,13 @@ The **Semantic Conventions** define the keys and values which describe commonly 
 * [Span Conventions](trace/semantic_conventions/README.md)
 * [Metrics Conventions](metrics/semantic_conventions/README.md)
 
+Both the collector and the libraries SHOULD autogenerate semantic
+convention keys into constants (or language idomatic equivalent).
+The [YAML](../semantic_conventions) files MUST be used as the 
+source of truth for generation. Each language implementation SHOULD 
+provide language-specific support to the
+[code generator](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#code-generator).
+
 ### Contrib Packages
 
 The OpenTelemetry project maintains integrations with popular OSS projects which have been identified as important for observing modern web services.
