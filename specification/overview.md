@@ -264,9 +264,12 @@ supports both - push and pull model of setting the `Metric` value.
 
 ### Metrics data model and SDK
 
-Metrics data model is defined in SDK and is based on
+Metrics data model is [specified here](metrics/datamodel.md) and is based on
 [metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
-This data model is used by all the OpenTelemetry exporters as an input.
+This data model defines three semantics: An Event model used by the API, an
+in-flight data model used by the SDK and OTLP, and a TimeSeries model which
+denotes how exporters should interpret the in-flight model.
+
 Different exporters have different capabilities (e.g. which data types are
 supported) and different constraints (e.g. which characters are allowed in label
 keys). Metrics is intended to be a superset of what's possible, not a lowest
@@ -278,6 +281,9 @@ characters are allowed in keys), and code dealing with Metrics should avoid
 validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
+
+See [Metrics Data Model Specification](metrics/datamodel.md) for more
+information.
 
 ## Log Signal
 
