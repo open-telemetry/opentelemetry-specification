@@ -10,8 +10,8 @@
 * [Tracer Shim](#tracer-shim)
   * [Inject](#inject)
   * [Extract](#extract)
+* [OpenTelemetry Span and SpanContext relationship](#opentelemetry-span-and-spancontext-relationship)
 * [Span Shim](#span-shim)
-  * [OpenTelemetry Span and SpanContext relationship](#opentelemetry-span-and-spancontext-relationship)
   * [Get Context](#get-context)
   * [Get Baggage Item](#get-baggage-item)
   * [Set Baggage Item](#set-baggage-item)
@@ -114,19 +114,38 @@ Returns a `SpanContext` Shim with the underlying extracted OpenTelemetry
 or no value could be extracted, depending on the specific OpenTracing Language API
 (e.g. Go and Python do, but Java may not).
 
-## Span Shim
+## OpenTelemetry Span and SpanContext Shim relationship
 
-The OpenTracing `Span` operations MUST be implemented using underlying OpenTelemetry `Span`
-and `Baggage` values through a `SpanContext` Shim.
+OpenTracing `SpanContext`, just as OpenTelemetry `SpanContext`, MUST be
+immutable, but it MUST also store `Baggage`. Hence, it MUST be replaced
+every time baggage is updated through the OpenTracing
+[Span Set Baggage Item](#set-baggage-item) operation. Special handling
+MUST be done by the Shim layer in order to retain these invariants.
 
-In order to satisfy the OpenTracing `Span` requirements:
+Because of the previous requirement, a given OpenTelemetry `Span`
+MUST be associated with ONE AND ONLY ONE `SpanContext` Shim object at all times
+for ALL execution units, in order to keep any linked `Baggage` consistent
+at all times. It MUST BE safe to get and set the associated `SpanContext` Shim
+object for a specified OpenTelemetry `Span` from different execution units.
 
-- The associated `SpanContext` Shim object will contain an OpenTelemetry `SpanContext`
-  and a `Baggage`. The `SpanContext` Shim MUST be immutable and MUST be
-  replaced every time baggage is updated through [Set Baggage Item](#set-baggage-item).
-- An underlying OpenTelemetry `Span` MUST be associated with only one
-  `SpanContext` Shim at a time. This is done in order to keep its linked `Baggage`
-  consistent across all execution units at all times.
+An example showing the need for these requirements is having an OpenTracing `Span`
+have its [Set Baggage Item](#set-baggage-item) operation called from two different
+execution units (e.g. threads, coroutines), and afterwards have its
+[Context](#get-context) fetched in order to
+[iterate over its baggage values](#get-baggage-items).
+
+```java
+// Thread A: New SpanContextShim and Baggage values are created.
+openTracingSpan.setBaggageItem("1", "a")
+
+// Thread B: New SpanContextShim and Baggage values are created again.
+openTracingSpan.setBaggageItem("2", "b")
+
+// Thread C: Up-to-date SpanContextShim and Bagggage values are retrieved.
+for (Map.Entry<String, String> entry : openTracingSpan.context().baggageItems()) {
+  ...
+}
+```
 
 This is a simple graphical representation of the mentioned objects:
 
@@ -138,34 +157,24 @@ This is a simple graphical representation of the mentioned objects:
         +- OpenTelemetry Baggage
 ```
 
-The OpenTelemetry `Span` in `Span` Shim is also used to get and set
-its currently associated `SpanContext` Shim. See
-[OpenTelemetry Span and SpanContext relationship](#opentelemetry-span-and-spancontext-relationship).
+The OpenTelemetry `Span` in the `Span` Shim object is used to get and set
+its currently associated `SpanContext` Shim.
+
+Managing this one-to-one relationship between an OpenTelemetry `Span` and
+a `SpanContext` Shim object is an implementation detail. It can be implemented,
+for example, with the help of a global synchronized dictionary, or with an
+additional attribute in each OpenTelemetry `Span` object for dynamic languages.
+
+## Span Shim
+
+The OpenTracing `Span` operations MUST be implemented using underlying OpenTelemetry `Span`
+and `Baggage` values with the help of a `SpanContext` Shim object.
 
 The `Log` operations MUST be implemented using the OpenTelemetry
 `Span`'s `Add Events` operations.
 
 The `Set Tag` operations MUST be implemented using the OpenTelemetry
 `Span`'s `Set Attributes` operations.
-
-### OpenTelemetry Span and SpanContext relationship
-
-A given OpenTelemetry `Span` MUST be associated with only one
-`SpanContext` Shim at all times for all execution units, in order
-to keep any linked `Baggage` consistent across all execution
-units at all times.
-
-An example of this scenario is having an OpenTracing `Span` have its
-[Set Baggage Item](#set-baggage-item) operation called from two different
-execution units (e.g. threads), and afterwards have its [Context](#get-context)
-fetched in order to [iterate over its baggage values](#get-baggage-items).
-
-Getting and setting the currently associated `SpanContext` for a specified
-OpenTelemetry `Span` MUST be safe to call from different execution units.
-
-Managing this relationship is an implementation detail. It can be implemented,
-for example, with the help of a global synchronized dictionary, or with an
-additional attribute in OpenTelemetry `Span` objects for dynamic languages.
 
 ### Get Context
 
@@ -265,14 +274,14 @@ OpenTracing and OpenTelemetry units.
 
 ## SpanContext Shim
 
-The `SpanContext` Shim MUST contain the associated `Span` and `Baggage` values.
-
-This object MUST be immutable.
+`SpanContext` Shim MUST be immutable and MUST contain the associated
+`SpanContext` and `Baggage` values.
 
 ### Get Baggage Items
 
-Returns a dictionary, collection, or iterator (depending on the requirements of the OpenTracing API for a specific language)
-backed by the associated OpenTelemetry `Baggage` values.
+Returns a dictionary, collection, or iterator (depending on the requirements of
+the OpenTracing API for a specific language) backed by the associated OpenTelemetry
+`Baggage` values.
 
 ## ScopeManager Shim
 
