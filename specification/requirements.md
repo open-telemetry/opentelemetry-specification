@@ -36,7 +36,7 @@ the specific requirements that the OpenTelemetry specification has.
 Each of these requirement sections has 2 components:
 
 1. A unique **key**, a string that identifies the requirement section in a Markdown document
-2. A **description**, a string that MUST have one and only one of the [BCP 14 keywords](https://tools.ietf.org/html/bcp14).
+2. A **description**, a string that MUST include at least one of the [BCP 14 keywords](https://tools.ietf.org/html/bcp14).
 
 ### Requirement Sections Format
 
@@ -69,7 +69,7 @@ The description of every requirement section MUST be written as a
 > More text can be placed here as well.
 ```
 
-In some part of the description one and only one RFC 2119 keyword MUST appear.
+In some part of the description one and only one BCP 14 keyword MUST appear.
 
 #### Example
 
@@ -127,5 +127,5 @@ python specification_parser/specification_parser.py
 ```
 
 This will recursively look for Markdown files in the `specification` directory. For every Markdown file that has at
-least one requirement section, it will generate a corresponding JSON file with the key, description and RFC 2119
+least one requirement section, it will generate a corresponding JSON file with the key, description and BCP 14
 keyword or every requirement section.

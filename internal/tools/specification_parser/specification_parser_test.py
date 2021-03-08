@@ -35,41 +35,41 @@ class TestSpecificationParser(TestCase):
             ): {
                 "testable_section_0": {
                     "description": "> This MUST be done.",
-                    "RFC 2119 Keyword": "MUST"
+                    "BCP 14 Keyword": "MUST"
                 },
                 "testable_section_1": {
                     "description": "> This MUST NOT be done.",
-                    "RFC 2119 Keyword": "MUST NOT"
+                    "BCP 14 Keyword": "MUST NOT"
                 },
                 "testable_section_2": {
                     "description": "> This SHOULD be done.",
-                    "RFC 2119 Keyword": "SHOULD"
+                    "BCP 14 Keyword": "SHOULD"
                 },
                 "testable_section_3": {
                     "description": "> This SHOULD NOT be done.",
-                    "RFC 2119 Keyword": "SHOULD NOT"
+                    "BCP 14 Keyword": "SHOULD NOT"
                 },
                 "testable_section_4": {
                     "description": "> This MAY be done.",
-                    "RFC 2119 Keyword": "MAY"
+                    "BCP 14 Keyword": "MAY"
                 },
                 "testable_section_5": {
                     "description": "> This **MAY** be done 5.",
-                    "RFC 2119 Keyword": "MAY"
+                    "BCP 14 Keyword": "MAY"
                 },
                 "testable_section_6": {
                     "description": "> This *MAY* be done 6.",
-                    "RFC 2119 Keyword": "MAY"
+                    "BCP 14 Keyword": "MAY"
                 },
                 "testable_section_7": {
                     "description": (
                         "> This *MAY* be done 7.\n> This is section 7."
                     ),
-                    "RFC 2119 Keyword": "MAY"
+                    "BCP 14 Keyword": "MAY"
                 },
                 "testable_section_8": {
                     "description": "> This *MAY* be done 8.",
-                    "RFC 2119 Keyword": "MAY"
+                    "BCP 14 Keyword": "MAY"
                 },
                 "testable_section_9": {
                     "description": (
@@ -77,7 +77,7 @@ class TestSpecificationParser(TestCase):
                         "> 1. Item 1\n> 2. Item 2\n>    1. Item 2.1\n"
                         ">    2. Item 2.2"
                     ),
-                    "RFC 2119 Keyword": "MAY"
+                    "BCP 14 Keyword": "MAY"
                 }
             }
         }

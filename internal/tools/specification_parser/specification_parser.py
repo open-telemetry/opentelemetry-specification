@@ -58,18 +58,18 @@ def parse_requirements(markdown_file_paths):
 
             requirement_description = requirement["description"].strip()
 
-            RFC_2119_keyword_matches = []
+            BCP_14_keyword_matches = []
 
-            for RFC_2119_keyword_regex in [
+            for BCP_14_keyword_regex in [
                 r"MUST NOT",
                 r"MUST(?! NOT)",
                 r"SHOULD NOT",
                 r"SHOULD(?! NOT)",
                 r"MAY"
             ]:
-                RFC_2119_keyword_matches.extend(
+                BCP_14_keyword_matches.extend(
                     findall(
-                        RFC_2119_keyword_regex,
+                        BCP_14_keyword_regex,
                         requirement_description
                     )
                 )
@@ -79,14 +79,14 @@ def parse_requirements(markdown_file_paths):
             )
 
             assert (
-                len(RFC_2119_keyword_matches) != 0
-            ), "No RFC 2119 keywords were found in {}".format(
+                len(BCP_14_keyword_matches) != 0
+            ), "No BCP 14 keywords were found in {}".format(
                 requirement_key_path
             )
 
             assert (
-                len(RFC_2119_keyword_matches) == 1
-            ), "Repeated RFC 2119 keywords were found in {}".format(
+                len(BCP_14_keyword_matches) == 1
+            ), "Repeated BCP 14 keywords were found in {}".format(
                 requirement_key_path
             )
 
@@ -96,8 +96,8 @@ def parse_requirements(markdown_file_paths):
                 requirement_description
             )
             requirements[json_file_path][requirement_key][
-                "RFC 2119 Keyword"
-            ] = RFC_2119_keyword_matches[0]
+                "BCP 14 Keyword"
+            ] = BCP_14_keyword_matches[0]
 
     return requirements
 
