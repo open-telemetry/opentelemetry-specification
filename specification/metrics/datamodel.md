@@ -119,7 +119,13 @@ decisions within the metrics data model.
 
 ## Model Details
 
-TODO(jsuereth): Recap split of 3 pieces
+OpenTelemetry fragments metrics into three interacting models:
+
+- An Event model, representing how instrumentation reports metric data.
+- A TimeSeries model, representing how backends store metric data.
+- The *O*pen*T*e*L*emetry *P*rotocol (OTLP) data model representing how metrics
+  are manipulated and transmitted between the Event model and the TimeSeries
+  storage.
 
 ### Event Model
 
@@ -174,7 +180,7 @@ is no delta temporality in the timeseries model. To precisely define presence
 and absence of data requires further development of the correspondence between
 these models.
 
-### OpenTelemetry data model
+### OpenTelemetry Protocol data model
 
 The OpenTelemetry data model for metrics includes four basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable

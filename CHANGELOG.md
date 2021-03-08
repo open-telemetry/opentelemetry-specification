@@ -17,6 +17,7 @@ release.
 - Rename `gcp_gke` to `gcp_kubernetes_engine` to have consistency with other
 Google products under `cloud.infrastructure_service` ([#1496](https://github.com/open-telemetry/opentelemetry-specification/pull/1496))
 - `http.url` MUST NOT contain credentials ([#1502](https://github.com/open-telemetry/opentelemetry-specification/pull/1502))
+- Adds new metric data model specification ([#1512](https://github.com/open-telemetry/opentelemetry-specification/pull/1512))
 
 ## v1.0.1 (2021-02-11)
 
