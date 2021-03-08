@@ -93,7 +93,8 @@ OpenTelemetry `Propagator`s:
 - `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered OpenTelemetry
   `HTTPTextPropagator`, if any.
 
-Errors MUST NOT be raised if the specified `Format` is `BINARY`.
+Errors MAY be raised if the specified `Format` is not recognized, depending
+on the specific OpenTracing Language API (e.g. Go and Python do, but Java may not).
 
 ### Extract
 
@@ -109,8 +110,9 @@ OpenTelemetry `Propagator`s:
   `HTTPTextPropagator`, if any.
 
 Returns a `SpanContext` Shim with the underlying extracted OpenTelemetry
-`Span` and `Baggage`, or null if either the `Format` is `BINARY` or
-no value could be extracted.
+`Span` and `Baggage`. Errors MAY be raised if either the `Format` is not recognized
+or no value could be extracted, depending on the specific OpenTracing Language API
+(e.g. Go and Python do, but Java may not).
 
 ## Span Shim
 
