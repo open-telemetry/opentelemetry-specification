@@ -1,6 +1,38 @@
 # Metrics Data Model
 
-TODO(jsuereth): Write introduction
+**Status**: [Experimental](../document-status.md)
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+<!-- tocstop -->
+
+## Overview
+
+The OpenTelemetry data model for metrics consists of a protocol specification
+and semantic conventions for delivery of pre-aggregated metric timeseries data.
+The data model is designed for importing data from existing systems and
+exporting data into existing systems, as well as to support internal
+OpenTelemetry use-cases for generating Metrics from streams of Spans or Logs.
+
+Popular existing metrics data formats can be unambiguously translated into the
+OpenTelemetry data model for metrics, without loss of semantics or fidelity.
+Translation from the Prometheus and Statsd exposition formats is explicitly
+specified.
+
+The data model specifies a number of semantics-preserving data transformations
+for use on the collection path, supporting flexible system configuration. The
+model supports reliability and statelessness controls, through the choice of
+cumulative and delta transport. The model supports cost controls, through
+spatial and temporal reaggregation.
+
+The OpenTelemetry collector is designed to accept metrics data in a number of
+formats, transport data using the OpenTelemetry data model, and then export into
+existing systems. The data model can be unambiguously translated into the
+Prometheus Remote Write protocol without loss of features or semantics, through
+well-defined translations of the data, including the ability to automatically
+remove attributes and lower histogram resolution.
 
 ## Events → Data → Timeseries
 
@@ -53,7 +85,9 @@ inside the SDK or by an external collector.
 
 ### Example Use-cases
 
-TODO(jsuereth): Flesh this out
+The metric data model is designed around a series of "core" use cases.  While
+this list is not exhaustive, it is meant to be representative of the scope and
+breadth of OTel metrics usage.
 
 1. OTel SDK exports 10 second resolution to a single OTel collector, using
   cumulative temporality for a stateful client, stateless server:
@@ -78,6 +112,7 @@ TODO(jsuereth): Flesh this out
 5. OTel collector receives Statsd and exports OTLP
     - With delta temporality: stateless collector
     - With cumulative temporality: stateful collector
+6. OTel SDK exports directly to 3P backend
 
 These are considered the "core" use-cases used to analyze tradeoffs and design
 decisions within the metrics data model.
@@ -186,6 +221,6 @@ Pending
 
 ## Footnotes
 
-<a name="otlpdatapointfn">1</a>: OTLP supports data point kinds that do not
+<a name="otlpdatapointfn">[1]</a>: OTLP supports data point kinds that do not
 satisfy these conditions; they are well-defined but do not support standard
 metric data transformations.
