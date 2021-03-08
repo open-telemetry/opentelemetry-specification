@@ -62,7 +62,7 @@ The mechanism by which end users set or register a custom error handler should f
 ### Examples
 
 These are examples of how end users might register custom error handlers.
-Examples are for illustration purposes only. OpenTelemetry client authors
+Examples are for illustration purposes only. OpenTelemetry library authors
 are free to deviate from these provided that their design matches the requirements outlined above.
 
 #### Go

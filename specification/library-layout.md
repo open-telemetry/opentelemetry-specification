@@ -1,12 +1,12 @@
-# OpenTelemetry Project Package Layout
+# OpenTelemetry Library Package Layout
 
-This documentation serves to document the "look and feel" of a basic layout for OpenTelemetry
-projects. This package layout is intentionally generic and it doesn't try to impose a language
-specific package structure.
+This documentation serves to document the "look and feel" of the basic layout of
+OpenTelemetry libraries. This layout is intentionally generic and it doesn't
+try to impose a language specific package structure.
 
 ## API Package
 
-Here is a proposed generic package structure for OpenTelemetry API package.
+Here is a proposed generic package structure for OpenTelemetry library API packages.
 
 A typical top-level directory layout:
 
@@ -56,7 +56,7 @@ Private application and library code.
 
 ## SDK Package
 
-Here is a proposed generic package structure for OpenTelemetry SDK package.
+Here is a proposed generic package structure for OpenTelemetry library SDK package.
 
 A typical top-level directory layout:
 

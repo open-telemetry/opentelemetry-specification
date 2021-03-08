@@ -1,4 +1,4 @@
-# Versioning and stability for OpenTelemetry clients
+# Versioning and stability for OpenTelemetry Libraries
 
 **Status**: [Stable](document-status.md)
 
@@ -30,9 +30,9 @@
 
 <!-- tocstop -->
 
-This document defines the stability guarantees offered by the OpenTelemetry clients, along with the rules and procedures for meeting those guarantees.
+This document defines the stability guarantees offered by the OpenTelemetry libraries, along with the rules and procedures for meeting those guarantees.
 
-In this document, the terms "OpenTelemetry" and "language implementations" both specifically refer to the OpenTelemetry clients.
+In this document, the terms "OpenTelemetry" and "language implementations" both specifically refer to the OpenTelemetry libraries.
 These terms do not refer to the specification or the Collector in this document.
 
 Each language implementation MUST take these versioning and stability requirements, and produce a language-specific document which details how these requirements will be met.
@@ -76,9 +76,9 @@ Components SHOULD NOT be expected to be feature-complete.
 In some cases, the experiment MAY be discarded and removed entirely.
 Long-term dependencies SHOULD NOT be taken against experimental signals.
 
-OpenTelemetry clients MUST be designed in a manner that allows experimental signals to be created without breaking the stability guarantees of existing signals.
+OpenTelemetry libraries MUST be designed in a manner that allows experimental signals to be created without breaking the stability guarantees of existing signals.
 
-OpenTelemetry clients MUST NOT be designed in a manner that breaks existing users when a signal transitions from experimental to stable. This would punish users of the release candidate, and hinder adoption.
+OpenTelemetry libraries MUST NOT be designed in a manner that breaks existing users when a signal transitions from experimental to stable. This would punish users of the release candidate, and hinder adoption.
 
 Terms which denote stability, such as "experimental," MUST NOT be used as part of a directory or import name.
 Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or -experimental, to differentiate stable and experimental packages.
@@ -171,9 +171,9 @@ We invented a new tracing API, but continue to support the old one.
 
 ## Version numbers
 
-OpenTelemetry clients follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
+OpenTelemetry libraries follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
 
-OpenTelemetry clients have four components: API, SDK, Semantic Conventions, and Contrib.
+OpenTelemetry libraries have four components: API, SDK, Semantic Conventions, and Contrib.
 
 For the purposes of versioning, all code within a component MUST treated as if it were part of a single package, and versioned with the same version number,
 except for Contrib, which may be a collection of packages versioned separately.
@@ -204,7 +204,7 @@ Major version bumps SHOULD NOT occur for changes which do not result in a drop i
 
 ### Minor version bump
 
-Most changes to OpenTelemetry clients result in a minor version bump.
+Most changes to OpenTelemetry libraries result in a minor version bump.
 
 * New backward-compatible functionality added to any component.
 * Breaking changes to internal SDK components.

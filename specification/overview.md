@@ -8,7 +8,7 @@ Table of Contents
 
 <!-- toc -->
 
-- [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
+- [OpenTelemetry Library Architecture](#opentelemetry-library-architecture)
   * [API](#api)
   * [SDK](#sdk)
   * [Semantic Conventions](#semantic-conventions)
@@ -42,23 +42,23 @@ This document provides an overview of the OpenTelemetry project and defines impo
 
 Additional term definitions can be found in the [glossary](glossary.md).
 
-## OpenTelemetry Client Architecture
+## OpenTelemetry Library Architecture
 
 ![Cross cutting concerns](../internal/img/architecture.png)
 
-At the highest architectural level, OpenTelemetry clients are organized into [**signals**](glossary.md#signals).
+At the highest architectural level, OpenTelemetry libraries are organized into [**signals**](glossary.md#signals).
 Each signal provides a specialized form of observability. For example, tracing, metrics, and baggage are three separate signals.
 Signals share a common subsystem – **context propagation** – but they function independently from each other.
 
 Each signal provides a mechanism for software to describe itself. A codebase, such as web framework or a database client, takes a dependency on various signals in order to describe itself. OpenTelemetry instrumentation code can then be mixed into the other code within that codebase.
-This makes OpenTelemetry a **cross-cutting concern** - a piece of software which is mixed into many other pieces of software in order to provide value. Cross-cutting concerns, by their very nature, violate a core design principle – separation of concerns. As a result, OpenTelemetry client design requires extra care and attention to avoid creating issues for the codebases which depend upon these cross-cutting APIs.
+This makes OpenTelemetry a **cross-cutting concern** - a piece of software which is mixed into many other pieces of software in order to provide value. Cross-cutting concerns, by their very nature, violate a core design principle – separation of concerns. As a result, OpenTelemetry library design requires extra care and attention to avoid creating issues for the codebases which depend upon these cross-cutting APIs.
 
-OpenTelemetry clients are designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions which can be managed independently. OpenTelemetry clients are also designed to be an extensible framework.
+OpenTelemetry libraries are designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions which can be managed independently. OpenTelemetry libraries are also designed to be an extensible framework.
 To accomplish these goals, each signal consists of four types of packages: API, SDK, Semantic Conventions, and Contrib.
 
 ### API
 
-API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into third-party libraries and application code is considered part of the API.
+API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry libraries which is imported into third-party libraries and application code is considered part of the API.
 
 ### SDK
 
