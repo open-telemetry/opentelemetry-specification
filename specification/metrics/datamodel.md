@@ -43,7 +43,7 @@ containing a higher-level model, about Metrics APIs and discrete input values,
 and a lower-level model, defining the Timeseries and discrete output values.
 The relationship between models is displayed in the diagram below.
 
-TODO(jsuereth) - Diagram
+![Events  → Data → Timeseries Diagram](img/model-layers.png)
 
 This protocol was designed to meet the requirements of the OpenCensus Metrics
 system, particularly to meet its concept of Metrics Views. Views are
