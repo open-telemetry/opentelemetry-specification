@@ -1,6 +1,6 @@
-# Introduction
+# Metrics Data Model
 
-TODO(jsuereth): Write this
+TODO(jsuereth): Write introduction
 
 ## Events → Data → Timeseries
 
@@ -11,7 +11,7 @@ containing a higher-level model, about Metrics APIs and discrete input values,
 and a lower-level model, defining the Timeseries and discrete output values.
 The relationship between models is displayed in the diagram below.
 
-TODO - Diagram
+TODO(jsuereth) - Diagram
 
 This protocol was designed to meet the requirements of the OpenCensus Metrics
 system, particularly to meet its concept of Metrics Views. Views are
@@ -57,36 +57,36 @@ TODO(jsuereth): Flesh this out
 
 1. OTel SDK exports 10 second resolution to a single OTel collector, using
   cumulative temporality for a stateful client, stateless server:
-  - Collector passes-through original data to an OTLP destination
-  - Collector re-aggregates into longer intervals without changing dimensions
-  - Collector re-aggregates into several distinct views, each with a subset of
-    the available dimensions, outputs to the same destination
+    - Collector passes-through original data to an OTLP destination
+    - Collector re-aggregates into longer intervals without changing dimensions
+    - Collector re-aggregates into several distinct views, each with a subset of
+      the available dimensions, outputs to the same destination
 2. OTel SDK exports 10 second resolution to a single OTel collector, using delta
   temporality for a stateless client, stateful server:
-  - Collector re-aggregates into 60 second resolution
-  - Collector converts delta to cumulative temporality
+    - Collector re-aggregates into 60 second resolution
+    - Collector converts delta to cumulative temporality
 3. A number of OTel SDKs running locally each exports 10 second resolution, each
   reports to a single (local) OTel collector.
-  - Collector re-aggregates into 60 second resolution
-  - Collector re-aggregates to eliminate the identity of individual SDKs (e.g.,
-    distinct `service.instance.id` values)
-  - Collector outputs to an OTLP destination
+    - Collector re-aggregates into 60 second resolution
+    - Collector re-aggregates to eliminate the identity of individual SDKs (e.g.,
+      distinct `service.instance.id` values)
+    - Collector outputs to an OTLP destination
 4. Pool of OTel collectors receive OTLP and export Prometheus Remote Write
-  - Collector joins service discovery with metric resources
-  - Collector computes “up”, staleness marker
-  - Collector applies a distinct external label
+    - Collector joins service discovery with metric resources
+    - Collector computes “up”, staleness marker
+    - Collector applies a distinct external label
 5. OTel collector receives Statsd and exports OTLP
-  - With delta temporality: stateless collector
-  - With cumulative temporality: stateful collector
+    - With delta temporality: stateless collector
+    - With cumulative temporality: stateful collector
 
 These are considered the "core" use-cases used to analyze tradeoffs and design
 decisions within the metrics data model.
 
-# Model Details
+## Model Details
 
 TODO(jsuereth): Recap split of 3 pieces
 
-## Event Model
+### Event Model
 
 This specification uses as its foundation a
 [Metrics API consisting of 6 model instruments](api.md), each having distinct
@@ -114,8 +114,7 @@ observed in real time or on demand (for the synchronous and asynchronous cases,
 respectively). The instruments and model use-cases will be described in greater
 detail as we link this model with the other two.
 
-
-## Timeseries Model
+### Timeseries Model
 
 In this low-level metrics data model, a Timeseries is defined by an entity
 consisting of several metadata properties:
@@ -140,7 +139,7 @@ is no delta temporality in the timeseries model. To precisely define presence
 and absence of data requires further development of the correspondence between
 these models.
 
-## OpenTelemetry data model
+### OpenTelemetry data model
 
 The OpenTelemetry data model for metrics includes four basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
@@ -156,29 +155,29 @@ Comparing the OpenTelemetry and Timeseries data models, OTLP carries an
 additional kind of point. Whereas an OTLP Monotonic Sum point translates into a
 Timeseries Counter point, and an OTLP Histogram point translates into a
 Timeseries Histogram point, there are two OTLP data points that become Gauges
-in the Timeseries model: the OTLP Non-Monotonic Sum point and OTLP Gauge point. 
+in the Timeseries model: the OTLP Non-Monotonic Sum point and OTLP Gauge point.
 
 The two points that become Gauges in the Timeseries model are distinguished by
 their built in aggregate function, meaning they define re-aggregation
 differently. Sum points combine using addition, while Gauge points combine into
 histograms.
 
-# Single-Writer
+## Single-Writer
 
 Pending
 
-# Temporarily
+## Temporarily
 
 Pending
 
-# Resources
+## Resources
 
 Pending
 
-# Temporal Alignment
+## Temporal Alignment
 
 Pending
 
-# External Labels
+## External Labels
 
 Pending
