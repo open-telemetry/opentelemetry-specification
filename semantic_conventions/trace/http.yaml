@@ -16,6 +16,9 @@ groups:
         brief: >
             Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
             Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
+        note: >
+          `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
+          In such case the attribute's value should be `https://www.example.com/`.
         examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
       - id: target
         type: string
@@ -58,7 +61,7 @@ groups:
             - id: QUIC
               value: 'QUIC'
               brief: 'QUIC protocol.'
-        brief: 'Kind of HTTP protocol used'
+        brief: 'Kind of HTTP protocol used.'
         note: >
           If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor`
           is `QUIC`, in which case `IP.UDP` is assumed.
