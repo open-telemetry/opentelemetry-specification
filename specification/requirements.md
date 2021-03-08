@@ -36,7 +36,7 @@ the specific requirements that the OpenTelemetry specification has.
 Each of these requirement sections has 2 components:
 
 1. A unique **key**, a string that identifies the requirement section in a Markdown document
-2. A **description**, a string that MUST have one an only one of the [RFC 2119 keywords](https://tools.ietf.org/html/rfc2119).
+2. A **description**, a string that MUST have one and only one of the [BCP 14 keywords](https://tools.ietf.org/html/bcp14).
 
 ### Requirement Sections Format
 
