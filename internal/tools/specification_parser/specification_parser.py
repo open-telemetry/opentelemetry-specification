@@ -76,7 +76,7 @@ def parse_requirements(markdown_file_paths):
                 r"NOT RECOMMENDED",
                 # 3. SHOULD
                 r"SHOULD(?! NOT)",
-                r"(?>!NOT )RECOMMENDED",
+                r"(?<!NOT )RECOMMENDED",
                 # 5. MAY
                 r"MAY",
                 r"OPTIONAL",
