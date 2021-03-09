@@ -10,7 +10,7 @@
 * [Tracer Shim](#tracer-shim)
   * [Inject](#inject)
   * [Extract](#extract)
-* [OpenTelemetry Span and SpanContext relationship](#opentelemetry-span-and-spancontext-relationship)
+* [OpenTelemetry Span and SpanContext Shim relationship](#opentelemetry-span-and-spancontext-shim-relationship)
 * [Span Shim](#span-shim)
   * [Get Context](#get-context)
   * [Get Baggage Item](#get-baggage-item)
@@ -65,12 +65,14 @@ The API MUST return an OpenTracing `Tracer`.
 
 ```java
 // Create a Tracer Shim relying on the global propagators.
-createTracerShim(Tracer tracer);
+createTracerShim(tracer);
 
-// Create a Tracer Shim with the specified propagators.
-createTracerShim(Tracer tracer, OTPropagatorsBuilder()
-  .setTextMap(customTextMapPropagator)
-  .setHttpHeaders(anotherCustomTextMapPropagator)
+// Create a Tracer Shim using:
+// 1) TraceContext propagator for TextMap
+// 2) Jaeger propagator for HttPHeaders.
+createTracerShim(tracer, OTPropagatorsBuilder()
+  .setTextMap(W3CTraceContextPropagator.getInstance())
+  .setHttpHeaders(JaegerPropagator.getInstance())
   .build());
 ```
 
@@ -87,11 +89,11 @@ Parameters:
 - A `Format` descriptor.
 - A carrier.
 
-Inject the underlying OpenTelemetry `Span` and `Bagagge` using the registered
-OpenTelemetry `Propagator`s:
+Inject the underlying OpenTelemetry `Span` and `Bagagge` using either the explicitly
+registered or the global OpenTelemetry `Propagator`s, as configured at construction time.
 
-- `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered OpenTelemetry
-  `HTTPTextPropagator`, if any.
+- `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
+  if any, or else use the global `TextMapPropagator`.
 
 Errors MAY be raised if the specified `Format` is not recognized, depending
 on the specific OpenTracing Language API (e.g. Go and Python do, but Java may not).
@@ -103,11 +105,11 @@ Parameters:
 - A `Format` descriptor.
 - A carrier.
 
-Extract OpenTelemetry `Span` and `Baggage` from a carrier using the registered
-OpenTelemetry `Propagator`s:
+Extract the underlying OpenTelemetry `Span` and `Bagagge` using either the explicitly
+registered or the global OpenTelemetry `Propagator`s, as configured at construction time.
 
-- `TEXT_MAP` and `HTTP_HEADERS` formats MUST use the registered OpenTelemetry
-  `HTTPTextPropagator`, if any.
+- `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
+  if any, or else use the global `TextMapPropagator`.
 
 Returns a `SpanContext` Shim with the underlying extracted OpenTelemetry
 `Span` and `Baggage`. Errors MAY be raised if either the `Format` is not recognized
