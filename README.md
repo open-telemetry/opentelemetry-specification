@@ -24,7 +24,7 @@ Technical committee holds regular meetings, notes are held
 ## Table of Contents
 
 - [Overview](specification/overview.md)
-- [Requirements](specification/requirements.md)
+- [Requirements](specification/requirement-sections.md)
 - [Glossary](specification/glossary.md)
 - [Versioning and stability for OpenTelemetry clients](specification/versioning-and-stability.md)
 - [Library Guidelines](specification/library-guidelines.md)
