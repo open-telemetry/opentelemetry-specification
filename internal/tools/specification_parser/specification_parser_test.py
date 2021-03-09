@@ -23,9 +23,9 @@ class TestSpecificationParser(TestCase):
         )[cls.test_specification_md_path]
 
     def test_find_markdown_file_paths(self):
-        self.assertEqual(
-            find_markdown_file_paths(self.current_directory_path),
-            [self.test_specification_md_path]
+        self.assertIn(
+            self.test_specification_md_path,
+            find_markdown_file_paths(self.current_directory_path)
         )
 
     def test_parseable_section_0(self):
@@ -87,9 +87,18 @@ class TestSpecificationParser(TestCase):
     def test_parseable_section_9(self):
         assert self.parsed_requirements["parseable_section_9"] == {
             "description": (
-                "> This *MAY* be done 9.\n>\n> This is section 9.\n"
+                "> This *MAY* be done 9.\n>\n> This is section 9.\n>\n"
                 "> 1. Item 1\n> 2. Item 2\n>    1. Item 2.1\n"
                 ">    2. Item 2.2"
             ),
             "BCP 14 Keywords": ["MAY"]
+        }
+
+    def test_parseable_section_10(self):
+        assert self.parsed_requirements["parseable_section_10"] == {
+            "description": (
+                "> This *MAY* be done 10\n>\n> If this is done, then this "
+                "MUST be that and MUST NOT be\n> something else."
+            ),
+            "BCP 14 Keywords": ["MAY", "MUST", "MUST NOT"]
         }

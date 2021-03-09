@@ -58,4 +58,5 @@ Some content.
 
 > This *MAY* be done 10
 >
-> If this is done, then this MUST be that.
+> If this is done, then this MUST be that and MUST NOT be
+> something else.

@@ -101,6 +101,9 @@ def parse_requirements(markdown_file_paths):
             requirements[md_file_path][requirement_key]["description"] = (
                 requirement_description
             )
+
+            BCP_14_keyword_matches.reverse()
+
             requirements[md_file_path][requirement_key][
                 "BCP 14 Keywords"
             ] = BCP_14_keyword_matches
