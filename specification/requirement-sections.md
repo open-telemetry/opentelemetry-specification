@@ -1,4 +1,4 @@
-# Requirements
+# Requirement Sections
 
 <details>
 <summary>
@@ -19,13 +19,13 @@ Table of Contents
 
 </details>
 
-This document explains how the OpenTelemetry specification requirements are written.
+This document explains how the OpenTelemetry specification requirement sections are written.
 
 ## Requirement Sections
 
-This specification is written in several [Markdown](https://github.github.com/gfm/) files.
+The OpenTelemetry specification is written in several [Markdown](https://github.github.com/gfm/) files.
 
-Each of these files can contain any resource to explain and describe its part of the specification.
+Each one of these files can contain any resource to explain and describe its part of the specification.
 Examples of these resources are images, diagrams, code, regular text, etc.
 
 Also, included in the same Markdown documents that make the OpenTelemetry specification
@@ -40,7 +40,7 @@ Each of these requirement sections has 2 components:
 
 ### Requirement Sections Format
 
-Each one of these sections are written also in Markdown syntax in order for them to integrate
+Each one of these requirement sections are written also in Markdown syntax in order for them to integrate
 with the rest of the document.
 
 #### Key Format
@@ -54,14 +54,14 @@ MUST be written in this manner:
 
 The first six `#` symbols create a Markdown heading for the requirement section. The `requirement: `
 string that follows indicates that this particular header is part of a requirement section and not
-just any Markdown six `#` heading. The following string indicated by `unique_key_indetifier` MUST be
-unique in the document that contains it. The characters that make this string SHOULD only be
+just any Markdown six `#` level heading. The following string indicated by `unique_key_indetifier` MUST be
+unique in the document that contains it. The characters that make this string MUST only be
 alphanumeric characters and underscores.
 
 #### Description Format
 
 The description of every requirement section MUST be written as a
-[block quote](https://github.github.com/gfm/#block-quotes) immediately following a requirement section key:
+[block quote](https://github.github.com/gfm/#block-quotes) immediately following a blank line after a requirement section key:
 
 ```
 > The span MUST have an identifier.
@@ -69,7 +69,7 @@ The description of every requirement section MUST be written as a
 > More text can be placed here as well.
 ```
 
-In some part of the description one and only one BCP 14 keyword MUST appear.
+The description MUST include at least one BCP 14 keyword.
 
 #### Example
 
@@ -84,9 +84,13 @@ This part describes some OpenTelemetry concept. It can include examples, images,
 After the concept is described, its specifc requirements are written in requirement sections:
 
 ###### requirement: concept_identifier
+
 > The concept MUST have an identifier.
+>
+> The concept is important for OpenTelemetry.
 
 ###### requirement: concept_documentation
+
 > The concept SHOULD be documented in every implementation.
 ```
 
@@ -105,8 +109,8 @@ developers to refer to a certain requirement unequivocally, making communication
 clear.
 
 It is also possible to parse the Markdown documents and extract from them a list of the requirements in a
-certain format. It is provided a parser that does this and produces JSON documents for every Markdown document
-that includes at least one requirement section. With this JSON files, a testing schema can be produced for
+certain format. A parser that does this is provided. Itproduces JSON documents for every Markdown document
+that includes at least one requirement section. With these JSON files, a testing schema can be produced for
 every implementation that can help developers know how compliant with the specification the implementation is.
 
 The parser can also work as a checker that makes sure that every requirement section is compliant with this
