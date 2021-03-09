@@ -101,8 +101,8 @@ REQUIRED parameters:
 This section defines all operations within the Baggage API that interact with
 the [`Context`](../context/context.md).
 
-The API MUST provide the following functionality to interact with a `Context`
-instance:
+If an implementation of this API does not interact purely via the `Context`, it
+MUST provide the following functionality to interact with a `Context` instance:
 
 - Extract the `Baggage` from a `Context` instance
 - Insert the `Baggage` to a `Context` instance
