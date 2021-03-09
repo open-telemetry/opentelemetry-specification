@@ -465,7 +465,7 @@ The Span interface MUST provide:
 The Span interface MAY provide:
 
 - An API to set multiple `Attributes` at once, where the `Attributes` are passed in a
-  single method call. This method MAY be called `SetAllAttributes`.
+  single method call.
 
 Setting an attribute with the same key as an existing attribute SHOULD overwrite
 the existing attribute's value.
