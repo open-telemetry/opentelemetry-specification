@@ -21,7 +21,7 @@ Table of Contents
 
 This document explains how the OpenTelemetry specification requirement sections are written.
 
-## Requirement Sections
+## Overview
 
 The OpenTelemetry specification is written in several [Markdown](https://github.github.com/gfm/) files.
 
