@@ -127,7 +127,7 @@ The included specification parser can be run from the root directory of the Open
 like this:
 
 ```
-python specification_parser/specification_parser.py
+python internal/tools/specification_parser/specification_parser.py
 ```
 
 This will recursively look for Markdown files in the `specification` directory. For every Markdown file that has at
