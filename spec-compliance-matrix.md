@@ -67,8 +67,8 @@ status of the feature is not known.
 | RecordException                                                                                  |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
-| Allow samplers to modify tracestate                                                              |          |    | +    |    | +      | +    | +      |     | +    |     | -    | +     |
-| ShouldSample gets full parent Context                                                            |          |    | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
+| Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    |     | -    | +     |
+| ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    | +    |    | +      | +    | +      |     |      |     | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          |    | +    |    |        | +    |        |     |      |     |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        |    | +    |    |        | +    |        |     |      |     |      | +     |
