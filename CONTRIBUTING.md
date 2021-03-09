@@ -95,9 +95,9 @@ the box settings for this repository will be consistent.
 To check for style violations, use
 
 ```bash
-# Ruby and gem are required for mdl
-gem install mdl
-mdl -c .mdlrc .
+# npm is required to install markdownlint
+npm install -g markdownlint-cli
+make markdownlint # run at the root
 ```
 
 To fix style violations, follow the
