@@ -20,67 +20,76 @@ class TestSpecificationParser(TestCase):
         )
         cls.parsed_requirements = parse_requirements(
             [cls.test_specification_md_path]
-        )
+        )[cls.test_specification_md_path]
 
     def test_find_markdown_file_paths(self):
-
         self.assertEqual(
             find_markdown_file_paths(self.current_directory_path),
             [self.test_specification_md_path]
         )
 
-    def test_parse_section_0(self):
+    def test_parseable_section_0(self):
+        assert self.parsed_requirements["parseable_section_0"] == {
+            "description": "> This MUST be done.",
+            "BCP 14 Keywords": ["MUST"]
+        }
 
-        assert parse_requirements([self.test_specification_md_path]) == {
-            (
-                "/home/ocelotl/ocelotl/opentelemetry-specification/"
-                "specification_parser/test_specification.json"
-            ): {
-                "testable_section_0": {
-                    "description": "> This MUST be done.",
-                    "BCP 14 Keyword": "MUST"
-                },
-                "testable_section_1": {
-                    "description": "> This MUST NOT be done.",
-                    "BCP 14 Keyword": "MUST NOT"
-                },
-                "testable_section_2": {
-                    "description": "> This SHOULD be done.",
-                    "BCP 14 Keyword": "SHOULD"
-                },
-                "testable_section_3": {
-                    "description": "> This SHOULD NOT be done.",
-                    "BCP 14 Keyword": "SHOULD NOT"
-                },
-                "testable_section_4": {
-                    "description": "> This MAY be done.",
-                    "BCP 14 Keyword": "MAY"
-                },
-                "testable_section_5": {
-                    "description": "> This **MAY** be done 5.",
-                    "BCP 14 Keyword": "MAY"
-                },
-                "testable_section_6": {
-                    "description": "> This *MAY* be done 6.",
-                    "BCP 14 Keyword": "MAY"
-                },
-                "testable_section_7": {
-                    "description": (
-                        "> This *MAY* be done 7.\n> This is section 7."
-                    ),
-                    "BCP 14 Keyword": "MAY"
-                },
-                "testable_section_8": {
-                    "description": "> This *MAY* be done 8.",
-                    "BCP 14 Keyword": "MAY"
-                },
-                "testable_section_9": {
-                    "description": (
-                        "> This *MAY* be done 9.\n>\n> This is section 9.\n"
-                        "> 1. Item 1\n> 2. Item 2\n>    1. Item 2.1\n"
-                        ">    2. Item 2.2"
-                    ),
-                    "BCP 14 Keyword": "MAY"
-                }
-            }
+    def test_parseable_section_1(self):
+        assert self.parsed_requirements["parseable_section_1"] == {
+            "description": "> This MUST NOT be done.",
+            "BCP 14 Keywords": ["MUST NOT"]
+        }
+
+    def test_parseable_section_2(self):
+        assert self.parsed_requirements["parseable_section_2"] == {
+            "description": "> This SHOULD be done.",
+            "BCP 14 Keywords": ["SHOULD"]
+        }
+
+    def test_parseable_section_3(self):
+        assert self.parsed_requirements["parseable_section_3"] == {
+            "description": "> This SHOULD NOT be done.",
+            "BCP 14 Keywords": ["SHOULD NOT"]
+        }
+
+    def test_parseable_section_4(self):
+        assert self.parsed_requirements["parseable_section_4"] == {
+            "description": "> This MAY be done.",
+            "BCP 14 Keywords": ["MAY"]
+        }
+
+    def test_parseable_section_5(self):
+        assert self.parsed_requirements["parseable_section_5"] == {
+            "description": "> This **MAY** be done 5.",
+            "BCP 14 Keywords": ["MAY"]
+        }
+
+    def test_parseable_section_6(self):
+        assert self.parsed_requirements["parseable_section_6"] == {
+            "description": "> This *MAY* be done 6.",
+            "BCP 14 Keywords": ["MAY"]
+        }
+
+    def test_parseable_section_7(self):
+        assert self.parsed_requirements["parseable_section_7"] == {
+            "description": (
+                "> This *MAY* be done 7.\n> This is section 7."
+            ),
+            "BCP 14 Keywords": ["MAY"]
+        }
+
+    def test_parseable_section_8(self):
+        assert self.parsed_requirements["parseable_section_8"] == {
+            "description": "> This *MAY* be done 8.\n>\n> This is section 8.",
+            "BCP 14 Keywords": ["MAY"]
+        }
+
+    def test_parseable_section_9(self):
+        assert self.parsed_requirements["parseable_section_9"] == {
+            "description": (
+                "> This *MAY* be done 9.\n>\n> This is section 9.\n"
+                "> 1. Item 1\n> 2. Item 2\n>    1. Item 2.1\n"
+                ">    2. Item 2.2"
+            ),
+            "BCP 14 Keywords": ["MAY"]
         }

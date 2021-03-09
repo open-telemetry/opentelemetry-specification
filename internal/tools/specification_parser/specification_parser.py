@@ -2,7 +2,6 @@ from re import finditer, findall
 from json import dumps
 from os.path import curdir, abspath, join, splitext
 from os import walk
-from ipdb import set_trace
 
 
 def find_markdown_file_paths(root):
@@ -42,11 +41,9 @@ def parse_requirements(markdown_file_paths):
         if not requirement_matches:
             continue
 
-        json_file_path = "".join([splitext(markdown_file_path)[0], ".json"])
+        md_file_path = "".join([splitext(markdown_file_path)[0], ".md"])
 
-        set_trace()
-
-        requirements[json_file_path] = {}
+        requirements[md_file_path] = {}
 
         for requirement in requirement_matches:
 
@@ -54,7 +51,7 @@ def parse_requirements(markdown_file_paths):
 
             assert (
                 requirement_key not in
-                requirements[json_file_path].keys()
+                requirements[md_file_path].keys()
             ), "Repeated requirement key {} found in {}".format(
                 requirement_key, markdown_file_path
             )
@@ -99,14 +96,14 @@ def parse_requirements(markdown_file_paths):
                 requirement_key_path
             )
 
-            requirements[json_file_path][requirement_key] = {}
+            requirements[md_file_path][requirement_key] = {}
 
-            requirements[json_file_path][requirement_key]["description"] = (
+            requirements[md_file_path][requirement_key]["description"] = (
                 requirement_description
             )
-            requirements[json_file_path][requirement_key][
-                "BCP 14 Keyword"
-            ] = BCP_14_keyword_matches[0]
+            requirements[md_file_path][requirement_key][
+                "BCP 14 Keywords"
+            ] = BCP_14_keyword_matches
 
     return requirements
 
