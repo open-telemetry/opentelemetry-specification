@@ -180,7 +180,7 @@ The `Set Tag` operations MUST be implemented using the OpenTelemetry
 
 ### Get Context
 
-Returns the [associated](#opentelemetry-span-and-spancontext-relationship)
+Returns the [associated](#opentelemetry-span-and-spancontext-shim-relationship)
 `SpanContext` Shim.
 
 ### Get Baggage Item
@@ -193,7 +193,7 @@ Returns a value for the specified key in the OpenTelemetry `Baggage` of the
 associated `SpanContext` Shim or null if none exists.
 
 This is accomplished by getting the
-[associated](#opentelemetry-span-and-spancontext-relationship)
+[associated](#opentelemetry-span-and-spancontext-shim-relationship)
 `SpanContext` Shim and do a lookup for the specified key in the OpenTelemetry
 `Baggage` instance.
 
@@ -212,7 +212,7 @@ Parameters:
 
 Creates a new `SpanContext` Shim with a new OpenTelemetry `Baggage` containing
 the specified `Baggage` key/value pair. The resulting `SpanContext` Shim is then
-[associated](#opentelemetry-span-and-spancontext-relationship) to the underlying
+[associated](#opentelemetry-span-and-spancontext-shim-relationship) to the underlying
 OpenTelemetry `Span`.
 
 ```java
@@ -297,7 +297,7 @@ Parameters:
 
 - A `Span`.
 
-Gets the [associated](#opentelemetry-span-and-spancontext-relationship)
+Gets the [associated](#opentelemetry-span-and-spancontext-shim-relationship)
 `SpanContext` Shim for the specified `Span` and puts its OpenTelemetry
 `Span`, `Baggage` and `Span` Shim objects in a new `Context`,
 which is then set as the currently active instance.
