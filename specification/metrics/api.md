@@ -120,7 +120,7 @@ From a user's perspective, calls to these should be ignored without raising erro
 
 ###### requirement: no_null_references
 
-> No null references MUST be returned in languages where accessing these results in errors.
+> Null references MUST NOT be returned in languages where accessing these results in errors.
 
 ###### requirement: no_api_exceptions
 
