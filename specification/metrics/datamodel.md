@@ -117,6 +117,21 @@ breadth of OTel metrics usage.
 These are considered the "core" use-cases used to analyze tradeoffs and design
 decisions within the metrics data model.
 
+
+### Out of Scope Use-cases
+
+The metrics data model is NOT designed to be a perfect rosetta stone of metrics.
+Here are a set of use cases that, while won't be outright unsupported, are not
+in scope for key design decisions:
+
+- Using OTLP as an intermediary format between two non-compatible formats
+  - Importing [statsd](https://github.com/statsd/statsd) => Prometheus PRW
+  - Importing [collectd](https://collectd.org/wiki/index.php/Binary_protocol#:~:text=The%20binary%20protocol%20is%20the,some%20documentation%20to%20reimplement%20it)
+    => Prometheus PRW
+  - Importing Prometheus endpoint scrape => [statsd push | collectd | opencensus]
+  - Importing OpenCensus "oca" => any non OC or OTel format
+- TODO: define others.
+
 ## Model Details
 
 OpenTelemetry fragments metrics into three interacting models:
