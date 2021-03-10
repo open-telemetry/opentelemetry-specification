@@ -117,7 +117,6 @@ breadth of OTel metrics usage.
 These are considered the "core" use-cases used to analyze tradeoffs and design
 decisions within the metrics data model.
 
-
 ### Out of Scope Use-cases
 
 The metrics data model is NOT designed to be a perfect rosetta stone of metrics.
