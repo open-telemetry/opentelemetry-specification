@@ -112,9 +112,11 @@ def parse_requirements(markdown_file_paths):
 
 
 def write_json_specifications(requirements):
-    for json_absolute_file_path, requirement_sections in requirements.items():
+    for md_absolute_file_path, requirement_sections in requirements.items():
 
-        with open(json_absolute_file_path, "w") as json_file:
+        with open(
+            "".join([splitext(md_absolute_file_path)[0], ".json"]), "w"
+        ) as json_file:
             json_file.write(dumps(requirement_sections, indent=4))
 
 if __name__ == "__main__":
