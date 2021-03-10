@@ -133,3 +133,7 @@ python internal/tools/specification_parser/specification_parser.py
 This will recursively look for Markdown files in the `specification` directory. For every Markdown file that has at
 least one requirement section, it will generate a corresponding JSON file with the key, description and BCP 14
 keyword or every requirement section.
+
+Once the JSON files are generated, they can be used by implementations as checklists to write test cases. These
+test cases then are written to implement what is said in the description of each item in the JSON file. This set of
+test cases can be used to measure how compliant with the specification an implementation is.
