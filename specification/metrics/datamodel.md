@@ -177,7 +177,7 @@ consisting of several metadata properties:
 
 - Metric name and description
 - Label set
-- Kind of point
+- Kind of point (integer, floating point, etc)
 - Unit of measurement
 
 The primary data of each timeseries are ordered (timestamp, value) points, for
