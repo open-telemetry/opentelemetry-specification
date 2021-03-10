@@ -15,7 +15,7 @@
 | `cloud.availability_zone` | string | Cloud regions often have multiple, isolated locations known as zones to increase availability. Availability zone represents the zone where the resource is running. [1] | `us-east-1c` | No |
 | `cloud.infrastructure_service` | string | The cloud infrastructure resource in use. [2] | `aws_ec2`; `azure_vm`; `gcp_compute_engine` | No |
 
-**[1]:** Google Cloud calls availability zones just "zones".
+**[1]:** Availability zones are called "zones" on Google Cloud.
 
 **[2]:** The prefix of the service SHOULD match the one specified in `cloud.provider`.
 
