@@ -77,8 +77,8 @@ status of the feature is not known.
 
 | Feature                            | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| Basic support                      |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Use official header name `baggage` |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| Basic support                      |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| Use official header name `baggage` |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 
 ## Metrics
 
