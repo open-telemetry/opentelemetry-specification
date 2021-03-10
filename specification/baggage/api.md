@@ -35,7 +35,7 @@ The Baggage API consists of:
 The functions described here are one way to approach interacting with the
 `Baggage` via having struct/object that represents the entire Baggage content.
 Depending on language idioms, a language API MAY implement these functions by
-interacting with the `Baggage` via the `Context` directly.
+interacting with the baggage via the `Context` directly.
 
 The Baggage API MUST be fully functional in the absence of an installed SDK.
 This is required in order to enable transparent cross-process Baggage
