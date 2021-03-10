@@ -165,10 +165,10 @@ three categories:
   instruments are primarily useful for monitoring a rate value, whereas
   non-monotonic instruments are primarily useful for monitoring a total value.
 
-In this model, the primary data are (instrument, number) points, originally
+In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
 respectively). The instruments and model use-cases will be described in greater
-detail as we link this model with the other two.
+detail as we link the event model with the other two.
 
 ### Timeseries Model
 
