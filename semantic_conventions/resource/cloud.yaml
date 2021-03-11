@@ -33,15 +33,15 @@ groups:
           [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), or
           [Google Cloud regions](https://cloud.google.com/about/locations).
         examples: ['us-central1', 'us-east-1']
-      - id: zone
+      - id: availability_zone
         type: string
         brief: >
           Cloud regions often have multiple, isolated locations known as zones
-          to increase availability. Zone represents the zone where the resource 
-          is running.
+          to increase availability. Availability zone represents the
+          zone where the resource is running.
         note: >
-          AWS and Azure calls them availability zones or AZs.
-        examples: ['us-central1-a', 'us-east-1c']
+          Availability zones are called "zones" on Google Cloud.
+        examples: ['us-east-1c']
       - id: infrastructure_service
         type:
           allow_custom_values: true
