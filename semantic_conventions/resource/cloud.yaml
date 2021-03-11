@@ -42,7 +42,7 @@ groups:
         note: >
           Availability zones are called "zones" on Google Cloud.
         examples: ['us-east-1c']
-      - id: infrastructure_service
+      - id: platform
         type:
           allow_custom_values: true
           members:
