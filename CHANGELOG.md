@@ -9,7 +9,7 @@ release.
 
 ## v1.1.0 (2021-03-11)
 
-- Adds note that implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
+- Implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
 - Adds `none` as a possible value for OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to disable export
   ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
 - Add [`ForceFlush`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
