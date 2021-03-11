@@ -109,7 +109,7 @@ This API MUST accept the following parameters:
   In that scenario, the `name` denotes a module name or component name within that library
   or application.
   In case an invalid name (null or empty string) is specified, a working
-  default Tracer implementation as a fallback MUST be returned rather than returning
+  default Tracer implementation MUST be returned as a fallback rather than returning
   null or throwing an exception, and `name` SHOULD be the set to the
   `<INVALID INSTRUMENTATION NAME PROVIDED>` literal, in order to signal the
   specified value is invalid.
