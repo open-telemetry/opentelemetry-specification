@@ -58,8 +58,9 @@ important to understand the goals of OpenTelemetry’s metrics effort:
   minimum goal is to provide full support for
   [Prometheus](https://prometheus.io/) and
   [StatsD](https://github.com/statsd/statsd) - users should be able to use
-  OpenTelemetry clients and [Collector](../overview.md#collector) to collect and export metrics, with the
-  ability to achieve the same functionality as their native clients.
+  OpenTelemetry clients and [Collector](../overview.md#collector) to collect and
+  export metrics, with the ability to achieve the same functionality as their
+  native clients.
 
 ### Concepts
 
