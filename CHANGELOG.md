@@ -7,12 +7,32 @@ release.
 
 ## Unreleased
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Semantic Conventions
+
 ## v1.1.0 (2021-03-11)
 
+### Traces
+
 - Implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
-- Add `none` as a possible value for OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to disable export
+- Add `none` as a possible value for OTEL_TRACES_EXPORTER to disable export
   ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
 - Add [`ForceFlush`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
+
+### Metrics
+
+- Add `none` as a possible value for OTEL_METRICS_EXPORTER to disable export
+  ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
+
+### Logs
+
+### Semantic Conventions
+
 - Add `elasticsearch` to `db.system` semantic conventions ([#1463](https://github.com/open-telemetry/opentelemetry-specification/pull/1463))
 - Add `arch` to `host` semantic conventions ([#1483](https://github.com/open-telemetry/opentelemetry-specification/pull/1483))
 - Add `runtime` to `container` semantic conventions ([#1482](https://github.com/open-telemetry/opentelemetry-specification/pull/1482))
