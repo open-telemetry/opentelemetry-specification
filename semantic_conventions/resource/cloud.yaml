@@ -92,7 +92,7 @@ groups:
               value: 'gcp_app_engine'
               brief: Google Cloud App Engine (GAE)
         brief: >
-          The cloud service in use.
+          The cloud platform in use.
         note: >
           The prefix of the service SHOULD match the one specified in `cloud.provider`.
         examples: ['aws_ec2', 'azure_vm', 'gcp_compute_engine']
