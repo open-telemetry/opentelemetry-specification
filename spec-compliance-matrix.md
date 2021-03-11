@@ -57,8 +57,8 @@ status of the feature is not known.
 | `null` values documented as invalid/undefined                                                    |          | +  | +    | +  | +      | +    | N/A    |     |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      |          |    |      |    |        |      |        |     |      |     |      |       |
-| AddLink                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | +    | +     |
-| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Links can be recorded on span creation                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Links order is preserved                                                                         |          | +  |      |    |        |      |        |     |      |     |      |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |    |      |    |        |      |        |     |      | +   |      |       |
 | AddEvent                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -77,8 +77,8 @@ status of the feature is not known.
 
 | Feature                            | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| Basic support                      |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Use official header name `baggage` |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| Basic support                      |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| Use official header name `baggage` |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 
 ## Metrics
 
