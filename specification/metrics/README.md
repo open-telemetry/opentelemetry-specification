@@ -68,11 +68,14 @@ important to understand the goals of OpenTelemetry’s metrics effort:
 The **OpenTelemetry Metrics API** ("the API" hereafter) serves two purposes:
 
 * Capturing raw measurements efficiently and simultaneously.
-* Allowing [SDK](#sdk) injection at runtime.
+* Decoupling the instrumentation from the [SDK](#sdk), allowing the SDK to be
+  specified/included in the application.
 
-If there is no [SDK](#sdk) injected, all the data reported via the API will be
-dropped on the floor. Please refer to the overall [OpenTelemetry
-API](../overview.md#api) concept for more information.
+When no [SDK](#sdk) is explicitly included in the application, no telemetry data
+will be collected. Please refer to the overall [OpenTelemetry
+API](../overview.md#api) concept and [API and Minimal
+Implementation](../library-guidelines.md#api-and-minimal-implementation) for
+more information.
 
 #### SDK
 
