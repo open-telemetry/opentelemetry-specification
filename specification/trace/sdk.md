@@ -252,7 +252,13 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 * The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
 parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
 the `ParentBased` sampler specified below.
-* Description MUST be `TraceIdRatioBased{0.000100}`.
+* Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
+  with `RATIO` replaced with the Sampler instances' trace sampling ratio
+  represented as a decimal number. The precision of the number SHOULD follow
+  implementation language standards and SHOULD be high enough to identify when
+  Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
+  had a sampling ratio of 1 to every 10,000 spans it could return
+  `"TraceIdRatioBased{0.000100}"` as its description.
 
 TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
 of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
