@@ -71,7 +71,8 @@ The **OpenTelemetry Metrics API** ("the API" hereafter) serves two purposes:
 * Allowing [SDK](#sdk) injection at runtime.
 
 If there is no [SDK](#sdk) injected, all the data reported via the API will be
-dropped on the floor.
+dropped on the floor. Please refer to the overall [OpenTelemetry
+API](../overview.md#api) concept for more information.
 
 #### SDK
 
@@ -81,17 +82,22 @@ processors and exporters.
 
 OpenTelemetry requires a [separation of the API from the
 SDK](../library-guidelines.md#requirements), so that different SDKs can be
-configured at run time.
+configured at run time. Please refer to the overall [OpenTelemetry
+SDK](../overview.md#sdk) concept concept for more information.
 
 #### Programming Model
 
 ```text
-MeterProvider
-  Meter A
-    Measurement X
-    Measurement Y
-  Meter B
-    Measurement Z
++------------------+
+| MeterProvider    |
+|   Meter A        |                 +-----------+  +------------+  +----------+
+|     Instrument X | Measurements... |           |  |            |  |          |
+|     Instrument Y +-----------------> Processor +--> Aggregator +--> Exporter +--> Another process
+|   Meter B        |                 |           |  |            |  |          |
+|     Instrument Z |                 +-----------+  +------------+  +----------+
+|     ...          |
+|   ...            |
++------------------+
 ```
 
 ## Specifications
