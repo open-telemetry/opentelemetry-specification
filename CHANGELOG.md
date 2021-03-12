@@ -7,6 +7,10 @@ release.
 
 ## Unreleased
 
+### Context
+
+- Clarify composite `TextMapPropagator` method required and optional arguments.
+
 ### Traces
 
 ### Metrics
