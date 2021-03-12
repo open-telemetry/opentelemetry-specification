@@ -124,19 +124,19 @@ Note: Support for environment variables is optional.
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | - | +  | -   |
-|OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | +    | - |    | - | -  | -   |        |
-|OTEL_PROPAGATORS                              |   | +  |   | +    | +  | +    | - |    | - | -  | -   |
-|OTEL_BSP_*                                    |   | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          |   | +  |   | -    | +  | -    | - |    | - | -  | -   |
-|OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
-|OTEL_TRACES_EXPORTER                          |   | +  |   | +    | +  | +    |   |    |   |    |     |
-|OTEL_METRICS_EXPORTER                         |   | +  |   | +    |    | -    |   |    |   | -  | -   |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER                           |   | +  |   | +    | +  | +    |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER_ARG                       |   | +  |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_LOG_LEVEL                                | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | +    | - |    | - | -  | -   |        |
+|OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - |    | - | -  | -   |
+|OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1085) | +  |   | -    | +  | -    | - |    | - | -  | -   |
+|OTEL_EXPORTER_JAEGER_*                        | - | +  |   | +    | +  | -    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                        | - | +  |   | +    |    | -    | - |    | - | -  | -   |
+|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_METRICS_EXPORTER                         | - | +  |   | +    |    | -    |   |    |   | -  | -   |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   |    |   |    |     |
 
 ## Exporters
 
