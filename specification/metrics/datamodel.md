@@ -151,7 +151,7 @@ anchor our understanding of the OpenTelemetry data model and are divided into
 three categories:
 
 - Synchronous vs. Asynchronous. The act of calling a Metrics API in a
-  synchronous context means the application calls the SDK, typically having
+  synchronous context means the application/library calls the SDK, typically having
   associated trace context and baggage; an Asynchronous instrument is called at
   collection time, through a callback, and lacks context.
 - Adding vs. Grouping. Whereas adding instruments express a sum, grouping
