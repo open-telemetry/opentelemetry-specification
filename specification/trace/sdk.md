@@ -253,7 +253,7 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
 the `ParentBased` sampler specified below.
 * Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
-  with `RATIO` replaced with the Sampler instances' trace sampling ratio
+  with `RATIO` replaced with the Sampler instance's trace sampling ratio
   represented as a decimal number. The precision of the number SHOULD follow
   implementation language standards and SHOULD be high enough to identify when
   Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
