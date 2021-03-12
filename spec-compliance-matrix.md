@@ -22,8 +22,8 @@ status of the feature is not known.
 | Set active Span                                                                                  |          | N/A| +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Get active Span                                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Mark Span active                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Mark Span active                                                                                 |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [SpanContext](specification/trace/api.md#spancontext)                                            |          |    |      |    |        |      |        |     |      |     |      |       |
 | IsValid                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -100,12 +100,12 @@ status of the feature is not known.
 
 | Feature                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |----------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| Create Context Key                                                               |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Get value from Context                                                           |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Set value for Context                                                            |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Attach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
-| Detach Context                                                                   |          |    | +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
-| Get current Context                                                              |          |    | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Create Context Key                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get value from Context                                                           |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Set value for Context                                                            |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Attach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
+| Detach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
+| Get current Context                                                              |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Composite Propagator                                                             |          |    | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
 | Global Propagator                                                                |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
