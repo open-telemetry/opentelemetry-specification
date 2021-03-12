@@ -9,7 +9,7 @@ release.
 
 ### Context
 
-- Clarify composite `TextMapPropagator` method required and optional arguments.
+- Clarify composite `TextMapPropagator` method required and optional arguments. ([#1541](https://github.com/open-telemetry/opentelemetry-specification/pull/1541))
 
 ### Traces
 
