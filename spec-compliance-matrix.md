@@ -22,8 +22,8 @@ status of the feature is not known.
 | Set active Span                                                                                  |          | N/A| +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Get active Span                                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Mark Span active                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get active Span                                                                                  |          | N/A  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Mark Span active                                                                                 |          | N/A  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [SpanContext](specification/trace/api.md#spancontext)                                            |          |    |      |    |        |      |        |     |      |     |      |       |
 | IsValid                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
