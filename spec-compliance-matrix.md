@@ -106,16 +106,16 @@ status of the feature is not known.
 | Attach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
 | Detach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
 | Get current Context                                                              |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Composite Propagator                                                             |          |    | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
-| Global Propagator                                                                |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| B3 Propagator                                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Jaeger Propagator                                                                |          |    | +    | +  | +      |      | +      |     | +    |     | -    | -     |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          |    |      |    |        |      |        |     |      |     |      |       |
-| Fields                                                                           |          |    | +    | +  | +      |      | +      |     | +    |     | +    | +     |
-| Setter argument                                                                  |          |    | +    | +  | +      | +    | +      |     |      |     | +    | +     |
-| Getter argument                                                                  |          |    | +    | +  | +      | +    | +      |     |      |     | +    | +     |
-| Getter argument returning Keys                                                   |          |    | +    | +  | +      | +    | +      |     |      |     | -    | +     |
+| Composite Propagator                                                             |          | +  | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
+| Global Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| Jaeger Propagator                                                                |          | +  | +    | +  | +      |      | +      |     | +    |     | -    | -     |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Fields                                                                           |          | +  | +    | +  | +      |      | +      |     | +    |     | +    | +     |
+| Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      |     | +    | +     |
+| Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      |     | +    | +     |
+| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     |      |     | -    | +     |
 
 ## Environment Variables
 
