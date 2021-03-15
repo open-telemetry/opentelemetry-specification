@@ -32,7 +32,7 @@ These attributes are filled in for all DynamoDB request types.
 <!-- semconv dynamodb.all -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`db.system`](../database.md) | string | The value `dynamodb`. | `dynamodb` | No |
+| [`db.system`](../database.md) | string | The value `dynamodb`. | `dynamodb` | Yes |
 <!-- endsemconv -->
 
 ### DynamoDB.BatchGetItem
