@@ -12,7 +12,8 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 ## Common Attributes
 
 The span name MUST be of the format `Service.Operation` as per the AWS HTTP API, e.g., `DynamoDB.GetItem`,
-`S3.ListBuckets`. This is equivalent to concatenating `rpc.service` and `rpc.method` with `.`.
+`S3.ListBuckets`. This is equivalent to concatenating `rpc.service` and `rpc.method` with `.` and consistent
+with the naming guidelines for RPC client spans.
 
 <!-- semconv aws -->
 | Attribute  | Type | Description  | Examples  | Required |
@@ -23,6 +24,16 @@ The span name MUST be of the format `Service.Operation` as per the AWS HTTP API,
 <!-- endsemconv -->
 
 ## DynamoDB
+
+### Common Attributes
+
+These attributes are filled in for all DynamoDB request types.
+
+<!-- semconv dynamodb.all -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| [`db.system`](../database.md) | string | The value `dynamodb`. | `dynamodb` | No |
+<!-- endsemconv -->
 
 ### DynamoDB.BatchGetItem
 

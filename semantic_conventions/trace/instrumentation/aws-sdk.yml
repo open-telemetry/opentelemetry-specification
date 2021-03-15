@@ -26,15 +26,19 @@ groups:
           - GetItem
           - PutItem
 
-  - id: dynamodb.shared
-    extends: aws
-    prefix: aws.dynamodb
-    brief: "Attributes that exist for multiple DynamoDB request types."
+  - id: dynamodb.all
+    brief: "Attributes always filled for all DynamoDB request types."
     attributes:
       - ref: db.system
         brief: "The value `dynamodb`."
         examples:
           - dynamodb
+
+  - id: dynamodb.shared
+    extends: aws
+    prefix: aws.dynamodb
+    brief: "Attributes that exist for multiple DynamoDB request types."
+    attributes:
       - ref: db.operation
         brief: "The same value as `rpc.method`."
         examples:
