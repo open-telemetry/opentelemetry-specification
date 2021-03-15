@@ -473,14 +473,24 @@ make the shutdown timeout configurable.
 
 #### ForceFlush()
 
-Exports all spans that have not yet been exported to the configured `Exporter`.
+This is a hint to ensure that any tasks associated with `Spans` for which the
+`SpanProcessor` had already received events prior to the call to `ForceFlush` SHOULD
+be completed as soon as possible, preferably before returning from this method.
+
+In particular, if any `SpanProcessor` has any associated exporter, it SHOULD
+try to call the exporter's `Export` with all spans for which this was not
+already done and then invoke `ForceFlush` on it.
+The [built-in SpanProcessors](#built-in-span-processors) MUST do so.
+If a timeout is specified (see below), the SpanProcessor MUST prioritize honoring the timeout over
+finishing all calls. It MAY skip or abort some or all Export or ForceFlush
+calls it has made to achieve this goal.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
 `ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
 such as when using some FaaS providers that may suspend the process after an
-invocation, but before the `Processor` exports the completed spans.
+invocation, but before the `SpanProcessor` exports the completed spans.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
@@ -587,6 +597,24 @@ return a `Failure` result.
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). OpenTelemetry client authors can decide if they
 want to make the shutdown timeout configurable.
+
+#### `ForceFlush()`
+
+This is a hint to ensure that the export of any `Spans` the exporter has received prior to the
+call to `ForceFlush` SHOULD be completed as soon as possible, preferably before
+returning from this method.
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
+such as when using some FaaS providers that may suspend the process after an
+invocation, but before the exporter exports the completed spans.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want to
+make the flush timeout configurable.
 
 ### Further Language Specialization
 
