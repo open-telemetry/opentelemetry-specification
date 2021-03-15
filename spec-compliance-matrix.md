@@ -72,7 +72,7 @@ status of the feature is not known.
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     |      |     | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          |    | +    |    |        | +    |        |     |      |     |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        |    | +    |    |        | +    |        |     |      |     |      | +     |
-| [SpanProcessor implements ForceFlushes spec](specification/trace/sdk.md#forceflush-1)            |          |    |      |    |        |      |        |     |      |     |      |       |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)               |          |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
