@@ -72,7 +72,7 @@ status of the feature is not known.
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     |      |     | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          |    | +    |    |        | +    |        |     |      |     |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        |    | +    |    |        | +    |        |     |      |     |      | +     |
-| [SpanProcessor implements ForceFlushes spec](specification/trace/sdk.md#force-flush-1)                                             |          |    |      |    |        |      |        |     |      |     |      |       |
+| [SpanProcessor implements ForceFlushes spec](specification/trace/sdk.md#forceflush-1)            |          |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -144,7 +144,7 @@ Note: Support for environment variables is optional.
 | Feature                                               | Optional | Go | Java                                                                  | JS | Python                                                                  | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |-------------------------------------------------------|----------|----|-----------------------------------------------------------------------|----|-------------------------------------------------------------------------|------|--------|-----|------|-----|------|-------|
 | [Exporter interface](specification/trace/sdk.md#span-exporter) |          |    | + |    | +                                                                       |      |        |     |      |     | +    |       |
-| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-1) |          |    | + |    |                                                                         |      |        |     |      |     |      |       |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    |                                                                         |      |        |     |      |     |      |       |
 | Standard output (logging)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
