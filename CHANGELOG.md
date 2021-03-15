@@ -9,6 +9,8 @@ release.
 
 ### Traces
 
+- Clarify the description for the `TraceIdRatioBased` sampler needs to include the sampler's sampling ratio. ([#1536](https://github.com/open-telemetry/opentelemetry-specification/pull/1536))
+
 ### Metrics
 
 ### Logs
