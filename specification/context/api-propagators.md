@@ -267,7 +267,7 @@ Required arguments:
 - A `Context`.
 - The carrier that holds propagation fields.
 
-If the `TextMapPropagator`'s `Extract` implementation accept the optional `Getter` argument the following arguments are REQUIRED, otherwise they are OPTIONAL:
+If the `TextMapPropagator`'s `Extract` implementation accepts the optional `Getter` argument, the following arguments are REQUIRED, otherwise they are OPTIONAL:
 
 - The instance of `Getter` invoked for each propagation key to get.
 
