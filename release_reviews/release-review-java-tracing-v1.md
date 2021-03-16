@@ -15,13 +15,14 @@ Public Code Documentation: [Javadoc.io](https://javadoc.io/doc/io.opentelemetry)
 Public Examples: [Examples](https://github.com/open-telemetry/opentelemetry-java/tree/main/examples)
 
 Discovered Issues:
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2913
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2894
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2786
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2784
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2724
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2664
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2658
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2629
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2626
-  - https://github.com/open-telemetry/opentelemetry-java/issues/2746
+
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2913]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2894]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2786]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2784]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2724]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2664]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2658]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2629]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2626]
+- [https://github.com/open-telemetry/opentelemetry-java/issues/2746]
