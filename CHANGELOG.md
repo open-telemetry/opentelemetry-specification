@@ -18,6 +18,8 @@ release.
 
 ### Semantic Conventions
 
+- Update semantic conventions to distinguish between int and double ([#1550](https://github.com/open-telemetry/opentelemetry-specification/pull/1550))
+
 ## v1.1.0 (2021-03-11)
 
 ### Traces
