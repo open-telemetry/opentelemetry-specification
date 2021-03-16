@@ -405,7 +405,8 @@ The Span creation API MUST provide:
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
   the `Span` to link to and optional `Attributes`, either as individual
   parameters or as an immutable object encapsulating them, whichever is most
-  appropriate for the language.
+  appropriate for the language. Implementations MAY ignore links with an
+  [invalid](#isvalid) `SpanContext`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -522,6 +523,7 @@ status, which is `Unset`.
 - `StatusCode`, one of the values listed below.
 - Optional `Description` that provides a descriptive message of the `Status`.
   `Description` MUST only be used with the `Error` `StatusCode` value.
+  An empty `Description` is equivalent with a not present one.
 
 `StatusCode` is one of the following values:
 
