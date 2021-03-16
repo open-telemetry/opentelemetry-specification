@@ -328,9 +328,10 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
 
-`Span` creation MUST NOT set the newly created `Span` as the
-active `Span` in the [implicit `Context`](#context-interaction) by default, but this functionality MAY be offered additionally
-as a separate operation in languages with implicit context propagation.
+In languages with implicit `Context` propagation, `Span` creation MUST NOT
+set the newly created `Span` as the active `Span` in the
+[current `Context`](#context-interaction) by default, but this functionality
+MAY be offered additionally as a separate operation.
 
 The API MUST accept the following parameters:
 
