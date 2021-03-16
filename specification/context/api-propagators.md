@@ -266,6 +266,9 @@ Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
+
+If the `TextMapPropagator`'s `Extract` implementation accepts the optional `Getter` argument, the following arguments are REQUIRED, otherwise they are OPTIONAL:
+
 - The instance of `Getter` invoked for each propagation key to get.
 
 ### Composite Inject
@@ -274,6 +277,9 @@ Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
+
+If the `TextMapPropagator`'s `Inject` implementation accepts the optional `Setter` argument, the following arguments are REQUIRED, otherwise they are OPTIONAL:
+
 - The `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
 
 ## Global Propagators
