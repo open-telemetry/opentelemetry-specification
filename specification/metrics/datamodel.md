@@ -154,7 +154,7 @@ anchor our understanding of the OpenTelemetry data model and are divided into
 three categories:
 
 - Synchronous vs. Asynchronous. The act of calling a Metrics API in a
-  synchronous context means the application calls the SDK, typically having
+  synchronous context means the application/library calls the SDK, typically having
   associated trace context and baggage; an Asynchronous instrument is called at
   collection time, through a callback, and lacks context.
 - Adding vs. Grouping. Whereas adding instruments express a sum, grouping
@@ -163,7 +163,7 @@ three categories:
   to grouping instruments are generally not. Adding instrument values are always
   parts of a sum, while grouping instrument values are individual measurements.
 - Monotonic vs. Non-Monotonic. The adding instruments are categorized by whether
-  the  derivative of the quantity they express is non-negative. Monotonic
+  the derivative of the quantity they express is non-negative. Monotonic
   instruments are primarily useful for monitoring a rate value, whereas
   non-monotonic instruments are primarily useful for monitoring a total value.
 
