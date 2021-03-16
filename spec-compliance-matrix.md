@@ -69,9 +69,10 @@ status of the feature is not known.
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
-| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          |    | +    |    | +      | +    | +      |     |      |     | -    | +     |
+| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     |      |     | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          |    | +    |    |        | +    |        |     |      |     |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        |    | +    |    |        | +    |        |     |      |     |      | +     |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -106,16 +107,16 @@ status of the feature is not known.
 | Attach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
 | Detach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
 | Get current Context                                                              |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Composite Propagator                                                             |          |    | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
-| Global Propagator                                                                |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| TraceContext Propagator                                                          |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| B3 Propagator                                                                    |          |    | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Jaeger Propagator                                                                |          |    | +    | +  | +      |      | +      |     | +    |     | -    | -     |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          |    |      |    |        |      |        |     |      |     |      |       |
-| Fields                                                                           |          |    | +    | +  | +      |      | +      |     | +    |     | +    | +     |
-| Setter argument                                                                  |          |    | +    | +  | +      | +    | +      |     |      |     | +    | +     |
-| Getter argument                                                                  |          |    | +    | +  | +      | +    | +      |     |      |     | +    | +     |
-| Getter argument returning Keys                                                   |          |    | +    | +  | +      | +    | +      |     |      |     | -    | +     |
+| Composite Propagator                                                             |          | +  | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
+| Global Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
+| Jaeger Propagator                                                                |          | +  | +    | +  | +      |      | +      |     | +    |     | -    | -     |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Fields                                                                           |          | +  | +    | +  | +      |      | +      |     | +    |     | +    | +     |
+| Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      |     | +    | +     |
+| Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      |     | +    | +     |
+| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     |      |     | -    | +     |
 
 ## Environment Variables
 
@@ -124,24 +125,26 @@ Note: Support for environment variables is optional.
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | - | +  | -   |
-|OTEL_LOG_LEVEL                                |   | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | +    | - |    | - | -  | -   |        |
-|OTEL_PROPAGATORS                              |   | +  |   | +    | +  | +    | - |    | - | -  | -   |
-|OTEL_BSP_*                                    |   | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          |   | +  |   | -    | +  | -    | - |    | - | -  | -   |
-|OTEL_EXPORTER_JAEGER_*                        |   | +  |   | +    | +  | -    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                        |   | +  |   | +    |    | -    | - |    | - | -  | -   |
-|OTEL_TRACES_EXPORTER                          |   | +  |   | +    | +  | +    |   |    |   |    |     |
-|OTEL_METRICS_EXPORTER                         |   | +  |   | +    |    | -    |   |    |   | -  | -   |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               |   | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   |   | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    |   | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER                           |   | +  |   | +    | +  | +    |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER_ARG                       |   | +  |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_LOG_LEVEL                                | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | +    | - |    | - | -  | -   |        |
+|OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - |    | - | -  | -   |
+|OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1085) | +  |   | -    | +  | -    | - |    | - | -  | -   |
+|OTEL_EXPORTER_JAEGER_*                        | - | +  |   | +    | +  | -    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                        | - | +  |   | +    |    | -    | - |    | - | -  | -   |
+|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_METRICS_EXPORTER                         | - | +  |   | +    |    | -    |   |    |   | -  | -   |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | -    |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   |    |   |    |     |
 
 ## Exporters
 
 | Feature                                               | Optional | Go | Java                                                                  | JS | Python                                                                  | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |-------------------------------------------------------|----------|----|-----------------------------------------------------------------------|----|-------------------------------------------------------------------------|------|--------|-----|------|-----|------|-------|
+| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +                                                                       |      |        |     |      |     | +    |       |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    |                                                                         |      |        |     |      |     |      |       |
 | Standard output (logging)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
