@@ -95,9 +95,8 @@ the box settings for this repository will be consistent.
 To check for style violations, use
 
 ```bash
-# npm is required to install markdownlint
-npm install -g markdownlint-cli
-make markdownlint # run at the root
+make install-markdownlint # install markdownlint if not installed
+make markdownlint # run at the root of the repo
 ```
 
 To fix style violations, follow the
