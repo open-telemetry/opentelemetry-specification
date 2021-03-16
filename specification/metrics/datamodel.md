@@ -99,20 +99,23 @@ breadth of OTel metrics usage.
   temporality for a stateless client, stateful server:
     - Collector re-aggregates into 60 second resolution
     - Collector converts delta to cumulative temporality
-3. A number of OTel SDKs running locally each exports 10 second resolution, each
+3. OTel SDK exports both 10 seconds resolution (e.g. CPU, request latency) and
+  15 minutes resolution (e.g. room temperature) to a single OTel Collector.
+  The collector exports streams upstream with or without aggregation.
+4. A number of OTel SDKs running locally each exports 10 second resolution, each
   reports to a single (local) OTel collector.
     - Collector re-aggregates into 60 second resolution
     - Collector re-aggregates to eliminate the identity of individual SDKs (e.g.,
       distinct `service.instance.id` values)
     - Collector outputs to an OTLP destination
-4. Pool of OTel collectors receive OTLP and export Prometheus Remote Write
+5. Pool of OTel collectors receive OTLP and export Prometheus Remote Write
     - Collector joins service discovery with metric resources
     - Collector computes “up”, staleness marker
     - Collector applies a distinct external label
-5. OTel collector receives Statsd and exports OTLP
+6. OTel collector receives Statsd and exports OTLP
     - With delta temporality: stateless collector
     - With cumulative temporality: stateful collector
-6. OTel SDK exports directly to 3P backend
+7. OTel SDK exports directly to 3P backend
 
 These are considered the "core" use-cases used to analyze tradeoffs and design
 decisions within the metrics data model.
@@ -189,10 +192,10 @@ three value types:
 This model may be viewed as an idealization of
 [Prometheus Remote Write](https://docs.google.com/document/d/1LPhVRSFkGNSuU1fBd81ulhsCPR4hkSZyyBj1SZ8fWOM/edit#heading=h.3p42p5s8n0ui).
 Like that protocol, we are additionally concerned with knowing when a point
-value is defined, as compared with being implicitly or explicitly absent. There
-is no delta temporality in the timeseries model. To precisely define presence
-and absence of data requires further development of the correspondence between
-these models.
+value is defined, as compared with being implicitly or explicitly absent. A
+metric stream of delta data points defines time-interval values, not
+point-in-time values.  To precisely define presence and absence of data requires
+further development of the correspondence between these models.
 
 ### OpenTelemetry Protocol data model
 
