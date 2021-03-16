@@ -7,6 +7,10 @@ release.
 
 ## Unreleased
 
+### Context
+
+- Clarify composite `TextMapPropagator` method required and optional arguments. ([#1541](https://github.com/open-telemetry/opentelemetry-specification/pull/1541))
+
 ### Traces
 
 - Add `ForceFlush` to `Span Exporter` interface ([#1467](https://github.com/open-telemetry/opentelemetry-specification/pull/1467))
