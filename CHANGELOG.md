@@ -63,6 +63,8 @@ New:
 
 Updates:
 
+- Add `http.server.active_requests` to count in-flight HTTP requests
+  ([#1378](https://github.com/open-telemetry/opentelemetry-specification/pull/1378))
 - Update default limit for span attributes, events, links to 128([#1419](https://github.com/open-telemetry/opentelemetry-specification/pull/1419))
 - Update OT Trace propagator environment variable to match latest name([#1406](https://github.com/open-telemetry/opentelemetry-specification/pull/1406))
 - Remove Metrics SDK specification to avoid confusion, clarify that Metrics API
