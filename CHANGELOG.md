@@ -7,10 +7,41 @@ release.
 
 ## Unreleased
 
-- Adds note that implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
-- Adds `none` as a possible value for OTEL_TRACES_EXPORTER and OTEL_METRICS_EXPORTER to disable export
+### Context
+
+- Clarify composite `TextMapPropagator` method required and optional arguments. ([#1541](https://github.com/open-telemetry/opentelemetry-specification/pull/1541))
+
+### Traces
+
+- Add `ForceFlush` to `Span Exporter` interface ([#1467](https://github.com/open-telemetry/opentelemetry-specification/pull/1467))
+- Clarify the description for the `TraceIdRatioBased` sampler needs to include the sampler's sampling ratio. ([#1536](https://github.com/open-telemetry/opentelemetry-specification/pull/1536))
+
+### Metrics
+
+- Adds new metric data model specification ([#1512](https://github.com/open-telemetry/opentelemetry-specification/pull/1512))
+
+### Logs
+
+### Semantic Conventions
+
+## v1.1.0 (2021-03-11)
+
+### Traces
+
+- Implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
+- Add `none` as a possible value for OTEL_TRACES_EXPORTER to disable export
   ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
 - Add [`ForceFlush`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
+
+### Metrics
+
+- Add `none` as a possible value for OTEL_METRICS_EXPORTER to disable export
+  ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
+
+### Logs
+
+### Semantic Conventions
+
 - Add `elasticsearch` to `db.system` semantic conventions ([#1463](https://github.com/open-telemetry/opentelemetry-specification/pull/1463))
 - Add `arch` to `host` semantic conventions ([#1483](https://github.com/open-telemetry/opentelemetry-specification/pull/1483))
 - Add `runtime` to `container` semantic conventions ([#1482](https://github.com/open-telemetry/opentelemetry-specification/pull/1482))
@@ -18,7 +49,7 @@ release.
 Google products under `cloud.infrastructure_service` ([#1496](https://github.com/open-telemetry/opentelemetry-specification/pull/1496))
 - `http.url` MUST NOT contain credentials ([#1502](https://github.com/open-telemetry/opentelemetry-specification/pull/1502))
 - Add `aws.eks.cluster.arn` to EKS specific semantic conventions ([#1484](https://github.com/open-telemetry/opentelemetry-specification/pull/1484))
-- Adds new metric data model specification ([#1512](https://github.com/open-telemetry/opentelemetry-specification/pull/1512))
+- Rename `zone` to `availability_zone` in `cloud` semantic conventions ([#1495](https://github.com/open-telemetry/opentelemetry-specification/pull/1495))
 
 ## v1.0.1 (2021-02-11)
 
@@ -34,6 +65,8 @@ New:
 
 Updates:
 
+- Add `http.server.active_requests` to count in-flight HTTP requests
+  ([#1378](https://github.com/open-telemetry/opentelemetry-specification/pull/1378))
 - Update default limit for span attributes, events, links to 128([#1419](https://github.com/open-telemetry/opentelemetry-specification/pull/1419))
 - Update OT Trace propagator environment variable to match latest name([#1406](https://github.com/open-telemetry/opentelemetry-specification/pull/1406))
 - Remove Metrics SDK specification to avoid confusion, clarify that Metrics API

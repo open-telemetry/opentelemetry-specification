@@ -328,9 +328,10 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
 
-`Span` creation MUST NOT set the newly created `Span` as the currently
-active `Span` by default, but this functionality MAY be offered additionally
-as a separate operation.
+In languages with implicit `Context` propagation, `Span` creation MUST NOT
+set the newly created `Span` as the active `Span` in the
+[current `Context`](#context-interaction) by default, but this functionality
+MAY be offered additionally as a separate operation.
 
 The API MUST accept the following parameters:
 
@@ -462,6 +463,11 @@ The Span interface MUST provide:
 - An API to set a single `Attribute` where the attribute properties are passed
   as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
   implementations may offer a separate API for each of the possible value types.
+
+The Span interface MAY provide:
+
+- An API to set multiple `Attributes` at once, where the `Attributes` are passed in a
+  single method call.
 
 Setting an attribute with the same key as an existing attribute SHOULD overwrite
 the existing attribute's value.
