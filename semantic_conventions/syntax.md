@@ -95,7 +95,8 @@ An attribute is defined by:
 
 - `id`, string that uniquely identifies the attribute.
 - `type`, either a string literal denoting the type or an enum definition (See later).
-   The accepted strings literals are:
+   The accepted string literals are:
+
   * "string": String attributes.
   * "int": Integer attributes.
   * "double": Double attributes.
@@ -104,6 +105,8 @@ An attribute is defined by:
   * "int[]": Array of integer attributes.
   * "double[]": Array of double attributes.
   * "boolean[]": Array of booleans attributes.
+
+  See the [specification of Attributes](../specification/common/common.md#attributes) for the definition of the value types.
 - `ref`, optional string, reference an existing attribute, see later.
 - `required`, optional, specifies if the attribute is mandatory.
     Can be "always", or "conditional". When omitted, the attribute is not required.
