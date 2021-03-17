@@ -17,6 +17,7 @@ release.
 - Clarify the description for the `TraceIdRatioBased` sampler needs to include the sampler's sampling ratio. ([#1536](https://github.com/open-telemetry/opentelemetry-specification/pull/1536))
 - Define the fallback tracer name for invalid values.
   ([#1534](https://github.com/open-telemetry/opentelemetry-specification/pull/1534))
+- Remove the Included Propagators section from trace API specification that was a duplicate of the Propagators Distribution of the context specification. ([#1556](https://github.com/open-telemetry/opentelemetry-specification/pull/1556))
 
 ### Metrics
 
