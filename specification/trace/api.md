@@ -617,8 +617,6 @@ Parameters:
 - (Optional) Timestamp to explicitly set the end timestamp.
   If omitted, this MUST be treated equivalent to passing the current time.
 
-This API MUST be non-blocking.
-
 #### Record Exception
 
 To facilitate recording an exception languages SHOULD provide a
