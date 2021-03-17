@@ -109,7 +109,7 @@ This API MUST accept the following parameters:
   In that scenario, the `name` denotes a module name or component name within that library
   or application.
   In case an invalid name (null or empty string) is specified, a working
-  default Tracer implementation MUST be returned as a fallback rather than returning
+  Tracer implementation MUST be returned as a fallback rather than returning
   null or throwing an exception, its `name` property SHOULD keep the original invalid value,
   and a message reporting that the specified value is invalid SHOULD be logged.
   A library, implementing the OpenTelemetry API *may* also ignore this name and
