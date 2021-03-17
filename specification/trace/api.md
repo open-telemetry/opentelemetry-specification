@@ -37,7 +37,6 @@ Table of Contents
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
-* [Included Propagators](#included-propagators)
 
 </details>
 
