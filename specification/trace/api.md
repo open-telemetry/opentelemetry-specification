@@ -748,15 +748,6 @@ be called concurrently.
 
 **Link** - Links are immutable and safe to be used concurrently.
 
-## Included Propagators
-
-The API layer or an extension package MUST include the following `Propagator`s:
-
-* A `TextMapPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
-
-See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
-for how propagators are to be distributed.
-
 ## Behavior of the API in the absence of an installed SDK
 
 In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
