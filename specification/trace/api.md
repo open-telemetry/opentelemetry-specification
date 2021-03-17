@@ -110,9 +110,8 @@ This API MUST accept the following parameters:
   or application.
   In case an invalid name (null or empty string) is specified, a working
   default Tracer implementation MUST be returned as a fallback rather than returning
-  null or throwing an exception, and `name` SHOULD be the set to the
-  "`<INVALID INSTRUMENTATION NAME PROVIDED>`" literal, in order to signal that the
-  specified value is invalid.
+  null or throwing an exception, and `name` SHOULD keep the original invalid value,
+  with a log message reporting that the specified value is invalid.
   A library, implementing the OpenTelemetry API *may* also ignore this name and
   return a default instance for all calls, if it does not support "named"
   functionality (e.g. an implementation which is not even observability-related).
