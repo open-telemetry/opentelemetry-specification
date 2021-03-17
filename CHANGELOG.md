@@ -24,6 +24,11 @@ release.
 
 ### Semantic Conventions
 
+### Compatibility
+
+- Add initial OpenTracing compatibility section.
+  ([#1101](https://github.com/open-telemetry/opentelemetry-specification/pull/1101))
+
 ## v1.1.0 (2021-03-11)
 
 ### Traces
