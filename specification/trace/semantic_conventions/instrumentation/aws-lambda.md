@@ -120,7 +120,7 @@ a Lambda function F:
 ```
 Process C: | Span Client        |
 --
-Process F:    | Span Function !
+Function F:    | Span Function |
 ```
 
 | Field or Attribute | `Span Client` | `Span Function` |
