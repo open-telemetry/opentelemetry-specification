@@ -323,7 +323,7 @@ To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
 the configured limit.
 
-It the SDK implements the limits above it MUST provide a way to change these
+If the SDK implements the limits above it MUST provide a way to change these
 limits, via a configuration to the TracerProvider, by allowing users to
 configure individual limits like in the Java example bellow.
 
