@@ -48,9 +48,11 @@ be set to the [resource property][] from the proxy request event, which correspo
 route instead of the function name.
 
 [`faas.trigger`](../faas.md) MUST be set to `http`. [HTTP attributes](../http.md) SHOULD be set based on the
-available information in the proxy request event.
+available information in the proxy request event. `http.scheme` is available as the `x-forwarded-proto` header
+in the proxy request. Refer to the [input format][] for more details.
 
 [resource property]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+[input format]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
 
 ## SQS
 
@@ -59,7 +61,8 @@ So we consider processing both of a batch and of each individual message. The fu
 correspond to the SQS event, which is the batch of messages. For each message, an additional span SHOULD be
 created to correspond with the handling of the SQS message. Because handling of a message will be inside user
 business logic, not the Lambda framework, automatic instrumentation mechanisms without code change will often
-not be able to instrument the processing of the individual messages.
+not be able to instrument the processing of the individual messages. Instrumentation SHOULD provide utilities
+for creating message processing spans within user code.
 
 The span kind for both types of SQS spans MUST be `CONSUMER`.
 
@@ -77,7 +80,7 @@ added as a link to the span. This means the span may have as many links as messa
 [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
 [`messaging.operation`](../messaging.md) MUST be set to `process`.
 [`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
-[`messaging.destination`](../messaging.md#messaging-attributes) MUST be set to `queue`.
+[`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 ### SQS Message
 
@@ -90,7 +93,7 @@ added as a link to the span.
 [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
 [`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
 [`messaging.system`](../messaging.md#messaging-attributes) MUST be set to `AmazonSQS`.
-[`messaging.destination`](../messaging.md#messaging-attributes) MUST be set to `queue`.
+[`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 Other [Messaging attributes](../messaging.md#messaging-attributes) SHOULD be set based on the available information in the SQS message
 event.
@@ -106,3 +109,82 @@ of propagating context and not tied to any particular observability backend. Not
 using AWS X-Ray - any observability backend will fully function using this propagation mechanism.
 
 [message system attributes]: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-metadata.html#sqs-message-system-attributes
+
+## Examples
+
+### API Gateway Request Proxy (Lambda tracing passive)
+
+Given a process C that sends an HTTP request to an API Gateway endpoint with path `/pets/{petId}` configured for
+a Lambda function F:
+
+```
+Process C: | Span Client        |
+--
+Process F:    | Span Function !
+```
+
+| Field or Attribute | `Span Client` | `Span Function` |
+|-|-|-|
+| Span name | `HTTP GET` | `/pets/{petId}` |
+| Parent |  | Span Client |
+| SpanKind | `CLIENT` | `SERVER` |
+| Status | `Ok` | `Ok` |
+| `faas.execution` | | `79104EXAMPLEB723` |
+| `faas.id` | | `arn:aws:lambda:us-west-2:123456789012:function:my-function.` |
+| `faas.trigger` | | `http` |
+| `cloud.account.id` | | `12345678912` |
+| `net.peer.name` | `foo.execute-api.us-east-1.amazonaws.com` |  |
+| `net.peer.port` | `413` |  |
+| `http.method` | `GET` | `GET` |
+| `http.user_agent` | `okhttp 3.0` | `okhttp 3.0` |
+| `http.url` | `https://foo.execute-api.us-east-1.amazonaws.com/pets/10` |  |
+| `http.scheme` | | `https` |
+| `http.host` | | `foo.execute-api.us-east-1.amazonaws.com` |
+| `http.target` | | `/pets/10` |
+| `http.route` | | `/pets/{petId}` |
+| `http.status_code` | `200` | `200` |
+
+### API Gateway Request Proxy (Lambda tracing active)
+
+Active tracing in Lambda means an API Gateway span `Span APIGW` and a Lambda runtime invocation span `Span Lambda`
+will be exported to AWS X-Ray. All attributes above are the same except that in this case, the parent of `APIGW`
+is `Span Client` and the parent of `Span Function` is `Span Lambda`.
+
+### SQS (Lambda tracing passive)
+
+Given a process P, that sends two messages to a queue Q on SQS, and a Lambda function F, which processes both of them in one batch (Span ProcBatch) and
+generates a processing span for each message separately (Spans Proc1 and Proc2).
+
+
+
+```
+Process P: | Span Prod1 | Span Prod2 |
+--
+Function F:                      | Span ProcBatch |
+                                        | Span Proc1 |
+                                               | Span Proc2 |
+```
+
+| Field or Attribute | Span Prod1 | Span Prod2 | Span ProcBatch | Span Proc1 | Span Proc2 |
+|-|-|-|-|-|-|
+| Span name | `Q send` | `Q send` | `Q process` | `Q process` | `Q process` |
+| Parent |  |  |  | Span ProcBatch | Span ProcBatch |
+| Links |  |  |  | Span Prod1 | Span Prod2 |
+| SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
+| Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
+| `messaging.system` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` |
+| `messaging.destination` | `Q` | `Q` | | `Q` | `Q` |
+| `messaging.destination_kind` | `queue` | `queue` | `queue` | `queue` | `queue` |
+| `messaging.operation` |  |  | `process` | `process"` | `process` |
+| `messaging.message_id` | | | | `"a1"` | `"a2"` |
+
+The above requires user code change to create `Span Proc1` and `Span Proc2` - if Java, they would inherit from
+[TracingSqsMessageHandler][] instead of Lambda's standard `RequestHandler` to enable them. Otherwise they would
+not exist.
+
+[TracingSqsMessageHandler]: https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/aws-lambda-1.0/library/src/main/java/io/opentelemetry/instrumentation/awslambda/v1_0/TracingSqsMessageHandler.java
+
+### SQS (Lambda tracing active)
+
+Active tracing in Lambda means a Lambda runtime invocation span `Span Lambda` will be exported to X-Ray. In this
+case, all of the above is the same except `Span ProcBatch` will have a parent of `Span Lambda`.
