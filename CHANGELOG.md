@@ -24,6 +24,8 @@ release.
 
 ### Semantic Conventions
 
+- Add details for filling semantic conventiosn for AWS Lambda ([#1442](https://github.com/open-telemetry/opentelemetry-specification/pull/1442))
+
 ### Compatibility
 
 - Add initial OpenTracing compatibility section.
