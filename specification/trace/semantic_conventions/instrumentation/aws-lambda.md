@@ -15,10 +15,10 @@ For all events, a span with kind `SERVER` MUST be created corresponding to the f
 otherwise below. Unless stated otherwise below, the name of the span MUST be set to the function name from the
 Lambda `Context`.
 
-The following attributes SHOULD be set.
+The following attributes SHOULD be set:
 
 - [`faas.execution`](../faas.md) - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`
-- [`faas.id`](../../../resource/semantic_conventions/faas.md) - The value of the invocation arn for the function, which is always available through an accessor on the Lambda `Context`
+- [`faas.id`](../../../resource/semantic_conventions/faas.md) - The value of the invocation ARN for the function, which is always available through an accessor on the Lambda `Context`
 - [`cloud.account.id`](../../../resource/semantic_conventions/cloud.md) - In some languages, this is available as an accessor on the Lambda `Context`. Otherwise, it can be parsed from the value of `faas.id` as the fifth item when splitting on `:`
 
 ### Determining the parent of a span
@@ -43,20 +43,23 @@ configuration for a REST API, in which case only a deserialized body payload is 
 gateway is configured to proxy to the Lambda function, the instrumented request handler will have access to all
 the information about the HTTP request in the form of an API Gateway Proxy Request Event.
 
-The Lambda span name and the [`http.route` span attribute](../http.md) SHOULD be set to the `Resource` from the
-proxy request event, which corresponds to the user configured HTTP route instead of the function name.
+The Lambda span name and the [`http.route` span attribute](../http.md#http-server-semantic-conventions) SHOULD
+be set to the [resource property][] from the proxy request event, which corresponds to the user configured HTTP
+route instead of the function name.
 
 [`faas.trigger`](../faas.md) MUST be set to `http`. [HTTP attributes](../http.md) SHOULD be set based on the
 available information in the proxy request event.
 
+[resource property]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+
 ## SQS
 
-SQS is a message queue that triggers a Lambda function with a batch of messages. So we consider processing both
-of a batch and of each individual message. The function invocation span MUST correspond to the SQS event, which
-is the batch of messages. For each message, an additional span SHOULD be created to correspond with the handling
-of the SQS message. Because handling of a message will be inside user business logic, not the Lambda framework,
-automatic instrumentation mechanisms without code change will often not be able to instrument the processing of
-the individual messages.
+Amazon Simple Queue Service (SQS) is a message queue that triggers a Lambda function with a batch of messages.
+So we consider processing both of a batch and of each individual message. The function invocation span MUST
+correspond to the SQS event, which is the batch of messages. For each message, an additional span SHOULD be
+created to correspond with the handling of the SQS message. Because handling of a message will be inside user
+business logic, not the Lambda framework, automatic instrumentation mechanisms without code change will often
+not be able to instrument the processing of the individual messages.
 
 The span kind for both types of SQS spans MUST be `CONSUMER`.
 
@@ -66,7 +69,7 @@ For the SQS event span, if all the messages in the event have the same event sou
 be `<event source> process`. If there are multiple sources in the batch, the name MUST be
 `multiple_sources process`. The parent MUST be the `SERVER` span corresponding to the function invocation.
 
-For every message in the event, the message's system attributes (not message attributes, which are provided by
+For every message in the event, the [message system attributes][] (not message attributes, which are provided by
 the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an OpenTelemetry `Context` SHOULD be
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span. This means the span may have as many links as messages in the batch.
@@ -74,23 +77,32 @@ added as a link to the span. This means the span may have as many links as messa
 [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
 [`messaging.operation`](../messaging.md) MUST be set to `process`.
 [`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
+[`messaging.destination`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 ### SQS Message
 
 For the SQS message span, the name MUST be `<event source> process`.  The parent MUST be the `CONSUMER` span
-corresponding to the SQS event. The message's system attributes (not message attributes, which are provided by
+corresponding to the SQS event. The [message system attributes][] (not message attributes, which are provided by
 the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an OpenTelemetry `Context` SHOULD be
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span.
 
 [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
-[`messaging.operation`](../messaging.md) MUST be set to `process`.
-[`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
+[`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
+[`messaging.system`](../messaging.md#messaging-attributes) MUST be set to `AmazonSQS`.
+[`messaging.destination`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
-Other [Messaging attributes](../messaging.md) SHOULD be set based on the available information in the SQS message
+Other [Messaging attributes](../messaging.md#messaging-attributes) SHOULD be set based on the available information in the SQS message
 event.
 
-Note that `AWSTraceHeader` is the only supported mechanism for propagating `Context` for SQS to prevent conflicts
-with other sources. Notably, message attributes (user-provided, not system) are not supported - the linked contexts
-are always expected to have been sent as HTTP headers of the `SQS.SendMessage` request that the message originated
-from. This is a function of AWS SDK instrumentation, not Lambda instrumentation.
+Note that `AWSTraceHeader` is the only supported mechanism for propagating `Context` in instrumentation for SQS
+to prevent conflicts with other sources. Notably, message attributes (user-provided, not system) are not supported -
+the linked contexts are always expected to have been sent as HTTP headers of the `SQS.SendMessage` request that
+the message originated from. This is a function of AWS SDK instrumentation, not Lambda instrumentation.
+
+Using the `AWSTraceHeader` ensures that propagation will work across AWS services that may be integrated to
+Lambda via SQS, for example a flow that goes through S3 -> SNS -> SQS -> Lambda. `AWSTraceHeader` is only a means
+of propagating context and not tied to any particular observability backend. Notably, using it does not imply
+using AWS X-Ray - any observability backend will fully function using this propagation mechanism.
+
+[message system attributes]: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-metadata.html#sqs-message-system-attributes

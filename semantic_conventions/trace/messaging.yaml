@@ -9,7 +9,7 @@ groups:
           type: string
           required: always
           brief: 'A string identifying the messaging system.'
-          examples: ['kafka', 'rabbitmq', 'activemq']
+          examples: ['kafka', 'rabbitmq', 'activemq', 'AmazonSQS']
         - id: destination
           type: string
           required: always
