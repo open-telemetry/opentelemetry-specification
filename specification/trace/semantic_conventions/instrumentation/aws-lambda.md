@@ -130,7 +130,7 @@ Function F:    | Span Function |
 | SpanKind | `CLIENT` | `SERVER` |
 | Status | `Ok` | `Ok` |
 | `faas.execution` | | `79104EXAMPLEB723` |
-| `faas.id` | | `arn:aws:lambda:us-west-2:123456789012:function:my-function.` |
+| `faas.id` | | `arn:aws:lambda:us-west-2:123456789012:function:my-function` |
 | `faas.trigger` | | `http` |
 | `cloud.account.id` | | `12345678912` |
 | `net.peer.name` | `foo.execute-api.us-east-1.amazonaws.com` |  |
