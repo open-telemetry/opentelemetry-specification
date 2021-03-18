@@ -77,10 +77,10 @@ the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an O
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span. This means the span may have as many links as messages in the batch.
 
-[`faas.trigger`](../faas.md) MUST be set to `pubsub`.
-[`messaging.operation`](../messaging.md) MUST be set to `process`.
-[`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
-[`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
+- [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
+- [`messaging.operation`](../messaging.md) MUST be set to `process`.
+- [`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
+- [`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 ### SQS Message
 
@@ -90,10 +90,10 @@ the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an O
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span.
 
-[`faas.trigger`](../faas.md) MUST be set to `pubsub`.
-[`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
-[`messaging.system`](../messaging.md#messaging-attributes) MUST be set to `AmazonSQS`.
-[`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
+- [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
+- [`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
+- [`messaging.system`](../messaging.md#messaging-attributes) MUST be set to `AmazonSQS`.
+- [`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 Other [Messaging attributes](../messaging.md#messaging-attributes) SHOULD be set based on the available information in the SQS message
 event.
@@ -154,8 +154,6 @@ is `Span Client` and the parent of `Span Function` is `Span Lambda`.
 
 Given a process P, that sends two messages to a queue Q on SQS, and a Lambda function F, which processes both of them in one batch (Span ProcBatch) and
 generates a processing span for each message separately (Spans Proc1 and Proc2).
-
-
 
 ```
 Process P: | Span Prod1 | Span Prod2 |
