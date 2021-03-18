@@ -178,8 +178,8 @@ Function F:                      | Span ProcBatch |
 | `messaging.operation` |  |  | `process` | `process"` | `process` |
 | `messaging.message_id` | | | | `"a1"` | `"a2"` |
 
-The above requires user code change to create `Span Proc1` and `Span Proc2` - if Java, they would inherit from
-[TracingSqsMessageHandler][] instead of Lambda's standard `RequestHandler` to enable them. Otherwise they would
+The above requires user code change to create `Span Proc1` and `Span Proc2` - in Java, the user would inherit from
+[TracingSqsMessageHandler][] instead of Lambda's standard `RequestHandler` to enable them. Otherwise the spans would
 not exist.
 
 [TracingSqsMessageHandler]: https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/aws-lambda-1.0/library/src/main/java/io/opentelemetry/instrumentation/awslambda/v1_0/TracingSqsMessageHandler.java
