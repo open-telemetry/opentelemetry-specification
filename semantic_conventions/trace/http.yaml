@@ -35,7 +35,7 @@ groups:
         brief: 'The URI scheme identifying the used protocol.'
         examples: ["http", "https"]
       - id: status_code
-        type: number
+        type: int
         required:
           conditional: If and only if one was received/sent.
         brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
@@ -71,26 +71,26 @@ groups:
         brief: 'Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client.'
         examples: ['CERN-LineMode/2.15 libwww/2.17b3']
       - id: request_content_length
-        type: number
+        type: int
         brief: >
           The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
       - id: request_content_length_uncompressed
-        type: number
+        type: int
         brief: >
           The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used.
         examples: 5493
       - id: response_content_length
-        type: number
+        type: int
         brief: >
           The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
       - id: response_content_length_uncompressed
-        type: number
+        type: int
         brief: >
           The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used.
         examples: 5493
