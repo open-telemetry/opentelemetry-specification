@@ -92,11 +92,11 @@ OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Zipk
 
 #### OTLP -> Zipkin
 
-If Zipkin `SpanKind` resolves to either `SpanKind.CLIENT` or `SpanKind.PRODUCER`
-then the service SHOULD specify remote endpoint otherwise Zipkin won't treat the
-Span as a dependency. `peer.service` is the preferred attribute but is not
-always available. The following table lists the possible attributes for
-`remoteEndpoint` by preferred ranking:
+Zipkin's `remoteEndpoint` SHOULD be populated to allow Zipkin to
+correctly treat the Span as a dependency regardless of `SpanKind`.
+`peer.service` is the preferred OpenTelemetry attribute to use, but is
+not always available. The following table lists the possible
+attributes for `remoteEndpoint` by preferred ranking:
 
 |Rank|Attribute Name|Reason|
 |---|---|---|
