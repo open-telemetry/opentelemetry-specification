@@ -15,6 +15,8 @@ release.
 
 - Add `ForceFlush` to `Span Exporter` interface ([#1467](https://github.com/open-telemetry/opentelemetry-specification/pull/1467))
 - Clarify the description for the `TraceIdRatioBased` sampler needs to include the sampler's sampling ratio. ([#1536](https://github.com/open-telemetry/opentelemetry-specification/pull/1536))
+- Define the fallback tracer name for invalid values.
+  ([#1534](https://github.com/open-telemetry/opentelemetry-specification/pull/1534))
 
 ### Metrics
 
@@ -23,6 +25,13 @@ release.
 ### Logs
 
 ### Semantic Conventions
+
+- Update semantic conventions to distinguish between int and double ([#1550](https://github.com/open-telemetry/opentelemetry-specification/pull/1550))
+
+### Compatibility
+
+- Add initial OpenTracing compatibility section.
+  ([#1101](https://github.com/open-telemetry/opentelemetry-specification/pull/1101))
 
 ## v1.1.0 (2021-03-11)
 
