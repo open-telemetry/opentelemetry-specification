@@ -188,9 +188,3 @@ Note: Support for environment variables is optional.
 
 `*` For each type of exporter, OTLP, Zipkin, and Jaeger, implementing at least one of the supported formats is required.
 Implementing more than one formats is optional.
-
-## Semantic Conventions
-
-|Feature                                       |Java|Go|JS|Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
-|----------------------------------------------|----|--|--|------|----|------|---|----|---|----|-----|
-|Auto-generate semantic convention key/enums   |  + |  |  |      |    |      |   |    |   |    |     |
