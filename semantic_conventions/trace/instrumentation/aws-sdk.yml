@@ -110,17 +110,17 @@ groups:
               ]
              }'
       - id: provisioned_read_capacity
-        type: number
+        type: double
         brief: "The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter."
         examples:
-          - 1
-          - 2
+          - 1.0
+          - 2.0
       - id: provisioned_write_capacity
-        type: number
+        type: double
         brief: "The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter."
         examples:
-          - 1
-          - 2
+          - 1.0
+          - 2.0
       - id: consistent_read
         type: boolean
         brief: "The value of the `ConsistentRead` request parameter."
@@ -132,7 +132,7 @@ groups:
           - Title, Price, Color
           - Title, Description, RelatedItems, ProductReviews
       - id: limit
-        type: number
+        type: int
         brief: "The value of the `Limit` request parameter."
         examples:
           - 10
@@ -271,7 +271,7 @@ groups:
           - Users
           - CatsTable
       - id: table_count
-        type: number
+        type: int
         brief: "The the number of items in the `TableNames` response parameter."
         examples:
           - 20
@@ -310,22 +310,22 @@ groups:
     prefix: aws.dynamodb
     attributes:
       - id: segment
-        type: number
+        type: int
         brief: "The value of the `Segment` request parameter."
         examples:
           - 10
       - id: total_segments
-        type: number
+        type: int
         brief: "The value of the `TotalSegments` request parameter."
         examples:
           - 100
       - id: count
-        type: number
+        type: int
         brief: "The value of the `Count` response parameter."
         examples:
           - 10
       - id: scanned_count
-        type: number
+        type: int
         brief: "The value of the `ScannedCount` response parameter."
         examples:
           - 50
