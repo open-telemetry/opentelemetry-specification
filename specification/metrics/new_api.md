@@ -142,8 +142,6 @@ should be the responsibility of the `MeterProvider` instead.
 The `Meter` MUST provide functions to create new [Instruments](#instrument):
 
 * [Create a new Counter](#counter-creation) (see the section on `Counter`)
-* [Create a new Gauge](#gauge-creation) (see the section on `Gauge`)
-* [Create a new Histogram](#histogram-creation) (see the section on `Histogram`)
 
 ## Instrument
 
@@ -151,9 +149,8 @@ Instruments are used to report [Measurements](#measurement). Each Instrument
 will have the following information:
 
 * The `name` of the Instrument
-* The `kind` of the Instrument - whether it is a [Counter](#counter),
-  [Gauge](#gauge) or [Histogram](#histogram), whether it is synchronous or
-  asynchronous
+* The `kind` of the Instrument - whether it is a [Counter](#counter) or other
+  instruments, whether it is synchronous or asynchronous
 * An optional `unit of measure`
 * An optional `description`
 * An optional list of [`Attribute`](../common/common.md#attributes) names and
