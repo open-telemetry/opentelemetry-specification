@@ -134,8 +134,8 @@ returned `Meter`s and actively update their configuration if it changes.
 
 The meter is responsible for creating [Instruments](#instrument).
 
-Note that `Meter` should usually *not* be responsible for configuration. This
-should be the responsibility of the `MeterProvider` instead.
+Note: `Meter` SHOULD NOT be responsible for the configuration. This should be
+the responsibility of the `MeterProvider` instead.
 
 ### Meter operations
 
