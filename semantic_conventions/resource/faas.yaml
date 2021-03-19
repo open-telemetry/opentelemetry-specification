@@ -35,7 +35,7 @@ groups:
           The execution environment ID as a string.
         examples: ['my-function:instance-0001']
       - id: max_memory
-        type: number
+        type: int
         brief: >
           The amount of memory available to the serverless function in MiB.
         note: >

@@ -36,10 +36,10 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 |---|---|---|---|---|
 | `net.transport` | string | Transport protocol used. See note below. | `IP.TCP` | No |
 | `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
-| `net.peer.port` | number | Remote port number. | `80`; `8080`; `443` | No |
+| `net.peer.port` | int | Remote port number. | `80`; `8080`; `443` | No |
 | `net.peer.name` | string | Remote hostname or similar, see note below. | `example.com` | No |
 | `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
-| `net.host.port` | number | Like `net.peer.port` but for the host port. | `35555` | No |
+| `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
 | `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
 
 `net.transport` MUST be one of the following:
@@ -149,7 +149,7 @@ a thread that started a span.
 <!-- semconv thread -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `thread.id` | number | Current "managed" thread ID (as opposed to OS thread ID). | `42` | No |
+| `thread.id` | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | No |
 | `thread.name` | string | Current thread name. | `main` | No |
 <!-- endsemconv -->
 
@@ -178,5 +178,5 @@ about the span.
 | `code.function` | string | The method or function name, or equivalent (usually rightmost part of the code unit's name). | `serveRequest` | No |
 | `code.namespace` | string | The "namespace" within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit. | `com.example.MyHttpService` | No |
 | `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | No |
-| `code.lineno` | number | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | No |
+| `code.lineno` | int | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | No |
 <!-- endsemconv -->
