@@ -267,7 +267,7 @@ the pair set, or else fallback to use the `log` literal string.
 If pair set contains a `event=error` entry, the values MUST be mapped from
 [OpenTracing Log Fields](https://github.com/opentracing/specification/blob/master/semantic_conventionsmd#log-fields-table)
 to an `Event` with the conventions outlined in the
-[Exception semantic conventions](semantic_conventions/exceptions.md) document:
+[Exception semantic conventions](../trace/semantic_conventions/exceptions.md) document:
 
 - If an entry with `error.object` key exists and the value is a language-specific
   error object, a call to `RecordException(e)` is performed along the rest of
