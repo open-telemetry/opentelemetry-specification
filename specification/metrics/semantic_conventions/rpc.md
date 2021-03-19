@@ -65,7 +65,7 @@ or not they should be on the server, client or both.
 | [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the method being called, must be equal to the $method part in the span name. | `exampleMethod` | No, but recommended |
 | [`net.peer.ip`](../../trace/semantic_conventions/span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
 | [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below |
-| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | number | Remote port number. | `80`; `8080`; `443` | See below |
+| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Remote port number. | `80`; `8080`; `443` | See below |
 | [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below. | `IP.TCP` | See below |
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
