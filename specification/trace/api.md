@@ -37,6 +37,7 @@ Table of Contents
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
 * [SpanKind](#spankind)
 * [Concurrency](#concurrency)
+* [Included Propagators](#included-propagators)
 
 </details>
 
@@ -746,6 +747,11 @@ be called concurrently.
 **Event** - Events are immutable and safe to be used concurrently.
 
 **Link** - Links are immutable and safe to be used concurrently.
+
+## Included Propagators
+
+See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
+for how propagators are to be distributed.
 
 ## Behavior of the API in the absence of an installed SDK
 
