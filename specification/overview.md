@@ -77,7 +77,7 @@ The **Semantic Conventions** define the keys and values which describe commonly 
 
 Both the collector and the client libraries SHOULD autogenerate semantic
 convention keys and enum values into constants (or language idomatic
-equivalent). Generated values shouldn't be distrubuted in stable packages
+equivalent). Generated values shouldn't be distributed in stable packages
 until semantic conventions are stable.
 The [YAML](../semantic_conventions) files MUST be used as the
 source of truth for generation. Each language implementation SHOULD
