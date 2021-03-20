@@ -9,6 +9,12 @@ applicable when handlers are for HTTP requests.
 There are a variety of triggers for Lambda functions, and this document will grow over time to cover all the
 use cases.
 
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+// toc goes here
+<!-- tocstop -->
+
 ## All triggers
 
 For all events, a span with kind `SERVER` MUST be created corresponding to the function invocation unless stated
@@ -176,11 +182,11 @@ Function F:                      | Span ProcBatch |
 | `messaging.operation` |  |  | `process` | `process"` | `process` |
 | `messaging.message_id` | | | | `"a1"` | `"a2"` |
 
-The above requires user code change to create `Span Proc1` and `Span Proc2` - in Java, the user would inherit from
-[TracingSqsMessageHandler][] instead of Lambda's standard `RequestHandler` to enable them. Otherwise the spans would
-not exist.
+The above requires user code change to create `Span Proc1` and `Span Proc2`. In Java, the user would inherit from
+[TracingSqsMessageHandler][] instead of Lambda's standard `RequestHandler` to enable them. Otherwise these two spans
+would not exist.
 
-[TracingSqsMessageHandler]: https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/aws-lambda-1.0/library/src/main/java/io/opentelemetry/instrumentation/awslambda/v1_0/TracingSqsMessageHandler.java
+[TracingSqsMessageHandler]: https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/v1.0.1/instrumentation/aws-lambda-1.0/library/src/main/java/io/opentelemetry/instrumentation/awslambda/v1_0/TracingSqsMessageHandler.java
 
 ### SQS (Lambda tracing active)
 
