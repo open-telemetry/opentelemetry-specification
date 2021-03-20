@@ -9,10 +9,22 @@ applicable when handlers are for HTTP requests.
 There are a variety of triggers for Lambda functions, and this document will grow over time to cover all the
 use cases.
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i specification/trace/semantic_conventions/instrumentation/aws-lambda.md` -->
 
 <!-- toc -->
-// toc goes here
+
+- [All triggers](#all-triggers)
+  * [Determining the parent of a span](#determining-the-parent-of-a-span)
+- [API Gateway](#api-gateway)
+- [SQS](#sqs)
+  * [SQS Event](#sqs-event)
+  * [SQS Message](#sqs-message)
+- [Examples](#examples)
+  * [API Gateway Request Proxy (Lambda tracing passive)](#api-gateway-request-proxy-lambda-tracing-passive)
+  * [API Gateway Request Proxy (Lambda tracing active)](#api-gateway-request-proxy-lambda-tracing-active)
+  * [SQS (Lambda tracing passive)](#sqs-lambda-tracing-passive)
+  * [SQS (Lambda tracing active)](#sqs-lambda-tracing-active)
+
 <!-- tocstop -->
 
 ## All triggers
