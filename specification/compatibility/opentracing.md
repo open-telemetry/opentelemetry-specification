@@ -264,6 +264,21 @@ key/value pair set.
 The `Add Event`'s `name` parameter MUST be the value with the `event` key in
 the pair set, or else fallback to use the `log` literal string.
 
+If pair set contains a `event=error` entry, the values MUST be mapped from
+[OpenTracing Log Fields](https://github.com/opentracing/specification/blob/master/semantic_conventionsmd#log-fields-table)
+to an `Event` with the conventions outlined in the
+[Exception semantic conventions](../trace/semantic_conventions/exceptions.md) document:
+
+- If an entry with `error.object` key exists and the value is a language-specific
+  error object, a call to `RecordException(e)` is performed along the rest of
+  the specified key/value pair set as additional event attributes.
+- Else, a call to `AddEvent` is performed with `name` being set to `exception`,
+  along the specified key/value pair set as additional event attributes,
+  including mapping of the following key/value pairs:
+  - `error.kind` maps to `exception.type`.
+  - `message` maps to `exception.message`.
+  - `stack` maps to `exception.stacktrace`.
+
 If an explicit timestamp is specified, a conversion MUST be done to match the
 OpenTracing and OpenTelemetry units.
 
