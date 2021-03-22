@@ -36,7 +36,7 @@ Table of Contents
 
 ## Overview
 
-The Metrics API consists of these main classes:
+The Metrics API consists of these main components:
 
 * [MeterProvider](#meterprovider) is the entry point of the API. It provides
   access to `Meters`.
