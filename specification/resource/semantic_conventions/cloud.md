@@ -13,7 +13,7 @@
 | `cloud.account.id` | string | The cloud account ID the resource is assigned to. | `111111111111`; `opentelemetry` | No |
 | `cloud.region` | string | The geographical region the resource is running. Refer to your provider's docs to see the available regions, for example [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), or [Google Cloud regions](https://cloud.google.com/about/locations). | `us-central1`; `us-east-1` | No |
 | `cloud.availability_zone` | string | Cloud regions often have multiple, isolated locations known as zones to increase availability. Availability zone represents the zone where the resource is running. [1] | `us-east-1c` | No |
-| `cloud.infrastructure_service` | string | The cloud infrastructure resource in use. [2] | `aws_ec2`; `azure_vm`; `gcp_compute_engine` | No |
+| `cloud.platform` | string | The cloud platform in use. [2] | `aws_ec2`; `azure_vm`; `gcp_compute_engine` | No |
 
 **[1]:** Availability zones are called "zones" on Google Cloud.
 
@@ -27,7 +27,7 @@
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
 
-`cloud.infrastructure_service` MUST be one of the following or, if none of the listed values apply, a custom value:
+`cloud.platform` MUST be one of the following or, if none of the listed values apply, a custom value:
 
 | Value  | Description |
 |---|---|
