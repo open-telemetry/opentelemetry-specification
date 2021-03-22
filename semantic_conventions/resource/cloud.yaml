@@ -2,7 +2,7 @@ groups:
   - id: cloud
     prefix: cloud
     brief: >
-      A cloud infrastructure (e.g. GCP, Azure, AWS)
+      A cloud environment (e.g. GCP, Azure, AWS)
     attributes:
       - id: provider
         type:
@@ -42,7 +42,7 @@ groups:
         note: >
           Availability zones are called "zones" on Google Cloud.
         examples: ['us-east-1c']
-      - id: infrastructure_service
+      - id: platform
         type:
           allow_custom_values: true
           members:
@@ -92,7 +92,7 @@ groups:
               value: 'gcp_app_engine'
               brief: Google Cloud App Engine (GAE)
         brief: >
-          The cloud infrastructure resource in use.
+          The cloud platform in use.
         note: >
           The prefix of the service SHOULD match the one specified in `cloud.provider`.
         examples: ['aws_ec2', 'azure_vm', 'gcp_compute_engine']
