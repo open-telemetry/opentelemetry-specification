@@ -750,10 +750,6 @@ be called concurrently.
 
 ## Included Propagators
 
-The API layer or an extension package MUST include the following `Propagator`s:
-
-* A `TextMapPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
-
 See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
 for how propagators are to be distributed.
 
