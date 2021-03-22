@@ -361,7 +361,7 @@ The Propagators API currently defines one `Propagator` type:
 
 The OpenTelemetry collector is a set of components that can collect traces,
 metrics and eventually other telemetry data (e.g. logs) from processes
-instrumented by OpenTelementry or other monitoring/tracing libraries (Jaeger,
+instrumented by OpenTelemetry or other monitoring/tracing libraries (Jaeger,
 Prometheus, etc.), do aggregation and smart sampling, and export traces and
 metrics to one or more monitoring/tracing backends. The collector will allow to
 enrich and transform collected telemetry (e.g. add additional attributes or
