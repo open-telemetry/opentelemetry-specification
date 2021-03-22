@@ -624,7 +624,7 @@ Any locking used MUST be minimized and SHOULD be removed entirely if
 possible. The downstream SpanProcessors and subsequent SpanExporters called
 from this operation may be used for testing, proof-of-concept ideas, or
 debugging and may not be designed for production use themselves. They are not
-in the scope this requirement and recommendation.
+in the scope of this requirement and recommendation.
 
 #### Record Exception
 
