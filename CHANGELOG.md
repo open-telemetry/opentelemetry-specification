@@ -21,9 +21,13 @@ release.
 
 ### Metrics
 
+- Adds new metric data model specification ([#1512](https://github.com/open-telemetry/opentelemetry-specification/pull/1512))
+
 ### Logs
 
 ### Semantic Conventions
+
+- Update semantic conventions to distinguish between int and double ([#1550](https://github.com/open-telemetry/opentelemetry-specification/pull/1550))
 
 ### Compatibility
 
