@@ -109,8 +109,9 @@ This API MUST accept the following parameters:
   In that scenario, the `name` denotes a module name or component name within that library
   or application.
   In case an invalid name (null or empty string) is specified, a working
-  default Tracer implementation as a fallback is returned rather than returning
-  null or throwing an exception.
+  Tracer implementation MUST be returned as a fallback rather than returning
+  null or throwing an exception, its `name` property SHOULD keep the original invalid value,
+  and a message reporting that the specified value is invalid SHOULD be logged.
   A library, implementing the OpenTelemetry API *may* also ignore this name and
   return a default instance for all calls, if it does not support "named"
   functionality (e.g. an implementation which is not even observability-related).
@@ -328,9 +329,10 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
 
-`Span` creation MUST NOT set the newly created `Span` as the currently
-active `Span` by default, but this functionality MAY be offered additionally
-as a separate operation.
+In languages with implicit `Context` propagation, `Span` creation MUST NOT
+set the newly created `Span` as the active `Span` in the
+[current `Context`](#context-interaction) by default, but this functionality
+MAY be offered additionally as a separate operation.
 
 The API MUST accept the following parameters:
 
@@ -462,6 +464,11 @@ The Span interface MUST provide:
 - An API to set a single `Attribute` where the attribute properties are passed
   as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
   implementations may offer a separate API for each of the possible value types.
+
+The Span interface MAY provide:
+
+- An API to set multiple `Attributes` at once, where the `Attributes` are passed in a
+  single method call.
 
 Setting an attribute with the same key as an existing attribute SHOULD overwrite
 the existing attribute's value.

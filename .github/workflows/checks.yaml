@@ -61,4 +61,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: verify semantic convention tables
-      run: docker run --rm -v $(pwd)/semantic_conventions:/source -v $(pwd)/specification:/spec otel/semconvgen:0.2.1 -f /source markdown -md /spec --md-check
+      run: docker run --rm -v $(pwd)/semantic_conventions:/source -v $(pwd)/specification:/spec otel/semconvgen:0.3.1 -f /source markdown -md /spec --md-check
