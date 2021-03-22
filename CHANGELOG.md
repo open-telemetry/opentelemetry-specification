@@ -60,6 +60,9 @@ Google products under `cloud.infrastructure_service` ([#1496](https://github.com
 - `http.url` MUST NOT contain credentials ([#1502](https://github.com/open-telemetry/opentelemetry-specification/pull/1502))
 - Add `aws.eks.cluster.arn` to EKS specific semantic conventions ([#1484](https://github.com/open-telemetry/opentelemetry-specification/pull/1484))
 - Rename `zone` to `availability_zone` in `cloud` semantic conventions ([#1495](https://github.com/open-telemetry/opentelemetry-specification/pull/1495))
+- Rename `cloud.infrastructure_service` to `cloud.platform` ([#1530](https://github.com/open-telemetry/opentelemetry-specification/pull/1530))
+- Add section describing that libraries and the collector should autogenerate
+the semantic convention keys. ([#1515](https://github.com/open-telemetry/opentelemetry-specification/pull/1515))
 
 ## v1.0.1 (2021-02-11)
 
