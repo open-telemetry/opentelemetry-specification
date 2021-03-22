@@ -617,6 +617,15 @@ Parameters:
 - (Optional) Timestamp to explicitly set the end timestamp.
   If omitted, this MUST be treated equivalent to passing the current time.
 
+Expect this operation to be called in the "hot path" of production
+applications. It needs to be designed to complete fast, if not immediately.
+This operation itself MUST NOT perform blocking I/O on the calling thread.
+Any locking used MUST be minimized and SHOULD be removed entirely if
+possible. The downstream SpanProcessors and subsequent SpanExporters called
+from this operation may be used for testing, proof-of-concept ideas, or
+debugging and may not be designed for production use themselves. They are not
+in the scope this requirement and recommendation.
+
 #### Record Exception
 
 To facilitate recording an exception languages SHOULD provide a
