@@ -52,19 +52,19 @@ metrics API:
     |
     +-- Meter(name='io.opentelemetry.runtime', version='1.0.0')
     |   |
-    |   +-- Instrument<Gauge, int>(name='cpython.gc', attributes=['generation'], unit='kB')
+    |   +-- instruments...
     |
     +-- Meter(name='io.opentelemetry.contrib.mongodb.client', version='2.3.0')
         |
         +-- Instrument<Counter, int>(name='client.exception', attributes=['type'], unit='1')
         |
-        +-- Instrument<Histogram, double>(name='client.duration', attributes=['net.peer.host', 'net.peer.port'], unit='ms')
+        +-- instruments...
 
 +-- MeterProvider(custom)
     |
     +-- Meter(name='bank.payment', version='23.3.5')
         |
-        +-- Instrument<Histogram, double>(name='transaction', attributes=['category', 'status'], unit='USD')
+        +-- instruments...
 ```
 
 ## MeterProvider
@@ -165,10 +165,18 @@ the name:
   Instruments under one Meter SHOULD NOT interfere with Instruments under
   another Meter.
 
-Instrument names MUST conform to the following syntax:
+Instrument names MUST conform to the following syntax (described using the
+[Augmented Backus-Naur Form](https://tools.ietf.org/html/rfc5234)):
+
+```abnf
+instrument-name = ALPHA 0*62 ("_" / "." / "-" / ALPHA / DIGIT)
+
+ALPHA = %x41-5A / %x61-7A; A-Z / a-z
+DIGIT = %x30-39 ; 0-9
+```
 
 * They are not null or empty strings.
-* They are case-insensitive.
+* They are case-insensitive, ASCII strings.
 * The first character must be an alphabetic character.
 * Subsequent characters must belong to the alphanumeric characters, '_', '.',
   and '-'.
