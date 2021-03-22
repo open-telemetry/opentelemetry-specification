@@ -79,7 +79,7 @@ Both the collector and the client libraries SHOULD autogenerate semantic
 convention keys and enum values into constants (or language idomatic
 equivalent). Generated values shouldn't be distributed in stable packages
 until semantic conventions are stable.
-The [YAML](../semantic_conventions) files MUST be used as the
+The [YAML](../semantic_conventions/README.md) files MUST be used as the
 source of truth for generation. Each language implementation SHOULD
 provide language-specific support to the
 [code generator](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#code-generator).
