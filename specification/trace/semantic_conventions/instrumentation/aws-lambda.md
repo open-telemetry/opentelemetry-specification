@@ -169,7 +169,9 @@ will be exported to AWS X-Ray by the infrastructure (not instrumentation). All a
 except that in this case, the parent of `APIGW` is `Span Client` and the parent of `Span Function` is
 `Span Lambda`. This means the hierarchy looks like:
 
+```
 Span Client --> Span APIGW --> Span Lambda --> Span Function
+```
 
 ### SQS (Lambda tracing passive)
 
@@ -192,10 +194,13 @@ Function F:                      | Span ProcBatch |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `messaging.system` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` |
-| `messaging.destination` | `Q` | `Q` | | `Q` | `Q` | `Q` |
+| `messaging.destination` | `Q` | `Q` | `Q` | `Q` | `Q` |
 | `messaging.destination_kind` | `queue` | `queue` | `queue` | `queue` | `queue` |
 | `messaging.operation` |  |  | `process` | `process` | `process` |
 | `messaging.message_id` | | | | `"a1"` | `"a2"` |
+
+Note that if Span Prod1 and Span Prod2 were sent to different queues, Span ProcBatch would not have
+`messaging.destination` set as it would correspond to multiple destinations.
 
 The above requires user code change to create `Span Proc1` and `Span Proc2`. In Java, the user would inherit from
 [TracingSqsMessageHandler][] instead of Lambda's standard `RequestHandler` to enable them. Otherwise these two spans
@@ -209,5 +214,7 @@ Active tracing in Lambda means a Lambda runtime invocation span `Span Lambda` wi
 infrastructure (not instrumentation). In this case, all of the above is the same except `Span ProcBatch` will
 have a parent of `Span Lambda`. This means the hierarchy looks like:
 
+```
 Span Lambda --> Span ProcBatch --> Span Proc1 (links to Span Prod1 and Span Prod2)
                                \-> Span Proc2 (links to Span Prod1 and Span Prod2)
+```
