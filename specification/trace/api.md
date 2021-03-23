@@ -552,8 +552,8 @@ The Span interface MUST provide:
 
 The status code SHOULD remain unset, except for the following circumstances:
 
-When the status is set to `ERROR` by Instrumentation Libraries, the status codes
-SHOULD be documented and predictable. The status code should only be set to `ERROR`
+When the status is set to `Error` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `Error`
 according to the rules defined within the semantic conventions. For operations
 not covered by the semantic conventions, Instrumentation Libraries SHOULD
 publish their own conventions, including status codes.
@@ -666,7 +666,7 @@ it SHOULD be named `NonRecordingSpan`.
 
 The behavior is defined as follows:
 
-- `GetContext()` MUST return the wrapped `SpanContext`.
+- `GetContext` MUST return the wrapped `SpanContext`.
 - `IsRecording` MUST return `false` to signal that events, attributes and other elements
   are not being recorded, i.e. they are being dropped.
 
