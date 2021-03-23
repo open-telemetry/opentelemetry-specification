@@ -164,7 +164,7 @@ inside the trace module. This functionality SHOULD be fully implemented in the A
 
 The tracer is responsible for creating `Span`s.
 
-Note that `Tracers` should usually *not* be responsible for configuration.
+Note that `Tracer`s should usually *not* be responsible for configuration.
 This should be the responsibility of the `TracerProvider` instead.
 
 ### Tracer operations
@@ -248,7 +248,7 @@ Please note, since `SpanContext` is immutable, it is not possible to update `Spa
 Such changes then make sense only right before
 [`SpanContext` propagation](../context/api-propagators.md)
 or [telemetry data exporting](sdk.md#span-exporter).
-In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
+In both cases, `Propagator`s and `SpanExporter`s may create a modified `TraceState` copy before serializing it to the wire.
 
 ## Span
 
