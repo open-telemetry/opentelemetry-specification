@@ -24,7 +24,7 @@ In case of virtualized environments, this is the operating system as it is obser
 | `FREEBSD` | FreeBSD |
 | `NETBSD` | NetBSD |
 | `OPENBSD` | OpenBSD |
-| `DRAGONFLYBSD` | DragonFly BSD |
+| `DRAGONFLY` | DragonFly BSD |
 | `HPUX` | HP-UX (Hewlett Packard Unix) |
 | `AIX` | AIX (Advanced Interactive eXecutive) |
 | `SOLARIS` | Oracle Solaris |

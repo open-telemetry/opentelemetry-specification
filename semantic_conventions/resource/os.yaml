@@ -29,8 +29,8 @@ groups:
             - id: OPENBSD
               value: 'OPENBSD'
               brief: "OpenBSD"
-            - id: DRAGONFLYBSD
-              value: 'DRAGONFLYBSD'
+            - id: DRAGONFLY
+              value: 'DRAGONFLY'
               brief: "DragonFly BSD"
             - id: HPUX
               value: 'HPUX'
