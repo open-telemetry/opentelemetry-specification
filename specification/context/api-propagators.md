@@ -361,8 +361,8 @@ When extracting B3, propagators:
 
 * MUST attempt to extract B3 encoded using single and multi-header
   formats. When configured for B3 single, the single-header format will take
-  precendence, when configured for B3 multi, the multi-header will take
-  precendence.
+  precedence, when configured for B3 multi, the multi-header will take
+  precedence.
 * MUST preserve a debug trace flag, if received, and propagate
   it with subsequent requests. Additionally, an OpenTelemetry implementation
   MUST set the sampled trace flag when the debug flag is set.
