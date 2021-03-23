@@ -64,8 +64,8 @@ status of the feature is not known.
 | Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span exceptions](specification/trace/api.md#record-exception)                                   |          |    |      |    |        |      |        |     |      |     |      |       |
-| RecordException                                                                                  |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
-| RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
+| RecordException                                                                                  |          | N/A| +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
+| RecordException with extra parameters                                                            |          | N/A| +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    |     | -    | +     |
 | ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
