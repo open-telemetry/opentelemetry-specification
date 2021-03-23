@@ -17,6 +17,7 @@ release.
 - Clarify the description for the `TraceIdRatioBased` sampler needs to include the sampler's sampling ratio. ([#1536](https://github.com/open-telemetry/opentelemetry-specification/pull/1536))
 - Define the fallback tracer name for invalid values.
   ([#1534](https://github.com/open-telemetry/opentelemetry-specification/pull/1534))
+- Remove the Included Propagators section from trace API specification that was a duplicate of the Propagators Distribution of the context specification. ([#1556](https://github.com/open-telemetry/opentelemetry-specification/pull/1556))
 
 ### Metrics
 
@@ -59,6 +60,7 @@ Google products under `cloud.infrastructure_service` ([#1496](https://github.com
 - `http.url` MUST NOT contain credentials ([#1502](https://github.com/open-telemetry/opentelemetry-specification/pull/1502))
 - Add `aws.eks.cluster.arn` to EKS specific semantic conventions ([#1484](https://github.com/open-telemetry/opentelemetry-specification/pull/1484))
 - Rename `zone` to `availability_zone` in `cloud` semantic conventions ([#1495](https://github.com/open-telemetry/opentelemetry-specification/pull/1495))
+- Rename `cloud.infrastructure_service` to `cloud.platform` ([#1530](https://github.com/open-telemetry/opentelemetry-specification/pull/1530))
 - Add section describing that libraries and the collector should autogenerate
 the semantic convention keys. ([#1515](https://github.com/open-telemetry/opentelemetry-specification/pull/1515))
 
