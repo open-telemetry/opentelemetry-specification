@@ -360,9 +360,8 @@ been established for B3 context propagation.
 When extracting B3, propagators:
 
 * MUST attempt to extract B3 encoded using single and multi-header
-  formats. When configured for B3 single, the single-header format will take
-  precedence, when configured for B3 multi, the multi-header will take
-  precedence.
+  formats. The single-header variant takes precedence over
+  the multi-header version.
 * MUST preserve a debug trace flag, if received, and propagate
   it with subsequent requests. Additionally, an OpenTelemetry implementation
   MUST set the sampled trace flag when the debug flag is set.
@@ -388,7 +387,7 @@ i.e., the headers used for the inject operation.
 | Option    | Extract Order | Inject Format | Specification     |
 |-----------|---------------|---------------| ------------------|
 | B3 Single | Single, Multi | Single        | [Link][b3-single] |
-| B3 Multi  | Multi, Single | Multi         | [Link][b3-multi]  |
+| B3 Multi  | Single, Multi | Multi         | [Link][b3-multi]  |
 
 [b3-single]: https://github.com/openzipkin/b3-propagation#single-header
 [b3-multi]: https://github.com/openzipkin/b3-propagation#multiple-headers
