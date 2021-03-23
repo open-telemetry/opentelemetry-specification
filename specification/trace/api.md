@@ -441,7 +441,7 @@ are one expected case where `IsRecording` cannot change after ending a Span.
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
 events in case when a Span is definitely not recorded. Note that any child
 span's recording is determined independently from the value of this flag
-(typically based on the `sampled` flag of a `TraceFlag` on
+(typically based on the `sampled` flag of a `TraceFlags` on
 [SpanContext](#spancontext)).
 
 This flag may be `true` despite the entire trace being sampled out. This
