@@ -378,6 +378,11 @@ When injecting B3, propagators:
 * MUST NOT propagate `X-B3-ParentSpanId` as OpenTelemetry does not support
   reusing the same id for both sides of a request.
 
+#### Fields
+
+Fields MUST return the header names that correspond to the configured format,
+i.e., the headers used for the inject operation.
+
 #### Configuration
 
 | Option    | Extract Order | Inject Format | Specification     |
