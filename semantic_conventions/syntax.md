@@ -215,7 +215,7 @@ array of booleans, or an enumeration. If it is an enumeration, additional fields
 An enum entry has the following fields:
 
 - `id`, string that uniquely identifies the enum entry.
-- `value`, string, int, double, or boolean; value of the enum entry.
+- `value`, string, int, or boolean; value of the enum entry.
 - `brief`, optional string, brief description of the enum entry value. It defaults to the value of `id`.
 - `note`, optional string, longer description. It defaults to an empty string.
 
