@@ -112,11 +112,11 @@ status of the feature is not known.
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      |      | +      |     | +    | +   | -    | -     |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      | +   |      |       |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      |     |      |       |
 | Fields                                                                           |          | +  | +    | +  | +      |      | +      |     | +    |     | +    | +     |
-| Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      |     | +    | +     |
-| Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      |     | +    | +     |
-| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     |      |     | -    | +     |
+| Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | +    | +     |
+| Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | +    | +     |
+| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | -    | +     |
 
 ## Environment Variables
 
