@@ -27,6 +27,7 @@ release.
 
 ### Semantic Conventions
 
+- Add semantic conventions for the AWS operations and DynamoDB([#1442](https://github.com/open-telemetry/opentelemetry-specification/pull/1422))
 - Update semantic conventions to distinguish between int and double ([#1550](https://github.com/open-telemetry/opentelemetry-specification/pull/1550))
 
 ### Compatibility
