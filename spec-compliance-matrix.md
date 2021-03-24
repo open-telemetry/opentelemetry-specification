@@ -107,12 +107,12 @@ status of the feature is not known.
 | Attach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
 | Detach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
 | Get current Context                                                              |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Composite Propagator                                                             |          | +  | +    | +  | +      | +    | N/A    |     | +    |     | +    | +     |
+| Composite Propagator                                                             |          | +  | +    | +  | +      | +    | N/A    |     | +    | +   | +    | +     |
 | Global Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Jaeger Propagator                                                                |          | +  | +    | +  | +      |      | +      |     | +    |     | -    | -     |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      |     |      |       |
+| B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| Jaeger Propagator                                                                |          | +  | +    | +  | +      |      | +      |     | +    | +   | -    | -     |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      | +   |      |       |
 | Fields                                                                           |          | +  | +    | +  | +      |      | +      |     | +    |     | +    | +     |
 | Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      |     | +    | +     |
 | Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      |     | +    | +     |
@@ -160,7 +160,7 @@ Note: Support for environment variables is optional.
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md) |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
 | Zipkin V1 JSON                                        | X        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173) |      | -      | -   | -    |     | -    | -     |
 | Zipkin V1 Thrift                                      | X        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174) |      | -      | -   | -    |     | -    | -     |
-| Zipkin V2 JSON                                        | *        | +  | + |    | +                                                                       |      | -      | +   | +    |     | +    | +     |
+| Zipkin V2 JSON                                        | *        | +  | + |    | +                                                                       |      | -      | +   | +    | +   | +    | +     |
 | Zipkin V2 Protobuf                                    | *        |    | + |    | +                                                                       |      | +      |     | -    |     | -    | -     |
 | Service name mapping                                  |          | +  | + | +  | +                                                                       |      | +      | +   | +    |     | +    | +     |
 | SpanKind mapping                                      |          | +  | + | +  | +                                                                       |      | +      | +   | +    |     | +    | +     |
