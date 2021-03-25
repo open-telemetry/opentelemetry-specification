@@ -207,7 +207,7 @@ desired, the client can decide the language idomatic name(s), for example
 The API MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
-  rule](instrument-naming-rule).
+  rule](#instrument-naming-rule).
 * An optional `unit of measure`.
 * An optional `description`.
 * An optional list of [`Attribute`](../common/common.md#attributes) names and
