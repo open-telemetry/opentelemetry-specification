@@ -21,7 +21,8 @@ The following semantic conventions for spans are defined:
 * [RPC/RMI](rpc.md): Spans for remote procedure calls (e.g., gRPC).
 * [Messaging](messaging.md): Spans for interaction with messaging systems (queues, publish/subscribe, etc.).
 * [FaaS](faas.md): Spans for Function as a Service (e.g., AWS Lambda).
-* [Exceptions](exceptions.md): Attributes for recording exceptions associated with a span
+  * [AWS Lambda](instrumentation/aws-lambda.md): Details on populating attributes for AWS Lambda.
+* [Exceptions](exceptions.md): Attributes for recording exceptions associated with a span.
 
 Apart from semantic conventions for traces and [metrics](../../metrics/semantic_conventions/README.md),
 OpenTelemetry also defines the concept of overarching [Resources](../../resource/sdk.md) with their own
