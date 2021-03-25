@@ -10,6 +10,7 @@ release.
 ### Context
 
 - Clarify composite `TextMapPropagator` method required and optional arguments. ([#1541](https://github.com/open-telemetry/opentelemetry-specification/pull/1541))
+- Clarify B3 requirements and configuration. ([#1570](https://github.com/open-telemetry/opentelemetry-specification/pull/1570))
 
 ### Traces
 
@@ -18,6 +19,7 @@ release.
 - Define the fallback tracer name for invalid values.
   ([#1534](https://github.com/open-telemetry/opentelemetry-specification/pull/1534))
 - Remove the Included Propagators section from trace API specification that was a duplicate of the Propagators Distribution of the context specification. ([#1556](https://github.com/open-telemetry/opentelemetry-specification/pull/1556))
+- Remove the Baggage API propagator notes that conflict with the API Propagators Operations section and fix [#1526](https://github.com/open-telemetry/opentelemetry-specification/issues/1526). ([#1575](https://github.com/open-telemetry/opentelemetry-specification/pull/1575))
 
 ### Metrics
 
@@ -28,6 +30,7 @@ release.
 ### Semantic Conventions
 
 - Add semantic conventions for the AWS operations and DynamoDB([#1442](https://github.com/open-telemetry/opentelemetry-specification/pull/1422))
+- Add details for filling semantic conventions for AWS Lambda ([#1442](https://github.com/open-telemetry/opentelemetry-specification/pull/1442))
 - Update semantic conventions to distinguish between int and double ([#1550](https://github.com/open-telemetry/opentelemetry-specification/pull/1550))
 
 ### Compatibility

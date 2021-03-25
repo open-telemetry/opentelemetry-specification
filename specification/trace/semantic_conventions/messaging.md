@@ -127,7 +127,7 @@ The following operations related to messages are defined for these semantic conv
 <!-- semconv messaging -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `activemq` | Yes |
+| `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `activemq`; `AmazonSQS` | Yes |
 | `messaging.destination` | string | The message destination name. This might be equal to the span name but is required nevertheless. | `MyQueue`; `MyTopic` | Yes |
 | `messaging.destination_kind` | string | The kind of message destination | `queue` | Conditional [1] |
 | `messaging.temp_destination` | boolean | A boolean that is true if the message destination is temporary. |  | If missing, it is assumed to be false. |
