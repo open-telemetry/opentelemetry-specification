@@ -280,11 +280,11 @@ OpenTelemetry collectors SHOULD export telemetry on the appearance of
 overlapping points, so that the user can monitor for erroneous configurations.
 
 ### Overlap interpolation
+
 When one process starts just as another exits, the appearance of overlapping
 points may be expected. In this case, OpenTelemetry collectors SHOULD modify
 points at the change-over using interpolation for Sum data points, to reduce
 gaps to zero width in these cases, without any overlap.
-
 
 ## Temporarily
 
