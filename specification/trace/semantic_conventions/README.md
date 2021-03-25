@@ -24,6 +24,10 @@ The following semantic conventions for spans are defined:
   * [AWS Lambda](instrumentation/aws-lambda.md): Details on populating attributes for AWS Lambda.
 * [Exceptions](exceptions.md): Attributes for recording exceptions associated with a span.
 
+The following instrumentation-specific semantic conventions are defined:
+
+* [AWS SDK](instrumentation/aws-sdk.md): AWS SDK
+
 Apart from semantic conventions for traces and [metrics](../../metrics/semantic_conventions/README.md),
 OpenTelemetry also defines the concept of overarching [Resources](../../resource/sdk.md) with their own
 [Resource Semantic Conventions](../../resource/semantic_conventions/README.md).
