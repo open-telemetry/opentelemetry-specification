@@ -165,6 +165,8 @@ the name:
   Instruments under one Meter SHOULD NOT interfere with Instruments under
   another Meter.
 
+<a name="instrument-naming-rule"></a>
+
 Instrument names MUST conform to the following syntax (described using the
 [Augmented Backus-Naur Form](https://tools.ietf.org/html/rfc5234)):
 
@@ -184,7 +186,53 @@ DIGIT = %x30-39 ; 0-9
 
 ### Counter
 
+`Counter` is a synchronous Instrument which supports non-negative increment.
+
+Example uses for `Counter`:
+
+* count the number of bytes received
+* count the number of requests completed
+* count the number of accounts created
+* count the number of checkpoints run
+* count the number of HTTP 5xx errors
+
 #### Counter Creation
+
+There MUST NOT be any API for creating a `Counter` other than with a
+[`Meter`](#meter). This MAY be called `CreateCounter`. If strong type is
+desired, the client can decide the language idomatic name(s), for example
+`CreateUInt64Counter`, `CreateDoubleCounter`, `CreateCounter<UInt64>`,
+`CreateCounter<double>`.
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](instrument-naming-rule).
+* An optional `unit of measure`.
+* An optional `description`.
+* An optional list of [`Attribute`](../common/common.md#attributes) names and
+  types.
+
+#### Counter operations
+
+##### Add
+
+Increment the Counter by a fixed amount.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+Required parameters:
+
+* The [attributes](../common/common.md#attributes)
+* The increment amount, which MUST be a non-negative numeric value
+
+The client MAY decide to allow flexible
+[attributes](../common/common.md#attributes) to be passed in as arguments. If
+the attribute names and types are provided during the [counter
+creation](#counter-creation), the client MAY allow attribute values to be passed
+in using a more efficient way (e.g. strong typed struct allocated on the
+callstack, tuple).
 
 ## Measurement
 
