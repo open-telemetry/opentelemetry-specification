@@ -184,6 +184,33 @@ DIGIT = %x30-39 ; 0-9
   and '-'.
 * They can have a maximum length of 63 characters.
 
+<a name="instrument-unit"></a>
+
+The `unit` is an optional string provided by the author of the instrument. It
+SHOULD be treated as an oqaque string from the API and SDK (e.g. the SDK is not
+expected to validate the unit of measurement, or perform the unit conversion).
+
+* If the `unit` is not provided or the `unit` is null, the API and SDK MUST make
+  sure that the behavior is the same as an empty `unit` string.
+* It MUST be case-sensitive (e.g. `kb` and `kB` are different units), ASCII
+  string.
+* It can have a maximum length of 63 characters.
+
+<a name="instrument-description"></a>
+
+The `description` is an optional free-form text provided by the author of the
+instrument. It MUST be treated as an oqaque string from the API and SDK.
+
+* If the `description` is not provided or the `description` is null, the API and
+  SDK MUST make sure that the behavior is the same as an empty `description`
+  string.
+* It MUST support [BMP (Unicode Plane
+  0](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane).
+  Individual language client can decide if they want to support more Unicode
+  [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
+* It MUST support at least 1023 characters. Individual language client can
+  decide if they want to support more.
+
 ### Counter
 
 `Counter` is a synchronous Instrument which supports non-negative increment.
@@ -208,8 +235,10 @@ The API MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit of measure`.
-* An optional `description`.
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
 * An optional list of [`Attribute`](../common/common.md#attributes) names and
   types.
 
