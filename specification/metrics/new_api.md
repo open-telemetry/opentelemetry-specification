@@ -282,15 +282,14 @@ var counterItemsSold = meter.CreateCounter<UInt64>("item_sold", description="num
 
 counterItemsSold.Add(2, ("item", "Tomato"), ("customer", "Jerry"));
 
-readonly struct CashReceived
+readonly struct PowerConsumption
 {
     string customer;
-    string store;
 };
 
-var counterCashReceived = meter.CreateCounter<double, CashReceived>("cash_received");
-counterCashReceived.Add(2.99, new CashReceived { customer = "Tom", store = "Portland" });
-counterCashReceived.Add(5.99, new CashReceived { customer = "Jerry" }, ("payment_method", "Credit Card"));
+var counterPowerUsed = meter.CreateCounter<double, PowerConsumption>("power_consumption", unit="kWh");
+counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
+counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
 
 ## Measurement
