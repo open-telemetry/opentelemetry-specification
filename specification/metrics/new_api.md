@@ -205,7 +205,7 @@ instrument. It MUST be treated as an oqaque string from the API and SDK.
   SDK MUST make sure that the behavior is the same as an empty `description`
   string.
 * It MUST support [BMP (Unicode Plane
-  0](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane).
+  0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane).
   Individual language client can decide if they want to support more Unicode
   [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
 * It MUST support at least 1023 characters. Individual language client can
@@ -253,15 +253,45 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 Required parameters:
 
-* The [attributes](../common/common.md#attributes)
-* The increment amount, which MUST be a non-negative numeric value
+* Optional [attributes](../common/common.md#attributes).
+* The increment amount, which MUST be a non-negative numeric value.
 
 The client MAY decide to allow flexible
 [attributes](../common/common.md#attributes) to be passed in as arguments. If
 the attribute names and types are provided during the [counter
 creation](#counter-creation), the client MAY allow attribute values to be passed
 in using a more efficient way (e.g. strong typed struct allocated on the
-callstack, tuple).
+callstack, tuple). The API MUST allow callers to provide flexible attributes at
+invocation time rather than having to register all the possible attribute names
+during the instrument creation. Here are some examples that individual language
+client might consider:
+
+```python
+# Python
+
+items_sold_counter = meter.create_counter(name="item_sold", description="number of items sold", value_type=int)
+
+items_sold_counter.Add(2, {"item": "Tomato", "customer": "Tom"})
+items_sold_counter.Add(3, item="Tomato", customer="Jerry"})
+```
+
+```csharp
+// C#
+
+var counterItemsSold = meter.CreateCounter<UInt64>("item_sold", description="number of items sold");
+
+counterItemsSold.Add(2, ("item", "Tomato"), ("customer", "Jerry"));
+
+readonly struct CashReceived
+{
+    string customer;
+    string store;
+};
+
+var counterCashReceived = meter.CreateCounter<double, CashReceived>("cash_received");
+counterCashReceived.Add(2.99, new CashReceived { customer = "Tom", store = "Portland" });
+counterCashReceived.Add(5.99, new CashReceived { customer = "Jerry" }, ("payment_method", "Credit Card"));
+```
 
 ## Measurement
 
