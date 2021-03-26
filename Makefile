@@ -7,6 +7,7 @@ MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 MARKDOWN_LINK_CHECK=markdown-link-check
 MARKDOWN_LINT=markdownlint
+# see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 SEMCONVGEN_VERSION=0.3.1
 
 .PHONY: install-misspell
