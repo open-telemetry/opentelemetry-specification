@@ -41,7 +41,7 @@ These attributes are filled in for all DynamoDB request types.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
-| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.BatchWriteItem
@@ -51,7 +51,7 @@ These attributes are filled in for all DynamoDB request types.
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
 | `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionMetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
-| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.CreateTable
@@ -65,7 +65,7 @@ These attributes are filled in for all DynamoDB request types.
 | `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionMetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
 | `aws.dynamodb.provisioned_read_capacity` | double | The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter. | `1.0`; `2.0` | No |
 | `aws.dynamodb.provisioned_write_capacity` | double | The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter. | `1.0`; `2.0` | No |
-| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.DeleteItem
@@ -75,7 +75,7 @@ These attributes are filled in for all DynamoDB request types.
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
 | `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionMetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
-| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.DeleteTable
@@ -83,7 +83,7 @@ These attributes are filled in for all DynamoDB request types.
 <!-- semconv dynamodb.deletetable -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.DescribeTable
@@ -91,7 +91,7 @@ These attributes are filled in for all DynamoDB request types.
 <!-- semconv dynamodb.describetable -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.GetItem
@@ -102,7 +102,7 @@ These attributes are filled in for all DynamoDB request types.
 | `aws.dynamodb.consistent_read` | boolean | The value of the `ConsistentRead` request parameter. |  | No |
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
 | `aws.dynamodb.projection` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
-| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.ListTables
@@ -122,7 +122,7 @@ These attributes are filled in for all DynamoDB request types.
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
 | `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionMetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
-| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field. | `[Users, Cats]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.Query
@@ -138,7 +138,7 @@ These attributes are filled in for all DynamoDB request types.
 | `aws.dynamodb.limit` | int | The value of the `Limit` request parameter. | `10` | No |
 | `aws.dynamodb.projection` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
 | `aws.dynamodb.select` | string | The value of the `Select` request parameter. | `ALL_ATTRIBUTES`; `COUNT` | No |
-| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.Scan
@@ -157,7 +157,7 @@ These attributes are filled in for all DynamoDB request types.
 | `aws.dynamodb.limit` | int | The value of the `Limit` request parameter. | `10` | No |
 | `aws.dynamodb.projection` | string | The value of the `ProjectionExpression` request parameter. | `Title`; `Title, Price, Color`; `Title, Description, RelatedItems, ProductReviews` | No |
 | `aws.dynamodb.select` | string | The value of the `Select` request parameter. | `ALL_ATTRIBUTES`; `COUNT` | No |
-| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.UpdateItem
@@ -167,7 +167,7 @@ These attributes are filled in for all DynamoDB request types.
 |---|---|---|---|---|
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
 | `aws.dynamodb.item_collection_metrics` | string | The JSON-serialized value of the `ItemCollectionMetrics` response field. | `{ "string" : [ { "ItemCollectionKey": { "string" : { "B": blob, "BOOL": boolean, "BS": [ blob ], "L": [ "AttributeValue" ], "M": { "string" : "AttributeValue" }, "N": "string", "NS": [ "string" ], "NULL": boolean, "S": "string", "SS": [ "string" ] } }, "SizeEstimateRangeGB": [ number ] } ] }` | No |
-| `aws.dynamodb.table_names` | string[] | The keys in the `RequestItems` object field in a request operating on multiple tables. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->
 
 ### DynamoDB.UpdateTable
@@ -180,5 +180,5 @@ These attributes are filled in for all DynamoDB request types.
 | `aws.dynamodb.consumed_capacity` | string[] | The JSON-serialized value of each item in the `ConsumedCapacity` response field. | `[{ "CapacityUnits": number, "GlobalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "LocalSecondaryIndexes": { "string" : { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number } }, "ReadCapacityUnits": number, "Table": { "CapacityUnits": number, "ReadCapacityUnits": number, "WriteCapacityUnits": number }, "TableName": "string", "WriteCapacityUnits": number }]` | No |
 | `aws.dynamodb.provisioned_read_capacity` | double | The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter. | `1.0`; `2.0` | No |
 | `aws.dynamodb.provisioned_write_capacity` | double | The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter. | `1.0`; `2.0` | No |
-| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users, Cats]` | No |
+| `aws.dynamodb.table_names` | string[] | A single-element array with the value of the TableName request parameter. | `[Users]` | No |
 <!-- endsemconv -->

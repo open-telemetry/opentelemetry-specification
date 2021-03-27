@@ -47,7 +47,7 @@ groups:
           - PutItem
       - id: table_names
         type: string[]
-        brief: The keys in the `RequestItems` object field in a request operating on multiple tables.
+        brief: The keys in the `RequestItems` object field.
         examples:
           - Users
           - Cats
@@ -218,6 +218,9 @@ groups:
               }
             }'
       - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.item_collection_metrics
       - ref: aws.dynamodb.provisioned_read_capacity
@@ -229,6 +232,9 @@ groups:
     prefix: aws.dynamodb
     attributes:
       - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.item_collection_metrics
 
@@ -239,6 +245,8 @@ groups:
     attributes:
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
 
   - id: dynamodb.describetable
     brief: DynamoDB.DescribeTable
@@ -247,6 +255,8 @@ groups:
     attributes:
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
 
   - id: dynamodb.getitem
     brief: DynamoDB.GetItem
@@ -255,6 +265,8 @@ groups:
     attributes:
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.consistent_read
       - ref: aws.dynamodb.projection
@@ -296,6 +308,8 @@ groups:
         brief: "The value of the `ScanIndexForward` request parameter."
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.consistent_read
       - ref: aws.dynamodb.limit
@@ -331,6 +345,8 @@ groups:
           - 50
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.consistent_read
       - ref: aws.dynamodb.limit
@@ -345,6 +361,9 @@ groups:
     prefix: aws.dynamodb
     attributes:
       - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.item_collection_metrics
 
@@ -385,6 +404,8 @@ groups:
               }'
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
       - ref: aws.dynamodb.consumed_capacity
       - ref: aws.dynamodb.provisioned_read_capacity
       - ref: aws.dynamodb.provisioned_write_capacity

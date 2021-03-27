@@ -23,7 +23,7 @@ The following semantic conventions for spans are defined:
 * [FaaS](faas.md): Spans for Function as a Service (e.g., AWS Lambda).
 * [Exceptions](exceptions.md): Attributes for recording exceptions associated with a span.
 
-The following instrumentation-specific semantic conventions are defined:
+The following library-specific semantic conventions are defined:
 
 * [AWS Lambda](instrumentation/aws-lambda.md): AWS Lambda
 * [AWS SDK](instrumentation/aws-sdk.md): AWS SDK
