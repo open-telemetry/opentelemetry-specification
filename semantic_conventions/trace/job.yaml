@@ -54,17 +54,17 @@ groups:
             The processing queue to which the job belongs.
           examples: ['mailers', 'payments']
         - id: priority
-          type: integer
+          type: int
           brief: >
             The priority value of the job, as defined by the job processing system. Can be positive or negative.
           examples: -5
         - id: attempt
-          type: integer
+          type: int
           brief: >
             The zero-based number previous run attempts which have occurred prior to the current run.
           examples: 0
         - id: max_attempts
-          type: integer
+          type: int
           brief: >
             The maximum number of successive failed run attempts after which the job will be abandoned.
           examples: 3
