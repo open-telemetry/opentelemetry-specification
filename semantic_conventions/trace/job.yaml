@@ -8,7 +8,8 @@ groups:
         - id: system
           type: string
           required: always
-          brief: 'A string identifying the job processing system.'
+          brief: >
+            A string identifying the job processing system.
           examples: ['sidekiq', 'resque', 'rake', 'celery', 'airflow']
         - id: job_name
           type: string
@@ -19,11 +20,13 @@ groups:
         - id: job_id
           type: string
           required: always
-          brief: 'A value used by the job system as an identifier for the job, represented as a string.'
+          brief: >
+            A value as an identifier for the job, represented as a string.
           examples: 'b18fc2c2f887f61452a7c7c7c7048572'
         - id: job_label
           type: string
-          brief: 'A value assigned as a human-readable label for the job.'
+          brief: >
+            A value assigned as a human-readable label for the job.
           examples: 'charge-payment-124293'
         - id: trigger
           type:
@@ -31,16 +34,19 @@ groups:
             members:
               - id: queue
                 value: 'queue'
-                brief: 'A job which is enqueued for running, typically in a first-in-first-out manner'
+                brief: 'The job is enqueued for invocation, usually in a first-in-first-out manner'
               - id: timer
                 value: 'timer'
-                brief: 'A job which is set to run by a regular timer'
+                brief: 'The job is set to run by a regular timer'
               - id: other
                 value: 'other'
                 brief: 'If none of the others apply'
+          brief: >
+            Type of the trigger on which the job is performed.
         - id: format
           type: string
-          brief: 'The name of the job format when enqueued for processing.'
+          brief: >
+            The name of the job format when enqueued for processing.
           examples: ['resque']
         - id: queue_name
           type: string
@@ -87,13 +93,15 @@ groups:
       prefix: messaging
       extends: messaging
       span_kind: producer
-      brief: 'Semantic convention for producers of jobs.'
+      brief: >
+        Semantic convention for producers of jobs.
 
     - id: job.consumer
       prefix: messaging
       extends: messaging
       span_kind: consumer
-      brief: 'Semantic convention for a consumer of jobs'
+      brief: >
+        Semantic convention for a consumer of jobs
       attributes:
         - id: pool
           type: string
