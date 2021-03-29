@@ -247,13 +247,13 @@ Here are some examples that individual language client might consider:
 ```python
 # Python
 
-items_sold_counter = meter.create_counter(name="item_sold", description="number of items sold", value_type=int)
+exception_counter = meter.create_counter(name="exceptions", description="number of exceptions caught", value_type=int)
 ```
 
 ```csharp
 // C#
 
-var counterItemsSold = meter.CreateCounter<UInt64>("item_sold", description="number of items sold");
+var counterExceptions = meter.CreateCounter<UInt64>("exceptions", description="number of exceptions caught");
 
 readonly struct PowerConsumption
 {
@@ -291,14 +291,14 @@ client might consider:
 ```python
 # Python
 
-items_sold_counter.Add(2, {"item": "Tomato", "customer": "Tom"})
-items_sold_counter.Add(3, item="Tomato", customer="Jerry"})
+exception_counter.Add(1, {"exception_type": "IOError", "handled_by_user": True})
+exception_counter.Add(1, exception_type="IOError", handled_by_user=True})
 ```
 
 ```csharp
 // C#
 
-counterItemsSold.Add(2, ("item", "Tomato"), ("customer", "Jerry"));
+counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_user", true));
 
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
