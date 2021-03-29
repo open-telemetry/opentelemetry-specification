@@ -205,7 +205,8 @@ instrument. It MUST be treated as an oqaque string from the API and SDK.
   SDK MUST make sure that the behavior is the same as an empty `description`
   string.
 * It MUST support [BMP (Unicode Plane
-  0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane).
+  0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
+  which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
   Individual language client can decide if they want to support more Unicode
   [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
 * It MUST support at least 1023 characters. Individual language client can
