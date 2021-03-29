@@ -242,6 +242,28 @@ The API MUST accept the following parameters:
 * An optional list of [`Attribute`](../common/common.md#attributes) names and
   types.
 
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+items_sold_counter = meter.create_counter(name="item_sold", description="number of items sold", value_type=int)
+```
+
+```csharp
+// C#
+
+var counterItemsSold = meter.CreateCounter<UInt64>("item_sold", description="number of items sold");
+
+readonly struct PowerConsumption
+{
+    [HighCardinality]
+    string customer;
+};
+
+var counterPowerUsed = meter.CreateCounter<double, PowerConsumption>("power_consumption", unit="kWh");
+```
+
 #### Counter operations
 
 ##### Add
@@ -269,8 +291,6 @@ client might consider:
 ```python
 # Python
 
-items_sold_counter = meter.create_counter(name="item_sold", description="number of items sold", value_type=int)
-
 items_sold_counter.Add(2, {"item": "Tomato", "customer": "Tom"})
 items_sold_counter.Add(3, item="Tomato", customer="Jerry"})
 ```
@@ -278,16 +298,8 @@ items_sold_counter.Add(3, item="Tomato", customer="Jerry"})
 ```csharp
 // C#
 
-var counterItemsSold = meter.CreateCounter<UInt64>("item_sold", description="number of items sold");
-
 counterItemsSold.Add(2, ("item", "Tomato"), ("customer", "Jerry"));
 
-readonly struct PowerConsumption
-{
-    string customer;
-};
-
-var counterPowerUsed = meter.CreateCounter<double, PowerConsumption>("power_consumption", unit="kWh");
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
