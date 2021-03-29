@@ -199,8 +199,8 @@ further development of the correspondence between these models.
 
 ### OpenTelemetry Protocol data model
 
-The OpenTelmetry protocol data model is composed of Metric data streams.  These
-streams are in turned composed of metric data points.   Metric data streams
+The OpenTelmetry protocol data model is composed of Metric data streams. These
+streams are in turn composed of metric data points. Metric data streams
 can be converted directly into timeseries, and share the same identity
 characteristics for a timeseries.   A metric stream is identified by:
 
