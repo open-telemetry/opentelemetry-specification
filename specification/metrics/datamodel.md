@@ -272,7 +272,40 @@ scenarios and take corrective actions.  Additionally, it ensures that
 well-behaved systems can perform metric stream manipulation without undesired
 degradation or loss of visibility.
 
-### Overlap
+## Temporarily
+
+Every OTLP point has two associated timestamps. For OTLP Sum and Histogram
+points, the two timestamps indicate when the point was reset and when the sum
+was captured. For OTLP Gauge points, the two timestamps indicate when the
+measurement was taken and when it was reported as being still the last value.
+
+The notion of temporality refers to a configuration choice made in the system
+as a whole, indicating whether reported values incorporate previous
+measurements, or not.
+
+- *Cumulative temporality* means that successive data points repeat the starting
+  timestamp. For example, from start time T0, cumulative data points cover time
+  ranges (T<sub>0</sub>, T<sub>1</sub>), (T<sub>0</sub>, T<sub>2</sub>),
+  (T<sub>0</sub>, T<sub>3</sub>), and so on.
+- *Delta temporality* means that successive data points advance the starting
+  timestamp. For example, from start time T0, delta data points cover time
+  ranges (T<sub>0</sub>, T<sub>1</sub>), (T<sub>1</sub>, T<sub>2</sub>),
+  (T<sub>2</sub>, T<sub>3</sub>), and so on.
+
+The use of cumulative temporality for monotonic sums is common, exemplified by
+Prometheus. Systems based in cumulative monotonic sums are naturally simpler, in
+terms of the cost of adding reliability. When collection fails intermittently,
+gaps in the data are naturally averaged from cumulative measurements.
+Cumulative data requires the sender to remember all previous measurements, an
+“up-front” memory cost proportional to cardinality.
+
+The use of delta temporality for metric sums is also common, exemplified by
+Statsd. There is a connection between OpenTelemetry tracing, in which a Span
+event commonly is translated into two metric events (a 1-count and a timing
+measurement). Delta temporality enables sampling and supports shifting the cost
+of cardinality outside of the process.
+
+## Overlap
 
 Overlap occurs when more than one metric data point occurs for a data stream
 within a time window.   This is particularly problematic for data points meant
@@ -309,9 +342,6 @@ points may be expected. In this case, OpenTelemetry collectors SHOULD modify
 points at the change-over using interpolation for Sum data points, to reduce
 gaps to zero width in these cases, without any overlap.
 
-## Temporarily
-
-Pending
 
 ## Resources
 
