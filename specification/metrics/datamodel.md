@@ -38,7 +38,7 @@ remove attributes and lower histogram resolution.
 
 The OTLP Metrics protocol is designed as a standard for transporting metric
 data. To describe the intended use of this data and the associated semantic
-meaning, OpenTelemetry metric data types will be linked into a framework
+meaning, OpenTelemetry metric data stream types will be linked into a framework
 containing a higher-level model, about Metrics APIs and discrete input values,
 and a lower-level model, defining the Timeseries and discrete output values.
 The relationship between models is displayed in the diagram below.
@@ -67,9 +67,9 @@ collector. These transformations are:
    allows downstream services to bear the cost of conversion into cumulative
    timeseries, or to forego the cost and calculate rates directly.
 
-OpenTelemetry Metrics data points are designed so that these transformations can
-be applied automatically to points of the same type, subject to conditions
-outlined below. Every OTLP data point has an intrinsic
+OpenTelemetry Metrics data streams are designed so that these transformations
+can be applied automatically to streams of the same type, subject to conditions
+outlined below. Every OTLP data stream has an intrinsic
 [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
 making it semantically well-defined to merge data points across both temporal
 and spatial dimensions. Every OTLP data point also has two meaningful timestamps
@@ -139,10 +139,10 @@ in scope for key design decisions:
 OpenTelemetry fragments metrics into three interacting models:
 
 - An Event model, representing how instrumentation reports metric data.
-- A TimeSeries model, representing how backends store metric data.
-- The *O*pen*T*e*L*emetry *P*rotocol (OTLP) data model representing how metric
-  data streams are manipulated and transmitted between the Event model and the
-  TimeSeries storage.
+- A Timeseries model, representing how backends store metric data.
+- A Metric Stream model, defining the *O*pen*T*e*L*emetry *P*rotocol (OTLP)
+  representing how metric data streams are manipulated and transmitted between
+  the Event model and the Timeseries storage.
 
 ### Event Model
 
@@ -201,8 +201,8 @@ further development of the correspondence between these models.
 
 The OpenTelmetry protocol data model is composed of Metric data streams. These
 streams are in turn composed of metric data points. Metric data streams
-can be converted directly into timeseries, and share the same identity
-characteristics for a timeseries.   A metric stream is identified by:
+can be converted directly into Timeseries, and share the same identity
+characteristics for a Timeseries.   A metric stream is identified by:
 
 - The originating `Resource`
 - The metric stream's `name`.
@@ -242,14 +242,22 @@ All metric data streams within OTLP must have one logical writer.  This means,
 conceptually, that any Timeseries created from the Protocol must have one
 originating source of truth.  In practical terms, this implies the following:
 
-- All metric data streams produce by OTel SDKs must by globally uniquely produced
-  and free from duplicates.
+- All metric data streams produce by OTel SDKs must by globally uniquely
+  produced and free from duplicates.   All metric data streams can be uniquely
+  identified in some way.
 - Aggregations of metric streams must only be written from a single logical
   source.
   __Note: This implies aggregated metric streams must reach one destination__.
 
 In systems, there is the possibility of multiple writers sending data for the
-same metric stream (duplication).  This is considered an error state, or
+same metric stream (duplication).  For example, if an SDK implementation fails
+to find uniquely identifying Resource attributes for a component, then all
+instances of that component could be reporting metrics as if they are from the
+same resource.  In this case, metrics will be reported at inconsistent time
+intervals.  For metrics like cumulative sums, this could cause issues where
+pairs of points appear to reset the cumulative sum leading to unusable metrics.
+
+Multiple writers for a metric stream is considered an error state, or
 misbehaving system. Receivers SHOULD presume a single writer was intended and
 eliminate overlap / deduplicate.
 
@@ -264,20 +272,35 @@ scenarios and take corrective actions.  Additionally, it ensures that
 well-behaved systems can perform metric stream manipulation without undesired
 degradation or loss of visibility.
 
+### Overlap
+
+Overlap occurs when more than one metric data point occurs for a data stream
+within a time window.   This is particularly problematic for data points meant
+to represent an entire time window, e.g. a Histogram reporting population
+density of collected metric data points for a time window.  If two of these show
+up with overlapping time windows, how do backends handle this situation?
+
+We define three principles for handling overlap:
+
+- Resolution (correction via dropping points)
+- Obersvability (allowing the data to flow to backends)
+- Interpolation (correction via data manipulation)
+
 ### Overlap resolution
 
 When more than one process writes the same metric data stream, OTLP data points
 may appear to overlap. This condition typically results from misconfiguration, but
 can also result from running identical processes (indicative of operating system
 or SDK bugs, like missing
-[process attribnutes](../resource/semantic_conventions/process.md)). When there
+[process attributes](../resource/semantic_conventions/process.md)). When there
 are overlapping points, receivers SHOULD eliminate points so that there are no
 overlaps. Which data to select in overlapping cases is not specified.
 
 ### Overlap observability
 
-OpenTelemetry collectors SHOULD export telemetry on the appearance of
-overlapping points, so that the user can monitor for erroneous configurations.
+OpenTelemetry collectors SHOULD export telemetry when they observe overlapping
+points in data streams, so that the user can monitor for erroneous
+configurations.
 
 ### Overlap interpolation
 
