@@ -7,6 +7,11 @@ language implementation.
 the feature is not applicable to the particular language, blank cell means the
 status of the feature is not known.
 
+For the `Optional` column, `X` means the feature is optional, blank means the
+feature is required, and columns marked with `*` mean that for each type of
+exporter (OTLP, Zipkin, and Jaeger), implementing at least one of the supported
+formats is required. Implementing more than one format is optional.
+
 ## Traces
 
 | Feature                                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
@@ -27,8 +32,8 @@ status of the feature is not known.
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [SpanContext](specification/trace/api.md#spancontext)                                            |          |    |      |    |        |      |        |     |      |     |      |       |
 | IsValid                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRemote                                                                                         |          | -  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Conforms to the W3C TraceContext spec                                                            |          |    | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| IsRemote                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Conforms to the W3C TraceContext spec                                                            |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1516)  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Span](specification/trace/api.md#span)                                                          |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -149,14 +154,14 @@ Note: Support for environment variables is optional.
 | In-memory (mock exporter)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
 | OTLP/gRPC Exporter                                    | *        | +  | + | +  | +                                                                       |      | +      |     | +    | +   | +    | +     |
-| OTLP/HTTP binary Protobuf Exporter                    | *        | -  | - | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106) | +    | +      |     |      |     | -    | -     |
-| OTLP/HTTP JSON Protobuf Exporter                      | *        | -  | - | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1003) |      | -      |     |      |     | -    | -     |
-| OTLP/HTTP gzip Content-Encoding support               | X        | -  | - | +  | +                                                                       | +    | -      |     |      |     | -    | -     |
+| OTLP/HTTP binary Protobuf Exporter                    | *        | +  | - | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106) | +    | +      |     |      |     | -    | -     |
+| OTLP/HTTP JSON Protobuf Exporter                      | *        | +  | - | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1003) |      | -      |     |      |     | -    | -     |
+| OTLP/HTTP gzip Content-Encoding support               | X        | +  | - | +  | +                                                                       | +    | -      |     |      |     | -    | -     |
 | Concurrent sending                                    |          | -  | + | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1108) |      | -      |     | +    |     | -    | -     |
-| Honors retryable responses with backoff               | X        | +  |   | +  | +                                                                       | +    | -      |     |      |     | -    | -     |
-| Honors non-retryable responses                        | X        | +  |   | -  | +                                                                       | +    | -      |     |      |     | -    | -     |
-| Honors throttling response                            | X        | +  |   | -  | +                                                                       | +    | -      |     |      |     | -    | -     |
-| Multi-destination spec compliance                     | X        | -  |   |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1109) |      | -      |     |      |     | -    | -     |
+| Honors retryable responses with backoff               | X        | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1632)  |   | +  | +                                                                       | +    | -      |     |      |     | -    | -     |
+| Honors non-retryable responses                        | X        | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1632)  |   | -  | +                                                                       | +    | -      |     |      |     | -    | -     |
+| Honors throttling response                            | X        | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1632)  |   | -  | +                                                                       | +    | -      |     |      |     | -    | -     |
+| Multi-destination spec compliance                     | X        | +  |   |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1109) |      | -      |     |      |     | -    | -     |
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md) |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
 | Zipkin V1 JSON                                        | X        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173) |      | -      | -   | -    |     | -    | -     |
 | Zipkin V1 Thrift                                      | X        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174) |      | -      | -   | -    |     | -    | -     |
@@ -185,6 +190,3 @@ Note: Support for environment variables is optional.
 | TBD                                                   |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
 | Prometheus                                            |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
 | TBD                                                   |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-
-`*` For each type of exporter, OTLP, Zipkin, and Jaeger, implementing at least one of the supported formats is required.
-Implementing more than one formats is optional.
