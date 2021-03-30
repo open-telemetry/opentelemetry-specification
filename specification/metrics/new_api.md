@@ -165,6 +165,8 @@ the name:
   Instruments under one Meter SHOULD NOT interfere with Instruments under
   another Meter.
 
+<a name="instrument-naming-rule"></a>
+
 Instrument names MUST conform to the following syntax (described using the
 [Augmented Backus-Naur Form](https://tools.ietf.org/html/rfc5234)):
 
@@ -182,9 +184,129 @@ DIGIT = %x30-39 ; 0-9
   and '-'.
 * They can have a maximum length of 63 characters.
 
+<a name="instrument-unit"></a>
+
+The `unit` is an optional string provided by the author of the instrument. It
+SHOULD be treated as an oqaque string from the API and SDK (e.g. the SDK is not
+expected to validate the unit of measurement, or perform the unit conversion).
+
+* If the `unit` is not provided or the `unit` is null, the API and SDK MUST make
+  sure that the behavior is the same as an empty `unit` string.
+* It MUST be case-sensitive (e.g. `kb` and `kB` are different units), ASCII
+  string.
+* It can have a maximum length of 63 characters. The number 63 is chosen to
+  allow the unit strings (includig the `\0` terminator on certain language
+  runtimes) to be stored and compared as 8-bytes integers when performance is
+  critical.
+
+<a name="instrument-description"></a>
+
+The `description` is an optional free-form text provided by the author of the
+instrument. It MUST be treated as an oqaque string from the API and SDK.
+
+* If the `description` is not provided or the `description` is null, the API and
+  SDK MUST make sure that the behavior is the same as an empty `description`
+  string.
+* It MUST support [BMP (Unicode Plane
+  0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
+  which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
+  Individual language clients can decide if they want to support more Unicode
+  [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
+* It MUST support at least 1023 characters. Individual language clients can
+  decide if they want to support more.
+
 ### Counter
 
+`Counter` is a synchronous Instrument which supports non-negative increments.
+
+Example uses for `Counter`:
+
+* count the number of bytes received
+* count the number of requests completed
+* count the number of accounts created
+* count the number of checkpoints run
+* count the number of HTTP 5xx errors
+
 #### Counter Creation
+
+There MUST NOT be any API for creating a `Counter` other than with a
+[`Meter`](#meter). This MAY be called `CreateCounter`. If strong type is
+desired, the client can decide the language idomatic name(s), for example
+`CreateUInt64Counter`, `CreateDoubleCounter`, `CreateCounter<UInt64>`,
+`CreateCounter<double>`.
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+* An optional list of [`Attribute`](../common/common.md#attributes) names and
+  types.
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+exception_counter = meter.create_counter(name="exceptions", description="number of exceptions caught", value_type=int)
+```
+
+```csharp
+// C#
+
+var counterExceptions = meter.CreateCounter<UInt64>("exceptions", description="number of exceptions caught");
+
+readonly struct PowerConsumption
+{
+    [HighCardinality]
+    string customer;
+};
+
+var counterPowerUsed = meter.CreateCounter<double, PowerConsumption>("power_consumption", unit="kWh");
+```
+
+#### Counter operations
+
+##### Add
+
+Increment the Counter by a fixed amount.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+Required parameters:
+
+* Optional [attributes](../common/common.md#attributes).
+* The increment amount, which MUST be a non-negative numeric value.
+
+The client MAY decide to allow flexible
+[attributes](../common/common.md#attributes) to be passed in as arguments. If
+the attribute names and types are provided during the [counter
+creation](#counter-creation), the client MAY allow attribute values to be passed
+in using a more efficient way (e.g. strong typed struct allocated on the
+callstack, tuple). The API MUST allow callers to provide flexible attributes at
+invocation time rather than having to register all the possible attribute names
+during the instrument creation. Here are some examples that individual language
+client might consider:
+
+```python
+# Python
+
+exception_counter.Add(1, {"exception_type": "IOError", "handled_by_user": True})
+exception_counter.Add(1, exception_type="IOError", handled_by_user=True})
+```
+
+```csharp
+// C#
+
+counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_user", true));
+
+counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
+counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
+```
 
 ## Measurement
 
