@@ -194,7 +194,10 @@ expected to validate the unit of measurement, or perform the unit conversion).
   sure that the behavior is the same as an empty `unit` string.
 * It MUST be case-sensitive (e.g. `kb` and `kB` are different units), ASCII
   string.
-* It can have a maximum length of 63 characters.
+* It can have a maximum length of 63 characters. The number 63 is chosen to
+  allow the unit strings (includig the `\0` terminator on certain language
+  runtimes) to be stored and compared as 8-bytes integers when performance is
+  critical.
 
 <a name="instrument-description"></a>
 
