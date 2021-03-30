@@ -7,10 +7,10 @@ language implementation.
 the feature is not applicable to the particular language, blank cell means the
 status of the feature is not known.
 
-For `Optional` column, `X` means the feature is optional, blank means required, columns marked `*` are explained below.
-type of exporter, OTLP, Zipkin, and Jaeger, implementing at least one of the
-supported formats is required. Implementing more than one formats is optional.
-Blank cell means the feature is required.
+For `Optional` column, `X` means the feature is optional, blank means the
+feature is required, columns marked `*` are explained as that for each type of
+exporter (OTLP, Zipkin, and Jaeger), implementing at least one of the supported
+formats is required. Implementing more than one formats is optional.
 
 ## Traces
 
