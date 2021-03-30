@@ -252,7 +252,13 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 * The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
 parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
 the `ParentBased` sampler specified below.
-* Description MUST be `TraceIdRatioBased{0.000100}`.
+* Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
+  with `RATIO` replaced with the Sampler instance's trace sampling ratio
+  represented as a decimal number. The precision of the number SHOULD follow
+  implementation language standards and SHOULD be high enough to identify when
+  Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
+  had a sampling ratio of 1 to every 10,000 spans it COULD return
+  `"TraceIdRatioBased{0.000100}"` as its description.
 
 TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
 of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
@@ -317,7 +323,7 @@ To protect against such errors, SDK Spans MAY discard attributes, links, and
 events that would increase the number of elements of each collection beyond
 the configured limit.
 
-It the SDK implements the limits above it MUST provide a way to change these
+If the SDK implements the limits above it MUST provide a way to change these
 limits, via a configuration to the TracerProvider, by allowing users to
 configure individual limits like in the Java example bellow.
 
@@ -467,14 +473,24 @@ make the shutdown timeout configurable.
 
 #### ForceFlush()
 
-Exports all spans that have not yet been exported to the configured `Exporter`.
+This is a hint to ensure that any tasks associated with `Spans` for which the
+`SpanProcessor` had already received events prior to the call to `ForceFlush` SHOULD
+be completed as soon as possible, preferably before returning from this method.
+
+In particular, if any `SpanProcessor` has any associated exporter, it SHOULD
+try to call the exporter's `Export` with all spans for which this was not
+already done and then invoke `ForceFlush` on it.
+The [built-in SpanProcessors](#built-in-span-processors) MUST do so.
+If a timeout is specified (see below), the SpanProcessor MUST prioritize honoring the timeout over
+finishing all calls. It MAY skip or abort some or all Export or ForceFlush
+calls it has made to achieve this goal.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
 `ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
 such as when using some FaaS providers that may suspend the process after an
-invocation, but before the `Processor` exports the completed spans.
+invocation, but before the `SpanProcessor` exports the completed spans.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
@@ -581,6 +597,24 @@ return a `Failure` result.
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). OpenTelemetry client authors can decide if they
 want to make the shutdown timeout configurable.
+
+#### `ForceFlush()`
+
+This is a hint to ensure that the export of any `Spans` the exporter has received prior to the
+call to `ForceFlush` SHOULD be completed as soon as possible, preferably before
+returning from this method.
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
+such as when using some FaaS providers that may suspend the process after an
+invocation, but before the exporter exports the completed spans.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want to
+make the flush timeout configurable.
 
 ### Further Language Specialization
 

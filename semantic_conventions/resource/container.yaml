@@ -12,10 +12,15 @@ groups:
       - id: id
         type: string
         brief: >
-          Container id. Usually a UUID, as for example used to
+          Container ID. Usually a UUID, as for example used to
           [identify Docker containers](https://docs.docker.com/engine/reference/run/#container-identification).
           The UUID might be abbreviated.
         examples: ['a3bf90e006b2']
+      - id: runtime
+        type: string
+        brief: >
+          The container runtime managing this container.
+        examples: ['docker', 'containerd', 'rkt']
       - id: image.name
         type: string
         brief: >
@@ -26,3 +31,4 @@ groups:
         brief: >
           Container image tag.
         examples: ['0.1']
+

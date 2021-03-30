@@ -75,6 +75,15 @@ The **Semantic Conventions** define the keys and values which describe commonly 
 * [Span Conventions](trace/semantic_conventions/README.md)
 * [Metrics Conventions](metrics/semantic_conventions/README.md)
 
+Both the collector and the client libraries SHOULD autogenerate semantic
+convention keys and enum values into constants (or language idomatic
+equivalent). Generated values shouldn't be distributed in stable packages
+until semantic conventions are stable.
+The [YAML](../semantic_conventions/README.md) files MUST be used as the
+source of truth for generation. Each language implementation SHOULD
+provide language-specific support to the
+[code generator](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#code-generator).
+
 ### Contrib Packages
 
 The OpenTelemetry project maintains integrations with popular OSS projects which have been identified as important for observing modern web services.
@@ -264,9 +273,12 @@ supports both - push and pull model of setting the `Metric` value.
 
 ### Metrics data model and SDK
 
-Metrics data model is defined in SDK and is based on
+Metrics data model is [specified here](metrics/datamodel.md) and is based on
 [metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
-This data model is used by all the OpenTelemetry exporters as an input.
+This data model defines three semantics: An Event model used by the API, an
+in-flight data model used by the SDK and OTLP, and a TimeSeries model which
+denotes how exporters should interpret the in-flight model.
+
 Different exporters have different capabilities (e.g. which data types are
 supported) and different constraints (e.g. which characters are allowed in label
 keys). Metrics is intended to be a superset of what's possible, not a lowest
@@ -278,6 +290,9 @@ characters are allowed in keys), and code dealing with Metrics should avoid
 validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
+
+See [Metrics Data Model Specification](metrics/datamodel.md) for more
+information.
 
 ## Log Signal
 
@@ -346,7 +361,7 @@ The Propagators API currently defines one `Propagator` type:
 
 The OpenTelemetry collector is a set of components that can collect traces,
 metrics and eventually other telemetry data (e.g. logs) from processes
-instrumented by OpenTelementry or other monitoring/tracing libraries (Jaeger,
+instrumented by OpenTelemetry or other monitoring/tracing libraries (Jaeger,
 Prometheus, etc.), do aggregation and smart sampling, and export traces and
 metrics to one or more monitoring/tracing backends. The collector will allow to
 enrich and transform collected telemetry (e.g. add additional attributes or

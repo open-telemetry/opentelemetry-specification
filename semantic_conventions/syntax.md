@@ -34,10 +34,12 @@ attributes ::= (id type brief examples | ref [brief] [examples]) [required] [not
 ref ::= id
 
 type ::= "string"
-     |   "number"
+     |   "int"
+     |   "double"
      |   "boolean"
      |   "string[]"
-     |   "number[]"
+     |   "int[]"
+     |   "double[]"
      |   "boolean[]"
      |   enum
 
@@ -93,13 +95,18 @@ An attribute is defined by:
 
 - `id`, string that uniquely identifies the attribute.
 - `type`, either a string literal denoting the type or an enum definition (See later).
-   The accepted strings literals are:
+   The accepted string literals are:
+
   * "string": String attributes.
-  * "number": Numeric attributes.
+  * "int": Integer attributes.
+  * "double": Double attributes.
   * "boolean": Boolean attributes.
   * "string[]": Array of strings attributes.
-  * "number[]": Array of numbers attributes.
+  * "int[]": Array of integer attributes.
+  * "double[]": Array of double attributes.
   * "boolean[]": Array of booleans attributes.
+
+  See the [specification of Attributes](../specification/common/common.md#attributes) for the definition of the value types.
 - `ref`, optional string, reference an existing attribute, see later.
 - `required`, optional, specifies if the attribute is mandatory.
     Can be "always", or "conditional". When omitted, the attribute is not required.
@@ -198,7 +205,7 @@ fields are present in the current attribute definition, they override the inheri
 
 ### Type
 
-An attribute type can either be a string, number, boolean, array of strings, array of numbers,
+An attribute type can either be a string, int, double, boolean, array of strings, array of int, array of double,
 array of booleans, or an enumeration. If it is an enumeration, additional fields are required:
 
 - `allow_custom_values`, optional boolean, set to false to not accept values
@@ -208,7 +215,7 @@ array of booleans, or an enumeration. If it is an enumeration, additional fields
 An enum entry has the following fields:
 
 - `id`, string that uniquely identifies the enum entry.
-- `value`, string, number, or boolean, value of the enum entry.
+- `value`, string, int, or boolean; value of the enum entry.
 - `brief`, optional string, brief description of the enum entry value. It defaults to the value of `id`.
 - `note`, optional string, longer description. It defaults to an empty string.
 

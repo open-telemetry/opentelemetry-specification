@@ -16,6 +16,9 @@ groups:
         brief: >
             Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
             Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
+        note: >
+          `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
+          In such case the attribute's value should be `https://www.example.com/`.
         examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
       - id: target
         type: string
@@ -32,7 +35,7 @@ groups:
         brief: 'The URI scheme identifying the used protocol.'
         examples: ["http", "https"]
       - id: status_code
-        type: number
+        type: int
         required:
           conditional: If and only if one was received/sent.
         brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
@@ -58,7 +61,7 @@ groups:
             - id: QUIC
               value: 'QUIC'
               brief: 'QUIC protocol.'
-        brief: 'Kind of HTTP protocol used'
+        brief: 'Kind of HTTP protocol used.'
         note: >
           If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor`
           is `QUIC`, in which case `IP.UDP` is assumed.
@@ -68,26 +71,26 @@ groups:
         brief: 'Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client.'
         examples: ['CERN-LineMode/2.15 libwww/2.17b3']
       - id: request_content_length
-        type: number
+        type: int
         brief: >
           The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
       - id: request_content_length_uncompressed
-        type: number
+        type: int
         brief: >
           The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used.
         examples: 5493
       - id: response_content_length
-        type: number
+        type: int
         brief: >
           The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
       - id: response_content_length_uncompressed
-        type: number
+        type: int
         brief: >
           The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used.
         examples: 5493
