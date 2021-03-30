@@ -35,4 +35,9 @@ groups:
         brief: >
           The task definition family this task definition is a member of.
         examples: ['opentelemetry-family']
+      - id: task.revision
+        type: string
+        brief: >
+          The revision for this task definition.
+        examples: ["8", "26"]
       

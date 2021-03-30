@@ -14,6 +14,7 @@
 | `aws.ecs.launchtype` | string | The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task. | `ec2`; `fargate` | No |
 | `aws.ecs.task.arn` | string | The ARN of an [ECS task definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html). | `arn:aws:ecs:us-west-1:123456789123:task/10838bed-421f-43ef-870a-f43feacbbb5b` | No |
 | `aws.ecs.task.family` | string | The task definition family this task definition is a member of. | `opentelemetry-family` | No |
+| `aws.ecs.task.revision` | string | The revision for this task definition. | `8`; `26` | No |
 
 `aws.ecs.launchtype` MUST be one of the following:
 
