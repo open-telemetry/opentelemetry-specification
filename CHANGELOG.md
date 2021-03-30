@@ -18,6 +18,7 @@ release.
 - Clarify the description for the `TraceIdRatioBased` sampler needs to include the sampler's sampling ratio. ([#1536](https://github.com/open-telemetry/opentelemetry-specification/pull/1536))
 - Define the fallback tracer name for invalid values.
   ([#1534](https://github.com/open-telemetry/opentelemetry-specification/pull/1534))
+- Clarify non-blocking requirement from span API End. ([#1555](https://github.com/open-telemetry/opentelemetry-specification/pull/1555))
 - Remove the Included Propagators section from trace API specification that was a duplicate of the Propagators Distribution of the context specification. ([#1556](https://github.com/open-telemetry/opentelemetry-specification/pull/1556))
 - Remove the Baggage API propagator notes that conflict with the API Propagators Operations section and fix [#1526](https://github.com/open-telemetry/opentelemetry-specification/issues/1526). ([#1575](https://github.com/open-telemetry/opentelemetry-specification/pull/1575))
 
