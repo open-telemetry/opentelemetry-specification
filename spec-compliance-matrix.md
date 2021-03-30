@@ -190,4 +190,3 @@ Note: Support for environment variables is optional.
 | TBD                                                   |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
 | Prometheus                                            |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
 | TBD                                                   |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-
