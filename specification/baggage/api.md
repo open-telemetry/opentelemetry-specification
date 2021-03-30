@@ -154,14 +154,9 @@ to the optional metadata.
 
 On `extract`, the propagator should store all metadata as a single metadata instance per entry.
 On `inject`, the propagator should append the metadata per the W3C specification format.
-
-Notes:
-
-If the propagator is unable to parse the incoming `baggage`, `extract` MUST return
-a `Context` with no baggage entries in it.
-
-If the incoming `baggage` is present, but contains no entries, `extract` MUST
-return a `Context` with no baggage entries in it.
+Refer to the API Propagators
+[Operation](../context/api-propagators.md#operations) section for the
+additional requirements these operations need to follow.
 
 ## Conflict Resolution
 
