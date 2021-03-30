@@ -214,7 +214,7 @@ instrument. It MUST be treated as an oqaque string from the API and SDK.
 
 ### Counter
 
-`Counter` is a synchronous Instrument which supports non-negative increment.
+`Counter` is a synchronous Instrument which supports non-negative increments.
 
 Example uses for `Counter`:
 
