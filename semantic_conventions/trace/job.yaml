@@ -11,19 +11,19 @@ groups:
           brief: >
             A string identifying the job processing system.
           examples: ['sidekiq', 'resque', 'rake', 'celery', 'airflow']
-        - id: job_name
+        - id: name
           type: string
           required: always
           brief: >
             The type or class name of the job.
           examples: ['SignupMailJob', 'ChargePaymentJob']
-        - id: job_id
+        - id: id
           type: string
           required: always
           brief: >
             A value as an identifier for the job, represented as a string.
           examples: 'b18fc2c2f887f61452a7c7c7c7048572'
-        - id: job_label
+        - id: label
           type: string
           brief: >
             A value assigned as a human-readable label for the job.
