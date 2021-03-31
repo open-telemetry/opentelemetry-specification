@@ -144,6 +144,9 @@ groups:
               - id: geode
                 value: 'geode'
                 brief: 'Apache Geode'
+              - id: elasticsearch
+                value: 'elasticsearch'
+                brief: 'Elasticsearch'
         - id: connection_string
           tag: connection-level
           type: string
@@ -255,7 +258,7 @@ groups:
             The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute.
           examples: 'mykeyspace'
         - id: page_size
-          type: number
+          type: int
           tag: call-level-tech-specific-cassandra
           brief: >
             The fetch size used for paging, i.e. how many rows will be returned at once.
@@ -308,7 +311,7 @@ groups:
           brief: >
             Whether or not the query is idempotent.
         - id: speculative_execution_count
-          type: number
+          type: int
           tag: call-level-tech-specific-cassandra
           brief: >
             The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively.
@@ -348,7 +351,7 @@ groups:
         Call-level attributes for Redis
       attributes:
         - id: database_index
-          type: number
+          type: int
           required:
             conditional: Required, if other than the default database (`0`).
           tag: call-level-tech-specific

@@ -2,7 +2,7 @@ groups:
   - id: cloud
     prefix: cloud
     brief: >
-      A cloud infrastructure (e.g. GCP, Azure, AWS)
+      A cloud environment (e.g. GCP, Azure, AWS)
     attributes:
       - id: provider
         type:
@@ -23,21 +23,26 @@ groups:
       - id: account.id
         type: string
         brief: >
-          The cloud account ID used to identify different entities.
-        examples: ['opentelemetry']
+          The cloud account ID the resource is assigned to.
+        examples: ['111111111111', 'opentelemetry']
       - id: region
         type: string
         brief: >
-          A specific geographical location where different entities can run.
-        examples: ['us-central1']
-      - id: zone
+          The geographical region the resource is running. Refer to your
+          provider's docs to see the available regions, for example
+          [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), or
+          [Google Cloud regions](https://cloud.google.com/about/locations).
+        examples: ['us-central1', 'us-east-1']
+      - id: availability_zone
         type: string
         brief: >
-          Zones are a sub set of the region connected through low-latency links.
+          Cloud regions often have multiple, isolated locations known as zones
+          to increase availability. Availability zone represents the
+          zone where the resource is running.
         note: >
-          In AWS, this is called availability-zone.
-        examples: ['us-central1-a']
-      - id: infrastructure_service
+          Availability zones are called "zones" on Google Cloud.
+        examples: ['us-east-1c']
+      - id: platform
         type:
           allow_custom_values: true
           members:
@@ -73,21 +78,21 @@ groups:
               brief: Azure App Service
             - id: GCP_ComputeEngine
               value: 'gcp_compute_engine'
-              brief: GCP Compute Engine
+              brief: Google Cloud Compute Engine (GCE)
             - id: GCP_CloudRun
               value: 'gcp_cloud_run'
-              brief: GCP Cloud Run
-            - id: GCP_GKE
-              value: 'gcp_gke'
-              brief: Google Kubernetes Engine
+              brief: Google Cloud Run
+            - id: GCP_KubernetesEngine
+              value: 'gcp_kubernetes_engine'
+              brief: Google Cloud Kubernetes Engine (GKE)
             - id: GCP_CloudFunctions
               value: 'gcp_cloud_functions'
-              brief: GCP Cloud Functions
+              brief: Google Cloud Functions (GCF)
             - id: GCP_AppEngine
               value: 'gcp_app_engine'
-              brief: GCP App Engine
+              brief: Google Cloud App Engine (GAE)
         brief: >
-          The cloud infrastructure resource in use.
+          The cloud platform in use.
         note: >
           The prefix of the service SHOULD match the one specified in `cloud.provider`.
         examples: ['aws_ec2', 'azure_vm', 'gcp_compute_engine']

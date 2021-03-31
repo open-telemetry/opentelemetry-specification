@@ -17,9 +17,10 @@ type and units.
 
 Below is a table of HTTP server metric instruments.
 
-| Name                   | Instrument    | Units        | Description |
-|------------------------|---------------|--------------|-------------|
-| `http.server.duration` | ValueRecorder | milliseconds | measures the duration of the inbound HTTP request |
+| Name                          | Instrument        | Units        | Description |
+|-------------------------------|-------------------|--------------|-------------|
+| `http.server.duration`        | ValueRecorder     | milliseconds | measures the duration of the inbound HTTP request |
+| `http.server.active_requests` | UpDownSumObserver | requests     | measures the number of concurrent HTTP requests that are currently in-flight |
 
 ### HTTP Client
 
@@ -31,7 +32,7 @@ Below is a table of HTTP client metric instruments.
 
 ## Labels
 
-Below is a table of the labels that SHOULD be included on metric events
+Below is a table of the labels that SHOULD be included on `duration` metric events
 and whether they should be on server, client, or both types of HTTP metric events:
 
 | Name               | Type                | Recommended       | Notes and examples |
@@ -47,6 +48,16 @@ and whether they should be on server, client, or both types of HTTP metric event
 | `http.server_name` | `server`            | see [2] in [label alternatives](#label-alternatives) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this label MUST NOT be set ( `net.host.name` should be used instead). |
 | `net.host.name`    | `server`            | see [2] in [label alternatives](#label-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
 | `net.host.port`    | `server`            | see [2] in [label alternatives](#label-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
+
+The following labels SHOULD be included in the `http.server.active_requests` observation:
+
+| Name               | Recommended | Notes and examples |
+|--------------------|-------------|--------------------|
+| `http.method`      | Yes         | The HTTP request method. E.g. `"GET"` |
+| `http.host`        | see [label alternatives](#label-alternatives) | The value of the [HTTP host header][]. When the header is empty or not present, this label should be the same |
+| `http.scheme`      | see [label alternatives](#label-alternatives) | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"` |
+| `http.flavor`      | Optional    | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"` |
+| `http.server_name` | see [2] in [label alternatives](#label-alternatives) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this label MUST NOT be set ( `net.host.name` should be used instead). |
 
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
 [HTTP response status code]: https://tools.ietf.org/html/rfc7231#section-6

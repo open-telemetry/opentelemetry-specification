@@ -5,7 +5,7 @@ groups:
         An operating system process.
     attributes:
       - id: pid
-        type: number
+        type: int
         brief: >
           Process identifier (PID).
         examples: [1234]

@@ -41,7 +41,7 @@ groups:
           [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6)
         examples: '127.0.0.1'
       - id: peer.port
-        type: number
+        type: int
         brief: 'Remote port number.'
         examples: [80, 8080, 443]
       - id: peer.name
@@ -53,7 +53,7 @@ groups:
         brief: 'Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.'
         examples: '192.168.0.1'
       - id: host.port
-        type: number
+        type: int
         brief: 'Like `net.peer.port` but for the host port.'
         examples: 35555
       - id: host.name
@@ -101,7 +101,7 @@ groups:
       These attributes may be used for any operation to store information about a thread that started a span.
     attributes:
       - id: id
-        type: number
+        type: int
         brief: >
           Current "managed" thread ID (as opposed to OS thread ID).
         examples: 42
@@ -132,7 +132,7 @@ groups:
           The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path).
         examples: /usr/local/MyApplication/content_root/app/index.php
       - id: lineno
-        type: number
+        type: int
         brief: >
           The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`.
         examples: 42

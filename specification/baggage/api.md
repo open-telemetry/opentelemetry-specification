@@ -35,7 +35,7 @@ The Baggage API consists of:
 The functions described here are one way to approach interacting with the
 `Baggage` via having struct/object that represents the entire Baggage content.
 Depending on language idioms, a language API MAY implement these functions by
-providing the defined functionality interacting purely via the `Context`.
+interacting with the baggage via the `Context` directly.
 
 The Baggage API MUST be fully functional in the absence of an installed SDK.
 This is required in order to enable transparent cross-process Baggage
@@ -101,8 +101,8 @@ REQUIRED parameters:
 This section defines all operations within the Baggage API that interact with
 the [`Context`](../context/context.md).
 
-The API MUST provide the following functionality to interact with a `Context`
-instance:
+If an implementation of this API does not operate directly on the `Context`, it
+MUST provide the following functionality to interact with a `Context` instance:
 
 - Extract the `Baggage` from a `Context` instance
 - Insert the `Baggage` to a `Context` instance
@@ -154,14 +154,9 @@ to the optional metadata.
 
 On `extract`, the propagator should store all metadata as a single metadata instance per entry.
 On `inject`, the propagator should append the metadata per the W3C specification format.
-
-Notes:
-
-If the propagator is unable to parse the incoming `baggage`, `extract` MUST return
-a `Context` with no baggage entries in it.
-
-If the incoming `baggage` is present, but contains no entries, `extract` MUST
-return a `Context` with no baggage entries in it.
+Refer to the API Propagators
+[Operation](../context/api-propagators.md#operations) section for the
+additional requirements these operations need to follow.
 
 ## Conflict Resolution
 

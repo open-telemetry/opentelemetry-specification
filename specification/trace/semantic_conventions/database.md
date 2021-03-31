@@ -45,7 +45,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | No |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below. |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below. |
-| [`net.peer.port`](span-general.md) | number | Remote port number. | `80`; `8080`; `443` | Conditional [1] |
+| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditional [1] |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `IP.TCP` | Conditional [2] |
 
 **[1]:** Required if using a port other than the default port for this DBMS.
@@ -105,6 +105,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `dynamodb` | Amazon DynamoDB |
 | `neo4j` | Neo4j |
 | `geode` | Apache Geode |
+| `elasticsearch` | Elasticsearch |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
@@ -173,7 +174,7 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `db.hbase.namespace` | string | The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute. | `default` | Yes |
-| `db.redis.database_index` | number | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`; `1`; `15` | Conditional [1] |
+| `db.redis.database_index` | int | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`; `1`; `15` | Conditional [1] |
 | `db.mongodb.collection` | string | The collection being accessed within the database stated in `db.name`. | `customers`; `products` | Yes |
 | `db.sql.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [2] | `public.users`; `customers` | Recommended if available. |
 
@@ -190,11 +191,11 @@ Separated for clarity.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
-| `db.cassandra.page_size` | number | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
+| `db.cassandra.page_size` | int | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
 | `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `ALL` | No |
 | `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [1] | `mytable` | Recommended if available. |
 | `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
-| `db.cassandra.speculative_execution_count` | number | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | No |
+| `db.cassandra.speculative_execution_count` | int | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | No |
 | `db.cassandra.coordinator.id` | string | The ID of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | No |
 | `db.cassandra.coordinator.dc` | string | The data center of the coordinating node for a query. | `us-west-2` | No |
 
