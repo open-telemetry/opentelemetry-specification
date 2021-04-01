@@ -29,7 +29,11 @@ Table of Contents
   * [Meter operations](#meter-operations)
 * [Instrument](#instrument)
   * [Counter](#counter)
-    * [Counter Creation](#counter-creation)
+    * [Counter creation](#counter-creation)
+    * [Counter operations](#counter-operations)
+  * [ObservableCounter](#observablecounter)
+    * [ObservableCounter creation](#observablecounter-creation)
+    * [ObservableCounter operations](#observablecounter-operations)
 * [Measurement](#measurement)
 
 </details>
@@ -227,7 +231,7 @@ Example uses for `Counter`:
 * count the number of checkpoints run
 * count the number of HTTP 5xx errors
 
-#### Counter Creation
+#### Counter creation
 
 There MUST NOT be any API for creating a `Counter` other than with a
 [`Meter`](#meter). This MAY be called `CreateCounter`. If strong type is
@@ -307,6 +311,87 @@ counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_u
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
+
+### ObservableCounter
+
+`ObservableCounter` is an asynchronous Instrument which reports
+[monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing
+value(s) when the Meter is observed.
+
+Example uses for `ObservableCounter`:
+
+* [CPU time](https://wikipedia.org/wiki/CPU_time), which could be reported for
+  each thread, each process or the entire system. For example "the CPU time for
+  process A running in user mode, measured in seconds".
+* The number of [page faults](https://wikipedia.org/wiki/Page_fault) for each
+  process.
+
+#### ObservableCounter creation
+
+There MUST NOT be any API for creating a `ObservableCounter` other than with a
+[`Meter`](#meter). This MAY be called `CreateObservableCounter`. If strong type
+is desired, the client can decide the language idomatic name(s), for example
+`CreateUInt64ObservableCounter`, `CreateDoubleObservableCounter`,
+`CreateObservableCounter<UInt64>`, `CreateObservableCounter<double>`.
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+* An optional list of [`Attribute`](../common/common.md#attributes) names and
+  types.
+* A `callback` function.
+  * This callback function will only be called when the Meter is being observed.
+  * This callback function will return the value(s) with optional
+    [`Attribute`](../common/common.md#attributes). Individual language client
+    can decide what is the idomatic approach (e.g. it could be a list, tuple,
+    generator, enumerator, etc.).
+  * Individual language client SHOULD define whether this callback function
+    needs to be reentrant safe / thread safe or not.
+* An optional `state`.
+  * The `state` parameter can be used to hold any stateful information.
+  * If `state` is not provided, the `callback` function MUST take no input
+    argument, otherwise it MUST take the `state` as the only input argument.
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+def pf_callback():
+    # Note: in the real world these would be retrieved from the operating system
+    return (
+        (8, ("pid", 0), ("bitness", 64)),
+        (37741921, ("pid", 4), ("bitness", 64)),
+        (10465, ("pid", 880), ("bitness", 32)),
+    )
+
+page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+```
+
+```csharp
+// C#
+
+// A simple scenario where only one value is reported
+
+interface IAtomicClock
+{
+    UInt64 GetCaesiumOscillates();
+}
+
+IAtomicClock clock = AtomicClock.Connect();
+
+var obCaesiumOscillates = meter.CreateCounterObserver<UInt64>("caesium_oscillates", clk => clk.GetCaesiumOscillates(), clock);
+```
+
+#### ObservableCounter operations
+
+`ObservableCounter` is only intended for asynchronous scenario, it does not
+provide any operation.
 
 ## Measurement
 
