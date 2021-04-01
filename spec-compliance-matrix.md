@@ -62,8 +62,8 @@ formats is required. Implementing more than one format is optional.
 | `null` values documented as invalid/undefined                                                    |          | +  | +    | +  | +      | +    | N/A    |     |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      |          |    |      |    |        |      |        |     |      |     |      |       |
-| Links can be recorded on span creation                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
-| Links order is preserved                                                                         |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Links can be recorded on span creation                                                           |          | +  |      |    |        | +    |        |     |      |     |      |       |
+| Links order is preserved                                                                         |          | +  |      |    |        | +    |        |     |      |     |      |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |    |      |    |        |      |        |     |      | +   |      |       |
 | AddEvent                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -77,7 +77,7 @@ formats is required. Implementing more than one format is optional.
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     |      |     | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    |        | +    |        |     |      |     |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    |        | +    |        |     |      |     |      | +     |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    |      |    |        |      |        |     |      |     |      |       |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    |      |    |        | +    |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -116,9 +116,9 @@ formats is required. Implementing more than one format is optional.
 | Global Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| Jaeger Propagator                                                                |          | +  | +    | +  | +      |      | +      |     | +    | +   | -    | -     |
+| Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | -     |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      |     |      |       |
-| Fields                                                                           |          | +  | +    | +  | +      |      | +      |     | +    |     | +    | +     |
+| Fields                                                                           |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
 | Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | +    | +     |
 | Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | +    | +     |
 | Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | -    | +     |
@@ -135,9 +135,9 @@ Note: Support for environment variables is optional.
 |OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_OTLP_*                          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1085) | +  |   | -    | +  | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        | - | +  |   | +    | +  | -    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                        | - | +  |   | +    |    | -    | - |    | - | -  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                        | - | +  |   | +    | +  | -    | - |    | - | -  | -   |
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   |    |   |    |     |
-|OTEL_METRICS_EXPORTER                         | - | +  |   | +    |    | -    |   |    |   | -  | -   |
+|OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   |    |   | -  | -   |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   |    |   |    |     |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   |    |   |    |     |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | -    |   |    |   |    |     |
@@ -149,7 +149,7 @@ Note: Support for environment variables is optional.
 | Feature                                               | Optional | Go | Java                                                                  | JS | Python                                                                  | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |-------------------------------------------------------|----------|----|-----------------------------------------------------------------------|----|-------------------------------------------------------------------------|------|--------|-----|------|-----|------|-------|
 | [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +                                                                       |      |        |     |      |     | +    |       |
-| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    |                                                                         |      |        |     |      |     |      |       |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    |                                                                         | +    |        |     |      |     |      |       |
 | Standard output (logging)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
@@ -163,22 +163,22 @@ Note: Support for environment variables is optional.
 | Honors throttling response                            | X        | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1632)  |   | -  | +                                                                       | +    | -      |     |      |     | -    | -     |
 | Multi-destination spec compliance                     | X        | +  |   |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1109) |      | -      |     |      |     | -    | -     |
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md) |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-| Zipkin V1 JSON                                        | X        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173) |      | -      | -   | -    |     | -    | -     |
-| Zipkin V1 Thrift                                      | X        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174) |      | -      | -   | -    |     | -    | -     |
-| Zipkin V2 JSON                                        | *        | +  | + |    | +                                                                       |      | -      | +   | +    | +   | +    | +     |
-| Zipkin V2 Protobuf                                    | *        |    | + |    | +                                                                       |      | +      |     | -    |     | -    | -     |
-| Service name mapping                                  |          | +  | + | +  | +                                                                       |      | +      | +   | +    |     | +    | +     |
-| SpanKind mapping                                      |          | +  | + | +  | +                                                                       |      | +      | +   | +    |     | +    | +     |
-| InstrumentationLibrary mapping                        |          |    | + | -  | +                                                                       |      | -      | -   | +    |     | +    | +     |
-| Boolean attributes                                    |          | +  | + | +  | +                                                                       |      | +      | +   | +    |     | +    | +     |
-| Array attributes                                      |          | +  | + | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110) |      | +      | +   | +    |     | +    | +     |
-| Status mapping                                        |          | +  | + | +  | +                                                                       |      | +      | +   | +    |     | +    | +     |
-| Error Status mapping                                  |          |    | + |    |                                                                         |      |        |     |      |     | +    | -     |
-| Event attributes mapping to Annotations               |          | +  | + | +  | +                                                                       |      | +      | +   | +    |     | +    | +     |
-| Integer microseconds in timestamps                    |          |    | + |    | +                                                                       |      |        |     |      |     | +    | +     |
+| Zipkin V1 JSON                                        | X        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173) | -    | -      | -   | -    |     | -    | -     |
+| Zipkin V1 Thrift                                      | X        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174) | -    | -      | -   | -    |     | -    | -     |
+| Zipkin V2 JSON                                        | *        | +  | + |    | +                                                                       | +    | -      | +   | +    | +   | +    | +     |
+| Zipkin V2 Protobuf                                    | *        |    | + |    | +                                                                       | -    | +      |     | -    |     | -    | -     |
+| Service name mapping                                  |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
+| SpanKind mapping                                      |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
+| InstrumentationLibrary mapping                        |          |    | + | -  | +                                                                       | +    | -      | -   | +    |     | +    | +     |
+| Boolean attributes                                    |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
+| Array attributes                                      |          | +  | + | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110) | +    | +      | +   | +    |     | +    | +     |
+| Status mapping                                        |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
+| Error Status mapping                                  |          |    | + |    |                                                                         | +    |        |     |      |     | +    | -     |
+| Event attributes mapping to Annotations               |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
+| Integer microseconds in timestamps                    |          |    | + |    | +                                                                       | +    |        |     |      |     | +    | +     |
 | [Jaeger](specification/trace/sdk_exporters/jaeger.md) |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
 | Jaeger Thrift over UDP                                | *        |    |   |    | +                                                                       | +    |        |     |      |     | +    | +     |
-| Jaeger Protobuf via gRPC                              | *        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1437) |      |        |     |      |     | -    | -     |
+| Jaeger Protobuf via gRPC                              | *        |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1437) | -    |        |     |      |     | -    | -     |
 | Jaeger Thrift over HTTP                               | *        |    | + |    | +                                                                       | +    |        |     |      |     | -    | -     |
 | Service name mapping                                  |          |    | + |    | +                                                                       | +    |        |     |      |     | +    | +     |
 | Resource to Process mapping                           |          |    | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1436) | +    |        |     |      |     | +    | -     |
