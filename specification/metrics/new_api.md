@@ -352,10 +352,10 @@ The API MUST accept the following parameters:
     generator, enumerator, etc.).
   * Individual language client SHOULD define whether this callback function
     needs to be reentrant safe / thread safe or not.
-* An optional `state`.
-  * The `state` parameter can be used to hold any stateful information.
-  * If `state` is not provided, the `callback` function MUST take no input
-    argument, otherwise it MUST take the `state` as the only input argument.
+
+The API SHOULD provide some way to pass `state` to the callback. Individual
+language client can decide what is the idomatic approach (e.g. it could be an
+additional parameter, or captured by the lambda closure, or something else).
 
 Here are some examples that individual language client might consider:
 
@@ -365,9 +365,9 @@ Here are some examples that individual language client might consider:
 def pf_callback():
     # Note: in the real world these would be retrieved from the operating system
     return (
-        (8, ("pid", 0), ("bitness", 64)),
-        (37741921, ("pid", 4), ("bitness", 64)),
-        (10465, ("pid", 880), ("bitness", 32)),
+        (8,        ("pid", 0),   ("bitness", 64)),
+        (37741921, ("pid", 4),   ("bitness", 64)),
+        (10465,    ("pid", 880), ("bitness", 32)),
     )
 
 page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
