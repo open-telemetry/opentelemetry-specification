@@ -351,11 +351,12 @@ some examples:
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
 * Use an observer argument to allow individual `Measurement`s to be reported.
 
-It is the responsibility of the [SDK](./README.md#sdk) to decide how to handle
-duplicates. For example, during the callback invocation if two measurements
-`value=1, attributes={pid:4 bitness:64}` and `value=2, attributes={pid:4,
-bitness:64}` are reported, the SDK can decide to drop the entire data, pick the
-last one, take all the data and add them together, or something else.
+Duplicates are not allowed. If it happens, the [SDK](./README.md#sdk) can decide
+how to handle it. For example, during the callback invocation if two
+measurements `value=1, attributes={pid:4 bitness:64}` and `value=2,
+attributes={pid:4, bitness:64}` are reported, the SDK can decide to drop the
+entire data, pick the last one, take all the data and add them together, or
+something else.
 
 The API SHOULD provide some way to pass `state` to the callback. Individual
 language client can decide what is the idomatic approach (e.g. it could be an
