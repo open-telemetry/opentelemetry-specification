@@ -157,8 +157,6 @@ will have the following information:
   instruments, whether it is synchronous or asynchronous
 * An optional `unit of measure`
 * An optional `description`
-* An optional list of [`Attribute`](../common/common.md#attributes) names and
-  types
 
 Instruments are associated with the Meter during creation, and are identified by
 the name:
@@ -247,8 +245,6 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* An optional list of [`Attribute`](../common/common.md#attributes) names and
-  types.
 
 Here are some examples that individual language client might consider:
 
@@ -342,20 +338,29 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* An optional list of [`Attribute`](../common/common.md#attributes) names and
-  types.
 * A `callback` function.
-  * This callback function will only be called when the Meter is being observed.
-  * This callback function will return the value(s) with optional
-    [`Attribute`](../common/common.md#attributes). Individual language client
-    can decide what is the idomatic approach (e.g. it could be a list, tuple,
-    generator, enumerator, etc.).
-  * Individual language client SHOULD define whether this callback function
-    needs to be reentrant safe / thread safe or not.
+
+The `callback` function is responsible for reporting the
+[Measurement](#measurement)s. It will only be called when the Meter is being
+observed. Individual language client SHOULD define whether this callback
+function needs to be reentrant safe / thread safe or not.
+
+Individual language client can decide what is the idomatic approach. Here are
+some examples:
+
+* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
+* Use an observer argument to allow individual `Measurement`s to be reported.
+
+It is the responsibility of the [SDK](./README.md#sdk) to decide how to handle
+duplicates. For example, during the callback invocation if two measurements
+`value=1, attributes={pid:4 bitness:64}` and `value=2, attributes={pid:4,
+bitness:64}` are reported, the SDK can decide to drop the entire data, pick the
+last one, take all the data and add them together, or something else.
 
 The API SHOULD provide some way to pass `state` to the callback. Individual
 language client can decide what is the idomatic approach (e.g. it could be an
-additional parameter, or captured by the lambda closure, or something else).
+additional parameter to the callback function, or captured by the lambda
+closure, or something else).
 
 Here are some examples that individual language client might consider:
 
@@ -403,6 +408,14 @@ for the interaction between the API and SDK.
 
 * A value
 * [`Attributes`](../common/common.md#attributes)
+
+## Compatibility
+
+All the metrics components SHOULD allow new APIs to be added to existing
+components without introducing breaking changes.
+
+All the metrics APIs SHOULD allow optional parameter(s) to be added to existing
+APIs without introducing breaking changes.
 
 ## Concurrency
 
