@@ -312,7 +312,7 @@ counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_gree
 
 `ObservableCounter` is an asynchronous Instrument which reports
 [monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing
-value(s) when the Meter is observed.
+value(s) when the instrument is being observed.
 
 Example uses for `ObservableCounter`:
 
