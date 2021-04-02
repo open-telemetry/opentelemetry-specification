@@ -177,7 +177,7 @@ detail as we link the event model with the other two.
 In this low-level metrics data model, a Timeseries is defined by an entity
 consisting of several metadata properties:
 
-- Metric name and description
+- Metric name
 - Label set
 - Kind of point (integer, floating point, etc)
 - Unit of measurement
