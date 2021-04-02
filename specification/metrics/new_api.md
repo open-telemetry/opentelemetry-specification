@@ -157,6 +157,8 @@ will have the following information:
   instruments, whether it is synchronous or asynchronous
 * An optional `unit of measure`
 * An optional `description`
+* An optional list of [`Attribute`](../common/common.md#attributes) names and
+  types
 
 Instruments are associated with the Meter during creation, and are identified by
 the name:
@@ -245,6 +247,8 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* An optional list of [`Attribute`](../common/common.md#attributes) names and
+  types
 
 Here are some examples that individual language client might consider:
 
@@ -382,11 +386,11 @@ page_faults_observable_counter = meter.create_observable_counter(name="PF", desc
 ```python
 # Python
 
-def pf_callback(observer):
+def pf_callback(result):
     # Note: in the real world these would be retrieved from the operating system
-    observer.Observe(8,        ("pid", 0),   ("bitness", 64))
-    observer.Observe(37741921, ("pid", 4),   ("bitness", 64))
-    observer.Observe(10465,    ("pid", 880), ("bitness", 32))
+    result.Observe(8,        ("pid", 0),   ("bitness", 64))
+    result.Observe(37741921, ("pid", 4),   ("bitness", 64))
+    result.Observe(10465,    ("pid", 880), ("bitness", 32))
 
 page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
 ```
@@ -421,14 +425,6 @@ for the interaction between the API and SDK.
 
 * A value
 * [`Attributes`](../common/common.md#attributes)
-
-## Compatibility
-
-All the metrics components SHOULD allow new APIs to be added to existing
-components without introducing breaking changes.
-
-All the metrics APIs SHOULD allow optional parameter(s) to be added to existing
-APIs without introducing breaking changes.
 
 ## Concurrency
 
