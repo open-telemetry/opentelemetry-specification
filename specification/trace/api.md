@@ -164,7 +164,7 @@ inside the trace module. This functionality SHOULD be fully implemented in the A
 
 The tracer is responsible for creating `Span`s.
 
-Note that `Tracers` should usually *not* be responsible for configuration.
+Note that `Tracer`s should usually *not* be responsible for configuration.
 This should be the responsibility of the `TracerProvider` instead.
 
 ### Tracer operations
@@ -248,7 +248,7 @@ Please note, since `SpanContext` is immutable, it is not possible to update `Spa
 Such changes then make sense only right before
 [`SpanContext` propagation](../context/api-propagators.md)
 or [telemetry data exporting](sdk.md#span-exporter).
-In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
+In both cases, `Propagator`s and `SpanExporter`s may create a modified `TraceState` copy before serializing it to the wire.
 
 ## Span
 
@@ -441,7 +441,7 @@ are one expected case where `IsRecording` cannot change after ending a Span.
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
 events in case when a Span is definitely not recorded. Note that any child
 span's recording is determined independently from the value of this flag
-(typically based on the `sampled` flag of a `TraceFlag` on
+(typically based on the `sampled` flag of a `TraceFlags` on
 [SpanContext](#spancontext)).
 
 This flag may be `true` despite the entire trace being sampled out. This
@@ -552,8 +552,8 @@ The Span interface MUST provide:
 
 The status code SHOULD remain unset, except for the following circumstances:
 
-When the status is set to `ERROR` by Instrumentation Libraries, the status codes
-SHOULD be documented and predictable. The status code should only be set to `ERROR`
+When the status is set to `Error` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `Error`
 according to the rules defined within the semantic conventions. For operations
 not covered by the semantic conventions, Instrumentation Libraries SHOULD
 publish their own conventions, including status codes.
@@ -617,7 +617,14 @@ Parameters:
 - (Optional) Timestamp to explicitly set the end timestamp.
   If omitted, this MUST be treated equivalent to passing the current time.
 
-This API MUST be non-blocking.
+Expect this operation to be called in the "hot path" of production
+applications. It needs to be designed to complete fast, if not immediately.
+This operation itself MUST NOT perform blocking I/O on the calling thread.
+Any locking used needs be minimized and SHOULD be removed entirely if
+possible. Some downstream SpanProcessors and subsequent SpanExporters called
+from this operation may be used for testing, proof-of-concept ideas, or
+debugging and may not be designed for production use themselves. They are not
+in the scope of this requirement and recommendation.
 
 #### Record Exception
 
@@ -666,7 +673,7 @@ it SHOULD be named `NonRecordingSpan`.
 
 The behavior is defined as follows:
 
-- `GetContext()` MUST return the wrapped `SpanContext`.
+- `GetContext` MUST return the wrapped `SpanContext`.
 - `IsRecording` MUST return `false` to signal that events, attributes and other elements
   are not being recorded, i.e. they are being dropped.
 
