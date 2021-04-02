@@ -266,7 +266,7 @@ misbehaving system. Receivers SHOULD presume a single writer was intended and
 eliminate overlap / deduplicate.
 
 Note: Identity is an important concept in most metrics systems.  For example,
-[prometheus directlly calls out uniqueness](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs):
+[Prometheus directly calls out uniqueness](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs):
 
 > Care must be taken with `labeldrop` and `labelkeep` to ensure that metrics
 > are still uniquely labeled once the labels are removed.
