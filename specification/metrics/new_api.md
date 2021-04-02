@@ -248,7 +248,7 @@ The API MUST accept the following parameters:
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
 * An optional list of [`Attribute`](../common/common.md#attributes) names and
-  types
+  types.
 
 Here are some examples that individual language client might consider:
 
