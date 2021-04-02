@@ -378,6 +378,18 @@ def pf_callback():
 page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
 ```
 
+```python
+# Python
+
+def pf_callback(observer):
+    # Note: in the real world these would be retrieved from the operating system
+    observer.Observe(8,        ("pid", 0),   ("bitness", 64))
+    observer.Observe(37741921, ("pid", 4),   ("bitness", 64))
+    observer.Observe(10465,    ("pid", 880), ("bitness", 32))
+
+page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+```
+
 ```csharp
 // C#
 
