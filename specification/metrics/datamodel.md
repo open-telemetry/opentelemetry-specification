@@ -212,6 +212,10 @@ characteristics for a Timeseries.   A metric stream is identified by:
 It is possible (and likely) that more than one metric stream is created per
 `Instrument` in the event model.
 
+__Note: The same `Resource`, `name` and `Attribute`s but differing point kind
+coming out of an OpenTelemetry SDK is considered an "error state" that should
+be handled by an SDK.__
+
 A metric stream can use one of four basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
