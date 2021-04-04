@@ -1,0 +1,20 @@
+groups:
+  - id: device
+    prefix: device
+    brief: >
+        The device on which the process represented by this resource is running.
+    attributes:
+      - id: id
+        type: string
+        brief: 'A unique identifier representing the device'
+        note: >
+          For example, in an iOS application this might be the 
+          [vendor identifier](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor).
+        examples: ['2ab2916d-a51f-4ac8-80ee-45ac31a28092']
+      - id: model
+        type: string
+        brief: 'The model identifier for the device'
+        note: >
+          It's recommended this value represents a machine readable version of the model identifier rather than
+          the market or consumer-friendly name of the device.
+        examples: ['iPhone3,4', 'SM-G920F']
