@@ -276,7 +276,7 @@ scenarios and take corrective actions.  Additionally, it ensures that
 well-behaved systems can perform metric stream manipulation without undesired
 degradation or loss of visibility.
 
-## Temporarily
+## Temporality
 
 Every OTLP point has two associated timestamps. For OTLP Sum and Histogram
 points, the two timestamps indicate when the point was reset and when the sum
