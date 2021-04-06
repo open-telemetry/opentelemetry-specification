@@ -40,6 +40,10 @@ release.
 - Add initial OpenTracing compatibility section.
   ([#1101](https://github.com/open-telemetry/opentelemetry-specification/pull/1101))
 
+### Compliance
+
+- Update Jaeger Exporter service name mapping to be supported in Go. ([#TBD])
+
 ## v1.1.0 (2021-03-11)
 
 ### Traces
