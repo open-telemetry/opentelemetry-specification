@@ -320,7 +320,7 @@ up with overlapping time windows, how do backends handle this situation?
 We define three principles for handling overlap:
 
 - Resolution (correction via dropping points)
-- Obersvability (allowing the data to flow to backends)
+- Observability (allowing the data to flow to backends)
 - Interpolation (correction via data manipulation)
 
 ### Overlap resolution
