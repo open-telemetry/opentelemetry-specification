@@ -345,6 +345,10 @@ The `callback` function is responsible for reporting the
 observed. Individual language client SHOULD define whether this callback
 function needs to be reentrant safe / thread safe or not.
 
+The callback function SHOULD NOT take indefinite amount of time. If multiple
+independent SDKs coexist in a running process, they MUST invoke the callback
+function(s) independently.
+
 Individual language client can decide what is the idomatic approach. Here are
 some examples:
 
