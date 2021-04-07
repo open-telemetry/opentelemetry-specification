@@ -409,8 +409,9 @@ var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", 
 
 #### CounterFunc operations
 
-`CounterFunc` is only intended for asynchronous scenario, it does not provide
-any operation.
+`CounterFunc` is only intended for asynchronous scenario. The only operation is
+provided by the `callback`, which is registered during the [CounterFunc
+creation](#counterfunc-creation).
 
 ## Measurement
 
