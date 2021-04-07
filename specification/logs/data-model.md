@@ -138,10 +138,20 @@ top-level structure of the record.
 
 ## Log and Event Record Definition
 
-Note: below we use type `any`, which can be a scalar value (number, string or
-boolean), or an array or map of values. Arbitrary deep nesting of values for
-arrays and maps is allowed (essentially allow to represent an equivalent of a
-JSON object).
+Note: below we use type `any`, which can be one of the following:
+
+- A scalar value: number, string or boolean,
+
+- An array (a list) of `any` values,
+
+- A map of string keys to `any` values. The representation of the map of
+  key/values is language-dependent. Some languages may use built-in maps or
+  dictionaries, others may use a list of key/value pairs. It is required that
+  the implementation has traditional
+  [map](https://en.wikipedia.org/wiki/Associative_array) semantics.
+
+Arbitrary deep nesting of values for arrays and maps is allowed (essentially
+allow to represent an equivalent of a JSON object).
 
 [Appendix A](#appendix-a-example-mappings) contains many examples that show how
 existing log formats map to the fields defined below. If there are questions
@@ -377,7 +387,7 @@ occurrence of the event coming from the same source. This field is optional.
 
 ### Field: `Resource`
 
-Type: key/value pair list.
+Type: map of key/value pairs.
 
 Description: Describes the source of the log, aka
 [resource](../overview.md#resources).
@@ -394,7 +404,7 @@ This field is optional.
 
 ### Field: `Attributes`
 
-Type: key/value pair list.
+Type: map of key/value pairs.
 
 Description: Additional information about the specific event occurrence. "key"
 of each pair is a `string` and "value" is of `any` type. Unlike the `Resource`
