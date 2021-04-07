@@ -31,9 +31,9 @@ Table of Contents
   * [Counter](#counter)
     * [Counter creation](#counter-creation)
     * [Counter operations](#counter-operations)
-  * [ObservableCounter](#observablecounter)
-    * [ObservableCounter creation](#observablecounter-creation)
-    * [ObservableCounter operations](#observablecounter-operations)
+  * [CounterFunc](#counterfunc)
+    * [CounterFunc creation](#counterfunc-creation)
+    * [CounterFunc operations](#counterfunc-operations)
 * [Measurement](#measurement)
 
 </details>
@@ -48,8 +48,8 @@ The Metrics API consists of these main components:
 * [Instrument](#instrument) is responsible for reporting
   [Measurements](#measurement).
 
-Here is an example of the object hierarchy inside a process instrumented with the
-metrics API:
+Here is an example of the object hierarchy inside a process instrumented with
+the metrics API:
 
 ```text
 +-- MeterProvider(default)
@@ -112,9 +112,9 @@ This API MUST accept the following parameters:
   the specified value is invalid SHOULD be logged. A library, implementing the
   OpenTelemetry API *may* also ignore this name and return a default instance
   for all calls, if it does not support "named" functionality (e.g. an
-  implementation which is not even observability-related). A MeterProvider
-  could also return a no-op Meter here if application owners configure the SDK
-  to suppress telemetry produced by this library.
+  implementation which is not even observability-related). A MeterProvider could
+  also return a no-op Meter here if application owners configure the SDK to
+  suppress telemetry produced by this library.
 * `version` (optional): Specifies the version of the instrumentation library
   (e.g. `1.0.0`).
 
@@ -308,13 +308,13 @@ counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
 
-### ObservableCounter
+### CounterFunc
 
-`ObservableCounter` is an asynchronous Instrument which reports
+`CounterFunc` is an asynchronous Instrument which reports
 [monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing
 value(s) when the instrument is being observed.
 
-Example uses for `ObservableCounter`:
+Example uses for `CounterFunc`:
 
 * [CPU time](https://wikipedia.org/wiki/CPU_time), which could be reported for
   each thread, each process or the entire system. For example "the CPU time for
@@ -322,13 +322,13 @@ Example uses for `ObservableCounter`:
 * The number of [page faults](https://wikipedia.org/wiki/Page_fault) for each
   process.
 
-#### ObservableCounter creation
+#### CounterFunc creation
 
-There MUST NOT be any API for creating a `ObservableCounter` other than with a
-[`Meter`](#meter). This MAY be called `CreateObservableCounter`. If strong type
-is desired, the client can decide the language idomatic name(s), for example
-`CreateUInt64ObservableCounter`, `CreateDoubleObservableCounter`,
-`CreateObservableCounter<UInt64>`, `CreateObservableCounter<double>`.
+There MUST NOT be any API for creating a `CounterFunc` other than with a
+[`Meter`](#meter). This MAY be called `CreateCounterFunc`. If strong type is
+desired, the client can decide the language idomatic name(s), for example
+`CreateUInt64CounterFunc`, `CreateDoubleCounterFunc`,
+`CreateCounterFunc<UInt64>`, `CreateCounterFunc<double>`.
 
 The API MUST accept the following parameters:
 
@@ -377,7 +377,7 @@ def pf_callback():
         (10465,    ("pid", 880), ("bitness", 32)),
     )
 
-page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+page_faults_counter_func = meter.create_counter_func(name="PF", description="process page faults", pf_callback)
 ```
 
 ```python
@@ -389,7 +389,7 @@ def pf_callback(result):
     result.Observe(37741921, ("pid", 4),   ("bitness", 64))
     result.Observe(10465,    ("pid", 880), ("bitness", 32))
 
-page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+page_faults_counter_func = meter.create_counter_func(name="PF", description="process page faults", pf_callback)
 ```
 
 ```csharp
@@ -404,13 +404,13 @@ interface IAtomicClock
 
 IAtomicClock clock = AtomicClock.Connect();
 
-var obCaesiumOscillates = meter.CreateCounterObserver<UInt64>("caesium_oscillates", clk => clk.GetCaesiumOscillates(), clock);
+var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", clk => clk.GetCaesiumOscillates(), clock);
 ```
 
-#### ObservableCounter operations
+#### CounterFunc operations
 
-`ObservableCounter` is only intended for asynchronous scenario, it does not
-provide any operation.
+`CounterFunc` is only intended for asynchronous scenario, it does not provide
+any operation.
 
 ## Measurement
 
