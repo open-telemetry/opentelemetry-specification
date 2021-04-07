@@ -6,11 +6,60 @@ groups:
           batch job queuing and processing systems.
       attributes:
         - id: system
-          type: string
           required: always
           brief: >
             A string identifying the job processing system.
-          examples: ['sidekiq', 'resque', 'rake', 'celery', 'airflow']
+          type:
+            allow_custom_values: true
+            members:
+            - id: active_job
+              value: 'active_job'
+              brief: 'Active Job'
+            - id: airflow
+              value: 'airflow'
+              brief: 'Apache Airflow'
+            - id: celery
+              value: 'celery'
+              brief: 'Oracle Database'
+            - id: delayed_job
+              value: 'delayed_job'
+              brief: 'Delayed Job'
+            - id: exq
+              value: 'exq'
+              brief: 'Exq'
+            - id: faktory
+              value: 'faktory'
+              brief: 'Faktory'
+            - id: hangfire
+              value: 'hangfire'
+              brief: 'Hangfire'
+            - id: minion
+              value: 'minion'
+              brief: 'Minion'
+            - id: oban
+              value: 'oban'
+              brief: 'Oban'
+            - id: rake
+              value: 'rake'
+              brief: 'Rake'
+            - id: resque
+              value: 'resque'
+              brief: 'Resque'
+            - id: sidekiq
+              value: 'sidekiq'
+              brief: 'Sidekiq'
+            - id: spring_batch
+              value: 'spring_batch'
+              brief: 'Spring Batch'
+            - id: sque
+              value: 'sque'
+              brief: 'Sque'
+            - id: toniq
+              value: 'toniq'
+              brief: 'Toniq'
+            - id: workerholic
+              value: 'workerholic'
+              brief: 'Workerholic'
         - id: name
           type: string
           required: always
@@ -22,8 +71,12 @@ groups:
           required: always
           brief: >
             A value as an identifier for the job, represented as a string.
+            This is typically the database ID of the persisted job object,
+            which is picked up and worked by a worker process.
+            Alternatively, it might be an ID of a job run, for example the
+            job name plus the a timestamp of the run.
           examples: 'b18fc2c2f887f61452a7c7c7c7048572'
-        - id: label
+        - id: display_name
           type: string
           brief: >
             A value assigned as a human-readable label for the job.
@@ -43,11 +96,6 @@ groups:
                 brief: 'If none of the others apply'
           brief: >
             Type of the trigger on which the job is performed.
-        - id: format
-          type: string
-          brief: >
-            The name of the job format when enqueued for processing.
-          examples: ['resque']
         - id: queue_name
           type: string
           brief: >
