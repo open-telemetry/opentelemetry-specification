@@ -416,7 +416,7 @@ interface IAtomicClock
 
 IAtomicClock clock = AtomicClock.Connect();
 
-var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", clk => clk.GetCaesiumOscillates(), clock);
+var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", () => clock.GetCaesiumOscillates());
 ```
 
 #### CounterFunc operations
