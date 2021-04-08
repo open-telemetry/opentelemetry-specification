@@ -345,6 +345,11 @@ The `callback` function is responsible for reporting the
 observed. Individual language client SHOULD define whether this callback
 function needs to be reentrant safe / thread safe or not.
 
+Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
+callback function reports the absolute value of the counter. To determine the
+reported rate the counter is changing, the difference between successive
+measurements is used.
+
 The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
 function(s) independently.
