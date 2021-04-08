@@ -107,6 +107,27 @@ We will need the following metrics every minute:
 | Portland | customerB | tomato | 10    |
 | Portland | customerC | potato | 2     |
 
+Each customer may enter and exit a grocery store.
+
+Here goes the Python snippet:
+
+```python
+store = GroceryStore("Portland")
+store.enter_customer("customerA", {"account_type": "restaurant"})
+store.enter_customer("customerB", {"account_type": "home cook"})
+store.exit_customer("customerB", {"account_type": "home cook"})
+store.exit_customer("customerA", {"account_type": "restaurant"})
+```
+
+We will need the following metrics every minute:
+
+**Customers in store:**
+
+| Store    | Account type | Count |
+| -------- | -----------  | ----- |
+| Portland | restaurant   | 1     |
+| Portland | home cook    | 1     |
+
 ## Scenario 2: HTTP Server
 
 The _HTTP Server_ scenario covers how a library developer X could use metrics
@@ -166,6 +187,19 @@ speaking it is not considered as a "dimension" from the SDK perspective.
 | --------- | ------------ |
 | MachineA  | 21           |
 
+**Server CPU usage:**
+
+| Host Name | CPU usage (seconds) |
+| --------- | ------------------- |
+| MachineA  | 100.1               |
+
+**Server Memory usage:**
+
+| Host Name | Memory usage (bytes) |
+| --------- | -------------------- |
+| MachineA  | 1000000000           |
+| MachineA  | 2000000000           |
+
 #### HTTP Server Library
 
 **Received HTTP requests:**
@@ -189,6 +223,13 @@ Note: the server duration is only available for **finished HTTP requests**.
 | --------- | ---------- | ----------- | ----------- | --------- | ---------------- | ----------- | --------- | --------- | --------- | --------- | ------------- |
 | MachineA  | 1234       | Android     | GET         | otel.org  | 200              | 1.1         | 127.0.0.1 | 51327     | 127.0.0.1 | 80        | 8.5           |
 | MachineA  | 1234       | Android     | POST        | otel.org  | 304              | 1.1         | 127.0.0.1 | 51328     | 127.0.0.1 | 80        | 100.0         |
+
+**HTTP active sessions:**
+
+| HTTP Host | HTTP flavor   | Active sessions |
+| --------- | ------------- | --------------- |
+| otel.org  | 1.1           | 17              |
+| otel.org  | 2.0           | 20              |
 
 ### Application Requirements
 
