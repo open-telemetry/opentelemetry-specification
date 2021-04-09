@@ -29,7 +29,11 @@ Table of Contents
   * [Meter operations](#meter-operations)
 * [Instrument](#instrument)
   * [Counter](#counter)
-    * [Counter Creation](#counter-creation)
+    * [Counter creation](#counter-creation)
+    * [Counter operations](#counter-operations)
+  * [CounterFunc](#counterfunc)
+    * [CounterFunc creation](#counterfunc-creation)
+    * [CounterFunc operations](#counterfunc-operations)
 * [Measurement](#measurement)
 
 </details>
@@ -44,8 +48,8 @@ The Metrics API consists of these main components:
 * [Instrument](#instrument) is responsible for reporting
   [Measurements](#measurement).
 
-Here is an example of the object hierarchy inside a process instrumented with the
-metrics API:
+Here is an example of the object hierarchy inside a process instrumented with
+the metrics API:
 
 ```text
 +-- MeterProvider(default)
@@ -108,9 +112,9 @@ This API MUST accept the following parameters:
   the specified value is invalid SHOULD be logged. A library, implementing the
   OpenTelemetry API *may* also ignore this name and return a default instance
   for all calls, if it does not support "named" functionality (e.g. an
-  implementation which is not even observability-related). A MeterProvider
-  could also return a no-op Meter here if application owners configure the SDK
-  to suppress telemetry produced by this library.
+  implementation which is not even observability-related). A MeterProvider could
+  also return a no-op Meter here if application owners configure the SDK to
+  suppress telemetry produced by this library.
 * `version` (optional): Specifies the version of the instrumentation library
   (e.g. `1.0.0`).
 
@@ -225,7 +229,7 @@ Example uses for `Counter`:
 * count the number of checkpoints run
 * count the number of HTTP 5xx errors
 
-#### Counter Creation
+#### Counter creation
 
 There MUST NOT be any API for creating a `Counter` other than with a
 [`Meter`](#meter). This MAY be called `CreateCounter`. If strong type is
@@ -303,6 +307,123 @@ counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_u
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
+
+### CounterFunc
+
+`CounterFunc` is an asynchronous Instrument which reports
+[monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing
+value(s) when the instrument is being observed.
+
+Example uses for `CounterFunc`:
+
+* [CPU time](https://wikipedia.org/wiki/CPU_time), which could be reported for
+  each thread, each process or the entire system. For example "the CPU time for
+  process A running in user mode, measured in seconds".
+* The number of [page faults](https://wikipedia.org/wiki/Page_fault) for each
+  process.
+
+#### CounterFunc creation
+
+There MUST NOT be any API for creating a `CounterFunc` other than with a
+[`Meter`](#meter). This MAY be called `CreateCounterFunc`. If strong type is
+desired, the client can decide the language idomatic name(s), for example
+`CreateUInt64CounterFunc`, `CreateDoubleCounterFunc`,
+`CreateCounterFunc<UInt64>`, `CreateCounterFunc<double>`.
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+* A `callback` function.
+
+The `callback` function is responsible for reporting the
+[Measurement](#measurement)s. It will only be called when the Meter is being
+observed. Individual language client SHOULD define whether this callback
+function needs to be reentrant safe / thread safe or not.
+
+Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
+callback function reports the absolute value of the counter. To determine the
+reported rate the counter is changing, the difference between successive
+measurements is used.
+
+The callback function SHOULD NOT take indefinite amount of time. If multiple
+independent SDKs coexist in a running process, they MUST invoke the callback
+function(s) independently.
+
+Individual language client can decide what is the idomatic approach. Here are
+some examples:
+
+* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
+* Use an observer argument to allow individual `Measurement`s to be reported.
+
+User code is recommended not to provide more than one `Measurement` with the
+same `attributes` in a single callback. If it happens, the
+[SDK](./README.md#sdk) can decide how to handle it. For example, during the
+callback invocation if two measurements `value=1, attributes={pid:4 bitness:64}`
+and `value=2, attributes={pid:4, bitness:64}` are reported, the SDK can decide
+to simply let them pass through (so the downstream consumer can handle
+duplication), drop the entire data, pick the last one, or something else. The
+API must treat observations from a single callback as logically taking place at
+a single instant, such that when recorded, observations from a single callback
+MUST be reported with identical timestamps.
+
+The API SHOULD provide some way to pass `state` to the callback. Individual
+language client can decide what is the idomatic approach (e.g. it could be an
+additional parameter to the callback function, or captured by the lambda
+closure, or something else).
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+def pf_callback():
+    # Note: in the real world these would be retrieved from the operating system
+    return (
+        (8,        ("pid", 0),   ("bitness", 64)),
+        (37741921, ("pid", 4),   ("bitness", 64)),
+        (10465,    ("pid", 880), ("bitness", 32)),
+    )
+
+page_faults_counter_func = meter.create_counter_func(name="PF", description="process page faults", pf_callback)
+```
+
+```python
+# Python
+
+def pf_callback(result):
+    # Note: in the real world these would be retrieved from the operating system
+    result.Observe(8,        ("pid", 0),   ("bitness", 64))
+    result.Observe(37741921, ("pid", 4),   ("bitness", 64))
+    result.Observe(10465,    ("pid", 880), ("bitness", 32))
+
+page_faults_counter_func = meter.create_counter_func(name="PF", description="process page faults", pf_callback)
+```
+
+```csharp
+// C#
+
+// A simple scenario where only one value is reported
+
+interface IAtomicClock
+{
+    UInt64 GetCaesiumOscillates();
+}
+
+IAtomicClock clock = AtomicClock.Connect();
+
+var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", () => clock.GetCaesiumOscillates());
+```
+
+#### CounterFunc operations
+
+`CounterFunc` is only intended for asynchronous scenario. The only operation is
+provided by the `callback`, which is registered during the [CounterFunc
+creation](#counterfunc-creation).
 
 ## Measurement
 
