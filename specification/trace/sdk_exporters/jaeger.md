@@ -59,7 +59,7 @@ OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as span `tags` to
 
 ### IDs
 
-Trace and span IDs in Jaeger are random sequences of bytes. However, Thrft model
+Trace and span IDs in Jaeger are random sequences of bytes. However, Thrift model
 represents IDs using `i64` type, or in case of a 128-bit wide Trace ID as two `i64`
 fields `traceIdLow` and `traceIdHigh`. The bytes MUST be converted to/from unsigned
 ints using Big Endian byte order, e.g. `[0x10, 0x00, 0x00, 0x00] == 268435456`.
