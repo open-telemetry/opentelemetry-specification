@@ -227,3 +227,6 @@ AWS Lambda resource information is available as environment variables provided b
 - [`cloud.region`](../../../resource/semantic_conventions/cloud.md) MUST be set to the value of the `AWS_REGION` environment variable
 - [`faas.name`](../../../resource/semantic_conventions/faas.md) MUST be set to the value of the `AWS_LAMBDA_FUNCTION_NAME` environment variable
 - [`faas.version`](../../../resource/semantic_conventions/faas.md) MUST be set to the value of the `AWS_LAMBDA_FUNCTION_VERSION` environment variable
+
+Note that [`faas.id`](../../../resource/semantic_conventions/faas.md) currently cannot be populated to resource
+because it is not available until function invocation.
