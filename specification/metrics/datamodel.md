@@ -167,14 +167,14 @@ mapping can be provided.
 The [OpenTelemetry metric instruments](api.md) are designed around the
 following concerns:
 
-- Synchronous vs. Asynchronous collection. 
+- Synchronous vs. Asynchronous collection.
   - Synchronous instruments are those where an application/library records a
     metric data point inline. In this scenario, OpenTelemetry *can* attach
     context (e.g. baggage) to recorded data points.
   - Asynchronous instruments are those where OpenTelemetry (not the application)
     will execute a callback (or other similar mechanism) to pull data points
     on demand.   This is generally done at regular intervals.
-- Adding vs. Grouping aggregation. 
+- Adding vs. Grouping aggregation.
   - Adding instruments express a sum.  All points recorded via this instrument
     are parts of a whole.
   - Grouping instruments characterize a group of measurements.  All points
