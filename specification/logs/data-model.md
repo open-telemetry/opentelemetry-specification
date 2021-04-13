@@ -94,6 +94,32 @@ The Data Model aims to successfully represent 3 sorts of logs and events:
   we include in the logs. We can likely modify the source code of the
   application if needed.
 
+### Definitions Used in this Document
+
+In this document we refer to types `any` and `map<string, any>`, defined as
+follows.
+
+#### Type `any`
+
+Value of type `any` can be one of the following:
+
+- A scalar value: number, string or boolean,
+
+- An array (a list) of `any` values,
+
+- A `map<string, any>`.
+
+#### Type `map<string, any>`
+
+Value of type `map<string, any>` is a map of string keys to `any` values. The
+representation of the map is language-dependent. Some languages may use built-in
+maps or dictionaries, others may use a list of key/value pairs. It is required
+that the implementation has traditional
+[map](https://en.wikipedia.org/wiki/Associative_array) semantics.
+
+Arbitrary deep nesting of values for arrays and maps is allowed (essentially
+allows to represent an equivalent of a JSON object).
+
 ### Field Kinds
 
 This Data Model defines a logical model for a log record (irrespective of the
@@ -102,8 +128,8 @@ fields:
 
 - Named top-level fields of specific type and meaning.
 
-- Fields stored in the key/value pair lists, which can contain arbitrary values
-  of different types. The keys and values for well-known fields follow semantic
+- Fields stored as `map<string, any>`, which can contain arbitrary values of
+  different types. The keys and values for well-known fields follow semantic
   conventions for key names and possible values that allow all parties that work
   with the field to have the same interpretation of the data. See references to
   semantic conventions for `Resource` and `Attributes` fields and examples in
@@ -118,7 +144,7 @@ The reasons for having these 2 kinds of fields are:
 - Ability to enforce types of named fields, which is very useful for compiled
   languages with type checks.
 
-- Flexibility to represent less frequent data via key/value pair lists. This
+- Flexibility to represent less frequent data as `map<string, any>`. This
   includes well-known data that has standardized semantics as well as arbitrary
   custom data that the application may want to include in the logs.
 
@@ -137,21 +163,6 @@ Both of the above conditions were required to give the field a place in the
 top-level structure of the record.
 
 ## Log and Event Record Definition
-
-Note: below we use type `any`, which can be one of the following:
-
-- A scalar value: number, string or boolean,
-
-- An array (a list) of `any` values,
-
-- A map of string keys to `any` values. This is denoted as `map<string, any>`
-  throughout this document. The representation of the map is language-dependent.
-  Some languages may use built-in maps or dictionaries, others may use a list of
-  key/value pairs. It is required that the implementation has traditional
-  [map](https://en.wikipedia.org/wiki/Associative_array) semantics.
-
-Arbitrary deep nesting of values for arrays and maps is allowed (essentially
-allow to represent an equivalent of a JSON object).
 
 [Appendix A](#appendix-a-example-mappings) contains many examples that show how
 existing log formats map to the fields defined below. If there are questions
