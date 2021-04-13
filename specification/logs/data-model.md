@@ -144,10 +144,10 @@ Note: below we use type `any`, which can be one of the following:
 
 - An array (a list) of `any` values,
 
-- A map of string keys to `any` values. The representation of the map of
-  key/values is language-dependent. Some languages may use built-in maps or
-  dictionaries, others may use a list of key/value pairs. It is required that
-  the implementation has traditional
+- A map of string keys to `any` values. This is denoted as `map<string, any>`
+  throughout this document. The representation of the map is language-dependent.
+  Some languages may use built-in maps or dictionaries, others may use a list of
+  key/value pairs. It is required that the implementation has traditional
   [map](https://en.wikipedia.org/wiki/Associative_array) semantics.
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
@@ -387,30 +387,27 @@ occurrence of the event coming from the same source. This field is optional.
 
 ### Field: `Resource`
 
-Type: map of key/value pairs.
+Type: `map<string, any>`.
 
 Description: Describes the source of the log, aka
-[resource](../overview.md#resources).
-"key" of each pair is a `string` and "value" is of `any` type. Multiple
-occurrences of events coming from the same event source can happen across time
-and they all have the same value of `Resource`. Can contain for example
-information about the application that emits the record or about the
-infrastructure where the application runs. Data formats that represent this data
-model may be designed in a manner that allows the `Resource` field to be
-recorded only once per batch of log records that come from the same source.
-SHOULD follow OpenTelemetry
+[resource](../overview.md#resources). Multiple occurrences of events coming from
+the same event source can happen across time and they all have the same value of
+`Resource`. Can contain for example information about the application that emits
+the record or about the infrastructure where the application runs. Data formats
+that represent this data model may be designed in a manner that allows the
+`Resource` field to be recorded only once per batch of log records that come
+from the same source. SHOULD follow OpenTelemetry
 [semantic conventions for Resources](../resource/semantic_conventions/README.md).
 This field is optional.
 
 ### Field: `Attributes`
 
-Type: map of key/value pairs.
+Type: `map<string, any>`.
 
-Description: Additional information about the specific event occurrence. "key"
-of each pair is a `string` and "value" is of `any` type. Unlike the `Resource`
-field, which is fixed for a particular source, `Attributes` can vary for each
-occurrence of the event coming from the same source. Can contain information
-about the request context (other than TraceId/SpanId). SHOULD follow
+Description: Additional information about the specific event occurrence. Unlike
+the `Resource` field, which is fixed for a particular source, `Attributes` can
+vary for each occurrence of the event coming from the same source. Can contain
+information about the request context (other than TraceId/SpanId). SHOULD follow
 OpenTelemetry
 [semantic conventions for Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
@@ -642,13 +639,13 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
   <tr>
     <td>Dimensions</td>
-    <td>map of string to string</td>
+    <td>map&lt;string, string></td>
     <td>Helps to define the identity of the event source together with EventType and Category. Multiple occurrences of events coming from the same event source can happen across time and they all have the value of Dimensions. </td>
     <td>Resource</td>
   </tr>
   <tr>
     <td>Properties</td>
-    <td>map of string to any</td>
+    <td>map&lt;string, any></td>
     <td>Additional information about the specific event occurrence. Unlike Dimensions which are fixed for a particular event source, Properties can have different values for each occurrence of the event coming from the same event source.</td>
     <td>Attributes</td>
   </tr>
@@ -695,7 +692,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
   <tr>
     <td>fields</td>
-    <td>Map of any</td>
+    <td>map&lt;string, any></td>
     <td>Specifies a JSON object that contains explicit custom fields.</td>
     <td>Attributes</td>
   </tr>
