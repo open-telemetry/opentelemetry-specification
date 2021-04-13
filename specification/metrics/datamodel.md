@@ -34,7 +34,7 @@ Prometheus Remote Write protocol without loss of features or semantics, through
 well-defined translations of the data, including the ability to automatically
 remove attributes and lower histogram resolution.
 
-## Events → Data → Timeseries
+## Events → Streams → Timeseries
 
 The OTLP Metrics protocol is designed as a standard for transporting metric
 data. To describe the intended use of this data and the associated semantic
@@ -43,7 +43,7 @@ containing a higher-level model, about Metrics APIs and discrete input values,
 and a lower-level model, defining the Timeseries and discrete output values.
 The relationship between models is displayed in the diagram below.
 
-![Events  → Data → Timeseries Diagram](img/model-layers.png)
+![Events  → Streams → Timeseries Diagram](img/model-layers.png)
 
 This protocol was designed to meet the requirements of the OpenCensus Metrics
 system, particularly to meet its concept of Metrics Views. Views are
@@ -146,26 +146,44 @@ OpenTelemetry fragments metrics into three interacting models:
 
 ### Event Model
 
-This specification uses as its foundation a
-[Metrics API consisting of 6 model instruments](api.md), each having distinct
-semantics, that were prototyped in several OpenTelemetry SDKs between July 2019
-and June 2020. The model instruments and their specific use-cases are meant to
-anchor our understanding of the OpenTelemetry data model and are divided into
-three categories:
+The event model is where recording of data happens. Its foundation is made of
+[Instruments](api.md), which are used to record observations on data.  These raw
+events are then transformed in some fashion before being sent to some other
+system.  OpenTelemetry metrics are designed such that the same instrument and
+events can be used in different ways to generate metric streams.
 
-- Synchronous vs. Asynchronous. The act of calling a Metrics API in a
-  synchronous context means the application/library calls the SDK, typically having
-  associated trace context and baggage; an Asynchronous instrument is called at
-  collection time, through a callback, and lacks context.
-- Adding vs. Grouping. Whereas adding instruments express a sum, grouping
-  instruments characterize a group of measurements. The numbers passed to adding
-  instruments define division, in the algebraic sense, while the numbers passed
-  to grouping instruments are generally not. Adding instrument values are always
-  parts of a sum, while grouping instrument values are individual measurements.
-- Monotonic vs. Non-Monotonic. The adding instruments are categorized by whether
-  the derivative of the quantity they express is non-negative. Monotonic
-  instruments are primarily useful for monitoring a rate value, whereas
-  non-monotonic instruments are primarily useful for monitoring a total value.
+![Events → Streams](img/model-event-layer.png)
+
+While observation events could be reported directly to a backend, in practice
+this would be infeasible due to the shear volume of data used in observability
+systems, and the limited amount of network/cpu telemetry collection has
+available.  The best example of this is the Histogram metric where raw
+events are recorded in a compressed format rather than individual timeseries.
+
+while OpenTelemetry provides flexibility in how instruments can be transformed
+into metric streams, the instruments are defined such that a reasonable default
+mapping can be provided.
+
+The [OpenTelemetry metric instruments](api.md) are designed around the
+following concerns:
+
+- Synchronous vs. Asynchronous collection. 
+  - Synchronous instruments are those where an application/library records a
+    metric data point inline. In this scenario, OpenTelemetry *can* attach
+    context (e.g. baggage) to recorded data points.
+  - Asynchronous instruments are those where OpenTelemetry (not the application)
+    will execute a callback (or other similar mechanism) to pull data points
+    on demand.   This is generally done at regular intervals.
+- Adding vs. Grouping aggregation. 
+  - Adding instruments express a sum.  All points recorded via this instrument
+    are parts of a whole.
+  - Grouping instruments characterize a group of measurements.  All points
+    recorded via this instrument are individual measurements.
+- Monotonic vs. Non-Monotonic (adding instruments only). These instruments are
+  categorized by whether the derivative of the quantity they express is
+  non-negative.
+  - Monotonic instruments are primarily useful for monitoring a rate value.
+  - Non-monotonic instruments are primarily useful for monitoring a total value.
 
 In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
