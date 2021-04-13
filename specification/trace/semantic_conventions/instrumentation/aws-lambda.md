@@ -221,7 +221,7 @@ Span Lambda --> Span ProcBatch --> Span Proc1 (links to Span Prod1 and Span Prod
 
 ## Resource Detector
 
-AWS Lambda resource information is available as environment variables provided by the runtime.
+AWS Lambda resource information is available as [environment variables][] provided by the runtime.
 
 - [`cloud.provider`](../../../resource/semantic_conventions/cloud.md) MUST be set to `aws`
 - [`cloud.region`](../../../resource/semantic_conventions/cloud.md) MUST be set to the value of the `AWS_REGION` environment variable
@@ -230,3 +230,5 @@ AWS Lambda resource information is available as environment variables provided b
 
 Note that [`faas.id`](../../../resource/semantic_conventions/faas.md) currently cannot be populated to resource
 because it is not available until function invocation.
+
+[environment variables]: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
