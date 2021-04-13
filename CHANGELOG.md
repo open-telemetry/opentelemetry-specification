@@ -11,6 +11,7 @@ release.
 
 - Clarify composite `TextMapPropagator` method required and optional arguments. ([#1541](https://github.com/open-telemetry/opentelemetry-specification/pull/1541))
 - Clarify B3 requirements and configuration. ([#1570](https://github.com/open-telemetry/opentelemetry-specification/pull/1570))
+- Added `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. (TODO add link after after PR opened)
 
 ### Traces
 
