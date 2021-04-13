@@ -91,14 +91,14 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 **Status**: [Stable](document-status.md)
 
-| Name                            | Description                                                  | Default                                                                                          |
-|---------------------------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent                                | "localhost"                                                                                      |
-| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent                                    | 6832                                                                                             |
-| OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                              | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_JAEGER_TIMEOUT    | Max waiting time for the backend to process each spans batch | 10s                                                                                              |
-| OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication            | -                                                                                                |
-| OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication            | -                                                                                                |
+| Name                            | Description                                                      | Default                                                                                          |
+|---------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent                                    | "localhost"                                                                                      |
+| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent                                        | 6832                                                                                             |
+| OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                                  | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
+| OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export | 10s                                                                                              |
+| OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                | -                                                                                                |
+| OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                | -                                                                                                |
 
 ## Zipkin Exporter
 
