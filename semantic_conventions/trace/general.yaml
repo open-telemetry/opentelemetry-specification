@@ -10,7 +10,7 @@ groups:
           members:
             - id: ip_tcp
               value: "ip_tcp"
-            - id: ip_udp"
+            - id: ip_udp
               value: "ip_udp"
             - id: ip
               value: "ip"

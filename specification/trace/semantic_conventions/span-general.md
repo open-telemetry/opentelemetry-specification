@@ -47,7 +47,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | Value  | Description |
 |---|---|
 | `ip_tcp` | ip_tcp |
-| `ip_udp` | ip_udp" |
+| `ip_udp` | ip_udp |
 | `ip` | Another IP-based protocol |
 | `unix` | Unix Domain socket. See below. |
 | `pipe` | Named or anonymous pipe. See note below. |
