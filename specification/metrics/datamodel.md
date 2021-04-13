@@ -147,20 +147,21 @@ OpenTelemetry fragments metrics into three interacting models:
 ### Event Model
 
 The event model is where recording of data happens. Its foundation is made of
-[Instruments](api.md), which are used to record observations on data.  These raw
-events are then transformed in some fashion before being sent to some other
-system.  OpenTelemetry metrics are designed such that the same instrument and
-events can be used in different ways to generate metric streams.
+[Instruments](api.md), which are used to record data observations via events.
+These raw events are then transformed in some fashion before being sent to some
+other system.  OpenTelemetry metrics are designed such that the same instrument
+and events can be used in different ways to generate metric streams.
 
 ![Events → Streams](img/model-event-layer.png)
 
-While observation events could be reported directly to a backend, in practice
-this would be infeasible due to the shear volume of data used in observability
-systems, and the limited amount of network/cpu telemetry collection has
-available.  The best example of this is the Histogram metric where raw
-events are recorded in a compressed format rather than individual timeseries.
+Even though observation events could be reported directly to a backend, in
+practice this would be infeasible due to the sheer volume of data used in
+observability systems, and the limited amount of network/cpu telemetry
+collection resources available for telemetry collection purposes. The best
+example of this is the Histogram metric where raw events are recorded in a
+compressed format rather than individual timeseries.
 
-while OpenTelemetry provides flexibility in how instruments can be transformed
+While OpenTelemetry provides flexibility in how instruments can be transformed
 into metric streams, the instruments are defined such that a reasonable default
 mapping can be provided.
 
