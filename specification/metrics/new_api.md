@@ -491,9 +491,9 @@ creation](#gaugefunc-creation).
 
 ### Distribution
 
-`Distribution` is a synchronous Instrument which can be used for reporting
-arbitrary values. It is intended for statistics such as histograms, summaries,
-and percentile.
+`Distribution` is a synchronous Instrument which can be used to report arbitrary
+values. It is intended for statistics such as histograms, summaries, and
+percentile.
 
 Example uses for `Distribution`:
 
