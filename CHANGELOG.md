@@ -9,6 +9,20 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Semantic Conventions
+
+### Compatibility
+
+## v1.2.0 (2021-04-14)
+
+### Context
+
 - Clarify composite `TextMapPropagator` method required and optional arguments. ([#1541](https://github.com/open-telemetry/opentelemetry-specification/pull/1541))
 - Clarify B3 requirements and configuration. ([#1570](https://github.com/open-telemetry/opentelemetry-specification/pull/1570))
 
@@ -25,8 +39,6 @@ release.
 ### Metrics
 
 - Adds new metric data model specification ([#1512](https://github.com/open-telemetry/opentelemetry-specification/pull/1512))
-
-### Logs
 
 ### Semantic Conventions
 
