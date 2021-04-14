@@ -65,11 +65,15 @@ the metrics API:
     |
     +-- Meter(name='io.opentelemetry.runtime', version='1.0.0')
     |   |
+    |   +-- Instrument<GaugeFunc, int>(name='cpython.gc', attributes=['generation'], unit='kB')
+    |   |
     |   +-- instruments...
     |
     +-- Meter(name='io.opentelemetry.contrib.mongodb.client', version='2.3.0')
         |
         +-- Instrument<Counter, int>(name='client.exception', attributes=['type'], unit='1')
+        |
+        +-- Instrument<Distribution, double>(name='client.duration', attributes=['net.peer.host', 'net.peer.port'], unit='ms')
         |
         +-- instruments...
 
@@ -433,6 +437,78 @@ var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", 
 `CounterFunc` is only intended for asynchronous scenario. The only operation is
 provided by the `callback`, which is registered during the [CounterFunc
 creation](#counterfunc-creation).
+
+### Gauge
+
+`Gauge` is a synchronous Instrument which can be used for values that go up
+and/or down. It is intended for monitoring things with natural upper bounds.
+
+Note: never gauge something you can count with [Counter](#counter)!
+
+Example uses for `Gauge`:
+
+* the number of active requests
+* the number of items in a queue
+
+#### Gauge creation
+
+TODO
+
+#### Gauge operations
+
+##### Add
+
+TODO
+
+##### Set
+
+TODO
+
+### GaugeFunc
+
+`GaugeFunc` is an asynchronous Instrument which reports value(s) when the
+instrument is being observed.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[CounterFunc](#counterfunc) instead.
+
+Example uses for `GaugeFunc`:
+
+* the current temperature
+* the process heap size
+* the approximate number of items in a lock-free circular buffer
+
+#### GaugeFunc creation
+
+TODO
+
+#### GaugeFunc operations
+
+`GaugeFunc` is only intended for asynchronous scenario. The only operation is
+provided by the `callback`, which is registered during the [GaugeFunc
+creation](#gaugefunc-creation).
+
+### Distribution
+
+`Distribution` is a synchronous Instrument which can be used for reporting
+arbitrary values. It is intended for statistics such as histograms, summaries,
+and percentile.
+
+Example uses for `Distribution`:
+
+* the request duration
+* the size of the response payload
+
+#### Distribution creation
+
+TODO
+
+#### Distribution operations
+
+##### Record
+
+TODO
 
 ## Measurement
 
