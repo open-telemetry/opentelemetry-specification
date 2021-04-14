@@ -34,6 +34,15 @@ Table of Contents
   * [CounterFunc](#counterfunc)
     * [CounterFunc creation](#counterfunc-creation)
     * [CounterFunc operations](#counterfunc-operations)
+  * [Gauge](#gauge)
+    * [Gauge creation](#gauge-creation)
+    * [Gauge operations](#gauge-operations)
+  * [GaugeFunc](#gaugefunc)
+    * [GaugeFunc creation](#gaugefunc-creation)
+    * [GaugeFunc operations](#gaugefunc-operations)
+  * [Distribution](#distribution)
+    * [Distribution creation](#distribution-creation)
+    * [Distribution operations](#distribution-operations)
 * [Measurement](#measurement)
 
 </details>
