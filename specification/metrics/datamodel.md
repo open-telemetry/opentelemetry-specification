@@ -225,7 +225,7 @@ assume that any particular Gauge is a sum, so the default aggregation would not
 be addition.
 
 In addition to the core point kinds used in OTLP, there are also data types
-designed for conmpatibility with existing metric formats.
+designed for compatibility with existing metric formats.
 
 - [Summary](#summary-legacy)
 
