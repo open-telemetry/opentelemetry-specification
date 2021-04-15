@@ -219,7 +219,7 @@ a Gauge when the sum is not monotonic.
 ![Stream → Timeseries](img/model-layers-stream.png)
 
 Specifically, in OpenTelemetry Sums always have an aggregate function where
-you can combine via addition. So, for non-monotonic sums in open-telemetry we
+you can combine via addition. So, for non-monotonic sums in OpenTelemetry we
 can aggregate (naturally) via addition.  In the timeseries model, you cannot
 assume that any particular Gauge is a sum, so the default aggregation would not
 be addition.
