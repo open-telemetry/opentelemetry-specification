@@ -241,7 +241,7 @@ in OTLP consist of the following:
   [monotonic](https://en.wikipedia.org/wiki/Monotonic_function). In the case of
   metrics, this usually means the sum is always increasing.
 - A set of data points, each containing:
-  - A different set of Attribute name-value pairs.
+  - An independent set of Attribute name-value pairs.
   - A time window (start, end) time for which the Sum was calculated.
 
 The aggregation temporality is used to understand the context in which the sum
