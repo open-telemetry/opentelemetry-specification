@@ -46,49 +46,49 @@ groups:
         type:
           allow_custom_values: true
           members:
-            - id: AWS_EC2
+            - id: aws_ec2
               value: 'aws_ec2'
               brief: AWS Elastic Compute Cloud
-            - id: AWS_ECS
+            - id: aws_ecs
               value: 'aws_ecs'
               brief: AWS Elastic Container Service
-            - id: AWS_EKS
+            - id: aws_eks
               value: 'aws_eks'
               brief: AWS Elastic Kubernetes Service
-            - id: AWS_Lambda
+            - id: aws_lambda
               value: 'aws_lambda'
               brief: AWS Lambda
-            - id: AWS_ElasticBeanstalk
+            - id: aws_elastic_beanstalk
               value: 'aws_elastic_beanstalk'
               brief: AWS Elastic Beanstalk
-            - id: Azure_VM
+            - id: azure_vm
               value: 'azure_vm'
               brief: Azure Virtual Machines
-            - id: Azure_ContainerInstances
+            - id: azure_container_instances
               value: 'azure_container_instances'
               brief: Azure Container Instances
-            - id: Azure_AKS
+            - id: azure_aks
               value: 'azure_aks'
               brief: Azure Kubernetes Service
-            - id: Azure_Functions
+            - id: azure_functions
               value: 'azure_functions'
               brief: Azure Functions
-            - id: Azure_AppService
+            - id: azure_app_service
               value: 'azure_app_service'
               brief: Azure App Service
-            - id: GCP_ComputeEngine
+            - id: gcp_compute_engine
               value: 'gcp_compute_engine'
               brief: Google Cloud Compute Engine (GCE)
-            - id: GCP_CloudRun
+            - id: gcp_cloud_run
               value: 'gcp_cloud_run'
               brief: Google Cloud Run
-            - id: GCP_KubernetesEngine
+            - id: gcp_kubernetes_engine
               value: 'gcp_kubernetes_engine'
               brief: Google Cloud Kubernetes Engine (GKE)
-            - id: GCP_CloudFunctions
+            - id: gcp_cloud_functions
               value: 'gcp_cloud_functions'
               brief: Google Cloud Functions (GCF)
-            - id: GCP_AppEngine
+            - id: gcp_app_engine
               value: 'gcp_app_engine'
               brief: Google Cloud App Engine (GAE)
         brief: >
