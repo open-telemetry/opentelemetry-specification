@@ -124,6 +124,7 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 - [Container](./container.md)
 - [Function as a Service](./faas.md)
 - [Process](./process.md)
+- [Web engine](./webengine.md)
 
 ## Compute Instance
 

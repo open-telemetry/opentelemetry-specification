@@ -269,28 +269,28 @@ groups:
             The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
           type:
             members:
-              - id: ALL
-                value: 'ALL'
-              - id: EACH_QUORUM
-                value: 'EACH_QUORUM'
-              - id: QUORUM
-                value: 'QUORUM'
-              - id: LOCAL_QUORUM
-                value: 'LOCAL_QUORUM'
-              - id: ONE
-                value: 'ONE'
-              - id: TWO
-                value: 'TWO'
-              - id: THREE
-                value: 'THREE'
-              - id: LOCAL_ONE
-                value: 'LOCAL_ONE'
-              - id: ANY
-                value: 'ANY'
-              - id: SERIAL
-                value: 'SERIAL'
-              - id: LOCAL_SERIAL
-                value: 'LOCAL_SERIAL'
+              - id: all
+                value: 'all'
+              - id: each_quorum
+                value: 'each_quorum'
+              - id: quorum
+                value: 'quorum'
+              - id: local_quorum
+                value: 'local_quorum'
+              - id: one
+                value: 'one'
+              - id: two
+                value: 'two'
+              - id: three
+                value: 'three'
+              - id: local_one
+                value: 'local_one'
+              - id: any
+                value: 'any'
+              - id: serial
+                value: 'serial'
+              - id: local_serial
+                value: 'local_serial'
         - id: table
           type: string
           tag: call-level-tech-specific-cassandra

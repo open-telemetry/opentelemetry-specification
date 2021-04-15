@@ -11,38 +11,38 @@ groups:
         type:
           allow_custom_values: true
           members:
-            - id: WINDOWS
-              value: 'WINDOWS'
+            - id: windows
+              value: 'windows'
               brief: "Microsoft Windows"
-            - id: LINUX
-              value: 'LINUX'
+            - id: linux
+              value: 'linux'
               brief: "Linux"
-            - id: DARWIN
-              value: 'DARWIN'
+            - id: darwin
+              value: 'darwin'
               brief: "Apple Darwin"
-            - id: FREEBSD
-              value: 'FREEBSD'
+            - id: freebsd
+              value: 'freebsd'
               brief: "FreeBSD"
-            - id: NETBSD
-              value: 'NETBSD'
+            - id: netbsd
+              value: 'netbsd'
               brief: "NetBSD"
-            - id: OPENBSD
-              value: 'OPENBSD'
+            - id: openbsd
+              value: 'openbsd'
               brief: "OpenBSD"
-            - id: DRAGONFLYBSD
-              value: 'DRAGONFLYBSD'
+            - id: dragonflybsd
+              value: 'dragonflybsd'
               brief: "DragonFly BSD"
-            - id: HPUX
-              value: 'HPUX'
+            - id: hpux
+              value: 'hpux'
               brief: "HP-UX (Hewlett Packard Unix)"
-            - id: AIX
-              value: 'AIX'
+            - id: aix
+              value: 'aix'
               brief: "AIX (Advanced Interactive eXecutive)"
-            - id: SOLARIS
-              value: 'SOLARIS'
+            - id: solaris
+              value: 'solaris'
               brief: "Oracle Solaris"
-            - id: ZOS
-              value: 'ZOS'
+            - id: z_os
+              value: 'z_os'
               brief: "IBM z/OS"
         required: always
         brief: 'The operating system type.'

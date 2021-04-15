@@ -46,7 +46,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below. |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below. |
 | [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditional [1] |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `IP.TCP` | Conditional [2] |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditional [2] |
 
 **[1]:** Required if using a port other than the default port for this DBMS.
 
@@ -192,7 +192,7 @@ Separated for clarity.
 |---|---|---|---|---|
 | `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
 | `db.cassandra.page_size` | int | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
-| `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `ALL` | No |
+| `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `all` | No |
 | `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [1] | `mytable` | Recommended if available. |
 | `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
 | `db.cassandra.speculative_execution_count` | int | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | No |
