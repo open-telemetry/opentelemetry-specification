@@ -278,7 +278,7 @@ Pending
 [Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L244)
 metric data points convey quantile summaries, e.g. What is the 99-th percentile
 latency of my HTTP server.  Unlike other point types in OpenTelemetry, Summary
-points cannot be merged in a meaningful way.   This point type is not
+points cannot always be merged in a meaningful way. This point type is not
 recommended for new applications and exists for compatibility with other
 formats.
 
