@@ -34,15 +34,18 @@ Table of Contents
   * [CounterFunc](#counterfunc)
     * [CounterFunc creation](#counterfunc-creation)
     * [CounterFunc operations](#counterfunc-operations)
-  * [Gauge](#gauge)
-    * [Gauge creation](#gauge-creation)
-    * [Gauge operations](#gauge-operations)
-  * [GaugeFunc](#gaugefunc)
-    * [GaugeFunc creation](#gaugefunc-creation)
-    * [GaugeFunc operations](#gaugefunc-operations)
   * [Distribution](#distribution)
     * [Distribution creation](#distribution-creation)
     * [Distribution operations](#distribution-operations)
+  * [GaugeFunc](#gaugefunc)
+    * [GaugeFunc creation](#gaugefunc-creation)
+    * [GaugeFunc operations](#gaugefunc-operations)
+  * [UpDownCounter](#updowncounter)
+    * [UpDownCounter creation](#updowncounter-creation)
+    * [UpDownCounter operations](#updowncounter-operations)
+  * [UpDownCounterFunc](#updowncounter)
+    * [UpDownCounterFunc creation](#updowncounter-creation)
+    * [UpDownCounterFunc operations](#updowncounter-operations)
 * [Measurement](#measurement)
 
 </details>
@@ -410,9 +413,9 @@ page_faults_counter_func = meter.create_counter_func(name="PF", description="pro
 
 def pf_callback(result):
     # Note: in the real world these would be retrieved from the operating system
-    result.Observe(8,        ("pid", 0),   ("bitness", 64))
-    result.Observe(37741921, ("pid", 4),   ("bitness", 64))
-    result.Observe(10465,    ("pid", 880), ("bitness", 32))
+    result.Report(8,        ("pid", 0),   ("bitness", 64))
+    result.Report(37741921, ("pid", 4),   ("bitness", 64))
+    result.Report(10465,    ("pid", 880), ("bitness", 32))
 
 page_faults_counter_func = meter.create_counter_func(name="PF", description="process page faults", pf_callback)
 ```
@@ -438,57 +441,6 @@ var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", 
 provided by the `callback`, which is registered during the [CounterFunc
 creation](#counterfunc-creation).
 
-### Gauge
-
-`Gauge` is a synchronous Instrument which can be used for values that go up
-and/or down. It is intended for monitoring things with natural upper bounds.
-
-Note: never gauge something you can count with [Counter](#counter)!
-
-Example uses for `Gauge`:
-
-* the number of active requests
-* the number of items in a queue
-
-#### Gauge creation
-
-TODO
-
-#### Gauge operations
-
-##### Add
-
-TODO
-
-##### Set
-
-TODO
-
-### GaugeFunc
-
-`GaugeFunc` is an asynchronous Instrument which reports value(s) when the
-instrument is being observed.
-
-Note: if the value grows
-[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
-[CounterFunc](#counterfunc) instead.
-
-Example uses for `GaugeFunc`:
-
-* the current temperature
-* the process heap size
-* the approximate number of items in a lock-free circular buffer
-
-#### GaugeFunc creation
-
-TODO
-
-#### GaugeFunc operations
-
-`GaugeFunc` is only intended for asynchronous scenario. The only operation is
-provided by the `callback`, which is registered during the [GaugeFunc
-creation](#gaugefunc-creation).
-
 ### Distribution
 
 `Distribution` is a synchronous Instrument which can be used to report arbitrary
@@ -506,9 +458,86 @@ TODO
 
 #### Distribution operations
 
-##### Record
+##### Report
 
 TODO
+
+### GaugeFunc
+
+`GaugeFunc` is an asynchronous Instrument which reports non-additive value(s)
+(_e.g. the room temperature - it makes no sense to report the temperature value
+from multiple rooms and sum them up_) when the instrument is being observed.
+
+Note: if the values are additive (_e.g. the process heap size - it makes sense
+to report the heap size from multiple processes and sum them up, so we get the
+total heap usage_), use [CounterFunc](#counterfunc) or
+[UpDownCounterFunc](#updowncounterfunc).
+
+Example uses for `GaugeFunc`:
+
+* the current room temperature
+* the CPU fan speed
+
+#### GaugeFunc creation
+
+TODO
+
+#### GaugeFunc operations
+
+`GaugeFunc` is only intended for asynchronous scenario. The only operation is
+provided by the `callback`, which is registered during the [GaugeFunc
+creation](#gaugefunc-creation).
+
+### UpDownCounter
+
+`UpDownCounter` is a synchronous Instrument which supports increments and
+decrements.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[Counter](#counter) instead.
+
+Example uses for `UpDownCounter`:
+
+* the number of active requests
+* the number of items in a queue
+
+#### UpDownCounter creation
+
+TODO
+
+#### UpDownCounter operations
+
+##### Add
+
+TODO
+
+### UpDownCounterFunc
+
+`UpDownCounterFunc` is an asynchronous Instrument which reports additive
+value(s) (_e.g. the process heap size - it makes sense to report the heap size
+from multiple processes and sum them up, so we get the total heap usage_) when
+the instrument is being observed.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[CounterFunc](#counterfunc) instead; if the value is non-additive, use
+[GaugeFunc](#gaugefunc) instead.
+
+Example uses for `UpDownCounterFunc`:
+
+* the process heap size
+* the approximate number of items in a lock-free circular buffer
+
+#### UpDownCounterFunc creation
+
+TODO
+
+#### UpDownCounterFunc operations
+
+`UpDownCounterFunc` is only intended for asynchronous scenario. The only operation is
+provided by the `callback`, which is registered during the [UpDownCounterFunc
+creation](#updowncounterfunc-creation).
 
 ## Measurement
 
