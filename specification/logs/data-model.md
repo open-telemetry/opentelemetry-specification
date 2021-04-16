@@ -112,10 +112,8 @@ Value of type `any` can be one of the following:
 #### Type `map<string, any>`
 
 Value of type `map<string, any>` is a map of string keys to `any` values. The
-representation of the map is language-dependent. Some languages may use built-in
-maps or dictionaries, others may use a list of key/value pairs. It is required
-that the implementation has traditional
-[map](https://en.wikipedia.org/wiki/Associative_array) semantics.
+keys in the map are unique (duplicate keys are not allowed). The representation
+of the map is language-dependent.
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
 allows to represent an equivalent of a JSON object).
