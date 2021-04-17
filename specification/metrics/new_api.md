@@ -413,9 +413,9 @@ page_faults_counter_func = meter.create_counter_func(name="PF", description="pro
 
 def pf_callback(result):
     # Note: in the real world these would be retrieved from the operating system
-    result.Report(8,        ("pid", 0),   ("bitness", 64))
-    result.Report(37741921, ("pid", 4),   ("bitness", 64))
-    result.Report(10465,    ("pid", 880), ("bitness", 32))
+    result.Observe(8,        ("pid", 0),   ("bitness", 64))
+    result.Observe(37741921, ("pid", 4),   ("bitness", 64))
+    result.Observe(10465,    ("pid", 880), ("bitness", 32))
 
 page_faults_counter_func = meter.create_counter_func(name="PF", description="process page faults", pf_callback)
 ```
