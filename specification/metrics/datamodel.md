@@ -227,7 +227,7 @@ The basic point kinds are:
 2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L170)
 3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L228)
 
-Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does 
+Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
 not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
 can represent a monotonic count or a non-monotonic count. This means an OTLP Sum
 is either translated into a Timeseries Counter, when the sum is monotonic, or
