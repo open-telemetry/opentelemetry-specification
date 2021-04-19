@@ -191,7 +191,6 @@ Note: Support for environment variables is optional.
 | Prometheus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 
-
 [go1085]: https://github.com/open-telemetry/opentelemetry-go/issues/1085
 [go1516]: https://github.com/open-telemetry/opentelemetry-go/issues/1516
 [go1606]: https://github.com/open-telemetry/opentelemetry-go/issues/1606
