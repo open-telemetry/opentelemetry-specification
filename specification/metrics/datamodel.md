@@ -170,7 +170,7 @@ detailed in the API specification.
 In addition to OpenTelemetry instruments, OpenTelemetry needs to adapt to other
 metric system models.  To that vein, we treat instruments of the Event model
 abstractly to allow mapping from other metric systems. We view all instruments
-within the following specturms:
+within the following (non-exhaustive) specturms:
 
 - Synchronous vs. Asynchronous collection.
   - Synchronous instruments are those where an application/library records a
