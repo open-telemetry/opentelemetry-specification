@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add `http.page_title` resource attribute ([#1630](https://github.com/open-telemetry/opentelemetry-specification/pull/1630))
+
 ### Metrics
 
 ### Logs
