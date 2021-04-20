@@ -227,7 +227,7 @@ The basic point kinds are:
 2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L170)
 3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L228)
 
-Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does 
+Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
 not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
 can represent a monotonic count or a non-monotonic count. This means an OTLP Sum
 is either translated into a Timeseries Counter, when the sum is monotonic, or
@@ -255,8 +255,13 @@ in OTLP consist of the following:
 
 - An *Aggregation Temporality* of delta or cumulative.
 - A flag denoting whether the Sum is
-  [monotonic](https://en.wikipedia.org/wiki/Monotonic_function). In the case of
-  metrics, this usually means the sum is always increasing.
+  [monotonic](https://en.wikipedia.org/wiki/Monotonic_function). In this case of
+  metrics, this means the sum is nominally increasing, which we assume without
+  loss of generality.
+  - For delta monotonic sums, this means the reader should expect non-negative
+    values.
+  - For cumulative monotonic sums, this means the reader should expect values
+    that are not less than the previous value.
 - A set of data points, each containing:
   - An independent set of Attribute name-value pairs.
   - A time window (of `(start, end]`) time for which the Sum was calculated.
@@ -431,6 +436,9 @@ sums to be reported, the timeseries model we target does not support delta
 counters.  To this end, converting from delta to cumulative needs to be defined
 so that backends can use this mechanism.
 
+> Note: This is not the only possible Delta to Cumulative algorithm.  It is
+> just one possible implementation that fits the OTel Data Model.
+
 Converting from delta points to cumulative point is inherently a stateful
 operation.  To successfully translate, we need all incoming delta points to
 reach one destination which can keep the current counter state and generate
@@ -454,10 +462,6 @@ The algorithm is scheduled out as follows:
     reset the counter following the same steps performed as if the current point
     was the first point seen.
 
-For comparison, see the simple logic used in
-[statsd sums](https://github.com/statsd/statsd/blob/master/stats.js#L281)
-where all points are added, and lost points are ignored.
-
 #### Sums: detecting alignment issues
 
 When the next delta sum reported for a given metric stream does not align with
@@ -465,8 +469,8 @@ where we expect it, one of several things could have occurred:
 
 - the process reporting metrics was rebooted, leading to a new reporting
   interval for the metric.
-- A bug or misconfiguration leads to multiple processes reporting the same
-  metric stream rather than uniquely identifying via resource and attributes.
+- A Single-Writer principle violation where multiple processes are reporting the
+  same metric stream.
 - There was a lost data point, or dropped information.
 
 In all of these scenarios we do our best to give any cumulative metric knowledge
@@ -475,10 +479,23 @@ that some data was lost, and reset the counter.
 We detect alignment via two mechanisms:
 
 - If the incoming delta time interval has significant overlap with the previous
-  time interval, we cannot accurately combine its sum and reset the cumulative
-  counter.
+  time interval, we must assume a violation of the single-writer principle.
 - If the incoming delta time interval has a significant gap from the last seen
   time, we assume some kind of reboot/restart and reset the cumulative counter.
+
+#### Sums: Missing Timestamps
+
+One degenerate case for the delta-to-cumulative algorithm is when timestamps
+are missing from metric data points. While this shouldn't be the case when
+using OpenTelemetry generated metrics, it can occur when adapting other metric
+formats, e.g.
+[StatsD counts](https://github.com/statsd/statsd/blob/master/docs/metric_types.md#counting).
+
+In this scenario, the algorithm listed above would reset the cumulative sum on
+every data point due to not being able to deterimine alignment or point overlap.
+For comparison, see the simple logic used in
+[statsd sums](https://github.com/statsd/statsd/blob/master/stats.js#L281)
+where all points are added, and lost points are ignored.
 
 ## Footnotes
 
