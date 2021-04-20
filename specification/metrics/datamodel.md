@@ -161,32 +161,16 @@ collection resources available for telemetry collection purposes. The best
 example of this is the Histogram metric where raw events are recorded in a
 compressed format rather than individual timeseries.
 
+> Note: The above picture shows how one instrument can transform events into
+> more than one type of metric stream. There are caveats and nuances for when
+> and how to do this.  Instrument and metric configuration are outlined
+> in the [metrics API specification](api.md).
+
 While OpenTelemetry provides flexibility in how instruments can be transformed
 into metric streams, the instruments are defined such that a reasonable default
 mapping can be provided. The exact
 [OpenTelemetry instruments](api.md##metric-instruments) are more fully
 detailed in the API specification.
-
-In addition to OpenTelemetry instruments, OpenTelemetry needs to adapt to other
-metric system models.  To that vein, we treat instruments of the Event model
-abstractly to allow mapping from other metric systems. We view all instruments
-within the following (non-exhaustive) specturms:
-
-- Synchronous vs. Asynchronous collection.
-  - Synchronous instruments are those where an application/library records a
-    metric data point inline. In this scenario, OpenTelemetry *can* attach
-    context (e.g. baggage) to recorded data points.
-  - Asynchronous instruments are those where OpenTelemetry (not the application)
-    will execute a callback (or other similar mechanism) to pull data points
-    on demand.   This is generally done at regular intervals.
-- Aggregation semantics
-  - Adding instruments express a sum.  All points recorded via this instrument
-    are parts of a whole.
-  - Grouping instruments characterize a group of measurements.  All points
-    recorded via this instrument are individual measurements.
-  - Quantile aggregation represents a mechanism whereby individual recordings
-    are turned into quantile measurements (e.g. 99th percentile latency is
-    2s).
 
 In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
