@@ -174,7 +174,7 @@ detailed in the API specification.
 
 In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
-respectively). 
+respectively).
 
 ### Timeseries Model
 
