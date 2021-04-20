@@ -163,10 +163,14 @@ compressed format rather than individual timeseries.
 
 While OpenTelemetry provides flexibility in how instruments can be transformed
 into metric streams, the instruments are defined such that a reasonable default
-mapping can be provided.
+mapping can be provided. The exact
+[OpenTelemetry instruments](api.md##metric-instruments) are more fully
+detailed in the API specification.
 
-The [OpenTelemetry metric instruments](api.md) are designed around the
-following concerns:
+In addition to OpenTelemetry instruments, OpenTelemetry needs to adapt to other
+metric system models.  To that vein, we treat instruments of the Event model
+abstractly to allow mapping from other metric systems. We view all instruments
+within the following specturms:
 
 - Synchronous vs. Asynchronous collection.
   - Synchronous instruments are those where an application/library records a
@@ -175,21 +179,18 @@ following concerns:
   - Asynchronous instruments are those where OpenTelemetry (not the application)
     will execute a callback (or other similar mechanism) to pull data points
     on demand.   This is generally done at regular intervals.
-- Adding vs. Grouping aggregation.
+- Aggregation semantics
   - Adding instruments express a sum.  All points recorded via this instrument
     are parts of a whole.
   - Grouping instruments characterize a group of measurements.  All points
     recorded via this instrument are individual measurements.
-- Monotonic vs. Non-Monotonic (adding instruments only). These instruments are
-  categorized by whether the derivative of the quantity they express is
-  non-negative.
-  - Monotonic instruments are primarily useful for monitoring a rate value.
-  - Non-monotonic instruments are primarily useful for monitoring a total value.
+  - Quantile aggregation represents a mechanism whereby individual recordings
+    are turned into quantile measurements (e.g. 99th percentile latency is
+    2s).
 
 In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
-respectively). The instruments and model use-cases will be described in greater
-detail as we link the event model with the other two.
+respectively). 
 
 ### Timeseries Model
 
