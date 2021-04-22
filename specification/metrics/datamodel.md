@@ -146,31 +146,35 @@ OpenTelemetry fragments metrics into three interacting models:
 
 ### Event Model
 
-This specification uses as its foundation a
-[Metrics API consisting of 6 model instruments](api.md), each having distinct
-semantics, that were prototyped in several OpenTelemetry SDKs between July 2019
-and June 2020. The model instruments and their specific use-cases are meant to
-anchor our understanding of the OpenTelemetry data model and are divided into
-three categories:
+The event model is where recording of data happens. Its foundation is made of
+[Instruments](api.md), which are used to record data observations via events.
+These raw events are then transformed in some fashion before being sent to some
+other system.  OpenTelemetry metrics are designed such that the same instrument
+and events can be used in different ways to generate metric streams.
 
-- Synchronous vs. Asynchronous. The act of calling a Metrics API in a
-  synchronous context means the application/library calls the SDK, typically having
-  associated trace context and baggage; an Asynchronous instrument is called at
-  collection time, through a callback, and lacks context.
-- Adding vs. Grouping. Whereas adding instruments express a sum, grouping
-  instruments characterize a group of measurements. The numbers passed to adding
-  instruments define division, in the algebraic sense, while the numbers passed
-  to grouping instruments are generally not. Adding instrument values are always
-  parts of a sum, while grouping instrument values are individual measurements.
-- Monotonic vs. Non-Monotonic. The adding instruments are categorized by whether
-  the derivative of the quantity they express is non-negative. Monotonic
-  instruments are primarily useful for monitoring a rate value, whereas
-  non-monotonic instruments are primarily useful for monitoring a total value.
+![Events → Streams](img/model-event-layer.png)
+
+Even though observation events could be reported directly to a backend, in
+practice this would be infeasible due to the sheer volume of data used in
+observability systems, and the limited amount of network/cpu telemetry
+collection resources available for telemetry collection purposes. The best
+example of this is the Histogram metric where raw events are recorded in a
+compressed format rather than individual timeseries.
+
+> Note: The above picture shows how one instrument can transform events into
+> more than one type of metric stream. There are caveats and nuances for when
+> and how to do this.  Instrument and metric configuration are outlined
+> in the [metrics API specification](api.md).
+
+While OpenTelemetry provides flexibility in how instruments can be transformed
+into metric streams, the instruments are defined such that a reasonable default
+mapping can be provided. The exact
+[OpenTelemetry instruments](api.md##metric-instruments) are more fully
+detailed in the API specification.
 
 In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
-respectively). The instruments and model use-cases will be described in greater
-detail as we link the event model with the other two.
+respectively).
 
 ### Timeseries Model
 
