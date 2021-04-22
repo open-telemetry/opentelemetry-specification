@@ -34,12 +34,12 @@ Table of Contents
   * [CounterFunc](#counterfunc)
     * [CounterFunc creation](#counterfunc-creation)
     * [CounterFunc operations](#counterfunc-operations)
-  * [Distribution](#distribution)
-    * [Distribution creation](#distribution-creation)
-    * [Distribution operations](#distribution-operations)
   * [GaugeFunc](#gaugefunc)
     * [GaugeFunc creation](#gaugefunc-creation)
     * [GaugeFunc operations](#gaugefunc-operations)
+  * [Histogram](#histogram)
+    * [Histogram creation](#histogram-creation)
+    * [Histogram operations](#histogram-operations)
   * [UpDownCounter](#updowncounter)
     * [UpDownCounter creation](#updowncounter-creation)
     * [UpDownCounter operations](#updowncounter-operations)
@@ -76,7 +76,7 @@ the metrics API:
         |
         +-- Instrument<Counter, int>(name='client.exception', attributes=['type'], unit='1')
         |
-        +-- Instrument<Distribution, double>(name='client.duration', attributes=['net.peer.host', 'net.peer.port'], unit='ms')
+        +-- Instrument<Histogram, double>(name='client.duration', attributes=['net.peer.host', 'net.peer.port'], unit='ms')
         |
         +-- instruments...
 
@@ -441,24 +441,24 @@ var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", 
 provided by the `callback`, which is registered during the [CounterFunc
 creation](#counterfunc-creation).
 
-### Distribution
+### Histogram
 
-`Distribution` is a synchronous Instrument which can be used to report arbitrary
-values. It is intended for statistics such as histograms, summaries, and
-percentile.
+`Histogram` is a synchronous Instrument which can be used to report arbitrary
+values that are likely to be statistically meaningful. It is intended for
+statistics such as histograms, summaries, and percentile.
 
-Example uses for `Distribution`:
+Example uses for `Histogram`:
 
 * the request duration
 * the size of the response payload
 
-#### Distribution creation
+#### Histogram creation
 
 TODO
 
-#### Distribution operations
+#### Histogram operations
 
-##### Report
+##### Record
 
 TODO
 
