@@ -74,14 +74,12 @@ Transient errors are errors which expect the backend to recover. The following s
 | ---------------- | ----------- |
 | 1  | Cancelled |
 | 4  | Deadline Exceeded |
-| 7  | Permission Denied |
 | 8  | Resource Exhausted |
 | 10 | Aborted |
 | 10 | Out of Range |
 | 14 | Unavailable |
 | 15 | Data Loss |
-| 16 | Unauthenticated |
 
-Additional details on transient errors can be found in [otep-35](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md#export-response) for gRPC and [otep-99](https://github.com/open-telemetry/oteps/blob/main/text/0099-otlp-http.md#failures) for HTTP
+Additional details on transient errors can be found in OTLP specification for [gRPC](otlp.md#otlpgrpc-response) and [HTTP](otlp.md#failures).
 
 [otlphttp-req]: otlp.md#otlphttp-request
