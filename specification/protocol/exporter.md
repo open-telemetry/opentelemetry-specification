@@ -80,6 +80,6 @@ Transient errors are errors which expect the backend to recover. The following s
 | 14 | Unavailable |
 | 15 | Data Loss |
 
-Additional details on transient errors can be found in OTLP specification for [gRPC](otlp.md#otlpgrpc-response) and [HTTP](otlp.md#failures).
+Additional details on transient errors can be found in the OTLP specification for [gRPC](otlp.md#otlpgrpc-response) and [HTTP](otlp.md#failures).
 
 [otlphttp-req]: otlp.md#otlphttp-request
