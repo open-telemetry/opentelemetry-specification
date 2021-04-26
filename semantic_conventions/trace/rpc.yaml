@@ -92,7 +92,7 @@ groups:
         - id: method
           type: string
           required: always
-          brief: "`method` property from request. Unlike `rpc.method`, this may not relate to the actual method being called."
+          brief: "`method` property from request. Unlike `rpc.method`, this may not relate to the actual method being called. Useful for client-side traces since client does not know what will be called on the server."
           examples: ['users.create', 'get_users']
         - id: id
           type: string
