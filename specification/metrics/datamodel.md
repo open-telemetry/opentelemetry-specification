@@ -282,14 +282,24 @@ degradation or loss of visibility.
 
 ## Temporality
 
-Every OTLP point has two associated timestamps. For OTLP Sum and Histogram
-points, the two timestamps indicate when the point was reset and when the sum
-was captured. For OTLP Gauge points, the two timestamps indicate when the
-measurement was taken and when it was reported as being still the last value.
+Every OTLP metric data point has two associated timestamps.  The
+first, mandatory timestamp is the one associated with the observation,
+the moment when the measurement became current or took effect, and is
+referred to as `TimeUnixNano`.  The second, optional timestamp is used
+to indicate when a series of events is unbroken, and is referred to as
+`StartTimeUnixNano`.
 
-The notion of temporality refers to a configuration choice made in the system
-as a whole, indicating whether reported values incorporate previous
-measurements, or not.
+The second timestamp is strongly recommended for Sum, Histogram, an
+Summary points, as it is necessary to correctly interpret the rate
+from an OTLP stream, in a manner that is aware of restarts.  The use
+of `StartTimeUnixNano` to indicate the start of an unbroken sequence
+of measurements means it can also be used to encode implicit gaps in
+the stream.
+
+The notion of temporality refers to the way additive quanties are
+expressed, in relation to time, indicating whether reported values
+incorporate previous measurements or not.  Sum and Histogram data
+points, in particular, support a choice of aggregation temporality.
 
 - *Cumulative temporality* means that successive data points repeat the starting
   timestamp. For example, from start time T0, cumulative data points cover time
@@ -313,13 +323,71 @@ event commonly is translated into two metric events (a 1-count and a timing
 measurement). Delta temporality enables sampling and supports shifting the cost
 of cardinality outside of the process.
 
+## Resets and Gaps
+
+When the `StartTimeUnixNano` field is present, it allows the consumer
+to observe when there are gaps and overlapping writers in a stream.
+Correctly used, the consumer can observe both transient and ongoing
+violations of the single-writer principle as well as reset events.  In
+an unbroken sequence of observations, the `StartTimeUnixNano` always
+matches either the `TimeUnixNano` or the `StartTimeUnixNano` of other
+points in the same sequence.  For the initial points in an unbroken
+sequence:
+
+- When `StartTimeUnixNano` is less than `TimeUnixNano`, a new unbroken sequence of observations begins with a "true" reset at a known start time. The zero value is implicit, it is not necessary to record the starting point.
+- When `StartTimeUnixNano` equals `TimeUnixNano`, a new unbroken sequence of observations begins with a reset at an unknown start time. The initial observed value is recorded to indicate that an unbroken sequence of observations resumes. These points have zero duration, and indicate that nothing is known about previously-reported points and that data may have been lost.
+
+For subsequent points in an unbroken sequence:
+
+- For points with delta aggregation temporality, the `StartTimeUnixNano` of each point matches the `TimeUnixNano` of the preceding point
+- Otherwise, the `StartTimeUnixNano` of each point matches the `StartTimeUnixNano` of the initial observation.
+
+A metric stream has a gap, where it is implicitly undefined, anywhere
+there is a range of time such that no point covers that range range
+with its `StartTimeUnixNano` and `TimeUnixNano` fields.
+
+### Cumulative unknown start-time handling
+
+An unbroken stream of observations is resumed with a zero-duration
+point and non-zero value, as described above.  For points with
+cumulative aggregation temporality, the rate contributed to the
+timeseries by each point depends on the prior point value in the
+stream.
+
+To correctly compute the rate contribution of the first point in a
+unbroken sequence requires knowing whether it is the first point.
+Unknown start-time reset points appear with `TimeUnixNano` equal to
+the `StartTimeUnixNano` of a stream of points, in which case the rate
+contribution of the first point is considered zero.  An earlier
+sequence of observations is expected to have reported the same
+cumulative state prior to a gap in observations.
+
+The presence or absence of a point with `TimeUnixNano` equal to the
+`StartTimeUnixNano` indicates how to count rate contribution frmo the
+first point in a sequence.  If the first point in an unknown
+start-time reset sequence is lost, the consumer of this data is might
+overcount the rate contribution of the second point, as it then appears
+like a "true" reset.
+
+Various approaches can be taken to avoid overcounting.  A system could
+use state from earlier in the stream to resolve start-time ambiguity,
+for example.
+
+The absolute value of the cumulative counter is often considered
+meaningful, but when the cumulative value is only used to calculate a
+rate function, it is possible to drop the initial unknown start-time
+reset point, but remember the initially observed value in order to
+modify subsequent observations.  Later in the cumulative sequence are
+output relative to the initial value, thus appears as a true reset
+offset by an unknown constant.
+
 ## Overlap
 
-Overlap occurs when more than one metric data point occurs for a data stream
-within a time window.   This is particularly problematic for data points meant
-to represent an entire time window, e.g. a Histogram reporting population
-density of collected metric data points for a time window.  If two of these show
-up with overlapping time windows, how do backends handle this situation?
+Overlap occurs when more than one metric data point is defined for a
+metric stream within a time window.  Overlap is usually caused through
+mis-configuration, and it can lead to serious mis-interpretation of
+the data.  `StartTimeUnixNano` is recommended so that consumers can
+recognize and response to overlapping points.
 
 We define three principles for handling overlap:
 
