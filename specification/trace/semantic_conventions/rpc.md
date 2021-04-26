@@ -18,6 +18,8 @@ This document defines how to describe remote procedure calls
   * [gRPC Attributes](#grpc-attributes)
   * [gRPC Status](#grpc-status)
   * [Events](#events)
+- [JSON RPC](#json-rpc)
+  * [JSON RPC Attributes](#json-rpc-attributes)
 
 <!-- tocstop -->
 
@@ -171,7 +173,7 @@ Conventions specific to [JSON RPC](https://www.jsonrpc.org/), namely `2.0`.
 
 `rpc.system` MUST be set to `"jsonrpc"`.
 
-## JSON RPC Attributes
+### JSON RPC Attributes
 
 <!-- semconv rpc.jsonrpc -->
 | Attribute  | Type | Description  | Examples  | Required |
