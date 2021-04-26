@@ -344,10 +344,14 @@ There MUST NOT be any API for creating an Asynchronous Counter other than with a
 [`Meter`](#meter). This MAY be called `CreateObservableCounter`. If strong type
 is desired, the client can decide the language idomatic name(s), for example
 `CreateUInt64ObservableCounter`, `CreateDoubleObservableCounter`,
-`CreateObservableCounter<UInt64>`, `CreateObservableCounter<double>`. It is
-highly recommended that implementations use the name `ObservableCounter` (or any
-language idiomatic variation, e.g. `observable_counter`) unless there is a
-strong reason not to do so.
+`CreateObservableCounter<UInt64>`, `CreateObservableCounter<double>`.
+
+It is highly recommended that implementations use the name `ObservableCounter`
+(or any language idiomatic variation, e.g. `observable_counter`) unless there is
+a strong reason not to do so. Please note that the name has nothing to do with
+[asynchronous
+pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
+[observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
 
 The API MUST accept the following parameters:
 
