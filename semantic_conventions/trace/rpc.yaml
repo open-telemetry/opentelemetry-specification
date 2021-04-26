@@ -81,7 +81,7 @@ groups:
     - id: rpc.jsonrpc
       prefix: rpc.jsonrpc
       extends: rpc
-      brief: 'Tech-specific attributes for JSON RPC.'
+      brief: 'Tech-specific attributes for [JSON RPC](https://www.jsonrpc.org/).'
       attributes:
         - id: version
           type: string
