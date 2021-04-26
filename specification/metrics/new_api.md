@@ -34,6 +34,18 @@ Table of Contents
   * [CounterFunc](#counterfunc)
     * [CounterFunc creation](#counterfunc-creation)
     * [CounterFunc operations](#counterfunc-operations)
+  * [GaugeFunc](#gaugefunc)
+    * [GaugeFunc creation](#gaugefunc-creation)
+    * [GaugeFunc operations](#gaugefunc-operations)
+  * [Histogram](#histogram)
+    * [Histogram creation](#histogram-creation)
+    * [Histogram operations](#histogram-operations)
+  * [UpDownCounter](#updowncounter)
+    * [UpDownCounter creation](#updowncounter-creation)
+    * [UpDownCounter operations](#updowncounter-operations)
+  * [UpDownCounterFunc](#updowncounter)
+    * [UpDownCounterFunc creation](#updowncounter-creation)
+    * [UpDownCounterFunc operations](#updowncounter-operations)
 * [Measurement](#measurement)
 
 </details>
@@ -56,11 +68,15 @@ the metrics API:
     |
     +-- Meter(name='io.opentelemetry.runtime', version='1.0.0')
     |   |
+    |   +-- Instrument<GaugeFunc, int>(name='cpython.gc', attributes=['generation'], unit='kB')
+    |   |
     |   +-- instruments...
     |
     +-- Meter(name='io.opentelemetry.contrib.mongodb.client', version='2.3.0')
         |
         +-- Instrument<Counter, int>(name='client.exception', attributes=['type'], unit='1')
+        |
+        +-- Instrument<Histogram, double>(name='client.duration', attributes=['net.peer.host', 'net.peer.port'], unit='ms')
         |
         +-- instruments...
 
@@ -424,6 +440,104 @@ var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", 
 `CounterFunc` is only intended for asynchronous scenario. The only operation is
 provided by the `callback`, which is registered during the [CounterFunc
 creation](#counterfunc-creation).
+
+### Histogram
+
+`Histogram` is a synchronous Instrument which can be used to report arbitrary
+values that are likely to be statistically meaningful. It is intended for
+statistics such as histograms, summaries, and percentile.
+
+Example uses for `Histogram`:
+
+* the request duration
+* the size of the response payload
+
+#### Histogram creation
+
+TODO
+
+#### Histogram operations
+
+##### Record
+
+TODO
+
+### GaugeFunc
+
+`GaugeFunc` is an asynchronous Instrument which reports non-additive value(s)
+(_e.g. the room temperature - it makes no sense to report the temperature value
+from multiple rooms and sum them up_) when the instrument is being observed.
+
+Note: if the values are additive (_e.g. the process heap size - it makes sense
+to report the heap size from multiple processes and sum them up, so we get the
+total heap usage_), use [CounterFunc](#counterfunc) or
+[UpDownCounterFunc](#updowncounterfunc).
+
+Example uses for `GaugeFunc`:
+
+* the current room temperature
+* the CPU fan speed
+
+#### GaugeFunc creation
+
+TODO
+
+#### GaugeFunc operations
+
+`GaugeFunc` is only intended for asynchronous scenario. The only operation is
+provided by the `callback`, which is registered during the [GaugeFunc
+creation](#gaugefunc-creation).
+
+### UpDownCounter
+
+`UpDownCounter` is a synchronous Instrument which supports increments and
+decrements.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[Counter](#counter) instead.
+
+Example uses for `UpDownCounter`:
+
+* the number of active requests
+* the number of items in a queue
+
+#### UpDownCounter creation
+
+TODO
+
+#### UpDownCounter operations
+
+##### Add
+
+TODO
+
+### UpDownCounterFunc
+
+`UpDownCounterFunc` is an asynchronous Instrument which reports additive
+value(s) (_e.g. the process heap size - it makes sense to report the heap size
+from multiple processes and sum them up, so we get the total heap usage_) when
+the instrument is being observed.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[CounterFunc](#counterfunc) instead; if the value is non-additive, use
+[GaugeFunc](#gaugefunc) instead.
+
+Example uses for `UpDownCounterFunc`:
+
+* the process heap size
+* the approximate number of items in a lock-free circular buffer
+
+#### UpDownCounterFunc creation
+
+TODO
+
+#### UpDownCounterFunc operations
+
+`UpDownCounterFunc` is only intended for asynchronous scenario. The only operation is
+provided by the `callback`, which is registered during the [UpDownCounterFunc
+creation](#updowncounterfunc-creation).
 
 ## Measurement
 
