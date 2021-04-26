@@ -471,9 +471,10 @@ TODO
 
 ### Asynchronous Gauge
 
-Asynchronous Gauge is an asynchronous Instrument which reports non-additive value(s)
-(_e.g. the room temperature - it makes no sense to report the temperature value
-from multiple rooms and sum them up_) when the instrument is being observed.
+Asynchronous Gauge is an asynchronous Instrument which reports non-additive
+value(s) (_e.g. the room temperature - it makes no sense to report the
+temperature value from multiple rooms and sum them up_) when the instrument is
+being observed.
 
 Note: if the values are additive (_e.g. the process heap size - it makes sense
 to report the heap size from multiple processes and sum them up, so we get the
@@ -491,9 +492,9 @@ TODO
 
 #### Asynchronous Gauge operations
 
-Asynchronous Gauge is only intended for an asynchronous scenario. The only operation is
-provided by the `callback`, which is registered during the [Asynchronous Gauge
-creation](#asynchronous-gauge-creation).
+Asynchronous Gauge is only intended for an asynchronous scenario. The only
+operation is provided by the `callback`, which is registered during the
+[Asynchronous Gauge creation](#asynchronous-gauge-creation).
 
 ### UpDownCounter
 
@@ -542,9 +543,9 @@ TODO
 
 #### Asynchronous UpDownCounter operations
 
-Asynchronous UpDownCounter is only intended for an asynchronous scenario. The only operation is
-provided by the `callback`, which is registered during the [Asynchronous UpDownCounter
-creation](#asynchronous-updowncounter-creation).
+Asynchronous UpDownCounter is only intended for an asynchronous scenario. The
+only operation is provided by the `callback`, which is registered during the
+[Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation).
 
 ## Measurement
 
