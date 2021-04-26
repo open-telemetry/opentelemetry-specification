@@ -15,7 +15,7 @@ release.
 
 ### Metrics
 
-- Add 
+- Add information about metric staleness and temporal alignment. ([#1648](https://github.com/open-telemetry/opentelemetry-specification/pull/1648))
 
 ### Logs
 
