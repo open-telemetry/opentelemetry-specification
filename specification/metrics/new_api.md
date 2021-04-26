@@ -491,7 +491,7 @@ TODO
 
 #### Asynchronous Gauge operations
 
-Asynchronous Gauge is only intended for asynchronous scenario. The only operation is
+Asynchronous Gauge is only intended for an asynchronous scenario. The only operation is
 provided by the `callback`, which is registered during the [Asynchronous Gauge
 creation](#asynchronous-gauge-creation).
 
