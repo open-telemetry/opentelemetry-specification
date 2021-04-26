@@ -167,7 +167,7 @@ client and server spans.
 
 ## JSON RPC
 
-Conventions specific to JSON RPC, namely `2.0`.
+Conventions specific to [JSON RPC](https://www.jsonrpc.org/), namely `2.0`.
 
 `rpc.system` MUST be set to `"jsonrpc"`.
 
