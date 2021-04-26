@@ -542,7 +542,7 @@ TODO
 
 #### Asynchronous UpDownCounter operations
 
-Asynchronous UpDownCounter is only intended for asynchronous scenario. The only operation is
+Asynchronous UpDownCounter is only intended for an asynchronous scenario. The only operation is
 provided by the `callback`, which is registered during the [Asynchronous UpDownCounter
 creation](#asynchronous-updowncounter-creation).
 
