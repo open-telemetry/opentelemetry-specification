@@ -346,7 +346,7 @@ A metric stream has a gap, where it is implicitly undefined, anywhere
 there is a range of time such that no point covers that range range
 with its `StartTimeUnixNano` and `TimeUnixNano` fields.
 
-### Cumulative unknown start-time handling
+### Cumulative streams: handling unknown start time
 
 An unbroken stream of observations is resumed with a zero-duration
 point and non-zero value, as described above.  For points with
@@ -373,6 +373,8 @@ Various approaches can be taken to avoid overcounting.  A system could
 use state from earlier in the stream to resolve start-time ambiguity,
 for example.
 
+### Cumulative streams: inserting true reset points
+
 The absolute value of the cumulative counter is often considered
 meaningful, but when the cumulative value is only used to calculate a
 rate function, it is possible to drop the initial unknown start-time
@@ -380,6 +382,9 @@ reset point, but remember the initially observed value in order to
 modify subsequent observations.  Later in the cumulative sequence are
 output relative to the initial value, thus appears as a true reset
 offset by an unknown constant.
+
+This process is known as inserting true reset points, a special case
+of reaggregation for cumulative series.
 
 ## Overlap
 
