@@ -350,17 +350,86 @@ points may be expected. In this case, OpenTelemetry collectors SHOULD modify
 points at the change-over using interpolation for Sum data points, to reduce
 gaps to zero width in these cases, without any overlap.
 
-## Resources
+## Staleness
 
-Pending
+Implementations have implicit and explicit means of detecting when a
+stream ceases being written.  Consumers of metric streams may wish to
+know when a stream is defined by an invalid value, a condition known
+as "staleness".
+
+### Explicit Staleness
+
+The explicit mechanism, characteristic of the Prometheus Remote-Write
+protocol, uses IEEE 754 floating point NaN values to encode invalid
+measurements with an explicit timestamp.
+
+NaN values can be used to indicate an explicit gap in an metric stream
+for Gauge and Sum valued points.  For Histogram and Summary points,
+the sum should be used, since it is a floating point value.
+
+These observations can be included in a sequence of measurements
+without being considered resets, meaning they do not interact with the
+interpretation of `StartTimeUnixNano`.  NaN-valued points are
+considered explicitly invalid point values.
+
+### Implicit Staleness
+
+The implicit mechanism, characteristic of systems that push metric
+data, have a time-to-live (TTL) associated with metric streams.  In
+these systems, data is expected to arrive more often than a specified
+duration specified, known as the the TTL parameter, otherwise they are
+considered stale.
+
+Implementations that perform a staleness calculation can be configured
+to issue an explicit staleness marker, or they can simply forget those
+streams.
 
 ## Temporal Alignment
 
-Pending
+Temporal alignment describes how to modify a stream of metric data
+with arbitary `StartTimeUnixNano` and `TimeUnixNano` timestamps into a
+stream with selected timestamps, typically into a stream of
+constant-duration points.  Temporal alignment is defined on the basis
+of point kind and is performed in a way that respects the original
+aggregation.
 
-## External Labels
+Temporal alignment is performed after overlapping data points have
+been resolved.  The input to temporal aggregation is a stream of
+non-overlapping points; the output is a stream of non-overlapping
+points with selected timestamps.  Temporal alignment defines the
+contribution to a selected output time range in terms of all input
+points in the stream that overlap the selected output.
 
-Pending
+The algorithm is performed by point kind on a case by case basis.
+Implementations may use rounding integer values to floating-point
+values, where possible, to reduce rounding errors.
+
+### Sum and Histogram points with delta aggregation temporality
+
+For delta aggregation temporality, Sum values, Histogram bucket
+counts, and the Histogram sum and count fields allocate their value
+proportionally into the output, based on the fraction of the input
+time range covered by the output time range.
+
+### Sum and Histogram points with cumulative aggregation temporality
+
+For cumulative aggregation temporality, temporal alignment uses linear
+interpolation to calculate the value of the sequence at specific time.
+First compute the most recent value of the stream before the output
+`TimeUnixNano` and the next value after the output `TimeUnixNano`,
+assume the sum or count rises linearly, and calculate an interpolated
+value for the output `TimeUnixNano`.
+
+### Gauge points
+
+For Gauge points, temporal alignment outputs the input value with the
+most recent `TimeUnixNano` prior to the output `TimeUnixNano`.
+
+### Summary points
+
+For Summary points, temporal alignment applies the logic for Histogram
+sum and count fields to the Summary sum and count fields, and it uses
+the logic for Gauge values to its `ValueAtQuantile` field.
 
 ## Footnotes
 
