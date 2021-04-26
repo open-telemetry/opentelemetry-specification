@@ -96,7 +96,7 @@ groups:
           examples: ['users.create', 'get_users']
         - id: id
           type: string
-          brief: "`id` property of request. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Omit if this is a notification."
+          brief: "`id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Omit if this is a notification."
           examples: ['10', 'request-7', '']
         - id: error_code
           type: int
