@@ -21,10 +21,10 @@ formats is required. Implementing more than one format is optional.
 | Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
-| ForceFlush (SDK only required)                                                                   |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1606)  | +    | -  | -      | +    | -      |     | -    | -   | +    | +     |
+| ForceFlush (SDK only required)                                                                   |          | [-][go1606]  | +    | -  | +      | +    | -      |     | +    | -   | +    | +     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
-| Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
-| Set active Span                                                                                  |          | N/A| +    | +  | +      | +    | +    |     | +    | +   | +    | +     |
+| Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| Set active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -33,7 +33,7 @@ formats is required. Implementing more than one format is optional.
 | [SpanContext](specification/trace/api.md#spancontext)                                            |          |    |      |    |        |      |        |     |      |     |      |       |
 | IsValid                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRemote                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Conforms to the W3C TraceContext spec                                                            |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1516)  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| Conforms to the W3C TraceContext spec                                                            |          | [-][go1516] | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Span](specification/trace/api.md#span)                                                          |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -45,7 +45,7 @@ formats is required. Implementing more than one format is optional.
 | End                                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | End with timestamp                                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRecording becomes false after End                                                              |          | +  | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
+| IsRecording becomes false after End                                                              |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
 | Set status with StatusCode (Unset, Ok, Error)                                                    |          | +  | +    | +  | +      | +    | -      |     | +    |     | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | events collection size limit                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | +   | -    | +     |
@@ -62,8 +62,8 @@ formats is required. Implementing more than one format is optional.
 | `null` values documented as invalid/undefined                                                    |          | +  | +    | +  | +      | +    | N/A    |     |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      |          |    |      |    |        |      |        |     |      |     |      |       |
-| Links can be recorded on span creation                                                           |          | +  |      |    |        | +    |        |     |      |     |      |       |
-| Links order is preserved                                                                         |          | +  |      |    |        | +    |        |     |      |     |      |       |
+| Links can be recorded on span creation                                                           |          | +  |      |    |        | +    |        |     | +    |     |      |       |
+| Links order is preserved                                                                         |          | +  |      |    |        | +    |        |     | +    |     |      |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |    |      |    |        |      |        |     |      | +   |      |       |
 | AddEvent                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -73,11 +73,11 @@ formats is required. Implementing more than one format is optional.
 | RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    |     | -    | +     |
-| ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     |      | +   | -    | +     |
-| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     |      |     | -    | +     |
-| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    |        | +    |        |     |      |     |      | +     |
-| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    |        | +    |        |     |      |     |      | +     |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    |      |    |        | +    |        |     |      |     |      |       |
+| ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
+| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     | +    |     | -    | +     |
+| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    |        |     | +    |     |      | +     |
+| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    |        |     |      |     |      | +     |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    |      |    | +      | +    |        |     | +    |     |      |       |
 
 ## Baggage
 
@@ -98,7 +98,7 @@ formats is required. Implementing more than one format is optional.
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          | +  | +    |    | +      | +    | +      |     |      | +   | +    |       |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          | +  | +    |    | +      | +    | +      |     | +    | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      |     |      | +   | +    |       |
 
@@ -119,9 +119,9 @@ formats is required. Implementing more than one format is optional.
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | -     |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      |     |      |       |
 | Fields                                                                           |          | +  | +    | +  | +      | +    | +      |     | +    |     | +    | +     |
-| Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | +    | +     |
-| Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | +    | +     |
-| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     |      | +   | -    | +     |
+| Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
+| Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
+| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | -    | +     |
 
 ## Environment Variables
 
@@ -130,63 +130,78 @@ Note: Support for environment variables is optional.
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | - | +  | -   |
-|OTEL_LOG_LEVEL                                | - | -  | + | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1059)    | +  | +    | - |    | - | -  | -   |        |
-|OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - |    | - | -  | -   |
+|OTEL_LOG_LEVEL                                | - | -  | + | [-][py1059] | +  | +    | - |    | - | -  | -   |        |
+|OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
 |OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1085) | +  |   | -    | +  | -    | - |    | - | -  | -   |
-|OTEL_EXPORTER_JAEGER_*                        | - | +  |   | +    | +  | -    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                        | - | +  |   | +    | +  | -    | - |    | - | -  | -   |
-|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   |    |   |    |     |
-|OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   |    |   | -  | -   |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | -    |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   |    |   |    |     |
+|OTEL_EXPORTER_OTLP_*                          | [-][go1085] | +  |   | +    | +  | -    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_JAEGER_*                        | - |    |   |      |    | -    | - |    | - | -  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                        | - | +  |   | +    | +  | -    | - | -  | - | -  | -   |
+|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  |   |    |     |
+|OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  |   | -  | -   |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   | +  |   |    |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   | +  |   |    |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | -    |   | +  |   |    |     |
+|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  |   |    |     |
+|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  |   |    |     |
 
 ## Exporters
 
-| Feature                                               | Optional | Go | Java                                                                  | JS | Python                                                                  | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
-|-------------------------------------------------------|----------|----|-----------------------------------------------------------------------|----|-------------------------------------------------------------------------|------|--------|-----|------|-----|------|-------|
-| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +                                                                       |      |        |     |      |     | +    |       |
-| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    |                                                                         | +    |        |     |      |     |      |       |
-| Standard output (logging)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | +    | +   | +    | +     |
-| In-memory (mock exporter)                             |          | +  | + | +  | +                                                                       | +    | +      | -   | -    | +   | +    | +     |
-| [OTLP](specification/protocol/otlp.md)                |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-| OTLP/gRPC Exporter                                    | *        | +  | + | +  | +                                                                       |      | +      |     | +    | +   | +    | +     |
-| OTLP/HTTP binary Protobuf Exporter                    | *        | +  | - | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1106) | +    | +      |     |      |     | -    | -     |
-| OTLP/HTTP JSON Protobuf Exporter                      | *        | +  | - | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1003) |      | -      |     |      |     | -    | -     |
-| OTLP/HTTP gzip Content-Encoding support               | X        | +  | - | +  | +                                                                       | +    | -      |     |      |     | -    | -     |
-| Concurrent sending                                    |          | -  | + | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1108) |      | -      |     | +    |     | -    | -     |
-| Honors retryable responses with backoff               | X        | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1632)  |   | +  | +                                                                       | +    | -      |     |      |     | -    | -     |
-| Honors non-retryable responses                        | X        | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1632)  |   | -  | +                                                                       | +    | -      |     |      |     | -    | -     |
-| Honors throttling response                            | X        | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1632)  |   | -  | +                                                                       | +    | -      |     |      |     | -    | -     |
-| Multi-destination spec compliance                     | X        | +  |   |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1109) |      | -      |     |      |     | -    | -     |
-| [Zipkin](specification/trace/sdk_exporters/zipkin.md) |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-| Zipkin V1 JSON                                        | X        | -  | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1173) | -    | -      | -   | -    |     | -    | -     |
-| Zipkin V1 Thrift                                      | X        | -  | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1174) | -    | -      | -   | -    |     | -    | -     |
-| Zipkin V2 JSON                                        | *        | +  | + |    | +                                                                       | +    | -      | +   | +    | +   | +    | +     |
-| Zipkin V2 Protobuf                                    | *        | -  | + |    | +                                                                       | -    | +      |     | -    |     | -    | -     |
-| Service name mapping                                  |          | [-](https://github.com/open-telemetry/opentelemetry-go/issues/1777) | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
-| SpanKind mapping                                      |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
-| InstrumentationLibrary mapping                        |          | +  | + | -  | +                                                                       | +    | -      | -   | +    |     | +    | +     |
-| Boolean attributes                                    |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
-| Array attributes                                      |          | +  | + | +  | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1110) | +    | +      | +   | +    |     | +    | +     |
-| Status mapping                                        |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
-| Error Status mapping                                  |          | +  | + |    |                                                                         | +    |        |     |      |     | +    | -     |
-| Event attributes mapping to Annotations               |          | +  | + | +  | +                                                                       | +    | +      | +   | +    |     | +    | +     |
-| Integer microseconds in timestamps                    |          | N/A| + |    | +                                                                       | +    |        |     |      |     | +    | +     |
-| [Jaeger](specification/trace/sdk_exporters/jaeger.md) |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-| Jaeger Thrift over UDP                                | *        | +  |   |    | +                                                                       | +    |        |     |      |     | +    | +     |
-| Jaeger Protobuf via gRPC                              | *        | -  | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1437) | -    |        |     |      |     | -    | -     |
-| Jaeger Thrift over HTTP                               | *        | +  | + |    | +                                                                       | +    |        |     |      |     | -    | -     |
-| Service name mapping                                  |          | +  | + |    | +                                                                       | +    |        |     |      |     | +    | +     |
-| Resource to Process mapping                           |          | +  | + |    | [-](https://github.com/open-telemetry/opentelemetry-python/issues/1436) | +    |        |     |      |     | +    | -     |
-| InstrumentationLibrary mapping                        |          | +  | + |    | +                                                                       | +    |        |     |      |     | +    | -     |
-| Status mapping                                        |          | +  | + |    |                                                                         | +    |        |     |      |     | +    | +     |
-| Error Status mapping                                  |          | +  | + |    |                                                                         | +    |        |     |      |     | +    | -     |
-| Events converted to Logs                              |          | +  | + |    | +                                                                       | +    |        |     |      |     | +    | +     |
-| OpenCensus                                            |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-| TBD                                                   |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-| Prometheus                                            |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
-| TBD                                                   |          |    |   |    |                                                                         |      |        |     |      |     |      |       |
+| Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
+|--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
+| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      |        |     | +    |     | +    |       |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    |        |     | -    |     |      |       |
+| Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
+| In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | -   | -    | +   | +    | +     |
+| [OTLP](specification/protocol/otlp.md)                                         |          |    |   |    |             |      |        |     |      |     |      |       |
+| OTLP/gRPC Exporter                                                             | *        | +  | + | +  | +           |      | +      |     | +    | +   | +    | +     |
+| OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | - | +  | [-][py1106] | +    | +      |     |      |     | -    | -     |
+| OTLP/HTTP JSON Protobuf Exporter                                               | *        | +  | - | +  | [-][py1003] |      | -      |     |      |     | -    | -     |
+| OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | - | +  | +           | +    | -      |     |      |     | -    | -     |
+| Concurrent sending                                                             |          | -  | + | +  | [-][py1108] |      | -      |     | +    |     | -    | -     |
+| Honors retryable responses with backoff                                        | X        | [-][go1632] |   | +  | +  | +    | -      |     |      |     | -    | -     |
+| Honors non-retryable responses                                                 | X        | [-][go1632]  |   | -  | + | +    | -      |     |      |     | -    | -     |
+| Honors throttling response                                                     | X        | [-][go1632]  |   | -  | + | +    | -      |     |      |     | -    | -     |
+| Multi-destination spec compliance                                              | X        | +  |   |    | [-][py1109] |      | -      |     |      |     | -    | -     |
+| [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
+| Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    |     | -    | -     |
+| Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    |     | -    | -     |
+| Zipkin V2 JSON                                                                 | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      |     | -    |     | -    | -     |
+| Service name mapping                                                           |          | [-][go1777] | + | +  | +  | +    | +      | +   | +    |     | +    | +     |
+| SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    |     | +    | +     |
+| InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | -   | +    |     | +    | +     |
+| Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    |     | +    | +     |
+| Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    |     | +    | +     |
+| Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    |     | +    | +     |
+| Error Status mapping                                                           |          | +  | + |    |             | +    |        |     | +    |     | +    | -     |
+| Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    |     | +    | +     |
+| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    |        |     | +    |     | +    | +     |
+| [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
+| Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    |        |     | +    |     | +    | +     |
+| Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    |        |     |      |     | -    | -     |
+| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    |        |     | +    |     | -    | -     |
+| Service name mapping                                                           |          | +  | + |    | +           | +    |        |     |      |     | +    | +     |
+| Resource to Process mapping                                                    |          | +  | + |    | +           | +    |        |     | +    |     | +    | -     |
+| InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    |        |     | +    |     | +    | -     |
+| Status mapping                                                                 |          | +  | + |    | +           | +    |        |     | +    |     | +    | +     |
+| Error Status mapping                                                           |          | +  | + |    | +           | +    |        |     | +    |     | +    | -     |
+| Events converted to Logs                                                       |          | +  | + |    | +           | +    |        |     | +    |     | +    | +     |
+| OpenCensus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
+| TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
+| Prometheus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
+| TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
+
+[go1085]: https://github.com/open-telemetry/opentelemetry-go/issues/1085
+[go1516]: https://github.com/open-telemetry/opentelemetry-go/issues/1516
+[go1606]: https://github.com/open-telemetry/opentelemetry-go/issues/1606
+[go1632]: https://github.com/open-telemetry/opentelemetry-go/issues/1632
+[go1777]: https://github.com/open-telemetry/opentelemetry-go/issues/1777
+
+[py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
+[py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059
+[py1106]: https://github.com/open-telemetry/opentelemetry-python/issues/1106
+[py1108]: https://github.com/open-telemetry/opentelemetry-python/issues/1108
+[py1109]: https://github.com/open-telemetry/opentelemetry-python/issues/1109
+[py1174]: https://github.com/open-telemetry/opentelemetry-python/issues/1174
+[py1437]: https://github.com/open-telemetry/opentelemetry-python/issues/1437
+[py1779]: https://github.com/open-telemetry/opentelemetry-python/issues/1779
