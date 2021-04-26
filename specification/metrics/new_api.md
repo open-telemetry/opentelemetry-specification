@@ -444,7 +444,7 @@ meter.CreateObservableCounter<UInt64>("caesium_oscillates", () => clock.GetCaesi
 
 #### Asynchronous Counter operations
 
-Asynchronous Counter is only intended for asynchronous scenario. The only
+Asynchronous Counter is only intended for an asynchronous scenario. The only
 operation is provided by the `callback`, which is registered during the
 [Asynchronous Counter creation](#asynchronous-counter-creation).
 
