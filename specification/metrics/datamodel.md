@@ -286,14 +286,14 @@ Every OTLP metric data point has two associated timestamps.  The
 first, mandatory timestamp is the one associated with the observation,
 the moment when the measurement became current or took effect, and is
 referred to as `TimeUnixNano`.  The second, optional timestamp is used
-to indicate when a series of events is unbroken, and is referred to as
+to indicate when a sequence of points is unbroken, and is referred to as
 `StartTimeUnixNano`.
 
 The second timestamp is strongly recommended for Sum, Histogram, an
 Summary points, as it is necessary to correctly interpret the rate
 from an OTLP stream, in a manner that is aware of restarts.  The use
 of `StartTimeUnixNano` to indicate the start of an unbroken sequence
-of measurements means it can also be used to encode implicit gaps in
+of points means it can also be used to encode implicit gaps in
 the stream.
 
 The notion of temporality refers to the way additive quanties are
