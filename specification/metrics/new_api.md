@@ -412,7 +412,7 @@ def pf_callback():
         (10465,    ("pid", 880), ("bitness", 32)),
     )
 
-page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
 ```
 
 ```python
@@ -424,7 +424,7 @@ def pf_callback(result):
     result.Observe(37741921, ("pid", 4),   ("bitness", 64))
     result.Observe(10465,    ("pid", 880), ("bitness", 32))
 
-page_faults_observable_counter = meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
 ```
 
 ```csharp
@@ -439,7 +439,7 @@ interface IAtomicClock
 
 IAtomicClock clock = AtomicClock.Connect();
 
-var obCaesiumOscillates = meter.CreateObservableCounter<UInt64>("caesium_oscillates", () => clock.GetCaesiumOscillates());
+meter.CreateObservableCounter<UInt64>("caesium_oscillates", () => clock.GetCaesiumOscillates());
 ```
 
 #### Asynchronous Counter operations
