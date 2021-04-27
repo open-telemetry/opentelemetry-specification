@@ -129,9 +129,10 @@ groups:
       attributes:
         - id: routing_key
           type: string
+          required:
+            conditional: Unless it is empty.          
           brief: >
             In RabbitMQ, the destination is defined by an exchange and a routing key.
-            The routing key MUST be provided to this attribute, unless it is empty.
           examples: 'myKey'
 
     - id: messaging.kafka
