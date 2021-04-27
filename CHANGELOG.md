@@ -25,6 +25,10 @@ release.
 
 ### Compatibility
 
+### OpenTelemetry Protocol
+
+- Fix incorrect table of transient errors ([#1642](https://github.com/open-telemetry/opentelemetry-specification/pull/1642))
+
 ## v1.2.0 (2021-04-14)
 
 ### Context

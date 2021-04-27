@@ -59,27 +59,7 @@ The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXP
 
 ## Retry
 
-[Transient errors](#transient-errors) MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
-
-## Transient Errors
-
-Transient errors are errors which expect the backend to recover. The following status codes are defined as transient errors:
-
-| HTTP Status Code | Description |
-| ---------------- | ----------- |
-| 408 | Request Timeout |
-| 5xx | Server Errors |
-
-| gRPC Status Code | Description |
-| ---------------- | ----------- |
-| 1  | Cancelled |
-| 4  | Deadline Exceeded |
-| 8  | Resource Exhausted |
-| 10 | Aborted |
-| 10 | Out of Range |
-| 14 | Unavailable |
-| 15 | Data Loss |
-
-Additional details on transient errors can be found in the OTLP specification for [gRPC](otlp.md#otlpgrpc-response) and [HTTP](otlp.md#failures).
+Transient errors MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
+The list of status codes defined as transient errors can be found in the OTLP specification for [gRPC](otlp.md#otlpgrpc-response) and [HTTP](otlp.md#failures).
 
 [otlphttp-req]: otlp.md#otlphttp-request
