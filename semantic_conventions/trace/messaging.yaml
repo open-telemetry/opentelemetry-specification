@@ -132,7 +132,7 @@ groups:
           required:
             conditional: Unless it is empty.          
           brief: >
-            In RabbitMQ, the destination is defined by an exchange and a routing key.
+            RabbitMQ message routing key.
           examples: 'myKey'
 
     - id: messaging.kafka
