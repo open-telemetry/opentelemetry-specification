@@ -363,6 +363,11 @@ they are not base64-encoded like it is defined in the standard
 The hex encoding is used for `trace_id` and `span_id` fields in all OTLP
 Protobuf messages, e.g. the `Span`, `Link`, `LogRecord`, etc. messages.
 
+Note that according to [Protobuf specs](
+https://developers.google.com/protocol-buffers/docs/proto3#json) 64-bit integer
+numbers in JSON-encoded payloads are encoded as decimal strings, and either
+numbers or strings are accepted when decoding.
+
 #### OTLP/HTTP Response
 
 Response body MUST be the appropriate serialized Protobuf message (see below for
