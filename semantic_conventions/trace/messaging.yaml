@@ -130,7 +130,7 @@ groups:
         - id: routing_key
           type: string
           required:
-            conditional: Unless it is empty.          
+            conditional: Unless it is empty.
           brief: >
             RabbitMQ message routing key.
           examples: 'myKey'
