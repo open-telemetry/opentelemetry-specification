@@ -11,6 +11,7 @@ release.
 
 - Added `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. ([#1612](https://github.com/open-telemetry/opentelemetry-specification/pull/1612))
 - Added `OTEL_EXPORTER_ZIPKIN_TIMEOUT` environment variable. ([#1636](https://github.com/open-telemetry/opentelemetry-specification/pull/1636))
+- Added Suppress Instrumentation context key. ([#1653](https://github.com/open-telemetry/opentelemetry-specification/pull/1653))
 
 ### Traces
 

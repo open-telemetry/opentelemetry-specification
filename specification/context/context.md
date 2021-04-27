@@ -15,6 +15,8 @@ Table of Contents
   - [Get current Context](#get-current-context)
   - [Attach Context](#attach-context)
   - [Detach Context](#detach-context)
+- [Predefined Keys](#predefined-keys)
+  - [Suppress Instrumentation](#suppress-instrumentation)
 
 </details>
 
@@ -125,3 +127,26 @@ The API MUST accept the following parameters:
 
 The API MAY return a value used to check whether the operation
 was successful or not.
+
+## Predefined Keys
+
+The following are predefined keys that may modify the behavior of multiple signals.
+For each key, there MUST be corresponding methods to set and get its value.
+The key itself MUST NOT be exposed publicly.
+
+### Suppress Instrumentation
+
+In some cases it may be useful to temporarily disable instrumentation.
+For example, this may be used to prevent span exports from being traced and exported,
+or by an instrumentation which wraps a lower-level package which may also be
+instrumented in order to prevent duplicate spans.
+
+If this key is set to `true`, the following behavior is changed:
+
+- Any `Span` created by `StartSpan` MUST be a non-recording `Span`.
+- `Propagator#Inject` MUST NOT modify the carrier.
+- `Propagator#Extract` MUST return the `Context` passed to it as an argument unchanged.
+- `Metrics` MUST NOT be recorded.
+
+If this key is not set it is assumed to be `false`.
+The `get` method for this key MAY return `false` if the key is unset.
