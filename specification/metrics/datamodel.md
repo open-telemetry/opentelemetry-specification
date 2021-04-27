@@ -413,12 +413,12 @@ time range covered by the output time range.
 
 ### Sum and Histogram points with cumulative aggregation temporality
 
-For cumulative aggregation temporality, temporal alignment uses linear
-interpolation to calculate the value of the sequence at specific time.
-First compute the most recent value of the stream before the output
-`TimeUnixNano` and the next value after the output `TimeUnixNano`,
-assume the sum or count rises linearly, and calculate an interpolated
-value for the output `TimeUnixNano`.
+For cumulative aggregation temporality, Sum values, Histogram bucket
+counts, and the Histogram sum and count fields, temporal alignment can
+be logically performed by transforming the cumulative stream into a
+delta stream, using the proportional temporal alignment process for
+delta streams, and then transforming the resulting delta back into a
+cumulative stream.
 
 ### Gauge points
 
