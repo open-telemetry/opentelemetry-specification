@@ -362,6 +362,46 @@ Pending
 
 Pending
 
+## Reaggregation
+
+Reaggregation may be used to correctly combine multiple metric streams
+into a single stream, according to their semantics.  Reaggregation can
+be used to remove attributes from metric data points and resources and
+to lower temporal resolution.
+
+Reaggregation has already been described in specific examples, for
+example, transforming delta into cumulative aggregation temporality,
+and the process of inserting true reset points in cumulative streams.
+
+Reaggregation should be applied after resolving overlaps, otherwise
+overlapping points will be reaggregated together incorrectly.
+
+After resolving overlaps, the first step in reaggregation is to
+perform temporal alignment on the desired streams to the desired
+output resolution.
+
+Following overlap resolution and temporal alignment, the next step is
+to remove unwanted attributes.  At this point a number of overlapping
+streams map onto one output stream, and a number of
+temporally-realigned input points have been computed mapping onto one
+output point.  Next, apply the natural aggregation function
+corresponding to the stream point kind, yielding output point values.
+
+### Identifying reaggregated streams
+
+When a new output stream is produced by the reaggregation process, the
+reaggregation processor is responsible for remembering the state of
+its input streams (for correct ovelrap handling) and its start time.
+
+Points written to the output stream use `StartTimeUnixNano` to convey
+an unbroken sequence of observations of the aggregated streams.  When
+the reaggregating processor forgets a stream because of the staleness
+of its inpouts, it should be sure to use a new `StartTimeUnixNano`
+if the stream is ever resumed.
+
+Reaggregating processors are responsible for ensuring that their
+outputs do not overlap.
+
 ## Footnotes
 
 <a name="otlpdatapointfn">[1]</a>: OTLP supports data point kinds that do not

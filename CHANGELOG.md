@@ -15,6 +15,8 @@ release.
 
 ### Metrics
 
+- Add detail about reaggregation for safe attribute removal and to lower temporal resolution. ()
+
 ### Logs
 
 ### Semantic Conventions
