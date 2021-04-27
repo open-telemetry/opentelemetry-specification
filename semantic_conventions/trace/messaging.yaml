@@ -121,6 +121,18 @@ groups:
         Semantic convention for servers that consume messages received from messaging systems
         and always send back replies directed to the producers of these messages.
 
+    - id: messaging.rabbitmq
+      prefix: messaging.rabbitmq
+      extends: messaging
+      brief: >
+        Attributes for RabbitMQ
+      attributes:
+        - id: routing_key
+          type: string
+          brief: >
+            In RabbitMQ, the destination is defined by an exchange and a routing key.
+            The routing key MUST be provided to this attribute, unless it is empty.
+
     - id: messaging.kafka
       prefix: messaging.kafka
       extends: messaging
