@@ -94,6 +94,30 @@ The Data Model aims to successfully represent 3 sorts of logs and events:
   we include in the logs. We can likely modify the source code of the
   application if needed.
 
+### Definitions Used in this Document
+
+In this document we refer to types `any` and `map<string, any>`, defined as
+follows.
+
+#### Type `any`
+
+Value of type `any` can be one of the following:
+
+- A scalar value: number, string or boolean,
+
+- An array (a list) of `any` values,
+
+- A `map<string, any>`.
+
+#### Type `map<string, any>`
+
+Value of type `map<string, any>` is a map of string keys to `any` values. The
+keys in the map are unique (duplicate keys are not allowed). The representation
+of the map is language-dependent.
+
+Arbitrary deep nesting of values for arrays and maps is allowed (essentially
+allows to represent an equivalent of a JSON object).
+
 ### Field Kinds
 
 This Data Model defines a logical model for a log record (irrespective of the
@@ -102,8 +126,8 @@ fields:
 
 - Named top-level fields of specific type and meaning.
 
-- Fields stored in the key/value pair lists, which can contain arbitrary values
-  of different types. The keys and values for well-known fields follow semantic
+- Fields stored as `map<string, any>`, which can contain arbitrary values of
+  different types. The keys and values for well-known fields follow semantic
   conventions for key names and possible values that allow all parties that work
   with the field to have the same interpretation of the data. See references to
   semantic conventions for `Resource` and `Attributes` fields and examples in
@@ -118,7 +142,7 @@ The reasons for having these 2 kinds of fields are:
 - Ability to enforce types of named fields, which is very useful for compiled
   languages with type checks.
 
-- Flexibility to represent less frequent data via key/value pair lists. This
+- Flexibility to represent less frequent data as `map<string, any>`. This
   includes well-known data that has standardized semantics as well as arbitrary
   custom data that the application may want to include in the logs.
 
@@ -137,11 +161,6 @@ Both of the above conditions were required to give the field a place in the
 top-level structure of the record.
 
 ## Log and Event Record Definition
-
-Note: below we use type `any`, which can be a scalar value (number, string or
-boolean), or an array or map of values. Arbitrary deep nesting of values for
-arrays and maps is allowed (essentially allow to represent an equivalent of a
-JSON object).
 
 [Appendix A](#appendix-a-example-mappings) contains many examples that show how
 existing log formats map to the fields defined below. If there are questions
@@ -377,30 +396,27 @@ occurrence of the event coming from the same source. This field is optional.
 
 ### Field: `Resource`
 
-Type: key/value pair list.
+Type: `map<string, any>`.
 
 Description: Describes the source of the log, aka
-[resource](../overview.md#resources).
-"key" of each pair is a `string` and "value" is of `any` type. Multiple
-occurrences of events coming from the same event source can happen across time
-and they all have the same value of `Resource`. Can contain for example
-information about the application that emits the record or about the
-infrastructure where the application runs. Data formats that represent this data
-model may be designed in a manner that allows the `Resource` field to be
-recorded only once per batch of log records that come from the same source.
-SHOULD follow OpenTelemetry
+[resource](../overview.md#resources). Multiple occurrences of events coming from
+the same event source can happen across time and they all have the same value of
+`Resource`. Can contain for example information about the application that emits
+the record or about the infrastructure where the application runs. Data formats
+that represent this data model may be designed in a manner that allows the
+`Resource` field to be recorded only once per batch of log records that come
+from the same source. SHOULD follow OpenTelemetry
 [semantic conventions for Resources](../resource/semantic_conventions/README.md).
 This field is optional.
 
 ### Field: `Attributes`
 
-Type: key/value pair list.
+Type: `map<string, any>`.
 
-Description: Additional information about the specific event occurrence. "key"
-of each pair is a `string` and "value" is of `any` type. Unlike the `Resource`
-field, which is fixed for a particular source, `Attributes` can vary for each
-occurrence of the event coming from the same source. Can contain information
-about the request context (other than TraceId/SpanId). SHOULD follow
+Description: Additional information about the specific event occurrence. Unlike
+the `Resource` field, which is fixed for a particular source, `Attributes` can
+vary for each occurrence of the event coming from the same source. Can contain
+information about the request context (other than TraceId/SpanId). SHOULD follow
 OpenTelemetry
 [semantic conventions for Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
@@ -632,13 +648,13 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
   <tr>
     <td>Dimensions</td>
-    <td>map of string to string</td>
+    <td>map&lt;string, string></td>
     <td>Helps to define the identity of the event source together with EventType and Category. Multiple occurrences of events coming from the same event source can happen across time and they all have the value of Dimensions. </td>
     <td>Resource</td>
   </tr>
   <tr>
     <td>Properties</td>
-    <td>map of string to any</td>
+    <td>map&lt;string, any></td>
     <td>Additional information about the specific event occurrence. Unlike Dimensions which are fixed for a particular event source, Properties can have different values for each occurrence of the event coming from the same event source.</td>
     <td>Attributes</td>
   </tr>
@@ -685,7 +701,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
   <tr>
     <td>fields</td>
-    <td>Map of any</td>
+    <td>map&lt;string, any></td>
     <td>Specifies a JSON object that contains explicit custom fields.</td>
     <td>Attributes</td>
   </tr>
