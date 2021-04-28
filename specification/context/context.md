@@ -16,7 +16,7 @@ Table of Contents
   - [Attach Context](#attach-context)
   - [Detach Context](#detach-context)
 - [Predefined Keys](#predefined-keys)
-  - [Suppress Instrumentation](#suppress-instrumentation)
+  - [Suppress Tracing](#suppress-tracing)
 
 </details>
 
