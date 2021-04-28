@@ -462,6 +462,8 @@ The algorithm is scheduled out as follows:
     - Add the current value to the cumulative counter
     - Output a new cumulative point with the original start time and current
       last seen time and count.
+  - if the current point precedes the start time, then drop this point.
+    Note: there are algorithms which can deal with late arriving points.
   - if the next point does NOT align with the expected next-time window, then
     reset the counter following the same steps performed as if the current point
     was the first point seen.

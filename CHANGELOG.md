@@ -16,6 +16,10 @@ release.
 
 ### Metrics
 
+- Expand description of Event Model and Instruments. ([#1614](https://github.com/open-telemetry/opentelemetry-specification/pull/1614))
+- Flesh out metric identity and single-write principle. ([#1574](https://github.com/open-telemetry/opentelemetry-specification/pull/1574))
+- Expand `Sum` metric description in the data model and delta-to-cumulative handling. ([#1618](https://github.com/open-telemetry/opentelemetry-specification/pull/1618))
+
 ### Logs
 
 ### Semantic Conventions
