@@ -11,7 +11,6 @@ release.
 
 - Add `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. ([#1612](https://github.com/open-telemetry/opentelemetry-specification/pull/1612))
 - Add `OTEL_EXPORTER_ZIPKIN_TIMEOUT` environment variable. ([#1636](https://github.com/open-telemetry/opentelemetry-specification/pull/1636))
-- `db.statement` MAY be disabled ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
 
 ### Traces
 
@@ -27,6 +26,7 @@ release.
 - Add details for filling resource for AWS Lambda([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
 - Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file.
 - Clarify usage of "otel." attribute namespace ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640)).
+- Add possibility to disable `db.statement` ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
 
 ### Compatibility
 
