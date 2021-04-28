@@ -14,6 +14,7 @@ Table of Contents
 * [TracerProvider](#tracerprovider)
   * [TracerProvider operations](#tracerprovider-operations)
 * [Context Interaction](#context-interaction)
+  * [Suppress Tracing](#suppress-tracing)
 * [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
 * [SpanContext](#spancontext)
@@ -145,6 +146,8 @@ instance:
 
 - Extract the `Span` from a `Context` instance
 - Insert the `Span` to a `Context` instance
+- Set a `SuppressTracing` flag on a `Context` instance
+- Unset the `SuppressTracing` flag on a `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
 access to the [Context Key](../context/context.md#create-a-key) used by the Tracing API implementation.
@@ -159,6 +162,14 @@ the following functionality:
 All the above functionalities operate solely on the context API, and they MAY be
 exposed as either static methods on the trace module, or as static methods on a class
 inside the trace module. This functionality SHOULD be fully implemented in the API when possible.
+
+### Suppress Tracing
+
+In some cases it may be useful to temporarily suppress tracing.
+For example, this may be used to prevent span exports from being traced and exported,
+or by an instrumentation which wraps a lower-level package which may also be
+instrumented in order to prevent duplicate spans. To see how tracing is suppressed,
+see [SDK Span creation](./sdk.md#sdk-span-creation).
 
 ## Tracer
 
@@ -344,6 +355,9 @@ The API MUST accept the following parameters:
 
   The semantic parent of the Span MUST be determined according to the rules
   described in [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context).
+
+  If the `Context` key described in [Suppress Tracing](#suppress-tracing) is set to true,
+  the newly created `Span` should be a non-recording `Span` with an invalid `SpanContext`.
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
 - [`Attributes`](../common/common.md#attributes). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling

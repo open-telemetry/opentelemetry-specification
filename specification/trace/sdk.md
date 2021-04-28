@@ -183,6 +183,8 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    A non-recording span MAY be implemented using the same mechanism as when a
    `Span` is created without an SDK installed or as described in
    [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
+   If the [`SuppressTracing`](./api.md#suppress-tracing) `Context` flag is set,
+   the newly created `Span` should be a non-recording `Span`.
 
 ### Sampler
 
