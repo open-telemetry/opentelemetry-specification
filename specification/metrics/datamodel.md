@@ -271,7 +271,7 @@ in OTLP consist of the following:
   - A time window (of `(start, end]`) time for which the Sum was calculated.
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
-      `00:00:00 UTC on 1 January`
+      `00:00:00 UTC on 1 January 1970`
 
 The aggregation temporality is used to understand the context in which the sum
 was calculated. When the aggregation temporality is "delta", we expect to have
