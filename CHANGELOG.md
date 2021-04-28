@@ -14,7 +14,7 @@ release.
 
 ### Traces
 
-- `Get Tracer` should use an emptry string if the specified `name` is null. ([#1654](https://github.com/open-telemetry/opentelemetry-specification/pull/1654))
+- `Get Tracer` should use an empty string if the specified `name` is null. ([#1654](https://github.com/open-telemetry/opentelemetry-specification/pull/1654))
 
 ### Metrics
 
