@@ -134,9 +134,9 @@ The following are predefined keys that may modify the behavior of multiple signa
 For each key, there MUST be corresponding methods to set and get its value.
 The key itself MUST NOT be exposed publicly.
 
-### Suppress Instrumentation
+### Suppress Tracing
 
-In some cases it may be useful to temporarily disable instrumentation.
+In some cases it may be useful to temporarily suppress tracing.
 For example, this may be used to prevent span exports from being traced and exported,
 or by an instrumentation which wraps a lower-level package which may also be
 instrumented in order to prevent duplicate spans.
@@ -145,8 +145,6 @@ If this key is set to `true`, the following behavior is changed:
 
 - Any `Span` created by `StartSpan` MUST be a non-recording `Span`.
 - `Propagator#Inject` MUST NOT modify the carrier.
-- `Propagator#Extract` MUST return the `Context` passed to it as an argument unchanged.
-- `Metrics` MUST NOT be recorded.
 
 If this key is not set it is assumed to be `false`.
 The `get` method for this key MAY return `false` if the key is unset.
