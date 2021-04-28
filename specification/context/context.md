@@ -141,10 +141,6 @@ For example, this may be used to prevent span exports from being traced and expo
 or by an instrumentation which wraps a lower-level package which may also be
 instrumented in order to prevent duplicate spans.
 
-If this key is set to `true`, the following behavior is changed:
+If this key is set to `true`, any `Span` created by `StartSpan` MUST be a non-recording `Span`.
 
-- Any `Span` created by `StartSpan` MUST be a non-recording `Span`.
-- `Propagator#Inject` MUST NOT modify the carrier.
-
-If this key is not set it is assumed to be `false`.
-The `get` method for this key MUST return `false` if the key is unset.
+The `get` function for this key MUST return `false` if the key is not set.
