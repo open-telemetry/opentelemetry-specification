@@ -147,4 +147,4 @@ If this key is set to `true`, the following behavior is changed:
 - `Propagator#Inject` MUST NOT modify the carrier.
 
 If this key is not set it is assumed to be `false`.
-The `get` method for this key MAY return `false` if the key is unset.
+The `get` method for this key MUST return `false` if the key is unset.
