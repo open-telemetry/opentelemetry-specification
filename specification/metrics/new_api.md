@@ -29,7 +29,23 @@ Table of Contents
   * [Meter operations](#meter-operations)
 * [Instrument](#instrument)
   * [Counter](#counter)
-    * [Counter Creation](#counter-creation)
+    * [Counter creation](#counter-creation)
+    * [Counter operations](#counter-operations)
+  * [Asynchronous Counter](#asynchronous-counter)
+    * [Asynchronous Counter creation](#asynchronous-counter-creation)
+    * [Asynchronous Counter operations](#asynchronous-counter-operations)
+  * [Asynchronous Gauge](#asynchronous-gauge)
+    * [Asynchronous Gauge creation](#asynchronous-gauge-creation)
+    * [Asynchronous Gauge operations](#asynchronous-gauge-operations)
+  * [Histogram](#histogram)
+    * [Histogram creation](#histogram-creation)
+    * [Histogram operations](#histogram-operations)
+  * [UpDownCounter](#updowncounter)
+    * [UpDownCounter creation](#updowncounter-creation)
+    * [UpDownCounter operations](#updowncounter-operations)
+  * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
+    * [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
+    * [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
 * [Measurement](#measurement)
 
 </details>
@@ -44,19 +60,23 @@ The Metrics API consists of these main components:
 * [Instrument](#instrument) is responsible for reporting
   [Measurements](#measurement).
 
-Here is an example of the object hierarchy inside a process instrumented with the
-metrics API:
+Here is an example of the object hierarchy inside a process instrumented with
+the metrics API:
 
 ```text
 +-- MeterProvider(default)
     |
     +-- Meter(name='io.opentelemetry.runtime', version='1.0.0')
     |   |
+    |   +-- Instrument<Asynchronous Gauge, int>(name='cpython.gc', attributes=['generation'], unit='kB')
+    |   |
     |   +-- instruments...
     |
     +-- Meter(name='io.opentelemetry.contrib.mongodb.client', version='2.3.0')
         |
         +-- Instrument<Counter, int>(name='client.exception', attributes=['type'], unit='1')
+        |
+        +-- Instrument<Histogram, double>(name='client.duration', attributes=['net.peer.host', 'net.peer.port'], unit='ms')
         |
         +-- instruments...
 
@@ -108,9 +128,9 @@ This API MUST accept the following parameters:
   the specified value is invalid SHOULD be logged. A library, implementing the
   OpenTelemetry API *may* also ignore this name and return a default instance
   for all calls, if it does not support "named" functionality (e.g. an
-  implementation which is not even observability-related). A MeterProvider
-  could also return a no-op Meter here if application owners configure the SDK
-  to suppress telemetry produced by this library.
+  implementation which is not even observability-related). A MeterProvider could
+  also return a no-op Meter here if application owners configure the SDK to
+  suppress telemetry produced by this library.
 * `version` (optional): Specifies the version of the instrumentation library
   (e.g. `1.0.0`).
 
@@ -225,7 +245,7 @@ Example uses for `Counter`:
 * count the number of checkpoints run
 * count the number of HTTP 5xx errors
 
-#### Counter Creation
+#### Counter creation
 
 There MUST NOT be any API for creating a `Counter` other than with a
 [`Meter`](#meter). This MAY be called `CreateCounter`. If strong type is
@@ -303,6 +323,229 @@ counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_u
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
+
+### Asynchronous Counter
+
+Asynchronous Counter is an asynchronous Instrument which reports
+[monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing
+value(s) when the instrument is being observed.
+
+Example uses for Asynchronous Counter:
+
+* [CPU time](https://wikipedia.org/wiki/CPU_time), which could be reported for
+  each thread, each process or the entire system. For example "the CPU time for
+  process A running in user mode, measured in seconds".
+* The number of [page faults](https://wikipedia.org/wiki/Page_fault) for each
+  process.
+
+#### Asynchronous Counter creation
+
+There MUST NOT be any API for creating an Asynchronous Counter other than with a
+[`Meter`](#meter). This MAY be called `CreateObservableCounter`. If strong type
+is desired, the client can decide the language idomatic name(s), for example
+`CreateUInt64ObservableCounter`, `CreateDoubleObservableCounter`,
+`CreateObservableCounter<UInt64>`, `CreateObservableCounter<double>`.
+
+It is highly recommended that implementations use the name `ObservableCounter`
+(or any language idiomatic variation, e.g. `observable_counter`) unless there is
+a strong reason not to do so. Please note that the name has nothing to do with
+[asynchronous
+pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
+[observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+* A `callback` function.
+
+The `callback` function is responsible for reporting the
+[Measurement](#measurement)s. It will only be called when the Meter is being
+observed. Individual language client SHOULD define whether this callback
+function needs to be reentrant safe / thread safe or not.
+
+Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
+callback function reports the absolute value of the counter. To determine the
+reported rate the counter is changing, the difference between successive
+measurements is used.
+
+The callback function SHOULD NOT take indefinite amount of time. If multiple
+independent SDKs coexist in a running process, they MUST invoke the callback
+function(s) independently.
+
+Individual language client can decide what is the idomatic approach. Here are
+some examples:
+
+* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
+* Use an observer argument to allow individual `Measurement`s to be reported.
+
+User code is recommended not to provide more than one `Measurement` with the
+same `attributes` in a single callback. If it happens, the
+[SDK](./README.md#sdk) can decide how to handle it. For example, during the
+callback invocation if two measurements `value=1, attributes={pid:4 bitness:64}`
+and `value=2, attributes={pid:4, bitness:64}` are reported, the SDK can decide
+to simply let them pass through (so the downstream consumer can handle
+duplication), drop the entire data, pick the last one, or something else. The
+API must treat observations from a single callback as logically taking place at
+a single instant, such that when recorded, observations from a single callback
+MUST be reported with identical timestamps.
+
+The API SHOULD provide some way to pass `state` to the callback. Individual
+language client can decide what is the idomatic approach (e.g. it could be an
+additional parameter to the callback function, or captured by the lambda
+closure, or something else).
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+def pf_callback():
+    # Note: in the real world these would be retrieved from the operating system
+    return (
+        (8,        ("pid", 0),   ("bitness", 64)),
+        (37741921, ("pid", 4),   ("bitness", 64)),
+        (10465,    ("pid", 880), ("bitness", 32)),
+    )
+
+meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+```
+
+```python
+# Python
+
+def pf_callback(result):
+    # Note: in the real world these would be retrieved from the operating system
+    result.Observe(8,        ("pid", 0),   ("bitness", 64))
+    result.Observe(37741921, ("pid", 4),   ("bitness", 64))
+    result.Observe(10465,    ("pid", 880), ("bitness", 32))
+
+meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+```
+
+```csharp
+// C#
+
+// A simple scenario where only one value is reported
+
+interface IAtomicClock
+{
+    UInt64 GetCaesiumOscillates();
+}
+
+IAtomicClock clock = AtomicClock.Connect();
+
+meter.CreateObservableCounter<UInt64>("caesium_oscillates", () => clock.GetCaesiumOscillates());
+```
+
+#### Asynchronous Counter operations
+
+Asynchronous Counter is only intended for an asynchronous scenario. The only
+operation is provided by the `callback`, which is registered during the
+[Asynchronous Counter creation](#asynchronous-counter-creation).
+
+### Histogram
+
+`Histogram` is a synchronous Instrument which can be used to report arbitrary
+values that are likely to be statistically meaningful. It is intended for
+statistics such as histograms, summaries, and percentile.
+
+Example uses for `Histogram`:
+
+* the request duration
+* the size of the response payload
+
+#### Histogram creation
+
+TODO
+
+#### Histogram operations
+
+##### Record
+
+TODO
+
+### Asynchronous Gauge
+
+Asynchronous Gauge is an asynchronous Instrument which reports non-additive
+value(s) (_e.g. the room temperature - it makes no sense to report the
+temperature value from multiple rooms and sum them up_) when the instrument is
+being observed.
+
+Note: if the values are additive (_e.g. the process heap size - it makes sense
+to report the heap size from multiple processes and sum them up, so we get the
+total heap usage_), use [Asynchronous Counter](#asynchronous-counter) or
+[Asynchronous UpDownCounter](#asynchronous-updowncounter).
+
+Example uses for Asynchronous Gauge:
+
+* the current room temperature
+* the CPU fan speed
+
+#### Asynchronous Gauge creation
+
+TODO
+
+#### Asynchronous Gauge operations
+
+Asynchronous Gauge is only intended for an asynchronous scenario. The only
+operation is provided by the `callback`, which is registered during the
+[Asynchronous Gauge creation](#asynchronous-gauge-creation).
+
+### UpDownCounter
+
+`UpDownCounter` is a synchronous Instrument which supports increments and
+decrements.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[Counter](#counter) instead.
+
+Example uses for `UpDownCounter`:
+
+* the number of active requests
+* the number of items in a queue
+
+#### UpDownCounter creation
+
+TODO
+
+#### UpDownCounter operations
+
+##### Add
+
+TODO
+
+### Asynchronous UpDownCounter
+
+Asynchronous UpDownCounter is an asynchronous Instrument which reports additive
+value(s) (_e.g. the process heap size - it makes sense to report the heap size
+from multiple processes and sum them up, so we get the total heap usage_) when
+the instrument is being observed.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[Asynchronous Counter](#asynchronous-counter) instead; if the value is
+non-additive, use [Asynchronous Gauge](#asynchronous-gauge) instead.
+
+Example uses for Asynchronous UpDownCounter:
+
+* the process heap size
+* the approximate number of items in a lock-free circular buffer
+
+#### Asynchronous UpDownCounter creation
+
+TODO
+
+#### Asynchronous UpDownCounter operations
+
+Asynchronous UpDownCounter is only intended for an asynchronous scenario. The
+only operation is provided by the `callback`, which is registered during the
+[Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation).
 
 ## Measurement
 
