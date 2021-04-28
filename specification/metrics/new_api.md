@@ -529,7 +529,7 @@ http_server_duration.Record(100, http_method="GET", http_scheme="http"})
 // C#
 
 httpServerDuration.Record(50, ("http.method", "POST"), ("http.scheme", "https"));
-httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "https" });
+httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
 ### Asynchronous Gauge
