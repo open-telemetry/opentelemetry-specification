@@ -14,7 +14,7 @@ release.
 
 ### Traces
 
-- Add InstrumentationLibrary and Resource as Sampler arguments. ([#????](https://github.com/open-telemetry/opentelemetry-specification/pull/????))
+- Add InstrumentationLibrary and Resource as Sampler arguments. ([#1658](https://github.com/open-telemetry/opentelemetry-specification/pull/1658))
 
 ### Metrics
 
