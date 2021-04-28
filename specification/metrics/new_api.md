@@ -484,7 +484,7 @@ Here are some examples that individual language client might consider:
 http_server_duration = meter.create_histogram(
     name="http.server.duration",
     description="measures the duration of the inbound HTTP request",
-    uint="milliseconds",
+    unit="milliseconds",
     value_type=float)
 ```
 
@@ -494,8 +494,7 @@ http_server_duration = meter.create_histogram(
 var httpServerDuration = meter.CreateHistogram<double>(
     "http.server.duration",
     description: "measures the duration of the inbound HTTP request",
-    uint: "milliseconds",
-    description: "number of exceptions caught"
+    unit: "milliseconds"
     );
 ```
 
@@ -508,7 +507,7 @@ Updates the statistics with the specified amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Required parameters:
+Parameters:
 
 * The amount of the `Measurement`.
 * Optional [attributes](../common/common.md#attributes).
