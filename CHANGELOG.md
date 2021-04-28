@@ -22,11 +22,11 @@ release.
 
 ### Semantic Conventions
 
-- Fix the inconsistent formatting of semantic convention enums ([#1598](https://github.com/open-telemetry/opentelemetry-specification/pull/1598/))
-- Add details for filling resource for AWS Lambda([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
+- Fix the inconsistent formatting of semantic convention enums. ([#1598](https://github.com/open-telemetry/opentelemetry-specification/pull/1598/))
+- Add details for filling resource for AWS Lambda. ([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
 - Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file.
-- Clarify usage of "otel." attribute namespace ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640)).
-- Add possibility to disable `db.statement` ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
+- Clarify usage of "otel." attribute namespace. ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640)).
+- Add possibility to disable `db.statement`. ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
 
 ### Compatibility
 
