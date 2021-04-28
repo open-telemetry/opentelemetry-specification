@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Added `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. ([#1612](https://github.com/open-telemetry/opentelemetry-specification/pull/1612))
+- Added `OTEL_EXPORTER_ZIPKIN_TIMEOUT` environment variable. ([#1636](https://github.com/open-telemetry/opentelemetry-specification/pull/1636))
+
 ### Traces
 
 ### Metrics
@@ -19,6 +22,7 @@ release.
 
 - Fix the inconsistent formatting of semantic convention enums ([#1598](https://github.com/open-telemetry/opentelemetry-specification/pull/1598/))
 - Add details for filling resource for AWS Lambda([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
+- Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file.
 
 ### Compatibility
 

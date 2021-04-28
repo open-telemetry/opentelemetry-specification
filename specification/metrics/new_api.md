@@ -31,9 +31,21 @@ Table of Contents
   * [Counter](#counter)
     * [Counter creation](#counter-creation)
     * [Counter operations](#counter-operations)
-  * [CounterFunc](#counterfunc)
-    * [CounterFunc creation](#counterfunc-creation)
-    * [CounterFunc operations](#counterfunc-operations)
+  * [Asynchronous Counter](#asynchronous-counter)
+    * [Asynchronous Counter creation](#asynchronous-counter-creation)
+    * [Asynchronous Counter operations](#asynchronous-counter-operations)
+  * [Asynchronous Gauge](#asynchronous-gauge)
+    * [Asynchronous Gauge creation](#asynchronous-gauge-creation)
+    * [Asynchronous Gauge operations](#asynchronous-gauge-operations)
+  * [Histogram](#histogram)
+    * [Histogram creation](#histogram-creation)
+    * [Histogram operations](#histogram-operations)
+  * [UpDownCounter](#updowncounter)
+    * [UpDownCounter creation](#updowncounter-creation)
+    * [UpDownCounter operations](#updowncounter-operations)
+  * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
+    * [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
+    * [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
 * [Measurement](#measurement)
 
 </details>
@@ -56,11 +68,15 @@ the metrics API:
     |
     +-- Meter(name='io.opentelemetry.runtime', version='1.0.0')
     |   |
+    |   +-- Instrument<Asynchronous Gauge, int>(name='cpython.gc', attributes=['generation'], unit='kB')
+    |   |
     |   +-- instruments...
     |
     +-- Meter(name='io.opentelemetry.contrib.mongodb.client', version='2.3.0')
         |
         +-- Instrument<Counter, int>(name='client.exception', attributes=['type'], unit='1')
+        |
+        +-- Instrument<Histogram, double>(name='client.duration', attributes=['net.peer.host', 'net.peer.port'], unit='ms')
         |
         +-- instruments...
 
@@ -308,13 +324,13 @@ counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
 
-### CounterFunc
+### Asynchronous Counter
 
-`CounterFunc` is an asynchronous Instrument which reports
+Asynchronous Counter is an asynchronous Instrument which reports
 [monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing
 value(s) when the instrument is being observed.
 
-Example uses for `CounterFunc`:
+Example uses for Asynchronous Counter:
 
 * [CPU time](https://wikipedia.org/wiki/CPU_time), which could be reported for
   each thread, each process or the entire system. For example "the CPU time for
@@ -322,13 +338,20 @@ Example uses for `CounterFunc`:
 * The number of [page faults](https://wikipedia.org/wiki/Page_fault) for each
   process.
 
-#### CounterFunc creation
+#### Asynchronous Counter creation
 
-There MUST NOT be any API for creating a `CounterFunc` other than with a
-[`Meter`](#meter). This MAY be called `CreateCounterFunc`. If strong type is
-desired, the client can decide the language idomatic name(s), for example
-`CreateUInt64CounterFunc`, `CreateDoubleCounterFunc`,
-`CreateCounterFunc<UInt64>`, `CreateCounterFunc<double>`.
+There MUST NOT be any API for creating an Asynchronous Counter other than with a
+[`Meter`](#meter). This MAY be called `CreateObservableCounter`. If strong type
+is desired, the client can decide the language idomatic name(s), for example
+`CreateUInt64ObservableCounter`, `CreateDoubleObservableCounter`,
+`CreateObservableCounter<UInt64>`, `CreateObservableCounter<double>`.
+
+It is highly recommended that implementations use the name `ObservableCounter`
+(or any language idiomatic variation, e.g. `observable_counter`) unless there is
+a strong reason not to do so. Please note that the name has nothing to do with
+[asynchronous
+pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
+[observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
 
 The API MUST accept the following parameters:
 
@@ -389,7 +412,7 @@ def pf_callback():
         (10465,    ("pid", 880), ("bitness", 32)),
     )
 
-page_faults_counter_func = meter.create_counter_func(name="PF", description="process page faults", pf_callback)
+meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
 ```
 
 ```python
@@ -401,7 +424,7 @@ def pf_callback(result):
     result.Observe(37741921, ("pid", 4),   ("bitness", 64))
     result.Observe(10465,    ("pid", 880), ("bitness", 32))
 
-page_faults_counter_func = meter.create_counter_func(name="PF", description="process page faults", pf_callback)
+meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
 ```
 
 ```csharp
@@ -416,14 +439,113 @@ interface IAtomicClock
 
 IAtomicClock clock = AtomicClock.Connect();
 
-var obCaesiumOscillates = meter.CreateCounterFunc<UInt64>("caesium_oscillates", () => clock.GetCaesiumOscillates());
+meter.CreateObservableCounter<UInt64>("caesium_oscillates", () => clock.GetCaesiumOscillates());
 ```
 
-#### CounterFunc operations
+#### Asynchronous Counter operations
 
-`CounterFunc` is only intended for asynchronous scenario. The only operation is
-provided by the `callback`, which is registered during the [CounterFunc
-creation](#counterfunc-creation).
+Asynchronous Counter is only intended for an asynchronous scenario. The only
+operation is provided by the `callback`, which is registered during the
+[Asynchronous Counter creation](#asynchronous-counter-creation).
+
+### Histogram
+
+`Histogram` is a synchronous Instrument which can be used to report arbitrary
+values that are likely to be statistically meaningful. It is intended for
+statistics such as histograms, summaries, and percentile.
+
+Example uses for `Histogram`:
+
+* the request duration
+* the size of the response payload
+
+#### Histogram creation
+
+TODO
+
+#### Histogram operations
+
+##### Record
+
+TODO
+
+### Asynchronous Gauge
+
+Asynchronous Gauge is an asynchronous Instrument which reports non-additive
+value(s) (_e.g. the room temperature - it makes no sense to report the
+temperature value from multiple rooms and sum them up_) when the instrument is
+being observed.
+
+Note: if the values are additive (_e.g. the process heap size - it makes sense
+to report the heap size from multiple processes and sum them up, so we get the
+total heap usage_), use [Asynchronous Counter](#asynchronous-counter) or
+[Asynchronous UpDownCounter](#asynchronous-updowncounter).
+
+Example uses for Asynchronous Gauge:
+
+* the current room temperature
+* the CPU fan speed
+
+#### Asynchronous Gauge creation
+
+TODO
+
+#### Asynchronous Gauge operations
+
+Asynchronous Gauge is only intended for an asynchronous scenario. The only
+operation is provided by the `callback`, which is registered during the
+[Asynchronous Gauge creation](#asynchronous-gauge-creation).
+
+### UpDownCounter
+
+`UpDownCounter` is a synchronous Instrument which supports increments and
+decrements.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[Counter](#counter) instead.
+
+Example uses for `UpDownCounter`:
+
+* the number of active requests
+* the number of items in a queue
+
+#### UpDownCounter creation
+
+TODO
+
+#### UpDownCounter operations
+
+##### Add
+
+TODO
+
+### Asynchronous UpDownCounter
+
+Asynchronous UpDownCounter is an asynchronous Instrument which reports additive
+value(s) (_e.g. the process heap size - it makes sense to report the heap size
+from multiple processes and sum them up, so we get the total heap usage_) when
+the instrument is being observed.
+
+Note: if the value grows
+[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+[Asynchronous Counter](#asynchronous-counter) instead; if the value is
+non-additive, use [Asynchronous Gauge](#asynchronous-gauge) instead.
+
+Example uses for Asynchronous UpDownCounter:
+
+* the process heap size
+* the approximate number of items in a lock-free circular buffer
+
+#### Asynchronous UpDownCounter creation
+
+TODO
+
+#### Asynchronous UpDownCounter operations
+
+Asynchronous UpDownCounter is only intended for an asynchronous scenario. The
+only operation is provided by the `callback`, which is registered during the
+[Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation).
 
 ## Measurement
 
