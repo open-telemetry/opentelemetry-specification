@@ -311,7 +311,7 @@ window.
 ![Gauge](img/model-gauge.png)
 
 In this example, we can see an underlying timeseries we are sampling with our
-Gauage.  While the event model *can* sample more than once for a given metric
+Gauge.  While the event model *can* sample more than once for a given metric
 reporting interval, only the last value is reported in the metric stream via
 OTLP.
 
