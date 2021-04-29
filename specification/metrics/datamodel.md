@@ -296,7 +296,31 @@ best tradeoff for their use case.
 
 ### Gauge
 
-Pending
+A [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L174)
+in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
+
+- A set of data points, each containing:
+  - An independent set of Attribute name-value pairs.
+  - A value sampled from some observable timeseries (e.g. current memory usage)
+  - A timestamp when the value was sampled (`time_unix_nano`)
+  - (optional) A timestamp (`start_time_unix_nano`) which has [TBD semantics](https://github.com/open-telemetry/opentelemetry-proto/pull/295).
+
+In OTLP, a Gauge stream represents the last-sampled event for a given time
+window.
+
+![Gauge](img/model-gauge.png)
+
+In this example, we can see an underlying timeseries we are sampling with our
+Gauage.  While the event model *can* sample more than once for a given metric
+reporting interval, only the last value is reported in the metric stream via
+OTLP.
+
+Gauges do not provide an aggregation semantic, instead "last sample value" is
+used when performing operations like temporal alignment or adjusting resolution.
+
+Gauages can be aggregated through transformation into histograms, or other
+metric types. These operations are not done by default, and require direct
+user configuration.
 
 ### Histogram
 
