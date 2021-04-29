@@ -34,16 +34,16 @@ Prometheus Remote Write protocol without loss of features or semantics, through
 well-defined translations of the data, including the ability to automatically
 remove attributes and lower histogram resolution.
 
-## Events → Data → Timeseries
+## Events → Data Stream → Timeseries
 
 The OTLP Metrics protocol is designed as a standard for transporting metric
 data. To describe the intended use of this data and the associated semantic
-meaning, OpenTelemetry metric data types will be linked into a framework
+meaning, OpenTelemetry metric data stream types will be linked into a framework
 containing a higher-level model, about Metrics APIs and discrete input values,
 and a lower-level model, defining the Timeseries and discrete output values.
 The relationship between models is displayed in the diagram below.
 
-![Events  → Data → Timeseries Diagram](img/model-layers.png)
+![Events  → Data Stream → Timeseries Diagram](img/model-layers.png)
 
 This protocol was designed to meet the requirements of the OpenCensus Metrics
 system, particularly to meet its concept of Metrics Views. Views are
@@ -67,9 +67,9 @@ collector. These transformations are:
    allows downstream services to bear the cost of conversion into cumulative
    timeseries, or to forego the cost and calculate rates directly.
 
-OpenTelemetry Metrics data points are designed so that these transformations can
-be applied automatically to points of the same type, subject to conditions
-outlined below. Every OTLP data point has an intrinsic
+OpenTelemetry Metrics data streams are designed so that these transformations
+can be applied automatically to streams of the same type, subject to conditions
+outlined below. Every OTLP data stream has an intrinsic
 [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
 making it semantically well-defined to merge data points across both temporal
 and spatial dimensions. Every OTLP data point also has two meaningful timestamps
@@ -139,45 +139,49 @@ in scope for key design decisions:
 OpenTelemetry fragments metrics into three interacting models:
 
 - An Event model, representing how instrumentation reports metric data.
-- A TimeSeries model, representing how backends store metric data.
-- The *O*pen*T*e*L*emetry *P*rotocol (OTLP) data model representing how metrics
-  are manipulated and transmitted between the Event model and the TimeSeries
-  storage.
+- A Timeseries model, representing how backends store metric data.
+- A Metric Stream model, defining the *O*pen*T*e*L*emetry *P*rotocol (OTLP)
+  representing how metric data streams are manipulated and transmitted between
+  the Event model and the Timeseries storage.
 
 ### Event Model
 
-This specification uses as its foundation a
-[Metrics API consisting of 6 model instruments](api.md), each having distinct
-semantics, that were prototyped in several OpenTelemetry SDKs between July 2019
-and June 2020. The model instruments and their specific use-cases are meant to
-anchor our understanding of the OpenTelemetry data model and are divided into
-three categories:
+The event model is where recording of data happens. Its foundation is made of
+[Instruments](api.md), which are used to record data observations via events.
+These raw events are then transformed in some fashion before being sent to some
+other system.  OpenTelemetry metrics are designed such that the same instrument
+and events can be used in different ways to generate metric streams.
 
-- Synchronous vs. Asynchronous. The act of calling a Metrics API in a
-  synchronous context means the application/library calls the SDK, typically having
-  associated trace context and baggage; an Asynchronous instrument is called at
-  collection time, through a callback, and lacks context.
-- Adding vs. Grouping. Whereas adding instruments express a sum, grouping
-  instruments characterize a group of measurements. The numbers passed to adding
-  instruments define division, in the algebraic sense, while the numbers passed
-  to grouping instruments are generally not. Adding instrument values are always
-  parts of a sum, while grouping instrument values are individual measurements.
-- Monotonic vs. Non-Monotonic. The adding instruments are categorized by whether
-  the derivative of the quantity they express is non-negative. Monotonic
-  instruments are primarily useful for monitoring a rate value, whereas
-  non-monotonic instruments are primarily useful for monitoring a total value.
+![Events → Streams](img/model-event-layer.png)
+
+Even though observation events could be reported directly to a backend, in
+practice this would be infeasible due to the sheer volume of data used in
+observability systems, and the limited amount of network/cpu telemetry
+collection resources available for telemetry collection purposes. The best
+example of this is the Histogram metric where raw events are recorded in a
+compressed format rather than individual timeseries.
+
+> Note: The above picture shows how one instrument can transform events into
+> more than one type of metric stream. There are caveats and nuances for when
+> and how to do this.  Instrument and metric configuration are outlined
+> in the [metrics API specification](api.md).
+
+While OpenTelemetry provides flexibility in how instruments can be transformed
+into metric streams, the instruments are defined such that a reasonable default
+mapping can be provided. The exact
+[OpenTelemetry instruments](api.md##metric-instruments) are more fully
+detailed in the API specification.
 
 In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
-respectively). The instruments and model use-cases will be described in greater
-detail as we link the event model with the other two.
+respectively).
 
 ### Timeseries Model
 
 In this low-level metrics data model, a Timeseries is defined by an entity
 consisting of several metadata properties:
 
-- Metric name and description
+- Metric name
 - Label set
 - Kind of point (integer, floating point, etc)
 - Unit of measurement
@@ -199,7 +203,24 @@ further development of the correspondence between these models.
 
 ### OpenTelemetry Protocol data model
 
-The OpenTelemetry data model for metrics includes four basic point kinds, all of
+The OpenTelmetry protocol data model is composed of Metric data streams. These
+streams are in turn composed of metric data points. Metric data streams
+can be converted directly into Timeseries, and share the same identity
+characteristics for a Timeseries.   A metric stream is identified by:
+
+- The originating `Resource`
+- The metric stream's `name`.
+- The attached `Attribute`s
+- The metric stream's point kind.
+
+It is possible (and likely) that more than one metric stream is created per
+`Instrument` in the event model.
+
+__Note: The same `Resource`, `name` and `Attribute`s but differing point kind
+coming out of an OpenTelemetry SDK is considered an "error state" that should
+be handled by an SDK.__
+
+A metric stream can use one of four basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
 same kind. <sup>[1](#otlpdatapointfn)</sup>
@@ -211,11 +232,12 @@ The basic point kinds are:
 3. Gauge
 4. Histogram
 
-Comparing the OpenTelemetry and Timeseries data models, OTLP carries an
-additional kind of point. Whereas an OTLP Monotonic Sum point translates into a
-Timeseries Counter point, and an OTLP Histogram point translates into a
-Timeseries Histogram point, there are two OTLP data points that become Gauges
-in the Timeseries model: the OTLP Non-Monotonic Sum point and OTLP Gauge point.
+Comparing the OTLP Metric Data Stream and Timeseries data models, Metric stream
+carries an additional kind of point. Whereas an OTLP Monotonic Sum point
+translates into a Timeseries Counter point, and an OTLP Histogram point
+translates into a Timeseries Histogram point, there are two OTLP data points
+that become Gauges in the Timeseries model: the OTLP Non-Monotonic Sum point
+and OTLP Gauge point.
 
 The two points that become Gauges in the Timeseries model are distinguished by
 their built in aggregate function, meaning they define re-aggregation
@@ -224,11 +246,109 @@ histograms.
 
 ## Single-Writer
 
-Pending
+All metric data streams within OTLP must have one logical writer.  This means,
+conceptually, that any Timeseries created from the Protocol must have one
+originating source of truth.  In practical terms, this implies the following:
 
-## Temporarily
+- All metric data streams produced by OTel SDKs must be globally uniquely
+  produced and free from duplicates.   All metric data streams can be uniquely
+  identified in some way.
+- Aggregations of metric streams must only be written from a single logical
+  source.
+  __Note: This implies aggregated metric streams must reach one destination__.
 
-Pending
+In systems, there is the possibility of multiple writers sending data for the
+same metric stream (duplication).  For example, if an SDK implementation fails
+to find uniquely identifying Resource attributes for a component, then all
+instances of that component could be reporting metrics as if they are from the
+same resource.  In this case, metrics will be reported at inconsistent time
+intervals.  For metrics like cumulative sums, this could cause issues where
+pairs of points appear to reset the cumulative sum leading to unusable metrics.
+
+Multiple writers for a metric stream is considered an error state, or
+misbehaving system. Receivers SHOULD presume a single writer was intended and
+eliminate overlap / deduplicate.
+
+Note: Identity is an important concept in most metrics systems.  For example,
+[Prometheus directly calls out uniqueness](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs):
+
+> Care must be taken with `labeldrop` and `labelkeep` to ensure that metrics
+> are still uniquely labeled once the labels are removed.
+
+For OTLP, the Single-Writer principle grants a way to reason over error
+scenarios and take corrective actions.  Additionally, it ensures that
+well-behaved systems can perform metric stream manipulation without undesired
+degradation or loss of visibility.
+
+## Temporality
+
+Every OTLP point has two associated timestamps. For OTLP Sum and Histogram
+points, the two timestamps indicate when the point was reset and when the sum
+was captured. For OTLP Gauge points, the two timestamps indicate when the
+measurement was taken and when it was reported as being still the last value.
+
+The notion of temporality refers to a configuration choice made in the system
+as a whole, indicating whether reported values incorporate previous
+measurements, or not.
+
+- *Cumulative temporality* means that successive data points repeat the starting
+  timestamp. For example, from start time T0, cumulative data points cover time
+  ranges (T<sub>0</sub>, T<sub>1</sub>), (T<sub>0</sub>, T<sub>2</sub>),
+  (T<sub>0</sub>, T<sub>3</sub>), and so on.
+- *Delta temporality* means that successive data points advance the starting
+  timestamp. For example, from start time T0, delta data points cover time
+  ranges (T<sub>0</sub>, T<sub>1</sub>), (T<sub>1</sub>, T<sub>2</sub>),
+  (T<sub>2</sub>, T<sub>3</sub>), and so on.
+
+The use of cumulative temporality for monotonic sums is common, exemplified by
+Prometheus. Systems based in cumulative monotonic sums are naturally simpler, in
+terms of the cost of adding reliability. When collection fails intermittently,
+gaps in the data are naturally averaged from cumulative measurements.
+Cumulative data requires the sender to remember all previous measurements, an
+“up-front” memory cost proportional to cardinality.
+
+The use of delta temporality for metric sums is also common, exemplified by
+Statsd. There is a connection between OpenTelemetry tracing, in which a Span
+event commonly is translated into two metric events (a 1-count and a timing
+measurement). Delta temporality enables sampling and supports shifting the cost
+of cardinality outside of the process.
+
+## Overlap
+
+Overlap occurs when more than one metric data point occurs for a data stream
+within a time window.   This is particularly problematic for data points meant
+to represent an entire time window, e.g. a Histogram reporting population
+density of collected metric data points for a time window.  If two of these show
+up with overlapping time windows, how do backends handle this situation?
+
+We define three principles for handling overlap:
+
+- Resolution (correction via dropping points)
+- Observability (allowing the data to flow to backends)
+- Interpolation (correction via data manipulation)
+
+### Overlap resolution
+
+When more than one process writes the same metric data stream, OTLP data points
+may appear to overlap. This condition typically results from misconfiguration, but
+can also result from running identical processes (indicative of operating system
+or SDK bugs, like missing
+[process attributes](../resource/semantic_conventions/process.md)). When there
+are overlapping points, receivers SHOULD eliminate points so that there are no
+overlaps. Which data to select in overlapping cases is not specified.
+
+### Overlap observability
+
+OpenTelemetry collectors SHOULD export telemetry when they observe overlapping
+points in data streams, so that the user can monitor for erroneous
+configurations.
+
+### Overlap interpolation
+
+When one process starts just as another exits, the appearance of overlapping
+points may be expected. In this case, OpenTelemetry collectors SHOULD modify
+points at the change-over using interpolation for Sum data points, to reduce
+gaps to zero width in these cases, without any overlap.
 
 ## Resources
 

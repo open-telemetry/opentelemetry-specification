@@ -189,7 +189,12 @@ Instead span kind should be set to either `CONSUMER` or `SERVER` according to th
 
 In RabbitMQ, the destination is defined by an _exchange_ and a _routing key_.
 `messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
-The routing key MUST be provided to the attribute `messaging.rabbitmq.routing_key`, unless it is empty.
+
+<!-- semconv messaging.rabbitmq -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `messaging.rabbitmq.routing_key` | string | RabbitMQ message routing key. | `myKey` | Unless it is empty. |
+<!-- endsemconv -->
 
 #### Apache Kafka
 

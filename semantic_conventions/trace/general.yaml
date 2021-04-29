@@ -8,15 +8,15 @@ groups:
         type:
           allow_custom_values: false
           members:
-            - id: IP.TCP
-              value: "IP.TCP"
-            - id: IP.UDP
-              value: "IP.UDP"
-            - id: IP
-              value: "IP"
+            - id: ip_tcp
+              value: "ip_tcp"
+            - id: ip_udp
+              value: "ip_udp"
+            - id: ip
+              value: "ip"
               brief: 'Another IP-based protocol'
-            - id: Unix
-              value: "Unix"
+            - id: unix
+              value: "unix"
               brief: 'Unix Domain socket. See below.'
             - id: pipe
               value: "pipe"
@@ -33,7 +33,7 @@ groups:
               brief: 'Something else (non IP-based).'
         brief: >
           Transport protocol used. See note below.
-        examples: 'IP.TCP'
+        examples: 'ip_tcp'
       - id: peer.ip
         type: string
         brief: >
