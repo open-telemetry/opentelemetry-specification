@@ -14,7 +14,13 @@ release.
 
 ### Traces
 
+- `Get Tracer` should use an empty string if the specified `name` is null. ([#1654](https://github.com/open-telemetry/opentelemetry-specification/pull/1654))
+
 ### Metrics
+
+- Expand description of Event Model and Instruments. ([#1614](https://github.com/open-telemetry/opentelemetry-specification/pull/1614))
+- Flesh out metric identity and single-write principle. ([#1574](https://github.com/open-telemetry/opentelemetry-specification/pull/1574))
+- Expand `Sum` metric description in the data model and delta-to-cumulative handling. ([#1618](https://github.com/open-telemetry/opentelemetry-specification/pull/1618))
 
 ### Logs
 
@@ -22,6 +28,8 @@ release.
 
 - Fix the inconsistent formatting of semantic convention enums ([#1598](https://github.com/open-telemetry/opentelemetry-specification/pull/1598/))
 - Add details for filling resource for AWS Lambda([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
+- Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file.
+- Clarify usage of "otel." attribute namespace ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640)).
 
 ### Compatibility
 
