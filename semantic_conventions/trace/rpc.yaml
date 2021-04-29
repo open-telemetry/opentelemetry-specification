@@ -94,7 +94,7 @@ groups:
           required: always
           brief: "`method` property from request. Unlike `rpc.method`, this may not relate to the actual method being called. Useful for client-side traces since client does not know what will be called on the server."
           examples: ['users.create', 'get_users']
-        - id: id
+        - id: request_id
           type: string
           brief: "`id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification."
           examples: ['10', 'request-7', '']
