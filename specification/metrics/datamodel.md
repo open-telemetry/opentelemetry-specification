@@ -318,7 +318,7 @@ OTLP.
 Gauges do not provide an aggregation semantic, instead "last sample value" is
 used when performing operations like temporal alignment or adjusting resolution.
 
-Gauages can be aggregated through transformation into histograms, or other
+Gauges can be aggregated through transformation into histograms, or other
 metric types. These operations are not done by default, and require direct
 user configuration.
 
