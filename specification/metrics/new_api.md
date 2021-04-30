@@ -559,7 +559,7 @@ def restock_item(color, material):
 def sell_item(color, material):
     succeeded = inventory.take_item(color=color, material=material)
     if succeeded:
-      items_counter.add(-1, {"color": color, "material": material})
+        items_counter.add(-1, {"color": color, "material": material})
     return succeeded
 ```
 
