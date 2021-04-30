@@ -179,7 +179,7 @@ Conventions specific to [JSON RPC](https://www.jsonrpc.org/).
 <!-- semconv rpc.jsonrpc -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `rpc.jsonrpc.version` | string | Protocol version as in `jsonrpc` property of request/response. Since first protocol version does not specify this, value can be omitted entirely. | `2.0`; `1.0` | If missing, it is assumed to be "2.0". |
+| `rpc.jsonrpc.version` | string | Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted. | `2.0`; `1.0` | If missing, it is assumed to be "1.0". |
 | `rpc.jsonrpc.method` | string | `method` property from request. Unlike `rpc.method`, this may not relate to the actual method being called. Useful for client-side traces since client does not know what will be called on the server. | `users.create`; `get_users` | Yes |
 | `rpc.jsonrpc.request_id` | string | `id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification. | `10`; `request-7`; `` | No |
 | `rpc.jsonrpc.error_code` | int | `error.code` property of response if it is an error response. | `-32700`; `100` | If missing, response is assumed to be successful. |
