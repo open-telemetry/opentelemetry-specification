@@ -511,14 +511,14 @@ Example uses for `UpDownCounter`:
 * the number of items in a queue
 
 `UpDownCounter` is intended for scenarios where the absolute values are not
-pre-calculated, or fetching the "current value" requires extra efforts. If the
+pre-calculated, or fetching the "current value" requires extra effort. If the
 pre-calculated value is already available or fetching the snapshot of the
 "current value" is straightforward, use [Asynchronous
 UpDownCounter](#asynchronous-updowncounter) instead.
 
 Taking the **the size of a collection** as an example, almost all the language
-runtime would provide APIs to retrieve the size of a collection, whether the
-size is internally maintained, or calculated on the fly. If the intention is to
+runtimes would provide APIs for retrieving the size of a collection, whether the
+size is internally maintained or calculated on the fly. If the intention is to
 report the size that can be retrieved from these APIs, use [Asynchronous
 UpDownCounter](#asynchronous-updowncounter).
 
