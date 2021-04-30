@@ -551,6 +551,11 @@ items_counter = meter.create_up_down_counter(
     name="store.inventory",
     description="the number of the items available")
 
+def restock_item(color, material):
+    inventory.add_item(color=color, material=material)
+    items_counter.add(1, {"color": color, "material": material})
+    return true
+
 def sell_item(color, material):
     succeeded = inventory.take_item(color=color, material=material)
     if succeeded:
