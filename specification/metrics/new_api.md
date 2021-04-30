@@ -510,6 +510,54 @@ Example uses for `UpDownCounter`:
 * the number of active requests
 * the number of items in a queue
 
+`UpDownCounter` is intended for scenarios where the absolute values are not
+pre-calculated, or fetching the "current value" requires extra efforts. If the
+pre-calculated value is already available or fetching the snapshot of the
+"current value" is straightforward, use [Asynchronous
+Gauge](#asynchronous-gauge) instead.
+
+Taking the **the size of a collection** as an example, almost all the language
+runtime would provide APIs to retrieve the size of a collection, whether the
+size is internally maintained, or calculated on the fly. If the intention is to
+report the size that can be retrieved from these APIs, use [Asynchronous
+UpDownCounter](#asynchronous-updowncounter).
+
+```python
+# Python
+items = []
+
+meter.create_observable_up_down_counter(
+    name="store.inventory",
+    description="the number of the items available",
+    callback=lambda result: result.Observe(len(items)))
+```
+
+There are cases when the runtime APIs won't provide sufficient information, e.g.
+reporting the number of items in a concurrent bag by the "color" and "material"
+properties.
+
+| Color    | Material     | Count |
+| -------- | -----------  | ----- |
+| Red      | Aluminum     | 1     |
+| Red      | Steel        | 2     |
+| Blue     | Aluminum     | 0     |
+| Blue     | Steel        | 5     |
+| Yellow   | Aluminum     | 0     |
+| Yellow   | Steel        | 3     |
+
+```python
+# Python
+items_counter = meter.create_up_down_counter(
+    name="store.inventory",
+    description="the number of the items available")
+
+def sell_item(color, material):
+    succeeded = inventory.take_item(color=color, material=material)
+    if succeeded:
+      items_counter.add(-1, {"color": color, "material": material})
+    return succeeded
+```
+
 #### UpDownCounter creation
 
 There MUST NOT be any API for creating an `UpDownCounter` other than with a
