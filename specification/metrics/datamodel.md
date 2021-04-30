@@ -305,7 +305,7 @@ metric data points convey a population of recorded data points in a compressed
 format. A histogram bundles a set of events into divided populations with an
 overall event count and aggregate sum for all events.
 
-![Delta Histogram](img/model-histogram.png)
+![Delta Histogram](img/model-delta-histogram.png)
 
 Histograms consist of the following:
 
