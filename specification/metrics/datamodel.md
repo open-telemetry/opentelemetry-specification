@@ -300,7 +300,51 @@ Pending
 
 ### Histogram
 
-Pending
+[Histgram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L225)
+metric data points convey a population of recorded data points in a compressed
+format. A histogram bundles a set of events into divided populations with an
+overall event count and aggregate sum for all events.
+
+![Delta Histogram](img/model-histogram.png)
+
+Histograms consist of the following:
+
+- An *Aggregation Temporality* of delta or cumulative.
+- A set of data points, each containing:
+- An independent set of Attribute name-value pairs.
+  - A time window (of `(start, end]`) time for which the Histogram was bundled.
+    - The time interval is inclusive of the end time.
+    - Times are specified in Value is UNIX Epoch time in nanoseconds since
+      `00:00:00 UTC on 1 January 1970`
+  - A count (`count`) of the total population of points in the histogram.
+  - A sum (`sum`) of all the values in the histogram.
+  - (optional) A series of buckets with:
+    - Explicit boundary values.  These values denote the lower and upper bounds
+      for buckets and whether not a given observation would be recorded in this
+      bucket.
+    - A count of the number of observations that fell within this bucket.
+  - (optional) a set of examplars (see [Exemplar](#exemplars)).  
+
+Like Sums, Histograms also define an aggregation temporality.  The picture above
+denotes Delta temporality where accumulated events are dropped after reporting
+and a new aggregation occurs. Cumulative, on the other hand, contiues to
+aggregate events until a reset.
+
+#### Exemplars
+  
+An exemplar is a recorded value that associates OpenTelemetry context to
+a metric event within a Histogram. It allows users to link Trace signals w/
+Metrics.
+
+Exemplars consist of:
+    - The trace associated with a recording (`trace_id`, `span_id`)
+    - The time of the observation (`time_unix_nano`)
+    - The recorded value (`value`)
+    - A set of filtered attributes (`filtered_attributes`) which provide
+      additional insight into the Context when the observation was made.
+
+When an exemplar exists, its value already participates in `bucket_counts`,
+`count` and `sum` reported by the histogram point.
 
 ### Summary (Legacy)
 
