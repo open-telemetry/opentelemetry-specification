@@ -323,7 +323,7 @@ Histograms consist of the following:
       for buckets and whether not a given observation would be recorded in this
       bucket.
     - A count of the number of observations that fell within this bucket.
-  - (optional) a set of examplars (see [Exemplar](#exemplars)).  
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).  
 
 Like Sums, Histograms also define an aggregation temporality.  The picture above
 denotes Delta temporality where accumulated events are dropped after reporting
@@ -337,11 +337,12 @@ a metric event within a Histogram. It allows users to link Trace signals w/
 Metrics.
 
 Exemplars consist of:
-    - The trace associated with a recording (`trace_id`, `span_id`)
-    - The time of the observation (`time_unix_nano`)
-    - The recorded value (`value`)
-    - A set of filtered attributes (`filtered_attributes`) which provide
-      additional insight into the Context when the observation was made.
+
+- The trace associated with a recording (`trace_id`, `span_id`)
+- The time of the observation (`time_unix_nano`)
+- The recorded value (`value`)
+- A set of filtered attributes (`filtered_attributes`) which provide
+  additional insight into the Context when the observation was made.
 
 When an exemplar exists, its value already participates in `bucket_counts`,
 `count` and `sum` reported by the histogram point.
