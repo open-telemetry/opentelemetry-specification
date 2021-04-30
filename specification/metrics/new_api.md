@@ -514,7 +514,7 @@ Example uses for `UpDownCounter`:
 pre-calculated, or fetching the "current value" requires extra efforts. If the
 pre-calculated value is already available or fetching the snapshot of the
 "current value" is straightforward, use [Asynchronous
-Gauge](#asynchronous-gauge) instead.
+UpDownCounter](#asynchronous-updowncounter) instead.
 
 Taking the **the size of a collection** as an example, almost all the language
 runtime would provide APIs to retrieve the size of a collection, whether the
