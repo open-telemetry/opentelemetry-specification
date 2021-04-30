@@ -311,7 +311,7 @@ Histograms consist of the following:
 
 - An *Aggregation Temporality* of delta or cumulative.
 - A set of data points, each containing:
-- An independent set of Attribute name-value pairs.
+  - An independent set of Attribute name-value pairs.
   - A time window (of `(start, end]`) time for which the Histogram was bundled.
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
@@ -338,7 +338,7 @@ Metrics.
 
 Exemplars consist of:
 
-- The trace associated with a recording (`trace_id`, `span_id`)
+- (optional) The trace associated with a recording (`trace_id`, `span_id`)
 - The time of the observation (`time_unix_nano`)
 - The recorded value (`value`)
 - A set of filtered attributes (`filtered_attributes`) which provide
