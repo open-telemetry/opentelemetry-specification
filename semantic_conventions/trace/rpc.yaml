@@ -86,8 +86,8 @@ groups:
         - id: version
           type: string
           required:
-            conditional: 'If missing, it is assumed to be "2.0".'
-          brief: "Protocol version as in `jsonrpc` property of request/response. Since first protocol version does not specify this, value can be omitted entirely."
+            conditional: 'If missing, it is assumed to be "1.0".'
+          brief: "Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted."
           examples: ['2.0', '1.0']
         - id: method
           type: string
