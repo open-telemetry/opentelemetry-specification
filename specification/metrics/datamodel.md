@@ -327,7 +327,7 @@ Histograms consist of the following:
 
 Like Sums, Histograms also define an aggregation temporality.  The picture above
 denotes Delta temporality where accumulated events are dropped after reporting
-and a new aggregation occurs. Cumulative, on the other hand, contiues to
+and a new aggregation occurs. Cumulative, on the other hand, continues to
 aggregate events until a reset.
 
 #### Exemplars
