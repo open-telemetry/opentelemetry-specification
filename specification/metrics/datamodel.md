@@ -332,7 +332,7 @@ aggregate events until a reset.
 #### Exemplars
   
 An exemplar is a recorded value that associates OpenTelemetry context to
-a metric event within a Histogram. It allows users to link Trace signals w/
+a metric event within a Histogram. One use case is to allow users to link Trace signals w/
 Metrics.
 
 Exemplars consist of:
