@@ -314,8 +314,7 @@ Histograms consist of the following:
   - An independent set of Attribute name-value pairs.
   - A time window (of `(start, end]`) time for which the Histogram was bundled.
     - The time interval is inclusive of the end time.
-    - Times are specified in Value is UNIX Epoch time in nanoseconds since
-      `00:00:00 UTC on 1 January 1970`
+    - Time values are specified as nanoseconds since the UNIX Epoch (00:00:00 UTC on 1 January 1970).
   - A count (`count`) of the total population of points in the histogram.
   - A sum (`sum`) of all the values in the histogram.
   - (optional) A series of buckets with:
