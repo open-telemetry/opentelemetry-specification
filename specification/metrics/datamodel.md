@@ -301,12 +301,12 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
 
 - A set of data points, each containing:
   - An independent set of Attribute name-value pairs.
-  - A value sampled from some observable timeseries (e.g. current memory usage)
+  - A sampled value (e.g. current memory usage)
   - A timestamp when the value was sampled (`time_unix_nano`)
   - (optional) A timestamp (`start_time_unix_nano`) which has [TBD semantics](https://github.com/open-telemetry/opentelemetry-proto/pull/295).
 
-In OTLP, a Gauge stream represents the last-sampled event for a given time
-window.
+In OTLP, a point within a Gauge stream represents the last-sampled event for a
+given time window.
 
 ![Gauge](img/model-gauge.png)
 
