@@ -510,7 +510,7 @@ Example uses for `UpDownCounter`:
 * the number of active requests
 * the number of items in a queue
 
-`UpDownCounter` is intended for scenarios where the absolute values are not
+An `UpDownCounter` is intended for scenarios where the absolute values are not
 pre-calculated, or fetching the "current value" requires extra effort. If the
 pre-calculated value is already available or fetching the snapshot of the
 "current value" is straightforward, use [Asynchronous
