@@ -311,14 +311,14 @@ given time window.
 ![Gauge](img/model-gauge.png)
 
 In this example, we can see an underlying timeseries we are sampling with our
-Gauage.  While the event model *can* sample more than once for a given metric
+Gauge.  While the event model *can* sample more than once for a given metric
 reporting interval, only the last value is reported in the metric stream via
 OTLP.
 
 Gauges do not provide an aggregation semantic, instead "last sample value" is
 used when performing operations like temporal alignment or adjusting resolution.
 
-Gauages can be aggregated through transformation into histograms, or other
+Gauges can be aggregated through transformation into histograms, or other
 metric types. These operations are not done by default, and require direct
 user configuration.
 
