@@ -510,15 +510,125 @@ Example uses for `UpDownCounter`:
 * the number of active requests
 * the number of items in a queue
 
+An `UpDownCounter` is intended for scenarios where the absolute values are not
+pre-calculated, or fetching the "current value" requires extra effort. If the
+pre-calculated value is already available or fetching the snapshot of the
+"current value" is straightforward, use [Asynchronous
+UpDownCounter](#asynchronous-updowncounter) instead.
+
+Taking the **the size of a collection** as an example, almost all the language
+runtimes would provide APIs for retrieving the size of a collection, whether the
+size is internally maintained or calculated on the fly. If the intention is to
+report the size that can be retrieved from these APIs, use [Asynchronous
+UpDownCounter](#asynchronous-updowncounter).
+
+```python
+# Python
+items = []
+
+meter.create_observable_up_down_counter(
+    name="store.inventory",
+    description="the number of the items available",
+    callback=lambda result: result.Observe(len(items)))
+```
+
+There are cases when the runtime APIs won't provide sufficient information, e.g.
+reporting the number of items in a concurrent bag by the "color" and "material"
+properties.
+
+| Color    | Material     | Count |
+| -------- | -----------  | ----- |
+| Red      | Aluminum     | 1     |
+| Red      | Steel        | 2     |
+| Blue     | Aluminum     | 0     |
+| Blue     | Steel        | 5     |
+| Yellow   | Aluminum     | 0     |
+| Yellow   | Steel        | 3     |
+
+```python
+# Python
+items_counter = meter.create_up_down_counter(
+    name="store.inventory",
+    description="the number of the items available")
+
+def restock_item(color, material):
+    inventory.add_item(color=color, material=material)
+    items_counter.add(1, {"color": color, "material": material})
+    return true
+
+def sell_item(color, material):
+    succeeded = inventory.take_item(color=color, material=material)
+    if succeeded:
+        items_counter.add(-1, {"color": color, "material": material})
+    return succeeded
+```
+
 #### UpDownCounter creation
 
-TODO
+There MUST NOT be any API for creating an `UpDownCounter` other than with a
+[`Meter`](#meter). This MAY be called `CreateUpDownCounter`. If strong type is
+desired, the client can decide the language idomatic name(s), for example
+`CreateInt64UpDownCounter`, `CreateDoubleUpDownCounter`,
+`CreateUpDownCounter<Int64>`, `CreateUpDownCounter<double>`.
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+customers_in_store = meter.create_up_down_counter(
+    name="grocery.customers",
+    description="measures the current customers in the grocery store",
+    value_type=int)
+```
+
+```csharp
+// C#
+var customersInStore = meter.CreateUpDownCounter<int>(
+    "grocery.customers",
+    description: "measures the current customers in the grocery store",
+    );
+```
 
 #### UpDownCounter operations
 
 ##### Add
 
-TODO
+Increment or decrement the UpDownCounter by a fixed amount.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+Parameters:
+
+* The amount to be added, can be positive, negative or zero.
+* Optional [attributes](../common/common.md#attributes).
+
+The client MAY decide to allow flexible
+[attributes](../common/common.md#attributes) to be passed in as individual
+arguments. The client MAY allow attribute values to be passed in using a more
+efficient way (e.g. strong typed struct allocated on the callstack, tuple). Here
+are some examples that individual language client might consider:
+
+```python
+# Python
+customers_in_store.Add(1, {"account.type": "commercial"})
+customers_in_store.Add(-1, account_type="residential")
+```
+
+```csharp
+// C#
+customersInStore.Add(1, ("account.type", "commercial"));
+customersInStore.Add(-1, new Account { Type = "residential" });
+```
 
 ### Asynchronous UpDownCounter
 
