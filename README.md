@@ -40,7 +40,7 @@ Technical committee holds regular meetings, notes are held
   - [Resource](specification/resource/sdk.md)
   - [Configuration](specification/sdk-configuration.md)
 - Data Specification
-  - [Semantic Conventions](specification/overview.md#semantic-conventions)]
+  - [Semantic Conventions](specification/overview.md#semantic-conventions)
   - [Protocol](specification/protocol/README.md)
     - [Metrics](specification/metrics/datamodel.md)
     - [Logs](specification/logs/data-model.md)
