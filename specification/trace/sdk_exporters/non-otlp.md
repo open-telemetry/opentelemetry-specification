@@ -1,0 +1,61 @@
+# OpenTelemetry Transformation to non-OTLP Formats
+
+**Status**: [Stable](../../document-status.md)
+
+All OpenTelemetry concepts and span data recorded using OpenTelemetry API can be
+directly and precisely represented using corresponding messages and fields of
+OTLP format. However, for other formats this is not always the case. Sometimes a
+format will not have a native way to represent a particular OpenTelemetry
+concept or a field of a concept.
+
+This document defines the transformation between OpenTelemetry and formats other
+than OTLP, for OpenTelemetry fields and concepts that have no direct semantic
+equivalent in those other formats.
+
+Note: when a format has a direct semantic equivalent for a particular field or
+concept then the recommendation in this document MUST be ignored.
+
+See also additional specific transformation rules for [Jaeger](jaeger.md) and
+[Zipkin](zipkin.md). The specific rules for Jaeger and Zipkin take precedence
+over the generic rules defined in this document.
+
+## Mappings
+
+### InstrumentationLibrary
+
+OpenTelemetry `InstrumentationLibrary`'s fields MUST be reported as key-value
+pairs associated with the Span using the following mapping:
+
+| OpenTelemetry InstrumentationLibrary Field | non-OTLP Key |
+| ------------------- | --- |
+| `InstrumentationLibrary.name`|`otel.library.name`|
+| `InstrumentationLibrary.version`|`otel.library.version`|
+
+### Span Status
+
+Span `Status` MUST be reported as key-value pairs associated with the Span,
+unless the `Status` is `UNSET`. In the latter case it MUST NOT be reported.
+
+The following table defines the OpenTelemetry `Status`'s mapping to Span's
+key-value pairs:
+
+|OpenTelemetry Status Field|non-OTLP Key|non-OTLP Value|
+|--|--|--|
+|Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
+|Description | `otel.status_description` | Description of the `Status` if it has a value otherwise not set. |
+
+### Dropped Attributes Count
+
+OpenTelemetry Span's dropped attributes count MUST be reported as a key-value
+pair associated with the Span. Similarly, Span Event's dropped attributes count
+MUST be reported as a key-value pair associated with the Span Event. In both
+cases the key name MUST be `otel.dropped_attributes_count`.
+
+This key-value pair should only be recorded when it contains a non-zero value.
+
+### Dropped Events Count
+
+OpenTelemetry Span's dropped events count MUST be reported as a key-value pair
+associated with the Span. The key name MUST be `otel.dropped_events_count`.
+
+This key-value pair should only be recorded when it contains a non-zero value.
