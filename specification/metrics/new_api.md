@@ -461,13 +461,76 @@ Example uses for `Histogram`:
 
 #### Histogram creation
 
-TODO
+There MUST NOT be any API for creating a `Histogram` other than with a
+[`Meter`](#meter). This MAY be called `CreateHistogram`. If strong type is
+desired, the client can decide the language idomatic name(s), for example
+`CreateUInt64Histogram`, `CreateDoubleHistogram`, `CreateHistogram<UInt64>`,
+`CreateHistogram<double>`.
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+http_server_duration = meter.create_histogram(
+    name="http.server.duration",
+    description="measures the duration of the inbound HTTP request",
+    unit="milliseconds",
+    value_type=float)
+```
+
+```csharp
+// C#
+
+var httpServerDuration = meter.CreateHistogram<double>(
+    "http.server.duration",
+    description: "measures the duration of the inbound HTTP request",
+    unit: "milliseconds"
+    );
+```
 
 #### Histogram operations
 
 ##### Record
 
-TODO
+Updates the statistics with the specified amount.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+Parameters:
+
+* The amount of the `Measurement`.
+* Optional [attributes](../common/common.md#attributes).
+
+The client MAY decide to allow flexible
+[attributes](../common/common.md#attributes) to be passed in as individual
+arguments. The client MAY allow attribute values to be passed in using a more
+efficient way (e.g. strong typed struct allocated on the callstack, tuple). Here
+are some examples that individual language client might consider:
+
+```python
+# Python
+
+http_server_duration.Record(50, {"http.method": "POST", "http.scheme": "https"})
+http_server_duration.Record(100, http_method="GET", http_scheme="http"})
+```
+
+```csharp
+// C#
+
+httpServerDuration.Record(50, ("http.method", "POST"), ("http.scheme", "https"));
+httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
+```
 
 ### Asynchronous Gauge
 
