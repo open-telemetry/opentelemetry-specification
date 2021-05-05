@@ -9,12 +9,13 @@ release.
 
 ### Context
 
-- Added `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. ([#1612](https://github.com/open-telemetry/opentelemetry-specification/pull/1612))
-- Added `OTEL_EXPORTER_ZIPKIN_TIMEOUT` environment variable. ([#1636](https://github.com/open-telemetry/opentelemetry-specification/pull/1636))
+- Add `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. ([#1612](https://github.com/open-telemetry/opentelemetry-specification/pull/1612))
+- Add `OTEL_EXPORTER_ZIPKIN_TIMEOUT` environment variable. ([#1636](https://github.com/open-telemetry/opentelemetry-specification/pull/1636))
 
 ### Traces
 
 - `Get Tracer` should use an empty string if the specified `name` is null. ([#1654](https://github.com/open-telemetry/opentelemetry-specification/pull/1654))
+- Clarify how to record dropped attribute count in non-OTLP formats. ([#1662](https://github.com/open-telemetry/opentelemetry-specification/pull/1662))
 
 ### Metrics
 
@@ -26,10 +27,11 @@ release.
 
 ### Semantic Conventions
 
-- Fix the inconsistent formatting of semantic convention enums ([#1598](https://github.com/open-telemetry/opentelemetry-specification/pull/1598/))
-- Add details for filling resource for AWS Lambda([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
+- Fix the inconsistent formatting of semantic convention enums. ([#1598](https://github.com/open-telemetry/opentelemetry-specification/pull/1598/))
+- Add details for filling resource for AWS Lambda. ([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
 - Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file.
-- Clarify usage of "otel." attribute namespace ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640)).
+- Clarify usage of "otel." attribute namespace. ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640))
+- Add possibility to disable `db.statement` via instrumentation configuration. ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
 
 ### Compatibility
 
