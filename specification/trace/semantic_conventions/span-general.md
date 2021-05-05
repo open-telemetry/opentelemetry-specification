@@ -52,6 +52,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | Value | Description |
 | --- | --- |
 | `wifi` | connected via wifi | 
+| `wired` | connected via a hard-wire | 
 | `1G` |  connected via a first gen cellular technology, such as `AMPS` or equivalent | 
 | `2G` | connected via a second gen cellular technology, such as `GPRS` |
 | `3G` | connected via a third gen cellular technology, such as `UMTS` or `1xEV-DO` | 
