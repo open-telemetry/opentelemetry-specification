@@ -21,12 +21,13 @@ release.
 
 ### OpenTelemetry Protocol
 
+### SDK Configuration
+
 ## v1.3.0 (2021-05-05)
 
 ### Context
 
-- Add `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. ([#1612](https://github.com/open-telemetry/opentelemetry-specification/pull/1612))
-- Add `OTEL_EXPORTER_ZIPKIN_TIMEOUT` environment variable. ([#1636](https://github.com/open-telemetry/opentelemetry-specification/pull/1636))
+- No changes.
 
 ### Traces
 
@@ -62,6 +63,11 @@ release.
 
 - Fix incorrect table of transient errors. ([#1642](https://github.com/open-telemetry/opentelemetry-specification/pull/1642))
 - Clarify that 64 bit integer numbers are decimal strings in OTLP/JSON. ([#1637](https://github.com/open-telemetry/opentelemetry-specification/pull/1637))
+
+### SDK Configuration
+
+- Add `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. ([#1612](https://github.com/open-telemetry/opentelemetry-specification/pull/1612))
+- Add `OTEL_EXPORTER_ZIPKIN_TIMEOUT` environment variable. ([#1636](https://github.com/open-telemetry/opentelemetry-specification/pull/1636))
 
 ## v1.2.0 (2021-04-14)
 
