@@ -22,7 +22,6 @@ the implementation unless explicitly communicated via
 Table of Contents
 </summary>
 
-* [Overview](#overview)
 * [MeterProvider](#meterprovider)
 * [MeasurementProcessor](#measurementprocessor)
 * [MetricProcessor](#metricprocessor)
