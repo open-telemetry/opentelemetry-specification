@@ -112,7 +112,8 @@ example:
 * Exporter A is a push exporter which sends data every 1 minute.
 * Exporter B is a push exporter which sends data every 5 seconds.
 * Exporter C is a pull exporter which reacts to a scraper over HTTP.
-* Exporter D is a pull exporter which reacts to another scraper over named pipe.
+* Exporter D is a pull exporter which reacts to another scraper over a named
+  pipe.
 
 ### Push Metric Exporter
 
