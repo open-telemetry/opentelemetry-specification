@@ -42,12 +42,12 @@ TODO:
 
 ## MeasurementProcessor
 
-`MeasurementProcessor` is an interface which allows hooks when a Measurement is
-recorded by an Instrument.
+`MeasurementProcessor` is an interface which allows hooks when a
+[Measurement](./api.md#measurement) is recorded by an
+[Instrument](./api.md#instrument).
 
-`MeasurementProcessor` has access to the [raw
-measurements](./datamodel.md#event-model) and the corresponding Instrument. It
-could also access the [Baggage](../baggage/api.md) and
+`MeasurementProcessor` has access to the Measurement and the corresponding
+Instrument. It could also access the [Baggage](../baggage/api.md) and
 [Context](../context/context.md) if the Baggage/Context are available.
 
 ```text
@@ -105,8 +105,14 @@ Metric Exporter has access to the [pre-aggregated metrics
 data](./datamodel.md#timeseries-model).
 
 There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
-Metric Exporters](#pull-metric-exporter) or even a mixture of both configured on a
-given MeterProvider.
+Metric Exporters](#pull-metric-exporter) or even a mixture of both configured on
+a given `MeterProvider`. Different exporters can run at different schedule, for
+example:
+
+* Exporter A is a push exporter which sends data every 1 minute.
+* Exporter B is a push exporter which sends data every 5 seconds.
+* Exporter C is a pull exporter which reacts to a scraper over HTTP.
+* Exporter D is a pull exporter which reacts to another scraper over named pipe.
 
 ### Push Metric Exporter
 
