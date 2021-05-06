@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Expand `Gauge` metric description in the data model ([#1661](https://github.com/open-telemetry/opentelemetry-specification/pull/1661))
+
 ### Logs
 
 ### Semantic Conventions
@@ -42,7 +44,6 @@ release.
 - Remove the "Func" name, use "Asynchronous" and "Observable". ([#1645](https://github.com/open-telemetry/opentelemetry-specification/pull/1645))
 - Add details to UpDownCounter API. ([#1665](https://github.com/open-telemetry/opentelemetry-specification/pull/1665))
 - Add details to Histogram API. ([#1657](https://github.com/open-telemetry/opentelemetry-specification/pull/1657))
-- Expand `Gauge` metric description in the data model ([#1661](https://github.com/open-telemetry/opentelemetry-specification/pull/1661))
 
 ### Logs
 
