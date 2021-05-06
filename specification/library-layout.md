@@ -29,7 +29,7 @@ api
 
 This directory describes the API that provides in-process context propagation.
 
-### [/metrics](./metrics/new_api.md)
+### [/metrics](./metrics/api.md)
 
 This directory describes the Metrics API that can be used to record application metrics.
 
