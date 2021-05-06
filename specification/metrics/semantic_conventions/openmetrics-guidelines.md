@@ -45,7 +45,7 @@ See also [Metric names and labels](https://prometheus.io/docs/concepts/data_mode
 in the Prometheus data model documentation.
 
 OpenMetrics does not allow metric names to begin with a digit. OpenTelemetry's
-[instrument naming requirements](../new_api.md#instrument-naming-rule) also
+[instrument naming requirements](../api.md#instrument-naming-rule) also
 require that the first character of a metric instrument is non-numeric.
 
 If a metric event is generated in OpenTelemetry that does not conform to this
