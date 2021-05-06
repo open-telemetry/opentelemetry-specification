@@ -28,7 +28,7 @@ Table of Contents
     * [API](#api)
     * [SDK](#sdk)
 * [Specifications](#specifications)
-  * [Metrics API](./new_api.md)
+  * [Metrics API](./api.md)
   * Metrics SDK (not available yet)
   * [Metrics Data Model and Protocol](datamodel.md)
   * [Semantic Conventions](./semantic_conventions/README.md)
@@ -106,7 +106,7 @@ SDK](../overview.md#sdk) concept concept for more information.
 
 ## Specifications
 
-* [Metrics API](./new_api.md)
+* [Metrics API](./api.md)
 * Metrics SDK (not available yet)
 * [Metrics Data Model and Protocol](datamodel.md)
 * [Semantic Conventions](./semantic_conventions/README.md)
