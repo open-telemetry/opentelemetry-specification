@@ -130,3 +130,17 @@ It is recommended to limit names to printable Basic Latin characters
 (more precisely to
 [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
 subset of Unicode code points).
+
+## otel.* Namespace
+
+Attribute and label names that start with `otel.` are reserved to be defined by
+OpenTelemetry specification. These are typically used to express OpenTelemetry
+concepts in formats that don't have a corresponding concept.
+
+For example, the `otel.library.name` attribute is used to record the
+instrumentation library name, which is an OpenTelemetry concept that is natively
+represented in OTLP, but does not have an equivalent in other telemetry formats
+and protocols.
+
+Any additions to the `otel.*` namespace MUST be approved as part of
+OpenTelemetry specification.
