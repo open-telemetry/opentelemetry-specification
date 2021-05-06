@@ -99,7 +99,7 @@ Metrics, logs, and traces exported to telemetry backends are examples of out-of-
 
 ### Manual Instrumentation
 
-Coding against the OpenTelemetry API such as the [Tracing API](trace/api.md), [Metrics API](metrics/api.md), or others to collect telemetry from end-user code or shared frameworks (e.g. MongoDB, Redis, etc.).
+Coding against the OpenTelemetry API such as the [Tracing API](trace/api.md), [Metrics API](metrics/new_api.md), or others to collect telemetry from end-user code or shared frameworks (e.g. MongoDB, Redis, etc.).
 
 ### Automatic Instrumentation
 
@@ -150,7 +150,7 @@ Synonyms: *Instrumenting Library*.
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meter-interface)).
+creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/new_api.md#meterprovider)).
 The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
 
 ## Logs
