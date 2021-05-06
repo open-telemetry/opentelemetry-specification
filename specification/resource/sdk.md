@@ -24,7 +24,7 @@ all `Span`s produced by any `Tracer` from the provider MUST be associated with t
 
 Analogous to distributed tracing, when used with metrics,
 a resource can be associated with a `MeterProvider`.
-When associated with a [`MeterProvider`](../metrics/api.md#meter-interface),
+When associated with a [`MeterProvider`](../metrics/new_api.md#meter),
 all metrics produced by any `Meter` from the provider will be
 associated with this `Resource`.
 

@@ -129,5 +129,5 @@ guidelines on the performance expectations that API implementations should meet,
 Please refer to individual API specification for guidelines on what concurrency
 safeties should API implementations provide and how they should be documented:
 
-* [Metrics API](./metrics/api.md#concurrency)
+* [Metrics API](./metrics/new_api.md#concurrency)
 * [Tracing API](./trace/api.md#concurrency)

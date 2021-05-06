@@ -147,7 +147,7 @@ OpenTelemetry fragments metrics into three interacting models:
 ### Event Model
 
 The event model is where recording of data happens. Its foundation is made of
-[Instruments](api.md), which are used to record data observations via events.
+[Instruments](new_api.md), which are used to record data observations via events.
 These raw events are then transformed in some fashion before being sent to some
 other system.  OpenTelemetry metrics are designed such that the same instrument
 and events can be used in different ways to generate metric streams.
@@ -164,12 +164,12 @@ compressed format rather than individual timeseries.
 > Note: The above picture shows how one instrument can transform events into
 > more than one type of metric stream. There are caveats and nuances for when
 > and how to do this.  Instrument and metric configuration are outlined
-> in the [metrics API specification](api.md).
+> in the [metrics API specification](new_api.md).
 
 While OpenTelemetry provides flexibility in how instruments can be transformed
 into metric streams, the instruments are defined such that a reasonable default
 mapping can be provided. The exact
-[OpenTelemetry instruments](api.md##metric-instruments) are more fully
+[OpenTelemetry instruments](new_api.md##instrument) are more fully
 detailed in the API specification.
 
 In the Event model, the primary data are (instrument, number) points, originally
