@@ -24,63 +24,100 @@ Table of Contents
 
 * [Overview](#overview)
 * [MeterProvider](#meterprovider)
-* [View](#view)
 * [MeasurementProcessor](#measurementprocessor)
 * [MetricProcessor](#metricprocessor)
 * [MetricExporter](#metricexporter)
-  * [PushMetricExporter](#pushmetricexporter)
-  * [PullMetricExporter](#pullmetricexporter)
+  * [Push Metric Exporter](#push-metric-exporter)
+  * [Pull Metric Exporter](#pull-metric-exporter)
 
 </details>
 
-## Overview
-
 ## MeterProvider
 
-Q: How do we describe which data we care about vs. not (e.g. if a library
-exposes both CPU and memory, and the application developer only wants memory
-metrics)?
+TODO:
 
-Q: How do we know which meters / instruments are available from the
-instrumentation library?
-
-Q: For time series that we don't need, do we drop the them at processor level
-(pay for the collection cost and then drop the data on the floor)?
-
-## View
-
-Q: Do we allow multiple Views provided for a single instrument? (my answer would
-be yes)
-
-Q: Do we want to View API to control the dimensions retrieved from
-Baggage/Context? Or it should be handled by MeasurementProcessor?
+* Allow multiple pipelines (processors, exporters).
+* Configure "Views".
+* Configure timing (related to [issue
+  1432](https://github.com/open-telemetry/opentelemetry-specification/issues/1432)).
 
 ## MeasurementProcessor
 
-Note: This processor will run before the aggregator, which means it will have
-access to the Baggage/Context if the measurements are reported by a synchronous
-instrument.
+`MeasurementProcessor` is an interface which allows hooks when a Measurement is
+recorded by an Instrument.
+
+`MeasurementProcessor` has access to the [raw
+measurements](./datamodel.md#event-model) and the corresponding Instrument. It
+could also access the [Baggage](../baggage/api.md) and
+[Context](../context/context.md) if the Baggage/Context are available.
+
+```text
++------------------+
+| MeterProvider    |                 +----------------------+
+|   Meter A        | Measurements... |                      | Metrics... +-----------------+
+|     Instrument X |-----------------> MeasurementProcessor +------------>                 |
+|     Instrument Y +                 |                      |            |                 |
+|   Meter B        |                 +----------------------+            |                 |
+|     Instrument Z |                                                     | In-memory state |
+|     ...          |                 +----------------------+            |                 |
+|     ...          | Measurements... |                      | Metrics... |                 |
+|     ...          |-----------------> MeasurementProcessor +------------>                 |
+|     ...          |                 |                      |            +-----------------+
+|     ...          |                 +----------------------+
++------------------+
+```
 
 ## MetricProcessor
 
-Note: This process will run after the aggregator, which means it will have no
-access to the Baggage/Context.
+`MetricProcessor` is an interface which allows hooks for [pre-aggregated metrics
+data](./datamodel.md#timeseries-model).
+
+Built-in metric processors are responsible for batching and conversion of
+metrics data to exportable representation and passing batches to exporters.
+
+The following diagram shows `MetricProcessor`'s relationship to other components
+in the SDK:
+
+```text
+                     +-----------------+  +-----------------------+
++-----------------+  |                 |  |                       |
+|                 |--> MetricProcessor |--> MetricExporter (push) |--> Another process
+|                 |  |                 |  |                       |
+|                 |  +-----------------+  +-----------------------+
+| In-memory state |
+|                 |  +-----------------+  +-----------------------+
+|                 |  |                 |  |                       |
+|                 |--> MetricProcessor |--> MetricExporter (pull) |--> Another process (scraper)
++-----------------+  |                 |  |                       |
+                     +-----------------+  +-----------------------+
+```
 
 ## MetricExporter
 
-Q: Do we allow a push exporter and a pull exporter to coexist on a single
-MeterProvider?
+`MetricExporter` defines the interface that protocol-specific exporters must
+implement so that they can be plugged into OpenTelemetry SDK and support sending
+of telemetry data.
 
-### PushMetricExporter
+The goal of the interface is to minimize burden of implementation for
+protocol-dependent telemetry exporters. The protocol exporter is expected to be
+primarily a simple telemetry data encoder and transmitter.
 
-Q: Do we allow multiple push exporters to be configured on a single
-MeterProvider? If yes, do we allow them to push at different frequency (e.g.
-hourly report for temperature, but 5 seconds report for CPU utilization)?
+Metric Exporter has access to the [pre-aggregated metrics
+data](./datamodel.md#timeseries-model).
 
-### PullMetricExporter
+There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
+Metric Exporters](#pull-metric-exporter) or even a mixture of both configured on a
+given MeterProvider.
 
-Q: Do we allow multiple pull exporters to be configured on a single
-MeterProvider?
+### Push Metric Exporter
 
-Q: Do we want to support the scenario where asynchronous instruments are
-observed at a higher frequency than the pull exporter?
+Push Metric Exporter sends the data on its own schedule. Here are some examples:
+
+* Sends the data based on a user configured schedule, e.g. every 1 minute.
+* Sends the data when there is a severe error.
+
+### Pull Metric Exporter
+
+Pull Metric Exporter reacts to the metrics scrapers and reports the data
+passively. This pattern has been widely adopted by
+[Prometheus](https://prometheus.io/).
