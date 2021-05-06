@@ -42,6 +42,8 @@ Technical committee holds regular meetings, notes are held
 - Data Specification
   - [Semantic Conventions](specification/overview.md#semantic-conventions)
   - [Protocol](specification/protocol/README.md)
+    - [Metrics](specification/metrics/datamodel.md)
+    - [Logs](specification/logs/data-model.md)
 - About the Project
   - [Timeline](#project-timeline)
   - [Notation Conventions and Compliance](#notation-conventions-and-compliance)

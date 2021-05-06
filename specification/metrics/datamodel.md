@@ -206,7 +206,7 @@ further development of the correspondence between these models.
 The OpenTelmetry protocol data model is composed of Metric data streams. These
 streams are in turn composed of metric data points. Metric data streams
 can be converted directly into Timeseries, and share the same identity
-characteristics for a Timeseries.   A metric stream is identified by:
+characteristics for a Timeseries. A metric stream is identified by:
 
 - The originating `Resource`
 - The metric stream's `name`.
@@ -220,29 +220,96 @@ __Note: The same `Resource`, `name` and `Attribute`s but differing point kind
 coming out of an OpenTelemetry SDK is considered an "error state" that should
 be handled by an SDK.__
 
-A metric stream can use one of four basic point kinds, all of
+A metric stream can use one of three basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
 same kind. <sup>[1](#otlpdatapointfn)</sup>
 
 The basic point kinds are:
 
-1. Monotonic Sum
-2. Non-Monotonic Sum
-3. Gauge
-4. Histogram
+1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L200)
+2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L170)
+3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L228)
 
-Comparing the OTLP Metric Data Stream and Timeseries data models, Metric stream
-carries an additional kind of point. Whereas an OTLP Monotonic Sum point
-translates into a Timeseries Counter point, and an OTLP Histogram point
-translates into a Timeseries Histogram point, there are two OTLP data points
-that become Gauges in the Timeseries model: the OTLP Non-Monotonic Sum point
-and OTLP Gauge point.
+Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
+not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
+can represent a monotonic count or a non-monotonic count. This means an OTLP Sum
+is either translated into a Timeseries Counter, when the sum is monotonic, or
+a Gauge when the sum is not monotonic.
 
-The two points that become Gauges in the Timeseries model are distinguished by
-their built in aggregate function, meaning they define re-aggregation
-differently. Sum points combine using addition, while Gauge points combine into
-histograms.
+![Stream → Timeseries](img/model-layers-stream.png)
+
+Specifically, in OpenTelemetry Sums always have an aggregate function where
+you can combine via addition. So, for non-monotonic sums in OpenTelemetry we
+can aggregate (naturally) via addition.  In the timeseries model, you cannot
+assume that any particular Gauge is a sum, so the default aggregation would not
+be addition.
+
+In addition to the core point kinds used in OTLP, there are also data types
+designed for compatibility with existing metric formats.
+
+- [Summary](#summary-legacy)
+
+## Metric points
+
+### Sums
+
+[Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L202)s
+in OTLP consist of the following:
+
+- An *Aggregation Temporality* of delta or cumulative.
+- A flag denoting whether the Sum is
+  [monotonic](https://en.wikipedia.org/wiki/Monotonic_function). In this case of
+  metrics, this means the sum is nominally increasing, which we assume without
+  loss of generality.
+  - For delta monotonic sums, this means the reader should expect non-negative
+    values.
+  - For cumulative monotonic sums, this means the reader should expect values
+    that are not less than the previous value.
+- A set of data points, each containing:
+  - An independent set of Attribute name-value pairs.
+  - A time window (of `(start, end]`) time for which the Sum was calculated.
+    - The time interval is inclusive of the end time.
+    - Times are specified in Value is UNIX Epoch time in nanoseconds since
+      `00:00:00 UTC on 1 January 1970`
+
+The aggregation temporality is used to understand the context in which the sum
+was calculated. When the aggregation temporality is "delta", we expect to have
+no overlap in time windows for metric streams, e.g.
+
+![Delta Sum](img/model-delta-sum.png)
+
+Contrast with cumulative aggregation temporality where we expect to report the
+full sum since 'start' (where usually start means a process/application start):
+
+![Cumulative Sum](img/model-cumulative-sum.png)
+
+There are various tradeoffs between using Delta vs. Cumulative aggregation, in
+various use cases, e.g.:
+
+- Detecting process restarts
+- Calculating rates
+- Push vs. Pull based metric reporting
+
+OTLP supports both models, and allows APIs, SDKs and users to determine the
+best tradeoff for their use case.
+
+### Gauge
+
+Pending
+
+### Histogram
+
+Pending
+
+### Summary (Legacy)
+
+[Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L244)
+metric data points convey quantile summaries, e.g. What is the 99-th percentile
+latency of my HTTP server.  Unlike other point types in OpenTelemetry, Summary
+points cannot always be merged in a meaningful way. This point type is not
+recommended for new applications and exists for compatibility with other
+formats.
 
 ## Single-Writer
 
@@ -361,6 +428,80 @@ Pending
 ## External Labels
 
 Pending
+
+## Stream Manipulations
+
+Pending introduction.
+
+### Sums: Delta-to-Cumulative
+
+While OpenTelemetry (and some metric backends) allows both Delta and Cumulative
+sums to be reported, the timeseries model we target does not support delta
+counters.  To this end, converting from delta to cumulative needs to be defined
+so that backends can use this mechanism.
+
+> Note: This is not the only possible Delta to Cumulative algorithm.  It is
+> just one possible implementation that fits the OTel Data Model.
+
+Converting from delta points to cumulative point is inherently a stateful
+operation.  To successfully translate, we need all incoming delta points to
+reach one destination which can keep the current counter state and generate
+a new cumulative stream of data (see [single writer princple](#single-writer)).
+
+The algorithm is scheduled out as follows:
+
+- Upon receiving the first Delta point for a given counter we set up the
+  following:
+  - A new counter which stores the cumulative sum, set to the initial counter.
+  - A start time that aligns with the start time of the first point.
+  - A "last seen" time that aligns with the time of the first point.
+- Upon receiving future Delta points, we do the following:
+  - If the next point aligns with the expected next-time window
+    (see [detecting delta restarts](#sums-detecting-alignment-issues))
+    - Update the "last seen" time to align with the time of the current point.
+    - Add the current value to the cumulative counter
+    - Output a new cumulative point with the original start time and current
+      last seen time and count.
+  - if the current point precedes the start time, then drop this point.
+    Note: there are algorithms which can deal with late arriving points.
+  - if the next point does NOT align with the expected next-time window, then
+    reset the counter following the same steps performed as if the current point
+    was the first point seen.
+
+#### Sums: detecting alignment issues
+
+When the next delta sum reported for a given metric stream does not align with
+where we expect it, one of several things could have occurred:
+
+- the process reporting metrics was rebooted, leading to a new reporting
+  interval for the metric.
+- A Single-Writer principle violation where multiple processes are reporting the
+  same metric stream.
+- There was a lost data point, or dropped information.
+
+In all of these scenarios we do our best to give any cumulative metric knowledge
+that some data was lost, and reset the counter.
+
+We detect alignment via two mechanisms:
+
+- If the incoming delta time interval has significant overlap with the previous
+  time interval, we must assume a violation of the single-writer principle.
+- If the incoming delta time interval has a significant gap from the last seen
+  time, we assume some kind of reboot/restart and reset the cumulative counter.
+
+#### Sums: Missing Timestamps
+
+One degenerate case for the delta-to-cumulative algorithm is when timestamps
+are missing from metric data points. While this shouldn't be the case when
+using OpenTelemetry generated metrics, it can occur when adapting other metric
+formats, e.g.
+[StatsD counts](https://github.com/statsd/statsd/blob/master/docs/metric_types.md#counting).
+
+In this scenario, the algorithm listed above would reset the cumulative sum on
+every data point due to not being able to deterimine alignment or point overlap.
+For comparison, see the simple logic used in
+[statsd sums](https://github.com/statsd/statsd/blob/master/stats.js#L281)
+where all points are added, and lost points are ignored.
 
 ## Footnotes
 

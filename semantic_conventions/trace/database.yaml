@@ -185,7 +185,7 @@ groups:
           type: string
           required:
             conditional: >
-              Required if applicable.
+              Required if applicable and not explicitly disabled via instrumentation configuration.
           brief: >
             The database statement being executed.
           note: The value may be sanitized to exclude sensitive information.
