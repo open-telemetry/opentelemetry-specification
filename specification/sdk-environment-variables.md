@@ -32,6 +32,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 | Name                     | Description                                       | Default                           | Notes                               |
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
+| OTEL_SERVICE_NAME        | Value of the [`service.name`](./resource/semantic_conventions/README.md#service) resource attribute | | If both this and `OTEL_RESOURCE_ATTRIBUTES` are provided then `OTEL_SERVICE_NAME` is [merged into](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/resource/sdk.md#merge) `OTEL_RESOURCE_ATTRIBUTES`
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
 | OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
