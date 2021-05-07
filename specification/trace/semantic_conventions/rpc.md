@@ -9,15 +9,18 @@ This document defines how to describe remote procedure calls
 
 <!-- toc -->
 
-- [Common remote procedure call conventions](#common-remote-procedure-call-conventions)
-  * [Span name](#span-name)
-  * [Attributes](#attributes)
-    + [Service name](#service-name)
-  * [Distinction from HTTP spans](#distinction-from-http-spans)
-- [gRPC](#grpc)
-  * [gRPC Attributes](#grpc-attributes)
-  * [gRPC Status](#grpc-status)
-  * [Events](#events)
+- [Semantic conventions for RPC spans](#semantic-conventions-for-rpc-spans)
+  - [Common remote procedure call conventions](#common-remote-procedure-call-conventions)
+    - [Span name](#span-name)
+    - [Attributes](#attributes)
+      - [Service name](#service-name)
+    - [Distinction from HTTP spans](#distinction-from-http-spans)
+  - [gRPC](#grpc)
+    - [gRPC Attributes](#grpc-attributes)
+    - [gRPC Status](#grpc-status)
+    - [Events](#events)
+  - [JSON RPC](#json-rpc)
+    - [JSON RPC Attributes](#json-rpc-attributes)
 
 <!-- tocstop -->
 
@@ -164,3 +167,21 @@ one for sent messages and one for received message. This way we guarantee that
 the values will be consistent between different implementations. In case of
 unary calls only one sent and one received message will be recorded for both
 client and server spans.
+
+## JSON RPC
+
+Conventions specific to [JSON RPC](https://www.jsonrpc.org/).
+
+`rpc.system` MUST be set to `"jsonrpc"`.
+
+### JSON RPC Attributes
+
+<!-- semconv rpc.jsonrpc -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `rpc.jsonrpc.version` | string | Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted. | `2.0`; `1.0` | If missing, it is assumed to be "1.0". |
+| `rpc.jsonrpc.method` | string | `method` property from request. Unlike `rpc.method`, this may not relate to the actual method being called. Useful for client-side traces since client does not know what will be called on the server. | `users.create`; `get_users` | Yes |
+| `rpc.jsonrpc.request_id` | string | `id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification. | `10`; `request-7`; `` | No |
+| `rpc.jsonrpc.error_code` | int | `error.code` property of response if it is an error response. | `-32700`; `100` | If missing, response is assumed to be successful. |
+| `rpc.jsonrpc.error_message` | string | `error.message` property of response if it is an error response. | `Parse error`; `User already exists` | No |
+<!-- endsemconv -->
