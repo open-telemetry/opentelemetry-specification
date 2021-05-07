@@ -8,7 +8,7 @@
 
 **Domain Experts:**
 
-* [Bogdan Brutu](https://github.com/bogdandrutu)
+* [Bogdan Drutu](https://github.com/bogdandrutu)
 * [Josh Suereth](https://github.com/jsuereth)
 * [Joshua MacDonald](https://github.com/jmacd)
 
@@ -205,7 +205,7 @@ DIGIT = %x30-39 ; 0-9
 <a name="instrument-unit"></a>
 
 The `unit` is an optional string provided by the author of the instrument. It
-SHOULD be treated as an oqaque string from the API and SDK (e.g. the SDK is not
+SHOULD be treated as an opaque string from the API and SDK (e.g. the SDK is not
 expected to validate the unit of measurement, or perform the unit conversion).
 
 * If the `unit` is not provided or the `unit` is null, the API and SDK MUST make
@@ -213,14 +213,14 @@ expected to validate the unit of measurement, or perform the unit conversion).
 * It MUST be case-sensitive (e.g. `kb` and `kB` are different units), ASCII
   string.
 * It can have a maximum length of 63 characters. The number 63 is chosen to
-  allow the unit strings (includig the `\0` terminator on certain language
+  allow the unit strings (including the `\0` terminator on certain language
   runtimes) to be stored and compared as 8-bytes integers when performance is
   critical.
 
 <a name="instrument-description"></a>
 
 The `description` is an optional free-form text provided by the author of the
-instrument. It MUST be treated as an oqaque string from the API and SDK.
+instrument. It MUST be treated as an opaque string from the API and SDK.
 
 * If the `description` is not provided or the `description` is null, the API and
   SDK MUST make sure that the behavior is the same as an empty `description`
@@ -249,7 +249,7 @@ Example uses for `Counter`:
 
 There MUST NOT be any API for creating a `Counter` other than with a
 [`Meter`](#meter). This MAY be called `CreateCounter`. If strong type is
-desired, the client can decide the language idomatic name(s), for example
+desired, the client can decide the language idiomatic name(s), for example
 `CreateUInt64Counter`, `CreateDoubleCounter`, `CreateCounter<UInt64>`,
 `CreateCounter<double>`.
 
@@ -342,7 +342,7 @@ Example uses for Asynchronous Counter:
 
 There MUST NOT be any API for creating an Asynchronous Counter other than with a
 [`Meter`](#meter). This MAY be called `CreateObservableCounter`. If strong type
-is desired, the client can decide the language idomatic name(s), for example
+is desired, the client can decide the language idiomatic name(s), for example
 `CreateUInt64ObservableCounter`, `CreateDoubleObservableCounter`,
 `CreateObservableCounter<UInt64>`, `CreateObservableCounter<double>`.
 
@@ -377,7 +377,7 @@ The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
 function(s) independently.
 
-Individual language client can decide what is the idomatic approach. Here are
+Individual language client can decide what is the idiomatic approach. Here are
 some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
@@ -386,7 +386,7 @@ some examples:
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, the
 [SDK](./README.md#sdk) can decide how to handle it. For example, during the
-callback invocation if two measurements `value=1, attributes={pid:4 bitness:64}`
+callback invocation if two measurements `value=1, attributes={pid:4, bitness:64}`
 and `value=2, attributes={pid:4, bitness:64}` are reported, the SDK can decide
 to simply let them pass through (so the downstream consumer can handle
 duplication), drop the entire data, pick the last one, or something else. The
@@ -395,7 +395,7 @@ a single instant, such that when recorded, observations from a single callback
 MUST be reported with identical timestamps.
 
 The API SHOULD provide some way to pass `state` to the callback. Individual
-language client can decide what is the idomatic approach (e.g. it could be an
+language client can decide what is the idiomatic approach (e.g. it could be an
 additional parameter to the callback function, or captured by the lambda
 closure, or something else).
 
@@ -463,7 +463,7 @@ Example uses for `Histogram`:
 
 There MUST NOT be any API for creating a `Histogram` other than with a
 [`Meter`](#meter). This MAY be called `CreateHistogram`. If strong type is
-desired, the client can decide the language idomatic name(s), for example
+desired, the client can decide the language idiomatic name(s), for example
 `CreateUInt64Histogram`, `CreateDoubleHistogram`, `CreateHistogram<UInt64>`,
 `CreateHistogram<double>`.
 
@@ -587,6 +587,7 @@ UpDownCounter](#asynchronous-updowncounter).
 
 ```python
 # Python
+
 items = []
 
 meter.create_observable_up_down_counter(
@@ -610,6 +611,7 @@ properties.
 
 ```python
 # Python
+
 items_counter = meter.create_up_down_counter(
     name="store.inventory",
     description="the number of the items available")
@@ -630,7 +632,7 @@ def sell_item(color, material):
 
 There MUST NOT be any API for creating an `UpDownCounter` other than with a
 [`Meter`](#meter). This MAY be called `CreateUpDownCounter`. If strong type is
-desired, the client can decide the language idomatic name(s), for example
+desired, the client can decide the language idiomatic name(s), for example
 `CreateInt64UpDownCounter`, `CreateDoubleUpDownCounter`,
 `CreateUpDownCounter<Int64>`, `CreateUpDownCounter<double>`.
 
@@ -647,6 +649,7 @@ Here are some examples that individual language client might consider:
 
 ```python
 # Python
+
 customers_in_store = meter.create_up_down_counter(
     name="grocery.customers",
     description="measures the current customers in the grocery store",
@@ -655,6 +658,7 @@ customers_in_store = meter.create_up_down_counter(
 
 ```csharp
 // C#
+
 var customersInStore = meter.CreateUpDownCounter<int>(
     "grocery.customers",
     description: "measures the current customers in the grocery store",
