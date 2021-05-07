@@ -23,6 +23,8 @@ release.
 
 ### SDK Configuration
 
+- Add `OTEL_SERVICE_NAME` environment variable. ([#](https://github.com/open-telemetry/opentelemetry-specification/pull/))
+
 ## v1.3.0 (2021-05-05)
 
 ### Context
