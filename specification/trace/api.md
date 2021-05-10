@@ -566,8 +566,8 @@ status code as `Unset` unless there is an error, as described above.
 
 Application developers and Operators may set the status code to `Ok`.
 
-When span status is set to `Ok` it SHOULD be considered final and any further 
-attempts to change it SHOULD be ignored. 
+When span status is set to `Ok` it SHOULD be considered final and any further
+attempts to change it SHOULD be ignored.
 
 Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
 would otherwise generate. For example, to suppress noisy errors such as 404s.
