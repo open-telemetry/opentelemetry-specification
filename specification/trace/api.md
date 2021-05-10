@@ -552,6 +552,8 @@ The Span interface MUST provide:
 
 The status code SHOULD remain unset, except for the following circumstances:
 
+An attempt to set value `Unset` SHOULD be ignored.
+
 When the status is set to `Error` by Instrumentation Libraries, the status codes
 SHOULD be documented and predictable. The status code should only be set to `Error`
 according to the rules defined within the semantic conventions. For operations
@@ -563,6 +565,9 @@ unless explicitly configured to do so. Instrumention libraries SHOULD leave the
 status code as `Unset` unless there is an error, as described above.
 
 Application developers and Operators may set the status code to `Ok`.
+
+When span status is set to `Ok` it SHOULD be considered final and any further 
+attempts to change it SHOULD be ignored. 
 
 Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
 would otherwise generate. For example, to suppress noisy errors such as 404s.
