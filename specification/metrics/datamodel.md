@@ -301,7 +301,7 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
 
 - A set of data points, each containing:
   - An independent set of Attribute name-value pairs.
-  - A sampled value (e.g. current memory usage)
+  - A sampled value (e.g. current cpu temperature)
   - A timestamp when the value was sampled (`time_unix_nano`)
   - (optional) A timestamp (`start_time_unix_nano`) which has [TBD semantics](https://github.com/open-telemetry/opentelemetry-proto/pull/295).
 
