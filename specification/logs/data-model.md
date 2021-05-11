@@ -105,6 +105,8 @@ Value of type `any` can be one of the following:
 
 - A scalar value: number, string or boolean,
 
+- A byte array,
+
 - An array (a list) of `any` values,
 
 - A `map<string, any>`.
