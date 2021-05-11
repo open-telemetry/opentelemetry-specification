@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Expand `Gauge` metric description in the data model ([#1661](https://github.com/open-telemetry/opentelemetry-specification/pull/1661))
+
 ### Logs
 
 ### Semantic Conventions
