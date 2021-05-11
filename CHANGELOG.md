@@ -17,6 +17,8 @@ release.
 
 ### Semantic Conventions
 
+- Add JSON RPC specific conventions ([#1643](https://github.com/open-telemetry/opentelemetry-specification/pull/1643)).
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
