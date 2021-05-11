@@ -325,7 +325,7 @@ user configuration.
 ### Histogram
 
 [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L225)
-metric data points convey a population of recorded data points in a compressed
+metric data points convey a population of recorded measurements in a compressed
 format. A histogram bundles a set of events into divided populations with an
 overall event count and aggregate sum for all events.
 
