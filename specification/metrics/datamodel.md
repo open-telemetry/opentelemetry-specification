@@ -282,6 +282,11 @@ degradation or loss of visibility.
 
 ## Temporality
 
+The notion of temporality refers to the way additive quanties are
+expressed, in relation to time, indicating whether reported values
+incorporate previous measurements or not.  Sum and Histogram data
+points, in particular, support a choice of aggregation temporality.
+
 Every OTLP metric data point has two associated timestamps.  The
 first, mandatory timestamp is the one associated with the observation,
 the moment when the measurement became current or took effect, and is
@@ -289,17 +294,12 @@ referred to as `TimeUnixNano`.  The second, optional timestamp is used
 to indicate when a sequence of points is unbroken, and is referred to as
 `StartTimeUnixNano`.
 
-The second timestamp is strongly recommended for Sum, Histogram, an
+The second timestamp is strongly recommended for Sum, Histogram, and
 Summary points, as it is necessary to correctly interpret the rate
 from an OTLP stream, in a manner that is aware of restarts.  The use
 of `StartTimeUnixNano` to indicate the start of an unbroken sequence
 of points means it can also be used to encode implicit gaps in
 the stream.
-
-The notion of temporality refers to the way additive quanties are
-expressed, in relation to time, indicating whether reported values
-incorporate previous measurements or not.  Sum and Histogram data
-points, in particular, support a choice of aggregation temporality.
 
 - *Cumulative temporality* means that successive data points repeat the starting
   timestamp. For example, from start time T0, cumulative data points cover time
@@ -363,9 +363,9 @@ sequence of observations is expected to have reported the same
 cumulative state prior to a gap in observations.
 
 The presence or absence of a point with `TimeUnixNano` equal to the
-`StartTimeUnixNano` indicates how to count rate contribution frmo the
+`StartTimeUnixNano` indicates how to count rate contribution from the
 first point in a sequence.  If the first point in an unknown
-start-time reset sequence is lost, the consumer of this data is might
+start-time reset sequence is lost, the consumer of this data might
 overcount the rate contribution of the second point, as it then appears
 like a "true" reset.
 
