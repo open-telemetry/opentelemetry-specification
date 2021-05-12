@@ -21,6 +21,8 @@ release.
 
 - Add JSON RPC specific conventions ([#1643](https://github.com/open-telemetry/opentelemetry-specification/pull/1643)).
 
+- Add Memcache to Database specific conventions ([#1689](https://github.com/open-telemetry/opentelemetry-specification/pull/1689)).
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
