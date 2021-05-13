@@ -46,9 +46,24 @@ TODO:
 [Measurement](./api.md#measurement) is recorded by an
 [Instrument](./api.md#instrument).
 
-`MeasurementProcessor` has access to the Measurement and the corresponding
-Instrument. It could also access the [Baggage](../baggage/api.md) and
-[Context](../context/context.md) if the Baggage/Context are available.
+`MeasurementProcessor` MUST provide access to:
+
+* The `Measurement`
+* The `Instrument`, which is used to report the `Measurement`
+* The `Resource`, which is associated with the `MeterProvider`
+
+In addition to things listed above, if the `Measurement` is reported by a
+synchronous `Instrument` (e.g. [Counter](./api.md#counter)),
+`MeasurementProcessor` MUST provide access to:
+
+* [Baggage](../baggage/api.md)
+* [Context](../context/context.md)
+* The [Span](../trace/api.md#span) which is associated with the `Measurement`
+
+Depending on the programming language and runtime model, these can be provided
+explicitly (e.g. as input arguments) or implicitly (e.g. [implicit
+Context](../context/context.md#optional-global-operations) and the [currently
+active span](../trace/api.md#context-interaction)).
 
 ```text
 +------------------+
