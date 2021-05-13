@@ -41,7 +41,6 @@ OpenTelemetry fields:
 - Resource attributes
 - Tracestate
 - Links
-- dropped links count
 
 Zipkin fields:
 
