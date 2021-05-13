@@ -48,8 +48,9 @@ key-value pairs:
 
 OpenTelemetry Span's dropped attributes count MUST be reported as a key-value
 pair associated with the Span. Similarly, Span Event's dropped attributes count
-MUST be reported as a key-value pair associated with the Span Event. In both
-cases the key name MUST be `otel.dropped_attributes_count`.
+MUST be reported as a key-value pair associated with the Span Event and Span Link's
+dropped attributes count MUST be reported as a key-value pair associated with the
+Span Link. In all cases the key name MUST be `otel.dropped_attributes_count`.
 
 This key-value pair should only be recorded when it contains a non-zero value.
 
