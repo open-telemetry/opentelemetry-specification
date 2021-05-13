@@ -272,7 +272,7 @@ in OTLP consist of the following:
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
       `00:00:00 UTC on 1 January 1970`
-    - (optional) a set of examplars (see [Exemplars](#exemplars)). 
+    - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 The aggregation temporality is used to understand the context in which the sum
 was calculated. When the aggregation temporality is "delta", we expect to have
@@ -365,7 +365,6 @@ points cannot always be merged in a meaningful way. This point type is not
 recommended for new applications and exists for compatibility with other
 formats.
 
-
 ## Exemplars
   
 An exemplar is a recorded value that associates OpenTelemetry context to
@@ -388,7 +387,6 @@ sum.
 
 For Gauges, when an exemplar exists, its value was seen at some point within
 the gauge interval for the same source.
-
 
 ## Single-Writer
 
