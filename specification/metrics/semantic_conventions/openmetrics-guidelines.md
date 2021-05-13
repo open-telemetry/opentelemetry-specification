@@ -26,7 +26,7 @@ metrics in the OpenMetrics exposition format. For more information, refer to the
 
 #### Name and Label Keys
 
-Exposting OpenTelemetry metrics in the OpenMetrics format is primarily
+Exposing OpenTelemetry metrics in the OpenMetrics format is primarily
 problematic for metric and label naming; the OpenMetrics exposition format
 expressly forbids some characters that are allowed in OpenTelemetry.
 
