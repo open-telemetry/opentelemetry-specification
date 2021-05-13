@@ -59,3 +59,10 @@ OpenTelemetry Span's dropped events count MUST be reported as a key-value pair
 associated with the Span. The key name MUST be `otel.dropped_events_count`.
 
 This key-value pair should only be recorded when it contains a non-zero value.
+
+### Dropped Links Count
+
+OpenTelemetry Span's dropped links count MUST be reported as a key-value pair
+associated with the Span. The key name MUST be `otel.dropped_links_count`.
+
+This key-value pair should only be recorded when it contains a non-zero value.
