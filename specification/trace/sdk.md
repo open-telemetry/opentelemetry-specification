@@ -356,6 +356,9 @@ There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
 should not be emitted once per span, or per discarded attribute, event, or links.
 
+Attributes, events and links dropped due to collection limits MUST be reported at export
+time.
+
 ## Id Generators
 
 The SDK MUST by default randomly generate both the `TraceId` and the `SpanId`.
