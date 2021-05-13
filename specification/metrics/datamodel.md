@@ -272,6 +272,7 @@ in OTLP consist of the following:
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
       `00:00:00 UTC on 1 January 1970`
+    - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 The aggregation temporality is used to understand the context in which the sum
 was calculated. When the aggregation temporality is "delta", we expect to have
@@ -304,6 +305,7 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
   - A sampled value (e.g. current cpu temperature)
   - A timestamp when the value was sampled (`time_unix_nano`)
   - (optional) A timestamp (`start_time_unix_nano`) which has [TBD semantics](https://github.com/open-telemetry/opentelemetry-proto/pull/295).
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 In OTLP, a point within a Gauge stream represents the last-sampled event for a
 given time window.
@@ -324,7 +326,35 @@ user configuration.
 
 ### Histogram
 
-Pending
+[Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L225)
+metric data points convey a population of recorded measurements in a compressed
+format. A histogram bundles a set of events into divided populations with an
+overall event count and aggregate sum for all events.
+
+![Delta Histogram](img/model-delta-histogram.png)
+
+Histograms consist of the following:
+
+- An *Aggregation Temporality* of delta or cumulative.
+- A set of data points, each containing:
+  - An independent set of Attribute name-value pairs.
+  - A time window (of `(start, end]`) time for which the Histogram was bundled.
+    - The time interval is inclusive of the end time.
+    - Time values are specified as nanoseconds since the UNIX Epoch
+      (00:00:00 UTC on 1 January 1970).
+  - A count (`count`) of the total population of points in the histogram.
+  - A sum (`sum`) of all the values in the histogram.
+  - (optional) A series of buckets with:
+    - Explicit boundary values.  These values denote the lower and upper bounds
+      for buckets and whether not a given observation would be recorded in this
+      bucket.
+    - A count of the number of observations that fell within this bucket.
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).  
+
+Like Sums, Histograms also define an aggregation temporality.  The picture above
+denotes Delta temporality where accumulated event counts are reset to zero after reporting
+and a new aggregation occurs. Cumulative, on the other hand, continues to
+aggregate events, resetting with the use of a new start time.
 
 ### Summary (Legacy)
 
@@ -334,6 +364,29 @@ latency of my HTTP server.  Unlike other point types in OpenTelemetry, Summary
 points cannot always be merged in a meaningful way. This point type is not
 recommended for new applications and exists for compatibility with other
 formats.
+
+## Exemplars
+  
+An exemplar is a recorded value that associates OpenTelemetry context to
+a metric event within a Metric. One use case is to allow users to link
+Trace signals w/ Metrics.
+
+Exemplars consist of:
+
+- (optional) The trace associated with a recording (`trace_id`, `span_id`)
+- The time of the observation (`time_unix_nano`)
+- The recorded value (`value`)
+- A set of filtered attributes (`filtered_attributes`) which provide
+  additional insight into the Context when the observation was made.
+
+For Histograms, when an exemplar exists, its value already participates
+in `bucket_counts`, `count` and `sum` reported by the histogram point.
+
+For Sums, when an exemplar exists, its value is already included in the overall
+sum.
+
+For Gauges, when an exemplar exists, its value was seen at some point within
+the gauge interval for the same source.
 
 ## Single-Writer
 
