@@ -619,7 +619,7 @@ def cpu_frequency_callback():
         (0.56, ("cpu", 1), ("core", 1)),
     )
 
-meter.create_observable_counter(
+meter.create_observable_gauge(
     name="cpu.frequency",
     description="the real-time CPU clock speed",
     callback=cpu_frequency_callback,
