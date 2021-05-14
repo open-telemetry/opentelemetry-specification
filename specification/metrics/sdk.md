@@ -67,17 +67,17 @@ active span](../trace/api.md#context-interaction)).
 
 ```text
 +------------------+
-| MeterProvider    |                 +----------------------+
-|   Meter A        | Measurements... |                      | Metrics... +-----------------+
-|     Instrument X |-----------------> MeasurementProcessor +------------>                 |
+| MeterProvider    |                 +----------------------+            +-----------------+
+|   Meter A        | Measurements... |                      | Metrics... |                 |
+|     Instrument X |-----------------> MeasurementProcessor +------------> In-memory state |
 |     Instrument Y +                 |                      |            |                 |
-|   Meter B        |                 +----------------------+            |                 |
-|     Instrument Z |                                                     | In-memory state |
-|     ...          |                 +----------------------+            |                 |
+|   Meter B        |                 +----------------------+            +-----------------+
+|     Instrument Z |
+|     ...          |                 +----------------------+            +-----------------+
 |     ...          | Measurements... |                      | Metrics... |                 |
-|     ...          |-----------------> MeasurementProcessor +------------>                 |
-|     ...          |                 |                      |            +-----------------+
-|     ...          |                 +----------------------+
+|     ...          |-----------------> MeasurementProcessor +------------> In-memory state |
+|     ...          |                 |                      |            |                 |
+|     ...          |                 +----------------------+            +-----------------+
 +------------------+
 ```
 
@@ -93,17 +93,17 @@ The following diagram shows `MetricProcessor`'s relationship to other components
 in the SDK:
 
 ```text
-                     +-----------------+  +-----------------------+
-+-----------------+  |                 |  |                       |
-|                 |--> MetricProcessor |--> MetricExporter (push) |--> Another process
++-----------------+  +-----------------+  +-----------------------+
 |                 |  |                 |  |                       |
-|                 |  +-----------------+  +-----------------------+
-| In-memory state |
-|                 |  +-----------------+  +-----------------------+
+> In-memory state |--> MetricProcessor |--> MetricExporter (push) |--> Another process
 |                 |  |                 |  |                       |
-|                 |--> MetricProcessor |--> MetricExporter (pull) |--> Another process (scraper)
-+-----------------+  |                 |  |                       |
-                     +-----------------+  +-----------------------+
++-----------------+  +-----------------+  +-----------------------+
+
++-----------------+  +-----------------+  +-----------------------+
+|                 |  |                 |  |                       |
+> In-memory state |--> MetricProcessor |--> MetricExporter (pull) |--> Another process (scraper)
+|                 |  |                 |  |                       |
++-----------------+  +-----------------+  +-----------------------+
 ```
 
 ## MetricExporter
