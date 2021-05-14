@@ -650,7 +650,7 @@ meter.create_observable_gauge(
 
 // A simple scenario where only one value is reported
 
-meter.CreateObservableCounter<double>("temperature", () => sensor.GetTemperature());
+meter.CreateObservableGauge<double>("temperature", () => sensor.GetTemperature());
 ```
 
 #### Asynchronous Gauge operations
