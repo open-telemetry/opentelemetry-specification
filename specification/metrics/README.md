@@ -8,7 +8,7 @@
 
 **Domain Experts:**
 
-* [Bogdan Brutu](https://github.com/bogdandrutu)
+* [Bogdan Drutu](https://github.com/bogdandrutu)
 * [Josh Suereth](https://github.com/jsuereth)
 * [Joshua MacDonald](https://github.com/jmacd)
 
