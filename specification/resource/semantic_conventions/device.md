@@ -13,7 +13,7 @@
 | `device.model.identifier` | string | The model identifier for the device [2] | `iPhone3,4`; `SM-G920F` | No |
 | `device.model.name` | string | The marketing name for the device model [3] | `iPhone 6s Plus`; `Samsung Galaxy S6` | No |
 
-**[1]:** For example, in an iOS application this might be the [vendor identifier](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor). Caution should be taken when storing personal data or anything which can identify a user. GDPR and data protection laws may apply, ensure you do your own due diligence.
+**[1]:** The device identifier MUST only be defined using the values outlined below. This value is not an advertising identifier and MUST NOT be used as such. On iOS (Swift or Objective-C), this value MUST be equal to the [vendor identifier](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor). On Android (Java or Kotlin), this value MUST be equal to the Firebase Installation ID or a globally unique UUID which is persisted across sessions in your application. More information can be found [here](https://developer.android.com/training/articles/user-data-ids) on best practices and exact implementation details. Caution should be taken when storing personal data or anything which can identify a user. GDPR and data protection laws may apply, ensure you do your own due diligence.
 
 **[2]:** It's recommended this value represents a machine readable version of the model identifier rather than the market or consumer-friendly name of the device.
 
