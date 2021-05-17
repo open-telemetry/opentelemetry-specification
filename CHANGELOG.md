@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add Dropped Links Count to non-otlp exporters section ([#1697](https://github.com/open-telemetry/opentelemetry-specification/pull/1697))
+
 ### Metrics
 
 - Expand `Gauge` metric description in the data model ([#1661](https://github.com/open-telemetry/opentelemetry-specification/pull/1661))
