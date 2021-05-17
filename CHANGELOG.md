@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add note about reporting dropped counts for attributes, events, links. ([#1699](https://github.com/open-telemetry/opentelemetry-specification/pull/1699))
+
 ### Metrics
 
 - Expand `Gauge` metric description in the data model ([#1661](https://github.com/open-telemetry/opentelemetry-specification/pull/1661))
