@@ -38,7 +38,7 @@ Certain attribute groups in this document have a **Required** column. For these 
 
 ## Attributes with Special Handling
 
-Given their significance some resource attributes receive a special treatment as described below.
+Given their significance some resource attributes are treated specifically as described below.
 
 ### Semantic Attributes with Dedicated Environment Variable
 
