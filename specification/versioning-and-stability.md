@@ -99,6 +99,26 @@ All existing API calls MUST continue to compile and function against all future 
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for API packages.
 
+##### Extending Existing API Calls
+
+An existing API call MAY be extended without incrementing the major version
+number if the particular language allows to do it in a backward-compatible
+manner.
+
+To add a new parameter to an existing API call depending on the language several
+approaches are possible:
+
+- Add a new optional parameter to existing methods. This may not be the right
+  approach for languages where ABI stability is part of our guarantees since it
+  likely breaks the ABI.
+
+- Add a method overload that allows passing a different set of parameters, that
+  include the new parameter. This is likely the preferred approach for languages
+  where method overloads are possible.
+
+There may be other ways to extend existing APIs in non-breaking manner. Language
+maintainers SHOULD choose the idiomatic way for their language.
+
 #### SDK Stability
 
 Public portions of SDK packages MUST remain backwards compatible.
