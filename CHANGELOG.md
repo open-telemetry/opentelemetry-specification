@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add Dropped Links Count to non-otlp exporters section ([#1697](https://github.com/open-telemetry/opentelemetry-specification/pull/1697))
+
 ### Metrics
 
 - Adds detail about when to use `StartTimeUnixNano` and handling of unknown start-time resets. ([#1646](https://github.com/open-telemetry/opentelemetry-specification/pull/1646))
