@@ -21,6 +21,10 @@ release.
 
 ### Logs
 
+### Resource
+
+- Add schema_url support to `Resource`. ([#1692](https://github.com/open-telemetry/opentelemetry-specification/pull/1692))
+
 ### Semantic Conventions
 
 - Add JSON RPC specific conventions ([#1643](https://github.com/open-telemetry/opentelemetry-specification/pull/1643)).
