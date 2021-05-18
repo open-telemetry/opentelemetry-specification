@@ -93,17 +93,17 @@ The following diagram shows `MetricProcessor`'s relationship to other components
 in the SDK:
 
 ```text
-+-----------------+  +-----------------+  +-----------------------+
-|                 |  |                 |  |                       |
-> In-memory state |--> MetricProcessor |--> MetricExporter (push) |--> Another process
-|                 |  |                 |  |                       |
-+-----------------+  +-----------------+  +-----------------------+
++-----------------+            +-----------------+            +-----------------------+
+|                 | Metrics... |                 | Metrics... |                       |
+> In-memory state | -----------> MetricProcessor | -----------> MetricExporter (push) |--> Another process
+|                 |            |                 |            |                       |
++-----------------+            +-----------------+            +-----------------------+
 
-+-----------------+  +-----------------+  +-----------------------+
-|                 |  |                 |  |                       |
-> In-memory state |--> MetricProcessor |--> MetricExporter (pull) |--> Another process (scraper)
-|                 |  |                 |  |                       |
-+-----------------+  +-----------------+  +-----------------------+
++-----------------+            +-----------------+            +-----------------------+
+|                 | Metrics... |                 | Metrics... |                       |
+> In-memory state |------------> MetricProcessor |------------> MetricExporter (pull) |--> Another process (scraper)
+|                 |            |                 |            |                       |
++-----------------+            +-----------------+            +-----------------------+
 ```
 
 ## MetricExporter
