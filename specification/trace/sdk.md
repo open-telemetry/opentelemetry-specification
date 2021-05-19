@@ -92,6 +92,10 @@ Thus, the SDK specification defines sets of possible requirements for
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
 
+  Counts for attributes, events and links dropped due to collection limits MUST be
+  available for exporters to report as described in the [exporters](./sdk_exporters/non-otlp.md#dropped-attributes-count)
+  specification.
+
   A function receiving this as argument might not be able to modify the Span.
 
   Note: Typically this will be implemented with a new interface or
@@ -355,10 +359,6 @@ public final class SpanLimits {
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
 should not be emitted once per span, or per discarded attribute, event, or links.
-
-Counts for attributes, events and links dropped due to collection limits MUST be
-available for exporters to report as described in the [exporters](./sdk_exporters/non-otlp.md#dropped-attributes-count)
-specification.
 
 ## Id Generators
 
