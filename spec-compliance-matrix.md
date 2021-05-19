@@ -19,9 +19,10 @@ formats is required. Implementing more than one format is optional.
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create TracerProvider                                                                            |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get a Tracer with schema_url                                                                     |          |    |      |    |        |      |        |     |      |     |      |       |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
-| ForceFlush (SDK only required)                                                                   |          | [-][go1606]  | +    | -  | +      | +    | -      |     | +    | -   | +    | +     |
+| ForceFlush (SDK only required)                                                                   |          | +  | +    | -  | +      | +    | -      |     | +    | -   | +    | +     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
 | Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Set active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
@@ -33,7 +34,7 @@ formats is required. Implementing more than one format is optional.
 | [SpanContext](specification/trace/api.md#spancontext)                                            |          |    |      |    |        |      |        |     |      |     |      |       |
 | IsValid                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRemote                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Conforms to the W3C TraceContext spec                                                            |          | [-][go1516] | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| Conforms to the W3C TraceContext spec                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Span](specification/trace/api.md#span)                                                          |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -133,7 +134,7 @@ Note: Support for environment variables is optional.
 |OTEL_LOG_LEVEL                                | - | -  | + | [-][py1059] | +  | +    | - |    | - | -  | -   |        |
 |OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
 |OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          | [-][go1085] | +  |   | +    | +  | -    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | -    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        | - |    |   |      |    | -    | - |    | - | -  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | -  | -   |
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  |   |    |     |
@@ -158,16 +159,16 @@ Note: Support for environment variables is optional.
 | OTLP/HTTP JSON Protobuf Exporter                                               | *        | +  | - | +  | [-][py1003] |      | -      |     |      |     | -    | -     |
 | OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | - | +  | +           | +    | -      |     |      |     | -    | -     |
 | Concurrent sending                                                             |          | -  | + | +  | [-][py1108] |      | -      |     | +    |     | -    | -     |
-| Honors retryable responses with backoff                                        | X        | [-][go1632] |   | +  | +  | +    | -      |     |      |     | -    | -     |
-| Honors non-retryable responses                                                 | X        | [-][go1632]  |   | -  | + | +    | -      |     |      |     | -    | -     |
-| Honors throttling response                                                     | X        | [-][go1632]  |   | -  | + | +    | -      |     |      |     | -    | -     |
+| Honors retryable responses with backoff                                        | X        | +  |   | +  | +  | +    | -      |     |      |     | -    | -     |
+| Honors non-retryable responses                                                 | X        | +  |   | -  | + | +    | -      |     |      |     | -    | -     |
+| Honors throttling response                                                     | X        | +  |   | -  | + | +    | -      |     |      |     | -    | -     |
 | Multi-destination spec compliance                                              | X        | +  |   |    | [-][py1109] |      | -      |     |      |     | -    | -     |
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    |     | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    |     | -    | -     |
 | Zipkin V2 JSON                                                                 | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      |     | -    |     | -    | -     |
-| Service name mapping                                                           |          | [-][go1777] | + | +  | +  | +    | +      | +   | +    |     | +    | +     |
+| Service name mapping                                                           |          | +  | + | +  | +  | +    | +      | +   | +    |     | +    | +     |
 | SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    |     | +    | +     |
 | InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | -   | +    |     | +    | +     |
 | Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    |     | +    | +     |
@@ -190,12 +191,6 @@ Note: Support for environment variables is optional.
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 | Prometheus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
-
-[go1085]: https://github.com/open-telemetry/opentelemetry-go/issues/1085
-[go1516]: https://github.com/open-telemetry/opentelemetry-go/issues/1516
-[go1606]: https://github.com/open-telemetry/opentelemetry-go/issues/1606
-[go1632]: https://github.com/open-telemetry/opentelemetry-go/issues/1632
-[go1777]: https://github.com/open-telemetry/opentelemetry-go/issues/1777
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
 [py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059

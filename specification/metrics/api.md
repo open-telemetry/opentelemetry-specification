@@ -133,22 +133,28 @@ This API MUST accept the following parameters:
   suppress telemetry produced by this library.
 * `version` (optional): Specifies the version of the instrumentation library
   (e.g. `1.0.0`).
+* [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
+  recorded in the emitted telemetry.
 
 It is unspecified whether or under which conditions the same or different
 `Meter` instances are returned from this functions.
 
 Implementations MUST NOT require users to repeatedly obtain a `Meter` again with
-the same name+version to pick up configuration changes. This can be achieved
-either by allowing to work with an outdated configuration or by ensuring that
-new configuration applies also to previously returned `Meter`s.
+the same name+version+schema_url to pick up configuration changes. This can be
+achieved either by allowing to work with an outdated configuration or by
+ensuring that new configuration applies also to previously returned `Meter`s.
 
 Note: This could, for example, be implemented by storing any mutable
 configuration in the `MeterProvider` and having `Meter` implementation objects
 have a reference to the `MeterProvider` from which they were obtained. If
 configuration must be stored per-meter (such as disabling a certain meter), the
-meter could, for example, do a look-up with its name+version in a map in the
-`MeterProvider`, or the `MeterProvider` could maintain a registry of all
+meter could, for example, do a look-up with its name+version+schema_url in a map
+in the `MeterProvider`, or the `MeterProvider` could maintain a registry of all
 returned `Meter`s and actively update their configuration if it changes.
+
+The effect of associating a Schema URL with a `Meter` MUST be that the telemetry
+emitted using the `Meter` will be associated with the Schema URL, provided that
+the emitted data format is capable of representing such association.
 
 ## Meter
 
