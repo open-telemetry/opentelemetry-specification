@@ -587,7 +587,7 @@ Individual language client can decide what is the idiomatic approach. Here are
 some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observer argument to allow individual `Measurement`s to be reported.
+* Use an observer result argument to allow individual `Measurement`s to be reported.
 
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, the
