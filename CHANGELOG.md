@@ -12,6 +12,7 @@ release.
 ### Traces
 
 - Add Dropped Links Count to non-otlp exporters section ([#1697](https://github.com/open-telemetry/opentelemetry-specification/pull/1697))
+- Add note about reporting dropped counts for attributes, events, links. ([#1699](https://github.com/open-telemetry/opentelemetry-specification/pull/1699))
 
 ### Metrics
 
