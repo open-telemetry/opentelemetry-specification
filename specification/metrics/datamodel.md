@@ -227,9 +227,9 @@ same kind. <sup>[1](#otlpdatapointfn)</sup>
 
 The basic point kinds are:
 
-1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L200)
-2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L170)
-3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L228)
+1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L230)
+2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L200)
+3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L258)
 
 Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
 not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
@@ -254,7 +254,7 @@ designed for compatibility with existing metric formats.
 
 ### Sums
 
-[Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L230)s
+[Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L230)s
 in OTLP consist of the following:
 
 - An *Aggregation Temporality* of delta or cumulative.
@@ -297,7 +297,7 @@ best tradeoff for their use case.
 
 ### Gauge
 
-A [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L200)
+A [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L200)
 in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
 
 - A set of data points, each containing:
@@ -326,7 +326,7 @@ user configuration.
 
 ### Histogram
 
-[Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L258)
+[Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L258)
 metric data points convey a population of recorded measurements in a compressed
 format. A histogram bundles a set of events into divided populations with an
 overall event count and aggregate sum for all events.
@@ -358,7 +358,7 @@ aggregate events, resetting with the use of a new start time.
 
 ### Summary (Legacy)
 
-[Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L244)
+[Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L268)
 metric data points convey quantile summaries, e.g. What is the 99-th percentile
 latency of my HTTP server.  Unlike other point types in OpenTelemetry, Summary
 points cannot always be merged in a meaningful way. This point type is not
