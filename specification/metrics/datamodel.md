@@ -272,6 +272,7 @@ in OTLP consist of the following:
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
       `00:00:00 UTC on 1 January 1970`
+    - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 The aggregation temporality is used to understand the context in which the sum
 was calculated. When the aggregation temporality is "delta", we expect to have
@@ -296,11 +297,64 @@ best tradeoff for their use case.
 
 ### Gauge
 
-Pending
+A [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L174)
+in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
+
+- A set of data points, each containing:
+  - An independent set of Attribute name-value pairs.
+  - A sampled value (e.g. current cpu temperature)
+  - A timestamp when the value was sampled (`time_unix_nano`)
+  - (optional) A timestamp (`start_time_unix_nano`) which has [TBD semantics](https://github.com/open-telemetry/opentelemetry-proto/pull/295).
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).
+
+In OTLP, a point within a Gauge stream represents the last-sampled event for a
+given time window.
+
+![Gauge](img/model-gauge.png)
+
+In this example, we can see an underlying timeseries we are sampling with our
+Gauge.  While the event model *can* sample more than once for a given metric
+reporting interval, only the last value is reported in the metric stream via
+OTLP.
+
+Gauges do not provide an aggregation semantic, instead "last sample value" is
+used when performing operations like temporal alignment or adjusting resolution.
+
+Gauges can be aggregated through transformation into histograms, or other
+metric types. These operations are not done by default, and require direct
+user configuration.
 
 ### Histogram
 
-Pending
+[Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L225)
+metric data points convey a population of recorded measurements in a compressed
+format. A histogram bundles a set of events into divided populations with an
+overall event count and aggregate sum for all events.
+
+![Delta Histogram](img/model-delta-histogram.png)
+
+Histograms consist of the following:
+
+- An *Aggregation Temporality* of delta or cumulative.
+- A set of data points, each containing:
+  - An independent set of Attribute name-value pairs.
+  - A time window (of `(start, end]`) time for which the Histogram was bundled.
+    - The time interval is inclusive of the end time.
+    - Time values are specified as nanoseconds since the UNIX Epoch
+      (00:00:00 UTC on 1 January 1970).
+  - A count (`count`) of the total population of points in the histogram.
+  - A sum (`sum`) of all the values in the histogram.
+  - (optional) A series of buckets with:
+    - Explicit boundary values.  These values denote the lower and upper bounds
+      for buckets and whether not a given observation would be recorded in this
+      bucket.
+    - A count of the number of observations that fell within this bucket.
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).  
+
+Like Sums, Histograms also define an aggregation temporality.  The picture above
+denotes Delta temporality where accumulated event counts are reset to zero after reporting
+and a new aggregation occurs. Cumulative, on the other hand, continues to
+aggregate events, resetting with the use of a new start time.
 
 ### Summary (Legacy)
 
@@ -310,6 +364,29 @@ latency of my HTTP server.  Unlike other point types in OpenTelemetry, Summary
 points cannot always be merged in a meaningful way. This point type is not
 recommended for new applications and exists for compatibility with other
 formats.
+
+## Exemplars
+  
+An exemplar is a recorded value that associates OpenTelemetry context to
+a metric event within a Metric. One use case is to allow users to link
+Trace signals w/ Metrics.
+
+Exemplars consist of:
+
+- (optional) The trace associated with a recording (`trace_id`, `span_id`)
+- The time of the observation (`time_unix_nano`)
+- The recorded value (`value`)
+- A set of filtered attributes (`filtered_attributes`) which provide
+  additional insight into the Context when the observation was made.
+
+For Histograms, when an exemplar exists, its value already participates
+in `bucket_counts`, `count` and `sum` reported by the histogram point.
+
+For Sums, when an exemplar exists, its value is already included in the overall
+sum.
+
+For Gauges, when an exemplar exists, its value was seen at some point within
+the gauge interval for the same source.
 
 ## Single-Writer
 
@@ -349,14 +426,24 @@ degradation or loss of visibility.
 
 ## Temporality
 
-Every OTLP point has two associated timestamps. For OTLP Sum and Histogram
-points, the two timestamps indicate when the point was reset and when the sum
-was captured. For OTLP Gauge points, the two timestamps indicate when the
-measurement was taken and when it was reported as being still the last value.
+The notion of temporality refers to the way additive quanties are
+expressed, in relation to time, indicating whether reported values
+incorporate previous measurements or not.  Sum and Histogram data
+points, in particular, support a choice of aggregation temporality.
 
-The notion of temporality refers to a configuration choice made in the system
-as a whole, indicating whether reported values incorporate previous
-measurements, or not.
+Every OTLP metric data point has two associated timestamps.  The
+first, mandatory timestamp is the one associated with the observation,
+the moment when the measurement became current or took effect, and is
+referred to as `TimeUnixNano`.  The second, optional timestamp is used
+to indicate when a sequence of points is unbroken, and is referred to as
+`StartTimeUnixNano`.
+
+The second timestamp is strongly recommended for Sum, Histogram, and
+Summary points, as it is necessary to correctly interpret the rate
+from an OTLP stream, in a manner that is aware of restarts.  The use
+of `StartTimeUnixNano` to indicate the start of an unbroken sequence
+of points means it can also be used to encode implicit gaps in
+the stream.
 
 - *Cumulative temporality* means that successive data points repeat the starting
   timestamp. For example, from start time T0, cumulative data points cover time
@@ -380,13 +467,76 @@ event commonly is translated into two metric events (a 1-count and a timing
 measurement). Delta temporality enables sampling and supports shifting the cost
 of cardinality outside of the process.
 
+## Resets and Gaps
+
+When the `StartTimeUnixNano` field is present, it allows the consumer
+to observe when there are gaps and overlapping writers in a stream.
+Correctly used, the consumer can observe both transient and ongoing
+violations of the single-writer principle as well as reset events.  In
+an unbroken sequence of observations, the `StartTimeUnixNano` always
+matches either the `TimeUnixNano` or the `StartTimeUnixNano` of other
+points in the same sequence.  For the initial points in an unbroken
+sequence:
+
+- When `StartTimeUnixNano` is less than `TimeUnixNano`, a new unbroken sequence of observations begins with a "true" reset at a known start time. The zero value is implicit, it is not necessary to record the starting point.
+- When `StartTimeUnixNano` equals `TimeUnixNano`, a new unbroken sequence of observations begins with a reset at an unknown start time. The initial observed value is recorded to indicate that an unbroken sequence of observations resumes. These points have zero duration, and indicate that nothing is known about previously-reported points and that data may have been lost.
+
+For subsequent points in an unbroken sequence:
+
+- For points with delta aggregation temporality, the `StartTimeUnixNano` of each point matches the `TimeUnixNano` of the preceding point
+- Otherwise, the `StartTimeUnixNano` of each point matches the `StartTimeUnixNano` of the initial observation.
+
+A metric stream has a gap, where it is implicitly undefined, anywhere
+there is a range of time such that no point covers that range range
+with its `StartTimeUnixNano` and `TimeUnixNano` fields.
+
+### Cumulative streams: handling unknown start time
+
+An unbroken stream of observations is resumed with a zero-duration
+point and non-zero value, as described above.  For points with
+cumulative aggregation temporality, the rate contributed to the
+timeseries by each point depends on the prior point value in the
+stream.
+
+To correctly compute the rate contribution of the first point in a
+unbroken sequence requires knowing whether it is the first point.
+Unknown start-time reset points appear with `TimeUnixNano` equal to
+the `StartTimeUnixNano` of a stream of points, in which case the rate
+contribution of the first point is considered zero.  An earlier
+sequence of observations is expected to have reported the same
+cumulative state prior to a gap in observations.
+
+The presence or absence of a point with `TimeUnixNano` equal to the
+`StartTimeUnixNano` indicates how to count rate contribution from the
+first point in a sequence.  If the first point in an unknown
+start-time reset sequence is lost, the consumer of this data might
+overcount the rate contribution of the second point, as it then appears
+like a "true" reset.
+
+Various approaches can be taken to avoid overcounting.  A system could
+use state from earlier in the stream to resolve start-time ambiguity,
+for example.
+
+### Cumulative streams: inserting true reset points
+
+The absolute value of the cumulative counter is often considered
+meaningful, but when the cumulative value is only used to calculate a
+rate function, it is possible to drop the initial unknown start-time
+reset point, but remember the initially observed value in order to
+modify subsequent observations.  Later in the cumulative sequence are
+output relative to the initial value, thus appears as a true reset
+offset by an unknown constant.
+
+This process is known as inserting true reset points, a special case
+of reaggregation for cumulative series.
+
 ## Overlap
 
-Overlap occurs when more than one metric data point occurs for a data stream
-within a time window.   This is particularly problematic for data points meant
-to represent an entire time window, e.g. a Histogram reporting population
-density of collected metric data points for a time window.  If two of these show
-up with overlapping time windows, how do backends handle this situation?
+Overlap occurs when more than one metric data point is defined for a
+metric stream within a time window.  Overlap is usually caused through
+mis-configuration, and it can lead to serious mis-interpretation of
+the data.  `StartTimeUnixNano` is recommended so that consumers can
+recognize and response to overlapping points.
 
 We define three principles for handling overlap:
 

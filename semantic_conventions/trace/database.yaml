@@ -147,6 +147,9 @@ groups:
               - id: elasticsearch
                 value: 'elasticsearch'
                 brief: 'Elasticsearch'
+              - id: memcached
+                value: 'memcached'
+                brief: 'Memcached'
         - id: connection_string
           tag: connection-level
           type: string
