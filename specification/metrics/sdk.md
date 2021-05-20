@@ -46,7 +46,7 @@ TODO:
 [Measurement](./api.md#measurement) is recorded by an
 [Instrument](./api.md#instrument).
 
-`MeasurementProcessor` MUST provide access to:
+`MeasurementProcessor` MUST have access to:
 
 * The `Measurement`
 * The `Instrument`, which is used to report the `Measurement`
