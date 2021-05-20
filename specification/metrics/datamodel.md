@@ -352,6 +352,28 @@ gaps to zero width in these cases, without any overlap.
 
 ## Staleness
 
+Staleness is a property of a metric stream. When a metric stream that
+previously produced data has not produced data, at some point it
+should be considered "stale" and no longer be considered live.
+
+When interacting with live metrics data, an application that fails to
+produce data may be considered stale by several mechanisms.  
+
+
+The
+notion of staleness is considered pulling metrics data, as with an OpenMetrics
+receiver,
+
+When data failed to produce data the stream is
+considered "stale".
+
+
+i.e. we know the stream existed, but
+we're not sure whether or not to expect data going forward.
+
+Consumers and Producers of metric streams have two mechanisms to denote "staleness" of a metric stream: > An implicit mechanism that leverages expectation on when metric points should arrive, and an explicit
+mechanism where staleness is denoted directly in metric data points.
+
 Implementations have implicit and explicit means of detecting when a
 stream ceases being written.  Consumers of metric streams may wish to
 know when a stream is defined by an invalid value, a condition known
