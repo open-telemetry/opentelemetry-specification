@@ -107,7 +107,7 @@ SDK](../overview.md#sdk) concept concept for more information.
 ## Specifications
 
 * [Metrics API](./api.md)
-* Metrics SDK (not available yet)
+* [Metrics SDK](./sdk.md)
 * [Metrics Data Model and Protocol](datamodel.md)
 * [Semantic Conventions](./semantic_conventions/README.md)
 
