@@ -54,7 +54,7 @@ TODO:
 
 In addition to things listed above, if the `Measurement` is reported by a
 synchronous `Instrument` (e.g. [Counter](./api.md#counter)),
-`MeasurementProcessor` MUST provide access to:
+`MeasurementProcessor` MUST have access to:
 
 * [Baggage](../baggage/api.md)
 * [Context](../context/context.md)
