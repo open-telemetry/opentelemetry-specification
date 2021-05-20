@@ -53,6 +53,10 @@ table-check:
 	docker run --rm -v $(PWD)/semantic_conventions:/source -v $(PWD)/specification:/spec \
 		otel/semconvgen:$(SEMCONVGEN_VERSION) -f /source markdown -md /spec --md-check
 
+.PHONY: schema-check
+schema-check:
+	cd tools && ./schema_check.sh
+
 # Run all checks in order of speed / likely failure.
 .PHONY: check
 check: misspell markdownlint markdown-link-check
