@@ -557,7 +557,107 @@ Example uses for Asynchronous Gauge:
 
 #### Asynchronous Gauge creation
 
-TODO
+There MUST NOT be any API for creating an Asynchronous Gauge other than with a
+[`Meter`](#meter). This MAY be called `CreateObservableGauge`. If strong type is
+desired, the client can decide the language idiomatic name(s), for example
+`CreateUInt64ObservableGauge`, `CreateDoubleObservableGauge`,
+`CreateObservableGauge<UInt64>`, `CreateObservableGauge<double>`.
+
+It is highly recommended that implementations use the name `ObservableGauge`
+(or any language idiomatic variation, e.g. `observable_gauge`) unless there is
+a strong reason not to do so. Please note that the name has nothing to do with
+[asynchronous
+pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
+[observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+* A `callback` function.
+
+The `callback` function is responsible for reporting the
+[Measurement](#measurement)s. It will only be called when the Meter is being
+observed. Individual language client SHOULD define whether this callback
+function needs to be reentrant safe / thread safe or not.
+
+The callback function SHOULD NOT take indefinite amount of time. If multiple
+independent SDKs coexist in a running process, they MUST invoke the callback
+function(s) independently.
+
+Individual language client can decide what is the idiomatic approach. Here are
+some examples:
+
+* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
+* Use an observer result argument to allow individual `Measurement`s to be reported.
+
+User code is recommended not to provide more than one `Measurement` with the
+same `attributes` in a single callback. If it happens, the
+[SDK](./README.md#sdk) can decide how to handle it. For example, during the
+callback invocation if two measurements `value=3.38, attributes={cpu:1, core:2}`
+and `value=3.51, attributes={cpu:1, core:2}` are reported, the SDK can decide to
+simply let them pass through (so the downstream consumer can handle
+duplication), drop the entire data, pick the last one, or something else. The
+API must treat observations from a single callback as logically taking place at
+a single instant, such that when recorded, observations from a single callback
+MUST be reported with identical timestamps.
+
+The API SHOULD provide some way to pass `state` to the callback. Individual
+language client can decide what is the idiomatic approach (e.g. it could be an
+additional parameter to the callback function, or captured by the lambda
+closure, or something else).
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+def cpu_frequency_callback():
+    # Note: in the real world these would be retrieved from the operating system
+    return (
+        (3.38, ("cpu", 0), ("core", 0)),
+        (3.51, ("cpu", 0), ("core", 1)),
+        (0.57, ("cpu", 1), ("core", 0)),
+        (0.56, ("cpu", 1), ("core", 1)),
+    )
+
+meter.create_observable_gauge(
+    name="cpu.frequency",
+    description="the real-time CPU clock speed",
+    callback=cpu_frequency_callback,
+    unit="GHz",
+    value_type=float)
+```
+
+```python
+# Python
+
+def cpu_frequency_callback(result):
+    # Note: in the real world these would be retrieved from the operating system
+    result.Observe(3.38, ("cpu", 0), ("core", 0))
+    result.Observe(3.51, ("cpu", 0), ("core", 1))
+    result.Observe(0.57, ("cpu", 1), ("core", 0))
+    result.Observe(0.56, ("cpu", 1), ("core", 1))
+
+meter.create_observable_gauge(
+    name="cpu.frequency",
+    description="the real-time CPU clock speed",
+    callback=cpu_frequency_callback,
+    unit="GHz",
+    value_type=float)
+```
+
+```csharp
+// C#
+
+// A simple scenario where only one value is reported
+
+meter.CreateObservableGauge<double>("temperature", () => sensor.GetTemperature());
+```
 
 #### Asynchronous Gauge operations
 
