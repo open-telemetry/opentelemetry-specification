@@ -49,6 +49,16 @@ groups:
       - id: description
         type: string
         brief: >
-            Human readable (not intended to be parsed) OS version information,
-            like e.g. reported by `ver` or `lsb_release -a` commands.
+          Human readable (not intended to be parsed) OS version information,
+          like e.g. reported by `ver` or `lsb_release -a` commands.
         examples: ['Microsoft Windows [Version 10.0.18363.778]', 'Ubuntu 18.04.1 LTS']
+      - id: name
+        type: string
+        brief: 'Human readable operating system name.'
+        examples: ['iOS', 'Android', 'Ubuntu']
+      - id: version
+        type: string
+        brief: >
+          The version string of the operating system as defined in
+          [Version Attributes](../../resource/semantic_conventions/README.md#version-attributes).
+        examples: ['14.2.1', '18.04.1']
