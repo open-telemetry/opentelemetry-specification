@@ -822,7 +822,111 @@ Example uses for Asynchronous UpDownCounter:
 
 #### Asynchronous UpDownCounter creation
 
-TODO
+There MUST NOT be any API for creating an Asynchronous UpDownCounter other than
+with a [`Meter`](#meter). This MAY be called `CreateObservableUpDownCounter`. If
+strong type is desired, the client can decide the language idiomatic name(s),
+for example `CreateUInt64ObservableUpDownCounter`,
+`CreateDoubleObservableUpDownCounter`, `CreateObservableUpDownCounter<UInt64>`,
+`CreateObservableUpDownCounter<double>`.
+
+It is highly recommended that implementations use the name
+`ObservableUpDownCounter` (or any language idiomatic variation, e.g.
+`observable_updowncounter`) unless there is a strong reason not to do so. Please
+note that the name has nothing to do with [asynchronous
+pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
+[observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
+
+The API MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit of measure`, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+* A `callback` function.
+
+The `callback` function is responsible for reporting the
+[Measurement](#measurement)s. It will only be called when the Meter is being
+observed. Individual language client SHOULD define whether this callback
+function needs to be reentrant safe / thread safe or not.
+
+Note: Unlike [UpDownCounter.Add()](#add) which takes the increment/delta value,
+the callback function reports the absolute value of the Asynchronous
+UpDownCounter. To determine the reported rate the Asynchronous UpDownCounter is
+changing, the difference between successive measurements is used.
+
+The callback function SHOULD NOT take indefinite amount of time. If multiple
+independent SDKs coexist in a running process, they MUST invoke the callback
+function(s) independently.
+
+Individual language client can decide what is the idiomatic approach. Here are
+some examples:
+
+* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
+* Use an observer argument to allow individual `Measurement`s to be reported.
+
+User code is recommended not to provide more than one `Measurement` with the
+same `attributes` in a single callback. If it happens, the
+[SDK](./README.md#sdk) can decide how to handle it. For example, during the
+callback invocation if two measurements `value=1, attributes={pid:4,
+bitness:64}` and `value=2, attributes={pid:4, bitness:64}` are reported, the SDK
+can decide to simply let them pass through (so the downstream consumer can
+handle duplication), drop the entire data, pick the last one, or something else.
+The API must treat observations from a single callback as logically taking place
+at a single instant, such that when recorded, observations from a single
+callback MUST be reported with identical timestamps.
+
+The API SHOULD provide some way to pass `state` to the callback. Individual
+language client can decide what is the idiomatic approach (e.g. it could be an
+additional parameter to the callback function, or captured by the lambda
+closure, or something else).
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+def ws_callback():
+    # Note: in the real world these would be retrieved from the operating system
+    return (
+        (8,      ("pid", 0),   ("bitness", 64)),
+        (20,     ("pid", 4),   ("bitness", 64)),
+        (126032, ("pid", 880), ("bitness", 32)),
+    )
+
+meter.create_observable_updowncounter(
+    name="process.workingset",
+    description="process working set",
+    callback=ws_callback,
+    unit="kB",
+    value_type=int)
+```
+
+```python
+# Python
+
+def ws_callback(result):
+    # Note: in the real world these would be retrieved from the operating system
+    result.Observe(8,      ("pid", 0),   ("bitness", 64))
+    result.Observe(20,     ("pid", 4),   ("bitness", 64))
+    result.Observe(126032, ("pid", 880), ("bitness", 32))
+
+meter.create_observable_updowncounter(
+    name="process.workingset",
+    description="process working set",
+    callback=ws_callback,
+    unit="kB",
+    value_type=int)
+```
+
+```csharp
+// C#
+
+// A simple scenario where only one value is reported
+
+meter.CreateObservableUpDownCounter<UInt64>("memory.physical.free", () => WMI.Query("FreePhysicalMemory"));
+```
 
 #### Asynchronous UpDownCounter operations
 
