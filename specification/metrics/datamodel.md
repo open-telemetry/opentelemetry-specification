@@ -43,7 +43,7 @@ containing a higher-level model, about Metrics APIs and discrete input values,
 and a lower-level model, defining the Timeseries and discrete output values.
 The relationship between models is displayed in the diagram below.
 
-![Events  → Data Stream → Timeseries Diagram](img/model-layers.png)
+![Events → Data Stream → Timeseries Diagram](img/model-layers.png)
 
 This protocol was designed to meet the requirements of the OpenCensus Metrics
 system, particularly to meet its concept of Metrics Views. Views are
@@ -156,10 +156,10 @@ and events can be used in different ways to generate metric streams.
 
 Even though observation events could be reported directly to a backend, in
 practice this would be infeasible due to the sheer volume of data used in
-observability systems, and the limited amount of network/cpu telemetry
-collection resources available for telemetry collection purposes. The best
-example of this is the Histogram metric where raw events are recorded in a
-compressed format rather than individual timeseries.
+observability systems, and the limited amount of network/CPU resources available
+for telemetry collection purposes. The best example of this is the Histogram
+metric where raw events are recorded in a compressed format rather than
+individual timeseries.
 
 > Note: The above picture shows how one instrument can transform events into
 > more than one type of metric stream. There are caveats and nuances for when
@@ -189,7 +189,7 @@ consisting of several metadata properties:
 The primary data of each timeseries are ordered (timestamp, value) points, for
 three value types:
 
-1. Counter (Monotonic, cumulative)
+1. Counter (Monotonic, Cumulative)
 2. Gauge
 3. Histogram
 
@@ -227,9 +227,9 @@ same kind. <sup>[1](#otlpdatapointfn)</sup>
 
 The basic point kinds are:
 
-1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L200)
-2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L170)
-3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L228)
+1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L230)
+2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L200)
+3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L258)
 
 Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
 not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
@@ -254,7 +254,7 @@ designed for compatibility with existing metric formats.
 
 ### Sums
 
-[Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L202)s
+[Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L230)s
 in OTLP consist of the following:
 
 - An *Aggregation Temporality* of delta or cumulative.
@@ -297,7 +297,7 @@ best tradeoff for their use case.
 
 ### Gauge
 
-A [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L174)
+A [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L200)
 in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
 
 - A set of data points, each containing:
@@ -326,7 +326,7 @@ user configuration.
 
 ### Histogram
 
-[Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L225)
+[Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L258)
 metric data points convey a population of recorded measurements in a compressed
 format. A histogram bundles a set of events into divided populations with an
 overall event count and aggregate sum for all events.
@@ -358,7 +358,7 @@ aggregate events, resetting with the use of a new start time.
 
 ### Summary (Legacy)
 
-[Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto#L244)
+[Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L268)
 metric data points convey quantile summaries, e.g. What is the 99-th percentile
 latency of my HTTP server.  Unlike other point types in OpenTelemetry, Summary
 points cannot always be merged in a meaningful way. This point type is not
@@ -426,7 +426,7 @@ degradation or loss of visibility.
 
 ## Temporality
 
-The notion of temporality refers to the way additive quanties are
+The notion of temporality refers to the way additive quantities are
 expressed, in relation to time, indicating whether reported values
 incorporate previous measurements or not.  Sum and Histogram data
 points, in particular, support a choice of aggregation temporality.
@@ -596,7 +596,7 @@ so that backends can use this mechanism.
 Converting from delta points to cumulative point is inherently a stateful
 operation.  To successfully translate, we need all incoming delta points to
 reach one destination which can keep the current counter state and generate
-a new cumulative stream of data (see [single writer princple](#single-writer)).
+a new cumulative stream of data (see [single writer principle](#single-writer)).
 
 The algorithm is scheduled out as follows:
 
@@ -648,7 +648,7 @@ formats, e.g.
 [StatsD counts](https://github.com/statsd/statsd/blob/master/docs/metric_types.md#counting).
 
 In this scenario, the algorithm listed above would reset the cumulative sum on
-every data point due to not being able to deterimine alignment or point overlap.
+every data point due to not being able to determine alignment or point overlap.
 For comparison, see the simple logic used in
 [statsd sums](https://github.com/statsd/statsd/blob/master/stats.js#L281)
 where all points are added, and lost points are ignored.
