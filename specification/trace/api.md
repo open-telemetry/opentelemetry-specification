@@ -110,7 +110,7 @@ This API MUST accept the following parameters:
   or application.
   In case an invalid name (null or empty string) is specified, a working
   Tracer implementation MUST be returned as a fallback rather than returning
-  null or throwing an exception, its `name` property SHOULD keep the original invalid value,
+  null or throwing an exception, its `name` property SHOULD be set to an **empty** string,
   and a message reporting that the specified value is invalid SHOULD be logged.
   A library, implementing the OpenTelemetry API *may* also ignore this name and
   return a default instance for all calls, if it does not support "named"
@@ -118,22 +118,29 @@ This API MUST accept the following parameters:
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
-
+- [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
+  recorded in the emitted telemetry.
+  
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
-with the same name+version to pick up configuration changes.
+with the same name+version+schema_url to pick up configuration changes.
 This can be achieved either by allowing to work with an outdated configuration or
 by ensuring that new configuration applies also to previously returned `Tracer`s.
 
 Note: This could, for example, be implemented by storing any mutable
 configuration in the `TracerProvider` and having `Tracer` implementation objects
-have a reference to the `TracerProvider` from which they were obtained.
-If configuration must be stored per-tracer (such as disabling a certain tracer),
-the tracer could, for example, do a look-up with its name+version in a map in
-the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
-returned `Tracer`s and actively update their configuration if it changes.
+have a reference to the `TracerProvider` from which they were obtained. If
+configuration must be stored per-tracer (such as disabling a certain tracer),
+the tracer could, for example, do a look-up with its name+version+schema_url in
+a map in the `TracerProvider`, or the `TracerProvider` could maintain a registry
+of all returned `Tracer`s and actively update their configuration if it changes.
+
+The effect of associating a Schema URL with a `Tracer` MUST be that the
+telemetry emitted using the `Tracer` will be associated with the Schema URL,
+provided that the emitted data format is capable of representing such
+association.
 
 ## Context Interaction
 

@@ -25,7 +25,7 @@ This document defines standard attributes for resources. These attributes are ty
 ## TODOs
 
 * Add more compute units: AppEngine unit, etc.
-* Add Device (mobile) and Web Browser.
+* Add Web Browser.
 * Decide if lower case strings only.
 * Consider to add optional/required for each attribute and combination of attributes
   (e.g when supplying a k8s resource all k8s may be required).
@@ -36,9 +36,20 @@ Attributes are grouped logically by the type of the concept that they described.
 
 Certain attribute groups in this document have a **Required** column. For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource. However it is also valid if the entire attribute group is omitted (i.e. none of the attributes from the particular group are present even though some of them are marked as Required in this document).
 
+## Attributes with Special Handling
+
+Given their significance some resource attributes are treated specifically as described below.
+
+### Semantic Attributes with Dedicated Environment Variable
+
+These are the attributes which MAY be configurable via a dedicated environment variable
+as specified in [OpenTelemetry Environment Variable Specification](../../sdk-environment-variables.md):
+
+- [`service.name`](#service)
+
 ## Semantic Attributes with SDK-provided Default Value
 
-These are the the attributes which MUST be provided by the SDK
+These are the attributes which MUST be provided by the SDK
 as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource-attributes):
 
 - [`service.name`](#service)
@@ -137,6 +148,7 @@ Attributes defining a computing instance (e.g. host):
 Attributes defining a running environment (e.g. Operating System, Cloud, Data Center, Deployment Service):
 
 - [Operating System](./os.md)
+- [Device](./device.md)
 - [Cloud](./cloud.md)
 - Deployment:
   - [Deployment Environment](./deployment_environment.md)

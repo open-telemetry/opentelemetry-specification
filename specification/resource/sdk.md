@@ -24,7 +24,7 @@ all `Span`s produced by any `Tracer` from the provider MUST be associated with t
 
 Analogous to distributed tracing, when used with metrics,
 a resource can be associated with a `MeterProvider`.
-When associated with a [`MeterProvider`](../metrics/api.md#meter-interface),
+When associated with a [`MeterProvider`](../metrics/api.md#meterprovider),
 all metrics produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
@@ -56,6 +56,9 @@ object. A factory method is recommended to enable support for cached objects.
 Required parameters:
 
 - [`Attributes`](../common/common.md#attributes)
+- [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
+  recorded in the emitted resource. If the `schema_url` parameter is unspecified
+  then the created resource will have an empty Schema URL.
 
 ### Merge
 
@@ -69,6 +72,17 @@ such as environment variables, or metadata extracted from the host or container.
 The resulting resource MUST have all attributes that are on any of the two input resources.
 If a key exists on both the old and updating resource, the value of the updating
 resource MUST be picked (even if the updated value is empty).
+
+The resulting resource will have the Schema URL calculated as follows:
+
+- If the old resource's Schema URL is empty then the resulting resource's Schema
+  URL will be set to the Schema URL of the updating resource,
+- Else if the updating resource's Schema URL is empty then the resulting
+  resource's Schema URL will be set to the Schema URL of the old resource,
+- Else if the Schema URLs of the old and updating resources are the same then
+  that will be the Schema URL of the resulting resource,
+- Else this is a merging error (this is the case when the Schema URL of the old
+  and updating resources are not empty and are different).
 
 Required parameters:
 
@@ -101,6 +115,16 @@ principles](../error-handling.md#basic-error-handling-principles). Note the
 failure to detect any resource information MUST NOT be considered an error,
 whereas an error that occurs during an attempt to detect resource information
 SHOULD be considered an error.
+
+Resource detectors that populate resource attributes according to OpenTelemetry
+semantic conventions MUST ensure that the resource has a Schema URL set to a
+value that matches the semantic conventions. Empty Schema URL SHOULD be used if
+the detector does not populate the resource with any known attributes that have
+a semantic convention or if the detector does not know what attributes it will
+populate (e.g. the detector that reads the attributes from environment values
+will not know what Schema URL to use). If multiple detectors are combined and
+the detectors use different non-empty Schema URL it MUST be an error since it is
+impossible to merge such resources.
 
 ### Specifying resource information via an environment variable
 
