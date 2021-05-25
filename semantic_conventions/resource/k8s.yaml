@@ -36,6 +36,19 @@ groups:
         brief: >
           The name of the namespace that the pod is running in.
         examples: ['default']
+      - id: uid
+        type: string
+        brief: >
+          The UID of the Namespace.
+        examples: [ 'bb219a0e-a465-4a0e-aaec-a3731ecc7fe1' ]
+      - id: start_time
+        type: string
+        note: >
+          This is a string representing an RFC 3339 date of the date and time the namespace object was created.
+          [kubernetes api conventions](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata)
+        brief: >
+          The creation time of the namespace.
+        examples: [ '2021-05-13 17:23:11' ]
 
   - id: k8s.pod
     prefix: k8s.pod
@@ -52,6 +65,14 @@ groups:
         brief: >
           The name of the Pod.
         examples: ['opentelemetry-pod-autoconf']
+      - id: start_time
+        type: string
+        note: >
+          This is a string representing an RFC 3339 date of the date and time the pod object was created.
+          [kubernetes api conventions](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata)
+        brief: >
+          The creation time of the Pod.
+        examples: [ '2021-05-25 23:36:44' ]
 
   - id: k8s.container
     prefix: k8s.container

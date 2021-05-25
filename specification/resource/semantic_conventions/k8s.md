@@ -53,6 +53,10 @@ a namespace, but not across namespaces.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.namespace.name` | string | The name of the namespace that the pod is running in. | `default` | No |
+| `k8s.namespace.uid` | string | The UID of the Namespace. | `bb219a0e-a465-4a0e-aaec-a3731ecc7fe1` | No |
+| `k8s.namespace.start_time` | string | The creation time of the namespace. [1] | `2021-05-13 17:23:11` | No |
+
+**[1]:** This is a string representing an RFC 3339 date of the date and time the namespace object was created. [kubernetes api conventions](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata)
 <!-- endsemconv -->
 
 ## Pod
@@ -69,6 +73,9 @@ containers on your cluster.
 |---|---|---|---|---|
 | `k8s.pod.uid` | string | The UID of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.pod.name` | string | The name of the Pod. | `opentelemetry-pod-autoconf` | No |
+| `k8s.pod.start_time` | string | The creation time of the Pod. [1] | `2021-05-25 23:36:44` | No |
+
+**[1]:** This is a string representing an RFC 3339 date of the date and time the pod object was created. [kubernetes api conventions](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata)
 <!-- endsemconv -->
 
 ## Container
