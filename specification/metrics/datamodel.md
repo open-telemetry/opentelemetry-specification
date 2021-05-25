@@ -603,8 +603,8 @@ is to encode any IEEE 754 floating point NaN value:
 
 - For `Sum` data points, use the `NumberDataPoint.as_double` field
 - For `Gauge` data points, use the `NumberDataPoint.as_double` field
-- For `Histogram` data points, use the `HistogramDataPoint.count` field
-- For `Summary` data points, use the `SummaryDataPoint.count` field.
+- For `Histogram` data points, use the `HistogramDataPoint.sum` field
+- For `Summary` data points, use the `SummaryDataPoint.sum` field.
 
 ### Implicit Staleness
 
