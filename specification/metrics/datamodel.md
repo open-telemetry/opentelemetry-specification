@@ -624,53 +624,6 @@ stale in the interval between these measurements.
 Users interested in less uncertainty over the staleness should use the
 explicit staleness option described above.
 
-## Temporal Alignment
-
-Temporal alignment describes how to modify a stream of metric data
-with arbitary `StartTimeUnixNano` and `TimeUnixNano` timestamps into a
-stream with selected timestamps, typically into a stream of
-constant-duration points.  Temporal alignment is defined on the basis
-of point kind and is performed in a way that respects the original
-aggregation.
-
-Temporal alignment is performed after overlapping data points have
-been resolved.  The input to temporal aggregation is a stream of
-non-overlapping points; the output is a stream of non-overlapping
-points with selected timestamps.  Temporal alignment defines the
-contribution to a selected output time range in terms of all input
-points in the stream that overlap the selected output.
-
-The algorithm is performed by point kind on a case by case basis.
-Implementations may use rounding integer values to floating-point
-values, where possible, to reduce rounding errors.
-
-### Sum and Histogram points with delta aggregation temporality
-
-For delta aggregation temporality, Sum values, Histogram bucket
-counts, and the Histogram sum and count fields allocate their value
-proportionally into the output, based on the fraction of the input
-time range covered by the output time range.
-
-### Sum and Histogram points with cumulative aggregation temporality
-
-For cumulative aggregation temporality, Sum values, Histogram bucket
-counts, and the Histogram sum and count fields, temporal alignment can
-be logically performed by transforming the cumulative stream into a
-delta stream, using the proportional temporal alignment process for
-delta streams, and then transforming the resulting delta back into a
-cumulative stream.
-
-### Gauge points
-
-For Gauge points, temporal alignment outputs the input value with the
-most recent `TimeUnixNano` prior to the output `TimeUnixNano`.
-
-### Summary points
-
-For Summary points, temporal alignment applies the logic for Histogram
-sum and count fields to the Summary sum and count fields, and it uses
-the logic for Gauge values to its `ValueAtQuantile` field.
-
 ## Stream Manipulations
 
 Pending introduction.
