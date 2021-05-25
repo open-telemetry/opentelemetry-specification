@@ -587,7 +587,7 @@ points.
 The explicit staleness detection mechanism is important to consider in
 active monitoring configurations, where one piece of software reports
 metrics on behalf of another, as in Prometheus.  In active monitoring,
-the protocol is required to encode the explicit absense of data at
+the protocol is required to encode the explicit absence of data at
 specific times.
 
 Active monitoring sources act as a single writers on behalf of the
@@ -616,7 +616,7 @@ staleness is common in push-based metrics collection.
 The last measured value in an unbroken sequence of measurements may be
 so recent in time that its staleness is unknown.  When the point is
 very nearly current, implementations may use the expected arrival time
-to indicate uncertainy over the next-to-arrive value.  Otherwise, if a
+to indicate uncertainty over the next-to-arrive value.  Otherwise, if a
 gap exists between the final observation in an unbroken sequence and
 the first observation in the following sequence, the stream should be
 stale in the interval between these measurements.
