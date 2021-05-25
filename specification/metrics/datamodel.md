@@ -584,10 +584,11 @@ points.
 
 ### Explicit Staleness
 
-The explicit mechanism is important to consider in active monitoring
-configurations, where one piece of software reports metrics on behalf
-of another, as in Prometheus.  In active monitoring, the protocol is
-required to encode the explicit absense of data at specific times.
+The explicit staleness detection mechanism is important to consider in
+active monitoring configurations, where one piece of software reports
+metrics on behalf of another, as in Prometheus.  In active monitoring,
+the protocol is required to encode the explicit absense of data at
+specific times.
 
 Active monitoring sources act as a single writers on behalf of the
 monitored resource.  In this configuration, an unbroken sequence of
@@ -598,25 +599,30 @@ and `TimeUnixNanos` fields.
 
 The recommended mechanism for active monitors to convey invalid
 measurements, characteristic of the Prometheus Remote-Write protocol,
-is to encode any IEEE 754 floating point NaN value.  For the `Sum` and
-`Gauge` data points, use the `as_int` or `as_double` fields of the
-`NumberDataPoint` to encode invalid data.  For the `Histogram` and
-`Summary` data points, use the `count` field to encode invalid data.
+is to encode any IEEE 754 floating point NaN value:
+
+- For `Sum` data points, use the `NumberDataPoint.as_double` field
+- For `Gauge` data points, use the `NumberDataPoint.as_double` field
+- For `Histogram` data points, use the `HistogramDataPoint.count` field
+- For `Summary` data points, use the `SummaryDataPoint.count` field.
 
 ### Implicit Staleness
 
-The implicit mechanism for detecting staleness uses the last
-`TimeUnixNanos` value in an unbroken sequence of events to determine
-whether the stream is stale.  Treating the last measured value in a
-stream properly can depend on whether the point is very recent in time
-(i.e., nearly current).  When this is the case, implementations may
-use the expected arrival time to indicate uncertainy over the
-next-to-arrive value. 
+The implicit staleness detection mechanism for detecting staleness
+uses the last `TimeUnixNanos` value in an unbroken sequence of events
+to determine whether the stream is stale.  This form of detecting
+staleness is common in push-based metrics collection.
 
-The uncertainy extends to late-arriving points only so far as an
-implementation is willing to admit them.  Users interested in less
-uncertainty over the staleness should use the explicit staleness
-option described above.
+The last measured value in an unbroken sequence of measurements may be
+so recent in time that its staleness is unknown.  When the point is
+very nearly current, implementations may use the expected arrival time
+to indicate uncertainy over the next-to-arrive value.  Otherwise, if a
+gap exists between the final observation in an unbroken sequence and
+the first observation in the following sequence, the stream should be
+stale in the interval between these measurements.
+
+Users interested in less uncertainty over the staleness should use the
+explicit staleness option described above.
 
 ## Temporal Alignment
 
