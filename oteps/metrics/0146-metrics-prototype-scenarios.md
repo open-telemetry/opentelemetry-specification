@@ -181,6 +181,9 @@ speaking it is not considered as a "dimension" from the SDK perspective.
 | --------- | --------------- |
 | MachineA  | 65.3            |
 
+Note: Temperature may take on negative values. For this reason, you must choose the instrument carefully to ensure it is one that
+can accept negative recordings and that they can be aggregated appropriately.
+
 **Server humidity:**
 
 | Host Name | Humidity (%) |
