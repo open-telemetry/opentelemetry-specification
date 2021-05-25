@@ -570,58 +570,53 @@ gaps to zero width in these cases, without any overlap.
 ## Staleness
 
 Staleness is a property of a metric stream. When a metric stream that
-previously produced data has not produced data, at some point it
-should be considered "stale" and no longer be considered live.
+previously produced data stops producing valid data, the stream is
+considered "stale".  For consumers of metrics data, it is important to
+know when a stream of metrics comes to an end, meaning no more points
+will be produced, compared with a stream of metrics that is
+interrupted because data collection is failing.
 
-When interacting with live metrics data, an application that fails to
-produce data may be considered stale by several mechanisms.  
-
-
-The
-notion of staleness is considered pulling metrics data, as with an OpenMetrics
-receiver,
-
-When data failed to produce data the stream is
-considered "stale".
-
-
-i.e. we know the stream existed, but
-we're not sure whether or not to expect data going forward.
-
-Consumers and Producers of metric streams have two mechanisms to denote "staleness" of a metric stream: > An implicit mechanism that leverages expectation on when metric points should arrive, and an explicit
-mechanism where staleness is denoted directly in metric data points.
-
-Implementations have implicit and explicit means of detecting when a
-stream ceases being written.  Consumers of metric streams may wish to
-know when a stream is defined by an invalid value, a condition known
-as "staleness".
+Consumers and producers of metric streams have two mechanisms to
+denote staleness in a metric stream: an implicit mechanism that
+leverages expectation on when metric points should arrive, and an
+explicit mechanism where staleness is denoted directly in metric data
+points.
 
 ### Explicit Staleness
 
-The explicit mechanism, characteristic of the Prometheus Remote-Write
-protocol, uses IEEE 754 floating point NaN values to encode invalid
-measurements with an explicit timestamp.
+The explicit mechanism is important to consider in active monitoring
+configurations, where one piece of software reports metrics on behalf
+of another, as in Prometheus.  In active monitoring, the protocol is
+required to encode the explicit absense of data at specific times.
 
-NaN values can be used to indicate an explicit gap in an metric stream
-for Gauge and Sum valued points.  For Histogram and Summary points,
-the sum should be used, since it is a floating point value.
+Active monitoring sources act as a single writers on behalf of the
+monitored resource.  In this configuration, an unbroken sequence of
+events is written by one monitoring agent, and following the precedent
+set by Prometheus, consider the value associated with the `Metric`
+data point to be independent of the `Attributes`, `StartTimeUnixNanos`
+and `TimeUnixNanos` fields.
 
-These observations can be included in a sequence of measurements
-without being considered resets, meaning they do not interact with the
-interpretation of `StartTimeUnixNano`.  NaN-valued points are
-considered explicitly invalid point values.
+The recommended mechanism for active monitors to convey invalid
+measurements, characteristic of the Prometheus Remote-Write protocol,
+is to encode any IEEE 754 floating point NaN value.  For the `Sum` and
+`Gauge` data points, use the `as_int` or `as_double` fields of the
+`NumberDataPoint` to encode invalid data.  For the `Histogram` and
+`Summary` data points, use the `count` field to encode invalid data.
 
 ### Implicit Staleness
 
-The implicit mechanism, characteristic of systems that push metric
-data, have a time-to-live (TTL) associated with metric streams.  In
-these systems, data is expected to arrive more often than a specified
-duration specified, known as the the TTL parameter, otherwise they are
-considered stale.
+The implicit mechanism for detecting staleness uses the last
+`TimeUnixNanos` value in an unbroken sequence of events to determine
+whether the stream is stale.  Treating the last measured value in a
+stream properly can depend on whether the point is very recent in time
+(i.e., nearly current).  When this is the case, implementations may
+use the expected arrival time to indicate uncertainy over the
+next-to-arrive value. 
 
-Implementations that perform a staleness calculation can be configured
-to issue an explicit staleness marker, or they can simply forget those
-streams.
+The uncertainy extends to late-arriving points only so far as an
+implementation is willing to admit them.  Users interested in less
+uncertainty over the staleness should use the explicit staleness
+option described above.
 
 ## Temporal Alignment
 
