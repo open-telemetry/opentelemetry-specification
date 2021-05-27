@@ -1,6 +1,6 @@
 # Metrics Data Model
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
@@ -9,6 +9,8 @@
 <!-- tocstop -->
 
 ## Overview
+
+**Status**: [Stable](../document-status.md)
 
 The OpenTelemetry data model for metrics consists of a protocol specification
 and semantic conventions for delivery of pre-aggregated metric timeseries data.
@@ -35,6 +37,8 @@ well-defined translations of the data, including the ability to automatically
 remove attributes and lower histogram resolution.
 
 ## Events → Data Stream → Timeseries
+
+**Status**: [Stable](../document-status.md)
 
 The OTLP Metrics protocol is designed as a standard for transporting metric
 data. To describe the intended use of this data and the associated semantic
@@ -136,13 +140,16 @@ in scope for key design decisions:
 
 ## Model Details
 
+**Status**: [Stable](../document-status.md)
+
 OpenTelemetry fragments metrics into three interacting models:
 
 - An Event model, representing how instrumentation reports metric data.
 - A Timeseries model, representing how backends store metric data.
 - A Metric Stream model, defining the *O*pen*T*e*L*emetry *P*rotocol (OTLP)
   representing how metric data streams are manipulated and transmitted between
-  the Event model and the Timeseries storage.
+  the Event model and the Timeseries storage.  This is the model specified
+  in this document.
 
 ### Event Model
 
@@ -169,8 +176,8 @@ individual timeseries.
 While OpenTelemetry provides flexibility in how instruments can be transformed
 into metric streams, the instruments are defined such that a reasonable default
 mapping can be provided. The exact
-[OpenTelemetry instruments](api.md##instrument) are more fully
-detailed in the API specification.
+[OpenTelemetry instruments](api.md##instrument) are detailed in the API
+specification.
 
 In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
@@ -200,6 +207,9 @@ value is defined, as compared with being implicitly or explicitly absent. A
 metric stream of delta data points defines time-interval values, not
 point-in-time values.  To precisely define presence and absence of data requires
 further development of the correspondence between these models.
+
+Note: Prometheus is not the only possible timeseries model for OpenTelemetry
+to map into, but is used as a reference throughout this document.
 
 ### OpenTelemetry Protocol data model
 
@@ -251,6 +261,8 @@ designed for compatibility with existing metric formats.
 - [Summary](#summary-legacy)
 
 ## Metric points
+
+**Status**: [Stable](../document-status.md)
 
 ### Sums
 
@@ -366,7 +378,9 @@ recommended for new applications and exists for compatibility with other
 formats.
 
 ## Exemplars
-  
+
+**Status**: [Stable](../document-status.md)
+
 An exemplar is a recorded value that associates OpenTelemetry context to
 a metric event within a Metric. One use case is to allow users to link
 Trace signals w/ Metrics.
@@ -389,6 +403,8 @@ For Gauges, when an exemplar exists, its value was seen at some point within
 the gauge interval for the same source.
 
 ## Single-Writer
+
+**Status**: [Stable](../document-status.md)
 
 All metric data streams within OTLP must have one logical writer.  This means,
 conceptually, that any Timeseries created from the Protocol must have one
@@ -425,6 +441,8 @@ well-behaved systems can perform metric stream manipulation without undesired
 degradation or loss of visibility.
 
 ## Temporality
+
+**Status**: [Stable](../document-status.md)
 
 The notion of temporality refers to the way additive quantities are
 expressed, in relation to time, indicating whether reported values
@@ -469,6 +487,8 @@ of cardinality outside of the process.
 
 ## Resets and Gaps
 
+**Status**: [Experimental](../document-status.md)
+
 When the `StartTimeUnixNano` field is present, it allows the consumer
 to observe when there are gaps and overlapping writers in a stream.
 Correctly used, the consumer can observe both transient and ongoing
@@ -478,13 +498,22 @@ matches either the `TimeUnixNano` or the `StartTimeUnixNano` of other
 points in the same sequence.  For the initial points in an unbroken
 sequence:
 
-- When `StartTimeUnixNano` is less than `TimeUnixNano`, a new unbroken sequence of observations begins with a "true" reset at a known start time. The zero value is implicit, it is not necessary to record the starting point.
-- When `StartTimeUnixNano` equals `TimeUnixNano`, a new unbroken sequence of observations begins with a reset at an unknown start time. The initial observed value is recorded to indicate that an unbroken sequence of observations resumes. These points have zero duration, and indicate that nothing is known about previously-reported points and that data may have been lost.
+- When `StartTimeUnixNano` is less than `TimeUnixNano`, a new unbroken sequence
+  of observations begins with a "true" reset at a known start time. The zero
+  value is implicit, it is not necessary to record the starting point.
+- When `StartTimeUnixNano` equals `TimeUnixNano`, a new unbroken sequence of
+  observations begins with a reset at an unknown start time. The initial
+  observed value is recorded to indicate that an unbroken sequence of
+  observations resumes. These points have zero duration, and indicate that
+  nothing is known about previously-reported points and that data may have been
+  lost.
 
 For subsequent points in an unbroken sequence:
 
-- For points with delta aggregation temporality, the `StartTimeUnixNano` of each point matches the `TimeUnixNano` of the preceding point
-- Otherwise, the `StartTimeUnixNano` of each point matches the `StartTimeUnixNano` of the initial observation.
+- For points with delta aggregation temporality, the `StartTimeUnixNano` of
+  each point matches the `TimeUnixNano` of the preceding point
+- Otherwise, the `StartTimeUnixNano` of each point matches the
+  `StartTimeUnixNano` of the initial observation.
 
 A metric stream has a gap, where it is implicitly undefined, anywhere
 there is a range of time such that no point covers that range range
@@ -532,6 +561,8 @@ of reaggregation for cumulative series.
 
 ## Overlap
 
+**Status**: [Experimental](../document-status.md)
+
 Overlap occurs when more than one metric data point is defined for a
 metric stream within a time window.  Overlap is usually caused through
 mis-configuration, and it can lead to serious mis-interpretation of
@@ -567,19 +598,9 @@ points may be expected. In this case, OpenTelemetry collectors SHOULD modify
 points at the change-over using interpolation for Sum data points, to reduce
 gaps to zero width in these cases, without any overlap.
 
-## Resources
-
-Pending
-
-## Temporal Alignment
-
-Pending
-
-## External Labels
-
-Pending
-
 ## Stream Manipulations
+
+**Status**: [Experimental](../document-status.md)
 
 Pending introduction.
 
