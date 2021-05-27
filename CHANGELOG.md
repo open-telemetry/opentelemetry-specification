@@ -22,6 +22,9 @@ release.
 
 ### Logs
 
+- Adds guidelines on using `Body` vs `Attributes` in Logs Data Model.
+  ([#1727](https://github.com/open-telemetry/opentelemetry-specification/pull/1727))
+
 ### Resource
 
 - Add schema_url support to `Resource`. ([#1692](https://github.com/open-telemetry/opentelemetry-specification/pull/1692))

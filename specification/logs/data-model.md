@@ -23,6 +23,7 @@
   * [Field: `Body`](#field-body)
   * [Field: `Resource`](#field-resource)
   * [Field: `Attributes`](#field-attributes)
+  * [Guidelines on using `Body` vs `Attributes`](#guidelines-on-using-body-vs-attributes)
 * [Example Log Records](#example-log-records)
 * [Appendix A. Example Mappings](#appendix-a-example-mappings)
   * [RFC5424 Syslog](#rfc5424-syslog)
@@ -422,6 +423,35 @@ information about the request context (other than TraceId/SpanId). SHOULD follow
 OpenTelemetry
 [semantic conventions for Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
+
+### Guidelines on using `Body` vs `Attributes`
+
+If the log record contains one or more "pieces" of data that may fit either
+in `Body` or `Attributes` but do not fit the description of the other top-level
+fields (`Timestamp`, `Severity`, etc) then follow these guidelines to decide how
+to record these pieces of data in the `Body` and `Attribute` fields:
+
+1. If the log record contains a single raw byte sequence that is not associated
+   with any particular key (such that we cannot think of it as a key/value pair)
+   put it in the `Body`.
+2. If the log record contains a single raw Unicode character string that is not
+   associated with any particular key then put it in the `Body`.
+3. If the log record contains a single JSON-like array value or a primitive value
+   that is not associated with any particular key then put it in the Body.
+4. If the log record contains a single JSON-like object with key/value pairs it may
+   be recorded either in the Body or in the Attributes. The choice in this case
+   should be based on whether we are interested in individual key/value pairs
+   (e.g. each key/value has a particular meaning, possibly independently from the
+   meaning of the other key/value pairs), in which case recording them in the
+   `Attributes` would be preferable. Otherwise if we are more interested in just
+   recording the object as a whole and getting it delivered then the `Body` would
+   be preferable.
+5. If the log record contains a piece of data that is associated with a key then
+   record that piece as a key/value pair in the `Attributes`.
+
+Note: if there is more than one piece of data that matches the rules 1-4 then we
+cannot record then in the Body, we have to come up with some keys and record each
+piece of data as a key/value pair in the Attributes.
 
 ## Example Log Records
 
