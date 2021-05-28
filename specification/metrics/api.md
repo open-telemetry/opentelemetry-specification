@@ -253,7 +253,7 @@ asynchronous:
 
 <a name="asynchronous-instrument"></a>
 
-* Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-Gauge)) give
+* Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-gauge)) give
   the user a way to register callback function, and the callback function will
   only be invoked upon collection. For example, a piece of embedded software
   could use an asynhronous gauge to collect the temperature from a sensor every
