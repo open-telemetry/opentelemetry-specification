@@ -42,7 +42,7 @@ the `MeterProvider` must be used to create an
 instance which is stored on the created `Meter`.
 
 Configuration (i.e., [MeasurementProcessors](#measurementprocessor),
-[MetricProcessors](#metricprocessors), [MetricExporters](#metricexporter) and
+[MetricProcessors](#metricprocessor), [MetricExporters](#metricexporter) and
 [`Views`](#view)) MUST be managed solely by the `MeterProvider` and it MUST
 provide some way to configure all of them that are implemented in the SDK, at
 least when creating or initializing it.
