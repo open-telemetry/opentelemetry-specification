@@ -239,6 +239,28 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support at least 1023 characters. Individual language clients can
   decide if they want to support more.
 
+Instruments can be categorized based on whether they are synchronous or
+asynchronous:
+
+* Synchronous instruments (e.g. [Counter](#counter)) are meant to be invoked by
+  the user (e.g. a library developer or an application developer). For example,
+  an HTTP client could use a Counter to record the number of bytes it has
+  received. [Measurements](#measurement) recorded by synchronous instruments can
+  be associated with [Baggage](../baggage/api.md) and
+  [Context](../context/context.md).
+* Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-Gauge)) give
+  the user a way to register callback function, and the callback function will
+  only be invoked upon collection. For example, an embedded software could use
+  an asynhronous gauge to collect the temperature from a sensor every 15
+  seconds, which means the callback function will only be invoked every 15
+  seconds. [Measurements](#measurement) recorded by asynchronous instruments
+  cannot be associated with [Baggage](../baggage/api.md) and
+  [Context](../context/context.md).
+
+Please note that the term _synchronous_ and _asynchronous_ have nothing to do
+with [asynchronous
+pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
+
 ### Counter
 
 `Counter` is a synchronous Instrument which supports non-negative increments.
