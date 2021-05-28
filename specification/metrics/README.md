@@ -78,6 +78,12 @@ API](../overview.md#api) concept and [API and Minimal
 Implementation](../library-guidelines.md#api-and-minimal-implementation) for
 more information.
 
+#### Instrument
+
+The **Instruments** are part of the [Metrics API](./api.md#instrument). They
+allow [Measurements](./api.md#measurement) to be recorded synchronously or
+asynchronously.
+
 #### SDK
 
 The **OpenTelemetry Metrics SDK** ("the SDK" hereafter) implements the API,
