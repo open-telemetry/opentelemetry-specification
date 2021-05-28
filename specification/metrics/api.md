@@ -255,15 +255,15 @@ asynchronous:
 
 * Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-Gauge)) give
   the user a way to register callback function, and the callback function will
-  only be invoked upon collection. For example, an embedded software could use
-  an asynhronous gauge to collect the temperature from a sensor every 15
-  seconds, which means the callback function will only be invoked every 15
+  only be invoked upon collection. For example, a piece of embedded software
+  could use an asynhronous gauge to collect the temperature from a sensor every
+  15 seconds, which means the callback function will only be invoked every 15
   seconds. [Measurements](#measurement) recorded by asynchronous instruments
   cannot be associated with [Baggage](../baggage/api.md) and
   [Context](../context/context.md).
 
 Please note that the term _synchronous_ and _asynchronous_ have nothing to do
-with [asynchronous
+with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
 ### Counter
