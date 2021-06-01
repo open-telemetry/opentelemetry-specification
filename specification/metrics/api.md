@@ -245,10 +245,10 @@ asynchronous:
 <a name="synchronous-instrument"></a>
 
 * Synchronous instruments (e.g. [Counter](#counter)) are meant to be invoked
-  directly by the user (e.g. a library developer or an application developer).
-  For example, an HTTP client could use a Counter to record the number of bytes
-  it has received. [Measurements](#measurement) recorded by synchronous
-  instruments can be associated with [Baggage](../baggage/api.md) and
+  inline with application/business processing logic. For example, an HTTP client
+  could use a Counter to record the number of bytes it has received.
+  [Measurements](#measurement) recorded by synchronous instruments can be
+  associated with [Baggage](../baggage/api.md) and
   [Context](../context/context.md).
 
 <a name="asynchronous-instrument"></a>
