@@ -256,7 +256,7 @@ It is possible (and likely) that more than one metric stream is created per
 `Instrument` in the event model.
 
 __Note: The same `Resource`, `name` and `Attribute`s but differing point kind
-coming out of an OpenTelemetry SDK is considered an "error state" that should
+coming out of an OpenTelemetry SDK is considered an "error state" that SHOULD
 be handled by an SDK.__
 
 A metric stream can use one of three basic point kinds, all of
@@ -303,9 +303,9 @@ in OTLP consist of the following:
   [monotonic](https://en.wikipedia.org/wiki/Monotonic_function). In this case of
   metrics, this means the sum is nominally increasing, which we assume without
   loss of generality.
-  - For delta monotonic sums, this means the reader should expect non-negative
+  - For delta monotonic sums, this means the reader SHOULD expect non-negative
     values.
-  - For cumulative monotonic sums, this means the reader should expect values
+  - For cumulative monotonic sums, this means the reader SHOULD expect values
     that are not less than the previous value.
 - A set of data points, each containing:
   - An independent set of Attribute name-value pairs.
@@ -435,14 +435,14 @@ the gauge interval for the same source.
 
 **Status**: [Stable](../document-status.md)
 
-All metric data streams within OTLP must have one logical writer.  This means,
-conceptually, that any Timeseries created from the Protocol must have one
+All metric data streams within OTLP MUST have one logical writer.  This means,
+conceptually, that any Timeseries created from the Protocol MUST have one
 originating source of truth.  In practical terms, this implies the following:
 
-- All metric data streams produced by OTel SDKs must be globally uniquely
+- All metric data streams produced by OTel SDKs MUST be globally uniquely
   produced and free from duplicates.   All metric data streams can be uniquely
   identified in some way.
-- Aggregations of metric streams must only be written from a single logical
+- Aggregations of metric streams MUST only be written from a single logical
   source.
   __Note: This implies aggregated metric streams must reach one destination__.
 
@@ -461,7 +461,7 @@ eliminate overlap / deduplicate.
 Note: Identity is an important concept in most metrics systems.  For example,
 [Prometheus directly calls out uniqueness](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs):
 
-> Care must be taken with `labeldrop` and `labelkeep` to ensure that metrics
+> Take care with `labeldrop` and `labelkeep` to ensure that metrics
 > are still uniquely labeled once the labels are removed.
 
 For OTLP, the Single-Writer principle grants a way to reason over error
@@ -685,7 +685,7 @@ that some data was lost, and reset the counter.
 We detect alignment via two mechanisms:
 
 - If the incoming delta time interval has significant overlap with the previous
-  time interval, we must assume a violation of the single-writer principle.
+  time interval, we assume a violation of the single-writer principle.
 - If the incoming delta time interval has a significant gap from the last seen
   time, we assume some kind of reboot/restart and reset the cumulative counter.
 
