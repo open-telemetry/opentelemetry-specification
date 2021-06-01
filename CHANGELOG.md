@@ -36,6 +36,8 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Require OTLP/gRPC exporters to handle endpoint configuration both with and without a scheme. ([#1729](https://github.com/open-telemetry/opentelemetry-specification/pull/1729))
+
 ### SDK Configuration
 
 - Add `OTEL_SERVICE_NAME` environment variable. ([#1677](https://github.com/open-telemetry/opentelemetry-specification/pull/1677))
