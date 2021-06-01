@@ -6,6 +6,35 @@
 
 <!-- toc -->
 
+- [Overview](#overview)
+- [Events → Data Stream → Timeseries](#events-%E2%86%92-data-stream-%E2%86%92-timeseries)
+  * [Example Use-cases](#example-use-cases)
+  * [Out of Scope Use-cases](#out-of-scope-use-cases)
+- [Model Details](#model-details)
+  * [Event Model](#event-model)
+  * [Timeseries Model](#timeseries-model)
+  * [OpenTelemetry Protocol data model](#opentelemetry-protocol-data-model)
+- [Metric points](#metric-points)
+  * [Sums](#sums)
+  * [Gauge](#gauge)
+  * [Histogram](#histogram)
+  * [Summary (Legacy)](#summary-legacy)
+- [Exemplars](#exemplars)
+- [Single-Writer](#single-writer)
+- [Temporality](#temporality)
+- [Resets and Gaps](#resets-and-gaps)
+  * [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time)
+  * [Cumulative streams: inserting true reset points](#cumulative-streams-inserting-true-reset-points)
+- [Overlap](#overlap)
+  * [Overlap resolution](#overlap-resolution)
+  * [Overlap observability](#overlap-observability)
+  * [Overlap interpolation](#overlap-interpolation)
+- [Stream Manipulations](#stream-manipulations)
+  * [Sums: Delta-to-Cumulative](#sums-delta-to-cumulative)
+    + [Sums: detecting alignment issues](#sums-detecting-alignment-issues)
+    + [Sums: Missing Timestamps](#sums-missing-timestamps)
+- [Footnotes](#footnotes)
+
 <!-- tocstop -->
 
 ## Overview
