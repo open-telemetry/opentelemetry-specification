@@ -150,6 +150,9 @@ groups:
               - id: memcached
                 value: 'memcached'
                 brief: 'Memcached'
+              - id: cockroachdb
+                value: 'cockroachdb'
+                brief: 'CockroachDB'
         - id: connection_string
           tag: connection-level
           type: string
