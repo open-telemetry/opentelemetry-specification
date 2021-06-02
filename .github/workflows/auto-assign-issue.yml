@@ -1,0 +1,12 @@
+name: 'Auto Assign Issue'
+on:
+  issues:
+    types: [opened]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bubkoo/auto-assign@v1
+        with:
+          CONFIG_FILE: ".github/auto_assign_issue.yml"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
