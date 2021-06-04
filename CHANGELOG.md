@@ -11,6 +11,28 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+## v1.4.0 (2021-06-04)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Add Dropped Links Count to non-otlp exporters section ([#1697](https://github.com/open-telemetry/opentelemetry-specification/pull/1697))
 - Add note about reporting dropped counts for attributes, events, links. ([#1699](https://github.com/open-telemetry/opentelemetry-specification/pull/1699))
 
@@ -39,6 +61,8 @@ release.
 
 ### Logs
 
+- No changes.
+
 ### Resource
 
 - Add schema_url support to `Resource`. ([#1692](https://github.com/open-telemetry/opentelemetry-specification/pull/1692))
@@ -52,7 +76,11 @@ release.
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### SDK Configuration
 
