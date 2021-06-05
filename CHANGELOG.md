@@ -19,6 +19,23 @@ release.
 - Adds detail about when to use `StartTimeUnixNano` and handling of unknown start-time resets. ([#1646](https://github.com/open-telemetry/opentelemetry-specification/pull/1646))
 - Expand `Gauge` metric description in the data model ([#1661](https://github.com/open-telemetry/opentelemetry-specification/pull/1661))
 - Expand `Histogram` metric description in the data model ([#1664](https://github.com/open-telemetry/opentelemetry-specification/pull/1664))
+- Added Experimental Metrics API specification.
+  ([#1401](https://github.com/open-telemetry/opentelemetry-specification/pull/1401),
+  [#1557](https://github.com/open-telemetry/opentelemetry-specification/pull/1557),
+  [#1578](https://github.com/open-telemetry/opentelemetry-specification/pull/1578),
+  [#1590](https://github.com/open-telemetry/opentelemetry-specification/pull/1590),
+  [#1594](https://github.com/open-telemetry/opentelemetry-specification/pull/1594),
+  [#1617](https://github.com/open-telemetry/opentelemetry-specification/pull/1617),
+  [#1645](https://github.com/open-telemetry/opentelemetry-specification/pull/1645),
+  [#1657](https://github.com/open-telemetry/opentelemetry-specification/pull/1657),
+  [#1665](https://github.com/open-telemetry/opentelemetry-specification/pull/1665),
+  [#1672](https://github.com/open-telemetry/opentelemetry-specification/pull/1672),
+  [#1674](https://github.com/open-telemetry/opentelemetry-specification/pull/1674),
+  [#1675](https://github.com/open-telemetry/opentelemetry-specification/pull/1675),
+  [#1703](https://github.com/open-telemetry/opentelemetry-specification/pull/1703),
+  [#1704](https://github.com/open-telemetry/opentelemetry-specification/pull/1704),
+  [#1731](https://github.com/open-telemetry/opentelemetry-specification/pull/1731),
+  [#1733](https://github.com/open-telemetry/opentelemetry-specification/pull/1733))
 
 ### Logs
 
