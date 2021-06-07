@@ -549,6 +549,10 @@ status, which is `Unset`.
 - `Error`
   - The operation contains an error.
 
+These values form a total order: `Ok > Error > Unset`.
+This means that setting `Status` with `StatusCode=Ok` will override any prior or future attempts to set
+span `Status` with `StatusCode=Error` or `StatusCode=Unset`. See below for more specific rules. 
+
 The Span interface MUST provide:
 
 - An API to set the `Status`. This SHOULD be called `SetStatus`. This API takes
