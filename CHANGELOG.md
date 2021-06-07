@@ -42,6 +42,7 @@ release.
 ### Resource
 
 - Add schema_url support to `Resource`. ([#1692](https://github.com/open-telemetry/opentelemetry-specification/pull/1692))
+- Clarify result of Resource merging and ResourceDetector aggregation in case of error. ([#1726](https://github.com/open-telemetry/opentelemetry-specification/pull/1726))
 
 ### Semantic Conventions
 
