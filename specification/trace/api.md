@@ -551,7 +551,7 @@ status, which is `Unset`.
 
 These values form a total order: `Ok > Error > Unset`.
 This means that setting `Status` with `StatusCode=Ok` will override any prior or future attempts to set
-span `Status` with `StatusCode=Error` or `StatusCode=Unset`. See below for more specific rules. 
+span `Status` with `StatusCode=Error` or `StatusCode=Unset`. See below for more specific rules.
 
 The Span interface MUST provide:
 
