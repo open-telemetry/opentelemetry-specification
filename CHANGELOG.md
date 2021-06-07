@@ -25,7 +25,7 @@ release.
 
 ### SDK Configuration
 
-## v1.4.0 (2021-06-04)
+## v1.4.0 (2021-06-07)
 
 ### Context
 
