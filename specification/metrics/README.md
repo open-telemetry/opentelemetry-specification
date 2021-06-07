@@ -8,7 +8,7 @@
 
 **Domain Experts:**
 
-* [Bogdan Brutu](https://github.com/bogdandrutu)
+* [Bogdan Drutu](https://github.com/bogdandrutu)
 * [Josh Suereth](https://github.com/jsuereth)
 * [Joshua MacDonald](https://github.com/jmacd)
 
@@ -87,7 +87,7 @@ processors and exporters.
 OpenTelemetry requires a [separation of the API from the
 SDK](../library-guidelines.md#requirements), so that different SDKs can be
 configured at run time. Please refer to the overall [OpenTelemetry
-SDK](../overview.md#sdk) concept concept for more information.
+SDK](../overview.md#sdk) concept for more information.
 
 #### Programming Model
 
@@ -107,7 +107,7 @@ SDK](../overview.md#sdk) concept concept for more information.
 ## Specifications
 
 * [Metrics API](./api.md)
-* Metrics SDK (not available yet)
+* [Metrics SDK](./sdk.md)
 * [Metrics Data Model and Protocol](datamodel.md)
 * [Semantic Conventions](./semantic_conventions/README.md)
 
