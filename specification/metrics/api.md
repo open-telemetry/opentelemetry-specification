@@ -224,9 +224,35 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support at least 1023 characters. Individual language clients can
   decide if they want to support more.
 
+Instruments can be categorized based on whether they are synchronous or
+asynchronous:
+
+<a name="synchronous-instrument"></a>
+
+* Synchronous instruments (e.g. [Counter](#counter)) are meant to be invoked
+  inline with application/business processing logic. For example, an HTTP client
+  could use a Counter to record the number of bytes it has received.
+  [Measurements](#measurement) recorded by synchronous instruments can be
+  associated with the [Context](../context/context.md).
+
+<a name="asynchronous-instrument"></a>
+
+* Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-gauge)) give
+  the user a way to register callback function, and the callback function will
+  only be invoked upon collection. For example, a piece of embedded software
+  could use an asynchronous gauge to collect the temperature from a sensor every
+  15 seconds, which means the callback function will only be invoked every 15
+  seconds. [Measurements](#measurement) recorded by asynchronous instruments
+  cannot be associated with the [Context](../context/context.md).
+
+Please note that the term _synchronous_ and _asynchronous_ have nothing to do
+with the [asynchronous
+pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
+
 ### Counter
 
-`Counter` is a synchronous Instrument which supports non-negative increments.
+`Counter` is a [synchronous Instrument](#synchronous-instrument) which supports
+non-negative increments.
 
 Example uses for `Counter`:
 
@@ -317,9 +343,9 @@ counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_gree
 
 ### Asynchronous Counter
 
-Asynchronous Counter is an asynchronous Instrument which reports
-[monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing
-value(s) when the instrument is being observed.
+Asynchronous Counter is an [asynchronous Instrument](#asynchronous-instrument)
+which reports [monotonically](https://wikipedia.org/wiki/Monotonic_function)
+increasing value(s) when the instrument is being observed.
 
 Example uses for Asynchronous Counter:
 
@@ -441,9 +467,9 @@ operation is provided by the `callback`, which is registered during the
 
 ### Histogram
 
-`Histogram` is a synchronous Instrument which can be used to report arbitrary
-values that are likely to be statistically meaningful. It is intended for
-statistics such as histograms, summaries, and percentile.
+`Histogram` is a [synchronous Instrument](#synchronous-instrument) which can be
+used to report arbitrary values that are likely to be statistically meaningful.
+It is intended for statistics such as histograms, summaries, and percentile.
 
 Example uses for `Histogram`:
 
@@ -525,10 +551,10 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 
 ### Asynchronous Gauge
 
-Asynchronous Gauge is an asynchronous Instrument which reports non-additive
-value(s) (_e.g. the room temperature - it makes no sense to report the
-temperature value from multiple rooms and sum them up_) when the instrument is
-being observed.
+Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument)
+which reports non-additive value(s) (_e.g. the room temperature - it makes no
+sense to report the temperature value from multiple rooms and sum them up_) when
+the instrument is being observed.
 
 Note: if the values are additive (_e.g. the process heap size - it makes sense
 to report the heap size from multiple processes and sum them up, so we get the
@@ -652,8 +678,8 @@ operation is provided by the `callback`, which is registered during the
 
 ### UpDownCounter
 
-`UpDownCounter` is a synchronous Instrument which supports increments and
-decrements.
+`UpDownCounter` is a [synchronous Instrument](#synchronous-instrument) which
+supports increments and decrements.
 
 Note: if the value grows
 [monotonically](https://wikipedia.org/wiki/Monotonic_function), use
@@ -790,10 +816,11 @@ customersInStore.Add(-1, new Account { Type = "residential" });
 
 ### Asynchronous UpDownCounter
 
-Asynchronous UpDownCounter is an asynchronous Instrument which reports additive
-value(s) (_e.g. the process heap size - it makes sense to report the heap size
-from multiple processes and sum them up, so we get the total heap usage_) when
-the instrument is being observed.
+Asynchronous UpDownCounter is an [asynchronous
+Instrument](#asynchronous-instrument) which reports additive value(s) (_e.g. the
+process heap size - it makes sense to report the heap size from multiple
+processes and sum them up, so we get the total heap usage_) when the instrument
+is being observed.
 
 Note: if the value grows
 [monotonically](https://wikipedia.org/wiki/Monotonic_function), use
