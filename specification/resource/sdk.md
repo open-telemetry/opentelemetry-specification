@@ -82,7 +82,8 @@ The resulting resource will have the Schema URL calculated as follows:
 - Else if the Schema URLs of the old and updating resources are the same then
   that will be the Schema URL of the resulting resource,
 - Else this is a merging error (this is the case when the Schema URL of the old
-  and updating resources are not empty and are different).
+  and updating resources are not empty and are different). The resulting resource is
+  undefined, and its contents are implementation-specific.
 
 Required parameters:
 
@@ -124,7 +125,8 @@ a semantic convention or if the detector does not know what attributes it will
 populate (e.g. the detector that reads the attributes from environment values
 will not know what Schema URL to use). If multiple detectors are combined and
 the detectors use different non-empty Schema URL it MUST be an error since it is
-impossible to merge such resources.
+impossible to merge such resources. The resulting resource is undefined, and its
+contents are implementation specific.
 
 ### Specifying resource information via an environment variable
 
