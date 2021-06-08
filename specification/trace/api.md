@@ -549,6 +549,10 @@ status, which is `Unset`.
 - `Error`
   - The operation contains an error.
 
+These values form a total order: `Ok > Error > Unset`.
+This means that setting `Status` with `StatusCode=Ok` will override any prior or future attempts to set
+span `Status` with `StatusCode=Error` or `StatusCode=Unset`. See below for more specific rules.
+
 The Span interface MUST provide:
 
 - An API to set the `Status`. This SHOULD be called `SetStatus`. This API takes
@@ -558,6 +562,8 @@ The Span interface MUST provide:
   `Ok` & `Unset` values.
 
 The status code SHOULD remain unset, except for the following circumstances:
+
+An attempt to set value `Unset` SHOULD be ignored.
 
 When the status is set to `Error` by Instrumentation Libraries, the status codes
 SHOULD be documented and predictable. The status code should only be set to `Error`
@@ -570,6 +576,9 @@ unless explicitly configured to do so. Instrumention libraries SHOULD leave the
 status code as `Unset` unless there is an error, as described above.
 
 Application developers and Operators may set the status code to `Ok`.
+
+When span status is set to `Ok` it SHOULD be considered final and any further
+attempts to change it SHOULD be ignored.
 
 Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
 would otherwise generate. For example, to suppress noisy errors such as 404s.
