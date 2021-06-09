@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Adding environment variables for event and link attribute limits.
+
 ### Metrics
 
 ### Logs
