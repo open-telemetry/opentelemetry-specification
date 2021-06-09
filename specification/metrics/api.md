@@ -31,6 +31,7 @@ Table of Contents
   * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
     * [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     * [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
+* [Hint](#hint)
 * [Measurement](#measurement)
 
 </details>
@@ -278,6 +279,7 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* An optional `hint`, following the [Hint](#hint) rule.
 
 Here are some examples that individual language client might consider:
 
@@ -378,6 +380,7 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* An optional `hint`, following the [Hint](#hint) rule.
 * A `callback` function.
 
 The `callback` function is responsible for reporting the
@@ -492,6 +495,7 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* An optional `hint`, following the [Hint](#hint) rule.
 
 Here are some examples that individual language client might consider:
 
@@ -589,6 +593,7 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* An optional `hint`, following the [Hint](#hint) rule.
 * A `callback` function.
 
 The `callback` function is responsible for reporting the
@@ -761,6 +766,7 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* An optional `hint`, following the [Hint](#hint) rule.
 
 Here are some examples that individual language client might consider:
 
@@ -856,6 +862,7 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* An optional `hint`, following the [Hint](#hint) rule.
 * A `callback` function.
 
 The `callback` function is responsible for reporting the
@@ -945,6 +952,69 @@ meter.CreateObservableUpDownCounter<UInt64>("memory.physical.free", () => WMI.Qu
 Asynchronous UpDownCounter is only intended for an asynchronous scenario. The
 only operation is provided by the `callback`, which is registered during the
 [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation).
+
+## Hint
+
+`Hint` allows extra metadata to be attached to an [Instrument](#instrument),
+which makes it easier to configure the [SDK](./sdk.md).
+
+Here are some examples:
+
+* An HTTP server library is using a [Histogram](#histogram) to record the server
+  side request duration. Without `Hint`, the users of this library will have to
+  figure out how to configure the histogram buckets, which is a non-trivial
+  task. With `Hint`, the author of the HTTP server library could embed
+  recommended buckets (e.g. `{ (0, 100us], (100us, 1ms], (1ms, 10ms], (10ms,
+  100ms], (100ms, 1s], (1s, INF) }`) so that users can get a histogram with
+  default buckets.
+* An HTTP client library is using a [Counter](#counter) to record the number of
+  HTTP error responses (e.g. HTTP 400-499, 500-599). There are many
+  [`attributes`](../common/common.md#attributes) collected (e.g. http.method,
+  http.host, http.scheme, http.status_code, net.peer.port, net.peer.ip,
+  net.host.port). Without `Hint`, most of the users of this library will need to
+  configure which dimension(s) to be reported. With `Hint`, the author of the
+  HTTP client library could embed the recommended dimensions (e.g.
+  http.status_code, http.method) so that most of the users would be covered by
+  the default recommendation.
+
+[`Meter`](#meter) MUST provide a way to specify `Hint` during the `Instrument`
+creation. The actual `Hint` allowed for each instrument type could be different
+(e.g. buckets would only make sense for `Histogram`).
+
+The following metadata SHOULD be supported by the `Hint`:
+
+* The `attribute keys` (optional).
+* The `buckets` (optional, only applies to Histogram).
+
+Here are some examples that individual language client might consider:
+
+```python
+# Python
+
+http_server_duration = meter.create_histogram(
+    name="http.server.duration",
+    description="measures the duration of the inbound HTTP request",
+    unit="milliseconds",
+    value_type=float,
+    hint={
+      "attribute_keys": ["http.method", "http.status_code"],
+      "buckets": [0.1, 1, 10, 100, 1000],
+    })
+```
+
+```csharp
+// C#
+
+var httpServerDuration = meter.CreateHistogram<double>(
+    "http.server.duration",
+    description: "measures the duration of the inbound HTTP request",
+    unit: "milliseconds",
+    hint: new {
+        AttributeKeys = new string[] { "http.method", "http.status_code" },
+        Buckets = new double[] { 0.1, 1, 10, 100, 1000 }
+      }
+    );
+```
 
 ## Measurement
 
