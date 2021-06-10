@@ -162,7 +162,7 @@ will have the following information:
 * The `name` of the Instrument
 * The `kind` of the Instrument - whether it is a [Counter](#counter) or other
   instruments, whether it is synchronous or asynchronous
-* An optional `unit of measure`
+* An optional `unit` of measure
 * An optional `description`
 
 Instruments are associated with the Meter during creation, and are identified by
@@ -274,7 +274,7 @@ The API MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit of measure`, following the [instrument unit
+* An optional `unit` of measure, following the [instrument unit
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
@@ -374,7 +374,7 @@ The API MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit of measure`, following the [instrument unit
+* An optional `unit` of measure, following the [instrument unit
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
@@ -488,7 +488,7 @@ The API MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit of measure`, following the [instrument unit
+* An optional `unit` of measure, following the [instrument unit
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
@@ -585,7 +585,7 @@ The API MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit of measure`, following the [instrument unit
+* An optional `unit` of measure, following the [instrument unit
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
@@ -757,7 +757,7 @@ The API MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit of measure`, following the [instrument unit
+* An optional `unit` of measure, following the [instrument unit
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
@@ -852,7 +852,7 @@ The API MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit of measure`, following the [instrument unit
+* An optional `unit` of measure, following the [instrument unit
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
