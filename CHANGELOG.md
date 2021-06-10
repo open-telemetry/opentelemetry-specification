@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add Metrics API Hint
+  ([#1753](https://github.com/open-telemetry/opentelemetry-specification/pull/1753)).
+
 ### Logs
 
 ### Resource
