@@ -41,26 +41,12 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
 | `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
 | `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
-| `net.host.connection_type` | string | The current network connection type in common terms | `wifi` | No |
-| `net.host.carrier.name` | string | Name of the mobile carrier. | `sprint` | No |
-| `net.host.carrier.mcc` | string | [Mobile country code](https://en.wikipedia.org/wiki/Mobile_country_code) | `310` | No | 
-| `net.host.carrier.mnc` | string | [Mobile network code](https://en.wikipedia.org/wiki/Mobile_country_code) | `001` | No |
-| `net.host.carrier.icc` | string | [ISO country code (two character)](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) | `DE` | No |
+| `net.host.connection_type` | string | The internet connection type used by the host. | `wifi` | No |
+| `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | No |
+| `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | No |
+| `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | No |
+| `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | No |
 
-`net.host.connection_type` SHOULD be one of the following : 
-
-| Value | Description |
-| --- | --- |
-| `wifi` | connected via wifi | 
-| `wired` | connected via a hard-wire | 
-| `1G` |  connected via a first gen cellular technology, such as `AMPS` or equivalent | 
-| `2G` | connected via a second gen cellular technology, such as `GPRS` |
-| `3G` | connected via a third gen cellular technology, such as `UMTS` or `1xEV-DO` | 
-| `4G` | connected via a fourth gen cellular technology, such as `eHRPD` or `LTE` |
-| `5G` | connected via a fifth gen cellular technology, such as `5G NR` | 
-| `unavailable` | network is disconnected or unavailable. | 
-
- 
 `net.transport` MUST be one of the following:
 
 | Value  | Description |
@@ -75,6 +61,18 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
 
+`net.host.connection_type` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `wifi` | wifi |
+| `wired` | wired |
+| `1G` | 1G |
+| `2G` | 2G |
+| `3G` | 3G |
+| `4G` | 4G |
+| `5G` | 5G |
+| `unavailable` | unavailable |
 <!-- endsemconv -->
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 

@@ -60,6 +60,44 @@ groups:
         type: string
         brief: 'Local hostname or similar, see note below.'
         examples: 'localhost'
+      - id: host.connection_type
+        type:
+          allow_custom_values: false
+          members:
+            - id: wifi
+              value: "wifi"
+            - id: wired
+              value: "wired"
+            - id: 1G
+              value: "1G"
+            - id: 2G
+              value: "2G"
+            - id: 3G
+              value: "3G"
+            - id: 4G
+              value: "4G"
+            - id: 5G
+              value: "5G"
+            - id: unavailable
+              value: "unavailable"
+        brief: 'The internet connection type used by the host.'
+        examples: 'wifi'
+      - id: host.carrier.name
+        type: string
+        brief: "The name of the mobile carrier."
+        examples: "sprint"
+      - id: host.carrier.mcc
+        type: string
+        brief: "The mobile carrier country code."
+        examples: "310"
+      - id: host.carrier.mnc
+        type: string
+        brief: "The mobile carrier network code."
+        examples: "001"
+      - id: host.carrier.icc
+        type: string
+        brief: "The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network."
+        examples: "DE"
   - id: peer
     prefix: peer
     brief: "Operations that access some remote service."
