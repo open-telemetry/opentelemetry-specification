@@ -116,5 +116,8 @@ groups:
           type: string
           brief: "`error.message` property of response if it is an error response."
           examples: ['Parse error', 'User already exists']
-      constraints:
-        - any_of: ['rpc.method']
+        - ref: rpc.method
+          required: always
+          note: >
+           This is always required for jsonrpc. See the note in the general
+           RPC conventions for more information.
