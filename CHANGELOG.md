@@ -26,7 +26,7 @@ release.
 ### SDK Configuration
 
 - Allow selecting multiple exporters via `OTEL_TRACES_EXPORTER` and `OTEL_METRICS_EXPORTER`
-  by using a comma-seperated list. ([#1758](https://github.com/open-telemetry/opentelemetry-specification/pull/1758))
+  by using a comma-separated list. ([#1758](https://github.com/open-telemetry/opentelemetry-specification/pull/1758))
 
 ## v1.4.0 (2021-06-07)
 
