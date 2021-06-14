@@ -132,7 +132,7 @@ thrift or protobuf.  As of 1.0 of the specification, there
 
 **Status**: [Stable](document-status.md)
 
-We define environment variables for setting an exporter per signal.
+We define environment variables for setting one or more exporters per signal.
 
 | Name          | Description                                                                  | Default |
 | ------------- | ---------------------------------------------------------------------------- | ------- |
