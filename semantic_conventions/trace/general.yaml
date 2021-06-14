@@ -62,7 +62,7 @@ groups:
         examples: 'localhost'
       - id: host.connection_type
         type:
-          allow_custom_values: false
+          allow_custom_values: true
           members:
             - id: wifi
               value: "wifi"
