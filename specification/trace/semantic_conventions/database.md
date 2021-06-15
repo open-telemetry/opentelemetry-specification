@@ -107,6 +107,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `geode` | Apache Geode |
 | `elasticsearch` | Elasticsearch |
 | `memcached` | Memcached |
+| `cockroachdb` | CockroachDB |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
