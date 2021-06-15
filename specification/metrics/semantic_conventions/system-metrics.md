@@ -1,5 +1,7 @@
 # Semantic Conventions for System Metrics
 
+**Status**: [Experimental](../../document-status.md)
+
 This document describes instruments and labels for common system level
 metrics in OpenTelemetry. Consider the [general metric semantic
 conventions](README.md#general-metric-semantic-conventions) when creating
@@ -16,7 +18,7 @@ instruments not explicitly defined in the specification.
   * [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
   * [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
   * [`system.network.` - Network metrics](#systemnetwork---network-metrics)
-  * [`system.process.` - Aggregate system process metrics](#systemprocess---aggregate-system-process-metrics)
+  * [`system.processes.` - Aggregate system process metrics](#systemprocesses---aggregate-system-process-metrics)
   * [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
 
 <!-- tocstop -->
@@ -140,13 +142,14 @@ from
 from
 [`GetIfEntry2`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-getifentry2).
 
-### `system.process.` - Aggregate system process metrics
+### `system.processes.` - Aggregate system process metrics
 
 **Description:** System level aggregate process metrics. For metrics at the
 individual process level, see [process metrics](process-metrics.md).
-| Name                 | Description                             | Units       | Instrument Type   | Value Type | Label Key | Label Values                                                                                   |
-| -------------------- | --------------------------------------- | ----------- | ----------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
-| system.process.count | Total number of processes in each state | {processes} | UpDownSumObserver | Int64      | status    | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
+| Name                     | Description                                               | Units       | Instrument Type   | Value Type | Label Key | Label Values                                                                                   |
+| ------------------------ | --------------------------------------------------------- | ----------- | ----------------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
+| system.processes.count   | Total number of processes in each state                   | {processes} | UpDownSumObserver | Int64      | status    | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
+| system.processes.created | Total number of processes created over uptime of the host | {processes} | SumObserver       | Int64      | -         | -                                                                                              |
 
 ### `system.{os}.` - OS Specific System Metrics
 

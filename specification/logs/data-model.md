@@ -1,5 +1,7 @@
 # Log Data Model
 
+**Status**: [Experimental](../document-status.md)
+
 * [Design Notes](#design-notes)
   * [Requirements](#requirements)
   * [Field Kinds](#field-kinds)
@@ -92,6 +94,32 @@ The Data Model aims to successfully represent 3 sorts of logs and events:
   we include in the logs. We can likely modify the source code of the
   application if needed.
 
+### Definitions Used in this Document
+
+In this document we refer to types `any` and `map<string, any>`, defined as
+follows.
+
+#### Type `any`
+
+Value of type `any` can be one of the following:
+
+- A scalar value: number, string or boolean,
+
+- A byte array,
+
+- An array (a list) of `any` values,
+
+- A `map<string, any>`.
+
+#### Type `map<string, any>`
+
+Value of type `map<string, any>` is a map of string keys to `any` values. The
+keys in the map are unique (duplicate keys are not allowed). The representation
+of the map is language-dependent.
+
+Arbitrary deep nesting of values for arrays and maps is allowed (essentially
+allows to represent an equivalent of a JSON object).
+
 ### Field Kinds
 
 This Data Model defines a logical model for a log record (irrespective of the
@@ -100,8 +128,8 @@ fields:
 
 - Named top-level fields of specific type and meaning.
 
-- Fields stored in the key/value pair lists, which can contain arbitrary values
-  of different types. The keys and values for well-known fields follow semantic
+- Fields stored as `map<string, any>`, which can contain arbitrary values of
+  different types. The keys and values for well-known fields follow semantic
   conventions for key names and possible values that allow all parties that work
   with the field to have the same interpretation of the data. See references to
   semantic conventions for `Resource` and `Attributes` fields and examples in
@@ -116,7 +144,7 @@ The reasons for having these 2 kinds of fields are:
 - Ability to enforce types of named fields, which is very useful for compiled
   languages with type checks.
 
-- Flexibility to represent less frequent data via key/value pair lists. This
+- Flexibility to represent less frequent data as `map<string, any>`. This
   includes well-known data that has standardized semantics as well as arbitrary
   custom data that the application may want to include in the logs.
 
@@ -135,11 +163,6 @@ Both of the above conditions were required to give the field a place in the
 top-level structure of the record.
 
 ## Log and Event Record Definition
-
-Note: below we use type `any`, which can be a scalar value (number, string or
-boolean), or an array or map of values. Arbitrary deep nesting of values for
-arrays and maps is allowed (essentially allow to represent an equivalent of a
-JSON object).
 
 [Appendix A](#appendix-a-example-mappings) contains many examples that show how
 existing log formats map to the fields defined below. If there are questions
@@ -375,32 +398,29 @@ occurrence of the event coming from the same source. This field is optional.
 
 ### Field: `Resource`
 
-Type: key/value pair list.
+Type: `map<string, any>`.
 
 Description: Describes the source of the log, aka
-[resource](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/overview.md#resources).
-"key" of each pair is a `string` and "value" is of `any` type. Multiple
-occurrences of events coming from the same event source can happen across time
-and they all have the same value of `Resource`. Can contain for example
-information about the application that emits the record or about the
-infrastructure where the application runs. Data formats that represent this data
-model may be designed in a manner that allows the `Resource` field to be
-recorded only once per batch of log records that come from the same source.
-SHOULD follow OpenTelemetry
-[semantic conventions for Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions).
+[resource](../overview.md#resources). Multiple occurrences of events coming from
+the same event source can happen across time and they all have the same value of
+`Resource`. Can contain for example information about the application that emits
+the record or about the infrastructure where the application runs. Data formats
+that represent this data model may be designed in a manner that allows the
+`Resource` field to be recorded only once per batch of log records that come
+from the same source. SHOULD follow OpenTelemetry
+[semantic conventions for Resources](../resource/semantic_conventions/README.md).
 This field is optional.
 
 ### Field: `Attributes`
 
-Type: key/value pair list.
+Type: `map<string, any>`.
 
-Description: Additional information about the specific event occurrence. "key"
-of each pair is a `string` and "value" is of `any` type. Unlike the `Resource`
-field, which is fixed for a particular source, `Attributes` can vary for each
-occurrence of the event coming from the same source. Can contain information
-about the request context (other than TraceId/SpanId). SHOULD follow
+Description: Additional information about the specific event occurrence. Unlike
+the `Resource` field, which is fixed for a particular source, `Attributes` can
+vary for each occurrence of the event coming from the same source. Can contain
+information about the request context (other than TraceId/SpanId). SHOULD follow
 OpenTelemetry
-[semantic conventions for Attributes](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions).
+[semantic conventions for Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
 
 ## Example Log Records
@@ -630,13 +650,13 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
   <tr>
     <td>Dimensions</td>
-    <td>map of string to string</td>
+    <td>map&lt;string, string></td>
     <td>Helps to define the identity of the event source together with EventType and Category. Multiple occurrences of events coming from the same event source can happen across time and they all have the value of Dimensions. </td>
     <td>Resource</td>
   </tr>
   <tr>
     <td>Properties</td>
-    <td>map of string to any</td>
+    <td>map&lt;string, any></td>
     <td>Additional information about the specific event occurrence. Unlike Dimensions which are fixed for a particular event source, Properties can have different values for each occurrence of the event coming from the same event source.</td>
     <td>Attributes</td>
   </tr>
@@ -683,7 +703,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
   <tr>
     <td>fields</td>
-    <td>Map of any</td>
+    <td>map&lt;string, any></td>
     <td>Specifies a JSON object that contains explicit custom fields.</td>
     <td>Attributes</td>
   </tr>
@@ -898,6 +918,7 @@ severity         | LogSeverity        | The severity of the log entry.          
 trace            | string             | The trace associated with the log entry, if any.        | TraceId
 span_id          | string             | The span ID within the trace associated with the log entry. | SpanId
 labels           | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes
+http_request     | HttpRequest        | The HTTP request associated with the log entry, if any. | Attributes["google.httpRequest"]
 All other fields |                    |                                                         | Attributes["google.*"]
 
 ## Elastic Common Schema
@@ -913,19 +934,19 @@ All other fields |                    |                                         
     <td>@timestamp</td>
     <td>datetime</td>
     <td>Time the event was recorded</td>
-    <td>timestamp</td>
+    <td>Timestamp</td>
   </tr>
   <tr>
     <td>message</td>
     <td>string</td>
     <td>Any type of message</td>
-    <td>body</td>
+    <td>Body</td>
   </tr>
   <tr>
     <td>labels</td>
     <td>key/value</td>
     <td>Arbitrary labels related to the event</td>
-    <td>attributes[*]</td>
+    <td>Attributes[*]</td>
   </tr>
   <tr>
     <td>tags</td>
@@ -949,157 +970,157 @@ All other fields |                    |                                         
     <td>agent.ephemeral_id</td>
     <td>string</td>
     <td>Ephemeral ID created by agent</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>agent.id</td>
     <td>string</td>
     <td>Unique identifier of this agent</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>agent.name</td>
     <td>string</td>
     <td>Name given to the agent</td>
-    <td>resource["telemetry.sdk.name"]</td>
+    <td>Resource["telemetry.sdk.name"]</td>
   </tr>
   <tr>
     <td>agent.type</td>
     <td>string</td>
     <td>Type of agent</td>
-    <td>resource["telemetry.sdk.language"]</td>
+    <td>Resource["telemetry.sdk.language"]</td>
   </tr>
   <tr>
     <td>agent.version</td>
     <td>string</td>
     <td>Version of agent</td>
-    <td>resource["telemetry.sdk.version"]</td>
+    <td>Resource["telemetry.sdk.version"]</td>
   </tr>
   <tr>
     <td>source.ip, client.ip</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>attributes["net.peer.ip"] or attributes["net.host.ip"]</td>
+    <td>Attributes["net.peer.ip"] or Attributes["net.host.ip"]</td>
   </tr>
   <tr>
     <td>cloud.account.id</td>
     <td>string</td>
     <td>ID of the account in the given cloud</td>
-    <td>resource["cloud.account.id"]</td>
+    <td>Resource["cloud.account.id"]</td>
   </tr>
   <tr>
     <td>cloud.availability_zone</td>
     <td>string</td>
     <td>Availability zone in which this host is running.</td>
-    <td>resource["cloud.zone"]</td>
+    <td>Resource["cloud.zone"]</td>
   </tr>
   <tr>
     <td>cloud.instance.id</td>
     <td>string</td>
     <td>Instance ID of the host machine.</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>cloud.instance.name</td>
     <td>string</td>
     <td>Instance name of the host machine.</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>cloud.machine.type</td>
     <td>string</td>
     <td>Machine type of the host machine.</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>cloud.provider</td>
     <td>string</td>
     <td>Name of the cloud provider. Example values are aws, azure, gcp, or digitalocean.</td>
-    <td>resource["cloud.provider"]</td>
+    <td>Resource["cloud.provider"]</td>
   </tr>
   <tr>
     <td>cloud.region</td>
     <td>string</td>
     <td>Region in which this host is running.</td>
-    <td>resource["cloud.region"]</td>
+    <td>Resource["cloud.region"]</td>
   </tr>
   <tr>
     <td>cloud.image.id*</td>
     <td>string</td>
     <td></td>
-    <td>resource["host.image.name"]</td>
+    <td>Resource["host.image.name"]</td>
   </tr>
   <tr>
     <td>container.id</td>
     <td>string</td>
     <td>Unique container id</td>
-    <td>resource["container.id"]</td>
+    <td>Resource["container.id"]</td>
   </tr>
   <tr>
     <td>container.image.name</td>
     <td>string</td>
     <td>Name of the image the container was built on.</td>
-    <td>resource["container.image.name"]</td>
+    <td>Resource["container.image.name"]</td>
   </tr>
   <tr>
     <td>container.image.tag</td>
     <td>Array of string</td>
     <td>Container image tags.</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>container.labels</td>
     <td>key/value</td>
     <td>Image labels.</td>
-    <td>attributes[*]</td>
+    <td>Attributes[*]</td>
   </tr>
   <tr>
     <td>container.name</td>
     <td>string</td>
     <td>Container name.</td>
-    <td>resource["container.name"]</td>
+    <td>Resource["container.name"]</td>
   </tr>
   <tr>
     <td>container.runtime</td>
     <td>string</td>
     <td>Runtime managing this container. Example: "docker"</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>destination.address</td>
     <td>string</td>
     <td>Destination address for the event</td>
-    <td>attributes["destination.address"]</td>
+    <td>Attributes["destination.address"]</td>
   </tr>
   <tr>
     <td>error.code</td>
     <td>string</td>
     <td>Error code describing the error.</td>
-    <td>attributes["error.code"]</td>
+    <td>Attributes["error.code"]</td>
   </tr>
   <tr>
     <td>error.id</td>
     <td>string</td>
     <td>Unique identifier for the error.</td>
-    <td>attributes["error.id"]</td>
+    <td>Attributes["error.id"]</td>
   </tr>
   <tr>
     <td>error.message</td>
     <td>string</td>
     <td>Error message.</td>
-    <td>attributes["error.message"]</td>
+    <td>Attributes["error.message"]</td>
   </tr>
   <tr>
     <td>error.stack_trace</td>
     <td>string</td>
     <td>The stack trace of this error in plain text.</td>
-    <td>attributes["error.stack_trace]</td>
+    <td>Attributes["error.stack_trace]</td>
   </tr>
   <tr>
     <td>host.architecture</td>
     <td>string</td>
     <td>Operating system architecture</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>host.domain</td>
@@ -1108,7 +1129,7 @@ All other fields |                    |                                         
 
 For example, on Windows this could be the host’s Active Directory domain or NetBIOS domain name. For Linux this could be the domain of the host’s LDAP provider.</td>
 
-<td>**resource</td>
+<td>**Resource</td>
   </tr>
   <tr>
     <td>host.hostname</td>
@@ -1117,26 +1138,26 @@ For example, on Windows this could be the host’s Active Directory domain or Ne
 
 It normally contains what the hostname command returns on the host machine.</td>
 
-<td>resource["host.hostname"]</td>
+<td>Resource["host.hostname"]</td>
 
   </tr>
   <tr>
     <td>host.id</td>
     <td>string</td>
     <td>Unique host id.</td>
-    <td>resource["host.id"]</td>
+    <td>Resource["host.id"]</td>
   </tr>
   <tr>
     <td>host.ip</td>
     <td>Array of string</td>
     <td>Host IP</td>
-    <td>resource["host.ip"]</td>
+    <td>Resource["host.ip"]</td>
   </tr>
   <tr>
     <td>host.mac</td>
     <td>array of string</td>
     <td>MAC addresses of the host</td>
-    <td>resource["host.mac"]</td>
+    <td>Resource["host.mac"]</td>
   </tr>
   <tr>
     <td>host.name</td>
@@ -1145,14 +1166,14 @@ It normally contains what the hostname command returns on the host machine.</td>
 
 It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
 
-<td>resource["host.name"]</td>
+<td>Resource["host.name"]</td>
 
   </tr>
   <tr>
     <td>host.type</td>
     <td>string</td>
     <td>Type of host.</td>
-    <td>resource["host.type"]</td>
+    <td>Resource["host.type"]</td>
   </tr>
   <tr>
     <td>host.uptime</td>
@@ -1166,43 +1187,43 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
 </td>
     <td>string</td>
     <td>Ephemeral identifier of this service</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>service.id</td>
     <td>string</td>
     <td>Unique identifier of the running service. If the service is comprised of many nodes, the service.id should be the same for all nodes.</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>service.name</td>
     <td>string</td>
     <td>Name of the service data is collected from.</td>
-    <td>resource["service.name"]</td>
+    <td>Resource["service.name"]</td>
   </tr>
   <tr>
     <td>service.node.name</td>
     <td>string</td>
     <td>Specific node serving that service</td>
-    <td>resource["service.instance.id"]</td>
+    <td>Resource["service.instance.id"]</td>
   </tr>
   <tr>
     <td>service.state</td>
     <td>string</td>
     <td>Current state of the service.</td>
-    <td>attributes["service.state"]</td>
+    <td>Attributes["service.state"]</td>
   </tr>
   <tr>
     <td>service.type</td>
     <td>string</td>
     <td>The type of the service data is collected from.</td>
-    <td>**resource</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>service.version</td>
     <td>string</td>
     <td>Version of the service the data was collected from.</td>
-    <td>resource["service.version"]</td>
+    <td>Resource["service.version"]</td>
   </tr>
   <tr>
     <td></td>
@@ -1215,7 +1236,7 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
 \* Not yet formalized into ECS.
 
 \*\* A resource that doesn’t exist in the
-[OpenTelemetry resource semantic convention](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions).
+[OpenTelemetry resource semantic convention](../resource/semantic_conventions/README.md).
 
 This is a selection of the most relevant fields. See
 [for the full reference](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html)
@@ -1239,7 +1260,7 @@ for an exhaustive list.
 
 ## References
 
-- Log Data Model [OTEP 0097](https://github.com/open-telemetry/oteps/blob/master/text/logs/0097-log-data-model.md)
+- Log Data Model [OTEP 0097](https://github.com/open-telemetry/oteps/blob/main/text/logs/0097-log-data-model.md)
 
 - [Draft discussion of Data Model](https://docs.google.com/document/d/1ix9_4TQO3o-qyeyNhcOmqAc1MTyr-wnXxxsdWgCMn9c/edit#)
 

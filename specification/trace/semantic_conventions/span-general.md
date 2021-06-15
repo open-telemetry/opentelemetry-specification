@@ -1,5 +1,7 @@
 # General attributes
 
+**Status**: [Experimental](../../document-status.md)
+
 The attributes described in this section are not specific to a particular operation but rather generic.
 They may be used in any Span they apply to.
 Particular operations may refer to or require some of these attributes.
@@ -30,24 +32,24 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 <a name="nettransport-attribute">
 
 <!-- semconv network -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `net.transport` | string enum | Transport protocol used. See note below. | `IP.TCP` | No |
+| `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | No |
 | `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
-| `net.peer.port` | number | Remote port number. | `80`<br>`8080`<br>`443` | No |
+| `net.peer.port` | int | Remote port number. | `80`; `8080`; `443` | No |
 | `net.peer.name` | string | Remote hostname or similar, see note below. | `example.com` | No |
 | `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
-| `net.host.port` | number | Like `net.peer.port` but for the host port. | `35555` | No |
+| `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
 | `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
 
 `net.transport` MUST be one of the following:
 
 | Value  | Description |
 |---|---|
-| `IP.TCP` | IP.TCP |
-| `IP.UDP` | IP.UDP |
-| `IP` | Another IP-based protocol |
-| `Unix` | Unix Domain socket. See below. |
+| `ip_tcp` | ip_tcp |
+| `ip_udp` | ip_udp |
+| `ip` | Another IP-based protocol |
+| `unix` | Unix Domain socket. See below. |
 | `pipe` | Named or anonymous pipe. See note below. |
 | `inproc` | In-process communication. [1] |
 | `other` | Something else (non IP-based). |
@@ -81,7 +83,7 @@ Users can define what the name of a service is based on their particular semanti
 Instrumentations SHOULD provide a way for users to configure this name.
 
 <!-- semconv peer -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `peer.service` | string | The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. | `AuthTokenCache` | No |
 <!-- endsemconv -->
@@ -96,7 +98,7 @@ Examples of `peer.service` that users may specify:
 These attributes may be used for any operation with an authenticated and/or authorized enduser.
 
 <!-- semconv identity -->
-| Attribute  | Type | Description  | Example  | Required |
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `enduser.id` | string | Username or client_id extracted from the access token or [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2) header in the inbound request from outside the system. | `username` | No |
 | `enduser.role` | string | Actual/assumed role the client is making the request under extracted from token or application security context. | `admin` | No |
@@ -144,10 +146,12 @@ information is required and would not violate any policies or regulations.
 These attributes may be used for any operation to store information about
 a thread that started a span.
 
-| Attribute name | Notes and examples                                                  |
-|----------------|---------------------------------------------------------------------|
-| `thread.id`    | Current "managed" thread ID (as opposed to OS thread ID). E.g. `42` |
-| `thread.name`  | Current thread name. E.g. `main`                                    |
+<!-- semconv thread -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `thread.id` | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | No |
+| `thread.name` | string | Current thread name. | `main` | No |
+<!-- endsemconv -->
 
 Examples of where `thread.id` and `thread.name` can be extracted from:
 
@@ -168,9 +172,11 @@ For an HTTP server span, this would be the function that handles the incoming re
 The attributes listed below allow to report this unit of code and therefore to provide more context
 about the span.
 
-| Attribute  | Type | Description  | Example  | Required |
+<!-- semconv code -->
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `code.function` | string | The method or function name, or equivalent (usually rightmost part of the code unit's name). | `serveRequest` | No |
 | `code.namespace` | string | The "namespace" within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit. | `com.example.MyHttpService` | No |
-| `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/src/main/java/com/example/MyHttpService.java` | No |
-| `code.lineno` | number | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | No |
+| `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | No |
+| `code.lineno` | int | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | No |
+<!-- endsemconv -->

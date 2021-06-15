@@ -1,5 +1,7 @@
 # Trace Semantic Conventions
 
+**Status**: [Experimental](../../document-status.md)
+
 In OpenTelemetry spans can be created freely and it’s up to the implementor to
 annotate them with attributes specific to the represented operation. Spans
 represent specific operations in and between systems. Some of these operations
@@ -19,7 +21,12 @@ The following semantic conventions for spans are defined:
 * [RPC/RMI](rpc.md): Spans for remote procedure calls (e.g., gRPC).
 * [Messaging](messaging.md): Spans for interaction with messaging systems (queues, publish/subscribe, etc.).
 * [FaaS](faas.md): Spans for Function as a Service (e.g., AWS Lambda).
-* [Exceptions](exceptions.md): Attributes for recording exceptions associated with a span
+* [Exceptions](exceptions.md): Attributes for recording exceptions associated with a span.
+
+The following library-specific semantic conventions are defined:
+
+* [AWS Lambda](instrumentation/aws-lambda.md): AWS Lambda
+* [AWS SDK](instrumentation/aws-sdk.md): AWS SDK
 
 Apart from semantic conventions for traces and [metrics](../../metrics/semantic_conventions/README.md),
 OpenTelemetry also defines the concept of overarching [Resources](../../resource/sdk.md) with their own

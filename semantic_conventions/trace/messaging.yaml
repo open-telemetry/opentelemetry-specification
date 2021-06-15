@@ -9,7 +9,7 @@ groups:
           type: string
           required: always
           brief: 'A string identifying the messaging system.'
-          examples: ['kafka', 'rabbitmq', 'activemq']
+          examples: ['kafka', 'rabbitmq', 'activemq', 'AmazonSQS']
         - id: destination
           type: string
           required: always
@@ -58,13 +58,13 @@ groups:
             represented as a string. Sometimes called "Correlation ID".
           examples: 'MyConversationId'
         - id: message_payload_size_bytes
-          type: number
+          type: int
           brief: >
             The (uncompressed) size of the message payload in bytes.
             Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
           examples: 2738
         - id: message_payload_compressed_size_bytes
-          type: number
+          type: int
           brief: 'The compressed size of the message payload in bytes.'
           examples: 2048
         - ref: net.peer.name
@@ -121,6 +121,20 @@ groups:
         Semantic convention for servers that consume messages received from messaging systems
         and always send back replies directed to the producers of these messages.
 
+    - id: messaging.rabbitmq
+      prefix: messaging.rabbitmq
+      extends: messaging
+      brief: >
+        Attributes for RabbitMQ
+      attributes:
+        - id: routing_key
+          type: string
+          required:
+            conditional: Unless it is empty.
+          brief: >
+            RabbitMQ message routing key.
+          examples: 'myKey'
+
     - id: messaging.kafka
       prefix: messaging.kafka
       extends: messaging
@@ -149,7 +163,7 @@ groups:
             Client Id for the Consumer or Producer that is handling the message.
           examples: 'client-5'
         - id: partition
-          type: number
+          type: int
           brief: >
             Partition the message is sent to.
           examples: 2

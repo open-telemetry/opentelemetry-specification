@@ -1,5 +1,7 @@
 # Common specification concepts
 
+**Status**: [Stable, Feature-freeze](../document-status.md)
+
 <details>
 <summary>
 Table of Contents
@@ -7,7 +9,6 @@ Table of Contents
 
 - [Attributes](#attributes)
   - [Attribute Limits](#attribute-limits)
-  - [Attribute and Label Naming](#attribute-and-label-naming)
 
 </details>
 
@@ -22,8 +23,6 @@ Attributes are a list of zero or more key-value pairs. An `Attribute` MUST have 
     i.e. it MUST NOT contain values of different types. For protocols that do
     not natively support array values such values SHOULD be represented as JSON strings.
 
-Attributes SHOULD preserve the order in which they're set.
-
 Attribute values expressing a numerical value of zero, an empty string, or an
 empty array are considered meaningful and MUST be stored and passed on to
 processors / exporters.
@@ -31,6 +30,9 @@ processors / exporters.
 Attribute values of `null` are not valid and attempting to set a `null` value is
 undefined behavior.
 
+`null` values SHOULD NOT be allowed in arrays. However, if it is impossible to
+make sure that no `null` values are accepted
+(e.g. in languages that do not have appropriate compile-time type checking),
 `null` values within arrays MUST be preserved as-is (i.e., passed on to span
 processors / exporters as `null`). If exporters do not support exporting `null`
 values, they MAY replace those values by 0, `false`, or empty strings.
@@ -41,138 +43,56 @@ both containing an array of strings to represent a mapping
 
 ### Attribute Limits
 
-Execution of erroneous code can result in unintended attributes. If there is no 
-limits placed on attributes, they can quickly exhaust available memory, resulting 
+Execution of erroneous code can result in unintended attributes. If there is no
+limits placed on attributes, they can quickly exhaust available memory, resulting
 in crashes that are difficult to recover from safely.
 
-SDKs MAY be configured to truncate attribute values. By default, attribute values 
-SHOULD NOT be truncated. If an SDK provides a way to set an attribute value size
-limit and the limit is set, then for each attribute value, serialized into a string,
-if it exceeds that limit, SDK Spans MUST truncate that value, so that its length
-is at most equal to the limit. However if a serialized value does not exceed the
-size limit, then it SHOULD NOT be serialized.
+SDKs MAY be configured to truncate attribute lists and/or their values. By
+default, attribute lists and values SHOULD NOT be truncated.
 
-SDKs SHOULD choose any serialization protocol, which is performant and appropriate
-for the language and/or environment they are implemented in. Please note that the
-aforementioned behavior MAY yield a previously unexpected type. For example, if 
-an attribute was set and its value was an array, then after serialization, due to
-an exceeded size limit, its value SHOULD be a string. 
+If an SDK provides a way to:
+- set an attribute value length limit and the limit is set, then for each
+  attribute value:
+  - if it is a string, if it exceeds that limit (counting any character in it as
+    1), SDK Spans MUST truncate that value, so that its length is at most equal
+    to the limit,
+  - if it is an array of strings, then apply the above rule to each of the
+    values separately,
+  - otherwise a value MUST NOT be truncated;
+- set a limit of unique attribute keys, and the limit is set:
+  - for each unique attributes key which exceeds a limit, SDK MUST discard that
+    key/value pair.
 
-There SHOULD be a log emitted to indicate to the user that an attribute was truncated.
-To prevent excessive logging, the log MUST NOT be emitted more than once per item
-on which an attribute is set.
+There SHOULD be a log emitted to indicate to the user that an attribute was
+truncated. To prevent excessive logging, the log MUST NOT be emitted more than
+once per record on which an attribute is set. If a record is embedded in another
+record (e.g. Events within a Span), then the log SHOULD NOT be emitted more than
+once per parent record.
 
-To define a limit SDKs SHOULD honor the environment variables specified in 
-[SDK environment variables](../sdk-environment-variables.md#attribute-limits). If an
-SDK does not implement truncation mechanism for all implementations of attributes,
-then it SHOULD NOT offer a single global environment variable for such a limit.
-SDKs SHOULD only offer environment variables for these types of attributes, for
-which that SDK implements truncation mechanism.
+To define a limit SDKs SHOULD honor the environment variables specified in
+[SDK environment variables](../sdk-environment-variables.md#attribute-limits).
+If an SDK does not implement truncation mechanism for all implementations of
+attributes, then it SHOULD NOT offer an unscoped (e.g.
+`OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`, as opposed to e.g.
+`OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT`) global environment variable for such a
+limit. SDKs SHOULD only offer environment variables for the types of attributes,
+for which that SDK implements truncation mechanism.
 
-Due to a possible increased implementation complexity, attribute value size limit
-MUST NOT be set to any number lower than 32. Please note that certain very low limits
-could even result in truncation of small numbers or booleans, and such a behavior
-is not valuable for preventing SDKs from exhausting large amounts of memory.
+If the SDK implements the limits above, it MUST provide a way to change these
+limits via a configuration passed to the to the `<Type>Provider`, where `<Type>`
+is any kind of a producer of records, which implement attributes.
 
-## Attribute and Label Naming
+The options MAY be bundled in a class, which then SHOULD be called
+`<Record>Limits` (where `<Record>` is a type of a record, e.g. `Span`). Names of
+the configuration options SHOULD be the same as in the list below.
+Implementations MAY provide additional configuration options such as
+`AttributePerEventCountLimit` or `AttributePerLinkCountLimit`.
 
-_This section applies to Resource, Span and Log attribute names (also known as
-the "attribute keys") and to keys of Metric labels. For brevity within this
-section when we use the term "name" without an adjective it is implied to mean
-"attribute name or metric label key"._
+<a name="attribute-limits-configuration"></a>
+**Configurable parameters:**
 
-Every name MUST be a valid Unicode sequence.
+* `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
+* `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
 
-_Note: we merely require that the names are represented as Unicode sequences.
-This specification does not define how exactly the Unicode sequences are
-encoded. The encoding can vary from one programming language to another and from
-one wire format to another. Use the idiomatic way to represent Unicode in the
-particular programming language or wire format._
-
-Names SHOULD follow these rules:
-
-- Use namespacing to avoid name clashes. Delimit the namespaces using a dot
-  character. For example `service.version` denotes the service version where
-  `service` is the namespace and `version` is an attribute in that namespace.
-
-- Namespaces can be nested. For example `telemetry.sdk` is a namespace inside
-  top-level `telemetry` namespace and `telemetry.sdk.name` is an attribute
-  inside `telemetry.sdk` namespace.
-
-- For each multi-word dot-delimited component of the attribute name separate the
-  words by underscores (i.e. use snake_case). For example `http.status_code`
-  denotes the status code in the http namespace.
-
-- Names SHOULD NOT coincide with namespaces. For example if
-  `service.instance.id` is an attribute name then it is no longer valid to have
-  an attribute named `service.instance` because `service.instance` is already a
-  namespace. Because of this rule be careful when choosing names: every existing
-  name prohibits existence of an equally named namespace in the future, and vice
-  versa: any existing namespace prohibits existence of an equally named
-  attribute or label key in the future.
-
-### Recommendations for OpenTelemetry Authors
-
-- All names that are part of OpenTelemetry semantic conventions SHOULD be part
-  of a namespace.
-
-- When coming up with a new semantic convention make sure to check existing
-  namespaces for
-  [Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
-  [Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
-  and
-  [Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions)
-  to see if the new name fits.
-
-- When a new namespace is necessary consider whether it should be a top-level
-  namespace (e.g. `service`) or a nested namespace (e.g. `service.instance`).
-
-- Semantic conventions exist for four areas: for Resource, Span and Log
-  attribute names as well as Metric label keys. In addition, for spans we have
-  two more areas: Event and Link attribute names. Identical namespaces or names
-  in all these areas MUST have identical meanings. For example the `http.method`
-  span attribute name denotes exactly the same concept as the `http.method`
-  metric label, has the same data type and the same set of possible values (in
-  both cases it records the value of the HTTP protocol's request method as a
-  string).
-
-- Semantic conventions MUST limit names to printable Basic Latin characters
-  (more precisely to
-  [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
-  subset of Unicode code points). It is recommended to further limit names to
-  the following Unicode code points: Latin alphabet, Numeric, Underscore, Dot
-  (as namespace delimiter).
-
-### Recommendations for Application Developers
-
-As an application developer when you need to record an attribute or a label
-first consult existing semantic conventions for
-[Resources](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/resource/semantic_conventions),
-[Spans](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/trace/semantic_conventions),
-and
-[Metrics](https://github.com/open-telemetry/opentelemetry-specification/tree/master/specification/metrics/semantic_conventions).
-If an appropriate name does not exists you will need to come up with a new name.
-To do that consider a few options:
-
-- The name is specific to your company and may be possibly used outside the
-  company as well. To avoid clashes with names introduced by other companies (in
-  a distributed system that uses applications from multiple vendors) it is
-  recommended to prefix the new name by your company's reverse domain name, e.g.
-  `com.acme.shopname`.
-
-- The name is specific to your application that will be used internally only. If
-  you already have an internal company process that helps you to ensure no name
-  clashes happen then feel free to follow it. Otherwise it is recommended to
-  prefix the attribute name or label key by your application name, provided that
-  the application name is reasonably unique within your organization (e.g.
-  `myuniquemapapp.longitude` is likely fine). Make sure the application name
-  does not clash with an existing semantic convention namespace.
-
-- The name may be generally applicable to applications in the industry. In that
-  case consider submitting a proposal to this specification to add a new name to
-  the semantic conventions, and if necessary also to add a new namespace.
-
-It is recommended to limit names to printable Basic Latin characters
-(more precisely to
-[U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
-subset of Unicode code points).
+SDKs MAY use a different notation (e.g. snake_case) if it's more suitable for
+its language.

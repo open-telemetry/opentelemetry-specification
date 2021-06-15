@@ -1,5 +1,7 @@
 # Tracing API
 
+**Status**: [Stable, Feature-freeze](../document-status.md)
+
 <details>
 <summary>
 Table of Contents
@@ -100,32 +102,45 @@ The `TracerProvider` MUST provide the following functions:
 This API MUST accept the following parameters:
 
 - `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
-  (e.g. `io.opentelemetry.contrib.mongodb`) and *not* the instrumented library.
+  (e.g. `io.opentelemetry.contrib.mongodb`).
+  If an application or library has built-in OpenTelemetry instrumentation, both
+  [Instrumented library](../glossary.md#instrumented-library) and
+  [Instrumentation library](../glossary.md#instrumentation-library) may refer to the same library.
+  In that scenario, the `name` denotes a module name or component name within that library
+  or application.
   In case an invalid name (null or empty string) is specified, a working
-  default Tracer implementation as a fallback is returned rather than returning
-  null or throwing an exception.
+  Tracer implementation MUST be returned as a fallback rather than returning
+  null or throwing an exception, its `name` property SHOULD be set to an **empty** string,
+  and a message reporting that the specified value is invalid SHOULD be logged.
   A library, implementing the OpenTelemetry API *may* also ignore this name and
   return a default instance for all calls, if it does not support "named"
   functionality (e.g. an implementation which is not even observability-related).
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
-
+- [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
+  recorded in the emitted telemetry.
+  
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
-with the same name+version to pick up configuration changes.
+with the same name+version+schema_url to pick up configuration changes.
 This can be achieved either by allowing to work with an outdated configuration or
 by ensuring that new configuration applies also to previously returned `Tracer`s.
 
 Note: This could, for example, be implemented by storing any mutable
 configuration in the `TracerProvider` and having `Tracer` implementation objects
-have a reference to the `TracerProvider` from which they were obtained.
-If configuration must be stored per-tracer (such as disabling a certain tracer),
-the tracer could, for example, do a look-up with its name+version in a map in
-the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
-returned `Tracer`s and actively update their configuration if it changes.
+have a reference to the `TracerProvider` from which they were obtained. If
+configuration must be stored per-tracer (such as disabling a certain tracer),
+the tracer could, for example, do a look-up with its name+version+schema_url in
+a map in the `TracerProvider`, or the `TracerProvider` could maintain a registry
+of all returned `Tracer`s and actively update their configuration if it changes.
+
+The effect of associating a Schema URL with a `Tracer` MUST be that the
+telemetry emitted using the `Tracer` will be associated with the Schema URL,
+provided that the emitted data format is capable of representing such
+association.
 
 ## Context Interaction
 
@@ -149,16 +164,14 @@ the following functionality:
 - Set the currently active span to the implicit context. This is equivalent to getting the implicit context, then inserting the `Span` to the context.
 
 All the above functionalities operate solely on the context API, and they MAY be
-exposed as static methods on the trace module, as static methods on a class
-inside the trace module (it MAY be named `TracingContextUtilities`), or on the
-[`Tracer`](#tracer) class. This functionality SHOULD be fully implemented in the
-API when possible.
+exposed as either static methods on the trace module, or as static methods on a class
+inside the trace module. This functionality SHOULD be fully implemented in the API when possible.
 
 ## Tracer
 
 The tracer is responsible for creating `Span`s.
 
-Note that `Tracers` should usually *not* be responsible for configuration.
+Note that `Tracer`s should usually *not* be responsible for configuration.
 This should be the responsibility of the `TracerProvider` instead.
 
 ### Tracer operations
@@ -204,9 +217,9 @@ The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
 `TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
 (result MUST be a 16-hex-character lowercase string).
 * Binary - returns the binary representation of the `TraceId` (result MUST be a
-16-byte array) `SpanId` (result MUST be a 8-byte array).
+16-byte array) or `SpanId` (result MUST be an 8-byte array).
 
-The API should not expose details about how they are internally stored.
+The API SHOULD NOT expose details about how they are internally stored.
 
 ### IsValid
 
@@ -236,13 +249,13 @@ All mutating operations MUST return a new `TraceState` with the modifications ap
 `TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
 Every mutating operations MUST validate input parameters.
 If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
-and MUST follow the [general error handling guidelines](../error-handling.md) (e.g. it usually must not return null or throw an exception).
+and MUST follow the [general error handling guidelines](../error-handling.md).
 
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
-[`SpanContext` propagation](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/api-propagators.md)
-or [telemetry data exporting](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md#span-exporter).
-In both cases, `Propagators` and `SpanExporters` may create a modified `TraceState` copy before serializing it to the wire.
+[`SpanContext` propagation](../context/api-propagators.md)
+or [telemetry data exporting](sdk.md#span-exporter).
+In both cases, `Propagator`s and `SpanExporter`s may create a modified `TraceState` copy before serializing it to the wire.
 
 ## Span
 
@@ -323,9 +336,10 @@ directly. All `Span`s MUST be created via a `Tracer`.
 
 There MUST NOT be any API for creating a `Span` other than with a [`Tracer`](#tracer).
 
-`Span` creation MUST NOT set the newly created `Span` as the currently
-active `Span` by default, but this functionality MAY be offered additionally
-as a separate operation.
+In languages with implicit `Context` propagation, `Span` creation MUST NOT
+set the newly created `Span` as the active `Span` in the
+[current `Context`](#context-interaction) by default, but this functionality
+MAY be offered additionally as a separate operation.
 
 The API MUST accept the following parameters:
 
@@ -349,7 +363,7 @@ The API MUST accept the following parameters:
 - `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
   when span creation time has already passed. If API is called at a moment of
-  a Span logical start, API user MUST not explicitly set this argument.
+  a Span logical start, API user MUST NOT explicitly set this argument.
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
@@ -400,7 +414,8 @@ The Span creation API MUST provide:
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
   the `Span` to link to and optional `Attributes`, either as individual
   parameters or as an immutable object encapsulating them, whichever is most
-  appropriate for the language.
+  appropriate for the language. Implementations MAY ignore links with an
+  [invalid](#isvalid) `SpanContext`.
 
 Links SHOULD preserve the order in which they're set.
 
@@ -433,7 +448,7 @@ are one expected case where `IsRecording` cannot change after ending a Span.
 This flag SHOULD be used to avoid expensive computations of a Span attributes or
 events in case when a Span is definitely not recorded. Note that any child
 span's recording is determined independently from the value of this flag
-(typically based on the `sampled` flag of a `TraceFlag` on
+(typically based on the `sampled` flag of a `TraceFlags` on
 [SpanContext](#spancontext)).
 
 This flag may be `true` despite the entire trace being sampled out. This
@@ -456,6 +471,11 @@ The Span interface MUST provide:
 - An API to set a single `Attribute` where the attribute properties are passed
   as arguments. This MAY be called `SetAttribute`. To avoid extra allocations some
   implementations may offer a separate API for each of the possible value types.
+
+The Span interface MAY provide:
+
+- An API to set multiple `Attributes` at once, where the `Attributes` are passed in a
+  single method call.
 
 Setting an attribute with the same key as an existing attribute SHOULD overwrite
 the existing attribute's value.
@@ -516,6 +536,8 @@ status, which is `Unset`.
 
 - `StatusCode`, one of the values listed below.
 - Optional `Description` that provides a descriptive message of the `Status`.
+  `Description` MUST only be used with the `Error` `StatusCode` value.
+  An empty `Description` is equivalent with a not present one.
 
 `StatusCode` is one of the following values:
 
@@ -529,15 +551,16 @@ status, which is `Unset`.
 
 The Span interface MUST provide:
 
-- An API to set the `Status`. This SHOULD be called `SetStatus`.
-  This API takes the `StatusCode`, and an optional `Description`, either as
-  individual parameters or as an immutable object encapsulating them, whichever
-  is most appropriate for the language.
+- An API to set the `Status`. This SHOULD be called `SetStatus`. This API takes
+  the `StatusCode`, and an optional `Description`, either as individual
+  parameters or as an immutable object encapsulating them, whichever is most
+  appropriate for the language. `Description` MUST be IGNORED for `StatusCode`
+  `Ok` & `Unset` values.
 
 The status code SHOULD remain unset, except for the following circumstances:
 
-When the status is set to `ERROR` by Instrumentation Libraries, the status codes
-SHOULD be documented and predictable. The status code should only be set to `ERROR`
+When the status is set to `Error` by Instrumentation Libraries, the status codes
+SHOULD be documented and predictable. The status code should only be set to `Error`
 according to the rules defined within the semantic conventions. For operations
 not covered by the semantic conventions, Instrumentation Libraries SHOULD
 publish their own conventions, including status codes.
@@ -601,7 +624,14 @@ Parameters:
 - (Optional) Timestamp to explicitly set the end timestamp.
   If omitted, this MUST be treated equivalent to passing the current time.
 
-This API MUST be non-blocking.
+Expect this operation to be called in the "hot path" of production
+applications. It needs to be designed to complete fast, if not immediately.
+This operation itself MUST NOT perform blocking I/O on the calling thread.
+Any locking used needs be minimized and SHOULD be removed entirely if
+possible. Some downstream SpanProcessors and subsequent SpanExporters called
+from this operation may be used for testing, proof-of-concept ideas, or
+debugging and may not be designed for production use themselves. They are not
+in the scope of this requirement and recommendation.
 
 #### Record Exception
 
@@ -643,14 +673,14 @@ The API MUST provide an operation for wrapping a `SpanContext` with an object
 implementing the `Span` interface. This is done in order to expose a `SpanContext`
 as a `Span` in operations such as in-process `Span` propagation.
 
-If a new type is required for supporting this operation, it SHOULD not be exposed
+If a new type is required for supporting this operation, it SHOULD NOT be exposed
 publicly if possible (e.g. by only exposing a function that returns something
 with the Span interface type). If a new type is required to be publicly exposed,
 it SHOULD be named `NonRecordingSpan`.
 
 The behavior is defined as follows:
 
-- `GetContext()` MUST return the wrapped `SpanContext`.
+- `GetContext` MUST return the wrapped `SpanContext`.
 - `IsRecording` MUST return `false` to signal that events, attributes and other elements
   are not being recorded, i.e. they are being dropped.
 
@@ -679,9 +709,9 @@ circumstances.  It can be useful for tracing systems to know this
 property, since synchronous Spans may contribute to the overall trace
 latency. Asynchronous scenarios can be remote or local.
 
-In order for `SpanKind` to be meaningful, callers should arrange that
+In order for `SpanKind` to be meaningful, callers SHOULD arrange that
 a single Span does not serve more than one purpose.  For example, a
-server-side span should not be used directly as the parent of another
+server-side span SHOULD NOT be used directly as the parent of another
 remote span.  As a simple guideline, instrumentation should create a
 new Span prior to extracting and serializing the SpanContext for a
 remote call.
@@ -733,10 +763,6 @@ be called concurrently.
 **Link** - Links are immutable and safe to be used concurrently.
 
 ## Included Propagators
-
-The API layer or an extension package MUST include the following `Propagator`s:
-
-* A `TextMapPropagator` implementing the [W3C TraceContext Specification](https://www.w3.org/TR/trace-context/).
 
 See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
 for how propagators are to be distributed.
