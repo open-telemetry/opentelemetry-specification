@@ -51,6 +51,7 @@ SDKs MAY be configured to truncate attribute lists and/or their values. By
 default, attribute lists and values SHOULD NOT be truncated.
 
 If an SDK provides a way to:
+
 - set an attribute value length limit and the limit is set, then for each
   attribute value:
   - if it is a string, if it exceeds that limit (counting any character in it as
