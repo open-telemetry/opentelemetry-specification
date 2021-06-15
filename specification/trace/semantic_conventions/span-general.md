@@ -74,6 +74,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `5G` | 5G |
 | `unavailable` | unavailable |
 <!-- endsemconv -->
+
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 
 <a name="net.name"></a>
