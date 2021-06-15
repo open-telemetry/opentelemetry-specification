@@ -152,9 +152,6 @@ Push Metric Exporter sends the data on its own schedule. Here are some examples:
 
 ### Pull Metric Exporter
 
-TODO: T.B.D.: DDSketch considered a good choice for ValueRecorder
-instrument default aggregation.
-
 Pull Metric Exporter reacts to the metrics scrapers and reports the data
 passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
