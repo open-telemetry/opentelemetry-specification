@@ -1,10 +1,25 @@
 # General
 
+**Status**: [Experimental](../../document-status.md)
+
+This document defines how to describe an instance of a function that runs without provisioning
+or managing of servers (also known as serverless functions or Function as a Service (FaaS)) with metrics.
+
 The conventions described in this section are FaaS (function as a service) specific. When FaaS operations occur,
 metric events about those operations will be generated and reported to provide insights into the
 operations. By adding FaaS labels to metric events it allows for finely tuned filtering.
 
 **Disclaimer:** These are initial FaaS metric instruments and labels but more may be added in the future.
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+- [Metric Instruments](#metric-instruments)
+  * [FaaS Invocations](#faas-invocations)
+- [Labels](#labels)
+- [References](#references)
+  * [Metric References](#metric-references)
+<!-- tocstop -->
 
 ## Metric Instruments
 
@@ -43,15 +58,17 @@ Below is a table of the labels that SHOULD be included on FaaS metric events.
 | `faas.invoked_provider` | Yes | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws` |
 | `faas.invoked_region` | Yes | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1` |
 
+More details on these labels and the function name and the difference compared to the faas.invoked_name can be found at the related [faas tracing specification](../../trace/semantic_conventions/faas.md).
+
 ## References
 
-### Metric Reference
+### Metric References
 
 Below are links to documentation regarding metrics that are available with different
 FaaS providers. This list is not exhaustive.
 
 * [AWS Lambda Metrics](https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics.html)
 * [AWS Lambda Insight Metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-metrics.html)
-* [Azure Functions Metrics](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/metrics-supported)
+* [Azure Functions Metrics](https://docs.microsoft.com/azure/azure-monitor/platform/metrics-supported)
 * [Google CloudFunctions Metrics](https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudfunctions)
 * [OpenFaas Metrics](https://docs.openfaas.com/architecture/metrics/)
