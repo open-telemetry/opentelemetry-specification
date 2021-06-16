@@ -60,7 +60,7 @@ groups:
         type: string
         brief: 'Local hostname or similar, see note below.'
         examples: 'localhost'
-      - id: host.connection_type
+      - id: host.connection.type
         type:
           allow_custom_values: true
           members:
@@ -68,20 +68,38 @@ groups:
               value: "wifi"
             - id: wired
               value: "wired"
-            - id: 1G
-              value: "1G"
-            - id: 2G
-              value: "2G"
-            - id: 3G
-              value: "3G"
-            - id: 4G
-              value: "4G"
-            - id: 5G
-              value: "5G"
+            - id: cell
+              value: "cell"
             - id: unavailable
               value: "unavailable"
-        brief: 'The internet connection type used by the host.'
+        brief: 'The internet connection type currently being used by the host.'
         examples: 'wifi'
+      - id: host.connection.subtype
+        type:
+          allow_custom_values: true
+          members:
+            - id: 1G
+              value: "1G"
+              brief: >
+                1st generation of cellular radio technology. e.g.: `NTT`, or `NMT`. This is generally not in uses anymore expect is very specific locations.
+            - id: 2G
+              value: "2G"
+              brief: >
+                2nd generation of cellular radio technology. e.g.: `GSM`, `CDMA1x`. This will also include technologies that may be consider `2.5G` or `2.75G` such as `GPRS` or `EDGE`
+            - id: 3G
+              value: "3G"
+              brief: >
+                3rd generation of cellular radio technology. e.g.: `UMTS`, `CDMA2000`, `WCDMA`, `CDMAEVDORev0`, `CDMAEVDORevA`, `eHRPD`, `CDMAEVDORevB`, etc. This category will also include technology considered `3.5G` such as `HSPA`, `HSDPA` and `HSUPA`
+            - id: 4G
+              value: "4G"
+              brief: >
+                4th generation of cellular radio technology. e.g.: `LTE`, `IWLAN`
+            - id: 5G
+              value: "5G"
+              brief: >
+                5th generation of cellular radio technology. e.g.: `NR`, `NRNSA`
+        brief: 'This describes more details regarding the connection.type. It may be the type of cell connection, but it could be used for describing details about a wifi connection.'
+        examples: '4G'
       - id: host.carrier.name
         type: string
         brief: "The name of the mobile carrier."

@@ -41,7 +41,8 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
 | `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
 | `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
-| `net.host.connection_type` | string | The internet connection type used by the host. | `wifi` | No |
+| `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | No |
+| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell connection, but it could be used for describing details about a wifi connection. | `4G` | No |
 | `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | No |
 | `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | No |
 | `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | No |
@@ -62,18 +63,29 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 **[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
 
 
-`net.host.connection_type` MUST be one of the following or, if none of the listed values apply, a custom value:
+`net.host.connection.type` MUST be one of the following or, if none of the listed values apply, a custom value:
 
 | Value  | Description |
 |---|---|
 | `wifi` | wifi |
 | `wired` | wired |
-| `1G` | 1G |
-| `2G` | 2G |
-| `3G` | 3G |
-| `4G` | 4G |
-| `5G` | 5G |
+| `cell` | cell |
 | `unavailable` | unavailable |
+
+`net.host.connection.subtype` MUST be one of the following or, if none of the listed values apply, a custom value:
+
+| Value  | Description |
+|---|---|
+| `1G` | 1st generation of cellular radio technology. e.g.: `NTT`, or `NMT`. This is generally not in uses anymore expect is very specific locations.
+ |
+| `2G` | 2nd generation of cellular radio technology. e.g.: `GSM`, `CDMA1x`. This will also include technologies that may be consider `2.5G` or `2.75G` such as `GPRS` or `EDGE`
+ |
+| `3G` | 3rd generation of cellular radio technology. e.g.: `UMTS`, `CDMA2000`, `WCDMA`, `CDMAEVDORev0`, `CDMAEVDORevA`, `eHRPD`, `CDMAEVDORevB`, etc. This category will also include technology considered `3.5G` such as `HSPA`, `HSDPA` and `HSUPA`
+ |
+| `4G` | 4th generation of cellular radio technology. e.g.: `LTE`, `IWLAN`
+ |
+| `5G` | 5th generation of cellular radio technology. e.g.: `NR`, `NRNSA`
+ |
 <!-- endsemconv -->
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
