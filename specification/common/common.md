@@ -70,32 +70,13 @@ once per record on which an attribute is set. If a record is embedded in another
 record (e.g. Events within a Span), then the log SHOULD NOT be emitted more than
 once per parent record.
 
-To define a limit SDKs SHOULD honor the environment variables specified in
-[SDK environment variables](../sdk-environment-variables.md#attribute-limits).
-If an SDK does not implement truncation mechanism for all implementations of
-attributes, then it SHOULD NOT offer an unscoped (e.g.
-`OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`, as opposed to e.g.
-`OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT`) global environment variable for such a
-limit. SDKs SHOULD only offer environment variables for the types of attributes,
-for which that SDK implements truncation mechanism. For each implemented limit
-SDK MUST first try to use the unscoped variable, if it isn't set, only then try
-to use the scoped variable.
-
 If the SDK implements the limits above, it MUST provide a way to change these
-limits via a configuration passed to the to the `<Type>Provider`, where `<Type>`
-is any kind of a producer of records, which implement attributes.
-
-The options MAY be bundled in a class, which then SHOULD be called
-`<Record>Limits` (where `<Record>` is a type of a record, e.g. `Span`). Names of
-the configuration options SHOULD be the same as in the list below.
-Implementations MAY provide additional configuration options such as
-`AttributePerEventCountLimit` or `AttributePerLinkCountLimit`.
+limits programatically. Names of the configuration options SHOULD be the same as
+in the list below. Implementations MAY provide additional configuration options
+such as `AttributePerEventCountLimit` or `AttributePerLinkCountLimit`.
 
 <a name="attribute-limits-configuration"></a>
 **Configurable parameters:**
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
-
-SDKs MAY use a different notation (e.g. snake_case) if it's more suitable for
-its language.
