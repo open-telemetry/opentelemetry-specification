@@ -19,6 +19,9 @@ release.
 
 ### Semantic Conventions
 
+- Remove `rpc.jsonrpc.method`, clarify that `rpc.method` should be used instead.
+  ([#1748](https://github.com/open-telemetry/opentelemetry-specification/pull/1748))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
