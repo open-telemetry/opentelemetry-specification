@@ -515,7 +515,7 @@ this data model.
     <td>SEVERITY</td>
     <td>enum</td>
     <td>Defines the importance of the event. Example: `Debug`</td>
-    <td>Severity</td>
+    <td>SeverityText</td>
   </tr>
   <tr>
     <td>FACILITY</td>
@@ -593,7 +593,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>Level</td>
     <td>enum</td>
     <td>Contains the severity level of the event.</td>
-    <td>Severity</td>
+    <td>SeverityText</td>
   </tr>
   <tr>
     <td>Computer</td>
@@ -734,7 +734,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>Level</td>
     <td>enum</td>
     <td>Log level.</td>
-    <td>Severity</td>
+    <td>SeverityText</td>
   </tr>
   <tr>
     <td>Message</td>
@@ -769,7 +769,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>level</td>
     <td>enum</td>
     <td>Logging level.</td>
-    <td>Severity</td>
+    <td>SeverityText</td>
   </tr>
   <tr>
     <td>caller</td>
@@ -914,7 +914,7 @@ log_name         | string             | The URL-encoded LOG_ID suffix of the log
 json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
 proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
 text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
-severity         | LogSeverity        | The severity of the log entry.                          | Severity
+severity         | LogSeverity        | The severity of the log entry.                          | SeverityText
 trace            | string             | The trace associated with the log entry, if any.        | TraceId
 span_id          | string             | The span ID within the trace associated with the log entry. | SpanId
 labels           | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes
