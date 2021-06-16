@@ -92,7 +92,7 @@ formats is required. Implementing more than one format is optional.
 
 | Feature                                                               | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
 |-----------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| [Measurement Limits](specification/metrics/skd.md#measurement-limits) | X        |    |      |    |        |      |        |     |      |     |      |       |
+| [Measurement Limits](specification/metrics/sdk.md#measurement-limits) | X        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Resource
 
