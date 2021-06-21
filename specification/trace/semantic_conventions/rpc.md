@@ -58,12 +58,16 @@ Examples of span names:
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `rpc.system` | string | A string identifying the remoting system. | `grpc`; `java_rmi`; `wcf` | Yes |
-| `rpc.service` | string | The full name of the service being called, including its package name, if applicable. | `myservice.EchoService` | No, but recommended |
-| `rpc.method` | string | The name of the method being called, must be equal to the $method part in the span name. | `exampleMethod` | No, but recommended |
+| `rpc.service` | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | No, but recommended |
+| `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | No, but recommended |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below |
 | [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | See below |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | See below |
+
+**[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
+
+**[2]:** This is the logical name of the method from the RPC interface perspective, which can be different from the name of any implementing method/function. The `code.function` attribute may be used to store the latter (e.g., method actually executing the call on the server side, RPC client stub method on the client side).
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -180,8 +184,10 @@ Conventions specific to [JSON RPC](https://www.jsonrpc.org/).
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `rpc.jsonrpc.version` | string | Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted. | `2.0`; `1.0` | If missing, it is assumed to be "1.0". |
-| `rpc.jsonrpc.method` | string | `method` property from request. Unlike `rpc.method`, this may not relate to the actual method being called. Useful for client-side traces since client does not know what will be called on the server. | `users.create`; `get_users` | Yes |
 | `rpc.jsonrpc.request_id` | string | `id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification. | `10`; `request-7`; `` | No |
 | `rpc.jsonrpc.error_code` | int | `error.code` property of response if it is an error response. | `-32700`; `100` | If missing, response is assumed to be successful. |
 | `rpc.jsonrpc.error_message` | string | `error.message` property of response if it is an error response. | `Parse error`; `User already exists` | No |
+| `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [1] | `exampleMethod` | Yes |
+
+**[1]:** This is always required for jsonrpc. See the note in the general RPC conventions for more information.
 <!-- endsemconv -->
