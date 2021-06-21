@@ -103,15 +103,6 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 | OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count     | 128     |       |
 | OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count      | 128     |       |
 
-## Measurement Limits
-
-See the SDK [Measurement Limits](metrics/sdk.md#measurement-limits) section for the definition of the limits.
-
-| Name                                          | Description                                 | Default | Notes |
-| --------------------------------------------- | ------------------------------------------- | ------- | ----- |
-| OTEL_MEASUREMENT_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size        |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
-| OTEL_MEASUREMENT_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed measurement attribute count | 128     |       |
-
 ## OTLP Exporter
 
 See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).

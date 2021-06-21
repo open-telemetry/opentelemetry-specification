@@ -47,8 +47,8 @@ Execution of erroneous code can result in unintended attributes. If there is no
 limits placed on attributes, they can quickly exhaust available memory, resulting
 in crashes that are difficult to recover from safely.
 
-SDKs MAY be configured to truncate attribute lists and/or their values. By
-default, attribute lists and values SHOULD NOT be truncated.
+By default an SDK SHOULD apply truncation as per the list of
+[configurable parameters](#attribute-limits-configuration) below.
 
 If an SDK provides a way to:
 
@@ -61,19 +61,18 @@ If an SDK provides a way to:
     values separately,
   - otherwise a value MUST NOT be truncated;
 - set a limit of unique attribute keys, and the limit is set:
-  - for each unique attributes key which exceeds a limit, SDK MUST discard that
-    key/value pair.
+  - for each unique attributes key, addition of which would result in exceeding
+    the limit, SDK MUST discard that key/value pair.
 
 There SHOULD be a log emitted to indicate to the user that an attribute was
-truncated. To prevent excessive logging, the log MUST NOT be emitted more than
-once per record on which an attribute is set. If a record is embedded in another
-record (e.g. Events within a Span), then the log SHOULD NOT be emitted more than
-once per parent record.
+truncated or discarded. To prevent excessive logging, the log MUST NOT be
+emitted more than once per record on which an attribute is set. If a record is
+embedded in another record (e.g. Events within a Span), then the log SHOULD NOT
+be emitted more than once per parent record.
 
 If the SDK implements the limits above, it MUST provide a way to change these
-limits programatically. Names of the configuration options SHOULD be the same as
-in the list below. Implementations MAY provide additional configuration options
-such as `AttributePerEventCountLimit` or `AttributePerLinkCountLimit`.
+limits programmatically. Names of the configuration options SHOULD be the same as
+in the list below.
 
 <a name="attribute-limits-configuration"></a>
 **Configurable parameters:**

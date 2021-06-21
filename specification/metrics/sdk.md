@@ -47,11 +47,9 @@ then `MeterProvider` MUST provide at least one way to configure them.
 
 ## Measurement Limits
 
-Measurement attributes MUST adhere to the
-[common rules of attribute limits](../common/common.md#attribute-limits).
-
-If the SDK implements the limits above it MUST provide a way to change these
-limits, via a configuration to the `MeterProvider`.
+Measurement attributes are exempt from the
+[common rules of attribute limits](../common/common.md#attribute-limits) due to
+the experimental status of the Metrics SDK specification.
 
 ## MeasurementProcessor
 
