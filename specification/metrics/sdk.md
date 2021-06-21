@@ -41,10 +41,6 @@ TODO:
 * Configure timing (related to [issue
   1432](https://github.com/open-telemetry/opentelemetry-specification/issues/1432)).
 
-Configuration of [Measurement Limits](#measurement-limits) MUST be managed
-solely by the `MeterProvider`. If Measurement Limits are implemented in an SDK,
-then `MeterProvider` MUST provide at least one way to configure them.
-
 ## Measurement Limits
 
 Measurement attributes are exempt from the

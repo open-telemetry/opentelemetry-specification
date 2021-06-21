@@ -90,9 +90,9 @@ formats is required. Implementing more than one format is optional.
 
 ## Metrics
 
-| Feature                                                               | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
-|-----------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| [Measurement Limits](specification/metrics/sdk.md#measurement-limits) | X        |    |      |    |        |      |        |     |      |     |      |       |
+|Feature                                       |Optional|Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
+|----------------------------------------------|--------|--|----|---|------|----|------|---|----|---|----|-----|
+|TBD|
 
 ## Resource
 
@@ -141,8 +141,6 @@ Note: Support for environment variables is optional.
 |OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | -  | -   |
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 |OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
-|OTEL_MEASUREMENT_ATTRIBUTE_COUNT_LIMIT        |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_MEASUREMENT_ATTRIBUTE_VALUE_LENGTH_LIMIT |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   | +  | - |    |     |
 |OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   | +  | - |    |     |
