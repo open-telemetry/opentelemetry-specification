@@ -665,6 +665,17 @@ Note: `RecordException` may be seen as a variant of `AddEvent` with
 additional exception-specific parameters and all other parameters being optional
 (because they have defaults from the exception semantic convention).
 
+#### Get TracerProvider
+
+To simplify the configuration of instrumented libraries that may not rely on a
+global `TracerProvider` instance, a `Span` SHOULD provide a method to retrieve
+the `TracerProvider` instance that was used to create the `Tracer` that created
+the `Span`.  If this method is provided but accessing the `TracerProvider`
+instance is not possible, then a `Span` MUST return a no-op `TracerProvider`.
+
+The returned value MUST be the same for the entire Span lifetime. This method
+SHOULD be called `TracerProvider`.
+
 ### Span lifetime
 
 Span lifetime represents the process of recording the start and the end

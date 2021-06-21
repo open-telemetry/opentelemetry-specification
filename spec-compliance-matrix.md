@@ -52,6 +52,7 @@ formats is required. Implementing more than one format is optional.
 | events collection size limit                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | -   | -    | +     |
 | attribute collection size limit                                                                  |          | +  | +    | +  | +      | +    | -      |     | +    | -   | -    | +     |
 | links collection size limit                                                                      |          | +  | +    | +  | +      | +    | -      |     | +    | -   | -    | +     |
+| get TracerProvider                                                                               |          | +  |      |    |        |      |        |     |      |     |      |       |
 | [Span attributes](specification/trace/api.md#set-attributes)                                     |          |    |      |    |        |      |        |     |      |     |      |       |
 | SetAttribute                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set order preserved                                                                              | X        | +  | -    | +  | +      | +    | +      | +   | +    | +   | +    | +     |

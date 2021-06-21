@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add `span.TracerProvider()` method to API. (#TBD)
+
 ### Metrics
 
 ### Logs
