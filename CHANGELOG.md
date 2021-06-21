@@ -11,7 +11,7 @@ release.
 
 ### Traces
 
-- Add `span.TracerProvider()` method to API. (#TBD)
+- Add `span.TracerProvider()` method to API. ([#1770](https://github.com/open-telemetry/opentelemetry-specification/pull/1770))
 
 ### Metrics
 
