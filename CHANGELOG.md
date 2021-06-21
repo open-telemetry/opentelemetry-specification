@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Add generalized attribute count and attribute value length limits and relevant
+  environment variables.
+  ([#1130](https://github.com/open-telemetry/opentelemetry-specification/pull/1130))
+
 ### Metrics
 
 ### Logs
