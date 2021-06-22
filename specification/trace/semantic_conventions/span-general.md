@@ -34,7 +34,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 <!-- semconv network -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `net.transport` | string | Transport protocol used. See note below. | `IP.TCP` | No |
+| `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | No |
 | `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
 | `net.peer.port` | int | Remote port number. | `80`; `8080`; `443` | No |
 | `net.peer.name` | string | Remote hostname or similar, see note below. | `example.com` | No |
@@ -46,17 +46,17 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 | Value  | Description |
 |---|---|
-| `IP.TCP` | IP.TCP |
-| `IP.UDP` | IP.UDP |
-| `IP` | Another IP-based protocol |
-| `Unix` | Unix Domain socket. See below. |
+| `ip_tcp` | ip_tcp |
+| `ip_udp` | ip_udp |
+| `ip` | Another IP-based protocol |
+| `unix` | Unix Domain socket. See below. |
 | `pipe` | Named or anonymous pipe. See note below. |
 | `inproc` | In-process communication. [1] |
 | `other` | Something else (non IP-based). |
 
 **[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
-
 <!-- endsemconv -->
+
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 
 <a name="net.name"></a>

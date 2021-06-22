@@ -3,6 +3,10 @@
 **Status**: [Stable](../../document-status.md)
 
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
+The generic transformation [rules specified here](non-otlp.md) also apply. If a
+particular generic transformation rule and the rule in this document contradict
+then the rule in this document MUST be used.
+
 Zipkin's v2 API is defined in the
 [zipkin.proto](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto)
 
@@ -11,21 +15,23 @@ Zipkin's v2 API is defined in the
 The following table summarizes the major transformations between OpenTelemetry
 and Zipkin.
 
-| OpenTelemetry            | Zipkin           | Notes                                                                                         |
-| ------------------------ | ---------------- | --------------------------------------------------------------------------------------------- |
-| Span.TraceId             | Span.trace_id     |                                                                                               |
-| Span.ParentId            | Span.parent_id    |                                                                                               |
-| Span.SpanId              | Span.id          |                                                                                               |
-| Span.TraceState          | TBD              | TBD                                                                                           |
-| Span.Name                | Span.name        |                                                                                               |
-| Span.Kind                | Span.kind        | See [SpanKind](#spankind) for values mapping                                                  |
-| Span.StartTime           | Span.timestamp   | See [Unit of time](#unit-of-time)                                                             |
-| Span.EndTime             | Span.duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
-| Span.Attributes          | Span.tags        | See [Attributes](../../common/common.md#attributes) for data types for the mapping.            |
-| Span.Events              | Span.annotations | See [Events](#events) for the mapping format.                                                 |
-| Span.Links               | TBD              | TBD                                                                                           |
-| Span.Status              | Add to Span.tags | See [Status](#status) for tag names to use.                                                   |
-| Span.LocalChildSpanCount | TBD              | TBD                                                                                           |
+| OpenTelemetry              | Zipkin           | Notes                                                                                         |
+| -------------------------- | ---------------- | --------------------------------------------------------------------------------------------- |
+| Span.TraceId               | Span.trace_id    |                                                                                               |
+| Span.ParentId              | Span.parent_id   |                                                                                               |
+| Span.SpanId                | Span.id          |                                                                                               |
+| Span.TraceState            | TBD              | TBD                                                                                           |
+| Span.Name                  | Span.name        |                                                                                               |
+| Span.Kind                  | Span.kind        | See [SpanKind](#spankind) for values mapping                                                  |
+| Span.StartTime             | Span.timestamp   | See [Unit of time](#unit-of-time)                                                             |
+| Span.EndTime               | Span.duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
+| Span.Attributes            | Add to Span.tags | See [Attributes](../../common/common.md#attributes) for data types for the mapping.           |
+| Span.DroppedAttributesCount| Add to Span.tags | See [Dropped Attributes Count](non-otlp.md#dropped-attributes-count) for tag name to use.     |
+| Span.Events                | Span.annotations | See [Events](#events) for the mapping format.                                                 |
+| Span.DroppedEventsCount    | Add to Span.tags | See [Dropped Events Count](non-otlp.md#dropped-events-count) for tag name to use.             |
+| Span.Links                 | TBD              | TBD                                                                                           |
+| Span.DroppedLinksCount     | Add to Span.tags | See [Dropped Links Count](non-otlp.md#dropped-links-count) for tag name to use.               |
+| Span.Status                | Add to Span.tags | See [Status](#status) for tag names to use.                                                   |
 
 TBD : This is work in progress document and it is currently doesn't specify
 mapping for these fields:
@@ -35,10 +41,6 @@ OpenTelemetry fields:
 - Resource attributes
 - Tracestate
 - Links
-- LocalChildSpanCount
-- dropped attributes count
-- dropped events count
-- dropped links count
 
 Zipkin fields:
 
@@ -78,15 +80,6 @@ Zipkin.
 | `SpanKind.CONSUMER`|`SpanKind.CONSUMER`||
 | `SpanKind.PRODUCER`|`SpanKind.PRODUCER` ||
 | `SpanKind.INTERNAL`|`null` |must be omitted (set to `null`)|
-
-### InstrumentationLibrary
-
-OpenTelemetry Span's `InstrumentationLibrary` MUST be reported as `tags` to Zipkin using the following mapping.
-
-| OpenTelemetry | Zipkin
-| ------------- | ------ |
-| `InstrumentationLibrary.name`|`otel.library.name`|
-| `InstrumentationLibrary.version`|`otel.library.version`|
 
 ### Remote endpoint
 
@@ -136,6 +129,9 @@ Array values MUST be serialized to string like a JSON list as mentioned in
 TBD: add examples
 
 ### Status
+
+This section overrides the
+[generic Status mapping rule](non-otlp.md#span-status).
 
 Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin, unless it is `UNSET`.
 In the latter case it MUST NOT be reported.

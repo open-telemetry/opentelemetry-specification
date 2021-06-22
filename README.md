@@ -42,6 +42,8 @@ Technical committee holds regular meetings, notes are held
 - Data Specification
   - [Semantic Conventions](specification/overview.md#semantic-conventions)
   - [Protocol](specification/protocol/README.md)
+    - [Metrics](specification/metrics/datamodel.md)
+    - [Logs](specification/logs/data-model.md)
 - About the Project
   - [Timeline](#project-timeline)
   - [Notation Conventions and Compliance](#notation-conventions-and-compliance)
@@ -53,7 +55,7 @@ Technical committee holds regular meetings, notes are held
 ## Project Timeline
 
 The current project status as well as information on notable past releases is found at
-[the OpenTelemetry project page](https://opentelemetry.io/project-status/).
+[the OpenTelemetry project page](https://opentelemetry.io/status/).
 
 Information about current work and future development plans is found at the
 [specification development milestones](https://github.com/open-telemetry/opentelemetry-specification/milestones).

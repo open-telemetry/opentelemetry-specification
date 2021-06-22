@@ -51,8 +51,8 @@ Each signal has different support and stability in OTLP, described through its
 own maturity level, which in turn applies to **all** the OTLP Transports listed below.
 
 * Tracing: **Stable**
-* Metrics: **Beta**
-* Logs: **Alpha**
+* Metrics: **Stable**
+* Logs: **Beta**
 
 See [OTLP Maturity Level](https://github.com/open-telemetry/opentelemetry-proto#maturity-level).
 
@@ -362,6 +362,11 @@ they are not base64-encoded like it is defined in the standard
 [JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json).
 The hex encoding is used for `trace_id` and `span_id` fields in all OTLP
 Protobuf messages, e.g. the `Span`, `Link`, `LogRecord`, etc. messages.
+
+Note that according to [Protobuf specs](
+https://developers.google.com/protocol-buffers/docs/proto3#json) 64-bit integer
+numbers in JSON-encoded payloads are encoded as decimal strings, and either
+numbers or strings are accepted when decoding.
 
 #### OTLP/HTTP Response
 

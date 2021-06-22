@@ -46,7 +46,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below. |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below. |
 | [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditional [1] |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `IP.TCP` | Conditional [2] |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditional [2] |
 
 **[1]:** Required if using a port other than the default port for this DBMS.
 
@@ -106,6 +106,8 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `neo4j` | Neo4j |
 | `geode` | Apache Geode |
 | `elasticsearch` | Elasticsearch |
+| `memcached` | Memcached |
+| `cockroachdb` | CockroachDB |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
@@ -146,8 +148,8 @@ Usually only one `db.name` will be used per connection though.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `db.name` | string | If no [tech-specific attribute](#call-level-attributes-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`; `main` | Conditional [2] |
-| `db.statement` | string | The database statement being executed. [3] | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Required if applicable. |
-| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [4] | `findAndModify`; `HMSET`; `SELECT` | Required, if `db.statement` is not applicable. |
+| `db.statement` | string | The database statement being executed. [3] | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Conditional [4] |
+| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [5] | `findAndModify`; `HMSET`; `SELECT` | Required, if `db.statement` is not applicable. |
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name".
 
@@ -155,7 +157,9 @@ Usually only one `db.name` will be used per connection though.
 
 **[3]:** The value may be sanitized to exclude sensitive information.
 
-**[4]:** When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
+**[4]:** Required if applicable and not explicitly disabled via instrumentation configuration.
+
+**[5]:** When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
 <!-- endsemconv -->
 
 For **Redis**, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.
@@ -192,7 +196,7 @@ Separated for clarity.
 |---|---|---|---|---|
 | `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
 | `db.cassandra.page_size` | int | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
-| `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `ALL` | No |
+| `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `all` | No |
 | `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [1] | `mytable` | Recommended if available. |
 | `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
 | `db.cassandra.speculative_execution_count` | int | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | No |

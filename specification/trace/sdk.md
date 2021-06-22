@@ -92,6 +92,10 @@ Thus, the SDK specification defines sets of possible requirements for
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
 
+  Counts for attributes, events and links dropped due to collection limits MUST be
+  available for exporters to report as described in the [exporters](./sdk_exporters/non-otlp.md#dropped-attributes-count)
+  specification.
+
   A function receiving this as argument might not be able to modify the Span.
 
   Note: Typically this will be implemented with a new interface or
@@ -286,7 +290,7 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
 
 #### ParentBased
 
-* This is a composite sampler. `ParentBased` helps distinguished between the
+* This is a composite sampler. `ParentBased` helps distinguish between the
 following cases:
   * No parent (root span).
   * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
