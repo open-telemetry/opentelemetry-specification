@@ -205,8 +205,8 @@ expected to validate the unit of measurement, or perform the unit conversion).
   string.
 * It can have a maximum length of 63 characters. The number 63 is chosen to
   allow the unit strings (including the `\0` terminator on certain language
-  runtimes) to be stored and compared as 8-bytes integers when performance is
-  critical.
+  runtimes) to be stored and compared as fixed size array/struct when
+  performance is critical.
 
 <a name="instrument-description"></a>
 
