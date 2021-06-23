@@ -55,8 +55,8 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `other` | Something else (non IP-based). |
 
 **[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
-
 <!-- endsemconv -->
+
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 
 <a name="net.name"></a>

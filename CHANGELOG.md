@@ -15,6 +15,9 @@ release.
 
 ### Metrics
 
+- Clarify the limit on the instrument unit.
+  ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
+
 ### Logs
 
 ### Resource
