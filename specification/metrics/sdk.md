@@ -36,8 +36,9 @@ Table of Contents
 ### Meter Creation
 
 New `Meter` instances are always created through a `MeterProvider` (see
-[API](./api.md#meterprovider)). The `name` and `version` arguments supplied to
-the `MeterProvider` must be used to create an
+[API](./api.md#meterprovider)). The `name`, `version` (optional), and
+`schema_url` (optional) arguments supplied to the `MeterProvider` MUST be used
+to create an
 [`InstrumentationLibrary`](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
 instance which is stored on the created `Meter`.
 
@@ -75,16 +76,20 @@ are some examples when `View` is needed:
 * Customize the aggregation - if the default aggregation associated with the
   Instrument does not meet the expectation. For example, an HTTP client library
   might expose HTTP client request duration as [Histogram](./api.md#histogram)
-  by default, but the application developer only wants the total count (sum
-  aggregation) of outgoing requests.
-* Customize which metrics dimension(s) to be reported. For example, an HTTP
-  server library might expose HTTP verb (e.g. GET, POST), HTTP status code (e.g.
-  200, 301, 404), and a [Baggage](../baggage/api.md) value indicating whether
-  the request is coming from a bot/crawler or not. The application developer
-  might only care about HTTP status code (e.g. reporting the total count of HTTP
-  requests for each HTTP status code). There are also extreme scenario that the
+  by default, but the application developer only wants the total count of
+  outgoing requests.
+* Customize which attribute(s) to be reported as metrics dimension(s). For
+  example, an HTTP server library might expose HTTP verb (e.g. GET, POST) and
+  HTTP status code (e.g. 200, 301, 404). The application developer might only
+  care about HTTP status code (e.g. reporting the total count of HTTP requests
+  for each HTTP status code). There are also extreme scenario that the
   application developer does not need any dimension (e.g. just get the total
   count of all incoming requests).
+* Add additional dimension(s) from the [Context](../context/context.md). For
+  example, a [Baggage](../baggage/api.md) value might be available indicating
+  whether an HTTP request is coming from a bot/crawler or not. The application
+  developer might want this to be converted to a dimension for HTTP server
+  metrics.
 
 The MeterProvider MUST provide a way to register Views, and here are the
 inputs:
@@ -178,7 +183,7 @@ in the SDK:
 
 ## MetricExporter
 
-`MetricExporter` defines the interface that protocol-specific exporters must
+`MetricExporter` defines the interface that protocol-specific exporters MUST
 implement so that they can be plugged into OpenTelemetry SDK and support sending
 of telemetry data.
 
