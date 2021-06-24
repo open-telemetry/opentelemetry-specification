@@ -140,7 +140,7 @@ meter_provider.start_pipeline(
     pipeline: pipeline
         .add_exporter(ConsoleExporter())
 ).start_pipeline(
-    # metrics from X and Y (renamed to Foo) will be exported to Prometheus upon scraping
+    # metrics from X and Y (reported as Foo) will be exported to Prometheus upon scraping
     pipeline: pipeline
         .add_view(name="X")
         .add_view(name="Foo", instrument_name="Y")
