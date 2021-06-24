@@ -94,26 +94,31 @@ are some examples when `View` is needed:
 The MeterProvider MUST provide a way to register Views, and here are the
 inputs:
 
+* The `name` of the View (optional). If not provided, the Instrument `name`
+  would be used by default.
 * The Instrument selection criteria (required), which covers:
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
   * The `name` of the Instrument (required).
-* The `name` of the View (optional). If not provided, the Instrument `name`
-  would be used by default.
-* The `description` of the View (optional). If not provided, the Instrument
-  `description` would be used by default.
-* The `attribute keys` (optional). If not provided, all the attribute keys will
-  be used by default (TODO: once the Hint API is available, the default behavior
-  should respect the Hint if it is available).
-* The `extra dimensions` which come from Baggage/Context (optional). If not
-  provided, no extra dimension will be used.
-* The `aggregation` (optional) to be used. If not provided, the default
-  aggregation (based on the type of the Instrument) will be applied.
+* The configuration for the resulting [metrics
+  stream](./datamodel.md#events--data-stream--timeseries):
+  * The `description`. If not provided, the Instrument `description` would be
+    used by default.
+  * The `attribute keys` (optional). If not provided, all the attribute keys
+    will be used by default (TODO: once the Hint API is available, the default
+    behavior should respect the Hint if it is available).
+  * The `extra dimensions` which come from Baggage/Context (optional). If not
+    provided, no extra dimension will be used.
+  * The `aggregation` (optional) to be used. If not provided, the default
+    aggregation (based on the type of the Instrument) will be applied.
 
-If there is no Instrument meeting the selection criteria, or there are more than
-one Instruments meeting the selection criteria, the SDK SHOULD fail fast and let
-the caller know.
+If there is no Instrument meeting the selection criteria, the SDK SHOULD fail
+fast and let the caller know.
+
+If there are more than one Instruments meeting the selection criteria,
+individual language implementation can decide what is the proper behavior, as
+long as the behavior is well defined and deterministic.
 
 If there is no View registered, all the Instruments associated with the
 MeterProvider SHOULD be used.
@@ -140,17 +145,18 @@ meter_provider.start_pipeline(
     pipeline: pipeline
         .add_exporter(ConsoleExporter())
 ).start_pipeline(
-    # metrics from X and Y (reported as Foo) will be exported to Prometheus upon scraping
+    # metrics from X and Y (reported as Foo and Bar) will be exported to Prometheus upon scraping
     pipeline: pipeline
         .add_view(name="X")
         .add_view(name="Foo", instrument_name="Y")
+        .add_view(name="Bar", instrument_name="Y")
         .add_exporter(PrometheusExporter())
 )
 ```
 
 TODO:
 
-* Allow multiple pipelines (processors, exporters).
+* Support multiple pipelines (processors, exporters).
 * Configure timing (related to [issue
   1432](https://github.com/open-telemetry/opentelemetry-specification/issues/1432)).
 
