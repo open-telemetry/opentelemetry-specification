@@ -95,7 +95,8 @@ The MeterProvider MUST provide a way to register Views, and here are the
 inputs:
 
 * The `name` of the View (optional). If not provided, the Instrument `name`
-  would be used by default.
+  would be used by default. This will be used as the name of the [metrics
+  stream](./datamodel.md#events--data-stream--timeseries).
 * The Instrument selection criteria (required), which covers:
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
