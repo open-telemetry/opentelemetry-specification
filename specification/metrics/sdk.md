@@ -89,16 +89,16 @@ are some examples when `View` is needed:
   example, a [Baggage](../baggage/api.md) value might be available indicating
   whether an HTTP request is coming from a bot/crawler or not. The application
   developer might want this to be converted to a dimension for HTTP server
-  metrics.
+  metrics (e.g. the request/second from bots vs. real users).
 
 The MeterProvider MUST provide a way to register Views, and here are the
 inputs:
 
-* The Instrument selection criteria (required), which MUST cover:
-  * The `name` of the Meter.
-  * The `version` of the Meter.
-  * The `name` of the Instrument.
-  * The `kind` of the Instrument.
+* The Instrument selection criteria (required), which covers:
+  * The `name` of the Meter (optional).
+  * The `version` of the Meter (optional).
+  * The `schema_url` of the Meter (optional).
+  * The `name` of the Instrument (required).
 * The `name` of the View (optional). If not provided, the Instrument `name`
   would be used by default.
 * The `description` of the View (optional). If not provided, the Instrument
@@ -108,6 +108,45 @@ inputs:
   should respect the Hint if it is available).
 * The `extra dimensions` which come from Baggage/Context (optional). If not
   provided, no extra dimension will be used.
+* The `aggregation` (optional) to be used. If not provided, the default
+  aggregation (based on the type of the Instrument) will be applied.
+
+If there is no Instrument meeting the selection criteria, or there are more than
+one Instruments meeting the selection criteria, the SDK SHOULD fail fast and let
+the caller know.
+
+If there is no View registered, all the Instruments associated with the
+MeterProvider SHOULD be used.
+
+If there is any View registered, only the registered View(s) should be used.
+
+Here is one example:
+
+```python
+# Python
+'''
++------------------+
+| MeterProvider    |
+|   Meter A        |
+|     Counter X    |
+|     Histogram Y  |
+|   Meter B        |
+|     Gauge Z      |
++------------------+
+'''
+
+meter_provider.start_pipeline(
+    # metrics from X, Y and Z will be exported to console every 5 seconds (default)
+    pipeline: pipeline
+        .add_exporter(ConsoleExporter())
+).start_pipeline(
+    # metrics from X and Y (renamed to Foo) will be exported to Prometheus upon scraping
+    pipeline: pipeline
+        .add_view(name="X")
+        .add_view(name="Foo", instrument_name="Y")
+        .add_exporter(PrometheusExporter())
+)
+```
 
 TODO:
 
