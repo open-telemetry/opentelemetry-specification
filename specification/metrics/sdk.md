@@ -121,6 +121,10 @@ If there are more than one Instruments meeting the selection criteria,
 individual language implementation can decide what is the proper behavior, as
 long as the behavior is well defined and deterministic.
 
+If the `aggregation` is not provided, and the default aggregation doesn't have
+sufficient information (e.g. a Histogram without any bucket configuration), the
+SDK SHOULD fail fast and let the caller know.
+
 If there is no View registered, all the Instruments associated with the
 MeterProvider SHOULD be used.
 
