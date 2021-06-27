@@ -91,8 +91,8 @@ are some examples when `View` is needed:
   developer might want this to be converted to a dimension for HTTP server
   metrics (e.g. the request/second from bots vs. real users).
 
-The MeterProvider MUST provide a way to register Views, and here are the
-inputs:
+The SDK must provide the means to register Views with a MeterProvider. Here are
+the inputs:
 
 * The `name` of the View (optional). If not provided, the Instrument `name`
   would be used by default. This will be used as the name of the [metrics
@@ -102,6 +102,7 @@ inputs:
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
   * The `name` of the Instrument (required).
+  * Individual language client MAY choose to support more criterias.
 * The configuration for the resulting [metrics
   stream](./datamodel.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` would be
@@ -114,21 +115,19 @@ inputs:
   * The `aggregation` (optional) to be used. If not provided, the default
     aggregation (based on the type of the Instrument) will be applied.
 
-If there is no Instrument meeting the selection criteria, the SDK SHOULD fail
-fast and let the caller know.
-
 If there are more than one Instruments meeting the selection criteria,
 individual language implementation can decide what is the proper behavior, as
 long as the behavior is well defined and deterministic.
 
 If the `aggregation` is not provided, and the default aggregation doesn't have
 sufficient information (e.g. a Histogram without any bucket configuration), the
-SDK SHOULD fail fast and let the caller know.
+SDK SHOULD provide a way to let the user know (e.g. expose [self-diagnostics
+logs](../error-handling.md#self-diagnostics)).
 
 If there is no View registered, all the Instruments associated with the
 MeterProvider SHOULD be used.
 
-If there is any View registered, only the registered View(s) should be used.
+If there is any View registered, only the registered View(s) SHOULD be used.
 
 Here is one example:
 
