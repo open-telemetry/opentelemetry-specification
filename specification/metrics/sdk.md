@@ -102,7 +102,7 @@ the inputs:
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
   * The `name` of the Instrument (required).
-  * Individual language client MAY choose to support more criterias.
+  * Individual language client MAY choose to support more criteria.
 * The configuration for the resulting [metrics
   stream](./datamodel.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` would be
