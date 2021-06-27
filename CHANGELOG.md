@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Adding environment variables for event and link attribute limits. ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
+
 ### Metrics
 
 - Clarify the limit on the instrument unit.
