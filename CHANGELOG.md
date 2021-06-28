@@ -14,8 +14,12 @@ release.
 - Add generalized attribute count and attribute value length limits and relevant
   environment variables.
   ([#1130](https://github.com/open-telemetry/opentelemetry-specification/pull/1130))
+- Adding environment variables for event and link attribute limits. ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
 
 ### Metrics
+
+- Clarify the limit on the instrument unit.
+  ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
 
 ### Logs
 
@@ -31,6 +35,9 @@ release.
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
+
+- Allow selecting multiple exporters via `OTEL_TRACES_EXPORTER` and `OTEL_METRICS_EXPORTER`
+  by using a comma-separated list. ([#1758](https://github.com/open-telemetry/opentelemetry-specification/pull/1758))
 
 ## v1.4.0 (2021-06-07)
 

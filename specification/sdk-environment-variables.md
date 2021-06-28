@@ -34,7 +34,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](./resource/semantic_conventions/README.md#service) resource attribute | | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
-| OTEL_PROPAGATORS         | Propagators to be used as a comma separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
+| OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
 | OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
 | OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.  |
 
@@ -96,12 +96,14 @@ to use the scoped variable.
 
 See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition of the limits.
 
-| Name                                   | Description                          | Default | Notes |
-| -------------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count     | 128     |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count      | 128     |       |
+| Name                                   | Description                                    | Default | Notes |
+| -------------------------------------- | ---------------------------------------------- | ------- | ----- |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
 
 ## OTLP Exporter
 
@@ -151,12 +153,14 @@ thrift or protobuf.  As of 1.0 of the specification, there
 
 **Status**: [Stable](document-status.md)
 
-We define environment variables for setting a single exporter per signal.
+We define environment variables for setting one or more exporters per signal.
 
 | Name          | Description                                                                  | Default |
 | ------------- | ---------------------------------------------------------------------------- | ------- |
 | OTEL_TRACES_EXPORTER | Trace exporter to be used | "otlp"  |
 | OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  |
+
+The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 
 Known values for OTEL_TRACES_EXPORTER are:
 
