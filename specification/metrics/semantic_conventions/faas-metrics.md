@@ -49,7 +49,7 @@ Optionally, when applicable:
 
 ## Labels
 
-Below is a table of the labels that SHOULD be included on FaaS metric events.
+Below is a table of the labels to be included on FaaS metric events.
 
 | Name | Recommended | Notes and examples |
 |------|-------------|--------------------|
@@ -58,7 +58,10 @@ Below is a table of the labels that SHOULD be included on FaaS metric events.
 | `faas.invoked_provider` | Yes | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws` |
 | `faas.invoked_region` | Yes | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1` |
 
-More details on these labels and the function name and the difference compared to the faas.invoked_name can be found at the related [faas tracing specification](../../trace/semantic_conventions/faas.md).
+More details on these labels, the function name and the difference compared to the faas.invoked_name can be found at the related [FaaS tracing specification](../../trace/semantic_conventions/faas.md).
+For incoming FaaS executions, the function for which metrics are reported is already described by its [FaaS resource attributes](../../resource/semantic_conventions/faas.md).
+Outgoing FaaS executions are identified using the `faas.invoked_*` attributes above.
+`faas.trigger` SHOULD be included in all metric events while `faas.invoked_*` attributes apply on outgoing FaaS execution events only.
 
 ## References
 
