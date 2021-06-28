@@ -24,7 +24,6 @@ groups:
               value: "fargate"
         brief: >
           The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
-        examples: ['ec2', 'fargate']
       - id: task.arn
         type: string
         brief: >
@@ -40,4 +39,3 @@ groups:
         brief: >
           The revision for this task definition.
         examples: ["8", "26"]
-      
