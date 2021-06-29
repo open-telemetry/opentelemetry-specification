@@ -9,11 +9,11 @@
 <!-- semconv cloud -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `cloud.provider` | string | Name of the cloud provider. | `gcp` | No |
+| `cloud.provider` | string | Name of the cloud provider. | `aws` | No |
 | `cloud.account.id` | string | The cloud account ID the resource is assigned to. | `111111111111`; `opentelemetry` | No |
 | `cloud.region` | string | The geographical region the resource is running. Refer to your provider's docs to see the available regions, for example [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), or [Google Cloud regions](https://cloud.google.com/about/locations). | `us-central1`; `us-east-1` | No |
 | `cloud.availability_zone` | string | Cloud regions often have multiple, isolated locations known as zones to increase availability. Availability zone represents the zone where the resource is running. [1] | `us-east-1c` | No |
-| `cloud.platform` | string | The cloud platform in use. [2] | `aws_ec2`; `azure_vm`; `gcp_compute_engine` | No |
+| `cloud.platform` | string | The cloud platform in use. [2] | `aws_ec2` | No |
 
 **[1]:** Availability zones are called "zones" on Google Cloud.
 

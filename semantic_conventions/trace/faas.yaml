@@ -169,7 +169,6 @@ groups:
         note: >
           SHOULD be equal to the `cloud.provider` resource attribute of the
           invoked function.
-        examples: 'aws'
       - id: invoked_region
         type: string
         required:
