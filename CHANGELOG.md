@@ -28,7 +28,7 @@ release.
   ([#1748](https://github.com/open-telemetry/opentelemetry-specification/pull/1748))
 
 - Add context propagation requirements to HTTP spec.
-  ([TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#1783](https://github.com/open-telemetry/opentelemetry-specification/pull/1783))
 
 ### Compatibility
 
