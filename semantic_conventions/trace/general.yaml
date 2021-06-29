@@ -72,6 +72,8 @@ groups:
               value: "cell"
             - id: unavailable
               value: "unavailable"
+            - id: unknown
+              value: "unknown"
         brief: 'The internet connection type currently being used by the host.'
         examples: 'wifi'
       - id: host.connection.subtype

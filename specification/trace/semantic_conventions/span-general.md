@@ -70,6 +70,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `wired` | wired |
 | `cell` | cell |
 | `unavailable` | unavailable |
+| `unknown` | unknown |
 
 `net.host.connection.subtype` MUST be one of the following or, if none of the listed values apply, a custom value:
 
