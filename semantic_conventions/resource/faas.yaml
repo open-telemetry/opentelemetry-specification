@@ -14,7 +14,7 @@ groups:
         type: string
         brief: >
           The unique ID of the single function that this runtime instance executes.
-        note: >
+        note: |
           Depending on the cloud provider, use:
 
           * **AWS Lambda:** The function [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html).
@@ -28,12 +28,11 @@ groups:
           part of the ARN is not available without calling another AWS API
           which may be deemed too slow for a short-running lambda function.
           As an alternative, consider setting `faas.id` as a span attribute instead.
-
         examples: ['arn:aws:lambda:us-west-2:123456789012:function:my-function']
       - id: version
         type: string
         brief: The immutable version of the function being executed.
-        note: >
+        note: |
           Depending on the cloud provider, use:
 
           * **AWS Lambda:** The [function version](https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html)
