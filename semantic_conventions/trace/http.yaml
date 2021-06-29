@@ -65,7 +65,6 @@ groups:
         note: >
           If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor`
           is `QUIC`, in which case `IP.UDP` is assumed.
-        examples: ['1.0']
       - id: user_agent
         type: string
         brief: 'Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client.'
