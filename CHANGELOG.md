@@ -25,7 +25,7 @@ release.
 ### Semantic Conventions
 
 - Clean up FaaS semantic conventions, add `aws.lambda.invoked_arn`.
-  ([#????](https://github.com/open-telemetry/opentelemetry-specification/pull/????))
+  ([#1781](https://github.com/open-telemetry/opentelemetry-specification/pull/1781))
 - Remove `rpc.jsonrpc.method`, clarify that `rpc.method` should be used instead.
   ([#1748](https://github.com/open-telemetry/opentelemetry-specification/pull/1748))
 
