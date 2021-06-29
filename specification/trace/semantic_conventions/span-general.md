@@ -42,7 +42,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
 | `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
 | `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | No |
-| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell connection, but it could be used for describing details about a wifi connection. | `4G` | No |
+| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | No |
 | `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | No |
 | `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | No |
 | `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | No |
@@ -75,16 +75,27 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 | Value  | Description |
 |---|---|
-| `1G` | 1st generation of cellular radio technology. e.g.: `NTT`, or `NMT`. This is generally not in uses anymore expect is very specific locations.
- |
-| `2G` | 2nd generation of cellular radio technology. e.g.: `GSM`, `CDMA1x`. This will also include technologies that may be consider `2.5G` or `2.75G` such as `GPRS` or `EDGE`
- |
-| `3G` | 3rd generation of cellular radio technology. e.g.: `UMTS`, `CDMA2000`, `WCDMA`, `CDMAEVDORev0`, `CDMAEVDORevA`, `eHRPD`, `CDMAEVDORevB`, etc. This category will also include technology considered `3.5G` such as `HSPA`, `HSDPA` and `HSUPA`
- |
-| `4G` | 4th generation of cellular radio technology. e.g.: `LTE`, `IWLAN`
- |
-| `5G` | 5th generation of cellular radio technology. e.g.: `NR`, `NRNSA`
- |
+| `GPRS` | GPRS |
+| `EDGE` | EDGE |
+| `UMTS` | UMTS |
+| `CDMA` | CDMA |
+| `EVDO_0` | EVDO_0 |
+| `EVDO_A` | EVDO_A |
+| `1xRTT` | 1xRTT |
+| `HSDPA` | HSDPA |
+| `HSUPA` | HSUPA |
+| `HSPA` | HSPA |
+| `IDEN` | IDEN |
+| `EVDO_B` | EVDO_B |
+| `LTE` | LTE |
+| `EHRPD` | EHRPD |
+| `HSPAP` | HSPAP |
+| `GSM` | GSM |
+| `TD_SCDMA` | TD_SCDMA |
+| `IWLAN` | IWLAN |
+| `NR` | NR |
+| `NRNSA` | NRNSA |
+| `LTE_CA` | LTE_CA |
 <!-- endsemconv -->
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
