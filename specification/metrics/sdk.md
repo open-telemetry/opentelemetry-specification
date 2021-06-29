@@ -111,18 +111,25 @@ the inputs:
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
   * The `extra dimensions` which come from Baggage/Context (optional). If not
-    provided, no extra dimension will be used.
-  * The `aggregation` (optional) to be used. If not provided, the default
-    aggregation (based on the type of the Instrument) will be applied.
+    provided, no extra dimension will be used. Please note that this only
+    applies to [synchronous Instruments](./api.md#synchronous-instrument), any
+    `extra dimensions` configured on [asynchronous
+    Instruments](./api.md#asynchronous-instrument) will be considered as error.
+  * The `aggregation` (optional) to be used. If not provided, a default
+    aggregation will be applied by the SDK. The default aggregation is a TODO
+    (e.g. first see if there is an explicitly specified aggregation from the
+    View, if not, see if there is a Hint, if not, fallback to the default
+    aggregation that is associated with the Instrument type), and for histogram,
+    the default buckets would be [0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0,
+    50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0,
+    1000.0], (1000.0, +&infin;).
 
-If there are more than one Instruments meeting the selection criteria,
-individual language implementation can decide what is the proper behavior, as
-long as the behavior is well defined and deterministic.
+The SDK SHOULD consider the following situation as user error and provide a way
+to let the user know (e.g. expose [self-diagnostics
+logs](../error-handling.md#self-diagnostics)):
 
-If the `aggregation` is not provided, and the default aggregation doesn't have
-sufficient information (e.g. a Histogram without any bucket configuration), the
-SDK SHOULD provide a way to let the user know (e.g. expose [self-diagnostics
-logs](../error-handling.md#self-diagnostics)).
+* If there are more than one Instruments meeting the selection criteria.
+* If the name of the View has conflict with other Views.
 
 If there is no View registered, all the Instruments associated with the
 MeterProvider SHOULD be used.
