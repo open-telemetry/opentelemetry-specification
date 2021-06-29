@@ -29,7 +29,9 @@ On some providers, it may not be possible to determine the full ID at startup, w
   (an integer represented as a decimal string).
 * **Google Cloud Run:** The [revision](https://cloud.google.com/run/docs/managing/revisions)
   (i.e., the function name plus the revision suffix).
-* **Google Cloud Functions:** Not applicable. Do not set this attribute. * **Azure Functions:** Not applicable. Do not set this attribute.
+* **Google Cloud Functions:** The value of the
+  [`K_REVISION` environment variable](https://cloud.google.com/functions/docs/env-var#runtime_environment_variables_set_automatically).
+* **Azure Functions:** Not applicable. Do not set this attribute.
 
 **[3]:** * **AWS Lambda:** Use the (full) log stream name.
 

@@ -40,7 +40,8 @@ groups:
             (an integer represented as a decimal string).
           * **Google Cloud Run:** The [revision](https://cloud.google.com/run/docs/managing/revisions)
             (i.e., the function name plus the revision suffix).
-          * **Google Cloud Functions:** Not applicable. Do not set this attribute.
+          * **Google Cloud Functions:** The value of the
+            [`K_REVISION` environment variable](https://cloud.google.com/functions/docs/env-var#runtime_environment_variables_set_automatically).
           * **Azure Functions:** Not applicable. Do not set this attribute.
         examples: ['26', 'pinkfroid-00002']
       - id: instance
