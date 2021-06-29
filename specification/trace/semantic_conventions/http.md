@@ -15,6 +15,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
   - [Status](#status)
   - [Common Attributes](#common-attributes)
   - [HTTP client](#http-client)
+    - [Context propagation](#context-propagation)
   - [HTTP server](#http-server)
     - [HTTP server definitions](#http-server-definitions)
     - [HTTP Server semantic conventions](#http-server-semantic-conventions)
@@ -110,6 +111,11 @@ Note that in some cases `http.host` might be different
 from the `net.peer.name`
 used to look up the `net.peer.ip` that is actually connected to.
 In that case it is strongly recommended to set the `net.peer.name` attribute in addition to `http.host`.
+
+### Context propagation
+
+- context created for HTTP client span MUST be injected on outgoing request using configured [propagator](../../context/api-propagators.md)
+- if outgoing HTTP request already has context (for configured propagator) injected, it cannot be changed and new span MUST not be created
 
 ## HTTP server
 
