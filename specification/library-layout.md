@@ -36,7 +36,7 @@ This directory describes the Metrics API that can be used to record application 
 ### [/baggage](baggage/api.md)
 
 This directory describes the Baggage API that can be used to manage context propagation
-and metrics-related attribution.
+and metric event attributes.
 
 ### [/trace](trace/api.md)
 
