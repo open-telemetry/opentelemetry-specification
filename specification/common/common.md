@@ -16,7 +16,7 @@ Table of Contents
 Attributes are a list of zero or more key-value pairs. An `Attribute` MUST have the following properties:
 
 - The attribute key, which MUST be a non-`null` and non-empty string.
-- The attribute value, which for logs is any type, but for traces and metrics is either:
+- The attribute value, which for logs is [any](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#type-any) type, but for traces and metrics is either:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e. it MUST NOT contain values of different types. For protocols that do
