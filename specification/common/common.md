@@ -40,4 +40,4 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
-See [Attribute and Label Naming](attribute-and-label-naming.md) for naming guidelines.
+See [Attribute Naming](attribute-naming.md) for naming guidelines.

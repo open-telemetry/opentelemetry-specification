@@ -11,11 +11,46 @@ release.
 
 ### Traces
 
+- Adding environment variables for event and link attribute limits. ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
+
+### Metrics
+
+- Clarify the limit on the instrument unit.
+  ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+- Remove `rpc.jsonrpc.method`, clarify that `rpc.method` should be used instead.
+  ([#1748](https://github.com/open-telemetry/opentelemetry-specification/pull/1748))
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+- Allow selecting multiple exporters via `OTEL_TRACES_EXPORTER` and `OTEL_METRICS_EXPORTER`
+  by using a comma-separated list. ([#1758](https://github.com/open-telemetry/opentelemetry-specification/pull/1758))
+
+## v1.4.0 (2021-06-07)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Add schema_url support to `Tracer`. ([#1666](https://github.com/open-telemetry/opentelemetry-specification/pull/1666))
 - Add Dropped Links Count to non-otlp exporters section ([#1697](https://github.com/open-telemetry/opentelemetry-specification/pull/1697))
 - Add note about reporting dropped counts for attributes, events, links. ([#1699](https://github.com/open-telemetry/opentelemetry-specification/pull/1699))
 
 ### Metrics
 
+- Add schema_url support to `Meter`. ([#1666](https://github.com/open-telemetry/opentelemetry-specification/pull/1666))
 - Adds detail about when to use `StartTimeUnixNano` and handling of unknown start-time resets. ([#1646](https://github.com/open-telemetry/opentelemetry-specification/pull/1646))
 - Expand `Gauge` metric description in the data model ([#1661](https://github.com/open-telemetry/opentelemetry-specification/pull/1661))
 - Expand `Histogram` metric description in the data model ([#1664](https://github.com/open-telemetry/opentelemetry-specification/pull/1664))
@@ -36,12 +71,16 @@ release.
   [#1704](https://github.com/open-telemetry/opentelemetry-specification/pull/1704),
   [#1731](https://github.com/open-telemetry/opentelemetry-specification/pull/1731),
   [#1733](https://github.com/open-telemetry/opentelemetry-specification/pull/1733))
+- Mark relevant portions of Metrics Data Model stable ([#1728](https://github.com/open-telemetry/opentelemetry-specification/pull/1728))
 
 ### Logs
+
+- No changes.
 
 ### Resource
 
 - Add schema_url support to `Resource`. ([#1692](https://github.com/open-telemetry/opentelemetry-specification/pull/1692))
+- Clarify result of Resource merging and ResourceDetector aggregation in case of error. ([#1726](https://github.com/open-telemetry/opentelemetry-specification/pull/1726))
 
 ### Semantic Conventions
 
@@ -51,6 +90,8 @@ release.
 - Add CockroachDB to Database specific conventions ([#1725](https://github.com/open-telemetry/opentelemetry-specification/pull/1725)).
 
 ### Compatibility
+
+- No changes.
 
 ### OpenTelemetry Protocol
 
@@ -70,7 +111,6 @@ release.
 
 - `Get Tracer` should use an empty string if the specified `name` is null. ([#1654](https://github.com/open-telemetry/opentelemetry-specification/pull/1654))
 - Clarify how to record dropped attribute count in non-OTLP formats. ([#1662](https://github.com/open-telemetry/opentelemetry-specification/pull/1662))
-- Add schema_url support to `Tracer`. ([#1666](https://github.com/open-telemetry/opentelemetry-specification/pull/1666))
 
 ### Metrics
 
@@ -80,7 +120,6 @@ release.
 - Remove the "Func" name, use "Asynchronous" and "Observable". ([#1645](https://github.com/open-telemetry/opentelemetry-specification/pull/1645))
 - Add details to UpDownCounter API. ([#1665](https://github.com/open-telemetry/opentelemetry-specification/pull/1665))
 - Add details to Histogram API. ([#1657](https://github.com/open-telemetry/opentelemetry-specification/pull/1657))
-- Add schema_url support to `Meter`. ([#1666](https://github.com/open-telemetry/opentelemetry-specification/pull/1666))
 
 ### Logs
 

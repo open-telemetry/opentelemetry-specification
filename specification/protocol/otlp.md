@@ -51,8 +51,8 @@ Each signal has different support and stability in OTLP, described through its
 own maturity level, which in turn applies to **all** the OTLP Transports listed below.
 
 * Tracing: **Stable**
-* Metrics: **Beta**
-* Logs: **Alpha**
+* Metrics: **Stable**
+* Logs: **Beta**
 
 See [OTLP Maturity Level](https://github.com/open-telemetry/opentelemetry-proto#maturity-level).
 

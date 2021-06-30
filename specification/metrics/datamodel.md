@@ -1,14 +1,46 @@
 # Metrics Data Model
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+<!-- Note: `Events → Data Stream → Timeseries` breaks markdown-toc -->
 
 <!-- toc -->
+
+- [Overview](#overview)
+- [Events → Data Stream → Timeseries](#events--data-stream--timeseries)
+  * [Example Use-cases](#example-use-cases)
+  * [Out of Scope Use-cases](#out-of-scope-use-cases)
+- [Model Details](#model-details)
+  * [Event Model](#event-model)
+  * [Timeseries Model](#timeseries-model)
+  * [OpenTelemetry Protocol data model](#opentelemetry-protocol-data-model)
+- [Metric points](#metric-points)
+  * [Sums](#sums)
+  * [Gauge](#gauge)
+  * [Histogram](#histogram)
+  * [Summary (Legacy)](#summary-legacy)
+- [Exemplars](#exemplars)
+- [Single-Writer](#single-writer)
+- [Temporality](#temporality)
+- [Resets and Gaps](#resets-and-gaps)
+  * [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time)
+  * [Cumulative streams: inserting true reset points](#cumulative-streams-inserting-true-reset-points)
+- [Overlap](#overlap)
+  * [Overlap resolution](#overlap-resolution)
+  * [Overlap observability](#overlap-observability)
+  * [Overlap interpolation](#overlap-interpolation)
+- [Stream Manipulations](#stream-manipulations)
+  * [Sums: Delta-to-Cumulative](#sums-delta-to-cumulative)
+    + [Sums: detecting alignment issues](#sums-detecting-alignment-issues)
+    + [Sums: Missing Timestamps](#sums-missing-timestamps)
+- [Footnotes](#footnotes)
 
 <!-- tocstop -->
 
 ## Overview
+
+**Status**: [Stable](../document-status.md)
 
 The OpenTelemetry data model for metrics consists of a protocol specification
 and semantic conventions for delivery of pre-aggregated metric timeseries data.
@@ -35,6 +67,8 @@ well-defined translations of the data, including the ability to automatically
 remove attributes and lower histogram resolution.
 
 ## Events → Data Stream → Timeseries
+
+**Status**: [Stable](../document-status.md)
 
 The OTLP Metrics protocol is designed as a standard for transporting metric
 data. To describe the intended use of this data and the associated semantic
@@ -136,13 +170,16 @@ in scope for key design decisions:
 
 ## Model Details
 
+**Status**: [Stable](../document-status.md)
+
 OpenTelemetry fragments metrics into three interacting models:
 
 - An Event model, representing how instrumentation reports metric data.
 - A Timeseries model, representing how backends store metric data.
 - A Metric Stream model, defining the *O*pen*T*e*L*emetry *P*rotocol (OTLP)
   representing how metric data streams are manipulated and transmitted between
-  the Event model and the Timeseries storage.
+  the Event model and the Timeseries storage.  This is the model specified
+  in this document.
 
 ### Event Model
 
@@ -169,8 +206,8 @@ individual timeseries.
 While OpenTelemetry provides flexibility in how instruments can be transformed
 into metric streams, the instruments are defined such that a reasonable default
 mapping can be provided. The exact
-[OpenTelemetry instruments](api.md##instrument) are more fully
-detailed in the API specification.
+[OpenTelemetry instruments](api.md##instrument) are detailed in the API
+specification.
 
 In the Event model, the primary data are (instrument, number) points, originally
 observed in real time or on demand (for the synchronous and asynchronous cases,
@@ -182,7 +219,7 @@ In this low-level metrics data model, a Timeseries is defined by an entity
 consisting of several metadata properties:
 
 - Metric name
-- Label set
+- Attributes (dimensions)
 - Kind of point (integer, floating point, etc)
 - Unit of measurement
 
@@ -201,6 +238,9 @@ metric stream of delta data points defines time-interval values, not
 point-in-time values.  To precisely define presence and absence of data requires
 further development of the correspondence between these models.
 
+Note: Prometheus is not the only possible timeseries model for OpenTelemetry
+to map into, but is used as a reference throughout this document.
+
 ### OpenTelemetry Protocol data model
 
 The OpenTelmetry protocol data model is composed of Metric data streams. These
@@ -217,7 +257,7 @@ It is possible (and likely) that more than one metric stream is created per
 `Instrument` in the event model.
 
 __Note: The same `Resource`, `name` and `Attribute`s but differing point kind
-coming out of an OpenTelemetry SDK is considered an "error state" that should
+coming out of an OpenTelemetry SDK is considered an "error state" that SHOULD
 be handled by an SDK.__
 
 A metric stream can use one of three basic point kinds, all of
@@ -252,6 +292,8 @@ designed for compatibility with existing metric formats.
 
 ## Metric points
 
+**Status**: [Stable](../document-status.md)
+
 ### Sums
 
 [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L230)s
@@ -262,9 +304,9 @@ in OTLP consist of the following:
   [monotonic](https://en.wikipedia.org/wiki/Monotonic_function). In this case of
   metrics, this means the sum is nominally increasing, which we assume without
   loss of generality.
-  - For delta monotonic sums, this means the reader should expect non-negative
+  - For delta monotonic sums, this means the reader SHOULD expect non-negative
     values.
-  - For cumulative monotonic sums, this means the reader should expect values
+  - For cumulative monotonic sums, this means the reader SHOULD expect values
     that are not less than the previous value.
 - A set of data points, each containing:
   - An independent set of Attribute name-value pairs.
@@ -349,7 +391,7 @@ Histograms consist of the following:
       for buckets and whether not a given observation would be recorded in this
       bucket.
     - A count of the number of observations that fell within this bucket.
-  - (optional) a set of examplars (see [Exemplars](#exemplars)).  
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 Like Sums, Histograms also define an aggregation temporality.  The picture above
 denotes Delta temporality where accumulated event counts are reset to zero after reporting
@@ -366,7 +408,9 @@ recommended for new applications and exists for compatibility with other
 formats.
 
 ## Exemplars
-  
+
+**Status**: [Stable](../document-status.md)
+
 An exemplar is a recorded value that associates OpenTelemetry context to
 a metric event within a Metric. One use case is to allow users to link
 Trace signals w/ Metrics.
@@ -390,14 +434,16 @@ the gauge interval for the same source.
 
 ## Single-Writer
 
-All metric data streams within OTLP must have one logical writer.  This means,
-conceptually, that any Timeseries created from the Protocol must have one
+**Status**: [Stable](../document-status.md)
+
+All metric data streams within OTLP MUST have one logical writer.  This means,
+conceptually, that any Timeseries created from the Protocol MUST have one
 originating source of truth.  In practical terms, this implies the following:
 
-- All metric data streams produced by OTel SDKs must be globally uniquely
+- All metric data streams produced by OTel SDKs MUST be globally uniquely
   produced and free from duplicates.   All metric data streams can be uniquely
   identified in some way.
-- Aggregations of metric streams must only be written from a single logical
+- Aggregations of metric streams MUST only be written from a single logical
   source.
   __Note: This implies aggregated metric streams must reach one destination__.
 
@@ -416,7 +462,7 @@ eliminate overlap / deduplicate.
 Note: Identity is an important concept in most metrics systems.  For example,
 [Prometheus directly calls out uniqueness](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs):
 
-> Care must be taken with `labeldrop` and `labelkeep` to ensure that metrics
+> Take care with `labeldrop` and `labelkeep` to ensure that metrics
 > are still uniquely labeled once the labels are removed.
 
 For OTLP, the Single-Writer principle grants a way to reason over error
@@ -425,6 +471,8 @@ well-behaved systems can perform metric stream manipulation without undesired
 degradation or loss of visibility.
 
 ## Temporality
+
+**Status**: [Stable](../document-status.md)
 
 The notion of temporality refers to the way additive quantities are
 expressed, in relation to time, indicating whether reported values
@@ -469,6 +517,8 @@ of cardinality outside of the process.
 
 ## Resets and Gaps
 
+**Status**: [Experimental](../document-status.md)
+
 When the `StartTimeUnixNano` field is present, it allows the consumer
 to observe when there are gaps and overlapping writers in a stream.
 Correctly used, the consumer can observe both transient and ongoing
@@ -478,13 +528,22 @@ matches either the `TimeUnixNano` or the `StartTimeUnixNano` of other
 points in the same sequence.  For the initial points in an unbroken
 sequence:
 
-- When `StartTimeUnixNano` is less than `TimeUnixNano`, a new unbroken sequence of observations begins with a "true" reset at a known start time. The zero value is implicit, it is not necessary to record the starting point.
-- When `StartTimeUnixNano` equals `TimeUnixNano`, a new unbroken sequence of observations begins with a reset at an unknown start time. The initial observed value is recorded to indicate that an unbroken sequence of observations resumes. These points have zero duration, and indicate that nothing is known about previously-reported points and that data may have been lost.
+- When `StartTimeUnixNano` is less than `TimeUnixNano`, a new unbroken sequence
+  of observations begins with a "true" reset at a known start time. The zero
+  value is implicit, it is not necessary to record the starting point.
+- When `StartTimeUnixNano` equals `TimeUnixNano`, a new unbroken sequence of
+  observations begins with a reset at an unknown start time. The initial
+  observed value is recorded to indicate that an unbroken sequence of
+  observations resumes. These points have zero duration, and indicate that
+  nothing is known about previously-reported points and that data may have been
+  lost.
 
 For subsequent points in an unbroken sequence:
 
-- For points with delta aggregation temporality, the `StartTimeUnixNano` of each point matches the `TimeUnixNano` of the preceding point
-- Otherwise, the `StartTimeUnixNano` of each point matches the `StartTimeUnixNano` of the initial observation.
+- For points with delta aggregation temporality, the `StartTimeUnixNano` of
+  each point matches the `TimeUnixNano` of the preceding point
+- Otherwise, the `StartTimeUnixNano` of each point matches the
+  `StartTimeUnixNano` of the initial observation.
 
 A metric stream has a gap, where it is implicitly undefined, anywhere
 there is a range of time such that no point covers that range range
@@ -532,6 +591,8 @@ of reaggregation for cumulative series.
 
 ## Overlap
 
+**Status**: [Experimental](../document-status.md)
+
 Overlap occurs when more than one metric data point is defined for a
 metric stream within a time window.  Overlap is usually caused through
 mis-configuration, and it can lead to serious mis-interpretation of
@@ -567,19 +628,9 @@ points may be expected. In this case, OpenTelemetry collectors SHOULD modify
 points at the change-over using interpolation for Sum data points, to reduce
 gaps to zero width in these cases, without any overlap.
 
-## Resources
-
-Pending
-
-## Temporal Alignment
-
-Pending
-
-## External Labels
-
-Pending
-
 ## Stream Manipulations
+
+**Status**: [Experimental](../document-status.md)
 
 Pending introduction.
 
@@ -635,7 +686,7 @@ that some data was lost, and reset the counter.
 We detect alignment via two mechanisms:
 
 - If the incoming delta time interval has significant overlap with the previous
-  time interval, we must assume a violation of the single-writer principle.
+  time interval, we assume a violation of the single-writer principle.
 - If the incoming delta time interval has a significant gap from the last seen
   time, we assume some kind of reboot/restart and reset the cumulative counter.
 
