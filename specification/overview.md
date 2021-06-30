@@ -216,11 +216,11 @@ scenarios.
 ## Metric Signal
 
 OpenTelemetry allows to record raw measurements or metrics with predefined
-aggregation and set of labels.
+aggregation and a [set of attributes](./common/common.md#attributes).
 
 Recording raw measurements using OpenTelemetry API allows to defer to end-user
 the decision on what aggregation algorithm should be applied for this metric as
-well as defining labels (dimensions). It will be used in client libraries like
+well as defining attributes (dimensions). It will be used in client libraries like
 gRPC to record raw measurements "server_latency" or "received_bytes". So end
 user will decide what type of aggregated values should be collected out of these
 raw measurements. It may be simple average or elaborate histogram calculation.
@@ -253,7 +253,7 @@ SDK.
 ### Recording metrics with predefined aggregation
 
 The base class for all types of pre-aggregated metrics is called `Metric`. It
-defines basic metric properties like a name and labels. Classes inheriting from
+defines basic metric properties like a name and attributes. Classes inheriting from
 the `Metric` define their aggregation type as well as a structure of individual
 measurements or Points. API defines the following types of pre-aggregated
 metrics:
@@ -280,7 +280,7 @@ in-flight data model used by the SDK and OTLP, and a TimeSeries model which
 denotes how exporters should interpret the in-flight model.
 
 Different exporters have different capabilities (e.g. which data types are
-supported) and different constraints (e.g. which characters are allowed in label
+supported) and different constraints (e.g. which characters are allowed in attribute
 keys). Metrics is intended to be a superset of what's possible, not a lowest
 common denominator that's supported everywhere. All exporters consume data from
 Metrics Data Model via a Metric Producer interface defined in OpenTelemetry SDK.

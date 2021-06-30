@@ -219,7 +219,7 @@ In this low-level metrics data model, a Timeseries is defined by an entity
 consisting of several metadata properties:
 
 - Metric name
-- Label set
+- Attributes (dimensions)
 - Kind of point (integer, floating point, etc)
 - Unit of measurement
 
@@ -391,7 +391,7 @@ Histograms consist of the following:
       for buckets and whether not a given observation would be recorded in this
       bucket.
     - A count of the number of observations that fell within this bucket.
-  - (optional) a set of examplars (see [Exemplars](#exemplars)).  
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 Like Sums, Histograms also define an aggregation temporality.  The picture above
 denotes Delta temporality where accumulated event counts are reset to zero after reporting
