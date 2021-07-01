@@ -16,6 +16,8 @@ and various HTTP versions like 1.1, 2 and SPDY.
   - [Common Attributes](#common-attributes)
   - [HTTP client](#http-client)
     - [Context propagation](#context-propagation)
+      - [Example 1: context propagation](#example-1-context-propagation)
+      - [Example 2: back-off](#example-2-back-off)
   - [HTTP server](#http-server)
     - [HTTP server definitions](#http-server-definitions)
     - [HTTP Server semantic conventions](#http-server-semantic-conventions)
@@ -114,8 +116,28 @@ In that case it is strongly recommended to set the `net.peer.name` attribute in 
 
 ### Context propagation
 
-- context created for HTTP client span MUST be injected on outgoing request using configured [propagator](../../context/api-propagators.md)
-- if outgoing HTTP request already has context (for configured propagator) injected, it cannot be changed and new span MUST not be created
+- context created for HTTP client span (if valid) MUST be injected on outgoing request header using configured [propagator](../../context/api-propagators.md)
+- Exception: if outgoing HTTP request already has valid context (for configured propagator), it cannot be changed and new span MUST NOT be recorded
+
+#### Example 1: context propagation
+
+No existing valid context, W3C Trace-Context propagator
+
+1. Instrumentation checks if valid context can be extracted
+   - no, there is no W3C Trace-Context
+   - OR: yes, there is an invalid context
+   - OR: yes, there is a valid B3 context
+2. Instrumentation starts a span
+3. Instrumentation injects context of the new span using W3C propagator
+4. Instrumentation waits for call to complete and ends span
+
+#### Example 2: back-off
+
+Existing valid context, W3C Trace-Context propagator
+
+1. Instrumentation checks if valid context can be extracted using W3C propagator
+   - yes, there is a valid W3C Trace-Context
+2. Instrumentation lets call to complete without creating a span
 
 ## HTTP server
 
