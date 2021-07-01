@@ -121,22 +121,21 @@ In that case it is strongly recommended to set the `net.peer.name` attribute in 
 
 #### Example 1: context propagation
 
-No existing valid context, W3C Trace-Context propagator
+There is no valid W3C Trace Context on the request when instrumentation starts, W3C Trace Context propagator is configured on the instrumentation.
 
-1. Instrumentation checks if valid context can be extracted
-   - no, there is no W3C Trace-Context
-   - OR: yes, there is an invalid context
-   - OR: yes, there is a valid B3 context
+1. Instrumentation checks if a valid context can be extracted using W3C Trace-Context propagator
+   - no, there is no W3C Trace Context
+   - OR: yes, there is an invalid W3C Trace Context
 2. Instrumentation starts a span
-3. Instrumentation injects context of the new span using W3C propagator
+3. Instrumentation injects context of the new span using the W3C Trace Context propagator
 4. Instrumentation waits for call to complete and ends span
 
 #### Example 2: back-off
 
-Existing valid context, W3C Trace-Context propagator
+There is valid W3C Trace Context context on the request when instrumentation starts. W3C Trace Context propagator is configured on the instrumentation.
 
-1. Instrumentation checks if valid context can be extracted using W3C propagator
-   - yes, there is a valid W3C Trace-Context
+1. Instrumentation checks if valid context can be extracted using W3C Trace Context propagator
+   - yes, there is a valid W3C Trace Context
 2. Instrumentation lets call to complete without creating a span
 
 ## HTTP server
