@@ -1,4 +1,4 @@
-# Attribute and Label Naming
+# Attribute Naming
 
 **Status**: [Experimental](../document-status.md)
 
@@ -13,10 +13,9 @@ Table of Contents
 
 </details>
 
-_This section applies to Resource, Span and Log attribute names (also known as
-the "attribute keys") and to keys of Metric labels. For brevity within this
-section when we use the term "name" without an adjective it is implied to mean
-"attribute name or metric label key"._
+_This section applies to Resource, Span, Log, and Metric attribute names (also
+known as the "attribute keys"). For brevity within this section when we use the
+term "name" without an adjective it is implied to mean "attribute name"._
 
 Every name MUST be a valid Unicode sequence.
 
@@ -50,8 +49,8 @@ Names SHOULD follow these rules:
   namespace. Because of this rule be careful when choosing names: every existing
   name prohibits existence of an equally named namespace in the future, and vice
   versa: any existing namespace prohibits existence of an equally named
-  attribute or label key in the future.
-  
+  attribute key in the future.
+
 ## Name Pluralization guidelines
 
 - When an attribute represents a single entity, the attribute name SHOULD be singular.
@@ -81,14 +80,13 @@ Names SHOULD follow these rules:
 - When a new namespace is necessary consider whether it should be a top-level
   namespace (e.g. `service`) or a nested namespace (e.g. `service.instance`).
 
-- Semantic conventions exist for four areas: for Resource, Span and Log
-  attribute names as well as Metric label keys. In addition, for spans we have
-  two more areas: Event and Link attribute names. Identical namespaces or names
-  in all these areas MUST have identical meanings. For example the `http.method`
-  span attribute name denotes exactly the same concept as the `http.method`
-  metric label, has the same data type and the same set of possible values (in
-  both cases it records the value of the HTTP protocol's request method as a
-  string).
+- Semantic conventions exist for four areas: for Resource, Span, Log, and Metric
+  attribute names. In addition, for spans we have two more areas: Event and Link
+  attribute names. Identical namespaces or names in all these areas MUST have
+  identical meanings. For example the `http.method` span attribute name denotes
+  exactly the same concept as the `http.method` metric attribute, has the same
+  data type and the same set of possible values (in both cases it records the
+  value of the HTTP protocol's request method as a string).
 
 - Semantic conventions MUST limit names to printable Basic Latin characters
   (more precisely to
@@ -99,8 +97,8 @@ Names SHOULD follow these rules:
 
 ## Recommendations for Application Developers
 
-As an application developer when you need to record an attribute or a label
-first consult existing semantic conventions for
+As an application developer when you need to record an attribute first consult
+existing semantic conventions for
 [Resources](../resource/semantic_conventions/README.md),
 [Spans](../trace/semantic_conventions/README.md),
 and
@@ -117,7 +115,7 @@ To do that consider a few options:
 - The name is specific to your application that will be used internally only. If
   you already have an internal company process that helps you to ensure no name
   clashes happen then feel free to follow it. Otherwise it is recommended to
-  prefix the attribute name or label key by your application name, provided that
+  prefix the attribute name by your application name, provided that
   the application name is reasonably unique within your organization (e.g.
   `myuniquemapapp.longitude` is likely fine). Make sure the application name
   does not clash with an existing semantic convention namespace.
@@ -133,7 +131,7 @@ subset of Unicode code points).
 
 ## otel.* Namespace
 
-Attribute and label names that start with `otel.` are reserved to be defined by
+Attribute names that start with `otel.` are reserved to be defined by
 OpenTelemetry specification. These are typically used to express OpenTelemetry
 concepts in formats that don't have a corresponding concept.
 
