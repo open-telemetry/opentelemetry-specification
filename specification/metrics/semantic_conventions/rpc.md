@@ -4,8 +4,8 @@
 
 The conventions described in this section are RPC specific. When RPC operations
 occur, metric events about those operations will be generated and reported to
-provide insight into those operations. By adding RPC labels to metric events
-it allows for finely tuned filtering.
+provide insight into those operations. By adding RPC properties as attributes
+on metric events it allows for finely tuned filtering.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
@@ -14,7 +14,7 @@ it allows for finely tuned filtering.
 - [Metric instruments](#metric-instruments)
   * [RPC Server](#rpc-server)
   * [RPC Client](#rpc-client)
-- [Labels](#labels)
+- [Attributes](#attributes)
   * [Service name](#service-name)
 - [gRPC conventions](#grpc-conventions)
 
@@ -52,9 +52,9 @@ RPC usage, not streaming RPCs.
 | `rpc.client.requests_per_rpc` | ValueRecorder | count | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
 | `rpc.client.responses_per_rpc` | ValueRecorder | count | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
 
-## Labels
+## Attributes
 
-Below is a table of labels that SHOULD be included on metric events and whether
+Below is a table of attributes that SHOULD be included on metric events and whether
 or not they should be on the server, client or both.
 
 <!-- semconv rpc -->

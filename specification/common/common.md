@@ -41,6 +41,8 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
+See [Attribute Naming](attribute-naming.md) for naming guidelines.
+
 ### Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there is no

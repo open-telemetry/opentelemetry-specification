@@ -33,7 +33,6 @@ groups:
               brief: 'Something else (non IP-based).'
         brief: >
           Transport protocol used. See note below.
-        examples: 'ip_tcp'
       - id: peer.ip
         type: string
         brief: >
