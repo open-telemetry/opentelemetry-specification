@@ -57,7 +57,6 @@ RPC usage, not streaming RPCs.
 Below is a table of attributes that SHOULD be included on metric events and whether
 or not they should be on the server, client or both.
 
-<!-- semconv rpc -->
 | Attribute                                                           | Type   | Description                                                                                                     | Examples                  | Required            |
 | ------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------- | ------------------------- | ------------------- |
 | [`rpc.system`](../../trace/semantic_conventions/rpc.md)             | string | A string identifying the remoting system.                                                                       | `grpc`; `java_rmi`; `wcf` | Yes                 |
