@@ -19,7 +19,6 @@ groups:
               brief: 'Google Cloud Platform'
         brief: >
           Name of the cloud provider.
-        examples: 'gcp'
       - id: account.id
         type: string
         brief: >
@@ -95,4 +94,3 @@ groups:
           The cloud platform in use.
         note: >
           The prefix of the service SHOULD match the one specified in `cloud.provider`.
-        examples: ['aws_ec2', 'azure_vm', 'gcp_compute_engine']
