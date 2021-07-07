@@ -81,6 +81,158 @@ active span](../trace/api.md#context-interaction)).
 +------------------+
 ```
 
+### Aggregator
+
+An `Aggregator` is a type of `MeasurementProcessor` and computes "aggregate"
+data from [Measurements](./api.md#measurement) and its `In-Memory State` into
+[Pre-Aggregated Metric](./datamodel.md#timeseries-model).
+
+```text
+
+                 +---------------------+
+                 | Aggregator          |
+                 |                     |
+ [Measurements]------> "Aggregate"     |
+                 |         |           |
+                 | +-------V---------+ |
+                 | |                 | |
+                 | | In-Memory State | |
+                 | |                 | |
+                 | +-------+---------+ |
+                 |         |           |
+                 |         V           |
+                 |      "Collect" +------[Pre-Aggregated Metrics]-->
+                 |                     |
+                 +---------------------+
+```
+
+An `Aggregator` MUST provide an interface to "aggregate" [Measurement](./api.md#measurement)
+data into its `In-Memory State`.
+
+An `Aggregator` MUST provide an interface to "collect" [Pre-Aggregated Metric](./datamodel.md#timeseries-model)
+data from its `In-Memory State`. The collect call should be treated as a
+stateful action and may reset in-memory state data. e.g. Resetting the time window
+for delta temporality instruments.
+
+An `Aggregator` MUST have read/write access to memory storage (`In-Memory
+State`) where it can store/retreive/manage its own internal state.
+
+Note: SDK SHOULD provide configuration and control for memory availability to
+optimize usage. Aggregators MUST log errors when memory limits are reached
+and/or data lost occurs due to memory mitigation strategy. (e.g dropping high
+cardinality attributes).
+
+An `Aggregator` MUST have access to or given the [View](./sdk.md#view)
+configuration so it can be properly configure. e.g. Configure a Sum aggregator
+for Monoticity and Temporality.
+
+SDK MUST route measurements to the configured aggregator/s. e.g. SDK
+expand a measurement's Attributes to key/value pair combinations, and route
+measurements for each distinct key/value pair combinations to zero or more
+aggregator/s.
+
+SDK MUST provide aggregators to support the default configured aggregator
+per instrument kind. e.g. Counter instruments default to a "Sum" aggregator
+configured for monotonic values.
+
+### Last Value Aggregator
+
+The Last Value Aggregator collect data for the [Gauge Metric Point](./datamodel.md#gauge)
+and is default aggregator for the following instruments.
+
+* [Asynchronous Gauge](./api.md#asynchronous-gauge) instrument.
+
+Last Value Aggregator maintains the following in memory:
+
+* Last Value (latest Measurement given, avoid any time comparison.)
+
+### Sum Aggregator
+
+The Sum Aggregator collect data for the [Sum Metric Point](./datamodel.md#sums)
+and is default aggregator for the following instruments.
+
+* [Counter](./api.md#counter) instruments.
+* [UpDown Counter](./api.md#updown-counter) instruments.
+* [Asynchronous Counter](./api.md#asynchronous-counter) instruments.
+* [Asynchronous UpDown Counter](./api.md#asynchronous-updown-counter) instruments.
+
+The Sum Aggregator MUST be configurable to support different Monoticity and/or
+Temporality.
+
+Sum Aggregator maintains the following in memory:
+
+* Time window (e.g. start time, end time)
+* Sum (sum of Measurements per Monoticity and Temporality configuration.)
+
+### Histogram Aggregator
+
+The Histogram Aggregator collect data for the [Histogram Metric Point](./datamodel.md#histogram)
+and is default aggregator for the following instruments.
+
+* [Histogram](./api.md#histogram) instruments.
+
+The Histogram Aggregator MUST be configurable to support different Temporality.
+
+Histogram Aggregator maintains the following in memory:
+
+* Time window (e.g. start time, end time)
+* Count
+* Sum
+* Bucket Counts (per configured boundaries)
+
+### An example of SDK implementation
+
+SDK expand each Measurement's Attribute by the combination of key/value pairs.
+For each distinct combination, SDK will route to an instance of a configured
+aggregator.
+
+```text
++------------------+  +-------------------------------------------------------------+
+| MeterProvider    |  | SDK                                                         |
+|   Meter A        |  |                     +----------------------+                |
+|     Instrument X |-----[Measurements]---->| MeasurementProcessor |                |
+|     Instrument Y |  |                     +-----------+----------+                |
+|     ...          |  |                                 |                           |
+|     ...          |  |                           [Measurements]                    |
++------------------+  |                                 |                           |
+                      |        SDK expand Measurements per View configuration       |
+                      |        (e.g. by Attribute key/value pairs)                  |
+                      |                                 |                           |
+                      |                                 |"Aggregate"                |
+                      | Measurement #1:                 V                           |
+                      |                      +---------------------+                |
+                      |      B=Y ----------->| Aggregator #1 (B=Y) |---->+          |
+                      |                      | In-Memory State:    |     |          |
+                      |                      |   count=1           |     |          |
+                      |                      +---------------------+     |          |
+                      |      A=X -------+                                |          |
+                      |                 |    +---------------------+     |          |
+                      | Measurment #2:  +--->| Aggregator #2 (A=X) |---->|          |
+                      |                 |    | In-Memory State:    |     |          |
+                      |                 |    |   count=2           |     |          |
+                      |                 |    +---------------------+     |          |
+                      |      A=X -------+                                |          |
+                      |                      +---------------------+     |          |
+                      |      B=Z ----------->| Aggregator #3 (B=Z) |---->|          |
+                      |                      | In-Memory State:    |     |          |
+                      |                      |   count=1           |     |          |
+                      |                      +---------------------+     |          |
+                      |                                                  |"Collect" |
+                      |                                                  |          |
+                      |                                              [Metrics]      |
+                      |                                                  |          |
+                      |                                        +---------V-------+  |
+                      |                                        | MetricProcessor |  |
+                      |                                        +---------+-------+  |
+                      |                                                  |          |
+                      |                                              [Metrics]      |
+                      |                                                  |          |
+                      |                                        +---------V-------+  |
+                      |                                        | MetricExporter  |=====> OTLP Collector
+                      |                                        +-----------------+  |
+                      +-------------------------------------------------------------+
+```
+
 ## MetricProcessor
 
 `MetricProcessor` is an interface which allows hooks for [pre-aggregated metrics
