@@ -11,6 +11,28 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+## v1.5.0 (2021-07-07)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Adding environment variables for event and link attribute limits. ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
 
 ### Metrics
@@ -20,7 +42,11 @@ release.
 
 ### Logs
 
+- No changes.
+
 ### Resource
+
+- No changes.
 
 ### Semantic Conventions
 
@@ -31,7 +57,11 @@ release.
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### SDK Configuration
 
