@@ -115,14 +115,14 @@ stateful action and may reset in-memory state data. e.g. Resetting the time wind
 for delta temporality instruments.
 
 An `Aggregator` MUST have read/write access to memory storage (`In-Memory
-State`) where it can store/retreive/manage its own internal state.
+State`) where it can store/retrieve/manage its own internal state.
 
 Note: SDK SHOULD provide configuration and control for memory availability to
 optimize usage. Aggregators MUST log errors when memory limits are reached
 and/or data lost occurs due to memory mitigation strategy. (e.g dropping high
 cardinality attributes).
 
-An `Aggregator` MUST have access to or given the [View](./sdk.md#view)
+An `Aggregator` MUST have access to or given the [View](./sdk.md)
 configuration so it can be properly configure. e.g. Configure a Sum aggregator
 for Monoticity and Temporality.
 
@@ -151,10 +151,10 @@ Last Value Aggregator maintains the following in memory:
 The Sum Aggregator collect data for the [Sum Metric Point](./datamodel.md#sums)
 and is default aggregator for the following instruments.
 
-* [Counter](./api.md#counter) instruments.
-* [UpDown Counter](./api.md#updown-counter) instruments.
-* [Asynchronous Counter](./api.md#asynchronous-counter) instruments.
-* [Asynchronous UpDown Counter](./api.md#asynchronous-updown-counter) instruments.
+* [Counter](./api.md#counter) instrument.
+* [Asynchronous Counter](./api.md#asynchronous-counter) instrument.
+* [UpDownCounter](./api.md#updowncounter) instrument.
+* [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) instrument.
 
 The Sum Aggregator MUST be configurable to support different Monoticity and/or
 Temporality.
@@ -169,7 +169,7 @@ Sum Aggregator maintains the following in memory:
 The Histogram Aggregator collect data for the [Histogram Metric Point](./datamodel.md#histogram)
 and is default aggregator for the following instruments.
 
-* [Histogram](./api.md#histogram) instruments.
+* [Histogram](./api.md#histogram) instrument.
 
 The Histogram Aggregator MUST be configurable to support different Temporality.
 
