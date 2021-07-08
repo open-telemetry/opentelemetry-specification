@@ -18,21 +18,60 @@ release.
 
 ### Metrics
 
-- Clarify the limit on the instrument unit.
-  ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
-
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
 
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+## v1.5.0 (2021-07-08)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Adding environment variables for event and link attribute limits.
+  ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
+- Clarify some details about span kind and the meanings of the values.
+  ([#1738](https://github.com/open-telemetry/opentelemetry-specification/pull/1738))
+- Clarify meaning of the Certificate File option.
+  ([#1803](https://github.com/open-telemetry/opentelemetry-specification/pull/1803))
+
+### Metrics
+
+- Clarify the limit on the instrument unit.
+  ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
+
+### Logs
+
+- Declare OTLP Logs Beta. ([#1741](https://github.com/open-telemetry/opentelemetry-specification/pull/1741))
+
+### Resource
+
+- No changes.
+
+### Semantic Conventions
+
+- Clean up FaaS semantic conventions, add `aws.lambda.invoked_arn`.
+  ([#1781](https://github.com/open-telemetry/opentelemetry-specification/pull/1781))
 - Remove `rpc.jsonrpc.method`, clarify that `rpc.method` should be used instead.
   ([#1748](https://github.com/open-telemetry/opentelemetry-specification/pull/1748))
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### SDK Configuration
 
