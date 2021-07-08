@@ -3,7 +3,7 @@
 **Status**: [Experimental](../../../document-status.md)
 
 This document defines how to apply semantic conventions when instrumenting an AWS Lambda request handler. AWS
-Lambda largely follows the conventions for [FaaS](../faas.md) while [HTTP](../http.md) conventions are also
+Lambda largely follows the conventions for [FaaS][faas] while [HTTP](../http.md) conventions are also
 applicable when handlers are for HTTP requests.
 
 There are a variety of triggers for Lambda functions, and this document will grow over time to cover all the
@@ -35,9 +35,30 @@ Lambda `Context`.
 
 The following attributes SHOULD be set:
 
-- [`faas.execution`](../faas.md) - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`
-- [`faas.id`](../../../resource/semantic_conventions/faas.md) - The value of the invocation ARN for the function, which is always available through an accessor on the Lambda `Context`
-- [`cloud.account.id`](../../../resource/semantic_conventions/cloud.md) - In some languages, this is available as an accessor on the Lambda `Context`. Otherwise, it can be parsed from the value of `faas.id` as the fifth item when splitting on `:`
+- [`faas.execution`][faas] - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`.
+- [`faas.id`][faasres] - The value of the invocation ARN
+  for the function, which is always available through an accessor on the
+  Lambda `Context`, modified as follows: Discard all parts beyond the seventh (when split on `:`;
+  the seventh part is the function name) and append the [`faas.version`][faasres], separated by a colon.
+
+  Note that this is set as span attribute instead of resource attribute due to technical limitations
+  (account ID is not available at startup).
+- [`cloud.account.id`][cloud] - In some languages, this is available as an accessor on the Lambda `Context`. Otherwise, it can be parsed from the value of `faas.id` as the fifth item when splitting on `:`
+
+Also consider setting other attributes of the [`faas` resource][faasres] and [trace][faas] conventions
+and the [cloud resource conventions][cloud]. The following AWS Lambda-specific attribute MAY also be set:
+
+<!-- semconv aws.lambda -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `aws.lambda.invoked_arn` | string | The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable). [1] | `arn:aws:lambda:us-east-1:123456:function:myfunction:myalias` | No |
+
+**[1]:** This may be different from `faas.id` if an alias is involved.
+<!-- endsemconv -->
+
+[faas]: ../faas.md (FaaS trace conventions)
+[faasres]: ../../../resource/semantic_conventions/faas.md (FaaS resource conventions)
+[cloud]: ../../../resource/semantic_conventions/cloud.md (Cloud resource conventions)
 
 ### Determining the parent of a span
 
@@ -65,7 +86,7 @@ The Lambda span name and the [`http.route` span attribute](../http.md#http-serve
 be set to the [resource property][] from the proxy request event, which corresponds to the user configured HTTP
 route instead of the function name.
 
-[`faas.trigger`](../faas.md) MUST be set to `http`. [HTTP attributes](../http.md) SHOULD be set based on the
+[`faas.trigger`][faas] MUST be set to `http`. [HTTP attributes](../http.md) SHOULD be set based on the
 available information in the proxy request event. `http.scheme` is available as the `x-forwarded-proto` header
 in the proxy request. Refer to the [input format][] for more details.
 
@@ -95,7 +116,7 @@ the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an O
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span. This means the span may have as many links as messages in the batch.
 
-- [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
+- [`faas.trigger`][faas]] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md) MUST be set to `process`.
 - [`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
 - [`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
@@ -108,7 +129,7 @@ the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an O
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span.
 
-- [`faas.trigger`](../faas.md) MUST be set to `pubsub`.
+- [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
 - [`messaging.system`](../messaging.md#messaging-attributes) MUST be set to `AmazonSQS`.
 - [`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
@@ -223,12 +244,12 @@ Span Lambda --> Span ProcBatch --> Span Proc1 (links to Span Prod1 and Span Prod
 
 AWS Lambda resource information is available as [environment variables][] provided by the runtime.
 
-- [`cloud.provider`](../../../resource/semantic_conventions/cloud.md) MUST be set to `aws`
-- [`cloud.region`](../../../resource/semantic_conventions/cloud.md) MUST be set to the value of the `AWS_REGION` environment variable
-- [`faas.name`](../../../resource/semantic_conventions/faas.md) MUST be set to the value of the `AWS_LAMBDA_FUNCTION_NAME` environment variable
-- [`faas.version`](../../../resource/semantic_conventions/faas.md) MUST be set to the value of the `AWS_LAMBDA_FUNCTION_VERSION` environment variable
+- [`cloud.provider`][cloud] MUST be set to `aws`
+- [`cloud.region`][cloud] MUST be set to the value of the `AWS_REGION` environment variable
+- [`faas.name`][faasres] MUST be set to the value of the `AWS_LAMBDA_FUNCTION_NAME` environment variable
+- [`faas.version`][faasres] MUST be set to the value of the `AWS_LAMBDA_FUNCTION_VERSION` environment variable
 
-Note that [`faas.id`](../../../resource/semantic_conventions/faas.md) currently cannot be populated to resource
+Note that [`faas.id`][faasres] currently cannot be populated to resource
 because it is not available until function invocation.
 
 [environment variables]: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
