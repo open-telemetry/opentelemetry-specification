@@ -263,8 +263,8 @@ Process CB:                           | Span Rcv2 |
 | Field or Attribute | Span Prod1 | Span Rcv1 | Span Proc1 | Span Prod2 | Span Rcv2
 |-|-|-|-|-|-|
 | Span name | `"T1 send"` | `"T1 receive"` | `"T1 process"` | `"T2 send"` | `"T2 receive`" |
-| Parent |  | Span Prod1 | Span Rcv1 |  | Span Prod2 |
-| Links |  |  | | Span Prod1 |  |
+| Parent |  | Span Prod1 | Span Rcv1 | Span Rcv1 | Span Prod2 |
+| Links |  |  | |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` | `PRODUCER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `peer.service` | `"myKafka"` |  |  | `"myKafka"` |  |
