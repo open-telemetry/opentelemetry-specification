@@ -30,9 +30,9 @@ Conventions](../../resource/semantic_conventions/README.md).
 
 ## General Guidelines
 
-Metric names and labels exist within a single universe and a single
-hierarchy. Metric names and labels MUST be considered within the universe of
-all existing metric names. When defining new metric names and labels,
+Metric names and attributes exist within a single universe and a single
+hierarchy. Metric names and attributes MUST be considered within the universe of
+all existing metric names. When defining new metric names and attributes,
 consider the prior art of existing standard metrics and metrics from
 frameworks/libraries.
 
@@ -48,8 +48,8 @@ OpenTelemetry artifacts define the metric structures and hierarchies for some
 categories of metrics, and these can assist decisions when creating future
 metrics.
 
-Common labels SHOULD be consistently named. This aids in discoverability and
-disambiguates similar labels to metric names.
+Common attributes SHOULD be consistently named. This aids in discoverability and
+disambiguates similar attributes to metric names.
 
 ["As a rule of thumb, **aggregations** over all the dimensions of a given
 metric **SHOULD** be
@@ -106,9 +106,9 @@ for the total amount of memory on a system.
 
 - **usage** - an instrument that measures an amount used out of a known total
 (**limit**) amount should be called `entity.usage`. For example,
-`system.memory.usage` with label `state = used | cached | free | ...` for the
+`system.memory.usage` with attribute `state = used | cached | free | ...` for the
 amount of memory in a each state. Where appropriate, the sum of **usage**
-over all label values SHOULD be equal to the **limit**.
+over all attribute values SHOULD be equal to the **limit**.
 
   A measure of the amount of an unlimited resource consumed is differentiated
   from **usage**.
@@ -119,19 +119,19 @@ out of its **limit** should be called `entity.utilization`. For example,
 values are in the range `[0, 1]`.
 
 - **time** - an instrument that measures passage of time should be called
-`entity.time`. For example, `system.cpu.time` with label `state = idle | user
+`entity.time`. For example, `system.cpu.time` with attribute `state = idle | user
 | system | ...`. **time** measurements are not necessarily wall time and can
 be less than or greater than the real wall time between measurements.
 
   **time** instruments are a special case of **usage** metrics, where the
-  **limit** can usually be calculated as the sum of **time** over all label
+  **limit** can usually be calculated as the sum of **time** over all attribute
   values. **utilization** for time instruments can be derived automatically
   using metric event timestamps. For example, `system.cpu.utilization` is
   defined as the difference in `system.cpu.time` measurements divided by the
   elapsed time.
 
 - **io** - an instrument that measures bidirectional data flow should be
-called `entity.io` and have labels for direction. For example,
+called `entity.io` and have attributes for direction. For example,
 `system.network.io`.
 
 - Other instruments that do not fit the above descriptions may be named more

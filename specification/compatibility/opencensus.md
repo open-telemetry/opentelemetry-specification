@@ -165,8 +165,8 @@ Note: resources appear not to be usable in the "API" section of OpenCensus.
 
 ### Semantic Convention Mappings
 
-Where possible, the tracing shim should provide mappings of labels defined
-within the OpenTelemetry semantic convetions.  
+Where possible, the tracing shim should provide mappings of labels to attributes
+defined within the OpenTelemetry semantic convetions.
 
 > The principle is to ensure OpenTelemetry exporters, which use these semantic
 > conventions, are likely to export the correct data.
@@ -192,6 +192,6 @@ metrics specification solidifies for GA.   Once GA on metrics is declared,
 this section will be filled out.
 
 > Philosophically, this should follow the same principles as Trace.
-> Specifically: Labels/Metric names should be converted to OTel semantic
+> Specifically: Metric names/attributes should be converted to OTel semantic
 > conventions, All API surface area should map to the closest relevant OTel
 > API and no SDK usage of OpenCensus will be compatible.
