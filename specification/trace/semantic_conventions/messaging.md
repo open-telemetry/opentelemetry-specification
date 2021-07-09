@@ -167,6 +167,7 @@ For message consumers, the following additional attributes may be set:
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `messaging.operation` | string | A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is "send", this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case. | `receive` | No |
+| `messaging.consumer_id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | No |
 
 `messaging.operation` MUST be one of the following:
 

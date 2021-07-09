@@ -30,6 +30,8 @@ release.
 
 - Adding alibaba cloud as a cloud provider.
   ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
+- Add `messaging.consumer_id` to differentiate between message consumers.
+  ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 
 ### Compatibility
 
