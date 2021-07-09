@@ -116,8 +116,9 @@ In that case it is strongly recommended to set the `net.peer.name` attribute in 
 
 ### Context propagation
 
-- context created for HTTP client span (if valid) MUST be injected on outgoing request header using configured [propagator](../../context/api-propagators.md)
-- Exception: if outgoing HTTP request already has valid context (for configured propagator), it cannot be changed and new span MUST NOT be recorded
+`Context` created for HTTP client span (if valid) MUST be injected on outgoing request headers using configured [propagator](../../context/api-propagators.md). Instrumentation that injects `Context` into HTTP request headers MUST also emit a span that complies with other client requirements in this specification.
+
+**Exception**: if outgoing HTTP request already has valid `Context` (for configured propagator), it cannot be changed and new span MUST NOT be recorded.
 
 #### Example 1: context propagation
 
