@@ -64,6 +64,57 @@ TODO
 
 TODO
 
+### Pipeline
+
+`MeterProvider` MUST support multiple pipelines, each pipeline is a logical
+group of:
+
+* An ordered list of [View](#view)s
+* A [MeasurementProcessor](#measurementprocessor)
+* An ordered list of [MetricProcessor](#metricprocessor)s
+* A [MetricExporter](#metricexporter)
+
+Here goes an example of multiple pipelines:
+
+```text
++------------------+      +------------+
+| MeterProvider    +----->| Pipeline 1 |
+|   Meter A        |      +------------+
+|     Counter X    |
+|     Histogram Y  |      +------------+
+|   Meter B        +----->| Pipeline 2 |
+|     Gauge Z      |      +------------+
+|     ...          |
+|   ...            |-----> More Pipelines ...
++------------------+
+```
+
+Pipeline:
+
+```text
+          +----------------------+  +-----------------+
+          |                      |  |                 |
+View(s) --> MeasurementProcessor +--> In-memory state +--+
+          |                      |  |                 |  |
+          +----------------------+  +-----------------+  |
+                                                         |
+  +------------------------------------------------------+
+  |
+  |  +-------------------+             +-------------------+ 
+  |  |                   |             |                   | 
+  +--> MetricProcessor 1 +--> ... ... -> MetricProcessor N +--+
+     |                   |             |                   |  |
+     +-------------------+             +-------------------+  |
+                                                              |
+  +-----------------------------------------------------------+
+  |
+  |  +----------------+
+  |  |                |
+  +--> MetricExporter +--> Another process
+     |                |
+     +----------------+
+```
+
 ### View
 
 `View` gives the SDK users flexibility to customize the metrics they want. Here
@@ -91,18 +142,21 @@ are some examples when `View` is needed:
   developer might want this to be converted to a dimension for HTTP server
   metrics (e.g. the request/second from bots vs. real users).
 
-The SDK must provide the means to register Views with a MeterProvider. Here are
+The SDK MUST provide the means to register Views with a MeterProvider. Here are
 the inputs:
 
-* The `name` of the View (optional). If not provided, the Instrument `name`
-  would be used by default. This will be used as the name of the [metrics
-  stream](./datamodel.md#events--data-stream--timeseries).
 * The Instrument selection criteria (required), which covers:
+  * The `name` of the Instrument(s), with wildcard support (required).
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
-  * The `name` of the Instrument (required).
-  * Individual language client MAY choose to support more criteria.
+  * Individual language client MAY choose to support more criteria. For example,
+    a strong typed language MAY support point type (e.g. allow the users to
+    select Instruments based on whether the underlying type is integer or
+    double).
+* The `name` of the View (optional). If not provided, the Instrument `name`
+  would be used by default. This will be used as the name of the [metrics
+  stream](./datamodel.md#events--data-stream--timeseries).
 * The configuration for the resulting [metrics
   stream](./datamodel.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` would be
@@ -131,10 +185,8 @@ logs](../error-handling.md#self-diagnostics)):
 * If there are more than one Instruments meeting the selection criteria.
 * If the name of the View has conflict with other Views.
 
-If there is no View registered, all the Instruments associated with the
-MeterProvider SHOULD be used.
-
-If there is any View registered, only the registered View(s) SHOULD be used.
+When initalizing an Instrument, if no View is registered, then a View with
+default aggregation is configured for this instrument.
 
 Here is one example:
 
@@ -154,14 +206,17 @@ Here is one example:
 meter_provider.start_pipeline(
     # metrics from X, Y and Z will be exported to console every 5 seconds (default)
     pipeline: pipeline
-        .add_exporter(ConsoleExporter())
+        .set_exporter(ConsoleExporter())
 ).start_pipeline(
     # metrics from X and Y (reported as Foo and Bar) will be exported to Prometheus upon scraping
     pipeline: pipeline
         .add_view(name="X")
         .add_view(name="Foo", instrument_name="Y")
-        .add_view(name="Bar", instrument_name="Y")
-        .add_exporter(PrometheusExporter())
+        .add_view(
+            name="Bar",
+            instrument_name="Y",
+            aggregation=HistogramAggregation(buckets=[5.0, 10.0, 25.0, 50.0, 100.0]))
+        .set_exporter(PrometheusExporter())
 )
 ```
 
@@ -200,13 +255,13 @@ active span](../trace/api.md#context-interaction)).
 +------------------+
 | MeterProvider    |                 +----------------------+            +-----------------+
 |   Meter A        | Measurements... |                      | Metrics... |                 |
-|     Instrument X |-----------------> MeasurementProcessor +------------> In-memory state |
-|     Instrument Y +                 |                      |            |                 |
+|     Instrument X +-----------------> MeasurementProcessor +------------> In-memory state |
+|     Instrument Y |                 |                      |            |                 |
 |   Meter B        |                 +----------------------+            +-----------------+
 |     Instrument Z |
 |     ...          |                 +----------------------+            +-----------------+
 |     ...          | Measurements... |                      | Metrics... |                 |
-|     ...          |-----------------> MeasurementProcessor +------------> In-memory state |
+|     ...          +-----------------> MeasurementProcessor +------------> In-memory state |
 |     ...          |                 |                      |            |                 |
 |     ...          |                 +----------------------+            +-----------------+
 +------------------+
@@ -226,13 +281,13 @@ in the SDK:
 ```text
 +-----------------+            +-----------------+            +-----------------------+
 |                 | Metrics... |                 | Metrics... |                       |
-> In-memory state | -----------> MetricProcessor | -----------> MetricExporter (push) |--> Another process
+| In-memory state +------------> MetricProcessor +------------> MetricExporter (push) +--> Another process
 |                 |            |                 |            |                       |
 +-----------------+            +-----------------+            +-----------------------+
 
 +-----------------+            +-----------------+            +-----------------------+
 |                 | Metrics... |                 | Metrics... |                       |
-> In-memory state |------------> MetricProcessor |------------> MetricExporter (pull) |--> Another process (scraper)
+| In-memory state +------------> MetricProcessor +------------> MetricExporter (pull) +--> Another process (scraper)
 |                 |            |                 |            |                       |
 +-----------------+            +-----------------+            +-----------------------+
 ```
