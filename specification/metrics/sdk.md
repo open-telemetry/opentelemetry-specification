@@ -100,15 +100,15 @@ Measurements --> MeasurementProcessor +--> In-memory state +--+
 `MeterProvider` MUST support multiple pipelines:
 
 ```text
-+------------------+      +------------+
-| MeterProvider    +----->| Pipeline 1 |
-|   Meter A        |      +------------+
++------------------+
+| MeterProvider    |
+|   Meter A        +-----> Pipeline 1
 |     Counter X    |
-|     Histogram Y  |      +------------+
-|   Meter B        +----->| Pipeline 2 |
-|     Gauge Z      |      +------------+
-|     ...          |
-|   ...            |-----> More Pipelines ...
+|     Histogram Y  +-----> ...
+|   Meter B        |       ...
+|     Gauge Z      |
+|     ...          +-----> Pipeline N
+|   ...            |
 +------------------+
 ```
 
