@@ -82,7 +82,7 @@ attributes, then it SHOULD NOT offer an unscoped (e.g.
 `OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT`) global environment variable for such a
 limit. SDKs SHOULD only offer environment variables for the types of attributes,
 for which that SDK implements truncation mechanism. For each implemented limit
-SDK MUST first try to use the unscoped variable, if it isn't set, only then try
+the SDK MUST first try to use the unscoped variable, if it isn't set, only then try
 to use the scoped variable.
 
 | Name                              | Description                          | Default | Notes |
