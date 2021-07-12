@@ -57,7 +57,7 @@ If an SDK provides a way to:
 - set an attribute value length limit and the limit is set, then for each
   attribute value:
   - if it is a string, if it exceeds that limit (counting any character in it as
-    1), SDK Spans MUST truncate that value, so that its length is at most equal
+    1), SDKs MUST truncate that value, so that its length is at most equal
     to the limit,
   - if it is an array of strings, then apply the above rule to each of the
     values separately,
