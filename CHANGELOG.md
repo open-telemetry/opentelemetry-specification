@@ -23,6 +23,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Adding requirement to implement at least one of two transports: `grpc` or `http/protobuf`.
+  ([#1790](https://github.com/open-telemetry/opentelemetry-specification/pull/1790/files))
+
 ### SDK Configuration
 
 ## v1.5.0 (2021-07-08)
