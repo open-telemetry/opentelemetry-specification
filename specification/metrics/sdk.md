@@ -165,9 +165,9 @@ Pipeline](#pipeline). Here are the inputs:
   stream](./datamodel.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` would be
     used by default.
-  * The `attribute keys` (optional). If not provided, all the attribute keys
-    will be used by default (TODO: once the Hint API is available, the default
-    behavior should respect the Hint if it is available).
+  * A list of `attribute keys` (optional). If not provided, all the attribute
+    keys will be used by default (TODO: once the Hint API is available, the
+    default behavior should respect the Hint if it is available).
   * The `extra dimensions` which come from Baggage/Context (optional). If not
     provided, no extra dimension will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument), any
