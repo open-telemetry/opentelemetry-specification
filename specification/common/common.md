@@ -76,6 +76,12 @@ If the SDK implements the limits above, it MUST provide a way to change these
 limits programmatically. Names of the configuration options SHOULD be the same as
 in the list below.
 
+An SDK MAY implement model-specific limits, for example
+`SpanAttributeCountLimit`. If both a general and a model-specific limit are
+implemented, then the SDK MUST first attempt to use the model-specific limit, if
+it isn't set and doesn't have a default, then the SDK MUST attempt to use the
+general limit.
+
 <a name="attribute-limits-configuration"></a>
 **Configurable parameters:**
 

@@ -74,16 +74,10 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Attribute Limits
 
-See the SDK [Attribute Limits](common/common.md#attribute-limits) section for the definition of the limits.
+SDKs SHOULD only offer environment variables for the types of attributes, for
+which that SDK implements truncation mechanism.
 
-If an SDK does not implement truncation mechanism for all implementations of
-attributes, then it SHOULD NOT offer an unscoped (e.g.
-`OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`, as opposed to scoped, e.g.
-`OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT`) global environment variable for such a
-limit. SDKs SHOULD only offer environment variables for the types of attributes,
-for which that SDK implements truncation mechanism. For each implemented limit
-the SDK MUST first try to use the unscoped variable, if it isn't set, only then try
-to use the scoped variable.
+See the SDK [Attribute Limits](common/common.md#attribute-limits) section for the definition of the limits.
 
 | Name                              | Description                          | Default | Notes |
 | --------------------------------- | ------------------------------------ | ------- | ----- |
