@@ -178,9 +178,9 @@ Pipeline](#pipeline). Here are the inputs:
     (e.g. first see if there is an explicitly specified aggregation from the
     View, if not, see if there is a Hint, if not, fallback to the default
     aggregation that is associated with the Instrument type), and for histogram,
-    the default buckets would be [0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0,
-    50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0,
-    1000.0], (1000.0, +&infin;).
+    the default buckets would be (-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0,
+    25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0,
+    500.0], (500.0, 1000.0], (1000.0, +&infin;).
 
 The SDK SHOULD use the following logic to determine how to process an
 Instrument:
