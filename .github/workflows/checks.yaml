@@ -31,7 +31,7 @@ jobs:
       run: make install-yamllint
 
     - name: run yamllint
-      run: make yamllint
+      run: yamllint . -f github
 
   markdown-link-check:
     runs-on: ubuntu-latest
