@@ -1,5 +1,5 @@
-# See https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md
-# and https://github.com/markdownlint/markdownlint/blob/master/docs/configuration.md
+# See https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+# and https://github.com/DavidAnson/markdownlint/blob/main/README.md
 
 # Default state for all rules
 default: true
