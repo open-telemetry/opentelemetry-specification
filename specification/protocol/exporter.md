@@ -41,9 +41,15 @@ export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metr
 
 ### Specify Protocol
 
-Currently, OTLP has more than one transport protocol it can support, e.g.
-`grpc`,  `http/json`, `http/protobuf`.   As of 1.0 of the specification, there
-*is no specified default, or configuration via environment variables*.  We
+Currently, OTLP supports the following transport protocols:
+
+- `grpc` for protobuf-encoded data using gRPC wire format over HTTP/2 connection
+- `http/protobuf` for protobuf-encoded data over HTTP connection
+- `http/json` for JSON-encoded data over HTTP connection
+
+SDKs MUST support either `grpc` or `http/protobuf` and SHOULD support both. They also MAY support `http/json`.
+
+As of 1.0 of the specification, there *is no specified default, or configuration via environment variables*.  We
 reserve the following environment variables for configuration of protocols in
 the future:
 
