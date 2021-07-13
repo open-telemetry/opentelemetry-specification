@@ -19,6 +19,20 @@ jobs:
     - name: run markdownlint
       run: make markdownlint
 
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - uses: actions/setup-python@v2
+
+    - name: install yamllint
+      run: make install-yamllint
+
+    - name: run yamllint
+      run: make yamllint
+
   markdown-link-check:
     runs-on: ubuntu-latest
     steps:
