@@ -70,7 +70,7 @@ groups:
           type: string
           required: always
           brief: >
-            A value as an identifier for the job, represented as a string.
+            An identifier for the job, represented as a string.
             This is typically the database ID of the persisted job object,
             which is picked up and worked by a worker process.
             Alternatively, it might be an ID of a job run, for example the

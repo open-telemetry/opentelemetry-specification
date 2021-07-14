@@ -29,18 +29,61 @@
 
 ## Definitions
 
-Although messaging systems are not as standardized as, e.g., HTTP, it is assumed that the following definitions are applicable to most of them that have similar concepts at all (names borrowed mostly from JMS):
+Although job systems are not as standardized as, e.g., HTTP, it is assumed that the following definitions are applicable to most of them that have similar concepts at all:
 
-A *message* is an envelope with a potentially empty payload.
+A *job* is an envelope with a potentially empty payload.
 This envelope may offer the possibility to convey additional metadata, often in key/value form.
 
-A message is sent by a message *producer* to:
+A job is sent by a message *consumer* (also referred to as a worker in some contexts) to:
 
 * Physically: some message *broker* (which can be e.g., a single server, or a cluster, or a local process reached via IPC). The broker handles the actual delivery, re-delivery, persistence, etc. In some messaging systems the broker may be identical or co-located with (some) message consumers.
 With Apache Kafka, the physical broker a message is written to depends on the number of partitions, and which broker is the *leader* of the partition the record is written to.
 * Logically: some particular message *destination*.
 
 Messages can be delivered to 0, 1, or multiple consumers depending on the dispatching semantic of the protocol.
+
+
+
+
+
+
+
+
+====================
+
+This PR defines a semantic convention for "Job" traces.
+
+A "Job" models a batch job or task, which can be either enqueued, scheduled, or run on-demand.
+
+Examples of job-related systems are:
+
+Sidekiq, instrumented here using "Messaging" convention
+Delayed Job, instrumented here using "Messaging" convention
+Celery, instrumented here using "Messaging" convention
+Resque, issue here
+Rake, issue here
+Apache Airflow, issue here
+The spec for "Job" would be somewhere between "Messaging" and "FAAS". It would cover both the producer and consumer aspects of running jobs.
+
+As noted above, OTEL instrumentation libraries are using the "Messaging" convention to represent Jobs today. However "Messaging", which is intended for Kafka, RabbitMQ, etc. is not a great fit:
+
+Messaging systems focus on the delivery of messages irrespective of the message contents. Jobs performing work/processing based on the job instruction.
+In a Messaging system the categorization is done by the "queue" or "topic" on which messages are transmitted; in a trace viewing system (e.g. Datadog, Lightstep, etc.) I would want to see messages labelled according to their queue. In Job systems, the categorization is based on job name/type, and the queue is just for worker (consumer) resource allocation. Hence I would want traces labelled as "ChargePaymentJob", "RefundPaymentJob", etc. even though all such jobs are in the same "payments" queue.
+FAAS is also not ideal, as it is typically for serverless providers such as AWS Lambda which the infrastructure running the job has been abstracted away, and the primary focus is on the "function".
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Destinations
 
@@ -56,38 +99,6 @@ Whether a specific message is processed as if it was sent to a topic or queue en
 For instance, there can be multiple consumer groups processing records from the same topic.
 
 [idempotent]: https://en.wikipedia.org/wiki/Idempotence
-
-### Disambiguation with Job semantic convention
-
-There is overlap and potential for confusion between Messaging and Job semantics; 
-
-| Category | Messaging | Job |
-| --- | --- | --- |
-| Usage of message payload | Only considers message envelope. Does not perform logic based on the payload of the message. | Performs work based on the payload of the message. |
-| Message termination | Forwards message to consumer systems. | Consumer (worker) is typically the end of the processing chain. Message is discarded after work is performed. |
-| Usage of destination / queue | A Messaging system *must* support some form of destination (queue) or topic . | A Job system *may* |
-
-Messaging:
-* Only considers does not have logic based on the 
-* Usually
-
-Does the system forward 
-Does work happen based on the payload (contents) of the message? 
-
-
-that Job systems that have "queues" should use Messaging semantics; that's not a good litmus test.
-"Queue" in the context of a Jobs is usually an optional feature.
-For example, Ruby's Delayed Job will work all jobs in FIFO order,
-but it optionally allows you to set named "queues" and then assign worker resources to specific queues.
-Unlike a Messaging system where the queue/topic is the primary feature, in a Job system the queue is an optional/secondary attribute.
-
-A better litmus test is, "does work happen based on the contents/payload of the message". 
-
-Message system delivers the payload without looking inside; its job is simply to forward the message. 
-A Job system does work based on the payload; a successfully worked Job is usually the end of the chain (unless a new/different message is generated as a result, e.g. an email sending job.)
-
-In addition, net.peer.* should still be used here because ultimately traces are sent from physical hosts,
-and we want to see which host sent the trace.
 
 ### Message consumption
 
@@ -159,17 +170,17 @@ The following operations related to messages are defined for these semantic conv
 <!-- semconv messaging -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `activemq`; `AmazonSQS` | Yes |
-| `messaging.destination` | string | The message destination name. This might be equal to the span name but is required nevertheless. | `MyQueue`; `MyTopic` | Yes |
-| `messaging.destination_kind` | string | The kind of message destination | `queue` | Conditional [1] |
-| `messaging.temp_destination` | boolean | A boolean that is true if the message destination is temporary. |  | If missing, it is assumed to be false. |
-| `messaging.protocol` | string | The name of the transport protocol. | `AMQP`; `MQTT` | No |
-| `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
-| `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`; `https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
-| `messaging.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
-| `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
-| `messaging.message_payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
-| `messaging.message_payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | No |
+| `job.system` | string | A string identifying the job processing system. | `active_job`; `airflow`; `celery`; `delayed_job` | Yes |
+| `job.name` | string | The type or class name of the job. | `SignupMailJob`; `ChargePaymentJob` | Yes |
+| `job.id` | string | An identifier for the job, represented as a string. Typically the database ID of the persisted job object. | `b18fc2c2f887f61452a7c7c7c7048572` | Yes |
+| `job.temp_destination` | boolean | A boolean that is true if the message destination is temporary. |  | If missing, it is assumed to be false. |
+| `job.protocol` | string | The name of the transport protocol. | `AMQP`; `MQTT` | No |
+| `job.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
+| `job.url` | string | Connection string. | `tibjmsnaming://localhost:7222`; `https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
+| `job.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
+| `job.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
+| `job.message_payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
+| `job.message_payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | No |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | If available. |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [2] | `example.com` | If available. |
 
