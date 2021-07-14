@@ -159,7 +159,6 @@ The `Meter` MUST provide functions to create new [Instruments](#instrument):
 * [Create a new UpDownCounter](#updowncounter-creation)
 * [Create a new Asynchronous UpDownCounter](#asynchronous-updowncounter-creation)
 
-
 Also see the respective sections below for more information on instrument creation.
 
 ## Instrument
