@@ -117,7 +117,7 @@ which the invoked FaaS instance reports about itself, if it's instrumented.
 | Value  | Description |
 |---|---|
 | `aws` | Amazon Web Services |
-| `azure` | Amazon Web Services |
+| `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
 <!-- endsemconv -->
 

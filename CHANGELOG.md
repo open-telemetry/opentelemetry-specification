@@ -9,6 +9,140 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+- Remove `rpc.jsonrpc.method`, clarify that `rpc.method` should be used instead.
+  ([#1748](https://github.com/open-telemetry/opentelemetry-specification/pull/1748))
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+## v1.4.0 (2021-06-07)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Add schema_url support to `Tracer`. ([#1666](https://github.com/open-telemetry/opentelemetry-specification/pull/1666))
+- Add Dropped Links Count to non-otlp exporters section ([#1697](https://github.com/open-telemetry/opentelemetry-specification/pull/1697))
+- Add note about reporting dropped counts for attributes, events, links. ([#1699](https://github.com/open-telemetry/opentelemetry-specification/pull/1699))
+
+### Metrics
+
+- Add schema_url support to `Meter`. ([#1666](https://github.com/open-telemetry/opentelemetry-specification/pull/1666))
+- Adds detail about when to use `StartTimeUnixNano` and handling of unknown start-time resets. ([#1646](https://github.com/open-telemetry/opentelemetry-specification/pull/1646))
+- Expand `Gauge` metric description in the data model ([#1661](https://github.com/open-telemetry/opentelemetry-specification/pull/1661))
+- Expand `Histogram` metric description in the data model ([#1664](https://github.com/open-telemetry/opentelemetry-specification/pull/1664))
+- Added Experimental Metrics API specification.
+  ([#1401](https://github.com/open-telemetry/opentelemetry-specification/pull/1401),
+  [#1557](https://github.com/open-telemetry/opentelemetry-specification/pull/1557),
+  [#1578](https://github.com/open-telemetry/opentelemetry-specification/pull/1578),
+  [#1590](https://github.com/open-telemetry/opentelemetry-specification/pull/1590),
+  [#1594](https://github.com/open-telemetry/opentelemetry-specification/pull/1594),
+  [#1617](https://github.com/open-telemetry/opentelemetry-specification/pull/1617),
+  [#1645](https://github.com/open-telemetry/opentelemetry-specification/pull/1645),
+  [#1657](https://github.com/open-telemetry/opentelemetry-specification/pull/1657),
+  [#1665](https://github.com/open-telemetry/opentelemetry-specification/pull/1665),
+  [#1672](https://github.com/open-telemetry/opentelemetry-specification/pull/1672),
+  [#1674](https://github.com/open-telemetry/opentelemetry-specification/pull/1674),
+  [#1675](https://github.com/open-telemetry/opentelemetry-specification/pull/1675),
+  [#1703](https://github.com/open-telemetry/opentelemetry-specification/pull/1703),
+  [#1704](https://github.com/open-telemetry/opentelemetry-specification/pull/1704),
+  [#1731](https://github.com/open-telemetry/opentelemetry-specification/pull/1731),
+  [#1733](https://github.com/open-telemetry/opentelemetry-specification/pull/1733))
+- Mark relevant portions of Metrics Data Model stable ([#1728](https://github.com/open-telemetry/opentelemetry-specification/pull/1728))
+
+### Logs
+
+- No changes.
+
+### Resource
+
+- Add schema_url support to `Resource`. ([#1692](https://github.com/open-telemetry/opentelemetry-specification/pull/1692))
+- Clarify result of Resource merging and ResourceDetector aggregation in case of error. ([#1726](https://github.com/open-telemetry/opentelemetry-specification/pull/1726))
+
+### Semantic Conventions
+
+- Add JSON RPC specific conventions ([#1643](https://github.com/open-telemetry/opentelemetry-specification/pull/1643)).
+- Add Memcached to Database specific conventions ([#1689](https://github.com/open-telemetry/opentelemetry-specification/pull/1689)).
+- Add semantic convention attributes for the host device and added OS name and version ([#1596](https://github.com/open-telemetry/opentelemetry-specification/pull/1596)).
+- Add CockroachDB to Database specific conventions ([#1725](https://github.com/open-telemetry/opentelemetry-specification/pull/1725)).
+
+### Compatibility
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### SDK Configuration
+
+- Add `OTEL_SERVICE_NAME` environment variable. ([#1677](https://github.com/open-telemetry/opentelemetry-specification/pull/1677))
+
+## v1.3.0 (2021-05-05)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- `Get Tracer` should use an empty string if the specified `name` is null. ([#1654](https://github.com/open-telemetry/opentelemetry-specification/pull/1654))
+- Clarify how to record dropped attribute count in non-OTLP formats. ([#1662](https://github.com/open-telemetry/opentelemetry-specification/pull/1662))
+
+### Metrics
+
+- Expand description of Event Model and Instruments. ([#1614](https://github.com/open-telemetry/opentelemetry-specification/pull/1614))
+- Flesh out metric identity and single-write principle. ([#1574](https://github.com/open-telemetry/opentelemetry-specification/pull/1574))
+- Expand `Sum` metric description in the data model and delta-to-cumulative handling. ([#1618](https://github.com/open-telemetry/opentelemetry-specification/pull/1618))
+- Remove the "Func" name, use "Asynchronous" and "Observable". ([#1645](https://github.com/open-telemetry/opentelemetry-specification/pull/1645))
+- Add details to UpDownCounter API. ([#1665](https://github.com/open-telemetry/opentelemetry-specification/pull/1665))
+- Add details to Histogram API. ([#1657](https://github.com/open-telemetry/opentelemetry-specification/pull/1657))
+
+### Logs
+
+- Clarify "key/value pair list" vs "map" in Log Data Model. ([#1604](https://github.com/open-telemetry/opentelemetry-specification/pull/1604))
+
+### Semantic Conventions
+
+- Fix the inconsistent formatting of semantic convention enums. ([#1598](https://github.com/open-telemetry/opentelemetry-specification/pull/1598/))
+- Add details for filling resource for AWS Lambda. ([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
+- Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file. ([#1651](https://github.com/open-telemetry/opentelemetry-specification/pull/1651))
+- Clarify usage of "otel." attribute namespace. ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640))
+- Add possibility to disable `db.statement` via instrumentation configuration. ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
+
+### Compatibility
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- Fix incorrect table of transient errors. ([#1642](https://github.com/open-telemetry/opentelemetry-specification/pull/1642))
+- Clarify that 64 bit integer numbers are decimal strings in OTLP/JSON. ([#1637](https://github.com/open-telemetry/opentelemetry-specification/pull/1637))
+
+### SDK Configuration
+
+- Add `OTEL_EXPORTER_JAEGER_TIMEOUT` environment variable. ([#1612](https://github.com/open-telemetry/opentelemetry-specification/pull/1612))
+- Add `OTEL_EXPORTER_ZIPKIN_TIMEOUT` environment variable. ([#1636](https://github.com/open-telemetry/opentelemetry-specification/pull/1636))
+
+## v1.2.0 (2021-04-14)
+
+### Context
+
 - Clarify composite `TextMapPropagator` method required and optional arguments. ([#1541](https://github.com/open-telemetry/opentelemetry-specification/pull/1541))
 - Clarify B3 requirements and configuration. ([#1570](https://github.com/open-telemetry/opentelemetry-specification/pull/1570))
 
@@ -18,6 +152,7 @@ release.
 - Clarify the description for the `TraceIdRatioBased` sampler needs to include the sampler's sampling ratio. ([#1536](https://github.com/open-telemetry/opentelemetry-specification/pull/1536))
 - Define the fallback tracer name for invalid values.
   ([#1534](https://github.com/open-telemetry/opentelemetry-specification/pull/1534))
+- Clarify non-blocking requirement from span API End. ([#1555](https://github.com/open-telemetry/opentelemetry-specification/pull/1555))
 - Remove the Included Propagators section from trace API specification that was a duplicate of the Propagators Distribution of the context specification. ([#1556](https://github.com/open-telemetry/opentelemetry-specification/pull/1556))
 - Remove the Baggage API propagator notes that conflict with the API Propagators Operations section and fix [#1526](https://github.com/open-telemetry/opentelemetry-specification/issues/1526). ([#1575](https://github.com/open-telemetry/opentelemetry-specification/pull/1575))
 
@@ -25,12 +160,12 @@ release.
 
 - Adds new metric data model specification ([#1512](https://github.com/open-telemetry/opentelemetry-specification/pull/1512))
 
-### Logs
-
 ### Semantic Conventions
 
+- Add semantic conventions for AWS SDK operations and DynamoDB ([#1422](https://github.com/open-telemetry/opentelemetry-specification/pull/1422))
 - Add details for filling semantic conventions for AWS Lambda ([#1442](https://github.com/open-telemetry/opentelemetry-specification/pull/1442))
 - Update semantic conventions to distinguish between int and double ([#1550](https://github.com/open-telemetry/opentelemetry-specification/pull/1550))
+- Add semantic convention for AWS ECS task revision ([#1581](https://github.com/open-telemetry/opentelemetry-specification/pull/1581))
 
 ### Compatibility
 

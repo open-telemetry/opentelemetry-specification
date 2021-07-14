@@ -24,4 +24,4 @@ Feature freeze is separate from a lifecycle status. The lifecycle represents the
 
 ## Mixed
 
-Some documents have individual sections with different statues. These documents are marked with the status `Mixed` at the top, for clarity.
+Some documents have individual sections with different statuses. These documents are marked with the status `Mixed` at the top, for clarity.

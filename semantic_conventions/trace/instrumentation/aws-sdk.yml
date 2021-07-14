@@ -1,0 +1,411 @@
+groups:
+  - id: aws
+    prefix: aws
+    brief: >
+      The `aws` conventions apply to operations using the AWS SDK. They map request or response parameters
+      in AWS SDK API calls to attributes on a Span. The conventions have been collected over time based
+      on feedback from AWS users of tracing and will continue to evolve as new interesting conventions
+      are found.
+
+      Some descriptions are also provided for populating general OpenTelemetry semantic conventions based on
+      these APIs.
+    attributes:
+      - ref: rpc.system
+        brief: "The value `aws-api`."
+        required: always
+        examples:
+          - aws-api
+      - ref: rpc.service
+        brief: "The name of the service to which a request is made, as returned by the AWS SDK."
+        examples:
+          - DynamoDB
+          - S3
+      - ref: rpc.method
+        brief: "The name of the operation corresponding to the request, as returned by the AWS SDK"
+        examples:
+          - GetItem
+          - PutItem
+
+  - id: dynamodb.all
+    brief: "Attributes always filled for all DynamoDB request types."
+    attributes:
+      - ref: db.system
+        brief: "The value `dynamodb`."
+        required: always
+        examples:
+          - dynamodb
+
+  - id: dynamodb.shared
+    extends: aws
+    prefix: aws.dynamodb
+    brief: "Attributes that exist for multiple DynamoDB request types."
+    attributes:
+      - ref: db.operation
+        brief: "The same value as `rpc.method`."
+        examples:
+          - GetItem
+          - PutItem
+      - id: table_names
+        type: string[]
+        brief: The keys in the `RequestItems` object field.
+        examples:
+          - Users
+          - Cats
+      - id: consumed_capacity
+        type: string[]
+        brief: "The JSON-serialized value of each item in the `ConsumedCapacity` response field."
+        examples:
+          - '{
+              "CapacityUnits": number,
+              "GlobalSecondaryIndexes": {
+                 "string" : {
+                    "CapacityUnits": number,
+                    "ReadCapacityUnits": number,
+                    "WriteCapacityUnits": number
+                 }
+              },
+              "LocalSecondaryIndexes": {
+                 "string" : {
+                    "CapacityUnits": number,
+                    "ReadCapacityUnits": number,
+                    "WriteCapacityUnits": number
+                 }
+              },
+              "ReadCapacityUnits": number,
+              "Table": {
+                 "CapacityUnits": number,
+                 "ReadCapacityUnits": number,
+                 "WriteCapacityUnits": number
+              },
+              "TableName": "string",
+              "WriteCapacityUnits": number
+            }'
+      - id: item_collection_metrics
+        type: string
+        brief: "The JSON-serialized value of the `ItemCollectionMetrics` response field."
+        examples:
+          - '{
+              "string" : [
+                 {
+                    "ItemCollectionKey": {
+                       "string" : {
+                          "B": blob,
+                          "BOOL": boolean,
+                          "BS": [ blob ],
+                          "L": [
+                             "AttributeValue"
+                          ],
+                          "M": {
+                             "string" : "AttributeValue"
+                          },
+                          "N": "string",
+                          "NS": [ "string" ],
+                          "NULL": boolean,
+                          "S": "string",
+                          "SS": [ "string" ]
+                       }
+                    },
+                    "SizeEstimateRangeGB": [ number ]
+                 }
+              ]
+             }'
+      - id: provisioned_read_capacity
+        type: double
+        brief: "The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter."
+        examples:
+          - 1.0
+          - 2.0
+      - id: provisioned_write_capacity
+        type: double
+        brief: "The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter."
+        examples:
+          - 1.0
+          - 2.0
+      - id: consistent_read
+        type: boolean
+        brief: "The value of the `ConsistentRead` request parameter."
+      - id: projection
+        type: string
+        brief: "The value of the `ProjectionExpression` request parameter."
+        examples:
+          - Title
+          - Title, Price, Color
+          - Title, Description, RelatedItems, ProductReviews
+      - id: limit
+        type: int
+        brief: "The value of the `Limit` request parameter."
+        examples:
+          - 10
+      - id: attributes_to_get
+        type: string[]
+        brief: "The value of the `AttributesToGet` request parameter."
+        examples:
+          - lives
+          - id
+      - id: index_name
+        type: string
+        brief: "The value of the `IndexName` request parameter."
+        examples:
+          - name_to_group
+      - id: select
+        type: string
+        brief: "The value of the `Select` request parameter."
+        examples:
+          - ALL_ATTRIBUTES
+          - COUNT
+
+  - id: dynamodb.batchgetitem
+    brief: DynamoDB.BatchGetItem
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
+
+  - id: dynamodb.batchwriteitem
+    brief: DynamoDB.BatchWriteItem
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
+
+  - id: dynamodb.createtable
+    brief: DynamoDB.CreateTable
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - id: global_secondary_indexes
+        type: string[]
+        brief: "The JSON-serialized value of each item of the `GlobalSecondaryIndexes` request field"
+        examples:
+          - '{
+              "IndexName": "string",
+              "KeySchema": [
+                {
+                  "AttributeName": "string",
+                  "KeyType": "string"
+                }
+              ],
+              "Projection": {
+                "NonKeyAttributes": [ "string" ],
+                "ProjectionType": "string"
+              },
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": number,
+                "WriteCapacityUnits": number
+              }
+            }'
+      - id: local_secondary_indexes
+        type: string[]
+        brief: "The JSON-serialized value of each item of the `LocalSecondaryIndexes` request field."
+        examples:
+          - '{
+              "IndexArn": "string",
+              "IndexName": "string",
+              "IndexSizeBytes": number,
+              "ItemCount": number,
+              "KeySchema": [
+                {
+                  "AttributeName": "string",
+                  "KeyType": "string"
+                }
+              ],
+              "Projection": {
+                "NonKeyAttributes": [ "string" ],
+                "ProjectionType": "string"
+              }
+            }'
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
+      - ref: aws.dynamodb.provisioned_read_capacity
+      - ref: aws.dynamodb.provisioned_write_capacity
+
+  - id: dynamodb.deleteitem
+    brief: DynamoDB.DeleteItem
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
+
+  - id: dynamodb.deletetable
+    brief: DynamoDB.DeleteTable
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+
+  - id: dynamodb.describetable
+    brief: DynamoDB.DescribeTable
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+
+  - id: dynamodb.getitem
+    brief: DynamoDB.GetItem
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.consistent_read
+      - ref: aws.dynamodb.projection
+
+  - id: dynamodb.listtables
+    brief: DynamoDB.ListTables
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - id: exclusive_start_table
+        type: string
+        brief: "The value of the `ExclusiveStartTableName` request parameter."
+        examples:
+          - Users
+          - CatsTable
+      - id: table_count
+        type: int
+        brief: "The the number of items in the `TableNames` response parameter."
+        examples:
+          - 20
+      - ref: aws.dynamodb.limit
+
+  - id: dynamodb.putitem
+    brief: DynamoDB.PutItem
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
+
+  - id: dynamodb.query
+    brief: DynamoDB.Query
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - id: scan_forward
+        type: boolean
+        brief: "The value of the `ScanIndexForward` request parameter."
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.consistent_read
+      - ref: aws.dynamodb.limit
+      - ref: aws.dynamodb.projection
+      - ref: aws.dynamodb.attributes_to_get
+      - ref: aws.dynamodb.index_name
+      - ref: aws.dynamodb.select
+
+  - id: dynamodb.scan
+    brief: DynamoDB.Scan
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - id: segment
+        type: int
+        brief: "The value of the `Segment` request parameter."
+        examples:
+          - 10
+      - id: total_segments
+        type: int
+        brief: "The value of the `TotalSegments` request parameter."
+        examples:
+          - 100
+      - id: count
+        type: int
+        brief: "The value of the `Count` response parameter."
+        examples:
+          - 10
+      - id: scanned_count
+        type: int
+        brief: "The value of the `ScannedCount` response parameter."
+        examples:
+          - 50
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.consistent_read
+      - ref: aws.dynamodb.limit
+      - ref: aws.dynamodb.projection
+      - ref: aws.dynamodb.attributes_to_get
+      - ref: aws.dynamodb.index_name
+      - ref: aws.dynamodb.select
+
+  - id: dynamodb.updateitem
+    brief: DynamoDB.UpdateItem
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.item_collection_metrics
+
+  - id: dynamodb.updatetable
+    brief: DynamoDB.UpdateTable
+    extends: aws
+    prefix: aws.dynamodb
+    attributes:
+      - id: attribute_definitions
+        type: string[]
+        brief: "The JSON-serialized value of each item in the `AttributeDefinitions` request field."
+        examples:
+          - '{
+              "AttributeName": "string",
+              "AttributeType": "string"
+             }'
+      - id: global_secondary_index_updates
+        type: string[]
+        brief: "The JSON-serialized value of each item in the the `GlobalSecondaryIndexUpdates` request field."
+        examples:
+          - '{
+              "Create": {
+                "IndexName": "string",
+                "KeySchema": [
+                  {
+                    "AttributeName": "string",
+                    "KeyType": "string"
+                  }
+                ],
+                "Projection": {
+                  "NonKeyAttributes": [ "string" ],
+                  "ProjectionType": "string"
+                },
+                "ProvisionedThroughput": {
+                  "ReadCapacityUnits": number,
+                  "WriteCapacityUnits": number
+                }
+              }'
+      - ref: aws.dynamodb.table_names
+        brief: "A single-element array with the value of the TableName request parameter."
+        examples:
+          - Users
+      - ref: aws.dynamodb.consumed_capacity
+      - ref: aws.dynamodb.provisioned_read_capacity
+      - ref: aws.dynamodb.provisioned_write_capacity
