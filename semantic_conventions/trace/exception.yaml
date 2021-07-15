@@ -11,11 +11,11 @@ groups:
           The type of the exception (its fully-qualified class name, if applicable).
           The dynamic type of the exception should be preferred over the static type
           in languages that support it.
-        examples: ["java.net.ConnectException","OSError"]
+        examples: ["java.net.ConnectException", "OSError"]
       - id: message
         type: string
         brief: The exception message.
-        examples: ["Division by zero","Can't convert 'int' object to str implicitly"]
+        examples: ["Division by zero", "Can't convert 'int' object to str implicitly"]
       - id: stacktrace
         type: string
         brief: >
@@ -50,5 +50,5 @@ groups:
 
     constraints:
       - any_of:
-        - "exception.type"
-        - "exception.message"
+          - "exception.type"
+          - "exception.message"
