@@ -7,16 +7,16 @@ or managing of servers (also known as serverless functions or Function as a Serv
 
 The conventions described in this section are FaaS (function as a service) specific. When FaaS operations occur,
 metric events about those operations will be generated and reported to provide insights into the
-operations. By adding FaaS labels to metric events it allows for finely tuned filtering.
+operations. By adding FaaS attributes to metric events it allows for finely tuned filtering.
 
-**Disclaimer:** These are initial FaaS metric instruments and labels but more may be added in the future.
+**Disclaimer:** These are initial FaaS metric instruments and attributes but more may be added in the future.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
 - [Metric Instruments](#metric-instruments)
   * [FaaS Invocations](#faas-invocations)
-- [Labels](#labels)
+- [Attributes](#attributes)
 - [References](#references)
   * [Metric References](#metric-references)
 <!-- tocstop -->
@@ -47,9 +47,9 @@ Optionally, when applicable:
 | `faas.cpu_usage` | Histogram | milliseconds | Distribution of cpu usage per invocation |
 | `faas.net_io` | Histogram | bytes | Distribution of net I/O usage per invocation |
 
-## Labels
+## Attributes
 
-Below is a table of the labels to be included on FaaS metric events.
+Below is a table of the attributes to be included on FaaS metric events.
 
 | Name | Recommended | Notes and examples |
 |------|-------------|--------------------|
@@ -58,7 +58,7 @@ Below is a table of the labels to be included on FaaS metric events.
 | `faas.invoked_provider` | Yes | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws` |
 | `faas.invoked_region` | Yes | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1` |
 
-More details on these labels, the function name and the difference compared to the faas.invoked_name can be found at the related [FaaS tracing specification](../../trace/semantic_conventions/faas.md).
+More details on these attributes, the function name and the difference compared to the faas.invoked_name can be found at the related [FaaS tracing specification](../../trace/semantic_conventions/faas.md).
 For incoming FaaS executions, the function for which metrics are reported is already described by its [FaaS resource attributes](../../resource/semantic_conventions/faas.md).
 Outgoing FaaS executions are identified using the `faas.invoked_*` attributes above.
 `faas.trigger` SHOULD be included in all metric events while `faas.invoked_*` attributes apply on outgoing FaaS execution events only.
