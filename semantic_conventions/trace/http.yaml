@@ -103,10 +103,10 @@ groups:
     brief: 'Semantic Convention for HTTP Client'
     constraints:
       - any_of:
-        - [http.url]
-        - [http.scheme, http.host, http.target]
-        - [http.scheme, net.peer.name, net.peer.port, http.target]
-        - [http.scheme, net.peer.ip, net.peer.port, http.target]
+          - [http.url]
+          - [http.scheme, http.host, http.target]
+          - [http.scheme, net.peer.name, net.peer.port, http.target]
+          - [http.scheme, net.peer.ip, net.peer.port, http.target]
 
   - id: http.server
     prefix: http
@@ -139,7 +139,7 @@ groups:
         examples: '83.164.160.102'
     constraints:
       - any_of:
-        - [http.scheme, http.host, http.target]
-        - [http.scheme, http.server_name, net.host.port, http.target]
-        - [http.scheme, net.host.name, net.host.port, http.target]
-        - [http.url]
+          - [http.scheme, http.host, http.target]
+          - [http.scheme, http.server_name, net.host.port, http.target]
+          - [http.scheme, net.host.name, net.host.port, http.target]
+          - [http.url]
