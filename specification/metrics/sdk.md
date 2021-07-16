@@ -23,6 +23,7 @@ Table of Contents
 </summary>
 
 * [MeterProvider](#meterprovider)
+* [Measurement Limits](#measurement-limits)
 * [MeasurementProcessor](#measurementprocessor)
 * [MetricProcessor](#metricprocessor)
 * [MetricExporter](#metricexporter)
@@ -39,6 +40,12 @@ TODO:
 * Configure "Views".
 * Configure timing (related to [issue
   1432](https://github.com/open-telemetry/opentelemetry-specification/issues/1432)).
+
+## Measurement Limits
+
+Measurement attributes are exempt from the
+[common rules of attribute limits](../common/common.md#attribute-limits) due to
+the experimental status of the Metrics SDK specification.
 
 ## MeasurementProcessor
 
