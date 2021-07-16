@@ -17,46 +17,46 @@ type and units.
 
 Below is a table of HTTP server metric instruments.
 
-| Name                          | Instrument        | Units        | Description |
-|-------------------------------|-------------------|--------------|-------------|
-| `http.server.duration`        | ValueRecorder     | milliseconds | measures the duration of the inbound HTTP request |
-| `http.server.active_requests` | UpDownSumObserver | requests     | measures the number of concurrent HTTP requests that are currently in-flight |
+| Name                          | Instrument    | Units        | Description                                                                  |
+| ----------------------------- | ------------- | ------------ | ---------------------------------------------------------------------------- |
+| `http.server.duration`        | Histogram     | milliseconds | measures the duration of the inbound HTTP request                            |
+| `http.server.active_requests` | UpDownCounter | requests     | measures the number of concurrent HTTP requests that are currently in-flight |
 
 ### HTTP Client
 
 Below is a table of HTTP client metric instruments.
 
-| Name                   | Instrument    | Units        | Description |
-|------------------------|---------------|--------------|-------------|
-| `http.client.duration` | ValueRecorder | milliseconds | measure the duration of the outbound HTTP request |
+| Name                   | Instrument | Units        | Description                                       |
+| ---------------------- | ---------- | ------------ | ------------------------------------------------- |
+| `http.client.duration` | Histogram  | milliseconds | measure the duration of the outbound HTTP request |
 
 ## Attributes
 
 Below is a table of the attributes that SHOULD be included on `duration` metric events
 and whether they should be on server, client, or both types of HTTP metric events:
 
-| Name               | Type                | Recommended       | Notes and examples |
-|--------------------|---------------------|-------------------|--------------------|
-| `http.method`      | `client` & `server` | Yes               | The HTTP request method. E.g. `"GET"` |
-| `http.host`        | `client` & `server` | see [attribute alternatives](#attribute-alternatives) | The value of the [HTTP host header][]. When the header is empty or not present, this attribute should be the same. |
-| `http.scheme`      | `client` & `server` | see [attribute alternatives](#attribute-alternatives) | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"` |
-| `http.status_code` | `client` & `server` | Optional          | [HTTP response status code][]. E.g. `200` (String) |
-| `http.flavor`      | `client` & `server` | Optional          | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`. |
-| `net.peer.name`    | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
-| `net.peer.port`    | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
-| `net.peer.ip`      | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
+| Name               | Type                | Recommended                                                  | Notes and examples                                                                                                                                                                                                  |
+| ------------------ | ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `http.method`      | `client` & `server` | Yes                                                          | The HTTP request method. E.g. `"GET"`                                                                                                                                                                               |
+| `http.host`        | `client` & `server` | see [attribute alternatives](#attribute-alternatives)        | The value of the [HTTP host header][]. When the header is empty or not present, this attribute should be the same.                                                                                                  |
+| `http.scheme`      | `client` & `server` | see [attribute alternatives](#attribute-alternatives)        | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"`                                                                                                                                    |
+| `http.status_code` | `client` & `server` | Optional                                                     | [HTTP response status code][]. E.g. `200` (String)                                                                                                                                                                  |
+| `http.flavor`      | `client` & `server` | Optional                                                     | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`.                                                                                                                                          |
+| `net.peer.name`    | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
+| `net.peer.port`    | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
+| `net.peer.ip`      | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
 | `http.server_name` | `server`            | see [2] in [attribute alternatives](#attribute-alternatives) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). |
-| `net.host.name`    | `server`            | see [2] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
-| `net.host.port`    | `server`            | see [2] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes) |
+| `net.host.name`    | `server`            | see [2] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
+| `net.host.port`    | `server`            | see [2] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
 
 The following attributes SHOULD be included in the `http.server.active_requests` observation:
 
-| Name               | Recommended | Notes and examples |
-|--------------------|-------------|--------------------|
-| `http.method`      | Yes         | The HTTP request method. E.g. `"GET"` |
-| `http.host`        | see [attribute alternatives](#attribute-alternatives) | The value of the [HTTP host header][]. When the header is empty or not present, this attribute should be the same |
-| `http.scheme`      | see [attribute alternatives](#attribute-alternatives) | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"` |
-| `http.flavor`      | Optional    | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"` |
+| Name               | Recommended                                                  | Notes and examples                                                                                                                                                                                                  |
+| ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `http.method`      | Yes                                                          | The HTTP request method. E.g. `"GET"`                                                                                                                                                                               |
+| `http.host`        | see [attribute alternatives](#attribute-alternatives)        | The value of the [HTTP host header][]. When the header is empty or not present, this attribute should be the same                                                                                                   |
+| `http.scheme`      | see [attribute alternatives](#attribute-alternatives)        | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"`                                                                                                                                    |
+| `http.flavor`      | Optional                                                     | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`                                                                                                                                           |
 | `http.server_name` | see [2] in [attribute alternatives](#attribute-alternatives) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). |
 
 [HTTP host header]: https://tools.ietf.org/html/rfc7230#section-5.4
@@ -67,10 +67,10 @@ The following attributes SHOULD be included in the `http.server.active_requests`
 
 To avoid high cardinality the following attributes SHOULD substitute any parameters when added as attributes to http metric events as described below:
 
-| Attribute name        | Type                | Recommended |  Notes and examples |
-|-------------------|---------------------|-------------|---------------------|
-|`http.url`         | `client` & `server` | see [attribute alternatives](#attribute-alternatives) | The originally requested URL |
-|`http.target`      | `client` & `server` | see [attribute alternatives](#attribute-alternatives) | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/{id}/?q={}"`. |
+| Attribute name | Type                | Recommended                                           | Notes and examples                                                                                     |
+| -------------- | ------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `http.url`     | `client` & `server` | see [attribute alternatives](#attribute-alternatives) | The originally requested URL                                                                           |
+| `http.target`  | `client` & `server` | see [attribute alternatives](#attribute-alternatives) | The full request target as passed in a [HTTP request line][] or equivalent, e.g. `"/path/{id}/?q={}"`. |
 
 [HTTP request line]: https://tools.ietf.org/html/rfc7230#section-3.1.1
 

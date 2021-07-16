@@ -31,9 +31,9 @@ instruments not explicitly defined in the specification.
 
 | Name                   | Description | Units | Instrument Type | Value Type | Attribute Key(s) | Attribute Values                    |
 | ---------------------- | ----------- | ----- | --------------- | ---------- | ---------------- | ----------------------------------- |
-| system.cpu.time        |             | s     | SumObserver     | Double     | state            | idle, user, system, interrupt, etc. |
+| system.cpu.time        |             | s     | Counter         | Double     | state            | idle, user, system, interrupt, etc. |
 |                        |             |       |                 |            | cpu              | CPU number [0..n-1]                 |
-| system.cpu.utilization |             | 1     | ValueObserver   | Double     | state            | idle, user, system, interrupt, etc. |
+| system.cpu.utilization |             | 1     | Gauge           | Double     | state            | idle, user, system, interrupt, etc. |
 |                        |             |       |                 |            | cpu              | CPU number (0..n)                   |
 
 ### `system.memory.` - Memory metrics
@@ -41,35 +41,35 @@ instruments not explicitly defined in the specification.
 **Description:** System level memory metrics. This does not include [paging/swap
 memory](#systempaging---pagingswap-metrics).
 
-| Name                      | Description | Units | Instrument Type   | Value Type | Attribute Key | Attribute Values         |
-| ------------------------- | ----------- | ----- | ----------------- | ---------- | ------------- | ------------------------ |
-| system.memory.usage       |             | By    | UpDownSumObserver | Int64      | state         | used, free, cached, etc. |
-| system.memory.utilization |             | 1     | ValueObserver     | Double     | state         | used, free, cached, etc. |
+| Name                      | Description | Units | Instrument Type | Value Type | Attribute Key | Attribute Values         |
+| ------------------------- | ----------- | ----- | --------------- | ---------- | ------------- | ------------------------ |
+| system.memory.usage       |             | By    | UpDownCounter   | Int64      | state         | used, free, cached, etc. |
+| system.memory.utilization |             | 1     | Gauge           | Double     | state         | used, free, cached, etc. |
 
 ### `system.paging.` - Paging/swap metrics
 
 **Description:** System level paging/swap memory metrics.
-| Name                      | Description                         | Units        | Instrument Type   | Value Type | Attribute Key | Attribute Values |
-| ------------------------- | ----------------------------------- | ------------ | ----------------- | ---------- | ------------- | ---------------- |
-| system.paging.usage       | Unix swap or windows pagefile usage | By           | UpDownSumObserver | Int64      | state         | used, free       |
-| system.paging.utilization |                                     | 1            | ValueObserver     | Double     | state         | used, free       |
-| system.paging.faults      |                                     | {faults}     | SumObserver       | Int64      | type          | major, minor     |
-| system.paging.operations  |                                     | {operations} | SumObserver       | Int64      | type          | major, minor     |
-|                           |                                     |              |                   |            | direction     | in, out          |
+| Name                      | Description                         | Units        | Instrument Type | Value Type | Attribute Key | Attribute Values |
+| ------------------------- | ----------------------------------- | ------------ | --------------- | ---------- | ------------- | ---------------- |
+| system.paging.usage       | Unix swap or windows pagefile usage | By           | UpDownCounter   | Int64      | state         | used, free       |
+| system.paging.utilization |                                     | 1            | Gauge           | Double     | state         | used, free       |
+| system.paging.faults      |                                     | {faults}     | Counter         | Int64      | type          | major, minor     |
+| system.paging.operations  |                                     | {operations} | Counter         | Int64      | type          | major, minor     |
+|                           |                                     |              |                 |            | direction     | in, out          |
 
 ### `system.disk.` - Disk controller metrics
 
 **Description:** System level disk performance metrics.
 | Name                                                      | Description                                     | Units        | Instrument Type | Value Type | Attribute Key | Attribute Values |
 | --------------------------------------------------------- | ----------------------------------------------- | ------------ | --------------- | ---------- | ------------- | ---------------- |
-| system.disk.io<!--notlink-->                              |                                                 | By           | SumObserver     | Int64      | device        | (identifier)     |
+| system.disk.io<!--notlink-->                              |                                                 | By           | Counter         | Int64      | device        | (identifier)     |
 |                                                           |                                                 |              |                 |            | direction     | read, write      |
-| system.disk.operations                                    |                                                 | {operations} | SumObserver     | Int64      | device        | (identifier)     |
+| system.disk.operations                                    |                                                 | {operations} | Counter         | Int64      | device        | (identifier)     |
 |                                                           |                                                 |              |                 |            | direction     | read, write      |
-| system.disk.io_time<sup>[1](#io_time)</sup>               | Time disk spent activated                       | s            | SumObserver     | Double     | device        | (identifier)     |
-| system.disk.operation_time<sup>[2](#operation_time)</sup> | Sum of the time each operation took to complete | s            | SumObserver     | Double     | device        | (identifier)     |
+| system.disk.io_time<sup>[1](#io_time)</sup>               | Time disk spent activated                       | s            | Counter         | Double     | device        | (identifier)     |
+| system.disk.operation_time<sup>[2](#operation_time)</sup> | Sum of the time each operation took to complete | s            | Counter         | Double     | device        | (identifier)     |
 |                                                           |                                                 |              |                 |            | direction     | read, write      |
-| system.disk.merged                                        |                                                 | {operations} | SumObserver     | Int64      | device        | (identifier)     |
+| system.disk.merged                                        |                                                 | {operations} | Counter         | Int64      | device        | (identifier)     |
 |                                                           |                                                 |              |                 |            | direction     | read, write      |
 
 <sup><a name="io_time">1</a></sup> The real elapsed time ("wall clock")
@@ -94,35 +94,35 @@ perf counter (similar for Writes)
 ### `system.filesystem.` - Filesystem metrics
 
 **Description:** System level filesystem metrics.
-| Name                          | Description | Units | Instrument Type   | Value Type | Attribute Key  | Attribute Values     |
-| ----------------------------- | ----------- | ----- | ----------------- | ---------- | -------------- | -------------------- |
-| system.filesystem.usage       |             | By    | UpDownSumObserver | Int64      | device         | (identifier)         |
-|                               |             |       |                   |            | state          | used, free, reserved |
-|                               |             |       |                   |            | type           | ext4, tmpfs, etc.    |
-|                               |             |       |                   |            | mode           | rw, ro, etc.         |
-|                               |             |       |                   |            | mountpoint     | (path)               |
-| system.filesystem.utilization |             | 1     | ValueObserver     | Double     | device         | (identifier)         |
-|                               |             |       |                   |            | state          | used, free, reserved |
-|                               |             |       |                   |            | type           | ext4, tmpfs, etc.    |
-|                               |             |       |                   |            | mode           | rw, ro, etc.         |
-|                               |             |       |                   |            | mountpoint     | (path)               |
+| Name                          | Description | Units | Instrument Type | Value Type | Attribute Key | Attribute Values     |
+| ----------------------------- | ----------- | ----- | --------------- | ---------- | ------------- | -------------------- |
+| system.filesystem.usage       |             | By    | UpDownCounter   | Int64      | device        | (identifier)         |
+|                               |             |       |                 |            | state         | used, free, reserved |
+|                               |             |       |                 |            | type          | ext4, tmpfs, etc.    |
+|                               |             |       |                 |            | mode          | rw, ro, etc.         |
+|                               |             |       |                 |            | mountpoint    | (path)               |
+| system.filesystem.utilization |             | 1     | Gauge           | Double     | device        | (identifier)         |
+|                               |             |       |                 |            | state         | used, free, reserved |
+|                               |             |       |                 |            | type          | ext4, tmpfs, etc.    |
+|                               |             |       |                 |            | mode          | rw, ro, etc.         |
+|                               |             |       |                 |            | mountpoint    | (path)               |
 
 ### `system.network.` - Network metrics
 
 **Description:** System level network metrics.
-| Name                                           | Description                                                                   | Units         | Instrument Type   | Value Type | Attribute Key | Attribute Values                                                                               |
-| ---------------------------------------------- | ----------------------------------------------------------------------------- | ------------- | ----------------- | ---------- | ------------- | ---------------------------------------------------------------------------------------------- |
-| system.network.dropped<sup>[1](#dropped)</sup> | Count of packets that are dropped or discarded even though there was no error | {packets}     | SumObserver       | Int64      | device        | (identifier)                                                                                   |
-|                                                |                                                                               |               |                   |            | direction     | transmit, receive                                                                              |
-| system.network.packets                         |                                                                               | {packets}     | SumObserver       | Int64      | device        | (identifier)                                                                                   |
-|                                                |                                                                               |               |                   |            | direction     | transmit, receive                                                                              |
-| system.network.errors<sup>[2](#errors)</sup>   | Count of network errors detected                                              | {errors}      | SumObserver       | Int64      | device        | (identifier)                                                                                   |
-|                                                |                                                                               |               |                   |            | direction     | transmit, receive                                                                              |
-| system<!--notlink-->.network.io                |                                                                               | By            | SumObserver       | Int64      | device        | (identifier)                                                                                   |
-|                                                |                                                                               |               |                   |            | direction     | transmit, receive                                                                              |
-| system.network.connections                     |                                                                               | {connections} | UpDownSumObserver | Int64      | device        | (identifier)                                                                                   |
-|                                                |                                                                               |               |                   |            | protocol      | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
-|                                                |                                                                               |               |                   |            | state         | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
+| Name                                           | Description                                                                   | Units         | Instrument Type | Value Type | Attribute Key | Attribute Values                                                                               |
+| ---------------------------------------------- | ----------------------------------------------------------------------------- | ------------- | --------------- | ---------- | ------------- | ---------------------------------------------------------------------------------------------- |
+| system.network.dropped<sup>[1](#dropped)</sup> | Count of packets that are dropped or discarded even though there was no error | {packets}     | Counter         | Int64      | device        | (identifier)                                                                                   |
+|                                                |                                                                               |               |                 |            | direction     | transmit, receive                                                                              |
+| system.network.packets                         |                                                                               | {packets}     | Counter         | Int64      | device        | (identifier)                                                                                   |
+|                                                |                                                                               |               |                 |            | direction     | transmit, receive                                                                              |
+| system.network.errors<sup>[2](#errors)</sup>   | Count of network errors detected                                              | {errors}      | Counter         | Int64      | device        | (identifier)                                                                                   |
+|                                                |                                                                               |               |                 |            | direction     | transmit, receive                                                                              |
+| system<!--notlink-->.network.io                |                                                                               | By            | Counter         | Int64      | device        | (identifier)                                                                                   |
+|                                                |                                                                               |               |                 |            | direction     | transmit, receive                                                                              |
+| system.network.connections                     |                                                                               | {connections} | UpDownCounter   | Int64      | device        | (identifier)                                                                                   |
+|                                                |                                                                               |               |                 |            | protocol      | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
+|                                                |                                                                               |               |                 |            | state         | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
 
 <sup><a name="dropped">1</a></sup> Measured as:
 
@@ -146,10 +146,10 @@ from
 
 **Description:** System level aggregate process metrics. For metrics at the
 individual process level, see [process metrics](process-metrics.md).
-| Name                     | Description                                               | Units       | Instrument Type   | Value Type | Attribute Key | Attribute Values                                                                               |
-| ------------------------ | --------------------------------------------------------- | ----------- | ----------------- | ---------- | ------------- | ---------------------------------------------------------------------------------------------- |
-| system.processes.count   | Total number of processes in each state                   | {processes} | UpDownSumObserver | Int64      | status        | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
-| system.processes.created | Total number of processes created over uptime of the host | {processes} | SumObserver       | Int64      | -             | -                                                                                              |
+| Name                     | Description                                               | Units       | Instrument Type | Value Type | Attribute Key | Attribute Values                                                                               |
+| ------------------------ | --------------------------------------------------------- | ----------- | --------------- | ---------- | ------------- | ---------------------------------------------------------------------------------------------- |
+| system.processes.count   | Total number of processes in each state                   | {processes} | UpDownCounter   | Int64      | status        | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
+| system.processes.created | Total number of processes created over uptime of the host | {processes} | Counter         | Int64      | -             | -                                                                                              |
 
 ### `system.{os}.` - OS Specific System Metrics
 
