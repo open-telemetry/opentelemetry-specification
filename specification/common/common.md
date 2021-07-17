@@ -66,11 +66,9 @@ If an SDK provides a way to:
   - for each unique attributes key, addition of which would result in exceeding
     the limit, SDK MUST discard that key/value pair.
 
-There SHOULD be a log emitted to indicate to the user that an attribute was
+There SHOULD NOT be a log emitted to indicate to the user that an attribute was
 truncated or discarded. To prevent excessive logging, the log MUST NOT be
-emitted more than once per record on which an attribute is set. If a record is
-embedded in another record (e.g. Events within a Span), then the log SHOULD NOT
-be emitted more than once per parent record.
+emitted more than once per record on which an attribute is set.
 
 If the SDK implements the limits above, it MUST provide a way to change these
 limits programmatically. Names of the configuration options SHOULD be the same as
