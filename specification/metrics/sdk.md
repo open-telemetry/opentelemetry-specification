@@ -83,8 +83,8 @@ active span](../trace/api.md#context-interaction)).
 
 ### Aggregation MeasurementProcessor
 
-An `Aggregation` `MeasurementProcessor` is responsible for computing instrument
-`Measurements` into [Pre-Aggregated Metrics](./datamodel.md##opentelemetry-protocol-data-model).
+An `Aggregation` `MeasurementProcessor` is responsible for providing incoming
+Instrument `Measurements` to the correct [`Aggregator`](#Aggregator) instances.
 
 The `Aggregation` `MeasurementProcessor` MUST have access to `In-Memory State`.
 
