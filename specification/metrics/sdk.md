@@ -81,178 +81,125 @@ active span](../trace/api.md#context-interaction)).
 +------------------+
 ```
 
+### Aggregation MeasurementProcessor
+
+An `Aggregation` `MeasurementProcessor` is responsible for computing instrument
+`Measurements` into [Pre-Aggregated Metrics](./datamodel.md##opentelemetry-protocol-data-model).
+
+The `Aggregation` `MeasurementProcessor` MUST have access to `In-Memory State`.
+
+The `Aggregation` `MeasurementProcessor` MUST create and configure [`Aggregators`](#Aggregator)
+based on [View](./sdk.md) configuration.
+
+e.g. Create a Sum Aggregator with monotonic values and delta temporality.
+
+The `Aggregation` `MeasurementProcessor` MUST provide `Measurements` to the
+properly configured `Aggregators` based on [View](./sdk.md) configuration.
+
+e.g. A View re-configures a temperature Gauge Instrument to use Histogram
+aggregator (configured for Cumulative temporality).
+
+e.g. A View re-configures a temperature Gauge Instrument to count only by
+Attribute "Location" (e.g. Location=Portland or Location=Seattle). The
+Aggregation MeasurementProcessor provides measurements only to the
+Aggregator instance that handles the specific Attribute Key/Value combination.
+(i.e. "Location=Portland" => Aggregator #1, "Location=Seattle" => Aggregator #2)
+
+```text
+                 +---------------------------+
+                 | Aggregation               |
+                 |    MeasurementProcessor   |
+                 |                           |   +-----------------+
+                 |    ...                    |   |                 |
+ [Measurements]-----> ... <--------------------->| In-Memory State |
+                 |    ...                    |   |                 |     
+                 |     |                     |   +-----------------+
+                 |     |  +--------------+   |
+                 |     |  | Aggregator   |   |
+                 |     |  |              |   |
+                 |     +---->"Update"    |   |
+                 |     |  |    ...       |   |
+                 |     |  |    "Collect"--------[Pre-Aggregated Metrics]-->
+                 |     |  +--------------+   |
+                 |     |                     |
+                 |     |  +--------------+   |
+                 |     |  | Aggregator   |   |
+                 |     |  |              |   |
+                 |     +---->"Update"    |   |
+                 |        |    ...       |   |
+                 |        |    "Collect"--------[Pre-Aggregated Metrics]-->
+                 |        +--------------+   |
+                 |                           |
+                 +---------------------------+
+```
+
+#### Default Instrument to Aggregator Mapping
+
+| Instrument Kind | Default Aggregator | Monotonic | Temporality | Notes |
+| --- | --- | --- | --- | --- |
+| [Counter](./api.md#counter) | [Sum Aggregator](#SumAggregator) | Monotonic | Delta | |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](#SumAggregator) | Monotonic | Cumulative | |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](#SumAggregator) | Non-Monotonic | Delta | |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](#SumAggregator) | Non-Monotonic | Cumulative | |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Gauge Aggregator](#GaugeAggregator) | n/a | Cumulative | |
+| [Histogram](./api.md#histogram) | [Histogram Aggregator](#HistogramAggregator) | n/a | Delta | TBD Boundaries|
+
 ### Aggregator
 
-An `Aggregator` is a type of `MeasurementProcessor` and computes "aggregate"
-data from [Measurements](./api.md#measurement) and its `In-Memory State` into
-zero or more [Pre-Aggregated Metrics](./datamodel.md#timeseries-model).
+An `Aggregator` computes incoming [Measurements](./api.md#measurement) into a
+[Pre-Aggregated Metric](./datamodel.md#opentelemetry-protocol-data-model).
 
-```text
-
-                 +---------------------+
-                 | Aggregator          |
-                 |                     |
- [Measurements]------> "Aggregate"     |
-                 |         |           |
-                 | +-------V---------+ |
-                 | |                 | |
-                 | | In-Memory State | |
-                 | |                 | |
-                 | +-------+---------+ |
-                 |         |           |
-                 |         V           |
-                 |      "Collect" +------[Pre-Aggregated Metrics]-->
-                 |                     |
-                 +---------------------+
-```
-
-An `Aggregator` MUST provide an interface to "aggregate" [Measurement](./api.md#measurement)
-data into its `In-Memory State`.
+An `Aggregator` MUST provide an interface to "update" itself given [Measurement](./api.md#measurement)
+data.
 
 An `Aggregator` MUST provide an interface to "collect" [Pre-Aggregated Metric](./datamodel.md#timeseries-model)
-data from its `In-Memory State`. The collect call should be treated as a
-stateful action and may reset in-memory state data. e.g. Resetting the time window
-for delta temporality instruments.
+data. The collect call should be treated as a stateful action and may reset its
+internal state.
 
-An `Aggregator` MUST have read/write access to memory storage (`In-Memory
-State`) where it can store/retrieve/manage its own internal state.
+The SDK MUST provide the following Aggregators to support the [Metric Points](./datamodel.md#metric-points)
+in the [Metrics Data Model](./datamodel.md).
 
-Note: SDK SHOULD provide configuration and control for memory availability to
-optimize usage. Aggregators MUST log errors when memory limits are reached
-and/or data lost occurs due to memory mitigation strategy. e.g dropping high
-cardinality attributes.
+- [Sum Aggregator](#SumAggregator)
+- [Gauge Aggregator](#GaugeAggregator)
+- [Histogram Aggregator](#HistogramAggregator)
 
-SDK MUST instantiate and configure aggregator/s based on [View](./sdk.md)
-configuration. e.g. Create a Sum aggregator with monotonic values and delta
-temporality (per mapping/routing).
-
-SDK MUST map/route measurements, based on [View](./sdk.md) configuration, to the
-configured aggregator/s. Each map/route has zero or more instances of
-aggregators.
-
-e.g. [View](./sdk.md) configuration specify which Attribute Keys to include,
-thus creating a map/route per configured Key/Value combination. The measurement
-is routed to each route and its configured aggregator/s.
-
-e.g. Support for multiple exporters creates a map/route per Exporter. The
-measurement is routed to each route and its configured aggregator/s.
-
-**Note:** An `Aggregator` instance is scoped to "aggregate" values that result
-in one metric timeseries (see [Metrics Data Model](./datamodel.md)). The SDK
-(via the [View](./sdk.md) configuration) allows Measurements to map/route into
-zero or more resulting metric timeseries (aka Aggregators). One map/route scheme
-involve expanding measurement `Attributes` to combinations of keys and values.
-The SDK will facilitate this map/route scheme. Thus, SDK will create and
-configure aggregators and route measurments to these aggregator instances.
-
-SDK MUST provide aggregators to support the default configured aggregator
-per instrument kind. e.g. Counter instruments default to a "Sum" aggregator
-configured for monotonic values.
-
-### Last Value Aggregator
-
-The Last Value Aggregator collect data for the [Gauge Metric Point](./datamodel.md#gauge)
-and is default aggregator for the following instruments:
-
-* [Asynchronous Gauge](./api.md#asynchronous-gauge) instrument.
-
-Last Value Aggregator maintains the following in memory:
-
-* Last Timestamp<sup>1</sup>
-* Last Value<sup>1</sup>
-
-\[1\]: Data from latest Measurement given, avoiding any time comparison.
-
-### Sum Aggregator
+### SumAggregator
 
 The Sum Aggregator collect data for the [Sum Metric Point](./datamodel.md#sums)
-and is default aggregator for the following instruments:
+and MUST be configurable to support Monotonicity and/or Temporality.
 
-* [Counter](./api.md#counter) instrument.
-* [Asynchronous Counter](./api.md#asynchronous-counter) instrument.
-* [UpDownCounter](./api.md#updowncounter) instrument.
-* [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) instrument.
+Sum Aggregator maintains the following state:
 
-The Sum Aggregator MUST be configurable to support different Monoticity and/or
-Temporality.
+* Start Time<sup>1</sup>
+* Sum (sum of Measurements)
 
-Sum Aggregator maintains the following in memory:
+\[1\]: Start Time is exclusive (aka not inclusive) of the provided time.
 
-* Time window (e.g. start time, end time)
-* Sum (sum of Measurements per Monoticity and Temporality configuration.)
+### GaugeAggregator
 
-### Histogram Aggregator
+The Gauge Aggregator collect data for the [Gauge Metric Point](./datamodel.md#gauge).
+
+Gauge Aggregator maintains the following state:
+
+* Last Timestamp<sup>2</sup>
+* Last Value<sup>2</sup>
+
+\[2\]: Data from latest Measurement given, avoiding any time comparison.
+
+### HistogramAggregator
 
 The Histogram Aggregator collect data for the [Histogram Metric Point](./datamodel.md#histogram)
-and is default aggregator for the following instruments:
+and MUST be configurable to support Temporality and Bucket Boundary values.
 
-* [Histogram](./api.md#histogram) instrument.
+Histogram Aggregator maintains the following state:
 
-The Histogram Aggregator MUST be configurable to support different Temporality
-and bucket Boundary Values.
-
-Histogram Aggregator maintains the following in memory:
-
-* Start Time<sup>2</sup>
+* Start Time<sup>3</sup>
 * Count (count of points in population)
 * Sum (sum of point values in population)
-* Boundary Values
+* Bucket Boundary values
 * Bucket Counts (count of values falling within configured Boundary Values)
 
-\[2\]: Start Time is exclusive (aka not inclusive) of the provided time.
-
-### An example of SDK implementation
-
-SDK expand each Measurement's Attribute by the combination of key/value pairs.
-For each distinct combination, SDK will route to an instance of a configured
-aggregator.
-
-```text
-+------------------+  +-------------------------------------------------------------+
-| MeterProvider    |  | SDK                                                         |
-|   Meter A        |  |                     +----------------------+                |
-|     Instrument X |-----[Measurements]---->| MeasurementProcessor |                |
-|     Instrument Y |  |                     +-----------+----------+                |
-|     ...          |  |                                 |                           |
-|     ...          |  |                           [Measurements]                    |
-+------------------+  |                                 |                           |
-                      |        SDK expand Measurements per View configuration       |
-                      |        (e.g. by Attribute key/value pairs)                  |
-                      |                                 |                           |
-                      |                                 |"Aggregate"                |
-                      | Measurement #1:                 V                           |
-                      |                      +---------------------+                |
-                      |      B=Y ----------->| Aggregator #1 (B=Y) |---->+          |
-                      |                      | In-Memory State:    |     |          |
-                      |                      |   count=1           |     |          |
-                      |                      +---------------------+     |          |
-                      |      A=X -------+                                |          |
-                      |                 |    +---------------------+     |          |
-                      | Measurment #2:  +--->| Aggregator #2 (A=X) |---->|          |
-                      |                 |    | In-Memory State:    |     |          |
-                      |                 |    |   count=2           |     |          |
-                      |                 |    +---------------------+     |          |
-                      |      A=X -------+                                |          |
-                      |                      +---------------------+     |          |
-                      |      B=Z ----------->| Aggregator #3 (B=Z) |---->|          |
-                      |                      | In-Memory State:    |     |          |
-                      |                      |   count=1           |     |          |
-                      |                      +---------------------+     |          |
-                      |                                                  |"Collect" |
-                      |                                                  |          |
-                      |                                              [Metrics]      |
-                      |                                                  |          |
-                      |                                        +---------V-------+  |
-                      |                                        | MetricProcessor |  |
-                      |                                        +---------+-------+  |
-                      |                                                  |          |
-                      |                                              [Metrics]      |
-                      |                                                  |          |
-                      |                                        +---------V-------+  |
-                      |                                        | MetricExporter  |=====> OTLP Collector
-                      |                                        +-----------------+  |
-                      +-------------------------------------------------------------+
-```
+\[3\]: Start Time is exclusive (aka not inclusive) of the provided time.
 
 ## MetricProcessor
 
