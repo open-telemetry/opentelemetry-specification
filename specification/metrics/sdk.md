@@ -115,9 +115,7 @@ are the inputs:
     default behavior should respect the Hint if it is available).
   * The `extra dimensions` which come from Baggage/Context (optional). If not
     provided, no extra dimension will be used. Please note that this only
-    applies to [synchronous Instruments](./api.md#synchronous-instrument), any
-    `extra dimensions` configured on [asynchronous
-    Instruments](./api.md#asynchronous-instrument) will be considered as error.
+    applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, a default
     aggregation will be applied by the SDK. The default aggregation is a TODO
     (e.g. first see if there is an explicitly specified aggregation from the
