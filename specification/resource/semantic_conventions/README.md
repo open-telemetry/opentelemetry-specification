@@ -111,6 +111,8 @@ The identifier SHOULD be stable across different versions of an implementation.
 | `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | No |
 | `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | No |
 | `telemetry.auto.version` | string | The version string of the auto instrumentation agent, if used. | `1.2.3` | No |
+| `telemetry.distro.name` | string | The name string of the distribution, if used. | `acme` | No |
+| `telemetry.distro.version` | string | The version string of the distribution, if used. | `1.2.3` | No |
 
 `telemetry.sdk.language` MUST be one of the following or, if none of the listed values apply, a custom value:
 

@@ -45,3 +45,13 @@ groups:
         brief: >
           The version string of the auto instrumentation agent, if used.
         examples: ["1.2.3"]
+      - id: distro.name
+        type: string
+        brief: >
+          The name string of the distribution, if used.
+        examples: ["acme"]
+      - id: distro.version
+        type: string
+        brief: >
+          The version string of the distribution, if used.
+        examples: ["1.2.3"]

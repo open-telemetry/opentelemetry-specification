@@ -27,6 +27,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Instrumented Library](#instrumented-library)
   * [Instrumentation Library](#instrumentation-library)
   * [Tracer Name / Meter Name](#tracer-name--meter-name)
+  * [OpenTelemetry Distro](#opentelemetry-distro)
 - [Logs](#logs)
   * [Log Record](#log-record)
   * [Log](#log)
@@ -152,6 +153,14 @@ Synonyms: *Instrumenting Library*.
 This refers to the `name` and (optional) `version` arguments specified when
 creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider)).
 The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
+
+### OpenTelemetry Distro
+
+This refers to any pre-configured OpenTelemetry compliant client or library,
+commonly associated with a specific working group, such as a telemetry vendor.
+OpenTelemetry Distros exist in order to encapsulate setup and configuration,
+and they may include a specific set of instrumentation libraries, plugins,
+samplers and other additional components.
 
 ## Logs
 
