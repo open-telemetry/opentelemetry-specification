@@ -45,7 +45,7 @@ See [Attribute Naming](attribute-naming.md) for naming guidelines.
 
 ### Attribute Limits
 
-Execution of erroneous code can result in unintended attributes. If there is no
+Execution of erroneous code can result in unintended attributes. If there are no
 limits placed on attributes, they can quickly exhaust available memory, resulting
 in crashes that are difficult to recover from safely.
 
