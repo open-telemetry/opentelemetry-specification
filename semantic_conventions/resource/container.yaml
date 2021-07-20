@@ -31,4 +31,3 @@ groups:
         brief: >
           Container image tag.
         examples: ['0.1']
-

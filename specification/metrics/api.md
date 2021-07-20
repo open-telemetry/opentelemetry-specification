@@ -152,7 +152,14 @@ the responsibility of the `MeterProvider` instead.
 
 The `Meter` MUST provide functions to create new [Instruments](#instrument):
 
-* [Create a new Counter](#counter-creation) (see the section on `Counter`)
+* [Create a new Counter](#counter-creation)
+* [Create a new Asynchronous Counter](#asynchronous-counter-creation)
+* [Create a new Histogram](#histogram-creation)
+* [Create a new Asynchronous Gauge](#asynchronous-gauge-creation)
+* [Create a new UpDownCounter](#updowncounter-creation)
+* [Create a new Asynchronous UpDownCounter](#asynchronous-updowncounter-creation)
+
+Also see the respective sections below for more information on instrument creation.
 
 ## Instrument
 

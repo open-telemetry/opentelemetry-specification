@@ -1,122 +1,126 @@
 groups:
-    - id: rpc
-      prefix: rpc
-      brief: 'This document defines semantic conventions for remote procedure calls.'
-      attributes:
-        - id: system
-          type: string
-          required: always
-          brief: 'A string identifying the remoting system.'
-          examples: ["grpc", "java_rmi", "wcf"]
-        - id: service
-          type: string
-          required:
-            conditional: "No, but recommended"
-          brief: 'The full (logical) name of the service being called, including its package name, if applicable.'
-          note: >
-            This is the logical name of the service from the RPC interface perspective,
-            which can be different from the name of any implementing class.
-            The `code.namespace` attribute may be used to store the latter
-            (despite the attribute name, it may include a class name;
-            e.g., class with method actually executing the call on the server side,
-            RPC client stub class on the client side).
-          examples: "myservice.EchoService"
-        - id: method
-          type: string
-          required:
-            conditional: "No, but recommended"
-          brief: 'The name of the (logical) method being called, must be equal to the $method part in the span name.'
-          note: >
-            This is the logical name of the method from the RPC interface perspective,
-            which can be different from the name of any implementing method/function.
-            The `code.function` attribute may be used to store the latter
-            (e.g., method actually executing the call on the server side,
-            RPC client stub method on the client side).
-          examples: "exampleMethod"
-        - ref: net.peer.ip
-        - ref: net.peer.name
-        - ref: net.peer.port
-          required:
-            conditional: "See below"
-        - ref: net.transport
-          required:
-            conditional: "See below"
-      constraints:
-        - any_of:
+  - id: rpc
+    prefix: rpc
+    brief: 'This document defines semantic conventions for remote procedure calls.'
+    attributes:
+      - id: system
+        type: string
+        required: always
+        brief: 'A string identifying the remoting system.'
+        examples: ["grpc", "java_rmi", "wcf"]
+      - id: service
+        type: string
+        required:
+          conditional: "No, but recommended"
+        brief: 'The full (logical) name of the service being called, including its package name, if applicable.'
+        note: >
+          This is the logical name of the service from the RPC interface perspective,
+          which can be different from the name of any implementing class.
+          The `code.namespace` attribute may be used to store the latter
+          (despite the attribute name, it may include a class name;
+          e.g., class with method actually executing the call on the server side,
+          RPC client stub class on the client side).
+        examples: "myservice.EchoService"
+      - id: method
+        type: string
+        required:
+          conditional: "No, but recommended"
+        brief: 'The name of the (logical) method being called, must be equal to the $method part in the span name.'
+        note: >
+          This is the logical name of the method from the RPC interface perspective,
+          which can be different from the name of any implementing method/function.
+          The `code.function` attribute may be used to store the latter
+          (e.g., method actually executing the call on the server side,
+          RPC client stub method on the client side).
+        examples: "exampleMethod"
+      - ref: net.peer.ip
+      - ref: net.peer.name
+      - ref: net.peer.port
+        required:
+          conditional: "See below"
+      - ref: net.transport
+        required:
+          conditional: "See below"
+    constraints:
+      - any_of:
           - net.peer.ip
           - net.peer.name
-        - include: network
-    - id: rpc.grpc
-      prefix: rpc.grpc
-      extends: rpc
-      brief: 'Tech-specific attributes for gRPC.'
-      attributes:
-        - id: status_code
-          type:
-            members:
-              - id: OK
-                value: 0
-              - id: CANCELLED
-                value: 1
-              - id: UNKNOWN
-                value: 2
-              - id: INVALID_ARGUMENT
-                value: 3
-              - id: DEADLINE_EXCEEDED
-                value: 4
-              - id: NOT_FOUND
-                value: 5
-              - id: ALREADY_EXISTS
-                value: 6
-              - id: PERMISSION_DENIED
-                value: 7
-              - id: RESOURCE_EXHAUSTED
-                value: 8
-              - id: FAILED_PRECONDITION
-                value: 9
-              - id: ABORTED
-                value: 10
-              - id: OUT_OF_RANGE
-                value: 11
-              - id: UNIMPLEMENTED
-                value: 12
-              - id: INTERNAL
-                value: 13
-              - id: UNAVAILABLE
-                value: 14
-              - id: DATA_LOSS
-                value: 15
-              - id: UNAUTHENTICATED
-                value: 16
-          required: always
-          brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."
-    - id: rpc.jsonrpc
-      prefix: rpc.jsonrpc
-      extends: rpc
-      brief: 'Tech-specific attributes for [JSON RPC](https://www.jsonrpc.org/).'
-      attributes:
-        - id: version
-          type: string
-          required:
-            conditional: 'If missing, it is assumed to be "1.0".'
-          brief: "Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted."
-          examples: ['2.0', '1.0']
-        - id: request_id
-          type: string
-          brief: "`id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification."
-          examples: ['10', 'request-7', '']
-        - id: error_code
-          type: int
-          required:
-            conditional: 'If missing, response is assumed to be successful.'
-          brief: "`error.code` property of response if it is an error response."
-          examples: [-32700, 100]
-        - id: error_message
-          type: string
-          brief: "`error.message` property of response if it is an error response."
-          examples: ['Parse error', 'User already exists']
-        - ref: rpc.method
-          required: always
-          note: >
-           This is always required for jsonrpc. See the note in the general
-           RPC conventions for more information.
+      - include: network
+  - id: rpc.grpc
+    prefix: rpc.grpc
+    extends: rpc
+    brief: 'Tech-specific attributes for gRPC.'
+    attributes:
+      - id: status_code
+        type:
+          members:
+            - id: OK
+              value: 0
+            - id: CANCELLED
+              value: 1
+            - id: UNKNOWN
+              value: 2
+            - id: INVALID_ARGUMENT
+              value: 3
+            - id: DEADLINE_EXCEEDED
+              value: 4
+            - id: NOT_FOUND
+              value: 5
+            - id: ALREADY_EXISTS
+              value: 6
+            - id: PERMISSION_DENIED
+              value: 7
+            - id: RESOURCE_EXHAUSTED
+              value: 8
+            - id: FAILED_PRECONDITION
+              value: 9
+            - id: ABORTED
+              value: 10
+            - id: OUT_OF_RANGE
+              value: 11
+            - id: UNIMPLEMENTED
+              value: 12
+            - id: INTERNAL
+              value: 13
+            - id: UNAVAILABLE
+              value: 14
+            - id: DATA_LOSS
+              value: 15
+            - id: UNAUTHENTICATED
+              value: 16
+        required: always
+        brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."
+  - id: rpc.jsonrpc
+    prefix: rpc.jsonrpc
+    extends: rpc
+    brief: 'Tech-specific attributes for [JSON RPC](https://www.jsonrpc.org/).'
+    attributes:
+      - id: version
+        type: string
+        required:
+          conditional: 'If missing, it is assumed to be "1.0".'
+        brief: "Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted."
+        examples: ['2.0', '1.0']
+      - id: request_id
+        type: string
+        brief: >
+          `id` property of request or response.
+          Since protocol allows id to be int, string, `null` or missing (for notifications),
+          value is expected to be cast to string for simplicity.
+          Use empty string in case of `null` value. Omit entirely if this is a notification.
+        examples: ['10', 'request-7', '']
+      - id: error_code
+        type: int
+        required:
+          conditional: 'If missing, response is assumed to be successful.'
+        brief: "`error.code` property of response if it is an error response."
+        examples: [-32700, 100]
+      - id: error_message
+        type: string
+        brief: "`error.message` property of response if it is an error response."
+        examples: ['Parse error', 'User already exists']
+      - ref: rpc.method
+        required: always
+        note: >
+          This is always required for jsonrpc. See the note in the general
+          RPC conventions for more information.
