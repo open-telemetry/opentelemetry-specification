@@ -135,7 +135,7 @@ release.
 
 ### OpenTelemetry Protocol
 
-- No changes.
+- Allow for OTLP/gRPC exporters to handle endpoint configuration without a scheme while still requiring them to support an endpoint configuration that includes a scheme of `http` or `https`. Reintroduce the insecure configuration option for OTLP/gRPC exporters. ([#1729](https://github.com/open-telemetry/opentelemetry-specification/pull/1729))
 
 ### SDK Configuration
 
