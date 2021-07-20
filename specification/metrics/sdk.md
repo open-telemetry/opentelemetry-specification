@@ -64,61 +64,6 @@ TODO
 
 TODO
 
-### Pipeline
-
-A pipeline is a logical group of:
-
-* An ordered list of [View](#view)s
-* A [MeasurementProcessor](#measurementprocessor)
-* An ordered list of [MetricProcessor](#metricprocessor)s
-* A [MetricExporter](#metricexporter)
-
-```text
-               +----------------------+  +-----------------+
-               |                      |  |                 |
-Measurements --> MeasurementProcessor +--> In-memory state +--+
-               |                      |  |                 |  |
-               +----------------------+  +-----------------+  |
-                                                              |
-  +-----------------------------------------------------------+
-  |
-  |  +-------------------+             +-------------------+ 
-  |  |                   |             |                   | 
-  +--> MetricProcessor 1 +--> ... ... -> MetricProcessor N +--+
-     |                   |             |                   |  |
-     +-------------------+             +-------------------+  |
-                                                              |
-  +-----------------------------------------------------------+
-  |
-  |  +----------------+
-  |  |                |
-  +--> MetricExporter +--> Another process
-     |                |
-     +----------------+
-```
-
-`MeterProvider` MUST support multiple pipelines:
-
-```text
-+------------------+
-| MeterProvider    |
-|   Meter A        +-----> Pipeline 1
-|     Counter X    |
-|     Histogram Y  +-----> ...
-|   Meter B        |       ...
-|     Gauge Z      |
-|     ...          +-----> Pipeline N
-|   ...            |
-+------------------+
-```
-
-Each pipeline has an ordered list of [View](#view)s, which provides
-configuration for:
-
-* Whether the Measurements from a certain Instrument should go through the
-  pipeline or not.
-* How should the Measurements turn into Metrics.
-
 ### View
 
 `View` gives the SDK users flexibility to customize the metrics they want. Here
@@ -146,8 +91,8 @@ are some examples when `View` is needed:
   developer might want this to be converted to a dimension for HTTP server
   metrics (e.g. the request/second from bots vs. real users).
 
-The SDK MUST provide the means to register Views with a [MeterProvider
-Pipeline](#pipeline). Here are the inputs:
+The SDK MUST provide the means to register Views with a `MeterProvider`. Here
+are the inputs:
 
 * The Instrument selection criteria (required), which covers:
   * The `name` of the Instrument(s), with wildcard support (required).
@@ -185,21 +130,18 @@ Pipeline](#pipeline). Here are the inputs:
 The SDK SHOULD use the following logic to determine how to process an
 Instrument:
 
-* Determine the MeterProvider which "owns" the Instrument.
-* If the MeterProvider has no [Pipeline](#pipeline) registered, go to the END.
-* For each Pipeline:
-  * If the Pipeline has no `View` registered, take the Instrument and apply the
-    default configuration.
-  * If the Pipeline has one or more `View`(s) registered, for each View:
-    * If the Instrument could match the instrument selection criteria:
-      * Try to apply the View configuration. If there is an error (e.g. the View
-        asks for extra dimensions from the Baggage, but the Instrument is
-        [asynchronous](./api.md#asynchronous-instrument) which doesn't have
-        Context) or a conflict (e.g. the View requires to export the metrics
-        using a certain name, but the name is already used by another View),
-        provide a way to let the user know (e.g. expose [self-diagnostics
-        logs](../error-handling.md#self-diagnostics)).
-      * Stop processing the remaining Views (proceed to the next Pipeline).
+* Determine the `MeterProvider` which "owns" the Instrument.
+* If the `MeterProvider` has no `View` registered, take the Instrument and apply
+    the default configuration.
+* If the `MeterProvider` has one or more `View`(s) registered, for each View:
+  * If the Instrument could match the instrument selection criteria:
+    * Try to apply the View configuration. If there is an error (e.g. the View
+      asks for extra dimensions from the Baggage, but the Instrument is
+      [asynchronous](./api.md#asynchronous-instrument) which doesn't have
+      Context) or a conflict (e.g. the View requires to export the metrics using
+      a certain name, but the name is already used by another View), provide a
+      way to let the user know (e.g. expose [self-diagnostics
+      logs](../error-handling.md#self-diagnostics)).
 * END.
 
 Here are some examples:
@@ -217,50 +159,43 @@ Here are some examples:
 +------------------+
 '''
 
-meter_provider.start_pipeline(
-    # all the metrics will be exported using the default configuration
-    pipeline: pipeline
-        .set_exporter(ConsoleExporter())
-).start_pipeline(
-    # metrics from X and Y (reported as Foo and Bar) will be exported to Prometheus upon scraping
-    pipeline: pipeline
-        .add_view("X")
-        .add_view("Foo", instrument_name="Y")
-        .add_view(
-            "Bar",
-            instrument_name="Y",
-            aggregation=HistogramAggregation(buckets=[5.0, 10.0, 25.0, 50.0, 100.0]))
-        .set_exporter(PrometheusExporter())
-)
+# metrics from X and Y (reported as Foo and Bar) will be exported
+meter_provider
+    .add_view("X")
+    .add_view("Foo", instrument_name="Y")
+    .add_view(
+        "Bar",
+        instrument_name="Y",
+        aggregation=HistogramAggregation(buckets=[5.0, 10.0, 25.0, 50.0, 100.0]))
+    .set_exporter(PrometheusExporter())
 ```
 
 ```python
-meter_provider.start_pipeline(
-    # all the metrics will be exported using the default configuration
-    pipeline: pipeline
-        .add_view("*") # a wildcard view that matches everything
-        .set_exporter(ConsoleExporter())
-)
+# all the metrics will be exported using the default configuration
+meter_provider.set_exporter(ConsoleExporter())
 ```
 
 ```python
-meter_provider.start_pipeline(
-    # Counter X will be exported as cumulative sum
-    pipeline: pipeline
-        .add_view("X", aggregation=SumAggregation(CUMULATIVE))
-        .set_exporter(ConsoleExporter())
-)
+# all the metrics will be exported using the default configuration
+meter_provider
+    .add_view("*") # a wildcard view that matches everything
+    .set_exporter(ConsoleExporter())
 ```
 
 ```python
-meter_provider.start_pipeline(
-    # Counter X will be exported as delta sum
-    # Histogram Y and Gauge Z will be exported with 2 dimensions (a and b)
-    pipeline: pipeline
-        .add_view("X", aggregation=SumAggregation(DELTA))
-        .add_view("*", attribute_keys=["a", "b"])
-        .set_exporter(ConsoleExporter())
-)
+# Counter X will be exported as cumulative sum
+meter_provider
+    .add_view("X", aggregation=SumAggregation(CUMULATIVE))
+    .set_exporter(ConsoleExporter())
+```
+
+```python
+# Counter X will be exported as delta sum
+# Histogram Y and Gauge Z will be exported with 2 dimensions (a and b)
+meter_provider
+    .add_view("X", aggregation=SumAggregation(DELTA))
+    .add_view("*", attribute_keys=["a", "b"])
+    .set_exporter(ConsoleExporter())
 ```
 
 ## MeasurementProcessor
