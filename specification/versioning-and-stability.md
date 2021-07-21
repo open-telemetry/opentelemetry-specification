@@ -150,7 +150,7 @@ A new, incompatible version of an integration SHOULD be released as a separate c
 **Telemetry stability guarantees are TBD.**
 
 Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid breaking analysis tools, such as dashboards and alerts.
-However, it is not clear at this time what type of instrumentation changes (for example, adding additional spans and labels) would actually cause a breaking change.
+However, it is not clear at this time what type of instrumentation changes (for example, adding additional spans and attributes) would actually cause a breaking change.
 
 #### NOT DEFINED: Semantic Conventions Stability
 

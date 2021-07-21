@@ -2,7 +2,7 @@
 
 **Status**: [Experimental](../../document-status.md)
 
-This document describes instruments and labels for common OS process level
+This document describes instruments and attributes for common OS process level
 metrics in OpenTelemetry. Also consider the [general metric semantic
 conventions](README.md#general-metric-semantic-conventions) when creating
 instruments not explicitly defined in this document. OS process metrics are

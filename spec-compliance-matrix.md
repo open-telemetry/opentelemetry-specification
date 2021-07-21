@@ -143,6 +143,8 @@ Note: Support for environment variables is optional.
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   | +  | - |    |     |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   | +  | - |    |     |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | -    |   | +  | - |    |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 |OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 
@@ -157,7 +159,7 @@ Note: Support for environment variables is optional.
 | [OTLP](specification/protocol/otlp.md)                                         |          |    |   |    |             |      |        |     |      |     |      |       |
 | OTLP/gRPC Exporter                                                             | *        | +  | + | +  | +           |      | +      |     | +    | +   | +    | +     |
 | OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | - | +  | [-][py1106] | +    | +      |     |      | -   | -    | -     |
-| OTLP/HTTP JSON Protobuf Exporter                                               | *        | +  | - | +  | [-][py1003] |      | -      |     |      | -   | -    | -     |
+| OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | - | +  | [-][py1003] |      | -      |     |      | -   | -    | -     |
 | OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | - | +  | +           | +    | -      |     |      | -   | -    | -     |
 | Concurrent sending                                                             |          | -  | + | +  | [-][py1108] |      | -      |     | +    | -   | -    | -     |
 | Honors retryable responses with backoff                                        | X        | +  |   | +  | +           | +    | -      |     |      | -   | -    | -     |
