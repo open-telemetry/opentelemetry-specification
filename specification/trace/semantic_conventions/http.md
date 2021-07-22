@@ -196,7 +196,7 @@ For example, `http.server_name` has shown great value in practice, as bogus HTTP
 
 It is strongly recommended to set `http.server_name` to allow associating requests with some logical server entity.
 
-Note that `net.host.port` is only applicable for ip transports and therefore only required if IP transport is used.
+Note that `net.host.port` is only applicable for IP transports and therefore only required if IP transport is used.
 
 ## HTTP client-server example
 
