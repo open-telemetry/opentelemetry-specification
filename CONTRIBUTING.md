@@ -61,7 +61,7 @@ See:
 ### Semantic Conventions update
 
 Semantic convention is declared in YAML files and markdown tables are
-generated from these files. Read about semantic convention updates [here](./semantic_conventions/syntax.md).
+generated from these files. Read about semantic convention updates [here](./semantic_conventions/README.md).
 
 ### Autoformatting
 
