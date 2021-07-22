@@ -102,7 +102,7 @@ before any HTTP-redirects that may happen when executing the request.
 
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
-* `http.scheme`, [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.transport`](span-general.md), [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
 * `http.scheme`, [`net.peer.ip`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
 <!-- endsemconv -->
 
