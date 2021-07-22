@@ -105,7 +105,8 @@ groups:
       - any_of:
           - [http.url]
           - [http.scheme, http.host, http.target]
-          - [http.scheme, net.transport, net.peer.name, net.peer.port, http.target]
+          - [http.scheme, net.peer.name, net.peer.port, http.target]
+          - [http.scheme, net.peer.name, net.transport, http.target]
           - [http.scheme, net.peer.ip, net.peer.port, http.target]
 
   - id: http.server
