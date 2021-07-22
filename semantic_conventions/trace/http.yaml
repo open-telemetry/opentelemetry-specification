@@ -105,7 +105,7 @@ groups:
       - any_of:
           - [http.url]
           - [http.scheme, http.host, http.target]
-          - [http.scheme, net.peer.name, net.peer.port, http.target]
+          - [http.scheme, net.peer.transport, net.peer.name, net.peer.port (IP only), http.target]
           - [http.scheme, net.peer.ip, net.peer.port, http.target]
 
   - id: http.server
@@ -140,6 +140,6 @@ groups:
     constraints:
       - any_of:
           - [http.scheme, http.host, http.target]
-          - [http.scheme, http.server_name, net.host.port, http.target]
-          - [http.scheme, net.host.name, net.host.port, http.target]
+          - [http.scheme, http.server_name, net.host.port (ip only), http.target]
+          - [http.scheme, net.host.name, net.host.port (ip only), http.target]
           - [http.url]
