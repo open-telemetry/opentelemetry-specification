@@ -66,23 +66,23 @@ TODO
 
 ### View
 
-`View` gives the SDK users flexibility to customize the metrics they want. Here
-are some examples when `View` is needed:
+A `View` provides SDK users with the flexibility to customize the metrics that
+are output by the SDK. Here are some examples when a `View` might be needed:
 
-* Customize which [Instrument](./api.md#instrument) to be processed/ignored. For
-  example, an [instrumented library](../glossary.md#instrumented-library) can
-  provide both temperature and humidity, but the application developer only
-  wants temperature information.
+* Customize which [Instruments](./api.md#instrument) are to be
+  processed/ignored. For example, an [instrumented
+  library](../glossary.md#instrumented-library) can provide both temperature and
+  humidity, but the application developer might only want temperature.
 * Customize the aggregation - if the default aggregation associated with the
-  Instrument does not meet the expectation. For example, an HTTP client library
-  might expose HTTP client request duration as [Histogram](./api.md#histogram)
-  by default, but the application developer only wants the total count of
-  outgoing requests.
-* Customize which attribute(s) to be reported as metrics dimension(s). For
+  Instrument does not meet the needs of the user. For example, an HTTP client
+  library might expose HTTP client request duration as
+  [Histogram](./api.md#histogram) by default, but the application developer
+  might only want the total count of outgoing requests.
+* Customize which attribute(s) are to be reported as metrics dimension(s). For
   example, an HTTP server library might expose HTTP verb (e.g. GET, POST) and
   HTTP status code (e.g. 200, 301, 404). The application developer might only
   care about HTTP status code (e.g. reporting the total count of HTTP requests
-  for each HTTP status code). There are also extreme scenario that the
+  for each HTTP status code). There could also be extreme scenarios in which the
   application developer does not need any dimension (e.g. just get the total
   count of all incoming requests).
 * Add additional dimension(s) from the [Context](../context/context.md). For
@@ -125,8 +125,8 @@ are the inputs:
     25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0,
     500.0], (500.0, 1000.0], (1000.0, +&infin;).
 
-The SDK SHOULD use the following logic to determine how to process an
-Instrument:
+The SDK SHOULD use the following logic to determine how to process Measurements
+made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
 * If the `MeterProvider` has no `View` registered, take the Instrument and apply
