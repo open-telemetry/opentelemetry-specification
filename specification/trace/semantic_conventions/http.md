@@ -102,7 +102,8 @@ before any HTTP-redirects that may happen when executing the request.
 
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
-* `http.scheme`, [`net.transport`](span-general.md), [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.peer.name`](span-general.md), [`net.transport`](span-general.md), `http.target`
 * `http.scheme`, [`net.peer.ip`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
 <!-- endsemconv -->
 
@@ -111,7 +112,7 @@ from the `net.peer.name`
 used to look up the `net.peer.ip` that is actually connected to.
 In that case it is strongly recommended to set the `net.peer.name` attribute in addition to `http.host`.
 
-Note that `net.peer.port` is only applicable for ip transports and therefore only required if IP transport is used.
+If transport is not based on IP `net.peer.port` is not applicable. Instead `net.transport` must be set.
 
 ## HTTP server
 
