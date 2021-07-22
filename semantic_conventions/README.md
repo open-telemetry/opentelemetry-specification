@@ -15,7 +15,7 @@ i.e.:
 ## Writing semantic conventions
 
 Refer to the [syntax](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions/syntax.md)
-for how to write the YAML files for semantic conventions.
+for how to write the YAML files for semantic conventions and what the YAML properties mean.
 
 A schema file for VS code is configured in the `/.vscode/settings.json` of this
 repository, enabling auto-completion and additional checks. Refer to
@@ -39,7 +39,3 @@ See also:
 
 * [Markdown Tables](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#markdown-tables)
 * [Code Generator](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#code-generator)
-
-## Description of the model
-
-The fields and their expected values are presented in [syntax.md](./syntax.md).
