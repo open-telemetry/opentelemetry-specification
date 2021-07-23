@@ -112,8 +112,6 @@ from the `net.peer.name`
 used to look up the `net.peer.ip` that is actually connected to.
 In that case it is strongly recommended to set the `net.peer.name` attribute in addition to `http.host`.
 
-If transport is not based on IP `net.peer.port` is not applicable. Instead `net.transport` must be set.
-
 ## HTTP server
 
 To understand the attributes defined in this section, it is helpful to read the "Definitions" subsection.
@@ -196,8 +194,6 @@ Of course, more than the required attributes can be supplied, but this is recomm
 For example, `http.server_name` has shown great value in practice, as bogus HTTP Host headers occur often in the wild.
 
 It is strongly recommended to set `http.server_name` to allow associating requests with some logical server entity.
-
-Note that `net.host.port` is only applicable for IP transports and therefore only required if IP transport is used.
 
 ## HTTP client-server example
 
