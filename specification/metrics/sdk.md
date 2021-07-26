@@ -255,6 +255,79 @@ active span](../trace/api.md#context-interaction)).
 +------------------+
 ```
 
+## Exemplars
+
+An [Exemplar](./datamodel.md#exemplars) is a recorded measurement that exposes
+the following pieces of information:
+
+- The `value` that was recorded.
+- The `time` the measurement was seen.
+- The set of [Attributes](../common/common.md#attributes) associated with the measurement not already included in a metric data point.
+- The associated [trace id and span id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active parent [Span within Context](../trace/api.md#determining-the-parent-span-from-a-context) of the measurement.
+
+A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
+
+A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have memory overhead related to exemplar sampling.
+
+A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
+
+<!-- TODO: The wording of this is completely dependend on the Aggreagor specification. -->
+A Metric SDK MUST allow exemplar sampling to leverage the configuration of a metric aggregator.  For example,
+Exemplar sampling of histograms should be able to leverage bucket boundaries.
+
+<!-- Note:  I'm fine dropping these interfaces for the first release. -->
+A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
+
+- `ExemplarFilter`: filter which measurements can become exemplars
+- `ExemplarReservoir`: determine how to store exemplars.
+
+### Exemplar Filter
+
+The `ExemplarFilter` interface MUST provide a method to determine if a
+measurement should be sampled.  
+
+This interface SHOULD have access to:
+
+- The value of the measurement.
+- The `Attributes` of the measurment.
+- the `Context` of the measuremnt.
+- The timestamp of the measurement.
+
+See [Defaults and Configuration](#defaults-and-configuration) for built-in
+filters.
+
+### Exemplar Reservoir
+
+The `ExemplarReservoir` interface MUST provide a method to offer measurements
+to the reservoir and another to collect accumulated Exemplars.
+
+The "offer" method SHOULD accept measurements, including:
+
+- value
+- `Attributes`
+- `Context`
+- timestamp
+
+The "offer" method SHOULD have the ability to pull associated trace and span
+information without needing to record full context.  In other words, current
+span context and baggage can be inspected at this point.
+
+The "offer" method does not need to store all measurements it is given and
+MAY further sample beyond the `ExemplarFilter`.
+
+The "collect" method MUST return accumulated `Exemplar`s.  
+
+These `Exemplar`s MUST have their attributes filtered by an aggregator 
+(or after the aggregator) when generating final Metric data points to ensure a 
+complete view of the attributes from the original measurement.  This does not
+need to be part of the `ExemplarReservoir` interface, but SDKs may choose to
+include it.
+
+<!-- Note: ok to remove this, but it's not a hard requirement.-->
+The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
+
+<!-- TODO: Should we propose default/simple implementations? -->
+
 ## MetricExporter
 
 `MetricExporter` defines the interface that protocol-specific exporters MUST
@@ -308,3 +381,20 @@ Push Metric Exporter sends the data on its own schedule. Here are some examples:
 Pull Metric Exporter reacts to the metrics scrapers and reports the data
 passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
+
+## Defaults and Configuration
+
+And SDK MUST provide the following configuration parameters for Exemplar
+sampling:
+
+<!-- TODO: reservoir config?-->
+
+| Name            | Description | Default | Notes |
+|-----------------|---------|-------------|---------|
+| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"WITH_SAMPLED_TRACE"` | |
+
+Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
+
+- `"NONE"`: No measurements are eligble for exemplar sampling.
+- `"ALL"`: All measurements are eligible for exemplar sampling.
+- `"WITH_SAMPLED_TRACE"`: Only allow measurements with a sampled parent span in context.
