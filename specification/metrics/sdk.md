@@ -141,8 +141,9 @@ made with an Instrument:
 * Determine the `MeterProvider` which "owns" the Instrument.
 * If the `MeterProvider` has no `View` registered, take the Instrument and apply
     the default configuration.
-* If the `MeterProvider` has one or more `View`(s) registered, for each View:
-  * If the Instrument could match the instrument selection criteria:
+* If the `MeterProvider` has one or more `View`(s) registered:
+  * For each View, if the Instrument could match the instrument selection
+    criteria:
     * Try to apply the View configuration. If there is an error (e.g. the View
       asks for extra dimensions from the Baggage, but the Instrument is
       [asynchronous](./api.md#asynchronous-instrument) which doesn't have
