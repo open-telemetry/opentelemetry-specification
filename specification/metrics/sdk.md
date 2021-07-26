@@ -95,7 +95,8 @@ The SDK MUST provide the means to register Views with a `MeterProvider`. Here
 are the inputs:
 
 * The Instrument selection criteria (required), which covers:
-  * The `name` of the Instrument(s), with wildcard support (required).
+  * The `type` of the Instrument(s) (optional).
+  * The `name` of the Instrument(s), with wildcard support (optional).
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
@@ -103,6 +104,15 @@ are the inputs:
     a strong typed language MAY support point type (e.g. allow the users to
     select Instruments based on whether the underlying type is integer or
     double).
+  * The criteria SHOULD be treated as additive, which means the Instrument has
+    to meet _all_ the provided criteria. For example, if the criteria are
+    _instrument name == "Foobar"_ and _instrument type is Histogram_, it will be
+    treated as _(instrument name == "Foobar") AND (instrument type is
+    Histogram)_.
+  * If _none_ the optional criteria is provided, the SDK SHOULD treat it as an
+    error. It is recommended that the SDK implementations fail fast. Please
+    refer to [Error handling in OpenTelemetry](error-handling.md) for the
+    general guidance.
 * The `name` of the View (optional). If not provided, the Instrument `name`
   would be used by default. This will be used as the name of the [metrics
   stream](./datamodel.md#events--data-stream--timeseries).
