@@ -88,22 +88,25 @@ Instrument `Measurements` to the correct [`Aggregator`](#Aggregator) instances.
 
 The `Aggregation` `MeasurementProcessor` MUST have access to `In-Memory State`.
 
-The `Aggregation` `MeasurementProcessor` MUST create and configure [`Aggregators`](#Aggregator)
-based on [View](./sdk.md) configuration.
+The `Aggregation` `MeasurementProcessor` MUST create and configure
+[`Aggregators`](#Aggregator) based on [View](./sdk.md) configuration.
 
 e.g. Create a Sum Aggregator with monotonic values and delta temporality.
 
 The `Aggregation` `MeasurementProcessor` MUST provide `Measurements` to the
 properly configured `Aggregators` based on [View](./sdk.md) configuration.
 
-e.g. A View re-configures a temperature Gauge Instrument to use Histogram
-aggregator (configured for Cumulative temporality).
+e.g. A View re-configures a temperature Gauge Instrument to use a Histogram
+aggregator with custom bucket boundaries and cumulative temporality.
 
-e.g. A View re-configures a temperature Gauge Instrument to count only by
-Attribute "Location" (e.g. Location=Portland or Location=Seattle). The
-Aggregation MeasurementProcessor provides measurements only to the
-Aggregator instance that handles the specific Attribute Key/Value combination.
+e.g. A View re-configures a temperature Gauge Instrument to count by Attribute
+"Location" (e.g. "Location=Portland" or "Location=Seattle"). The Aggregation
+MeasurementProcessor provides measurements to the Aggregator instance that
+handles the specific Attribute Key/Value combination.
 (i.e. "Location=Portland" => Aggregator #1, "Location=Seattle" => Aggregator #2)
+
+e.g. A View re-configures a temperature Gauge Instrument to be ignored and not
+generate any metrics.
 
 ```text
                  +---------------------------+
@@ -133,7 +136,69 @@ Aggregator instance that handles the specific Attribute Key/Value combination.
                  +---------------------------+
 ```
 
-#### Default Instrument to Aggregator Mapping
+### Aggregator
+
+An `Aggregator` computes incoming [Measurements](./api.md#measurement) into
+[Pre-Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model).
+
+An `Aggregator` MUST provide a mean to "update" itself given
+[Measurement](./api.md#measurement) data.
+
+An `Aggregator` MUST provide a mean to "collect"
+[Pre-Aggregated Metric](./datamodel.md#timeseries-model) data.
+The collect call should be treated as a stateful action and may reset its
+internal state.
+
+e.g. When an Exporter (support only Cumulative temporality) collects from
+a SumAggregator with delta temporality, the Exporter may drop the metrics OR
+support DELTA to CUMULATIVE conversion.
+
+e.g. When an Exporter (support only Delta temporality) collects from
+a SumAggregator with cumulative temporality, the Exporter may drop the metrics
+OR support CUMULATIVE TO DELTA conversion.
+
+The SDK MUST provide the following Aggregators to support the
+[Metric Points](./datamodel.md#metric-points) in the
+[Metrics Data Model](./datamodel.md).
+
+- [Sum Aggregator](#SumAggregator)
+- [Last Value Aggregator](#LastValueAggregator) (For Gauge Metric Point)
+- [Explicit Bucket Histogram Aggregator](#ExplicitBucketHistogramAggregator)
+
+#### SumAggregator
+
+The Sum Aggregator collect data for the
+[Sum Metric Point](./datamodel.md#sums)
+and reports the arithmetic sum of seen `Measurements`.
+This Aggregator may be configured for monoticity and temporality.
+
+A [Default Aggregator](#DefaultAggregators) MUST be provided.
+
+#### LastValueAggregator
+
+The Last Value Aggregator collect data for the
+[Gauge Metric Point](./datamodel.md#gauge)
+and reports the last seen `Measurement`.
+
+A [Default Aggregator](#DefaultAggregators) MUST be provided.
+
+#### ExplicitBucketHistogramAggregator
+
+The Explict Bucket Histogram Aggregator collect data for the
+[Histogram Metric Point](./datamodel.md#histogram)
+and reports a histogram with explict bucket boundaries of seen `Measurements`.
+This Aggregator may be configured for custom bucket boundaries, monoticity, and
+temporality.
+
+A [Default Aggregator](#DefaultAggregators) MUST be provided.
+
+This Aggregator MUST also report on the arithmetic sum of seen `Measurements`.
+The [Histogram Metric Point](./datamodel.md#histogram) requires Sum.
+
+### DefaultAggregators
+
+An `Aggregation` `MeasurementProcessor` MUST provide the following default
+`Aggregators`.
 
 | Instrument Kind | Default Aggregator | Monotonic | Temporality | Notes |
 | --- | --- | --- | --- | --- |
@@ -141,65 +206,8 @@ Aggregator instance that handles the specific Attribute Key/Value combination.
 | [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](#SumAggregator) | Monotonic | Cumulative | |
 | [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](#SumAggregator) | Non-Monotonic | Delta | |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](#SumAggregator) | Non-Monotonic | Cumulative | |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Gauge Aggregator](#GaugeAggregator) | n/a | Cumulative | |
-| [Histogram](./api.md#histogram) | [Histogram Aggregator](#HistogramAggregator) | n/a | Delta | TBD Boundaries|
-
-### Aggregator
-
-An `Aggregator` computes incoming [Measurements](./api.md#measurement) into a
-[Pre-Aggregated Metric](./datamodel.md#opentelemetry-protocol-data-model).
-
-An `Aggregator` MUST provide an interface to "update" itself given [Measurement](./api.md#measurement)
-data.
-
-An `Aggregator` MUST provide an interface to "collect" [Pre-Aggregated Metric](./datamodel.md#timeseries-model)
-data. The collect call should be treated as a stateful action and may reset its
-internal state.
-
-The SDK MUST provide the following Aggregators to support the [Metric Points](./datamodel.md#metric-points)
-in the [Metrics Data Model](./datamodel.md).
-
-- [Sum Aggregator](#SumAggregator)
-- [Gauge Aggregator](#GaugeAggregator)
-- [Histogram Aggregator](#HistogramAggregator)
-
-### SumAggregator
-
-The Sum Aggregator collect data for the [Sum Metric Point](./datamodel.md#sums)
-and MUST be configurable to support Monotonicity and/or Temporality.
-
-Sum Aggregator maintains the following state:
-
-* Start Time<sup>1</sup>
-* Sum (sum of Measurements)
-
-\[1\]: Start Time is exclusive (aka not inclusive) of the provided time.
-
-### GaugeAggregator
-
-The Gauge Aggregator collect data for the [Gauge Metric Point](./datamodel.md#gauge).
-
-Gauge Aggregator maintains the following state:
-
-* Last Timestamp<sup>2</sup>
-* Last Value<sup>2</sup>
-
-\[2\]: Data from latest Measurement given, avoiding any time comparison.
-
-### HistogramAggregator
-
-The Histogram Aggregator collect data for the [Histogram Metric Point](./datamodel.md#histogram)
-and MUST be configurable to support Temporality and Bucket Boundary values.
-
-Histogram Aggregator maintains the following state:
-
-* Start Time<sup>3</sup>
-* Count (count of points in population)
-* Sum (sum of point values in population)
-* Bucket Boundary values
-* Bucket Counts (count of values falling within configured Boundary Values)
-
-\[3\]: Start Time is exclusive (aka not inclusive) of the provided time.
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](#LastValueAggregator) | Non-Monotonic | Cumulative | |
+| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](#ExplicitBucketHistogramAggregator) | Monotonic | Delta | Default Bucket Boundaries |
 
 ## MetricProcessor
 
