@@ -150,6 +150,12 @@ made with an Instrument:
       a certain name, but the name is already used by another View), provide a
       way to let the user know (e.g. expose [self-diagnostics
       logs](../error-handling.md#self-diagnostics)).
+  * If the Instrument could not match with any of the registered `View`(s), the
+    SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
+    the user to turn off the default behavior via MeterProvider (which means the
+    Instrument will be ignored when there is no match). Individual
+    implementations can decide what the default behavior is, and how to turn the
+    default behavior off.
 * END.
 
 Here are some examples:
