@@ -155,7 +155,7 @@ support DELTA to CUMULATIVE conversion.
 
 e.g. When an Exporter (support only Delta temporality) collects from
 a SumAggregator with cumulative temporality, the Exporter may drop the metrics
-OR support CUMULATIVE TO DELTA conversion.
+OR support CUMULATIVE to DELTA conversion.
 
 The SDK MUST provide the following Aggregators to support the
 [Metric Points](./datamodel.md#metric-points) in the
@@ -195,10 +195,24 @@ A [Default Aggregator](#DefaultAggregators) MUST be provided.
 This Aggregator MUST also report on the arithmetic sum of seen `Measurements`.
 The [Histogram Metric Point](./datamodel.md#histogram) requires Sum.
 
+#### Example of In-Memory State
+
+The following are examples of `In-Memory State`:
+
+| Aggregator | In-Memory State |
+| --- | --- |
+| Sum | Start Time<sup>1</sup><br>Sum (arithmetic sum of measurements) |
+| Last Value | Last Timestamp<sup>2</sup><br>Last Value<sup>2</sup> |
+| Explicit Bucket Histogram | Start Time<sup>1</sup><br>Count (count of points in population)<br>Sum (arithmetic sum of point values in population)<br>Bucket Counts (count of values falling within configured Boundary Values) |
+
+\[1\]: Start Time is exclusive (e.g. not inclusive) of the provided time.
+
+\[2\]: From latest measurement given, avoiding any time comparison.
+
 ### DefaultAggregators
 
-An `Aggregation` `MeasurementProcessor` MUST provide the following default
-`Aggregators`.
+An `Aggregation` `MeasurementProcessor` MUST provide the following **DEFAULT**
+`Aggregators` based on the reporting Instrument.
 
 | Instrument Kind | Default Aggregator | Monotonic | Temporality | Notes |
 | --- | --- | --- | --- | --- |
