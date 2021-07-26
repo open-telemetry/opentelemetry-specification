@@ -184,9 +184,9 @@ A [Default Aggregator](#DefaultAggregators) MUST be provided.
 
 #### ExplicitBucketHistogramAggregator
 
-The Explict Bucket Histogram Aggregator collect data for the
+The Explicit Bucket Histogram Aggregator collect data for the
 [Histogram Metric Point](./datamodel.md#histogram)
-and reports a histogram with explict bucket boundaries of seen `Measurements`.
+and reports a histogram with explicit bucket boundaries of seen `Measurements`.
 This Aggregator may be configured for custom bucket boundaries, monoticity, and
 temporality.
 
