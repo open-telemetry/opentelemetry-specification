@@ -256,12 +256,12 @@ Instrument `Measurements` to the correct [`Aggregator`](#Aggregator) instances.
 The `Aggregation` `MeasurementProcessor` MUST have access to `In-Memory State`.
 
 The `Aggregation` `MeasurementProcessor` MUST create and configure
-[`Aggregators`](#Aggregator) based on [View](./sdk.md) configuration.
+[`Aggregators`](#Aggregator) based on [View](#View) configuration.
 
 e.g. Create a Sum Aggregator with monotonic values and delta temporality.
 
 The `Aggregation` `MeasurementProcessor` MUST provide `Measurements` to the
-correct and properly configured `Aggregators` based on [View](./sdk.md)
+correct and properly configured `Aggregators` based on [View](#View)
 configuration.
 
 e.g. A View re-configures a temperature Gauge Instrument to use a Histogram
@@ -389,7 +389,9 @@ An `Aggregation` `MeasurementProcessor` MUST provide the following **DEFAULT**
 | [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](#SumAggregator) | Non-Monotonic | Delta | |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](#SumAggregator) | Non-Monotonic | Cumulative | |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](#LastValueAggregator) | Non-Monotonic | Cumulative | |
-| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](#ExplicitBucketHistogramAggregator) | Monotonic | Delta | Default Bucket Boundaries |
+| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](#ExplicitBucketHistogramAggregator) | Monotonic | Delta | Default Bucket Boundaries<sup>1</sup> |
+
+\[1\]: Default Bucket Boundaries: (-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;)
 
 ## MetricProcessor
 
