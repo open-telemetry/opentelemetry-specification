@@ -56,6 +56,7 @@ Known values for `OTEL_TRACES_SAMPLER` are:
 - `"parentbased_always_on"`: `ParentBased(root=AlwaysOnSampler)`
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
+- `"xray"`: [AWS X-Ray Centralized Sampling](https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html) (_third party_)
 
 Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may be set as follows:
 
