@@ -9,6 +9,7 @@ Table of Contents
 
 - [Attributes](#attributes)
   - [Attribute Limits](#attribute-limits)
+    - [Exempt Entities](#exempt-entities)
 
 </details>
 
@@ -85,3 +86,9 @@ general limit.
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
+
+#### Exempt Entities
+
+Attributes which belong to Metrics MUST NOT implement the aforementioned
+limits at ths time as discussed in
+[Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).

@@ -41,11 +41,12 @@ TODO:
 * Configure timing (related to [issue
   1432](https://github.com/open-telemetry/opentelemetry-specification/issues/1432)).
 
-## Measurement Limits
+## Attribute Limits
 
-Measurement attributes are exempt from the
-[common rules of attribute limits](../common/common.md#attribute-limits) due to
-the experimental status of the Metrics SDK specification.
+Attributes which belong to Metrics MUST NOT implement limits from the
+[common rules of attribute limits](../common/common.md#attribute-limits) at this
+time. Attribute truncation or deletion could affect identitity of metric time
+series and it requires further analysis.
 
 ## MeasurementProcessor
 
