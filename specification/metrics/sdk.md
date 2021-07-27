@@ -43,7 +43,7 @@ TODO:
 
 ## Attribute Limits
 
-Attributes which belong to Metrics MUST NOT implement limits from the
+Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identitity of metric time
 series and it requires further analysis.

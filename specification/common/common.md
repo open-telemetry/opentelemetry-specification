@@ -89,6 +89,6 @@ general limit.
 
 #### Exempt Entities
 
-Attributes which belong to Metrics MUST NOT implement the aforementioned
-limits at ths time as discussed in
+Attributes, which belong to Metrics, are exempt from the limits described above
+at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
