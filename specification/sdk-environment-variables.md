@@ -67,6 +67,8 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
   - `initialSamplingRate`:  in the [0..1] range, which is used as the sampling probability when the backend cannot be reached to retrieve a sampling strategy. This value stops having an effect once a sampling strategy is retrieved successfully, as the remote strategy will be used until a new update is retrieved.
   - Example: `endpoint=localhost:14250,pollingIntervalMs=5000,initialSamplingRate=0.25`
 
+## Batch Span Processor
+
 **Status**: [Stable](document-status.md)
 
 | Name                           | Description                                    | Default | Notes                                                 |
