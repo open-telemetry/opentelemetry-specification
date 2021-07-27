@@ -23,7 +23,7 @@ Table of Contents
 </summary>
 
 * [MeterProvider](#meterprovider)
-* [Measurement Limits](#measurement-limits)
+* [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
 * [MetricProcessor](#metricprocessor)
 * [MetricExporter](#metricexporter)
