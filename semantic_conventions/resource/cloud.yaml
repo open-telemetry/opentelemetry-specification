@@ -8,6 +8,9 @@ groups:
         type:
           allow_custom_values: true
           members:
+            - id: Aliyun
+              value: 'aliyun'
+              brief: 'Alibaba Cloud (Aliyun)'
             - id: AWS
               value: 'aws'
               brief: 'Amazon Web Services'
@@ -45,6 +48,12 @@ groups:
         type:
           allow_custom_values: true
           members:
+            - id: aliyun_ecs
+              value: 'aliyun_ecs'
+              brief: Aliyun Elastic Compute Service
+            - id: aliyun_fc
+              value: 'aliyun_fc'
+              brief: Aliyun Function Compute
             - id: aws_ec2
               value: 'aws_ec2'
               brief: AWS Elastic Compute Cloud
