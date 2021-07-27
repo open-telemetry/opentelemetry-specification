@@ -94,7 +94,8 @@ The `Aggregation` `MeasurementProcessor` MUST create and configure
 e.g. Create a Sum Aggregator with monotonic values and delta temporality.
 
 The `Aggregation` `MeasurementProcessor` MUST provide `Measurements` to the
-properly configured `Aggregators` based on [View](./sdk.md) configuration.
+correct and properly configured `Aggregators` based on [View](./sdk.md)
+configuration.
 
 e.g. A View re-configures a temperature Gauge Instrument to use a Histogram
 aggregator with custom bucket boundaries and cumulative temporality.
@@ -105,35 +106,35 @@ MeasurementProcessor provides measurements to the Aggregator instance that
 handles the specific Attribute Key/Value combination.
 (i.e. "Location=Portland" => Aggregator #1, "Location=Seattle" => Aggregator #2)
 
-e.g. A View re-configures a temperature Gauge Instrument to be ignored and not
-generate any metrics.
+e.g. A View re-configures a temperature Gauge Instrument to not provide
+measurements to any Aggregator.
 
 ```text
-                 +---------------------------+
-                 | Aggregation               |
-                 |    MeasurementProcessor   |
-                 |                           |   +-----------------+
-                 |    ...                    |   |                 |
- [Measurements]-----> ... <--------------------->| In-Memory State |
-                 |    ...                    |   |                 |     
-                 |     |                     |   +-----------------+
-                 |     |  +--------------+   |
-                 |     |  | Aggregator   |   |
-                 |     |  |              |   |
-                 |     +---->"Update"    |   |
-                 |     |  |    ...       |   |
-                 |     |  |    "Collect"--------[Pre-Aggregated Metrics]-->
-                 |     |  +--------------+   |
-                 |     |                     |
-                 |     |  +--------------+   |
-                 |     |  | Aggregator   |   |
-                 |     |  |              |   |
-                 |     +---->"Update"    |   |
-                 |        |    ...       |   |
-                 |        |    "Collect"--------[Pre-Aggregated Metrics]-->
-                 |        +--------------+   |
-                 |                           |
-                 +---------------------------+
+                 +----------------------------+
+                 | Aggregation                |
+                 |    MeasurementProcessor    |
+                 |                            |   +-----------------+
+                 |    ...                     |   |                 |
+ [Measurements]-----> ... <---------------------->| In-Memory State |
+                 |    ...                     |   |                 |     
+                 |     |                      |   +-----------------+
+                 |     |  +---------------+   |
+                 |     |  | Aggregator #1 |   |
+                 |     |  |               |   |
+                 |     +---->"Update"     |   |
+                 |     |  |    ...        |   |
+                 |     |  |  "Collect"-----------[Pre-Aggregated Metrics]-->
+                 |     |  +---------------+   |
+                 |     |                      |
+                 |     |  +---------------+   |
+                 |     |  | Aggregator #2 |   |
+                 |     |  |               |   |
+                 |     +---->"Update"     |   |
+                 |        |    ...        |   |
+                 |        |  "Collect"-----------[Pre-Aggregated Metrics]-->
+                 |        +---------------+   |
+                 |                            |
+                 +----------------------------+
 ```
 
 ### Aggregator
@@ -141,10 +142,10 @@ generate any metrics.
 An `Aggregator` computes incoming [Measurements](./api.md#measurement) into
 [Pre-Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model).
 
-An `Aggregator` MUST provide a mean to "update" itself given
+An `Aggregator` MUST provide a means to "update" with given
 [Measurement](./api.md#measurement) data.
 
-An `Aggregator` MUST provide a mean to "collect"
+An `Aggregator` MUST provide a means to "collect"
 [Pre-Aggregated Metric](./datamodel.md#timeseries-model) data.
 The collect call should be treated as a stateful action and may reset its
 internal state.
@@ -170,7 +171,7 @@ The SDK MUST provide the following Aggregators to support the
 The Sum Aggregator collect data for the
 [Sum Metric Point](./datamodel.md#sums)
 and reports the arithmetic sum of seen `Measurements`.
-This Aggregator may be configured for monoticity and temporality.
+This Aggregator may be configured for monotonicity and temporality.
 
 A [Default Aggregator](#DefaultAggregators) MUST be provided.
 
@@ -187,7 +188,7 @@ A [Default Aggregator](#DefaultAggregators) MUST be provided.
 The Explicit Bucket Histogram Aggregator collect data for the
 [Histogram Metric Point](./datamodel.md#histogram)
 and reports a histogram with explicit bucket boundaries of seen `Measurements`.
-This Aggregator may be configured for custom bucket boundaries, monoticity, and
+This Aggregator may be configured for custom bucket boundaries, monotonicity, and
 temporality.
 
 A [Default Aggregator](#DefaultAggregators) MUST be provided.
@@ -207,7 +208,7 @@ The following are examples of `In-Memory State`:
 
 \[1\]: Start Time is exclusive (e.g. not inclusive) of the provided time.
 
-\[2\]: From latest measurement given, avoiding any time comparison.
+\[2\]: From last measurement given, avoiding any time comparison.
 
 ### DefaultAggregators
 
