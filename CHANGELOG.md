@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Metrics API specification Feature-freeze.
+  ([#1833](https://github.com/open-telemetry/opentelemetry-specification/pull/1833))
+
 ### Logs
 
 ### Resource
