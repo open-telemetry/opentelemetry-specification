@@ -11,8 +11,35 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+- Adding requirement to implement at least one of two transports: `grpc` or `http/protobuf`.
+  ([#1790](https://github.com/open-telemetry/opentelemetry-specification/pull/1790/files))
+
+### SDK Configuration
+
+## v1.5.0 (2021-07-08)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Adding environment variables for event and link attribute limits.
   ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
+- Clarify some details about span kind and the meanings of the values.
+  ([#1738](https://github.com/open-telemetry/opentelemetry-specification/pull/1738))
 - Clarify meaning of the Certificate File option.
   ([#1803](https://github.com/open-telemetry/opentelemetry-specification/pull/1803))
 
@@ -23,7 +50,11 @@ release.
 
 ### Logs
 
+- Declare OTLP Logs Beta. ([#1741](https://github.com/open-telemetry/opentelemetry-specification/pull/1741))
+
 ### Resource
+
+- No changes.
 
 ### Semantic Conventions
 
@@ -34,7 +65,11 @@ release.
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### SDK Configuration
 
@@ -100,7 +135,7 @@ release.
 
 ### OpenTelemetry Protocol
 
-- No changes.
+- Allow for OTLP/gRPC exporters to handle endpoint configuration without a scheme while still requiring them to support an endpoint configuration that includes a scheme of `http` or `https`. Reintroduce the insecure configuration option for OTLP/gRPC exporters. ([#1729](https://github.com/open-telemetry/opentelemetry-specification/pull/1729))
 
 ### SDK Configuration
 
@@ -137,6 +172,7 @@ release.
 - Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file. ([#1651](https://github.com/open-telemetry/opentelemetry-specification/pull/1651))
 - Clarify usage of "otel." attribute namespace. ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640))
 - Add possibility to disable `db.statement` via instrumentation configuration. ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
+- Add mobile related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
 
 ### Compatibility
 
