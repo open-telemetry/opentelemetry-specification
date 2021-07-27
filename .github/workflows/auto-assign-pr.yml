@@ -10,5 +10,5 @@ jobs:
       - name: run
         uses: kentaro-m/auto-assign-action@v1.1.1
         with:
-          configuration-path: ".github/auto_assign-pr.yml"
+          configuration-path: ".github/auto_assign_pr.yml"
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
