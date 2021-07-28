@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Adding SDK configuration for Jaeger remote sampler ([#1791](https://github.com/open-telemetry/opentelemetry-specification/pull/1791))
+
 ### Metrics
 
 ### Logs
@@ -42,6 +44,7 @@ release.
   ([#1738](https://github.com/open-telemetry/opentelemetry-specification/pull/1738))
 - Clarify meaning of the Certificate File option.
   ([#1803](https://github.com/open-telemetry/opentelemetry-specification/pull/1803))
+- Adding environment variables for event and link attribute limits. ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
 
 ### Metrics
 
