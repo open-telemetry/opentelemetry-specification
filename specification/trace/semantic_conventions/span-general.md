@@ -41,6 +41,12 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
 | `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
 | `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
+| `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | No |
+| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | No |
+| `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | No |
+| `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | No |
+| `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | No |
+| `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | No |
 
 `net.transport` MUST be one of the following:
 
@@ -55,6 +61,42 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `other` | Something else (non IP-based). |
 
 **[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
+
+`net.host.connection.type` MUST be one of the following or, if none of the listed values apply, a custom value:
+
+| Value  | Description |
+|---|---|
+| `wifi` | wifi |
+| `wired` | wired |
+| `cell` | cell |
+| `unavailable` | unavailable |
+| `unknown` | unknown |
+
+`net.host.connection.subtype` MUST be one of the following or, if none of the listed values apply, a custom value:
+
+| Value  | Description |
+|---|---|
+| `GPRS` | GPRS |
+| `EDGE` | EDGE |
+| `UMTS` | UMTS |
+| `CDMA` | CDMA |
+| `EVDO_0` | EVDO_0 |
+| `EVDO_A` | EVDO_A |
+| `1xRTT` | 1xRTT |
+| `HSDPA` | HSDPA |
+| `HSUPA` | HSUPA |
+| `HSPA` | HSPA |
+| `IDEN` | IDEN |
+| `EVDO_B` | EVDO_B |
+| `LTE` | LTE |
+| `EHRPD` | EHRPD |
+| `HSPAP` | HSPAP |
+| `GSM` | GSM |
+| `TD_SCDMA` | TD_SCDMA |
+| `IWLAN` | IWLAN |
+| `NR` | NR |
+| `NRNSA` | NRNSA |
+| `LTE_CA` | LTE_CA |
 <!-- endsemconv -->
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
