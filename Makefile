@@ -41,6 +41,15 @@ install-markdownlint:
 markdownlint:
 	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
 
+.PHONY: install-yamllint
+install-yamllint:
+    # Using a venv is recommended
+	pip install -U yamllint~=1.26.1
+
+.PHONY: yamllint
+yamllint:
+	yamllint .
+
 # Generate markdown tables from YAML definitions
 .PHONY: table-generation
 table-generation:

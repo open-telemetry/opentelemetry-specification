@@ -4,9 +4,22 @@ The YAML descriptions of semantic convention contained in this directory are int
 be used by the various OpenTelemetry language implementations to aid in automatic
 generation of semantics-related code.
 
+⚠ If you want to read the semantic conventions and not edit them, please see
+the generated markdown output under `/specification/*/semantic_conventions/`,
+i.e.:
+
+* [Trace semantic conventions](../specification/trace/semantic_conventions/README.md)
+* [Metric semantic conventions](../specification/metrics/semantic_conventions/README.md)
+* [Resource semantic conventions](../specification/resource/semantic_conventions/README.md)
+
 ## Writing semantic conventions
 
-Refer to the [syntax](./syntax.md) for how to write the YAML files for semantic conventions.
+Refer to the [syntax](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions/syntax.md)
+for how to write the YAML files for semantic conventions and what the YAML properties mean.
+
+A schema file for VS code is configured in the `/.vscode/settings.json` of this
+repository, enabling auto-completion and additional checks. Refer to
+[the generator README](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions/README.md) for what extension you need.
 
 ## Generation
 
@@ -26,7 +39,3 @@ See also:
 
 * [Markdown Tables](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#markdown-tables)
 * [Code Generator](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#code-generator)
-
-## Description of the model
-
-The fields and their expected values are presented in [syntax.md](./syntax.md).
