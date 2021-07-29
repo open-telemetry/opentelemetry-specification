@@ -1,6 +1,6 @@
 # Metrics API
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Feature-freeze](../document-status.md)
 
 <details>
 <summary>
