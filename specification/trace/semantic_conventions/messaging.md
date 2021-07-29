@@ -272,7 +272,7 @@ Process CB:                           | Span Rcv2 |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
-| `messaging.operation` |  | `"receive"` | `"process"` |  | `"receive"` |
+| `messaging.operation` |  |  | `"process"` |  | `"receive"` |
 | `messaging.kafka.message_key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
 | `messaging.kafka.consumer_group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
 | `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
