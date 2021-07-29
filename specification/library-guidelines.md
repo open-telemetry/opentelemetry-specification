@@ -27,7 +27,7 @@ _Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK
         - In-memory (mock) exporter that accumulates telemetry data in the local memory and allows to inspect it (useful for e.g. unit tests).
     - metrics
         - Prometheus.
-    - traces
+    - trace
         - Jaeger.
         - Zipkin.
 
