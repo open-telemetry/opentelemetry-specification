@@ -21,12 +21,15 @@ _Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK
 4. The SDK must be clearly separated into wire protocol-independent parts that implement common logic (e.g. batching, tag enrichment by process information, etc.) and protocol-dependent telemetry exporters. Telemetry exporters must contain minimal functionality, thus enabling vendors to easily add support for their specific protocol.
 
 5. The SDK implementation should include the following exporters:
-    - OTLP.
-    - Jaeger.
-    - Zipkin.
-    - Prometheus.
-    - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
-    - In-memory (mock) exporter that accumulates telemetry data in the local memory and allows to inspect it (useful for e.g. unit tests).
+    - logs, metrics, trace
+        - OTLP (OpenTelemetry Protocol).
+        - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
+        - In-memory (mock) exporter that accumulates telemetry data in the local memory and allows to inspect it (useful for e.g. unit tests).
+    - metrics
+        - Prometheus.
+    - traces
+        - Jaeger.
+        - Zipkin.
 
     Note: some of these support multiple protocols (e.g. gRPC, Thrift, etc). The exact list of protocols to implement in the exporters is TBD.
 
