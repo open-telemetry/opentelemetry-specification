@@ -48,7 +48,7 @@ groups:
       - id: distro.name
         type: string
         brief: >
-          The name string of the distribution, if used.
+          The name of the distribution, if applicable.
         examples: ["acme"]
       - id: distro.version
         type: string
