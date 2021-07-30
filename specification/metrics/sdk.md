@@ -274,8 +274,8 @@ The [View](./sdk.md#view) can refer to the following Aggregator by name.
 | Default<sup>1</sup> | Depends<sup>3</sup> | Depends<sup>3</sup> |
 | None<sup>2</sup> | - | - |
 | Sum | [Sum Aggregator](./sdk.md#sum-aggregator) | Depends<sup>3</sup> |
-| Gauge | [Last Value Aggregator](./sdk.md#last-value-aggregator) | Depends<sup>3</sup> |
-| Histogram | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Depends<sup>3</sup> |
+| Gauge | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - |
+| Histogram | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Default |
 
 \[1\]: The name "Default" is use to select Aggregator by Instrument Kind.
 See [Default Aggregators](./sdk.md#default-aggregators).
@@ -300,7 +300,7 @@ to select the correct Aggregator and default configuration parameters.
 | [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | false | Delta | - |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | true | Cumulative | - |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | false | Cumulative | - |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](./sdk.md#last-value-aggregator) | false | Cumulative | - |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - | - | - |
 | [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | true | Delta | Default<sup>1</sup> |
 
 \[1\]: See Default Bucket Boundaries in [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
@@ -345,15 +345,13 @@ This Aggregator honors the following configuration parameter keys:
 
 | Key | Value | Default | Description |
 | --- | --- | --- | --- |
-| Monotonic | boolean | Depends<sup>1</sup> | if true, non-positive values are treated as errors<sup>2</sup>. |
-| Temporality | Delta, Cummulative | Depends<sup>1</sup> | See [Temporality](./datamodel.md#temporality). |
-| Boundaries | double\[\] | Default<sup>3</sup> | Array of increasing values representing explicit bucket boundary values. |
+| Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
+| Temporality | Delta, Cummulative | Delta | See [Temporality](./datamodel.md#temporality). |
+| Boundaries | double\[\] | Default<sup>2</sup> | Array of increasing values representing explicit bucket boundary values. |
 
-\[1\]: Depends on the Instrument Kind. See [Default Aggregators](./sdk.md#default-aggregators).
+\[1\]: Language implementation may choose best strategy for handling errors. (i.e. Logged, Discard, etc...)
 
-\[2\]: Language implementation may choose best strategy for handling errors. (i.e. Logged, Discard, etc...)
-
-\[3\]: Default Bucket Boundaries: (-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;)
+\[2\]: Default Bucket Boundaries: (-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;)
 
 This Aggregator reports on:
 
