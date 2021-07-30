@@ -213,11 +213,11 @@ An `Aggregator` computes incoming Instrument [Measurements](./api.md#measurement
 into [Pre-Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model).
 
 The [View](./sdk.md#view) informs the SDK on creation and configuration of
-Aggregators. An [Aggregator Name](./sdk.md#aggregator-name) may be used to
+Aggregators. An [Aggregator Name](./sdk.md#aggregator-name) may be use to
 refer to an Aggregator and configuration.
 
 e.g. The View specifies the string name of an Aggregator (i.e. "Histogram")
-and an optional array of key-value-pair configuration parameters.
+and an optional list of configuration parameter overrides.
 
 ```c#
 // Use default Histogram
@@ -243,8 +243,8 @@ Instrument [Measurements](./api.md#measurement) to the correct Aggregators.
 
 An `Aggregator` is created with optional configuration parameters
 (i.e. Monotonic=true, Boundaries=[0, 10, 100]).
-When no configuration parameters are provided,
-a Default Aggregator with default configuration parameters will be created.
+Default configuration parameters will be use unless overridden by
+optional configuration parameters.
 
 An `Aggregator` has a means to "update" with incoming Instrument
 [Measurement](./api.md#measurement) data.
