@@ -24,7 +24,6 @@ Table of Contents
 
 * [MeterProvider](#meterprovider)
 * [MeasurementProcessor](#measurementprocessor)
-* [MetricProcessor](#metricprocessor)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
@@ -43,10 +42,10 @@ to create an
 instance which is stored on the created `Meter`.
 
 Configuration (i.e., [MeasurementProcessors](#measurementprocessor),
-[MetricProcessors](#metricprocessor), [MetricExporters](#metricexporter) and
-[`Views`](#view)) MUST be managed solely by the `MeterProvider` and the SDK MUST
-provide a way to configure all options that are implemented by the SDK. This MAY be done at the
-time of MeterProvider creation if appropriate.
+[MetricExporters](#metricexporter) and [`Views`](#view)) MUST be managed solely
+by the `MeterProvider` and the SDK MUST provide a way to configure all options
+that are implemented by the SDK. This MAY be done at the time of MeterProvider
+creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MetricProcessor`), the updated
