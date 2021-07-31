@@ -258,7 +258,7 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
-The following diagram shows `MetricProcessor`'s relationship to other components
+The following diagram shows `MetricExporter`'s relationship to other components
 in the SDK:
 
 ```text
