@@ -1,4 +1,4 @@
-# OpenTelemetry Metrics Exporter - Console
+# OpenTelemetry Metrics Exporter - Standard output
 
 **Status**: [Experimental](../../document-status.md)
 
