@@ -49,6 +49,7 @@ containers on your cluster.
 |---|---|---|
 | k8s.pod.uid | The uid of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` |
 | k8s.pod.name | The name of the Pod. | `opentelemetry-pod-autoconf` |
+| k8s.pod.ip | The IP address assigned to the Pod. | `172.17.0.5` |
 
 ## Container
 

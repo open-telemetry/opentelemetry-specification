@@ -39,6 +39,8 @@ New:
   ([#994](https://github.com/open-telemetry/opentelemetry-specification/pull/994))
 - Add Metric SDK specification (partial): covering terminology and Accumulator component
   ([#626](https://github.com/open-telemetry/opentelemetry-specification/pull/626))
+- Add resource semantic convention for `k8s.pod.ip`
+  ([#1841](https://github.com/open-telemetry/opentelemetry-specification/pull/1841))
 
 Updates:
 
