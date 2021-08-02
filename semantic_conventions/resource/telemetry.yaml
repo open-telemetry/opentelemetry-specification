@@ -1,0 +1,47 @@
+groups:
+  - id: telemetry
+    prefix: telemetry
+    brief: >
+      The telemetry SDK used to capture data recorded by the instrumentation libraries.
+    attributes:
+      - id: sdk.name
+        type: string
+        brief: >
+          The name of the telemetry SDK as defined above.
+        examples: ["opentelemetry"]
+      - id: sdk.language
+        type:
+          allow_custom_values: true
+          members:
+            - id: cpp
+              value: "cpp"
+            - id: dotnet
+              value: "dotnet"
+            - id: erlang
+              value: "erlang"
+            - id: go
+              value: "go"
+            - id: java
+              value: "java"
+            - id: nodejs
+              value: "nodejs"
+            - id: php
+              value: "php"
+            - id: python
+              value: "python"
+            - id: ruby
+              value: "ruby"
+            - id: webjs
+              value: "webjs"
+        brief: >
+          The language of the telemetry SDK.
+      - id: sdk.version
+        type: string
+        brief: >
+          The version string of the telemetry SDK.
+        examples: ["1.2.3"]
+      - id: auto.version
+        type: string
+        brief: >
+          The version string of the auto instrumentation agent, if used.
+        examples: ["1.2.3"]

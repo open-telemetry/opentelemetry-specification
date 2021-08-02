@@ -1,42 +1,60 @@
 # OpenTelemetry Protocol Specification
 
+**Status**: [Mixed](../document-status.md)
+
 OpenTelemetry Protocol (OTLP) specification describes the encoding, transport,
 and delivery mechanism of telemetry data between telemetry sources, intermediate
 nodes such as collectors and telemetry backends.
 
-## Table of Contents
+<details>
+<summary>
+Table of Contents
+</summary>
 
-* [Table of Contents](#table-of-contents)
-* [Protocol Details](#protocol-details)
+- [Signals Maturity Level](#signals-maturity-level)
+- [Protocol Details](#protocol-details)
   * [OTLP/gRPC](#otlpgrpc)
-    * [Concurrent Requests](#concurrent-requests)
-    * [Response](#response)
-    * [Throttling](#throttling)
-    * [gRPC Service and Protobuf Definitions](#grpc-service-and-protobuf-definitions)
-    * [Default Port](#default-port)
+    + [OTLP/gRPC Concurrent Requests](#otlpgrpc-concurrent-requests)
+    + [OTLP/gRPC Response](#otlpgrpc-response)
+    + [OTLP/gRPC Throttling](#otlpgrpc-throttling)
+    + [OTLP/gRPC Service and Protobuf Definitions](#otlpgrpc-service-and-protobuf-definitions)
+    + [OTLP/gRPC Default Port](#otlpgrpc-default-port)
   * [OTLP/HTTP](#otlphttp)
-    * [Request](#request)
-    * [Response](#response-1)
-      * [Success](#success)
-      * [Failures](#failures)
-      * [Bad Data](#bad-data)
-      * [Throttling](#throttling-1)
-      * [All Other Responses](#all-other-responses)
-    * [Connection](#connection)
-    * [Concurrent Requests](#concurrent-requests-1)
-    * [Default Port](#default-port-1)
-* [Implementation Recommendations](#implementation-recommendations)
+    + [OTLP/HTTP Request](#otlphttp-request)
+    + [OTLP/HTTP Response](#otlphttp-response)
+      - [Success](#success)
+      - [Failures](#failures)
+      - [Bad Data](#bad-data)
+      - [OTLP/HTTP Throttling](#otlphttp-throttling)
+      - [All Other Responses](#all-other-responses)
+    + [OTLP/HTTP Connection](#otlphttp-connection)
+    + [OTLP/HTTP Concurrent Requests](#otlphttp-concurrent-requests)
+    + [OTLP/HTTP Default Port](#otlphttp-default-port)
+- [Implementation Recommendations](#implementation-recommendations)
   * [Multi-Destination Exporting](#multi-destination-exporting)
-* [Known Limitations](#known-limitations)
+- [Known Limitations](#known-limitations)
   * [Request Acknowledgements](#request-acknowledgements)
-    * [Duplicate Data](#duplicate-data)
+    + [Duplicate Data](#duplicate-data)
   * [Partial Success](#partial-success)
-* [Future Versions and Interoperability](#future-versions-and-interoperability)
-* [Glossary](#glossary)
-* [References](#references)
+- [Future Versions and Interoperability](#future-versions-and-interoperability)
+- [Glossary](#glossary)
+- [References](#references)
+
+</details>
 
 OTLP is a general-purpose telemetry data delivery protocol designed in the scope
 of OpenTelemetry project.
+
+## Signals Maturity Level
+
+Each signal has different support and stability in OTLP, described through its
+own maturity level, which in turn applies to **all** the OTLP Transports listed below.
+
+* Tracing: **Stable**
+* Metrics: **Stable**
+* Logs: **Beta**
+
+See [OTLP Maturity Level](https://github.com/open-telemetry/opentelemetry-proto#maturity-level).
 
 ## Protocol Details
 
@@ -53,6 +71,8 @@ server replies with corresponding responses. This document defines one requests
 and response type: `Export`.
 
 ### OTLP/gRPC
+
+**Status**: [Stable](../document-status.md)
 
 After establishing the underlying gRPC transport the client starts sending
 telemetry data using unary requests using
@@ -74,7 +94,7 @@ acknowledgements described in this protocol happen between a single
 client/server pair and do not span intermediary nodes in multi-hop delivery
 paths._
 
-#### Concurrent Requests
+#### OTLP/gRPC Concurrent Requests
 
 After sending the request the client MAY wait until the response is received
 from the server. In that case there will be at most only one request in flight
@@ -85,7 +105,7 @@ that is not yet acknowledged by the server.
 Sequential operation is recommended when simplicity of implementation is
 desirable and when the client and the server are connected via very low-latency
 network, such as for example when the client is an instrumented application and
-the server is a OpenTelemetry Collector running as a local daemon (agent).
+the server is an OpenTelemetry Collector running as a local daemon (agent).
 
 The implementations that need to achieve high throughput SHOULD support
 concurrent Unary calls to achieve higher throughput. The client SHOULD send new
@@ -116,7 +136,7 @@ If the client is unable to deliver a certain request (e.g. a timer expired while
 waiting for acknowledgements) the client SHOULD record the fact that the data
 was not delivered.
 
-#### Response
+#### OTLP/gRPC Response
 
 The server may respond with either a success or an error to the requests.
 
@@ -209,7 +229,7 @@ When retrying, the client SHOULD implement an exponential backoff strategy. An
 exception to this is the Throttling case explained below, which provides
 explicit instructions about retrying interval.
 
-#### Throttling
+#### OTLP/gRPC Throttling
 
 OTLP allows backpressure signalling.
 
@@ -274,7 +294,7 @@ dependant. The server SHOULD choose a `retry_delay` value that is big enough to
 give the server time to recover, yet is not too big to cause the client to drop
 data while it is throttled.
 
-#### gRPC Service and Protobuf Definitions
+#### OTLP/gRPC Service and Protobuf Definitions
 
 gRPC service definitions
 [are here](https://github.com/open-telemetry/opentelemetry-proto/tree/master/opentelemetry/proto/collector).
@@ -287,11 +307,14 @@ Please make sure to check the proto version and
 Schemas for different signals may be at different maturity level - some stable,
 some in beta.
 
-#### Default Port
+#### OTLP/gRPC Default Port
 
-The default network port for OTLP/gRPC is 55680.
+The default network port for OTLP/gRPC is 4317.
 
 ### OTLP/HTTP
+
+**Binary Format Status**: [Stable](../document-status.md)
+**JSON Format Status**: [Experimental](../document-status.md)
 
 OTLP/HTTP uses Protobuf payloads encoded either in binary format or in JSON
 format. The Protobuf schema of the messages is the same for OTLP/HTTP and
@@ -302,7 +325,7 @@ servers. Implementations MAY use HTTP/1.1 or HTTP/2 transports. Implementations
 that use HTTP/2 transport SHOULD fallback to HTTP/1.1 transport if HTTP/2
 connection cannot be established.
 
-#### Request
+#### OTLP/HTTP Request
 
 Telemetry data is sent via HTTP POST request. The body of the POST request is a
 payload either in binary-encoded Protobuf format or in JSON-encoded Protobuf
@@ -323,7 +346,7 @@ The client MUST set "Content-Type: application/x-protobuf" request header when
 sending binary-encoded Protobuf or "Content-Type: application/json" request
 header when sending JSON encoded Protobuf payload.
 
-The client MAY gzip the content and in that case SHOULD include
+The client MAY gzip the content and in that case MUST include
 "Content-Encoding: gzip" request header. The client MAY include
 "Accept-Encoding: gzip" request header if it can receive gzip-encoded responses.
 
@@ -340,7 +363,12 @@ they are not base64-encoded like it is defined in the standard
 The hex encoding is used for `trace_id` and `span_id` fields in all OTLP
 Protobuf messages, e.g. the `Span`, `Link`, `LogRecord`, etc. messages.
 
-#### Response
+Note that according to [Protobuf specs](
+https://developers.google.com/protocol-buffers/docs/proto3#json) 64-bit integer
+numbers in JSON-encoded payloads are encoded as decimal strings, and either
+numbers or strings are accepted when decoding.
+
+#### OTLP/HTTP Response
 
 Response body MUST be the appropriate serialized Protobuf message (see below for
 the specific message to use in the Success and Failure cases).
@@ -398,7 +426,7 @@ that describes the bad data.
 The client MUST NOT retry the request when it receives `HTTP 400 Bad Request`
 response.
 
-##### Throttling
+##### OTLP/HTTP Throttling
 
 If the server receives more requests than the client is allowed or the server is
 overloaded the server SHOULD respond with `HTTP 429 Too Many Requests` or
@@ -420,7 +448,7 @@ If the server disconnects without returning a response the client SHOULD retry
 and send the same request. The client SHOULD implement an exponential backoff
 strategy between retries to avoid overwhelming the server.
 
-#### Connection
+#### OTLP/HTTP Connection
 
 If the client is unable to connect to the server the client SHOULD retry the
 connection using exponential backoff strategy between retries. The interval
@@ -437,18 +465,15 @@ Server implementations MAY accept OTLP/gRPC and OTLP/HTTP requests on the same
 port and multiplex the connections to the corresponding transport handler based
 on the "Content-Type" request header.
 
-#### Concurrent Requests
+#### OTLP/HTTP Concurrent Requests
 
 To achieve higher total throughput the client MAY send requests using several
 parallel HTTP connections. In that case the maximum number of parallel
 connections SHOULD be configurable.
 
-#### Default Port
+#### OTLP/HTTP Default Port
 
-The default network port for OTLP/HTTP is 55681. There is currently an [open
-issue](https://github.com/open-telemetry/opentelemetry-collector/issues/1256) to
-use the same port for OTLP/gRPC and OTLP/HTTP. In that case this spec will be
-updated to use the same default port for OTLP/gRPC and OTLP/HTTP.
+The default network port for OTLP/HTTP is 4317.
 
 ## Implementation Recommendations
 
@@ -549,6 +574,6 @@ document when referring to either one.
 
 ## References
 
-- [OTEP 0035](https://github.com/open-telemetry/oteps/blob/master/text/0035-opentelemetry-protocol.md) OpenTelemetry Protocol Specification
-- [OTEP 0099](https://github.com/open-telemetry/oteps/blob/master/text/0099-otlp-http.md) OTLP/HTTP: HTTP Transport Extension for OTLP
-- [OTEP 0122](https://github.com/open-telemetry/oteps/blob/master/text/0122-otlp-http-json.md) OTLP: JSON Encoding for OTLP/HTTP
+- [OTEP 0035](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md) OpenTelemetry Protocol Specification
+- [OTEP 0099](https://github.com/open-telemetry/oteps/blob/main/text/0099-otlp-http.md) OTLP/HTTP: HTTP Transport Extension for OTLP
+- [OTEP 0122](https://github.com/open-telemetry/oteps/blob/main/text/0122-otlp-http-json.md) OTLP: JSON Encoding for OTLP/HTTP

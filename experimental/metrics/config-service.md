@@ -50,7 +50,7 @@ A request consists of two fields: `resource` and an optional
 `last_known_fingerprint`.
 
 `resource` is an OpenTelemetry
-[Resource](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/overview.md#resources)
+[Resource](../../specification/overview.md#resources)
 that describes a source of telemetry data. All requests SHOULD have a nonempty
 `resource` field.
 
@@ -226,7 +226,7 @@ The following rules govern the file-based configurations:
 
 * There MUST be 1 ConfigBlock or more in a ConfigBlocks list
 * Each ConfigBlock MAY have a field Resource
-* Resource MAY have one or more strings, each a string-representation of a key-value label in a resource. If no strings are specified, then this ConfigBlock matches with any request
+* Resource MAY have one or more strings, each a string-representation of an attribute in a resource. If no strings are specified, then this ConfigBlock matches with any request
 * Each ConfigBlock MUST have a field Schedules, consisting of one or more Schedule types
 * Each Schedule MAY have a field InclusionPatterns and/or a field ExclusionPatterns, consisting of one or more Pattern types
 * Each Pattern type MUST be either “StartsWith” or “Equals,” corresponding to the type of matching performed
@@ -236,14 +236,14 @@ The following rules govern the file-based configurations:
 
 An incoming request specifies a resource for which configuration data should be
 returned. A ConfigBlock matches a resource if all strings listed under
-ConfigBlock::Resource exactly equal a key-value label in the resource. In the
+ConfigBlock::Resource are exactly equal to attributes in the resource. In the
 event that multiple ConfigBlocks match a resource, then the schedules from these
 ConfigBlocks are concatenated into a single set. Conflicts between these
 schedules are resolved by the SDK -- i.e. by taking the shortest period in case
 multiple are specified for a single metric.
 
 In this way, a user may specify more generic ConfigBlocks with perhaps fewer
-resource labels, as a means of specifying configs that should apply broadly
+resource attributes, as a means of specifying configs that should apply broadly
 across telemetry sources, unless superseded by a more specific ConfigBlock that
 asks for a shorter period.
 

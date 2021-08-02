@@ -9,4 +9,10 @@
         "MD033": false,
         "MD040": false,
     },
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/open-telemetry/build-tools/main/semantic-conventions/semconv.schema.json": [
+            "semantic_conventions/**/*.yaml"
+        ]
+    },
+    "json.schemaDownload.enable": true
 }

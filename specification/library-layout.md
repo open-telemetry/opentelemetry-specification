@@ -36,7 +36,7 @@ This directory describes the Metrics API that can be used to record application 
 ### [/baggage](baggage/api.md)
 
 This directory describes the Baggage API that can be used to manage context propagation
-and metrics-related labeling.
+and metric event attributes.
 
 ### [/trace](trace/api.md)
 
@@ -48,7 +48,9 @@ This API consist of a few main classes:
 
 ### `/internal` (_Optional_)
 
-Private application and library code.
+Library components and implementations that shouldn't be exposed to the users.
+If a language has an idiomatic layout for internal compoents, please follow
+the language idiomatic style.
 
 ### `/logs` (_In the future_)
 
@@ -96,7 +98,9 @@ This directory describes the SDK implementation for api/trace.
 
 ### `/sdk/internal` (_Optional_)
 
-Private application and library code.
+Library components and implementations that shouldn't be exposed to the users.
+If a language has an idiomatic layout for internal compoents, please follow
+the language idiomatic style.
 
 ### `/sdk/logs` (_In the future_)
 

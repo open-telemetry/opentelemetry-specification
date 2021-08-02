@@ -1,29 +1,34 @@
 # Operating System
 
+**Status**: [Experimental](../../document-status.md)
+
 **type:** `os`
 
 **Description**: The operating system (OS) on which the process represented by this resource is running.
 
 In case of virtualized environments, this is the operating system as it is observed by the process, i.e., the virtualized guest rather than the underlying host.
 
-| Attribute  | Type | Description  | Example  | Required |
+<!-- semconv os -->
+| Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `os.type` | string | The operating system type. | `"WINDOWS"` | Yes |
-| `os.description` | string | Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands. | `"Microsoft Windows [Version 10.0.18363.778]"`<br>`"Ubuntu 18.04.1 LTS"` | No |
+| `os.type` | string | The operating system type. | `windows` | Yes |
+| `os.description` | string | Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands. | `Microsoft Windows [Version 10.0.18363.778]`; `Ubuntu 18.04.1 LTS` | No |
+| `os.name` | string | Human readable operating system name. | `iOS`; `Android`; `Ubuntu` | No |
+| `os.version` | string | The version string of the operating system as defined in [Version Attributes](../../resource/semantic_conventions/README.md#version-attributes). | `14.2.1`; `18.04.1` | No |
 
-`os.type` SHOULD be set to one of the values listed below.
-If none of the listed values apply, a custom value best describing the family the operating system belongs to CAN be used.
+`os.type` MUST be one of the following or, if none of the listed values apply, a custom value:
 
 | Value  | Description |
 |---|---|
-| `WINDOWS` | Microsoft Windows |
-| `LINUX` | Linux |
-| `DARWIN` | Apple Darwin |
-| `FREEBSD` | FreeBSD |
-| `NETBSD` | NetBSD|
-| `OPENBSD` | OpenBSD |
-| `DRAGONFLYBSD` | DragonFly BSD |
-| `HPUX` | HP-UX (Hewlett Packard Unix) |
-| `AIX` | AIX (Advanced Interactive eXecutive) |
-| `SOLARIS` | Oracle Solaris |
-| `ZOS` | IBM z/OS |
+| `windows` | Microsoft Windows |
+| `linux` | Linux |
+| `darwin` | Apple Darwin |
+| `freebsd` | FreeBSD |
+| `netbsd` | NetBSD |
+| `openbsd` | OpenBSD |
+| `dragonflybsd` | DragonFly BSD |
+| `hpux` | HP-UX (Hewlett Packard Unix) |
+| `aix` | AIX (Advanced Interactive eXecutive) |
+| `solaris` | Oracle Solaris |
+| `z_os` | IBM z/OS |
+<!-- endsemconv -->

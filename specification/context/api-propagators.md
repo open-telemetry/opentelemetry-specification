@@ -1,5 +1,7 @@
 # Propagators API
 
+**Status**: [Stable, Feature-Freeze](../document-status.md)
+
 <details>
 <summary>
 Table of Contents
@@ -7,22 +9,31 @@ Table of Contents
 
 - [Overview](#overview)
 - [Propagator Types](#propagator-types)
-  - [Carrier](#carrier)
-  - [Operations](#operations)
-    - [Inject](#inject)
-    - [Extract](#extract)
+  * [Carrier](#carrier)
+  * [Operations](#operations)
+    + [Inject](#inject)
+    + [Extract](#extract)
 - [TextMap Propagator](#textmap-propagator)
-  - [Fields](#fields)
-  - [Inject](#inject-1)
-    - [Setter argument](#setter-argument)
+  * [Fields](#fields)
+  * [TextMap Inject](#textmap-inject)
+    + [Setter argument](#setter-argument)
       - [Set](#set)
-  - [Extract](#extract-1)
-    - [Getter argument](#getter-argument)
+  * [TextMap Extract](#textmap-extract)
+    + [Getter argument](#getter-argument)
       - [Keys](#keys)
       - [Get](#get)
+- [Injectors and Extractors as Separate Interfaces](#injectors-and-extractors-as-separate-interfaces)
 - [Composite Propagator](#composite-propagator)
+  * [Create a Composite Propagator](#create-a-composite-propagator)
+  * [Composite Extract](#composite-extract)
+  * [Composite Inject](#composite-inject)
 - [Global Propagators](#global-propagators)
+  * [Get Global Propagator](#get-global-propagator)
+  * [Set Global Propagator](#set-global-propagator)
 - [Propagators Distribution](#propagators-distribution)
+  * [B3 Requirements](#b3-requirements)
+    + [B3 Extract](#b3-extract)
+    + [B3 Inject](#b3-inject)
 
 </details>
 
@@ -67,7 +78,7 @@ Carriers used at [Inject](#inject) are expected to be mutable.
 
 `Propagator`s MUST define `Inject` and `Extract` operations, in order to write
 values to and read values from carriers respectively. Each `Propagator` type MUST define the specific carrier type
-and CAN define additional parameters.
+and MAY define additional parameters.
 
 #### Inject
 
@@ -83,7 +94,7 @@ Required arguments:
 
 Extracts the value from an incoming request. For example, from the headers of an HTTP request.
 
-If a value can not be parsed from the carrier for a cross-cutting concern,
+If a value can not be parsed from the carrier, for a cross-cutting concern,
 the implementation MUST NOT throw an exception and MUST NOT store a new value in the `Context`,
 in order to preserve any previously existing valid value.
 
@@ -137,15 +148,15 @@ Observe that some `Propagator`s may define, besides the returned values, additio
 variable names. To get a full list of fields for a specific carrier object, use the
 [Keys](#keys) operation.
 
-### Inject
+### TextMap Inject
 
 Injects the value into a carrier. The required arguments are the same as defined by
 the base [Inject](#inject) operation.
 
 Optional arguments:
 
-- A `Setter` invoked for each propagation key to add or remove. This is an additional
-  argument that languages are free to define to help inject data into the carrier.
+- A `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
+  This is an additional argument that languages are free to define to help inject data into the carrier.
 
 #### Setter argument
 
@@ -167,7 +178,7 @@ Required arguments:
 
 The implementation SHOULD preserve casing (e.g. it should not transform `Content-Type` to `content-type`) if the used protocol is case insensitive, otherwise it MUST preserve casing.
 
-### Extract
+### TextMap Extract
 
 Extracts the value from an incoming request. The required arguments are the same as defined by
 the base [Extract](#extract) operation.
@@ -249,21 +260,27 @@ Required arguments:
 
 Returns a new composite `Propagator` with the specified `Propagator`s.
 
-### Extract
+### Composite Extract
 
 Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
+
+If the `TextMapPropagator`'s `Extract` implementation accepts the optional `Getter` argument, the following arguments are REQUIRED, otherwise they are OPTIONAL:
+
 - The instance of `Getter` invoked for each propagation key to get.
 
-### Inject
+### Composite Inject
 
 Required arguments:
 
 - A `Context`.
 - The carrier that holds propagation fields.
-- The `Setter` invoked for each propagation key to add or remove.
+
+If the `TextMapPropagator`'s `Inject` implementation accepts the optional `Setter` argument, the following arguments are REQUIRED, otherwise they are OPTIONAL:
+
+- The `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
 
 ## Global Propagators
 
@@ -288,7 +305,7 @@ unconfigured, although the trace context propagation was configured to enrich lo
 Platforms such as ASP.NET may pre-configure out-of-the-box
 propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` containing the W3C Trace Context Propagator and the Baggage
-`Propagator` specified in the [Baggage API](../baggage/api.md#baggage-propagation).
+`Propagator` specified in the [Baggage API](../baggage/api.md#propagation).
 These platforms MUST also allow pre-configured propagators to be disabled or overridden.
 
 ### Get Global Propagator
@@ -312,31 +329,65 @@ Required parameters:
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
-* [B3](https://github.com/openzipkin/b3-propagation)
-* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format)
+* [W3C TraceContext](https://www.w3.org/TR/trace-context/). MAY alternatively
+  be distributed as part of the OpenTelemetry API.
+* [W3C Baggage](https://w3c.github.io/baggage). MAY alternatively
+  be distributed as part of the OpenTelemetry API.
+* [B3](https://github.com/openzipkin/b3-propagation).
+* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
+
+This is a list of additional propagators that MAY be maintained and distributed
+as OpenTelemetry extension packages:
+
+* [OT Trace](https://github.com/opentracing?q=basic&type=&language=). Propagation format
+  used by the OpenTracing Basic Tracers. It MUST NOT use `OpenTracing` in the resulting
+  propagator name as it is not widely adopted format in the OpenTracing ecosystem.
+
+Additional `Propagator`s implementing vendor-specific protocols such as AWS
+X-Ray trace header protocol MUST NOT be maintained or distributed as part of
+the Core OpenTelemetry repositories.
 
 ### B3 Requirements
 
-B3 has both single and multi-header encodings. To maximize compatibility between
-implementations, the following guidelines have been established for B3
-propagation in OpenTelemetry.
+B3 has both single and multi-header encodings. It also has semantics that do not
+map directly to OpenTelemetry such as a debug trace flag, and allowing spans
+from both sides of request to share the same id. To maximize compatibility
+between OpenTelemetry and Zipkin implementations, the following guidelines have
+been established for B3 context propagation.
 
-#### Extract
+#### B3 Extract
 
-Propagators MUST attempt to extract B3 encoded using single and multi-header
-formats. When extracting, the single-header variant takes precedence over
-the multi-header version.
+When extracting B3, propagators:
 
-#### Inject
+* MUST attempt to extract B3 encoded using single and multi-header
+  formats. The single-header variant takes precedence over
+  the multi-header version.
+* MUST preserve a debug trace flag, if received, and propagate
+  it with subsequent requests. Additionally, an OpenTelemetry implementation
+  MUST set the sampled trace flag when the debug flag is set.
+* MUST NOT reuse `X-B3-SpanId` as the id for the server-side span.
+
+#### B3 Inject
 
 When injecting B3, propagators:
 
 * MUST default to injecting B3 using the single-header format
 * MUST provide configuration to change the default injection format to B3
   multi-header
+* MUST NOT propagate `X-B3-ParentSpanId` as OpenTelemetry does not support
+  reusing the same id for both sides of a request.
 
-### Vendor-specific propagators
+#### Fields
 
-Additional `Propagator`s implementing vendor-specific protocols such as
-AWS X-Ray trace header protocol are encouraged to be maintained and distributed by
-their respective vendors.
+Fields MUST return the header names that correspond to the configured format,
+i.e., the headers used for the inject operation.
+
+#### Configuration
+
+| Option    | Extract Order | Inject Format | Specification     |
+|-----------|---------------|---------------| ------------------|
+| B3 Single | Single, Multi | Single        | [Link][b3-single] |
+| B3 Multi  | Single, Multi | Multi         | [Link][b3-multi]  |
+
+[b3-single]: https://github.com/openzipkin/b3-propagation#single-header
+[b3-multi]: https://github.com/openzipkin/b3-propagation#multiple-headers

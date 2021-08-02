@@ -1,0 +1,13 @@
+groups:
+  - id: aws.lambda
+    prefix: aws.lambda
+    brief: >
+      Span attributes used by AWS Lambda (in addition to general `faas` attributes).
+    attributes:
+      - id: invoked_arn
+        type: string
+        brief: >
+          The full invoked ARN as provided on the `Context` passed to the function
+          (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable).
+        note: This may be different from `faas.id` if an alias is involved.
+        examples: ['arn:aws:lambda:us-east-1:123456:function:myfunction:myalias']
