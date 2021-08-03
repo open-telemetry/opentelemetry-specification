@@ -26,6 +26,10 @@ release.
 
 - Adding alibaba cloud as a cloud provider.
   ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
+- Update YAML definitions for events
+  ([#1843](https://github.com/open-telemetry/opentelemetry-specification/pull/1843)):
+  - Mark exception as semconv type "event".
+  - Add YAML definitions for grpc events.
 
 ### Compatibility
 
