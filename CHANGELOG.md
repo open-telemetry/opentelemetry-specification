@@ -24,6 +24,9 @@ release.
 
 ### Semantic Conventions
 
+- Adding alibaba cloud as a cloud provider.
+  ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
