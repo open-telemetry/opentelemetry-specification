@@ -28,12 +28,18 @@ release.
 
 ### Semantic Conventions
 
+- Adding alibaba cloud as a cloud provider.
+  ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
 - Adding requirement to implement at least one of two transports: `grpc` or `http/protobuf`.
   ([#1790](https://github.com/open-telemetry/opentelemetry-specification/pull/1790/files))
+
+- Change OTLP/HTTP port from 4317 to 4318.
+  ([#1839](https://github.com/open-telemetry/opentelemetry-specification/pull/1839))
 
 ### SDK Configuration
 
