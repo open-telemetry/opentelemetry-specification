@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Add generalized attribute count and attribute value length limits and relevant
+  environment variables.
+  ([#1130](https://github.com/open-telemetry/opentelemetry-specification/pull/1130))
+- Adding environment variables for event and link attribute limits. ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
 - Adding SDK configuration for Jaeger remote sampler ([#1791](https://github.com/open-telemetry/opentelemetry-specification/pull/1791))
 
 ### Metrics
