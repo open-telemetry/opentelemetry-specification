@@ -48,7 +48,7 @@ that are implemented by the SDK. This MAY be done at the time of MeterProvider
 creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
-configuration is updated (e.g., adding a `MetricProcessor`), the updated
+configuration is updated (e.g., adding a `MeasurementProcessor`), the updated
 configuration MUST also apply to all already returned `Meters` (i.e. it MUST NOT
 matter whether a `Meter` was obtained from the `MeterProvider` before or after
 the configuration change). Note: Implementation-wise, this could mean that
