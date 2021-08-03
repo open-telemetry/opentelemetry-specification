@@ -23,6 +23,7 @@ Table of Contents
 </summary>
 
 * [MeterProvider](#meterprovider)
+* [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
 * [MetricProcessor](#metricprocessor)
 * [MetricExporter](#metricexporter)
@@ -206,6 +207,13 @@ meter_provider
     .add_view("*", attribute_keys=["a", "b"])
     .set_exporter(ConsoleExporter())
 ```
+
+## Attribute Limits
+
+Attributes which belong to Metrics are exempt from the
+[common rules of attribute limits](../common/common.md#attribute-limits) at this
+time. Attribute truncation or deletion could affect identitity of metric time
+series and it requires further analysis.
 
 ## MeasurementProcessor
 

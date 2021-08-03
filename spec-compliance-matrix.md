@@ -79,6 +79,7 @@ formats is required. Implementing more than one format is optional.
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    |        |     | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    |        |     |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    |      |    | +      | +    |        |     | +    | +   |      |       |
+| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -141,12 +142,15 @@ Note: Support for environment variables is optional.
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 |OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   | +  | - |    |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   | +  | - |    |     |
 |OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | -    |   | +  | - |    |     |
 |OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 |OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - |    |     |
+|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |     |
 
 ## Exporters
 
