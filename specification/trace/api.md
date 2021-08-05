@@ -270,7 +270,7 @@ is expected to happen, in order to preserve existing values beloging to other co
 For example, if a given concern K wants to set `k1:13`:
 
 * `otel=p:8;r:64` will become `otel=p:8;r:64;k1:13`.
-* `otel=p:8,r:64;tkey=7` will become `otel:p8;r:64;k1=13`.
+* `otel=p:8,r:64;k1:7` will become `otel:p8;r:64;k1:13`.
 
 Observe that the keys and values used within the `otel` value MUST all comply with the `TraceState` rules.
 
