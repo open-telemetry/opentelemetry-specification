@@ -126,7 +126,7 @@ groups:
           This is always required for jsonrpc. See the note in the general
           RPC conventions for more information.
   - id: rpc.grpc.message
-    prefix: "message" # TODO: Change the prefix to rpc.grpc.message?
+    prefix: "message"  # TODO: Change the prefix to rpc.grpc.message?
     type: event
     brief: "gRPC received/sent message."
     attributes:
