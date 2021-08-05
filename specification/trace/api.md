@@ -257,6 +257,23 @@ Such changes then make sense only right before
 or [telemetry data exporting](sdk.md#span-exporter).
 In both cases, `Propagator`s and `SpanExporter`s may create a modified `TraceState` copy before serializing it to the wire.
 
+#### OTel specific values
+
+When setting values that are part of the OTel ecosystem, they MUST all be contained in a single entry using
+the `otel` key, and the value MUST be a semicolon separated list of key-value pairs such as:
+
+* `otel=p:8;r:64`
+* `otel=foo:bar;k1=13`
+
+New set values MUST be appended to existing `otel` entry in `TraceState`, unless an explicit override
+is expected to happen, in order to preserve existing values beloging to other concerns.
+For example, if a given concern K wants to set `k1:13`:
+
+* `otel=p:8;r:64` will become `otel=p:8;r:64;k1=13`.
+* `otel=p:8,r:64;tkey=7` will become `otel:p8;r:64;k1=13`.
+
+Observe that the keys and values used within the `otel` value MUST all comply with the `TraceState` rules.
+
 ## Span
 
 A `Span` represents a single operation within a trace. Spans can be nested to
