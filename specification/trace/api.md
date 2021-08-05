@@ -263,7 +263,7 @@ When setting values that are part of the OTel ecosystem, they MUST all be contai
 the `otel` key, and the value MUST be a semicolon separated list of key-value pairs such as:
 
 * `otel=p:8;r:64`
-* `otel=foo:bar;k1=13`
+* `otel=foo:bar;k1:13`
 
 New set values MUST be appended to existing `otel` entry in `TraceState`, unless an explicit override
 is expected to happen, in order to preserve existing values beloging to other concerns.
