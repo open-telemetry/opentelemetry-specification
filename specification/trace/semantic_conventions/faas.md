@@ -103,7 +103,7 @@ which the invoked FaaS instance reports about itself, if it's instrumented.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `faas.invoked_name` | string | The name of the invoked function. [1] | `my-function` | Yes |
-| `faas.invoked_provider` | string | The cloud provider of the invoked function. [2] | `aws` | Yes |
+| `faas.invoked_provider` | string | The cloud provider of the invoked function. [2] | `alibaba_cloud` | Yes |
 | `faas.invoked_region` | string | The cloud region of the invoked function. [3] | `eu-central-1` | Conditional [4] |
 
 **[1]:** SHOULD be equal to the `faas.name` resource attribute of the invoked function.
@@ -118,6 +118,7 @@ which the invoked FaaS instance reports about itself, if it's instrumented.
 
 | Value  | Description |
 |---|---|
+| `alibaba_cloud` | Alibaba Cloud |
 | `aws` | Amazon Web Services |
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
