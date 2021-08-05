@@ -212,6 +212,9 @@ Returns the sampling Decision for a `Span` to be created.
   [Links Between Spans](../overview.md#links-between-spans).
 * `InstrumentationLibrary` (name and version) of the `Span` to be created.
 
+Note: Implementations may "bundle" all or several arguments together in a single
+object.
+
 **Return value:**
 
 It produces an output called `SamplingResult` which contains:
