@@ -210,6 +210,7 @@ Returns the sampling Decision for a `Span` to be created.
 * Collection of links that will be associated with the `Span` to be created.
   Typically useful for batch operations, see
   [Links Between Spans](../overview.md#links-between-spans).
+* `InstrumentationLibrary` (name and version) of the `Span` to be created.
 
 **Return value:**
 
