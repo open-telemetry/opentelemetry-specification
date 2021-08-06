@@ -11,13 +11,25 @@ release.
 
 ### Traces
 
+- Add generalized attribute count and attribute value length limits and relevant
+  environment variables.
+  ([#1130](https://github.com/open-telemetry/opentelemetry-specification/pull/1130))
+- Adding environment variables for event and link attribute limits. ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
+- Adding SDK configuration for Jaeger remote sampler ([#1791](https://github.com/open-telemetry/opentelemetry-specification/pull/1791))
+
 ### Metrics
+
+- Metrics API specification Feature-freeze.
+  ([#1833](https://github.com/open-telemetry/opentelemetry-specification/pull/1833))
 
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
+
+- Adding alibaba cloud as a cloud provider.
+  ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
 
 ### Compatibility
 
@@ -42,6 +54,7 @@ release.
   ([#1738](https://github.com/open-telemetry/opentelemetry-specification/pull/1738))
 - Clarify meaning of the Certificate File option.
   ([#1803](https://github.com/open-telemetry/opentelemetry-specification/pull/1803))
+- Adding environment variables for event and link attribute limits. ([#1751](https://github.com/open-telemetry/opentelemetry-specification/pull/1751))
 
 ### Metrics
 

@@ -56,11 +56,17 @@ Known values for `OTEL_TRACES_SAMPLER` are:
 - `"parentbased_always_on"`: `ParentBased(root=AlwaysOnSampler)`
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
+- `"jaeger_remote"`: `JaegerRemoteSampler`
 - `"xray"`: [AWS X-Ray Centralized Sampling](https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html) (_third party_)
 
 Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may be set as follows:
 
 - For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25". Default is 1.0 if unset.
+- For `jaeger_remote`: The value is a comma separated list:
+  - `endpoint`: the endpoint in form of `host:port` of gRPC server that serves the sampling strategy for the service ([sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/sampling.proto)).
+  - `pollingIntervalMs`:  in milliseconds indicating how often the sampler will poll the backend for updates to sampling strategy.
+  - `initialSamplingRate`:  in the [0..1] range, which is used as the sampling probability when the backend cannot be reached to retrieve a sampling strategy. This value stops having an effect once a sampling strategy is retrieved successfully, as the remote strategy will be used until a new update is retrieved.
+  - Example: `endpoint=localhost:14250,pollingIntervalMs=5000,initialSamplingRate=0.25`
 
 ## Batch Span Processor
 
@@ -73,19 +79,32 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
-## Span Collection Limits
+## Attribute Limits
+
+SDKs SHOULD only offer environment variables for the types of attributes, for
+which that SDK implements truncation mechanism.
+
+See the SDK [Attribute Limits](common/common.md#attribute-limits) section for the definition of the limits.
+
+| Name                              | Description                          | Default | Notes |
+| --------------------------------- | ------------------------------------ | ------- | ----- |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
+
+## Span Limits <a name="span-collection-limits"></a>
 
 **Status**: [Stable](document-status.md)
 
 See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition of the limits.
 
-| Name                             | Description                                    | Default | Notes |
-| -------------------------------- | ---------------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT  | Maximum allowed span attribute count           | 128     |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT      | Maximum allowed span event count               | 128     |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT       | Maximum allowed span link count                | 128     |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT | Maximum allowed attribute per span event count | 128     |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT  | Maximum allowed attribute per span link count  | 128     |       |
+| Name                                   | Description                                    | Default | Notes |
+| -------------------------------------- | ---------------------------------------------- | ------- | ----- |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
 
 ## OTLP Exporter
 
