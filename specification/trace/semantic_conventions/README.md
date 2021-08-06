@@ -22,6 +22,7 @@ The following semantic conventions for spans are defined:
 * [Messaging](messaging.md): Spans for interaction with messaging systems (queues, publish/subscribe, etc.).
 * [FaaS](faas.md): Spans for Function as a Service (e.g., AWS Lambda).
 * [Exceptions](exceptions.md): Attributes for recording exceptions associated with a span.
+* [TLS/SSL](tls.md): Spans for TLS/SSL encrypted communication.
 
 The following library-specific semantic conventions are defined:
 

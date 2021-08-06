@@ -1,0 +1,99 @@
+groups:
+  - id: tls
+    prefix: tls
+    brief: 'This document defines semantic conventions for TLS/SSL client and server Spans.'
+    attributes:
+      - id: protocol
+        brief: 'The negotiated SSL/TLS protocol version of the current connection.'
+        type: 
+          allow_custom_values: false
+          members:
+            - id: SSLv3
+              value: SSLv3
+            - id: TLSv1
+              value: 'TLSv1'
+            - id: TLSv1.1
+              value: 'TLSv1.1'
+            - id: TLSv1.1
+              value: 'TLSv1.2'
+            - id: TLSv1.3
+              value: 'TLSv1.3'
+      - id: authorized
+        type: boolean
+        examples: [true]
+        brief: true, if the peer certificate was signed by one of the CAs specified when creating the socket, otherwise false.
+  - id: tls.cipher
+    prefix: tls.cipher
+    brief: 'Details on the negotiated cipher suite'
+    attributes: 
+      - id: name
+        brief: IETF name of the cipher suite.
+        type: string
+        examples: ['TLS_RSA_WITH_3DES_EDE_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256']
+      - id: version
+        brief: The minimum TLS protocol version supported by this cipher suite.
+        type: 
+          allow_custom_values: false
+          members:
+            - id: SSLv3
+              value: SSLv3
+            - id: TLSv1
+              value: 'TLSv1'
+            - id: TLSv1.1
+              value: 'TLSv1.1'
+            - id: TLSv1.1
+              value: 'TLSv1.2'
+            - id: TLSv1.3
+              value: 'TLSv1.3'
+  - id: tls.certificate
+    prefix: tls
+    brief: 'Details on the used certificates'
+    attributes:
+      - id: peer.certificate.subject
+        type: string
+        brief: The peer certificate subject
+        examples: ['C=US, ST=California, L=San Francisco, O=OpenTelemetry, Inc, CN=*.opentelemetry.io']
+      - id: peer.certificate.fingerprint
+        brief: The SHA-1 (or SHA-256) digest of the DER encoded peer certificate
+        type: string
+        examples: ['95:B4:D0:6E:CD:C1:2C:22:92:B8:CD:26:54:79:E4:84:E3:47:34:2E']
+      - id: peer.certificate.serial_number
+        brief: The peer certificate serial number, as a hex string
+        type: string
+        examples: ['04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C']
+      - id: peer.certificate.valid_from
+        type: string
+        brief: The date-time the peer certificate is valid from.
+        examples: ['Mar  9 00:00:00 2021 GMT']
+      - id: peer.certificate.valid_to
+        type: string
+        brief: The date-time the peer certificate is valid to.
+        examples: ['Mar  1 23:59:59 2022 GMT']
+      - id: host.certificate.subject
+        type: string
+        brief: The host certificate subject
+        examples: ['C=US, ST=California, L=San Francisco, O=OpenTelemetry, Inc, CN=*.opentelemetry.io']
+      - id: host.certificate.fingerprint
+        brief: The SHA-1 (or SHA-256) digest of the DER encoded host certificate
+        type: string
+        examples: ['95:B4:D0:6E:CD:C1:2C:22:92:B8:CD:26:54:79:E4:84:E3:47:34:2E']
+      - id: host.certificate.serial_number
+        brief: The host certificate serial number, as a hex string
+        type: string
+        examples: ['04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C']
+      - id: host.certificate.valid_from
+        type: string
+        brief: The timestamp the host certificate is valid from.
+        examples: ['Mar  9 00:00:00 2021 GMT']
+      - id: host.certificate.valid_to
+        type: string
+        brief: The timestamp the host certificate is valid to.
+        examples: ['Mar  1 23:59:59 2022 GMT']
+  - id: tls.alpn
+    prefix: tls.alpn
+    brief: 'Details on the selected ALPN protocol'
+    attributes:
+      - id: protocol
+        type: string
+        brief: The negotiated ALPN protocol
+        examples: ['h2', 'http/1.1']
