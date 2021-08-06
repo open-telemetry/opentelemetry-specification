@@ -73,7 +73,6 @@ These attributes may be used for any operation for details on the certificates.
 
 ## ALPN attributes
 
-
 This attribute may be used if [ALPN](https://datatracker.ietf.org/doc/html/rfc7301) is used within the TLS connection
 
 <!-- semconv tls.alpn -->
