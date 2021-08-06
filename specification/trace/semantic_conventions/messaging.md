@@ -245,10 +245,15 @@ Process CB:                 | Span CB1 |
 | `messaging.operation` |  | `"process"` | `"process"` |
 | `messaging.message_id` | `"a1"` | `"a1"`| `"a1"` |
 
-### Apache Kafka Example
+### Apache Kafka with Quarkus or Spring Boot Example
 
 Given is a process P, that publishes a message to a topic T1 on Apache Kafka.
 One process, CA, receives the message and publishes a new message to a topic T2 that is then received and processed by CB.
+
+Frameworks such as Quarkus and Spring Boot separate processing of a received message from producing subsequent messages out.
+For this reason, receiving (Span Rcv1) is the parent of both processing (Span Proc1) and producing a new message (Span Prod2).
+The span representing message receiving (Span Rcv1) should not set `messaging.operation` to `receive`,
+as the work is hidden away by frameworks such as Quarkus and Spring Boot.
 
 ```
 Process P:  | Span Prod1 |
