@@ -56,7 +56,7 @@ release.
 
 ### Semantic Conventions
 
-- Add mobile related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
+- Add mobile-related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
 - Adding alibaba cloud as a cloud provider.
   ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
 
