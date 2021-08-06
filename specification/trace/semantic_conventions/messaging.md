@@ -253,7 +253,7 @@ One process, CA, receives the message and publishes a new message to a topic T2 
 Frameworks such as Quarkus and Spring Boot separate processing of a received message from producing subsequent messages out.
 For this reason, receiving (Span Rcv1) is the parent of both processing (Span Proc1) and producing a new message (Span Prod2).
 The span representing message receiving (Span Rcv1) should not set `messaging.operation` to `receive`,
-as the work is hidden away by frameworks such as Quarkus and Spring Boot.
+as it does not only receive the message but also converts the input message to something suitable for the processing operation to consume and creates the output message from the result of processing.
 
 ```
 Process P:  | Span Prod1 |
