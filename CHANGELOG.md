@@ -11,6 +11,28 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+## v1.6.0 (2021-08-06)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Add generalized attribute count and attribute value length limits and relevant
   environment variables.
   ([#1130](https://github.com/open-telemetry/opentelemetry-specification/pull/1130))
@@ -21,24 +43,36 @@ release.
 
 - Metrics API specification Feature-freeze.
   ([#1833](https://github.com/open-telemetry/opentelemetry-specification/pull/1833))
+- Remove MetricProcessor from the SDK spec (for now)
+  ([#1840](https://github.com/open-telemetry/opentelemetry-specification/pull/1840))
 
 ### Logs
 
+- No changes.
+
 ### Resource
+
+- No changes.
 
 ### Semantic Conventions
 
+- Add mobile-related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
 - Adding alibaba cloud as a cloud provider.
   ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
 
+- Allow for OTLP/gRPC exporters to handle endpoint configuration without a scheme while still requiring them to support an endpoint configuration that includes a scheme of `http` or `https`. Reintroduce the insecure configuration option for OTLP/gRPC exporters. ([#1729](https://github.com/open-telemetry/opentelemetry-specification/pull/1729))
 - Adding requirement to implement at least one of two transports: `grpc` or `http/protobuf`.
   ([#1790](https://github.com/open-telemetry/opentelemetry-specification/pull/1790/files))
 
 ### SDK Configuration
+
+- No changes.
 
 ## v1.5.0 (2021-07-08)
 
@@ -148,7 +182,7 @@ release.
 
 ### OpenTelemetry Protocol
 
-- Allow for OTLP/gRPC exporters to handle endpoint configuration without a scheme while still requiring them to support an endpoint configuration that includes a scheme of `http` or `https`. Reintroduce the insecure configuration option for OTLP/gRPC exporters. ([#1729](https://github.com/open-telemetry/opentelemetry-specification/pull/1729))
+- No changes.
 
 ### SDK Configuration
 
@@ -185,7 +219,6 @@ release.
 - Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file. ([#1651](https://github.com/open-telemetry/opentelemetry-specification/pull/1651))
 - Clarify usage of "otel." attribute namespace. ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640))
 - Add possibility to disable `db.statement` via instrumentation configuration. ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
-- Add mobile related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
 
 ### Compatibility
 
