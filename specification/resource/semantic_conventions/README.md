@@ -167,6 +167,7 @@ resources can only be defined for providers listed as a valid `cloud.provider` i
 [Cloud](./cloud.md) and below. Provider-specific attributes all reside in the `cloud_provider` directory.
 Valid cloud providers are:
 
+- [Alibaba Cloud](https://www.alibabacloud.com/) (`alibaba_cloud`)
 - [Amazon Web Services](https://aws.amazon.com/) ([`aws`](cloud_provider/aws/README.md))
 - [Google Cloud Platform](https://cloud.google.com/) (`gcp`)
 - [Microsoft Azure](https://azure.microsoft.com/) (`azure`)

@@ -59,6 +59,86 @@ groups:
         type: string
         brief: 'Local hostname or similar, see note below.'
         examples: 'localhost'
+      - id: host.connection.type
+        type:
+          allow_custom_values: true
+          members:
+            - id: wifi
+              value: "wifi"
+            - id: wired
+              value: "wired"
+            - id: cell
+              value: "cell"
+            - id: unavailable
+              value: "unavailable"
+            - id: unknown
+              value: "unknown"
+        brief: 'The internet connection type currently being used by the host.'
+        examples: 'wifi'
+      - id: host.connection.subtype
+        type:
+          allow_custom_values: true
+          members:
+            - id: GPRS
+              value: "GPRS"
+            - id: EDGE
+              value: "EDGE"
+            - id: UMTS
+              value: "UMTS"
+            - id: CDMA
+              value: "CDMA"
+            - id: EVDO_0
+              value: "EVDO_0"
+            - id: EVDO_A
+              value: "EVDO_A"
+            - id: 1xRTT
+              value: "1xRTT"
+            - id: HSDPA
+              value: "HSDPA"
+            - id: HSUPA
+              value: "HSUPA"
+            - id: HSPA
+              value: "HSPA"
+            - id: IDEN
+              value: "IDEN"
+            - id: EVDO_B
+              value: "EVDO_B"
+            - id: LTE
+              value: "LTE"
+            - id: EHRPD
+              value: "EHRPD"
+            - id: HSPAP
+              value: "HSPAP"
+            - id: GSM
+              value: "GSM"
+            - id: TD_SCDMA
+              value: "TD_SCDMA"
+            - id: IWLAN
+              value: "IWLAN"
+            - id: NR
+              value: "NR"
+            - id: NRNSA
+              value: "NRNSA"
+            - id: LTE_CA
+              value: "LTE_CA"
+        brief: 'This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.'
+        examples: 'LTE'
+      - id: host.carrier.name
+        type: string
+        brief: "The name of the mobile carrier."
+        examples: "sprint"
+      - id: host.carrier.mcc
+        type: string
+        brief: "The mobile carrier country code."
+        examples: "310"
+      - id: host.carrier.mnc
+        type: string
+        brief: "The mobile carrier network code."
+        examples: "001"
+      - id: host.carrier.icc
+        type: string
+        brief: "The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network."
+        examples: "DE"
   - id: peer
     prefix: peer
     brief: "Operations that access some remote service."

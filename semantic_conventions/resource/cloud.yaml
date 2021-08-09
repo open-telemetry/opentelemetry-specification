@@ -8,6 +8,9 @@ groups:
         type:
           allow_custom_values: true
           members:
+            - id: Alibaba Cloud
+              value: 'alibaba_cloud'
+              brief: 'Alibaba Cloud'
             - id: AWS
               value: 'aws'
               brief: 'Amazon Web Services'
@@ -29,8 +32,10 @@ groups:
         brief: >
           The geographical region the resource is running. Refer to your
           provider's docs to see the available regions, for example
-          [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), or
-          [Google Cloud regions](https://cloud.google.com/about/locations).
+          [Alibaba Cloud regions](https://www.alibabacloud.com/help/doc-detail/40654.htm),
+          [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/),
+          [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/),
+          or [Google Cloud regions](https://cloud.google.com/about/locations).
         examples: ['us-central1', 'us-east-1']
       - id: availability_zone
         type: string
@@ -39,12 +44,18 @@ groups:
           to increase availability. Availability zone represents the
           zone where the resource is running.
         note: >
-          Availability zones are called "zones" on Google Cloud.
+          Availability zones are called "zones" on Alibaba Cloud and Google Cloud.
         examples: ['us-east-1c']
       - id: platform
         type:
           allow_custom_values: true
           members:
+            - id: alibaba_cloud_ecs
+              value: 'alibaba_cloud_ecs'
+              brief: Alibaba Cloud Elastic Compute Service
+            - id: alibaba_cloud_fc
+              value: 'alibaba_cloud_fc'
+              brief: Alibaba Cloud Function Compute
             - id: aws_ec2
               value: 'aws_ec2'
               brief: AWS Elastic Compute Cloud

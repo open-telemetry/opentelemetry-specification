@@ -8,6 +8,8 @@ Table of Contents
 </summary>
 
 - [Attributes](#attributes)
+  - [Attribute Limits](#attribute-limits)
+    - [Exempt Entities](#exempt-entities)
 
 </details>
 
@@ -41,3 +43,52 @@ both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
 See [Attribute Naming](attribute-naming.md) for naming guidelines.
+
+### Attribute Limits
+
+Execution of erroneous code can result in unintended attributes. If there are no
+limits placed on attributes, they can quickly exhaust available memory, resulting
+in crashes that are difficult to recover from safely.
+
+By default an SDK SHOULD apply truncation as per the list of
+[configurable parameters](#attribute-limits-configuration) below.
+
+If an SDK provides a way to:
+
+- set an attribute value length limit such that for each
+  attribute value:
+  - if it is a string, if it exceeds that limit (counting any character in it as
+    1), SDKs MUST truncate that value, so that its length is at most equal
+    to the limit,
+  - if it is an array of strings, then apply the above rule to each of the
+    values separately,
+  - otherwise a value MUST NOT be truncated;
+- set a limit of unique attribute keys such that:
+  - for each unique attributes key, addition of which would result in exceeding
+    the limit, SDK MUST discard that key/value pair.
+
+There MAY be a log emitted to indicate to the user that an attribute was
+truncated or discarded. To prevent excessive logging, the log MUST NOT be
+emitted more than once per record on which an attribute is set.
+
+If the SDK implements the limits above, it MUST provide a way to change these
+limits programmatically. Names of the configuration options SHOULD be the same as
+in the list below.
+
+An SDK MAY implement model-specific limits, for example
+`SpanAttributeCountLimit`. If both a general and a model-specific limit are
+implemented, then the SDK MUST first attempt to use the model-specific limit, if
+it isn't set and doesn't have a default, then the SDK MUST attempt to use the
+general limit.
+
+<a name="attribute-limits-configuration"></a>
+**Configurable parameters:**
+
+* `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
+* `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
+
+#### Exempt Entities
+
+Attributes, which belong to Metrics, are exempt from the limits described above
+at this time, as discussed in
+[Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
