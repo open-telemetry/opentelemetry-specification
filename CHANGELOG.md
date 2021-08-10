@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add InstrumentationLibrary to Sampler.ShouldSample.
+  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
+
 ### Metrics
 
 ### Logs
