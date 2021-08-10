@@ -57,8 +57,8 @@ The values allowed for `tls.cipher.name` MUST be one of the `Descriptions` of th
 ## Certificate attributes
 
 These attributes may be used for any operation for details on the certificates.
-Fingerprints and serial numbers MUST be provided in tuples of hexadecimal numbers separated by colon (`:`) with letters `A-F` in uppercase, e.g. `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C`
-This is the widely-used notation by CLI tools like `openssl` or browsers to display those certificate details.'
+Fingerprints and serial numbers MUST be provided in tuples of hexadecimal numbers separated by colon (`:`) with letters `A-F` in uppercase, e.g. `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C`.
+This is a widely-used notation by CLI tools like `openssl` or browsers to display those certificate details.'
 
 <!-- semconv tls.certificate -->
 | Attribute  | Type | Description  | Examples  | Required |
