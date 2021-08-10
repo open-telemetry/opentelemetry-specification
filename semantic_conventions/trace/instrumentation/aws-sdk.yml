@@ -16,10 +16,11 @@ groups:
         examples:
           - aws-api
       - ref: rpc.service
-        brief: >
-          The name of the service to which a request is made, as returned by the AWS SDK. If the SDK does not
-          provide a away to retrieve a name, the name of the SDK's client interface for a service SHOULD be
-          used, removing the suffix `Client` if present, resulting in a PascalCase name with no spaces.
+        brief: "The name of the service to which a request is made, as returned by the AWS SDK."
+        note: >
+          If the SDK does not provide a away to retrieve a name, the name of the SDK's client interface for a
+          service SHOULD be used, removing the suffix `Client` if present, resulting in a PascalCase name with
+          no spaces. For example, `DynamoDBClient` would be `DynamoDB`.
         examples:
           - DynamoDB
           - S3
@@ -29,6 +30,10 @@ groups:
           The name of the operation corresponding to the request, as returned by the AWS SDK. If the SDK does
           not provide a way to retrieve a name, the name of the command SHOULD be used, removing the suffix
           `Command` if present, resulting in a PascalCase name with no spaces.
+        note: >
+          If the SDK does not provide a way to retrieve a name, the name of the command SHOULD be used,
+          removing the suffix `Command` if present, resulting in a PascalCase name with no spaces. For example,
+          `GetItemCommand` would be `GetItem`.
         examples:
           - GetItem
           - PutItem
