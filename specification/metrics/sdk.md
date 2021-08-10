@@ -293,11 +293,11 @@ to select the correct Aggregator and default configuration parameters.
 | [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Cumulative<br>SumType = Monotonic<sup>2</sup> |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Cumulative<br>SumType = Non-Monotonic<sup>2</sup> |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - |
-| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Temporality = Delta<br>Boundaries = Default<sup>1</sup> |
+| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Default<sup>1</sup> |
 
-\[1\]: See Default Bucket Boundaries in [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
+\[1\]: See Default Values in [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
 
-\[2\]: TBD: See [PR#320](https://github.com/open-telemetry/opentelemetry-proto/pull/320).
+\[2\]: **TBD**: See [PR#320](https://github.com/open-telemetry/opentelemetry-proto/pull/320).
 
 ### Last Value Aggregator
 
@@ -316,7 +316,7 @@ The Sum Aggregator collects data for the [Sum Metric Point](./datamodel.md#sums)
 
 This Aggregator honors the following configuration parameters:
 
-| Key | Value | Default | Description |
+| Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
 | SumType<sup>2</sup> | Monotonic, Non-Monotonic, Other<sup>2</sup> | Depends<sup>1</sup> | See SumType<sup>2</sup> |
 | Temporality | Delta, Cummulative | Depends<sup>1</sup> | See [Temporality](./datamodel.md#temporality). |
@@ -337,15 +337,13 @@ explicit boundary values for histogram bucketing.
 
 This Aggregator honors the following configuration parameters:
 
-| Key | Value | Default | Description |
+| Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
 | Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
 | Temporality | Delta, Cummulative | Delta | See [Temporality](./datamodel.md#temporality). |
-| Boundaries | double\[\] | Default<sup>2</sup> | Array of increasing values representing explicit bucket boundary values. |
+| Boundaries | double\[\] | (-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) | Array of increasing values representing explicit bucket boundary values. |
 
 \[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
-
-\[2\]: Default Bucket Boundaries: (-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;)
 
 This Aggregator collects:
 
