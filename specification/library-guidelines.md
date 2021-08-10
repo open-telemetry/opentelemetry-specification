@@ -8,7 +8,7 @@ Please read the [overview](overview.md) first, to understand the fundamental arc
 
 This document does not attempt to describe the details or functionality of the OpenTelemetry client API. For API specs see the [API specifications](../README.md).
 
-_Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK implementation guidelines are work in progress. If you notice incomplete or missing information, contradictions, inconsistent styling and other defects please let specification writers know by creating an issue in this repository or posting in [Gitter](https://gitter.im/open-telemetry/opentelemetry-specification). As implementors of the specification you will often have valuable insights into how the specification can be improved. The Specification SIG and members of Technical Committee highly value your opinion and welcome your feedback.
+_Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK implementation guidelines are work in progress. If you notice incomplete or missing information, contradictions, inconsistent styling and other defects please let specification writers know by creating an issue in this repository or posting in [Slack](https://cloud-native.slack.com/archives/C01N7PP1THC). As implementors of the specification you will often have valuable insights into how the specification can be improved. The Specification SIG and members of Technical Committee highly value your opinion and welcome your feedback.
 
 ## Requirements
 
@@ -21,12 +21,15 @@ _Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK
 4. The SDK must be clearly separated into wire protocol-independent parts that implement common logic (e.g. batching, tag enrichment by process information, etc.) and protocol-dependent telemetry exporters. Telemetry exporters must contain minimal functionality, thus enabling vendors to easily add support for their specific protocol.
 
 5. The SDK implementation should include the following exporters:
-    - OTLP.
-    - Jaeger.
-    - Zipkin.
-    - Prometheus.
-    - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
-    - In-memory (mock) exporter that accumulates telemetry data in the local memory and allows to inspect it (useful for e.g. unit tests).
+    - logs, metrics, trace
+        - OTLP (OpenTelemetry Protocol).
+        - Standard output (or logging) to use for debugging and testing as well as an input for the various log proxy tools.
+        - In-memory (mock) exporter that accumulates telemetry data in the local memory and allows to inspect it (useful for e.g. unit tests).
+    - metrics
+        - Prometheus.
+    - trace
+        - Jaeger.
+        - Zipkin.
 
     Note: some of these support multiple protocols (e.g. gRPC, Thrift, etc). The exact list of protocols to implement in the exporters is TBD.
 

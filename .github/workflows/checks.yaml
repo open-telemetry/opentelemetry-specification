@@ -19,6 +19,20 @@ jobs:
     - name: run markdownlint
       run: make markdownlint
 
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - uses: actions/setup-python@v2
+
+    - name: install yamllint
+      run: make install-yamllint
+
+    - name: run yamllint
+      run: yamllint . -f github
+
   markdown-link-check:
     runs-on: ubuntu-latest
     steps:
@@ -62,3 +76,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: verify semantic convention tables
       run: make table-check
+
+  schemas-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: verify schemas
+      run: make schema-check

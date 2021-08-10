@@ -154,6 +154,9 @@ groups:
         type:
           allow_custom_values: true
           members:
+            - id: Alibaba Cloud
+              value: 'alibaba_cloud'
+              brief: 'Alibaba Cloud'
             - id: AWS
               value: 'aws'
               brief: 'Amazon Web Services'
@@ -169,7 +172,6 @@ groups:
         note: >
           SHOULD be equal to the `cloud.provider` resource attribute of the
           invoked function.
-        examples: 'aws'
       - id: invoked_region
         type: string
         required:

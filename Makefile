@@ -8,7 +8,7 @@ MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 MARKDOWN_LINK_CHECK=markdown-link-check
 MARKDOWN_LINT=markdownlint
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
-SEMCONVGEN_VERSION=0.3.1
+SEMCONVGEN_VERSION=0.4.1
 
 .PHONY: install-misspell
 install-misspell:
@@ -41,6 +41,15 @@ install-markdownlint:
 markdownlint:
 	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
 
+.PHONY: install-yamllint
+install-yamllint:
+    # Using a venv is recommended
+	pip install -U yamllint~=1.26.1
+
+.PHONY: yamllint
+yamllint:
+	yamllint .
+
 # Generate markdown tables from YAML definitions
 .PHONY: table-generation
 table-generation:
@@ -52,6 +61,10 @@ table-generation:
 table-check:
 	docker run --rm -v $(PWD)/semantic_conventions:/source -v $(PWD)/specification:/spec \
 		otel/semconvgen:$(SEMCONVGEN_VERSION) -f /source markdown -md /spec --md-check
+
+.PHONY: schema-check
+schema-check:
+	cd tools && ./schema_check.sh
 
 # Run all checks in order of speed / likely failure.
 .PHONY: check

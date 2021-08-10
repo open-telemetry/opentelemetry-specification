@@ -92,6 +92,10 @@ Thus, the SDK specification defines sets of possible requirements for
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
 
+  Counts for attributes, events and links dropped due to collection limits MUST be
+  available for exporters to report as described in the [exporters](./sdk_exporters/non-otlp.md#dropped-attributes-count)
+  specification.
+
   A function receiving this as argument might not be able to modify the Span.
 
   Note: Typically this will be implemented with a new interface or
@@ -291,7 +295,7 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
 
 #### ParentBased
 
-* This is a composite sampler. `ParentBased` helps distinguished between the
+* This is a composite sampler. `ParentBased` helps distinguish between the
 following cases:
   * No parent (root span).
   * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
@@ -320,20 +324,16 @@ Optional parameters:
 
 ## Span Limits
 
-Erroneous code can add unintended attributes, events, and links to a span. If
-these collections are unbounded, they can quickly exhaust available memory,
-resulting in crashes that are difficult to recover from safely.
+Span attributes MUST adhere to the [common rules of attribute limits](../common/common.md#attribute-limits).
 
-To protect against such errors, SDK Spans MAY discard attributes, links, and
-events that would increase the number of elements of each collection beyond
-the configured limit.
+SDK Spans MAY also discard links and events that would increase the number of
+elements of each collection beyond the configured limit.
 
 If the SDK implements the limits above it MUST provide a way to change these
 limits, via a configuration to the TracerProvider, by allowing users to
 configure individual limits like in the Java example bellow.
 
-The name of the configuration options SHOULD be `AttributeCountLimit`,
-`EventCountLimit` and `LinkCountLimit`. The options MAY be bundled in a class,
+The name of the configuration options SHOULD be `EventCountLimit` and `LinkCountLimit`. The options MAY be bundled in a class,
 which then SHOULD be called `SpanLimits`. Implementations MAY provide additional
 configuration such as `AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
 
@@ -343,6 +343,10 @@ public final class SpanLimits {
 
   public int getAttributeCountLimit();
 
+  public int getAttributeCountPerEventLimit();
+
+  public int getAttributeCountPerLinkLimit();
+
   public int getEventCountLimit();
 
   public int getLinkCountLimit();
@@ -351,7 +355,7 @@ public final class SpanLimits {
 
 **Configurable parameters:**
 
-* `AttributeCountLimit` (Default=128) - Maximum allowed span attribute count;
+* [all common options applicable to attributes](../common/common.md#attribute-limits-configuration)
 * `EventCountLimit` (Default=128) - Maximum allowed span event count;
 * `LinkCountLimit` (Default=128) - Maximum allowed span link count;
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;

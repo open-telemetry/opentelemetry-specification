@@ -19,4 +19,4 @@ A resource can be attributed to at most one web engine.
 The situations where there are multiple candidates, it is up to instrumentation library authors to choose the web engine. To illustrate, let's look at a Python application using Apache HTTP Server with mod_wsgi as the server and Django as the web framework. In this situation:
 
 * Either Apache HTTP Server or `mod_wsgi` MAY be chosen as `webengine`, depending on the decision made by the instrumentation authors.
-* Django SHOULD NOT be set as an `webengine` as the required information is already available in insrumentation library and setting this into `webengine` would duplicate the information.
+* Django SHOULD NOT be set as an `webengine` as the required information is already available in instrumentation library and setting this into `webengine` would duplicate the information.

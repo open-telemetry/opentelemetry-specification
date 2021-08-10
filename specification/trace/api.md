@@ -118,22 +118,29 @@ This API MUST accept the following parameters:
   A TracerProvider could also return a no-op Tracer here if application owners configure
   the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
-
+- [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
+  recorded in the emitted telemetry.
+  
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
-with the same name+version to pick up configuration changes.
+with the same name+version+schema_url to pick up configuration changes.
 This can be achieved either by allowing to work with an outdated configuration or
 by ensuring that new configuration applies also to previously returned `Tracer`s.
 
 Note: This could, for example, be implemented by storing any mutable
 configuration in the `TracerProvider` and having `Tracer` implementation objects
-have a reference to the `TracerProvider` from which they were obtained.
-If configuration must be stored per-tracer (such as disabling a certain tracer),
-the tracer could, for example, do a look-up with its name+version in a map in
-the `TracerProvider`, or the `TracerProvider` could maintain a registry of all
-returned `Tracer`s and actively update their configuration if it changes.
+have a reference to the `TracerProvider` from which they were obtained. If
+configuration must be stored per-tracer (such as disabling a certain tracer),
+the tracer could, for example, do a look-up with its name+version+schema_url in
+a map in the `TracerProvider`, or the `TracerProvider` could maintain a registry
+of all returned `Tracer`s and actively update their configuration if it changes.
+
+The effect of associating a Schema URL with a `Tracer` MUST be that the
+telemetry emitted using the `Tracer` will be associated with the Schema URL,
+provided that the emitted data format is capable of representing such
+association.
 
 ## Context Interaction
 
@@ -542,6 +549,10 @@ status, which is `Unset`.
 - `Error`
   - The operation contains an error.
 
+These values form a total order: `Ok > Error > Unset`.
+This means that setting `Status` with `StatusCode=Ok` will override any prior or future attempts to set
+span `Status` with `StatusCode=Error` or `StatusCode=Unset`. See below for more specific rules.
+
 The Span interface MUST provide:
 
 - An API to set the `Status`. This SHOULD be called `SetStatus`. This API takes
@@ -551,6 +562,8 @@ The Span interface MUST provide:
   `Ok` & `Unset` values.
 
 The status code SHOULD remain unset, except for the following circumstances:
+
+An attempt to set value `Unset` SHOULD be ignored.
 
 When the status is set to `Error` by Instrumentation Libraries, the status codes
 SHOULD be documented and predictable. The status code should only be set to `Error`
@@ -563,6 +576,9 @@ unless explicitly configured to do so. Instrumention libraries SHOULD leave the
 status code as `Unset` unless there is an error, as described above.
 
 Application developers and Operators may set the status code to `Ok`.
+
+When span status is set to `Ok` it SHOULD be considered final and any further
+attempts to change it SHOULD be ignored.
 
 Analysis tools SHOULD respond to an `Ok` status by suppressing any errors they
 would otherwise generate. For example, to suppress noisy errors such as 404s.
@@ -690,7 +706,9 @@ and its children in a Trace.  `SpanKind` describes two independent
 properties that benefit tracing systems during analysis.
 
 The first property described by `SpanKind` reflects whether the Span
-is a remote child or parent.  Spans with a remote parent are
+is a "logical" remote child or parent. By "logical", we mean that
+the span is logically a remote child or parent, from the point of view
+of the library that is being instrumented. Spans with a remote parent are
 interesting because they are sources of external load.  Spans with a
 remote child are interesting because they reflect a non-local system
 dependency.
@@ -709,21 +727,28 @@ remote span.  As a simple guideline, instrumentation should create a
 new Span prior to extracting and serializing the SpanContext for a
 remote call.
 
+Note: there are complex scenarios where a CLIENT span may have a child
+that is also logically a CLIENT span, or a PRODUCER span might have a local child
+that is a CLIENT span, depending on how the various libraries that are providing
+the functionality are built and instrumented. These scenarios, when they occur,
+should be detailed in the semantic conventions appropriate to the relevant
+libraries.
+
 These are the possible SpanKinds:
 
 * `SERVER` Indicates that the span covers server-side handling of a
-  synchronous RPC or other remote request.  This span is the child of
-  a remote `CLIENT` span that was expected to wait for a response.
-* `CLIENT` Indicates that the span describes a synchronous request to
-  some remote service.  This span is the parent of a remote `SERVER`
-  span and waits for its response.
-* `PRODUCER` Indicates that the span describes the parent of an
-  asynchronous request.  This parent span is expected to end before
+  synchronous RPC or other remote request.  This span is often the child
+  of a remote `CLIENT` span that was expected to wait for a response.
+* `CLIENT` Indicates that the span describes a request to
+  some remote service.  This span is usually the parent of a remote `SERVER`
+  span and does not end until the response is received.
+* `PRODUCER` Indicates that the span describes the initiators of an
+  asynchronous request.  This parent span will often end before
   the corresponding child `CONSUMER` span, possibly even before the
   child span starts. In messaging scenarios with batching, tracing
   individual messages requires a new `PRODUCER` span per message to
   be created.
-* `CONSUMER` Indicates that the span describes the child of an
+* `CONSUMER` Indicates that the span describes a child of an
   asynchronous `PRODUCER` request.
 * `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
@@ -732,7 +757,7 @@ These are the possible SpanKinds:
 To summarize the interpretation of these kinds:
 
 | `SpanKind` | Synchronous | Asynchronous | Remote Incoming | Remote Outgoing |
-|--|--|--|--|--|
+|---|---|---|---|---|
 | `CLIENT` | yes | | | yes |
 | `SERVER` | yes | | yes | |
 | `PRODUCER` | | yes | | maybe |

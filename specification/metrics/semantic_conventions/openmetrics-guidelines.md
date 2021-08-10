@@ -24,14 +24,15 @@ metrics in the OpenMetrics exposition format. For more information, refer to the
 
 ### OpenTelemetry to OpenMetrics
 
-#### Name and Label Keys
+#### Name and Attribute Keys
 
-Exposting OpenTelemetry metrics in the OpenMetrics format is primarily
-problematic for metric and label naming; the OpenMetrics exposition format
-expressly forbids some characters that are allowed in OpenTelemetry.
+Exposing OpenTelemetry metrics in the OpenMetrics format is primarily
+problematic for metric and attribute (labels in OpenMetrics) naming; the
+OpenMetrics exposition format expressly forbids some characters that are allowed
+in OpenTelemetry.
 
 When converting OpenTelemetry metric events to the OpenMetrics exposition
-format, the name field and all label keys MUST be sanitized by replacing
+format, the name field and all attribute keys MUST be sanitized by replacing
 every character that is not a letter or a digit with an underscore.
 
 Example pseudocode:
@@ -45,7 +46,7 @@ See also [Metric names and labels](https://prometheus.io/docs/concepts/data_mode
 in the Prometheus data model documentation.
 
 OpenMetrics does not allow metric names to begin with a digit. OpenTelemetry's
-[instrument naming requirements](../api.md#instrument-naming-requirements) also
+[instrument naming requirements](../api.md#instrument-naming-rule) also
 require that the first character of a metric instrument is non-numeric.
 
 If a metric event is generated in OpenTelemetry that does not conform to this

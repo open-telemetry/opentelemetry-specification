@@ -61,7 +61,7 @@ See:
 ### Semantic Conventions update
 
 Semantic convention is declared in YAML files and markdown tables are
-generated from these files. Read about semantic convention updates [here](/semantic_conventions#yaml-model-for-semantic-conventions).
+generated from these files. Read about semantic convention updates [here](./semantic_conventions/README.md).
 
 ### Autoformatting
 
@@ -189,8 +189,7 @@ on each other), the owner should try to get people aligned by:
   with a summary in the PR conversation.
 * Tagging subdomain experts (by looking at the change history) in the PR asking
   for suggestion.
-* Reaching out to more people on the [gitter
-  channel](https://gitter.im/open-telemetry/opentelemetry-specification).
+* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](http://slack.cncf.io/).
 * Stepping back to see if it makes sense to narrow down the scope of the PR or
   split it up.
 

@@ -55,7 +55,7 @@ Technical committee holds regular meetings, notes are held
 ## Project Timeline
 
 The current project status as well as information on notable past releases is found at
-[the OpenTelemetry project page](https://opentelemetry.io/project-status/).
+[the OpenTelemetry project page](https://opentelemetry.io/status/).
 
 Information about current work and future development plans is found at the
 [specification development milestones](https://github.com/open-telemetry/opentelemetry-specification/milestones).

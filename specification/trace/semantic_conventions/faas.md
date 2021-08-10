@@ -5,6 +5,8 @@
 This document defines how to describe an instance of a function that runs without provisioning
 or managing of servers (also known as serverless functions or Function as a Service (FaaS)) with spans.
 
+See also the [additional instructions for instrumenting AWS Lambda](instrumentation/aws-lambda.md).
+
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
@@ -101,7 +103,7 @@ which the invoked FaaS instance reports about itself, if it's instrumented.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `faas.invoked_name` | string | The name of the invoked function. [1] | `my-function` | Yes |
-| `faas.invoked_provider` | string | The cloud provider of the invoked function. [2] | `aws` | Yes |
+| `faas.invoked_provider` | string | The cloud provider of the invoked function. [2] | `alibaba_cloud` | Yes |
 | `faas.invoked_region` | string | The cloud region of the invoked function. [3] | `eu-central-1` | Conditional [4] |
 
 **[1]:** SHOULD be equal to the `faas.name` resource attribute of the invoked function.
@@ -116,6 +118,7 @@ which the invoked FaaS instance reports about itself, if it's instrumented.
 
 | Value  | Description |
 |---|---|
+| `alibaba_cloud` | Alibaba Cloud |
 | `aws` | Amazon Web Services |
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
