@@ -38,8 +38,8 @@ These attributes may be used for details on the negotiated cipher suite.
 <!-- semconv tls.cipher -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `tls.cipher.name` | string | IETF name of the cipher suite. | `TLS_RSA_WITH_3DES_EDE_CBC_SHA`; `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256` | No |
 | `tls.cipher.version` | string | The minimum TLS protocol version supported by this cipher suite. | `SSLv3` | No |
+| `tls.cipher.name` | string | IETF name of the cipher suite. | `TLS_RSA_WITH_3DES_EDE_CBC_SHA`; `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256` | No |
 
 `tls.cipher.version` MUST be one of the following:
 
@@ -52,9 +52,13 @@ These attributes may be used for details on the negotiated cipher suite.
 | `TLSv1.3` | TLSv1.3 |
 <!-- endsemconv -->
 
+The values allowed for `tls.cipher.name` MUST be one of the `Descriptions` of the [registered TLS Cipher Suits](https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#table-tls-parameters-4).
+
 ## Certificate attributes
 
 These attributes may be used for any operation for details on the certificates.
+Fingerprints and serial numbers MUST be provided in *hexadecimal colon notation*.
+This is the widely-used notation by CLI tools like `openssl` or browsers to display those certificate details.'
 
 <!-- semconv tls.certificate -->
 | Attribute  | Type | Description  | Examples  | Required |

@@ -26,10 +26,6 @@ groups:
     prefix: tls.cipher
     brief: 'Details on the negotiated cipher suite'
     attributes: 
-      - id: name
-        brief: IETF name of the cipher suite.
-        type: string
-        examples: ['TLS_RSA_WITH_3DES_EDE_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256']
       - id: version
         brief: The minimum TLS protocol version supported by this cipher suite.
         type: 
@@ -45,6 +41,10 @@ groups:
               value: 'TLSv1.2'
             - id: TLSv1.3
               value: 'TLSv1.3'
+      - id: name
+        brief: IETF name of the cipher suite.
+        type: string
+        examples: ['TLS_RSA_WITH_3DES_EDE_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256']
   - id: tls.certificate
     prefix: tls
     brief: 'Details on the used certificates'
