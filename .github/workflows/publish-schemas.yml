@@ -27,9 +27,9 @@ jobs:
           git clone "https://$API_TOKEN_GITHUB@github.com/$DESTINATION_REPO.git" "$TARGET_DIR"
           rsync -av --delete "$SOURCE_PATH/" "$TARGET_DIR/$DESTINATION_PATH/"
           cd "$TARGET_DIR"
-          git checkout -b docs-$GITHUB_REPOSITORY-$GITHUB_SHA
+          git checkout -b schemas-$GITHUB_REPOSITORY-$GITHUB_SHA
           git add .
-          git commit -m "Docs update from $GITHUB_REPOSITORY"
-          git push -u origin HEAD:docs-$GITHUB_REPOSITORY-$GITHUB_SHA
-          gh pr create -t "Docs Update from $GITHUB_REPOSITORY" -b "This is an automated pull request." -B main -H docs-$GITHUB_REPOSITORY-$GITHUB_SHA
+          git commit -m "Schemas update from $GITHUB_REPOSITORY"
+          git push -u origin HEAD:schemas-$GITHUB_REPOSITORY-$GITHUB_SHA
+          gh pr create -t "Schemas Update from $GITHUB_REPOSITORY" -b "This is an automated pull request." -B main -H schemas-$GITHUB_REPOSITORY-$GITHUB_SHA
           echo "done"
