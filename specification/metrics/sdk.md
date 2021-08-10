@@ -210,10 +210,10 @@ meter_provider
 ## Aggregator
 
 An `Aggregator` computes incoming Instrument [Measurements](./api.md#measurement)
-into [Pre-Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model).
+into [Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model).
 
 The [View](./sdk.md#view) informs the SDK on creation and configuration of
-Aggregators. An [Aggregator Name](./sdk.md#aggregator-name) may be use to
+Aggregators. An [Aggregator Name](./sdk.md#aggregator-name) may be used to
 refer to an Aggregator and configuration.
 
 e.g. The View specifies the string name of an Aggregator (i.e. "Histogram")
@@ -226,14 +226,13 @@ meter_provider
     instrument_name = "X",
     aggregator = "Histogram");
 
-// Use Histogram with custom boundaries and monotonic values
+// Use Histogram with custom boundaries
 meter_provider
   .add_view(
     instrument_name = "X",
     aggregator = "Histogram",
     aggregator_params = new KeyValuePair<string, object>[]
     {
-      new KeyValuePair<string, object>("Monotonic", true),
       new KeyValuePair<string, object>("Boundaries", new double[] { 0.0, 10.0, 100.0 }),
     });
 ```
@@ -242,24 +241,17 @@ The [View](./sdk.md#view) informs the SDK to provide correct
 Instrument [Measurements](./api.md#measurement) to the correct Aggregators.
 
 An `Aggregator` is created with optional configuration parameters
-(i.e. Monotonic=true, Boundaries=[0, 10, 100]).
-Default configuration parameters will be use unless overridden by
+(i.e. Temporality=Delta, Boundaries=[0, 10, 100]).
+Default configuration parameters will be used unless overridden by
 optional configuration parameters.
 
-An `Aggregator` has a means to "update" with incoming Instrument
-[Measurement](./api.md#measurement) data.
+An `Aggregator` has a means to "update" its internal state with incoming
+Instrument [Measurement](./api.md#measurement) data.
 
 An `Aggregator` has a means to "collect"
-[Pre-Aggregated Metric](./datamodel.md#timeseries-model) data.
+[Aggregated Metric](./datamodel.md#timeseries-model) data.
 The "collect" action should be treated as stateful and may update its
 internal state.
-
-e.g. When "collect" is acted on a Sum Aggregator, configured for delta
-temporality, it will return a delta metric and reset its internal
-counts and time-period window. A downstream Exporter, supporting only
-cumulative temporality, may choose to 1. drop the delta metric
-OR 2. support [Delta to Cumulative](./datamodel.md#sums-delta-to-cumulative)
-conversion.
 
 **TBD**:
 The [View](./sdk.md#view) may inform an `Aggregator` to collect
@@ -277,10 +269,10 @@ The [View](./sdk.md#view) can refer to the following Aggregator by name.
 | Gauge | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - |
 | Histogram | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Default |
 
-\[1\]: The name "Default" is use to select Aggregator by Instrument Kind.
+\[1\]: The name "Default" is used to select Aggregator by Instrument Kind.
 See [Default Aggregators](./sdk.md#default-aggregators).
 
-\[2\]: The name "None" is use to specify no Aggregator or
+\[2\]: The name "None" is used to specify no Aggregator or
 a "virtual" Aggregator which ignores all measurements.
 
 \[3\]: Depends on the Instrument Kind. See [Default Aggregators](./sdk.md#default-aggregators).
@@ -291,57 +283,59 @@ The SDK MUST provide default Aggregators to support the
 [Metric Points](./datamodel.md#metric-points) in the
 [Metrics Data Model](./datamodel.md).
 
-The "Default" Aggregator use the Instrument Kind (e.g. at View registration)
+The "Default" Aggregator uses the Instrument Kind (e.g. at View registration)
 to select the correct Aggregator and default configuration parameters.
 
-| Instrument Kind | Default Aggregator | Monotonic | Temporality | Boundaries |
-| --- | --- | --- | --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | true | Delta | - |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | false | Delta | - |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | true | Cumulative | - |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | false | Cumulative | - |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - | - | - |
-| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | true | Delta | Default<sup>1</sup> |
+| Instrument Kind | Default Aggregator | Default Configuration Parameters |
+| --- | --- | --- |
+| [Counter](./api.md#counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Delta<br>SumType = Monotonic<sup>2</sup> |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Delta<br>SumType = Non-Monotonic<sup>2</sup> |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Cumulative<br>SumType = Monotonic<sup>2</sup> |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Cumulative<br>SumType = Non-Monotonic<sup>2</sup> |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - |
+| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Temporality = Delta<br>Boundaries = Default<sup>1</sup> |
 
 \[1\]: See Default Bucket Boundaries in [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
 
+\[2\]: TBD: See [PR#320](https://github.com/open-telemetry/opentelemetry-proto/pull/320).
+
 ### Last Value Aggregator
 
-The Last Value Aggregator collect data for the
+The Last Value Aggregator collects data for the
 [Gauge Metric Point](./datamodel.md#gauge).
 
-This Aggregator does not have any configuration parameter keys.
+This Aggregator does not have any configuration parameters.
 
-This Aggregator reports on:
+This Aggregator collects:
 
 - The last `Measurement`.
 
 ### Sum Aggregator
 
-The Sum Aggregator collect data for the [Sum Metric Point](./datamodel.md#sums).
+The Sum Aggregator collects data for the [Sum Metric Point](./datamodel.md#sums).
 
-This Aggregator honors the following configuration parameter keys:
+This Aggregator honors the following configuration parameters:
 
 | Key | Value | Default | Description |
 | --- | --- | --- | --- |
-| Monotonic | boolean | Depends<sup>1</sup> | if true, non-positive values are treated as errors<sup>2</sup>. |
+| SumType<sup>2</sup> | Monotonic, Non-Monotonic, Other<sup>2</sup> | Depends<sup>1</sup> | See SumType<sup>2</sup> |
 | Temporality | Delta, Cummulative | Depends<sup>1</sup> | See [Temporality](./datamodel.md#temporality). |
 
 \[1\]: Depends on the Instrument Kind. See [Default Aggregators](./sdk.md#default-aggregators).
 
-\[2\]: Language implementation may choose best strategy for handling errors. (i.e. Logged, Discard, etc...)
+\[2\]: **TBD**: See [PR#320](https://github.com/open-telemetry/opentelemetry-proto/pull/320).
 
-This Aggregator reports on:
+This Aggregator collects:
 
 - The arithmetic sum of `Measurement` values.
 
 ### Explicit Bucket Histogram Aggregator
 
-The Explicit Bucket Histogram Aggregator collect data for the
+The Explicit Bucket Histogram Aggregator collects data for the
 [Histogram Metric Point](./datamodel.md#histogram). It supports a set of
 explicit boundary values for histogram bucketing.
 
-This Aggregator honors the following configuration parameter keys:
+This Aggregator honors the following configuration parameters:
 
 | Key | Value | Default | Description |
 | --- | --- | --- | --- |
@@ -349,11 +343,11 @@ This Aggregator honors the following configuration parameter keys:
 | Temporality | Delta, Cummulative | Delta | See [Temporality](./datamodel.md#temporality). |
 | Boundaries | double\[\] | Default<sup>2</sup> | Array of increasing values representing explicit bucket boundary values. |
 
-\[1\]: Language implementation may choose best strategy for handling errors. (i.e. Logged, Discard, etc...)
+\[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
 
 \[2\]: Default Bucket Boundaries: (-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;)
 
-This Aggregator reports on:
+This Aggregator collects:
 
 - Count of `Measurement` values falling within explicit bucket boundaries.
 - Arithmetic sum of `Measurement` values in population.
