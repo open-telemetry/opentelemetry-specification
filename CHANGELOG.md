@@ -97,6 +97,7 @@ release.
 
 - Clarify the limit on the instrument unit.
   ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
+- Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))  
 
 ### Logs
 
