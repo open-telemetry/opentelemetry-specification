@@ -5,7 +5,7 @@ groups:
     attributes:
       - id: protocol
         brief: 'The negotiated SSL/TLS protocol version of the current connection.'
-        type: 
+        type:
           allow_custom_values: false
           members:
             - id: SSLv3
@@ -25,10 +25,10 @@ groups:
   - id: tls.cipher
     prefix: tls.cipher
     brief: 'Details on the negotiated cipher suite'
-    attributes: 
+    attributes:
       - id: version
         brief: The minimum TLS protocol version supported by this cipher suite.
-        type: 
+        type:
           allow_custom_values: false
           members:
             - id: SSLv3
