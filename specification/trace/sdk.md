@@ -13,6 +13,7 @@
 * [Id Generator](#id-generators)
 * [Span Processor](#span-processor)
 * [Span Exporter](#span-exporter)
+* [OTel TraceState values](#otel-tracestate-values)
 
 </details>
 
@@ -679,6 +680,24 @@ public interface SpanExporter {
  void shutdown();
 }
 ```
+
+## OTel TraceState values
+
+When setting [TraceState](api#tracestate) values that are part of the OTel ecosystem,
+they MUST all be contained in a single entry using the `ot` key, with the value being
+a semicolon separated list of key-value pairs such as:
+
+* `ot=p:8;r:64`
+* `ot=foo:bar;k1:13`
+
+Set values MUST be either updated or added to the `ot` entry in `TraceState`,
+in order to preserve existing values belonging to other OTel concerns. For example,
+if a given concern K wants to set `k1:13`:
+
+* `ot=p:8;r:64` will become `ot=p:8;r:64;k1:13`.
+* `ot=p:8,r:64;k1:7` will become `ot:p8;r:64;k1:13`.
+
+Keys and values MUST only contain alphanumeric characters.
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
 [otep-83]: https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md
