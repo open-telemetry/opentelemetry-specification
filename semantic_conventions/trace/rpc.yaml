@@ -64,7 +64,7 @@ groups:
               brief: UNKNOWN
               value: 2
             - id: invalid_argument
-              brief: INVALID_ARGUMENT 
+              brief: INVALID_ARGUMENT
               value: 3
             - id: deadline_exceeded
               brief: DEADLINE_EXCEEDED
