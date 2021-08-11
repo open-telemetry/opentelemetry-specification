@@ -27,7 +27,7 @@ These attributes may be used for base information of any TLS/SSL encrypted commu
 | `SSLv3` | SSLv3 |
 | `TLSv1` | TLSv1 |
 | `TLSv1.1` | TLSv1.1 |
-| `TLSv1.2` | TLSv1.1 |
+| `TLSv1.2` | TLSv1.2 |
 | `TLSv1.3` | TLSv1.3 |
 <!-- endsemconv -->
 
@@ -48,7 +48,7 @@ These attributes may be used for details on the negotiated cipher suite.
 | `SSLv3` | SSLv3 |
 | `TLSv1` | TLSv1 |
 | `TLSv1.1` | TLSv1.1 |
-| `TLSv1.2` | TLSv1.1 |
+| `TLSv1.2` | TLSv1.2 |
 | `TLSv1.3` | TLSv1.3 |
 <!-- endsemconv -->
 

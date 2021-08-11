@@ -14,7 +14,7 @@ groups:
               value: 'TLSv1'
             - id: TLSv1.1
               value: 'TLSv1.1'
-            - id: TLSv1.1
+            - id: TLSv1.2
               value: 'TLSv1.2'
             - id: TLSv1.3
               value: 'TLSv1.3'
@@ -37,7 +37,7 @@ groups:
               value: 'TLSv1'
             - id: TLSv1.1
               value: 'TLSv1.1'
-            - id: TLSv1.1
+            - id: TLSv1.2
               value: 'TLSv1.2'
             - id: TLSv1.3
               value: 'TLSv1.3'
