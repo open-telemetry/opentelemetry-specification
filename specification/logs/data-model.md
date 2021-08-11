@@ -2,41 +2,45 @@
 
 **Status**: [Experimental](../document-status.md)
 
-* [Design Notes](#design-notes)
-  * [Requirements](#requirements)
-  * [Field Kinds](#field-kinds)
-* [Log and Event Record Definition](#log-and-event-record-definition)
-  * [Field: `Timestamp`](#field-timestamp)
-  * [Trace Context Fields](#trace-context-fields)
-    * [Field: `TraceId`](#field-traceid)
-    * [Field: `SpanId`](#field-spanid)
-    * [Field: `TraceFlags`](#field-traceflags)
-  * [Severity Fields](#severity-fields)
-    * [Field: `SeverityText`](#field-severitytext)
-    * [Field: `SeverityNumber`](#field-severitynumber)
-    * [Mapping of `SeverityNumber`](#mapping-of-severitynumber)
-    * [Reverse Mapping](#reverse-mapping)
-    * [Error Semantics](#error-semantics)
-    * [Displaying Severity](#displaying-severity)
-    * [Comparing Severity](#comparing-severity)
-  * [Field: `Name`](#field-name)
-  * [Field: `Body`](#field-body)
-  * [Field: `Resource`](#field-resource)
-  * [Field: `Attributes`](#field-attributes)
-* [Example Log Records](#example-log-records)
-* [Appendix A. Example Mappings](#appendix-a-example-mappings)
-  * [RFC5424 Syslog](#rfc5424-syslog)
-  * [Windows Event Log](#windows-event-log)
-  * [SignalFx Events](#signalfx-events)
-  * [Splunk HEC](#splunk-hec)
-  * [Log4j](#log4j)
-  * [Zap](#zap)
-  * [Apache HTTP Server access log](#apache-http-server-access-log)
-  * [CloudTrail Log Event](#cloudtrail-log-event)
-  * [Google Cloud Logging](#google-cloud-logging)
-* [Elastic Common Schema](#elastic-common-schema)
-* [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
-* [References](#references)
+- [Log Data Model](#log-data-model)
+  - [Design Notes](#design-notes)
+    - [Requirements](#requirements)
+    - [Definitions Used in this Document](#definitions-used-in-this-document)
+      - [Type `any`](#type-any)
+      - [Type `map<string, any>`](#type-mapstring-any)
+    - [Field Kinds](#field-kinds)
+  - [Log and Event Record Definition](#log-and-event-record-definition)
+    - [Field: `Timestamp`](#field-timestamp)
+    - [Trace Context Fields](#trace-context-fields)
+      - [Field: `TraceId`](#field-traceid)
+      - [Field: `SpanId`](#field-spanid)
+      - [Field: `TraceFlags`](#field-traceflags)
+    - [Severity Fields](#severity-fields)
+      - [Field: `SeverityText`](#field-severitytext)
+      - [Field: `SeverityNumber`](#field-severitynumber)
+      - [Mapping of `SeverityNumber`](#mapping-of-severitynumber)
+      - [Reverse Mapping](#reverse-mapping)
+      - [Error Semantics](#error-semantics)
+      - [Displaying Severity](#displaying-severity)
+      - [Comparing Severity](#comparing-severity)
+    - [Field: `Name`](#field-name)
+    - [Field: `Body`](#field-body)
+    - [Field: `Resource`](#field-resource)
+    - [Field: `Attributes`](#field-attributes)
+  - [Example Log Records](#example-log-records)
+  - [Appendix A. Example Mappings](#appendix-a-example-mappings)
+    - [RFC5424 Syslog](#rfc5424-syslog)
+    - [Windows Event Log](#windows-event-log)
+    - [SignalFx Events](#signalfx-events)
+    - [Splunk HEC](#splunk-hec)
+    - [Log4j](#log4j)
+    - [Zap](#zap)
+    - [Apache HTTP Server access log](#apache-http-server-access-log)
+    - [CloudTrail Log Event](#cloudtrail-log-event)
+    - [Google Cloud Logging](#google-cloud-logging)
+  - [Elastic Common Schema](#elastic-common-schema)
+  - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
+  - [References](#references)
 
 This is a data model and semantic conventions that allow to represent logs from
 various sources: application log files, machine generated events, system logs,
@@ -687,13 +691,13 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>source</td>
     <td>string</td>
     <td>The source value to assign to the event data. For example, if you are sending data from an app you are developing, you could set this key to the name of the app.</td>
-    <td>Resource["service.name"]</td>
+    <td>Resource["com.splunk.source"]</td>
   </tr>
   <tr>
     <td>sourcetype</td>
     <td>string</td>
     <td>The sourcetype value to assign to the event data.</td>
-    <td>Attributes["source.type"]</td>
+    <td>Resource["com.splunk.sourcetype"]</td>
   </tr>
   <tr>
     <td>event</td>
@@ -711,7 +715,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>index</td>
     <td>string</td>
     <td>The name of the index by which the event data is to be indexed. The index you specify here must be within the list of allowed indexes if the token has the indexes parameter set.</td>
-    <td>TBD, most like will go to attributes</td>
+    <td>Attributes["com.splunk.index"]</td>
   </tr>
 </table>
 
