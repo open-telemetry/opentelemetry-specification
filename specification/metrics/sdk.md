@@ -261,43 +261,34 @@ The [View](./sdk.md#view) may inform an `Aggregator` to collect
 
 The [View](./sdk.md#view) can refer to the following Aggregator by name.
 
-| Name | Aggregator | Configuration Parameters |
-| --- | --- | --- |
-| Default<sup>1</sup> | Depends<sup>3</sup> | Depends<sup>3</sup> |
-| None<sup>2</sup> | - | - |
-| Sum | [Sum Aggregator](./sdk.md#sum-aggregator) | Depends<sup>3</sup> |
-| Gauge | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - |
-| Histogram | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Default |
+| Name | Aggregator | Description |
+| --- | --- | -- |
+| None | - | The reserved name "None" specify no Aggregator or a "virtual" Aggregator which ignores all measurements. |
+| Default | [Default](./sdk.md#default-aggregator) | The reserved name "Default" select an Aggregator by Instrument Kind. See [Default Aggregator](./sdk.md#default-aggregator). |
+| Sum | [Sum Aggregator](./sdk.md#sum-aggregator) | The reserved name "Sum" select a Sum Aggregator and SumType configuration parameter by Instrument Kind. See [Default Aggregator](./sdk.md#default-aggregator). |
+| Gauge | [Last Value Aggregator](./sdk.md#last-value-aggregator) | The reserved name "Gauge" select the [Last Value Aggregator](./sdk.md#last-value-aggregator). |
+| Histogram | "Best" Histogram | The reserved name "Histogram" select the "best" available Histogram Aggregator. i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator). |
+| Explicit_Bucket_Histogram | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Select the [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator). |
 
-\[1\]: The name "Default" is used to select Aggregator by Instrument Kind.
-See [Default Aggregators](./sdk.md#default-aggregators).
-
-\[2\]: The name "None" is used to specify no Aggregator or
-a "virtual" Aggregator which ignores all measurements.
-
-\[3\]: Depends on the Instrument Kind. See [Default Aggregators](./sdk.md#default-aggregators).
-
-### Default Aggregators
+### Default Aggregator
 
 The SDK MUST provide default Aggregators to support the
 [Metric Points](./datamodel.md#metric-points) in the
 [Metrics Data Model](./datamodel.md).
 
 The "Default" Aggregator uses the Instrument Kind (e.g. at View registration)
-to select the correct Aggregator and default configuration parameters.
+to select an Aggregator and configuration parameters.
 
-| Instrument Kind | Default Aggregator | Default Configuration Parameters |
+| Instrument Kind | Default Aggregator | Configuration Parameters |
 | --- | --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Delta<br>SumType = Monotonic<sup>2</sup> |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Delta<br>SumType = Non-Monotonic<sup>2</sup> |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Cumulative<br>SumType = Monotonic<sup>2</sup> |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | Temporality = Cumulative<br>SumType = Non-Monotonic<sup>2</sup> |
+| [Counter](./api.md#counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | SumType = Monotonic |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | SumType = Monotonic |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | SumType = Non-Monotonic |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | SumType = Non-Monotonic |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - |
-| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Default<sup>1</sup> |
+| [Histogram](./api.md#histogram) | "Best" Histogram<sup>1</sup> | - |
 
-\[1\]: See Default Values in [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
-
-\[2\]: **TBD**: See [PR#320](https://github.com/open-telemetry/opentelemetry-proto/pull/320).
+\[1\]: The SDK will select the "best" available Histogram Aggregator. i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
 
 ### Last Value Aggregator
 
@@ -319,11 +310,11 @@ This Aggregator honors the following configuration parameters:
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
 | SumType<sup>2</sup> | Monotonic, Non-Monotonic, Other<sup>2</sup> | Depends<sup>1</sup> | See SumType<sup>2</sup> |
-| Temporality | Delta, Cummulative | Depends<sup>1</sup> | See [Temporality](./datamodel.md#temporality). |
+| Temporality | Delta, Cummulative | Cummulative | See [Temporality](./datamodel.md#temporality). |
 
-\[1\]: Depends on the Instrument Kind. See [Default Aggregators](./sdk.md#default-aggregators).
+\[1\]: Depends on the Instrument Kind. See [Default Aggregator](./sdk.md#default-aggregator).
 
-\[2\]: **TBD**: See [PR#320](https://github.com/open-telemetry/opentelemetry-proto/pull/320).
+\[2\]: **TBD**: See [PR#320](open-telemetry/opentelemetry-proto#320) for SumType definition.
 
 This Aggregator collects:
 
@@ -340,8 +331,8 @@ This Aggregator honors the following configuration parameters:
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
 | Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
-| Temporality | Delta, Cummulative | Delta | See [Temporality](./datamodel.md#temporality). |
-| Boundaries | double\[\] | (-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) | Array of increasing values representing explicit bucket boundary values. |
+| Temporality | Delta, Cummulative | Cummulative | See [Temporality](./datamodel.md#temporality). |
+| Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 
 \[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
 
