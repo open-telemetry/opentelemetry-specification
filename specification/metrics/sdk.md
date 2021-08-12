@@ -327,11 +327,10 @@ Returns: `ExportResult`
 `ExportResult` is one of:
 
 * `Success` - The batch has been successfully exported. For protocol exporters
-this typically means that the data is sent over the wire and delivered to the
-destination server.
-* `Failure` - exporting failed. The batch must be dropped. For
-example, this can happen when the batch contains bad data and cannot be
-serialized.
+  this typically means that the data is sent over the wire and delivered to the
+  destination server.
+* `Failure` - exporting failed. The batch must be dropped. For example, this can
+  happen when the batch contains bad data and cannot be serialized.
 
 Note: this result may be returned via an async mechanism or a callback, if that
 is idiomatic for the language implementation.
