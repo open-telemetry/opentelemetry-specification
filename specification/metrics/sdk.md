@@ -216,25 +216,32 @@ The [View](./sdk.md#view) informs the SDK on creation and configuration of
 Aggregators. An [Aggregator Name](./sdk.md#aggregator-name) may be used to
 refer to an Aggregator and configuration.
 
-e.g. The View specifies the string name of an Aggregator (i.e. "Histogram")
-and an optional list of configuration parameter overrides.
+Implementors may choose the best idiomatic practice for their language to
+represent the semantic of an Aggregator and configuration parameters.
+
+e.g. The View specifies an Aggregator by string name (i.e. "Histogram").
+
+```python
+# Use Histogram with custom boundaries
+meter_provider
+  .add_view(
+    "X", 
+    aggregator="Histogram", 
+    aggregator_params={"Boundaries": [0, 10, 100]}
+    )
+```
+
+e.g. The View specifies an Aggregator by class/type instance.
 
 ```c#
-// Use default Histogram
-meter_provider
-  .add_view(
-    instrument_name = "X",
-    aggregator = "Histogram");
-
 // Use Histogram with custom boundaries
-meter_provider
-  .add_view(
-    instrument_name = "X",
-    aggregator = "Histogram",
-    aggregator_params = new KeyValuePair<string, object>[]
-    {
-      new KeyValuePair<string, object>("Boundaries", new double[] { 0.0, 10.0, 100.0 }),
-    });
+meterProviderBuilder
+  .AddView(
+    instrumentName: "X",
+    aggregator: new HistogramAggregator(
+      boundaries: new double[] { 0.0, 10.0, 100.0 }
+    )
+  );
 ```
 
 The [View](./sdk.md#view) informs the SDK to provide correct
