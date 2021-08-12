@@ -307,6 +307,7 @@ This Aggregator does not have any configuration parameters.
 This Aggregator collects:
 
 - The last `Measurement`.
+- The timestamp of the last `Measurement`.
 
 ### Sum Aggregator
 
