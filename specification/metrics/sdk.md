@@ -317,6 +317,10 @@ exporter. The default SDK SHOULD NOT implement retry logic, as the required
 logic is likely to depend heavily on the specific protocol and backend the spans
 are being sent to.
 
+Individual language clients can decide how to associate
+[Resource](../resource/sdk.md) with `Metrics`. Refer to the [tracing SDK
+specfication](../trace/sdk.md#additional-span-interfaces) for more information.
+
 **Parameters:**
 
 `batch` - a batch of `Metrics`. The exact data type of the batch is language
