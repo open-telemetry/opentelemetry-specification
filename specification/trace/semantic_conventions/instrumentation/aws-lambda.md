@@ -90,11 +90,11 @@ be set to the [resource property][] from the proxy request event, which correspo
 route instead of the function name.
 
 [`faas.trigger`][faas] MUST be set to `http`. [HTTP attributes](../http.md) SHOULD be set based on the
-available information in the proxy request event. `http.scheme` is available as the `x-forwarded-proto` header
-in the proxy request. Refer to the [input format][] for more details.
+available information in the Lambda event initiated by the proxy request. `http.scheme` is available as the
+`x-forwarded-proto` header in the Lambda event. Refer to the [input event format][] for more details.
 
 [resource property]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
-[input format]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+[input event format]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
 
 ## SQS
 
