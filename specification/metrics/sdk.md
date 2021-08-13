@@ -216,7 +216,7 @@ The [View](./sdk.md#view) informs the SDK on creation and configuration of
 Aggregators. An [Aggregator Name](./sdk.md#aggregator-name) may be used to
 refer to an Aggregator and configuration.
 
-Implementors may choose the best idiomatic practice for their language to
+Implementors MAY choose the best idiomatic practice for their language to
 represent the semantic of an Aggregator and configuration parameters.
 
 e.g. The View specifies an Aggregator by string name (i.e. "Histogram").
@@ -262,7 +262,7 @@ internal state.
 
 **TBD**:
 The [View](./sdk.md#view) may inform an `Aggregator` to collect
-[Examplars](./datamodel.md#exemplars).
+[Exemplars](./datamodel.md#exemplars).
 
 ### Aggregator Name
 
@@ -318,11 +318,11 @@ This Aggregator honors the following configuration parameters:
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
 | SumType<sup>2</sup> | Monotonic, Non-Monotonic, Other<sup>2</sup> | Depends<sup>1</sup> | See SumType<sup>2</sup> |
-| Temporality | Delta, Cummulative | Cummulative | See [Temporality](./datamodel.md#temporality). |
+| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
 
 \[1\]: Depends on the Instrument Kind. See [Default Aggregator](./sdk.md#default-aggregator).
 
-\[2\]: **TBD**: See [PR#320](open-telemetry/opentelemetry-proto#320) for SumType definition.
+\[2\]: **TBD**: See [PR#320](https://github.com/open-telemetry/opentelemetry-proto/pull/320) for SumType definition.
 
 This Aggregator collects:
 
@@ -339,7 +339,7 @@ This Aggregator honors the following configuration parameters:
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
 | Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
-| Temporality | Delta, Cummulative | Cummulative | See [Temporality](./datamodel.md#temporality). |
+| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 
 \[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
