@@ -731,10 +731,16 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>Maps to HEC</td>
   </tr>
   <tr>
-    <td>severity</td>
+    <td>SeverityText</td>
     <td>string</td>
     <td>The severity of the event as a human-readable string.</td>
-    <td>fields['severity']</td>
+    <td>fields['otlp.log.severity']</td>
+  </tr>
+    <tr>
+    <td>Name</td>
+    <td>string</td>
+    <td>Short event identifier that does not contain varying parts.</td>
+    <td>fields['otlp.log.name']</td>
   </tr>
 </table>
 
