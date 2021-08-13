@@ -296,11 +296,18 @@ example:
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
 
-### Interface Definition
+### Push Metric Exporter
 
-`MetricExporter` must support the following functions:
+Push Metric Exporter sends the data on its own schedule. Here are some examples:
 
-#### Export(batch)
+* Sends the data based on a user configured schedule, e.g. every 1 minute.
+* Sends the data when there is a severe error.
+
+#### Interface Definition
+
+Push Metric Exporter MUST support the following functions:
+
+##### Export(batch)
 
 Exports a batch of `Metrics`. Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
@@ -339,7 +346,7 @@ Returns: `ExportResult`
 Note: this result may be returned via an async mechanism or a callback, if that
 is idiomatic for the language implementation.
 
-#### ForceFlush()
+##### ForceFlush()
 
 This is a hint to ensure that the export of any `Metrics` the exporter has
 received prior to the call to `ForceFlush` SHOULD be completed as soon as
@@ -357,7 +364,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry client authors can decide if they want
 to make the flush timeout configurable.
 
-#### Shutdown()
+##### Shutdown()
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
@@ -370,18 +377,8 @@ should return a Failure result.
 and the destination is unavailable). OpenTelemetry client authors can decide if
 they want to make the shutdown timeout configurable.
 
-### Push Metric Exporter
-
-Push Metric Exporter sends the data on its own schedule. Here are some examples:
-
-* Sends the data based on a user configured schedule, e.g. every 1 minute.
-* Sends the data when there is a severe error.
-
 ### Pull Metric Exporter
 
 Pull Metric Exporter reacts to the metrics scrapers and reports the data
 passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
-
-Pull Metric Exporter SHOULD always return immediately with an indication of
-failure when `ForceFlush` is called.
