@@ -321,7 +321,7 @@ after which the call must time out with an error result (Failure).
 
 Any retry logic that is required by the exporter is the responsibility of the
 exporter. The default SDK SHOULD NOT implement retry logic, as the required
-logic is likely to depend heavily on the specific protocol and backend the spans
+logic is likely to depend heavily on the specific protocol and backend the metrics
 are being sent to.
 
 Individual language clients can decide how to associate
