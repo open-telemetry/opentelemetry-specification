@@ -23,8 +23,8 @@ Table of Contents
 </summary>
 
 * [MeterProvider](#meterprovider)
+* [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
-* [MetricProcessor](#metricprocessor)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
@@ -43,13 +43,13 @@ to create an
 instance which is stored on the created `Meter`.
 
 Configuration (i.e., [MeasurementProcessors](#measurementprocessor),
-[MetricProcessors](#metricprocessor), [MetricExporters](#metricexporter) and
-[`Views`](#view)) MUST be managed solely by the `MeterProvider` and the SDK MUST
-provide a way to configure all options that are implemented by the SDK. This MAY be done at the
-time of MeterProvider creation if appropriate.
+[MetricExporters](#metricexporter) and [`Views`](#view)) MUST be managed solely
+by the `MeterProvider` and the SDK MUST provide a way to configure all options
+that are implemented by the SDK. This MAY be done at the time of MeterProvider
+creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
-configuration is updated (e.g., adding a `MetricProcessor`), the updated
+configuration is updated (e.g., adding a `MeasurementProcessor`), the updated
 configuration MUST also apply to all already returned `Meters` (i.e. it MUST NOT
 matter whether a `Meter` was obtained from the `MeterProvider` before or after
 the configuration change). Note: Implementation-wise, this could mean that
@@ -349,6 +349,13 @@ This Aggregator collects:
 - Count of `Measurement` values falling within explicit bucket boundaries.
 - Arithmetic sum of `Measurement` values in population.
 
+## Attribute Limits
+
+Attributes which belong to Metrics are exempt from the
+[common rules of attribute limits](../common/common.md#attribute-limits) at this
+time. Attribute truncation or deletion could affect identitity of metric time
+series and it requires further analysis.
+
 ## MeasurementProcessor
 
 `MeasurementProcessor` is an interface which allows hooks when a
@@ -390,31 +397,6 @@ active span](../trace/api.md#context-interaction)).
 +------------------+
 ```
 
-## MetricProcessor
-
-`MetricProcessor` is an interface which allows hooks for [pre-aggregated metrics
-data](./datamodel.md#timeseries-model).
-
-Built-in metric processors are responsible for batching and conversion of
-metrics data to exportable representation and passing batches to exporters.
-
-The following diagram shows `MetricProcessor`'s relationship to other components
-in the SDK:
-
-```text
-+-----------------+            +-----------------+            +-----------------------+
-|                 | Metrics... |                 | Metrics... |                       |
-| In-memory state +------------> MetricProcessor +------------> MetricExporter (push) +--> Another process
-|                 |            |                 |            |                       |
-+-----------------+            +-----------------+            +-----------------------+
-
-+-----------------+            +-----------------+            +-----------------------+
-|                 | Metrics... |                 | Metrics... |                       |
-| In-memory state +------------> MetricProcessor +------------> MetricExporter (pull) +--> Another process (scraper)
-|                 |            |                 |            |                       |
-+-----------------+            +-----------------+            +-----------------------+
-```
-
 ## MetricExporter
 
 `MetricExporter` defines the interface that protocol-specific exporters MUST
@@ -424,6 +406,23 @@ of telemetry data.
 The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
+
+The following diagram shows `MetricExporter`'s relationship to other components
+in the SDK:
+
+```text
++-----------------+            +-----------------------+
+|                 | Metrics... |                       |
+| In-memory state +------------> MetricExporter (push) +--> Another process
+|                 |            |                       |
++-----------------+            +-----------------------+
+
++-----------------+            +-----------------------+
+|                 | Metrics... |                       |
+| In-memory state +------------> MetricExporter (pull) +--> Another process (scraper)
+|                 |            |                       |
++-----------------+            +-----------------------+
+```
 
 Metric Exporter has access to the [pre-aggregated metrics
 data](./datamodel.md#timeseries-model).

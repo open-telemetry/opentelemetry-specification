@@ -154,6 +154,9 @@ groups:
         type:
           allow_custom_values: true
           members:
+            - id: Alibaba Cloud
+              value: 'alibaba_cloud'
+              brief: 'Alibaba Cloud'
             - id: AWS
               value: 'aws'
               brief: 'Amazon Web Services'
