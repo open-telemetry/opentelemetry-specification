@@ -740,7 +740,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>Name</td>
     <td>string</td>
     <td>Short event identifier that does not contain varying parts.</td>
-    <td>fields['otlp.log.name']</td>
+    <td>fields['otel.log.name']</td>
   </tr>
 </table>
 
