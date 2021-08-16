@@ -14,6 +14,9 @@ i.e.:
 
 ## Writing semantic conventions
 
+Semantic conventions for the spec MUST adhere to the
+[attribute naming conventions](../specification/common/attribute-naming.md).
+
 Refer to the [syntax](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions/syntax.md)
 for how to write the YAML files for semantic conventions and what the YAML properties mean.
 
@@ -21,7 +24,7 @@ A schema file for VS code is configured in the `/.vscode/settings.json` of this
 repository, enabling auto-completion and additional checks. Refer to
 [the generator README](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions/README.md) for what extension you need.
 
-## Generation
+## Generating markdown
 
 These YAML files are used by the make target `table-generation` to generate consistently
 formatted Markdown tables for all semantic conventions in the specification. Run it from the root of this repository using the command
