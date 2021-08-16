@@ -734,7 +734,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>SeverityText</td>
     <td>string</td>
     <td>The severity of the event as a human-readable string.</td>
-    <td>fields['otlp.log.severity']</td>
+    <td>fields['otel.log.severity']</td>
   </tr>
     <tr>
     <td>Name</td>
