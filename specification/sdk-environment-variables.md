@@ -167,8 +167,9 @@ Known values for OTEL_TRACES_EXPORTER are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
-- `"zipkin_proto"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
+- `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"zipkin_json"`: [Zipkin](https://zipkin.io/zipkin-api/)
+- `"zipkin_proto"`: [Zipkin](https://zipkin.io/zipkin-api/)
 - `"none"`: No automatically configured exporter for traces.
 
 Known values for OTEL_METRICS_EXPORTER are:
