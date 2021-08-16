@@ -734,9 +734,15 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>SeverityText</td>
     <td>string</td>
     <td>The severity of the event as a human-readable string.</td>
-    <td>fields['otel.log.severity']</td>
+    <td>fields['otel.log.severity.text']</td>
   </tr>
     <tr>
+    <td>SeverityNumber</td>
+    <td>string</td>
+    <td>The severity of the event as a number.</td>
+    <td>fields['otel.log.severity.number']</td>
+  </tr>
+  <tr>
     <td>Name</td>
     <td>string</td>
     <td>Short event identifier that does not contain varying parts.</td>
