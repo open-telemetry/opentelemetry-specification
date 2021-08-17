@@ -209,10 +209,10 @@ meter_provider
 
 ### Aggregation
 
-An `Aggregation`, as configured via the [View](./sdk.md#view), informs
-the SDK on the ways and means to compute incoming Instrument
-[Measurements](./api.md#measurement) into
-[Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model).
+An `Aggregation`, as configured via the [View](./sdk.md#view),
+informs the SDK on the ways and means to compute
+[Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model)
+from incoming Instrument [Measurements](./api.md#measurement).
 
 An `Aggregation` specifies an operation
 (i.e. [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
@@ -250,10 +250,6 @@ meterProviderBuilder
 ```
 
 **TBD:**
-An Aggregation informs the SDK on the ways and means to create and
-configure [Aggregators](./sdk.md#aggregator).
-
-**TBD:**
 The [View](./sdk.md#view) may configure an `Aggregation` to collect
 [Exemplars](./datamodel.md#exemplars).
 
@@ -261,7 +257,7 @@ The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./datamodel.md#metric-points) in the
 [Metrics Data Model](./datamodel.md).
 
-- [None](./sdk.md#-aggregation)
+- [None](./sdk.md#none-aggregation)
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
@@ -302,10 +298,10 @@ the Instrument Kind (e.g. at View registration OR at first seen measurement).
 
 | Instrument Kind | Default `SumType` | Default `Temporality` |
 | --- | --- | --- |
-| [Counter](./api.md#counter) | Monotonic | Cummulative |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic | Cummulative |
-| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic | Cummulative |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic | Cummulative |
+| [Counter](./api.md#counter) | Monotonic | Cumulative |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic | Cumulative |
+| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic | Cumulative |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic | Cumulative |
 
 This Aggregation honors the following configuration parameters:
 
@@ -336,7 +332,7 @@ This Aggregation informs the SDK to collect:
 
 The Histogram Aggregation informs the SDK to select the best
 Histogram Aggregation available.
-i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
+i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregation).
 
 This Aggregation does not have any configuration parameters.
 
@@ -360,10 +356,6 @@ This Aggregation informs the SDK to collect:
 
 - Count of `Measurement` values falling within explicit bucket boundaries.
 - Arithmetic sum of `Measurement` values in population.
-
-### Aggregator
-
-TBD
 
 ## Attribute Limits
 
