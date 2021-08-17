@@ -207,134 +207,142 @@ meter_provider
     .set_exporter(ConsoleExporter())
 ```
 
-## Aggregator
+### Aggregation
 
-An `Aggregator` computes incoming Instrument [Measurements](./api.md#measurement)
-into [Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model).
+An `Aggregation`, as configured via the [View](./sdk.md#view), informs
+the SDK on the ways and means to compute incoming Instrument
+[Measurements](./api.md#measurement) into
+[Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model).
 
-The [View](./sdk.md#view) informs the SDK on creation and configuration of
-Aggregators. An [Aggregator Name](./sdk.md#aggregator-name) may be used to
-refer to an Aggregator and configuration.
+An `Aggregation` specifies an operation
+(i.e. [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
+like Sum, Histogram, Min, Max, Count)
+and optional configuration parameter overrides.
+The operation's default configuration parameter values will be used
+unless overridden by optional configuration parameter overrides.
 
-Implementors MAY choose the best idiomatic practice for their language to
-represent the semantic of an Aggregator and configuration parameters.
+Note: Implementors MAY choose the best idiomatic practice for their language to
+represent the semantic of an Aggregation and optional configuration parameters.
 
-e.g. The View specifies an Aggregator by string name (i.e. "Histogram").
+e.g. The View specifies an Aggregation by string name (i.e. "ExplicitBucketHistogram").
 
 ```python
 # Use Histogram with custom boundaries
 meter_provider
   .add_view(
     "X", 
-    aggregator="Histogram", 
-    aggregator_params={"Boundaries": [0, 10, 100]}
+    aggregation="ExplicitBucketHistogram", 
+    aggregation_params={"Boundaries": [0, 10, 100]}
     )
 ```
 
-e.g. The View specifies an Aggregator by class/type instance.
+e.g. The View specifies an Aggregation by class/type instance.
 
 ```c#
 // Use Histogram with custom boundaries
 meterProviderBuilder
   .AddView(
     instrumentName: "X",
-    aggregator: new HistogramAggregator(
+    aggregation: new ExplicitBucketHistogramAggregation(
       boundaries: new double[] { 0.0, 10.0, 100.0 }
     )
   );
 ```
 
-The [View](./sdk.md#view) informs the SDK to provide correct
-Instrument [Measurements](./api.md#measurement) to the correct Aggregators.
+**TBD:**
+An Aggregation informs the SDK on the ways and means to create and
+configure [Aggregators](./sdk.md#aggregator).
 
-An `Aggregator` is created with optional configuration parameters
-(i.e. Temporality=Delta, Boundaries=[0, 10, 100]).
-Default configuration parameters will be used unless overridden by
-optional configuration parameters.
-
-An `Aggregator` has a means to "update" its internal state with incoming
-Instrument [Measurement](./api.md#measurement) data.
-
-An `Aggregator` has a means to "collect"
-[Aggregated Metric](./datamodel.md#timeseries-model) data.
-The "collect" action should be treated as stateful and may update its
-internal state.
-
-**TBD**:
-The [View](./sdk.md#view) may inform an `Aggregator` to collect
+**TBD:**
+The [View](./sdk.md#view) may configure an `Aggregation` to collect
 [Exemplars](./datamodel.md#exemplars).
 
-### Aggregator Name
-
-The [View](./sdk.md#view) can refer to the following Aggregator by name.
-
-| Name | Aggregator | Description |
-| --- | --- | -- |
-| None | - | The reserved name "None" specify no Aggregator or a "virtual" Aggregator which ignores all measurements. |
-| Default | [Default](./sdk.md#default-aggregator) | The reserved name "Default" select an Aggregator by Instrument Kind. See [Default Aggregator](./sdk.md#default-aggregator). |
-| Sum | [Sum Aggregator](./sdk.md#sum-aggregator) | The reserved name "Sum" select a Sum Aggregator and SumType configuration parameter by Instrument Kind. See [Default Aggregator](./sdk.md#default-aggregator). |
-| Gauge | [Last Value Aggregator](./sdk.md#last-value-aggregator) | The reserved name "Gauge" select the [Last Value Aggregator](./sdk.md#last-value-aggregator). |
-| Histogram | "Best" Histogram | The reserved name "Histogram" select the "best" available Histogram Aggregator. i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator). |
-| Explicit_Bucket_Histogram | [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator) | Select the [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator). |
-
-### Default Aggregator
-
-The SDK MUST provide default Aggregators to support the
+The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./datamodel.md#metric-points) in the
 [Metrics Data Model](./datamodel.md).
 
-The "Default" Aggregator uses the Instrument Kind (e.g. at View registration)
-to select an Aggregator and configuration parameters.
+- [None](./sdk.md#-aggregation)
+- [Default](./sdk.md#default-aggregation)
+- [Sum](./sdk.md#sum-aggregation)
+- [Last Value](./sdk.md#last-value-aggregation)
+- [Histogram](./sdk.md#histogram-aggregation)
+- [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
-| Instrument Kind | Default Aggregator | Configuration Parameters |
+#### None Aggregation
+
+The None Aggregation informs the SDK to ignore/drop all Instrument Measurements
+for this Aggregation.
+
+This Aggregation does not have any configuration parameters.
+
+#### Default Aggregation
+
+The Default Aggregation informs the SDK to use the Instrument Kind
+(e.g. at View registration OR at first seen measurement)
+to select an aggregation and configuration parameters.
+
+| Instrument Kind | Selected Aggregation | Configuration Parameter Overrides |
 | --- | --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | SumType = Monotonic |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregator](./sdk.md#sum-aggregator) | SumType = Monotonic |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | SumType = Non-Monotonic |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregator](./sdk.md#sum-aggregator) | SumType = Non-Monotonic |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregator](./sdk.md#last-value-aggregator) | - |
-| [Histogram](./api.md#histogram) | "Best" Histogram<sup>1</sup> | - |
+| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) | See [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) | See [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) | See [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) | See [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) | - |
+| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) | - |
 
-\[1\]: The SDK will select the "best" available Histogram Aggregator. i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
+#### Sum Aggregation
 
-### Last Value Aggregator
+The Sum Aggregation informs the SDK to collect data for the
+[Sum Metric Point](./datamodel.md#sums).
 
-The Last Value Aggregator collects data for the
+The configuration parameters will be overridden based on the Instrument Kind
+(e.g. at View registration OR at first seen measurement).
+
+| Instrument Kind | SumType | Temporality |
+| --- | --- | --- |
+| [Counter](./api.md#counter) | Monotonic | Cummulative |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic | Cummulative |
+| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic | Cummulative |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic | Cummulative |
+
+This Aggregation honors the following configuration parameters:
+
+| Key | Value | Default Value | Description |
+| --- | --- | --- | --- |
+| SumType | Monotonic, Non-Monotonic, Other | Monotonic | See [SumType in PR](https://github.com/open-telemetry/opentelemetry-proto/pull/320). |
+| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
+
+This Aggregation informs the SDK to collect:
+
+- The arithmetic sum of `Measurement` values.
+
+#### Last Value Aggregation
+
+The Last Value Aggregation informs the SDK to collects data for the
 [Gauge Metric Point](./datamodel.md#gauge).
 
-This Aggregator does not have any configuration parameters.
+This Aggregation does not have any configuration parameters.
 
-This Aggregator collects:
+This Aggregation informs the SDK to collect:
 
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
 
-### Sum Aggregator
+#### Histogram Aggregation
 
-The Sum Aggregator collects data for the [Sum Metric Point](./datamodel.md#sums).
+The Histogram Aggregation informs the SDK to select the best
+Histogram Aggregation available.
+i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregator).
 
-This Aggregator honors the following configuration parameters:
+This Aggregation does not have any configuration parameters.
 
-| Key | Value | Default Value | Description |
-| --- | --- | --- | --- |
-| SumType<sup>2</sup> | Monotonic, Non-Monotonic, Other<sup>2</sup> | Depends<sup>1</sup> | See SumType<sup>2</sup> |
-| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
+#### Explicit Bucket Histogram Aggregation
 
-\[1\]: Depends on the Instrument Kind. See [Default Aggregator](./sdk.md#default-aggregator).
-
-\[2\]: **TBD**: See [PR#320](https://github.com/open-telemetry/opentelemetry-proto/pull/320) for SumType definition.
-
-This Aggregator collects:
-
-- The arithmetic sum of `Measurement` values.
-
-### Explicit Bucket Histogram Aggregator
-
-The Explicit Bucket Histogram Aggregator collects data for the
-[Histogram Metric Point](./datamodel.md#histogram). It supports a set of
+The Explicit Bucket Histogram Aggregation informs the SDK to collect data for
+the [Histogram Metric Point](./datamodel.md#histogram) using a set of
 explicit boundary values for histogram bucketing.
 
-This Aggregator honors the following configuration parameters:
+This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
@@ -344,10 +352,14 @@ This Aggregator honors the following configuration parameters:
 
 \[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
 
-This Aggregator collects:
+This Aggregation informs the SDK to collect:
 
 - Count of `Measurement` values falling within explicit bucket boundaries.
 - Arithmetic sum of `Measurement` values in population.
+
+### Aggregator
+
+TBD
 
 ## Attribute Limits
 
