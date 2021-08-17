@@ -318,7 +318,7 @@ This Aggregation informs the SDK to collect:
 
 #### Last Value Aggregation
 
-The Last Value Aggregation informs the SDK to collects data for the
+The Last Value Aggregation informs the SDK to collect data for the
 [Gauge Metric Point](./datamodel.md#gauge).
 
 This Aggregation does not have any configuration parameters.
