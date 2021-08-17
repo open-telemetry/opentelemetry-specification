@@ -281,24 +281,26 @@ The Default Aggregation informs the SDK to use the Instrument Kind
 (e.g. at View registration OR at first seen measurement)
 to select an aggregation and configuration parameters.
 
-| Instrument Kind | Selected Aggregation | Configuration Parameter Overrides |
-| --- | --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) | See [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) | See [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) | See [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) | See [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) | - |
-| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) | - |
+| Instrument Kind | Selected Aggregation |
+| --- | --- |
+| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) |
+| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) |
+
+This Aggregation does not have any configuration parameters.
 
 #### Sum Aggregation
 
 The Sum Aggregation informs the SDK to collect data for the
 [Sum Metric Point](./datamodel.md#sums).
 
-The configuration parameters will be overridden based on the Instrument Kind
-(e.g. at View registration OR at first seen measurement).
+The default values for the configuration parameters will be set based on
+the Instrument Kind (e.g. at View registration OR at first seen measurement).
 
-| Instrument Kind | SumType | Temporality |
+| Instrument Kind | Default `SumType` | Default `Temporality` |
 | --- | --- | --- |
 | [Counter](./api.md#counter) | Monotonic | Cummulative |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic | Cummulative |
@@ -309,8 +311,10 @@ This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| SumType | Monotonic, Non-Monotonic, Other | Monotonic | See [SumType in PR](https://github.com/open-telemetry/opentelemetry-proto/pull/320). |
-| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
+| SumType | Monotonic, Non-Monotonic, Other | See <sup>1</sup> | See [SumType in PR](https://github.com/open-telemetry/opentelemetry-proto/pull/320). |
+| Temporality | Delta, Cumulative | See <sup>1</sup> | See [Temporality](./datamodel.md#temporality). |
+
+\[1\]: See Default values based on Instrument Kind above.
 
 This Aggregation informs the SDK to collect:
 
