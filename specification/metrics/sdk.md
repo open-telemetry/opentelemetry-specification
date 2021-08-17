@@ -128,6 +128,8 @@ are the inputs:
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, a default
     aggregation will be applied by the SDK. The default aggregation is a TODO.
+  * The `exemplar_reservoir` to use for storing exemplars.  
+    The exact parameters are TODO pending further aggregator specification.
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -271,11 +273,9 @@ A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance th
 
 A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
 
-<!-- TODO: The wording of this is completely dependend on the Aggreagor specification. -->
-A Metric SDK MUST allow exemplar sampling to leverage the configuration of a metric aggregator.  For example,
-Exemplar sampling of histograms should be able to leverage bucket boundaries.
+A Metric SDK MUST allow exemplar sampling to leverage the configuration of a metric aggregator.  
+For example, Exemplar sampling of histograms should be able to leverage bucket boundaries.
 
-<!-- Note:  I'm fine dropping these interfaces for the first release. -->
 A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
 
 - `ExemplarFilter`: filter which measurements can become exemplars
@@ -315,18 +315,59 @@ span context and baggage can be inspected at this point.
 The "offer" method does not need to store all measurements it is given and
 MAY further sample beyond the `ExemplarFilter`.
 
-The "collect" method MUST return accumulated `Exemplar`s.  
+The "collect" method MUST return accumulated `Exemplar`s.
 
-These `Exemplar`s MUST have their attributes filtered by an aggregator 
-(or after the aggregator) when generating final Metric data points to ensure a 
+These `Exemplar`s MUST have their attributes filtered by an aggregator
+(or after the aggregator) when generating final Metric data points to ensure a
 complete view of the attributes from the original measurement.  This does not
 need to be part of the `ExemplarReservoir` interface, but SDKs may choose to
 include it.
 
-<!-- Note: ok to remove this, but it's not a hard requirement.-->
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
-<!-- TODO: Should we propose default/simple implementations? -->
+### Exemplar Defaults
+
+The SDK will come with two types of built-in exemplar resorvoirs:
+
+1. SimpleFixedSizeExemplarReservoir
+2. AlignedHistogramBucketExemplarReservoir
+
+By default, fixed sized histogram aggregators will use
+`AlignedHistogramBucketExemplarReservoir` and all other aggregaators will use
+`SimpleFixedSizeExemplarReservoir`.
+
+*SimpleExemplarReservoir*
+This Exemplar reservoir MAY take a configuration parameter for the size of
+the reservoir pool.  The reservoir will accept measurements using an equivalent
+the [naive reservoir sampling algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
+
+  ```
+  bucket = random_integer(0, num_measurements_seen)
+  if bucket < num_buckets then
+    reservoir[bucket] = meaasurement
+  end
+  ```
+
+*AlignedHistogramBucketExemplarReservoir*
+This Exemplar reservoir MUST take a configuration parameter that is the
+configuration of a Histogram.  This implementation MUST keep the last seen
+measurement that falls within a histogram bucket.  The reservoir will accept
+measurements using the equivalent of the following naive algorithm:
+
+  ```
+  bucket = find_histogram_bucket(measurement)
+  if bucket < num_buckets then
+    reservoir[bucket] = measurement
+  end
+
+  def find_histogram_bucket(measurement):
+    for boundary, idx in bucket_boundaries do
+      if value <= boundary then
+        return idx
+      end
+    end
+    return boundaries.length
+  ```
 
 ## MetricExporter
 
@@ -386,8 +427,6 @@ passively. This pattern has been widely adopted by
 
 And SDK MUST provide the following configuration parameters for Exemplar
 sampling:
-
-<!-- TODO: reservoir config?-->
 
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
