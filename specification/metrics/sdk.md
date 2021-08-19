@@ -207,6 +207,156 @@ meter_provider
     .set_exporter(ConsoleExporter())
 ```
 
+### Aggregation
+
+An `Aggregation`, as configured via the [View](./sdk.md#view),
+informs the SDK on the ways and means to compute
+[Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model)
+from incoming Instrument [Measurements](./api.md#measurement).
+
+An `Aggregation` specifies an operation
+(i.e. [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
+like Sum, Histogram, Min, Max, Count)
+and optional configuration parameter overrides.
+The operation's default configuration parameter values will be used
+unless overridden by optional configuration parameter overrides.
+
+Note: Implementors MAY choose the best idiomatic practice for their language to
+represent the semantic of an Aggregation and optional configuration parameters.
+
+e.g. The View specifies an Aggregation by string name (i.e. "ExplicitBucketHistogram").
+
+```python
+# Use Histogram with custom boundaries
+meter_provider
+  .add_view(
+    "X", 
+    aggregation="ExplicitBucketHistogram", 
+    aggregation_params={"Boundaries": [0, 10, 100]}
+    )
+```
+
+e.g. The View specifies an Aggregation by class/type instance.
+
+```c#
+// Use Histogram with custom boundaries
+meterProviderBuilder
+  .AddView(
+    instrumentName: "X",
+    aggregation: new ExplicitBucketHistogramAggregation(
+      boundaries: new double[] { 0.0, 10.0, 100.0 }
+    )
+  );
+```
+
+**TBD:**
+The [View](./sdk.md#view) may configure an `Aggregation` to collect
+[Exemplars](./datamodel.md#exemplars).
+
+The SDK MUST provide the following `Aggregation` to support the
+[Metric Points](./datamodel.md#metric-points) in the
+[Metrics Data Model](./datamodel.md).
+
+- [None](./sdk.md#none-aggregation)
+- [Default](./sdk.md#default-aggregation)
+- [Sum](./sdk.md#sum-aggregation)
+- [Last Value](./sdk.md#last-value-aggregation)
+- [Histogram](./sdk.md#histogram-aggregation)
+- [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
+
+#### None Aggregation
+
+The None Aggregation informs the SDK to ignore/drop all Instrument Measurements
+for this Aggregation.
+
+This Aggregation does not have any configuration parameters.
+
+#### Default Aggregation
+
+The Default Aggregation informs the SDK to use the Instrument Kind
+(e.g. at View registration OR at first seen measurement)
+to select an aggregation and configuration parameters.
+
+| Instrument Kind | Selected Aggregation |
+| --- | --- |
+| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) |
+| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) |
+
+This Aggregation does not have any configuration parameters.
+
+#### Sum Aggregation
+
+The Sum Aggregation informs the SDK to collect data for the
+[Sum Metric Point](./datamodel.md#sums).
+
+The default values for the configuration parameters will be set based on
+the Instrument Kind (e.g. at View registration OR at first seen measurement).
+
+| Instrument Kind | Default `SumType` | Default `Temporality` |
+| --- | --- | --- |
+| [Counter](./api.md#counter) | Monotonic | Cumulative |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic | Cumulative |
+| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic | Cumulative |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic | Cumulative |
+
+This Aggregation honors the following configuration parameters:
+
+| Key | Value | Default Value | Description |
+| --- | --- | --- | --- |
+| SumType | Monotonic, Non-Monotonic, Other | See <sup>1</sup> | See [SumType in PR](https://github.com/open-telemetry/opentelemetry-proto/pull/320). |
+| Temporality | Delta, Cumulative | See <sup>1</sup> | See [Temporality](./datamodel.md#temporality). |
+
+\[1\]: See Default values based on Instrument Kind above.
+
+This Aggregation informs the SDK to collect:
+
+- The arithmetic sum of `Measurement` values.
+
+#### Last Value Aggregation
+
+The Last Value Aggregation informs the SDK to collect data for the
+[Gauge Metric Point](./datamodel.md#gauge).
+
+This Aggregation does not have any configuration parameters.
+
+This Aggregation informs the SDK to collect:
+
+- The last `Measurement`.
+- The timestamp of the last `Measurement`.
+
+#### Histogram Aggregation
+
+The Histogram Aggregation informs the SDK to select the best
+Histogram Aggregation available.
+i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregation).
+
+This Aggregation does not have any configuration parameters.
+
+#### Explicit Bucket Histogram Aggregation
+
+The Explicit Bucket Histogram Aggregation informs the SDK to collect data for
+the [Histogram Metric Point](./datamodel.md#histogram) using a set of
+explicit boundary values for histogram bucketing.
+
+This Aggregation honors the following configuration parameters:
+
+| Key | Value | Default Value | Description |
+| --- | --- | --- | --- |
+| Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
+| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
+| Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
+
+\[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
+
+This Aggregation informs the SDK to collect:
+
+- Count of `Measurement` values falling within explicit bucket boundaries.
+- Arithmetic sum of `Measurement` values in population.
+
 ## Attribute Limits
 
 Attributes which belong to Metrics are exempt from the
