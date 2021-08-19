@@ -683,6 +683,11 @@ public interface SpanExporter {
 
 ## OTel TraceState values
 
+In alignment to the [TraceContext](https://www.w3.org/TR/trace-context/) specification, this section uses the
+Augmented Backus-Naur Form (ABNF) notation of [RFC5234](https://www.w3.org/TR/trace-context/#bib-rfc5234),
+including the DIGIT rule in that document. It also includes the OWS rule from
+[RFC7230 section 3.2.3](https://httpwg.org/specs/rfc7230.html#whitespace).
+
 When setting [TraceState](api#tracestate) values that are part of the OTel ecosystem,
 they MUST all be contained in a single entry using the `ot` key, with the value being
 a semicolon separated list of key-value pairs such as:
@@ -690,14 +695,53 @@ a semicolon separated list of key-value pairs such as:
 * `ot=p:8;r:64`
 * `ot=foo:bar;k1:13`
 
+The list can be formally defined as:
+
+```
+list        = list-member *( ";" list-member )
+list-member = key ":" value
+list-member = "" ; empty character
+```
+
+The complete list length MUST NOT exceed 256 characters, as defined by the
+[TraceState value section](https://www.w3.org/TR/trace-context/#value),
+and the used keys MUST be unique.
+
+### Key
+
+The key is an identifier that describes the OTel concern, consisting
+of either one or two characters. Simple examples are `p`, `ts`, or `s1`.
+
+The key can be formally defined as:
+
+```
+key        = lcalpha 0*1(lcalpha / DIGIT )
+lcalpha    = %x61-7A ; a-z
+```
+
+### Value
+
+The value is an opaque string. Although it has no maximum allowed length,
+it is recommended to use short values, as the **entire** list of key-values
+MUST NOT exceed 256 characters.
+
+The value can be formally defined as:
+
+```
+value      = *(chr)
+chr        = ucalpha / lcalpha / DIGIT / "." / "_" / "-"
+ucalpha    = %x41-5A ; A-Z
+lcalpha    = %x61-7A ; a-z
+```
+
+### Setting values
+
 Set values MUST be either updated or added to the `ot` entry in `TraceState`,
 in order to preserve existing values belonging to other OTel concerns. For example,
 if a given concern K wants to set `k1:13`:
 
 * `ot=p:8;r:64` will become `ot=p:8;r:64;k1:13`.
 * `ot=p:8,r:64;k1:7` will become `ot:p8;r:64;k1:13`.
-
-Keys and values MUST only contain alphanumeric characters.
 
 [trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
 [otep-83]: https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md
