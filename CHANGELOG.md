@@ -22,6 +22,9 @@ release.
 
 ### Semantic Conventions
 
+- Lambda instrumentations should check if X-Ray parent context is valid
+  ([#1867](https://github.com/open-telemetry/opentelemetry-specification/pull/1867))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
