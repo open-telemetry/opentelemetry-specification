@@ -687,7 +687,7 @@ In alignment to the [TraceContext](https://www.w3.org/TR/trace-context/) specifi
 Augmented Backus-Naur Form (ABNF) notation of [RFC5234](https://www.w3.org/TR/trace-context/#bib-rfc5234),
 including the DIGIT rule in that document.
 
-When setting [TraceState](api#tracestate) values that are part of the OTel ecosystem,
+When setting [TraceState](api.md#tracestate) values that are part of the OTel ecosystem,
 they MUST all be contained in a single entry using the `ot` key, with the value being
 a semicolon separated list of key-value pairs such as:
 
