@@ -370,8 +370,8 @@ Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
 
 Shutdown should be called only once for each `MetricExporter` instance. After
-the call to `Shutdown` subsequent calls to `MetricExporter` are not allowed and
-should return a Failure result.
+the call to `Shutdown` subsequent calls to `Export` are not allowed and should
+return a Failure result.
 
 `Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). OpenTelemetry client authors can decide if
