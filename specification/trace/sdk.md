@@ -685,8 +685,7 @@ public interface SpanExporter {
 
 In alignment to the [TraceContext](https://www.w3.org/TR/trace-context/) specification, this section uses the
 Augmented Backus-Naur Form (ABNF) notation of [RFC5234](https://www.w3.org/TR/trace-context/#bib-rfc5234),
-including the DIGIT rule in that document. It also includes the OWS rule from
-[RFC7230 section 3.2.3](https://httpwg.org/specs/rfc7230.html#whitespace).
+including the DIGIT rule in that document.
 
 When setting [TraceState](api#tracestate) values that are part of the OTel ecosystem,
 they MUST all be contained in a single entry using the `ot` key, with the value being
