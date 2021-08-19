@@ -324,9 +324,11 @@ exporter. The default SDK SHOULD NOT implement retry logic, as the required
 logic is likely to depend heavily on the specific protocol and backend the metrics
 are being sent to.
 
-Individual language clients can decide how to associate
-[Resource](../resource/sdk.md) with `Metrics`. Refer to the [tracing SDK
-specfication](../trace/sdk.md#additional-span-interfaces) for more information.
+A [Resource](../resource/sdk.md) can be associated with a `MeterProvider`. When
+associated with a `MeterProvider`, all metrics produced by any `Meter` from the
+provider will be associated with this `Resource`. The [tracing SDK
+specfication](../trace/sdk.md#additional-span-interfaces) has provided some
+suggestions regarding how to implement this efficiently.
 
 **Parameters:**
 
