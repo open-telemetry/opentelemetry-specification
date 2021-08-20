@@ -25,6 +25,17 @@ release.
 
 ### SDK Configuration
 
+## v1.6.1 (2021-08-25)
+
+This is a patch release on the previous 1.6.0 release, fixing the issue below.
+Users are encouraged to NOT refer to 1.6.0.
+
+### Semantic Conventions
+
+- BREAKING: Change enum member IDs to lowercase without spaces, not starting with numbers.
+  Change values of `net.host.connection.subtype` to match.
+  ([#1863](https://github.com/open-telemetry/opentelemetry-specification/pull/1863))
+
 ## v1.6.0 (2021-08-06)
 
 ### Context
