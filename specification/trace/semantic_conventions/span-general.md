@@ -76,27 +76,27 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 | Value  | Description |
 |---|---|
-| `GPRS` | GPRS |
-| `EDGE` | EDGE |
-| `UMTS` | UMTS |
-| `CDMA` | CDMA |
-| `EVDO_0` | EVDO_0 |
-| `EVDO_A` | EVDO_A |
-| `1xRTT` | 1xRTT |
-| `HSDPA` | HSDPA |
-| `HSUPA` | HSUPA |
-| `HSPA` | HSPA |
-| `IDEN` | IDEN |
-| `EVDO_B` | EVDO_B |
-| `LTE` | LTE |
-| `EHRPD` | EHRPD |
-| `HSPAP` | HSPAP |
-| `GSM` | GSM |
-| `TD_SCDMA` | TD_SCDMA |
-| `IWLAN` | IWLAN |
-| `NR` | NR |
-| `NRNSA` | NRNSA |
-| `LTE_CA` | LTE_CA |
+| `gprs` | GPRS |
+| `edge` | EDGE |
+| `umts` | UMTS |
+| `cdma` | CDMA |
+| `evdo_0` | EVDO Rel. 0 |
+| `evdo_a` | EVDO Rev. A |
+| `cdma2000_1xrtt` | CDMA2000 1XRTT |
+| `hsdpa` | HSDPA |
+| `hsupa` | HSUPA |
+| `hspa` | HSPA |
+| `iden` | IDEN |
+| `evdo_b` | EVDO Rev. B |
+| `lte` | LTE |
+| `ehrpd` | EHRPD |
+| `hspap` | HSPAP |
+| `gsm` | GSM |
+| `td_scdma` | TD-SCDMA |
+| `iwlan` | IWLAN |
+| `nr` | 5G NR (New Radio) |
+| `nrnsa` | 5G NRNSA (New Radio Non-Standalone) |
+| `lte_ca` | LTE CA |
 <!-- endsemconv -->
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
