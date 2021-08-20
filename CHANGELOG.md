@@ -25,6 +25,8 @@ release.
 - BREAKING: Change enum member IDs to lowercase without spaces, not starting with numbers.
   Change values of `net.host.connection.subtype` to match.
   ([#1863](https://github.com/open-telemetry/opentelemetry-specification/pull/1863))
+- Lambda instrumentations should check if X-Ray parent context is valid
+  ([#1867](https://github.com/open-telemetry/opentelemetry-specification/pull/1867))
 
 ### Compatibility
 
