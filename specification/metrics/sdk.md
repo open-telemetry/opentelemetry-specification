@@ -33,6 +33,12 @@ Table of Contents
 
 ## MeterProvider
 
+`MeterProvider` MUST provide a way to allow a [Resource](../resource/sdk.md) to
+be specified. If a `Resource` is specfied, it SHOULD be associated with all the
+metrics produced by any `Meter` from the `MeterProvider`. The [tracing SDK
+specfication](../trace/sdk.md#additional-span-interfaces) has provided some
+suggestions regarding how to implement this efficiently.
+
 ### Meter Creation
 
 New `Meter` instances are always created through a `MeterProvider` (see
@@ -323,12 +329,6 @@ Any retry logic that is required by the exporter is the responsibility of the
 exporter. The default SDK SHOULD NOT implement retry logic, as the required
 logic is likely to depend heavily on the specific protocol and backend the metrics
 are being sent to.
-
-A [Resource](../resource/sdk.md) can be associated with a `MeterProvider`. When
-associated with a `MeterProvider`, all metrics produced by any `Meter` from the
-provider will be associated with this `Resource`. The [tracing SDK
-specfication](../trace/sdk.md#additional-span-interfaces) has provided some
-suggestions regarding how to implement this efficiently.
 
 **Parameters:**
 
