@@ -187,7 +187,7 @@ Key/value pairs contained in a `Log Record`.
 
 Logs that are recorded in a format which has a well-defined structure that allows
 to differentiate between different elements of a Log Record (e.g. the Timestamp,
-the Attributes, etc). The _Syslog protocol_ ([RFC 5425](https://tools.ietf.org/html/rfc5424)),
+the Attributes, etc). The _Syslog protocol_ ([RFC 5424](https://tools.ietf.org/html/rfc5424)),
 for example, defines a `structured-data` format.
 
 ### Flat File Logs

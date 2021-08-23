@@ -54,39 +54,56 @@ groups:
       - id: status_code
         type:
           members:
-            - id: OK
+            - id: ok
+              brief: OK
               value: 0
-            - id: CANCELLED
+            - id: cancelled
+              brief: CANCELLED
               value: 1
-            - id: UNKNOWN
+            - id: unknown
+              brief: UNKNOWN
               value: 2
-            - id: INVALID_ARGUMENT
+            - id: invalid_argument
+              brief: INVALID_ARGUMENT
               value: 3
-            - id: DEADLINE_EXCEEDED
+            - id: deadline_exceeded
+              brief: DEADLINE_EXCEEDED
               value: 4
-            - id: NOT_FOUND
+            - id: not_found
+              brief: NOT_FOUND
               value: 5
-            - id: ALREADY_EXISTS
+            - id: already_exists
+              brief: ALREADY_EXISTS
               value: 6
-            - id: PERMISSION_DENIED
+            - id: permission_denied
+              brief: PERMISSION_DENIED
               value: 7
-            - id: RESOURCE_EXHAUSTED
+            - id: resource_exhausted
+              brief: RESOURCE_EXHAUSTED
               value: 8
-            - id: FAILED_PRECONDITION
+            - id: failed_precondition
+              brief: FAILED_PRECONDITION
               value: 9
-            - id: ABORTED
+            - id: aborted
+              brief: ABORTED
               value: 10
-            - id: OUT_OF_RANGE
+            - id: out_of_range
+              brief: OUT_OF_RANGE
               value: 11
-            - id: UNIMPLEMENTED
+            - id: unimplemented
+              brief: UNIMPLEMENTED
               value: 12
-            - id: INTERNAL
+            - id: internal
+              brief: INTERNAL
               value: 13
-            - id: UNAVAILABLE
+            - id: unavailable
+              brief: UNAVAILABLE
               value: 14
-            - id: DATA_LOSS
+            - id: data_loss
+              brief: DATA_LOSS
               value: 15
-            - id: UNAUTHENTICATED
+            - id: unauthenticated
+              brief: UNAUTHENTICATED
               value: 16
         required: always
         brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."

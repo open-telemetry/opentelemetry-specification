@@ -14,7 +14,7 @@ formats is required. Implementing more than one format is optional.
 
 ## Traces
 
-| Feature                                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
+| Feature                                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create TracerProvider                                                                            |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -75,6 +75,7 @@ formats is required. Implementing more than one format is optional.
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
 | ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
+| ShouldSample gets InstrumentationLibrary                                                         |          |    |      |    |        |      |        |     |      |     |      |       |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    |        |     | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    |        |     |      | -   |      | +     |
@@ -83,20 +84,20 @@ formats is required. Implementing more than one format is optional.
 
 ## Baggage
 
-| Feature                            | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
+| Feature                            | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Basic support                      |          | +  | +    | +  | +      | +    | +      |     | +    |  +  | +    | +     |
 | Use official header name `baggage` |          | +  | +    | +  | +      | +    | +      |     | +    |  +  | +    | +     |
 
 ## Metrics
 
-|Feature                                       |Optional|Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
+|Feature                                       |Optional|Go|Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
 |----------------------------------------------|--------|--|----|---|------|----|------|---|----|---|----|-----|
 |TBD|
 
 ## Resource
 
-| Feature                                                                                                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
+| Feature                                                                                                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
@@ -106,7 +107,7 @@ formats is required. Implementing more than one format is optional.
 
 ## Context Propagation
 
-| Feature                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
+| Feature                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create Context Key                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get value from Context                                                           |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -129,7 +130,7 @@ formats is required. Implementing more than one format is optional.
 
 Note: Support for environment variables is optional.
 
-|Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.Net|Swift|
+|Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | + | +  | -   |
 |OTEL_SERVICE_NAME                             | + |    |   |      |    |      |   |    |   |    |     |
@@ -154,7 +155,7 @@ Note: Support for environment variables is optional.
 
 ## Exporters
 
-| Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .Net | Swift |
+| Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
 | [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      |        |     | +    |     | +    |       |
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    |        |     | -    |     |      |       |
