@@ -311,7 +311,7 @@ Push Metric Exporter sends the data on its own schedule. Here are some examples:
 
 #### Interface Definition
 
-Push Metric Exporter MUST support the following functions:
+A Push Metric Exporter MUST support the following functions:
 
 ##### Export(batch)
 
