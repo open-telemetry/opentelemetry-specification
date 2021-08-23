@@ -33,7 +33,7 @@ Table of Contents
 
 ## MeterProvider
 
-`MeterProvider` MUST provide a way to allow a [Resource](../resource/sdk.md) to
+A `MeterProvider` MUST provide a way to allow a [Resource](../resource/sdk.md) to
 be specified. If a `Resource` is specified, it SHOULD be associated with all the
 metrics produced by any `Meter` from the `MeterProvider`. The [tracing SDK
 specification](../trace/sdk.md#additional-span-interfaces) has provided some
