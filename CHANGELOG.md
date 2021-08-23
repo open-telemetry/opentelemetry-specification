@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Update `Get` function used in `TextMapPropagator` extraction to combine the
+  values of duplicate keys ([#1884](https://github.com/open-telemetry/opentelemetry-specification/pull/1884))
+
 ### Traces
 
 - Prefer global user defined limits over model-sepcific default values.

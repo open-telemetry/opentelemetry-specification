@@ -216,14 +216,23 @@ For example, it can be used to detect all keys following the `uberctx-{user-defi
 
 ##### Get
 
-The Get function MUST return the first value of the given propagation key or return null if the key doesn't exist.
+The Get function returns the value for a given propagation key or returns null if
+the key doesn't exist.
 
 Required arguments:
 
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive.
+The Get function is responsible for handling case sensitivity. If the getter is
+intended to work with a HTTP request object, the getter MUST be case
+insensitive.
+
+If the getter is intended to work with the builtin propagators and the carrier
+is a type that allows duplicate keys, like a list or array as opposed to a
+dictionary, then the Get function MUST get all the values for the key and
+combine them in order separated by a comma as described in
+[RFC7230](https://httpwg.org/specs/rfc7230.html#field.order).
 
 ## Injectors and Extractors as Separate Interfaces
 
