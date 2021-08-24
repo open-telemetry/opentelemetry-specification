@@ -27,6 +27,8 @@ release.
   ([#1863](https://github.com/open-telemetry/opentelemetry-specification/pull/1863))
 - Lambda instrumentations should check if X-Ray parent context is valid
   ([#1867](https://github.com/open-telemetry/opentelemetry-specification/pull/1867))
+- Add `messaging.consumer_id` to differentiate between message consumers.
+  ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 
 ### Compatibility
 
@@ -68,8 +70,6 @@ release.
 - Add mobile-related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
 - Adding alibaba cloud as a cloud provider.
   ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
-- Add `messaging.consumer_id` to differentiate between message consumers.
-  ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 
 ### Compatibility
 
