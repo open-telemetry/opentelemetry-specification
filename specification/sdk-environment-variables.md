@@ -132,8 +132,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_ZIPKIN_TIMEOUT    | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
 | OTEL_EXPORTER_ZIPKIN_CERTIFICATE    | The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection. | -                                                                                              |
-| OTEL_EXPORTER_ZIPKIN_CLIENT_CERIFICATE    | Path to client certificate | -                                                                                              |
-| OTEL_EXPORTER_ZIPKIN_CLIENT_KEY    | Path to client private key | -                                                                                              |
+| OTEL_EXPORTER_ZIPKIN_CLIENT_CERIFICATE    | The client certificate to use when connecting via mTLS | -                                                                                              |
+| OTEL_EXPORTER_ZIPKIN_CLIENT_KEY    | The client's private key to use when connecting via mTLS | -                                                                                              |
 
 Addtionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
