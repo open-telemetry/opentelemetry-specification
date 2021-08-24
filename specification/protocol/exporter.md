@@ -41,26 +41,6 @@ export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://collector:4317
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics
 ```
 
-### Specify Protocol
-
-Currently, OTLP supports the following transport protocols:
-
-- `grpc` for protobuf-encoded data using gRPC wire format over HTTP/2 connection
-- `http/protobuf` for protobuf-encoded data over HTTP connection
-- `http/json` for JSON-encoded data over HTTP connection
-
-SDKs MUST support either `grpc` or `http/protobuf` and SHOULD support both. They also MAY support `http/json`.
-
-As of 1.0 of the specification, there *is no specified default, or configuration via environment variables*.  We
-reserve the following environment variables for configuration of protocols in
-the future:
-
-- `OTEL_EXPORTER_OTLP_PROTOCOL`
-- `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`
-- `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL`
-
-SDKs have an unspecified default, if no configuration is provided.
-
 ### Specifying headers via environment variables
 
 The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXPORTER_OTLP_METRICS_HEADERS` environment variables will contain a list of key value pairs, and these are expected to be represented in a format matching to the [W3C Correlation-Context](https://github.com/w3c/baggage/blob/master/baggage/HTTP_HEADER_FORMAT.md), except that additional semi-colon delimited metadata is not supported, i.e.: key1=value1,key2=value2. All attribute values MUST be considered strings.
