@@ -131,7 +131,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_ZIPKIN_TIMEOUT    | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
-| OTEL_EXPORTER_ZIPKIN_CA_CERIFICATE    | Path to a CA Bundle | -                                                                                              |
+| OTEL_EXPORTER_ZIPKIN_CERTIFICATE    | The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection. | -                                                                                              |
 | OTEL_EXPORTER_ZIPKIN_CLIENT_CERIFICATE    | Path to client certificate | -                                                                                              |
 | OTEL_EXPORTER_ZIPKIN_CLIENT_KEY    | Path to client private key | -                                                                                              |
 
