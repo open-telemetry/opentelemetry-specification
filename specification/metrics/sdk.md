@@ -33,6 +33,12 @@ Table of Contents
 
 ## MeterProvider
 
+A `MeterProvider` MUST provide a way to allow a [Resource](../resource/sdk.md) to
+be specified. If a `Resource` is specified, it SHOULD be associated with all the
+metrics produced by any `Meter` from the `MeterProvider`. The [tracing SDK
+specification](../trace/sdk.md#additional-span-interfaces) has provided some
+suggestions regarding how to implement this efficiently.
+
 ### Meter Creation
 
 New `Meter` instances are always created through a `MeterProvider` (see
@@ -452,6 +458,76 @@ Push Metric Exporter sends the data on its own schedule. Here are some examples:
 
 * Sends the data based on a user configured schedule, e.g. every 1 minute.
 * Sends the data when there is a severe error.
+
+#### Interface Definition
+
+A Push Metric Exporter MUST support the following functions:
+
+##### Export(batch)
+
+Exports a batch of `Metrics`. Protocol exporters that will implement this
+function are typically expected to serialize and transmit the data to the
+destination.
+
+`Export` will never be called concurrently for the same exporter instance.
+`Export` can be called again only after the current call returns.
+
+`Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
+after which the call must time out with an error result (Failure).
+
+Any retry logic that is required by the exporter is the responsibility of the
+exporter. The default SDK SHOULD NOT implement retry logic, as the required
+logic is likely to depend heavily on the specific protocol and backend the metrics
+are being sent to.
+
+**Parameters:**
+
+`batch` - a batch of `Metrics`. The exact data type of the batch is language
+specific, typically it is some kind of list.
+
+Returns: `ExportResult`
+
+`ExportResult` is one of:
+
+* `Success` - The batch has been successfully exported. For protocol exporters
+  this typically means that the data is sent over the wire and delivered to the
+  destination server.
+* `Failure` - exporting failed. The batch must be dropped. For example, this can
+  happen when the batch contains bad data and cannot be serialized.
+
+Note: this result may be returned via an async mechanism or a callback, if that
+is idiomatic for the language implementation.
+
+##### ForceFlush()
+
+This is a hint to ensure that the export of any `Metrics` the exporter has
+received prior to the call to `ForceFlush` SHOULD be completed as soon as
+possible, preferably before returning from this method.
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
+such as when using some FaaS providers that may suspend the process after an
+invocation, but before the exporter exports the completed metrics.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want
+to make the flush timeout configurable.
+
+##### Shutdown()
+
+Shuts down the exporter. Called when SDK is shut down. This is an opportunity
+for exporter to do any cleanup required.
+
+Shutdown should be called only once for each `MetricExporter` instance. After
+the call to `Shutdown` subsequent calls to `Export` are not allowed and should
+return a Failure result.
+
+`Shutdown` should not block indefinitely (e.g. if it attempts to flush the data
+and the destination is unavailable). OpenTelemetry client authors can decide if
+they want to make the shutdown timeout configurable.
 
 ### Pull Metric Exporter
 
