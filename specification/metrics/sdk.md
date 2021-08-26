@@ -450,7 +450,7 @@ failed or timed out.
 `Collect` does not have any required parameters, however, individual language
 client MAY choose to support optional parameters (e.g. filter, timeout).
 
-#### OnCollect(batch)
+#### OnCollect
 
 Callback function which will be triggered by [Collect](#collect).
 
