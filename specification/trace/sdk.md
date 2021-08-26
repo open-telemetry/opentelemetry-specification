@@ -744,7 +744,7 @@ if a given concern K wants to set `k1:13`:
 * `ot=p:8,r:64;k1:7` will become `ot:p8;r:64;k1:13`.
 
 If setting a value ends up making the entire `ot` entry exceed the 256 characters limit,
-SDKs are adviced to discard the operation and signal the user about the error, e.g.
+SDKs are advised to discard the operation and signal the user about the error, e.g.
 
 ```go
 traceState, err := SetTraceStateValue(traceState, value)
