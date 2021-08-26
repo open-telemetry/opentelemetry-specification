@@ -535,17 +535,29 @@ The following diagram shows `MetricExporter`'s relationship to other components
 in the SDK:
 
 ```text
-+-----------------+            +-----------------------+
-|                 | Metrics... |                       |
-| In-memory state +------------> MetricExporter (push) +--> Another process
-|                 |            |                       |
-+-----------------+            +-----------------------+
++-----------------+            +-----------------------------+
+|                 | Metrics... |                             |
+| In-memory state +------------> Base exporting MetricReader |
+|                 |            |                             |
++-----------------+            |  +-----------------------+  |
+                               |  |                       |  |
+                               |  | MetricExporter (push) +-----> Another process
+                               |  |                       |  |
+                               |  +-----------------------+  |
+                               |                             |
+                               +-----------------------------+
 
-+-----------------+            +-----------------------+
-|                 | Metrics... |                       |
-| In-memory state +------------> MetricExporter (pull) +--> Another process (scraper)
-|                 |            |                       |
-+-----------------+            +-----------------------+
++-----------------+            +-----------------------------+
+|                 | Metrics... |                             |
+| In-memory state +------------> Base exporting MetricReader |
+|                 |            |                             |
++-----------------+            |  +-----------------------+  |
+                               |  |                       |  |
+                               |  | MetricExporter (pull) +-----> Another process (scraper)
+                               |  |                       |  |
+                               |  +-----------------------+  |
+                               |                             |
+                               +-----------------------------+
 ```
 
 Metric Exporter has access to the [pre-aggregated metrics
