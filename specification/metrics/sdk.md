@@ -25,6 +25,8 @@ Table of Contents
 * [MeterProvider](#meterprovider)
 * [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
+* [MetricReader](#metricreader)
+  * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
@@ -410,6 +412,95 @@ active span](../trace/api.md#context-interaction)).
 |     ...          |                 +----------------------+            +-----------------+
 +------------------+
 ```
+
+## MetricReader
+
+`MetricReader` is an interface which provides the following capabilities:
+
+* Collecting metrics from the SDK.
+* Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
+  the SDK.
+
+```text
++-----------------+            +--------------+
+|                 | Metrics... |              |
+| In-memory state +------------> MetricReader |
+|                 |            |              |
++-----------------+            +--------------+
+
++-----------------+            +--------------+
+|                 | Metrics... |              |
+| In-memory state +------------> MetricReader |
+|                 |            |              |
++-----------------+            +--------------+
+```
+
+### MetricReader operations
+
+#### Collect
+
+Collects the metrics from the SDK. If there are [asynchronous
+Instruments](./api.md#asynchronous-instrument) involved, their callback
+functions will be triggered. Then the [OnCollect callback](#oncollect) will be
+called with the collected metrics from the in-memory state.
+
+`Collect` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Collect` does not have any required parameters, however, individual language
+client MAY choose to support optional parameters (e.g. filter, timeout).
+
+#### OnCollect(batch)
+
+Callback function which will be triggered by [Collect](#collect).
+
+`OnCollect` SHOULD provide a way to indicate whether it succeeded, failed or
+timed out.
+
+`OnCollect` MUST accept the following parameters:
+
+* A `batch` of metrics. The exact data type of the batch is language specific,
+  typically it is some kind of list, e.g. it could be an enumerator that travels
+  through the in-memory state.
+
+Individual language client MAY choose to add optional parameters (e.g. timeout).
+
+#### OnForceFlush
+
+Callback function which will be triggered by [ForceFlush](#forceflush).
+
+`OnForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`OnForceFlush` SHOULD complete or abort within some timeout. `OnForceFlush` can
+be implemented as a blocking API or an asynchronous API which notifies the
+caller via a callback or an event. OpenTelemetry client authors can decide if
+they want to make the flush timeout configurable.
+
+#### OnShutdown
+
+Callback function which will be triggered by [Shutdown](#shutdown). This is an
+opportunity for `MetricReader` to perform any required cleanup.
+
+`OnShutdown` should be called only once for each `MetricReader` instance.
+
+`OnShutdown` should not block indefinitely (e.g. if it attempts to flush the
+data and the destination is unavailable). OpenTelemetry client authors can
+decide if they want to make the shutdown timeout configurable.
+
+### Periodic exporting MetricReader
+
+This is an implementation of the `MetricReader` which collects metrics based on
+a user-configurable time interval, and passes the metrics to the configured
+[Push Metric Exporter](#push-metric-exporter).
+
+Configurable parameters:
+
+* `exporter` - the push exporter where the metrics are sent to.
+* `exportIntervalMillis` - the time interval in milliseconds between two
+  consecutive exports. The default value is 5000 (milliseconds).
+* `exportTimeoutMillis` - how long the export can run before it is cancelled.
+  The default value is 30000 (milliseconds).
 
 ## MetricExporter
 
