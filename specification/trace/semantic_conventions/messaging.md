@@ -21,7 +21,7 @@
     + [Apache Kafka](#apache-kafka)
 - [Examples](#examples)
   * [Topic with multiple consumers](#topic-with-multiple-consumers)
-  * [Apache Kafka Example](#apache-kafka-example)
+  * [Apache Kafka with Quarkus or Spring Boot Example](#apache-kafka-with-quarkus-or-spring-boot-example)
   * [Batch receiving](#batch-receiving)
   * [Batch processing](#batch-processing)
 
@@ -167,6 +167,7 @@ For message consumers, the following additional attributes may be set:
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `messaging.operation` | string | A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is "send", this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case. | `receive` | No |
+| `messaging.consumer_id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | No |
 
 `messaging.operation` MUST be one of the following:
 
@@ -245,10 +246,15 @@ Process CB:                 | Span CB1 |
 | `messaging.operation` |  | `"process"` | `"process"` |
 | `messaging.message_id` | `"a1"` | `"a1"`| `"a1"` |
 
-### Apache Kafka Example
+### Apache Kafka with Quarkus or Spring Boot Example
 
 Given is a process P, that publishes a message to a topic T1 on Apache Kafka.
 One process, CA, receives the message and publishes a new message to a topic T2 that is then received and processed by CB.
+
+Frameworks such as Quarkus and Spring Boot separate processing of a received message from producing subsequent messages out.
+For this reason, receiving (Span Rcv1) is the parent of both processing (Span Proc1) and producing a new message (Span Prod2).
+The span representing message receiving (Span Rcv1) should not set `messaging.operation` to `receive`,
+as it does not only receive the message but also converts the input message to something suitable for the processing operation to consume and creates the output message from the result of processing.
 
 ```
 Process P:  | Span Prod1 |
@@ -263,8 +269,8 @@ Process CB:                           | Span Rcv2 |
 | Field or Attribute | Span Prod1 | Span Rcv1 | Span Proc1 | Span Prod2 | Span Rcv2
 |-|-|-|-|-|-|
 | Span name | `"T1 send"` | `"T1 receive"` | `"T1 process"` | `"T2 send"` | `"T2 receive`" |
-| Parent |  | Span Prod1 | Span Rcv1 |  | Span Prod2 |
-| Links |  |  | | Span Prod1 |  |
+| Parent |  | Span Prod1 | Span Rcv1 | Span Rcv1 | Span Prod2 |
+| Links |  |  | |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` | `PRODUCER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `peer.service` | `"myKafka"` |  |  | `"myKafka"` |  |
@@ -272,7 +278,7 @@ Process CB:                           | Span Rcv2 |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
 | `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
-| `messaging.operation` |  | `"receive"` | `"process"` |  | `"receive"` |
+| `messaging.operation` |  |  | `"process"` |  | `"receive"` |
 | `messaging.kafka.message_key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
 | `messaging.kafka.consumer_group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
 | `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |

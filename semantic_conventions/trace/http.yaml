@@ -46,19 +46,19 @@ groups:
           # encode checks that only accept the listed values.
           allow_custom_values: true
           members:
-            - id: HTTP_1_0
+            - id: http_1_0
               value: '1.0'
               brief: 'HTTP 1.0'
-            - id: HTTP_1_1
+            - id: http_1_1
               value: '1.1'
               brief: 'HTTP 1.1'
-            - id: HTTP_2_0
+            - id: http_2_0
               value: '2.0'
               brief: 'HTTP 2'
-            - id: SPDY
+            - id: spdy
               value: 'SPDY'
               brief: 'SPDY protocol.'
-            - id: QUIC
+            - id: quic
               value: 'QUIC'
               brief: 'QUIC protocol.'
         brief: 'Kind of HTTP protocol used.'

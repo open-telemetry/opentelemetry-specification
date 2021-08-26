@@ -22,11 +22,22 @@ release.
 
 ### Semantic Conventions
 
+- BREAKING: Change enum member IDs to lowercase without spaces, not starting with numbers.
+  Change values of `net.host.connection.subtype` to match.
+  ([#1863](https://github.com/open-telemetry/opentelemetry-specification/pull/1863))
+- Lambda instrumentations should check if X-Ray parent context is valid
+  ([#1867](https://github.com/open-telemetry/opentelemetry-specification/pull/1867))
+- Add `messaging.consumer_id` to differentiate between message consumers.
+  ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
+
+- Change default value for OTEL_EXPORTER_JAEGER_AGENT_PORT to 6831.
+  ([#1812](https://github.com/open-telemetry/opentelemetry-specification/pull/1812))
 
 ## v1.6.0 (2021-08-06)
 
