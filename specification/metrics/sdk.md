@@ -488,7 +488,7 @@ By default, fixed sized histogram aggregators will use
 
 *SimpleExemplarReservoir*
 This Exemplar reservoir MAY take a configuration parameter for the size of
-the reservoir pool.  The reservoir will accept measurements using an equivalent
+the reservoir pool.  The reservoir will accept measurements using an equivalent of
 the [naive reservoir sampling algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
 
   ```
