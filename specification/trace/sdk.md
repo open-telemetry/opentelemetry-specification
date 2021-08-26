@@ -708,7 +708,7 @@ and the used keys MUST be unique.
 
 ### Key
 
-The key is an identifier that describes the OTel concern, consisting
+The key is an identifier that describes an OTel concern, consisting
 of either one or two characters. Simple examples are `p`, `ts`, or `s1`.
 
 The key can be formally defined as:
