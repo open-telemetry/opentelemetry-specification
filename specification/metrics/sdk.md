@@ -477,7 +477,7 @@ The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar Defaults
 
-The SDK will come with two types of built-in exemplar resorvoirs:
+The SDK will come with two types of built-in exemplar reservoirs:
 
 1. SimpleFixedSizeExemplarReservoir
 2. AlignedHistogramBucketExemplarReservoir
