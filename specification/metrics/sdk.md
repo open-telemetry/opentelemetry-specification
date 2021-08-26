@@ -488,6 +488,25 @@ opportunity for `MetricReader` to perform any required cleanup.
 data and the destination is unavailable). OpenTelemetry client authors can
 decide if they want to make the shutdown timeout configurable.
 
+### Base exporting MetricReader
+
+This is an implementation of the `MetricReader` which collects metrics when
+[OnCollect](#oncollect) is called. and passes the metrics to the configured
+[MetricExporter](#metricexporter).
+
+Configurable parameters:
+
+* `exporter` - the exporter where the metrics are sent to.
+
+If the configured exporter only supports [pull mode](#pull-metric-exporter):
+
+* [Collect](#collect) SHOULD only be called when the [Pull Metric
+  Exporter](#pull-metric-exporter) triggers the scraping, otherwise it SHOULD be
+  treated as an error.
+* Individual language client MAY decide if [OnForceFlush](#onforceflush) will
+  return immediately (with an indication of failure) or wait for the next
+  [OnCollect](#oncollect) call to complete.
+
 ### Periodic exporting MetricReader
 
 This is an implementation of the `MetricReader` which collects metrics based on
