@@ -494,7 +494,7 @@ the [naive reservoir sampling algorithm](https://en.wikipedia.org/wiki/Reservoir
   ```
   bucket = random_integer(0, num_measurements_seen)
   if bucket < num_buckets then
-    reservoir[bucket] = meaasurement
+    reservoir[bucket] = measurement
   end
   ```
 
