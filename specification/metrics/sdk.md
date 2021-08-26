@@ -415,7 +415,7 @@ the following pieces of information:
 - The `value` that was recorded.
 - The `time` the measurement was seen.
 - The set of [Attributes](../common/common.md#attributes) associated with the measurement not already included in a metric data point.
-- The associated [trace id and span id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active parent [Span within Context](../trace/api.md#determining-the-parent-span-from-a-context) of the measurement.
+- The associated [trace id and span id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span within Context](../trace/api.md#determining-the-parent-span-from-a-context) of the measurement.
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
