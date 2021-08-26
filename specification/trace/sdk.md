@@ -699,7 +699,6 @@ The list can be formally defined as:
 ```
 list        = list-member *( ";" list-member )
 list-member = key ":" value
-list-member = "" ; empty character
 ```
 
 The complete list length MUST NOT exceed 256 characters, as defined by the
@@ -708,15 +707,17 @@ and the used keys MUST be unique.
 
 ### Key
 
-The key is an identifier that describes an OTel concern, consisting
-of either one or two characters. Simple examples are `p`, `ts`, or `s1`.
+The key is an identifier that describes an OTel concern.
+Simple examples are `p`, `ts`, or `s1`.
 
 The key can be formally defined as:
 
 ```
-key        = lcalpha 0*1(lcalpha / DIGIT )
+key        = lcalpha *(lcalpha / DIGIT )
 lcalpha    = %x61-7A ; a-z
 ```
+
+Specific keys used by OTel concerns MUST be defined as part as the Specification too.
 
 ### Value
 
