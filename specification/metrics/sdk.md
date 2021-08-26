@@ -419,7 +419,7 @@ the following pieces of information:
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
-A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have memory overhead related to exemplar sampling.
+A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have overhead related to exemplar sampling.
 
 A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
 
