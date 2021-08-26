@@ -575,7 +575,7 @@ passively. This pattern has been widely adopted by
 
 ## Defaults and Configuration
 
-And SDK MUST provide the following configuration parameters for Exemplar
+The SDK MUST provide the following configuration parameters for Exemplar
 sampling:
 
 | Name            | Description | Default | Notes |
