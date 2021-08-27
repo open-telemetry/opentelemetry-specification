@@ -421,11 +421,11 @@ the following pieces of information:
 - The `value` that was recorded.
 - The `time` the measurement was seen.
 - The set of [Attributes](../common/common.md#attributes) associated with the measurement not already included in a metric data point.
-- The associated [trace id and span id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active parent [Span within Context](../trace/api.md#determining-the-parent-span-from-a-context) of the measurement.
+- The associated [trace id and span id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span within Context](../trace/api.md#determining-the-parent-span-from-a-context) of the measurement.
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
-A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have memory overhead related to exemplar sampling.
+A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have overhead related to exemplar sampling.
 
 A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
 
@@ -483,7 +483,7 @@ The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar Defaults
 
-The SDK will come with two types of built-in exemplar resorvoirs:
+The SDK will come with two types of built-in exemplar reservoirs:
 
 1. SimpleFixedSizeExemplarReservoir
 2. AlignedHistogramBucketExemplarReservoir
@@ -494,13 +494,13 @@ By default, fixed sized histogram aggregators will use
 
 *SimpleExemplarReservoir*
 This Exemplar reservoir MAY take a configuration parameter for the size of
-the reservoir pool.  The reservoir will accept measurements using an equivalent
+the reservoir pool.  The reservoir will accept measurements using an equivalent of
 the [naive reservoir sampling algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
 
   ```
   bucket = random_integer(0, num_measurements_seen)
   if bucket < num_buckets then
-    reservoir[bucket] = meaasurement
+    reservoir[bucket] = measurement
   end
   ```
 
@@ -651,7 +651,7 @@ passively. This pattern has been widely adopted by
 
 ## Defaults and Configuration
 
-And SDK MUST provide the following configuration parameters for Exemplar
+The SDK MUST provide the following configuration parameters for Exemplar
 sampling:
 
 | Name            | Description | Default | Notes |
