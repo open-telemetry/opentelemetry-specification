@@ -134,8 +134,9 @@ are the inputs:
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, a default
     aggregation will be applied by the SDK. The default aggregation is a TODO.
-  * The `exemplar_reservoir` to use for storing exemplars.  
-    The exact parameters are TODO pending further aggregator specification.
+  * The `exemplar_reservoir` (optional) to use for storing exemplars.  
+    This should be a factory or callback similar to aggregation which allows
+    different reservoirs to be chosen by the aggregation.
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -445,7 +446,7 @@ measurement should be sampled.
 This interface SHOULD have access to:
 
 - The value of the measurement.
-- The `Attributes` of the measurment.
+- The complete set of `Attributes` of the measurment.
 - the `Context` of the measuremnt.
 - The timestamp of the measurement.
 
@@ -460,7 +461,7 @@ to the reservoir and another to collect accumulated Exemplars.
 The "offer" method SHOULD accept measurements, including:
 
 - value
-- `Attributes`
+- `Attributes` (complete set)
 - `Context`
 - timestamp
 
