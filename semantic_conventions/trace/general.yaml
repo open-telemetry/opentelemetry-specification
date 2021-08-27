@@ -79,48 +79,69 @@ groups:
         type:
           allow_custom_values: true
           members:
-            - id: GPRS
-              value: "GPRS"
-            - id: EDGE
-              value: "EDGE"
-            - id: UMTS
-              value: "UMTS"
-            - id: CDMA
-              value: "CDMA"
-            - id: EVDO_0
-              value: "EVDO_0"
-            - id: EVDO_A
-              value: "EVDO_A"
-            - id: 1xRTT
-              value: "1xRTT"
-            - id: HSDPA
-              value: "HSDPA"
-            - id: HSUPA
-              value: "HSUPA"
-            - id: HSPA
-              value: "HSPA"
-            - id: IDEN
-              value: "IDEN"
-            - id: EVDO_B
-              value: "EVDO_B"
-            - id: LTE
-              value: "LTE"
-            - id: EHRPD
-              value: "EHRPD"
-            - id: HSPAP
-              value: "HSPAP"
-            - id: GSM
-              value: "GSM"
-            - id: TD_SCDMA
-              value: "TD_SCDMA"
-            - id: IWLAN
-              value: "IWLAN"
-            - id: NR
-              value: "NR"
-            - id: NRNSA
-              value: "NRNSA"
-            - id: LTE_CA
-              value: "LTE_CA"
+            - id: gprs
+              brief: GPRS
+              value: "gprs"
+            - id: edge
+              brief: EDGE
+              value: "edge"
+            - id: umts
+              brief: UMTS
+              value: "umts"
+            - id: cdma
+              brief: CDMA
+              value: "cdma"
+            - id: evdo_0
+              brief: EVDO Rel. 0
+              value: "evdo_0"
+            - id: evdo_a
+              brief: "EVDO Rev. A"
+              value: "evdo_a"
+            - id: cdma2000_1xrtt
+              brief: CDMA2000 1XRTT
+              value: "cdma2000_1xrtt"
+            - id: hsdpa
+              brief: HSDPA
+              value: "hsdpa"
+            - id: hsupa
+              brief: HSUPA
+              value: "hsupa"
+            - id: hspa
+              brief: HSPA
+              value: "hspa"
+            - id: iden
+              brief: IDEN
+              value: "iden"
+            - id: evdo_b
+              brief: "EVDO Rev. B"
+              value: "evdo_b"
+            - id: lte
+              brief: LTE
+              value: "lte"
+            - id: ehrpd
+              brief: EHRPD
+              value: "ehrpd"
+            - id: hspap
+              brief: HSPAP
+              value: "hspap"
+            - id: gsm
+              brief: GSM
+              value: "gsm"
+            - id: td_scdma
+              brief: TD-SCDMA
+              value: "td_scdma"
+            - id: iwlan
+              brief: IWLAN
+              value: "iwlan"
+            - id: nr
+              brief: "5G NR (New Radio)"
+              value: "nr"
+            - id: nrnsa
+              brief: "5G NRNSA (New Radio Non-Standalone)"
+              value: "nrnsa"
+            - id: lte_ca
+              brief: LTE CA
+              value: "lte_ca"
         brief: 'This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.'
         examples: 'LTE'
       - id: host.carrier.name
