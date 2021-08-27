@@ -457,6 +457,9 @@ Callback function which will be triggered by [Collect](#collect).
 `OnCollect` SHOULD provide a way to indicate whether it succeeded, failed or
 timed out.
 
+`OnCollect` SHOULD never be called concurrently for the same `MetricReader`
+instance. `OnCollect` can be called again only after the current call returns.
+
 `OnCollect` MUST accept the following parameters:
 
 * A `batch` of metrics. The exact data type of the batch is language specific,
