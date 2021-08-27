@@ -474,11 +474,11 @@ MAY further sample beyond the `ExemplarFilter`.
 
 The "collect" method MUST return accumulated `Exemplar`s.
 
-These `Exemplar`s MUST have their attributes filtered by an aggregator
-(or after the aggregator) when generating final Metric data points to ensure a
-complete view of the attributes from the original measurement.  This does not
-need to be part of the `ExemplarReservoir` interface, but SDKs may choose to
-include it.
+`Exemplar`s MUST retain the any attributes available in the measurement that
+are not preserved by aggregation or view configuration. Specifically, at a
+minimum, joining together attributes on an `Exemplar` with those available
+on its associated metric data point should result in the full set of attributes
+from the original sample measurement.
 
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
