@@ -51,10 +51,10 @@ to create an
 instance which is stored on the created `Meter`.
 
 Configuration (i.e., [MeasurementProcessors](#measurementprocessor),
-[MetricExporters](#metricexporter) and [`Views`](#view)) MUST be managed solely
-by the `MeterProvider` and the SDK MUST provide a way to configure all options
-that are implemented by the SDK. This MAY be done at the time of MeterProvider
-creation if appropriate.
+[MetricExporters](#metricexporter), [MetricReaders](#metricreader) and
+[Views](#view)) MUST be managed solely by the `MeterProvider` and the SDK MUST
+provide a way to configure all options that are implemented by the SDK. This MAY
+be done at the time of MeterProvider creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MeasurementProcessor`), the updated
@@ -184,26 +184,26 @@ meter_provider
         "Bar",
         instrument_name="Y",
         aggregation=HistogramAggregation(buckets=[5.0, 10.0, 25.0, 50.0, 100.0]))
-    .set_exporter(PrometheusExporter())
+    .add_metric_reader(BaseExportingMetricReader(PrometheusExporter()))
 ```
 
 ```python
 # all the metrics will be exported using the default configuration
-meter_provider.set_exporter(ConsoleExporter())
+meter_provider.add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
 # all the metrics will be exported using the default configuration
 meter_provider
     .add_view("*") # a wildcard view that matches everything
-    .set_exporter(ConsoleExporter())
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
 # Counter X will be exported as cumulative sum
 meter_provider
     .add_view("X", aggregation=SumAggregation(CUMULATIVE))
-    .set_exporter(ConsoleExporter())
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
@@ -212,7 +212,7 @@ meter_provider
 meter_provider
     .add_view("X", aggregation=SumAggregation(DELTA))
     .add_view("*", attribute_keys=["a", "b"])
-    .set_exporter(ConsoleExporter())
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ### Aggregation
