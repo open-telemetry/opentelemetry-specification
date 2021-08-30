@@ -91,8 +91,8 @@ It is recommended to also use the general [network attributes][], especially `ne
 
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] | `http.request.header.Content-Type=["application/json"]`; `http.request.header.X-Forwarded-for=["1.2.3.4", "1.2.3.5"]` | No |
-| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] | `http.response.header.Content-Type=["application/json"]`; `http.response.header.My-custom-header=["abc", "def"]` | No |
+| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] [2] | `http.request.header.Content-Type=["application/json"]`; `http.request.header.X-Forwarded-for=["1.2.3.4", "1.2.3.5"]` | No |
+| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] [2] | `http.response.header.Content-Type=["application/json"]`; `http.response.header.My-custom-header=["abc", "def"]` | No |
 
 **[1]:** Certain headers MAY be sanitized or omitted to avoid leaking sensitive information.
 
