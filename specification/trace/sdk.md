@@ -119,15 +119,18 @@ Thus, the SDK specification defines sets of possible requirements for
 
 ## Sampling
 
-Sampling is a mechanism to control the noise and overhead introduced by
-OpenTelemetry by reducing the number of samples of traces collected and sent to
-the backend.
+Sampling is a mechanism to control the cost of OpenTelemetry tracing by
+reducing the number of spans collected and sent to the backend.
+OpenTelemetry gives participants in a distributed trace the option to sample
+based on whether their context was sampled or to make the decision
+independently.
 
-Sampling may be implemented on different stages of a trace collection. The
-earliest sampling could happen before the trace is actually created, and the
-latest sampling could happen on the Collector which is out of process.
+Sampling may be implemented in different stages of trace collection. The
+earliest sampling happens inside the trace SDK, but later sampling decisions
+can happen outside the process, for example in an OpenTelemetry collector.
 
-The OpenTelemetry API has two properties responsible for the data collection:
+The OpenTelemetry API has two properties associated with Spans that allow the
+user to become aware of the sampling decision:
 
 * `IsRecording` field of a `Span`. If `false` the current `Span` discards all
   tracing data (attributes, events, status, etc.). Users can use this property
@@ -165,6 +168,59 @@ The following table summarizes the expected behavior for each combination of
 The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 [built-in samplers](#built-in-samplers) and associates a `Sampler` with each [`TracerProvider`].
 
+### Probability sampling
+
+OpenTelemetry specifies a mechanism for conveying sampling probability, when
+known, to enable accurate statistical counting of the population of spans
+using only the portion that were sampled and collected.
+
+Samping probability is conveyed in a form known as "adjusted count", which
+is the number of spans in the population accurately represented by the
+individual.  In common terms, a "1-in-N" sampling scheme produces spans with
+adjusted count N, where every sample span represents N in the general
+population.  Adjusted count is the inverse of sampling probability except
+when the probability is zero, which is an important special case.
+
+Although sampling can be carried out in multiple stages, OpenTelemetry
+specifies a dedicated field in the Span data model for representing
+probability at the "head" of the distributed trace, where it describes the
+probability the `Sampled` flag was set in the Span's initial sampling
+decision.
+
+To reduce the cost of conveying Sampling information through propagators,
+OpenTelemetry limits head sampling probabilities to powers of two or zero.
+Adjusted counts are likewise limited to powers of two or zero.  As not all
+Sampler implementations will be probabilistic in nature, a special value for
+the "unknown" adjusted count is included in the data model.  Aside from the
+zero and unknown cases, adjusted count values can be encoded using their
+base-2 logarithm in a small number of bits.
+
+The OpenTelemetry Span field for encoding adjusted count is named
+`log_head_adjusted_count`, with the default value zero representing the case
+of unknown adjusted count.  Values 1 through 62 encode one plus the base-2
+logarithm of adjusted count (i.e., adjusted count equals
+`2**(encoded_value-1)`), and zero adjusted count is encoded by value 63.
+Thus, it takes 6 bits to encode the `log_head_adjusted_count` field, with
+interpretation specified in the table below.
+
+<a name="log-head-adjusted-count-table"></a>
+
+| Encoded Value | Head adjusted count | Head sampling probability |
+| ------------- | ------------------- | ------------------------- |
+| 0             | Unknown             | Unknown                   |
+| 1             | 1                   | 1                         |
+| 2             | 2                   | 1/2                       |
+| 3             | 4                   | 1/4                       |
+| 4             | 8                   | 1/8                       |
+| ...           | ...                 | ...                       |
+| N             | 2**(N-1)            | 2**(-N+1)                 |
+| ...           | ...                 | ...                       |
+| 62            | 2**61               | 2**-61                    |
+| 63            | 0                   | 0                         |
+
+The built-in Samplers are defined so that when this specification is
+followed, all spans will have known head sampling probability.
+
 ### SDK Span creation
 
 When asked to create a Span, the SDK MUST act as if doing the following in order:
@@ -175,7 +231,7 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
 2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method
    (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
    use the sampling decision of the parent,
-   translating a set SampledFlag to RECORD and an unset one to DROP).
+   translating a set SampledFlag to `RECORD_AND_SAMPLE` and an unset one to `DROP`).
 3. Generate a new span ID for the `Span`, independently of the sampling decision.
    This is done so other components (such as logs or exception handling) can rely on
    a unique span ID, even if the `Span` is a non-recording instance.
@@ -227,12 +283,22 @@ object must be immutable (multiple calls may return different immutable objects)
   If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
   so samplers SHOULD normally return the passed-in `Tracestate` if they do not intend
   to change it.
+* The value of `log_head_adjusted_count` for the Span data model, reflecting
+  known and unknown values for adjusted count defined above.  The following guidance 
+  is given for user-defined Samplers:
+  * If the Sampler can be implemented as choice of built-in Sampler behavior
+    made at runtime, the resulting _composite_ sampler gives the correct
+    behavior.
+  * `RECORD_ONLY` and `DROP` sampling decisions indicate zero adjusted count.  It is
+    an error to return a `RECORD_ONLY` or `DROP` decision with non-zero adjusted count.
+  * `RECORD_AND_SAMPLE` sampling decisions that cannot be defined in terms of
+    a built-in Sampler SHOULD use unknown adjusted count.
 
 #### GetDescription
 
 Returns the sampler name or short description with the configuration. This may
 be displayed on debug pages or in the logs. Example:
-`"TraceIdRatioBased{0.000100}"`.
+`"TraceIdRatioBased{.000122}"`.
 
 Description MUST NOT change over time and caller can cache the returned value.
 
@@ -261,11 +327,8 @@ the `ParentBased` sampler specified below.
   represented as a decimal number. The precision of the number SHOULD follow
   implementation language standards and SHOULD be high enough to identify when
   Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-  had a sampling ratio of 1 to every 10,000 spans it COULD return
-  `"TraceIdRatioBased{0.000100}"` as its description.
-
-TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
+  had a sampling ratio of 1-in-(2**13) spans it COULD return
+  `"TraceIdRatioBased{0.000122}"` as its description.
 
 ##### Requirements for `TraceIdRatioBased` sampler algorithm
 
