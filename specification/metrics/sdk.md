@@ -581,7 +581,7 @@ instance. `OnCollect` can be called again only after the current call returns.
   typically it is some kind of list, e.g. it could be an enumerator that travels
   through the in-memory state.
 
-Individual language client MAY choose to add optional parameters (e.g. timeout).
+Individual language clients MAY choose to add optional parameters (e.g. timeout).
 
 #### OnForceFlush
 
