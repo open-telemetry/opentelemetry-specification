@@ -311,45 +311,138 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 * Returns `RECORD_AND_SAMPLE` always.
 * Description MUST be `AlwaysOnSampler`.
+* Behavior of `ShouldSample` is identical to `TraceIdRatioBased{1}`
 
 #### AlwaysOff
 
 * Returns `DROP` always.
 * Description MUST be `AlwaysOffSampler`.
+* Behavior of `ShouldSample` is identical to `TraceIdRatioBased{0}`
 
 #### TraceIdRatioBased
 
-* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
+This Sampler supports making independent sampling decisions at each Span in
+a trace, making it possible for each SDK to independently control its rate
+of sample spans.  The decision is defined to be consistent, such that for
+any two spans `T` and `U` of the same trace configured with
+`TraceIDRatioBased` ratios `ratio_T` and `ratio_U`, respectively, if
+`ratio_T <= ratio_U` and span `T` was sampled, span `U` MUST also be
+sampled.
+
+The constructor for `TraceIDRatioBased` MUST accept ratios in the range 0
+through 1, inclusive.  When the input ratio is not a power of two exactly,
+the Sampler MUST round the ratio down to the nearest power of two.
+
+The `TraceIdRatioBased` Sampler MUST ignore the parent `SampledFlag`. To respect the
 parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
 the `ParentBased` sampler specified below.
-* Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
-  with `RATIO` replaced with the Sampler instance's trace sampling ratio
-  represented as a decimal number. The precision of the number SHOULD follow
-  implementation language standards and SHOULD be high enough to identify when
-  Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-  had a sampling ratio of 1-in-(2**13) spans it COULD return
-  `"TraceIdRatioBased{0.000122}"` as its description.
 
-##### Requirements for `TraceIdRatioBased` sampler algorithm
+The description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
+with `RATIO` replaced with the Sampler instance's trace sampling ratio
+represented as a decimal number. The precision of the number SHOULD follow
+implementation language standards and SHOULD be high enough to identify when
+Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
+had a sampling ratio of 1-in-(2**13) spans it COULD return
+`"TraceIdRatioBased{0.000122}"` as its description.
 
-* The sampling algorithm MUST be deterministic. A trace identified by a given
-  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
-  implementations MUST use a deterministic hash of the `TraceId` when computing
-  the sampling decision. By ensuring this, running the sampler on any child `Span`
-  will produce the same decision.
-* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
-  sample. This is important when a backend system may want to run with a higher
-  sampling rate than the frontend system, this way all frontend traces will
-  still be sampled and extra traces will be sampled on the backend only.
-* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
-  there will probably be changes to it in any language SDK once it is, which
-  would break code that relies on the algorithm results.
-  Only the configuration and creation APIs can be considered stable.
-  It is recommended to use this sampler algorithm only for root spans
-  (in combination with [`ParentBased`](#parentbased)) because different language
-  SDKs or even different versions of the same language SDKs may produce inconsistent
-  results for the same input.
+##### `TraceIdRatioBased` sampler behavior
+
+Given the restriction to power-of-two sampling probabilities stated above
+and a uniform random distribution of `TraceId` bits, it would be possible to
+define the `TraceIdRatioBased` Sampler behavior in terms of the number of
+leading zeros of the TraceID.  If this were the case, sampling with
+probability `2**(-k)` means sampling all traces with `TraceId` having at
+least `k` leading zeros.
+
+OpenTelemetry follows the W3C specification for Trace Context, which does
+not require a uniform random distribution of `TraceId` bits, therefore the
+built-in OpenTelemetry Samplers are defined to propagate additional bits of
+randomness to facilitate consistent sampling.
+
+To convey the head sampling probability, so that child `ParentBased`
+Samplers can accurately record their adjusted count, the `TraceIDRatioBased`
+Sampler is required to propagate its adjusted count via W3C `tracestate`
+when that form of trace context propagation is used.  OpenTelemetry
+specifies the following syntax for propagating two values known as `p` for
+probability and `r` for randomness, for example:
+
+```
+tracestate: otel=p:PP;r:RR
+```
+
+where `PP` are two base16 encoded bytes conveying 6 bits of probability and
+`RR` are two base16 encoded bytes conveying 6 bits of randomness.  [TODO:
+elsewhere and in a different PR, write the syntax and rules for interpreting
+OpenTelemetry `tracestate`.  In both cases, values for `p` and `r` are
+restricted to the range 0 through 63 inclusive.](TODO)
+
+The value for `p` corresponds exactly with the encoded value for
+`log_head_adjusted_count` of the parent span, with values 1 through 62
+representing known non-zero adjusted counts.
+
+The value for `r` MUST be generated at the root of the trace, which MUST use
+a `TraceIdRatioBased` sampler so that its child `TraceIdRatioBased` Samplers
+know their adjusted counts.
+
+The `ShouldSample()` implementation considers two cases, root and non-root
+decisions.
+
+###### TraceIdRatioBased: Root case
+
+The value for `r` MUST be drawn from the following discrete probability
+distribution:
+
+| `r` Value | Likihood  |
+| --------- | --------- |
+| 0         | 1/2       |
+| 1         | 1/4       |
+| 2         | 1/8       |
+| 3         | 1/16      |
+| ...       | ...       |
+| N         | 2**(-N-1) |
+| ...       | ...       |
+| 62        | 2**(-63)  |
+| 63        | Reject    |
+
+This value can be computed by counting the number of zeros in a string of
+random bits limited to maximum value 62.  Here is example code to compute a
+value for `r`:
+
+```golang
+func nextRandomness() int {
+  // Repeat until a valid result is produced.
+  for {
+    R := 0
+    for {
+      if nextRandomBit() {
+        break
+      }
+      R++
+    }
+	if R < 63 {
+	  return R
+    }
+	// Reject, try again.
+  }
+}
+```
+
+Given a randomness value `r` and a power-of-two `TraceIdRatioBased` sampling
+ratio expressed as`2**(-s)`, the `TraceIdRatioBased` Sampler MUST make the
+sampling decision `RECORD_AND_SAMPLE` if and only if `s <= r`.
+
+###### TraceIdRatioBased: Non-root case
+
+The `r` value should have been generated by the root `Sampler`.  If no `r`
+value was provided in the context, the Sampler SHOULD return an unknown
+adjusted count as the `log_head_adjusted_count`.  No `p` value should be
+propagated to child contexts, in this case.
+
+When `r` was properly generated by a root Sampler, the decision is the same
+for the root case.  Given a randomness value `r` and a power-of-two
+`TraceIdRatioBased` sampling ratio expressed as`2**(-s)`, the
+`TraceIdRatioBased` Sampler MUST make the sampling decision
+`RECORD_AND_SAMPLE` if and only if `s <= r`.
 
 #### ParentBased
 
@@ -379,6 +472,12 @@ Optional parameters:
 |present|true|false|`remoteParentNotSampled()`|
 |present|false|true|`localParentSampled()`|
 |present|false|false|`localParentNotSampled()`|
+
+The `ParentBased` Sampler computes the `log_head_adjusted_count` field as
+follows:
+
+* If a `p` value was generated by the parent Sampler or one of its ancestors, use it as the `log_head_adjusted_count`
+* If no `p` value was generated by the parent Sampler or one of its ancestors, return an unknown `log_head_adjusted_count`.
 
 ## Span Limits
 
