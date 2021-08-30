@@ -26,6 +26,7 @@ Table of Contents
 * [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
 * [MetricReader](#metricreader)
+  * [Base exporting MetricReader](#base-exporting-metricreader)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
