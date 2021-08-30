@@ -621,7 +621,7 @@ If the configured exporter only supports [pull mode](#pull-metric-exporter):
 * [Collect](#collect) SHOULD only be called when the [Pull Metric
   Exporter](#pull-metric-exporter) triggers the scraping, otherwise it SHOULD be
   treated as an error.
-* Individual language client MAY decide if [OnForceFlush](#onforceflush) will
+* Individual language clients MAY decide if [OnForceFlush](#onforceflush) will
   return immediately (with an indication of failure) or wait for the next
   [OnCollect](#oncollect) call to complete.
 
