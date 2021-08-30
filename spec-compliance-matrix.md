@@ -165,7 +165,7 @@ Note: Support for environment variables is optional.
 | OTLP/gRPC Exporter                                                             | *        | +  | + | +  | +           |      | +      |     | +    | +   | +    | +     |
 | OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | + | +  | [-][py1106] | +    | +      |     |      | -   | -    | -     |
 | OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | - | +  | [-][py1003] |      | -      |     |      | -   | -    | -     |
-| OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | - | +  | +           | +    | -      |     |      | -   | -    | -     |
+| OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | + | +  | +           | +    | -      |     |      | -   | -    | -     |
 | Concurrent sending                                                             |          | -  | + | +  | [-][py1108] |      | -      |     | +    | -   | -    | -     |
 | Honors retryable responses with backoff                                        | X        | +  |   | +  | +           | +    | -      |     |      | -   | -    | -     |
 | Honors non-retryable responses                                                 | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
