@@ -12,6 +12,7 @@ release.
 ### Traces
 
 - Adding SDK configuration for Jaeger remote sampler ([#1791](https://github.com/open-telemetry/opentelemetry-specification/pull/1791))
+- Adds specification for probability sampling, updates the definition of the built-in Samplers.
 
 ### Metrics
 
