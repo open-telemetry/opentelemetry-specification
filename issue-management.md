@@ -71,6 +71,13 @@ action, please provide the rationale for closing, and indicate that OP can
 re-open for discussion if there are additional info, justification and
 questions.
 
+Issues with no activity during 1 year can be considered stale
+and can be closed. However, SIGs are free to use a longer period of time.
+
+Pull requests with no activity during 7 days can be marked stale,
+and they should stay at least 7 days as stale before they can be closed.
+Similarly to issues, SIGs are free to use longer periods of time.
+
 ## When Issues Get Stuck
 
 Some issues are not directly related to a particular code change. If an
