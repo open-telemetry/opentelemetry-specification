@@ -87,6 +87,17 @@ Don't set the span status description if the reason can be inferred from `http.s
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
+### HTTP request and response headers
+
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] | `http.request.header.Content-Type=["application/json"]`; `http.request.header.X-Forwarded-for=["1.2.3.4", "1.2.3.5"]` | No |
+| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] | `http.response.header.Content-Type=["application/json"]`; `http.response.header.My-custom-header=["abc", "def"]` | No |
+
+**[1]:** Certain headers MAY be sanitized or omitted to avoid leaking sensitive information.
+
+**[2]:** The attribute value MAY contain separate header value as separate items, or concatenated header values as one item, depending on the way the HTTP library provides access to headers.
+
 [network attributes]: span-general.md#general-network-connection-attributes
 
 ## HTTP client
