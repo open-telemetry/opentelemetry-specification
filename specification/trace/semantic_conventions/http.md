@@ -94,7 +94,7 @@ It is recommended to also use the general [network attributes][], especially `ne
 | `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] [2] | `http.request.header.Content-Type=["application/json"]`; `http.request.header.X-Forwarded-for=["1.2.3.4", "1.2.3.5"]` | No |
 | `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] [2] | `http.response.header.Content-Type=["application/json"]`; `http.response.header.My-custom-header=["abc", "def"]` | No |
 
-**[1]:** Instrumentations SHOULD require an explicit configuration of which headers are to be captured (e.g. an allowlist).
+**[1]:** Instrumentations SHOULD require an explicit configuration of which headers are to be captured.
 Including all request/response headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
 
 Some HTTP headers - `Host` and `User-Agent` - are already captured in the `http.host` and `http.user_agent` attributes.
