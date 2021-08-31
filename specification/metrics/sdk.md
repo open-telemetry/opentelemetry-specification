@@ -679,6 +679,46 @@ in the SDK:
                                +-----------------------------+
 ```
 
+The following sequence diagram shows how `MetricExporter` interacts with other
+components in the SDK. Note that the _SIGNAL_ in the diagram could come from:
+
+* A periodic timer from the `MetricReader`, if the MetricReader is a [Periodic
+  exporting MetricReader](#periodic-exporting-metricreader).
+* A scraping call received by the `MetricExporter`, if the MetricExporter is a
+  [Pull Metric Exporter](#pull-metric-exporter).
+* An explicit call to the `MetricReader.Collect()` from the user.
+* An implicit call to the `MetricReader.Collect()` (e.g.
+  `MeterProvider.ForceFlush()`).
+
+```text
++---------------+                         +--------------+             +----------------+
+|               |                         |              |             |                |
+| MeterProvider |                         | MetricReader |             | MetricExporter |
+|               |                         |              |             |                |
++---------------+                         +--------------+             +----------------+
+        |           +--------+                   |                              |
+        |           |        |                   |                              |
+        |           | SIGNAL |                   |                              |
+        |           |        |                   |                              |
+        |           +---+----+                   |                              |
+        |               |                        |                              |
+        |               | MetricReader.Collect() |                              |
+        |               +------------------------>                              |
+        |                                        |                              |
+        | invoke callbacks from async instuments |                              |
+        <----------------------------------------+                              |
+        |                                        |                              |
+        | MetricReader.OnCollect(batch) callback |                              |
+        +---------------------------------------->                              |
+        |                                        |                              |
+        |                                        | MetricExporter.Export(batch) |
+        |                                        +------------------------------>
+        |                                        |                              |
+        |                                        |                              | send metrics
+        |                                        |                              +-------------->
+        |                                        |                              |
+```
+
 Metric Exporter has access to the [pre-aggregated metrics
 data](./datamodel.md#timeseries-model).
 
@@ -692,13 +732,6 @@ example:
 * Exporter C is a pull exporter which reacts to a scraper over HTTP.
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
-
-### Push Metric Exporter
-
-Push Metric Exporter sends the data on its own schedule. Here are some examples:
-
-* Sends the data based on a user configured schedule, e.g. every 1 minute.
-* Sends the data when there is a severe error.
 
 #### Interface Definition
 
@@ -770,11 +803,44 @@ return a Failure result.
 and the destination is unavailable). OpenTelemetry client authors can decide if
 they want to make the shutdown timeout configurable.
 
+### Push Metric Exporter
+
+Push Metric Exporter sends the data on its own schedule. Here are some examples:
+
+* Sends the data based on a user configured schedule, e.g. every 1 minute.
+* Sends the data when there is a severe error.
+
 ### Pull Metric Exporter
 
 Pull Metric Exporter reacts to the metrics scrapers and reports the data
 passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
+
+```text
++---------------+                         +--------------+          +-----------------------+
+|               |                         |              |          |                       |
+| MeterProvider |                         | MetricReader |          | MetricExporter (pull) |
+|               |                         |              |          |                       |
++---------------+                         +--------------+          +-----------------------+
+        |                                        |                              |          +---------+
+        |                                        |                              | scraping |         |
+        |                                        |                              <----------+ Scraper |
+        |                                        | MetricReader.Collect()       |          |         |
+        |                                        <------------------------------+          +---------+
+        |                                        |                              |
+        | invoke callbacks from async instuments |                              |
+        <----------------------------------------+                              |
+        |                                        |                              |
+        | MetricReader.OnCollect(batch) callback |                              |
+        +---------------------------------------->                              |
+        |                                        |                              |
+        |                                        | MetricExporter.Export(batch) |
+        |                                        +------------------------------>
+        |                                        |                              |
+        |                                        |                              | respond to scraper
+        |                                        |                              +-------------------->
+        |                                        |                              |
+```
 
 ## Defaults and Configuration
 
