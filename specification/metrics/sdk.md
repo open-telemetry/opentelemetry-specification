@@ -691,32 +691,32 @@ components in the SDK. Note that the _SIGNAL_ in the diagram could come from:
   `MeterProvider.ForceFlush()`).
 
 ```text
-+---------------+                         +--------------+             +----------------+
-|               |                         |              |             |                |
-| MeterProvider |                         | MetricReader |             | MetricExporter |
-|               |                         |              |             |                |
-+---------------+                         +--------------+             +----------------+
-        |           +--------+                   |                              |
-        |           |        |                   |                              |
-        |           | SIGNAL |                   |                              |
-        |           |        |                   |                              |
-        |           +---+----+                   |                              |
-        |               |                        |                              |
-        |               | MetricReader.Collect() |                              |
-        |               +------------------------>                              |
-        |                                        |                              |
-        | invoke callbacks from async instuments |                              |
-        <----------------------------------------+                              |
-        |                                        |                              |
-        | MetricReader.OnCollect(batch) callback |                              |
-        +---------------------------------------->                              |
-        |                                        |                              |
-        |                                        | MetricExporter.Export(batch) |
-        |                                        +------------------------------>
-        |                                        |                              |
-        |                                        |                              | send metrics
-        |                                        |                              +-------------->
-        |                                        |                              |
++---------------+                          +--------------+             +----------------+
+|               |                          |              |             |                |
+| MeterProvider |                          | MetricReader |             | MetricExporter |
+|               |                          |              |             |                |
++---------------+                          +--------------+             +----------------+
+        |           +--------+                    |                              |
+        |           |        |                    |                              |
+        |           | SIGNAL |                    |                              |
+        |           |        |                    |                              |
+        |           +---+----+                    |                              |
+        |               |                         |                              |
+        |               | MetricReader.Collect()  |                              |
+        |               +------------------------->                              |
+        |                                         |                              |
+        | invoke callbacks from async instruments |                              |
+        <-----------------------------------------+                              |
+        |                                         |                              |
+        | MetricReader.OnCollect(batch) callback  |                              |
+        +----------------------------------------->                              |
+        |                                         |                              |
+        |                                         | MetricExporter.Export(batch) |
+        |                                         +------------------------------>
+        |                                         |                              |
+        |                                         |                              | send metrics
+        |                                         |                              +-------------->
+        |                                         |                              |
 ```
 
 Metric Exporter has access to the [pre-aggregated metrics
@@ -817,29 +817,29 @@ passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
 
 ```text
-+---------------+                         +--------------+          +-----------------------+
-|               |                         |              |          |                       |
-| MeterProvider |                         | MetricReader |          | MetricExporter (pull) |
-|               |                         |              |          |                       |
-+---------------+                         +--------------+          +-----------------------+
-        |                                        |                              |          +---------+
-        |                                        |                              | scraping |         |
-        |                                        |                              <----------+ Scraper |
-        |                                        | MetricReader.Collect()       |          |         |
-        |                                        <------------------------------+          +---------+
-        |                                        |                              |
-        | invoke callbacks from async instuments |                              |
-        <----------------------------------------+                              |
-        |                                        |                              |
-        | MetricReader.OnCollect(batch) callback |                              |
-        +---------------------------------------->                              |
-        |                                        |                              |
-        |                                        | MetricExporter.Export(batch) |
-        |                                        +------------------------------>
-        |                                        |                              |
-        |                                        |                              | respond to scraper
-        |                                        |                              +-------------------->
-        |                                        |                              |
++---------------+                          +--------------+          +-----------------------+
+|               |                          |              |          |                       |
+| MeterProvider |                          | MetricReader |          | MetricExporter (pull) |
+|               |                          |              |          |                       |
++---------------+                          +--------------+          +-----------------------+
+        |                                         |                              |          +---------+
+        |                                         |                              | scraping |         |
+        |                                         |                              <----------+ Scraper |
+        |                                         | MetricReader.Collect()       |          |         |
+        |                                         <------------------------------+          +---------+
+        |                                         |                              |
+        | invoke callbacks from async instruments |                              |
+        <-----------------------------------------+                              |
+        |                                         |                              |
+        | MetricReader.OnCollect(batch) callback  |                              |
+        +----------------------------------------->                              |
+        |                                         |                              |
+        |                                         | MetricExporter.Export(batch) |
+        |                                         +------------------------------>
+        |                                         |                              |
+        |                                         |                              | respond to scraper
+        |                                         |                              +-------------------->
+        |                                         |                              |
 ```
 
 ## Defaults and Configuration
