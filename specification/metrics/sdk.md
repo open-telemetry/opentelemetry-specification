@@ -733,11 +733,11 @@ example:
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
 
-#### Interface Definition
+### Interface Definition
 
 A Push Metric Exporter MUST support the following functions:
 
-##### Export(batch)
+#### Export(batch)
 
 Exports a batch of `Metrics`. Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
@@ -772,7 +772,7 @@ Returns: `ExportResult`
 Note: this result may be returned via an async mechanism or a callback, if that
 is idiomatic for the language implementation.
 
-##### ForceFlush()
+#### ForceFlush()
 
 This is a hint to ensure that the export of any `Metrics` the exporter has
 received prior to the call to `ForceFlush` SHOULD be completed as soon as
@@ -790,7 +790,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry client authors can decide if they want
 to make the flush timeout configurable.
 
-##### Shutdown()
+#### Shutdown()
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
