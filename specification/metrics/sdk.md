@@ -537,6 +537,16 @@ measurements using the equivalent of the following naive algorithm:
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
+The SDK MUST support multiple `MetricReader` instances to be registered on the
+same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
+`MetricReader` instance MUST NOT introduce side-effects to other `MetricReader`
+instances. For example, if a `MetricReader` instance is receiving metric data
+points that have [delta temporality](./datamodel.md#temporality) via the
+[MetricReader.OnCollect](#oncollect) callback, it is expected that SDK will
+update the time range - e.g. from (T<sub>n</sub>, T<sub>n+1</sub>] to
+(T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular `MetricReader`
+instance, so the next `OnCollect` will get a new start time.
+
 ```text
 +-----------------+            +--------------+
 |                 | Metrics... |              |
