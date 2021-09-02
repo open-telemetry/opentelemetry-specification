@@ -120,7 +120,7 @@ Thus, the SDK specification defines sets of possible requirements for
 ## Sampling
 
 Sampling is a mechanism to control the cost of OpenTelemetry tracing by
-reducing the number of spans collected and sent to the backend.
+reducing the number and/or verbosity of spans collected and sent to the backend.
 OpenTelemetry gives participants in a distributed trace the option to sample
 based on whether their context was sampled or to make the decision
 independently.
@@ -170,14 +170,14 @@ The SDK defines the interface [`Sampler`](#sampler) as well as a set of
 
 ### Probability sampling
 
-OpenTelemetry specifies a mechanism for conveying sampling probability, when
+OpenTelemetry specifies a mechanism for recording sampling probability, when
 known, to enable accurate statistical counting of the population of spans
 using only the portion that were sampled and collected.
 
 Samping probability is conveyed in a form known as "adjusted count", which
 is the number of spans in the population accurately represented by the
 individual.  In common terms, a "1-in-N" sampling scheme produces spans with
-adjusted count N, where every sample span represents N in the general
+adjusted count N, where every sample span represents N spans in the general
 population.  Adjusted count is the inverse of sampling probability except
 when the probability is zero, which is an important special case.
 
@@ -416,13 +416,13 @@ func nextRandomness() int {
   for {
     R := 0
     for {
-      if nextRandomBit() {
+      if nextRandomBit() == 1 {
         break
       }
       R++
     }
-	if R < 63 {
-	  return R
+    if R < 63 {
+        return R
     }
 	// Reject, try again.
   }
