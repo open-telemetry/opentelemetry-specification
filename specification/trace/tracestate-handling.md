@@ -36,7 +36,7 @@ key        = lcalpha *(lcalpha / DIGIT )
 lcalpha    = %x61-7A ; a-z
 ```
 
-Specific keys used by OTel concerns MUST be defined as part as the Specification too.
+Specific keys used by OTel concerns MUST be defined as part as the Specification.
 
 ## Value
 
