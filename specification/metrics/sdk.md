@@ -561,66 +561,31 @@ instance, so the next `OnCollect` will get a new start time.
 +-----------------+            +--------------+
 ```
 
+The SDK SHOULD provide a way to allow `MetricReader` to respond to
+[MeterProvider.ForceFlush](#forceflush) and [MeterProvider.Shutdown](#shutdown).
+Individual language clients can decide the language idiomatic approach, for
+example, as `OnForceFlush` and `OnShutdown` callback functions.
+
 ### MetricReader operations
 
 #### Collect
 
 Collects the metrics from the SDK. If there are [asynchronous
 Instruments](./api.md#asynchronous-instrument) involved, their callback
-functions will be triggered. Then the [OnCollect callback](#oncollect) will be
-called with the collected metrics from the in-memory state.
+functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
 `Collect` does not have any required parameters, however, individual language
-client MAY choose to support optional parameters (e.g. filter, timeout).
-
-#### OnCollect
-
-Callback function which will be triggered by [Collect](#collect).
-
-`OnCollect` SHOULD provide a way to indicate whether it succeeded, failed or
-timed out.
-
-`OnCollect` SHOULD never be called concurrently for the same `MetricReader`
-instance. `OnCollect` can be called again only after the current call returns.
-
-`OnCollect` MUST accept the following parameters:
-
-* A `batch` of metrics. The exact data type of the batch is language specific,
-  typically it is some kind of list, e.g. it could be an enumerator that travels
-  through the in-memory state.
-
-Individual language clients MAY choose to add optional parameters (e.g. timeout).
-
-#### OnForceFlush
-
-Callback function which will be triggered by [ForceFlush](#forceflush).
-
-`OnForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out.
-
-`OnForceFlush` SHOULD complete or abort within some timeout. `OnForceFlush` can
-be implemented as a blocking API or an asynchronous API which notifies the
-caller via a callback or an event. OpenTelemetry client authors can decide if
-they want to make the flush timeout configurable.
-
-#### OnShutdown
-
-Callback function which will be triggered by [Shutdown](#shutdown). This is an
-opportunity for `MetricReader` to perform any required cleanup.
-
-`OnShutdown` should be called only once for each `MetricReader` instance.
-
-`OnShutdown` should not block indefinitely (e.g. if it attempts to flush the
-data and the destination is unavailable). OpenTelemetry client authors can
-decide if they want to make the shutdown timeout configurable.
+clients MAY choose to support optional parameters (e.g. callback, filter,
+timeout). Individual language clients MAY choose the return value type, or do
+not return anything.
 
 ### Base exporting MetricReader
 
 This is an implementation of the `MetricReader` which collects metrics when
-[OnCollect](#oncollect) is called. and passes the metrics to the configured
+[Collect](#collect) is called. and passes the metrics to the configured
 [MetricExporter](#metricexporter).
 
 Configurable parameters:
@@ -632,9 +597,6 @@ If the configured exporter only supports [pull mode](#pull-metric-exporter):
 * [Collect](#collect) SHOULD only be called when the [Pull Metric
   Exporter](#pull-metric-exporter) triggers the scraping, otherwise it SHOULD be
   treated as an error.
-* Individual language clients MAY decide if [OnForceFlush](#onforceflush) will
-  return immediately (with an indication of failure) or wait for the next
-  [OnCollect](#oncollect) call to complete.
 
 ### Periodic exporting MetricReader
 
@@ -689,46 +651,6 @@ in the SDK:
                                +-----------------------------+
 ```
 
-The following sequence diagram shows how `MetricExporter` interacts with other
-components in the SDK. Note that the _SIGNAL_ in the diagram could come from:
-
-* A periodic timer from the `MetricReader`, if the MetricReader is a [Periodic
-  exporting MetricReader](#periodic-exporting-metricreader).
-* A scraping call received by the `MetricExporter`, if the MetricExporter is a
-  [Pull Metric Exporter](#pull-metric-exporter).
-* An explicit call to the `MetricReader.Collect()` from the user.
-* An implicit call to the `MetricReader.Collect()` (e.g.
-  `MeterProvider.ForceFlush()`).
-
-```text
-+---------------+                          +--------------+             +----------------+
-|               |                          |              |             |                |
-| MeterProvider |                          | MetricReader |             | MetricExporter |
-|               |                          |              |             |                |
-+---------------+                          +--------------+             +----------------+
-        |           +--------+                    |                              |
-        |           |        |                    |                              |
-        |           | SIGNAL |                    |                              |
-        |           |        |                    |                              |
-        |           +---+----+                    |                              |
-        |               |                         |                              |
-        |               | MetricReader.Collect()  |                              |
-        |               +------------------------->                              |
-        |                                         |                              |
-        | invoke callbacks from async instruments |                              |
-        <-----------------------------------------+                              |
-        |                                         |                              |
-        | MetricReader.OnCollect(batch) callback  |                              |
-        +----------------------------------------->                              |
-        |                                         |                              |
-        |                                         | MetricExporter.Export(batch) |
-        |                                         +------------------------------>
-        |                                         |                              |
-        |                                         |                              | send metrics
-        |                                         |                              +-------------->
-        |                                         |                              |
-```
-
 Metric Exporter has access to the [pre-aggregated metrics
 data](./datamodel.md#timeseries-model).
 
@@ -743,11 +665,18 @@ example:
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
 
-### Interface Definition
+### Push Metric Exporter
+
+Push Metric Exporter sends the data on its own schedule. Here are some examples:
+
+* Sends the data based on a user configured schedule, e.g. every 1 minute.
+* Sends the data when there is a severe error.
+
+#### Interface Definition
 
 A Push Metric Exporter MUST support the following functions:
 
-#### Export(batch)
+##### Export(batch)
 
 Exports a batch of `Metrics`. Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
@@ -782,7 +711,7 @@ Returns: `ExportResult`
 Note: this result may be returned via an async mechanism or a callback, if that
 is idiomatic for the language implementation.
 
-#### ForceFlush()
+##### ForceFlush()
 
 This is a hint to ensure that the export of any `Metrics` the exporter has
 received prior to the call to `ForceFlush` SHOULD be completed as soon as
@@ -800,7 +729,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry client authors can decide if they want
 to make the flush timeout configurable.
 
-#### Shutdown()
+##### Shutdown()
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
@@ -813,44 +742,16 @@ return a Failure result.
 and the destination is unavailable). OpenTelemetry client authors can decide if
 they want to make the shutdown timeout configurable.
 
-### Push Metric Exporter
-
-Push Metric Exporter sends the data on its own schedule. Here are some examples:
-
-* Sends the data based on a user configured schedule, e.g. every 1 minute.
-* Sends the data when there is a severe error.
-
 ### Pull Metric Exporter
 
 Pull Metric Exporter reacts to the metrics scrapers and reports the data
 passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
 
-```text
-+---------------+                          +--------------+          +-----------------------+
-|               |                          |              |          |                       |
-| MeterProvider |                          | MetricReader |          | MetricExporter (pull) |
-|               |                          |              |          |                       |
-+---------------+                          +--------------+          +-----------------------+
-        |                                         |                              |          +---------+
-        |                                         |                              | scraping |         |
-        |                                         |                              <----------+ Scraper |
-        |                                         | MetricReader.Collect()       |          |         |
-        |                                         <------------------------------+          +---------+
-        |                                         |                              |
-        | invoke callbacks from async instruments |                              |
-        <-----------------------------------------+                              |
-        |                                         |                              |
-        | MetricReader.OnCollect(batch) callback  |                              |
-        +----------------------------------------->                              |
-        |                                         |                              |
-        |                                         | MetricExporter.Export(batch) |
-        |                                         +------------------------------>
-        |                                         |                              |
-        |                                         |                              | respond to scraper
-        |                                         |                              +-------------------->
-        |                                         |                              |
-```
+Implementors MAY choose the best idiomatic design for their language. For
+example, they could apply the [Push Metric Exporter
+interface](#push-metric-exporter) design for consistency, or they could design a
+completely different pull exporter interface.
 
 ## Defaults and Configuration
 
