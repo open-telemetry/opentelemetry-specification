@@ -150,6 +150,8 @@ client and server spans SHOULD be created. In case of
 unary calls only one sent and one received message will be recorded for both
 client and server spans.
 
+The event name MUST be `"message"`.
+
 <!-- semconv rpc.grpc.message -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
