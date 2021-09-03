@@ -587,6 +587,11 @@ This is an implementation of the `MetricReader` which collects metrics when
 [Collect](#collect) is called. and passes the metrics to the configured
 [MetricExporter](#metricexporter).
 
+**Note:** The name **"Base" exporting MetricReader** has nothing to do with
+object oriented programming or class inheritance / hierarchy. In case it might
+introduce confusion in certain programming languages, individual language client
+CAN choose a different wording.
+
 Configurable parameters:
 
 * `exporter` - the exporter where the metrics are sent to.
