@@ -106,21 +106,9 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 | OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
 
-## OTLP Exporters
+## OTLP Exporter
 
 See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).
-
-[OTLP](./protocol/exporter.md) supports the following transport protocols and corresponding [exporters values](#exporter-selection):
-
-| Protocol          | Exporter Value    | Description |
-| ----------------- | ----------------- | ----------- |
-| `grpc`            | "otlp_grpc"       | Protobuf-encoded data using gRPC wire format over HTTP/2 connection |
-| `http/protobuf`   | "otlp_http_proto" | Protobuf-encoded data over HTTP connection |
-| `http/json`       | "otlp_http_json"  | JSON-encoded data over HTTP connection |
-
-SDKs MUST support either `grpc` or `http/protobuf` and SHOULD support both. They also MAY support `http/json`.
-
-SDKs have an unspecified default protocol, which is used if the exporter selection is "otlp".
 
 ## Jaeger Exporter
 
@@ -177,20 +165,14 @@ The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 
 Known values for OTEL_TRACES_EXPORTER are:
 
-- `"otlp"`: [OTLP](./protocol/otlp.md) with the unspecified default protocol described in [OTLP exporters](#otlp-exporters).
-- `"otlp_grpc"`: [OTLP](./protocol/otlp.md) with the `otlp/grpc` protocol.
-- `"otlp_http_proto"`: [OTLP](./protocol/otlp.md) with the `http/protobuf` protocol.
-- `"otlp_http_json"`: [OTLP](./protocol/otlp.md) with the `http/json` protocol.
+- `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"none"`: No automatically configured exporter for traces.
 
 Known values for OTEL_METRICS_EXPORTER are:
 
-- `"otlp"`: [OTLP](./protocol/otlp.md) with the unspecified default protocol as described in [OTLP exporters](#otlp-exporters).
-- `"otlp_grpc"`: [OTLP](./protocol/otlp.md) with the `otlp/grpc` protocol.
-- `"otlp_http_proto"`: [OTLP](./protocol/otlp.md) with the `http/protobuf` protocol.
-- `"otlp_http_json"`: [OTLP](./protocol/otlp.md) with the `http/json` protocol.
+- `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 - `"none"`: No automatically configured exporter for metrics.
 
