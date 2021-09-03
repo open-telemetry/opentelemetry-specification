@@ -539,7 +539,7 @@ measurements using the equivalent of the following naive algorithm:
 
 The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
-`MetricReader` instance MUST NOT introduce side-effects to other `MetricReader`
+`MetricReader` instance SHOULD NOT introduce side-effects to other `MetricReader`
 instances. For example, if a `MetricReader` instance is receiving metric data
 points that have [delta temporality](./datamodel.md#temporality), it is expected
 that SDK will update the time range - e.g. from (T<sub>n</sub>, T<sub>n+1</sub>]
@@ -577,9 +577,9 @@ functions will be triggered.
 failed or timed out.
 
 `Collect` does not have any required parameters, however, individual language
-clients MAY choose to support optional parameters (e.g. callback, filter,
-timeout). Individual language clients MAY choose the return value type, or do
-not return anything.
+clients MAY choose to add parameters (e.g. callback, filter, timeout).
+Individual language clients MAY choose the return value type, or do not return
+anything.
 
 ### Base exporting MetricReader
 
