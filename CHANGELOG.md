@@ -27,6 +27,10 @@ release.
   ([#1863](https://github.com/open-telemetry/opentelemetry-specification/pull/1863))
 - Lambda instrumentations should check if X-Ray parent context is valid
   ([#1867](https://github.com/open-telemetry/opentelemetry-specification/pull/1867))
+- Update YAML definitions for events
+  ([#1843](https://github.com/open-telemetry/opentelemetry-specification/pull/1843)):
+  - Mark exception as semconv type "event".
+  - Add YAML definitions for grpc events.
 - Add `messaging.consumer_id` to differentiate between message consumers.
   ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 
