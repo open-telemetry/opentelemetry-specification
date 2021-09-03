@@ -31,12 +31,17 @@ release.
   ([#1843](https://github.com/open-telemetry/opentelemetry-specification/pull/1843)):
   - Mark exception as semconv type "event".
   - Add YAML definitions for grpc events.
+- Add `messaging.consumer_id` to differentiate between message consumers.
+  ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
+
+- Change default value for OTEL_EXPORTER_JAEGER_AGENT_PORT to 6831.
+  ([#1812](https://github.com/open-telemetry/opentelemetry-specification/pull/1812))
 
 ## v1.6.0 (2021-08-06)
 
@@ -72,8 +77,6 @@ release.
 - Add mobile-related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
 - Adding alibaba cloud as a cloud provider.
   ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
-- Add `messaging.consumer_id` to differentiate between message consumers.
-  ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 
 ### Compatibility
 
