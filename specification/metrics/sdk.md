@@ -134,6 +134,9 @@ are the inputs:
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, a default
     aggregation will be applied by the SDK. The default aggregation is a TODO.
+  * The `exemplar_reservoir` (optional) to use for storing exemplars.  
+    This should be a factory or callback similar to aggregation which allows
+    different reservoirs to be chosen by the aggregation.
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -411,6 +414,118 @@ active span](../trace/api.md#context-interaction)).
 +------------------+
 ```
 
+## Exemplars
+
+An [Exemplar](./datamodel.md#exemplars) is a recorded measurement that exposes
+the following pieces of information:
+
+- The `value` that was recorded.
+- The `time` the measurement was seen.
+- The set of [Attributes](../common/common.md#attributes) associated with the measurement not already included in a metric data point.
+- The associated [trace id and span id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span within Context](../trace/api.md#determining-the-parent-span-from-a-context) of the measurement.
+
+A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
+
+A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have overhead related to exemplar sampling.
+
+A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
+
+A Metric SDK MUST allow exemplar sampling to leverage the configuration of a metric aggregator.  
+For example, Exemplar sampling of histograms should be able to leverage bucket boundaries.
+
+A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
+
+- `ExemplarFilter`: filter which measurements can become exemplars
+- `ExemplarReservoir`: determine how to store exemplars.
+
+### Exemplar Filter
+
+The `ExemplarFilter` interface MUST provide a method to determine if a
+measurement should be sampled.  
+
+This interface SHOULD have access to:
+
+- The value of the measurement.
+- The complete set of `Attributes` of the measurment.
+- the `Context` of the measuremnt.
+- The timestamp of the measurement.
+
+See [Defaults and Configuration](#defaults-and-configuration) for built-in
+filters.
+
+### Exemplar Reservoir
+
+The `ExemplarReservoir` interface MUST provide a method to offer measurements
+to the reservoir and another to collect accumulated Exemplars.
+
+The "offer" method SHOULD accept measurements, including:
+
+- value
+- `Attributes` (complete set)
+- `Context`
+- timestamp
+
+The "offer" method SHOULD have the ability to pull associated trace and span
+information without needing to record full context.  In other words, current
+span context and baggage can be inspected at this point.
+
+The "offer" method does not need to store all measurements it is given and
+MAY further sample beyond the `ExemplarFilter`.
+
+The "collect" method MUST return accumulated `Exemplar`s.
+
+`Exemplar`s MUST retain the any attributes available in the measurement that
+are not preserved by aggregation or view configuration. Specifically, at a
+minimum, joining together attributes on an `Exemplar` with those available
+on its associated metric data point should result in the full set of attributes
+from the original sample measurement.
+
+The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
+
+### Exemplar Defaults
+
+The SDK will come with two types of built-in exemplar reservoirs:
+
+1. SimpleFixedSizeExemplarReservoir
+2. AlignedHistogramBucketExemplarReservoir
+
+By default, fixed sized histogram aggregators will use
+`AlignedHistogramBucketExemplarReservoir` and all other aggregaators will use
+`SimpleFixedSizeExemplarReservoir`.
+
+*SimpleExemplarReservoir*
+This Exemplar reservoir MAY take a configuration parameter for the size of
+the reservoir pool.  The reservoir will accept measurements using an equivalent of
+the [naive reservoir sampling algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
+
+  ```
+  bucket = random_integer(0, num_measurements_seen)
+  if bucket < num_buckets then
+    reservoir[bucket] = measurement
+  end
+  ```
+
+*AlignedHistogramBucketExemplarReservoir*
+This Exemplar reservoir MUST take a configuration parameter that is the
+configuration of a Histogram.  This implementation MUST keep the last seen
+measurement that falls within a histogram bucket.  The reservoir will accept
+measurements using the equivalent of the following naive algorithm:
+
+  ```
+  bucket = find_histogram_bucket(measurement)
+  if bucket < num_buckets then
+    reservoir[bucket] = measurement
+  end
+
+  def find_histogram_bucket(measurement):
+    for boundary, idx in bucket_boundaries do
+      if value <= boundary then
+        return idx
+      end
+    end
+    return boundaries.length
+  ```
+
 ## MetricExporter
 
 `MetricExporter` defines the interface that protocol-specific exporters MUST
@@ -534,3 +649,18 @@ they want to make the shutdown timeout configurable.
 Pull Metric Exporter reacts to the metrics scrapers and reports the data
 passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
+
+## Defaults and Configuration
+
+The SDK MUST provide the following configuration parameters for Exemplar
+sampling:
+
+| Name            | Description | Default | Notes |
+|-----------------|---------|-------------|---------|
+| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"WITH_SAMPLED_TRACE"` | |
+
+Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
+
+- `"NONE"`: No measurements are eligble for exemplar sampling.
+- `"ALL"`: All measurements are eligible for exemplar sampling.
+- `"WITH_SAMPLED_TRACE"`: Only allow measurements with a sampled parent span in context.
