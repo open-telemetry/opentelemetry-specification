@@ -98,7 +98,7 @@ It is recommended to also use the general [network attributes][], especially `ne
 Including all request/response headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
 
 Some HTTP headers - `Host` and `User-Agent` - are already captured in the `http.host` and `http.user_agent` attributes.
-These headers SHOULD NOT be captured as a part of this convention.
+Users MAY explicitly configure instrumentations to capture them even though it is not recommended.
 
 **[2]:** The attribute value MAY contain separate header value as separate items, or concatenated header values as one item, depending on the way the HTTP library provides access to headers.
 
