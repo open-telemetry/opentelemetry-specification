@@ -33,6 +33,8 @@ release.
   - Add YAML definitions for grpc events.
 - Add `messaging.consumer_id` to differentiate between message consumers.
   ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
+- Clarifications for `http.client_ip` and `http.host`.
+  ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 
 ### Compatibility
 
