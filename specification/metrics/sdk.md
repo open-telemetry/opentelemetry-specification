@@ -590,7 +590,7 @@ Configurable parameters:
 
 * `exporter` - the push exporter where the metrics are sent to.
 * `exportIntervalMillis` - the time interval in milliseconds between two
-  consecutive exports. The default value is 5000 (milliseconds).
+  consecutive exports. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
 
