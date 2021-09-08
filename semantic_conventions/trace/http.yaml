@@ -28,7 +28,13 @@ groups:
         type: string
         brief: >
             The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4).
-            When the header is empty or not present, this attribute should be the same.
+            An empty Host header should also be reported, see note.
+        note: >
+          When the header is present but empty the attribute SHOULD be set to
+          the empty string. Note that this is a valid situation that is expected
+          in certain cases, according the aforementioned
+          [section of RFC 7230](https://tools.ietf.org/html/rfc7230#section-5.4).
+          When the header is not set the attribute MUST NOT be set.
         examples: ['www.example.org']
       - id: scheme
         type: string
@@ -134,8 +140,18 @@ groups:
         brief: >
             The IP address of the original client behind all proxies, if
             known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)).
-        note: >
-            This is not necessarily the same as `net.peer.ip`, which would identify the network-level peer, which may be a proxy.
+        note: |
+            This is not necessarily the same as `net.peer.ip`, which would
+            identify the network-level peer, which may be a proxy.
+
+            This attribute should be set when a source of information different
+            from the one used for `net.peer.ip`, is available even if that other
+            source just confirms the same value as `net.peer.ip`.
+            Rationale: For `net.peer.ip`, one typically does not know if it
+            comes from a proxy, reverse proxy, or the actual client. Setting
+            `http.client_ip` when it's the same as `net.peer.ip` means that
+            one is at least somewhat confident that the address is not that of
+            the closest proxy.
         examples: '83.164.160.102'
     constraints:
       - any_of:
