@@ -26,7 +26,6 @@ Table of Contents
 * [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
 * [MetricReader](#metricreader)
-  * [Base exporting MetricReader](#base-exporting-metricreader)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
@@ -188,7 +187,7 @@ meter_provider
         "Bar",
         instrument_name="Y",
         aggregation=HistogramAggregation(buckets=[5.0, 10.0, 25.0, 50.0, 100.0]))
-    .add_metric_reader(BaseExportingMetricReader(PrometheusExporter()))
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
@@ -581,27 +580,6 @@ clients MAY choose to add parameters (e.g. callback, filter, timeout).
 Individual language clients MAY choose the return value type, or do not return
 anything.
 
-### Base exporting MetricReader
-
-This is an implementation of the `MetricReader` which collects metrics when
-[Collect](#collect) is called. and passes the metrics to the configured
-[MetricExporter](#metricexporter).
-
-**Note:** The name **"Base" exporting MetricReader** has nothing to do with
-object oriented programming or class inheritance / hierarchy. In case it might
-introduce confusion in certain programming languages, individual language client
-CAN choose a different wording.
-
-Configurable parameters:
-
-* `exporter` - the exporter where the metrics are sent to.
-
-If the configured exporter only supports [pull mode](#pull-metric-exporter):
-
-* [Collect](#collect) SHOULD only be called when the [Pull Metric
-  Exporter](#pull-metric-exporter) triggers the scraping, otherwise it SHOULD be
-  treated as an error.
-
 ### Periodic exporting MetricReader
 
 This is an implementation of the `MetricReader` which collects metrics based on
@@ -626,35 +604,6 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
-The following diagram shows `MetricExporter`'s relationship to other components
-in the SDK:
-
-```text
-+-----------------+            +-----------------------------+
-|                 | Metrics... |                             |
-| In-memory state +------------> Base exporting MetricReader |
-|                 |            |                             |
-+-----------------+            |  +-----------------------+  |
-                               |  |                       |  |
-                               |  | MetricExporter (push) +-----> Another process
-                               |  |                       |  |
-                               |  +-----------------------+  |
-                               |                             |
-                               +-----------------------------+
-
-+-----------------+            +-----------------------------+
-|                 | Metrics... |                             |
-| In-memory state +------------> Base exporting MetricReader |
-|                 |            |                             |
-+-----------------+            |  +-----------------------+  |
-                               |  |                       |  |
-                               |  | MetricExporter (pull) +-----> Another process (scraper)
-                               |  |                       |  |
-                               |  +-----------------------+  |
-                               |                             |
-                               +-----------------------------+
-```
-
 Metric Exporter has access to the [pre-aggregated metrics
 data](./datamodel.md#timeseries-model).
 
@@ -675,6 +624,23 @@ Push Metric Exporter sends the data on its own schedule. Here are some examples:
 
 * Sends the data based on a user configured schedule, e.g. every 1 minute.
 * Sends the data when there is a severe error.
+
+The following diagram shows `Push Metric Exporter`'s relationship to other
+components in the SDK:
+
+```text
++-----------------+            +---------------------------------+
+|                 | Metrics... |                                 |
+| In-memory state +------------> Periodic exporting MetricReader |
+|                 |            |                                 |
++-----------------+            |    +-----------------------+    |
+                               |    |                       |    |
+                               |    | MetricExporter (push) +-------> Another process
+                               |    |                       |    |
+                               |    +-----------------------+    |
+                               |                                 |
+                               +---------------------------------+
+```
 
 #### Interface Definition
 
@@ -761,6 +727,36 @@ example, they could generalize the [Push Metric Exporter
 interface](#push-metric-exporter) design and use that for consistency, they
 could model the pull exporter as [MetricReader](#metricreader), or they could
 design a completely different pull exporter interface.
+
+The following diagram gives some examples on how `Pull Metric Exporter` can be
+modeled to interact with other components in the SDK:
+
+* Model the pull exporter as MetricReader
+
+  ```text
+  +-----------------+            +-----------------------------+
+  |                 | Metrics... |                             |
+  | In-memory state +------------> PrometheusExporter (pull)   +---> Another process (scraper)
+  |                 |            | (modeled as a MetricReader) |
+  +-----------------+            |                             |
+                                 +-----------------------------+
+  ```
+
+* Use the same MetricExporter design for both push and pull exporters
+
+  ```text
+  +-----------------+            +-----------------------------+
+  |                 | Metrics... |                             |
+  | In-memory state +------------> Base exporting MetricReader |
+  |                 |            |                             |
+  +-----------------+            |  +-----------------------+  |
+                                 |  |                       |  |
+                                 |  | MetricExporter (pull) +------> Another process (scraper)
+                                 |  |                       |  |
+                                 |  +-----------------------+  |
+                                 |                             |
+                                 +-----------------------------+
+  ```
 
 ## Defaults and Configuration
 
