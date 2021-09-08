@@ -14,6 +14,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
   - [Name](#name)
   - [Status](#status)
   - [Common Attributes](#common-attributes)
+    - [HTTP request and response headers](#http-request-and-response-headers)
   - [HTTP client](#http-client)
   - [HTTP server](#http-server)
     - [HTTP server definitions](#http-server-definitions)
@@ -91,8 +92,8 @@ It is recommended to also use the general [network attributes][], especially `ne
 
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] [2] | `http.request.header.Content-Type=["application/json"]`; `http.request.header.X-Forwarded-for=["1.2.3.4", "1.2.3.5"]` | No |
-| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the HTTP Header name (case preserving), the value being the header values. [1] [2] | `http.response.header.Content-Type=["application/json"]`; `http.response.header.My-custom-header=["abc", "def"]` | No |
+| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.request.header.content_type=["application/json"]`; `http.request.header.x_forwarded_for=["1.2.3.4", "1.2.3.5"]` | No |
+| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.response.header.content_type=["application/json"]`; `http.response.header.my_custom_header=["abc", "def"]` | No |
 
 **[1]:** Instrumentations SHOULD require an explicit configuration of which headers are to be captured.
 Including all request/response headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
