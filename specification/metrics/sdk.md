@@ -752,10 +752,15 @@ Pull Metric Exporter reacts to the metrics scrapers and reports the data
 passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
 
+Unlike [Push Metric Exporter](#push-metric-exporter) which can send data on its
+own schedule, pull exporter can only send the data when it is being asked by the
+scraper, and `ForceFlush` would not make sense.
+
 Implementors MAY choose the best idiomatic design for their language. For
-example, they could apply the [Push Metric Exporter
-interface](#push-metric-exporter) design for consistency, or they could design a
-completely different pull exporter interface.
+example, they could generalize the [Push Metric Exporter
+interface](#push-metric-exporter) design and use that for consistency, they
+could model the pull exporter as [MetricReader](#metricreader), or they could
+design a completely different pull exporter interface.
 
 ## Defaults and Configuration
 
