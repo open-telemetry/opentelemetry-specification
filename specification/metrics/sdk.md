@@ -25,6 +25,8 @@ Table of Contents
 * [MeterProvider](#meterprovider)
 * [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
+* [MetricReader](#metricreader)
+  * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
@@ -49,10 +51,10 @@ to create an
 instance which is stored on the created `Meter`.
 
 Configuration (i.e., [MeasurementProcessors](#measurementprocessor),
-[MetricExporters](#metricexporter) and [`Views`](#view)) MUST be managed solely
-by the `MeterProvider` and the SDK MUST provide a way to configure all options
-that are implemented by the SDK. This MAY be done at the time of MeterProvider
-creation if appropriate.
+[MetricExporters](#metricexporter), [MetricReaders](#metricreader) and
+[Views](#view)) MUST be managed solely by the `MeterProvider` and the SDK MUST
+provide a way to configure all options that are implemented by the SDK. This MAY
+be done at the time of MeterProvider creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MeasurementProcessor`), the updated
@@ -185,26 +187,26 @@ meter_provider
         "Bar",
         instrument_name="Y",
         aggregation=HistogramAggregation(buckets=[5.0, 10.0, 25.0, 50.0, 100.0]))
-    .set_exporter(PrometheusExporter())
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
 # all the metrics will be exported using the default configuration
-meter_provider.set_exporter(ConsoleExporter())
+meter_provider.add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
 # all the metrics will be exported using the default configuration
 meter_provider
     .add_view("*") # a wildcard view that matches everything
-    .set_exporter(ConsoleExporter())
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
 # Counter X will be exported as cumulative sum
 meter_provider
     .add_view("X", aggregation=SumAggregation(CUMULATIVE))
-    .set_exporter(ConsoleExporter())
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
@@ -213,7 +215,7 @@ meter_provider
 meter_provider
     .add_view("X", aggregation=SumAggregation(DELTA))
     .add_view("*", attribute_keys=["a", "b"])
-    .set_exporter(ConsoleExporter())
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ### Aggregation
@@ -526,6 +528,72 @@ measurements using the equivalent of the following naive algorithm:
     return boundaries.length
   ```
 
+## MetricReader
+
+`MetricReader` is an interface which provides the following capabilities:
+
+* Collecting metrics from the SDK.
+* Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
+  the SDK.
+
+The SDK MUST support multiple `MetricReader` instances to be registered on the
+same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
+`MetricReader` instance SHOULD NOT introduce side-effects to other `MetricReader`
+instances. For example, if a `MetricReader` instance is receiving metric data
+points that have [delta temporality](./datamodel.md#temporality), it is expected
+that SDK will update the time range - e.g. from (T<sub>n</sub>, T<sub>n+1</sub>]
+to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
+`MetricReader` instance.
+
+```text
++-----------------+            +--------------+
+|                 | Metrics... |              |
+| In-memory state +------------> MetricReader |
+|                 |            |              |
++-----------------+            +--------------+
+
++-----------------+            +--------------+
+|                 | Metrics... |              |
+| In-memory state +------------> MetricReader |
+|                 |            |              |
++-----------------+            +--------------+
+```
+
+The SDK SHOULD provide a way to allow `MetricReader` to respond to
+[MeterProvider.ForceFlush](#forceflush) and [MeterProvider.Shutdown](#shutdown).
+Individual language clients can decide the language idiomatic approach, for
+example, as `OnForceFlush` and `OnShutdown` callback functions.
+
+### MetricReader operations
+
+#### Collect
+
+Collects the metrics from the SDK. If there are [asynchronous
+Instruments](./api.md#asynchronous-instrument) involved, their callback
+functions will be triggered.
+
+`Collect` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Collect` does not have any required parameters, however, individual language
+clients MAY choose to add parameters (e.g. callback, filter, timeout).
+Individual language clients MAY choose the return value type, or do not return
+anything.
+
+### Periodic exporting MetricReader
+
+This is an implementation of the `MetricReader` which collects metrics based on
+a user-configurable time interval, and passes the metrics to the configured
+[Push Metric Exporter](#push-metric-exporter).
+
+Configurable parameters:
+
+* `exporter` - the push exporter where the metrics are sent to.
+* `exportIntervalMillis` - the time interval in milliseconds between two
+  consecutive exports. The default value is 60000 (milliseconds).
+* `exportTimeoutMillis` - how long the export can run before it is cancelled.
+  The default value is 30000 (milliseconds).
+
 ## MetricExporter
 
 `MetricExporter` defines the interface that protocol-specific exporters MUST
@@ -535,23 +603,6 @@ of telemetry data.
 The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
-
-The following diagram shows `MetricExporter`'s relationship to other components
-in the SDK:
-
-```text
-+-----------------+            +-----------------------+
-|                 | Metrics... |                       |
-| In-memory state +------------> MetricExporter (push) +--> Another process
-|                 |            |                       |
-+-----------------+            +-----------------------+
-
-+-----------------+            +-----------------------+
-|                 | Metrics... |                       |
-| In-memory state +------------> MetricExporter (pull) +--> Another process (scraper)
-|                 |            |                       |
-+-----------------+            +-----------------------+
-```
 
 Metric Exporter has access to the [pre-aggregated metrics
 data](./datamodel.md#timeseries-model).
@@ -573,6 +624,23 @@ Push Metric Exporter sends the data on its own schedule. Here are some examples:
 
 * Sends the data based on a user configured schedule, e.g. every 1 minute.
 * Sends the data when there is a severe error.
+
+The following diagram shows `Push Metric Exporter`'s relationship to other
+components in the SDK:
+
+```text
++-----------------+            +---------------------------------+
+|                 | Metrics... |                                 |
+| In-memory state +------------> Periodic exporting MetricReader |
+|                 |            |                                 |
++-----------------+            |    +-----------------------+    |
+                               |    |                       |    |
+                               |    | MetricExporter (push) +-------> Another process
+                               |    |                       |    |
+                               |    +-----------------------+    |
+                               |                                 |
+                               +---------------------------------+
+```
 
 #### Interface Definition
 
@@ -649,6 +717,46 @@ they want to make the shutdown timeout configurable.
 Pull Metric Exporter reacts to the metrics scrapers and reports the data
 passively. This pattern has been widely adopted by
 [Prometheus](https://prometheus.io/).
+
+Unlike [Push Metric Exporter](#push-metric-exporter) which can send data on its
+own schedule, pull exporter can only send the data when it is being asked by the
+scraper, and `ForceFlush` would not make sense.
+
+Implementors MAY choose the best idiomatic design for their language. For
+example, they could generalize the [Push Metric Exporter
+interface](#push-metric-exporter) design and use that for consistency, they
+could model the pull exporter as [MetricReader](#metricreader), or they could
+design a completely different pull exporter interface.
+
+The following diagram gives some examples on how `Pull Metric Exporter` can be
+modeled to interact with other components in the SDK:
+
+* Model the pull exporter as MetricReader
+
+  ```text
+  +-----------------+            +-----------------------------+
+  |                 | Metrics... |                             |
+  | In-memory state +------------> PrometheusExporter (pull)   +---> Another process (scraper)
+  |                 |            | (modeled as a MetricReader) |
+  +-----------------+            |                             |
+                                 +-----------------------------+
+  ```
+
+* Use the same MetricExporter design for both push and pull exporters
+
+  ```text
+  +-----------------+            +-----------------------------+
+  |                 | Metrics... |                             |
+  | In-memory state +------------> Base exporting MetricReader |
+  |                 |            |                             |
+  +-----------------+            |  +-----------------------+  |
+                                 |  |                       |  |
+                                 |  | MetricExporter (pull) +------> Another process (scraper)
+                                 |  |                       |  |
+                                 |  +-----------------------+  |
+                                 |                             |
+                                 +-----------------------------+
+  ```
 
 ## Defaults and Configuration
 
