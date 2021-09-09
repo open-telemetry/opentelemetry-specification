@@ -21,6 +21,7 @@ The following semantic conventions surrounding metrics are defined:
 * [System Metrics](system-metrics.md): Semantic conventions and instruments for standard system metrics.
 * [Process Metrics](process-metrics.md): Semantic conventions and instruments for standard process metrics.
 * [Runtime Environment Metrics](runtime-environment-metrics.md): Semantic conventions and instruments for runtime environment metrics.
+* [FaaS Metrics](faas-metrics.md): Semantic conventions and instruments for FaaS metrics.
 
 Apart from semantic conventions for metrics and
 [traces](../../trace/semantic_conventions/README.md), OpenTelemetry also

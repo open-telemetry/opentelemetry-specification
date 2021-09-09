@@ -57,6 +57,7 @@ Known values for `OTEL_TRACES_SAMPLER` are:
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
 - `"jaeger_remote"`: `JaegerRemoteSampler`
+- `"xray"`: [AWS X-Ray Centralized Sampling](https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html) (_third party_)
 
 Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may be set as follows:
 
@@ -78,19 +79,32 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
-## Span Collection Limits
+## Attribute Limits
+
+SDKs SHOULD only offer environment variables for the types of attributes, for
+which that SDK implements truncation mechanism.
+
+See the SDK [Attribute Limits](common/common.md#attribute-limits) section for the definition of the limits.
+
+| Name                              | Description                          | Default | Notes |
+| --------------------------------- | ------------------------------------ | ------- | ----- |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
+
+## Span Limits <a name="span-collection-limits"></a>
 
 **Status**: [Stable](document-status.md)
 
 See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition of the limits.
 
-| Name                             | Description                                    | Default | Notes |
-| -------------------------------- | ---------------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT  | Maximum allowed span attribute count           | 128     |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT      | Maximum allowed span event count               | 128     |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT       | Maximum allowed span link count                | 128     |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT | Maximum allowed attribute per span event count | 128     |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT  | Maximum allowed attribute per span link count  | 128     |       |
+| Name                                   | Description                                    | Default | Notes |
+| -------------------------------------- | ---------------------------------------------- | ------- | ----- |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
 
 ## OTLP Exporter
 
@@ -103,11 +117,13 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | Name                            | Description                                                      | Default                                                                                          |
 |---------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent                                    | "localhost"                                                                                      |
-| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent                                        | 6832                                                                                             |
+| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent `compact` Thrift protocol              | 6831                                                                                             |
 | OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                                  | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export | 10s                                                                                              |
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                | -                                                                                                |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                | -                                                                                                |
+
+See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
 
 ## Zipkin Exporter
 
