@@ -30,6 +30,9 @@ release.
 - Don't set Span.Status for 4xx http status codes for SERVER spans.
   ([#1998](https://github.com/open-telemetry/opentelemetry-specification/pull/1998))
 
+- Define http tracing attributes provided at span creation time
+  ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
