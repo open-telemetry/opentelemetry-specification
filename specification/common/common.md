@@ -79,7 +79,7 @@ An SDK MAY implement model-specific limits, for example
 `SpanAttributeCountLimit`. If both a general and a model-specific limit are
 implemented, then the SDK MUST first attempt to use the model-specific limit, if
 it isn't set, then the SDK MUST attempt to use the general limit. If neither are
-defined, then the SDK must try to use the model-specific limit default value,
+defined, then the SDK MUST try to use the model-specific limit default value,
 followed by the global limit default value.
 
 <a name="attribute-limits-configuration"></a>
