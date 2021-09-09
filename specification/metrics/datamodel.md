@@ -386,6 +386,8 @@ Histograms consist of the following:
       (00:00:00 UTC on 1 January 1970).
   - A count (`count`) of the total population of points in the histogram.
   - A sum (`sum`) of all the values in the histogram.
+  - (optional) A min (`min`) representing the minimum value recorded.
+  - (optional) A max (`max`) representing the maximum value recorded. 
   - (optional) A series of buckets with:
     - Explicit boundary values.  These values denote the lower and upper bounds
       for buckets and whether not a given observation would be recorded in this
@@ -397,6 +399,11 @@ Like Sums, Histograms also define an aggregation temporality.  The picture above
 denotes Delta temporality where accumulated event counts are reset to zero after reporting
 and a new aggregation occurs. Cumulative, on the other hand, continues to
 aggregate events, resetting with the use of a new start time.
+
+The min and max fields behave differently based on aggregation temporality. When
+Delta, they represent the minimum and maximum values recorded over the time window. When
+Cumulative, they represent the minimum and maximum values recently recorded. The max age
+of recently recorded is commonly set to 10 minutes, and is not specified in the histogram.
 
 ### Summary (Legacy)
 
