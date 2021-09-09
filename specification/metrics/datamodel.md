@@ -387,7 +387,7 @@ Histograms consist of the following:
   - A count (`count`) of the total population of points in the histogram.
   - A sum (`sum`) of all the values in the histogram.
   - (optional) A min (`min`) representing the minimum value recorded.
-  - (optional) A max (`max`) representing the maximum value recorded. 
+  - (optional) A max (`max`) representing the maximum value recorded.
   - (optional) A series of buckets with:
     - Explicit boundary values.  These values denote the lower and upper bounds
       for buckets and whether not a given observation would be recorded in this
