@@ -84,7 +84,7 @@ to make the shutdown timeout configurable.
 ### ForceFlush
 
 This method provides a way for provider to immediately export all metrics data
-that have not yet been exported. Unlike [Push Metric
+that have not yet been exported. Note: unlike [Push Metric
 Exporter](#push-metric-exporter) which can send data on its own schedule, [Pull
 Metric Exporter](#pull-metric-exporter) can only send the data when it is being
 asked by the scraper, so `ForceFlush` would not make sense.
