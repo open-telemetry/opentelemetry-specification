@@ -64,11 +64,41 @@ configuration only via this reference.
 
 ### Shutdown
 
-TODO
+This method provides a way for provider to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `MeterProvider` instance. After the
+call to `Shutdown`, subsequent attempts to get a `Meter` are not allowed. SDKs
+SHOULD return a valid no-op Meter for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want
+to make the shutdown timeout configurable.
+
+`Shutdown` MUST be implemented at least by invoking `Shutdown` on all registered
+[exporters](#metricexporter).
 
 ### ForceFlush
 
-TODO
+This method provides a way for provider to immediately export all metrics data
+that have not yet been exported. Unlike [Push Metric
+Exporter](#push-metric-exporter) which can send data on its own schedule, [Pull
+Metric Exporter](#pull-metric-exporter) can only send the data when it is being
+asked by the scraper, so `ForceFlush` would not make sense.
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. OpenTelemetry client authors can decide if they want
+to make the flush timeout configurable.
+
+`ForceFlush` MUST invoke `ForceFlush` on all registered [push
+exporters](#push-metric-exporter).
 
 ### View
 
