@@ -24,7 +24,8 @@ release.
   [#1864](https://github.com/open-telemetry/opentelemetry-specification/pull/1864),
   [#1828](https://github.com/open-telemetry/opentelemetry-specification/pull/1828),
   [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
-  [#1911](https://github.com/open-telemetry/opentelemetry-specification/pull/1911))
+  [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
+  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913))
 
 ### Logs
 
