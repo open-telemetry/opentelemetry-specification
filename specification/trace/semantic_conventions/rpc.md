@@ -97,7 +97,7 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 
 ### Events
 
-In the lifetime of a RPC stream, an event for each message sent/received on
+In the lifetime of an RPC stream, an event for each message sent/received on
 client and server spans SHOULD be created. In case of unary calls only one sent
 and one received message will be recorded for both client and server spans.
 
