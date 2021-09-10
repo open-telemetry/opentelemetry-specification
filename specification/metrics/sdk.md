@@ -747,7 +747,7 @@ modeled to interact with other components in the SDK:
   ```text
   +-----------------+            +-----------------------------+
   |                 | Metrics... |                             |
-  | In-memory state +------------> Base exporting MetricReader |
+  | In-memory state +------------> Exporting MetricReader      |
   |                 |            |                             |
   +-----------------+            |  +-----------------------+  |
                                  |  |                       |  |
