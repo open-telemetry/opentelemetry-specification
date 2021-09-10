@@ -25,11 +25,16 @@ Table of Contents
 * [MeterProvider](#meterprovider)
 * [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
+* [Exemplar](#exemplar)
+  * [Exemplar Filter](#exemplar-filter)
+  * [Exemplar Reservoir](#exemplar-reservoir)
+  * [Exemplar Defaults](#exemplar-defaults)
 * [MetricReader](#metricreader)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
+* [Defaults and Configuration](#defaults-and-configuration)
 
 </details>
 
@@ -416,7 +421,7 @@ active span](../trace/api.md#context-interaction)).
 +------------------+
 ```
 
-## Exemplars
+## Exemplar
 
 An [Exemplar](./datamodel.md#exemplars) is a recorded measurement that exposes
 the following pieces of information:
