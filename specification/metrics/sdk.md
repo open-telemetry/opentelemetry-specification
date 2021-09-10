@@ -81,7 +81,7 @@ via a callback or an event. OpenTelemetry client authors can decide if they want
 to make the shutdown timeout configurable.
 
 `Shutdown` MUST be implemented at least by invoking `Shutdown` on all registered
-[exporters](#metricexporter).
+[MetricReader](#metricreader) and [MetricExporter](#metricexporter) instances.
 
 ### ForceFlush
 
@@ -105,7 +105,7 @@ via a callback or an event. OpenTelemetry client authors can decide if they want
 to make the flush timeout configurable.
 
 `ForceFlush` MUST invoke `ForceFlush` on all registered
-[MetricReader](#metricreader) [Push Metric Exporter](#push-metric-exporter)
+[MetricReader](#metricreader) and [Push Metric Exporter](#push-metric-exporter)
 instances.
 
 ### View
