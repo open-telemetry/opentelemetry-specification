@@ -668,6 +668,8 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
 
 ### Splunk HEC
 
+We apply this mapping from HEC to the unified model:
+
 <table>
   <tr>
     <td>Field</td>
@@ -716,6 +718,35 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>string</td>
     <td>The name of the index by which the event data is to be indexed. The index you specify here must be within the list of allowed indexes if the token has the indexes parameter set.</td>
     <td>Attributes["com.splunk.index"]</td>
+  </tr>
+</table>
+
+When mapping from the unified model to HEC, we apply this additional mapping:
+
+<table>
+  <tr>
+    <td>Unified model element</td>
+    <td>Type</td>
+    <td>Description</td>
+    <td>Maps to HEC</td>
+  </tr>
+  <tr>
+    <td>SeverityText</td>
+    <td>string</td>
+    <td>The severity of the event as a human-readable string.</td>
+    <td>fields['otel.log.severity.text']</td>
+  </tr>
+    <tr>
+    <td>SeverityNumber</td>
+    <td>string</td>
+    <td>The severity of the event as a number.</td>
+    <td>fields['otel.log.severity.number']</td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td>string</td>
+    <td>Short event identifier that does not contain varying parts.</td>
+    <td>fields['otel.log.name']</td>
   </tr>
 </table>
 

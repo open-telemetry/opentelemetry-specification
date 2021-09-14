@@ -146,31 +146,29 @@ The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC stat
 ### Events
 
 In the lifetime of a gRPC stream, an event for each message sent/received on
-client and server spans SHOULD be created with the following attributes:
-
-```
--> [time],
-    "name" = "message",
-    "message.type" = "SENT",
-    "message.id" = id
-    "message.compressed_size" = <compressed size in bytes>,
-    "message.uncompressed_size" = <uncompressed size in bytes>
-```
-
-```
--> [time],
-    "name" = "message",
-    "message.type" = "RECEIVED",
-    "message.id" = id
-    "message.compressed_size" = <compressed size in bytes>,
-    "message.uncompressed_size" = <uncompressed size in bytes>
-```
-
-The `message.id` MUST be calculated as two different counters starting from `1`
-one for sent messages and one for received message. This way we guarantee that
-the values will be consistent between different implementations. In case of
+client and server spans SHOULD be created. In case of
 unary calls only one sent and one received message will be recorded for both
 client and server spans.
+
+The event name MUST be `"message"`.
+
+<!-- semconv rpc.grpc.message -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `message.type` | string | Whether this is a received or sent message. | `SENT` | No |
+| `message.id` | int | MUST be calculated as two different counters starting from `1` one for sent messages and one for received message. [1] |  | No |
+| `message.compressed_size` | int | Compressed size of the message in bytes. |  | No |
+| `message.uncompressed_size` | int | Uncompressed size of the message in bytes. |  | No |
+
+**[1]:** This way we guarantee that the values will be consistent between different implementations.
+
+`message.type` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `SENT` | sent |
+| `RECEIVED` | received |
+<!-- endsemconv -->
 
 ## JSON RPC
 
