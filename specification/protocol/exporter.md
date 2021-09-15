@@ -17,6 +17,7 @@ The following configuration options MUST be available to configure the OTLP expo
 | Headers              | Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.                   | n/a               | `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` |
 | Compression          | Compression key for supported compression types. Supported compression: `gzip`| No value              | `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` |
 | Timeout              | Maximum time the OTLP exporter will wait for each batch export. | 10s               | `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` |
+| Protocol             | The transport protocol. Options MAY include `grpc`, `http/protobuf`, and `http/json`. See [Specify Protocol](./exporter.md#specify-protocol) for more details. | n/a               | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` |
 
 Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
 
@@ -43,21 +44,13 @@ export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metr
 
 ### Specify Protocol
 
-Currently, OTLP supports the following transport protocols:
+The `OTEL_EXPORTER_OTLP_PROTOCOL`, `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`, and `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` environment variables specify the OTLP transport protocol. Supported values:
 
 - `grpc` for protobuf-encoded data using gRPC wire format over HTTP/2 connection
 - `http/protobuf` for protobuf-encoded data over HTTP connection
 - `http/json` for JSON-encoded data over HTTP connection
 
 SDKs MUST support either `grpc` or `http/protobuf` and SHOULD support both. They also MAY support `http/json`.
-
-As of 1.0 of the specification, there *is no specified default, or configuration via environment variables*.  We
-reserve the following environment variables for configuration of protocols in
-the future:
-
-- `OTEL_EXPORTER_OTLP_PROTOCOL`
-- `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`
-- `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL`
 
 SDKs have an unspecified default, if no configuration is provided.
 
