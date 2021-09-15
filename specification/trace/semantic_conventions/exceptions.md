@@ -7,16 +7,16 @@ exceptions.
 
 <!-- toc -->
 
-- [Recording an Exception](#recording-an-exception)
-- [Attributes](#attributes)
-  - [Stacktrace Representation](#stacktrace-representation)
+- [Semantic Conventions for Exceptions](#semantic-conventions-for-exceptions)
+  - [Recording an Exception](#recording-an-exception)
+  - [Semantic definitions and attributes](#semantic-definitions-and-attributes)
+    - [Stacktrace Representation](#stacktrace-representation)
 
 <!-- tocstop -->
 
 ## Recording an Exception
 
 An exception SHOULD be recorded as an `Event` on the span during which it occurred.
-The name of the event MUST be `"exception"`.
 
 <a name="exception-end-example"></a>
 
@@ -36,12 +36,11 @@ try {
 }
 ```
 
-## Attributes
-
-The table below indicates which attributes should be added to the `Event` and
-their types.
+## Semantic definitions and attributes
 
 <!-- semconv exception -->
+The event name MUST be `exception`.
+
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.net.ConnectException`; `OSError` | See below |
