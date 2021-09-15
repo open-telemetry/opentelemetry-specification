@@ -11,6 +11,27 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+## v1.7.0 (2021-09-15)
+
+### Context
+
+- No changes.
+
+### Traces
 - Prefer global user defined limits over model-sepcific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
 - Add InstrumentationLibrary to Sampler.ShouldSample.
@@ -28,10 +49,15 @@ release.
   [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
   [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
   [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913))
+- Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))
 
 ### Logs
 
+- No changes.
+
 ### Resource
+
+- No changes.
 
 ### Semantic Conventions
 
@@ -50,6 +76,8 @@ release.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 
 ### Compatibility
+
+- No changes.
 
 ### OpenTelemetry Protocol
 
@@ -129,7 +157,6 @@ release.
 
 - Clarify the limit on the instrument unit.
   ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
-- Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))  
 
 ### Logs
 
