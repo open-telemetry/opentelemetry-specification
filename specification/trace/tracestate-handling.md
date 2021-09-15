@@ -25,7 +25,7 @@ The complete list length MUST NOT exceed 256 characters, as defined by the
 and the used keys MUST be unique.
 
 Instrumentation libraries and clients MUST NOT use this entry, and they SHOULD
-instead use ther own entry.
+instead use their own entry.
 
 ## Key
 
