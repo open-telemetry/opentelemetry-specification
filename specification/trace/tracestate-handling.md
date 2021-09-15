@@ -24,7 +24,7 @@ The complete list length MUST NOT exceed 256 characters, as defined by the
 [TraceState value section](https://www.w3.org/TR/trace-context/#value),
 and the used keys MUST be unique.
 
-Instrumentation libraries and clients MUST NOT use this entry, and they SHOULD
+Instrumentation libraries and clients MUST NOT use this entry, and they MUST
 instead use their own entry.
 
 ## Key
