@@ -24,6 +24,9 @@ The complete list length MUST NOT exceed 256 characters, as defined by the
 [TraceState value section](https://www.w3.org/TR/trace-context/#value),
 and the used keys MUST be unique.
 
+Instrumentation libraries and clients MUST NOT use this entry, and they SHOULD
+instead use ther own entry.
+
 ## Key
 
 The key is an identifier that describes an OTel concern.
@@ -36,7 +39,9 @@ key        = lcalpha *(lcalpha / DIGIT )
 lcalpha    = %x61-7A ; a-z
 ```
 
-Specific keys used by OTel concerns MUST be defined as part as the Specification.
+Specific keys used by OTel concerns MUST be defined as part as the Specification,
+and hence it is forbidden to use to use any key that has not been defined in
+the Specification itself.
 
 ## Value
 
@@ -60,14 +65,16 @@ in order to preserve existing values belonging to other OTel concerns. For examp
 if a given concern K wants to set `k1:13`:
 
 * `ot=p:8;r:64` will become `ot=p:8;r:64;k1:13`.
-* `ot=p:8,r:64;k1:7` will become `ot:p8;r:64;k1:13`.
+* `ot=p:8;k1:7;r:64` will become `ot=p8;r:64;k1:13`. Preserving the order is not required.
 
 If setting a value ends up making the entire `ot` entry exceed the 256 characters limit,
 SDKs are advised to abort the operation and signal the user about the error, e.g.
 
 ```go
-traceState, err := SetTraceStateValue(traceState, value)
-if err != nil {
-  // Could not set the specified value, traceState was not updated.
+traceState, ok := SetTraceStateValue(traceState, value)
+if ok {
+  // Successfully set the specified value, traceState was updated.
+} else {
+  // traceState was not updated.
 }
 ```
