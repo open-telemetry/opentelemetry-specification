@@ -48,6 +48,8 @@ release.
   ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 - Clarifications for `http.client_ip` and `http.host`.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
+- Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
+  ([#????](https://github.com/open-telemetry/opentelemetry-specification/pull/????))
 
 ### Compatibility
 
