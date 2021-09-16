@@ -2,21 +2,6 @@
 
 **Status**: [Experimental](../document-status.md)
 
-**Owner:**
-
-* [Reiley Yang](https://github.com/reyang)
-
-**Domain Experts:**
-
-* [Bogdan Drutu](https://github.com/bogdandrutu)
-* [Josh Suereth](https://github.com/jsuereth)
-* [Joshua MacDonald](https://github.com/jmacd)
-
-Note: this specification is subject to major changes. To ensure the best use of
-language client maintainers time, we don't recommend OpenTelemetry clients to start
-the implementation unless explicitly communicated via
-[OTEP](https://github.com/open-telemetry/oteps#opentelemetry-enhancement-proposal-otep).
-
 <details>
 <summary>
 Table of Contents
@@ -29,8 +14,8 @@ Table of Contents
     * [SDK](#sdk)
 * [Specifications](#specifications)
   * [Metrics API](./api.md)
-  * Metrics SDK (not available yet)
-  * [Metrics Data Model and Protocol](datamodel.md)
+  * [Metrics SDK](./sdk.md)
+  * [Metrics Data Model and Protocol](./datamodel.md)
   * [Semantic Conventions](./semantic_conventions/README.md)
 
 </details>
@@ -72,8 +57,8 @@ The **OpenTelemetry Metrics API** ("the API" hereafter) serves two purposes:
 * Decoupling the instrumentation from the [SDK](#sdk), allowing the SDK to be
   specified/included in the application.
 
-When no [SDK](#sdk) is explicitly included/enabled in the application, no telemetry data
-will be collected. Please refer to the overall [OpenTelemetry
+When no [SDK](#sdk) is explicitly included/enabled in the application, no
+telemetry data will be collected. Please refer to the overall [OpenTelemetry
 API](../overview.md#api) concept and [API and Minimal
 Implementation](../library-guidelines.md#api-and-minimal-implementation) for
 more information.
@@ -89,28 +74,14 @@ SDK](../library-guidelines.md#requirements), so that different SDKs can be
 configured at run time. Please refer to the overall [OpenTelemetry
 SDK](../overview.md#sdk) concept for more information.
 
-#### Programming Model
-
-```text
-+------------------+
-| MeterProvider    |
-|   Meter A        |                 +-----------+  +------------+  +----------+
-|     Instrument X | Measurements... |           |  |            |  |          |
-|     Instrument Y +-----------------> Processor +--> Aggregator +--> Exporter +--> Another process
-|   Meter B        |                 |           |  |            |  |          |
-|     Instrument Z |                 +-----------+  +------------+  +----------+
-|     ...          |
-|   ...            |
-+------------------+
-```
-
 ## Specifications
 
 * [Metrics API](./api.md)
 * [Metrics SDK](./sdk.md)
-* [Metrics Data Model and Protocol](datamodel.md)
+* [Metrics Data Model and Protocol](./datamodel.md)
 * [Semantic Conventions](./semantic_conventions/README.md)
 
 ## References
 
-* Scenarios for Metrics API/SDK Prototyping ([OTEP 146](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md))
+* Scenarios for Metrics API/SDK Prototyping ([OTEP
+  146](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md))
