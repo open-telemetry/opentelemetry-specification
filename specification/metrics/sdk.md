@@ -10,11 +10,16 @@ Table of Contents
 * [MeterProvider](#meterprovider)
 * [Attribute Limits](#attribute-limits)
 * [MeasurementProcessor](#measurementprocessor)
+* [Exemplar](#exemplar)
+  * [ExemplarFilter](#exemplarfilter)
+  * [ExemplarReservoir](#exemplarreservoir)
+  * [Exemplar Defaults](#exemplar-defaults)
 * [MetricReader](#metricreader)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
+* [Defaults and Configuration](#defaults-and-configuration)
 
 </details>
 
@@ -437,7 +442,7 @@ active span](../trace/api.md#context-interaction)).
 +------------------+
 ```
 
-## Exemplars
+## Exemplar
 
 An [Exemplar](./datamodel.md#exemplars) is a recorded measurement that exposes
 the following pieces of information:
@@ -461,7 +466,7 @@ A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically
 - `ExemplarFilter`: filter which measurements can become exemplars
 - `ExemplarReservoir`: determine how to store exemplars.
 
-### Exemplar Filter
+### ExemplarFilter
 
 The `ExemplarFilter` interface MUST provide a method to determine if a
 measurement should be sampled.  
@@ -476,7 +481,7 @@ This interface SHOULD have access to:
 See [Defaults and Configuration](#defaults-and-configuration) for built-in
 filters.
 
-### Exemplar Reservoir
+### ExemplarReservoir
 
 The `ExemplarReservoir` interface MUST provide a method to offer measurements
 to the reservoir and another to collect accumulated Exemplars.
@@ -768,7 +773,7 @@ modeled to interact with other components in the SDK:
   ```text
   +-----------------+            +-----------------------------+
   |                 | Metrics... |                             |
-  | In-memory state +------------> Base exporting MetricReader |
+  | In-memory state +------------> Exporting MetricReader      |
   |                 |            |                             |
   +-----------------+            |  +-----------------------+  |
                                  |  |                       |  |
