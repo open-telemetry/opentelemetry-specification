@@ -49,7 +49,10 @@ emit logs in OpenTelemetry formats.
 
 Note: The functionality that this document proposes will be an SDK package. A
 logging-related API package may be added in the future if we decide to have an
-end-user callable logging API.
+end-user callable logging API. Until then the functions and methods callable
+from this SDK package are intended to be used by Logging Libraries only and are
+NOT intended to be used by the end user and will NOT be exposed in the
+OpenTelemetry API package.
 
 We will have the following in the SDK.
 
