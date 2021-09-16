@@ -65,14 +65,17 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 The parent of the span MUST be determined by considering both the environment and any headers or attributes
 available from the event.
 
-If the `_X_AMZN_TRACE_ID` environment variable is set, it SHOULD be parsed into an OpenTelemetry `Context` using
-the [AWS X-Ray Propagator](../../../context/api-propagators.md). If the resulting `Context` is sampled, then this
-`Context` is the parent of the function span. The environment variable will be set and the `Context` will be
-sampled only if AWS X-Ray has been enabled for the Lambda function. A user can disable AWS X-Ray for the function
-if this propagation is not desired.
+If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentations SHOULD first try to parse an
+OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). If the
+resulting `Context` is [valid](../../api.md#isvalid) and sampled, then this `Context` is the parent of the
+function span. We check if it is valid because sometimes the `_X_AMZN_TRACE_ID` environment variable contains
+an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
+`Context` will be valid and sampled only if AWS X-Ray has been enabled for the Lambda function. A user can
+disable AWS X-Ray for the function if X-Ray propagation is not desired.
 
-Otherwise, for an API Gateway Proxy Request, the user's configured propagators should be applied to the HTTP
-headers of the request to extract a `Context`.
+Otherwise, when X-Ray propagation fails, the user's configured propagators SHOULD be applied to the HTTP
+headers of the request to extract a `Context`. For example, API Gateway proxy requests can be configured to
+send HTTP headers to a Lambda function using [a body mapping template](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-override-request-response-parameters.html).
 
 ## API Gateway
 
@@ -87,11 +90,11 @@ be set to the [resource property][] from the proxy request event, which correspo
 route instead of the function name.
 
 [`faas.trigger`][faas] MUST be set to `http`. [HTTP attributes](../http.md) SHOULD be set based on the
-available information in the proxy request event. `http.scheme` is available as the `x-forwarded-proto` header
-in the proxy request. Refer to the [input format][] for more details.
+available information in the Lambda event initiated by the proxy request. `http.scheme` is available as the
+`x-forwarded-proto` header in the Lambda event. Refer to the [input event format][] for more details.
 
 [resource property]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
-[input format]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+[input event format]: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
 
 ## SQS
 

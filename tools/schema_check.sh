@@ -6,9 +6,8 @@
 
 set -e
 
-# This is the list of vesions that were released before the schemas were
-# introduced and which did not require a schema file.
-declare -a skip_versions=("1.0.0" "1.0.1" "1.1.0" "1.2.0" "1.3.0")
+# List of vesions that do not require or have a schema.
+declare -a skip_versions=("1.0.0" "1.0.1" "1.1.0" "1.2.0" "1.3.0" "1.6.0")
 
 schemas_dir="../schemas"
 

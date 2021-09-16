@@ -154,16 +154,16 @@ groups:
         type:
           allow_custom_values: true
           members:
-            - id: Alibaba Cloud
+            - id: 'alibaba_cloud'
               value: 'alibaba_cloud'
               brief: 'Alibaba Cloud'
-            - id: AWS
+            - id: 'aws'
               value: 'aws'
               brief: 'Amazon Web Services'
-            - id: Azure
+            - id: 'azure'
               value: 'azure'
               brief: 'Microsoft Azure'
-            - id: GCP
+            - id: 'gcp'
               value: 'gcp'
               brief: 'Google Cloud Platform'
         required: always
