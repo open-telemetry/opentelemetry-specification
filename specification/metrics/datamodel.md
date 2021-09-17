@@ -398,9 +398,9 @@ denotes Delta temporality where accumulated event counts are reset to zero after
 and a new aggregation occurs. Cumulative, on the other hand, continues to
 aggregate events, resetting with the use of a new start time.
 
-Buckets and counts are optional.  A Histogram without buckets conveys
-a population in terms of only the sum and count, and may be
-interpreted as a histogram with single bucket covering `(-Inf, +Inf)`.
+Bucket counts are optional.  A Histogram without buckets conveys a
+population in terms of only the sum and count, and may be interpreted
+as a histogram with single bucket covering `(-Inf, +Inf)`.
 
 Bucket upper-bounds are inclusive while bucket lower-bounds are
 exclusive. That is, buckets express the number of values that are
