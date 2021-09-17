@@ -121,13 +121,13 @@ Thus, the SDK specification defines sets of possible requirements for
 
 Sampling is a mechanism to control the cost of OpenTelemetry tracing by
 reducing the number and/or verbosity of spans collected and sent to the backend.
-OpenTelemetry gives participants in a distributed trace the option to sample
+OpenTelemetry gives distributed trace participants the option to sample
 based on whether their context was sampled or to make the decision
 independently.
 
 Sampling may be implemented in different stages of trace collection. The
 earliest sampling happens inside the trace SDK, but later sampling decisions
-can happen outside the process, for example in an OpenTelemetry collector.
+can happen outside the process, for example in an OpenTelemetry Collector.
 
 The OpenTelemetry API has two properties associated with Spans that allow the
 user to become aware of the sampling decision:
