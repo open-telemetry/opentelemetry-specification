@@ -9,7 +9,6 @@ Table of Contents
 
 * [MeterProvider](#meterprovider)
 * [Attribute Limits](#attribute-limits)
-* [MeasurementProcessor](#measurementprocessor)
 * [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
   * [ExemplarReservoir](#exemplarreservoir)
@@ -40,14 +39,14 @@ to create an
 [`InstrumentationLibrary`](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
 instance which is stored on the created `Meter`.
 
-Configuration (i.e., [MeasurementProcessors](#measurementprocessor),
-[MetricExporters](#metricexporter), [MetricReaders](#metricreader) and
-[Views](#view)) MUST be managed solely by the `MeterProvider` and the SDK MUST
-provide a way to configure all options that are implemented by the SDK. This MAY
-be done at the time of MeterProvider creation if appropriate.
+Configuration (i.e., [MetricExporters](#metricexporter),
+[MetricReaders](#metricreader) and [Views](#view)) MUST be managed solely by the
+`MeterProvider` and the SDK MUST provide a way to configure all options that are
+implemented by the SDK. This MAY be done at the time of MeterProvider creation
+if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
-configuration is updated (e.g., adding a `MeasurementProcessor`), the updated
+configuration is updated (e.g., adding a `MetricReader`), the updated
 configuration MUST also apply to all already returned `Meters` (i.e. it MUST NOT
 matter whether a `Meter` was obtained from the `MeterProvider` before or after
 the configuration change). Note: Implementation-wise, this could mean that
@@ -400,47 +399,6 @@ Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identitity of metric time
 series and it requires further analysis.
-
-## MeasurementProcessor
-
-`MeasurementProcessor` is an interface which allows hooks when a
-[Measurement](./api.md#measurement) is recorded by an
-[Instrument](./api.md#instrument).
-
-`MeasurementProcessor` MUST have access to:
-
-* The `Measurement`
-* The `Instrument`, which is used to report the `Measurement`
-* The `Resource`, which is associated with the `MeterProvider`
-
-In addition to things listed above, if the `Measurement` is reported by a
-synchronous `Instrument` (e.g. [Counter](./api.md#counter)),
-`MeasurementProcessor` MUST have access to:
-
-* [Baggage](../baggage/api.md)
-* [Context](../context/context.md)
-* The [Span](../trace/api.md#span) which is associated with the `Measurement`
-
-Depending on the programming language and runtime model, these can be provided
-explicitly (e.g. as input arguments) or implicitly (e.g. [implicit
-Context](../context/context.md#optional-global-operations) and the [currently
-active span](../trace/api.md#context-interaction)).
-
-```text
-+------------------+
-| MeterProvider    |                 +----------------------+            +-----------------+
-|   Meter A        | Measurements... |                      | Metrics... |                 |
-|     Instrument X +-----------------> MeasurementProcessor +------------> In-memory state |
-|     Instrument Y |                 |                      |            |                 |
-|   Meter B        |                 +----------------------+            +-----------------+
-|     Instrument Z |
-|     ...          |                 +----------------------+            +-----------------+
-|     ...          | Measurements... |                      | Metrics... |                 |
-|     ...          +-----------------> MeasurementProcessor +------------> In-memory state |
-|     ...          |                 |                      |            |                 |
-|     ...          |                 +----------------------+            +-----------------+
-+------------------+
-```
 
 ## Exemplar
 
