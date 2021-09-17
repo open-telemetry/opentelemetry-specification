@@ -101,7 +101,7 @@ Including all request/response headers can be a security risk - explicit configu
 Some HTTP headers - `Host` and `User-Agent` - are already captured in the `http.host` and `http.user_agent` attributes.
 Users MAY explicitly configure instrumentations to capture them even though it is not recommended.
 
-**[2]:** The attribute value MAY contain multiple header values as an array of strings, or as a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
+**[2]:** The attribute value MUST consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
 
 [network attributes]: span-general.md#general-network-connection-attributes
 
