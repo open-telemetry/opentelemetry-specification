@@ -2,6 +2,7 @@ groups:
   - id: rpc
     prefix: rpc
     brief: 'This document defines semantic conventions for remote procedure calls.'
+    events: [rpc.grpc.message]
     attributes:
       - id: system
         type: string
@@ -141,3 +142,26 @@ groups:
         note: >
           This is always required for jsonrpc. See the note in the general
           RPC conventions for more information.
+  - id: rpc.grpc.message
+    prefix: "message"  # TODO: Change the prefix to rpc.grpc.message?
+    type: event
+    brief: "gRPC received/sent message."
+    attributes:
+      - id: type
+        type:
+          members:
+            - id: sent
+              value: "SENT"
+            - id: received
+              value: "RECEIVED"
+        brief: "Whether this is a received or sent message."
+      - id: id
+        type: int
+        brief: "MUST be calculated as two different counters starting from `1` one for sent messages and one for received message."
+        note: "This way we guarantee that the values will be consistent between different implementations."
+      - id: compressed_size
+        type: int
+        brief: "Compressed size of the message in bytes."
+      - id: uncompressed_size
+        type: int
+        brief: "Uncompressed size of the message in bytes."
