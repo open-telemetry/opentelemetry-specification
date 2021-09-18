@@ -402,13 +402,18 @@ series and it requires further analysis.
 
 ## Exemplar
 
-An [Exemplar](./datamodel.md#exemplars) is a recorded measurement that exposes
-the following pieces of information:
+An [Exemplar](./datamodel.md#exemplars) is a recorded
+[Measurement](./api.md#measurement) that exposes the following pieces of
+information:
 
 - The `value` that was recorded.
-- The `time` the measurement was seen.
-- The set of [Attributes](../common/common.md#attributes) associated with the measurement not already included in a metric data point.
-- The associated [trace id and span id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span within Context](../trace/api.md#determining-the-parent-span-from-a-context) of the measurement.
+- The `time` the `Measurement` was seen.
+- The set of [Attributes](../common/common.md#attributes) associated with the
+  `Measurement` not already included in a metric data point.
+- The associated [trace id and span
+  id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
+  within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
+  the `Measurement`.
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
@@ -427,14 +432,16 @@ A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically
 ### ExemplarFilter
 
 The `ExemplarFilter` interface MUST provide a method to determine if a
-measurement should be sampled.  
+measurement should be sampled.
 
 This interface SHOULD have access to:
 
-- The value of the measurement.
-- The complete set of `Attributes` of the measurment.
-- the `Context` of the measuremnt.
-- The timestamp of the measurement.
+- The `value` of the measurement.
+- The complete set of `Attributes` of the measurement.
+- The [Context](../context/context.md) of the measurement, which covers the
+  [Baggage](../baggage/api.md) and the current actve
+  [Span](../trace/api.md#span).
+- The `timestamp` of the measurement.
 
 See [Defaults and Configuration](#defaults-and-configuration) for built-in
 filters.
