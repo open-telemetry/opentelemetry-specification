@@ -453,10 +453,12 @@ to the reservoir and another to collect accumulated Exemplars.
 
 The "offer" method SHOULD accept measurements, including:
 
-- value
-- `Attributes` (complete set)
-- `Context`
-- timestamp
+- The `value` of the measurement.
+- The complete set of `Attributes` of the measurement.
+- The [Context](../context/context.md) of the measurement, which covers the
+  [Baggage](../baggage/api.md) and the current actve
+  [Span](../trace/api.md#span).
+- The `timestamp` of the measurement.
 
 The "offer" method SHOULD have the ability to pull associated trace and span
 information without needing to record full context.  In other words, current
