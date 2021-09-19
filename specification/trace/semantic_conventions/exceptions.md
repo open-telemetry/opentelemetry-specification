@@ -81,7 +81,7 @@ to adopt them if they see fit.
 
 | Language   | Format                                                              |
 | ---------- | ------------------------------------------------------------------- |
-| C#         | the return value of [Exception.ToString()][csharp-stacktrace]       |
+| C#         | the return value of [Exception.StackTrace][csharp-stacktrace]       |
 | Go         | the return value of [runtime.Stack][go-stacktrace]                  |
 | Java       | the contents of [Throwable.printStackTrace()][java-stacktrace]      |
 | Javascript | the return value of [error.stack][js-stacktrace] as returned by V8  |
@@ -98,6 +98,6 @@ grained information from a stacktrace, if necessary.
 [python-stacktrace]: https://docs.python.org/3/library/traceback.html#traceback.format_exc
 [js-stacktrace]: https://v8.dev/docs/stack-trace-api
 [ruby-full-message]: https://ruby-doc.org/core-2.7.1/Exception.html#method-i-full_message
-[csharp-stacktrace]: https://docs.microsoft.com/en-us/dotnet/api/system.exception.tostring
+[csharp-stacktrace]: https://docs.microsoft.com/en-us/dotnet/api/system.exception.stacktrace
 [go-stacktrace]: https://golang.org/pkg/runtime/debug/#Stack
 [telemetry-sdk-resource]:../../resource/semantic_conventions/README.md#telemetry-sdk
