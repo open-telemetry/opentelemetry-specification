@@ -8,7 +8,7 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [Events → Data Stream → Timeseries](#events--data-stream--timeseries)
+- [Events → Data Stream → Timeseries](#events-%E2%86%92-data-stream-%E2%86%92-timeseries)
   * [Example Use-cases](#example-use-cases)
   * [Out of Scope Use-cases](#out-of-scope-use-cases)
 - [Model Details](#model-details)
@@ -19,6 +19,11 @@
   * [Sums](#sums)
   * [Gauge](#gauge)
   * [Histogram](#histogram)
+  * [ExponentialHistogram](#exponentialhistogram)
+    + [Exponential scale](#exponential-scale)
+    + [Exponential buckets](#exponential-buckets)
+    + [Exponential zero count](#exponential-zero-count)
+    + [Producer and consumer expectations](#producer-and-consumer-expectations)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -404,24 +409,25 @@ aggregate events, resetting with the use of a new start time.
 
 [ExponentialHistogram](https://github.com/open-telemetry/opentelemetry-proto/blob/cfbf9357c03bf4ac150a3ab3bcbe4cc4ed087362/opentelemetry/proto/metrics/v1/metrics.proto#L222)
 data points are an alternate representation to the
-[Histogram](#histogram), used to convey a population of recorded
-measurements in a compressed format.  ExponentialHistogram compresses
-bucket boundaries using an exponential formula, making it suitable for
-conveying high-resolution data using a large number of buckets.
+[Histogram](#histogram) data point, used to convey a population of
+recorded measurements in a compressed format.  ExponentialHistogram
+compresses bucket boundaries using an exponential formula, making it
+suitable for conveying high-resolution data using a relatively large
+number of buckets.
 
 Statements about `Histogram` that refer to aggregation temporality,
-attributes, timestamps, as well as the `sum`, `count`, and `exemplars`
-fields are the same for `ExponentialHistogram`.  These fields all have
-identical interpretation with `Histogram`, only their bucket structure
-differs.
+attributes, and timestamps, as well as the `sum`, `count`, and
+`exemplars` fields, are the same for `ExponentialHistogram`.  These
+fields all share identical interpretation as for `Histogram`, only the
+bucket structure differs between these two types.
 
 #### Exponential scale
 
 The resolution of the ExponentialHistogram is characterized by a
 parameter known as `scale`, with larger values of `scale` offering
 greater precision.  Bucket boundaries of the ExponentialHistogram are
-located at integer powers of the `base`, which is the "growth factor",
-where:
+located at integer powers of the `base`, also known as the "growth
+factor", where:
 
 ```
 base = 2**(2**(-scale))
@@ -452,9 +458,9 @@ selected scales are shown below:
 
 An important property of this design is described as "perfect
 subsetting".  Buckets of an exponential Histogram with a given scale
-map directly into buckets of exponential Histograms with lesser
-scales, which allows consumers to automatically lower the resolution
-of a histogram (i.e., downscale) without introducing errors.
+map exactly into buckets of exponential Histograms with lesser scales,
+which allows consumers to automatically lower the resolution of a
+histogram (i.e., downscale) without introducing error.
 
 #### Exponential buckets
 
@@ -475,7 +481,7 @@ index `offset+i`.
 For a given range, positive or negative:
 
 - Bucket index `0` counts measurements in the range `[1, base)`
-- Positive indexes correspond with absoluve values greater or equal to `base`
+- Positive indexes correspond with absolute values greater or equal to `base`
 - Negative indexes correspond with absolute values less than 1
 - There are `2**scale` buckets between successive powers of 2.
 
@@ -485,16 +491,16 @@ histogram maps into the lower boundary for bucket index 2 in a
 `scale=2` histogram and maps into the lower boundary for bucket index
 1 (i.e., the `base`) in a `scale=1` histogram.
 
-| `scale=3` bucket index | lower boundary     | equation |
-| --                     | --                 | --       |
-| 0                      | 1                  | 2**(0/8) |
-| 1                      | 1.090507732665258  | 2**(1/8) |
-| 2                      | 1.189207115002721  | 2**(2/8), 2**(1/4)|
-| 3                      | 1.29683955465101   | 2**(3/8) |
-| 4                      | 1.414213562373095  | 2**(4/8), 2**(2/4), 2**(1/2) |
-| 5                      | 1.542210825407941  | 2**(5/8) |
-| 6                      | 1.681792830507429  | 2**(6/8) |
-| 7                      | 1.834008086409343) | 2**(7/8) |
+| `scale=3` bucket index | lower boundary    | equation                     |
+| --                     | --                | --                           |
+| 0                      | 1                 | 2**(0/8)                     |
+| 1                      | 1.090507732665258 | 2**(1/8)                     |
+| 2                      | 1.189207115002721 | 2**(2/8), 2**(1/4)           |
+| 3                      | 1.296839554651010 | 2**(3/8)                     |
+| 4                      | 1.414213562373095 | 2**(4/8), 2**(2/4), 2**(1/2) |
+| 5                      | 1.542210825407941 | 2**(5/8)                     |
+| 6                      | 1.681792830507429 | 2**(6/8)                     |
+| 7                      | 1.834008086409343 | 2**(7/8)                     |
 
 #### Exponential zero count
 
@@ -515,7 +521,7 @@ useful.
 The range of data represented by an ExponentialHistogram determines
 which scales can be usefully applied.  Therefore, producers SHOULD
 ensure that bucket indices are within the range of a signed 64-bit
-integer by downscaling as necessary.
+integer by changing scale.
 
 ExponentialHistogram buckets are expected to map into numbers can be
 represented using normalized IEEE 754 double-width floating point
