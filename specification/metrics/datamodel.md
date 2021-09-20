@@ -22,7 +22,7 @@
   * [ExponentialHistogram](#exponentialhistogram)
     + [Exponential scale](#exponential-scale)
     + [Exponential buckets](#exponential-buckets)
-    + [Exponential zero count](#exponential-zero-count)
+    + [Zero count](#zero-count)
     + [Producer and consumer expectations](#producer-and-consumer-expectations)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
@@ -502,7 +502,7 @@ histogram maps into the lower boundary for bucket index 2 in a
 | 6                      | 1.681792830507429 | 2**(6/8)                     |
 | 7                      | 1.834008086409343 | 2**(7/8)                     |
 
-#### Exponential zero count
+#### Zero count
 
 The ExponentialHistogram contains a special `zero_count` field
 containing the count of values that are either exactly zero or within
