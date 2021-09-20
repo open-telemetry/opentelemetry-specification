@@ -535,7 +535,7 @@ adjacent bucket.
 
 #### Consumer expectations
 
-ExponentialHistogram buckets are expected to map into numbers can be
+ExponentialHistogram buckets are expected to map into numbers that can be
 represented using normalized IEEE 754 double-width floating point
 values (i.e., subnormal values are excluded).  Consumers SHOULD reject
 ExponentialHistogram data with `scale` and bucket indices that
