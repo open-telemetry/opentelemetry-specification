@@ -23,7 +23,8 @@
     + [Exponential scale](#exponential-scale)
     + [Exponential buckets](#exponential-buckets)
     + [Zero count](#zero-count)
-    + [Producer and consumer expectations](#producer-and-consumer-expectations)
+    + [Producer expectations](#producer-expectations)
+    + [Consumer expectations](#consumer-expectations)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -511,7 +512,7 @@ level of precision.  This bucket stores values that cannot be
 expressed using the standard exponential formula as well as values
 that have been rounded to zero.
 
-#### Producer and consumer expectations
+#### Producer expectations
 
 The ExponentialHistogram design makes it possible to express values
 that are too large or small to be represented in computer hardware.
@@ -522,6 +523,17 @@ The range of data represented by an ExponentialHistogram determines
 which scales can be usefully applied.  Therefore, producers SHOULD
 ensure that bucket indices are within the range of a signed 64-bit
 integer by changing scale.
+
+Producers MAY use a built-in logarithm function to calculate the
+bucket index of a value.  The use of a built-in logarithm function
+could lead to results that differ from the bucket index that would be
+computed using arbitrary precision or a lookup table, however
+producers are not required to perform an exact computation.  As a
+result, ExponentialHistogram exemplars could map into buckets with
+zero count.  Instead, we expect to find such values counted in the
+adjacent bucket.
+
+#### Consumer expectations
 
 ExponentialHistogram buckets are expected to map into numbers can be
 represented using normalized IEEE 754 double-width floating point
