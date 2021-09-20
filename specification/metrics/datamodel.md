@@ -400,28 +400,35 @@ aggregate events, resetting with the use of a new start time.
 
 ### ExponentialHistogram
 
-[ExponentialHistogram](TBD_after_PR322_merges) data points are an
-alternate representation, like the [Histogram](#histogram) that convey
-a population of recorded measurements in a compressed format.
-ExponentialHistogram compresses bucket boundaries using an exponential
-formula, making it suitable for conveying high-resolution histogram
-data with a large number of buckets.
+**Status**: [Experimental](../document-status.md)
+
+[ExponentialHistogram](https://github.com/open-telemetry/opentelemetry-proto/blob/cfbf9357c03bf4ac150a3ab3bcbe4cc4ed087362/opentelemetry/proto/metrics/v1/metrics.proto#L222)
+data points are an alternate representation to the
+[Histogram](#histogram), used to convey a population of recorded
+measurements in a compressed format.  ExponentialHistogram compresses
+bucket boundaries using an exponential formula, making it suitable for
+conveying high-resolution data using a large number of buckets.
 
 Statements about `Histogram` that refer to aggregation temporality,
-attributes, timestamps, as well as the `sum`, `count`, `exemplars`
-fields are identical for `ExponentialHistogram`.
+attributes, timestamps, as well as the `sum`, `count`, and `exemplars`
+fields are the same for `ExponentialHistogram`.  These fields all have
+identical interpretation with `Histogram`, only their bucket structure
+differs.
+
+#### Exponential scale
 
 The resolution of the ExponentialHistogram is characterized by a
 parameter known as `scale`, with larger values of `scale` offering
 greater precision.  Bucket boundaries of the ExponentialHistogram are
-located at integer powers of the `base`, where:
+located at integer powers of the `base`, which is the "growth factor",
+where:
 
 ```
 base = 2**(2**(-scale))
 ```
 
 The symbol `**` in these formulas represents exponentiation, thus
-`2**x` is read "Two to the power of X", typically computed by an
+`2**x` is read "Two to the power of `x`", typically computed by an
 expression like `math.Pow(2.0, x)`.  Calculated `base` values for
 selected scales are shown below:
 
@@ -443,6 +450,14 @@ selected scales are shown below:
 | -3    | 256               | 2**8        |
 | -4    | 65536             | 2**16       |
 
+An important property of this design is described as "perfect
+subsetting".  Buckets of an exponential Histogram with a given scale
+map directly into buckets of exponential Histograms with lesser
+scales, which allows consumers to automatically lower the resolution
+of a histogram (i.e., downscale) without introducing errors.
+
+#### Exponential buckets
+
 The ExponentialHistogram bucket identified by `index`, a signed
 integer, represents values in the population that are greater than or
 equal to `base**index` and less than `base**(index+1)`.
@@ -459,29 +474,65 @@ index `offset+i`.
 
 For a given range, positive or negative:
 
-- The absolute value 1.0 has bucket index `0`
-- Bucket index `0` counts measurements greater than or equal to 1.0 and less than `base`
-- Negative indexes correspond with absolute values less than 1.0.
+- Bucket index `0` counts measurements in the range `[1, base)`
+- Positive indexes correspond with absoluve values greater or equal to `base`
+- Negative indexes correspond with absolute values less than 1
+- There are `2**scale` buckets between successive powers of 2.
+
+For example, with `scale=3` there are `2**3` buckets between 1 and 2.
+Note that the lower boundary for bucket index 4 in a `scale=3`
+histogram maps into the lower boundary for bucket index 2 in a
+`scale=2` histogram and maps into the lower boundary for bucket index
+1 (i.e., the `base`) in a `scale=1` histogram.
+
+| `scale=3` bucket index | lower boundary     | equation |
+| --                     | --                 | --       |
+| 0                      | 1                  | 2**(0/8) |
+| 1                      | 1.090507732665258  | 2**(1/8) |
+| 2                      | 1.189207115002721  | 2**(2/8), 2**(1/4)|
+| 3                      | 1.29683955465101   | 2**(3/8) |
+| 4                      | 1.414213562373095  | 2**(4/8), 2**(2/4), 2**(1/2) |
+| 5                      | 1.542210825407941  | 2**(5/8) |
+| 6                      | 1.681792830507429  | 2**(6/8) |
+| 7                      | 1.834008086409343) | 2**(7/8) |
+
+#### Exponential zero count
 
 The ExponentialHistogram contains a special `zero_count` field
-containing is the count of values that are either exactly zero or
-within the region considered zero by the instrumentation at the
-tolerated degree of precision.  This bucket stores values that cannot
-be expressed using the standard exponential formula as well as values
+containing the count of values that are either exactly zero or within
+the region considered zero by the instrumentation at the tolerated
+level of precision.  This bucket stores values that cannot be
+expressed using the standard exponential formula as well as values
 that have been rounded to zero.
 
-#### Producers and consumer requirements
+#### Producer and consumer expectations
 
-TODO: Work-In-Progress.
+The ExponentialHistogram design makes it possible to express values
+that are too large or small to be represented in computer hardware.
+Certain values for `scale`, while meaningful, are not necessarily
+useful.
+
+The range of data represented by an ExponentialHistogram determines
+which scales can be usefully applied.  Therefore, producers SHOULD
+ensure that bucket indices are within the range of a signed 64-bit
+integer by downscaling as necessary.
+
+ExponentialHistogram buckets are expected to map into numbers can be
+represented using normalized IEEE 754 double-width floating point
+values (i.e., subnormal values are excluded).  Consumers SHOULD reject
+ExponentialHistogram data with `scale` and bucket indices that
+overflow or underflow this representation.  Consumers that reject such
+data SHOULD warn the user through error logging that out-of-range data
+was received.
 
 ### Summary (Legacy)
 
 [Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L268)
-metric data points convey quantile summaries, e.g. What is the 99-th percentile
-latency of my HTTP server.  Unlike other point types in OpenTelemetry, Summary
-points cannot always be merged in a meaningful way. This point type is not
-recommended for new applications and exists for compatibility with other
-formats.
+metric data points convey quantile summaries, e.g. What is the 99-th
+percentile latency of my HTTP server.  Unlike other point types in
+OpenTelemetry, Summary points cannot always be merged in a meaningful
+way. This point type is not recommended for new applications and
+exists for compatibility with other formats.
 
 ## Exemplars
 
