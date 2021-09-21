@@ -202,7 +202,6 @@ Note: Support for environment variables is optional.
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
 [py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059
-[py1106]: https://github.com/open-telemetry/opentelemetry-python/issues/1106
 [py1108]: https://github.com/open-telemetry/opentelemetry-python/issues/1108
 [py1109]: https://github.com/open-telemetry/opentelemetry-python/issues/1109
 [py1174]: https://github.com/open-telemetry/opentelemetry-python/issues/1174
