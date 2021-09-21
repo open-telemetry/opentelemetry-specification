@@ -10,7 +10,7 @@ MARKDOWN_LINT=markdownlint
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
-SEMCONVGEN_VERSION=0.5.0
+SEMCONVGEN_VERSION=0.6.0
 
 .PHONY: install-misspell
 install-misspell:
