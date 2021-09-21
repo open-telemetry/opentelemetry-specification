@@ -752,19 +752,19 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>TraceId</td>
     <td>string</td>
     <td>Request trace id.</td>
-    <td>fields['otel.log.trace_id']</td>
+    <td>fields['trace_id']</td>
   </tr>
   <tr>
     <td>SpanId</td>
     <td>string</td>
     <td>Request span id.</td>
-    <td>fields['otel.log.span_id']</td>
+    <td>fields['span_id']</td>
   </tr>
   <tr>
     <td>TraceFlags</td>
     <td>string</td>
     <td>W3C trace flags.</td>
-    <td>fields['otel.log.trace_flags']</td>
+    <td>fields['trace_flags']</td>
   </tr>  
 </table>
 
