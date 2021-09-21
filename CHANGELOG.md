@@ -51,7 +51,7 @@ release.
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 - Add semantic conventions for [CloudEvents](https://cloudevents.io).
-  ([#????](https://github.com/open-telemetry/opentelemetry-specification/pull/????))
+  ([#1951](https://github.com/open-telemetry/opentelemetry-specification/pull/1951))
 
 ### Compatibility
 
