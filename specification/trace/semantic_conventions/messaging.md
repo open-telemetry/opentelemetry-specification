@@ -19,6 +19,7 @@
   * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
     + [RabbitMQ](#rabbitmq)
     + [Apache Kafka](#apache-kafka)
+    + [CloudEvents](#cloudevents)
 - [Examples](#examples)
   * [Topic with multiple consumers](#topic-with-multiple-consumers)
   * [Apache Kafka with Quarkus or Spring Boot Example](#apache-kafka-with-quarkus-or-spring-boot-example)
@@ -177,7 +178,7 @@ For message consumers, the following additional attributes may be set:
 | `process` | process |
 <!-- endsemconv -->
 
-The _receive_ span is be used to track the time used for receiving the message(s), whereas the _process_ span(s) track the time for processing the message(s).
+The _receive_ span is used to track the time spent for receiving the message(s), whereas the _process_ span(s) is used to track the time spent for processing the message(s).
 Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive`.
 The distinction between receiving and processing of messages is not always of particular interest or sometimes hidden away in a framework (see the [Message consumption](#message-consumption) section above) and therefore the attribute can be left out.
 For batch receiving and processing (see the [Batch receiving](#batch-receiving) and [Batch processing](#batch-processing) examples below) in particular, the attribute SHOULD be set.
@@ -216,6 +217,27 @@ For Apache Kafka, the following additional attributes are defined:
 For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or service the message will be sent to.
 The `service.name` of a Consumer's Resource SHOULD match the `peer.service` of the Producer, when the message is directly passed to another service.
 If an intermediary broker is present, `service.name` and `peer.service` will not be the same.
+
+#### CloudEvents
+
+For [CloudEvents](https://cloudevents.io/) clients, the `messaging.system` MUST be set to `cloudevents`. 
+The `messaging.destination` SHOULD be set to `<event type> <operation name>`. 
+If known, the `messaging.protocol` MAY be set to the underlying protocol used by the CloudEvents client. 
+
+In addition, the following attributes are defined for CloudEvents:
+
+<!-- semconv messaging.cloudevents -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `messaging.cloudevents.event_id` | string | The [event_id](https://github.com/cloudevents/spec/blob/master/spec.md#id) identifies the event within the scope of a producer. | `123e4567-e89b-12d3-a456-426614174000`; `producer-1` | No |
+| `messaging.cloudevents.source` | string | The [source](https://github.com/cloudevents/spec/blob/master/spec.md#source-1) identifies the context in which an event happened. | `my-service` | No |
+| `messaging.cloudevents.spec_version` | string | The [version of the CloudEvents specification](https://github.com/cloudevents/spec/blob/master/spec.md#specversion) which the event uses. | `1.0` | No |
+| `messaging.cloudevents.event_type` | string | The [event_type](https://github.com/cloudevents/spec/blob/master/spec.md#type) contains a value describing the type of event related to the originating occurrence. | `com.github.pull_request.opened`; `com.example.object.deleted.v2` | No |
+| `messaging.cloudevents.data_content_type` | string | The [content type](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype) of the event `data` value. [1] | `application/json` | No |
+| `messaging.cloudevents.subject` | string | The [subject](https://github.com/cloudevents/spec/blob/master/spec.md#subject) of the event in the context of the event producer (identified by source). | `mynewfile.jpg` | No |
+
+**[1]:** If present, MUST adhere to the format specified in [RFC 2046](https://datatracker.ietf.org/doc/html/rfc2046)
+<!-- endsemconv -->
 
 ## Examples
 

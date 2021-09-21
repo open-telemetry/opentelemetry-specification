@@ -180,3 +180,42 @@ groups:
         required:
           conditional: 'If missing, it is assumed to be false.'
         brief: 'A boolean that is true if the message is a tombstone.'
+
+  - id: messaging.cloudevents
+    prefix: messaging.cloudevents
+    extends: messaging
+    brief: >
+      Attributes for CloudEvents
+    attributes:
+      - id: event_id
+        type: string
+        brief: >
+          The [event_id](https://github.com/cloudevents/spec/blob/master/spec.md#id) identifies the event within the scope of a producer.
+        examples: ['123e4567-e89b-12d3-a456-426614174000', 'producer-1']
+      - id: source
+        type: string
+        brief: >
+          The [source](https://github.com/cloudevents/spec/blob/master/spec.md#source-1) identifies the context in which an event happened.
+        examples: 'my-service'
+      - id: spec_version
+        type: string
+        brief: >
+          The [version of the CloudEvents specification](https://github.com/cloudevents/spec/blob/master/spec.md#specversion) which the event uses.
+        examples: '1.0'
+      - id: event_type
+        type: string
+        brief: >
+          The [event_type](https://github.com/cloudevents/spec/blob/master/spec.md#type) contains a value describing the type of event related to the originating occurrence.
+        examples: ['com.github.pull_request.opened', 'com.example.object.deleted.v2']
+      - id: data_content_type
+        type: string
+        brief: >
+          The [content type](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype) of the event `data` value.
+        note: >
+          If present, MUST adhere to the format specified in [RFC 2046](https://datatracker.ietf.org/doc/html/rfc2046)
+        examples: 'application/json'
+      - id: subject
+        type: string
+        brief: >
+          The [subject](https://github.com/cloudevents/spec/blob/master/spec.md#subject) of the event in the context of the event producer (identified by source).
+        examples: 'mynewfile.jpg'
