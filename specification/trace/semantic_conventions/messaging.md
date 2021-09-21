@@ -220,9 +220,9 @@ If an intermediary broker is present, `service.name` and `peer.service` will not
 
 #### CloudEvents
 
-For [CloudEvents](https://cloudevents.io/) clients, the `messaging.system` MUST be set to `cloudevents`. 
-The `messaging.destination` SHOULD be set to `<event type> <operation name>`. 
-If known, the `messaging.protocol` MAY be set to the underlying protocol used by the CloudEvents client. 
+For [CloudEvents](https://cloudevents.io/) clients, the `messaging.system` MUST be set to `cloudevents`.
+The `messaging.destination` SHOULD be set to `<event type> <operation name>`.
+If known, the `messaging.protocol` MAY be set to the underlying protocol used by the CloudEvents client.
 
 In addition, the following attributes are defined for CloudEvents:
 
