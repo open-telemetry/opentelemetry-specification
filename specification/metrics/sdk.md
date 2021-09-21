@@ -439,9 +439,9 @@ This interface SHOULD have access to:
 - The `value` of the measurement.
 - The complete set of `Attributes` of the measurement.
 - The [Context](../context/context.md) of the measurement, which covers the
-  [Baggage](../baggage/api.md) and the current actve
+  [Baggage](../baggage/api.md) and the current active
   [Span](../trace/api.md#span).
-- The `timestamp` of the measurement.
+- A `timestamp` that best represents when the measurement was taken.
 
 See [Defaults and Configuration](#defaults-and-configuration) for built-in
 filters.
@@ -456,9 +456,9 @@ The "offer" method SHOULD accept measurements, including:
 - The `value` of the measurement.
 - The complete set of `Attributes` of the measurement.
 - The [Context](../context/context.md) of the measurement, which covers the
-  [Baggage](../baggage/api.md) and the current actve
+  [Baggage](../baggage/api.md) and the current active
   [Span](../trace/api.md#span).
-- The `timestamp` of the measurement.
+- A `timestamp` that best represents when the measurement was taken.
 
 The "offer" method SHOULD have the ability to pull associated trace and span
 information without needing to record full context.  In other words, current
