@@ -16,6 +16,8 @@ release.
 
 ### Metrics
 
+- Add optional min / max fields to histogram data points ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
+
 ### Logs
 
 ### Resource
