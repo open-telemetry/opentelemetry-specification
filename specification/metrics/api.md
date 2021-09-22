@@ -32,6 +32,8 @@ Table of Contents
     * [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     * [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
 * [Measurement](#measurement)
+* [Compatibility requirements](#compatibility-requirements)
+* [Concurrency requirements](#concurrency-requirements)
 
 </details>
 
@@ -978,7 +980,7 @@ for the interaction between the API and SDK.
 * A value
 * [`Attributes`](../common/common.md#attributes)
 
-## Compatibility
+## Compatibility requirements
 
 All the metrics components SHOULD allow new APIs to be added to existing
 components without introducing breaking changes.
@@ -986,7 +988,7 @@ components without introducing breaking changes.
 All the metrics APIs SHOULD allow optional parameter(s) to be added to existing
 APIs without introducing breaking changes.
 
-## Concurrency
+## Concurrency requirements
 
 For languages which support concurrent execution the Metrics APIs provide
 specific guarantees and safeties.
