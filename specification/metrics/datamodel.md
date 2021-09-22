@@ -407,6 +407,21 @@ it is possible to convert min and max from Delta to Cumulative, but not from
 Cumulative to Delta. When converting from Cumulative to Delta, min and max can
 be dropped, or captured in an alternative representation such as a gauge.
 
+Bucket counts are optional.  A Histogram without buckets conveys a
+population in terms of only the sum and count, and may be interpreted
+as a histogram with single bucket covering `(-Inf, +Inf)`.
+
+Bucket upper-bounds are inclusive (except for the case where the
+upper-bound is +Inf) while bucket lower-bounds are exclusive. That is,
+buckets express the number of values that are greater than their lower
+bound and less than or equal to their upper bound.  Importers and
+exporters working with OpenTelemetry Metrics data are meant to
+disregard this specification when translating to and from histogram
+formats that use inclusive lower bounds and exclusive upper bounds.
+Changing the inclusivity and exclusivity of bounds is an example of
+worst-case Histogram error; users should choose Histogram boundaries
+so that worst-case error is within their error tolerance.
+
 ### Summary (Legacy)
 
 [Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L268)

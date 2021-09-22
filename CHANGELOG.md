@@ -11,12 +11,23 @@ release.
 
 ### Traces
 
-- Add InstrumentationLibrary to Sampler.ShouldSample.
-  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
+- Prefer global user defined limits over model-sepcific default values.
+  ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
 
 ### Metrics
 
-- Add optional min / max fields to histogram data points 
+- Added Experimental Metrics SDK specification.
+  ([#1673](https://github.com/open-telemetry/opentelemetry-specification/pull/1673),
+  [#1730](https://github.com/open-telemetry/opentelemetry-specification/pull/1730),
+  [#1840](https://github.com/open-telemetry/opentelemetry-specification/pull/1840),
+  [#1842](https://github.com/open-telemetry/opentelemetry-specification/pull/1842),
+  [#1864](https://github.com/open-telemetry/opentelemetry-specification/pull/1864),
+  [#1828](https://github.com/open-telemetry/opentelemetry-specification/pull/1828),
+  [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
+  [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
+  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913),
+  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938))
+- Add optional min / max fields to histogram data model.
   ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
 
 ### Logs
@@ -38,10 +49,16 @@ release.
   ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 - Clarifications for `http.client_ip` and `http.host`.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
+- Add HTTP request and response headers semantic conventions.
+  ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Add environment variables for configuring the OTLP exporter protocol 
+  (`grpc`, `http/protobuf`, `http/json`).
+  ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
 
 ### SDK Configuration
 
