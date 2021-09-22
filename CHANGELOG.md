@@ -13,8 +13,6 @@ release.
 
 - Prefer global user defined limits over model-sepcific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
-- Add InstrumentationLibrary to Sampler.ShouldSample.
-  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
 
 ### Metrics
 
@@ -27,7 +25,8 @@ release.
   [#1828](https://github.com/open-telemetry/opentelemetry-specification/pull/1828),
   [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
   [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
-  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913))
+  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913),
+  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938))
 
 ### Logs
 
