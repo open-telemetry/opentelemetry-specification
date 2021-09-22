@@ -19,13 +19,13 @@ The following configuration options MUST be available to configure the OTLP expo
 | Timeout              | Maximum time the OTLP exporter will wait for each batch export. | 10s               | `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` |
 | Protocol             | The transport protocol. Options MAY include `grpc`, `http/protobuf`, and `http/json`. See [Specify Protocol](./exporter.md#specify-protocol) for more details. | n/a               | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` |
 
-**[1]**: If no explicit compression value is specified, SIGs can default to the value they deem
+**[1]**: If no compression value is explicitly specified, SIGs can default to the value they deem
 most useful among the supported options. This is specially important in presence of technical constraints,
 e.g. directly sending telemetry data from mobile devices to backend servers.
 
 Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
 
-- `none` if compression is disabled.
+- `` if compression is disabled.
 - `gzip` is the only specified compression method for now.
 
 Example 1
