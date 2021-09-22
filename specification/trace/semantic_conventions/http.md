@@ -14,6 +14,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
   - [Name](#name)
   - [Status](#status)
   - [Common Attributes](#common-attributes)
+    - [HTTP request and response headers](#http-request-and-response-headers)
   - [HTTP client](#http-client)
   - [HTTP server](#http-server)
     - [HTTP server definitions](#http-server-definitions)
@@ -86,6 +87,21 @@ Don't set the span status description if the reason can be inferred from `http.s
 <!-- endsemconv -->
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+
+### HTTP request and response headers
+
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.request.header.content_type=["application/json"]`; `http.request.header.x_forwarded_for=["1.2.3.4", "1.2.3.5"]` | No |
+| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.response.header.content_type=["application/json"]`; `http.response.header.my_custom_header=["abc", "def"]` | No |
+
+**[1]:** Instrumentations SHOULD require an explicit configuration of which headers are to be captured.
+Including all request/response headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
+
+Some HTTP headers - `Host` and `User-Agent` - are already captured in the `http.host` and `http.user_agent` attributes.
+Users MAY explicitly configure instrumentations to capture them even though it is not recommended.
+
+**[2]:** The attribute value MUST consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
 
 [network attributes]: span-general.md#general-network-connection-attributes
 
