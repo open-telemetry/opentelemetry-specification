@@ -75,7 +75,6 @@ formats is required. Implementing more than one format is optional.
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
 | ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
-| ShouldSample gets InstrumentationLibrary                                                         |          |    |      |    |        |      |        |     |      |     |      |       |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    |        |     | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    |        |     |      | -   |      | +     |
@@ -163,7 +162,7 @@ Note: Support for environment variables is optional.
 | In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                                         |          |    |   |    |             |      |        |     |      |     |      |       |
 | OTLP/gRPC Exporter                                                             | *        | +  | + | +  | +           |      | +      |     | +    | +   | +    | +     |
-| OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | + | +  | [-][py1106] | +    | +      |     |      | -   | -    | -     |
+| OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | + | +  | +           | +    | +      |     |      | -   | -    | -     |
 | OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | - | +  | [-][py1003] |      | -      |     |      | -   | -    | -     |
 | OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | + | +  | +           | +    | -      |     |      | -   | -    | -     |
 | Concurrent sending                                                             |          | -  | + | +  | [-][py1108] |      | -      |     | +    | -   | -    | -     |
@@ -202,7 +201,6 @@ Note: Support for environment variables is optional.
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
 [py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059
-[py1106]: https://github.com/open-telemetry/opentelemetry-python/issues/1106
 [py1108]: https://github.com/open-telemetry/opentelemetry-python/issues/1108
 [py1109]: https://github.com/open-telemetry/opentelemetry-python/issues/1109
 [py1174]: https://github.com/open-telemetry/opentelemetry-python/issues/1174

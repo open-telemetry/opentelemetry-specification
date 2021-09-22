@@ -13,8 +13,6 @@ release.
 
 - Prefer global user defined limits over model-sepcific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
-- Add InstrumentationLibrary to Sampler.ShouldSample.
-  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
 
 ### Metrics
 
@@ -48,6 +46,8 @@ release.
   ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 - Clarifications for `http.client_ip` and `http.host`.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
+- Add HTTP request and response headers semantic conventions.
+  ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 
 ### Compatibility
 
