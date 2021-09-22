@@ -479,7 +479,7 @@ from the original sample measurement.
 
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
-### Exemplar Defaults
+### Exemplar defaults
 
 The SDK will come with two types of built-in exemplar reservoirs:
 
