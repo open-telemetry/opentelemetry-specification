@@ -56,7 +56,7 @@ release.
 
 ### OpenTelemetry Protocol
 
-- Add environment variables for configuring the OTLP exporter protocol 
+- Add environment variables for configuring the OTLP exporter protocol
   (`grpc`, `http/protobuf`, `http/json`).
   ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
 
