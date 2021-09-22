@@ -32,6 +32,9 @@ release.
 
 ### Resource
 
+- Exempt Resource from attribute limits.
+  ([#1892](https://github.com/open-telemetry/opentelemetry-specification/pull/1892))
+
 ### Semantic Conventions
 
 - BREAKING: Change enum member IDs to lowercase without spaces, not starting with numbers.
