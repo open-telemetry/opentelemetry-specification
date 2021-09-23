@@ -986,7 +986,7 @@ All the metrics components SHOULD allow new APIs to be added to existing
 components without introducing breaking changes.
 
 All the metrics APIs SHOULD allow optional parameter(s) to be added to existing
-APIs without introducing breaking changes.
+APIs without introducing breaking changes, if possible.
 
 ## Concurrency requirements
 
