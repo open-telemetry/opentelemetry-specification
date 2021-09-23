@@ -791,7 +791,7 @@ All the metrics components SHOULD allow new methods to be added to existing
 components without introducing breaking changes.
 
 All the metrics SDK methods SHOULD allow optional parameter(s) to be added to
-existing methods without introducing breaking changes.
+existing methods without introducing breaking changes, if possible.
 
 ## Concurrency requirements
 
