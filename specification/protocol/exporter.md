@@ -20,7 +20,7 @@ The following configuration options MUST be available to configure the OTLP expo
 | Protocol             | The transport protocol. Options MAY include `grpc`, `http/protobuf`, and `http/json`. See [Specify Protocol](./exporter.md#specify-protocol) for more details. | n/a               | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` |
 
 **[1]**: If no compression value is explicitly specified, SIGs can default to the value they deem
-most useful among the supported options. This is specially important in presence of technical constraints,
+most useful among the supported options. This is especially important in the presence of technical constraints,
 e.g. directly sending telemetry data from mobile devices to backend servers.
 
 Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
