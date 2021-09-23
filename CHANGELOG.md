@@ -13,8 +13,6 @@ release.
 
 - Prefer global user defined limits over model-sepcific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
-- Add InstrumentationLibrary to Sampler.ShouldSample.
-  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
 
 ### Metrics
 
@@ -27,11 +25,15 @@ release.
   [#1828](https://github.com/open-telemetry/opentelemetry-specification/pull/1828),
   [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
   [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
-  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913))
+  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913),
+  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938))
 
 ### Logs
 
 ### Resource
+
+- Exempt Resource from attribute limits.
+  ([#1892](https://github.com/open-telemetry/opentelemetry-specification/pull/1892))
 
 ### Semantic Conventions
 
@@ -50,6 +52,8 @@ release.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 - Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
   ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
+- Add HTTP request and response headers semantic conventions.
+  ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 
 ### Compatibility
 
