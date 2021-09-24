@@ -123,8 +123,6 @@ So here are some suggestions that we encourage SDK implementers to consider:
   stream hasn't received any updates for a long period of time, would it be okay
   to reset the start time?
 
-Now we can explore a more interesting topic, Cumulative->Delta conversion.
-
 In the above case, we have Measurements reported by a [Histogram
 Instrument](./api.md#histogram). What if we collect measurements from an
 [Asynchronous Counter](./api.md#asynchronous-counter)?
@@ -211,8 +209,8 @@ temporality. For example:
 
 So here are some suggestions that we encourage SDK implementers to consider:
 
-* You probably don't want to encourage your users to do Cumulative to Delta
+* You probably don't want to encourage your users to do Cumulative->Delta
   conversion. Actually, you might want to discourage them from doing this.
-* If you have to do Cumulative to Delta conversion, and you encountered min/max,
+* If you have to do Cumulative->Delta conversion, and you encountered min/max,
   rather than drop the data on the floor, you might want to convert them to
   something useful - e.g. [Gauge](./datamodel.md#gauge).
