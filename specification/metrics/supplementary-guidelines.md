@@ -23,23 +23,23 @@ The OpenTelemetry Metrics [Data Model](./datamodel.md) and [SDK](./sdk.md) are
 designed to support both Cumulative and Delta
 [Temporality](./datamodel.md#temporality). It is important to understand that
 temporality will impact how the SDK could manage memory usage. Let's take the
-following example:
+following HTTP requests example:
 
 * During the time range (T<sub>0</sub>, T<sub>1</sub>]:
-  * HTTP verb = `GET`, status = `200`, duration = `50 (ms)`
-  * HTTP verb = `GET`, status = `200`, duration = `100 (ms)`
-  * HTTP verb = `GET`, status = `500`, duration = `1 (ms)`
+  * verb = `GET`, status = `200`, duration = `50 (ms)`
+  * verb = `GET`, status = `200`, duration = `100 (ms)`
+  * verb = `GET`, status = `500`, duration = `1 (ms)`
 * During the time range (T<sub>1</sub>, T<sub>2</sub>]:
   * no HTTP request has been received
 * During the time range (T<sub>2</sub>, T<sub>3</sub>]
-  * HTTP verb = `GET`, status = `500`, duration = `5 (ms)`
-  * HTTP verb = `GET`, status = `500`, duration = `2 (ms)`
+  * verb = `GET`, status = `500`, duration = `5 (ms)`
+  * verb = `GET`, status = `500`, duration = `2 (ms)`
 * During the time range (T<sub>3</sub>, T<sub>4</sub>]:
-  * HTTP verb = `GET`, status = `200`, duration = `100 (ms)`
+  * verb = `GET`, status = `200`, duration = `100 (ms)`
 * During the time range (T<sub>4</sub>, T<sub>5</sub>]:
-  * HTTP verb = `GET`, status = `200`, duration = `100 (ms)`
-  * HTTP verb = `GET`, status = `200`, duration = `30 (ms)`
-  * HTTP verb = `GET`, status = `200`, duration = `50 (ms)`
+  * verb = `GET`, status = `200`, duration = `100 (ms)`
+  * verb = `GET`, status = `200`, duration = `30 (ms)`
+  * verb = `GET`, status = `200`, duration = `50 (ms)`
 
 Let's imagine we export the metrics as [Histogram](./datamodel.md#histogram),
 and to simplify the story we will only have one histogram bucket `(-Inf, +Inf)`:
@@ -129,37 +129,73 @@ In the above case, we have Measurements reported by a [Histogram
 Instrument](./api.md#histogram). What if we collect measurements from an
 [Asynchronous Counter](./api.md#asynchronous-counter)?
 
-The following example shows the number page faults of each thread since the
+The following example shows the number of [page
+faults](https://en.wikipedia.org/wiki/Page_fault) of each thread since the
 thread ever started:
 
 * During the time range (T<sub>0</sub>, T<sub>1</sub>]:
-  * ProcessId = `1001`, ThreadId = `1`, PageFaults = `50`
-  * ProcessId = `1001`, ThreadId = `2`, PageFaults = `30`
+  * pid = `1001`, tid = `1`, #PF = `50`
+  * pid = `1001`, tid = `2`, #PF = `30`
 * During the time range (T<sub>1</sub>, T<sub>2</sub>]:
-  * ProcessId = `1001`, ThreadId = `1`, PageFaults = `53`
-  * ProcessId = `1001`, ThreadId = `2`, PageFaults = `38`
+  * pid = `1001`, tid = `1`, #PF = `53`
+  * pid = `1001`, tid = `2`, #PF = `38`
 * During the time range (T<sub>2</sub>, T<sub>3</sub>]
-  * ProcessId = `1001`, ThreadId = `1`, PageFaults = `56`
-  * ProcessId = `1001`, ThreadId = `2`, PageFaults = `42`
+  * pid = `1001`, tid = `1`, #PF = `56`
+  * pid = `1001`, tid = `2`, #PF = `42`
 * During the time range (T<sub>3</sub>, T<sub>4</sub>]:
-  * ProcessId = `1001`, ThreadId = `1`, PageFaults = `60`
-  * ProcessId = `1001`, ThreadId = `2`, PageFaults = `47`
+  * pid = `1001`, tid = `1`, #PF = `60`
+  * pid = `1001`, tid = `2`, #PF = `47`
 * During the time range (T<sub>4</sub>, T<sub>5</sub>]:
   * thread 1 died, thread 3 started
-  * ProcessId = `1001`, ThreadId = `2`, PageFaults = `53`
-  * ProcessId = `1001`, ThreadId = `3`, PageFaults = `5`
+  * pid = `1001`, tid = `2`, #PF = `53`
+  * pid = `1001`, tid = `3`, #PF = `5`
 
-If we export the metrics using **Cumulative Temporality**, it is quite
-straightforward - we just take the data being reported from the asynchronous
-instruments and send them. We might want to consider if [Resets and
+If we export the metrics using **Cumulative Temporality**:
+
+* (T<sub>0</sub>, T<sub>1</sub>]
+  * dimensions: {pid = `1001`, tid = `1`}, sum: `50`
+  * dimensions: {pid = `1001`, tid = `2`}, sum: `30`
+* (T<sub>0</sub>, T<sub>2</sub>]
+  * dimensions: {pid = `1001`, tid = `1`}, sum: `53`
+  * dimensions: {pid = `1001`, tid = `2`}, sum: `38`
+* (T<sub>0</sub>, T<sub>3</sub>]
+  * dimensions: {pid = `1001`, tid = `1`}, sum: `56`
+  * dimensions: {pid = `1001`, tid = `2`}, sum: `42`
+* (T<sub>0</sub>, T<sub>4</sub>]
+  * dimensions: {pid = `1001`, tid = `1`}, sum: `60`
+  * dimensions: {pid = `1001`, tid = `2`}, sum: `47`
+* (T<sub>0</sub>, T<sub>5</sub>]
+  * dimensions: {pid = `1001`, tid = `2`}, sum: `53`
+  * dimensions: {pid = `1001`, tid = `3`}, sum: `5`
+
+It is quite straightforward - we just take the data being reported from the
+asynchronous instruments and send them. We might want to consider if [Resets and
 Gaps](./datamodel.md#resets-and-gaps) should be used to denote the end of a
 metric stream - e.g. thread 1 died, the thread ID might be reused by the
 operating system, and we probably don't want to confuse the metrics backend.
 
-If we export the metrics using **Delta Temporality**, we will have to remember
-the last value of **every single permutation we've encountered so far**, because
-if we don't, we won't be able to calculate the delta value using `current -
-last`. And you can tell, this is super expensive.
+If we export the metrics using **Delta Temporality**:
+
+* (T<sub>0</sub>, T<sub>1</sub>]
+  * dimensions: {pid = `1001`, tid = `1`}, delta: `50`
+  * dimensions: {pid = `1001`, tid = `2`}, delta: `30`
+* (T<sub>1</sub>, T<sub>2</sub>]
+  * dimensions: {pid = `1001`, tid = `1`}, delta: `3`
+  * dimensions: {pid = `1001`, tid = `2`}, delta: `8`
+* (T<sub>2</sub>, T<sub>3</sub>]
+  * dimensions: {pid = `1001`, tid = `1`}, delta: `3`
+  * dimensions: {pid = `1001`, tid = `2`}, delta: `4`
+* (T<sub>3</sub>, T<sub>4</sub>]
+  * dimensions: {pid = `1001`, tid = `1`}, delta: `4`
+  * dimensions: {pid = `1001`, tid = `2`}, delta: `5`
+* (T<sub>4</sub>, T<sub>5</sub>]
+  * dimensions: {pid = `1001`, tid = `2`}, delta: `6`
+  * dimensions: {pid = `1001`, tid = `3`}, delta: `5`
+
+You can see that we will have to remember the last value of **every single
+permutation we've encountered so far**, because if we don't, we won't be able to
+calculate the delta value using `current value - last value`. And you can tell,
+this is super expensive.
 
 Making it more interesting, if we have min/max value, it is **mathematically
 impossible** to reliably deduce the Delta temporality from Cumulative
