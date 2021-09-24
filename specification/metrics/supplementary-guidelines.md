@@ -99,6 +99,7 @@ If we export the metrics using **Cumulative Temporality**:
 If we choose **Cumulative Temporality**, the SDK **has to track what has
 happened prior to the latest collection/export cycle**, in this worst case, the
 SDK **will remember what has happened since the ever beginning of the process**.
+This is known as Delta->Cumulative conversion.
 
 Imagine if we have a long running service and we collect metrics with 7
 dimensions, and each dimension can have 30 different values. We might eventually
@@ -122,11 +123,14 @@ So here are some suggestions that we encourage SDK implementers to consider:
   stream hasn't received any updates for a long period of time, would it be okay
   to reset the start time?
 
-Now we can explore a more interesting topic, Cumulative->Delta conversions.
+Now we can explore a more interesting topic, Cumulative->Delta conversion.
 
 In the above case, we have Measurements reported by a [Histogram
 Instrument](./api.md#histogram). What if we collect measurements from an
 [Asynchronous Counter](./api.md#asynchronous-counter)?
+
+The following example shows the number page faults of each thread since the
+thread ever started:
 
 * During the time range (T<sub>0</sub>, T<sub>1</sub>]:
   * ProcessId = `1001`, ThreadId = `1`, PageFaults = `50`
@@ -141,7 +145,7 @@ Instrument](./api.md#histogram). What if we collect measurements from an
   * ProcessId = `1001`, ThreadId = `1`, PageFaults = `60`
   * ProcessId = `1001`, ThreadId = `2`, PageFaults = `47`
 * During the time range (T<sub>4</sub>, T<sub>5</sub>]:
-  * thread 1 died
+  * thread 1 died, thread 3 started
   * ProcessId = `1001`, ThreadId = `2`, PageFaults = `53`
   * ProcessId = `1001`, ThreadId = `3`, PageFaults = `5`
 
