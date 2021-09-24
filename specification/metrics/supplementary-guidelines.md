@@ -122,8 +122,7 @@ So here are some suggestions that we encourage SDK implementers to consider:
   stream hasn't received any updates for a long period of time, would it be okay
   to reset the start time?
 
-Now we can explore a more interesting topic, Delta->Cumulative and
-Cumulative->Delta conversions.
+Now we can explore a more interesting topic, Cumulative->Delta conversions.
 
 In the above case, we have Measurements reported by a [Histogram
 Instrument](./api.md#histogram). What if we collect measurements from an
