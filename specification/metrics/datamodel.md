@@ -413,8 +413,8 @@ data points are an alternate representation to the
 [Histogram](#histogram) data point, used to convey a population of
 recorded measurements in a compressed format.  ExponentialHistogram
 compresses bucket boundaries using an exponential formula, making it
-suitable for conveying high-resolution data using a relatively large
-number of buckets.
+suitable for conveying high dynamic range data with small relative
+error, compared with alternative representations of similar size.
 
 Statements about `Histogram` that refer to aggregation temporality,
 attributes, and timestamps, as well as the `sum`, `count`, and
@@ -460,14 +460,16 @@ selected scales are shown below:
 An important property of this design is described as "perfect
 subsetting".  Buckets of an exponential Histogram with a given scale
 map exactly into buckets of exponential Histograms with lesser scales,
-which allows consumers to automatically lower the resolution of a
-histogram (i.e., downscale) without introducing error.
+which allows consumers to lower the resolution of a histogram (i.e.,
+downscale) without introducing error.
 
 #### Exponential buckets
 
 The ExponentialHistogram bucket identified by `index`, a signed
 integer, represents values in the population that are greater than or
-equal to `base**index` and less than `base**(index+1)`.
+equal to `base**index` and less than `base**(index+1)`.  Note that the
+ExponentialHistogram specifies a lower-inclusive bound while the
+explicit-boundary Histogram specifies an upper-inclusive bound.
 
 The positive and negative ranges of the histogram are expressed
 separately.  Negative values are mapped by their absolute value
@@ -490,7 +492,8 @@ For example, with `scale=3` there are `2**3` buckets between 1 and 2.
 Note that the lower boundary for bucket index 4 in a `scale=3`
 histogram maps into the lower boundary for bucket index 2 in a
 `scale=2` histogram and maps into the lower boundary for bucket index
-1 (i.e., the `base`) in a `scale=1` histogram.
+1 (i.e., the `base`) in a `scale=1` histogram—these are examples of
+perfect subsetting.
 
 | `scale=3` bucket index | lower boundary | equation                     |
 | --                     | --             | --                           |
@@ -515,14 +518,17 @@ that have been rounded to zero.
 #### Producer expectations
 
 The ExponentialHistogram design makes it possible to express values
-that are too large or small to be represented in computer hardware.
-Certain values for `scale`, while meaningful, are not necessarily
-useful.
+that are too large or small to be represented in the 64 bit "double"
+floating point format.  Certain values for `scale`, while meaningful,
+are not necessarily useful.
 
 The range of data represented by an ExponentialHistogram determines
-which scales can be usefully applied.  Therefore, producers SHOULD
-ensure that bucket indices are within the range of a signed 64-bit
-integer by changing scale.
+which scales can be usefully applied.  Regardless of scale, producers
+SHOULD ensure that the index of any encoded bucket falls within the
+range of a signed 32-bit integer.  This recommendation is applied to
+limit the width of integers used in standard processing pipelines such
+as the OpenTelemetry collector.  The wire-level protocol could be
+extended for 64-bit bucket indices in a future release.
 
 Producers MAY use a built-in logarithm function to calculate the
 bucket index of a value.  The use of a built-in logarithm function
@@ -530,18 +536,17 @@ could lead to results that differ from the bucket index that would be
 computed using arbitrary precision or a lookup table, however
 producers are not required to perform an exact computation.  As a
 result, ExponentialHistogram exemplars could map into buckets with
-zero count.  Instead, we expect to find such values counted in the
-adjacent bucket.
+zero count.  We expect to find such values counted in the adjacent
+bucket.
 
 #### Consumer expectations
 
-ExponentialHistogram buckets are expected to map into numbers that can be
-represented using normalized IEEE 754 double-width floating point
-values (i.e., subnormal values are excluded).  Consumers SHOULD reject
-ExponentialHistogram data with `scale` and bucket indices that
-overflow or underflow this representation.  Consumers that reject such
-data SHOULD warn the user through error logging that out-of-range data
-was received.
+ExponentialHistogram buckets are expected to map into numbers that can
+be represented using IEEE 754 double-width floating point values.
+Consumers SHOULD reject ExponentialHistogram data with `scale` and
+bucket indices that overflow or underflow this representation.
+Consumers that reject such data SHOULD warn the user through error
+logging that out-of-range data was received.
 
 ### Summary (Legacy)
 
