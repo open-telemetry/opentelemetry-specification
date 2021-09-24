@@ -157,9 +157,9 @@ metric stream - e.g. thread 1 died, the thread ID might be reused by the
 operating system, and we probably don't want to confuse the metrics backend.
 
 If we export the metrics using **Delta Temporality**, we will have to remember
-the last value of **everything single permutation we've encountered so far**,
-because if we don't, we won't be able to calculate the delta value using
-`current value - last value`. And you can tell, this is super expensive.
+the last value of **every single permutation we've encountered so far**, because
+if we don't, we won't be able to calculate the delta value using `current -
+last`. And you can tell, this is super expensive.
 
 Making it more interesting, if we have min/max value, it is **mathematically
 impossible** to reliably deduce the Delta temporality from Cumulative
