@@ -104,9 +104,9 @@ This is known as Delta->Cumulative conversion.
 Imagine if we have a long running service and we collect metrics with 7
 dimensions, and each dimension can have 30 different values. We might eventually
 end up having to remember the complete set of all `21,870,000,000` permutations!
-This **cardinality explosion** a well known challenge in the metrics space.
+This **cardinality explosion** a well-known challenge in the metrics space.
 
-Making it even worse, if we export the permutations even if there is no recent
+Making it even worse, if we export the permutations even if there are no recent
 updates, the export batch could become huge and will be very costly. For
 example, do we really need/want to export the same thing for (T<sub>0</sub>,
 T<sub>2</sub>] in the above case?
@@ -149,7 +149,7 @@ thread ever started:
   * ProcessId = `1001`, ThreadId = `2`, PageFaults = `53`
   * ProcessId = `1001`, ThreadId = `3`, PageFaults = `5`
 
-If we export the metrics using **Cumulative Temporality**, it is actually quite
+If we export the metrics using **Cumulative Temporality**, it is quite
 straightforward - we just take the data being reported from the asynchronous
 instruments and send them. We might want to consider if [Resets and
 Gaps](./datamodel.md#resets-and-gaps) should be used to denote the end of a
@@ -167,16 +167,16 @@ temporality. For example:
 
 * If the maximum value is 10 during (T<sub>0</sub>, T<sub>2</sub>] and the
   maximum value is 20 during (T<sub>0</sub>, T<sub>3</sub>], we know that the
-  maximum value druing (T<sub>2</sub>, T<sub>3</sub>] must be 20.
+  maximum value during (T<sub>2</sub>, T<sub>3</sub>] must be 20.
 * If the maximum value is 20 during (T<sub>0</sub>, T<sub>2</sub>] and the
   maximum value is also 20 during (T<sub>0</sub>, T<sub>3</sub>], we wouldn't
-  know what is the maximum value during (T<sub>2</sub>, T<sub>3</sub>], unless
+  know what the maximum value is during (T<sub>2</sub>, T<sub>3</sub>], unless
   we know that there is no value (count = 0).
 
 So here are some suggestions that we encourage SDK implementers to consider:
 
 * You probably don't want to encourage your users to do Cumulative to Delta
-  conversion. Actually you might want to discourage them from doing this.
+  conversion. Actually, you might want to discourage them from doing this.
 * If you have to do Cumulative to Delta conversion, and you encountered min/max,
-  rather than drop the data on the floor, you might want to convert to something
-  useful - e.g. [Gauge](./datamodel.md#gauge).
+  rather than drop the data on the floor, you might want to convert them to
+  something useful - e.g. [Gauge](./datamodel.md#gauge).
