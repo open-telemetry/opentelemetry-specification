@@ -759,10 +759,10 @@ sampling:
 
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
-| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"WITH_SAMPLED_TRACE"` | |
+| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"with_sampled_trace"` | |
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
-- `"NONE"`: No measurements are eligble for exemplar sampling.
-- `"ALL"`: All measurements are eligible for exemplar sampling.
-- `"WITH_SAMPLED_TRACE"`: Only allow measurements with a sampled parent span in context.
+- `"none"`: No measurements are eligble for exemplar sampling.
+- `"all"`: All measurements are eligible for exemplar sampling.
+- `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
