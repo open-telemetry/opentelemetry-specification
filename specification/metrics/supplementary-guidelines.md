@@ -163,14 +163,15 @@ because if we don't, we won't be able to calculate the delta value using
 
 Making it more interesting, if we have min/max value, it is **mathematically
 impossible** to reliably deduce the Delta temporality from Cumulative
-temporality. For example, if the maximum value is 10 during (T<sub>0</sub>,
-T<sub>2</sub>] and the maximum value is 20 during (T<sub>0</sub>,
-T<sub>3</sub>], we know that the maximum value druing (T<sub>2</sub>,
-T<sub>3</sub>] must be 20. But if the maximum value is 20 during (T<sub>0</sub>,
-T<sub>2</sub>] and the maximum value is also 20 during (T<sub>0</sub>,
-T<sub>3</sub>], we wouldn't know what is the maximum value during
-(T<sub>2</sub>, T<sub>3</sub>], unless we know that there is no value (count =
-0).
+temporality. For example:
+
+* If the maximum value is 10 during (T<sub>0</sub>, T<sub>2</sub>] and the
+  maximum value is 20 during (T<sub>0</sub>, T<sub>3</sub>], we know that the
+  maximum value druing (T<sub>2</sub>, T<sub>3</sub>] must be 20.
+* If the maximum value is 20 during (T<sub>0</sub>, T<sub>2</sub>] and the
+  maximum value is also 20 during (T<sub>0</sub>, T<sub>3</sub>], we wouldn't
+  know what is the maximum value during (T<sub>2</sub>, T<sub>3</sub>], unless
+  we know that there is no value (count = 0).
 
 So here are some suggestions that we encourage SDK implementers to consider:
 
