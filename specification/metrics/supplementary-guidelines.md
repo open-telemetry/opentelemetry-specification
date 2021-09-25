@@ -96,15 +96,15 @@ If we export the metrics using **Cumulative Temporality**:
   * dimensions: {verb = `GET`, status = `500`}, count: `3`, min: `1 (ms)`, max:
     `5 (ms)`
 
-If we choose **Cumulative Temporality**, the SDK **has to track what has
-happened prior to the latest collection/export cycle**, in this worst case, the
-SDK **will have to remember what has happened since the ever beginning of the
-process**. This is known as Delta->Cumulative conversion.
+You can see that we are performing Delta->Cumulative conversion, and the SDK
+**has to track what has happened prior to the latest collection/export cycle**,
+in the worst case, the SDK **will have to remember what has happened since the
+ever beginning of the process**.
 
 Imagine if we have a long running service and we collect metrics with 7
-dimensions, and each dimension can have 30 different values. We might eventually
+dimensions and each dimension can have 30 different values. We might eventually
 end up having to remember the complete set of all `21,870,000,000` permutations!
-This **cardinality explosion** a well-known challenge in the metrics space.
+This **cardinality explosion** is a well-known challenge in the metrics space.
 
 Making it even worse, if we export the permutations even if there are no recent
 updates, the export batch could become huge and will be very costly. For
@@ -190,10 +190,10 @@ If we export the metrics using **Delta Temporality**:
   * dimensions: {pid = `1001`, tid = `2`}, delta: `6`
   * dimensions: {pid = `1001`, tid = `3`}, delta: `5`
 
-You can see that we will have to remember the last value of **every single
-permutation we've encountered so far**, because if we don't, we won't be able to
-calculate the delta value using `current value - last value`. And you can tell,
-this is super expensive.
+You can see that we are performing Cumulative->Delta conversion, and it requires
+us to remember the last value of **every single permutation we've encountered so
+far**, because if we don't, we won't be able to calculate the delta value using
+`current value - last value`. And as you can tell, this is super expensive.
 
 Making it more interesting, if we have min/max value, it is **mathematically
 impossible** to reliably deduce the Delta temporality from Cumulative
