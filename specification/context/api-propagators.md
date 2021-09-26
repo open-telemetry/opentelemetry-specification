@@ -101,7 +101,7 @@ in order to preserve any previously existing valid value.
 Required arguments:
 
 - A `Context`.
-- The carrier that holds the propagation fields. For example, an incoming message or http response.
+- The carrier that holds the propagation fields. For example, an incoming message or HTTP request.
 
 Returns a new `Context` derived from the `Context` passed as argument,
 containing the extracted value, which can be a `SpanContext`,

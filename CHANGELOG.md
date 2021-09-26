@@ -11,14 +11,29 @@ release.
 
 ### Traces
 
-- Add InstrumentationLibrary to Sampler.ShouldSample.
-  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
+- Prefer global user defined limits over model-sepcific default values.
+  ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
 
 ### Metrics
+
+- Added Experimental Metrics SDK specification.
+  ([#1673](https://github.com/open-telemetry/opentelemetry-specification/pull/1673),
+  [#1730](https://github.com/open-telemetry/opentelemetry-specification/pull/1730),
+  [#1840](https://github.com/open-telemetry/opentelemetry-specification/pull/1840),
+  [#1842](https://github.com/open-telemetry/opentelemetry-specification/pull/1842),
+  [#1864](https://github.com/open-telemetry/opentelemetry-specification/pull/1864),
+  [#1828](https://github.com/open-telemetry/opentelemetry-specification/pull/1828),
+  [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
+  [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
+  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913),
+  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938))
 
 ### Logs
 
 ### Resource
+
+- Exempt Resource from attribute limits.
+  ([#1892](https://github.com/open-telemetry/opentelemetry-specification/pull/1892))
 
 ### Semantic Conventions
 
@@ -27,12 +42,27 @@ release.
   ([#1863](https://github.com/open-telemetry/opentelemetry-specification/pull/1863))
 - Lambda instrumentations should check if X-Ray parent context is valid
   ([#1867](https://github.com/open-telemetry/opentelemetry-specification/pull/1867))
+- Update YAML definitions for events
+  ([#1843](https://github.com/open-telemetry/opentelemetry-specification/pull/1843)):
+  - Mark exception as semconv type "event".
+  - Add YAML definitions for grpc events.
+- Add `messaging.consumer_id` to differentiate between message consumers.
+  ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
+- Clarifications for `http.client_ip` and `http.host`.
+  ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
+- Add HTTP request and response headers semantic conventions.
+  ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
+- Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
+
 ### SDK Configuration
+
+- Change default value for OTEL_EXPORTER_JAEGER_AGENT_PORT to 6831.
+  ([#1812](https://github.com/open-telemetry/opentelemetry-specification/pull/1812))
 
 ## v1.6.0 (2021-08-06)
 
@@ -68,8 +98,6 @@ release.
 - Add mobile-related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
 - Adding alibaba cloud as a cloud provider.
   ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
-- Add `messaging.consumer_id` to differentiate between message consumers.
-  ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 
 ### Compatibility
 
