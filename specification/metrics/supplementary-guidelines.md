@@ -9,7 +9,8 @@ Table of Contents:
 * [Guidelines for instrumentation library
   authors](#guidelines-for-instrumentation-library-authors)
 * [Guidelines for SDK authors](#guidelines-for-sdk-authors)
-  * [Memory efficiency](#memory-efficiency)
+  * [Aggregation temporality](#aggregation-temporality)
+  * [Memory management](#memory-management)
 
 ## Guidelines for instrumentation library authors
 
@@ -17,7 +18,7 @@ TBD
 
 ## Guidelines for SDK authors
 
-### Memory efficiency
+### Aggregation temporality
 
 The OpenTelemetry Metrics [Data Model](./datamodel.md) and [SDK](./sdk.md) are
 designed to support both Cumulative and Delta
@@ -214,3 +215,33 @@ So here are some suggestions that we encourage SDK implementers to consider:
 * If you have to do Cumulative->Delta conversion, and you encountered min/max,
   rather than drop the data on the floor, you might want to convert them to
   something useful - e.g. [Gauge](./datamodel.md#gauge).
+
+### Memory management
+
+Memory management is a wide topic, here we will only cover some of the most
+important things for the OpenTelemetry SDK:
+
+* Choose a better design so the SDK has less things to be memorized, and avoid
+  keeping things in memory unless there is a must need. One good example is the
+  [aggregation temporality](#aggregation-temporality).
+* Design a better memory layout, so the storage is efficient and accessing the
+  storage can be fast. This is normally specific to the targeting programming
+  language and platform. For example, aliging the memory to the CPU cache line,
+  keeping the hot memories close to each other, keeping the memory close to the
+  hardware (e.g. non-paged pool,
+  [NUMA](https://en.wikipedia.org/wiki/Non-uniform_memory_access)).
+* Pre-allocate and pool the memory, so the SDK doesn't have to allocate memory
+  on-the-fly. This is especially useful to language runtimes that have garbage
+  collectors, as it ensures the hot path in the code won't trigger garbage
+  colletion.
+* Limit the memmory usage, and handle critical memory condition. In general the
+  expectation is that a telemetry SDK should not fail the application. This can
+  be done via some dimension-capping algorithm - e.g. start to combine/drop some
+  data points when the SDK hits the memory limit, and provide a mechanism to
+  report the data loss.
+* Provide configurations to the application owner. The answer to _"what is an
+  efficient memory usage"_ is ultimately depending on goal of the application
+  owner. For example, the application owners might want to spend more memory in
+  order to keep more permutations of metrics dimensions, or they might want to
+  use memory aggressively for certain dimensions that are important, and keep a
+  conservative limit for dimensions that are less important.
