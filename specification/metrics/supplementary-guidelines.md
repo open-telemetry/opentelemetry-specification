@@ -227,7 +227,7 @@ keeping things in memory unless there is a must need. One good example is the
 
 **Design a better memory layout**, so the storage is efficient and accessing the
 storage can be fast. This is normally specific to the targeting programming
-language and platform. For example, aliging the memory to the CPU cache line,
+language and platform. For example, aligning the memory to the CPU cache line,
 keeping the hot memories close to each other, keeping the memory close to the
 hardware (e.g. non-paged pool,
 [NUMA](https://en.wikipedia.org/wiki/Non-uniform_memory_access)).
@@ -235,7 +235,7 @@ hardware (e.g. non-paged pool,
 **Pre-allocate and pool the memory**, so the SDK doesn't have to allocate memory
 on-the-fly. This is especially useful to language runtimes that have garbage
 collectors, as it ensures the hot path in the code won't trigger garbage
-colletion.
+collection.
 
 **Limit the memory usage, and handle critical memory condition.** The general
 expectation is that a telemetry SDK should not fail the application. This can be
