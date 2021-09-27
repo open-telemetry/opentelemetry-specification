@@ -62,6 +62,20 @@ The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXP
 
 Transient errors MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
 
-For OTLP/HTTP, the errors `408 (Request Timeout)` and `5xx (Server Errors)` are defined as transient, detailed information about erros can be found in the [HTTP failures section](otlp.md#failures). For the OTLP/gRPC, the full list of the gRPC retryable status codes can be found in the [gRPC response section](otlp.md#otlpgrpc-response).
+For OTLP/HTTP, the errors `408 (Request Timeout)` and `5xx (Server Errors)` are defined as transient, detailed information about errors can be found in the [HTTP failures section](otlp.md#failures). For the OTLP/gRPC, the full list of the gRPC retryable status codes can be found in the [gRPC response section](otlp.md#otlpgrpc-response).
+
+SDKs MAY use the built-in [gRPC Retry](https://github.com/grpc/proposal/blob/master/A6-client-retries.md) mechanism to facilitate exponential back-off. If the built-in gRPC mechanism is used, the following values SHOULD be available for configuration:
+
+- `maxAttempts`: The maximum number of attempts, including the original request. Must be an integer greater than 1 and less than 6. (The built-in gRPC mechanism treats values greater than 5 as 5.) Defaults to `5`.
+- `initialBackoff`: Must be a duration greater than 0. Defaults to `1s`
+- `maxBackoff`: Must be a duration greater than 0. Defaults to `5s`.
+- `backoffMultiplier` Must be a number greater than 0. Defaults to `1.5`.
+
+These properties are used to compute the backoff as follows:
+
+- The initial retry attempt will occur after `random(0, initialBackoff)`
+- The `n`-th retry attempt will occur after `random(0, min(initialBackoff*backoffMultiplier**(n-1), maxBackoff))`
+
+Language SDKs SHOULD have retry configuration and mechanics that are consistent across protocols. For example, if the built-in gRPC Retry mechanism is used for the `grpc` protocol, the `http/protobuf` and `http/json` protocols should expose the same configuration options and compute the backoff duration in the same manner.
 
 [otlphttp-req]: otlp.md#otlphttp-request
