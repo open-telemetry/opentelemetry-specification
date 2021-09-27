@@ -234,7 +234,7 @@ important things for the OpenTelemetry SDK:
   on-the-fly. This is especially useful to language runtimes that have garbage
   collectors, as it ensures the hot path in the code won't trigger garbage
   colletion.
-* Limit the memmory usage, and handle critical memory condition. In general the
+* Limit the memory usage, and handle critical memory condition. The general
   expectation is that a telemetry SDK should not fail the application. This can
   be done via some dimension-capping algorithm - e.g. start to combine/drop some
   data points when the SDK hits the memory limit, and provide a mechanism to
