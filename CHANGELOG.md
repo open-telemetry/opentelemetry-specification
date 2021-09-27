@@ -53,7 +53,7 @@ release.
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
-  ([#    ](https://github.com/open-telemetry/opentelemetry-specification/pull/    ))
+  ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
 
 ### Compatibility
 
