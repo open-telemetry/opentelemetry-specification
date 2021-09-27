@@ -151,6 +151,7 @@ are the inputs:
   stream](./datamodel.md#events--data-stream--timeseries).
 * The configuration for the resulting [metrics
   stream](./datamodel.md#events--data-stream--timeseries):
+  * The `unit`. If not provided, the Instrument `unit` would be used by default.
   * The `description`. If not provided, the Instrument `description` would be
     used by default.
   * A list of `attribute keys` (optional). If not provided, all the attribute
