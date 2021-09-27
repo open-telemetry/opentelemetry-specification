@@ -240,8 +240,9 @@ important things for the OpenTelemetry SDK:
   data points when the SDK hits the memory limit, and provide a mechanism to
   report the data loss.
 * Provide configurations to the application owner. The answer to _"what is an
-  efficient memory usage"_ is ultimately depending on goal of the application
-  owner. For example, the application owners might want to spend more memory in
-  order to keep more permutations of metrics dimensions, or they might want to
-  use memory aggressively for certain dimensions that are important, and keep a
-  conservative limit for dimensions that are less important.
+  efficient memory usage"_ is ultimately depending on the goal of the
+  application owner. For example, the application owners might want to spend
+  more memory in order to keep more permutations of metrics dimensions, or they
+  might want to use memory aggressively for certain dimensions that are
+  important, and keep a conservative limit for dimensions that are less
+  important.
