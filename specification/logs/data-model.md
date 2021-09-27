@@ -748,6 +748,24 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>Short event identifier that does not contain varying parts.</td>
     <td>fields['otel.log.name']</td>
   </tr>
+  <tr>
+    <td>TraceId</td>
+    <td>string</td>
+    <td>Request trace id.</td>
+    <td>fields['trace_id']</td>
+  </tr>
+  <tr>
+    <td>SpanId</td>
+    <td>string</td>
+    <td>Request span id.</td>
+    <td>fields['span_id']</td>
+  </tr>
+  <tr>
+    <td>TraceFlags</td>
+    <td>string</td>
+    <td>W3C trace flags.</td>
+    <td>fields['trace_flags']</td>
+  </tr>  
 </table>
 
 ### Log4j
