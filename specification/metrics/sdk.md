@@ -9,7 +9,6 @@ Table of Contents
 
 * [MeterProvider](#meterprovider)
 * [Attribute Limits](#attribute-limits)
-* [MeasurementProcessor](#measurementprocessor)
 * [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
   * [ExemplarReservoir](#exemplarreservoir)
@@ -40,14 +39,14 @@ to create an
 [`InstrumentationLibrary`](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
 instance which is stored on the created `Meter`.
 
-Configuration (i.e., [MeasurementProcessors](#measurementprocessor),
-[MetricExporters](#metricexporter), [MetricReaders](#metricreader) and
-[Views](#view)) MUST be managed solely by the `MeterProvider` and the SDK MUST
-provide a way to configure all options that are implemented by the SDK. This MAY
-be done at the time of MeterProvider creation if appropriate.
+Configuration (i.e., [MetricExporters](#metricexporter),
+[MetricReaders](#metricreader) and [Views](#view)) MUST be managed solely by the
+`MeterProvider` and the SDK MUST provide a way to configure all options that are
+implemented by the SDK. This MAY be done at the time of MeterProvider creation
+if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
-configuration is updated (e.g., adding a `MeasurementProcessor`), the updated
+configuration is updated (e.g., adding a `MetricReader`), the updated
 configuration MUST also apply to all already returned `Meters` (i.e. it MUST NOT
 matter whether a `Meter` was obtained from the `MeterProvider` before or after
 the configuration change). Note: Implementation-wise, this could mean that
@@ -401,56 +400,20 @@ Attributes which belong to Metrics are exempt from the
 time. Attribute truncation or deletion could affect identitity of metric time
 series and it requires further analysis.
 
-## MeasurementProcessor
-
-`MeasurementProcessor` is an interface which allows hooks when a
-[Measurement](./api.md#measurement) is recorded by an
-[Instrument](./api.md#instrument).
-
-`MeasurementProcessor` MUST have access to:
-
-* The `Measurement`
-* The `Instrument`, which is used to report the `Measurement`
-* The `Resource`, which is associated with the `MeterProvider`
-
-In addition to things listed above, if the `Measurement` is reported by a
-synchronous `Instrument` (e.g. [Counter](./api.md#counter)),
-`MeasurementProcessor` MUST have access to:
-
-* [Baggage](../baggage/api.md)
-* [Context](../context/context.md)
-* The [Span](../trace/api.md#span) which is associated with the `Measurement`
-
-Depending on the programming language and runtime model, these can be provided
-explicitly (e.g. as input arguments) or implicitly (e.g. [implicit
-Context](../context/context.md#optional-global-operations) and the [currently
-active span](../trace/api.md#context-interaction)).
-
-```text
-+------------------+
-| MeterProvider    |                 +----------------------+            +-----------------+
-|   Meter A        | Measurements... |                      | Metrics... |                 |
-|     Instrument X +-----------------> MeasurementProcessor +------------> In-memory state |
-|     Instrument Y |                 |                      |            |                 |
-|   Meter B        |                 +----------------------+            +-----------------+
-|     Instrument Z |
-|     ...          |                 +----------------------+            +-----------------+
-|     ...          | Measurements... |                      | Metrics... |                 |
-|     ...          +-----------------> MeasurementProcessor +------------> In-memory state |
-|     ...          |                 |                      |            |                 |
-|     ...          |                 +----------------------+            +-----------------+
-+------------------+
-```
-
 ## Exemplar
 
-An [Exemplar](./datamodel.md#exemplars) is a recorded measurement that exposes
-the following pieces of information:
+An [Exemplar](./datamodel.md#exemplars) is a recorded
+[Measurement](./api.md#measurement) that exposes the following pieces of
+information:
 
 - The `value` that was recorded.
-- The `time` the measurement was seen.
-- The set of [Attributes](../common/common.md#attributes) associated with the measurement not already included in a metric data point.
-- The associated [trace id and span id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span within Context](../trace/api.md#determining-the-parent-span-from-a-context) of the measurement.
+- The `time` the `Measurement` was seen.
+- The set of [Attributes](../common/common.md#attributes) associated with the
+  `Measurement` not already included in a metric data point.
+- The associated [trace id and span
+  id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
+  within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
+  the `Measurement`.
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
@@ -469,14 +432,16 @@ A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically
 ### ExemplarFilter
 
 The `ExemplarFilter` interface MUST provide a method to determine if a
-measurement should be sampled.  
+measurement should be sampled.
 
 This interface SHOULD have access to:
 
-- The value of the measurement.
-- The complete set of `Attributes` of the measurment.
-- the `Context` of the measuremnt.
-- The timestamp of the measurement.
+- The `value` of the measurement.
+- The complete set of `Attributes` of the measurement.
+- The [Context](../context/context.md) of the measurement, which covers the
+  [Baggage](../baggage/api.md) and the current active
+  [Span](../trace/api.md#span).
+- A `timestamp` that best represents when the measurement was taken.
 
 See [Defaults and Configuration](#defaults-and-configuration) for built-in
 filters.
@@ -488,10 +453,12 @@ to the reservoir and another to collect accumulated Exemplars.
 
 The "offer" method SHOULD accept measurements, including:
 
-- value
-- `Attributes` (complete set)
-- `Context`
-- timestamp
+- The `value` of the measurement.
+- The complete set of `Attributes` of the measurement.
+- The [Context](../context/context.md) of the measurement, which covers the
+  [Baggage](../baggage/api.md) and the current active
+  [Span](../trace/api.md#span).
+- A `timestamp` that best represents when the measurement was taken.
 
 The "offer" method SHOULD have the ability to pull associated trace and span
 information without needing to record full context.  In other words, current

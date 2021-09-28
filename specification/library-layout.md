@@ -49,7 +49,7 @@ This API consist of a few main classes:
 ### `/internal` (_Optional_)
 
 Library components and implementations that shouldn't be exposed to the users.
-If a language has an idiomatic layout for internal compoents, please follow
+If a language has an idiomatic layout for internal components, please follow
 the language idiomatic style.
 
 ### `/logs` (_In the future_)
@@ -99,7 +99,7 @@ This directory describes the SDK implementation for api/trace.
 ### `/sdk/internal` (_Optional_)
 
 Library components and implementations that shouldn't be exposed to the users.
-If a language has an idiomatic layout for internal compoents, please follow
+If a language has an idiomatic layout for internal components, please follow
 the language idiomatic style.
 
 ### `/sdk/logs` (_In the future_)
