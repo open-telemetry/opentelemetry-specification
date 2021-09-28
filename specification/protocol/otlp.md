@@ -72,7 +72,7 @@ and response type: `Export`.
 
 All transports MUST support in the server components the following compression options:
 
-* No compression.
+* No compression, denotated by `none`.
 * Gzip compression, denoted by `gzip`.
 
 ### OTLP/gRPC
