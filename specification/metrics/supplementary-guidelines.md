@@ -100,7 +100,7 @@ If we export the metrics using **Cumulative Temporality**:
 You can see that we are performing Delta->Cumulative conversion, and the SDK
 **has to track what has happened prior to the latest collection/export cycle**,
 in the worst case, the SDK **will have to remember what has happened since the
-ever beginning of the process**.
+beginning of the process**.
 
 Imagine if we have a long running service and we collect metrics with 7
 dimensions and each dimension can have 30 different values. We might eventually
