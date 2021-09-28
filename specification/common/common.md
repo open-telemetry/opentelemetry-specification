@@ -90,6 +90,14 @@ followed by the global limit default value.
 
 #### Exempt Entities
 
+Resource attributes SHOULD be exempt from the limits described above as resources
+are not susceptible to the scenarios (auto-instrumentation) that result in
+excessive attributes count or size. Resources are also sent only once per batch
+instead of per span so it is relatively cheaper to have more/larger attributes
+on them. Resources are also immutable by design and they are generally passed
+down to TracerProvider along with limits. This makes it awkward to implement
+attribute limits for Resources.
+
 Attributes, which belong to Metrics, are exempt from the limits described above
 at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
