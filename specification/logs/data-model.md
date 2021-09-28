@@ -27,6 +27,7 @@
     - [Field: `Body`](#field-body)
     - [Field: `Resource`](#field-resource)
     - [Field: `Attributes`](#field-attributes)
+      - [Errors and Exceptions](#errors-and-exceptions)
   - [Example Log Records](#example-log-records)
   - [Appendix A. Example Mappings](#appendix-a-example-mappings)
     - [RFC5424 Syslog](#rfc5424-syslog)
@@ -426,6 +427,14 @@ information about the request context (other than TraceId/SpanId). SHOULD follow
 OpenTelemetry
 [semantic conventions for Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
+
+#### Errors and Exceptions
+
+Additional information about errors and/or exceptions that are associated with
+a log record MAY be included in the structured data in the `Attributes` section
+of the record.
+If included, they MUST follow the OpenTelemetry
+[semantic conventions for exception-related attributes](../trace/semantic_conventions/exceptions.md#attributes).
 
 ## Example Log Records
 
