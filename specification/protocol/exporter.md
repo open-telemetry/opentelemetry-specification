@@ -25,7 +25,7 @@ e.g. directly sending telemetry data from mobile devices to backend servers.
 
 Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
 
-- `` if compression is disabled.
+- `none` if compression is disabled.
 - `gzip` is the only specified compression method for now.
 
 Example 1
