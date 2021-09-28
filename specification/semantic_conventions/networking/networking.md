@@ -1,26 +1,23 @@
-# General attributes
+# Networking
 
 **Status**: [Experimental](../../document-status.md)
 
-The attributes described in this section are not specific to a particular operation but rather generic.
-They may be used in any Span they apply to.
-Particular operations may refer to or require some of these attributes.
+These conventions describe common session, transport, and network protocols. They
+do not include high level application layers such as HTTP.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
 
-- [General network connection attributes](#general-network-connection-attributes)
+- [Network connection attributes](#general-network-connection-attributes)
   * [`net.transport` attribute](#nettransport-attribute)
   * [`net.*.name` attributes](#netname-attributes)
-- [General remote service attributes](#general-remote-service-attributes)
-- [General identity attributes](#general-identity-attributes)
-- [General thread attributes](#general-thread-attributes)
-- [Source Code Attributes](#source-code-attributes)
+- [Remote service attributes](#general-remote-service-attributes)
+- [Identity attributes](#general-identity-attributes)
 
 <!-- tocstop -->
 
-## General network connection attributes
+## Network connection attributes
 
 These attributes may be used for any network related operation.
 The `net.peer.*` attributes describe properties of the remote end of the network connection
@@ -118,7 +115,7 @@ If `net.transport` is `"unix"` or `"pipe"`, the absolute path to the file repres
 If there is no such file (e.g., anonymous pipe),
 the name should explicitly be set to the empty string to distinguish it from the case where the name is just unknown or not covered by the instrumentation.
 
-## General remote service attributes
+## Remote service attributes
 
 This attribute may be used for any operation that accesses some remote service.
 Users can define what the name of a service is based on their particular semantics in their distributed system.
@@ -135,7 +132,7 @@ Examples of `peer.service` that users may specify:
 - A Redis cache of auth tokens as `peer.service="AuthTokenCache"`.
 - A gRPC service `rpc.service="io.opentelemetry.AuthService"` may be hosted in both a gateway, `peer.service="ExternalApiService"` and a backend, `peer.service="AuthService"`.
 
-## General identity attributes
+## Identity attributes
 
 These attributes may be used for any operation with an authenticated and/or authorized enduser.
 
@@ -182,43 +179,3 @@ Examples of where the `enduser.id` value is extracted from:
 Given the sensitive nature of this information, SDKs and exporters SHOULD drop these attributes by
 default and then provide a configuration parameter to turn on retention for use cases where the
 information is required and would not violate any policies or regulations.
-
-## General thread attributes
-
-These attributes may be used for any operation to store information about
-a thread that started a span.
-
-<!-- semconv thread -->
-| Attribute  | Type | Description  | Examples  | Required |
-|---|---|---|---|---|
-| `thread.id` | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | No |
-| `thread.name` | string | Current thread name. | `main` | No |
-<!-- endsemconv -->
-
-Examples of where `thread.id` and `thread.name` can be extracted from:
-
-| Launguage or platform | `thread.id`                            | `thread.name`                      |
-|-----------------------|----------------------------------------|------------------------------------|
-| JVM                   | `Thread.currentThread().getId()`       | `Thread.currentThread().getName()` |
-| .NET                  | `Thread.CurrentThread.ManagedThreadId` | `Thread.CurrentThread.Name`        |
-| Python                | `threading.current_thread().ident`     | `threading.current_thread().name`  |
-| Ruby                  |                                        | `Thread.current.name`              |
-| C++                   | `std::this_thread::get_id()`             |                                    |
-| Erlang               | `erlang:system_info(scheduler_id)` |                                  |
-
-## Source Code Attributes
-
-Often a span is closely tied to a certain unit of code that is logically responsible for handling
-the operation that the span describes (usually the method that starts the span).
-For an HTTP server span, this would be the function that handles the incoming request, for example.
-The attributes listed below allow to report this unit of code and therefore to provide more context
-about the span.
-
-<!-- semconv code -->
-| Attribute  | Type | Description  | Examples  | Required |
-|---|---|---|---|---|
-| `code.function` | string | The method or function name, or equivalent (usually rightmost part of the code unit's name). | `serveRequest` | No |
-| `code.namespace` | string | The "namespace" within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit. | `com.example.MyHttpService` | No |
-| `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | No |
-| `code.lineno` | int | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | No |
-<!-- endsemconv -->
