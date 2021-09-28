@@ -226,10 +226,10 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
   which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
-  Individual language clients can decide if they want to support more Unicode
-  [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
-* It MUST support at least 1023 characters. Individual language clients can
-  decide if they want to support more.
+  [OpenTelemetry API](../overview.md#api) authors CAN decide if they want to
+  support more Unicode [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
+* It MUST support at least 1023 characters. [OpenTelemetry
+  API](../overview.md#api) authors CAN decide if they want to support more.
 
 Instruments can be categorized based on whether they are synchronous or
 asynchronous:
@@ -273,9 +273,9 @@ Example uses for `Counter`:
 
 There MUST NOT be any API for creating a `Counter` other than with a
 [`Meter`](#meter). This MAY be called `CreateCounter`. If strong type is
-desired, the client can decide the language idiomatic name(s), for example
-`CreateUInt64Counter`, `CreateDoubleCounter`, `CreateCounter<UInt64>`,
-`CreateCounter<double>`.
+desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the language
+idiomatic name(s), for example `CreateUInt64Counter`, `CreateDoubleCounter`,
+`CreateCounter<UInt64>`, `CreateCounter<double>`.
 
 The API MUST accept the following parameters:
 
@@ -286,7 +286,8 @@ The API MUST accept the following parameters:
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
 
-Here are some examples that individual language client might consider:
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
 
 ```python
 # Python
@@ -322,15 +323,16 @@ Required parameters:
 * Optional [attributes](../common/common.md#attributes).
 * The increment amount, which MUST be a non-negative numeric value.
 
-The client MAY decide to allow flexible
+The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/common.md#attributes) to be passed in as arguments. If
 the attribute names and types are provided during the [counter
-creation](#counter-creation), the client MAY allow attribute values to be passed
-in using a more efficient way (e.g. strong typed struct allocated on the
-callstack, tuple). The API MUST allow callers to provide flexible attributes at
-invocation time rather than having to register all the possible attribute names
-during the instrument creation. Here are some examples that individual language
-client might consider:
+creation](#counter-creation), the [OpenTelemetry API](../overview.md#api)
+authors MAY allow attribute values to be passed in using a more efficient way
+(e.g. strong typed struct allocated on the callstack, tuple). The API MUST allow
+callers to provide flexible attributes at invocation time rather than having to
+register all the possible attribute names during the instrument creation. Here
+are some examples that [OpenTelemetry API](../overview.md#api) authors might
+consider:
 
 ```python
 # Python
@@ -366,9 +368,10 @@ Example uses for Asynchronous Counter:
 
 There MUST NOT be any API for creating an Asynchronous Counter other than with a
 [`Meter`](#meter). This MAY be called `CreateObservableCounter`. If strong type
-is desired, the client can decide the language idiomatic name(s), for example
-`CreateUInt64ObservableCounter`, `CreateDoubleObservableCounter`,
-`CreateObservableCounter<UInt64>`, `CreateObservableCounter<double>`.
+is desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the
+language idiomatic name(s), for example `CreateUInt64ObservableCounter`,
+`CreateDoubleObservableCounter`, `CreateObservableCounter<UInt64>`,
+`CreateObservableCounter<double>`.
 
 It is highly recommended that implementations use the name `ObservableCounter`
 (or any language idiomatic variation, e.g. `observable_counter`) unless there is
@@ -389,8 +392,8 @@ The API MUST accept the following parameters:
 
 The `callback` function is responsible for reporting the
 [Measurement](#measurement)s. It will only be called when the Meter is being
-observed. Individual language client SHOULD define whether this callback
-function needs to be reentrant safe / thread safe or not.
+observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
+this callback function needs to be reentrant safe / thread safe or not.
 
 Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
 callback function reports the absolute value of the counter. To determine the
@@ -401,29 +404,31 @@ The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
 function(s) independently.
 
-Individual language client can decide what is the idiomatic approach. Here are
-some examples:
+[OpenTelemetry API](../overview.md#api) authors CAN decide what is the idiomatic
+approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
 * Use an observer argument to allow individual `Measurement`s to be reported.
 
 User code is recommended not to provide more than one `Measurement` with the
-same `attributes` in a single callback. If it happens, the
-[SDK](./README.md#sdk) can decide how to handle it. For example, during the
-callback invocation if two measurements `value=1, attributes={pid:4, bitness:64}`
-and `value=2, attributes={pid:4, bitness:64}` are reported, the SDK can decide
-to simply let them pass through (so the downstream consumer can handle
-duplication), drop the entire data, pick the last one, or something else. The
-API must treat observations from a single callback as logically taking place at
-a single instant, such that when recorded, observations from a single callback
-MUST be reported with identical timestamps.
+same `attributes` in a single callback. If it happens, [OpenTelemetry
+SDK](../overview.md#sdk) authors CAN decide how to handle it in the
+[SDK](./README.md#sdk). For example, during the callback invocation if two
+measurements `value=1, attributes={pid:4, bitness:64}` and `value=2,
+attributes={pid:4, bitness:64}` are reported, [OpenTelemetry
+SDK](../overview.md#sdk) authors CAN decide to simply let them pass through (so
+the downstream consumer can handle duplication), drop the entire data, pick the
+last one, or something else. The API MUST treat observations from a single
+callback as logically taking place at a single instant, such that when recorded,
+observations from a single callback MUST be reported with identical timestamps.
 
-The API SHOULD provide some way to pass `state` to the callback. Individual
-language client can decide what is the idiomatic approach (e.g. it could be an
-additional parameter to the callback function, or captured by the lambda
-closure, or something else).
+The API SHOULD provide some way to pass `state` to the callback. [OpenTelemetry
+API](../overview.md#api) authors CAN decide what is the idiomatic approach (e.g.
+it could be an additional parameter to the callback function, or captured by the
+lambda closure, or something else).
 
-Here are some examples that individual language client might consider:
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
 
 ```python
 # Python
@@ -487,9 +492,9 @@ Example uses for `Histogram`:
 
 There MUST NOT be any API for creating a `Histogram` other than with a
 [`Meter`](#meter). This MAY be called `CreateHistogram`. If strong type is
-desired, the client can decide the language idiomatic name(s), for example
-`CreateUInt64Histogram`, `CreateDoubleHistogram`, `CreateHistogram<UInt64>`,
-`CreateHistogram<double>`.
+desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the language
+idiomatic name(s), for example `CreateUInt64Histogram`, `CreateDoubleHistogram`,
+`CreateHistogram<UInt64>`, `CreateHistogram<double>`.
 
 The API MUST accept the following parameters:
 
@@ -500,7 +505,8 @@ The API MUST accept the following parameters:
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
 
-Here are some examples that individual language client might consider:
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
 
 ```python
 # Python
@@ -536,11 +542,12 @@ Parameters:
 * The amount of the `Measurement`.
 * Optional [attributes](../common/common.md#attributes).
 
-The client MAY decide to allow flexible
+[OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/common.md#attributes) to be passed in as individual
-arguments. The client MAY allow attribute values to be passed in using a more
-efficient way (e.g. strong typed struct allocated on the callstack, tuple). Here
-are some examples that individual language client might consider:
+arguments. [OpenTelemetry API](../overview.md#api) authors MAY allow attribute
+values to be passed in using a more efficient way (e.g. strong typed struct
+allocated on the callstack, tuple). Here are some examples that [OpenTelemetry
+API](../overview.md#api) authors might consider:
 
 ```python
 # Python
@@ -577,9 +584,10 @@ Example uses for Asynchronous Gauge:
 
 There MUST NOT be any API for creating an Asynchronous Gauge other than with a
 [`Meter`](#meter). This MAY be called `CreateObservableGauge`. If strong type is
-desired, the client can decide the language idiomatic name(s), for example
-`CreateUInt64ObservableGauge`, `CreateDoubleObservableGauge`,
-`CreateObservableGauge<UInt64>`, `CreateObservableGauge<double>`.
+desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the language
+idiomatic name(s), for example `CreateUInt64ObservableGauge`,
+`CreateDoubleObservableGauge`, `CreateObservableGauge<UInt64>`,
+`CreateObservableGauge<double>`.
 
 It is highly recommended that implementations use the name `ObservableGauge`
 (or any language idiomatic variation, e.g. `observable_gauge`) unless there is
@@ -600,15 +608,15 @@ The API MUST accept the following parameters:
 
 The `callback` function is responsible for reporting the
 [Measurement](#measurement)s. It will only be called when the Meter is being
-observed. Individual language client SHOULD define whether this callback
-function needs to be reentrant safe / thread safe or not.
+observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
+this callback function needs to be reentrant safe / thread safe or not.
 
 The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
 function(s) independently.
 
-Individual language client can decide what is the idiomatic approach. Here are
-some examples:
+[OpenTelemetry API](../overview.md#api) authors CAN decide what is the idiomatic
+approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
 * Use an observer result argument to allow individual `Measurement`s to be reported.
@@ -620,16 +628,17 @@ callback invocation if two measurements `value=3.38, attributes={cpu:1, core:2}`
 and `value=3.51, attributes={cpu:1, core:2}` are reported, the SDK can decide to
 simply let them pass through (so the downstream consumer can handle
 duplication), drop the entire data, pick the last one, or something else. The
-API must treat observations from a single callback as logically taking place at
+API MUST treat observations from a single callback as logically taking place at
 a single instant, such that when recorded, observations from a single callback
 MUST be reported with identical timestamps.
 
-The API SHOULD provide some way to pass `state` to the callback. Individual
-language client can decide what is the idiomatic approach (e.g. it could be an
-additional parameter to the callback function, or captured by the lambda
-closure, or something else).
+The API SHOULD provide some way to pass `state` to the callback. [OpenTelemetry
+API](../overview.md#api) authors CAN decide what is the idiomatic approach (e.g.
+it could be an additional parameter to the callback function, or captured by the
+lambda closure, or something else).
 
-Here are some examples that individual language client might consider:
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
 
 ```python
 # Python
@@ -756,9 +765,10 @@ def sell_item(color, material):
 
 There MUST NOT be any API for creating an `UpDownCounter` other than with a
 [`Meter`](#meter). This MAY be called `CreateUpDownCounter`. If strong type is
-desired, the client can decide the language idiomatic name(s), for example
-`CreateInt64UpDownCounter`, `CreateDoubleUpDownCounter`,
-`CreateUpDownCounter<Int64>`, `CreateUpDownCounter<double>`.
+desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the language
+idiomatic name(s), for example `CreateInt64UpDownCounter`,
+`CreateDoubleUpDownCounter`, `CreateUpDownCounter<Int64>`,
+`CreateUpDownCounter<double>`.
 
 The API MUST accept the following parameters:
 
@@ -769,7 +779,8 @@ The API MUST accept the following parameters:
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
 
-Here are some examples that individual language client might consider:
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
 
 ```python
 # Python
@@ -803,11 +814,12 @@ Parameters:
 * The amount to be added, can be positive, negative or zero.
 * Optional [attributes](../common/common.md#attributes).
 
-The client MAY decide to allow flexible
+[OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/common.md#attributes) to be passed in as individual
-arguments. The client MAY allow attribute values to be passed in using a more
-efficient way (e.g. strong typed struct allocated on the callstack, tuple). Here
-are some examples that individual language client might consider:
+arguments. [OpenTelemetry API](../overview.md#api) authors MAY allow attribute
+values to be passed in using a more efficient way (e.g. strong typed struct
+allocated on the callstack, tuple). Here are some examples that [OpenTelemetry
+API](../overview.md#api) authors might consider:
 
 ```python
 # Python
@@ -843,9 +855,10 @@ Example uses for Asynchronous UpDownCounter:
 
 There MUST NOT be any API for creating an Asynchronous UpDownCounter other than
 with a [`Meter`](#meter). This MAY be called `CreateObservableUpDownCounter`. If
-strong type is desired, the client can decide the language idiomatic name(s),
-for example `CreateUInt64ObservableUpDownCounter`,
-`CreateDoubleObservableUpDownCounter`, `CreateObservableUpDownCounter<UInt64>`,
+strong type is desired, [OpenTelemetry API](../overview.md#api) authors CAN
+decide the language idiomatic name(s), for example
+`CreateUInt64ObservableUpDownCounter`, `CreateDoubleObservableUpDownCounter`,
+`CreateObservableUpDownCounter<UInt64>`,
 `CreateObservableUpDownCounter<double>`.
 
 It is highly recommended that implementations use the name
@@ -867,8 +880,8 @@ The API MUST accept the following parameters:
 
 The `callback` function is responsible for reporting the
 [Measurement](#measurement)s. It will only be called when the Meter is being
-observed. Individual language client SHOULD define whether this callback
-function needs to be reentrant safe / thread safe or not.
+observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
+this callback function needs to be reentrant safe / thread safe or not.
 
 Note: Unlike [UpDownCounter.Add()](#add) which takes the increment/delta value,
 the callback function reports the absolute value of the Asynchronous
@@ -879,29 +892,30 @@ The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
 function(s) independently.
 
-Individual language client can decide what is the idiomatic approach. Here are
-some examples:
+[OpenTelemetry API](../overview.md#api) authors CAN decide what is the idiomatic
+approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
 * Use an observer argument to allow individual `Measurement`s to be reported.
 
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, the
-[SDK](./README.md#sdk) can decide how to handle it. For example, during the
+[SDK](./README.md#sdk) CAN decide how to handle it. For example, during the
 callback invocation if two measurements `value=1, attributes={pid:4,
 bitness:64}` and `value=2, attributes={pid:4, bitness:64}` are reported, the SDK
 can decide to simply let them pass through (so the downstream consumer can
 handle duplication), drop the entire data, pick the last one, or something else.
-The API must treat observations from a single callback as logically taking place
+The API MUST treat observations from a single callback as logically taking place
 at a single instant, such that when recorded, observations from a single
 callback MUST be reported with identical timestamps.
 
-The API SHOULD provide some way to pass `state` to the callback. Individual
-language client can decide what is the idiomatic approach (e.g. it could be an
-additional parameter to the callback function, or captured by the lambda
-closure, or something else).
+The API SHOULD provide some way to pass `state` to the callback. [OpenTelemetry
+API](../overview.md#api) authors CAN decide what is the idiomatic approach (e.g.
+it could be an additional parameter to the callback function, or captured by the
+lambda closure, or something else).
 
-Here are some examples that individual language client might consider:
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
 
 ```python
 # Python
