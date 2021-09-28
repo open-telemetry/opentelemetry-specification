@@ -13,6 +13,10 @@ release.
 
 - Prefer global user defined limits over model-sepcific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
+- Add InstrumentationLibrary to Sampler.ShouldSample.
+  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
+- Generalize the "message" event to apply to all RPC systems not just gRPC
+  ([#1914](https://github.com/open-telemetry/opentelemetry-specification/pull/1914))
 
 ### Metrics
 
