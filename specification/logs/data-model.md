@@ -696,7 +696,7 @@ We apply this mapping from HEC to the unified model:
     <td>host</td>
     <td>string</td>
     <td>The host value to assign to the event data. This is typically the host name of the client that you are sending data from.</td>
-    <td>Resource["host.hostname"]</td>
+    <td>Resource["host.name"]</td>
   </tr>
   <tr>
     <td>source</td>
