@@ -2,7 +2,7 @@
 
 **Status**: [Experimental](../../document-status.md)
 
-These conventions describe common session, transport, and network protocols. They
+These conventions describe lower-level session, transport, and network protocols. They
 do not include high level application layers such as HTTP.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
