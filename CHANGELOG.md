@@ -62,6 +62,8 @@ release.
 ### OpenTelemetry Protocol
 
 - Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
+- Allow implementations to use their own default for OTLP compression, with `none` denotating no compression
+  ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
 
 ### SDK Configuration
 
