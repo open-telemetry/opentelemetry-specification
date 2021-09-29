@@ -70,7 +70,7 @@ OTLP is a request/response style protocols: the clients send requests, the
 server replies with corresponding responses. This document defines one requests
 and response type: `Export`.
 
-All transports MUST support in the server components the following compression options:
+All server components MUST support the following transport compression options:
 
 * No compression, denotated by `none`.
 * Gzip compression, denoted by `gzip`.
