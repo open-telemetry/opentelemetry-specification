@@ -66,6 +66,7 @@ release.
   ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
 - Clarify OTLP server components MUST support none/gzip compression
   ([#1955](https://github.com/open-telemetry/opentelemetry-specification/pull/1955))
+- Change OTLP/HTTP port from 4317 to 4318 ([#1970](https://github.com/open-telemetry/opentelemetry-specification/pull/1970))
 
 ### SDK Configuration
 
