@@ -115,6 +115,8 @@ release.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 - Add `k8s.container.restart_count` Resource attribute.
   ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
+- Add semantic conventions for [CloudEvents](https://cloudevents.io).
+  ([#???](https://github.com/open-telemetry/opentelemetry-specification/pull/???))
 
 ### Compatibility
 
