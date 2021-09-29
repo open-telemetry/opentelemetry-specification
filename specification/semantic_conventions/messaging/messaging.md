@@ -16,12 +16,8 @@
   * [Span kind](#span-kind)
   * [Operation names](#operation-names)
 - [Messaging attributes](#messaging-attributes)
-  * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
-    + [RabbitMQ](#rabbitmq)
-    + [Apache Kafka](#apache-kafka)
 - [Examples](#examples)
   * [Topic with multiple consumers](#topic-with-multiple-consumers)
-  * [Apache Kafka with Quarkus or Spring Boot Example](#apache-kafka-with-quarkus-or-spring-boot-example)
   * [Batch receiving](#batch-receiving)
   * [Batch processing](#batch-processing)
 
@@ -183,19 +179,6 @@ The distinction between receiving and processing of messages is not always of pa
 For batch receiving and processing (see the [Batch receiving](#batch-receiving) and [Batch processing](#batch-processing) examples below) in particular, the attribute SHOULD be set.
 Even though in that case one might think that the processing span's kind should be `INTERNAL`, that kind MUST NOT be used.
 Instead span kind should be set to either `CONSUMER` or `SERVER` according to the rules defined above.
-
-### Attributes specific to certain messaging systems
-
-#### RabbitMQ
-
-In RabbitMQ, the destination is defined by an _exchange_ and a _routing key_.
-`messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
-
-<!-- semconv messaging.rabbitmq -->
-| Attribute  | Type | Description  | Examples  | Required |
-|---|---|---|---|---|
-| `messaging.rabbitmq.routing_key` | string | RabbitMQ message routing key. | `myKey` | Unless it is empty. |
-<!-- endsemconv -->
 
 ## Examples
 
