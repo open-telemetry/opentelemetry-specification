@@ -25,7 +25,7 @@ release.
 
 ### SDK Configuration
 
-## v1.7.0 (2021-09-15)
+## v1.7.0 (2021-09-29)
 
 ### Context
 
@@ -37,6 +37,8 @@ release.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
 - Add InstrumentationLibrary to Sampler.ShouldSample.
   ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
+- Generalize the "message" event to apply to all RPC systems not just gRPC
+  ([#1914](https://github.com/open-telemetry/opentelemetry-specification/pull/1914))
 
 ### Metrics
 
@@ -49,7 +51,8 @@ release.
   [#1828](https://github.com/open-telemetry/opentelemetry-specification/pull/1828),
   [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
   [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
-  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913))
+  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913),
+  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938))
 - Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))
 
 ### Logs
@@ -58,7 +61,8 @@ release.
 
 ### Resource
 
-- No changes.
+- Exempt Resource from attribute limits.
+  ([#1892](https://github.com/open-telemetry/opentelemetry-specification/pull/1892))
 
 ### Semantic Conventions
 
@@ -75,6 +79,8 @@ release.
   ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 - Clarifications for `http.client_ip` and `http.host`.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
+- Add HTTP request and response headers semantic conventions.
+  ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 
 ### Compatibility
 
@@ -83,6 +89,10 @@ release.
 ### OpenTelemetry Protocol
 
 - Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
+- Allow implementations to use their own default for OTLP compression, with `none` denotating no compression
+  ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
+- Clarify OTLP server components MUST support none/gzip compression
+  ([#1955](https://github.com/open-telemetry/opentelemetry-specification/pull/1955))
 
 ### SDK Configuration
 
