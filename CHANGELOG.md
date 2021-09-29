@@ -13,6 +13,10 @@ release.
 
 - Prefer global user defined limits over model-sepcific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
+- Add InstrumentationLibrary to Sampler.ShouldSample.
+  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
+- Generalize the "message" event to apply to all RPC systems not just gRPC
+  ([#1914](https://github.com/open-telemetry/opentelemetry-specification/pull/1914))
 
 ### Metrics
 
@@ -58,6 +62,10 @@ release.
 ### OpenTelemetry Protocol
 
 - Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
+- Allow implementations to use their own default for OTLP compression, with `none` denotating no compression
+  ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
+- Clarify OTLP server components MUST support none/gzip compression
+  ([#1955](https://github.com/open-telemetry/opentelemetry-specification/pull/1955))
 - Change OTLP/HTTP port from 4317 to 4318 ([#1970](https://github.com/open-telemetry/opentelemetry-specification/pull/1970))
 
 ### SDK Configuration

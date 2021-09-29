@@ -754,15 +754,4 @@ modeled to interact with other components in the SDK:
 
 ## Defaults and Configuration
 
-The SDK MUST provide the following configuration parameters for Exemplar
-sampling:
-
-| Name            | Description | Default | Notes |
-|-----------------|---------|-------------|---------|
-| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"WITH_SAMPLED_TRACE"` | |
-
-Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
-
-- `"NONE"`: No measurements are eligble for exemplar sampling.
-- `"ALL"`: All measurements are eligible for exemplar sampling.
-- `"WITH_SAMPLED_TRACE"`: Only allow measurements with a sampled parent span in context.
+The SDK MUST provide configuration according to the [SDK environment variables](../sdk-environment-variables.md) specification.

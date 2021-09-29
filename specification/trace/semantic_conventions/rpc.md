@@ -14,11 +14,11 @@ This document defines how to describe remote procedure calls
     - [Span name](#span-name)
     - [Attributes](#attributes)
       - [Service name](#service-name)
+    - [Events](#events)
     - [Distinction from HTTP spans](#distinction-from-http-spans)
   - [gRPC](#grpc)
     - [gRPC Attributes](#grpc-attributes)
     - [gRPC Status](#grpc-status)
-    - [Events](#events)
   - [JSON RPC](#json-rpc)
     - [JSON RPC Attributes](#json-rpc-attributes)
 
@@ -95,6 +95,32 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 [`service.name`]: ../../resource/semantic_conventions/README.md#service
 [`peer.service`]: span-general.md#general-remote-service-attributes
 
+### Events
+
+In the lifetime of an RPC stream, an event for each message sent/received on
+client and server spans SHOULD be created. In case of unary calls only one sent
+and one received message will be recorded for both client and server spans.
+
+The event name MUST be `"message"`.
+
+<!-- semconv rpc.message -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `message.type` | string | Whether this is a received or sent message. | `SENT` | No |
+| `message.id` | int | MUST be calculated as two different counters starting from `1` one for sent messages and one for received message. [1] |  | No |
+| `message.compressed_size` | int | Compressed size of the message in bytes. |  | No |
+| `message.uncompressed_size` | int | Uncompressed size of the message in bytes. |  | No |
+
+**[1]:** This way we guarantee that the values will be consistent between different implementations.
+
+`message.type` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `SENT` | sent |
+| `RECEIVED` | received |
+<!-- endsemconv -->
+
 ### Distinction from HTTP spans
 
 HTTP calls can generally be represented using just [HTTP spans](./http.md).
@@ -142,33 +168,6 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 ### gRPC Status
 
 The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
-
-### Events
-
-In the lifetime of a gRPC stream, an event for each message sent/received on
-client and server spans SHOULD be created. In case of
-unary calls only one sent and one received message will be recorded for both
-client and server spans.
-
-The event name MUST be `"message"`.
-
-<!-- semconv rpc.grpc.message -->
-| Attribute  | Type | Description  | Examples  | Required |
-|---|---|---|---|---|
-| `message.type` | string | Whether this is a received or sent message. | `SENT` | No |
-| `message.id` | int | MUST be calculated as two different counters starting from `1` one for sent messages and one for received message. [1] |  | No |
-| `message.compressed_size` | int | Compressed size of the message in bytes. |  | No |
-| `message.uncompressed_size` | int | Uncompressed size of the message in bytes. |  | No |
-
-**[1]:** This way we guarantee that the values will be consistent between different implementations.
-
-`message.type` MUST be one of the following:
-
-| Value  | Description |
-|---|---|
-| `SENT` | sent |
-| `RECEIVED` | received |
-<!-- endsemconv -->
 
 ## JSON RPC
 
