@@ -168,6 +168,10 @@ If, for example, the [`HMSET` command][] is invoked, `"HMSET myhash field1 'Hell
 In **CouchDB**, `db.operation` should be set to the HTTP method + the target REST route according to the API reference documentation.
 For example, when retrieving a document, `db.operation` would be set to (literally, i.e., without replacing the placeholders with concrete values): [`GET /{db}/{docid}`][CouchDB get doc].
 
+In **Cassandra**, `db.name` should be set to the keyspace name.
+
+In **HBase**, `db.name` should be set to the HBase namespace.
+
 [CouchDB get doc]: http://docs.couchdb.org/en/stable/api/document/common.html#get--db-docid
 
 ### Call-level attributes for specific technologies
