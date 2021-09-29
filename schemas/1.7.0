@@ -8,5 +8,6 @@ versions:
             attribute_map:
               db.cassandra.keyspace: db.name
               db.hbase.namespace: db.name
+  1.6.1:
   1.5.0:
   1.4.0:
