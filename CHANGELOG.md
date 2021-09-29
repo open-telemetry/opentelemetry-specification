@@ -58,11 +58,14 @@ release.
 ### OpenTelemetry Protocol
 
 - Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
+- Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
+  ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975)).
 
 ### SDK Configuration
 
 - Change default value for OTEL_EXPORTER_JAEGER_AGENT_PORT to 6831.
   ([#1812](https://github.com/open-telemetry/opentelemetry-specification/pull/1812))
+- See also the changes for OTLP configuration listed under "OpenTelemetry Protocol" above.
 
 ## v1.6.0 (2021-08-06)
 
