@@ -296,7 +296,7 @@ groups:
         tag: call-level-tech-specific-cassandra
         required:
           conditional: Recommended if available.
-        brief: The name of the primary table that the operation is acting upon, including the database name (if applicable).
+        brief: The name of the primary table that the operation is acting upon, including the keyspace name (if applicable).
         note: >
           This mirrors the db.sql.table attribute but references cassandra rather than sql.
           It is not recommended to attempt any client-side parsing of
