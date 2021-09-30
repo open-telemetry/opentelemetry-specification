@@ -197,7 +197,7 @@ Separated for clarity.
 |---|---|---|---|---|
 | `db.cassandra.page_size` | int | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
 | `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `all` | No |
-| `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the database name (if applicable). [1] | `mytable` | Recommended if available. |
+| `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the keyspace name (if applicable). [1] | `mytable` | Recommended if available. |
 | `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
 | `db.cassandra.speculative_execution_count` | int | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | No |
 | `db.cassandra.coordinator.id` | string | The ID of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | No |
