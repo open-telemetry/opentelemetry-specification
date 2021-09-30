@@ -82,7 +82,7 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317/mycollector/
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics/
 ```
 
-Traces are sent to `http://collector:4317/mycollector/mycollector/v1/traces`
+Traces are sent to `http://collector:4317/mycollector/v1/traces`
 and metrics to `https://collector.example.com/v1/metrics/`
 (other signals, would they be defined, would be sent to their specific paths
 relative to `http://collector:4317/mycollector/`).
