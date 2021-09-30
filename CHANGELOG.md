@@ -25,7 +25,7 @@ release.
 
 ### SDK Configuration
 
-## v1.7.0 (2021-09-29)
+## v1.7.0 (2021-09-30)
 
 ### Context
 
@@ -52,7 +52,8 @@ release.
   [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
   [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
   [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913),
-  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938))
+  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938),
+  [#1958](https://github.com/open-telemetry/opentelemetry-specification/pull/1958))
 - Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))
 
 ### Logs
