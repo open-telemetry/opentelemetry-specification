@@ -49,6 +49,8 @@ Here is one way of choosing the correct instrument:
     non-negative) - use [Counter](./api.md#counter).
   * If the value is NOT monotonically increasing (the delta value can be
     positive, negative or zero) - use [UpDownCounter](./api.md#updowncounter).
+* I want to **record** or **time** something, and the **statistics** about this
+  thing are likely to be meaningful - use [Histogram](./api.md#histogram).
 * I want to **measure** something (by reporting an absolute value):
   * If it makes NO sense to add up the values across different dimensions, use
     [Asynchronous Gauge](./api.md#asynchronous-gauge).
@@ -57,8 +59,6 @@ Here is one way of choosing the correct instrument:
       Counter](./api.md#asynchronous-counter).
     * If the value is NOT monotonically increasing - use [Asynchronous
       UpDownCounter](./api.md#asynchronous-updowncounter).
-* I want to **record** something, and the statistics about this thing are likely
-  to be meaningful - use [Histogram](./api.md#histogram).
 
 ### Semantic convention
 
