@@ -478,7 +478,7 @@ connections SHOULD be configurable.
 
 #### OTLP/HTTP Default Port
 
-The default network port for OTLP/HTTP is 4317.
+The default network port for OTLP/HTTP is 4318.
 
 ## Implementation Recommendations
 
