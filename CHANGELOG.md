@@ -35,8 +35,6 @@ release.
 
 - Prefer global user defined limits over model-sepcific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
-- Add InstrumentationLibrary to Sampler.ShouldSample.
-  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
 - Generalize the "message" event to apply to all RPC systems not just gRPC
   ([#1914](https://github.com/open-telemetry/opentelemetry-specification/pull/1914))
 
@@ -55,6 +53,8 @@ release.
   [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938),
   [#1958](https://github.com/open-telemetry/opentelemetry-specification/pull/1958))
 - Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))
+- Update env variable values to match other env variables
+  ([#1965](https://github.com/open-telemetry/opentelemetry-specification/pull/1965))
 
 ### Logs
 
