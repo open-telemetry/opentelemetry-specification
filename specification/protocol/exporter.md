@@ -10,19 +10,23 @@ The following configuration options MUST be available to configure the OTLP expo
 
 | Configuration Option | Description                                                  | Default           | Env variable                                                 |
 | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
-| Endpoint (OTLP/HTTP) | Target to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, and MAY contain a port and path. A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters SHOULD follow the collector convention of appending the version and signal to the path (e.g. `v1/traces` or `v1/metrics`), if not present already. The per-signal endpoint configuration options take precedence and can be used to override this behavior. See the [OTLP Specification][otlphttp-req] for more details. | `https://localhost:4317` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
+| Endpoint (OTLP/HTTP) | Target to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, and MAY contain a port and path. A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters SHOULD follow the collector convention of appending the version and signal to the path (e.g. `v1/traces` or `v1/metrics`), if not present already. The per-signal endpoint configuration options take precedence and can be used to override this behavior. See the [OTLP Specification][otlphttp-req] for more details. | `https://localhost:4318` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
 | Endpoint (OTLP/gRPC) | Target to which the exporter is going to send spans or metrics. The endpoint SHOULD accept any form allowed by the underlying gRPC client implementation. Additionally, the endpoint MUST accept a URL with a scheme of either `http` or `https`. A scheme of `https` indicates a secure connection and takes precedence over the `insecure` configuration setting. If the gRPC client implementation does not support an endpoint with a scheme of `http` or `https` then the endpoint SHOULD be transformed to the most sensible format for that implementation. | `https://localhost:4317` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
 | Insecure             | Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation. | `false` | `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_SPAN_INSECURE` `OTEL_EXPORTER_OTLP_METRIC_INSECURE` |
 | Certificate File     | The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection. | n/a               | `OTEL_EXPORTER_OTLP_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE` |
 | Headers              | Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.                   | n/a               | `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` |
-| Compression          | Compression key for supported compression types. Supported compression: `gzip`| No value              | `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` |
+| Compression          | Compression key for supported compression types. Supported compression: `gzip`| No value [1]          | `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` |
 | Timeout              | Maximum time the OTLP exporter will wait for each batch export. | 10s               | `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` |
 | Protocol             | The transport protocol. Options MAY include `grpc`, `http/protobuf`, and `http/json`. See [Specify Protocol](./exporter.md#specify-protocol) for more details. | n/a               | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` |
 
+**[1]**: If no compression value is explicitly specified, SIGs can default to the value they deem
+most useful among the supported options. This is especially important in the presence of technical constraints,
+e.g. directly sending telemetry data from mobile devices to backend servers.
+
 Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
 
-- If the value is missing, then compression is disabled.
-- `gzip` is the only specified compression method for now. Other options MAY be supported by language SDKs and should be documented for each particular language.
+- `none` if compression is disabled.
+- `gzip` is the only specified compression method for now.
 
 Example 1
 
