@@ -53,22 +53,22 @@ for each signal as follow:
 The following configuration sends all signals to the same collector:
 
 ```bash
-export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
 ```
 
-Traces are sent to `http://collector:4317/v1/traces` and metrics to
-`http://collector:4317/v1/metrics`.
+Traces are sent to `http://collector:4318/v1/traces` and metrics to
+`http://collector:4318/v1/metrics`.
 
 #### Example 2
 
 Traces and metrics are sent to different collectors and paths:
 
 ```bash
-export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://collector:4317
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://collector:4318
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics
 ```
 
-This will send traces directly to the root path `http://collector:4317/`
+This will send traces directly to the root path `http://collector:4318/`
 (`/v1/traces` is only automatically added when using the non-signal-specific
 environment variable) and metrics
 to `https://collector.example.com/v1/metrics`.
@@ -78,14 +78,14 @@ to `https://collector.example.com/v1/metrics`.
 The following configuration sends all signals except for metrics to the same collector:
 
 ```bash
-export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317/mycollector/
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318/mycollector/
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics/
 ```
 
-Traces are sent to `http://collector:4317/mycollector/v1/traces`
+Traces are sent to `http://collector:4318/mycollector/v1/traces`
 and metrics to `https://collector.example.com/v1/metrics/`
 (other signals, would they be defined, would be sent to their specific paths
-relative to `http://collector:4317/mycollector/`).
+relative to `http://collector:4318/mycollector/`).
 
 ### Specify Protocol
 
