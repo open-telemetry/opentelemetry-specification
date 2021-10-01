@@ -21,8 +21,8 @@ The following configuration options MUST be available to configure the OTLP expo
 Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
 
 - If the value is missing, then `gzip` compression is enabled by default.
-- If the value is `null`, compression will be disabled.
-- `gzip` and `null` are the only specified compression methods for now. Other options MAY be supported by language SDKs and should be documented for each particular language.
+- If the value is `none`, compression will be disabled.
+- `gzip` and `none` are the only specified compression methods for now. Other options MAY be supported by language SDKs and should be documented for each particular language.
 
 Example 1
 
