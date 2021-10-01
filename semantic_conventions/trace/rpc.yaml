@@ -2,7 +2,7 @@ groups:
   - id: rpc
     prefix: rpc
     brief: 'This document defines semantic conventions for remote procedure calls.'
-    events: [rpc.grpc.message]
+    events: [rpc.message]
     attributes:
       - id: system
         type: string
@@ -142,10 +142,10 @@ groups:
         note: >
           This is always required for jsonrpc. See the note in the general
           RPC conventions for more information.
-  - id: rpc.grpc.message
-    prefix: "message"  # TODO: Change the prefix to rpc.grpc.message?
+  - id: rpc.message
+    prefix: "message"  # TODO: Change the prefix to rpc.message?
     type: event
-    brief: "gRPC received/sent message."
+    brief: "RPC received/sent message."
     attributes:
       - id: type
         type:
