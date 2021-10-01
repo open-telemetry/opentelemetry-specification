@@ -406,7 +406,7 @@ count of a population of measurements.
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
 | Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
-| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
+| Temporality | Delta, Cumulative | Delta | See [Temporality](./datamodel.md#temporality). |
 
 This Aggregation informs the SDK to collect:
 
