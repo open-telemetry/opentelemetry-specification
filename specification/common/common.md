@@ -78,8 +78,9 @@ in the list below.
 An SDK MAY implement model-specific limits, for example
 `SpanAttributeCountLimit`. If both a general and a model-specific limit are
 implemented, then the SDK MUST first attempt to use the model-specific limit, if
-it isn't set and doesn't have a default, then the SDK MUST attempt to use the
-general limit.
+it isn't set, then the SDK MUST attempt to use the general limit. If neither are
+defined, then the SDK MUST try to use the model-specific limit default value,
+followed by the global limit default value.
 
 <a name="attribute-limits-configuration"></a>
 **Configurable parameters:**
@@ -88,6 +89,14 @@ general limit.
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
 
 #### Exempt Entities
+
+Resource attributes SHOULD be exempt from the limits described above as resources
+are not susceptible to the scenarios (auto-instrumentation) that result in
+excessive attributes count or size. Resources are also sent only once per batch
+instead of per span so it is relatively cheaper to have more/larger attributes
+on them. Resources are also immutable by design and they are generally passed
+down to TracerProvider along with limits. This makes it awkward to implement
+attribute limits for Resources.
 
 Attributes, which belong to Metrics, are exempt from the limits described above
 at this time, as discussed in

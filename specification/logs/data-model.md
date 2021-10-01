@@ -27,6 +27,7 @@
     - [Field: `Body`](#field-body)
     - [Field: `Resource`](#field-resource)
     - [Field: `Attributes`](#field-attributes)
+      - [Errors and Exceptions](#errors-and-exceptions)
   - [Example Log Records](#example-log-records)
   - [Appendix A. Example Mappings](#appendix-a-example-mappings)
     - [RFC5424 Syslog](#rfc5424-syslog)
@@ -427,6 +428,14 @@ OpenTelemetry
 [semantic conventions for Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
 
+#### Errors and Exceptions
+
+Additional information about errors and/or exceptions that are associated with
+a log record MAY be included in the structured data in the `Attributes` section
+of the record.
+If included, they MUST follow the OpenTelemetry
+[semantic conventions for exception-related attributes](../trace/semantic_conventions/exceptions.md#attributes).
+
 ## Example Log Records
 
 Below are examples that show one possible representation of log records in JSON.
@@ -687,7 +696,7 @@ We apply this mapping from HEC to the unified model:
     <td>host</td>
     <td>string</td>
     <td>The host value to assign to the event data. This is typically the host name of the client that you are sending data from.</td>
-    <td>Resource["host.hostname"]</td>
+    <td>Resource["host.name"]</td>
   </tr>
   <tr>
     <td>source</td>
@@ -748,6 +757,24 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>Short event identifier that does not contain varying parts.</td>
     <td>fields['otel.log.name']</td>
   </tr>
+  <tr>
+    <td>TraceId</td>
+    <td>string</td>
+    <td>Request trace id.</td>
+    <td>fields['trace_id']</td>
+  </tr>
+  <tr>
+    <td>SpanId</td>
+    <td>string</td>
+    <td>Request span id.</td>
+    <td>fields['span_id']</td>
+  </tr>
+  <tr>
+    <td>TraceFlags</td>
+    <td>string</td>
+    <td>W3C trace flags.</td>
+    <td>fields['trace_flags']</td>
+  </tr>  
 </table>
 
 ### Log4j

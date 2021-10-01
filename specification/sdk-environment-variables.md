@@ -178,6 +178,20 @@ Known values for OTEL_METRICS_EXPORTER are:
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 - `"none"`: No automatically configured exporter for metrics.
 
+## Metrics SDK Configuration
+
+**Status**: [Experimental](document-status.md)
+
+| Name            | Description | Default | Notes |
+|-----------------|---------|-------------|---------|
+| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"with_sampled_trace"` | |
+
+Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
+
+- `"none"`: No measurements are eligble for exemplar sampling.
+- `"all"`: All measurements are eligible for exemplar sampling.
+- `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
+
 ## Language Specific Environment Variables
 
 To ensure consistent naming across projects, this specification recommends that language specific environment variables are formed using the following convention:

@@ -11,9 +11,6 @@ release.
 
 ### Traces
 
-- Add InstrumentationLibrary to Sampler.ShouldSample.
-  ([#1850](https://github.com/open-telemetry/opentelemetry-specification/pull/1850))
-
 ### Metrics
 
 ### Logs
@@ -22,17 +19,82 @@ release.
 
 ### Semantic Conventions
 
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+## v1.7.0 (2021-09-30)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Prefer global user defined limits over model-sepcific default values.
+  ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
+- Generalize the "message" event to apply to all RPC systems not just gRPC
+  ([#1914](https://github.com/open-telemetry/opentelemetry-specification/pull/1914))
+
+### Metrics
+
+- Added Experimental Metrics SDK specification.
+  ([#1673](https://github.com/open-telemetry/opentelemetry-specification/pull/1673),
+  [#1730](https://github.com/open-telemetry/opentelemetry-specification/pull/1730),
+  [#1840](https://github.com/open-telemetry/opentelemetry-specification/pull/1840),
+  [#1842](https://github.com/open-telemetry/opentelemetry-specification/pull/1842),
+  [#1864](https://github.com/open-telemetry/opentelemetry-specification/pull/1864),
+  [#1828](https://github.com/open-telemetry/opentelemetry-specification/pull/1828),
+  [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
+  [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
+  [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913),
+  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938),
+  [#1958](https://github.com/open-telemetry/opentelemetry-specification/pull/1958))
+- Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))
+- Update env variable values to match other env variables
+  ([#1965](https://github.com/open-telemetry/opentelemetry-specification/pull/1965))
+
+### Logs
+
+- No changes.
+
+### Resource
+
+- Exempt Resource from attribute limits.
+  ([#1892](https://github.com/open-telemetry/opentelemetry-specification/pull/1892))
+
+### Semantic Conventions
+
 - BREAKING: Change enum member IDs to lowercase without spaces, not starting with numbers.
   Change values of `net.host.connection.subtype` to match.
   ([#1863](https://github.com/open-telemetry/opentelemetry-specification/pull/1863))
 - Lambda instrumentations should check if X-Ray parent context is valid
   ([#1867](https://github.com/open-telemetry/opentelemetry-specification/pull/1867))
+- Update YAML definitions for events
+  ([#1843](https://github.com/open-telemetry/opentelemetry-specification/pull/1843)):
+  - Mark exception as semconv type "event".
+  - Add YAML definitions for grpc events.
 - Add `messaging.consumer_id` to differentiate between message consumers.
   ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
+- Clarifications for `http.client_ip` and `http.host`.
+  ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
+- Add HTTP request and response headers semantic conventions.
+  ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
+- Allow implementations to use their own default for OTLP compression, with `none` denotating no compression
+  ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
+- Clarify OTLP server components MUST support none/gzip compression
+  ([#1955](https://github.com/open-telemetry/opentelemetry-specification/pull/1955))
+- Change OTLP/HTTP port from 4317 to 4318 ([#1970](https://github.com/open-telemetry/opentelemetry-specification/pull/1970))
 
 ### SDK Configuration
 
@@ -108,7 +170,6 @@ release.
 
 - Clarify the limit on the instrument unit.
   ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
-- Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))  
 
 ### Logs
 
