@@ -32,13 +32,13 @@ Choosing the correct instrument is important, because:
   happened.
 * It makes the consumption easier for the user of the library. For example, if
   we want to report HTTP server request latency, we want to consider
-  [Histogram](./api.md#histogram), so most of the users can get a reasonable
+  a [Histogram](./api.md#histogram), so most of the users can get a reasonable
   experience (e.g. default buckets, min/max) by simply enabling the metrics
   stream, rather than doing extra configurations.
 * It generates clarity to the semantic of the metrics stream, so the consumers
   have better understanding of the results. For example, if we want to report
-  the process heap size, by using [Asynchronous
-  UpDownCounter](./api.md#asynchronous-updowncounter) rather than [Asynchronous
+  the process heap size, by using an [Asynchronous
+  UpDownCounter](./api.md#asynchronous-updowncounter) rather than an [Asynchronous
   Gauge](./api.md#asynchronous-gauge), we've made it explicit that the consumer
   can add up the numbers across all processes to get the "total heap size".
 
@@ -46,18 +46,18 @@ Here is one way of choosing the correct instrument:
 
 * I want to **count** something (by recording a delta value):
   * If the value is monotonically increasing (the delta value is always
-    non-negative) - use [Counter](./api.md#counter).
+    non-negative) - use a [Counter](./api.md#counter).
   * If the value is NOT monotonically increasing (the delta value can be
-    positive, negative or zero) - use [UpDownCounter](./api.md#updowncounter).
+    positive, negative or zero) - use an [UpDownCounter](./api.md#updowncounter).
 * I want to **record** or **time** something, and the **statistics** about this
-  thing are likely to be meaningful - use [Histogram](./api.md#histogram).
+  thing are likely to be meaningful - use a [Histogram](./api.md#histogram).
 * I want to **measure** something (by reporting an absolute value):
   * If it makes NO sense to add up the values across different dimensions, use
-    [Asynchronous Gauge](./api.md#asynchronous-gauge).
+    an [Asynchronous Gauge](./api.md#asynchronous-gauge).
   * If it makes sense to add up the values across different dimensions:
-    * If the value is monotonically increasing - use [Asynchronous
+    * If the value is monotonically increasing - use an [Asynchronous
       Counter](./api.md#asynchronous-counter).
-    * If the value is NOT monotonically increasing - use [Asynchronous
+    * If the value is NOT monotonically increasing - use an [Asynchronous
       UpDownCounter](./api.md#asynchronous-updowncounter).
 
 ### Semantic convention
