@@ -27,7 +27,7 @@ Choosing the correct instrument is important, because:
 
 * It helps the library to achieve better efficiency. For example, if we want to
   report room temperature to [Prometheus](https://prometheus.io), we want to
-  consider [Asynchronous Gauge](./api.md#asynchronous-gauge) rather than
+  consider using an [Asynchronous Gauge](./api.md#asynchronous-gauge) rather than
   periodically poll the sensor, so that we only access the sensor when scraping
   happened.
 * It makes the consumption easier for the user of the library. For example, if
