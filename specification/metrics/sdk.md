@@ -8,17 +8,19 @@ Table of Contents
 </summary>
 
 * [MeterProvider](#meterprovider)
-* [Attribute Limits](#attribute-limits)
+* [Attribute limits](#attribute-limits)
 * [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
   * [ExemplarReservoir](#exemplarreservoir)
-  * [Exemplar Defaults](#exemplar-defaults)
+  * [Exemplar defaults](#exemplar-defaults)
 * [MetricReader](#metricreader)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
-* [Defaults and Configuration](#defaults-and-configuration)
+* [Defaults and configuration](#defaults-and-configuration)
+* [Compatibility requirements](#compatibility-requirements)
+* [Concurrency requirements](#concurrency-requirements)
 
 </details>
 
@@ -393,7 +395,7 @@ This Aggregation informs the SDK to collect:
 - Count of `Measurement` values falling within explicit bucket boundaries.
 - Arithmetic sum of `Measurement` values in population.
 
-## Attribute Limits
+## Attribute limits
 
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
@@ -477,7 +479,7 @@ from the original sample measurement.
 
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
-### Exemplar Defaults
+### Exemplar defaults
 
 The SDK will come with two types of built-in exemplar reservoirs:
 
@@ -573,6 +575,22 @@ failed or timed out.
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
 filter, timeout). [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose the
 return value type, or do not return anything.
+
+### Shutdown
+
+This method provides a way for the `MetricReader` to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `MetricReader` instance. After the
+call to `Shutdown`, subsequent invocations to `Collect` are not allowed. SDKs
+SHOULD return some failure for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` CAN be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors CAN
+decide if they want to make the shutdown timeout configurable.
 
 ### Periodic exporting MetricReader
 
@@ -752,6 +770,32 @@ modeled to interact with other components in the SDK:
                                  +-----------------------------+
   ```
 
-## Defaults and Configuration
+## Defaults and configuration
 
-The SDK MUST provide configuration according to the [SDK environment variables](../sdk-environment-variables.md) specification.
+The SDK MUST provide configuration according to the [SDK environment
+variables](../sdk-environment-variables.md) specification.
+
+## Compatibility requirements
+
+All the metrics components SHOULD allow new methods to be added to existing
+components without introducing breaking changes.
+
+All the metrics SDK methods SHOULD allow optional parameter(s) to be added to
+existing methods without introducing breaking changes, if possible.
+
+## Concurrency requirements
+
+For languages which support concurrent execution the Metrics SDKs provide
+specific guarantees and safeties.
+
+**MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` are safe to be
+called concurrently.
+
+**ExemplarFilter** - all methods are safe to be called concurrently.
+
+**ExemplarReservoir** - all methods are safe to be called concurrently.
+
+**MetricReader** - `Collect` and `Shutdown` are safe to be called concurrently.
+
+**MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
+concurrently.
