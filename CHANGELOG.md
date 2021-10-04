@@ -26,6 +26,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+* Clarify default port for OTLP/HTTP if an URL without port is configured.
+  ([#1985](https://github.com/open-telemetry/opentelemetry-specification/pull/1985))
+
 ### SDK Configuration
 
 ## v1.7.0 (2021-09-30)
