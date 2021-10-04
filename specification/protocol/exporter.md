@@ -10,7 +10,7 @@ The following configuration options MUST be available to configure the OTLP expo
 
 | Configuration Option | Description                                                  | Default           | Env variable                                                 |
 | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
-| Endpoint (OTLP/HTTP) | Target to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, and MAY contain a port and path. A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters SHOULD follow the collector convention of appending the version and signal to the path (e.g. `v1/traces` or `v1/metrics`), if not present already. The per-signal endpoint configuration options take precedence and can be used to override this behavior. See the [OTLP Specification][otlphttp-req] for more details. | `https://localhost:4318` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
+| Endpoint (OTLP/HTTP) | Target URL to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, MAY contain a port, SHOULD contain a path and MUST NOT contain other parts (such as query string or fragment). A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters MUST construct per-signal URLs as  [described below](#per-signal-urls). The per-signal endpoint configuration options take precedence and can be used to override this behavior (the URL is used as-is for them, without any modifications). See the [OTLP Specification][otlphttp-req] for more details. | `https://localhost:4318` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
 | Endpoint (OTLP/gRPC) | Target to which the exporter is going to send spans or metrics. The endpoint SHOULD accept any form allowed by the underlying gRPC client implementation. Additionally, the endpoint MUST accept a URL with a scheme of either `http` or `https`. A scheme of `https` indicates a secure connection and takes precedence over the `insecure` configuration setting. If the gRPC client implementation does not support an endpoint with a scheme of `http` or `https` then the endpoint SHOULD be transformed to the most sensible format for that implementation. | `https://localhost:4317` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
 | Insecure             | Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation. | `false` | `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_SPAN_INSECURE` `OTEL_EXPORTER_OTLP_METRIC_INSECURE` |
 | Certificate File     | The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection. | n/a               | `OTEL_EXPORTER_OTLP_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE` |
@@ -28,23 +28,64 @@ Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
 - `none` if compression is disabled.
 - `gzip` is the only specified compression method for now.
 
-Example 1
+<a name="per-signal-urls"></a>
+
+### Endpoint URLs for OTLP/HTTP
+
+Based on the environment variables above, the OTLP/HTTP exporter MUST construct URLs
+for each signal as follow:
+
+1. For the per-signal variables (`OTEL_EXPORTER_OTLP_<signal>_ENDPOINT`), the URL
+   MUST be used as-is without any modification. The only exception is that if an
+   URL contains no path part, the root path `/` MUST be used (see [Example 2](#example-2)).
+2. If signals are sent that have no per-signal configuration from the previous point,
+   `OTEL_EXPORTER_OTLP_ENDPOINT` is used as a base URL and the signals are sent
+   to these paths relative to that:
+
+   * Traces: `v1/traces`
+   * Metrics: `v1/metrics`.
+
+   Non-normatively, this could be implemented by ensuring that the base URL ends with
+   a slash and then appending the relative URLs as strings.
+
+#### Example 1
 
 The following configuration sends all signals to the same collector:
 
 ```bash
-export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
 ```
 
-Example 2
+Traces are sent to `http://collector:4318/v1/traces` and metrics to
+`http://collector:4318/v1/metrics`.
 
-Traces and metrics are sent to different collectors:
+#### Example 2
+
+Traces and metrics are sent to different collectors and paths:
 
 ```bash
-export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://collector:4317
-
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://collector:4318
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics
 ```
+
+This will send traces directly to the root path `http://collector:4318/`
+(`/v1/traces` is only automatically added when using the non-signal-specific
+environment variable) and metrics
+to `https://collector.example.com/v1/metrics`.
+
+#### Example 3
+
+The following configuration sends all signals except for metrics to the same collector:
+
+```bash
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318/mycollector/
+export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics/
+```
+
+Traces are sent to `http://collector:4318/mycollector/v1/traces`
+and metrics to `https://collector.example.com/v1/metrics/`
+(other signals, would they be defined, would be sent to their specific paths
+relative to `http://collector:4318/mycollector/`).
 
 ### Specify Protocol
 
