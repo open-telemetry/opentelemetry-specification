@@ -301,7 +301,7 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
-- [Zero Bucket Histogram](./sdk.md#zero-bucket-histogram-aggregation)
+- [Degenerate Histogram](./sdk.md#degenerate-histogram-aggregation)
 
 #### None Aggregation
 
@@ -396,9 +396,9 @@ This Aggregation informs the SDK to collect:
 - Min `Measurement` value in population.
 - Max `Measurement` value in population.
 
-#### Zero Bucket Histogram Aggregation
+#### Degenerate Histogram Aggregation
 
-The Zero Bucket Aggregation informs the SDK to collect data for
+The Degenerate Histogram Aggregation informs the SDK to collect data for
 the [Histogram Metric Point](./datamodel.md#histogram) using zero buckets. This
 produces lightweight histogram data points which capture the min, max, sum, and
 count of a population of measurements.
