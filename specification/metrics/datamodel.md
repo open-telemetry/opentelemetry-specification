@@ -545,19 +545,100 @@ limit the width of integers used in standard processing pipelines such
 as the OpenTelemetry collector.  The wire-level protocol could be
 extended for 64-bit bucket indices in a future release.
 
-Producers MAY use a built-in logarithm function to calculate the
-bucket index of a value.  The use of a built-in logarithm function
-could lead to results that differ from the bucket index that would be
-computed using arbitrary precision or a lookup table, however
-producers are not required to perform an exact computation.  As a
-result, ExponentialHistogram exemplars could map into buckets with
-zero count.  We expect to find such values counted in the adjacent
-bucket.
+Producers use a mapping function to compute bucket indices.  Producers
+are presumed to support IEEE double-width floating-point numbers with
+11-bit exponent and 52-bit significand.  The pseudo-code below for
+mapping values to exponents refers to the following constants:
+
+```golang
+const (
+	// SignificandWidth is the size of an IEEE 754 double-precision
+	// floating-point significand.
+	SignificandWidth = 52
+	// ExponentWidth is the size of an IEEE 754 double-precision
+	// floating-point exponent.
+	ExponentWidth = 11
+
+	// SignificandMask is the mask for the significand of an IEEE 754
+	// double-precision floating-point value: 0xFFFFFFFFFFFFF.
+	SignificandMask = 1<<SignificandWidth - 1
+
+	// ExponentBias is the exponent bias specified for encoding
+	// the IEEE 754 double-precision floating point exponent: 1023.
+	ExponentBias = 1<<(ExponentWidth-1) - 1
+
+	// ExponentMask are set to 1 for the bits of an IEEE 754
+	// floating point exponent: 0x7FF0000000000000.
+	ExponentMask = ((1 << ExponentWidth) - 1) << SignificandWidth
+)
+```
+
+The following choices of mapping function have been validated through
+reference implementations:
+
+1. For scale zero, the index of a value equals its normalized base-2
+   exponent, meaning the value of _exponent_ in the base-2 fractional
+   representation `1._significand_ * 2**_exponent_`.  Normal IEEE 754
+   double-width floating point values have indices in the range
+   [-1022,+1023] and subnormal values have indices in the range
+   [-1074,-1023].  This may be written as:
+
+```golang
+// GetExponent extracts the normalized base-2 fractional exponent.
+// Let the value be represented as `1.significand x 2**exponent`,
+// this returns `exponent`.  Not defined for 0, Inf, or NaN values.
+func GetExponent(value float64) int32 {
+	rawBits := math.Float64bits(value)
+	rawExponent := (int64(rawBits) & ExponentMask) >> SignificandWidth
+	rawSignificand := rawBits & SignificandMask
+	if rawExponent == 0 {
+		// Handle subnormal values: rawSignificand cannot be zero
+		// unless value is zero.
+		rawExponent -= int64(bits.LeadingZeros64(rawSignificand) - 12)
+	}
+	return int32(rawExponent - ExponentBias)
+}
+```
+
+2. For negative scales, the index of a value equals the normalized
+   base-2 exponent (as by `GetExponent()` above) shifted to the right
+   by `-scale`.  Note that because of sign extension, this shift performs
+   correct rounding for the negative indices.  This may be written as:
+   
+```golang
+  return GetExponent(value) << -scale
+```
+   
+3. For positive scales, use of the built-in natural logarithm
+   function.  A multiplicative factor equal to `2**scale / ln(2)`
+   proves useful (where `ln()` is the natural logarithm), for example:
+   
+```golang
+    scaleFactor := math.Log2E * math.Exp2(1<<scale)
+	return int64(math.Floor(math.Log(value) * scaleFactor))
+```
+
+4. For positive scales, lookup table methods have been demonstrated
+   that are able to exactly compute the index in constant time from a
+   lookup table with `O(2**scale)` entries.
+   
+For positive scales, the logarithm method is preferred because it
+requires very little code to validate and is nearly as fast and
+accurate as the lookup table approach.
+
+The use of a built-in logarithm function could lead to results that
+differ from the bucket index that would be computed using arbitrary
+precision or a lookup table, however producers are not required to
+perform an exact computation.  As a result, ExponentialHistogram
+exemplars could map into buckets with zero count.  We expect to find
+such values counted in the adjacent buckets.
 
 #### Consumer expectations
 
-ExponentialHistogram buckets are expected to map into numbers that can
-be represented using IEEE 754 double-width floating point values.
+ExponentialHistogram bucket indices are expected to map into buckets
+where both the uppwer and lower boundaries that can be represented
+using IEEE 754 double-width floating point values.
+
 Consumers SHOULD reject ExponentialHistogram data with `scale` and
 bucket indices that overflow or underflow this representation.
 Consumers that reject such data SHOULD warn the user through error
