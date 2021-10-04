@@ -1,38 +1,26 @@
 # CloudEvents
 
-This document defines how to describe sending and receiving [CloudEvents](https://cloudevents.io/) with spans.
-
-The transport involved in sending/receiving CloudEvents is represented by a separate span, depending on the underlying protocol used.
-
 **Status**: [Experimental](../../document-status.md)
+
+This specification defines attributes for [CloudEvents](https://cloudevents.io/).
+The attributes described in this document are not specific to a particular operation but rather generic. They may be used in any Span they apply to.
+
+At this time, this specification does not cover:
+
+- How and when Spans are created for CloudEvents
+
+- Transport aspects of sending and receiving CloudEvents
+
+The above points are being worked on in the messaging semantic conventions.
+This document will be updated with further guidance once the messaging semantic conventions reaches a stable state.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
 
-- [Span name](#span-name)
-- [Span kind](#span-kind)
 - [Attributes](#attributes)
 
 <!-- tocstop -->
-
-## Span name
-
-The span name should be a combination of the `CloudEvents` prefix, followed by the event type as in the following format:
-
-```
-CloudEvents <event_type>
-```
-
-The event type SHOULD only be used as part of the span name if it is known to be of low cardinality (cf. [general span name guidelines](../api.md#span)).
-
-Examples:
-
-* `CloudEvents com.github.pull_request.opened`
-
-## Span kind
-
-When an entity is acting as a sender of CloudEvents, it should set the span kind to `PRODUCER`. When acting as a receiver, it should set the span kind to `CONSUMER`.
 
 ## Attributes
 
