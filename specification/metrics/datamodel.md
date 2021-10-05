@@ -606,17 +606,20 @@ func GetExponent(value float64) int32 {
    correct rounding for the negative indices.  This may be written as:
    
 ```golang
-  return GetExponent(value) << -scale
+  return GetExponent(value) >> -scale
 ```
    
-3. For positive scales, use of the built-in natural logarithm
+3. For any scale, use of the built-in natural logarithm
    function.  A multiplicative factor equal to `2**scale / ln(2)`
    proves useful (where `ln()` is the natural logarithm), for example:
    
 ```golang
-    scaleFactor := math.Log2E * math.Exp2(1<<scale)
+    scaleFactor := math.Log2E * math.Exp2(scale)
 	return int64(math.Floor(math.Log(value) * scaleFactor))
 ```
+
+   Note that in the example Golang code above, the built-in `math.Log2E` 
+   is defined as `1/ln(2)`.
 
 4. For positive scales, lookup table methods have been demonstrated
    that are able to exactly compute the index in constant time from a
@@ -624,7 +627,9 @@ func GetExponent(value float64) int32 {
    
 For positive scales, the logarithm method is preferred because it
 requires very little code to validate and is nearly as fast and
-accurate as the lookup table approach.
+accurate as the lookup table approach.  For zero scale and negative
+scales, directly calculating the index from the floating-point
+representation is more efficient.
 
 The use of a built-in logarithm function could lead to results that
 differ from the bucket index that would be computed using arbitrary
