@@ -655,7 +655,7 @@ At the lowest or highest end of the 64 bit IEEE floating point, a
 bucket's range may only be partially representable by the floating
 point number format.  When mapping a number in these buckets, a
 producer may correctly return the index of such a partially
-representable bucket.  This is considered a normal condition.  
+representable bucket.  This is considered a normal condition.
 
 For positive scales, the logarithm method is preferred because it
 requires very little code, is easy to validate and is nearly as fast
