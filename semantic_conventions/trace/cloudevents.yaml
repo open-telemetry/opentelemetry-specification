@@ -11,8 +11,8 @@ groups:
         brief: >
           The [event_id](https://github.com/cloudevents/spec/blob/master/spec.md#id) uniquely identifies the event.
         note: >
-          Producers MUST ensure that event_source + event_id is unique for each distinct event. 
-          If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id. 
+          Producers MUST ensure that event_source + event_id is unique for each distinct event.
+          If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id.
           Consumers MAY assume that Events with identical event_source and event_id are duplicates.
         examples: ['123e4567-e89b-12d3-a456-426614174000', '0001']
       - id: event_source

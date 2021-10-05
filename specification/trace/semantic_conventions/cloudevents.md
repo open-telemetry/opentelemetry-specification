@@ -24,5 +24,5 @@ The attributes described in this document are not specific to a particular opera
 | `cloudevents.event_type` | string | The [event_type](https://github.com/cloudevents/spec/blob/master/spec.md#type) contains a value describing the type of event related to the originating occurrence. | `com.github.pull_request.opened`; `com.example.object.deleted.v2` | No |
 | `cloudevents.event_subject` | string | The [subject](https://github.com/cloudevents/spec/blob/master/spec.md#subject) of the event in the context of the event producer (identified by source). | `mynewfile.jpg` | No |
 
-**[1]:** Producers MUST ensure that event_source + event_id is unique for each distinct event.  If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id.  Consumers MAY assume that Events with identical event_source and event_id are duplicates.
+**[1]:** Producers MUST ensure that event_source + event_id is unique for each distinct event. If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id. Consumers MAY assume that Events with identical event_source and event_id are duplicates.
 <!-- endsemconv -->
