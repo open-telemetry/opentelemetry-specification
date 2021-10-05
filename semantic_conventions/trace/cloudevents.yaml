@@ -9,14 +9,18 @@ groups:
       - id: event_id
         type: string
         brief: >
-          The [event_id](https://github.com/cloudevents/spec/blob/master/spec.md#id) identifies the event within the scope of a producer.
-        examples: ['123e4567-e89b-12d3-a456-426614174000', 'producer-1']
-      - id: source
+          The [event_id](https://github.com/cloudevents/spec/blob/master/spec.md#id) uniquely identifies the event.
+        note: >
+          Producers MUST ensure that event_source + event_id is unique for each distinct event. 
+          If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id. 
+          Consumers MAY assume that Events with identical event_source and event_id are duplicates.
+        examples: ['123e4567-e89b-12d3-a456-426614174000', '0001']
+      - id: event_source
         type: string
         brief: >
           The [source](https://github.com/cloudevents/spec/blob/master/spec.md#source-1) identifies the context in which an event happened.
         examples: ['https://github.com/cloudevents', '/cloudevents/spec/pull/123', 'my-service' ]
-      - id: spec_version
+      - id: event_spec_version
         type: string
         brief: >
           The [version of the CloudEvents specification](https://github.com/cloudevents/spec/blob/master/spec.md#specversion) which the event uses.
@@ -26,7 +30,7 @@ groups:
         brief: >
           The [event_type](https://github.com/cloudevents/spec/blob/master/spec.md#type) contains a value describing the type of event related to the originating occurrence.
         examples: ['com.github.pull_request.opened', 'com.example.object.deleted.v2']
-      - id: subject
+      - id: event_subject
         type: string
         brief: >
           The [subject](https://github.com/cloudevents/spec/blob/master/spec.md#subject) of the event in the context of the event producer (identified by source).
