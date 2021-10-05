@@ -48,11 +48,10 @@ for each signal as follow:
    Non-normatively, this could be implemented by ensuring that the base URL ends with
    a slash and then appending the relative URLs as strings.
 
-The URL MUST be used without any extra port modification,
-following the usual rules for the URL's scheme
-(see [RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-2.7.1);
-i.e. the default port for OTLP/HTTP does *not* play a role in selecting the port
-if a URL was configured).
+An SDK MUST NOT modify the URL in ways other than specified above. That also means,
+if the port is empty or not given, TCP port 80 is the default for the `http` scheme
+and TCP port 443 is the default for the `https` scheme, as per the usual rules
+for these schemes ([RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-2.7.1)).
 
 #### Example 1
 
