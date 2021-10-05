@@ -8,7 +8,7 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [Events → Data Stream → Timeseries](#events--data-stream--timeseries)
+- [Events → Data Stream → Timeseries](#events-%E2%86%92-data-stream-%E2%86%92-timeseries)
   * [Example Use-cases](#example-use-cases)
   * [Out of Scope Use-cases](#out-of-scope-use-cases)
 - [Model Details](#model-details)
@@ -24,6 +24,11 @@
     + [Exponential buckets](#exponential-buckets)
     + [Zero count](#zero-count)
     + [Producer expectations](#producer-expectations)
+      - [Scale zero: extract the exponent](#scale-zero-extract-the-exponent)
+      - [Negative scale: extract and shift the exponent](#negative-scale-extract-and-shift-the-exponent)
+      - [All scales: use the logarithm function](#all-scales-use-the-logarithm-function)
+      - [Positive scale: use a lookup table](#positive-scale-use-a-lookup-table)
+      - [Producer recommendations](#producer-recommendations)
     + [Consumer expectations](#consumer-expectations)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
@@ -552,84 +557,94 @@ mapping values to exponents refers to the following constants:
 
 ```golang
 const (
-	// SignificandWidth is the size of an IEEE 754 double-precision
-	// floating-point significand.
-	SignificandWidth = 52
-	// ExponentWidth is the size of an IEEE 754 double-precision
-	// floating-point exponent.
-	ExponentWidth = 11
+    // SignificandWidth is the size of an IEEE 754 double-precision
+    // floating-point significand.
+    SignificandWidth = 52
+    // ExponentWidth is the size of an IEEE 754 double-precision
+    // floating-point exponent.
+    ExponentWidth = 11
 
-	// SignificandMask is the mask for the significand of an IEEE 754
-	// double-precision floating-point value: 0xFFFFFFFFFFFFF.
-	SignificandMask = 1<<SignificandWidth - 1
+    // SignificandMask is the mask for the significand of an IEEE 754
+    // double-precision floating-point value: 0xFFFFFFFFFFFFF.
+    SignificandMask = 1<<SignificandWidth - 1
 
-	// ExponentBias is the exponent bias specified for encoding
-	// the IEEE 754 double-precision floating point exponent: 1023.
-	ExponentBias = 1<<(ExponentWidth-1) - 1
+    // ExponentBias is the exponent bias specified for encoding
+    // the IEEE 754 double-precision floating point exponent: 1023.
+    ExponentBias = 1<<(ExponentWidth-1) - 1
 
-	// ExponentMask are set to 1 for the bits of an IEEE 754
-	// floating point exponent: 0x7FF0000000000000.
-	ExponentMask = ((1 << ExponentWidth) - 1) << SignificandWidth
+    // ExponentMask are set to 1 for the bits of an IEEE 754
+    // floating point exponent: 0x7FF0000000000000.
+    ExponentMask = ((1 << ExponentWidth) - 1) << SignificandWidth
 )
 ```
 
 The following choices of mapping function have been validated through
-reference implementations:
+reference implementations.
 
-1. For scale zero, the index of a value equals its normalized base-2
-   exponent, meaning the value of _exponent_ in the base-2 fractional
-   representation `1._significand_ * 2**_exponent_`.  Normal IEEE 754
-   double-width floating point values have indices in the range
-   [-1022,+1023] and subnormal values have indices in the range
-   [-1074,-1023].  This may be written as:
+##### Scale zero: extract the exponent
+
+For scale zero, the index of a value equals its normalized base-2
+exponent, meaning the value of _exponent_ in the base-2 fractional
+representation `1._significand_ * 2**_exponent_`.  Normal IEEE 754
+double-width floating point values have indices in the range
+`[-1022,+1023]` and subnormal values have indices in the range
+`[-1074,-1023]`.  This may be written as:
 
 ```golang
 // GetExponent extracts the normalized base-2 fractional exponent.
 // Let the value be represented as `1.significand x 2**exponent`,
 // this returns `exponent`.  Not defined for 0, Inf, or NaN values.
 func GetExponent(value float64) int32 {
-	rawBits := math.Float64bits(value)
-	rawExponent := (int64(rawBits) & ExponentMask) >> SignificandWidth
-	rawSignificand := rawBits & SignificandMask
-	if rawExponent == 0 {
-		// Handle subnormal values: rawSignificand cannot be zero
-		// unless value is zero.
-		rawExponent -= int64(bits.LeadingZeros64(rawSignificand) - 12)
-	}
-	return int32(rawExponent - ExponentBias)
+    rawBits := math.Float64bits(value)
+    rawExponent := (int64(rawBits) & ExponentMask) >> SignificandWidth
+    rawSignificand := rawBits & SignificandMask
+    if rawExponent == 0 {
+        // Handle subnormal values: rawSignificand cannot be zero
+        // unless value is zero.
+        rawExponent -= int64(bits.LeadingZeros64(rawSignificand) - 12)
+    }
+    return int32(rawExponent - ExponentBias)
 }
 ```
 
-2. For negative scales, the index of a value equals the normalized
-   base-2 exponent (as by `GetExponent()` above) shifted to the right
-   by `-scale`.  Note that because of sign extension, this shift performs
-   correct rounding for the negative indices.  This may be written as:
-   
+##### Negative scale: extract and shift the exponent
+
+For negative scales, the index of a value equals the normalized
+base-2 exponent (as by `GetExponent()` above) shifted to the right
+by `-scale`.  Note that because of sign extension, this shift performs
+correct rounding for the negative indices.  This may be written as:
+
 ```golang
   return GetExponent(value) >> -scale
 ```
-   
-3. For any scale, use of the built-in natural logarithm
-   function.  A multiplicative factor equal to `2**scale / ln(2)`
-   proves useful (where `ln()` is the natural logarithm), for example:
-   
+
+##### All scales: use the logarithm function
+
+For any scale, use of the built-in natural logarithm
+function.  A multiplicative factor equal to `2**scale / ln(2)`
+proves useful (where `ln()` is the natural logarithm), for example:
+
 ```golang
     scaleFactor := math.Log2E * math.Exp2(scale)
-	return int64(math.Floor(math.Log(value) * scaleFactor))
+    return int64(math.Floor(math.Log(value) * scaleFactor))
 ```
 
-   Note that in the example Golang code above, the built-in `math.Log2E` 
-   is defined as `1/ln(2)`.
+Note that in the example Golang code above, the built-in `math.Log2E`
+is defined as `1 / ln(2)`.
 
-4. For positive scales, lookup table methods have been demonstrated
-   that are able to exactly compute the index in constant time from a
-   lookup table with `O(2**scale)` entries.
-   
+##### Positive scale: use a lookup table
+
+For positive scales, lookup table methods have been demonstrated
+that are able to exactly compute the index in constant time from a
+lookup table with `O(2**scale)` entries.
+
+##### Producer recommendations
+
 For positive scales, the logarithm method is preferred because it
-requires very little code to validate and is nearly as fast and
-accurate as the lookup table approach.  For zero scale and negative
-scales, directly calculating the index from the floating-point
-representation is more efficient.
+requires very little code, is easy to validate and is nearly as fast
+and accurate as the lookup table approach.  For zero scale and
+negative scales, directly calculating the index from the
+floating-point representation is more efficient.
 
 The use of a built-in logarithm function could lead to results that
 differ from the bucket index that would be computed using arbitrary
