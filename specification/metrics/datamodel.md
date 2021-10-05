@@ -448,7 +448,7 @@ suitable for conveying high dynamic range data with small relative
 error, compared with alternative representations of similar size.
 
 Statements about `Histogram` that refer to aggregation temporality,
-attributes, and timestamps, as well as the `sum`, `count`, and
+attributes, and timestamps, as well as the `sum`, `count`, `min`, `max` and
 `exemplars` fields, are the same for `ExponentialHistogram`.  These
 fields all share identical interpretation as for `Histogram`, only the
 bucket structure differs between these two types.
