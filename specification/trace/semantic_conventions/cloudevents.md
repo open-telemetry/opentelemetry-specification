@@ -5,12 +5,6 @@
 This specification defines attributes for [CloudEvents](https://cloudevents.io/).
 The attributes described in this document are not specific to a particular operation but rather generic. They may be used in any Span they apply to.
 
-At this time, this specification does not cover:
-
-- How and when Spans are created for CloudEvents
-
-- Transport aspects of sending and receiving CloudEvents
-
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
