@@ -32,6 +32,8 @@ Table of Contents
     * [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     * [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
 * [Measurement](#measurement)
+* [Compatibility requirements](#compatibility-requirements)
+* [Concurrency requirements](#concurrency-requirements)
 
 </details>
 
@@ -408,7 +410,8 @@ function(s) independently.
 approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observer argument to allow individual `Measurement`s to be reported.
+* Use an observer result argument to allow individual `Measurement`s to be
+  reported.
 
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, [OpenTelemetry
@@ -896,7 +899,8 @@ function(s) independently.
 approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observer argument to allow individual `Measurement`s to be reported.
+* Use an observer result argument to allow individual `Measurement`s to be
+  reported.
 
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, the
@@ -978,15 +982,15 @@ for the interaction between the API and SDK.
 * A value
 * [`Attributes`](../common/common.md#attributes)
 
-## Compatibility
+## Compatibility requirements
 
 All the metrics components SHOULD allow new APIs to be added to existing
 components without introducing breaking changes.
 
 All the metrics APIs SHOULD allow optional parameter(s) to be added to existing
-APIs without introducing breaking changes.
+APIs without introducing breaking changes, if possible.
 
-## Concurrency
+## Concurrency requirements
 
 For languages which support concurrent execution the Metrics APIs provide
 specific guarantees and safeties.
