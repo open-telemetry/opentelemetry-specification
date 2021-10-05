@@ -651,11 +651,11 @@ lookup table with `O(2**scale)` entries.
 
 ##### Producer recommendations
 
-Regardless of scale or mapping technique, it can be difficult to
-correctly map values to indices at the extremes of the floating-point
-range.  Some mapping functions may correctly compute an index whose
-upper- or lower-boundary cannot be represented.  This is considered a
-normal condition which consumers are expected to handle.
+At the lowest or highest end of the 64 bit IEEE floating point, a
+bucket's range may only be partially representable by the floating
+point number format.  When mapping a number in these buckets, a
+producer may correctly return the index of such a partially
+representable bucket.  This is considered a normal condition.  
 
 For positive scales, the logarithm method is preferred because it
 requires very little code, is easy to validate and is nearly as fast
@@ -674,7 +674,9 @@ such values counted in the adjacent buckets.
 
 ExponentialHistogram bucket indices are expected to map into buckets
 where both the uppwer and lower boundaries that can be represented
-using IEEE 754 double-width floating point values.
+using IEEE 754 double-width floating point values.  Consumers MAY
+round the unrepresentable boundary of a partially representable bucket
+index to the nearest representable value.
 
 Consumers SHOULD reject ExponentialHistogram data with `scale` and
 bucket indices that overflow or underflow this representation.
