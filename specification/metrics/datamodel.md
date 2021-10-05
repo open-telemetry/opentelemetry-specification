@@ -651,6 +651,12 @@ lookup table with `O(2**scale)` entries.
 
 ##### Producer recommendations
 
+Regardless of scale or mapping technique, it can be difficult to
+correctly map values to indices at the extremes of the floating-point
+range.  Some mapping functions may correctly compute an index whose
+upper- or lower-boundary cannot be represented.  This is considered a
+normal condition which consumers are expected to handle.
+
 For positive scales, the logarithm method is preferred because it
 requires very little code, is easy to validate and is nearly as fast
 and accurate as the lookup table approach.  For zero scale and
