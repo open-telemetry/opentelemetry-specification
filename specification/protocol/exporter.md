@@ -48,11 +48,11 @@ for each signal as follow:
    Non-normatively, this could be implemented by ensuring that the base URL ends with
    a slash and then appending the relative URLs as strings.
 
-If no port is given, the URL MUST be used without any extra port modification,
-letting the HTTP library use whatever default port it normally uses for the scheme
-(i.e., 443 for `https://` and 80 for `http://`, though some libraries/configurations
-might allow overriding that by some means like
-[`/etc/services`](https://man7.org/linux/man-pages/man5/services.5.html))
+The URL MUST be used without any extra port modification,
+following the usual rules for the URL's scheme
+(see [RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-2.7.1);
+i.e. the default port for OTLP/HTTP does *not* play a role in selecting the port
+if a URL was configured).
 
 #### Example 1
 
