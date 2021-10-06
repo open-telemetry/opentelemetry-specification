@@ -8,7 +8,7 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [Events → Data Stream → Timeseries](#events-%E2%86%92-data-stream-%E2%86%92-timeseries)
+- [Events → Data Stream → Timeseries](#events--data-stream--timeseries)
   * [Example Use-cases](#example-use-cases)
   * [Out of Scope Use-cases](#out-of-scope-use-cases)
 - [Model Details](#model-details)
@@ -234,8 +234,8 @@ consisting of several metadata properties:
 - Kind of point (integer, floating point, etc)
 - Unit of measurement
 
-The primary data of each timeseries are ordered (timestamp, value) points, for
-four value types:
+The primary data of each timeseries are ordered (timestamp, value) points, with
+one of the following value types:
 
 1. Counter (Monotonic, Cumulative)
 2. Gauge
