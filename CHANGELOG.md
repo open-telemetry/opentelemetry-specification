@@ -28,6 +28,8 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
+
 ### SDK Configuration
 
 ## v1.7.0 (2021-09-30)
@@ -87,6 +89,8 @@ release.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
+- Add `k8s.container.restart_count` Resource attribute.
+  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 
 ### Compatibility
 

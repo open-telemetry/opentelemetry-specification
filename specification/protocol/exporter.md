@@ -17,7 +17,7 @@ The following configuration options MUST be available to configure the OTLP expo
 | Headers              | Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.                   | n/a               | `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` |
 | Compression          | Compression key for supported compression types. Supported compression: `gzip`| No value [1]          | `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` |
 | Timeout              | Maximum time the OTLP exporter will wait for each batch export. | 10s               | `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` |
-| Protocol             | The transport protocol. Options MAY include `grpc`, `http/protobuf`, and `http/json`. See [Specify Protocol](./exporter.md#specify-protocol) for more details. | n/a               | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` |
+| Protocol             | The transport protocol. Options MAY include `grpc`, `http/protobuf`, and `http/json`. See [Specify Protocol](./exporter.md#specify-protocol) for more details. | `http/protobuf` [2]        | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` |
 
 **[1]**: If no compression value is explicitly specified, SIGs can default to the value they deem
 most useful among the supported options. This is especially important in the presence of technical constraints,
@@ -95,9 +95,14 @@ The `OTEL_EXPORTER_OTLP_PROTOCOL`, `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`, and `OT
 - `http/protobuf` for protobuf-encoded data over HTTP connection
 - `http/json` for JSON-encoded data over HTTP connection
 
-SDKs MUST support either `grpc` or `http/protobuf` and SHOULD support both. They also MAY support `http/json`.
+**[2]**: SDKs SHOULD support both `grpc` and `http/protobuf` transports and MUST
+support at least one of them. If they support only one, it SHOULD be
+`http/protobuf`. They also MAY support `http/json`.
 
-SDKs have an unspecified default, if no configuration is provided.
+If no configuration is provided the default transport SHOULD be `http/protobuf`
+unless SDKs have good reasons to choose `grpc` as the default (e.g. for backward
+compatibility reasons when `grpc` was already the default in a stable SDK
+release).
 
 ### Specifying headers via environment variables
 
