@@ -577,11 +577,11 @@ const (
 
     // SignificandMask is the mask for the significand of an IEEE 754
     // double-precision floating-point value: 0xFFFFFFFFFFFFF.
-    SignificandMask = 1<<SignificandWidth - 1
+    SignificandMask = 1 << SignificandWidth - 1
 
     // ExponentBias is the exponent bias specified for encoding
     // the IEEE 754 double-precision floating point exponent: 1023.
-    ExponentBias = 1<<(ExponentWidth-1) - 1
+    ExponentBias = 1 << (ExponentWidth-1) - 1
 
     // ExponentMask are set to 1 for the bits of an IEEE 754
     // floating point exponent: 0x7FF0000000000000.
@@ -598,8 +598,8 @@ For scale zero, the index of a value equals its normalized base-2
 exponent, meaning the value of _exponent_ in the base-2 fractional
 representation `1._significand_ * 2**_exponent_`.  Normal IEEE 754
 double-width floating point values have indices in the range
-`[-1022,+1023]` and subnormal values have indices in the range
-`[-1074,-1023]`.  This may be written as:
+`[-1022, +1023]` and subnormal values have indices in the range
+`[-1074, -1023]`.  This may be written as:
 
 ```golang
 // GetExponent extracts the normalized base-2 fractional exponent.
