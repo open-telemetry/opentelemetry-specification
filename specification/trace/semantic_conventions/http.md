@@ -47,7 +47,7 @@ the response body; or 3xx codes with max redirects exceeded), in which case stat
 MUST be set to `Error`.
 
 For HTTP status codes in the 4xx range span status MUST be left unset in case of `SpanKind.SERVER`
-and MUST be set to `Error` otherwise.
+and MUST be set to `Error` in case of `SpanKind.CLIENT`.
 
 For HTTP status codes in the 5xx range, as well as any other code the client
 failed to interpret, span status MUST be set to `Error`.
