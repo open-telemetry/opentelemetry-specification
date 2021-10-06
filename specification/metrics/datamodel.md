@@ -20,16 +20,16 @@
   * [Gauge](#gauge)
   * [Histogram](#histogram)
   * [ExponentialHistogram](#exponentialhistogram)
-    + [Exponential scale](#exponential-scale)
-    + [Exponential buckets](#exponential-buckets)
-    + [Zero count](#zero-count)
-    + [Producer expectations](#producer-expectations)
-      - [Scale zero: extract the exponent](#scale-zero-extract-the-exponent)
-      - [Negative scale: extract and shift the exponent](#negative-scale-extract-and-shift-the-exponent)
-      - [All scales: use the logarithm function](#all-scales-use-the-logarithm-function)
-      - [Positive scale: use a lookup table](#positive-scale-use-a-lookup-table)
-      - [Producer recommendations](#producer-recommendations)
-    + [Consumer expectations](#consumer-expectations)
+    + [Exponential Scale](#exponential-scale)
+    + [Exponential Buckets](#exponential-buckets)
+    + [Zero Count](#zero-count)
+    + [Producer Expectations](#producer-expectations)
+      - [Scale Zero: Extract the Exponent](#scale-zero-extract-the-exponent)
+      - [Negative Scale: Extract and Shift the Exponent](#negative-scale-extract-and-shift-the-exponent)
+      - [All Scales: Use the Logarithm Function](#all-scales-use-the-logarithm-function)
+      - [Positive Scale: Use a Lookup Table](#positive-scale-use-a-lookup-table)
+      - [Producer Recommendations](#producer-recommendations)
+    + [Consumer Expectations](#consumer-expectations)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -453,7 +453,7 @@ attributes, and timestamps, as well as the `sum`, `count`, `min`, `max` and
 fields all share identical interpretation as for `Histogram`, only the
 bucket structure differs between these two types.
 
-#### Exponential scale
+#### Exponential Scale
 
 The resolution of the ExponentialHistogram is characterized by a
 parameter known as `scale`, with larger values of `scale` offering
@@ -494,7 +494,7 @@ map exactly into buckets of exponential Histograms with lesser scales,
 which allows consumers to lower the resolution of a histogram (i.e.,
 downscale) without introducing error.
 
-#### Exponential buckets
+#### Exponential Buckets
 
 The ExponentialHistogram bucket identified by `index`, a signed
 integer, represents values in the population that are greater than or
@@ -537,7 +537,7 @@ perfect subsetting.
 | 6                      | 1.68179        | 2**(6/8)                     |
 | 7                      | 1.83401        | 2**(7/8)                     |
 
-#### Zero count
+#### Zero Count
 
 The ExponentialHistogram contains a special `zero_count` field
 containing the count of values that are either exactly zero or within
@@ -546,7 +546,7 @@ level of precision.  This bucket stores values that cannot be
 expressed using the standard exponential formula as well as values
 that have been rounded to zero.
 
-#### Producer expectations
+#### Producer Expectations
 
 The ExponentialHistogram design makes it possible to express values
 that are too large or small to be represented in the 64 bit "double"
@@ -592,7 +592,7 @@ const (
 The following choices of mapping function have been validated through
 reference implementations.
 
-##### Scale zero: extract the exponent
+##### Scale Zero: Extract the Exponent
 
 For scale zero, the index of a value equals its normalized base-2
 exponent, meaning the value of _exponent_ in the base-2 fractional
@@ -618,7 +618,7 @@ func GetExponent(value float64) int32 {
 }
 ```
 
-##### Negative scale: extract and shift the exponent
+##### Negative Scale: Extract and Shift the Exponent
 
 For negative scales, the index of a value equals the normalized
 base-2 exponent (as by `GetExponent()` above) shifted to the right
@@ -629,7 +629,7 @@ correct rounding for the negative indices.  This may be written as:
   return GetExponent(value) >> -scale
 ```
 
-##### All scales: use the logarithm function
+##### All Scales: Use the Logarithm Function
 
 For any scale, use of the built-in natural logarithm
 function.  A multiplicative factor equal to `2**scale / ln(2)`
@@ -643,13 +643,13 @@ proves useful (where `ln()` is the natural logarithm), for example:
 Note that in the example Golang code above, the built-in `math.Log2E`
 is defined as `1 / ln(2)`.
 
-##### Positive scale: use a lookup table
+##### Positive Scale: Use a Lookup Table
 
 For positive scales, lookup table methods have been demonstrated
 that are able to exactly compute the index in constant time from a
 lookup table with `O(2**scale)` entries.
 
-##### Producer recommendations
+##### Producer Recommendations
 
 At the lowest or highest end of the 64 bit IEEE floating point, a
 bucket's range may only be partially representable by the floating
@@ -670,7 +670,7 @@ perform an exact computation.  As a result, ExponentialHistogram
 exemplars could map into buckets with zero count.  We expect to find
 such values counted in the adjacent buckets.
 
-#### Consumer expectations
+#### Consumer Expectations
 
 ExponentialHistogram bucket indices are expected to map into buckets
 where both the uppwer and lower boundaries that can be represented
