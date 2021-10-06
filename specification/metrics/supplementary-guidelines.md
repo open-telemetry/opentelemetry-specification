@@ -99,8 +99,9 @@ accurate way is to say "the total bytes received during (T<sub>0</sub>,
 T<sub>3</sub>] is `380`". In a nutshell, the count is always associated with a
 time range, which is known as [Temporality](#aggregation-temporality).
 
-Let's take another example with a process using an [Asynchronous Counter](./api.md#asynchronous-counter)
-to report the total page faults of the process:
+Let's take another example with a process using an [Asynchronous
+Counter](./api.md#asynchronous-counter) to report the total page faults of the
+process:
 
 The page faults are managed by the operating system, and the process could
 retrieve the number of page faults via some system APIs.
