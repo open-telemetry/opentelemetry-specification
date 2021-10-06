@@ -673,7 +673,7 @@ such values counted in the adjacent buckets.
 #### Consumer Expectations
 
 ExponentialHistogram bucket indices are expected to map into buckets
-where both the uppwer and lower boundaries that can be represented
+where both the upper and lower boundaries can be represented
 using IEEE 754 double-width floating point values.  Consumers MAY
 round the unrepresentable boundary of a partially representable bucket
 index to the nearest representable value.
