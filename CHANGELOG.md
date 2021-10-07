@@ -22,6 +22,9 @@ release.
 
 ### Semantic Conventions
 
+- Don't set Span.Status for 4xx http status codes for SERVER spans.
+  ([#1998](https://github.com/open-telemetry/opentelemetry-specification/pull/1998))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
