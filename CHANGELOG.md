@@ -15,6 +15,8 @@ release.
 
 - Add optional min / max fields to histogram data model.
   ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
+- Add exponential histogram to the metrics data model.
+  ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
 
 ### Logs
 
@@ -29,6 +31,7 @@ release.
 - Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
   ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975),
   [#1985](https://github.com/open-telemetry/opentelemetry-specification/pull/1985))
+- Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
 
@@ -89,6 +92,8 @@ release.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
+- Add `k8s.container.restart_count` Resource attribute.
+  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 
 ### Compatibility
 
