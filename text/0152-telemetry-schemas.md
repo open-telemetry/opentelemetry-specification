@@ -18,7 +18,7 @@
     * [rename_attributes Transformation](#rename_attributes-transformation-1)
   * [metrics Section](#metrics-section)
     * [rename_metrics Transformation](#rename_metrics-transformation)
-    * [rename_labels Transformation](#rename_labels-transformation)
+    * [rename_attributes Transformation](#rename_attributes-transformation)
   * [logs Section](#logs-section)
     * [rename_attributes Transformation](#rename_attributes-transformation-2)
   * [Order of Transformations](#order-of-transformations)
@@ -44,8 +44,8 @@
 Telemetry sources such as instrumented applications and consumers of telemetry
 such as observability backends sometimes make implicit assumptions about the
 emitted telemetry. They assume that the telemetry will contain certain
-attributes or labels or otherwise have a certain shape and composition of data
-(this is referred to as "telemetry schema" throughout this document).
+attributes or otherwise have a certain shape and composition of data (this is
+referred to as "telemetry schema" throughout this document).
 
 This makes it difficult or impossible to change the composition of the emitted
 telemetry data without breaking the consumers. For example changing the name of
@@ -334,7 +334,7 @@ the new name of the attribute starting from this version. Here is the structure:
 
 The transformations in section "all" apply to the following telemetry data:
 resource attributes, span attributes, span event attributes, log attributes,
-metric labels.
+metric attributes.
 
 Important: when converting from the previous version to the current version the
 transformation sequence in section "all" is performed first. After that the
@@ -448,7 +448,7 @@ defines a sequence of actions to be applied to convert metrics from the previous
 version to this version.
 
 Two transformations are supported for section "metrics": "rename_metrics" and
-"rename_labels".
+"rename_attributes".
 
 #### rename_metrics Transformation
 
@@ -464,7 +464,7 @@ Here is the structure:
             # starting from this version.
 ```
 
-#### rename_labels Transformation
+#### rename_attributes Transformation
 
 This is similar to the "rename_attributes" transformation supported in "span"
 sections. Here is the structure:
@@ -472,10 +472,10 @@ sections. Here is the structure:
 ```yaml
     metrics:
       changes:
-        - rename_labels:
-            label_map:
-              # map of key/values. The keys are the old label name used
-              # in the previous version, the values are the new label name
+        - rename_attributes:
+            attribute_map:
+              # map of key/values. The keys are the old attribute name used
+              # in the previous version, the values are the new attribute name
               # starting from this version.
 
             apply_to_metrics:
@@ -842,7 +842,7 @@ The benchmark does the following:
   conventions were renamed.
 
 - Uses data composed of batches of 100 spans each with 10 attributes or 100
-  metric data points (Int64 Gauge type) with 2 labels per data point. Each batch
+  metric data points (Int64 Gauge type) with 2 attributes per data point. Each batch
   is associated with one resource that has 20 attributes.
 
 Here are the benchmark results:
@@ -1151,8 +1151,8 @@ versions:
             container.cpu.usage.total: cpu.usage.total
             container.memory.usage.max: memory.usage.max
 
-        - rename_labels:
-            label_map:
+        - rename_attributes:
+            attribute_map:
               status: state
             apply_to_metrics:
               # Optional. If it is missing the transformation is applied
