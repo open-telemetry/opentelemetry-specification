@@ -8,13 +8,67 @@ Table of Contents:
 
 * [Guidelines for instrumentation library
   authors](#guidelines-for-instrumentation-library-authors)
+  * [Instrument selection](#instrument-selection)
+  * [Semantic convention](#semantic-convention)
 * [Guidelines for SDK authors](#guidelines-for-sdk-authors)
   * [Aggregation temporality](#aggregation-temporality)
   * [Memory management](#memory-management)
 
 ## Guidelines for instrumentation library authors
 
-TBD
+### Instrument selection
+
+The [Instruments](./api.md#instrument) are part of the [Metrics API](./api.md).
+They allow [Measurements](./api.md#measurement) to be recorded
+[synchronously](./api.md#synchronous-instrument) or
+[asynchronously](./api.md#asynchronous-instrument).
+
+Choosing the correct instrument is important, because:
+
+* It helps the library to achieve better efficiency. For example, if we want to
+  report room temperature to [Prometheus](https://prometheus.io), we want to
+  consider using an [Asynchronous Gauge](./api.md#asynchronous-gauge) rather
+  than periodically poll the sensor, so that we only access the sensor when
+  scraping happened.
+* It makes the consumption easier for the user of the library. For example, if
+  we want to report HTTP server request latency, we want to consider a
+  [Histogram](./api.md#histogram), so most of the users can get a reasonable
+  experience (e.g. default buckets, min/max) by simply enabling the metrics
+  stream, rather than doing extra configurations.
+* It generates clarity to the semantic of the metrics stream, so the consumers
+  have better understanding of the results. For example, if we want to report
+  the process heap size, by using an [Asynchronous
+  UpDownCounter](./api.md#asynchronous-updowncounter) rather than an
+  [Asynchronous Gauge](./api.md#asynchronous-gauge), we've made it explicit that
+  the consumer can add up the numbers across all processes to get the "total
+  heap size".
+
+Here is one way of choosing the correct instrument:
+
+* I want to **count** something (by recording a delta value):
+  * If the value is monotonically increasing (the delta value is always
+    non-negative) - use a [Counter](./api.md#counter).
+  * If the value is NOT monotonically increasing (the delta value can be
+    positive, negative or zero) - use an
+    [UpDownCounter](./api.md#updowncounter).
+* I want to **record** or **time** something, and the **statistics** about this
+  thing are likely to be meaningful - use a [Histogram](./api.md#histogram).
+* I want to **measure** something (by reporting an absolute value):
+  * If it makes NO sense to add up the values across different dimensions, use
+    an [Asynchronous Gauge](./api.md#asynchronous-gauge).
+  * If it makes sense to add up the values across different dimensions:
+    * If the value is monotonically increasing - use an [Asynchronous
+      Counter](./api.md#asynchronous-counter).
+    * If the value is NOT monotonically increasing - use an [Asynchronous
+      UpDownCounter](./api.md#asynchronous-updowncounter).
+
+### Semantic convention
+
+Once you decided [which instrument(s) to be used](#instrument-selection), you
+will need to decide the names for the instruments and attributes.
+
+It is highly recommended that you align with the `OpenTelemetry Semantic
+Conventions`, rather than inventing your own semantics.
 
 ## Guidelines for SDK authors
 

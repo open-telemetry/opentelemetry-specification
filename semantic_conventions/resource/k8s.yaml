@@ -63,6 +63,13 @@ groups:
         brief: >
           The name of the Container in a Pod template.
         examples: ['redis']
+      - id: restart_count
+        type: int
+        brief: >
+          Number of times the container was restarted. This attribute can be
+          used to identify a particular container (running or stopped) within a
+          container spec.
+        examples: [0, 2]
 
   - id: k8s.replicaset
     prefix: k8s.replicaset
