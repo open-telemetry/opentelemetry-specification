@@ -507,9 +507,9 @@ The SDK will come with two types of built-in exemplar reservoirs:
 1. SimpleFixedSizeExemplarReservoir
 2. AlignedHistogramBucketExemplarReservoir
 
-By default, explicit bucket histogram aggregators, except trivial histogram
-aggregators, will use `AlignedHistogramBucketExemplarReservoir`. All other
-aggregators will use `SimpleFixedSizeExemplarReservoir`.
+By default, explicit bucket histogram aggregators with more than 1 bucket will
+use `AlignedHistogramBucketExemplarReservoir`. All other aggregators will
+use `SimpleFixedSizeExemplarReservoir`.
 
 *SimpleExemplarReservoir*
 This Exemplar reservoir MAY take a configuration parameter for the size of
