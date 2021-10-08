@@ -72,7 +72,7 @@ In the OpenTelemetry Metrics [Data Model](./datamodel.md) and [API](./api.md)
 specifications, the word `monotonic` has been used frequently.
 
 It is important to understand that different
-[Instruments](#instrument-selection) handles monotonicity differently.
+[Instruments](#instrument-selection) handle monotonicity differently.
 
 Let's take an example with a network driver using a [Counter](./api.md#counter)
 to record the total number of bytes received:
