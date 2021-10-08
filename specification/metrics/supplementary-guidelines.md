@@ -71,8 +71,6 @@ Here is one way of choosing the correct instrument:
 In the OpenTelemetry Metrics [Data Model](./datamodel.md) and [API](./api.md)
 specifications, the word `monotonic` has been used frequently.
 
-Monotonicity is important because it
-
 It is important to understand that different
 [Instruments](#instrument-selection) handles monotonicity differently.
 
@@ -94,6 +92,17 @@ You can see that the total increment during (T<sub>0</sub>, T<sub>1</sub>] is
 and the total increment during (T<s3ub>0</sub>, T<sub>3</sub>] is `380` (`0 +
 280 + 100`). All the increments are non-negative, in other words, the **sum is
 monotonically increasing**.
+
+This monotonicity property is important because it gives the downstream systems
+additional hints so they can handle the data in a better way. Imagine we report
+the total number of bytes received in a cumulative sum data stream:
+
+* At T<sub>n</sub>, we reported `896,473,820`.
+* At T<sub>n+1</sub>, we reported `4,294,967,293`.
+* At T<sub>n+2</sub>, we reported `1,800,372`.
+
+The backend system could tell that there was integer overflow or system restart
+during (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "fix" the data.
 
 Note that it is inaccurate to say "the total bytes received by T<sub>3</sub> is
 `380`", because there might be network packets received by the driver before we
