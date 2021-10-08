@@ -104,7 +104,7 @@ This monotonicity property is important because it gives the downstream systems
 additional hints so they can handle the data in a better way. Imagine we report
 the total number of bytes received in a cumulative sum data stream:
 
-* At T<sub>n</sub>, we reported `896,473,820`.
+* At T<sub>n</sub>, we reported `3,896,473,820`.
 * At T<sub>n+1</sub>, we reported `4,294,967,293`.
 * At T<sub>n+2</sub>, we reported `1,800,372`.
 
