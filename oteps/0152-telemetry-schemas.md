@@ -425,7 +425,9 @@ only to events of spans that have the specified name. Here is the structure:
 
 This is similar to the "rename_attributes" transformation supported in "all" and
 "resource" sections. In addition it is also possible to optionally specify spans
-and events that the transformation should apply to. Here is the structure:
+and events that the transformation should apply to (both optional conditions
+must match, if specified, for transformation to be applicable). Here is the
+structure:
 
 ```yaml
     span_events:
@@ -435,6 +437,9 @@ and events that the transformation should apply to. Here is the structure:
               # map of key/values. The keys are the old attribute name used
               # in the previous version, the values are the new attribute name
               # starting from this version.
+
+            apply_to_spans:
+              # Optional span names to apply to. If empty applies to all spans.
 
             apply_to_events:
               # Optional event names to apply to. If empty applies to all events.
