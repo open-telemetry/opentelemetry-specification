@@ -24,6 +24,9 @@ release.
 
 ### Semantic Conventions
 
+- BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
+  ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol

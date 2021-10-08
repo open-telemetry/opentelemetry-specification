@@ -176,15 +176,16 @@ groups:
         tag: call-level
         type: string
         required:
-          conditional: >
-            Required, if applicable and no more-specific attribute is defined.
+          conditional: Required, if applicable.
         brief: >
-          If no [tech-specific attribute](#call-level-attributes-for-specific-technologies)
-          is defined, this attribute is used to report the name of the database being accessed.
+          This attribute is used to report the name of the database being accessed.
           For commands that switch the database, this should be set to the target database
           (even if the command fails).
         note: >
           In some SQL databases, the database name to be used is called "schema name".
+          In case there are multiple layers that could be considered for database name
+          (e.g. Oracle instance name and schema name),
+          the database name to be used is the more specific layer (e.g. Oracle schema name).
         examples: [ 'customers', 'main' ]
       - id: statement
         tag: call-level
@@ -256,13 +257,6 @@ groups:
     brief: >
       Call-level attributes for Cassandra
     attributes:
-      - id: keyspace
-        type: string
-        required: always
-        tag: call-level-tech-specific-cassandra
-        brief: >
-          The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute.
-        examples: 'mykeyspace'
       - id: page_size
         type: int
         tag: call-level-tech-specific-cassandra
@@ -302,7 +296,7 @@ groups:
         tag: call-level-tech-specific-cassandra
         required:
           conditional: Recommended if available.
-        brief: The name of the primary table that the operation is acting upon, including the schema name (if applicable).
+        brief: The name of the primary table that the operation is acting upon, including the keyspace name (if applicable).
         note: >
           This mirrors the db.sql.table attribute but references cassandra rather than sql.
           It is not recommended to attempt any client-side parsing of
@@ -334,21 +328,6 @@ groups:
         brief: >
           The data center of the coordinating node for a query.
         examples: 'us-west-2'
-
-  - id: db.hbase
-    prefix: db.hbase
-    extends: db
-    brief: >
-      Call-level attributes for Apache HBase
-    attributes:
-      - id: namespace
-        type: string
-        required: always
-        tag: call-level-tech-specific
-        brief: >
-          The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed.
-          To be used instead of the generic `db.name` attribute.
-        examples: 'default'
 
   - id: db.redis
     prefix: db.redis
@@ -384,14 +363,14 @@ groups:
     prefix: 'db.sql'
     extends: 'db'
     brief: >
-      Call-level attrbiutes for SQL databases
+      Call-level attributes for SQL databases
     attributes:
       - id: table
         tag: call-level-tech-specific
         type: string
         required:
           conditional: Recommended if available.
-        brief: The name of the primary table that the operation is acting upon, including the schema name (if applicable).
+        brief: The name of the primary table that the operation is acting upon, including the database name (if applicable).
         note: >
           It is not recommended to attempt any client-side parsing of
           `db.statement` just to get this property, but it should be set if
@@ -404,7 +383,6 @@ groups:
     brief: "Semantic convention group for specific technologies"
     constraints:
       - include: 'db.cassandra'
-      - include: 'db.hbase'
       - include: 'db.redis'
       - include: 'db.mongodb'
       - include: 'db.sql'
