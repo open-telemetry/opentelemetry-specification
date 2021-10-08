@@ -1013,6 +1013,121 @@ For comparison, see the simple logic used in
 [statsd sums](https://github.com/statsd/statsd/blob/master/stats.js#L281)
 where all points are added, and lost points are ignored.
 
+## Prometheus Compatibility
+
+**Status**: [Experimental](../document-status.md)
+
+This section denotes how to convert from prometheus scraped metrics to the
+OpenTelemtery metric data model and how to create prometheus metrics from
+OpenTelemetry metric data.
+
+### Label Mapping
+
+Prometheus metric labels are split in opentelemetry across Resource attributes
+and Metric data stream attributes.   Some labels are used within metric
+families to denote semantics which open-telemetry captures within the structure
+of a data point.  When mapping from prometheus to OpenTelemetry, any label
+that is not explicitly called out as being handled specially will be included
+in the set of attributes for a metric data stream.
+
+Here is a table of the sett of prometheus labels that are lifted into Resource
+attributes when converting into OpenTelemetry.
+
+| Prometheus Label | OTLP Resource Attribute | Description |
+| -------------------- | ----------------------- | ----------- |
+| `job` | `service.name` | [Semantic convention](../resource/semantic_conventions/README.md#Service) |
+| `host` | `host.name` | [Semantic convention](../resource/semantic_conventions/host.md) |
+| `job`  | `job` | ... |
+| `instance` | `instance` | ... |
+| `port` | `port` | ... |
+| `__scheme__` | `scheme` | ... |
+
+Next, this set of attributes are "special" and used when converting from a
+metric family to a specific OTLP metric data point:
+
+- `le` label is used to identify histogram bucket boundaries and counts.
+- `quantile` label is used to identify quantile points in summary metrics.
+- `__name__` is used to identify the metric name of the data point.
+- `__metrics_path__` is ignored in OTLP.
+
+### Prometheus Metric points to OTLP
+
+Prometheus allows metrics to reported in "metric family" groups.  While
+OpenTelemetry can assume some shape/structure to metric family groups, any
+metric belonging to a family that is not treated specially should be exported
+as its own metric stream.  For example, while histograms are expected to
+live in a metric family with metrics `{name}_sum`, `{name}_count` and `{name}`,
+any other metric also reported in the family should be exported as an
+independent metric in OpenTelemetry.
+
+TODO - A bit about detecting/using start_time.
+
+Prometheus Counter becomes an OTLP Sum.
+
+Prometheus Gauge becomes an OTLP Gauge.
+
+Prometheus Unknown becomes an OTLP Gauge.
+
+Prometheus Histogram becomes an OTLP Histogram.
+
+Prometheus Summary becomes an OTLP Summary.
+
+Prometheus Gauge Histogram is dropped (TBD).
+
+Prometheus Stateset is dropped (TBD).
+
+Prometheus Info is dropped (TBD).
+
+### OTLP Metric points to Prometheus
+
+OpenTelemetry Gauge becomes a Prometheus Gauge.
+
+TODO: Example Gauge Conversions
+
+OpenTelemetry Sum follows this logic:
+
+- If the aggregation temporality is cumulative and the sum is monotonic,
+  then it becomes a Prometheus Sum.
+- Otherwise the Sum becomes a Prometheus Gauge.
+
+TODO: Example Sum Conversions
+
+OpenTelemetry Histogram becomes a metric family with the following:
+
+- A single `{name}_count` metric denoting the count field of the histogram.
+  All attributes of the histogram point are converted to prometheus labels.
+- `{name}_sum` metric denoting the sum field of the histogram, reported
+  only if the sum is positive and monotonic. All attributes of the histogram
+  point are converted to prometheus labels.
+- A series of `{name}` metric points that contain all attributes of the
+  histogram point recorded as labels.  Additionally, a label, denoted as `le`
+  is added denoting a bucket boundary, and having its value be the stringified
+  floating point value of bucket boundaries, starting form lowest to highest,
+  and all being non-negative.  The value of each point is the sum of the count
+  of all histogram buckets up the the boundary reported in the `le` label.
+  These points will include a single exemplar that falls within `le` label and
+  no other `le` labelled point.
+
+_Note: OpenTelemetry DELTA histograms are not exported to prometheus._
+
+TODO: Example Histogram conversion
+
+OpenTelemetry Summary becomes a metric family with the following:
+
+- A single `{name}_count` metric denoting the count field of the summary.
+  All attributes of the summary point are converted to prometheus labels.
+- `{name}_sum` metric denoting the sum field of the summary, reported
+  only if the sum is positive and monotonic. All attributes of the summary
+  point are converted to prometheus labels.
+- A series of `{name}` metric points that contain all attributes of the
+  summary point recorded as labels.  Additionally, a label, denoted as
+  `quantile` is added denoting a reported qunatile point, and having its value
+  be the stringified floating point value of quantiles (between 0.0 and 1.0),
+  starting from lowest to highest, and all being non-negative.  The value of
+  each point is the computed value of the quantile point.
+
+TODO: Example Summary conversion
+
 ## Footnotes
 
 <a name="otlpdatapointfn">[1]</a>: OTLP supports data point kinds that do not
