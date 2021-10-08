@@ -93,6 +93,13 @@ and the total increment during (T<s3ub>0</sub>, T<sub>3</sub>] is `380` (`0 +
 280 + 100`). All the increments are non-negative, in other words, the **sum is
 monotonically increasing**.
 
+Note that it is inaccurate to say "the total bytes received by T<sub>3</sub> is
+`380`", because there might be network packets received by the driver before we
+started to observe it (e.g. before the last operating system reboot). The
+accurate way is to say "the total bytes received during (T<sub>0</sub>,
+T<sub>3</sub>] is `380`". In a nutshell, the count represents a **rate** which
+is associated with a time range.
+
 This monotonicity property is important because it gives the downstream systems
 additional hints so they can handle the data in a better way. Imagine we report
 the total number of bytes received in a cumulative sum data stream:
@@ -103,13 +110,6 @@ the total number of bytes received in a cumulative sum data stream:
 
 The backend system could tell that there was integer overflow or system restart
 during (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "fix" the data.
-
-Note that it is inaccurate to say "the total bytes received by T<sub>3</sub> is
-`380`", because there might be network packets received by the driver before we
-started to observe it (e.g. before the last operating system reboot). The
-accurate way is to say "the total bytes received during (T<sub>0</sub>,
-T<sub>3</sub>] is `380`". In a nutshell, the count represents a **rate** which
-is associated with a time range.
 
 Let's take another example with a process using an [Asynchronous
 Counter](./api.md#asynchronous-counter) to report the total page faults of the
