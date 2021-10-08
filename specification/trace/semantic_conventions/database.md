@@ -147,19 +147,17 @@ Usually only one `db.name` will be used per connection though.
 <!-- semconv db(tag=call-level,remove_constraints) -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `db.name` | string | If no [tech-specific attribute](#call-level-attributes-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`; `main` | Conditional [2] |
-| `db.statement` | string | The database statement being executed. [3] | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Conditional [4] |
-| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [5] | `findAndModify`; `HMSET`; `SELECT` | Required, if `db.statement` is not applicable. |
+| `db.name` | string | This attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`; `main` | Required, if applicable. |
+| `db.statement` | string | The database statement being executed. [2] | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Conditional [3] |
+| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [4] | `findAndModify`; `HMSET`; `SELECT` | Required, if `db.statement` is not applicable. |
 
-**[1]:** In some SQL databases, the database name to be used is called "schema name".
+**[1]:** In some SQL databases, the database name to be used is called "schema name". In case there are multiple layers that could be considered for database name (e.g. Oracle instance name and schema name), the database name to be used is the more specific layer (e.g. Oracle schema name).
 
-**[2]:** Required, if applicable and no more-specific attribute is defined.
+**[2]:** The value may be sanitized to exclude sensitive information.
 
-**[3]:** The value may be sanitized to exclude sensitive information.
+**[3]:** Required if applicable and not explicitly disabled via instrumentation configuration.
 
-**[4]:** Required if applicable and not explicitly disabled via instrumentation configuration.
-
-**[5]:** When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
+**[4]:** When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
 <!-- endsemconv -->
 
 For **Redis**, the value provided for `db.statement` SHOULD correspond to the syntax of the Redis CLI.
@@ -170,6 +168,10 @@ If, for example, the [`HMSET` command][] is invoked, `"HMSET myhash field1 'Hell
 In **CouchDB**, `db.operation` should be set to the HTTP method + the target REST route according to the API reference documentation.
 For example, when retrieving a document, `db.operation` would be set to (literally, i.e., without replacing the placeholders with concrete values): [`GET /{db}/{docid}`][CouchDB get doc].
 
+In **Cassandra**, `db.name` SHOULD be set to the keyspace name.
+
+In **HBase**, `db.name` SHOULD be set to the HBase namespace.
+
 [CouchDB get doc]: http://docs.couchdb.org/en/stable/api/document/common.html#get--db-docid
 
 ### Call-level attributes for specific technologies
@@ -177,10 +179,9 @@ For example, when retrieving a document, `db.operation` would be set to (literal
 <!-- semconv db.tech(tag=call-level-tech-specific) -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `db.hbase.namespace` | string | The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute. | `default` | Yes |
 | `db.redis.database_index` | int | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`; `1`; `15` | Conditional [1] |
 | `db.mongodb.collection` | string | The collection being accessed within the database stated in `db.name`. | `customers`; `products` | Yes |
-| `db.sql.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [2] | `public.users`; `customers` | Recommended if available. |
+| `db.sql.table` | string | The name of the primary table that the operation is acting upon, including the database name (if applicable). [2] | `public.users`; `customers` | Recommended if available. |
 
 **[1]:** Required, if other than the default database (`0`).
 
@@ -194,10 +195,9 @@ Separated for clarity.
 <!-- semconv db.tech(tag=call-level-tech-specific-cassandra) -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `db.cassandra.keyspace` | string | The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute. | `mykeyspace` | Yes |
 | `db.cassandra.page_size` | int | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
 | `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `all` | No |
-| `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the schema name (if applicable). [1] | `mytable` | Recommended if available. |
+| `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the keyspace name (if applicable). [1] | `mytable` | Recommended if available. |
 | `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
 | `db.cassandra.speculative_execution_count` | int | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | No |
 | `db.cassandra.coordinator.id` | string | The ID of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | No |
