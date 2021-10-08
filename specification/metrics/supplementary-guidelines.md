@@ -69,9 +69,12 @@ Here is one way of choosing the correct instrument:
 ### Monotonicity property
 
 In the OpenTelemetry Metrics [Data Model](./datamodel.md) and [API](./api.md)
-specifications, the word `monotonic` has been used frequently. It is important
-to keep in mind that OpenTelemetry Metrics put additional semantics on
-monotonicity comparing to the mathematical definition.
+specifications, the word `monotonic` has been used frequently.
+
+Monotonicity is important because it
+
+It is important to understand that different
+[Instruments](#instrument-selection) handles monotonicity differently.
 
 Let's take an example with a network driver using a [Counter](./api.md#counter)
 to record the total number of bytes received:
@@ -89,15 +92,15 @@ You can see that the total increment during (T<sub>0</sub>, T<sub>1</sub>] is
 `0`, the total increment during (T<sub>1</sub>, T<sub>2</sub>] is `280` (`30 +
 200 + 50`), the total increment during (T<sub>2</sub>, T<sub>3</sub>] is `100`,
 and the total increment during (T<s3ub>0</sub>, T<sub>3</sub>] is `380` (`0 +
-280 + 100`). All the increments are non-negative, in other words, the **value is
+280 + 100`). All the increments are non-negative, in other words, the **sum is
 monotonically increasing**.
 
 Note that it is inaccurate to say "the total bytes received by T<sub>3</sub> is
 `380`", because there might be network packets received by the driver before we
 started to observe it (e.g. before the last operating system reboot). The
 accurate way is to say "the total bytes received during (T<sub>0</sub>,
-T<sub>3</sub>] is `380`". In a nutshell, the count is always associated with a
-time range, which is known as [Temporality](#aggregation-temporality).
+T<sub>3</sub>] is `380`". In a nutshell, the count represents a **rate** which
+is associated with a time range.
 
 Let's take another example with a process using an [Asynchronous
 Counter](./api.md#asynchronous-counter) to report the total page faults of the
@@ -119,10 +122,7 @@ retrieve the number of page faults via some system APIs.
   * the operating system reported with `1200` page faults for the process
 
 You can see that the number being reported is the absolute value rather than
-increments, the value is non-negative, and the value is monotonically
-increasing. Note that the mathematical definition of "monotonically increasing"
-does not require the value to be always non-negative, this additional semantic
-is added by OpenTelemetry.
+increments, and the value is monotonically increasing.
 
 If we need to calculate "how many page faults have been introduced during
 (T<sub>3</sub>, T<sub>4</sub>]", we need to apply subtraction `1200 - 1050 =
