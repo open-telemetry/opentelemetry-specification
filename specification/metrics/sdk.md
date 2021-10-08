@@ -301,7 +301,7 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
-- [Degenerate Histogram](./sdk.md#degenerate-histogram-aggregation)
+- [Trivial Histogram](./sdk.md#Trivial-histogram-aggregation)
 
 #### None Aggregation
 
@@ -385,7 +385,6 @@ This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
 | Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 
@@ -396,26 +395,26 @@ This Aggregation informs the SDK to collect:
 - Min `Measurement` value in population.
 - Max `Measurement` value in population.
 
-#### Degenerate Histogram Aggregation
+#### Trivial Histogram Aggregation
 
-The Degenerate Histogram Aggregation informs the SDK to collect data for
-the [Histogram Metric Point](./datamodel.md#histogram) using zero buckets. This
-produces lightweight histogram data points which capture the min, max, sum, and
-count of a population of measurements.
+The Trivial Histogram Aggregation informs the SDK to collect data for
+the [Histogram Metric Point](./datamodel.md#histogram) using a single bucket
+with boundaries (-&infin;, +&infin;). This produces lightweight histogram data
+points which capture the min, max, sum and count of a population of
+measurements.
+
+This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
 | Temporality | Delta, Cumulative | Delta | See [Temporality](./datamodel.md#temporality). |
 
 This Aggregation informs the SDK to collect:
 
-- Count of `Measurement` values in population
+- Count of `Measurement` values in population.
 - Arithmetic sum of `Measurement` values in population.
 - Min `Measurement` value in population.
 - Max `Measurement` value in population.
-
-\[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
 
 ## Attribute limits
 
@@ -508,9 +507,9 @@ The SDK will come with two types of built-in exemplar reservoirs:
 1. SimpleFixedSizeExemplarReservoir
 2. AlignedHistogramBucketExemplarReservoir
 
-By default, fixed sized histogram aggregators will use
-`AlignedHistogramBucketExemplarReservoir` and all other aggregaators will use
-`SimpleFixedSizeExemplarReservoir`.
+By default, explicit bucket histogram aggregators, except trivial histogram
+aggregators, will use `AlignedHistogramBucketExemplarReservoir`. All other
+aggregators will use `SimpleFixedSizeExemplarReservoir`.
 
 *SimpleExemplarReservoir*
 This Exemplar reservoir MAY take a configuration parameter for the size of
