@@ -13,15 +13,25 @@ release.
 
 ### Metrics
 
+- Add optional min / max fields to histogram data model.
+  ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
+- Add exponential histogram to the metrics data model.
+  ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
+
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
 
+- BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
+  ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
 
@@ -82,6 +92,8 @@ release.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
+- Add `k8s.container.restart_count` Resource attribute.
+  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 
 ### Compatibility
 
@@ -90,6 +102,8 @@ release.
 ### OpenTelemetry Protocol
 
 - Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
+- Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
+  ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975)).
 - Allow implementations to use their own default for OTLP compression, with `none` denotating no compression
   ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
 - Clarify OTLP server components MUST support none/gzip compression
@@ -100,6 +114,7 @@ release.
 
 - Change default value for OTEL_EXPORTER_JAEGER_AGENT_PORT to 6831.
   ([#1812](https://github.com/open-telemetry/opentelemetry-specification/pull/1812))
+- See also the changes for OTLP configuration listed under "OpenTelemetry Protocol" above.
 
 ## v1.6.0 (2021-08-06)
 
