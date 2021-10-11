@@ -781,7 +781,7 @@ variables](../sdk-environment-variables.md) specification.
 The SDK MUST handle limits in a graceful way according to [Error handling in
 OpenTelemetry](../error-handling.md).
 
-If the SDK receives float/double value from [Instruments](./api.md/#instrument),
+If the SDK receives float/double value from [Instruments](./api.md#instrument),
 it MUST handle all the possible values. For example, if the language runtime
 supports [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754), the SDK needs to
 handle NaNs and Infinites.
