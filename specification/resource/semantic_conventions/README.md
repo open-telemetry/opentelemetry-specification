@@ -171,5 +171,5 @@ Valid cloud providers are:
 - [Amazon Web Services](https://aws.amazon.com/) ([`aws`](cloud_provider/aws/README.md))
 - [Google Cloud Platform](https://cloud.google.com/) (`gcp`)
 - [Microsoft Azure](https://azure.microsoft.com/) (`azure`)
-- [Tencent Cloud](https://cloud.tencent.com/) (`tencent_cloud`)
+- [Tencent Cloud](https://intl.cloud.tencent.com/) (`tencent_cloud`)
 

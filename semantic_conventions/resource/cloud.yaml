@@ -39,7 +39,7 @@ groups:
           [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/),
           [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/),
           [Google Cloud regions](https://cloud.google.com/about/locations),
-          or [Tencent Cloud regions](https://cloud.tencent.com/document/product/213/6091).
+          or [Tencent Cloud regions](https://intl.cloud.tencent.com/document/product/213/6091).
         examples: ['us-central1', 'us-east-1']
       - id: availability_zone
         type: string
@@ -48,7 +48,7 @@ groups:
           to increase availability. Availability zone represents the
           zone where the resource is running.
         note: >
-          Availability zones are called "zones" on Alibaba Cloud, Google Cloud and Tencent Cloud.
+          Availability zones are called "zones" on Alibaba Cloud and Google Cloud.
         examples: ['us-east-1c']
       - id: platform
         type:
