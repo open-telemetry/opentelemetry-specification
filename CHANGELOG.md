@@ -26,7 +26,7 @@ release.
 
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
   ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
-- Adding Tencent Cloud as a cloud provider.
+- Add Tencent Cloud as a cloud provider.
   ([#2006](https://github.com/open-telemetry/opentelemetry-specification/pull/2006))
 
 ### Compatibility
