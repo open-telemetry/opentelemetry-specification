@@ -108,6 +108,9 @@ groups:
             - id: tencent_cloud_cvm
               value: 'tencent_cloud_cvm'
               brief: Tencent Cloud Cloud Virtual Machine (CVM)
+            - id: tencent_cloud_eks
+              value: 'tencent_cloud_eks'
+              brief: Tencent Cloud Elastic Kubernetes Service (EKS)
             - id: tencent_cloud_scf
               value: 'tencent_cloud_scf'
               brief: Tencent Cloud Serverless Cloud Function (SCF)

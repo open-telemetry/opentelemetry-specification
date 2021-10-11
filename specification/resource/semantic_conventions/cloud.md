@@ -51,5 +51,6 @@
 | `gcp_cloud_functions` | Google Cloud Functions (GCF) |
 | `gcp_app_engine` | Google Cloud App Engine (GAE) |
 | `tencent_cloud_cvm` | Tencent Cloud Cloud Virtual Machine (CVM) |
+| `tencent_cloud_eks` | Tencent Cloud Elastic Kubernetes Service (EKS) |
 | `tencent_cloud_scf` | Tencent Cloud Serverless Cloud Function (SCF) |
 <!-- endsemconv -->
