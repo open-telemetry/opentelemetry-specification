@@ -15,7 +15,7 @@
 | `cloud.availability_zone` | string | Cloud regions often have multiple, isolated locations known as zones to increase availability. Availability zone represents the zone where the resource is running. [1] | `us-east-1c` | No |
 | `cloud.platform` | string | The cloud platform in use. [2] | `alibaba_cloud_ecs` | No |
 
-**[1]:** Availability zones are called "zones" on Alibaba Cloud and Google Cloud.
+**[1]:** Availability zones are called "zones" on Alibaba Cloud, Google Cloud and Tencent Cloud.
 
 **[2]:** The prefix of the service SHOULD match the one specified in `cloud.provider`.
 
@@ -27,6 +27,7 @@
 | `aws` | Amazon Web Services |
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
+| `tencent_cloud` | Tencent Cloud |
 
 `cloud.platform` MUST be one of the following or, if none of the listed values apply, a custom value:
 
@@ -49,4 +50,6 @@
 | `gcp_kubernetes_engine` | Google Cloud Kubernetes Engine (GKE) |
 | `gcp_cloud_functions` | Google Cloud Functions (GCF) |
 | `gcp_app_engine` | Google Cloud App Engine (GAE) |
+| `tencent_cloud_cvm` | Tencent Cloud Cloud Virtual Machine (CVM) |
+| `tencent_cloud_scf` | Tencent Cloud Serverless Cloud Function (SCF) |
 <!-- endsemconv -->
