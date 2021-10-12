@@ -542,7 +542,7 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 Parameters:
 
-* The amount of the `Measurement`.
+* The amount of the `Measurement`, which MUST be a non-negative numeric value.
 * Optional [attributes](../common/common.md#attributes).
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
