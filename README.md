@@ -74,6 +74,15 @@ Changes to the [specification](./specification/overview.md) are versioned accord
 
 Changes to the change process itself are not currently versioned but may be independently versioned in the future.
 
+## Generating requirements in JSON
+
+As described in the [conformance clause](./conformance_clause.md) this specification follows the
+[W3C Recommendation QA Framework: Specification Guidelines](https://www.w3.org/TR/2005/REC-qaframe-spec-20050817/). The requirements can be automatically extracted from the
+specification markdown files into JSON files for easy listing. These JSON files can later be used to check the compliance of a particular implementation.
+
+To generate JSON files run `python tools/specification_parser/specification_parser.py` from the directory that contains this file. This will generate the corresponding JSON files
+in the same directories of the markdown files that contain the requirements.
+
 ## Acronym
 
 The official acronym used by the OpenTelemetry project is "OTel".

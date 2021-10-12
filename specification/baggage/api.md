@@ -161,39 +161,39 @@ on the `Context`, then users should not have access to the
 > > The API **SHOULD** provide a get `Baggage` functionality to get the currently active
 > > `Baggage` from the implicit context and a set `Baggage` functionality to set the
 > > currently active `Baggage` into the implicit context.
+>
+> ##### Condition 2.1
+>
+> > The API provides a functionality to get the currently active `Baggage` from the
+> > implicit context and a functionality to set the currently active `Baggage` into
+> > the implicit context.
 > >
-> > ##### Condition 2.1
+> > ##### Conditional Requirement 2.1.1
 > >
-> > > The API provides a functionality to get the currently active `Baggage` from the
-> > > implicit context and a functionality to set the currently active `Baggage` into
-> > > the implicit context.
-> > >
-> > > ##### Conditional Requirement 2.1.1
-> > >
-> > > > The get `Baggage` functionality behavior **MUST** be equivalent to getting the
-> > > > implicit context, then extracting the `Baggage` from the context.
-> > >
-> > > ##### Conditional Requirement 2.1.2
-> > >
-> > > > The set `Baggage` functionality behavior **MUST** be equivalent to getting the
-> > > > implicit context, then inserting the `Baggage` into the context.
-> > >
-> > > ##### Conditional Requirement 2.1.3
-> > >
-> > > > The get and set `Baggage` functionalities **MUST** operate solely on the context
-> > > > API.
-> > >
-> > > ##### Conditional Requirement 2.1.4
-> > >
-> > > > The get and set `Baggage` functionalities **MAY** be exposed
-> > > > - as static methods on the baggage module or
-> > > > - as static methods on a class inside the baggage module or
-> > > > - on the `Baggage` class
-> > >
-> > > ##### Conditional Requirement 2.1.5
-> > >
-> > > > The get and set `Baggage` functionalities **SHOULD** be fully implemented in
-> > > > the API.
+> > > The get `Baggage` functionality behavior **MUST** be equivalent to getting the
+> > > implicit context, then extracting the `Baggage` from the context.
+> >
+> > ##### Conditional Requirement 2.1.2
+> >
+> > > The set `Baggage` functionality behavior **MUST** be equivalent to getting the
+> > > implicit context, then inserting the `Baggage` into the context.
+> >
+> > ##### Conditional Requirement 2.1.3
+> >
+> > > The get and set `Baggage` functionalities **MUST** operate solely on the context
+> > > API.
+> >
+> > ##### Conditional Requirement 2.1.4
+> >
+> > > The get and set `Baggage` functionalities **MAY** be exposed
+> > > - as static methods on the baggage module or
+> > > - as static methods on a class inside the baggage module or
+> > > - on the `Baggage` class
+> >
+> > ##### Conditional Requirement 2.1.5
+> >
+> > > The get and set `Baggage` functionalities **SHOULD** be fully implemented in
+> > > the API.
 
 ### Clear Baggage in the Context
 

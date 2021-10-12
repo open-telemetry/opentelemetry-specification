@@ -93,11 +93,11 @@ particular implementation.
 This is the markdown code for the previous example:
 
 ```
-##### Condition 1:
+##### Condition 1
 
 > The API does not operate directly on the `Context`.
 >
-> ##### Conditional Requirement 1.1:
+> ##### Conditional Requirement 1.1
 >
 > > The API **MUST** provide an `extract` function to extract the `Baggage`
 > > from a `Context` instance.
@@ -124,7 +124,7 @@ the following words:
 - REQUIRED
 - SHALL
 - SHALL NOT
-- MUST NOT:w
+- MUST NOT
 - SHOULD
 - RECOMMENDED
 - SHOULD NOT
