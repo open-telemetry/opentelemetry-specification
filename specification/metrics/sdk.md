@@ -301,7 +301,8 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
-- [Trivial Histogram](./sdk.md#Trivial-histogram-aggregation)
+- [Trivial Histogram](./sdk.md#trivial-histogram-aggregation)
+
 
 #### None Aggregation
 
