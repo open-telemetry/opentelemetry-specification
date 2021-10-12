@@ -776,7 +776,7 @@ modeled to interact with other components in the SDK:
 The SDK MUST provide configuration according to the [SDK environment
 variables](../sdk-environment-variables.md) specification.
 
-## Limits Handling
+## Numerical Limits Handling
 
 The SDK MUST handle limits in a graceful way according to [Error handling in
 OpenTelemetry](../error-handling.md).
