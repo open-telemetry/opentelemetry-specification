@@ -19,7 +19,7 @@ Table of Contents
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
 * [Defaults and configuration](#defaults-and-configuration)
-* [Limits Handling](#limits-handling)
+* [Numerical Limits Handling](#numerical-limits-handling)
 * [Compatibility requirements](#compatibility-requirements)
 * [Concurrency requirements](#concurrency-requirements)
 
