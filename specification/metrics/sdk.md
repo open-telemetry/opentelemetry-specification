@@ -19,7 +19,7 @@ Table of Contents
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
 * [Defaults and configuration](#defaults-and-configuration)
-* [Numerical Limits Handling](#numerical-limits-handling)
+* [Numerical limits handling](#numerical-limits-handling)
 * [Compatibility requirements](#compatibility-requirements)
 * [Concurrency requirements](#concurrency-requirements)
 
@@ -776,10 +776,10 @@ modeled to interact with other components in the SDK:
 The SDK MUST provide configuration according to the [SDK environment
 variables](../sdk-environment-variables.md) specification.
 
-## Numerical Limits Handling
+## Numerical limits handling
 
-The SDK MUST handle limits in a graceful way according to [Error handling in
-OpenTelemetry](../error-handling.md).
+The SDK MUST handle numerical limits in a graceful way according to [Error
+handling in OpenTelemetry](../error-handling.md).
 
 If the SDK receives float/double values from [Instruments](./api.md#instrument),
 it MUST handle all the possible values. For example, if the language runtime
