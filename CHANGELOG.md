@@ -32,6 +32,7 @@ release.
 ### OpenTelemetry Protocol
 
 - Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
+- Make gzip the recommended default compression method ([#1895](https://github.com/open-telemetry/opentelemetry-specification/pull/1895))
 
 ### SDK Configuration
 
