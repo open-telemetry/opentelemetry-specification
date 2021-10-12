@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Adds text specifying how to interpret Span data in the OpenTelemetry trace data model. ([#2012](https://github.com/open-telemetry/opentelemetry-specification/pull/2012))
+
 ### Metrics
 
 - Add optional min / max fields to histogram data model.
