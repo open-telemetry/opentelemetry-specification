@@ -46,8 +46,11 @@ default span name.
 the response body; or 3xx codes with max redirects exceeded), in which case status
 MUST be set to `Error`.
 
-For HTTP status codes in the 4xx and 5xx ranges, as well as any other code the client
-failed to interpret, status MUST be set to `Error`.
+For HTTP status codes in the 4xx range span status MUST be left unset in case of `SpanKind.SERVER`
+and MUST be set to `Error` in case of `SpanKind.CLIENT`.
+
+For HTTP status codes in the 5xx range, as well as any other code the client
+failed to interpret, span status MUST be set to `Error`.
 
 Don't set the span status description if the reason can be inferred from `http.status_code`.
 
