@@ -26,6 +26,8 @@ release.
 
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
   ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
+- Add AWS App Runner as a cloud platform
+  ([#2004](https://github.com/open-telemetry/opentelemetry-specification/pull/2004))
 
 ### Compatibility
 
