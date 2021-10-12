@@ -781,17 +781,17 @@ variables](../sdk-environment-variables.md) specification.
 The SDK MUST handle limits in a graceful way according to [Error handling in
 OpenTelemetry](../error-handling.md).
 
-If the SDK receives float/double value from [Instruments](./api.md#instrument),
+If the SDK receives float/double values from [Instruments](./api.md#instrument),
 it MUST handle all the possible values. For example, if the language runtime
 supports [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754), the SDK needs to
 handle NaNs and Infinites.
 
 It is unspecified _how_ the SDK should handle the input limits. The SDK authors
-may leverage/follow the language runtime behavior for better performance, rather
+MAY leverage/follow the language runtime behavior for better performance, rather
 than perform a check on each value coming from the API.
 
 It is unspecified _how_ the SDK should handle the output limits (e.g. integer
-overflow). The SDK authors may rely on the language runtime behavior as long as
+overflow). The SDK authors MAY rely on the language runtime behavior as long as
 errors/exceptions are taken care of.
 
 ## Compatibility requirements
