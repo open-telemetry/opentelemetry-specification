@@ -16,6 +16,8 @@ release.
 - Add optional min / max fields to histogram data model.
   ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915),
   [#1983](https://github.com/open-telemetry/opentelemetry-specification/pull/1983))
+- Add exponential histogram to the metrics data model.
+  ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
 
 ### Logs
 
@@ -23,9 +25,20 @@ release.
 
 ### Semantic Conventions
 
+- BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
+  ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
+
+- Don't set Span.Status for 4xx http status codes for SERVER spans.
+  ([#1998](https://github.com/open-telemetry/opentelemetry-specification/pull/1998))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
+  ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975),
+  [#1985](https://github.com/open-telemetry/opentelemetry-specification/pull/1985))
+- Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
 
@@ -86,6 +99,8 @@ release.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
+- Add `k8s.container.restart_count` Resource attribute.
+  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 
 ### Compatibility
 
@@ -104,6 +119,7 @@ release.
 
 - Change default value for OTEL_EXPORTER_JAEGER_AGENT_PORT to 6831.
   ([#1812](https://github.com/open-telemetry/opentelemetry-specification/pull/1812))
+- See also the changes for OTLP configuration listed under "OpenTelemetry Protocol" above.
 
 ## v1.6.0 (2021-08-06)
 
