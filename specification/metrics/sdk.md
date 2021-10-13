@@ -303,7 +303,6 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 - [Trivial Histogram](./sdk.md#trivial-histogram-aggregation)
 
-
 #### None Aggregation
 
 The None Aggregation informs the SDK to ignore/drop all Instrument Measurements
