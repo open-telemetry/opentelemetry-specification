@@ -61,7 +61,7 @@ We recognize the following needs:
   of received telemetry confirms to. The consumers also need a way to be able to
   interpret the telemetry data that uses different telemetry schemas.
 
-Telemetry Schemas proposed and accepted in
+Telemetry Schemas that were proposed and accepted in
 [OTEP0152](https://github.com/open-telemetry/oteps/blob/main/text/0152-telemetry-schemas.md)
 address these needs.
 
@@ -74,7 +74,8 @@ work together.
 Telemetry Schemas are central to how we make this possible. Here is a summary of
 how the schemas work:
 
-- OpenTelemetry defines a file format for defining telemetry schemas.
+- OpenTelemetry defines a [file format](file_format_v1.0.0.md) for defining
+  telemetry schemas.
 
 - Telemetry schemas are versioned. Over time the schema may evolve and telemetry
   sources may emit data confirming to newer versions of the schema.
@@ -103,8 +104,7 @@ how the schemas work:
   specification version number).
 
 - OpenTelemetry instrumentation libraries include the OpenTelemetry Schema URL
-  in all emitted telemetry. This is currently work in progress. Not all
-  languages and libraries currently do this,
+  in all emitted telemetry. This is currently work in progress,
   [here is an example](https://github.com/open-telemetry/opentelemetry-go/blob/8ba6da8f3e5380629fcd72057fe0f827a9e23493/sdk/resource/os.go#L50)
   of how it is done in Go SDK's Resource detectors.
 

@@ -318,9 +318,8 @@ file. The format version follows the MAJOR.MINOR.PATCH format, similar to semver
 The "file_format" setting is used by consumers of the file to know if they are
 capable of interpreting the content of the file.
 
-The current value for this setting is "1.0.0" and it will be published in
-OpenTelemetry specification once this OTEP is accepted. Any change to this
-number MUST follow the OTEP process and be published in the specification.
+The current value for this setting is "1.0.0". Any change to this number MUST
+follow the OTEP process and be published in the specification.
 
 The current schema file format allows representing a limited set of
 transformations of telemetry data. We anticipate that in the future more types
