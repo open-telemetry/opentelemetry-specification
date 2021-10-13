@@ -2,6 +2,13 @@
 
 **Status**: [Experimental](../../document-status.md)
 
-Note: this specification is subject to major changes. To avoid thrusting
-language client maintainers, we don't recommend OpenTelemetry clients to start
-the implementation unless explicitly communicated.
+OTLP Metrics Exporter is a [Push Metric
+Exporter](../sdk.md#push-metric-exporter) which sends metrics via the
+[OpenTelemetry Protocol](../../protocol/README.md).
+
+OTLP Metrics Exporter MUST support both Cumulative and Delta
+[Temporality](../datamodel.md#temporality).
+
+OTLP Metrics Exporter MUST allow [Aggregation
+Temporality](../datamodel.md#temporality) to be specified, as described in
+[MetricExporter](../sdk.md#metricexporter).
