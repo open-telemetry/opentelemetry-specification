@@ -9,7 +9,7 @@ groups:
         type: string
         required: always
         brief: 'A string identifying the messaging system.'
-        examples: ['kafka', 'rabbitmq', 'activemq', 'AmazonSQS']
+        examples: ['kafka', 'rabbitmq', 'rocketmq', 'activemq', 'AmazonSQS']
       - id: destination
         type: string
         required: always
@@ -180,3 +180,68 @@ groups:
         required:
           conditional: 'If missing, it is assumed to be false.'
         brief: 'A boolean that is true if the message is a tombstone.'
+
+  - id: messaging.rocketmq
+    prefix: messaging.rocketmq
+    extends: messaging
+    brief: >
+      Attributes for Apache RocketMQ
+    attributes:
+      - id: namespace
+        type: string
+        required: always
+        brief: >
+          Namespace of RocketMQ resources, resources in different namespaces are individual.
+        examples: 'myNamespace'
+      - id: client_group
+        type: string
+        required: always
+        brief: >
+          Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind.
+        examples: 'myConsumerGroup'
+      - id: client_id
+        type: string
+        required: always
+        brief: >
+          The unique identifier for each client.
+        examples: 'myhost@8742@s8083jm'
+      - id: message_type
+        type:
+          allow_custom_values: false
+          members:
+            - id: normal
+              value: 'normal'
+              brief: "Normal message"
+            - id: fifo
+              value: 'fifo'
+              brief: 'FIFO message'
+            - id: delay
+              value: 'delay'
+              brief: 'Delay message'
+            - id: transaction
+              value: 'transaction'
+              brief: 'Transaction message'
+        brief: >
+          Type of message.
+      - id: message_tag
+        type: string
+        brief: >
+          The secondary classifier of message besides topic.
+        examples: tagA
+      - id: message_keys
+        type: string[]
+        brief: >
+          Key(s) of message, another way to mark message besides message id.
+        examples: ['keyA', 'keyB']
+      - id: consumption_model
+        type:
+          allow_custom_values: false
+          members:
+            - id: clustering
+              value: 'clustering'
+              brief: 'Clustering consumption model'
+            - id: broadcasting
+              value: 'broadcasting'
+              brief: 'Broadcasting consumption model'
+        brief: >
+          Model of message consumption. This only applies to consumer spans.
