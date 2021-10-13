@@ -340,7 +340,7 @@ This Aggregation honors the following configuration parameters:
 The monotonicity of the aggregation is determined by the instrument type:
 
 | Instrument Kind | `SumType` |
-| --- | --- | --- |
+| --- | --- |
 | [Counter](./api.md#counter) | Monotonic |
 | [UpDownCounter](./api.md#updowncounter) | Non-Monotonic |
 | [Histogram](./api.md#histogram) | Monotonic |
