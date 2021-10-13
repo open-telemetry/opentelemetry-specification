@@ -19,7 +19,7 @@ The following configuration options MUST be available to configure the OTLP expo
 | Timeout              | Maximum time the OTLP exporter will wait for each batch export. | 10s               | `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` |
 | Protocol             | The transport protocol. Options MAY include `grpc`, `http/protobuf`, and `http/json`. See [Specify Protocol](./exporter.md#specify-protocol) for more details. | `http/protobuf` [2]        | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` |
 
-**[1]**: SDKs SHOULD default endpoint variables to use `http` scheme unless as they have good reasons to choose
+**[1]**: SDKs SHOULD default endpoint variables to use `http` scheme unless they have good reasons to choose
 `https` scheme for the default (e.g., for backward compatibility reasons in a stable SDK release).
 
 **[2]**: If no compression value is explicitly specified, SIGs can default to the value they deem
