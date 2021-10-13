@@ -12,3 +12,6 @@ OTLP Metrics Exporter MUST support both Cumulative and Delta
 OTLP Metrics Exporter MUST allow [Aggregation
 Temporality](../datamodel.md#temporality) to be specified, as described in
 [MetricExporter](../sdk.md#metricexporter).
+
+If the temporality is not specified, OTLP Metrics Exporter SHOULD use Cumulative
+as the default temporality.
