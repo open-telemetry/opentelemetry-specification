@@ -166,6 +166,9 @@ groups:
             - id: 'gcp'
               value: 'gcp'
               brief: 'Google Cloud Platform'
+            - id: 'tencent_cloud'
+              value: 'tencent_cloud'
+              brief: 'Tencent Cloud'
         required: always
         brief: >
           The cloud provider of the invoked function.
