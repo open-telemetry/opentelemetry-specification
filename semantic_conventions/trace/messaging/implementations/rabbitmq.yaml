@@ -1,0 +1,14 @@
+groups:
+  - id: messaging.rabbitmq
+    prefix: messaging.rabbitmq
+    extends: messaging
+    brief: >
+      Attributes for RabbitMQ
+    attributes:
+      - id: routing_key
+        type: string
+        required:
+          conditional: Unless it is empty.
+        brief: >
+          RabbitMQ message routing key.
+        examples: 'myKey'
