@@ -71,6 +71,9 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `http.request_content_length_uncompressed` | int | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
 | `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
 | `http.response_content_length_uncompressed` | int | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
+| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | No |
+| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | No |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
@@ -87,6 +90,17 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `2.0` | HTTP 2 |
 | `SPDY` | SPDY protocol. |
 | `QUIC` | QUIC protocol. |
+
+Following attributes MUST be provided **at span creation time** (when provided at all):
+
+* `http.method`
+* `http.url`
+* `http.target`
+* `http.host`
+* `http.scheme`
+* [`net.peer.ip`](span-general.md)
+* [`net.peer.name`](span-general.md)
+* [`net.peer.port`](span-general.md)
 <!-- endsemconv -->
 
 It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
