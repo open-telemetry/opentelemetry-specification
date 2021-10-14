@@ -20,12 +20,18 @@
     + [Multiply the adjusted count into the data](#multiply-the-adjusted-count-into-the-data)
   * [Trace Sampling](#trace-sampling)
     + [Counting child spans using root span adjusted counts](#counting-child-spans-using-root-span-adjusted-counts)
-    + [Using head trace probability to count all spans](#using-head-trace-probability-to-count-all-spans)
-    + [Head sampling for traces](#head-sampling-for-traces)
+    + [Using parent sampling probability to count all spans](#using-parent-sampling-probability-to-count-all-spans)
+    + [Parent sampling for traces](#parent-sampling-for-traces)
       - [`Parent` Sampler](#parent-sampler)
       - [`TraceIDRatio` Sampler](#traceidratio-sampler)
       - [Dapper's "Inflationary" Sampler](#dappers-inflationary-sampler)
-- [Proposed specification text](#proposed-specification-text)
+- [Proposed `Span` protocol](#proposed-span-protocol)
+  * [Span data model changes](#span-data-model-changes)
+  * [Proposed `Sampler` composition rules](#proposed-sampler-composition-rules)
+    + [Composing two consistent probability samplers](#composing-two-consistent-probability-samplers)
+    + [Composing a probability sampler and a non-probability sampler](#composing-a-probability-sampler-and-a-non-probability-sampler)
+    + [Composition rules summary](#composition-rules-summary)
+  * [Proposed `Sampler` interface changes](#proposed-sampler-interface-changes)
 - [Recommended reading](#recommended-reading)
 - [Acknowledgements](#acknowledgements)
 
@@ -74,7 +80,7 @@ details about the sampling configuration.
 The hypothetical `sampler.adjusted_count` attribute is used throughout
 these examples to demonstrate this concept, although the proposal
 below for OpenTelemetry `Span` messages introduces a dedicated field
-with specific interpretation for conveying head sampling probability.
+with specific interpretation for conveying parent sampling probability.
 
 ### Span sampling
 
@@ -351,15 +357,15 @@ Sampling techniques are always about lowering the cost of data
 collection and analysis, but in trace collection and analysis
 specifically, approaches can be categorized by whether they reduce
 Tracer overhead.  Tracer overhead is reduced by not recording spans
-for unsampled traces and requires making the sampling decision for a
-trace before all of its attributes are known.
+for unsampled traces and requires making the sampling decision at the
+time a new span context is created, sometimes before all of its
+attributes are known.
 
-Traces are expected to be complete, meaning that a tree or sub-tree of
-spans branching from a certain root are expected to be fully
-collected.  When sampling is applied to reduce Tracer overhead, there
-is generally an expectation that complete traces will still be
-produced.  Sampling techniques that lower Tracer overhead and produce
-complete traces are known as _Head-based trace sampling_ techniques.
+Traces are said to be complete when the all spans that were part of
+the trace are collected.  When sampling is applied to reduce Tracer
+overhead, there is generally an expectation that complete traces will
+still be produced.  Sampling techniques that lower Tracer overhead and
+produce complete traces are known as _Head trace sampling_ techniques.
 
 The decision to produce and collect a sample trace has to be made when
 the root span starts, to avoid incomplete traces.  Then, assuming
@@ -409,14 +415,19 @@ non-root spans.  The cost of indexing and looking up the root span
 adjusted counts makes this analysis relatively expensive to perform in
 real time.
 
-#### Using head trace probability to count all spans
+#### Using parent sampling probability to count all spans
 
 If the W3C `is-sampled` flag will be used to determine whether
 `RECORD_AND_SAMPLE` is returned in a Sampler, then in order to count
 sample spans without first locating the root span requires propagating
-the _head trace sampling probability_ through the context.
+information about the parent sampling probability through the
+context.  Using the parent sampling probability, instead of the
+root, allows individual spans in a trace to control the sampling
+probability of their descendents in a sub-trace that use `ParentBased`
+sampler.  Such techniques are referred to as _parent sampling_
+techniques.
 
-Head trace sampling probability may be thought of as the probability
+Parent sampling probability may be thought of as the probability
 of causing a child span to be a sampled.  Propagators that maintain
 this variable MUST obey the rules of conditional probability.  In this
 model, the adjusted count of each span depends on the adjusted count
@@ -425,16 +436,16 @@ counts of all sampled spans is expected to equal the population total
 number of spans.
 
 This applies to other forms of telemetry that happen (i.e., are
-caused) within a context carrying head trace sampling probability.
-For example, we may record log events and metrics exemplars with
-adjusted counts equal to the inverse of the current head trace
-sampling probability when they are produced.
+caused) within a context carrying parent sampling probability.  For
+example, we may record log events and metrics exemplars with adjusted
+counts equal to the inverse of the current parent sampling probability
+when they are produced.
 
 This technique allows translating spans and logs to metrics without
 first locating their root span, a significant performance advantage
 compared with first collecting and indexing root spans.
 
-Several head sampling techniques are discussed in the following
+Several parent sampling techniques are discussed in the following
 sections and evaluated in terms of their ability to meet all of the
 following criteria:
 
@@ -442,7 +453,7 @@ following criteria:
 - Produces complete traces
 - Spans are countable.
 
-#### Head sampling for traces
+#### Parent sampling for traces
 
 Details about Sampler implementations that meet
 the requirements stated above.
@@ -457,7 +468,7 @@ requires propagating the sampling probability or adjusted count of
 the context in effect when starting child spans.  This is expanded
 upon in [OTEP 168 (WIP)](https://github.com/open-telemetry/oteps/pull/168).
 
-When propagating head sampling probability, spans recorded by the
+When propagating parent sampling probability, spans recorded by the
 `Parent` sampler could encode the adjusted count in the corresponding
 `SpanData` using a Span attribute named `sampler.adjusted_count`.
 
@@ -510,7 +521,7 @@ systems where a high-throughput service on occasion calls a
 low-throughput service.  Low-throughput services are meant to inflate
 their sampling probability.
 
-The use of this technique requires propagating the head inclusion
+The use of this technique requires propagating the parent inclusion
 probability (as discussed for the `Parent` sampler) of the incoming
 Context and whether it was sampled, in order to calculate the
 probability of starting to sample a new "sub-root" in the trace.
@@ -526,7 +537,7 @@ P(x)=P(x|y)*P(y)+P(x|not y)*P(not y)
 
 The variables are:
 
-- **`H`**: The head inclusion probability of the parent context that
+- **`H`**: The parent inclusion probability of the parent context that
   is in effect, independent of whether the parent context was sampled
 - **`I`**: The inflationary sampling probability for the span being
   started.
@@ -560,90 +571,269 @@ D = (I - H) / (1 - H)
 ```
 
 Now the Sampler makes a decision with probability `D`.  Whether the
-decision is true or false, propagate `I` as the new head inclusion
+decision is true or false, propagate `I` as the new parent inclusion
 probability.  If the decision is true, begin recording a sub-rooted
 trace with adjusted count `1/I`.
 
 ## Proposed `Span` protocol
 
-Earlier drafts of this document had proposed the use of Span
-attributes to convey a the combined effects of head- and tail-sampling
-in the form of an (optional) adjusted count and (optional) sampler
-name.  The group did not reach agreement on whether and/or how to
-convey tail sampling.
-
-Following the proposal for propagating consistent head trace sampling
+Following the proposal for propagating consistent parent sampling
 probability developed in [OTEP
 168](https://github.com/open-telemetry/oteps/pull/168), this proposal
-is limited to adding a field to encode the head sampling probability.
-The OTEP 168 proposal for propagation limits head sampling
+is limited to adding a field to encode the parent sampling probability.
+The OTEP 168 proposal for propagation limits parent sampling
 probabilities to powers of two, hence we are able to encode the
 corresponding adjusted count using a small non-negative integer.
 
-Interoperability with existing Propagators and Span data means
-recognizing Spans with unknown adjusted count when the new field is
-unset.  Thus, the 0 value shall mean unknown adjusted count.
+The OpenTelemetry Span protocol already includes the Span's
+`tracestate`, which allows consumers to calculate the adjusted count
+of the span by applying the rules specified that proposal to calculate
+the parent sampling probability.
 
-The OTEP 168 proposal for _propagating_ head sampling probability uses
-6 bits of information, with 62 ordinary values, one zero value, and a
-single unused value.
+The OTEP 168 proposal for propagating parent sampling probability uses 6
+bits of information, with 63 ordinary values and a special zero value.
+When `tracestate` is empty, the `ot` subkey cannot be found, or the
+`p` value cannot be determined, the parent sampling probability is
+considered unknown.
 
-Here, we propose a biased encoding for head sampling probability equal
-to 1 plus the `P` value as proposed in OTEP 168.  The proposed span
-field, a biased base-2 logarithm of the adjusted count, is named
-simply `log_head_adjusted_count` and still requires 6 bits of
-information.
+| Value | Parent Adjusted Count |
+| ----- | ----------------      |
+| 0     | 1                     |
+| 1     | 2                     |
+| 2     | 4                     |
+| 3     | 8                     |
+| 4     | 16                    |
+| ...   | ...                   |
+| X     | 2**X                  |
+| ...   | ...                   |
+| 62    | 2**62                 |
+| 63    | 0                     |
 
-| Value | Head Adjusted Count |
-| ----- | ---------------- |
-| 0 | _Unknown_ |
-| 1 | 1 |
-| 2 | 2 |
-| 3 | 4 |
-| 4 | 8 |
-| 5 | 16 |
-| 6 | 32 |
-| ... | ... |
-| X | 2^(X-1) |
-| ... | ... |
-| 62 | 2^61 |
-| 63 | 0 |
-
-Combined with the proposal for propagating head sampling probability
+Combined with the proposal for propagating parent sampling probability
 in OTEP 168, the result is that Sampling can be enabled in an
-up-to-date system and all Spans, roots and children alike, will have a
-non-zero values in the `log_head_adjusted_count` field.  Consumers of a
-stream of Span data with non-zero values in the `log_head_adjusted_count`
-field can approximately and accurately count Spans using adjusted
-counts.
+up-to-date system and all Spans, roots and children alike, will have
+known adjusted count.  Consumers of a stream of Span data with the
+OTEP 168 `tracestate` value can approximately and accurately count
+Spans by their adjusted count.
 
-Non-probabilistic Samplers such as the [Leaky-bucket rate-limited
-sampler](https://github.com/open-telemetry/opentelemetry-specification/issues/1769)
-SHOULD set the `log_head_adjusted_count` field to zero to indicate an
-unknown adjusted count.
+### Span data model changes
 
-### Proposed `Span` field documentation
-
-The following text will be added to the `Span` message in
-`opentelemetry/proto/trace/v1/trace.proto`:
+Addition to the Span data model:
 
 ```
-  // Log-head-adjusted count is the logarithm of adjusted count for
-  // this span as calculated at the head, offset by +1, with the
-  // following recognized values.
-  //
-  // 0: The zero value represents an UNKNOWN adjusted count.
-  //    Consumers of these Spans cannot cannot compute span metrics.
-  //
-  // 1: An adjusted count of 1.
-  //
-  // 2-62: Values 2 through 62 represent an adjusted count of 2^(Value-1)
-  //
-  // 63: Value 63 represents an adjusted count of zero.
-  //
-  // Values greater than 64 are unrecognized.
-  uint32 log_head_adjusted_count = <next_tag>;
+### Definitions Used in this Document
+
+#### Sampler
+
+A Sampler provides configurable logic, used by the SDK, for selecting
+which Spans are "recorded" and/or "sampled" in a tracing client
+library.  To "record" a span means to build a representation of it in
+the client's memory, which makes it eligible for being exported.  To
+"sample" a span implies setting the W3C `sampled` flag and recording
+the span for export.
+
+OpenTelemetry supports spans that are "recorded" and not "sampled"
+for "live" observability of spans (e.g., z-pages).
+
+The Sampler interface and the built-in Samplers defined by OpenTelemetry 
+must be capable of deciding immediately whether to sample the child
+context.  The term "sampling" may be used in a more general sense.  
+For example, a reservoir sampling scheme limits the rate of sample items 
+selected over a period of time, but such a scheme necessarily defers its 
+decision making, thus "Sampling" may be applied anywhere on a collection 
+path whereas the "Sampler" API is restricted to logic that can immediately
+decide to sample a trace in side an OpenTelemetry SDK.
+
+#### Parent-based sampling
+
+A Sampler that makes its decision to sample based on the W3C `sampled`
+flag is said to use parent-based sampling.
+
+#### Parent sampling
+
+In a tracing context, Parent sampling refers to the initial decision to
+sample a span or a trace, which determines the W3C `sampled` flag of
+the child context.  The OpenTelemetry tracing data model currently
+supports only parent sampling.
+
+#### Probability sampler
+
+A probability Sampler is a Sampler that knows immediately, for each
+of its decisions, the probability that the span had of being selected.
+
+Sampling probability is defined as a number less than or equal to 1
+and greater than 0 (i.e., `0 < probability <= 1`).  The case of 0
+probability is treated as a special, non-probabilistic case.
+
+#### Consistent probability sampler
+
+A consistent probability sampler is a Sampler that supports independent
+sampling decisions at each span in a trace while maintaining that 
+traces will be complete with probability equal to the minimum sampling 
+probability across the trace.  Consistent probability sampling requires that 
+for any span in a given trace, if a Sampler with lesser sampling probability 
+selects the span for sampling, then the span would also be selected by a
+Sampler configured with greater sampling probability.
+
+In OpenTelemetry, consistent probability samplers are limited to 
+power-of-two probabilities.  OpenTelemetry consistent probability sampling 
+is defined in terms of a "p-value" and an "r-value", both of which are 
+propagated via the context to assist in making consistent sampling decisions.
+
+### Always-on sampler
+
+An always-on sampler is another name for a consistent probability
+sampler with probability equal to one.
+
+### Always-off sampler
+
+An always-off Sampler has the effect of disabling a span completely,
+effectively excluding it from the population.  This is not defined as
+a probability sampler with zero probability, because these spans are
+effectively uncountable.
+
+### Non-probability sampler
+
+A non-probability sampler is a Sampler that makes its decisions not 
+based on chance, but instead uses arbitrary logic and internal state 
+to make its decisions. Because OpenTelemetry specifies the use of 
+consistent probability samplers, any sampler other than a parent-based 
+sampler that does not meet all the requirements for consistent probability 
+sampling is termed a non-probability sampler.
+
+#### Adjusted count
+
+Adjusted count is defined as a measure of representivity, the number
+of spans in the population that are represented by the individually
+sampled span.  Span-to-metrics pipelines may be built by adding the
+adjusted count of each sample span to a counter of matching spans,
+observing the duration of each sample span in a histogram adjusted
+count many times, and so on.
+
+The adjusted count 1 means an one-to-one sampling was in effect.
+Adjusted counts greater than 1 indicate the use of a probability
+sampler.  Adjusted counts are unknown when using a non-probability
+sampler.
+
+Zero adjusted count is defined in a way to support composition of
+probability and non-probability samplers.  In effect, spans that are 
+"recorded" but not "sampled" have adjusted count of zero.
+
+#### Unbiased probability sampling
+
+The statistical term "unbiased" is a requirement applied to the
+adjusted count of a span, which states that the expected value of the
+sum of adjusted counts across all exported spans MUST equal the true
+number of spans in the population.  Statistical bias, a measure of the
+difference between an estimate and its true value, of the estimated
+span count in the population should equal zero.  Moreover, this
+requirement must be true for all subsets of the span population for a 
+sampler to be considered an unbiased probability sampler.
+
+It is easier to define probability sampling by what it is not.  Here
+are several samplers that should be categorized as non-probability
+samplers because they cannot record unbiased adjusted counts:
+
+- A traditional form of "leaky-bucket" sampler applies a rate limit to
+  the starting of new sampled traces.  When the configured limit is
+  not exceeded, all spans pass through with adjusted count 1.  When
+  the configured rate limit is exceeded, it is impossible to set
+  adjusted count without introducing bias because future arrivals are
+  not known.
+- A "every-N" sampler records spans on a regular interval, but instead
+  of making a probabilistic decision it makes an exact decision 
+  (e.g., every 10,000 spans).  This sampler knows the representivity
+  of the spans it samples, but the selection process is biased.
+- A "at least once per time period" sampler remembers the last time
+  each distinct span name exported a span.  When a span occurs after
+  more than the specified interval, it samples one (e.g., to ensure
+  that receivers know about these spans).  This sampler introduces
+  bias because spans that happen between the intervals do not receive
+  consideration.
+- The "always off" sampler is biased by definition. Since it exports
+  no spans, the sum of adjusted count is always zero.
 ```
+
+### Proposed `Sampler` composition rules
+
+When combining multiple Samplers, the natural outcome is that a span
+will be recorded and sampled if any one of the Samplers says to record
+or sample the span.  To combine Samplers in a way that preserves
+adjusted count requires first classifying Samplers into one of the
+following categories:
+
+1. Parent-based (`ParentBased`)
+2. Known non-zero probability (`TraceIDRatio`, `AlwaysOn`)
+3. Non-probability based (`AlwaysOff`, all other Samplers)
+
+The Parent-based sampler always reduces into one of other two at
+runtime, based on whether the parent context includes known parent
+probability or not.
+
+Here are the rules for combining Sampler decisions from each of these
+categories that may be used to construct composite samplers.
+
+#### Composing two consistent probability samplers
+
+When two consistent probability samplers are used, the Sampler with
+the larger probability by definition includes every span the smaller
+probability sampler would select.  The result is a consistent sampler
+with the minimum p-value.
+
+#### Composing a probability sampler and a non-probability sampler
+
+When a probability sampler is composed with a non-probability sampler,
+the effect is to change an unknown probability into a known
+probability.  When the probability sampler selects the span, its
+adjusted count will be used.  When the probability sampler does not
+select a span, zero adjusted count will be used.
+
+The use of zero adjusted count allows recording spans that an unbiased
+probability sampler did not select, allowing those spans to be
+received at the backend without introducing statistical bias.
+
+#### Composition rules summary
+
+To create a composite Sampler, first express the result of each
+Sampler in terms of the p-value and `sampled` flag.  Note that
+p-values fall into three categories:
+
+1. Unknown p-value indicates unknown adjusted count
+2. Known non-zero p-value (in the range `[0,62]`) indicates known non-zero adjusted count
+3. Known zero p-value (`p=63`) indicates known zero adjusted count
+
+While non-probability samplers always return unknown `p` and may set
+`sampled=true` or `sampled=false`, a probability sampler is restricted
+to returning either `p∈[0,62]` with `sampled=true` or to returning
+`p=63` with `sampled=false`.  No individual sampler can return `p=63`
+with `sampled=true`, but this condition MAY result from composition of
+`p=63` and unknown `p`.
+
+A composite sampler can be computed using the table below, as follows.
+Although unknown `p` is never encoded in `tracestate`, for the purpose
+of composition we assign unknowns `p=64`, which is 1 beyond the range
+of the 6-bit that represent known p-values.  The assignment of `p=64`
+simplifies the formulas below .
+
+By following these simple rules, any numher of consistent probability
+samplers and non-probability samplers can be combined.  Starting with
+`p=64` representing unknown and `sampled=false`, update the composite
+p-value to the minimum value of the prior composite p-value and the
+individual sampler p-value.
+
+```
+p<sub>out</sub> = min(p<sub>in</sub>, p<sub>sampler</sub)
+sampled<sub>out</sub> = logicalOR(sampled<sub>in</sub>, sampled<sub>sampler</sub)
+```
+
+The composite sampler is always the logical-OR of the individual
+samplers.  For p-value, this has two effects:
+
+1. When combining two consistent probability samplers, the
+less-selective Sampler's adjusted count is taken.
+2. When combining a consistent probability sampler and a
+non-probability sampler, this has the effect of changing unknown
+adjusted count into known adjusted count.
 
 ### Proposed `Sampler` interface changes
 
@@ -651,21 +841,25 @@ The Trace SDK specification of the `SamplingResult` will be extended
 with a new field to be returned by all Samplers.
 
 ```
-- The sampling probability of the span is encoded as one plus the
-  inverse of head inclusion probability, known as "adjusted count",
-  which is the effective count of the Span for use in Span-to-Metrics
-  pipelines.  The value 0 is used to represent unknown adjusted count,
-  and the value 63 is used to represent known-zero adjusted count.
-  For values >0 and <63, the adjusted count of the Span is
-  2^(value-1), representing power-of-two probabilities between
-  1 and 2^-61.
+- The sampling probability of the span is encoded as the base-2
+  logarithm of inverse parent sampling probability, known as "adjusted
+  count", which is the effective count of the Span for use in
+  Span-to-Metrics pipelines.  The value 64 is used to represent
+  unknown adjusted count, and the value 63 is used to represent
+  known-zero adjusted count.  For values >=0 and <63, the adjusted
+  count of the Span is 2**value, representing power-of-two
+  probabilities between 1 and 2**-62.
 
   The corresonding `SamplerResult` field SHOULD be named
-  `log_head_adjusted_count` to match the Span data model.
+  `log_adjusted_count` because it carries the newly-created 
+  span and child context's adjusted count and is expressed as
+  the logarithm of adjusted count for spans selected by a 
+  probability Sampler. 
 ```
 
 See [OTEP 168](https://github.com/open-telemetry/oteps/pull/168) for
-details on how each of the built-in Samplers is expected to behave.
+details on how each of the built-in Samplers is expected to set
+`tracestate` for conveying sampling probabilities.
 
 ## Recommended reading
 
