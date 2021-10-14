@@ -1,0 +1,63 @@
+groups:
+  - id: rpc.grpc
+    prefix: rpc.grpc
+    extends: rpc
+    brief: 'Tech-specific attributes for gRPC.'
+    attributes:
+      - id: status_code
+        type:
+          members:
+            - id: ok
+              brief: OK
+              value: 0
+            - id: cancelled
+              brief: CANCELLED
+              value: 1
+            - id: unknown
+              brief: UNKNOWN
+              value: 2
+            - id: invalid_argument
+              brief: INVALID_ARGUMENT
+              value: 3
+            - id: deadline_exceeded
+              brief: DEADLINE_EXCEEDED
+              value: 4
+            - id: not_found
+              brief: NOT_FOUND
+              value: 5
+            - id: already_exists
+              brief: ALREADY_EXISTS
+              value: 6
+            - id: permission_denied
+              brief: PERMISSION_DENIED
+              value: 7
+            - id: resource_exhausted
+              brief: RESOURCE_EXHAUSTED
+              value: 8
+            - id: failed_precondition
+              brief: FAILED_PRECONDITION
+              value: 9
+            - id: aborted
+              brief: ABORTED
+              value: 10
+            - id: out_of_range
+              brief: OUT_OF_RANGE
+              value: 11
+            - id: unimplemented
+              brief: UNIMPLEMENTED
+              value: 12
+            - id: internal
+              brief: INTERNAL
+              value: 13
+            - id: unavailable
+              brief: UNAVAILABLE
+              value: 14
+            - id: data_loss
+              brief: DATA_LOSS
+              value: 15
+            - id: unauthenticated
+              brief: UNAUTHENTICATED
+              value: 16
+        required: always
+        brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."
+  
