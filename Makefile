@@ -41,7 +41,9 @@ install-markdown-toc:
 .PHONY: markdown-toc
 markdown-toc:
 	@for f in $(ALL_DOCS); do \
-		if grep -q '<!-- tocstop -->' $$f; then \
+		if [[ "$$f" == "./specification/metrics/datamodel.md" ]]; then \
+			echo markdown-toc: excluding $$f; \
+		elif grep -q '<!-- tocstop -->' $$f; then \
 			echo markdown-toc: processing $$f; \
 			$(MARKDOWN_TOC) --no-first-h1 -i $$f; \
 		else \
