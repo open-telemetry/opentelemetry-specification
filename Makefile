@@ -7,6 +7,7 @@ MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 MARKDOWN_LINK_CHECK=markdown-link-check
 MARKDOWN_LINT=markdownlint
+MARKDOWN_TOC=markdown-toc
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
@@ -42,6 +43,15 @@ install-markdownlint:
 .PHONY: markdownlint
 markdownlint:
 	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
+
+.PHONY: install-markdown-toc
+install-markdown-toc:
+    # TODO: Check for existence before installing
+	npm install -g $(MARKDOWN_TOC)
+
+.PHONY: markdown-toc
+markdown-toc:
+	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_TOC) --no-first-h1 -i $$f || exit 1;	done
 
 .PHONY: install-yamllint
 install-yamllint:
@@ -80,5 +90,5 @@ fix: table-generation misspell-correction
 
 # Attempt to install all the tools
 .PHONY: install-tools
-install-tools: install-misspell install-markdownlint install-markdown-link-check
+install-tools: install-misspell install-markdownlint install-markdown-link-check install-markdown-toc
 	@echo "All tools installed"

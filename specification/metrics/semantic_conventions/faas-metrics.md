@@ -14,11 +14,13 @@ operations. By adding FaaS attributes to metric events it allows for finely tune
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
+
 - [Metric Instruments](#metric-instruments)
   * [FaaS Invocations](#faas-invocations)
 - [Attributes](#attributes)
 - [References](#references)
   * [Metric References](#metric-references)
+
 <!-- tocstop -->
 
 ## Metric Instruments

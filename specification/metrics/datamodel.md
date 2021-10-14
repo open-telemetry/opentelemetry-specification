@@ -8,7 +8,7 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [Events → Data Stream → Timeseries](#events--data-stream--timeseries)
+- [Events → Data Stream → Timeseries](#events-%E2%86%92-data-stream-%E2%86%92-timeseries)
   * [Example Use-cases](#example-use-cases)
   * [Out of Scope Use-cases](#out-of-scope-use-cases)
 - [Model Details](#model-details)
