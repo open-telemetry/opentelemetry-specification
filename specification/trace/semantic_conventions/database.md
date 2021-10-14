@@ -6,17 +6,16 @@
 
 <!-- toc -->
 
-- [Semantic conventions for database client calls](#semantic-conventions-for-database-client-calls)
-  - [Connection-level attributes](#connection-level-attributes)
-    - [Notes and well-known identifiers for `db.system`](#notes-and-well-known-identifiers-for-dbsystem)
-    - [Connection-level attributes for specific technologies](#connection-level-attributes-for-specific-technologies)
-  - [Call-level attributes](#call-level-attributes)
-    - [Call-level attributes for specific technologies](#call-level-attributes-for-specific-technologies)
-      - [Cassandra](#cassandra)
-  - [Examples](#examples)
-    - [MySQL](#mysql)
-    - [Redis](#redis)
-    - [MongoDB](#mongodb)
+- [Connection-level attributes](#connection-level-attributes)
+  * [Notes and well-known identifiers for `db.system`](#notes-and-well-known-identifiers-for-dbsystem)
+  * [Connection-level attributes for specific technologies](#connection-level-attributes-for-specific-technologies)
+- [Call-level attributes](#call-level-attributes)
+  * [Call-level attributes for specific technologies](#call-level-attributes-for-specific-technologies)
+    + [Cassandra](#cassandra)
+- [Examples](#examples)
+  * [MySQL](#mysql)
+  * [Redis](#redis)
+  * [MongoDB](#mongodb)
 
 <!-- tocstop -->
 

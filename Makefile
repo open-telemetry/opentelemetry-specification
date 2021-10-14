@@ -43,7 +43,7 @@ markdown-toc:
 	@for f in $(ALL_DOCS); do \
 		if grep -q '<!-- tocstop -->' $$f; then \
 			echo markdown-toc: processing $$f; \
-			echo $(MARKDOWN_TOC) --no-first-h1 -i $$f; \
+			$(MARKDOWN_TOC) --no-first-h1 -i $$f; \
 		else \
 			echo markdown-toc: no TOC markers, skipping $$f; \
 		fi; \
