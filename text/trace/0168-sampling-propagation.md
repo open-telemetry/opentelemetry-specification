@@ -1,14 +1,14 @@
-# Propagate head trace sampling probability
+# Propagate parent sampling probability
 
-Use the W3C trace context to convey consistent head trace sampling probability.
+Use the W3C trace context to convey consistent parent sampling probability.
 
 ## Motivation
 
-The head trace sampling probability is the probability associated with
+The parent sampling probability is the probability associated with
 the start of a trace context that was used to determine whether the
 W3C `sampled` flag is set, which determines whether child contexts
 will be sampled by a `ParentBased` Sampler.  It is useful to know the
-head trace sampling probability associated with a context in order to
+parent sampling probability associated with a context in order to
 build span-to-metrics pipelines when the built-in `ParentBased`
 Sampler is used.  Further motivation for supporting span-to-metrics
 pipelines is presented in [OTEP
@@ -30,10 +30,9 @@ itself](https://github.com/open-telemetry/opentelemetry-specification/pull/1852)
 
 ## Explanation
 
-Two pieces of information are needed to convey consistent head trace
-sampling probability:
+Two pieces of information are needed to convey consistent parent sampling probability:
 
-1. p-value representing the head trace sampling probability.
+1. p-value representing the parent sampling probability.
 2. r-value representing the "randomness" as the source of consistent sampling decisions.
 
 This proposal uses 6 bits of information to propagate each of these
@@ -42,11 +41,28 @@ sufficiently specified for probability sampling at this time.  This
 proposal closely follows [research by Otmar
 Ertl](https://arxiv.org/pdf/2107.07703.pdf).
 
+### Adjusted count
+
+The concept of adjusted count is introduced in [OTEP
+170](./0170-sampling_probability.md).  Briefly, adjusted count is defined
+in terms of the sampling probability, where:
+
+| Sampling probability | Adjusted count                     | Notes                                                                                                      |
+| --                   | --                                 | --                                                                                                         |
+| `probability` != 0   | `adjusted_count` = `1/probability` | For spans selected with non-zero probability, adjusted count is the inverse of their sampling probability. |
+| `probability` == 0   | `adjusted_count` = 0               | For spans that were not selected by a probability sampler, adjusted count is zero.                         |
+
+The term is used to convey the representivity of an item that was (or
+was not) selected by a probability sampler.  Items that are not
+selected by a probability sampler are logically assigned zero adjusted
+count, such that if they are recorded for any other reason they do not
+introduce bias in the estimated count of the total span population.
+
 ### p-value
 
 To limit the cost of this extension and for statistical reasons
-documented below, we propose to limit head trace sampling probability
-to powers of two.  This limits the available head trace sampling
+documented below, we propose to limit parent sampling probability
+to powers of two.  This limits the available parent sampling
 probabilities to 1/2, 1/4, 1/8, and so on.  We can compactly encode
 these probabilities as small integer values using the base-2 logarithm
 of the adjusted count.
@@ -60,7 +76,7 @@ When propagated, the "p-value" as it is known will be interpreted as
 shown in the following table.  The p-value for known sampling
 probabilities is the negative base-2 logarithm of the probability:
 
-| p-value | Head Probability |
+| p-value | Parent Probability |
 | -----   | -----------      |
 | 0       | 1                |
 | 1       | 1/2              |
@@ -74,20 +90,20 @@ probabilities is the negative base-2 logarithm of the probability:
 
 [As specified in OTEP 170 for the Trace data
 model](https://github.com/open-telemetry/oteps/blob/main/text/trace/0170-sampling-probability.md),
-head sampling probability can be stored in exported Span data to
+parent sampling probability can be stored in exported Span data to
 enable span-to-metrics pipelines to be built.  Because `tracestate` is
 already encoded in the OpenTelemetry Span, this proposal is requires
 no changes to the Span protocol.  Accepting this proposal means the
-p-value can be derived from `tracesstate` when the head sampling
+p-value can be derived from `tracestate` when the parent sampling
 probability is known.
 
 An unknown value for `p` cannot be propagated using `tracestate`
-explicitly, simply omitting `p` conveys an unknown head sampling
+explicitly, simply omitting `p` conveys an unknown parent sampling
 probability.
 
 ### r-value
 
-With head trace sampling probabilities limited to powers of two, the
+With parent sampling probabilities limited to powers of two, the
 amount of randomness needed per trace context is limited.  A
 consistent sampling decision is accomplished by propagating a specific
 random variable known as the r-value.
@@ -145,7 +161,7 @@ import (
 
 func nextRValueLeading() int {
     x := uint64(rand.Int63()) // 63 least-significant bits are random
-    y := x << 1 | 0x7         // 61 most-significant bits are random
+    y := x << 1 | 0x3         // 62 most-significant bits are random
     return bits.LeadingZeros64(y)
 }
 ```
@@ -160,13 +176,13 @@ import (
 
 func nextRValueTrailing() int {
     x := uint64(rand.Int63())
-    for r := 0; r < 61; r++ {
+    for r := 0; r < 62; r++ {
         if x & 0x1 == 0x1 {
             return r
         }
         x = x >> 1
     }
-    return 61
+    return 62
 }
 ```
 
@@ -178,7 +194,7 @@ but not at probabilities 1-in-16 and smaller.
 
 ### Proposed `tracestate` syntax
 
-The consistent sampling r-value (`r`) and and head sampling
+The consistent sampling r-value (`r`) and the parent sampling
 probability p-value (`p`) will be propagated using two bytes of base16
 content for each of the two fields, as follows:
 
@@ -206,7 +222,7 @@ tracestate: ot=r:0a;p:03
 and translates to
 
 ```
-base16(p-value) = 03 // 1-in-8 head probability
+base16(p-value) = 03 // 1-in-8 parent sampling probability
 base16(r-value) = 0a // qualifies for 1-in-1024 or greater probability consistent sampling
 ```
 
@@ -215,7 +231,7 @@ A `ParentBased` Sampler will include `ot=r:0a;p:03` in the stored
 count of 8 spans.  The `sampled=true` flag remains set.
 
 A `TraceIDRatioBased` Sampler configured with probability 2**-10 or
-greater will enable `sampled=true` and convey a new head sampling
+greater will enable `sampled=true` and convey a new parent sampling
 probability via `tracestate: ot=r:0a;p:0a`.
 
 A `TraceIDRatioBased` Sampler configured with probability 2**-11 or
@@ -226,7 +242,7 @@ setting `tracestate: ot=r:0a`.
 
 The reasoning behind restricting the set of sampling rates is that it:
 
-- Lowers the cost of propagating head sampling probability
+- Lowers the cost of propagating parent sampling probability
 - Limits the number of random bits required
 - Avoids floating-point to integer rounding errors
 - Makes math involving partial traces tractable.
@@ -238,21 +254,22 @@ explains how to work with a limited number of power-of-2 sampling rates.
 ### Behavior of the `TraceIDRatioBased` Sampler
 
 The Sampler MUST be configured with a power-of-two probability
-expressed as `2**-s` with s being an integer in the range [0, 61]
-except for the special case of zero probability.
+expressed as `2**-s` with s being an integer in the range [0, 62]
+except for the special case of zero probability (in which case `p=63`
+is used).
 
 If the context is a new root, the initial `tracestate` must be created
-with randomness value `r`, as described above, in the range [0, 61].
+with randomness value `r`, as described above, in the range [0, 62].
 If the context is not a new root, output a new `tracestate` with the
 same `r` value as the parent context.
+
+In both cases, set the sampled bit if the outgoing `p` is less than or
+equal to the outgoing `r` (i.e., `p <= r`).
 
 When sampled, in both cases, the context's p-value `p` is set to the
 value of `s` in the range [0, 62].  If the sampling probability is
 zero (the special case where `s` is undefined), use `p=63` the
 specified value for zero probability.
-
-In both cases, set the sampled bit if the outgoing `p` is less than or
-equal to the outgoing `r` (i.e., `p <= r`).
 
 If the context is not a new root and the incoming context's r-value
 is not set, the implementation SHOULD notify the user of an error
@@ -262,12 +279,12 @@ condition and follow the incoming context's `sampled` flag.
 
 The `ParentBased` sampler is unmodified by this proposal.  It honors
 the W3C `sampled` flag and copies the incoming `tracestate` keys to
-the child context.  If the incoming context has known head sampling
+the child context.  If the incoming context has known parent sampling
 probability, so does the Span.
 
-The span's head probability is known when both `p` and `r` are defined
-are defined in the `ot` sub-key of `tracestate`.  When `r` or `p`
-areis not defined, the span's head sampling probability is unknown.
+The span's parent sampling probability is known when both `p` and `r`
+are defined in the `ot` sub-key of `tracestate`.  When `r` or `p` are
+not defined, the span's parent sampling probability is unknown.
 
 ### Behavior of the `AlwaysOn` Sampler
 
@@ -298,10 +315,11 @@ Values of `p` are interpreted as follows:
 | 6         | 64             |
 | 7         | 0              |
 
-Note there are only 6 non-zero, non-unknown values for the adjusted
-count. Thus there are six defined values of `r` and `s`.  The
-following table shows `r` and the corresponding selection probability,
-along with the calculated adjusted count for each `s`:
+Note there are only seven known non-zero values for the adjusted count
+(`p`) ranging from 1 to 64. Thus there are seven defined values of `r`
+and `s`.  The following table shows `r` and the corresponding
+selection probability, along with the calculated adjusted count for
+each `s`:
 
 | `r` value | probability of `r` | `s=0` | `s=1` | `s=2` | `s=3` | `s=4` | `s=5` | `s=6` |
 | --        | --                 | --    | --    | --    | --    | --    | --    | --    |
@@ -315,12 +333,11 @@ along with the calculated adjusted count for each `s`:
 
 Notice that the sum of `r` probability times adjusted count in each of
 the `s=*` columns equals 1.  For example, in the `s=4` column we have
-`0*1/2 + 0*1/4 + 0*1/8 + 0*1/16 + 16*1/32 + 16*1/64 + 16*1/64 =
-16/32 + 16/64 + 16/64 = 1`.  In the `s=2` column we have `0*1/2 +
-0*1/4 + 4*1/8 + 4*1/16 + 4*1/32 + 4*1/64 + 4*1/64 = 4/8 + 4/16 +
-4/32 + 4/64 + 4/64 = 1/2 + 1/4 + 1/8 + 1/16 + 1/16 = 1`.  We conclude
-that when `r` is chosen with the given probabilities, any choice of
-`s` produces one expected span.
+`0*1/2 + 0*1/4 + 0*1/8 + 0*1/16 + 16*1/32 + 16*1/64 + 16*1/64 = 1/2 +
+1/4 + 1/4 = 1`.  In the `s=2` column we have `0*1/2 + 0*1/4 + 4*1/8 +
+4*1/16 + 4*1/32 + 4*1/64 + 4*1/64 = 1/2 + 1/4 + 1/8 + 1/16 + 1/16 = 1`.
+We conclude that when `r` is chosen with the given probabilities,
+any choice of `s` produces one expected span.
 
 ## Invariant checking
 
@@ -334,7 +351,7 @@ respect to the incoming and outgoing values for `p`, `r`, and
 | TraceIDRatio(Non-Root) | used         | unused       | ignored            | checked and passed through | set to `s`                 | set to `p <= r`          |
 | TraceIDRatio(Root)     | n/a          | n/a          | n/a                | random variable            | set to `s`                 | set to `p <= r`          |
 
-There are several cases where the resulting span's head sampling
+There are several cases where the resulting span's parent sampling
 probability is unknown:
 
 | Sampler                | Unknown condition |
@@ -360,10 +377,10 @@ as discussed below.
 
 The violation is always addressed by honoring the `sampled` flag and
 correcting `p` to either 63 (for zero adjusted count) or unset (for
-unknown adjusted count).
+unknown parent sampling probability).
 
 If `sampled` is false and the invariant is violated, drop `p` from the
-outgoing context to convey unknown head probability.
+outgoing context to convey unknown parent sampling probability.
 
 The case where `sampled` is true with `p=63` indicating 0% probability
 may by regarded as a special case to allow zero adjusted count
@@ -371,7 +388,7 @@ sampling, which permits non-probabilistic sampling to take place in
 the presence of probability sampling.  Set `p` to 63.
 
 If `sampled` is true with `p<63` (but `p>r`), drop `p` from the
-outgoing context to convey unknown head probability.
+outgoing context to convey unknown parent sampling probability.
 
 ## Prototype
 
@@ -399,9 +416,9 @@ way with respect to the bits of the TraceID.
 
 ### Not using TraceID randomness
 
-It would be possible, if TraceID were specified to have at least 61
+It would be possible, if TraceID were specified to have at least 62
 uniform random bits, to compute the randomness value described above
-as the number of leading zeros among those 61 random bits.
+as the number of leading zeros among those 62 random bits.
 
 However, this would require modifying the W3C traceparent specification,
 therefore we do not propose to use bits of the TraceID.
@@ -422,7 +439,7 @@ data to avoid the computational cost of hashing TraceIDs.
 
 ### Restriction to power-of-two
 
-Restricting head sampling rates to powers of two does not limit tail
+Restricting parent sampling probabilities to powers of two does not limit tail
 Samplers from using arbitrary probabilities.  The companion [OTEP
 170](https://github.com/open-telemetry/oteps/blob/main/text/trace/0170-sampling-probability.md) has discussed
 the use of a `sampler.adjusted_count` attribute that would not be
@@ -430,7 +447,7 @@ limited to power-of-two values.  Discussion about how to represent the
 effective adjusted count for tail-sampled Spans belongs in [OTEP
 170](https://github.com/open-telemetry/oteps/blob/main/text/trace/0170-sampling-probability.md), not this OTEP.
 
-Restricting head sampling rates to powers of two does not limit
+Restricting parent sampling probabilities to powers of two does not limit
 Samplers from using arbitrary effective probabilities over a period of
 time.  For example, a typical trace sampling rate of 5% (i.e., 1 in
 20) can be accomplished by choosing 1/16 sampling 60% of the time and
