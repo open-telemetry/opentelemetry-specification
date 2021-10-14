@@ -1037,7 +1037,6 @@ attributes when converting into OpenTelemetry.
 | -------------------- | ----------------------- | ----------- |
 | `job` | `service.name` | [Semantic convention](../resource/semantic_conventions/README.md#Service) |
 | `host` | `host.name` | [Semantic convention](../resource/semantic_conventions/host.md) |
-| `job`  | `job` | ... |
 | `instance` | `instance` | ... |
 | `port` | `port` | ... |
 | `__scheme__` | `scheme` | ... |
