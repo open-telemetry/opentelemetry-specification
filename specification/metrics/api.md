@@ -700,8 +700,8 @@ operation is provided by the `callback`, which is registered during the
 `UpDownCounter` is a [synchronous Instrument](#synchronous-instrument) which
 supports increments and decrements.
 
-Note: if the value grows
-[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+Note: if the value is
+[monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing, use
 [Counter](#counter) instead.
 
 Example uses for `UpDownCounter`:
@@ -844,8 +844,8 @@ process heap size - it makes sense to report the heap size from multiple
 processes and sum them up, so we get the total heap usage_) when the instrument
 is being observed.
 
-Note: if the value grows
-[monotonically](https://wikipedia.org/wiki/Monotonic_function), use
+Note: if the value is
+[monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing, use
 [Asynchronous Counter](#asynchronous-counter) instead; if the value is
 non-additive, use [Asynchronous Gauge](#asynchronous-gauge) instead.
 
@@ -886,7 +886,7 @@ The `callback` function is responsible for reporting the
 observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
 this callback function needs to be reentrant safe / thread safe or not.
 
-Note: Unlike [UpDownCounter.Add()](#add) which takes the increment/delta value,
+Note: Unlike [UpDownCounter.Add()](#add-1) which takes the increment/delta value,
 the callback function reports the absolute value of the Asynchronous
 UpDownCounter. To determine the reported rate the Asynchronous UpDownCounter is
 changing, the difference between successive measurements is used.
