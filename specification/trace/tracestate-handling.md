@@ -13,6 +13,7 @@ a semicolon separated list of key-value pairs such as:
 * `ot=p:8;r:64`
 * `ot=foo:bar;k1:13`
 
+The [TraceContext](https://www.w3.org/TR/trace-context/) specification defines support for multiple "tenants" each to use their own `tracestate` entry by prefixing `tenant@` to tenant-specific values in a mixed tracing environment. OpenTelemetry recognizes this syntax but does not specify an interpretation for multi-tenant `tracestate`.
 The list can be formally defined as:
 
 ```
