@@ -26,9 +26,12 @@ release.
 
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
   ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
-
+- Add Tencent Cloud as a cloud provider.
+  ([#2006](https://github.com/open-telemetry/opentelemetry-specification/pull/2006))
 - Don't set Span.Status for 4xx http status codes for SERVER spans.
   ([#1998](https://github.com/open-telemetry/opentelemetry-specification/pull/1998))
+- Add attributes for Apache RocketMQ.
+  ([#1904](https://github.com/open-telemetry/opentelemetry-specification/pull/1904))
 
 - Define http tracing attributes provided at span creation time
   ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
@@ -37,6 +40,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
+  ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975),
+  [#1985](https://github.com/open-telemetry/opentelemetry-specification/pull/1985))
 - Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
@@ -108,8 +114,6 @@ release.
 ### OpenTelemetry Protocol
 
 - Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
-- Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
-  ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975)).
 - Allow implementations to use their own default for OTLP compression, with `none` denotating no compression
   ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
 - Clarify OTLP server components MUST support none/gzip compression

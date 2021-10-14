@@ -51,6 +51,11 @@ for each signal as follow:
    Non-normatively, this could be implemented by ensuring that the base URL ends with
    a slash and then appending the relative URLs as strings.
 
+An SDK MUST NOT modify the URL in ways other than specified above. That also means,
+if the port is empty or not given, TCP port 80 is the default for the `http` scheme
+and TCP port 443 is the default for the `https` scheme, as per the usual rules
+for these schemes ([RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-2.7.1)).
+
 #### Example 1
 
 The following configuration sends all signals to the same collector:
@@ -74,7 +79,7 @@ export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metr
 This will send traces directly to the root path `http://collector:4318/`
 (`/v1/traces` is only automatically added when using the non-signal-specific
 environment variable) and metrics
-to `https://collector.example.com/v1/metrics`.
+to `https://collector.example.com/v1/metrics`, using the default https port (443).
 
 #### Example 3
 
@@ -86,9 +91,10 @@ export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metr
 ```
 
 Traces are sent to `http://collector:4318/mycollector/v1/traces`
-and metrics to `https://collector.example.com/v1/metrics/`
-(other signals, would they be defined, would be sent to their specific paths
-relative to `http://collector:4318/mycollector/`).
+and metrics to `https://collector.example.com/v1/metrics/`, using the default
+https port (443).
+Other signals, (if there were any) would be sent to their specific paths
+relative to `http://collector:4318/mycollector/`.
 
 ### Specify Protocol
 

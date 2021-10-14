@@ -20,6 +20,9 @@ groups:
             - id: 'gcp'
               value: 'gcp'
               brief: 'Google Cloud Platform'
+            - id: 'tencent_cloud'
+              value: 'tencent_cloud'
+              brief: 'Tencent Cloud'
         brief: >
           Name of the cloud provider.
       - id: account.id
@@ -30,12 +33,14 @@ groups:
       - id: region
         type: string
         brief: >
-          The geographical region the resource is running. Refer to your
-          provider's docs to see the available regions, for example
+          The geographical region the resource is running.
+        note: >
+          Refer to your provider's docs to see the available regions, for example
           [Alibaba Cloud regions](https://www.alibabacloud.com/help/doc-detail/40654.htm),
           [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/),
           [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/),
-          or [Google Cloud regions](https://cloud.google.com/about/locations).
+          [Google Cloud regions](https://cloud.google.com/about/locations),
+          or [Tencent Cloud regions](https://intl.cloud.tencent.com/document/product/213/6091).
         examples: ['us-central1', 'us-east-1']
       - id: availability_zone
         type: string
@@ -101,6 +106,15 @@ groups:
             - id: gcp_app_engine
               value: 'gcp_app_engine'
               brief: Google Cloud App Engine (GAE)
+            - id: tencent_cloud_cvm
+              value: 'tencent_cloud_cvm'
+              brief: Tencent Cloud Cloud Virtual Machine (CVM)
+            - id: tencent_cloud_eks
+              value: 'tencent_cloud_eks'
+              brief: Tencent Cloud Elastic Kubernetes Service (EKS)
+            - id: tencent_cloud_scf
+              value: 'tencent_cloud_scf'
+              brief: Tencent Cloud Serverless Cloud Function (SCF)
         brief: >
           The cloud platform in use.
         note: >
