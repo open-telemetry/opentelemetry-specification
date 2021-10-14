@@ -5,8 +5,9 @@ PWD := $(shell pwd)
 TOOLS_DIR := ./internal/tools
 MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
-MARKDOWN_LINK_CHECK=markdown-link-check
-MARKDOWN_LINT=markdownlint
+MARKDOWN_LINK_CHECK=./node_modules/.bin/markdown-link-check
+MARKDOWN_LINT=./node_modules/.bin/markdownlint
+MARKDOWN_TOC=./node_modules/.bin/markdownlint
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
@@ -27,17 +28,24 @@ misspell-correction:
 
 .PHONY: install-markdown-link-check
 install-markdown-link-check:
-	# TODO: Check for existence before installing
-	npm install -g $(MARKDOWN_LINK_CHECK)
+	npm install markdown-link-check
 
 .PHONY: markdown-link-check
 markdown-link-check:
 	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f; done
 
+.PHONY: install-markdown-toc
+install-markdown-toc:
+	npm install markdown-toc
+
+.PHONY: markdown-toc
+markdown-toc:
+	@for f in $(ALL_DOCS); do $(MARKDOWN_TOC) --no-first-h1 -i $$f; done
+
 .PHONY: install-markdownlint
 install-markdownlint:
     # TODO: Check for existence before installing
-	npm install -g markdownlint-cli
+	npm install markdownlint-cli
 
 .PHONY: markdownlint
 markdownlint:
@@ -80,5 +88,5 @@ fix: table-generation misspell-correction
 
 # Attempt to install all the tools
 .PHONY: install-tools
-install-tools: install-misspell install-markdownlint install-markdown-link-check
+install-tools: install-misspell install-markdownlint install-markdown-link-check install-markdown-toc
 	@echo "All tools installed"
