@@ -1,0 +1,17 @@
+groups:
+  - id: db.mssql
+    prefix: db.mssql
+    extends: db
+    brief: >
+      Connection-level attributes for Microsoft SQL Server
+    attributes:
+      - id: instance_name
+        tag: connection-level-tech-specific
+        type: string
+        note: >
+          If setting a `db.mssql.instance_name`, `net.peer.port` is no longer
+          required (but still recommended if non-standard).
+        brief: >
+          The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15)
+          connecting to. This name is used to determine the port of a named instance.
+        examples: 'MSSQLSERVER'

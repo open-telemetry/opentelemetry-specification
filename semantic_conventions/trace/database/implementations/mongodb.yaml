@@ -1,0 +1,14 @@
+groups:
+  - id: db.mongodb
+    prefix: db.mongodb
+    extends: db
+    brief: >
+      Call-level attributes for MongoDB
+    attributes:
+      - id: collection
+        type: string
+        required: always
+        tag: call-level-tech-specific
+        brief: >
+          The collection being accessed within the database stated in `db.name`.
+        examples: [ 'customers', 'products' ]
