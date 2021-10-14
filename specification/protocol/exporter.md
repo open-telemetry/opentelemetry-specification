@@ -64,18 +64,8 @@ Transient errors MUST be handled with a retry strategy. This retry strategy MUST
 
 For OTLP/HTTP, the errors `408 (Request Timeout)` and `5xx (Server Errors)` are defined as transient, detailed information about errors can be found in the [HTTP failures section](otlp.md#failures). For the OTLP/gRPC, the full list of the gRPC retryable status codes can be found in the [gRPC response section](otlp.md#otlpgrpc-response).
 
-SDKs MAY use the built-in [gRPC Retry](https://github.com/grpc/proposal/blob/master/A6-client-retries.md) mechanism to facilitate exponential back-off. If the built-in gRPC mechanism is used, the following values SHOULD be available for configuration:
+SDKs MAY use the built-in [gRPC Retry](https://github.com/grpc/proposal/blob/master/A6-client-retries.md) mechanism to facilitate exponential back-off.
 
-- `maxAttempts`: The maximum number of attempts, including the original request. Must be an integer greater than 1 and less than 6.
-- `initialBackoff`: Must be a duration greater than 0.
-- `maxBackoff`: Must be a duration greater than 0.
-- `backoffMultiplier` Must be a number greater than 0.
-
-SDKs have unspecified default values for these properties. They are used to compute the backoff as follows:
-
-- The initial retry attempt will occur after `random(0, initialBackoff)`
-- The `n`-th retry attempt will occur after `random(0, min(initialBackoff*backoffMultiplier**(n-1), maxBackoff))`
-
-Language SDKs SHOULD have retry configuration and mechanics that are consistent across OTLP protocols. For example, if the built-in gRPC Retry mechanism is used for the `grpc` protocol, the `http/protobuf` and `http/json` protocols should expose the same configuration options and compute the backoff duration in the same manner.
+SDKs SHOULD have retry configuration and mechanics that are consistent across OTLP protocols. For example, if the built-in gRPC Retry mechanism is used for the `grpc` protocol, the `http/protobuf` and `http/json` protocols should expose the same configuration options and compute the backoff duration in the same manner.
 
 [otlphttp-req]: otlp.md#otlphttp-request
