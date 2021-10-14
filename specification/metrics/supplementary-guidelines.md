@@ -9,6 +9,8 @@ Table of Contents:
 * [Guidelines for instrumentation library
   authors](#guidelines-for-instrumentation-library-authors)
   * [Instrument selection](#instrument-selection)
+  * [Additive property](#additive-property)
+  * [Monotonicity property](#monotonicity-property)
   * [Semantic convention](#semantic-convention)
 * [Guidelines for SDK authors](#guidelines-for-sdk-authors)
   * [Aggregation temporality](#aggregation-temporality)
@@ -61,6 +63,79 @@ Here is one way of choosing the correct instrument:
       Counter](./api.md#asynchronous-counter).
     * If the value is NOT monotonically increasing - use an [Asynchronous
       UpDownCounter](./api.md#asynchronous-updowncounter).
+
+### Additive property
+
+### Monotonicity property
+
+In the OpenTelemetry Metrics [Data Model](./datamodel.md) and [API](./api.md)
+specifications, the word `monotonic` has been used frequently.
+
+It is important to understand that different
+[Instruments](#instrument-selection) handle monotonicity differently.
+
+Let's take an example with a network driver using a [Counter](./api.md#counter)
+to record the total number of bytes received:
+
+* During the time range (T<sub>0</sub>, T<sub>1</sub>]:
+  * no network packet has been received
+* During the time range (T<sub>1</sub>, T<sub>2</sub>]:
+  * received a packet with `30` bytes - `Counter.Add(30)`
+  * received a packet with `200` bytes - `Counter.Add(200)`
+  * received a packet with `50` bytes - `Counter.Add(50)`
+* During the time range (T<sub>2</sub>, T<sub>3</sub>]
+  * received a packet with `100` bytes - `Counter.Add(100)`
+
+You can see that the total increment during (T<sub>0</sub>, T<sub>1</sub>] is
+`0`, the total increment during (T<sub>1</sub>, T<sub>2</sub>] is `280` (`30 +
+200 + 50`), the total increment during (T<sub>2</sub>, T<sub>3</sub>] is `100`,
+and the total increment during (T<s3ub>0</sub>, T<sub>3</sub>] is `380` (`0 +
+280 + 100`). All the increments are non-negative, in other words, the **sum is
+monotonically increasing**.
+
+Note that it is inaccurate to say "the total bytes received by T<sub>3</sub> is
+`380`", because there might be network packets received by the driver before we
+started to observe it (e.g. before the last operating system reboot). The
+accurate way is to say "the total bytes received during (T<sub>0</sub>,
+T<sub>3</sub>] is `380`". In a nutshell, the count represents a **rate** which
+is associated with a time range.
+
+This monotonicity property is important because it gives the downstream systems
+additional hints so they can handle the data in a better way. Imagine we report
+the total number of bytes received in a cumulative sum data stream:
+
+* At T<sub>n</sub>, we reported `3,896,473,820`.
+* At T<sub>n+1</sub>, we reported `4,294,967,293`.
+* At T<sub>n+2</sub>, we reported `1,800,372`.
+
+The backend system could tell that there was integer overflow or system restart
+during (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "fix" the data.
+
+Let's take another example with a process using an [Asynchronous
+Counter](./api.md#asynchronous-counter) to report the total page faults of the
+process:
+
+The page faults are managed by the operating system, and the process could
+retrieve the number of page faults via some system APIs.
+
+* At T<sub>0</sub>:
+  * the process started
+  * the process didn't ask the operating system to report the page faults
+* At T<sub>1</sub>:
+  * the operating system reported with `1000` page faults for the process
+* At T<sub>2</sub>:
+  * the process didn't ask the operating system to report the page faults
+* At T<sub>3</sub>:
+  * the operating system reported with `1050` page faults for the process
+* At T<sub>4</sub>:
+  * the operating system reported with `1200` page faults for the process
+
+You can see that the number being reported is the absolute value rather than
+increments, and the value is monotonically increasing.
+
+If we need to calculate "how many page faults have been introduced during
+(T<sub>3</sub>, T<sub>4</sub>]", we need to apply subtraction `1200 - 1050 =
+150`.
 
 ### Semantic convention
 
