@@ -41,6 +41,8 @@ install-markdown-toc:
 .PHONY: markdown-toc
 markdown-toc:
 	@for f in $(ALL_DOCS); do \
+		# datamodel uses → unicode char which breaks toc links
+		# it could be replaced with ASCII "->", but will change the link
 		if [[ "$$f" == "./specification/metrics/datamodel.md" ]]; then \
 			echo markdown-toc: excluding $$f; \
 		elif grep -q '<!-- tocstop -->' $$f; then \
