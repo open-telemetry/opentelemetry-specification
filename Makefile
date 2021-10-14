@@ -7,7 +7,7 @@ MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 MARKDOWN_LINK_CHECK=./node_modules/.bin/markdown-link-check
 MARKDOWN_LINT=./node_modules/.bin/markdownlint
-MARKDOWN_TOC=./node_modules/.bin/markdownlint
+MARKDOWN_TOC=./node_modules/.bin/markdown-toc
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
@@ -40,11 +40,17 @@ install-markdown-toc:
 
 .PHONY: markdown-toc
 markdown-toc:
-	@for f in $(ALL_DOCS); do $(MARKDOWN_TOC) --no-first-h1 -i $$f; done
+	@for f in $(ALL_DOCS); do \
+		if grep -q '<!-- tocstop -->' $$f; then \
+			echo markdown-toc: processing $$f; \
+			echo $(MARKDOWN_TOC) --no-first-h1 -i $$f; \
+		else \
+			echo markdown-toc: no TOC markers, skipping $$f; \
+		fi; \
+	done
 
 .PHONY: install-markdownlint
 install-markdownlint:
-    # TODO: Check for existence before installing
 	npm install markdownlint-cli
 
 .PHONY: markdownlint
