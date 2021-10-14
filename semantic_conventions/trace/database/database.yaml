@@ -251,84 +251,6 @@ groups:
           connecting to. This name is used to determine the port of a named instance.
         examples: 'MSSQLSERVER'
 
-  - id: db.cassandra
-    prefix: db.cassandra
-    extends: db
-    brief: >
-      Call-level attributes for Cassandra
-    attributes:
-      - id: page_size
-        type: int
-        tag: call-level-tech-specific-cassandra
-        brief: >
-          The fetch size used for paging, i.e. how many rows will be returned at once.
-        examples: [5000]
-      - id: consistency_level
-        tag: call-level-tech-specific-cassandra
-        brief: >
-          The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
-        type:
-          members:
-            - id: all
-              value: 'all'
-            - id: each_quorum
-              value: 'each_quorum'
-            - id: quorum
-              value: 'quorum'
-            - id: local_quorum
-              value: 'local_quorum'
-            - id: one
-              value: 'one'
-            - id: two
-              value: 'two'
-            - id: three
-              value: 'three'
-            - id: local_one
-              value: 'local_one'
-            - id: any
-              value: 'any'
-            - id: serial
-              value: 'serial'
-            - id: local_serial
-              value: 'local_serial'
-      - id: table
-        type: string
-        tag: call-level-tech-specific-cassandra
-        required:
-          conditional: Recommended if available.
-        brief: The name of the primary table that the operation is acting upon, including the keyspace name (if applicable).
-        note: >
-          This mirrors the db.sql.table attribute but references cassandra rather than sql.
-          It is not recommended to attempt any client-side parsing of
-          `db.statement` just to get this property, but it should be set if
-          it is provided by the library being instrumented.
-          If the operation is acting upon an anonymous table, or more than one table, this
-          value MUST NOT be set.
-        examples: 'mytable'
-      - id: idempotence
-        type: boolean
-        tag: call-level-tech-specific-cassandra
-        brief: >
-          Whether or not the query is idempotent.
-      - id: speculative_execution_count
-        type: int
-        tag: call-level-tech-specific-cassandra
-        brief: >
-          The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively.
-        examples: [0, 2]
-      - id: coordinator.id
-        type: string
-        tag: call-level-tech-specific-cassandra
-        brief: >
-          The ID of the coordinating node for a query.
-        examples: 'be13faa2-8574-4d71-926d-27f16cf8a7af'
-      - id: coordinator.dc
-        type: string
-        tag: call-level-tech-specific-cassandra
-        brief: >
-          The data center of the coordinating node for a query.
-        examples: 'us-west-2'
-
   - id: db.redis
     prefix: db.redis
     extends: db
@@ -358,26 +280,6 @@ groups:
         brief: >
           The collection being accessed within the database stated in `db.name`.
         examples: [ 'customers', 'products' ]
-
-  - id: db.sql
-    prefix: 'db.sql'
-    extends: 'db'
-    brief: >
-      Call-level attributes for SQL databases
-    attributes:
-      - id: table
-        tag: call-level-tech-specific
-        type: string
-        required:
-          conditional: Recommended if available.
-        brief: The name of the primary table that the operation is acting upon, including the database name (if applicable).
-        note: >
-          It is not recommended to attempt any client-side parsing of
-          `db.statement` just to get this property, but it should be set if
-          it is provided by the library being instrumented.
-          If the operation is acting upon an anonymous table, or more than one table, this
-          value MUST NOT be set.
-        examples: ['public.users', 'customers']
 
   - id: db.tech
     brief: "Semantic convention group for specific technologies"

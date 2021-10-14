@@ -1,0 +1,20 @@
+groups: 
+  - id: db.sql
+    prefix: 'db.sql'
+    extends: 'db'
+    brief: >
+      Call-level attributes for SQL databases
+    attributes:
+      - id: table
+        tag: call-level-tech-specific
+        type: string
+        required:
+          conditional: Recommended if available.
+        brief: The name of the primary table that the operation is acting upon, including the database name (if applicable).
+        note: >
+          It is not recommended to attempt any client-side parsing of
+          `db.statement` just to get this property, but it should be set if
+          it is provided by the library being instrumented.
+          If the operation is acting upon an anonymous table, or more than one table, this
+          value MUST NOT be set.
+        examples: ['public.users', 'customers']
