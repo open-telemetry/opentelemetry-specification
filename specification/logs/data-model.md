@@ -450,8 +450,7 @@ Example 1
 
 ```javascript
 {
-  "Timestamp": 1586960586000, // JSON needs to make a decision about
-                              // how to represent nanoseconds.
+  "Timestamp": "1586960586000000000",
   "Attributes": {
     "http.status_code": 500,
     "http.url": "http://example.com",
@@ -475,7 +474,7 @@ Example 2
 
 ```javascript
 {
-  "Timestamp": 1586960586000,
+  "Timestamp": "1586960586000000000",
   ...
   "Body": {
     "i": "am",
@@ -491,7 +490,7 @@ Example 3
 
 ```javascript
 {
-   "Timestamp": 1586960586000,
+   "Timestamp": "1586960586000000000",
    "Attributes":{
       "http.scheme":"https",
       "http.host":"donut.mycie.com",

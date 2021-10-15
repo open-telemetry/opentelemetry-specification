@@ -332,24 +332,22 @@ This Aggregation does not have any configuration parameters.
 The Sum Aggregation informs the SDK to collect data for the
 [Sum Metric Point](./datamodel.md#sums).
 
-The default values for the configuration parameters will be set based on
-the Instrument Kind (e.g. at View registration OR at first seen measurement).
-
-| Instrument Kind | Default `SumType` | Default `Temporality` |
-| --- | --- | --- |
-| [Counter](./api.md#counter) | Monotonic | Cumulative |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic | Cumulative |
-| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic | Cumulative |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic | Cumulative |
-
 This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| SumType | Monotonic, Non-Monotonic, Other | See <sup>1</sup> | See [SumType in PR](https://github.com/open-telemetry/opentelemetry-proto/pull/320). |
-| Temporality | Delta, Cumulative | See <sup>1</sup> | See [Temporality](./datamodel.md#temporality). |
+| Temporality | Delta, Cumulative | Cumulative | |
 
-\[1\]: See Default values based on Instrument Kind above.
+The monotonicity of the aggregation is determined by the instrument type:
+
+| Instrument Kind | `SumType` |
+| --- | --- |
+| [Counter](./api.md#counter) | Monotonic |
+| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic |
+| [Histogram](./api.md#histogram) | Monotonic |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
 This Aggregation informs the SDK to collect:
 
@@ -385,11 +383,11 @@ This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
 | Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 
-\[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
+Note: This aggregator should not fill out `sum` when used with instruments
+that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
 
 This Aggregation informs the SDK to collect:
 
