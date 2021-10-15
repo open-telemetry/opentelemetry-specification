@@ -2,8 +2,7 @@
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-<!-- Note: `Events → Data Stream → Timeseries` breaks markdown-toc -->
+<!-- Re-generate TOC with `make markdown-toc` -->
 
 <!-- toc -->
 

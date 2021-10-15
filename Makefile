@@ -5,9 +5,9 @@ PWD := $(shell pwd)
 TOOLS_DIR := ./internal/tools
 MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
-MARKDOWN_LINK_CHECK=markdown-link-check
-MARKDOWN_LINT=markdownlint
-MARKDOWN_TOC=markdown-toc
+MARKDOWN_LINK_CHECK=./node_modules/.bin/markdown-link-check
+MARKDOWN_LINT=./node_modules/.bin/markdownlint
+MARKDOWN_TOC=./node_modules/.bin/markdown-toc
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
@@ -28,30 +28,43 @@ misspell-correction:
 
 .PHONY: install-markdown-link-check
 install-markdown-link-check:
-	# TODO: Check for existence before installing
-	npm install -g $(MARKDOWN_LINK_CHECK)
+	npm install markdown-link-check
 
 .PHONY: markdown-link-check
 markdown-link-check:
 	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f; done
 
+.PHONY: install-markdown-toc
+install-markdown-toc:
+	npm install markdown-toc
+
+.PHONY: markdown-toc
+# This target runs markdown-toc on all files that contain
+# a comment <!-- tocstop -->.
+#
+# The recommended way to prepate a .md file for markdown-toc is
+# to add these comments:
+#
+#   <!-- Re-generate TOC with `make markdown-toc` -->
+#   <!-- toc -->
+#   <!-- tocstop -->
+markdown-toc:
+	@for f in $(ALL_DOCS); do \
+		if grep -q '<!-- tocstop -->' $$f; then \
+			echo markdown-toc: processing $$f; \
+			$(MARKDOWN_TOC) --no-first-h1 -i $$f; \
+		else \
+			echo markdown-toc: no TOC markers, skipping $$f; \
+		fi; \
+	done
+
 .PHONY: install-markdownlint
 install-markdownlint:
-    # TODO: Check for existence before installing
-	npm install -g markdownlint-cli
+	npm install markdownlint-cli
 
 .PHONY: markdownlint
 markdownlint:
 	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
-
-.PHONY: install-markdown-toc
-install-markdown-toc:
-    # TODO: Check for existence before installing
-	npm install -g $(MARKDOWN_TOC)
-
-.PHONY: markdown-toc
-markdown-toc:
-	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_TOC) --no-first-h1 -i $$f || exit 1;	done
 
 .PHONY: install-yamllint
 install-yamllint:
