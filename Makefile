@@ -5,9 +5,9 @@ PWD := $(shell pwd)
 TOOLS_DIR := ./internal/tools
 MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
-MARKDOWN_LINK_CHECK=markdown-link-check
-MARKDOWN_LINT=markdownlint
-MARKDOWN_TOC=markdown-toc
+MARKDOWN_LINK_CHECK=./node_modules/.bin/markdown-link-check
+MARKDOWN_LINT=./node_modules/.bin/markdownlint
+MARKDOWN_TOC=./node_modules/.bin/markdown-toc
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
