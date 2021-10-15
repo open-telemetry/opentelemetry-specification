@@ -76,8 +76,6 @@ Prometheus Remote Write protocol without loss of features or semantics, through
 well-defined translations of the data, including the ability to automatically
 remove attributes and lower histogram resolution.
 
-<!-- anchor is to preserve previously used link -->
-<a name="events--data-stream--timeseries"></a>
 ## Events => Data Stream => Timeseries
 
 **Status**: [Stable](../document-status.md)
