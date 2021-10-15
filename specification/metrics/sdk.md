@@ -19,6 +19,7 @@ Table of Contents
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
 * [Defaults and configuration](#defaults-and-configuration)
+* [Numerical limits handling](#numerical-limits-handling)
 * [Compatibility requirements](#compatibility-requirements)
 * [Concurrency requirements](#concurrency-requirements)
 
@@ -774,6 +775,24 @@ modeled to interact with other components in the SDK:
 
 The SDK MUST provide configuration according to the [SDK environment
 variables](../sdk-environment-variables.md) specification.
+
+## Numerical limits handling
+
+The SDK MUST handle numerical limits in a graceful way according to [Error
+handling in OpenTelemetry](../error-handling.md).
+
+If the SDK receives float/double values from [Instruments](./api.md#instrument),
+it MUST handle all the possible values. For example, if the language runtime
+supports [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754), the SDK needs to
+handle NaNs and Infinites.
+
+It is unspecified _how_ the SDK should handle the input limits. The SDK authors
+MAY leverage/follow the language runtime behavior for better performance, rather
+than perform a check on each value coming from the API.
+
+It is unspecified _how_ the SDK should handle the output limits (e.g. integer
+overflow). The SDK authors MAY rely on the language runtime behavior as long as
+errors/exceptions are taken care of.
 
 ## Compatibility requirements
 
