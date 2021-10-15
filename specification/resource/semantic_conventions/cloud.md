@@ -42,6 +42,7 @@
 | `aws_eks` | AWS Elastic Kubernetes Service |
 | `aws_lambda` | AWS Lambda |
 | `aws_elastic_beanstalk` | AWS Elastic Beanstalk |
+| `aws_app_runner` | AWS App Runner |
 | `azure_vm` | Azure Virtual Machines |
 | `azure_container_instances` | Azure Container Instances |
 | `azure_aks` | Azure Kubernetes Service |
