@@ -10,6 +10,7 @@ groups:
         type: string
         required: always
         brief: 'HTTP request method.'
+        sampling_relevant: true
         examples: ["GET", "POST", "HEAD"]
       - id: url
         type: string
@@ -19,10 +20,12 @@ groups:
         note: >
           `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
           In such case the attribute's value should be `https://www.example.com/`.
+        sampling_relevant: true
         examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
       - id: target
         type: string
         brief: 'The full request target as passed in a HTTP request line or equivalent.'
+        sampling_relevant: true
         examples: ['/path/12314/?q=ddds#123']
       - id: host
         type: string
@@ -35,10 +38,12 @@ groups:
           in certain cases, according the aforementioned
           [section of RFC 7230](https://tools.ietf.org/html/rfc7230#section-5.4).
           When the header is not set the attribute MUST NOT be set.
+        sampling_relevant: true
         examples: ['www.example.org']
       - id: scheme
         type: string
         brief: 'The URI scheme identifying the used protocol.'
+        sampling_relevant: true
         examples: ["http", "https"]
       - id: status_code
         type: int
@@ -99,6 +104,12 @@ groups:
         brief: >
           The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used.
         examples: 5493
+      - ref: net.peer.name
+        sampling_relevant: true
+      - ref: net.peer.ip
+        sampling_relevant: true
+      - ref: net.peer.port
+        sampling_relevant: true
     constraints:
       - include: network
 

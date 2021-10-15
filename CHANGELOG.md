@@ -30,9 +30,13 @@ release.
   ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
 - Add Tencent Cloud as a cloud provider.
   ([#2006](https://github.com/open-telemetry/opentelemetry-specification/pull/2006))
-
 - Don't set Span.Status for 4xx http status codes for SERVER spans.
   ([#1998](https://github.com/open-telemetry/opentelemetry-specification/pull/1998))
+- Add attributes for Apache RocketMQ.
+  ([#1904](https://github.com/open-telemetry/opentelemetry-specification/pull/1904))
+
+- Define http tracing attributes provided at span creation time
+  ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
 
 ### Compatibility
 
