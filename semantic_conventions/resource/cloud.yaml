@@ -76,6 +76,9 @@ groups:
             - id: aws_elastic_beanstalk
               value: 'aws_elastic_beanstalk'
               brief: AWS Elastic Beanstalk
+            - id: aws_app_runner
+              value: 'aws_app_runner'
+              brief: AWS App Runner
             - id: azure_vm
               value: 'azure_vm'
               brief: Azure Virtual Machines
