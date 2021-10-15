@@ -39,13 +39,18 @@ install-markdown-toc:
 	npm install markdown-toc
 
 .PHONY: markdown-toc
+# This target runs markdown-toc on all files that contain
+# a comment <!-- tocstop -->.
+#
+# The recommended way to prepate a .md file for markdown-toc is
+# to add these comments:
+#
+#   <!-- Re-generate TOC with `make markdown-toc` -->
+#   <!-- toc -->
+#   <!-- tocstop -->
 markdown-toc:
 	@for f in $(ALL_DOCS); do \
-		# datamodel uses → unicode char which breaks toc links
-		# it could be replaced with ASCII "->", but will change the link
-		if [[ "$$f" == "./specification/metrics/datamodel.md" ]]; then \
-			echo markdown-toc: excluding $$f; \
-		elif grep -q '<!-- tocstop -->' $$f; then \
+		if grep -q '<!-- tocstop -->' $$f; then \
 			echo markdown-toc: processing $$f; \
 			$(MARKDOWN_TOC) --no-first-h1 -i $$f; \
 		else \
