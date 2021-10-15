@@ -9,18 +9,17 @@ This document defines how to describe remote procedure calls
 
 <!-- toc -->
 
-- [Semantic conventions for RPC spans](#semantic-conventions-for-rpc-spans)
-  - [Common remote procedure call conventions](#common-remote-procedure-call-conventions)
-    - [Span name](#span-name)
-    - [Attributes](#attributes)
-      - [Service name](#service-name)
-    - [Events](#events)
-    - [Distinction from HTTP spans](#distinction-from-http-spans)
-  - [gRPC](#grpc)
-    - [gRPC Attributes](#grpc-attributes)
-    - [gRPC Status](#grpc-status)
-  - [JSON RPC](#json-rpc)
-    - [JSON RPC Attributes](#json-rpc-attributes)
+- [Common remote procedure call conventions](#common-remote-procedure-call-conventions)
+  * [Span name](#span-name)
+  * [Attributes](#attributes)
+    + [Service name](#service-name)
+  * [Events](#events)
+  * [Distinction from HTTP spans](#distinction-from-http-spans)
+- [gRPC](#grpc)
+  * [gRPC Attributes](#grpc-attributes)
+  * [gRPC Status](#grpc-status)
+- [JSON RPC](#json-rpc)
+  * [JSON RPC Attributes](#json-rpc-attributes)
 
 <!-- tocstop -->
 
