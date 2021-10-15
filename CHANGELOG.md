@@ -17,6 +17,8 @@ release.
   ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
 - Add exponential histogram to the metrics data model.
   ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
+- Add clarifications on how to handle numerical limits.
+  ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
 
 ### Logs
 
