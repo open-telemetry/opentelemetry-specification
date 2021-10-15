@@ -203,7 +203,9 @@ only supports a single flag called [sampled](https://www.w3.org/TR/trace-context
 `TraceState` carries vendor-specific trace identification data, represented as a list
 of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. It is fully described in the [W3C Trace Context
-specification](https://www.w3.org/TR/trace-context/#tracestate-header).
+specification](https://www.w3.org/TR/trace-context/#tracestate-header). For
+specific OTel values in `TraceState`, see the [TraceState Handling](tracestate-handling.md)
+document.
 
 The API MUST implement methods to create a `SpanContext`. These methods SHOULD be the only way to
 create a `SpanContext`. This functionality MUST be fully implemented in the API, and SHOULD NOT be
