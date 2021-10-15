@@ -52,7 +52,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: install markdown-toc
-      run: sudo make install-markdown-toc
+      run: make install-markdown-toc
 
     - name: run markdown-toc
       run: make markdown-toc
