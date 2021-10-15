@@ -33,6 +33,9 @@ release.
 - Add attributes for Apache RocketMQ.
   ([#1904](https://github.com/open-telemetry/opentelemetry-specification/pull/1904))
 
+- Define http tracing attributes provided at span creation time
+  ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
