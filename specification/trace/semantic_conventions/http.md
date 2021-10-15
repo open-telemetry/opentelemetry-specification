@@ -10,16 +10,15 @@ and various HTTP versions like 1.1, 2 and SPDY.
 
 <!-- toc -->
 
-- [Semantic conventions for HTTP spans](#semantic-conventions-for-http-spans)
-  - [Name](#name)
-  - [Status](#status)
-  - [Common Attributes](#common-attributes)
-    - [HTTP request and response headers](#http-request-and-response-headers)
-  - [HTTP client](#http-client)
-  - [HTTP server](#http-server)
-    - [HTTP server definitions](#http-server-definitions)
-    - [HTTP Server semantic conventions](#http-server-semantic-conventions)
-  - [HTTP client-server example](#http-client-server-example)
+- [Name](#name)
+- [Status](#status)
+- [Common Attributes](#common-attributes)
+  * [HTTP request and response headers](#http-request-and-response-headers)
+- [HTTP client](#http-client)
+- [HTTP server](#http-server)
+  * [HTTP server definitions](#http-server-definitions)
+  * [HTTP Server semantic conventions](#http-server-semantic-conventions)
+- [HTTP client-server example](#http-client-server-example)
 
 <!-- tocstop -->
 

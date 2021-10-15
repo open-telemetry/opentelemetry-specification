@@ -11,6 +11,7 @@
   * [Experimental](#experimental)
   * [Stable](#stable)
     + [API Stability](#api-stability)
+      - [Extending Existing API Calls](#extending-existing-api-calls)
     + [SDK Stability](#sdk-stability)
     + [Contrib Stability](#contrib-stability)
     + [NOT DEFINED: Telemetry Stability](#not-defined-telemetry-stability)
