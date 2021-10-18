@@ -155,6 +155,12 @@ that the transformation should apply to. Here is the structure:
               # map of key/values. The keys are the old attribute name used
               # in the previous version, the values are the new attribute name
               # starting from this version.
+
+            apply_to_spans:
+              # Optional. If it is missing the transformation is applied
+              # to all spans. If it is present the transformation is applied
+              # only to the spans with the name that is found in the sequence
+              # specified below.
 ```
 
 ### span_events Section
@@ -479,6 +485,9 @@ versions:
               # in the previous version, the values are the new attribute name
               # starting from this version.
               peer.service: peer.service.name
+            apply_to_spans:
+              # apply only to spans named "HTTP GET"
+              - "HTTP GET"
 
     span_events:
       # Definitions that apply to Span Event data type.
