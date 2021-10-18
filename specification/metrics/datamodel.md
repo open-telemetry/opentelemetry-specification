@@ -706,6 +706,7 @@ Summary consists of the following:
     - The quantile of a distribution, within the interval `[0.0, 1.0]`.  For
       example, the value `0.9` would represent the 90th-percentile.
     - The value of the quantile.  This MUST be non-negative.
+
 Quantile values 0.0 and 1.0 are defined to be equal to the minimum and maximum values, respectively.
 
 Quantile values do not need to represent values observed between
