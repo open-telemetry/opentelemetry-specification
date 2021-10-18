@@ -2,6 +2,6 @@
 
 **Status**: [Experimental](../../document-status.md)
 
-Note: this specification is subject to major changes. To avoid thrusting
-language client maintainers, we don't recommend OpenTelemetry clients to start
-the implementation unless explicitly communicated.
+Prometheus Exporter is a [Pull Metric Exporter](../sdk.md#pull-metric-exporter)
+which reacts to the Prometheus scraper and report the metrics passively to
+[Prometheus](https://prometheus.io/).
