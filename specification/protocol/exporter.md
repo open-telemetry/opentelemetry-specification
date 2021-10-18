@@ -10,16 +10,19 @@ The following configuration options MUST be available to configure the OTLP expo
 
 | Configuration Option | Description                                                  | Default           | Env variable                                                 |
 | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
-| Endpoint (OTLP/HTTP) | Target URL to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, MAY contain a port, SHOULD contain a path and MUST NOT contain other parts (such as query string or fragment). A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters MUST construct per-signal URLs as  [described below](#per-signal-urls). The per-signal endpoint configuration options take precedence and can be used to override this behavior (the URL is used as-is for them, without any modifications). See the [OTLP Specification][otlphttp-req] for more details. | `https://localhost:4318` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
-| Endpoint (OTLP/gRPC) | Target to which the exporter is going to send spans or metrics. The endpoint SHOULD accept any form allowed by the underlying gRPC client implementation. Additionally, the endpoint MUST accept a URL with a scheme of either `http` or `https`. A scheme of `https` indicates a secure connection and takes precedence over the `insecure` configuration setting. If the gRPC client implementation does not support an endpoint with a scheme of `http` or `https` then the endpoint SHOULD be transformed to the most sensible format for that implementation. | `https://localhost:4317` | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
+| Endpoint (OTLP/HTTP) | Target URL to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, MAY contain a port, SHOULD contain a path and MUST NOT contain other parts (such as query string or fragment). A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters MUST construct per-signal URLs as  [described below](#per-signal-urls). The per-signal endpoint configuration options take precedence and can be used to override this behavior (the URL is used as-is for them, without any modifications). See the [OTLP Specification][otlphttp-req] for more details. | `http://localhost:4318` [1] | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
+| Endpoint (OTLP/gRPC) | Target to which the exporter is going to send spans or metrics. The endpoint SHOULD accept any form allowed by the underlying gRPC client implementation. Additionally, the endpoint MUST accept a URL with a scheme of either `http` or `https`. A scheme of `https` indicates a secure connection and takes precedence over the `insecure` configuration setting. If the gRPC client implementation does not support an endpoint with a scheme of `http` or `https` then the endpoint SHOULD be transformed to the most sensible format for that implementation. | `http://localhost:4317` [1] | `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` |
 | Insecure             | Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation. | `false` | `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_SPAN_INSECURE` `OTEL_EXPORTER_OTLP_METRIC_INSECURE` |
 | Certificate File     | The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection. | n/a               | `OTEL_EXPORTER_OTLP_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE` |
 | Headers              | Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.                   | n/a               | `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` |
-| Compression          | Compression key for supported compression types. Supported compression: `gzip`| No value [1]          | `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` |
+| Compression          | Compression key for supported compression types. Supported compression: `gzip`| No value [2]          | `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` |
 | Timeout              | Maximum time the OTLP exporter will wait for each batch export. | 10s               | `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` |
 | Protocol             | The transport protocol. Options MAY include `grpc`, `http/protobuf`, and `http/json`. See [Specify Protocol](./exporter.md#specify-protocol) for more details. | `http/protobuf` [2]        | `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` |
 
-**[1]**: If no compression value is explicitly specified, SIGs can default to the value they deem
+**[1]**: SDKs SHOULD default endpoint variables to use `http` scheme unless they have good reasons to choose
+`https` scheme for the default (e.g., for backward compatibility reasons in a stable SDK release).
+
+**[2]**: If no compression value is explicitly specified, SIGs can default to the value they deem
 most useful among the supported options. This is especially important in the presence of technical constraints,
 e.g. directly sending telemetry data from mobile devices to backend servers.
 
@@ -48,6 +51,11 @@ for each signal as follow:
    Non-normatively, this could be implemented by ensuring that the base URL ends with
    a slash and then appending the relative URLs as strings.
 
+An SDK MUST NOT modify the URL in ways other than specified above. That also means,
+if the port is empty or not given, TCP port 80 is the default for the `http` scheme
+and TCP port 443 is the default for the `https` scheme, as per the usual rules
+for these schemes ([RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-2.7.1)).
+
 #### Example 1
 
 The following configuration sends all signals to the same collector:
@@ -71,7 +79,7 @@ export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metr
 This will send traces directly to the root path `http://collector:4318/`
 (`/v1/traces` is only automatically added when using the non-signal-specific
 environment variable) and metrics
-to `https://collector.example.com/v1/metrics`.
+to `https://collector.example.com/v1/metrics`, using the default https port (443).
 
 #### Example 3
 
@@ -83,9 +91,10 @@ export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metr
 ```
 
 Traces are sent to `http://collector:4318/mycollector/v1/traces`
-and metrics to `https://collector.example.com/v1/metrics/`
-(other signals, would they be defined, would be sent to their specific paths
-relative to `http://collector:4318/mycollector/`).
+and metrics to `https://collector.example.com/v1/metrics/`, using the default
+https port (443).
+Other signals, (if there were any) would be sent to their specific paths
+relative to `http://collector:4318/mycollector/`.
 
 ### Specify Protocol
 

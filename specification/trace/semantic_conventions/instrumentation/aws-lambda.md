@@ -24,6 +24,7 @@ use cases.
   * [API Gateway Request Proxy (Lambda tracing active)](#api-gateway-request-proxy-lambda-tracing-active)
   * [SQS (Lambda tracing passive)](#sqs-lambda-tracing-passive)
   * [SQS (Lambda tracing active)](#sqs-lambda-tracing-active)
+- [Resource Detector](#resource-detector)
 
 <!-- tocstop -->
 

@@ -2,13 +2,12 @@
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-<!-- Note: `Events → Data Stream → Timeseries` breaks markdown-toc -->
+<!-- Re-generate TOC with `make markdown-toc` -->
 
 <!-- toc -->
 
 - [Overview](#overview)
-- [Events → Data Stream → Timeseries](#events--data-stream--timeseries)
+- [Events => Data Stream => Timeseries](#events--data-stream--timeseries)
   * [Example Use-cases](#example-use-cases)
   * [Out of Scope Use-cases](#out-of-scope-use-cases)
 - [Model Details](#model-details)
@@ -77,7 +76,7 @@ Prometheus Remote Write protocol without loss of features or semantics, through
 well-defined translations of the data, including the ability to automatically
 remove attributes and lower histogram resolution.
 
-## Events → Data Stream → Timeseries
+## Events => Data Stream => Timeseries
 
 **Status**: [Stable](../document-status.md)
 
