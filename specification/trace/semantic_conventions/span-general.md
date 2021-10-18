@@ -221,3 +221,27 @@ about the span.
 | `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | No |
 | `code.lineno` | int | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | No |
 <!-- endsemconv -->
+
+## Experimentation Attributes
+
+The attributes are split into two sections, global and experiment specific.
+Experiments can run anywhere within the code and therefore be on ony span.
+
+## Trace Scoped Attributes
+
+<!-- semconv experimentation -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `experimentation.seed` | string | The seed used to calculate which variants to use | `k43l24kl2l43lj32` | No |
+<!-- endsemconv -->
+
+## Experiment specific Attributes
+
+`experiment_name` MUST be replaced with the name of the experiment.
+
+<!-- semconv experiment_name -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `experimentation.experiment_name.variant` | string | The variant of the experiment being used | `A` | No |
+| `experimentation.experiment_name.id` | string | The id of the experiment | `43223`; `j3lkjl2j3`; `b282f9d1-d22a-49d1-999a-96d3487a571d` | No |
+<!-- endsemconv -->

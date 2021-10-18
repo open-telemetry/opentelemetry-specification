@@ -11,6 +11,7 @@ i.e.:
 * [Trace semantic conventions](../specification/trace/semantic_conventions/README.md)
 * [Metric semantic conventions](../specification/metrics/semantic_conventions/README.md)
 * [Resource semantic conventions](../specification/resource/semantic_conventions/README.md)
+* [Experimentation semantic conventions](../specification/resource/semantic_conventions/README.md)
 
 ## Writing semantic conventions
 

@@ -1,0 +1,22 @@
+groups:
+  - id: experimentation
+    prefix: experimentation
+    brief: 'This document defines semantic conventions for adding experimentation information to Spans.'
+    attributes:
+      - id: seed
+        type: string
+        brief: 'The seed used to calculate which variants to use'
+        examples: ["k43l24kl2l43lj32"]
+  - id: experiment_name
+    prefix: experimentation.experiment_name
+    brief: 'This document defines semantic conventions for adding experimentation information to Spans for a specific named experiment.'
+    attributes:
+      - id: variant
+        type: string
+        brief: 'The variant of the experiment being used'
+        examples: ["A", "B", "C", "DEFAULT"]
+      - id: id
+        type: string
+        brief: 'The id of the experiment'
+        examples: [ "43223", "j3lkjl2j3", "b282f9d1-d22a-49d1-999a-96d3487a571d" ]
+
