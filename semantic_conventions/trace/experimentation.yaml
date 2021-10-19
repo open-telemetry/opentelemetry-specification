@@ -1,6 +1,6 @@
 groups:
-  - id: experimentation
-    prefix: experimentation
+  - id: experiment
+    prefix: experiment
     brief: 'This document defines semantic conventions for adding experimentation information to Spans.'
     attributes:
       - id: seed
@@ -8,7 +8,7 @@ groups:
         brief: 'The seed used to calculate which variants to use'
         examples: ["k43l24kl2l43lj32"]
   - id: experiment_name
-    prefix: experimentation.experiment_name
+    prefix: experiment.experiment_name
     brief: 'This document defines semantic conventions for adding experimentation information to Spans for a specific named experiment.'
     attributes:
       - id: variant

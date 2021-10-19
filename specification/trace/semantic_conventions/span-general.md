@@ -229,10 +229,10 @@ Experiments can run anywhere within the code and therefore be on ony span.
 
 #### Trace Scoped Attributes
 
-<!-- semconv experimentation -->
+<!-- semconv experiment -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `experimentation.seed` | string | The seed used to calculate which variants to use | `k43l24kl2l43lj32` | No |
+| `experiment.seed` | string | The seed used to calculate which variants to use | `k43l24kl2l43lj32` | No |
 <!-- endsemconv -->
 
 #### Experiment specific Attributes
@@ -242,6 +242,6 @@ Experiments can run anywhere within the code and therefore be on ony span.
 <!-- semconv experiment_name -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `experimentation.experiment_name.variant` | string | The variant of the experiment being used | `A`; `B`; `C`; `DEFAULT` | No |
-| `experimentation.experiment_name.id` | string | The id of the experiment | `43223`; `j3lkjl2j3`; `b282f9d1-d22a-49d1-999a-96d3487a571d` | No |
+| `experiment.experiment_name.variant` | string | The variant of the experiment being used | `A`; `B`; `C`; `DEFAULT` | No |
+| `experiment.experiment_name.id` | string | The id of the experiment | `43223`; `j3lkjl2j3`; `b282f9d1-d22a-49d1-999a-96d3487a571d` | No |
 <!-- endsemconv -->
