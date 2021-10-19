@@ -559,6 +559,26 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
+The SDK SHOULD provide a way to allow [Aggregation
+Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
+instance during the creation time. [OpenTelemetry SDK](../overview.md#sdk)
+authors MAY choose the best idiomatic design for their language:
+
+* Whether to treat the temporality settings as recommendation or enforcement.
+  For example, if the temporality is set to Delta, would the SDK want to perform
+  Cumulative->Delta conversion for an [Asynchronous
+  Counter](./api.md#asynchronous-counter), or downgrade it to a
+  [Gauge](./datamodel.md#gauge), or keep consuming it as Cumulative due to the
+  consideration of [memory
+  efficiency](./supplementary-guidelines.md#memory-management)?
+* If an invalid combination of settings occurred (e.g. if a `MetricReader`
+  instance is set to use Cumulative, and it has an associated [Push Metric
+  Exporter](#push-metric-exporter) instance which has the temporality set to
+  Delta), would the SDK want to fail fast or use some fallback logic?
+* Refer to the [supplementary
+  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
+  more context and suggestions.
+
 ### MetricReader operations
 
 #### Collect
@@ -628,6 +648,29 @@ example:
 * Exporter C is a pull exporter which reacts to a scraper over HTTP.
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
+
+The SDK SHOULD provide a way to allow [Aggregation
+Temporality](./datamodel.md#temporality) to be specified for a `MetricExporter`
+instance during the creation time, if the exporter supports both Cumulative and
+Delta [Temporality](./datamodel.md#temporality). [OpenTelemetry
+SDK](../overview.md#sdk) authors MAY choose the best idiomatic design for their
+language:
+
+* Whether to treat the temporality settings as recommendation or enforcement.
+  For example, if an [OTLP Exporter](./sdk_exporters/otlp.md) instance is being
+  used, and the temporality is set to Delta, would the SDK want to perform
+  Cumulative->Delta conversion for an [Asynchronous
+  Counter](./api.md#asynchronous-counter), or downgrade it to a
+  [Gauge](./datamodel.md#gauge), or keep exporting it as Cumulative due to the
+  consideration of [memory
+  efficiency](./supplementary-guidelines.md#memory-management)?
+* If an invalid combination of settings occurred (e.g. if a [Prometheus
+  Exporter](./sdk_exporters/prometheus.md) instance is being used, and the
+  temporality is set to Delta), would the SDK want to fail fast or use some
+  fallback logic?
+* Refer to the [supplementary
+  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
+  more context and suggestions.
 
 ### Push Metric Exporter
 
