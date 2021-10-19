@@ -844,12 +844,10 @@ used:
     the View [aggregation](#aggregation) and goto END.
 * END.
 
-If the above process caused conflicts (e.g. a View has an explicitly specified
-temporality Delta, but the `MetricExporter` only supports Cumulative), the SDK
-SHOULD treat the conflicts as error. It is unspecified _how_ the SDK should
-handle these error (e.g. it could fail fast during the SDK configuration time).
-Please refer to [Error handling in OpenTelemetry](../error-handling.md) for the
-general guidance.
+If the above process caused conflicts, the SDK SHOULD treat the conflicts as
+error. It is unspecified _how_ the SDK should handle these error (e.g. it could
+fail fast during the SDK configuration time). Please refer to [Error handling in
+OpenTelemetry](../error-handling.md) for the general guidance.
 
 ## Numerical limits handling
 
