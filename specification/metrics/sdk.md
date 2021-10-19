@@ -302,7 +302,6 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
-- [Trivial Histogram](./sdk.md#trivial-histogram-aggregation)
 
 #### None Aggregation
 
@@ -390,30 +389,6 @@ This Aggregation honors the following configuration parameters:
 This Aggregation informs the SDK to collect:
 
 - Count of `Measurement` values falling within explicit bucket boundaries.
-- Arithmetic sum of `Measurement` values in population.
-- Min `Measurement` value in population.
-- Max `Measurement` value in population.
-
-Note: This aggregator should not fill out `sum` when used with instruments
-that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
-
-#### Trivial Histogram Aggregation
-
-The Trivial Histogram Aggregation informs the SDK to collect data for
-the [Histogram Metric Point](./datamodel.md#histogram) using a single bucket
-with boundaries (-&infin;, +&infin;). This produces lightweight histogram data
-points which capture the min, max, sum and count of a population of
-measurements.
-
-This Aggregation honors the following configuration parameters:
-
-| Key | Value | Default Value | Description |
-| --- | --- | --- | --- |
-| Temporality | Delta, Cumulative | Delta | See [Temporality](./datamodel.md#temporality). |
-
-This Aggregation informs the SDK to collect:
-
-- Count of `Measurement` values in population.
 - Arithmetic sum of `Measurement` values in population.
 - Min `Measurement` value in population.
 - Max `Measurement` value in population.
