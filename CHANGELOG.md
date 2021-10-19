@@ -19,6 +19,8 @@ release.
   ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
 - Add clarifications on how to handle numerical limits.
   ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
+- Specify that the SDK must support exporters to access meter information.
+  ([#2040](https://github.com/open-telemetry/opentelemetry-specification/pull/2040))
 
 ### Logs
 
