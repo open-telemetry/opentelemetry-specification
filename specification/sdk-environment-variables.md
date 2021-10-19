@@ -149,8 +149,14 @@ thrift or protobuf.  As of 1.0 of the specification, there
 
 | Name                          | Description                     | Default                      |
 | ----------------------------- | --------------------------------| ---------------------------- |
-| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
-| OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
+| `OTEL_EXPORTER_PROMETHEUS_HOST` | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
+| `OTEL_EXPORTER_PROMETHEUS_PORT` | Port used by the Prometheus exporter | 9464                    |
+| `OTEL_EXPORTER_PROMETHEUS_ADD_METER_ATTRIBUTES` | Filter for if `name` and `version` from [Meter](./metrics/api.md#get-a-meter) are exported. | `false` | |
+
+Known values for `OTEL_EXPORTER_PROMETHEUS_ADD_METER_ATTRIBUTES` are:
+
+- `true` : Add the Meter `name` and `version` as Attributes on the metrics exported.
+- `false` : Don't add Meter `name` and `version` as Attributes on the metrics exported.
 
 ## Exporter Selection
 

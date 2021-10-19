@@ -30,6 +30,8 @@ release.
 - Add clarifications on how to determine aggregation temporality.
   ([#2013](https://github.com/open-telemetry/opentelemetry-specification/pull/2013),
   [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2032))
+- Define how Prometheus should handle Meter attributes.
+  ([#2035](https://github.com/open-telemetry/opentelemetry-specification/pull/2035))
 
 ### Logs
 
