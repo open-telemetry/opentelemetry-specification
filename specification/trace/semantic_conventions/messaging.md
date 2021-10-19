@@ -19,6 +19,7 @@
   * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
     + [RabbitMQ](#rabbitmq)
     + [Apache Kafka](#apache-kafka)
+    + [Apache RocketMQ](#apache-rocketmq)
 - [Examples](#examples)
   * [Topic with multiple consumers](#topic-with-multiple-consumers)
   * [Apache Kafka with Quarkus or Spring Boot Example](#apache-kafka-with-quarkus-or-spring-boot-example)
@@ -127,7 +128,7 @@ The following operations related to messages are defined for these semantic conv
 <!-- semconv messaging -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `activemq`; `AmazonSQS` | Yes |
+| `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `rocketmq`; `activemq`; `AmazonSQS` | Yes |
 | `messaging.destination` | string | The message destination name. This might be equal to the span name but is required nevertheless. | `MyQueue`; `MyTopic` | Yes |
 | `messaging.destination_kind` | string | The kind of message destination | `queue` | Conditional [1] |
 | `messaging.temp_destination` | boolean | A boolean that is true if the message destination is temporary. |  | If missing, it is assumed to be false. |
@@ -216,6 +217,38 @@ For Apache Kafka, the following additional attributes are defined:
 For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or service the message will be sent to.
 The `service.name` of a Consumer's Resource SHOULD match the `peer.service` of the Producer, when the message is directly passed to another service.
 If an intermediary broker is present, `service.name` and `peer.service` will not be the same.
+
+#### Apache RocketMQ
+
+Specific attributes for Apache RocketMQ are defined below.
+
+<!-- semconv messaging.rocketmq -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `messaging.rocketmq.namespace` | string | Namespace of RocketMQ resources, resources in different namespaces are individual. | `myNamespace` | Yes |
+| `messaging.rocketmq.client_group` | string | Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind. | `myConsumerGroup` | Yes |
+| `messaging.rocketmq.client_id` | string | The unique identifier for each client. | `myhost@8742@s8083jm` | Yes |
+| `messaging.rocketmq.message_type` | string | Type of message. | `normal` | No |
+| `messaging.rocketmq.message_tag` | string | The secondary classifier of message besides topic. | `tagA` | No |
+| `messaging.rocketmq.message_keys` | string[] | Key(s) of message, another way to mark message besides message id. | `[keyA, keyB]` | No |
+| `messaging.rocketmq.consumption_model` | string | Model of message consumption. This only applies to consumer spans. | `clustering` | No |
+
+`messaging.rocketmq.message_type` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `normal` | Normal message |
+| `fifo` | FIFO message |
+| `delay` | Delay message |
+| `transaction` | Transaction message |
+
+`messaging.rocketmq.consumption_model` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `clustering` | Clustering consumption model |
+| `broadcasting` | Broadcasting consumption model |
+<!-- endsemconv -->
 
 ## Examples
 

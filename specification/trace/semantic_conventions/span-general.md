@@ -11,7 +11,6 @@ Particular operations may refer to or require some of these attributes.
 <!-- toc -->
 
 - [General network connection attributes](#general-network-connection-attributes)
-  * [`net.transport` attribute](#nettransport-attribute)
   * [`net.*.name` attributes](#netname-attributes)
 - [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
