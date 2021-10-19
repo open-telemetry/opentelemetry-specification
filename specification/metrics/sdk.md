@@ -336,12 +336,6 @@ This Aggregation does not have any configuration parameters.
 The Sum Aggregation informs the SDK to collect data for the
 [Sum Metric Point](./datamodel.md#sums).
 
-This Aggregation honors the following configuration parameters:
-
-| Key | Value | Default Value | Description |
-| --- | --- | --- | --- |
-| Temporality | Delta, Cumulative | Cumulative | |
-
 The monotonicity of the aggregation is determined by the instrument type:
 
 | Instrument Kind | `SumType` |
@@ -352,6 +346,8 @@ The monotonicity of the aggregation is determined by the instrument type:
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
+
+This Aggregation does not have any configuration parameters.
 
 This Aggregation informs the SDK to collect:
 
@@ -387,7 +383,6 @@ This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 
 Note: This aggregator should not fill out `sum` when used with instruments
@@ -840,8 +835,7 @@ used:
   * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
     has a preferred temporality, use the preferred temporality and goto END.
   * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
-    does not have a preferred temporality, use the default temporality based on
-    the View [aggregation](#aggregation) and goto END.
+    does not have a preferred temporality, use Cumulative and goto END.
 * END.
 
 If the above process caused conflicts, the SDK SHOULD treat the conflicts as
