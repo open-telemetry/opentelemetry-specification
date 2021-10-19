@@ -226,8 +226,8 @@ about the span.
 ## Experimentation Attributes
 
 Experiments are sometimes used to measure the result of a change within an application.
-When an experiment is running different requests may execute different code paths.
-By adding experiment information ont traces it allows for experiment specific issues to be found and also understand how experiments change the flow of a request.
+When an experiment is running, different requests may execute different code paths.
+By adding experiment information onto traces, it allows for experiment specific issues to be found and also understand how experiments change the flow of a request.
 
 To make sure requests/customers receive a consistent experience an experiment seed may be used.
 The seed is used to initialise a pseudorandom number generator which is then used to decide which version of the code to execute.
