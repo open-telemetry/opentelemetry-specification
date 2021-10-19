@@ -227,7 +227,7 @@ about the span.
 The attributes are split into two sections, global and experiment specific.
 Experiments can run anywhere within the code and therefore be on ony span.
 
-#### Trace Scoped Attributes
+### Trace Scoped Attributes
 
 <!-- semconv experiment -->
 | Attribute  | Type | Description  | Examples  | Required |
@@ -235,7 +235,7 @@ Experiments can run anywhere within the code and therefore be on ony span.
 | `experiment.seed` | string | The seed used to calculate which variants to use | `k43l24kl2l43lj32` | No |
 <!-- endsemconv -->
 
-#### Experiment specific Attributes
+### Experiment specific Attributes
 
 `experiment_name` MUST be replaced with the name of the experiment.
 
