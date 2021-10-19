@@ -832,20 +832,19 @@ Temporality](./datamodel.md#temporality) can be configured in the OpenTelemetry
 SDK. The SDK MUST use the following order to determine which temporality to be
 used:
 
-* If the temporality is explicitly specified on a [View](#view), use the
-  specified temporality and goto END.
 * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader) only
   supports one temporality (either Cumulative or Delta), use the supported
   temporality and goto END.
 * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
   supports both Cumulative and Delta:
-  * If the temporality is explicitly specified on the
-    [MetricExporter](#metricexporter) or [MetricReader](#metricreader), use the
-    specified temporality and goto END.
+  * If the temporality is explicitly specified (e.g. via environment variables)
+    on the [MetricExporter](#metricexporter) or [MetricReader](#metricreader),
+    use the specified temporality and goto END.
   * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
     has a preferred temporality, use the preferred temporality and goto END.
   * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
-    does not have a preferred temporality, use Cumulative and goto END.
+    does not have a preferred temporality, use the default temporality based on
+    the View [aggregation](#aggregation) and goto END.
 * END.
 
 If the above process caused conflicts (e.g. a View has an explicitly specified
