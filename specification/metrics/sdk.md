@@ -837,9 +837,6 @@ used:
   temporality and goto END.
 * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
   supports both Cumulative and Delta:
-  * If the temporality is explicitly specified (e.g. via environment variables)
-    on the [MetricExporter](#metricexporter) or [MetricReader](#metricreader),
-    use the specified temporality and goto END.
   * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
     has a preferred temporality, use the preferred temporality and goto END.
   * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
