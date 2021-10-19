@@ -16,6 +16,7 @@ Particular operations may refer to or require some of these attributes.
 - [General identity attributes](#general-identity-attributes)
 - [General thread attributes](#general-thread-attributes)
 - [Source Code Attributes](#source-code-attributes)
+- [Experiment Attributes](#experimentation-attributes)
 
 <!-- tocstop -->
 
@@ -223,6 +224,19 @@ about the span.
 <!-- endsemconv -->
 
 ## Experimentation Attributes
+
+Experiments are sometimes used to measure the result of a change within an application.
+When an experiment is running different requests may execute different code paths.
+By adding experiment information ont traces it allows for experiment specific issues to be found and also understand how experiments change the flow of a request.
+
+To make sure requests/customers receive a consistent experience an experiment seed may be used.
+The seed is used to initialise a pseudorandom number generator which is then used to decide which version of the code to execute.
+
+Multiple experiments may be running within a single application and many may affect a single request.
+To keep track of which variant of an experiment is run the experiment name is included in the attribute name with the variant as the value.
+
+These attributes should be set when experiment frameworks are in use.
+When the framework runs a variant for an experiment the variant name should be added as an attribute to the active span.
 
 The attributes are split into two sections, global and experiment specific.
 Experiments can run anywhere within the code and therefore be on ony span.
