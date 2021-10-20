@@ -21,7 +21,7 @@ The following semantic conventions surrounding metrics are defined:
 * [System](system-metrics.md): For standard system metrics.
 * [Process](process-metrics.md): For standard process metrics.
 * [Runtime Environment](runtime-environment-metrics.md): For runtime environment metrics.
-* [FaaS](faas-metrics.md): For Function as a Service metrics.
+* [FaaS](faas-metrics.md): For [Function as a Service](https://en.wikipedia.org/wiki/Function_as_a_service) metrics.
 
 Apart from semantic conventions for metrics and
 [traces](../../trace/semantic_conventions/README.md), OpenTelemetry also
