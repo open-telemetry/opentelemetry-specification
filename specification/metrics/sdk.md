@@ -8,17 +8,20 @@ Table of Contents
 </summary>
 
 * [MeterProvider](#meterprovider)
-* [Attribute Limits](#attribute-limits)
+* [Attribute limits](#attribute-limits)
 * [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
   * [ExemplarReservoir](#exemplarreservoir)
-  * [Exemplar Defaults](#exemplar-defaults)
+  * [Exemplar defaults](#exemplar-defaults)
 * [MetricReader](#metricreader)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 * [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
-* [Defaults and Configuration](#defaults-and-configuration)
+* [Defaults and configuration](#defaults-and-configuration)
+* [Numerical limits handling](#numerical-limits-handling)
+* [Compatibility requirements](#compatibility-requirements)
+* [Concurrency requirements](#concurrency-requirements)
 
 </details>
 
@@ -64,9 +67,9 @@ SHOULD return a valid no-op Meter for these calls, if possible.
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
-`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` CAN be
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors CAN
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
 `Shutdown` MUST be implemented at least by invoking `Shutdown` on all registered
@@ -88,9 +91,9 @@ is an error condition; and if there is no error condition, it should return some
 **NO ERROR** status, language implementations MAY decide how to model **ERROR**
 and **NO ERROR**.
 
-`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` CAN be
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors CAN
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
 
 `ForceFlush` MUST invoke `ForceFlush` on all registered
@@ -329,24 +332,22 @@ This Aggregation does not have any configuration parameters.
 The Sum Aggregation informs the SDK to collect data for the
 [Sum Metric Point](./datamodel.md#sums).
 
-The default values for the configuration parameters will be set based on
-the Instrument Kind (e.g. at View registration OR at first seen measurement).
-
-| Instrument Kind | Default `SumType` | Default `Temporality` |
-| --- | --- | --- |
-| [Counter](./api.md#counter) | Monotonic | Cumulative |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic | Cumulative |
-| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic | Cumulative |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic | Cumulative |
-
 This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| SumType | Monotonic, Non-Monotonic, Other | See <sup>1</sup> | See [SumType in PR](https://github.com/open-telemetry/opentelemetry-proto/pull/320). |
-| Temporality | Delta, Cumulative | See <sup>1</sup> | See [Temporality](./datamodel.md#temporality). |
+| Temporality | Delta, Cumulative | Cumulative | |
 
-\[1\]: See Default values based on Instrument Kind above.
+The monotonicity of the aggregation is determined by the instrument type:
+
+| Instrument Kind | `SumType` |
+| --- | --- |
+| [Counter](./api.md#counter) | Monotonic |
+| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic |
+| [Histogram](./api.md#histogram) | Monotonic |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
 This Aggregation informs the SDK to collect:
 
@@ -382,18 +383,18 @@ This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| Monotonic | boolean | true | if true, non-positive values are treated as errors<sup>1</sup>. |
 | Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 
-\[1\]: Language implementations may choose the best strategy for handling errors. (i.e. Log, Discard, etc...)
+Note: This aggregator should not fill out `sum` when used with instruments
+that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
 
 This Aggregation informs the SDK to collect:
 
 - Count of `Measurement` values falling within explicit bucket boundaries.
 - Arithmetic sum of `Measurement` values in population.
 
-## Attribute Limits
+## Attribute limits
 
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
@@ -477,7 +478,7 @@ from the original sample measurement.
 
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
-### Exemplar Defaults
+### Exemplar defaults
 
 The SDK will come with two types of built-in exemplar reservoirs:
 
@@ -554,9 +555,29 @@ to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 
 The SDK SHOULD provide a way to allow `MetricReader` to respond to
 [MeterProvider.ForceFlush](#forceflush) and [MeterProvider.Shutdown](#shutdown).
-[OpenTelemetry SDK](../overview.md#sdk) authors CAN decide the language
+[OpenTelemetry SDK](../overview.md#sdk) authors MAY decide the language
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
+
+The SDK SHOULD provide a way to allow [Aggregation
+Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
+instance during the creation time. [OpenTelemetry SDK](../overview.md#sdk)
+authors MAY choose the best idiomatic design for their language:
+
+* Whether to treat the temporality settings as recommendation or enforcement.
+  For example, if the temporality is set to Delta, would the SDK want to perform
+  Cumulative->Delta conversion for an [Asynchronous
+  Counter](./api.md#asynchronous-counter), or downgrade it to a
+  [Gauge](./datamodel.md#gauge), or keep consuming it as Cumulative due to the
+  consideration of [memory
+  efficiency](./supplementary-guidelines.md#memory-management)?
+* If an invalid combination of settings occurred (e.g. if a `MetricReader`
+  instance is set to use Cumulative, and it has an associated [Push Metric
+  Exporter](#push-metric-exporter) instance which has the temporality set to
+  Delta), would the SDK want to fail fast or use some fallback logic?
+* Refer to the [supplementary
+  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
+  more context and suggestions.
 
 ### MetricReader operations
 
@@ -573,6 +594,22 @@ failed or timed out.
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
 filter, timeout). [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose the
 return value type, or do not return anything.
+
+### Shutdown
+
+This method provides a way for the `MetricReader` to do any cleanup required.
+
+`Shutdown` MUST be called only once for each `MetricReader` instance. After the
+call to `Shutdown`, subsequent invocations to `Collect` are not allowed. SDKs
+SHOULD return some failure for these calls, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` MAY be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
+decide if they want to make the shutdown timeout configurable.
 
 ### Periodic exporting MetricReader
 
@@ -611,6 +648,29 @@ example:
 * Exporter C is a pull exporter which reacts to a scraper over HTTP.
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
+
+The SDK SHOULD provide a way to allow [Aggregation
+Temporality](./datamodel.md#temporality) to be specified for a `MetricExporter`
+instance during the creation time, if the exporter supports both Cumulative and
+Delta [Temporality](./datamodel.md#temporality). [OpenTelemetry
+SDK](../overview.md#sdk) authors MAY choose the best idiomatic design for their
+language:
+
+* Whether to treat the temporality settings as recommendation or enforcement.
+  For example, if an [OTLP Exporter](./sdk_exporters/otlp.md) instance is being
+  used, and the temporality is set to Delta, would the SDK want to perform
+  Cumulative->Delta conversion for an [Asynchronous
+  Counter](./api.md#asynchronous-counter), or downgrade it to a
+  [Gauge](./datamodel.md#gauge), or keep exporting it as Cumulative due to the
+  consideration of [memory
+  efficiency](./supplementary-guidelines.md#memory-management)?
+* If an invalid combination of settings occurred (e.g. if a [Prometheus
+  Exporter](./sdk_exporters/prometheus.md) instance is being used, and the
+  temporality is set to Delta), would the SDK want to fail fast or use some
+  fallback logic?
+* Refer to the [supplementary
+  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
+  more context and suggestions.
 
 ### Push Metric Exporter
 
@@ -690,7 +750,7 @@ invocation, but before the exporter exports the completed metrics.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors CAN
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
 
 ##### Shutdown()
@@ -704,7 +764,7 @@ return a Failure result.
 
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
-authors CAN decide if they want to make the shutdown timeout configurable.
+authors MAY decide if they want to make the shutdown timeout configurable.
 
 ### Pull Metric Exporter
 
@@ -752,17 +812,50 @@ modeled to interact with other components in the SDK:
                                  +-----------------------------+
   ```
 
-## Defaults and Configuration
+## Defaults and configuration
 
-The SDK MUST provide the following configuration parameters for Exemplar
-sampling:
+The SDK MUST provide configuration according to the [SDK environment
+variables](../sdk-environment-variables.md) specification.
 
-| Name            | Description | Default | Notes |
-|-----------------|---------|-------------|---------|
-| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"WITH_SAMPLED_TRACE"` | |
+## Numerical limits handling
 
-Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
+The SDK MUST handle numerical limits in a graceful way according to [Error
+handling in OpenTelemetry](../error-handling.md).
 
-- `"NONE"`: No measurements are eligble for exemplar sampling.
-- `"ALL"`: All measurements are eligible for exemplar sampling.
-- `"WITH_SAMPLED_TRACE"`: Only allow measurements with a sampled parent span in context.
+If the SDK receives float/double values from [Instruments](./api.md#instrument),
+it MUST handle all the possible values. For example, if the language runtime
+supports [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754), the SDK needs to
+handle NaNs and Infinites.
+
+It is unspecified _how_ the SDK should handle the input limits. The SDK authors
+MAY leverage/follow the language runtime behavior for better performance, rather
+than perform a check on each value coming from the API.
+
+It is unspecified _how_ the SDK should handle the output limits (e.g. integer
+overflow). The SDK authors MAY rely on the language runtime behavior as long as
+errors/exceptions are taken care of.
+
+## Compatibility requirements
+
+All the metrics components SHOULD allow new methods to be added to existing
+components without introducing breaking changes.
+
+All the metrics SDK methods SHOULD allow optional parameter(s) to be added to
+existing methods without introducing breaking changes, if possible.
+
+## Concurrency requirements
+
+For languages which support concurrent execution the Metrics SDKs provide
+specific guarantees and safeties.
+
+**MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` are safe to be
+called concurrently.
+
+**ExemplarFilter** - all methods are safe to be called concurrently.
+
+**ExemplarReservoir** - all methods are safe to be called concurrently.
+
+**MetricReader** - `Collect` and `Shutdown` are safe to be called concurrently.
+
+**MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
+concurrently.

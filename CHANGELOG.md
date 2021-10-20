@@ -11,8 +11,58 @@ release.
 
 ### Traces
 
+### Metrics
+
+- Add optional min / max fields to histogram data model.
+  ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
+- Add exponential histogram to the metrics data model.
+  ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
+- Add clarifications on how to handle numerical limits.
+  ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+- BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
+  ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
+- Add AWS App Runner as a cloud platform
+  ([#2004](https://github.com/open-telemetry/opentelemetry-specification/pull/2004))
+- Add Tencent Cloud as a cloud provider.
+  ([#2006](https://github.com/open-telemetry/opentelemetry-specification/pull/2006))
+- Don't set Span.Status for 4xx http status codes for SERVER spans.
+  ([#1998](https://github.com/open-telemetry/opentelemetry-specification/pull/1998))
+- Add attributes for Apache RocketMQ.
+  ([#1904](https://github.com/open-telemetry/opentelemetry-specification/pull/1904))
+
+- Define http tracing attributes provided at span creation time
+  ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+- Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
+  ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975),
+  [#1985](https://github.com/open-telemetry/opentelemetry-specification/pull/1985))
+- Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
+
+### SDK Configuration
+
+## v1.7.0 (2021-09-30)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Prefer global user defined limits over model-sepcific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
+- Generalize the "message" event to apply to all RPC systems not just gRPC
+  ([#1914](https://github.com/open-telemetry/opentelemetry-specification/pull/1914))
 
 ### Metrics
 
@@ -26,9 +76,15 @@ release.
   [#1888](https://github.com/open-telemetry/opentelemetry-specification/pull/1888),
   [#1912](https://github.com/open-telemetry/opentelemetry-specification/pull/1912),
   [#1913](https://github.com/open-telemetry/opentelemetry-specification/pull/1913),
-  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938))
+  [#1938](https://github.com/open-telemetry/opentelemetry-specification/pull/1938),
+  [#1958](https://github.com/open-telemetry/opentelemetry-specification/pull/1958))
+- Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))
+- Update env variable values to match other env variables
+  ([#1965](https://github.com/open-telemetry/opentelemetry-specification/pull/1965))
 
 ### Logs
+
+- No changes.
 
 ### Resource
 
@@ -54,17 +110,27 @@ release.
   ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
+- Add `k8s.container.restart_count` Resource attribute.
+  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 
 ### Compatibility
+
+- No changes.
 
 ### OpenTelemetry Protocol
 
 - Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
+- Allow implementations to use their own default for OTLP compression, with `none` denotating no compression
+  ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
+- Clarify OTLP server components MUST support none/gzip compression
+  ([#1955](https://github.com/open-telemetry/opentelemetry-specification/pull/1955))
+- Change OTLP/HTTP port from 4317 to 4318 ([#1970](https://github.com/open-telemetry/opentelemetry-specification/pull/1970))
 
 ### SDK Configuration
 
 - Change default value for OTEL_EXPORTER_JAEGER_AGENT_PORT to 6831.
   ([#1812](https://github.com/open-telemetry/opentelemetry-specification/pull/1812))
+- See also the changes for OTLP configuration listed under "OpenTelemetry Protocol" above.
 
 ## v1.6.0 (2021-08-06)
 
@@ -135,7 +201,6 @@ release.
 
 - Clarify the limit on the instrument unit.
   ([#1762](https://github.com/open-telemetry/opentelemetry-specification/pull/1762))
-- Add FaaS metrics semantic conventions ([#1736](https://github.com/open-telemetry/opentelemetry-specification/pull/1736))  
 
 ### Logs
 

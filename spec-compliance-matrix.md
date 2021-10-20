@@ -19,7 +19,7 @@ formats is required. Implementing more than one format is optional.
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create TracerProvider                                                                            |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Get a Tracer with schema_url                                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
+| Get a Tracer with schema_url                                                                     |          | +  |      |    |        |      |        |     |      | +   |      |       |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
 | ForceFlush (SDK only required)                                                                   |          | +  | +    | -  | +      | +    | -      |     | +    | +   | +    | +     |
@@ -39,7 +39,7 @@ formats is required. Implementing more than one format is optional.
 | Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with parent from Context                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| No explicit parent Span/SpanContext allowed                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | -   | -    | +     |
+| No explicit parent Span/SpanContext allowed                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
 | SpanProcessor.OnStart receives parent Context                                                    |          | +  | +    | +  | +      | +    | +      |     | +    | -   | -    | +     |
 | UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | User-defined start timestamp                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -103,6 +103,8 @@ formats is required. Implementing more than one format is optional.
 | [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          | +  | +    |    | +      | +    | +      |     | +    | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      |     |      | +   | +    |       |
+| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | [-][php225]   | +    | +   | +    | +     |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  |      |    |        |      |        |     |      |     |      |       |
 
 ## Context Propagation
 
@@ -120,10 +122,10 @@ formats is required. Implementing more than one format is optional.
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | -     |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      |     |      |       |
-| Fields                                                                           |          | +  | +    | +  | +      | +    | +      |     | +    | -   | +    | +     |
+| Fields                                                                           |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
 | Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
-| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | -   | -    | +     |
+| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | -    | +     |
 
 ## Environment Variables
 
@@ -136,7 +138,7 @@ Note: Support for environment variables is optional.
 |OTEL_LOG_LEVEL                                | - | -  | + | [-][py1059] | +  | + | -  |    | - | -  | -   |
 |OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
 |OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | -    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | -    | - | +  | + | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        | + |    |   |      |    | -    | - |    | - | +  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | -  | -   |
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
@@ -156,20 +158,23 @@ Note: Support for environment variables is optional.
 
 | Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
-| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      |        |     | +    |     | +    |       |
+| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      |        |     | +    | +   | +    |       |
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    |        |     | -    |     |      |       |
 | Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                                         |          |    |   |    |             |      |        |     |      |     |      |       |
 | OTLP/gRPC Exporter                                                             | *        | +  | + | +  | +           |      | +      |     | +    | +   | +    | +     |
-| OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | + | +  | +           | +    | +      |     |      | -   | -    | -     |
-| OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | - | +  | [-][py1003] |      | -      |     |      | -   | -    | -     |
+| OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | + | +  | +           | +    | +      |     | +    | +   | -    | -     |
+| OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | - | +  | [-][py1003] |      | -      |     |      | +   | -    | -     |
 | OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | + | +  | +           | +    | -      |     |      | -   | -    | -     |
 | Concurrent sending                                                             |          | -  | + | +  | [-][py1108] |      | -      |     | +    | -   | -    | -     |
 | Honors retryable responses with backoff                                        | X        | +  |   | +  | +           | +    | -      |     |      | -   | -    | -     |
 | Honors non-retryable responses                                                 | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Honors throttling response                                                     | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Multi-destination spec compliance                                              | X        | +  |   |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
+| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          |    |   |    |             |      |        |     |      |     |      |       |
+| SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      |        |     |      |     |      |       |
+| SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      |        |     |      |     |      |       |
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
@@ -187,7 +192,7 @@ Note: Support for environment variables is optional.
 | [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    |        |     | +    | +   | +    | +     |
 | Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    |        |     |      | -   | -    | -     |
-| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    |        |     | +    | -   | -    | -     |
+| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    |        |     | +    | +   | -    | -     |
 | Service name mapping                                                           |          | +  | + |    | +           | +    |        |     |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | + |    | +           | +    |        |     | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    |        |     | +    | -   | +    | -     |
@@ -206,3 +211,4 @@ Note: Support for environment variables is optional.
 [py1174]: https://github.com/open-telemetry/opentelemetry-python/issues/1174
 [py1437]: https://github.com/open-telemetry/opentelemetry-python/issues/1437
 [py1779]: https://github.com/open-telemetry/opentelemetry-python/issues/1779
+[php225]: https://github.com/open-telemetry/opentelemetry-php/issues/225

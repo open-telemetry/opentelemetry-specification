@@ -12,6 +12,7 @@ See also the [additional instructions for instrumenting AWS Lambda](instrumentat
 <!-- toc -->
 
 - [General Attributes](#general-attributes)
+  * [Function Name](#function-name)
   * [Difference between execution and instance](#difference-between-execution-and-instance)
 - [Incoming Invocations](#incoming-invocations)
 - [Outgoing Invocations](#outgoing-invocations)
@@ -141,6 +142,7 @@ which the invoked FaaS instance reports about itself, if it's instrumented.
 | `aws` | Amazon Web Services |
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
+| `tencent_cloud` | Tencent Cloud |
 <!-- endsemconv -->
 
 [FaaS resource attributes]: ../../resource/semantic_conventions/faas.md

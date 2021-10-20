@@ -2,13 +2,12 @@
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-<!-- Note: `Events → Data Stream → Timeseries` breaks markdown-toc -->
+<!-- Re-generate TOC with `make markdown-toc` -->
 
 <!-- toc -->
 
 - [Overview](#overview)
-- [Events → Data Stream → Timeseries](#events--data-stream--timeseries)
+- [Events => Data Stream => Timeseries](#events--data-stream--timeseries)
   * [Example Use-cases](#example-use-cases)
   * [Out of Scope Use-cases](#out-of-scope-use-cases)
 - [Model Details](#model-details)
@@ -19,6 +18,17 @@
   * [Sums](#sums)
   * [Gauge](#gauge)
   * [Histogram](#histogram)
+  * [ExponentialHistogram](#exponentialhistogram)
+    + [Exponential Scale](#exponential-scale)
+    + [Exponential Buckets](#exponential-buckets)
+    + [Zero Count](#zero-count)
+    + [Producer Expectations](#producer-expectations)
+      - [Scale Zero: Extract the Exponent](#scale-zero-extract-the-exponent)
+      - [Negative Scale: Extract and Shift the Exponent](#negative-scale-extract-and-shift-the-exponent)
+      - [All Scales: Use the Logarithm Function](#all-scales-use-the-logarithm-function)
+      - [Positive Scale: Use a Lookup Table](#positive-scale-use-a-lookup-table)
+      - [Producer Recommendations](#producer-recommendations)
+    + [Consumer Expectations](#consumer-expectations)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -66,7 +76,7 @@ Prometheus Remote Write protocol without loss of features or semantics, through
 well-defined translations of the data, including the ability to automatically
 remove attributes and lower histogram resolution.
 
-## Events → Data Stream → Timeseries
+## Events => Data Stream => Timeseries
 
 **Status**: [Stable](../document-status.md)
 
@@ -223,12 +233,13 @@ consisting of several metadata properties:
 - Kind of point (integer, floating point, etc)
 - Unit of measurement
 
-The primary data of each timeseries are ordered (timestamp, value) points, for
-three value types:
+The primary data of each timeseries are ordered (timestamp, value) points, with
+one of the following value types:
 
 1. Counter (Monotonic, Cumulative)
 2. Gauge
 3. Histogram
+4. Exponential Histogram
 
 This model may be viewed as an idealization of
 [Prometheus Remote Write](https://docs.google.com/document/d/1LPhVRSFkGNSuU1fBd81ulhsCPR4hkSZyyBj1SZ8fWOM/edit#heading=h.3p42p5s8n0ui).
@@ -267,9 +278,10 @@ same kind. <sup>[1](#otlpdatapointfn)</sup>
 
 The basic point kinds are:
 
-1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L230)
-2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L200)
-3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L258)
+1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L198)
+2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L192)
+3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L211)
+4. [Exponential Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/27a10cd70f63afdbddf460881969f9ad7ae4af5d/opentelemetry/proto/metrics/v1/metrics.proto#L239)
 
 Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
 not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
@@ -346,7 +358,9 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
   - An independent set of Attribute name-value pairs.
   - A sampled value (e.g. current cpu temperature)
   - A timestamp when the value was sampled (`time_unix_nano`)
-  - (optional) A timestamp (`start_time_unix_nano`) which has [TBD semantics](https://github.com/open-telemetry/opentelemetry-proto/pull/295).
+  - (optional) A timestamp (`start_time_unix_nano`) which best represents the
+    first possible moment a measurement could be recorded.  This is commonly
+    set to the timestamp when a metric collection system started.
   - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 In OTLP, a point within a Gauge stream represents the last-sampled event for a
@@ -386,6 +400,8 @@ Histograms consist of the following:
       (00:00:00 UTC on 1 January 1970).
   - A count (`count`) of the total population of points in the histogram.
   - A sum (`sum`) of all the values in the histogram.
+  - (optional) The min (`min`) of all values in the histogram.
+  - (optional) The max (`max`) of all values in the histogram.
   - (optional) A series of buckets with:
     - Explicit boundary values.  These values denote the lower and upper bounds
       for buckets and whether not a given observation would be recorded in this
@@ -397,6 +413,13 @@ Like Sums, Histograms also define an aggregation temporality.  The picture above
 denotes Delta temporality where accumulated event counts are reset to zero after reporting
 and a new aggregation occurs. Cumulative, on the other hand, continues to
 aggregate events, resetting with the use of a new start time.
+
+The aggregation temporality also has implications on the min and max fields. Min
+and max are more useful for Delta temporality, since the values represented by
+Cumulative min and max will stabilize as more events are recorded. Additionally,
+it is possible to convert min and max from Delta to Cumulative, but not from
+Cumulative to Delta. When converting from Cumulative to Delta, min and max can
+be dropped, or captured in an alternative representation such as a gauge.
 
 Bucket counts are optional.  A Histogram without buckets conveys a
 population in terms of only the sum and count, and may be interpreted
@@ -413,14 +436,282 @@ Changing the inclusivity and exclusivity of bounds is an example of
 worst-case Histogram error; users should choose Histogram boundaries
 so that worst-case error is within their error tolerance.
 
+### ExponentialHistogram
+
+**Status**: [Experimental](../document-status.md)
+
+[ExponentialHistogram](https://github.com/open-telemetry/opentelemetry-proto/blob/cfbf9357c03bf4ac150a3ab3bcbe4cc4ed087362/opentelemetry/proto/metrics/v1/metrics.proto#L222)
+data points are an alternate representation to the
+[Histogram](#histogram) data point, used to convey a population of
+recorded measurements in a compressed format.  ExponentialHistogram
+compresses bucket boundaries using an exponential formula, making it
+suitable for conveying high dynamic range data with small relative
+error, compared with alternative representations of similar size.
+
+Statements about `Histogram` that refer to aggregation temporality,
+attributes, and timestamps, as well as the `sum`, `count`, `min`, `max` and
+`exemplars` fields, are the same for `ExponentialHistogram`.  These
+fields all share identical interpretation as for `Histogram`, only the
+bucket structure differs between these two types.
+
+#### Exponential Scale
+
+The resolution of the ExponentialHistogram is characterized by a
+parameter known as `scale`, with larger values of `scale` offering
+greater precision.  Bucket boundaries of the ExponentialHistogram are
+located at integer powers of the `base`, also known as the "growth
+factor", where:
+
+```
+base = 2**(2**(-scale))
+```
+
+The symbol `**` in these formulas represents exponentiation, thus
+`2**x` is read "Two to the power of `x`", typically computed by an
+expression like `math.Pow(2.0, x)`.  Calculated `base` values for
+selected scales are shown below:
+
+| Scale | Base    | Expression  |
+| --    | --      | --          |
+| 10    | 1.00068 | 2**(1/1024) |
+| 9     | 1.00135 | 2**(1/512)  |
+| 8     | 1.00271 | 2**(1/256)  |
+| 7     | 1.00543 | 2**(1/128)  |
+| 6     | 1.01089 | 2**(1/64)   |
+| 5     | 1.02190 | 2**(1/32)   |
+| 4     | 1.04427 | 2**(1/16)   |
+| 3     | 1.09051 | 2**(1/8)    |
+| 2     | 1.18921 | 2**(1/4)    |
+| 1     | 1.41421 | 2**(1/2)    |
+| 0     | 2       | 2**1        |
+| -1    | 4       | 2**2        |
+| -2    | 16      | 2**4        |
+| -3    | 256     | 2**8        |
+| -4    | 65536   | 2**16       |
+
+An important property of this design is described as "perfect
+subsetting".  Buckets of an exponential Histogram with a given scale
+map exactly into buckets of exponential Histograms with lesser scales,
+which allows consumers to lower the resolution of a histogram (i.e.,
+downscale) without introducing error.
+
+#### Exponential Buckets
+
+The ExponentialHistogram bucket identified by `index`, a signed
+integer, represents values in the population that are greater than or
+equal to `base**index` and less than `base**(index+1)`.  Note that the
+ExponentialHistogram specifies a lower-inclusive bound while the
+explicit-boundary Histogram specifies an upper-inclusive bound.
+
+The positive and negative ranges of the histogram are expressed
+separately.  Negative values are mapped by their absolute value
+into the negative range using the same scale as the positive range.
+
+Each range of the ExponentialHistogram data point uses a dense
+representation of the buckets, where a range of buckets is expressed
+as a single `offset` value, a signed integer, and an array of count
+values, where array element `i` represents the bucket count for bucket
+index `offset+i`.
+
+For a given range, positive or negative:
+
+- Bucket index `0` counts measurements in the range `[1, base)`
+- Positive indexes correspond with absolute values greater or equal to `base`
+- Negative indexes correspond with absolute values less than 1
+- There are `2**scale` buckets between successive powers of 2.
+
+For example, with `scale=3` there are `2**3` buckets between 1 and 2.
+Note that the lower boundary for bucket index 4 in a `scale=3`
+histogram maps into the lower boundary for bucket index 2 in a
+`scale=2` histogram and maps into the lower boundary for bucket index
+1 (i.e., the `base`) in a `scale=1` histogram—these are examples of
+perfect subsetting.
+
+| `scale=3` bucket index | lower boundary | equation                     |
+| --                     | --             | --                           |
+| 0                      | 1              | 2**(0/8)                     |
+| 1                      | 1.09051        | 2**(1/8)                     |
+| 2                      | 1.18921        | 2**(2/8), 2**(1/4)           |
+| 3                      | 1.29684        | 2**(3/8)                     |
+| 4                      | 1.41421        | 2**(4/8), 2**(2/4), 2**(1/2) |
+| 5                      | 1.54221        | 2**(5/8)                     |
+| 6                      | 1.68179        | 2**(6/8)                     |
+| 7                      | 1.83401        | 2**(7/8)                     |
+
+#### Zero Count
+
+The ExponentialHistogram contains a special `zero_count` field
+containing the count of values that are either exactly zero or within
+the region considered zero by the instrumentation at the tolerated
+level of precision.  This bucket stores values that cannot be
+expressed using the standard exponential formula as well as values
+that have been rounded to zero.
+
+#### Producer Expectations
+
+The ExponentialHistogram design makes it possible to express values
+that are too large or small to be represented in the 64 bit "double"
+floating point format.  Certain values for `scale`, while meaningful,
+are not necessarily useful.
+
+The range of data represented by an ExponentialHistogram determines
+which scales can be usefully applied.  Regardless of scale, producers
+SHOULD ensure that the index of any encoded bucket falls within the
+range of a signed 32-bit integer.  This recommendation is applied to
+limit the width of integers used in standard processing pipelines such
+as the OpenTelemetry collector.  The wire-level protocol could be
+extended for 64-bit bucket indices in a future release.
+
+Producers use a mapping function to compute bucket indices.  Producers
+are presumed to support IEEE double-width floating-point numbers with
+11-bit exponent and 52-bit significand.  The pseudo-code below for
+mapping values to exponents refers to the following constants:
+
+```golang
+const (
+    // SignificandWidth is the size of an IEEE 754 double-precision
+    // floating-point significand.
+    SignificandWidth = 52
+    // ExponentWidth is the size of an IEEE 754 double-precision
+    // floating-point exponent.
+    ExponentWidth = 11
+
+    // SignificandMask is the mask for the significand of an IEEE 754
+    // double-precision floating-point value: 0xFFFFFFFFFFFFF.
+    SignificandMask = 1 << SignificandWidth - 1
+
+    // ExponentBias is the exponent bias specified for encoding
+    // the IEEE 754 double-precision floating point exponent: 1023.
+    ExponentBias = 1 << (ExponentWidth-1) - 1
+
+    // ExponentMask are set to 1 for the bits of an IEEE 754
+    // floating point exponent: 0x7FF0000000000000.
+    ExponentMask = ((1 << ExponentWidth) - 1) << SignificandWidth
+)
+```
+
+The following choices of mapping function have been validated through
+reference implementations.
+
+##### Scale Zero: Extract the Exponent
+
+For scale zero, the index of a value equals its normalized base-2
+exponent, meaning the value of _exponent_ in the base-2 fractional
+representation `1._significand_ * 2**_exponent_`.  Normal IEEE 754
+double-width floating point values have indices in the range
+`[-1022, +1023]` and subnormal values have indices in the range
+`[-1074, -1023]`.  This may be written as:
+
+```golang
+// GetExponent extracts the normalized base-2 fractional exponent.
+// Let the value be represented as `1.significand x 2**exponent`,
+// this returns `exponent`.  Not defined for 0, Inf, or NaN values.
+func GetExponent(value float64) int32 {
+    rawBits := math.Float64bits(value)
+    rawExponent := (int64(rawBits) & ExponentMask) >> SignificandWidth
+    rawSignificand := rawBits & SignificandMask
+    if rawExponent == 0 {
+        // Handle subnormal values: rawSignificand cannot be zero
+        // unless value is zero.
+        rawExponent -= int64(bits.LeadingZeros64(rawSignificand) - 12)
+    }
+    return int32(rawExponent - ExponentBias)
+}
+```
+
+##### Negative Scale: Extract and Shift the Exponent
+
+For negative scales, the index of a value equals the normalized
+base-2 exponent (as by `GetExponent()` above) shifted to the right
+by `-scale`.  Note that because of sign extension, this shift performs
+correct rounding for the negative indices.  This may be written as:
+
+```golang
+  return GetExponent(value) >> -scale
+```
+
+##### All Scales: Use the Logarithm Function
+
+For any scale, use of the built-in natural logarithm
+function.  A multiplicative factor equal to `2**scale / ln(2)`
+proves useful (where `ln()` is the natural logarithm), for example:
+
+```golang
+    scaleFactor := math.Log2E * math.Exp2(scale)
+    return int64(math.Floor(math.Log(value) * scaleFactor))
+```
+
+Note that in the example Golang code above, the built-in `math.Log2E`
+is defined as `1 / ln(2)`.
+
+##### Positive Scale: Use a Lookup Table
+
+For positive scales, lookup table methods have been demonstrated
+that are able to exactly compute the index in constant time from a
+lookup table with `O(2**scale)` entries.
+
+##### Producer Recommendations
+
+At the lowest or highest end of the 64 bit IEEE floating point, a
+bucket's range may only be partially representable by the floating
+point number format.  When mapping a number in these buckets, a
+producer may correctly return the index of such a partially
+representable bucket.  This is considered a normal condition.
+
+For positive scales, the logarithm method is preferred because it
+requires very little code, is easy to validate and is nearly as fast
+and accurate as the lookup table approach.  For zero scale and
+negative scales, directly calculating the index from the
+floating-point representation is more efficient.
+
+The use of a built-in logarithm function could lead to results that
+differ from the bucket index that would be computed using arbitrary
+precision or a lookup table, however producers are not required to
+perform an exact computation.  As a result, ExponentialHistogram
+exemplars could map into buckets with zero count.  We expect to find
+such values counted in the adjacent buckets.
+
+#### Consumer Expectations
+
+ExponentialHistogram bucket indices are expected to map into buckets
+where both the upper and lower boundaries can be represented
+using IEEE 754 double-width floating point values.  Consumers MAY
+round the unrepresentable boundary of a partially representable bucket
+index to the nearest representable value.
+
+Consumers SHOULD reject ExponentialHistogram data with `scale` and
+bucket indices that overflow or underflow this representation.
+Consumers that reject such data SHOULD warn the user through error
+logging that out-of-range data was received.
+
 ### Summary (Legacy)
 
 [Summary](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.9.0/opentelemetry/proto/metrics/v1/metrics.proto#L268)
-metric data points convey quantile summaries, e.g. What is the 99-th percentile
-latency of my HTTP server.  Unlike other point types in OpenTelemetry, Summary
-points cannot always be merged in a meaningful way. This point type is not
-recommended for new applications and exists for compatibility with other
-formats.
+metric data points convey quantile summaries, e.g. What is the 99-th
+percentile latency of my HTTP server.  Unlike other point types in
+OpenTelemetry, Summary points cannot always be merged in a meaningful
+way. This point type is not recommended for new applications and
+exists for compatibility with other formats.
+
+Summary consists of the following:
+
+- A set of data points, each containing:
+  - An independent set of Attribute name-value pairs.
+  - A timestamp when the value was sampled (`time_unix_nano`)
+  - (optional) A timestamp (`start_time_unix_nano`) that denotes the start time
+    of observation collection for the summary.
+  - A count of the number of observations in the population of the data point.
+  - A sum of the values in the population.
+  - A set of quantile values (in strictly increasing order) consisting of:
+    - The quantile of a distribution, within the interval `[0.0, 1.0]`.  For
+      example, the value `0.9` would represent the 90th-percentile.
+    - The value of the quantile.  This MUST be non-negative.
+
+Quantile values 0.0 and 1.0 are defined to be equal to the minimum and maximum values, respectively.
+
+Quantile values do not need to represent values observed between
+`start_time_unix_nano` and `time_unix_nano` and are expected to be calculated
+against recent time windows, typically the last 5-10 minutes.
 
 ## Exemplars
 

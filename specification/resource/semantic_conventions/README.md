@@ -11,6 +11,8 @@ This document defines standard attributes for resources. These attributes are ty
 
 - [TODOs](#todos)
 - [Document Conventions](#document-conventions)
+- [Attributes with Special Handling](#attributes-with-special-handling)
+  * [Semantic Attributes with Dedicated Environment Variable](#semantic-attributes-with-dedicated-environment-variable)
 - [Semantic Attributes with SDK-provided Default Value](#semantic-attributes-with-sdk-provided-default-value)
 - [Service](#service)
 - [Telemetry SDK](#telemetry-sdk)
@@ -171,3 +173,4 @@ Valid cloud providers are:
 - [Amazon Web Services](https://aws.amazon.com/) ([`aws`](cloud_provider/aws/README.md))
 - [Google Cloud Platform](https://cloud.google.com/) (`gcp`)
 - [Microsoft Azure](https://azure.microsoft.com/) (`azure`)
+- [Tencent Cloud](https://intl.cloud.tencent.com/) (`tencent_cloud`)
