@@ -2,18 +2,38 @@
 
 <!-- toc -->
 
-- [Definitions Used in this Document](#definitions-used-in-this-document)
+- [Definitions used in this document](#definitions-used-in-this-document)
   * [Sampling](#sampling)
+    + [Adjusted count](#adjusted-count)
+    + [Power-of-two random sampling](#power-of-two-random-sampling)
   * [Sampler](#sampler)
-  * [Parent-based sampler](#parent-based-sampler)
-  * [Probability sampler](#probability-sampler)
-  * [Consistent probability sampler](#consistent-probability-sampler)
-  * [Always-on sampler](#always-on-sampler)
-  * [Always-off sampler](#always-off-sampler)
-  * [Non-probability sampler](#non-probability-sampler)
-  * [Adjusted count](#adjusted-count)
-  * [Unbiased probability sampling](#unbiased-probability-sampling)
-  * [Power-of-two random sampling](#power-of-two-random-sampling)
+    + [Parent-based sampler](#parent-based-sampler)
+    + [Probability sampler](#probability-sampler)
+    + [Consistent probability sampler](#consistent-probability-sampler)
+    + [Always-on sampler](#always-on-sampler)
+    + [Always-off sampler](#always-off-sampler)
+    + [Non-probability sampler](#non-probability-sampler)
+- [Probability sampling](#probability-sampling)
+  * [Context: traceparent](#context-traceparent)
+    + [Sampled flag](#sampled-flag)
+      - [Requirement 1](#requirement-1)
+      - [Requirement 2](#requirement-2)
+  * [Context: tracestate](#context-tracestate)
+    + [P-value](#p-value)
+      - [Requirement 1](#requirement-1-1)
+      - [Requirement 2](#requirement-2-1)
+      - [Requirement 3](#requirement-3)
+      - [Requirement 4](#requirement-4)
+      - [Requirement 5](#requirement-5)
+      - [Requirement 6](#requirement-6)
+    + [R-value](#r-value)
+      - [Requirement 1](#requirement-1-2)
+      - [Requirement 2](#requirement-2-2)
+    + [Composition rules](#composition-rules)
+      - [Requirement 1](#requirement-1-3)
+      - [Requirement 2](#requirement-2-3)
+      - [Requirement 3](#requirement-3-1)
+      - [Requirement 4](#requirement-4-1)
 
 <!-- tocstop -->
 
@@ -31,10 +51,9 @@ The specification in this document is semantic in nature.  Two
 enable the development of interoperable probability Sampler
 implementations.  OpenTelemetry is gathering experience with Samplers
 based on this specification while the group considers how to add
-probability sampling support in the default SDKs, via the specified
-built-in Samplers.
+probability sampling support to the default SDK specification.
 
-## Definitions Used in this Document
+## Definitions used in this document
 
 ### Sampling
 
@@ -53,6 +72,36 @@ is generally known, whereas OpenTelemetry also recognizes
 "non-probability" sampling approaches, in which representivity is not
 explicitly quantified.
 
+#### Adjusted count
+
+Adjusted count is a measure of representivity, the number of spans in
+the population that are represented by the individually sampled span.
+Span-to-metrics pipelines can be built by adding the adjusted count of
+each sample span to a counter of matching spans.
+
+For probability sampling, adjusted count is defined as the reciprocal
+(i.e., mathematical inverse) of sampling probability.
+
+For non-probability sampling, adjusted count is unknown.
+
+Zero adjusted count is defined in a way that supports composition of
+probability and non-probability sampling.  Zero is assigned as the
+adjusted count when a probability sampler does not select a span.
+
+#### Power-of-two random sampling
+
+A simple sampling scheme can be implemented using a random bit string
+as the input.  This scheme is limited to power-of-two sampling
+probabilities, as follows.
+
+1. Express the sampling probability as `2**-s`. For example, 25%
+   equals `2**-2` with `s=2`
+2. Count `r`, the number of consecutive zero bits in the input string
+3. If `s <= r`, select the item with adjusted count `2**s`.
+
+This algorithm is the basis of the consistent probability sampling
+approach used in OpenTelemetry, defined in greater detail below.
+
 ### Sampler
 
 A Sampler provides configurable logic, used by the SDK, for selecting
@@ -66,16 +115,15 @@ OpenTelemetry supports spans that are "recorded" and not "sampled"
 for in-process observability of live spans (e.g., z-pages).
 
 The Sampler interface and the built-in Samplers defined by
-OpenTelemetry must be capable of deciding immediately whether to
-sample a span, since the child context immediately propagates the
-decision.
+OpenTelemetry decide immediately whether to sample a span, and the
+child context immediately propagates the decision.
 
-### Parent-based sampler
+#### Parent-based sampler
 
 A Sampler that makes its decision to sample based on the W3C `sampled`
 flag from the context is said to use parent-based sampling.
 
-### Probability sampler
+#### Probability sampler
 
 A probability Sampler is a Sampler that knows immediately, for each
 of its decisions, the probability that the span had of being selected.
@@ -84,7 +132,7 @@ Sampling probability is defined as a number less than or equal to 1
 and greater than 0 (i.e., `0 < probability <= 1`).  The case of 0
 probability is treated as a special, non-probabilistic case.
 
-### Consistent probability sampler
+#### Consistent probability sampler
 
 A consistent probability sampler is a Sampler that supports independent
 sampling decisions at each span in a trace while maintaining that 
@@ -94,145 +142,138 @@ for any span in a given trace, if a Sampler with lesser sampling probability
 selects the span for sampling, then the span would also be selected by a
 Sampler configured with greater sampling probability.
 
-In OpenTelemetry, consistent probability samplers are limited to
-power-of-two probabilities.  OpenTelemetry consistent probability
-sampling is defined in terms of "p-value" and "r-value", both
-integers, which are propagated via the context to assist in making
-consistent sampling decisions.
-
-### Always-on sampler
+#### Always-on sampler
 
 An always-on sampler is another name for a consistent probability
 sampler with probability equal to one.
 
-### Always-off sampler
+#### Always-off sampler
 
 An always-off Sampler has the effect of disabling a span completely,
 effectively excluding it from the population.  This is not defined as
 a probability sampler with zero probability, because these spans are
 effectively unrepresented.
 
-### Non-probability sampler
+#### Non-probability sampler
 
 A non-probability sampler is a Sampler that makes its decisions not
 based on chance, but instead uses arbitrary logic and internal state.
 
-### Adjusted count
-
-Adjusted count is defined as a measure of representivity, the number
-of spans in the population that are represented by the individually
-sampled span.  Span-to-metrics pipelines can be built by adding the
-adjusted count of each sample span to a counter of matching spans.
-Likewise, span-to-metrics pipelines can be built by observing the
-duration of each sample span in a histogram, the span's adjusted count
-number of times each.
-
-The adjusted count 1 means one-to-one sampling.  Adjusted counts
-greater than 1 indicate the use of a probability sampler.  Adjusted
-counts are unknown when using a non-probability sampler.
-
-Zero adjusted count is defined in a way that supports composition of
-probability and non-probability samplers.  In effect, spans that are
-"recorded" but not "sampled" have adjusted count of zero.
-
-### Unbiased probability sampling
-
-The statistical term "unbiased" is a requirement applied to the
-adjusted count of a span, which states that the expected value of the
-sum of adjusted counts across all exported spans MUST equal the true
-number of spans in the population.  Statistical bias, a measure of the
-difference between an estimate and its true value, of the estimated
-span count in the population should equal zero.  Moreover, this
-requirement must be true for all subsets of the span population for a 
-sampler to be considered an unbiased probability sampler.
-
-Sampling schemes that are not explicitly unbiased should be
-categorized as non-probability samplers because they cannot record
-unbiased adjusted counts.  Here are example Samplers that do not
-qualify as unbiased:
-
-- A traditional form of "leaky-bucket" sampler applies a rate limit to
-  the starting of new sampled traces.  When the configured limit is
-  not exceeded, all spans pass through with adjusted count 1.  When
-  the configured rate limit is exceeded, it is impossible to set
-  adjusted count without introducing bias because future arrivals are
-  not known.
-- A "every-N" sampler records spans on a regular interval, but instead
-  of making a probabilistic decision it makes an exact decision 
-  (e.g., every 10,000 spans).  This sampler knows the representivity
-  of the spans it samples, but the selection process is biased.
-- A "at least once per time period" sampler remembers the last time
-  each distinct span name exported a span.  When a span occurs after
-  more than the specified interval, it samples one (e.g., to ensure
-  that receivers know about these spans).  This sampler introduces
-  bias because spans that happen between the intervals do not receive
-  consideration.
-- The "always off" sampler is biased by definition. Since it exports
-  no spans, the sum of adjusted count is always zero.
-
-As an example, Simple Random Sampling is an unbiased sampling
-algorithm.  The algorithm is given a sampling probability `p` in the
-interval `(0, 1]` and a source of randomness.  Then for each item:
-
-1. Generate a uniform floating point value `r` in the range `[0, 1)`
-2. If `r < p`, select the item with adjusted count `1 / p`.
-
-This algorithm is unbiased because every item in the population
-receives equal consideration.
-
-### Power-of-two random sampling
-
-An unbiased sampling scheme can be implemented using a random bit
-string as the input.  This scheme is limited to power-of-two sampling
-probabilities, as follows.
-
-1. Express the sampling probability as `2**-s`. For example, 25%
-   equals `2**-2`
-2. Count `r`, the number of consecutive zero bits in the input string
-3. If `s <= r`, select the item with adjusted coubnt `2**s`.
-
-This algorithm is the basis of the consistent probability sampling
-approach used in OpenTelemetry, defined in greater detail below.
-
-## Probability sampling tracestate fields
+## Probability sampling
 
 The consistent sampling scheme adopted by OpenTelemetry propagates two
-values, p-value and r-value, via the context.
+values via the context, termed "p-value" and "r-value":
 
-1. r-value: this "randomness" value is determined and propagated from the root of the trace to all spans and serves to make sampling decisions consistent
-2. p-value: the "parent probability" value can be modified by any span in the trace and informs child parent-based Samplers their adjusted count
+1. p-value: the "parent probability" value can be set independently by any span in the trace, for its children, and informs child parent-based Samplers of their adjusted count
+2. r-value: the "randomness" value is determined and propagated from the root to all spans in the trace and serves to make sampling decisions consistent
 
 Both fields are propagated via the OpenTelemetry `tracestate` under
-the `ot` vendor tag using [syntax defined
-here](tracestate-handling.md).  Both fields are represented as
-unsigned six-bit integers (i.e., in the inclusive interval [0, 63]).
+the `ot` vendor tag using the rules for [tracestate
+handling](tracestate-handling.md).  Both fields are represented as
+unsigned integers requiring at most 6 bits of information.  An
+invariant will be stated that connects the `sampled` trace flag found
+in `traceparent` context to the r-value and p-value found in
+`tracestate` context.
 
-### p-value
+### Context: traceparent
 
-The p-value SHOULD be set in the `tracestate` when an unbiased
-probability sampler configured with power-of-two probability selected
-the parent span for sampling.  p-value SHOULD be set in the
-`tracestate` when the W3C `sampled` flag is set in the corresponding
-`traceparent`.  Non-probability samplers, having unknown adjusted
-count, SHOULD unset p-value when making sampling decisions.
+The W3C `traceparent` (version 0) contains three fields of
+information: the TraceId, the SpanId, and the trace flags.  The
+`sampled` trace flag has been defined by W3C to signal an intent to
+sample the context.
 
-Zero adjusted count is represented by the special p-value 63.
-Otherwise, the p-value is set to the negative base-2 logarithm of
+The [Sampler API](sdk.md#sampler) is responsible for setting the
+`sampled` flag.
+
+#### Sampled flag
+
+Probability sampling uses additional information to enable consistent
+decision making and to record the adjusted count of sampled spans.
+When both values are defined and in the specified range, the invariant
+between r-value and p-value and the `sampled` trace flag states that
+`sampled` is equivalent to the expression `p <= r || p == 63`.
+
+When the invariant is violated, the `sampled` flag takes precedence
+and `p` is unset from `tracestate` in order to signal unknown adjusted count.
+
+##### Requirement 1
+
+If `sampled` is set, the `r` and `p` values are valid, `p < 63`, and
+`p > r`, then the invariant is violated.  In this case, Samplers
+SHOULD honor the `sampled` flag and unset `p` from the OpenTelemetry
+`tracestate`.
+
+##### Requirement 2
+
+If `sampled` is not set, the `r` and `p` values are valid, and `p <=
+r` or `p == 63`, the invariant is violated.  In this case,
+implementations SHOULD honor the `sampled` flag and unset `p` from the
+OpenTelemetry `tracestate`.
+
+### Context: tracestate
+
+P-value and r-value are set in the OpenTelemetry `tracestate` using
+the identifiers `p` and `r`, each an unsigned base-16 integer.
+
+P-value is valid in the inclusive range `[0, 63]` (i.e., there are 64
+valid values).
+
+R-value is valid in the inclusive range `[0, 62]` (i.e., there are 63
+valid values).
+
+P-value and r-value are independent settings, each can be meaningfully
+set without the other present.  The invariant between `sampled`, `p`,
+and `r` only applies when both `p` and `r` are present.
+
+#### P-value
+
+Zero adjusted count is represented by the special p-value 63,
+otherwise the p-value is set to the negative base-2 logarithm of
 sampling probability:
 
-| p-value | Parent Probability |
-| -----   | -----------        |
-| 0       | 1                  |
-| 1       | 1/2                |
-| 2       | 1/4                |
-| ...     | ...                |
-| N       | 2**-N              |
-| ...     | ...                |
-| 61      | 2**-61             |
-| 62      | 2**-62             |
-| 63      | 0                  |
+| p-value | Parent Probability | Adjusted count |
+| -----   | -----------        | --             |
+| 0       | 1                  | 1              |
+| 1       | 1/2                | 2              |
+| 2       | 1/4                | 4              |
+| ...     | ...                | ...            |
+| N       | 2**-N              | 2**N           |
+| ...     | ...                | ...            |
+| 61      | 2**-61             | 2**61          |
+| 62      | 2**-62             | 2**62          |
+| 63      | 0                  | 0              |
 
-### r-value
+##### Requirement 1
+
+Samplers SHOULD unset `p` from the tracestate if the unsigned value is
+greater than 63.
+
+##### Requirement 2
+
+Parent-based Samplers SHOULD NOT modify a valid `tracestate`.
+
+##### Requirement 3
+
+Non-probability samplers, having unknown adjusted count, SHOULD unset
+`p` from the `tracestate`.
+
+##### Requirement 4
+
+If p-value is set without r-value, the consumer SHOULD interpret the
+adjusted count from the context, which is provided without the ability
+to make new consistent sampling decisions.
+
+##### Requirement 5
+
+Consistent probability samplers, when they decide not sample a span,
+MUST unset `p`.
+
+##### Requirement 6
+
+Consistent probability samplers, when they decide to sample a span,
+MUST set `p` to the base-2 logarithm of the adjusted count.
+
+#### R-value
 
 The r-value SHOULD be set in the `tracestate` by the Sampler at the
 root of the trace in order to support consistent probability sampling.
@@ -256,11 +297,56 @@ for spans of a given trace, as follows:
 | 61               | 2**-62                   | 2**-61 and above               |
 | 62               | 2**-62                   | 2**-62 and above               |
 
-### Probability Sampler behavior
+##### Requirement 1
 
+Samplers SHOULD unset both `r` and `p` if the unsigned value is
+greater than 62.
 
+##### Requirement 2
 
-#### Parent-based
+Samplers SHOULD NOT modify `r` when it is already set in the `tracestate`.
 
-#### Consistent probability-based
+#### Composition rules
 
+When more than one Sampler participates in the decision to sample a
+context, their decisions can be combined using composition rules.  In
+all cases, the combined decision to sample is the logical-OR of the
+Samplers' decisions (i.e., sample if at least one of the composite
+Samplers decides to sample).
+
+To combine p-values from two consistent probability Sampler decisions,
+the Sampler with the greater probability takes effect.  The output
+p-value becomes the minimum of the two values for `p`.
+
+To combine a consistent probability Sampler decision with a
+non-probability Sampler decision, p-value 63 is used to signify zero
+adjusted count.  If the probability Sampler decides to sample, its
+p-value takes effect.  If the probability Sampler decides not to
+sample when the non-probability sample does sample, p-value 63 takes
+effect signifying zero adjusted count.
+
+##### Requirement 1
+
+When combining Sampler decisions for multiple consistent probability
+Samplers and at least one decides to sample, the minimum of the "yes"
+decision `p` values MUST be set in the `tracestate`.
+
+##### Requirement 2
+
+When combining Sampler decisions for multiple consistent probability
+Samplers and none decides to sample, p-value MUST be unset in the
+`tracestate`.
+
+##### Requirement 3
+
+When combining Sampler decisions for a consistent probability Sampler
+and a non-probability Sampler, and the probabilty Sampler decides to
+sample, its p-value MUST be set in the `tracestate` regardless of the
+non-probability Sampler decision.
+
+##### Requirement 4
+
+When combining Sampler decisions for a consistent probability Sampler
+and a non-probability Sampler, and the probabilty Sampler decides not
+to sample but the non-probability does sample, p-value 63 MUST be set
+in the `tracestate`.
