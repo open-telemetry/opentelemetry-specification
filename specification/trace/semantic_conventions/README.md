@@ -20,7 +20,7 @@ The following semantic conventions for spans are defined:
 * [Database](database.md): For SQL and NoSQL client call spans.
 * [RPC/RMI](rpc.md): For remote procedure call (e.g., gRPC) spans.
 * [Messaging](messaging.md): For messaging systems (queues, publish/subscribe, etc.) spans.
-* [FaaS](faas.md): For Function as a Service (e.g., AWS Lambda) spans.
+* [FaaS](faas.md): For [Function as a Service](https://en.wikipedia.org/wiki/Function_as_a_service) (e.g., AWS Lambda) spans.
 * [Exceptions](exceptions.md): For recording exceptions associated with a span.
 
 The following library-specific semantic conventions are defined:
