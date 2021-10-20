@@ -172,6 +172,9 @@ Note: Support for environment variables is optional.
 | Honors non-retryable responses                                                 | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Honors throttling response                                                     | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Multi-destination spec compliance                                              | X        | +  |   |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
+| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          |    |   |    |             |      |        |     |      |     |      |       |
+| SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      |        |     |      |     |      |       |
+| SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      |        |     |      |     |      |       |
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
