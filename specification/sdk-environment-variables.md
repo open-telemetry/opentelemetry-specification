@@ -4,6 +4,12 @@
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
+## Parsing empty value
+
+**Status**: [Stable](document-status.md)
+
+The SDK SHOULD interpret an empty value of an environment variable in the same way as if would be unset.
+
 ## Special configuration types
 
 **Status**: [Stable](document-status.md)
@@ -16,6 +22,7 @@ If an SDK chooses to support an integer-valued environment variable, it SHOULD s
 
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
+`"none"` MAY be used as value that repesents an "empty" selection.
 
 ### Duration
 
@@ -47,6 +54,7 @@ Known values for OTEL_PROPAGATORS are:
 - `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
+- `"none"`: No automatically configured propagator.
 
 Known values for `OTEL_TRACES_SAMPLER` are:
 
