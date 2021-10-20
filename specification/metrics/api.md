@@ -228,10 +228,10 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
   which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
-  [OpenTelemetry API](../overview.md#api) authors CAN decide if they want to
+  [OpenTelemetry API](../overview.md#api) authors MAY decide if they want to
   support more Unicode [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
 * It MUST support at least 1023 characters. [OpenTelemetry
-  API](../overview.md#api) authors CAN decide if they want to support more.
+  API](../overview.md#api) authors MAY decide if they want to support more.
 
 Instruments can be categorized based on whether they are synchronous or
 asynchronous:
@@ -275,7 +275,7 @@ Example uses for `Counter`:
 
 There MUST NOT be any API for creating a `Counter` other than with a
 [`Meter`](#meter). This MAY be called `CreateCounter`. If strong type is
-desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the language
+desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
 idiomatic name(s), for example `CreateUInt64Counter`, `CreateDoubleCounter`,
 `CreateCounter<UInt64>`, `CreateCounter<double>`.
 
@@ -370,7 +370,7 @@ Example uses for Asynchronous Counter:
 
 There MUST NOT be any API for creating an Asynchronous Counter other than with a
 [`Meter`](#meter). This MAY be called `CreateObservableCounter`. If strong type
-is desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the
+is desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the
 language idiomatic name(s), for example `CreateUInt64ObservableCounter`,
 `CreateDoubleObservableCounter`, `CreateObservableCounter<UInt64>`,
 `CreateObservableCounter<double>`.
@@ -406,7 +406,7 @@ The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
 function(s) independently.
 
-[OpenTelemetry API](../overview.md#api) authors CAN decide what is the idiomatic
+[OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
@@ -415,18 +415,18 @@ approach. Here are some examples:
 
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, [OpenTelemetry
-SDK](../overview.md#sdk) authors CAN decide how to handle it in the
+SDK](../overview.md#sdk) authors MAY decide how to handle it in the
 [SDK](./README.md#sdk). For example, during the callback invocation if two
 measurements `value=1, attributes={pid:4, bitness:64}` and `value=2,
 attributes={pid:4, bitness:64}` are reported, [OpenTelemetry
-SDK](../overview.md#sdk) authors CAN decide to simply let them pass through (so
+SDK](../overview.md#sdk) authors MAY decide to simply let them pass through (so
 the downstream consumer can handle duplication), drop the entire data, pick the
 last one, or something else. The API MUST treat observations from a single
 callback as logically taking place at a single instant, such that when recorded,
 observations from a single callback MUST be reported with identical timestamps.
 
 The API SHOULD provide some way to pass `state` to the callback. [OpenTelemetry
-API](../overview.md#api) authors CAN decide what is the idiomatic approach (e.g.
+API](../overview.md#api) authors MAY decide what is the idiomatic approach (e.g.
 it could be an additional parameter to the callback function, or captured by the
 lambda closure, or something else).
 
@@ -495,7 +495,7 @@ Example uses for `Histogram`:
 
 There MUST NOT be any API for creating a `Histogram` other than with a
 [`Meter`](#meter). This MAY be called `CreateHistogram`. If strong type is
-desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the language
+desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
 idiomatic name(s), for example `CreateUInt64Histogram`, `CreateDoubleHistogram`,
 `CreateHistogram<UInt64>`, `CreateHistogram<double>`.
 
@@ -587,7 +587,7 @@ Example uses for Asynchronous Gauge:
 
 There MUST NOT be any API for creating an Asynchronous Gauge other than with a
 [`Meter`](#meter). This MAY be called `CreateObservableGauge`. If strong type is
-desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the language
+desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
 idiomatic name(s), for example `CreateUInt64ObservableGauge`,
 `CreateDoubleObservableGauge`, `CreateObservableGauge<UInt64>`,
 `CreateObservableGauge<double>`.
@@ -618,7 +618,7 @@ The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
 function(s) independently.
 
-[OpenTelemetry API](../overview.md#api) authors CAN decide what is the idiomatic
+[OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
@@ -636,7 +636,7 @@ a single instant, such that when recorded, observations from a single callback
 MUST be reported with identical timestamps.
 
 The API SHOULD provide some way to pass `state` to the callback. [OpenTelemetry
-API](../overview.md#api) authors CAN decide what is the idiomatic approach (e.g.
+API](../overview.md#api) authors MAY decide what is the idiomatic approach (e.g.
 it could be an additional parameter to the callback function, or captured by the
 lambda closure, or something else).
 
@@ -768,7 +768,7 @@ def sell_item(color, material):
 
 There MUST NOT be any API for creating an `UpDownCounter` other than with a
 [`Meter`](#meter). This MAY be called `CreateUpDownCounter`. If strong type is
-desired, [OpenTelemetry API](../overview.md#api) authors CAN decide the language
+desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
 idiomatic name(s), for example `CreateInt64UpDownCounter`,
 `CreateDoubleUpDownCounter`, `CreateUpDownCounter<Int64>`,
 `CreateUpDownCounter<double>`.
@@ -858,7 +858,7 @@ Example uses for Asynchronous UpDownCounter:
 
 There MUST NOT be any API for creating an Asynchronous UpDownCounter other than
 with a [`Meter`](#meter). This MAY be called `CreateObservableUpDownCounter`. If
-strong type is desired, [OpenTelemetry API](../overview.md#api) authors CAN
+strong type is desired, [OpenTelemetry API](../overview.md#api) authors MAY
 decide the language idiomatic name(s), for example
 `CreateUInt64ObservableUpDownCounter`, `CreateDoubleObservableUpDownCounter`,
 `CreateObservableUpDownCounter<UInt64>`,
@@ -895,7 +895,7 @@ The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
 function(s) independently.
 
-[OpenTelemetry API](../overview.md#api) authors CAN decide what is the idiomatic
+[OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
@@ -904,7 +904,7 @@ approach. Here are some examples:
 
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, the
-[SDK](./README.md#sdk) CAN decide how to handle it. For example, during the
+[SDK](./README.md#sdk) MAY decide how to handle it. For example, during the
 callback invocation if two measurements `value=1, attributes={pid:4,
 bitness:64}` and `value=2, attributes={pid:4, bitness:64}` are reported, the SDK
 can decide to simply let them pass through (so the downstream consumer can
@@ -914,7 +914,7 @@ at a single instant, such that when recorded, observations from a single
 callback MUST be reported with identical timestamps.
 
 The API SHOULD provide some way to pass `state` to the callback. [OpenTelemetry
-API](../overview.md#api) authors CAN decide what is the idiomatic approach (e.g.
+API](../overview.md#api) authors MAY decide what is the idiomatic approach (e.g.
 it could be an additional parameter to the callback function, or captured by the
 lambda closure, or something else).
 

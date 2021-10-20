@@ -67,9 +67,9 @@ SHOULD return a valid no-op Meter for these calls, if possible.
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
-`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` CAN be
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors CAN
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
 `Shutdown` MUST be implemented at least by invoking `Shutdown` on all registered
@@ -91,9 +91,9 @@ is an error condition; and if there is no error condition, it should return some
 **NO ERROR** status, language implementations MAY decide how to model **ERROR**
 and **NO ERROR**.
 
-`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` CAN be
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors CAN
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
 
 `ForceFlush` MUST invoke `ForceFlush` on all registered
@@ -555,7 +555,7 @@ to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 
 The SDK SHOULD provide a way to allow `MetricReader` to respond to
 [MeterProvider.ForceFlush](#forceflush) and [MeterProvider.Shutdown](#shutdown).
-[OpenTelemetry SDK](../overview.md#sdk) authors CAN decide the language
+[OpenTelemetry SDK](../overview.md#sdk) authors MAY decide the language
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
@@ -606,9 +606,9 @@ SHOULD return some failure for these calls, if possible.
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
-`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` CAN be
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors CAN
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
 ### Periodic exporting MetricReader
@@ -750,7 +750,7 @@ invocation, but before the exporter exports the completed metrics.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors CAN
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
 
 ##### Shutdown()
@@ -764,7 +764,7 @@ return a Failure result.
 
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
-authors CAN decide if they want to make the shutdown timeout configurable.
+authors MAY decide if they want to make the shutdown timeout configurable.
 
 ### Pull Metric Exporter
 
