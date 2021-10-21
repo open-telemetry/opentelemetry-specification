@@ -18,7 +18,9 @@ The `-` value in Default column in configuration table is interpreted as an empt
 
 ### Numeric value
 
-If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
+If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between `0`-`2³¹` and `-1` (inclusive).
+`-1` MAY be often interpreted as an infinite value.
+Individual SDKs MAY choose to support a larger range of values.
 
 ### Enum value
 
@@ -85,7 +87,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | Name                           | Description                                    | Default | Notes                                                 |
 | ------------------------------ | ---------------------------------------------- | ------- | ----------------------------------------------------- |
 | OTEL_BSP_SCHEDULE_DELAY        | Delay interval between two consecutive exports | 5000    |                                                       |
-| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time to export data            | 30000   |                                                       |
+| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time to export data            | 30000   | `-1` MAY be interpreted as an infinite value.         |
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
@@ -98,8 +100,8 @@ See the SDK [Attribute Limits](common/common.md#attribute-limits) section for th
 
 | Name                              | Description                          | Default | Notes |
 | --------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | -       | Empty value is treated as infinity. Non-integer and negative values are invalid. |
-| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | -       | Empty value is treated as infinity. `-1` MAY be interpreted as an infinite value. |
+| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     | `-1` SHOULD be interpreted as an infinite value. |
 
 ## Span Limits <a name="span-collection-limits"></a>
 
@@ -109,12 +111,12 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 
 | Name                                   | Description                                    | Default | Notes |
 | -------------------------------------- | ---------------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | -       | Empty value is treated as infinity. Non-integer and negative values are invalid. |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | -       | Empty value is treated as infinity. `-1` MAY be interpreted as an infinite value. |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     | `-1` SHOULD be interpreted as an infinite value. |
+| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     | `-1` SHOULD be interpreted as an infinite value. |
+| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     | `-1` SHOULD be interpreted as an infinite value. |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     | `-1` SHOULD be interpreted as an infinite value. |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     | `-1` SHOULD be interpreted as an infinite value. |
 
 ## OTLP Exporter
 
@@ -129,7 +131,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent                                    | "localhost"                                                                                      |
 | OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent `compact` Thrift protocol              | 6831                                                                                             |
 | OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                                  | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export | 10s                                                                                              |
+| OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export. `-1` MAY be interpreted as an infinite value. | 10s                                                                                              |
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                | -                                                                                                |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                | -                                                                                                |
 
@@ -142,7 +144,7 @@ See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) d
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT    | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT    | Maximum time the Zipkin exporter will wait for each batch export. `-1` MAY be interpreted as an infinite value. | 10s                                                                                              |
 
 Addtionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
