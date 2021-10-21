@@ -358,7 +358,9 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
   - An independent set of Attribute name-value pairs.
   - A sampled value (e.g. current cpu temperature)
   - A timestamp when the value was sampled (`time_unix_nano`)
-  - (optional) A timestamp (`start_time_unix_nano`) which has [TBD semantics](https://github.com/open-telemetry/opentelemetry-proto/pull/295).
+  - (optional) A timestamp (`start_time_unix_nano`) which best represents the
+    first possible moment a measurement could be recorded.  This is commonly
+    set to the timestamp when a metric collection system started.
   - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 In OTLP, a point within a Gauge stream represents the last-sampled event for a
@@ -690,6 +692,26 @@ percentile latency of my HTTP server.  Unlike other point types in
 OpenTelemetry, Summary points cannot always be merged in a meaningful
 way. This point type is not recommended for new applications and
 exists for compatibility with other formats.
+
+Summary consists of the following:
+
+- A set of data points, each containing:
+  - An independent set of Attribute name-value pairs.
+  - A timestamp when the value was sampled (`time_unix_nano`)
+  - (optional) A timestamp (`start_time_unix_nano`) that denotes the start time
+    of observation collection for the summary.
+  - A count of the number of observations in the population of the data point.
+  - A sum of the values in the population.
+  - A set of quantile values (in strictly increasing order) consisting of:
+    - The quantile of a distribution, within the interval `[0.0, 1.0]`.  For
+      example, the value `0.9` would represent the 90th-percentile.
+    - The value of the quantile.  This MUST be non-negative.
+
+Quantile values 0.0 and 1.0 are defined to be equal to the minimum and maximum values, respectively.
+
+Quantile values do not need to represent values observed between
+`start_time_unix_nano` and `time_unix_nano` and are expected to be calculated
+against recent time windows, typically the last 5-10 minutes.
 
 ## Exemplars
 

@@ -35,10 +35,18 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 <!-- semconv faas_span -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `faas.trigger` | string | Type of the trigger on which the function is executed. | `datasource` | Conditional [1] |
+| `faas.trigger` | string | Type of the trigger which caused this function execution. [1] | `datasource` | No |
 | `faas.execution` | string | The execution ID of the current function execution. | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | No |
 
-**[1]:** On FaaS instances, faas.trigger MUST be set on incoming invocations. Clients invoking FaaS instances MUST set `faas.trigger` on outgoing invocations, if it is known to the client. This is, for example, not the case, when the transport layer is abstracted in a FaaS client framework without access to its configuration.
+**[1]:** For the server/consumer span on the incoming side,
+`faas.trigger` MUST be set.
+
+Clients invoking FaaS instances usually cannot set `faas.trigger`,
+since they would typically need to look in the payload to determine
+the event type. If clients set it, it should be the same as the
+trigger that corresponding incoming would have (i.e., this has
+nothing to do with the underlying transport used to make the API
+call to invoke the lambda, which is often HTTP).
 
 `faas.trigger` MUST be one of the following:
 
@@ -88,6 +96,17 @@ For incoming FaaS spans, the span kind MUST be `Server`.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `faas.coldstart` | boolean | A boolean that is true if the serverless function is executed for the first time (aka cold-start). |  | No |
+| `faas.trigger` | string | Type of the trigger which caused this function execution. [1] | `datasource` | Yes |
+
+**[1]:** For the server/consumer span on the incoming side,
+`faas.trigger` MUST be set.
+
+Clients invoking FaaS instances usually cannot set `faas.trigger`,
+since they would typically need to look in the payload to determine
+the event type. If clients set it, it should be the same as the
+trigger that corresponding incoming would have (i.e., this has
+nothing to do with the underlying transport used to make the API
+call to invoke the lambda, which is often HTTP).
 <!-- endsemconv -->
 
 ## Outgoing Invocations
