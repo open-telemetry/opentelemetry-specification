@@ -10,6 +10,8 @@ The goal of this specification is to unify the environment variable names betwee
 
 The SDK SHOULD interpret an empty value of an environment variable in the same way as if would be unset.
 
+The `-` value in Default column in configuration table is interpreted as an empty value.
+
 ## Special configuration types
 
 **Status**: [Stable](document-status.md)
@@ -96,7 +98,7 @@ See the SDK [Attribute Limits](common/common.md#attribute-limits) section for th
 
 | Name                              | Description                          | Default | Notes |
 | --------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | -       | Empty value is treated as infinity. Non-integer and negative values are invalid. |
 | OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
 
 ## Span Limits <a name="span-collection-limits"></a>
@@ -107,7 +109,7 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 
 | Name                                   | Description                                    | Default | Notes |
 | -------------------------------------- | ---------------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | -       | Empty value is treated as infinity. Non-integer and negative values are invalid. |
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
 | OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
 | OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
