@@ -16,17 +16,17 @@ can still be easily correlated and cross-analyzed.
 The following semantic conventions for spans are defined:
 
 * [General](span-general.md): General semantic attributes that may be used in describing different kinds of operations.
-* [HTTP](http.md): Spans for HTTP client and server.
-* [Database](database.md): Spans for SQL and NoSQL client calls.
-* [RPC/RMI](rpc.md): Spans for remote procedure calls (e.g., gRPC).
-* [Messaging](messaging.md): Spans for interaction with messaging systems (queues, publish/subscribe, etc.).
-* [FaaS](faas.md): Spans for Function as a Service (e.g., AWS Lambda).
-* [Exceptions](exceptions.md): Attributes for recording exceptions associated with a span.
+* [HTTP](http.md): For HTTP client and server spans.
+* [Database](database.md): For SQL and NoSQL client call spans.
+* [RPC/RMI](rpc.md): For remote procedure call (e.g., gRPC) spans.
+* [Messaging](messaging.md): For messaging systems (queues, publish/subscribe, etc.) spans.
+* [FaaS](faas.md): For [Function as a Service](https://en.wikipedia.org/wiki/Function_as_a_service) (e.g., AWS Lambda) spans.
+* [Exceptions](exceptions.md): For recording exceptions associated with a span.
 
 The following library-specific semantic conventions are defined:
 
-* [AWS Lambda](instrumentation/aws-lambda.md): AWS Lambda
-* [AWS SDK](instrumentation/aws-sdk.md): AWS SDK
+* [AWS Lambda](instrumentation/aws-lambda.md): For AWS Lambda spans.
+* [AWS SDK](instrumentation/aws-sdk.md): For AWS SDK spans.
 
 Apart from semantic conventions for traces and [metrics](../../metrics/semantic_conventions/README.md),
 OpenTelemetry also defines the concept of overarching [Resources](../../resource/sdk.md) with their own
