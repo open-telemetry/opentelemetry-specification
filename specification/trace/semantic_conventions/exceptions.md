@@ -9,7 +9,7 @@ exceptions.
 
 - [Recording an Exception](#recording-an-exception)
 - [Attributes](#attributes)
-  - [Stacktrace Representation](#stacktrace-representation)
+  * [Stacktrace Representation](#stacktrace-representation)
 
 <!-- tocstop -->
 

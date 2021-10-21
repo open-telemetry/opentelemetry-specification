@@ -13,9 +13,6 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
-    - name: install markdownlint
-      run: sudo make install-markdownlint
-
     - name: run markdownlint
       run: make markdownlint
 
@@ -39,20 +36,26 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
-    - name: install markdown-link-check
-      run: sudo make install-markdown-link-check
-
     - name: run markdown-link-check
       run: make markdown-link-check
+
+  markdown-toc-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: run markdown-toc
+      run: make markdown-toc
+
+    - name: validate markdown-toc
+      run: git diff --exit-code ':*.md' || (echo 'Generated markdown Table of Contents is out of date, please run "make markdown-toc" and commit the changes in this PR.' && exit 1)
 
   misspell:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
       uses: actions/checkout@v2
-
-    - name: install misspell
-      run: sudo make install-misspell
 
     - name: run misspell
       run: make misspell

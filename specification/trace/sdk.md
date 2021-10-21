@@ -6,13 +6,49 @@
 
 <summary>Table of Contents</summary>
 
-* [Tracer Provider](#tracer-provider)
-* [Additional Span Interfaces](#additional-span-interfaces)
-* [Sampling](#sampling)
-* [Span Limits](#span-limits)
-* [Id Generator](#id-generators)
-* [Span Processor](#span-processor)
-* [Span Exporter](#span-exporter)
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+<!-- https://github.com/jonschlinkert/markdown-toc -->
+
+<!-- toc -->
+
+- [Tracer Provider](#tracer-provider)
+  * [Tracer Creation](#tracer-creation)
+  * [Shutdown](#shutdown)
+  * [ForceFlush](#forceflush)
+- [Additional Span Interfaces](#additional-span-interfaces)
+- [Sampling](#sampling)
+  * [SDK Span creation](#sdk-span-creation)
+  * [Sampler](#sampler)
+    + [ShouldSample](#shouldsample)
+    + [GetDescription](#getdescription)
+  * [Built-in samplers](#built-in-samplers)
+    + [AlwaysOn](#alwayson)
+    + [AlwaysOff](#alwaysoff)
+    + [TraceIdRatioBased](#traceidratiobased)
+      - [Requirements for `TraceIdRatioBased` sampler algorithm](#requirements-for-traceidratiobased-sampler-algorithm)
+    + [ParentBased](#parentbased)
+- [Span Limits](#span-limits)
+- [Id Generators](#id-generators)
+- [Span processor](#span-processor)
+  * [Interface definition](#interface-definition)
+    + [OnStart](#onstart)
+    + [OnEnd(Span)](#onendspan)
+    + [Shutdown()](#shutdown)
+    + [ForceFlush()](#forceflush)
+  * [Built-in span processors](#built-in-span-processors)
+    + [Simple processor](#simple-processor)
+    + [Batching processor](#batching-processor)
+- [Span Exporter](#span-exporter)
+  * [Interface Definition](#interface-definition)
+    + [`Export(batch)`](#exportbatch)
+    + [`Shutdown()`](#shutdown)
+    + [`ForceFlush()`](#forceflush)
+  * [Further Language Specialization](#further-language-specialization)
+    + [Examples](#examples)
+      - [Go SpanExporter Interface](#go-spanexporter-interface)
+      - [Java SpanExporter Interface](#java-spanexporter-interface)
+
+<!-- tocstop -->
 
 </details>
 
