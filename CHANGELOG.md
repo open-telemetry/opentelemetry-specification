@@ -17,7 +17,8 @@ release.
 ### Metrics
 
 - Add optional min / max fields to histogram data model.
-  ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
+  ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915),
+  [#1983](https://github.com/open-telemetry/opentelemetry-specification/pull/1983))
 - Add exponential histogram to the metrics data model.
   ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
 - Add clarifications on how to handle numerical limits.
