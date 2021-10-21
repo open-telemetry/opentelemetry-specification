@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Add a section for OTel specific values in TraceState.
+  ([#1852](https://github.com/open-telemetry/opentelemetry-specification/pull/1852))
+
 ### Traces
 
 ### Metrics
@@ -37,9 +40,10 @@ release.
   ([#1998](https://github.com/open-telemetry/opentelemetry-specification/pull/1998))
 - Add attributes for Apache RocketMQ.
   ([#1904](https://github.com/open-telemetry/opentelemetry-specification/pull/1904))
-
 - Define http tracing attributes provided at span creation time
   ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
+- Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
+  ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
 
 ### Compatibility
 
