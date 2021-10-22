@@ -8,7 +8,7 @@ The goal of this specification is to unify the environment variable names betwee
 
 **Status**: [Stable](document-status.md)
 
-The SDK MUST interpret an empty value of an environment variable in the same way as if would be unset.
+The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
 
 The `-` value in Default column in configuration table is interpreted as an empty value.
 
