@@ -24,7 +24,7 @@ If an SDK chooses to support an integer-valued environment variable, it SHOULD s
 
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
-`"none"` MAY be used as value that repesents an "empty" selection.
+`"none"` SHOULD be used as the value that repesents an "empty" selection.
 
 ### Duration
 
@@ -56,7 +56,6 @@ Known values for OTEL_PROPAGATORS are:
 - `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
-- `"none"`: No automatically configured propagator.
 
 Known values for `OTEL_TRACES_SAMPLER` are:
 
@@ -98,7 +97,7 @@ See the SDK [Attribute Limits](common/common.md#attribute-limits) section for th
 
 | Name                              | Description                          | Default | Notes |
 | --------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | -       | Empty value is treated as infinity. |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | -       | Empty value is treated as no limit. |
 | OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
 
 ## Span Limits <a name="span-collection-limits"></a>
@@ -109,7 +108,7 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 
 | Name                                   | Description                                    | Default | Notes |
 | -------------------------------------- | ---------------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | -       | Empty value is treated as infinity. |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | -       | Empty value is treated as no limit. |
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
 | OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
 | OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
