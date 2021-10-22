@@ -51,8 +51,8 @@ release.
 
 ### SDK Configuration
 
--  Unset and empty environment variables are equivalent.
-   ([#2045](https://github.com/open-telemetry/opentelemetry-specification/pull/2045))
+- Unset and empty environment variables are equivalent.
+  ([#2045](https://github.com/open-telemetry/opentelemetry-specification/pull/2045))
 
 ## v1.7.0 (2021-09-30)
 
