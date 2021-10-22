@@ -59,6 +59,10 @@ release.
 - Unset and empty environment variables are equivalent.
   ([#2045](https://github.com/open-telemetry/opentelemetry-specification/pull/2045))
 
+### Telemetry Schemas
+
+Added telemetry schemas documents to the specification ([#2008](https://github.com/open-telemetry/opentelemetry-specification/pull/2008))
+
 ## v1.7.0 (2021-09-30)
 
 ### Context
