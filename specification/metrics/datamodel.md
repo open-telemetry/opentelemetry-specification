@@ -998,7 +998,7 @@ OpenTelemetry metric data.
 
 ### Label Mapping
 
-Prometheus metric labels are split in opentelemetry across Resource attributes
+Prometheus metric labels are split in OpenTelemetry across Resource attributes
 and Metric data stream attributes.   Some labels are used within metric
 families to denote semantics which open-telemetry captures within the structure
 of a data point.  When mapping from prometheus to OpenTelemetry, any label
@@ -1023,6 +1023,11 @@ metric family to a specific OTLP metric data point:
 - `quantile` label is used to identify quantile points in summary metrics.
 - `__name__` is used to identify the metric name of the data point.
 - `__metrics_path__` is ignored in OTLP.
+
+Additionally, in Prometheus metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
+from OpenTelemetry with unsupported Attribute names should replace invalid characters with the `_` character. This
+may cause ambiguity in scenarios where mulitple similar-named attributes share invalid characters at the same
+location.  This is considered  an unsupported case, and is highly unlikely.
 
 ### Prometheus Metric points to OTLP
 
