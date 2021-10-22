@@ -14,6 +14,9 @@ Once the trace context is set on the event, it MUST not be modified.
 
 <!-- toc -->
 
+- [Spans](#spans)
+  * [Creation](#creation)
+  * [Processing](#processing)
 - [Attributes](#attributes)
 
 <!-- tocstop -->
@@ -25,7 +28,7 @@ Once the trace context is set on the event, it MUST not be modified.
 Instrumentation SHOULD create a new span and populate the [Distributed Tracing Extension](https://github.com/cloudevents/spec/blob/v1.0.1/extensions/distributed-tracing.md) on the event. This applies when:
 
 - A CloudEvent is created by the instrumented library. It may be impossible or impractical to create the Span during event creation (e.g. inside the constructor or in a factory method) - instrumentation MAY create the Span later, when passing the event to the transport layer.
-- A CloudEvent is created outside of the instrumented library (e.g. directly constructed by the application owner, without calling a constructor or factory method), but passed without the 'Distributed Tracing Extension' populated.
+- A CloudEvent is created outside of the instrumented library (e.g. directly constructed by the application owner, without calling a constructor or factory method), and passed without the Distributed Tracing Extension populated.
 
 In case a CloudEvent is passed to the instrumented library with the Distributed Tracing Extension populated, instrumentation MUST NOT create a span and MUST NOT modify the Distributed Tracing Extension on the event.
 
@@ -35,15 +38,16 @@ In case a CloudEvent is passed to the instrumented library with the Distributed 
 ### Processing
 
 To trace the processing of one or more CloudEvents, instrumentation SHOULD create a new span.
-If a single event is processed, instrumentation SHOULD use the remote trace context from Distributed Tracing Extension as a parent or MAY instead add it as a link on the processing span.
-If multiple events are processed together, for each event being processed, if the event has Distributed Tracing Extension populated, instrumentation MUST add a link to the trace context from the extension on the processing span.
+If a single event is processed, instrumentation SHOULD use the remote trace context from the Distributed Tracing Extension as a parent or MAY instead add it as a link on the processing span.
+
+If multiple events are processed together, for each event being processed, if the event has the Distributed Tracing Extension populated, instrumentation MUST add a link to the trace context from the extension on the processing span.
 
 **Span name:** `CloudEvents Process <event_type>`
 **Span kind:** CONSUMER
 
 ## Attributes
 
-Attributes are applicable to creation and processing spans.
+The following attributes are applicable to creation and processing Spans.
 
 <!-- semconv cloudevents -->
 | Attribute  | Type | Description  | Examples  | Required |
