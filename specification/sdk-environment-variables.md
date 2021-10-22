@@ -194,10 +194,10 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
 ### Periodic exporting MetricReader
 
-| Name                        | Description                                                          | Default | Notes |
-| --------------------------- | -------------------------------------------------------------------- | ------- | ----- |
-| `OTEL_PEMR_EXPORT_INTERVAL` | The time interval (in milliseconds) between two consecutive exports. | 60000   |       |
-| `OTEL_PEMR_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.               | 30000   |       |
+| Name                          | Description                                                          | Default | Notes |
+| ----------------------------- | -------------------------------------------------------------------- | ------- | ----- |
+| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between two consecutive exports. | 60000   |       |
+| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.               | 30000   |       |
 
 ## Language Specific Environment Variables
 
