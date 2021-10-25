@@ -709,6 +709,9 @@ Exports a batch of `Metrics`. Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
 destination.
 
+The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
+information (e.g. name, version, etc.) associated with each `Metric`.
+
 `Export` will never be called concurrently for the same exporter instance.
 `Export` can be called again only after the current call returns.
 

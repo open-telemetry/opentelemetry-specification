@@ -25,6 +25,8 @@ release.
   ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
 - Add environment variables for Periodic exporting MetricReader.
   ([#2038](https://github.com/open-telemetry/opentelemetry-specification/pull/2038))
+- Specify that the SDK must support exporters to access meter information.
+  ([#2040](https://github.com/open-telemetry/opentelemetry-specification/pull/2040))
 
 ### Logs
 
