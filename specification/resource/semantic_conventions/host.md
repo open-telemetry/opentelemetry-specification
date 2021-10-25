@@ -28,4 +28,5 @@
 | `ppc32` | 32-bit PowerPC |
 | `ppc64` | 64-bit PowerPC |
 | `x86` | 32-bit x86 |
+| `z` | IBM z/Architecture |
 <!-- endsemconv -->

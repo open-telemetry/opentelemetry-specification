@@ -46,6 +46,9 @@ groups:
             - id: x86
               value: 'x86'
               brief: "32-bit x86"
+            - id: ibmz
+              value: 'z'
+              brief: "IBM z/Architecture"
         brief: >
             The CPU architecture the host system is running on.
       - id: image.name
