@@ -17,11 +17,14 @@ release.
 ### Metrics
 
 - Add optional min / max fields to histogram data model.
-  ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
+  ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915),
+  [#1983](https://github.com/open-telemetry/opentelemetry-specification/pull/1983))
 - Add exponential histogram to the metrics data model.
   ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
 - Add clarifications on how to handle numerical limits.
   ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
+- Add environment variables for Periodic exporting MetricReader.
+  ([#2038](https://github.com/open-telemetry/opentelemetry-specification/pull/2038))
 
 ### Logs
 
@@ -54,6 +57,10 @@ release.
 - Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
+
+### Telemetry Schemas
+
+Added telemetry schemas documents to the specification ([#2008](https://github.com/open-telemetry/opentelemetry-specification/pull/2008))
 
 ## v1.7.0 (2021-09-30)
 
