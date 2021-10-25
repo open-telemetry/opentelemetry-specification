@@ -46,16 +46,23 @@ probability sampling using the W3C `tracestate` in a way that allows
 Span-to-Metrics pipelines to be built that accurately count sampled
 spans.
 
-The specification in this document is semantic in nature.  Two
-`tracestate` fields, known as "r-value" and "p-value", are defined to
-enable the development of interoperable probability Sampler
-implementations.  OpenTelemetry is gathering experience with Samplers
-based on this specification while the group considers how to add
-probability sampling support to the default SDK specification.
+## Approach used in this document
 
-## Definitions used in this document
+### Objective
 
-### Sampling
+This document specifies two `tracestate` fields, known as "r-value"
+and "p-value" meant to support interoperable Sampler implementations.
+Rules are given for creating, validating, interpreting, and mutating
+these fields in an OpenTelemetry [context](../context/context.md).
+
+Two Samplers are specified that for optional use by OpenTelemetry
+tracing SDKs named `ConsistentProbabilitityParent` and
+`ConsistentProbability`, meant as optional replacements for the
+built-in `Parent` and `TraceIdRatio` Samplers, respectively.
+
+### Definitions
+
+#### Sampling
 
 Sampling is a family of techniques for collecting and analyzing only a
 fraction of a complete data set.  Individual items that are "sampled"
@@ -102,7 +109,7 @@ probabilities, as follows.
 This algorithm is the basis of the consistent probability sampling
 approach used in OpenTelemetry, defined in greater detail below.
 
-### Sampler
+#### Sampler
 
 A Sampler provides configurable logic, used by the SDK, for selecting
 which Spans are "recorded" and/or "sampled" in a tracing client
@@ -175,7 +182,20 @@ invariant will be stated that connects the `sampled` trace flag found
 in `traceparent` context to the r-value and p-value found in
 `tracestate` context.
 
-### Context: traceparent
+### Conformance
+
+Samplers that conform to this specification have both behavioral and
+statistical requirements.  Consumers of OpenTelemetry `tracestate`
+data are expected to validate the probability sampling fields before
+interpreting the data.
+
+Producers of OpenTelemetry `tracestate` are required to meet the
+behavioral requirements and ensure statistically valid outcomes using
+tests that are included in this specification, so that users and
+consumers of OpenTelemetry `tracestate` can be assured of the accuracy
+of their data.
+
+### Context invariants
 
 The W3C `traceparent` (version 0) contains three fields of
 information: the TraceId, the SpanId, and the trace flags.  The
@@ -183,7 +203,15 @@ information: the TraceId, the SpanId, and the trace flags.  The
 sample the context.
 
 The [Sampler API](sdk.md#sampler) is responsible for setting the
-`sampled` flag.
+`sampled` flag and the `tracestate`. 
+
+P-value and r-value are set in the OpenTelemetry `tracestate`, under
+the vendor tag `ot`, using the identifiers `p` and `r`.  P-value is an
+unsigned integer valid in the inclusive range `[0, 63]` (i.e., there
+are 64 valid values).  R-value is an unsigned integer valid in the
+inclusive range `[0, 62]` (i.e., there are 63 valid values).  P-value
+and r-value are independent settings, each can be meaningfully set
+without the other present.
 
 #### Sampled flag
 
@@ -193,8 +221,10 @@ When both values are defined and in the specified range, the invariant
 between r-value and p-value and the `sampled` trace flag states that
 `sampled` is equivalent to the expression `p <= r || p == 63`.
 
-When the invariant is violated, the `sampled` flag takes precedence
-and `p` is unset from `tracestate` in order to signal unknown adjusted count.
+The invariant between `sampled`, `p`, and `r` only applies when both
+`p` and `r` are present.  When the invariant is violated, the
+`sampled` flag takes precedence and `p` is unset from `tracestate` in
+order to signal unknown adjusted count.
 
 ##### Requirement 1
 
@@ -209,21 +239,6 @@ If `sampled` is not set, the `r` and `p` values are valid, and `p <=
 r` or `p == 63`, the invariant is violated.  In this case,
 implementations SHOULD honor the `sampled` flag and unset `p` from the
 OpenTelemetry `tracestate`.
-
-### Context: tracestate
-
-P-value and r-value are set in the OpenTelemetry `tracestate` using
-the identifiers `p` and `r`, each an unsigned base-16 integer.
-
-P-value is valid in the inclusive range `[0, 63]` (i.e., there are 64
-valid values).
-
-R-value is valid in the inclusive range `[0, 62]` (i.e., there are 63
-valid values).
-
-P-value and r-value are independent settings, each can be meaningfully
-set without the other present.  The invariant between `sampled`, `p`,
-and `r` only applies when both `p` and `r` are present.
 
 #### P-value
 
@@ -260,13 +275,12 @@ Non-probability samplers, having unknown adjusted count, SHOULD unset
 ##### Requirement 4
 
 If p-value is set without r-value, the consumer SHOULD interpret the
-adjusted count from the context, which is provided without the ability
-to make new consistent sampling decisions.
+adjusted count from the context.
 
 ##### Requirement 5
 
-Consistent probability samplers, when they decide not sample a span,
-MUST unset `p`.
+Consistent probability samplers, when they decide not to sample a
+span, MUST unset `p`.
 
 ##### Requirement 6
 
@@ -275,10 +289,10 @@ MUST set `p` to the base-2 logarithm of the adjusted count.
 
 #### R-value
 
-The r-value SHOULD be set in the `tracestate` by the Sampler at the
-root of the trace in order to support consistent probability sampling.
-When the value is omitted or not present, child spans in the trace are
-not able to participate in consistent probability sampling.
+R-value is set in the `tracestate` by the Sampler at the root of the
+trace, in order to support consistent probability sampling.  When the
+value is omitted or not present, child spans in the trace are not able
+to participate in consistent probability sampling.
 
 R-value determines which sampling probabilities and will not sample
 for spans of a given trace, as follows:
@@ -299,12 +313,16 @@ for spans of a given trace, as follows:
 
 ##### Requirement 1
 
-Samplers SHOULD unset both `r` and `p` if the unsigned value is
-greater than 62.
+Samplers SHOULD unset both `r` and `p` if the unsigned value is of `r`
+is greater than 62.
 
 ##### Requirement 2
 
 Samplers SHOULD NOT modify `r` when it is already set in the `tracestate`.
+
+### Sampler interface
+
+TODO
 
 #### Composition rules
 
