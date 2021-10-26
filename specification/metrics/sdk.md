@@ -19,6 +19,7 @@ Table of Contents
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
 * [Defaults and configuration](#defaults-and-configuration)
+* [Temporality override rules](#temporality-override-rules)
 * [Numerical limits handling](#numerical-limits-handling)
 * [Compatibility requirements](#compatibility-requirements)
 * [Concurrency requirements](#concurrency-requirements)
@@ -162,9 +163,12 @@ are the inputs:
   * The `extra dimensions` which come from Baggage/Context (optional). If not
     provided, no extra dimension will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
-  * The `aggregation` (optional) to be used. If not provided, a default
-    aggregation will be applied by the SDK. The default aggregation is a TODO.
-  * The `exemplar_reservoir` (optional) to use for storing exemplars.  
+  * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
+    apply a [default aggregation](#default-aggregation). If the aggregation has
+    temporality, the SDK SHOULD use the [temporality override
+    rules](#temporality-override-rules) to determine the aggregation
+    temporality.
+  * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
 
@@ -332,12 +336,6 @@ This Aggregation does not have any configuration parameters.
 The Sum Aggregation informs the SDK to collect data for the
 [Sum Metric Point](./datamodel.md#sums).
 
-This Aggregation honors the following configuration parameters:
-
-| Key | Value | Default Value | Description |
-| --- | --- | --- | --- |
-| Temporality | Delta, Cumulative | Cumulative | |
-
 The monotonicity of the aggregation is determined by the instrument type:
 
 | Instrument Kind | `SumType` |
@@ -348,6 +346,8 @@ The monotonicity of the aggregation is determined by the instrument type:
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
+
+This Aggregation does not have any configuration parameters.
 
 This Aggregation informs the SDK to collect:
 
@@ -383,7 +383,6 @@ This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
@@ -578,6 +577,8 @@ authors MAY choose the best idiomatic design for their language:
   instance is set to use Cumulative, and it has an associated [Push Metric
   Exporter](#push-metric-exporter) instance which has the temporality set to
   Delta), would the SDK want to fail fast or use some fallback logic?
+* Refer to the [temporality override rules](#temporality-override-rules) for how
+  to determine the temporality.
 * Refer to the [supplementary
   guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
   more context and suggestions.
@@ -671,6 +672,8 @@ language:
   Exporter](./sdk_exporters/prometheus.md) instance is being used, and the
   temporality is set to Delta), would the SDK want to fail fast or use some
   fallback logic?
+* Refer to the [temporality override rules](#temporality-override-rules) for how
+  to determine the temporality.
 * Refer to the [supplementary
   guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
   more context and suggestions.
@@ -822,6 +825,29 @@ modeled to interact with other components in the SDK:
 
 The SDK MUST provide configuration according to the [SDK environment
 variables](../sdk-environment-variables.md) specification.
+
+## Temporality override rules
+
+There are several places where [Aggregation
+Temporality](./datamodel.md#temporality) can be configured in the OpenTelemetry
+SDK. The SDK MUST use the following order to determine which temporality to be
+used:
+
+* If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader) only
+  supports one temporality (either Cumulative or Delta), use the supported
+  temporality and goto END.
+* If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
+  supports both Cumulative and Delta:
+  * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
+    has a preferred temporality, use the preferred temporality and goto END.
+  * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
+    does not have a preferred temporality, use Cumulative and goto END.
+* END.
+
+If the above process caused conflicts, the SDK SHOULD treat the conflicts as
+error. It is unspecified _how_ the SDK should handle these error (e.g. it could
+fail fast during the SDK configuration time). Please refer to [Error handling in
+OpenTelemetry](../error-handling.md) for the general guidance.
 
 ## Numerical limits handling
 
