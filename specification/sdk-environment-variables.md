@@ -192,6 +192,13 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 - `"all"`: All measurements are eligible for exemplar sampling.
 - `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
 
+### Periodic exporting MetricReader
+
+| Name                          | Description                                                                   | Default | Notes |
+| ----------------------------- | ----------------------------------------------------------------------------- | ------- | ----- |
+| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   |       |
+| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   |       |
+
 ## Language Specific Environment Variables
 
 To ensure consistent naming across projects, this specification recommends that language specific environment variables are formed using the following convention:
