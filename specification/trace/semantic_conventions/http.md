@@ -70,6 +70,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `http.request_content_length_uncompressed` | int | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
 | `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
 | `http.response_content_length_uncompressed` | int | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
+| `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | If and only if a request was retried. |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | No |
 | [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | No |
@@ -90,7 +91,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `SPDY` | SPDY protocol. |
 | `QUIC` | QUIC protocol. |
 
-Following attributes MUST be provided **at span creation time** (when provided at all):
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
 * `http.method`
 * `http.url`
@@ -120,6 +121,12 @@ Users MAY explicitly configure instrumentations to capture them even though it i
 **[2]:** The attribute value MUST consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
 
 [network attributes]: span-general.md#general-network-connection-attributes
+
+### HTTP request retries and redirects
+
+A span for each subsequent HTTP request re-sending attempt MUST be linked with a previous one by creating a single `Link`. `http.retry_count` attribute MUST be added to each retry span with the value that reflects the ordinal number of request retry attempt.
+
+A span for each subsequent HTTP request redirect MUST be linked with a span for initial request or previous redirect by creating a single `Link`.
 
 ## HTTP client
 
