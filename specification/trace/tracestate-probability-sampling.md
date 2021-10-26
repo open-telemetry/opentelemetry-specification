@@ -419,6 +419,8 @@ E.g., a 1% significance level test should be repeated and demonstrate
 occasional failure, then be saved with the seed that produced the
 passing result.  This should be documented.
 
+Tests can be implemented using a another SDK's test, for example.
+
 #### Power of two sampling probability
 
 This MAY use an exact binomial test or it may use a Chi-squared test
