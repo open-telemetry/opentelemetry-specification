@@ -293,7 +293,7 @@ meterProviderBuilder
   );
 ```
 
-(TODO: after we released the initial Stable version of the Metrics SDK
+(TODO: after we release the initial Stable version of the Metrics SDK
 specification, we will explore how to allow the [View](./sdk.md#view) to
 configure an `Aggregation` to collect [Exemplars](./datamodel.md#exemplars)).
 
