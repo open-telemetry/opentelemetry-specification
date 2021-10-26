@@ -23,6 +23,10 @@ release.
   ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
 - Add clarifications on how to handle numerical limits.
   ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
+- Add environment variables for Periodic exporting MetricReader.
+  ([#2038](https://github.com/open-telemetry/opentelemetry-specification/pull/2038))
+- Specify that the SDK must support exporters to access meter information.
+  ([#2040](https://github.com/open-telemetry/opentelemetry-specification/pull/2040))
 
 ### Logs
 
@@ -55,6 +59,10 @@ release.
 - Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
+
+### Telemetry Schemas
+
+Added telemetry schemas documents to the specification ([#2008](https://github.com/open-telemetry/opentelemetry-specification/pull/2008))
 
 ## v1.7.0 (2021-09-30)
 
