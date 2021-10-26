@@ -27,6 +27,9 @@ release.
   ([#2038](https://github.com/open-telemetry/opentelemetry-specification/pull/2038))
 - Specify that the SDK must support exporters to access meter information.
   ([#2040](https://github.com/open-telemetry/opentelemetry-specification/pull/2040))
+- Add clarifications on how to determine aggregation temporality.
+  ([#2013](https://github.com/open-telemetry/opentelemetry-specification/pull/2013),
+  [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2032))
 
 ### Logs
 
