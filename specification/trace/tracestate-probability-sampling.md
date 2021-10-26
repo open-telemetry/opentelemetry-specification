@@ -2,11 +2,13 @@
 
 <!-- toc -->
 
-- [Definitions used in this document](#definitions-used-in-this-document)
-  * [Sampling](#sampling)
+- [Approach used in this document](#approach-used-in-this-document)
+  * [Objective](#objective)
+  * [Definitions](#definitions)
+    + [Sampling](#sampling)
     + [Adjusted count](#adjusted-count)
     + [Power-of-two random sampling](#power-of-two-random-sampling)
-  * [Sampler](#sampler)
+    + [Sampler](#sampler)
     + [Parent-based sampler](#parent-based-sampler)
     + [Probability sampler](#probability-sampler)
     + [Consistent probability sampler](#consistent-probability-sampler)
@@ -14,26 +16,33 @@
     + [Always-off sampler](#always-off-sampler)
     + [Non-probability sampler](#non-probability-sampler)
 - [Probability sampling](#probability-sampling)
-  * [Context: traceparent](#context-traceparent)
+  * [Conformance](#conformance)
+  * [Context invariants](#context-invariants)
     + [Sampled flag](#sampled-flag)
       - [Requirement 1](#requirement-1)
-      - [Requirement 2](#requirement-2)
-  * [Context: tracestate](#context-tracestate)
     + [P-value](#p-value)
       - [Requirement 1](#requirement-1-1)
-      - [Requirement 2](#requirement-2-1)
-      - [Requirement 3](#requirement-3)
-      - [Requirement 4](#requirement-4)
-      - [Requirement 5](#requirement-5)
-      - [Requirement 6](#requirement-6)
     + [R-value](#r-value)
       - [Requirement 1](#requirement-1-2)
-      - [Requirement 2](#requirement-2-2)
-    + [Composition rules](#composition-rules)
+  * [Samplers](#samplers)
+    + [ParentConsistentProbabilityBased sampler](#parentconsistentprobabilitybased-sampler)
       - [Requirement 1](#requirement-1-3)
-      - [Requirement 2](#requirement-2-3)
+      - [Requirement 2](#requirement-2)
+      - [Requirement 3](#requirement-3)
+    + [ConsistentProbabilityBased sampler](#consistentprobabilitybased-sampler)
+      - [Requirement 1](#requirement-1-4)
+      - [Requirement 2](#requirement-2-1)
       - [Requirement 3](#requirement-3-1)
+      - [Requirement 4](#requirement-4)
+    + [Composition rules](#composition-rules)
+      - [Requirement 1](#requirement-1-5)
+      - [Requirement 2](#requirement-2-2)
+      - [Requirement 3](#requirement-3-2)
       - [Requirement 4](#requirement-4-1)
+  * [Testing requirements](#testing-requirements)
+    + [Power of two sampling probability](#power-of-two-sampling-probability)
+    + [Arbitrary sampling probability](#arbitrary-sampling-probability)
+    + [Uniform attribute probability](#uniform-attribute-probability)
 
 <!-- tocstop -->
 
@@ -56,9 +65,9 @@ Rules are given for creating, validating, interpreting, and mutating
 these fields in an OpenTelemetry [context](../context/context.md).
 
 Two Samplers are specified that for optional use by OpenTelemetry
-tracing SDKs named `ConsistentProbabilitityParent` and
-`ConsistentProbability`, meant as optional replacements for the
-built-in `Parent` and `TraceIdRatio` Samplers, respectively.
+tracing SDKs named `ParentConsistentProbabilitityBased` and
+`ConsistentProbabilityBased`, meant as optional replacements for the
+built-in `ParentBased` and `TraceIdRatioBased` Samplers, respectively.
 
 ### Definitions
 
@@ -228,17 +237,9 @@ order to signal unknown adjusted count.
 
 ##### Requirement 1
 
-If `sampled` is set, the `r` and `p` values are valid, `p < 63`, and
-`p > r`, then the invariant is violated.  In this case, Samplers
-SHOULD honor the `sampled` flag and unset `p` from the OpenTelemetry
-`tracestate`.
-
-##### Requirement 2
-
-If `sampled` is not set, the `r` and `p` values are valid, and `p <=
-r` or `p == 63`, the invariant is violated.  In this case,
-implementations SHOULD honor the `sampled` flag and unset `p` from the
-OpenTelemetry `tracestate`.
+Samplers SHOULD unset `p` when the invariant between the `sampled`,
+`p`, and `r` values is violated before using the `tracestate` to make
+a sampling decision.
 
 #### P-value
 
@@ -260,32 +261,8 @@ sampling probability:
 
 ##### Requirement 1
 
-Samplers SHOULD unset `p` from the tracestate if the unsigned value is
-greater than 63.
-
-##### Requirement 2
-
-Parent-based Samplers SHOULD NOT modify a valid `tracestate`.
-
-##### Requirement 3
-
-Non-probability samplers, having unknown adjusted count, SHOULD unset
-`p` from the `tracestate`.
-
-##### Requirement 4
-
-If p-value is set without r-value, the consumer SHOULD interpret the
-adjusted count from the context.
-
-##### Requirement 5
-
-Consistent probability samplers, when they decide not to sample a
-span, MUST unset `p`.
-
-##### Requirement 6
-
-Consistent probability samplers, when they decide to sample a span,
-MUST set `p` to the base-2 logarithm of the adjusted count.
+Samplers SHOULD unset `p` from the `tracestate` if the unsigned value is
+greater than 63 before using the `tracestate` to make a sampling decision.
 
 #### R-value
 
@@ -313,16 +290,74 @@ for spans of a given trace, as follows:
 
 ##### Requirement 1
 
-Samplers SHOULD unset both `r` and `p` if the unsigned value is of `r`
-is greater than 62.
+Samplers SHOULD unset both `r` and `p` from the `tracestate` if the
+unsigned value is of `r` is greater than 62 before using the
+`tracestate` to make a sampling decision.
+
+### Samplers
+
+#### ParentConsistentProbabilityBased sampler
+
+The `ParentConsistentProbabilityBased` sampler is meant as an optional
+replacement for the [`ParentBased` Sampler](sdk.md#parentbased). It is
+required to first validate the `tracestate` and then behave as the
+`ParentBased` sampler would.
+
+##### Requirement 1
+
+The `ParentConsistentProbabilityBased` Sampler MUST have the same
+constructor signature as the built-in `ParentBased` sampler in each
+OpenTelemetry SDK.
 
 ##### Requirement 2
 
-Samplers SHOULD NOT modify `r` when it is already set in the `tracestate`.
+The `ParentConsistentProbabilityBased` Sampler MUST NOT modify a
+valid `tracestate`.
 
-### Sampler interface
+##### Requirement 3
 
-TODO
+The `ParentConsistentProbabilityBased` Sampler MUST make the same
+decision specified for the `ParentBased` sampler for valid contexts.
+
+#### ConsistentProbabilityBased sampler
+
+The `ConsistentProbabilityBased` sampler is meant as an optional
+replacement for the [`TraceIdRatioBased`
+Sampler](sdk.md#traceidratiobased).  In the case where it is used as a
+root sampler, it is required to produce a valid `tracestate`.  In the
+case where it is used in a non-root context, it is required to
+validate the incoming `tracestate` and to produce a valid `tracestate`
+for the outgoing context.
+
+The `ConsistentProbabilityBased` sampler is required to support
+probabilities that are not exact powers of two.  To do so,
+implementations are required to select between the nearest powers of
+two probabilistically.  For example, 5% sampling can be achieved by
+selecting 1/16 sampling 60% of the time and 1/32 sampling 40% of the
+time.
+
+##### Requirement 1
+
+The `ConsistentProbabilityBased` Sampler MUST have the same
+constructor signature as the built-in `TraceIdRatioBased` sampler in
+each OpenTelemetry SDK.
+
+##### Requirement 2
+
+The `ConsistentProbabilityBased` Sampler MUST set `r` when it makes a
+root sampling decision.
+
+##### Requirement 3
+
+The `ConsistentProbabilityBased` Sampler MUST unset `p` from the
+`tracestate` when it decides not to sample.
+
+##### Requirement 4
+
+The `ConsistentProbabilityBased` Sampler MUST set `p` when it decides
+to sample to the base-2 logarithm of the unbiased adjusted count.
+
+A test specification for this requirement is given in the appendix.
 
 #### Composition rules
 
@@ -358,13 +393,52 @@ Samplers and none decides to sample, p-value MUST be unset in the
 ##### Requirement 3
 
 When combining Sampler decisions for a consistent probability Sampler
-and a non-probability Sampler, and the probabilty Sampler decides to
+and a non-probability Sampler, and the probability Sampler decides to
 sample, its p-value MUST be set in the `tracestate` regardless of the
 non-probability Sampler decision.
 
 ##### Requirement 4
 
 When combining Sampler decisions for a consistent probability Sampler
-and a non-probability Sampler, and the probabilty Sampler decides not
+and a non-probability Sampler, and the probability Sampler decides not
 to sample but the non-probability does sample, p-value 63 MUST be set
 in the `tracestate`.
+
+### Testing requirements
+
+TODO describe these tests: Overview for hypothesis testing, use of
+large N, use of significance levels.  Expectation of a strong general
+purpose non-cryptographic random number generator.  Tests are meant to
+validate end-to-end sampling logic and span-to-metrics accounting, not
+validate the RNG.
+
+Tests are expected to use fixed seeds.  Tests are expected to
+demonstrate and document that the statistical tests fail at
+approximately at the expected level of statistical significance.
+E.g., a 1% significance level test should be repeated and demonstrate
+occasional failure, then be saved with the seed that produced the
+passing result.  This should be documented.
+
+#### Power of two sampling probability
+
+This MAY use an exact binomial test or it may use a Chi-squared test
+with 1 degree of freedom.
+
+Repeat for sampling probabilities: TBD.
+
+#### Arbitrary sampling probability
+
+Chi-squared test with three categories:
+
+1. Unsampled
+2. Sampled with lesser probability
+3. Sampled with greater/equal probability 
+
+Repeat for sampling probabilities: TBD.
+
+#### Uniform attribute probability
+
+Chi-squared test with arbitrary number of categories.  In either of
+the above tests, use a secondary attribute with K categorical values.
+
+Repeat for number of categories: TBD.
