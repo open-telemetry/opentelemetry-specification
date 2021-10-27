@@ -43,12 +43,12 @@ groups:
             - id: ppc64
               value: 'ppc64'
               brief: "64-bit PowerPC"
-            - id: x86
-              value: 'x86'
-              brief: "32-bit x86"
             - id: s390x
               value: 's390x'
               brief: "IBM z/Architecture"
+            - id: x86
+              value: 'x86'
+              brief: "32-bit x86"
         brief: >
             The CPU architecture the host system is running on.
       - id: image.name
