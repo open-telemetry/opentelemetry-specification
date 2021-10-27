@@ -18,6 +18,7 @@
 The following semantic conventions surrounding metrics are defined:
 
 * [HTTP](http-metrics.md): For HTTP client and server metrics.
+* [Database](database-metrics.md): For SQL and NoSQL metrics.
 * [System](system-metrics.md): For standard system metrics.
 * [Process](process-metrics.md): For standard process metrics.
 * [Runtime Environment](runtime-environment-metrics.md): For runtime environment metrics.
