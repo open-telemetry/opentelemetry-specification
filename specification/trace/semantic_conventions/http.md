@@ -124,9 +124,9 @@ Users MAY explicitly configure instrumentations to capture them even though it i
 
 ### HTTP request retries and redirects
 
-A span for each subsequent HTTP request re-sending attempt a span MUST be created and it SHOULD be linked with a previous one by creating a single `Link`. `http.retry_count` attribute SHOULD be added to each retry span with the value that reflects the ordinal number of request retry attempt.
+A span for each subsequent HTTP request re-sending attempt MUST be created and it SHOULD be linked with a previous one by creating a single `Link`. `http.retry_count` attribute SHOULD be added to each retry span with the value that reflects the ordinal number of request retry attempt.
 
-A span for each subsequent HTTP request redirect a span MUST be created and it SHOULD be linked with a span for initial request or previous redirect by creating a single `Link`.
+A span for each subsequent HTTP request redirect MUST be created and it SHOULD be linked with a span for initial request or previous redirect by creating a single `Link`.
 
 ## HTTP client
 
