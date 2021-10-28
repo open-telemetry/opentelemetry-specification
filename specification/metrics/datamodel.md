@@ -216,7 +216,7 @@ individual timeseries.
 While OpenTelemetry provides flexibility in how instruments can be transformed
 into metric streams, the instruments are defined such that a reasonable default
 mapping can be provided. The exact
-[OpenTelemetry instruments](api.md##instrument) are detailed in the API
+[OpenTelemetry instruments](api.md#instrument) are detailed in the API
 specification.
 
 In the Event model, the primary data are (instrument, number) points, originally
