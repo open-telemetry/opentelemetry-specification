@@ -26,6 +26,13 @@ release.
   ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
 - Add clarifications on how to handle numerical limits.
   ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
+- Add environment variables for Periodic exporting MetricReader.
+  ([#2038](https://github.com/open-telemetry/opentelemetry-specification/pull/2038))
+- Specify that the SDK must support exporters to access meter information.
+  ([#2040](https://github.com/open-telemetry/opentelemetry-specification/pull/2040))
+- Add clarifications on how to determine aggregation temporality.
+  ([#2013](https://github.com/open-telemetry/opentelemetry-specification/pull/2013),
+  [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2032))
 
 ### Logs
 
@@ -33,6 +40,8 @@ release.
 
 ### Semantic Conventions
 
+- Add "IBM z/Architecture" (`s390x`) to `host.arch`
+  ([#2055](https://github.com/open-telemetry/opentelemetry-specification/pull/2055))
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
   ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
 - Add AWS App Runner as a cloud platform
@@ -58,6 +67,10 @@ release.
 - Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
+
+### Telemetry Schemas
+
+Added telemetry schemas documents to the specification ([#2008](https://github.com/open-telemetry/opentelemetry-specification/pull/2008))
 
 ## v1.7.0 (2021-09-30)
 

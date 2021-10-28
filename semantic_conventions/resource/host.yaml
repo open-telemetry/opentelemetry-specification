@@ -43,6 +43,9 @@ groups:
             - id: ppc64
               value: 'ppc64'
               brief: "64-bit PowerPC"
+            - id: s390x
+              value: 's390x'
+              brief: "IBM z/Architecture"
             - id: x86
               value: 'x86'
               brief: "32-bit x86"
