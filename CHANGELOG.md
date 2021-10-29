@@ -33,6 +33,11 @@ release.
 
 ### Logs
 
+- Map Syslog Emergency to FATAL instead of ERROR3.
+  ([#2087](https://github.com/open-telemetry/opentelemetry-specification/pull/2087))
+- Map Syslog Alert to ERROR3 instead of FATAL.
+  ([#2087](https://github.com/open-telemetry/opentelemetry-specification/pull/2087))
+
 ### Resource
 
 ### Semantic Conventions
