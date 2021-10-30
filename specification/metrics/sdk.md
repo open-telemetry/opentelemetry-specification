@@ -293,7 +293,7 @@ meterProviderBuilder
   );
 ```
 
-TODO: after we release the intial Stable version of Metrics SDK specification,
+TODO: after we release the initial Stable version of Metrics SDK specification,
 we will explore how to allow configuring custom
 [ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
