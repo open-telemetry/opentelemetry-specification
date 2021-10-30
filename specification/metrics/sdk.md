@@ -293,9 +293,9 @@ meterProviderBuilder
   );
 ```
 
-(TODO: after we release the initial Stable version of the Metrics SDK
-specification, we will explore how to allow the [View](./sdk.md#view) to
-configure an `Aggregation` to collect [Exemplars](./datamodel.md#exemplars)).
+TODO: after we release the intial Stable version of Metrics SDK specification,
+we will explore how to allow configuring custom
+[ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./datamodel.md#metric-points) in the
