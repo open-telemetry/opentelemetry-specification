@@ -153,6 +153,9 @@ groups:
             - id: cockroachdb
               value: 'cockroachdb'
               brief: 'CockroachDB'
+            - id: aerospike
+              value: 'aerospike'
+              brief: 'Aerospike'
       - id: connection_string
         tag: connection-level
         type: string
