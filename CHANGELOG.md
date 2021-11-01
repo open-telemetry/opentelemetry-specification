@@ -298,6 +298,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 - Add Memcached to Database specific conventions ([#1689](https://github.com/open-telemetry/opentelemetry-specification/pull/1689)).
 - Add semantic convention attributes for the host device and added OS name and version ([#1596](https://github.com/open-telemetry/opentelemetry-specification/pull/1596)).
 - Add CockroachDB to Database specific conventions ([#1725](https://github.com/open-telemetry/opentelemetry-specification/pull/1725)).
+- Add Aerospike to Database specific conventions ([#2090](https://github.com/open-telemetry/opentelemetry-specification/pull/2090)).
 
 ### Compatibility
 
