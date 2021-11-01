@@ -11,6 +11,9 @@ release.
 
 - Add a section for OTel specific values in TraceState.
   ([#1852](https://github.com/open-telemetry/opentelemetry-specification/pull/1852))
+- Add `none` as a possible value for `OTEL_PROPAGATORS` to disable context
+  propagation.
+  ([#2052](https://github.com/open-telemetry/opentelemetry-specification/pull/2052))
 
 ### Traces
 
