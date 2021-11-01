@@ -27,5 +27,6 @@
 | `ia64` | Itanium |
 | `ppc32` | 32-bit PowerPC |
 | `ppc64` | 64-bit PowerPC |
+| `s390x` | IBM z/Architecture |
 | `x86` | 32-bit x86 |
 <!-- endsemconv -->

@@ -11,6 +11,9 @@ release.
 
 - Add a section for OTel specific values in TraceState.
   ([#1852](https://github.com/open-telemetry/opentelemetry-specification/pull/1852))
+- Add `none` as a possible value for `OTEL_PROPAGATORS` to disable context
+  propagation.
+  ([#2052](https://github.com/open-telemetry/opentelemetry-specification/pull/2052))
 
 ### Traces
 
@@ -25,6 +28,11 @@ release.
   ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
 - Add environment variables for Periodic exporting MetricReader.
   ([#2038](https://github.com/open-telemetry/opentelemetry-specification/pull/2038))
+- Specify that the SDK must support exporters to access meter information.
+  ([#2040](https://github.com/open-telemetry/opentelemetry-specification/pull/2040))
+- Add clarifications on how to determine aggregation temporality.
+  ([#2013](https://github.com/open-telemetry/opentelemetry-specification/pull/2013),
+  [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2032))
 
 ### Logs
 
@@ -32,6 +40,8 @@ release.
 
 ### Semantic Conventions
 
+- Add "IBM z/Architecture" (`s390x`) to `host.arch`
+  ([#2055](https://github.com/open-telemetry/opentelemetry-specification/pull/2055))
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
   ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
 - Add AWS App Runner as a cloud platform
