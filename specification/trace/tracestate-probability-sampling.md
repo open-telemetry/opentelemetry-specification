@@ -456,44 +456,98 @@ the trace as inconsistently sampled.
 
 ### Appendix: Statistical test requirements
 
-This section specifies a test that can be implemented to ensures
-basic conformance to the requirement that sampling decisions be unbiased.
+This section specifies a test that can be implemented to ensure basic
+conformance with the requirement that sampling decisions are unbiased.
 
 The goal of this test specification is to be simple to implement and
 not require advanced statistical skills or libraries to be successful.
 
 This test is not meant to evaluate the performance of a random number
-generator.  This test assumes the underlying RNG is good quality and
-checks that the sampler produces the expected proportion of sampling
-decisions.
+generator.  This test assumes the underlying RNG is of good quality
+and checks that the sampler produces the expected proportionality with
+a high degree of statistical confidence.
 
 One of the challenges of this kind of test is that probabilistic tests
 are expected to occasionally produce exceptional results.  To make
-this a strict test for randomness, we take the following approach to
-locate a "golden" seed:
+this a strict test for random behavior, we take the following approach:
 
+- Generate a pre-determined list of 20 random seeds
 - Use fixed values for significance level (5%) and trials (20)
 - Use a population size of one million spans
-- Locate a seed value such that the Chi-Squared test fails exactly once.
+- For each trial, simulate the population and compute ChiSquared 
+  test statistic
+- Locate the first seed value in the ordered list such that the
+  Chi-Squared significance test fails exactly once out of 20 trials
 
-For a correct implementation, this is a fairly easy test to pass.  The
-author of the test is expected to document how the test was produced.
+To create this test, perform the above sequence using the seed values
+from the predetermined list, in order, until a seed value is found
+with exactly one failure.  This is expected to happen fairly often and
+is required to happen once among the 20 available seeds.  After
+calculating the index of the first seed with exactly one ChiSquared
+failure, record it in the test.  For continuous integration testing,
+it is only necessary to re-run the test using the predetermined seed
+index.
+
 As specified, the Chi-Squared test has either one or two degrees of
 freedom, depending on whether the sampling probability is an exact
 power of two or not.
+
+#### Test procedure: non-powers of two
+
+In this case there are two degrees of freedom for the Chi-Squared test.
+The following table summarizes the test parameters.
+
+| Test case | Sampling probability | Lower, Upper p-value when sampled | Expect<sub>lower</sub> | Expect<sub>upper</sub> | Expect<sub>unsampled</sub> |
+| ---       | ---                  | ---                               |                        |                        |                            |
+| 0         | 0.900000             | 0, 1                              | 100000                 | 800000                 | 100000                     |
+| 1         | 0.600000             | 0, 1                              | 400000                 | 200000                 | 400000                     |
+| 2         | 0.330000             | 1, 2                              | 170000                 | 160000                 | 670000                     |
+| 3         | 0.130000             | 2, 3                              | 120000                 | 10000                  | 870000                     |
+| 4         | 0.100000             | 3, 4                              | 25000                  | 75000                  | 900000                     |
+| 5         | 0.050000             | 4, 5                              | 12500                  | 37500                  | 950000                     |
+| 6         | 0.017000             | 5, 6                              | 14250                  | 2750                   | 983000                     |
+| 7         | 0.010000             | 6, 7                              | 5625                   | 4375                   | 990000                     |
+| 8         | 0.005000             | 7, 8                              | 2812.5                 | 2187.5                 | 995000                     |
+| 9         | 0.002900             | 8, 9                              | 1006.25                | 1893.75                | 997100                     |
+| 10        | 0.001000             | 9, 10                             | 953.125                | 46.875                 | 999000                     |
+| 11        | 0.000500             | 10, 11                            | 476.5625               | 23.4375                | 999500                     |
+| 12        | 0.000260             | 11, 12                            | 228.28125              | 31.71875               | 999740                     |
+| 13        | 0.000230             | 12, 13                            | 14.140625              | 215.859375             | 999770                     |
+| 14        | 0.000100             | 13, 14                            | 22.0703125             | 77.9296875             | 999900                     |
+
+The formula for computing Chi-Squared in this case is:
+
+```
+ChiSquared = math.Pow(sampled<sub>lower</sub> - expect<sub>lower</sub>, 2) / expect<sub>lower</sub> +
+             math.Pow(sampled<sub>upper</sub> - expect<sub>upper</sub>, 2) / expect<sub>upper</sub> +
+             math.Pow(1000000 - sampled<sub>lower</sub> - sampled<sub>upper</sub> - expect<sub>unsampled</sub>, 2) / expect<sub>unsampled</sub>
+
+```
+
+This should be compared with 0.102587, the value of the Chi-Squared
+distribution for two degrees of freedom with significance level 5%.
+For each probability in the table above, the test is required to
+demonstrate a seed that produces exactly one ChiSquared value less
+than 0.102587.
+
+##### Requirement 1
+
+For the test with 20 trials and 1 million spans each, the test MUST
+demonstrate a random number generator seed such that the ChiSquared
+test statistic is below 0.102587 exactly 1 out of 20 times.
 
 #### Test procedure: exact powers of two
 
 In this case there is one degree of freedom for the Chi-Squared test.
 The following table summarizes the test parameters.
 
-| Sampling probability    | p-value when sampled | Expect<sub>sampled</sub> | Expect<sub>unsampled</sub> |
-| ---                     | ---                  | ---                      | ---                        |
-| 0.5 (2**-1)             | 1                    | 500000                   | 500000                     |
-| .0625 (2**-4)           | 4                    | 62500                    | 937500                     |
-| .0078125 (2**-7)        | 7                    | 7812.5                   | 992187.5                   |
-| 976.5625 (2**-10)       | 10                   | 976.5625                 | 999023.4375                |
-| .0001220703125 (2**-13) | 13                   | 122.0703125              | 999877.9296875             |
+| Test case | Sampling probability | P-value when sampled | Expect<sub>sampled</sub> | Expect<sub>unsampled</sub> |
+| ---       | ---                  | ---                  | ---                      | ---                        |
+| 15        | 0x1p-01 (0.500000)   | 1                    | 500000                   | 500000                     |
+| 16        | 0x1p-04 (0.062500)   | 4                    | 62500                    | 937500                     |
+| 17        | 0x1p-07 (0.007812)   | 7                    | 7812.5                   | 992187.5                   |
+| 18        | 0x1p-10 (0.000977)   | 10                   | 976.5625                 | 999023.4375                |
+| 19        | 0x1p-13 (0.000122)   | 13                   | 122.0703125              | 999877.9297                |
 
 The formula for computing Chi-Squared in this case is:
 
@@ -514,32 +568,3 @@ For the teset with 20 trials and 1 million spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
 test statistic is below 0.003932 exactly 1 out of 20 times.
 
-#### Test procedure: non-powers of two
-
-In this case there are two degrees of freedom for the Chi-Squared test.
-The following table summarizes the test parameters.
-
-| Sampling probability | Lower p-value | Upper p-value | Expect<sub>lower</sub> | Expect<sub>upper</sub> | Expect<sub>unsampled</sub> |
-| ---                  | ---           | ---           | ---                    |                        |                            |
-| 0.6                  | 0             | 1             | 400000                 | 200000                 | 400000                     |
-| 0.1                  | 3             | 4             | ...                    | ...                    | ...                        |
-| ...                  | ...           | ...           | ...                    | ...                    | ...                        |
-| TODO                 |               |               |                        |                        |                            |
-
-The formula for computing Chi-Squared in this case is:
-
-```
-TODO
-```
-
-This should be compared with 0.102587, the value of the Chi-Squared
-distribution for two degrees of freedom with significance level 5%.
-For each probability in the table above, the test is required to
-demonstrate a seed that produces exactly one ChiSquared value less
-than 0.102587.
-
-##### Requirement 1
-
-For the teset with 20 trials and 1 million spans each, the test MUST
-demonstrate a random number generator seed such that the ChiSquared
-test statistic is below 0.102587 exactly 1 out of 20 times.
