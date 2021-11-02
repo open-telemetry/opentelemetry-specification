@@ -576,3 +576,44 @@ For the teset with 20 trials and 1 million spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
 test statistic is below 0.003932 exactly 1 out of 20 times.
 
+#### Test implementation 
+
+The recommended structure for this test uses a table listing the 20
+probability values, the expected p-values, whether the ChiSquared
+statistic has one or two degrees of freedom, and the index into the
+predetermined list of seeds.
+
+```
+	for _, test := range []testCase{
+		// Non-powers of two
+		{0.90000, 1, twoDegrees, 5},
+		{0.60000, 1, twoDegrees, 14},
+		{0.33000, 2, twoDegrees, 3},
+		{0.13000, 3, twoDegrees, 2},
+		{0.10000, 4, twoDegrees, 0},
+		{0.05000, 5, twoDegrees, 0},
+		{0.01700, 6, twoDegrees, 2},
+		{0.01000, 7, twoDegrees, 3},
+		{0.00500, 8, twoDegrees, 1},
+		{0.00290, 9, twoDegrees, 1},
+		{0.00100, 10, twoDegrees, 5},
+		{0.00050, 11, twoDegrees, 1},
+		{0.00026, 12, twoDegrees, 3},
+		{0.00023, 13, twoDegrees, 0},
+		{0.00010, 14, twoDegrees, 2},
+
+		// Powers of two
+		{0x1p-1, 1, oneDegree, 0},
+		{0x1p-4, 4, oneDegree, 2},
+		{0x1p-7, 7, oneDegree, 3},
+		{0x1p-10, 10, oneDegree, 0},
+		{0x1p-13, 13, oneDegree, 1},
+	} {
+```
+
+Note that seed indexes in the example above have what appears to be
+the correct distribution.  The five 0s, four 1s, four 2s, four 3s, and
+two 5s demonstrate that it is relatively easy to find examples where
+there is exactly one failure.  Seed index 14, for probability 0.6 in
+this case, is a reminder that outliers exist.  Further significance
+testing of this distribution is not recommended.
