@@ -38,7 +38,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 | OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
 | OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.  |
 
-Known values for OTEL_PROPAGATORS are:
+Known values for `OTEL_PROPAGATORS` are:
 
 - `"tracecontext"`: [W3C Trace Context](https://www.w3.org/TR/trace-context/)
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
@@ -47,6 +47,7 @@ Known values for OTEL_PROPAGATORS are:
 - `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
+- `"none"`: No automatically configured propagator.
 
 Known values for `OTEL_TRACES_SAMPLER` are:
 
@@ -165,14 +166,14 @@ We define environment variables for setting one or more exporters per signal.
 
 The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 
-Known values for OTEL_TRACES_EXPORTER are:
+Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"none"`: No automatically configured exporter for traces.
 
-Known values for OTEL_METRICS_EXPORTER are:
+Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
