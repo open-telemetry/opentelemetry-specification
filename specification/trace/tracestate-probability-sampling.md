@@ -518,10 +518,9 @@ The following table summarizes the test parameters.
 The formula for computing Chi-Squared in this case is:
 
 ```
-ChiSquared = math.Pow(sampled<sub>lower</sub> - expect<sub>lower</sub>, 2) / expect<sub>lower</sub> +
-             math.Pow(sampled<sub>upper</sub> - expect<sub>upper</sub>, 2) / expect<sub>upper</sub> +
-             math.Pow(1000000 - sampled<sub>lower</sub> - sampled<sub>upper</sub> - expect<sub>unsampled</sub>, 2) / expect<sub>unsampled</sub>
-
+ChiSquared = math.Pow(sampled_lowerP - expect_lowerP, 2) / expect_lowerP +
+             math.Pow(sampled_upperP - expect_upperP, 2) / expect_upperP +
+             math.Pow(1000000 - sampled_lowerP - sampled_upperP - expect_unsampled, 2) / expect_unsampled
 ```
 
 This should be compared with 0.102587, the value of the Chi-Squared
@@ -552,8 +551,8 @@ The following table summarizes the test parameters.
 The formula for computing Chi-Squared in this case is:
 
 ```
-ChiSquared = math.Pow(sampled - expect<sub>sampled</sub>, 2) / expect<sub>sampled</sub> +
-             math.Pow(1000000 - sampled - expect<sub>unsampled</sub>, 2) / expect<sub>unsampled</sub>
+ChiSquared = math.Pow(sampled - expect_sampled, 2) / expect_sampled +
+             math.Pow(1000000 - sampled - expect_unsampled, 2) / expect_unsampled
 ```
 
 This should be compared with 0.003932, the value of the Chi-Squared
