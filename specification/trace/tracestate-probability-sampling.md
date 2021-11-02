@@ -498,7 +498,7 @@ In this case there are two degrees of freedom for the Chi-Squared test.
 The following table summarizes the test parameters.
 
 | Test case | Sampling probability | Lower, Upper p-value when sampled | Expect<sub>lower</sub> | Expect<sub>upper</sub> | Expect<sub>unsampled</sub> |
-| ---       | ---                  | ---                               |                        |                        |                            |
+| ---       | ---                  | ---                               | ---                    | ---                    | ---                        |
 | 0         | 0.900000             | 0, 1                              | 100000                 | 800000                 | 100000                     |
 | 1         | 0.600000             | 0, 1                              | 400000                 | 200000                 | 400000                     |
 | 2         | 0.330000             | 1, 2                              | 170000                 | 160000                 | 670000                     |
