@@ -64,10 +64,11 @@ and "p-value" meant to support interoperable Sampler implementations.
 Rules are given for creating, validating, interpreting, and mutating
 these fields in an OpenTelemetry [context](../context/context.md).
 
-Two Samplers are specified that for optional use by OpenTelemetry
-tracing SDKs named `ParentConsistentProbabilitityBased` and
-`ConsistentProbabilityBased`, meant as optional replacements for the
-built-in `ParentBased` and `TraceIdRatioBased` Samplers, respectively.
+Two Samplers are specified for optional inclusion in OpenTelemetry
+tracing SDKs, named `ParentConsistentProbabilitityBased` and
+`ConsistentProbabilityBased`.  These are meant as optional
+replacements for the built-in `ParentBased` and `TraceIdRatioBased`
+Samplers.
 
 ### Definitions
 
@@ -193,16 +194,18 @@ in `traceparent` context to the r-value and p-value found in
 
 ### Conformance
 
-Samplers that conform to this specification have both behavioral and
-statistical requirements.  Consumers of OpenTelemetry `tracestate`
-data are expected to validate the probability sampling fields before
-interpreting the data.
+Consumers of OpenTelemetry `tracestate` data are expected to validate
+the probability sampling fields before interpreting the data.  This
+applies to the two samplers specified here as well as consumers of
+span data, who are expected to validate `tracestate` before
+interpreting span adjusted counts.
 
-Producers of OpenTelemetry `tracestate` are required to meet the
-behavioral requirements and ensure statistically valid outcomes using
-tests that are included in this specification, so that users and
-consumers of OpenTelemetry `tracestate` can be assured of the accuracy
-of their data.
+Producers of OpenTelemetry `tracestate` containing p-value and r-value
+fields are required to meet the behavioral requirements stated for the
+ConsistentProbabilityBased sampler, to ensure statistically valid
+outcomes, using a test suite included in this specification, so that
+users and consumers of OpenTelemetry `tracestate` can be assured of
+accurate span counts in a span-to-metrics pipeline.
 
 ### Context invariants
 
@@ -239,7 +242,7 @@ order to signal unknown adjusted count.
 
 Samplers SHOULD unset `p` when the invariant between the `sampled`,
 `p`, and `r` values is violated before using the `tracestate` to make
-a sampling decision.
+a sampling decision or interpret adjusted count.
 
 #### P-value
 
@@ -261,8 +264,9 @@ sampling probability:
 
 ##### Requirement 1
 
-Samplers SHOULD unset `p` from the `tracestate` if the unsigned value is
-greater than 63 before using the `tracestate` to make a sampling decision.
+Consumers SHOULD unset `p` from the `tracestate` if the unsigned value
+is greater than 63 before using the `tracestate` to make a sampling
+decision or interpret adjusted count.
 
 #### R-value
 
@@ -317,17 +321,18 @@ valid `tracestate`.
 ##### Requirement 3
 
 The `ParentConsistentProbabilityBased` Sampler MUST make the same
-decision specified for the `ParentBased` sampler for valid contexts.
+decision specified for the `ParentBased` sampler when the context is
+valid.
 
 #### ConsistentProbabilityBased sampler
 
 The `ConsistentProbabilityBased` sampler is meant as an optional
 replacement for the [`TraceIdRatioBased`
 Sampler](sdk.md#traceidratiobased).  In the case where it is used as a
-root sampler, it is required to produce a valid `tracestate`.  In the
-case where it is used in a non-root context, it is required to
-validate the incoming `tracestate` and to produce a valid `tracestate`
-for the outgoing context.
+root sampler, the `ConsistentProbabilityBased` sampler is required to
+produce a valid `tracestate`.  In the case where it is used in a
+non-root context, it is required to validate the incoming `tracestate`
+and to produce a valid `tracestate` for the outgoing context.
 
 The `ConsistentProbabilityBased` sampler is required to support
 probabilities that are not exact powers of two.  To do so,
@@ -355,11 +360,35 @@ The `ConsistentProbabilityBased` Sampler MUST unset `p` from the
 ##### Requirement 4
 
 The `ConsistentProbabilityBased` Sampler MUST set `p` when it decides
-to sample to the base-2 logarithm of the unbiased adjusted count.
+to sample.
+
+##### Requirement 5
+
+When it decides to sample, the `ConsistentProbabilityBased` Sampler
+MUST set `p` to the negative base-2 logarithm of a power-of-two
+sampling probability.
+
+##### Requirement 6
+
+The `ConsistentProbabilityBased` Sampler MUST set `p` so that the
+adjusted count interpreted from the `tracestate` is an unbiased
+estimate of the number of representative spans in the population.
 
 A test specification for this requirement is given in the appendix.
 
-#### Composition rules
+##### Requirement 7
+
+If `r` is not set on the input `tracecontext` and the Span is not a
+root span, `ConsistentProbabilityBased` SHOULD set `r` as if it were a
+root span.
+
+##### Requirement 8
+
+If the configured sampling probability is less than `2**-62`, the
+Sampler should round down to zero probability and make the same
+sampling decision as the builtin `AlwaysOff` sampler would.
+
+### Composition rules
 
 When more than one Sampler participates in the decision to sample a
 context, their decisions can be combined using composition rules.  In
@@ -377,6 +406,8 @@ adjusted count.  If the probability Sampler decides to sample, its
 p-value takes effect.  If the probability Sampler decides not to
 sample when the non-probability sample does sample, p-value 63 takes
 effect signifying zero adjusted count.
+
+#### List of requirements
 
 ##### Requirement 1
 
@@ -404,43 +435,111 @@ and a non-probability Sampler, and the probability Sampler decides not
 to sample but the non-probability does sample, p-value 63 MUST be set
 in the `tracestate`.
 
-### Testing requirements
+### Consumer-only requirements
 
-TODO describe these tests: Overview for hypothesis testing, use of
-large N, use of significance levels.  Expectation of a strong general
-purpose non-cryptographic random number generator.  Tests are meant to
-validate end-to-end sampling logic and span-to-metrics accounting, not
-validate the RNG.
+#### Trace consumers
 
-Tests are expected to use fixed seeds.  Tests are expected to
-demonstrate and document that the statistical tests fail at
-approximately at the expected level of statistical significance.
-E.g., a 1% significance level test should be repeated and demonstrate
-occasional failure, then be saved with the seed that produced the
-passing result.  This should be documented.
+Due to the `ConsistentProbabilityBased` Sampler requirement about
+setting `r` when it is unset for a non-root span, trace consumers are
+advised to check traces for r-value consistency.
 
-Tests can be implemented using a another SDK's test, for example.
+When a single trace contains more than a single distinct `r` value, it
+means the trace was not correctly sampled at the root for probability
+sampling.  While the adjusted count of each span is correct in this
+scenario, it may be impossible to detect complete traces.
 
-#### Power of two sampling probability
+##### Requirement 1
 
-This MAY use an exact binomial test or it may use a Chi-squared test
-with 1 degree of freedom.
+When a single trace contains spans with `tracestate` values containing
+more than one distinct value for `r`, the consumer SHOULD recognize
+the trace as inconsistently sampled.
 
-Repeat for sampling probabilities: TBD.
+### Appendix: Statistical test requirements
 
-#### Arbitrary sampling probability
+This section specifies a test that can be implemented to ensures
+basic conformance to the requirement that sampling decisions be unbiased.
 
-Chi-squared test with three categories:
+The goal of this test specification is to be simple to implement and
+not require advanced statistical skills or libraries to be successful.
 
-1. Unsampled
-2. Sampled with lesser probability
-3. Sampled with greater/equal probability 
+This test is not meant to evaluate the performance of a random number
+generator.  This test assumes the underlying RNG is good quality and
+checks that the sampler produces the expected proportion of sampling
+decisions.
 
-Repeat for sampling probabilities: TBD.
+One of the challenges of this kind of test is that probabilistic tests
+are expected to occasionally produce exceptional results.  To make
+this a strict test for randomness, we take the following approach to
+locate a "golden" seed:
 
-#### Uniform attribute probability
+- Use fixed values for significance level (5%) and trials (20)
+- Use a population size of one million spans
+- Locate a seed value such that the Chi-Squared test fails exactly once.
 
-Chi-squared test with arbitrary number of categories.  In either of
-the above tests, use a secondary attribute with K categorical values.
+For a correct implementation, this is a fairly easy test to pass.  The
+author of the test is expected to document how the test was produced.
+As specified, the Chi-Squared test has either one or two degrees of
+freedom, depending on whether the sampling probability is an exact
+power of two or not.
 
-Repeat for number of categories: TBD.
+#### Test procedure: exact powers of two
+
+In this case there is one degree of freedom for the Chi-Squared test.
+The following table summarizes the test parameters.
+
+| Sampling probability    | p-value when sampled | Expect<sub>sampled</sub> | Expect<sub>unsampled</sub> |
+| ---                     | ---                  | ---                      | ---                        |
+| 0.5 (2**-1)             | 1                    | 500000                   | 500000                     |
+| .0625 (2**-4)           | 4                    | 62500                    | 937500                     |
+| .0078125 (2**-7)        | 7                    | 7812.5                   | 992187.5                   |
+| 976.5625 (2**-10)       | 10                   | 976.5625                 | 999023.4375                |
+| .0001220703125 (2**-13) | 13                   | 122.0703125              | 999877.9296875             |
+
+The formula for computing Chi-Squared in this case is:
+
+```
+ChiSquared = math.Pow(sampled - expect<sub>sampled</sub>, 2) / expect<sub>sampled</sub> +
+             math.Pow(1000000 - sampled - expect<sub>unsampled</sub>, 2) / expect<sub>unsampled</sub>
+```
+
+This should be compared with 0.003932, the value of the Chi-Squared
+distribution for one degree of freedom with significance level 5%.
+For each probability in the table above, the test is required to
+demonstrate a seed that produces exactly one ChiSquared value less
+than 0.003932.
+
+##### Requirement 1
+
+For the teset with 20 trials and 1 million spans each, the test MUST
+demonstrate a random number generator seed such that the ChiSquared
+test statistic is below 0.003932 exactly 1 out of 20 times.
+
+#### Test procedure: non-powers of two
+
+In this case there are two degrees of freedom for the Chi-Squared test.
+The following table summarizes the test parameters.
+
+| Sampling probability | Lower p-value | Upper p-value | Expect<sub>lower</sub> | Expect<sub>upper</sub> | Expect<sub>unsampled</sub> |
+| ---                  | ---           | ---           | ---                    |                        |                            |
+| 0.6                  | 0             | 1             | 400000                 | 200000                 | 400000                     |
+| 0.1                  | 3             | 4             | ...                    | ...                    | ...                        |
+| ...                  | ...           | ...           | ...                    | ...                    | ...                        |
+| TODO                 |               |               |                        |                        |                            |
+
+The formula for computing Chi-Squared in this case is:
+
+```
+TODO
+```
+
+This should be compared with 0.102587, the value of the Chi-Squared
+distribution for two degrees of freedom with significance level 5%.
+For each probability in the table above, the test is required to
+demonstrate a seed that produces exactly one ChiSquared value less
+than 0.102587.
+
+##### Requirement 1
+
+For the teset with 20 trials and 1 million spans each, the test MUST
+demonstrate a random number generator seed such that the ChiSquared
+test statistic is below 0.102587 exactly 1 out of 20 times.
