@@ -21,8 +21,8 @@ formats is required. Implementing more than one format is optional.
 | Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer with schema_url                                                                     |          | +  | +    |    |        |      |        |     |      | +   |      |       |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Shutdown (SDK only required)                                                                     |          | +  | +    | +  | +      | +    | -      |     | +    | +   | +    | +     |
-| ForceFlush (SDK only required)                                                                   |          | +  | +    | -  | +      | +    | -      |     | +    | +   | +    | +     |
+| Shutdown (SDK only required)                                                                     |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
+| ForceFlush (SDK only required)                                                                   |          | +  | +    | -  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
 | Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Set active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
@@ -63,23 +63,23 @@ formats is required. Implementing more than one format is optional.
 | `null` values documented as invalid/undefined                                                    |          | +  | +    | +  | +      | +    | N/A    |     |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      |          |    |      |    |        |      |        |     |      |     |      |       |
-| Links can be recorded on span creation                                                           |          | +  | +    |    |        | +    |        |     | +    | +   |      |       |
-| Links order is preserved                                                                         |          | +  | +    |    |        | +    |        |     | +    | +   |      |       |
+| Links can be recorded on span creation                                                           |          | +  | +    |    |        | +    | +      |     | +    | +   |      |       |
+| Links order is preserved                                                                         |          | +  | +    |    |        | +    | +      |     | +    | +   |      |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |    |      |    |        |      |        |     |      |     |      |       |
 | AddEvent                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span exceptions](specification/trace/api.md#record-exception)                                   |          |    |      |    |        |      |        |     |      |     |      |       |
-| RecordException                                                                                  |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
-| RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | -      |     | +    | -   | +    | -     |
+| RecordException                                                                                  |          | -  | +    | +  | +      | +    | +      |     | +    | -   | +    | -     |
+| RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | +      |     | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
 | Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
 | ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
-| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    |        |     | +    | +   |      | +     |
-| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    |        |     |      | -   |      | +     |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    | +    |    | +      | +    |        |     | +    | +   |      |       |
-| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |    | +    |    |        |      |        |     |      |     |      |       |
+| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    | -      |     | +    | +   |      | +     |
+| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    | -      |     |      | -   |      | +     |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    | +    |    | +      | +    | +      |     | +    | +   |      |       |
+| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |    | +    |    |        |      | -      |     |      |     |      |       |
 
 ## Baggage
 
@@ -186,7 +186,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      |     |      | +   | +    |       |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | [-][php225]   | +    | +   | +    | +     |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  |      |    |        |      |        |     |      |     |      |       |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  |      |    |        |      | -      |     |      |     |      |       |
 
 ## Context Propagation
 
@@ -198,7 +198,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Attach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
 | Detach Context                                                                   |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | -    | -     |
 | Get current Context                                                              |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Composite Propagator                                                             |          | +  | +    | +  | +      | +    | N/A    |     | +    | +   | +    | +     |
+| Composite Propagator                                                             |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Global Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
@@ -216,11 +216,11 @@ Note: Support for environment variables is optional.
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_SERVICE_NAME                             | + |    |   |      |    |      |   |    |   |    |     |
+|OTEL_SERVICE_NAME                             | + |    |   |      |    | +    |   |    |   |    |     |
 |OTEL_LOG_LEVEL                                | - | -  | + | [-][py1059] | +  | + | -  |    | - | -  | -   |
 |OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
 |OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | -    | - | +  | + | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | +    | - | +  | + | -  | -   |
 |OTEL_EXPORTER_JAEGER_*                        | + |    |   |      |    | -    | - |    | - | +  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | -  | -   |
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
@@ -241,7 +241,7 @@ Note: Support for environment variables is optional.
 | Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
 | [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      |        |     | +    | +   | +    |       |
-| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    |        |     | -    |     |      |       |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      |     | -    |     |      |       |
 | Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | -   | -    | +   | +    | +     |
 | [OTLP](specification/protocol/otlp.md)                                         |          |    |   |    |             |      |        |     |      |     |      |       |
@@ -254,9 +254,9 @@ Note: Support for environment variables is optional.
 | Honors non-retryable responses                                                 | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Honors throttling response                                                     | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Multi-destination spec compliance                                              | X        | +  |   |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
-| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      |        |     |      |     |      |       |
-| SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      |        |     |      |     |      |       |
-| SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      |        |     |      |     |      |       |
+| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      | -      |     |      |     |      |       |
+| SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      | -      |     |      |     |      |       |
+| SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      | -      |     |      |     |      |       |
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
@@ -268,19 +268,19 @@ Note: Support for environment variables is optional.
 | Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    |             | +    |        |     | +    | +   | +    | -     |
+| Error Status mapping                                                           |          | +  | + |    |             | +    | -      |     | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    |        |     | +    | +   | +    | +     |
+| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      |     | +    | +   | +    | +     |
 | [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
-| Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    |        |     | +    | +   | +    | +     |
-| Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    |        |     |      | -   | -    | -     |
-| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    |        |     | +    | +   | -    | -     |
-| Service name mapping                                                           |          | +  | + |    | +           | +    |        |     |      | +   | +    | +     |
-| Resource to Process mapping                                                    |          | +  | + |    | +           | +    |        |     | +    | -   | +    | -     |
-| InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    |        |     | +    | -   | +    | -     |
-| Status mapping                                                                 |          | +  | + |    | +           | +    |        |     | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    | +           | +    |        |     | +    | +   | +    | -     |
-| Events converted to Logs                                                       |          | +  | + |    | +           | +    |        |     | +    | -   | +    | +     |
+| Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
+| Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
+| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    | -      |     | +    | +   | -    | -     |
+| Service name mapping                                                           |          | +  | + |    | +           | +    | -      |     |      | +   | +    | +     |
+| Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
+| InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
+| Status mapping                                                                 |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | +     |
+| Error Status mapping                                                           |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
+| Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | +     |
 | OpenCensus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 | Prometheus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
