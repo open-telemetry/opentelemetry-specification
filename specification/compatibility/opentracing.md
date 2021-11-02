@@ -243,7 +243,7 @@ Certain values MUST be mapped from
 [OpenTracing Span Tags](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#standard-span-tags-and-log-fields)
 to the respective OpenTelemetry `Attribute`:
 
-- `error` maps to [StatusCode](../trace/api.md##set-status):
+- `error` maps to [StatusCode](../trace/api.md#set-status):
   - `true` maps to `Error`.
   - `false` maps to `Ok`.
   - no value being set maps to `Unset`.
