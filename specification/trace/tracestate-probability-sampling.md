@@ -19,39 +19,39 @@
   * [Conformance](#conformance)
   * [Context invariants](#context-invariants)
     + [Sampled flag](#sampled-flag)
-      - [Requirement 1](#requirement-1)
+      - [Requirement: Inconsistent p-values are unset](#requirement-inconsistent-p-values-are-unset)
     + [P-value](#p-value)
-      - [Requirement 1](#requirement-1-1)
+      - [Requirement: Out-of-range p-values are unset](#requirement-out-of-range-p-values-are-unset)
     + [R-value](#r-value)
-      - [Requirement 1](#requirement-1-2)
+      - [Requirement: Out-of-range r-values unset both p and r](#requirement-out-of-range-r-values-unset-both-p-and-r)
   * [Samplers](#samplers)
     + [ParentConsistentProbabilityBased sampler](#parentconsistentprobabilitybased-sampler)
-      - [Requirement 1](#requirement-1-3)
-      - [Requirement 2](#requirement-2)
-      - [Requirement 3](#requirement-3)
+      - [Requirement: ParentBased API compatibility](#requirement-parentbased-api-compatibility)
+      - [Requirement: ParentConsistentProbabilityBased does not modify valid tracestate](#requirement-parentconsistentprobabilitybased-does-not-modify-valid-tracestate)
+      - [Requirement: ParentConsistentProbabilityBased and ParentBased make identical decisions](#requirement-parentconsistentprobabilitybased-and-parentbased-make-identical-decisions)
     + [ConsistentProbabilityBased sampler](#consistentprobabilitybased-sampler)
-      - [Requirement 1](#requirement-1-4)
-      - [Requirement 2](#requirement-2-1)
-      - [Requirement 3](#requirement-3-1)
-      - [Requirement 4](#requirement-4)
-      - [Requirement 5](#requirement-5)
-      - [Requirement 6](#requirement-6)
-      - [Requirement 7](#requirement-7)
-      - [Requirement 8](#requirement-8)
+      - [Requirement: TraceIdRatioBased API compatibility](#requirement-traceidratiobased-api-compatibility)
+      - [Requirement: ConsistentProbabilityBased sampler sets r for root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-root-span)
+      - [Requirement: ConsistentProbabilityBased sampler unsets p when not sampling](#requirement-consistentprobabilitybased-sampler-unsets-p-when-not-sampling)
+      - [Requirement: ConsistentProbabilityBased sampler sets p when sampling](#requirement-consistentprobabilitybased-sampler-sets-p-when-sampling)
+      - [Requirement: ConsistentProbabilityBased sampler sets p using an unbiased algorithm](#requirement-consistentprobabilitybased-sampler-sets-p-using-an-unbiased-algorithm)
+      - [Requirement: ConsistentProbabilityBased sampler sets r for non-root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-non-root-span)
+      - [Requirement: ConsistentProbabilityBased sampler acts like AlwaysOff sampler for probabilities less than 2**-62](#requirement-consistentprobabilitybased-sampler-acts-like-alwaysoff-sampler-for-probabilities-less-than-2-62)
   * [Composition rules](#composition-rules)
     + [List of requirements](#list-of-requirements)
-      - [Requirement 1](#requirement-1-5)
-      - [Requirement 2](#requirement-2-2)
-      - [Requirement 3](#requirement-3-2)
-      - [Requirement 4](#requirement-4-1)
-  * [Consumer-only requirements](#consumer-only-requirements)
+      - [Requirement: Combining multiple sampling decisions using logical `or`](#requirement-combining-multiple-sampling-decisions-using-logical-or)
+      - [Requirement: Combine multiple consistent probability samplers using the minimum p-value](#requirement-combine-multiple-consistent-probability-samplers-using-the-minimum-p-value)
+      - [Requirement: Unset p when multiple consistent probability samplers decide not to sample](#requirement-unset-p-when-multiple-consistent-probability-samplers-decide-not-to-sample)
+      - [Requirement: Use probability sampler p-value when its decision to sample is combined with non-probability samplers](#requirement-use-probability-sampler-p-value-when-its-decision-to-sample-is-combined-with-non-probability-samplers)
+      - [Requirement: Use p-value 63 when a probability sampler decision not to sample when combined with non-probability sampler decision to sample](#requirement-use-p-value-63-when-a-probability-sampler-decision-not-to-sample-when-combined-with-non-probability-sampler-decision-to-sample)
+  * [Consumer recommendations](#consumer-recommendations)
     + [Trace consumers](#trace-consumers)
-      - [Requirement 1](#requirement-1-6)
+      - [Recommendation: Recognize inconsistent r-values](#recommendation-recognize-inconsistent-r-values)
   * [Appendix: Statistical test requirements](#appendix-statistical-test-requirements)
     + [Test procedure: non-powers of two](#test-procedure-non-powers-of-two)
-      - [Requirement 1](#requirement-1-7)
+      - [Requirement: Pass 15 non-power-of-two statistical tests](#requirement-pass-15-non-power-of-two-statistical-tests)
     + [Test procedure: exact powers of two](#test-procedure-exact-powers-of-two)
-      - [Requirement 1](#requirement-1-8)
+      - [Requirement: Pass 5 power-of-two statistical tests](#requirement-pass-5-power-of-two-statistical-tests)
 
 <!-- tocstop -->
 
@@ -247,7 +247,7 @@ The invariant between `sampled`, `p`, and `r` only applies when both
 `sampled` flag takes precedence and `p` is unset from `tracestate` in
 order to signal unknown adjusted count.
 
-##### Requirement 1
+##### Requirement: Inconsistent p-values are unset
 
 Samplers SHOULD unset `p` when the invariant between the `sampled`,
 `p`, and `r` values is violated before using the `tracestate` to make
@@ -271,7 +271,7 @@ sampling probability:
 | 62      | 2**-62             | 2**62          |
 | 63      | 0                  | 0              |
 
-##### Requirement 1
+##### Requirement: Out-of-range p-values are unset
 
 Consumers SHOULD unset `p` from the `tracestate` if the unsigned value
 is greater than 63 before using the `tracestate` to make a sampling
@@ -301,7 +301,7 @@ for spans of a given trace, as follows:
 | 61               | 2**-62                   | 2**-61 and above               |
 | 62               | 2**-62                   | 2**-62 and above               |
 
-##### Requirement 1
+##### Requirement: Out-of-range r-values unset both p and r
 
 Samplers SHOULD unset both `r` and `p` from the `tracestate` if the
 unsigned value is of `r` is greater than 62 before using the
@@ -316,22 +316,21 @@ replacement for the [`ParentBased` Sampler](sdk.md#parentbased). It is
 required to first validate the `tracestate` and then behave as the
 `ParentBased` sampler would.
 
-##### Requirement 1
+##### Requirement: ParentBased API compatibility
 
 The `ParentConsistentProbabilityBased` Sampler MUST have the same
 constructor signature as the built-in `ParentBased` sampler in each
 OpenTelemetry SDK.
 
-##### Requirement 2
+##### Requirement: ParentConsistentProbabilityBased does not modify valid tracestate
 
 The `ParentConsistentProbabilityBased` Sampler MUST NOT modify a
 valid `tracestate`.
 
-##### Requirement 3
+##### Requirement: ParentConsistentProbabilityBased and ParentBased make identical decisions
 
 The `ParentConsistentProbabilityBased` Sampler MUST make the same
-decision specified for the `ParentBased` sampler when the context is
-valid.
+decision specified for the `ParentBased` sampler.
 
 #### ConsistentProbabilityBased sampler
 
@@ -350,34 +349,28 @@ two probabilistically.  For example, 5% sampling can be achieved by
 selecting 1/16 sampling 60% of the time and 1/32 sampling 40% of the
 time.
 
-##### Requirement 1
+##### Requirement: TraceIdRatioBased API compatibility
 
 The `ConsistentProbabilityBased` Sampler MUST have the same
 constructor signature as the built-in `TraceIdRatioBased` sampler in
 each OpenTelemetry SDK.
 
-##### Requirement 2
+##### Requirement: ConsistentProbabilityBased sampler sets r for root span
 
 The `ConsistentProbabilityBased` Sampler MUST set `r` when it makes a
 root sampling decision.
 
-##### Requirement 3
+##### Requirement: ConsistentProbabilityBased sampler unsets p when not sampling
 
 The `ConsistentProbabilityBased` Sampler MUST unset `p` from the
 `tracestate` when it decides not to sample.
 
-##### Requirement 4
+##### Requirement: ConsistentProbabilityBased sampler sets p when sampling
 
 The `ConsistentProbabilityBased` Sampler MUST set `p` when it decides
 to sample.
 
-##### Requirement 5
-
-When it decides to sample, the `ConsistentProbabilityBased` Sampler
-MUST set `p` to the negative base-2 logarithm of a power-of-two
-sampling probability.
-
-##### Requirement 6
+##### Requirement: ConsistentProbabilityBased sampler sets p using an unbiased algorithm
 
 The `ConsistentProbabilityBased` Sampler MUST set `p` so that the
 adjusted count interpreted from the `tracestate` is an unbiased
@@ -385,13 +378,14 @@ estimate of the number of representative spans in the population.
 
 A test specification for this requirement is given in the appendix.
 
-##### Requirement 7
+##### Requirement: ConsistentProbabilityBased sampler sets r for non-root span
 
 If `r` is not set on the input `tracecontext` and the Span is not a
 root span, `ConsistentProbabilityBased` SHOULD set `r` as if it were a
-root span.
+root span and MAY warn the user that a potentially inconsistent trace
+is being produced.
 
-##### Requirement 8
+##### Requirement: ConsistentProbabilityBased sampler acts like AlwaysOff sampler for probabilities less than 2**-62
 
 If the configured sampling probability is less than `2**-62`, the
 Sampler should round down to zero probability and make the same
@@ -418,33 +412,39 @@ effect signifying zero adjusted count.
 
 #### List of requirements
 
-##### Requirement 1
+##### Requirement: Combining multiple sampling decisions using logical `or`
+
+When multiple samplers are combined using composition, the sampling
+decision is to sample if at least of the combined samplers decies to
+sample.
+
+##### Requirement: Combine multiple consistent probability samplers using the minimum p-value
 
 When combining Sampler decisions for multiple consistent probability
 Samplers and at least one decides to sample, the minimum of the "yes"
 decision `p` values MUST be set in the `tracestate`.
 
-##### Requirement 2
+##### Requirement: Unset p when multiple consistent probability samplers decide not to sample
 
 When combining Sampler decisions for multiple consistent probability
 Samplers and none decides to sample, p-value MUST be unset in the
 `tracestate`.
 
-##### Requirement 3
+##### Requirement: Use probability sampler p-value when its decision to sample is combined with non-probability samplers
 
 When combining Sampler decisions for a consistent probability Sampler
 and a non-probability Sampler, and the probability Sampler decides to
 sample, its p-value MUST be set in the `tracestate` regardless of the
 non-probability Sampler decision.
 
-##### Requirement 4
+##### Requirement: Use p-value 63 when a probability sampler decision not to sample when combined with non-probability sampler decision to sample
 
 When combining Sampler decisions for a consistent probability Sampler
 and a non-probability Sampler, and the probability Sampler decides not
 to sample but the non-probability does sample, p-value 63 MUST be set
 in the `tracestate`.
 
-### Consumer-only requirements
+### Consumer recommendations
 
 #### Trace consumers
 
@@ -457,7 +457,7 @@ means the trace was not correctly sampled at the root for probability
 sampling.  While the adjusted count of each span is correct in this
 scenario, it may be impossible to detect complete traces.
 
-##### Requirement 1
+##### Recommendation: Recognize inconsistent r-values
 
 When a single trace contains spans with `tracestate` values containing
 more than one distinct value for `r`, the consumer SHOULD recognize
@@ -538,7 +538,7 @@ For each probability in the table above, the test is required to
 demonstrate a seed that produces exactly one ChiSquared value less
 than 0.102587.
 
-##### Requirement 1
+##### Requirement: Pass 15 non-power-of-two statistical tests
 
 For the test with 20 trials and 1 million spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
@@ -570,7 +570,7 @@ For each probability in the table above, the test is required to
 demonstrate a seed that produces exactly one ChiSquared value less
 than 0.003932.
 
-##### Requirement 1
+##### Requirement: Pass 5 power-of-two statistical tests
 
 For the teset with 20 trials and 1 million spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
