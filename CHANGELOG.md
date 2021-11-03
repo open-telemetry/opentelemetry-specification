@@ -9,16 +9,30 @@ release.
 
 ### Context
 
+- Add a section for OTel specific values in TraceState.
+  ([#1852](https://github.com/open-telemetry/opentelemetry-specification/pull/1852))
+- Add `none` as a possible value for `OTEL_PROPAGATORS` to disable context
+  propagation.
+  ([#2052](https://github.com/open-telemetry/opentelemetry-specification/pull/2052))
+
 ### Traces
 
 ### Metrics
 
 - Add optional min / max fields to histogram data model.
-  ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915))
+  ([#1915](https://github.com/open-telemetry/opentelemetry-specification/pull/1915),
+  [#1983](https://github.com/open-telemetry/opentelemetry-specification/pull/1983))
 - Add exponential histogram to the metrics data model.
   ([#1935](https://github.com/open-telemetry/opentelemetry-specification/pull/1935))
 - Add clarifications on how to handle numerical limits.
   ([#2007](https://github.com/open-telemetry/opentelemetry-specification/pull/2007))
+- Add environment variables for Periodic exporting MetricReader.
+  ([#2038](https://github.com/open-telemetry/opentelemetry-specification/pull/2038))
+- Specify that the SDK must support exporters to access meter information.
+  ([#2040](https://github.com/open-telemetry/opentelemetry-specification/pull/2040))
+- Add clarifications on how to determine aggregation temporality.
+  ([#2013](https://github.com/open-telemetry/opentelemetry-specification/pull/2013),
+  [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2032))
 
 ### Logs
 
@@ -26,6 +40,8 @@ release.
 
 ### Semantic Conventions
 
+- Add "IBM z/Architecture" (`s390x`) to `host.arch`
+  ([#2055](https://github.com/open-telemetry/opentelemetry-specification/pull/2055))
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
   ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
 - Add AWS App Runner as a cloud platform
@@ -36,9 +52,10 @@ release.
   ([#1998](https://github.com/open-telemetry/opentelemetry-specification/pull/1998))
 - Add attributes for Apache RocketMQ.
   ([#1904](https://github.com/open-telemetry/opentelemetry-specification/pull/1904))
-
 - Define http tracing attributes provided at span creation time
   ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
+- Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
+  ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
 
 ### Compatibility
 
@@ -50,6 +67,10 @@ release.
 - Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
+
+### Telemetry Schemas
+
+Added telemetry schemas documents to the specification ([#2008](https://github.com/open-telemetry/opentelemetry-specification/pull/2008))
 
 ## v1.7.0 (2021-09-30)
 
@@ -106,8 +127,6 @@ release.
   ([#1810](https://github.com/open-telemetry/opentelemetry-specification/pull/1810))
 - Clarifications for `http.client_ip` and `http.host`.
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
-- Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
-  ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
 - Add `k8s.container.restart_count` Resource attribute.

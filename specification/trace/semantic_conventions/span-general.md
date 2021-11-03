@@ -28,7 +28,7 @@ while the `net.host.*` properties describe the local end.
 In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
 the `net.peer.*` properties of a client are equal to the `net.host.*` properties of the server and vice versa.
 
-<a name="nettransport-attribute">
+<a name="nettransport-attribute"></a>
 
 <!-- semconv network -->
 | Attribute  | Type | Description  | Examples  | Required |
