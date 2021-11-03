@@ -4,15 +4,15 @@
 
 Some content.
 
-##### Requirement 1
+##### Requirement Some requirement
 
 > This **MUST** be done.
 
-##### Requirement 2
+##### Requirement Some other requirement
 
 > This **MUST NOT** be done.
 
-##### Requirement 3
+##### Requirement Another requirement-name
 
 > This **SHOULD** be done
 > in a certain way.
@@ -29,15 +29,15 @@ Some content.
 > >
 > > > This is a condition.
 > > >
-> > > ##### Conditional Requirement 1.1.1.1
+> > > ##### Conditional Requirement Conditional requirement name
 > > >
 > > > > This **MAY** be done.
 > > >
-> > > ##### Conditional Requirement 1.1.1.2
+> > > ##### Conditional Requirement Other name
 > > >
 > > > > This **SHOULD NOT** be done.
 > > >
-> > > ##### Conditional Requirement 1.1.1.3
+> > > ##### Conditional Requirement Another name here
 > > >
 > > > > This **MAY** be done.
 >
@@ -45,13 +45,13 @@ Some content.
 >
 > > This is a condition.
 > >
-> > ##### Conditional Requirement 1.2.1
+> > ##### Conditional Requirement And another-name
 > >
 > > > This **MUST** be done.
 
 Some content.
 
-##### Requirement 4
+##### Requirement This is the name of-the-requirement
 
 > This **MUST NOT** be done.
 
@@ -67,7 +67,7 @@ Some content.
 > >
 > > > This is a condition.
 > > >
-> > > ##### Conditional Requirement 2.2.1
+> > > ##### Conditional Requirement The name here
 > > >
 > > > > This **MAY** be done.
 

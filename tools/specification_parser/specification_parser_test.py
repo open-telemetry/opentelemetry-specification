@@ -27,33 +27,39 @@ class TestSpecificationParser(TestCase):
         )
 
     def test_parse_requirements(self):
+        self.maxDiff = None
         self.assertEqual(
             [
                 {
-                    "id": "Requirement 1",
+                    "id": "Some requirement",
+                    "clean id": "some_requirement",
                     "content": "This MUST be done.",
                     "RFC 2119 keyword": "MUST"
                 },
                 {
-                    "id": "Requirement 2",
+                    "id": "Some other requirement",
+                    "clean id": "some_other_requirement",
                     "content": "This MUST NOT be done.",
                     "RFC 2119 keyword": "MUST NOT"
                 },
                 {
-                    "id": "Requirement 3",
+                    "id": "Another requirement-name",
+                    "clean id": "another_requirement_name",
                     "content": "This SHOULD be done in a certain way.",
                     "RFC 2119 keyword": "SHOULD"
                 },
                 {
-                    "id": "Requirement 4",
+                    "id": "This is the name of-the-requirement",
+                    "clean id": "this_is_the_name_of_the_requirement",
                     "content": "This MUST NOT be done.",
                     "RFC 2119 keyword": "MUST NOT"
                 },
             ],
-            parse_requirements([self.test_specification_md_path])
+            parse_requirements(self.test_specification_md_path)
         )
 
     def test_parse_conditions(self):
+        self.maxDiff = None
         self.assertEqual(
             [
                 {
@@ -69,17 +75,20 @@ class TestSpecificationParser(TestCase):
                                     "content": "This is a condition.",
                                     "children": [
                                         {
-                                            "id": "Conditional Requirement 1.1.1.1",
+                                            "id": "Conditional requirement name",
+                                            "clean id": "conditional_requirement_name",
                                             "content": "This MAY be done.",
                                             "RFC 2119 keyword": "MAY"
                                         },
                                         {
-                                            "id": "Conditional Requirement 1.1.1.2",
+                                            "id": "Other name",
+                                            "clean id": "other_name",
                                             "content": "This SHOULD NOT be done.",
                                             "RFC 2119 keyword": "SHOULD NOT"
                                         },
                                         {
-                                            "id": "Conditional Requirement 1.1.1.3",
+                                            "id": "Another name here",
+                                            "clean id": "another_name_here",
                                             "content": "This MAY be done.",
                                             "RFC 2119 keyword": "MAY"
                                         }
@@ -92,7 +101,8 @@ class TestSpecificationParser(TestCase):
                             "content": "This is a condition.",
                             "children": [
                                 {
-                                    "id": "Conditional Requirement 1.2.1",
+                                    "id": "And another-name",
+                                    "clean id": "and_another_name",
                                     "content": "This MUST be done.",
                                     "RFC 2119 keyword": "MUST"
                                 }
@@ -113,7 +123,8 @@ class TestSpecificationParser(TestCase):
                                     "content": "This is a condition.",
                                     "children": [
                                         {
-                                            "id": "Conditional Requirement 2.2.1",
+                                            "id": "The name here",
+                                            "clean id": "the_name_here",
                                             "content": "This MAY be done.",
                                             "RFC 2119 keyword": "MAY"
                                         }
@@ -124,5 +135,5 @@ class TestSpecificationParser(TestCase):
                     ]
                 }
             ],
-            parse_conditions([self.test_specification_md_path])
+            parse_conditions(self.test_specification_md_path)
         )

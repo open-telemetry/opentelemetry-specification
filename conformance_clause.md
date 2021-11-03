@@ -10,7 +10,7 @@ conformance clause follows the
 
 _Normative Parts_ of this specification define its strict requirements. They
 are identified by a level 5 header followed by the word *Requirement* or the
-words *Conditional Requirement* and an identifying number.
+words *Conditional Requirement* and an identifying name.
 
 #### Requirement Normative Parts
 
@@ -21,21 +21,20 @@ Normative Part.
 
 Here is an example of a Requirement Normative Part:
 
-##### Requirement 4
+##### Requirement Some name
 
 > The trace **MUST** have an identifier.
 
 This is the markdown code for the previous example:
 
 ```
-##### Requirement 4:
+##### Requirement Some name:
 
 > The trace **MUST** have an identifier.
 ```
 
 The header for a requirement must be of level 5 (a header that begins with 5 `#`
-characters). The requirement number must be unique per file and continuously increasing
-from 1.
+characters). The requirement name must be unique per file.
 
 A blank line must follow the header.
 
@@ -44,7 +43,7 @@ first character of any line that makes the content of the Normative Part.
 Multiple lines can start with this character:
 
 ```
-##### Requirement 6:
+##### Requirement Another name:
 
 > The span **MAY** include
 > additional metadata.
@@ -68,17 +67,15 @@ Here is an example of a Conditional Requirement Normative Part:
 
 > The API does not operate directly on the `Context`.
 >
-> ##### Conditional Requirement 1.1
+> ##### Conditional Requirement A name here
 >
 > > The API **MUST** provide an `extract` function to extract the `Baggage`
 > > from a `Context` instance.
 
 The header for a condition must be of level 5. The condition number must be
-unique per file and continuously increasing from 1. The conditional requirement
-number must be composed of the containing condition number a period and an
-unique number continuously increasing from 1. As more condition or requirement
+unique per file and continuously increasing from 1. As more condition or requirement
 levels are nested more numbers separated by periods are correspondingly to be
-added to the condition or conditional requirement numbers.
+added to the condition number.
 
 A blank line must follow the header.
 
@@ -97,7 +94,7 @@ This is the markdown code for the previous example:
 
 > The API does not operate directly on the `Context`.
 >
-> ##### Conditional Requirement 1.1
+> ##### Conditional Requirement Some other name
 >
 > > The API **MUST** provide an `extract` function to extract the `Baggage`
 > > from a `Context` instance.

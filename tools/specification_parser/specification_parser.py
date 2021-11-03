@@ -67,7 +67,7 @@ def parse_requirements(markdown_file_path):
         for requirement in [
             requirement_match.groupdict() for requirement_match in (
                 finditer(
-                    r"##### (?P<id>Requirement [0-9]+)\n\n"
+                    r"##### Requirement (?P<id>(.*?)+)\n\n"
                     r"> (?P<content>(.*?))\n\n",
                     markdown_file.read(),
                     DOTALL
@@ -80,12 +80,18 @@ def parse_requirements(markdown_file_path):
             requirements.append(
                 {
                     "id": requirement["id"],
+                    "clean id": sub(r"[^\w]", "_", requirement["id"].lower()),
                     "content": clean_content(content),
                     "RFC 2119 keyword": find_rfc_2119_keyword(content)
                 }
             )
 
     return requirements
+
+
+regex = compile_(
+    r"(?P<level>(> ?)*)(?P<pounds>##### )?(?P<content>.*)"
+)
 
 
 def parse_conditions(markdown_file_path):
@@ -101,10 +107,6 @@ def parse_conditions(markdown_file_path):
         ):
 
             stack = []
-
-            regex = compile_(
-                r"(?P<level>(> ?)*)(?P<pounds>##### )?(?P<content>.*)"
-            )
 
             text = ""
 
@@ -132,8 +134,12 @@ def parse_conditions(markdown_file_path):
                         "children": []
                     }
                 else:
+
+                    content = sub(r"Conditional Requirement ", "", content)
+
                     node = {
                         "id": content,
+                        "clean id": sub(r"[^\w]", "_", content.lower()),
                         "content": "",
                         "RFC 2119 keyword": None
                     }
@@ -159,11 +165,7 @@ def parse_conditions(markdown_file_path):
                         stack.pop()
 
                 text = ""
-                from ipdb import set_trace
-                try:
-                    stack[-1]["children"].append(node)
-                except:
-                    set_trace()
+                stack[-1]["children"].append(node)
                 stack.append(node)
 
             stack[-1]["content"] = clean_content(text)
