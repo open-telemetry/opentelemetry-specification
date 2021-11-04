@@ -449,7 +449,7 @@ and a non-probability Sampler, and the probability Sampler decides to
 sample, its p-value MUST be set in the `tracestate` regardless of the
 non-probability Sampler decision.
 
-##### Requirement: Use p-value 63 when a probability sampler decision not to sample when combined with non-probability sampler decision to sample
+##### Requirement: Use p-value 63 when a probability sampler decision not to sample is combined with a non-probability sampler decision to sample
 
 When combining Sampler decisions for a consistent probability Sampler
 and a non-probability Sampler, and the probability Sampler decides not
