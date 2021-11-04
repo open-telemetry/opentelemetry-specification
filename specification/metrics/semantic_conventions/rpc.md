@@ -86,6 +86,8 @@ For client-side metrics `net.peer.port` is required if the connection is IP-base
 For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
 Furthermore, setting [net.transport][] is required for non-IP connection like named pipe bindings.
 
+[net.transport]: ../../trace/semantic_conventions/span-general.md#nettransport-attribute
+
 ### Service name
 
 On the server process receiving and handling the remote procedure call, the service name provided in `rpc.service` does not necessarily have to match the [`service.name`][] resource attribute.
