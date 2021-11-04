@@ -114,19 +114,11 @@ Zero adjusted count is defined in a way that supports composition of
 probability and non-probability sampling.  Zero is assigned as the
 adjusted count when a probability sampler does not select a span.
 
-#### Power-of-two random sampling
+#### Simple random sampling
 
-A simple sampling scheme can be implemented using a random bit string
-as the input.  This scheme is limited to power-of-two sampling
-probabilities, as follows.
-
-1. Express the sampling probability as `2**-s`. For example, 25%
-   equals `2**-2` with `s=2`
-2. Count `r`, the number of consecutive zero bits in the input string
-3. If `s <= r`, select the item with adjusted count `2**s`.
-
-This algorithm is the basis of the consistent probability sampling
-approach used in OpenTelemetry, defined in greater detail below.
+Simple random sampling is a scheme for selecting items that chooses
+items independently with fixed probability `prob`.  The adjusted count
+of each selected item is set to `1 / prob`.
 
 #### Sampler
 
@@ -185,7 +177,7 @@ effectively unrepresented.
 A non-probability sampler is a Sampler that makes its decisions not
 based on chance, but instead uses arbitrary logic and internal state.
 
-## Probability sampling
+## Consistent Probability sampling
 
 The consistent sampling scheme adopted by OpenTelemetry propagates two
 values via the context, termed "p-value" and "r-value":
@@ -196,9 +188,19 @@ values via the context, termed "p-value" and "r-value":
 Both fields are propagated via the OpenTelemetry `tracestate` under
 the `ot` vendor tag using the rules for [tracestate
 handling](tracestate-handling.md).  Both fields are represented as
-unsigned integers requiring at most 6 bits of information.  An
-invariant will be stated that connects the `sampled` trace flag found
-in `traceparent` context to the r-value and p-value found in
+unsigned integers requiring at most 6 bits of information.
+
+Unlike the simple random sampling algorithm define above, this scheme
+selects items from among a fixed set of 63 distinct probability
+values, those being the integer powers of two between 1 and 2**-62.
+
+R-value encodes which among the 63 possibilities will decide to sample
+for a given trace. P-value encodes the adjusted count for child
+contexts (i.e., consumers of `tracestate`) and consumers of sampled
+spans.
+
+An invariant will be stated that connects the `sampled` trace flag
+found in `traceparent` context to the r-value and p-value found in
 `tracestate` context.
 
 ### Conformance
@@ -211,10 +213,10 @@ interpreting span adjusted counts.
 
 Producers of OpenTelemetry `tracestate` containing p-value and r-value
 fields are required to meet the behavioral requirements stated for the
-ConsistentProbabilityBased sampler, to ensure statistically valid
-outcomes, using a test suite included in this specification, so that
+ConsistentProbabilityBased sampler and to ensure statistically valid
+outcomes.  A test suite is included in this specification so that
 users and consumers of OpenTelemetry `tracestate` can be assured of
-accurate span counts in a Span-to-metrics pipeline.
+accuracy in Span-to-metrics pipelines.
 
 ### Context invariants
 
@@ -378,9 +380,9 @@ The `ConsistentProbabilityBased` Sampler MUST unset `p` from the
 ##### Requirement: ConsistentProbabilityBased sampler sets p when sampling
 
 The `ConsistentProbabilityBased` Sampler MUST set `p` when it decides
-to sample.
+to sample according to its configured sampling probability.
 
-##### Requirement: ConsistentProbabilityBased sampler sets p using an unbiased algorithm
+##### Requirement: ConsistentProbabilityBased records unbiased adjusted counts
 
 The `ConsistentProbabilityBased` Sampler MUST set `p` so that the
 adjusted count interpreted from the `tracestate` is an unbiased
