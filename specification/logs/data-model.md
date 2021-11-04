@@ -1318,8 +1318,8 @@ for an exhaustive list.
 |Warning      |Warning    |WARN  |Warn  | WARNING         |WARN          |
 |Error        |Error      |ERROR |Error | SEVERE          |ERROR         |
 |Critical     |Critical   |      |Dpanic|                 |ERROR2        |
-|Emergency    |           |      |Panic |                 |ERROR3        |
-|Alert        |           |FATAL |Fatal |                 |FATAL         |
+|Alert        |           |      |Panic |                 |ERROR3        |
+|Emergency    |           |FATAL |Fatal |                 |FATAL         |
 
 ## References
 
