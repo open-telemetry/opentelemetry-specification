@@ -295,26 +295,13 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 | Create OpenTracing Shim                                                      |   |    |   |      |    |   |    |   |    |     |
 | Create OpenTracing Shim with custom propagators                              |   |    |   |      |    |   |    |   |    |     |
 | [Tracer](specification/compatibility/opentracing.md#tracer-shim)             |   |    |   |      |    |   |    |   |    |     |
-| Inject SpanContext                                                           |   |    |   |      |    |   |    |   |    |     |
-| Extract SpanContext                                                          |   |    |   |      |    |   |    |   |    |     |
 | [Span](specification/compatibility/opentracing.md#span-shim)                 |   |    |   |      |    |   |    |   |    |     |
-| Get Context                                                                  |   |    |   |      |    |   |    |   |    |     |
-| Get Baggage Item                                                             |   |    |   |      |    |   |    |   |    |     |
-| Set Baggage Item                                                             |   |    |   |      |    |   |    |   |    |     |
-| SetTag                                                                       |   |    |   |      |    |   |    |   |    |     |
-| SetTag with error mapping                                                    |   |    |   |      |    |   |    |   |    |     |
-| Log                                                                          |   |    |   |      |    |   |    |   |    |     |
-| Log with error mapping                                                       |   |    |   |      |    |   |    |   |    |     |
-| Log with explicit timestamp                                                  |   |    |   |      |    |   |    |   |    |     |
-| Finish                                                                       |   |    |   |      |    |   |    |   |    |     |
-| Finish with explicit timestamp                                               |   |    |   |      |    |   |    |   |    |     |
-| SpanContext changes visible among execution units                            |   |    |   |      |    |   |    |   |    |     |
+| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim)   |   |    |   |      |    |   |    |   |    |     |
+| SpanContext changes visible among different execution units                  |   |    |   |      |    |   |    |   |    |     |
 | [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim) |   |    |   |      |    |   |    |   |    |     |
-| Activate Span                                                                |   |    |   |      |    |   |    |   |    |     |
-| Activate Span storing Baggage in Context                                     |   |    |   |      |    |   |    |   |    |     |
-| Activate Span storing Shim Obj in Context                                    |   |    |   |      |    |   |    |   |    |     |
-| GetActive Span                                                               |   |    |   |      |    |   |    |   |    |     |
-| GetActive Span fetching Shim Obj in Context                                  |   |    |   |      |    |   |    |   |    |     |
+| ScopeManager caching Shim objects in Context                                 |   |    |   |      |    |   |    |   |    |     |
+| Semantic convention mapping for attributes/events                            |   |    |   |      |    |   |    |   |    |     |
+| Migration to OpenTelemetry guide                                             |   |    |   |      |    |   |    |   |    |     |
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
 [py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059
