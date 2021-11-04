@@ -7,7 +7,7 @@
   * [Definitions](#definitions)
     + [Sampling](#sampling)
     + [Adjusted count](#adjusted-count)
-    + [Power-of-two random sampling](#power-of-two-random-sampling)
+    + [Simple random sampling](#simple-random-sampling)
     + [Sampler](#sampler)
     + [Parent-based sampler](#parent-based-sampler)
     + [Probability sampler](#probability-sampler)
@@ -15,7 +15,7 @@
     + [Always-on sampler](#always-on-sampler)
     + [Always-off sampler](#always-off-sampler)
     + [Non-probability sampler](#non-probability-sampler)
-- [Probability sampling](#probability-sampling)
+- [Consistent Probability sampling](#consistent-probability-sampling)
   * [Conformance](#conformance)
   * [Context invariants](#context-invariants)
     + [Sampled flag](#sampled-flag)
@@ -24,6 +24,7 @@
       - [Requirement: Out-of-range p-values are unset](#requirement-out-of-range-p-values-are-unset)
     + [R-value](#r-value)
       - [Requirement: Out-of-range r-values unset both p and r](#requirement-out-of-range-r-values-unset-both-p-and-r)
+      - [Requirement: R-value is generated with the correct probabilities](#requirement-r-value-is-generated-with-the-correct-probabilities)
   * [Samplers](#samplers)
     + [ParentConsistentProbabilityBased sampler](#parentconsistentprobabilitybased-sampler)
       - [Requirement: ParentBased API compatibility](#requirement-parentbased-api-compatibility)
@@ -34,7 +35,7 @@
       - [Requirement: ConsistentProbabilityBased sampler sets r for root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-root-span)
       - [Requirement: ConsistentProbabilityBased sampler unsets p when not sampling](#requirement-consistentprobabilitybased-sampler-unsets-p-when-not-sampling)
       - [Requirement: ConsistentProbabilityBased sampler sets p when sampling](#requirement-consistentprobabilitybased-sampler-sets-p-when-sampling)
-      - [Requirement: ConsistentProbabilityBased sampler sets p using an unbiased algorithm](#requirement-consistentprobabilitybased-sampler-sets-p-using-an-unbiased-algorithm)
+      - [Requirement: ConsistentProbabilityBased records unbiased adjusted counts](#requirement-consistentprobabilitybased-records-unbiased-adjusted-counts)
       - [Requirement: ConsistentProbabilityBased sampler sets r for non-root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-non-root-span)
       - [Requirement: ConsistentProbabilityBased sampler acts like AlwaysOff sampler for probabilities less than 2**-62](#requirement-consistentprobabilitybased-sampler-acts-like-alwaysoff-sampler-for-probabilities-less-than-2-62)
   * [Composition rules](#composition-rules)
@@ -52,6 +53,7 @@
       - [Requirement: Pass 15 non-power-of-two statistical tests](#requirement-pass-15-non-power-of-two-statistical-tests)
     + [Test procedure: exact powers of two](#test-procedure-exact-powers-of-two)
       - [Requirement: Pass 5 power-of-two statistical tests](#requirement-pass-5-power-of-two-statistical-tests)
+    + [Test implementation](#test-implementation)
 
 <!-- tocstop -->
 
@@ -180,10 +182,7 @@ based on chance, but instead uses arbitrary logic and internal state.
 ## Consistent Probability sampling
 
 The consistent sampling scheme adopted by OpenTelemetry propagates two
-values via the context, termed "p-value" and "r-value":
-
-1. p-value: the "parent probability" value can be set independently by any span in the trace, for its children, and informs child parent-based Samplers of their adjusted count
-2. r-value: the "randomness" value is determined and propagated from the root to all spans in the trace and serves to make sampling decisions consistent
+values via the context, termed "p-value" and "r-value".
 
 Both fields are propagated via the OpenTelemetry `tracestate` under
 the `ot` vendor tag using the rules for [tracestate
@@ -194,10 +193,10 @@ Unlike the simple random sampling algorithm define above, this scheme
 selects items from among a fixed set of 63 distinct probability
 values, those being the integer powers of two between 1 and 2**-62.
 
-R-value encodes which among the 63 possibilities will decide to sample
-for a given trace. P-value encodes the adjusted count for child
-contexts (i.e., consumers of `tracestate`) and consumers of sampled
-spans.
+R-value encodes which among the 63 possibilities will consistently
+decide to sample for a given trace. P-value encodes the adjusted count
+for child contexts (i.e., consumers of `tracestate`) and consumers of
+sampled spans to record for use in Span-to-metrics pipelines.
 
 An invariant will be stated that connects the `sampled` trace flag
 found in `traceparent` context to the r-value and p-value found in
@@ -306,7 +305,8 @@ for spans of a given trace, as follows:
 These probabilities are specified to ensure that conforming Sampler
 implementations record spans with correct adjusted counts.  The
 recommended method of generating r-values is to count the number of
-leading 0s in a string of 62 random bits.
+leading 0s in a string of 62 random bits, however it is not required
+to use this approach.
 
 ##### Requirement: Out-of-range r-values unset both p and r
 
