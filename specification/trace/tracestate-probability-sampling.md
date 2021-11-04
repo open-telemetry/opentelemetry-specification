@@ -116,12 +116,6 @@ Zero adjusted count is defined in a way that supports composition of
 probability and non-probability sampling.  Zero is assigned as the
 adjusted count when a probability sampler does not select a span.
 
-#### Simple random sampling
-
-Simple random sampling is a scheme for selecting items that chooses
-items independently with fixed probability `prob`.  The adjusted count
-of each selected item is set to `1 / prob`.
-
 #### Sampler
 
 A Sampler provides configurable logic, used by the SDK, for selecting
@@ -189,14 +183,23 @@ the `ot` vendor tag using the rules for [tracestate
 handling](tracestate-handling.md).  Both fields are represented as
 unsigned integers requiring at most 6 bits of information.
 
-Unlike the simple random sampling algorithm define above, this scheme
-selects items from among a fixed set of 63 distinct probability
-values, those being the integer powers of two between 1 and 2**-62.
+This sampling scheme selects items from among a fixed set of 63
+distinct probability values. The set of supported probabilities
+includes the integer powers of two between 1 and 2**-62.
 
 R-value encodes which among the 63 possibilities will consistently
-decide to sample for a given trace. P-value encodes the adjusted count
-for child contexts (i.e., consumers of `tracestate`) and consumers of
-sampled spans to record for use in Span-to-metrics pipelines.
+decide to sample for a given trace.  Specifically, r-value specifies
+the smallest probability that will decide to sample a given trace in
+terms of the corresponding p-value.  For example, a trace with r-value
+0 will sample spans configured for 100% sampling, while r-value 1 will
+sample spans configured for 50% or 100% sampling, and so on through
+r-value 62 which will sample every span.
+
+P-value encodes the adjusted count for child contexts (i.e., consumers
+of `tracestate`) and consumers of sampled spans to record for use in
+Span-to-metrics pipelines.  A special p-value of 63 is defined to mean
+zero adjusted count, which helps define composition rules for
+non-probability samplers.
 
 An invariant will be stated that connects the `sampled` trace flag
 found in `traceparent` context to the r-value and p-value found in
