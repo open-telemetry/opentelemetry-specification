@@ -214,7 +214,7 @@ fields are required to meet the behavioral requirements stated for the
 ConsistentProbabilityBased sampler, to ensure statistically valid
 outcomes, using a test suite included in this specification, so that
 users and consumers of OpenTelemetry `tracestate` can be assured of
-accurate span counts in a span-to-metrics pipeline.
+accurate span counts in a Span-to-metrics pipeline.
 
 ### Context invariants
 
@@ -240,7 +240,7 @@ Probability sampling uses additional information to enable consistent
 decision making and to record the adjusted count of sampled spans.
 When both values are defined and in the specified range, the invariant
 between r-value and p-value and the `sampled` trace flag states that
-`sampled` is equivalent to the expression `p <= r || p == 63`.
+`((p <= r) == sampled) OR (sampled AND (p == 63)) == TRUE`.
 
 The invariant between `sampled`, `p`, and `r` only applies when both
 `p` and `r` are present.  When the invariant is violated, the
@@ -259,7 +259,7 @@ Zero adjusted count is represented by the special p-value 63,
 otherwise the p-value is set to the negative base-2 logarithm of
 sampling probability:
 
-| P-value | Parent Probability | Adjusted count |
+| p-value | Parent Probability | Adjusted count |
 | -----   | -----------        | --             |
 | 0       | 1                  | 1              |
 | 1       | 1/2                | 2              |
@@ -287,25 +287,35 @@ to participate in consistent probability sampling.
 R-value determines which sampling probabilities and will not sample
 for spans of a given trace, as follows:
 
-| R-value        | Implied sampling probabilities |
-| -------------- | ----------------------         |
-| 0              | 1                              |
-| 1              | 1/2 and above                  |
-| 2              | 1/4 and above                  |
-| 3              | 1/8 and above                  |
-| ...            | ...                            |
-| 0 <= r <= 62   | 2**-r and above                |
-| ...            | ...                            |
-| 59             | 2**-59 and above               |
-| 60             | 2**-60 and above               |
-| 61             | 2**-61 and above               |
-| 62             | 2**-62 and above               |
+| r-value          | Probability of r-value   | Implied sampling probabilities |
+| ---------------- | ------------------------ | ----------------------         |
+| 0                | 1/2                      | 1                              |
+| 1                | 1/4                      | 1/2 and above                  |
+| 2                | 1/8                      | 1/4 and above                  |
+| 3                | 1/16                     | 1/8 and above                  |
+| ...              | ...                      | ...                            |
+| 0 <= r <= 61     | 2**-(r+1)                | 2**-r and above                |
+| ...              | ...                      | ...                            |
+| 59               | 2**-60                   | 2**-59 and above               |
+| 60               | 2**-61                   | 2**-60 and above               |
+| 61               | 2**-62                   | 2**-61 and above               |
+| 62               | 2**-62                   | 2**-62 and above               |
+
+These probabilities are specified to ensure that conforming Sampler
+implementations record spans with correct adjusted counts.  The
+recommended method of generating r-values is to count the number of
+leading 0s in a string of 62 random bits.
 
 ##### Requirement: Out-of-range r-values unset both p and r
 
 Samplers SHOULD unset both `r` and `p` from the `tracestate` if the
 unsigned value is of `r` is greater than 62 before using the
 `tracestate` to make a sampling decision.
+
+##### Requirement: R-value is generated with the correct probabilities
+
+Samplers MUST generate r-values using a randomized scheme that
+produces each value with the specified probability.
 
 ### Samplers
 
