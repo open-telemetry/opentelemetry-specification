@@ -259,7 +259,7 @@ Zero adjusted count is represented by the special p-value 63,
 otherwise the p-value is set to the negative base-2 logarithm of
 sampling probability:
 
-| p-value | Parent Probability | Adjusted count |
+| P-value | Parent Probability | Adjusted count |
 | -----   | -----------        | --             |
 | 0       | 1                  | 1              |
 | 1       | 1/2                | 2              |
@@ -287,19 +287,19 @@ to participate in consistent probability sampling.
 R-value determines which sampling probabilities and will not sample
 for spans of a given trace, as follows:
 
-| r-value          | Probability of r-value   | Implied sampling probabilities |
-| ---------------- | ------------------------ | ----------------------         |
-| 0                | 1/2                      | 1                              |
-| 1                | 1/4                      | 1/2 and above                  |
-| 2                | 1/8                      | 1/4 and above                  |
-| 3                | 1/16                     | 1/8 and above                  |
-| ...              | ...                      | ...                            |
-| 0 <= r <= 61     | 1/(2**(-r-1))            | 2**(-r) and above              |
-| ...              | ...                      | ...                            |
-| 59               | 2**-60                   | 2**-59 and above               |
-| 60               | 2**-61                   | 2**-60 and above               |
-| 61               | 2**-62                   | 2**-61 and above               |
-| 62               | 2**-62                   | 2**-62 and above               |
+| R-value        | Implied sampling probabilities |
+| -------------- | ----------------------         |
+| 0              | 1                              |
+| 1              | 1/2 and above                  |
+| 2              | 1/4 and above                  |
+| 3              | 1/8 and above                  |
+| ...            | ...                            |
+| 0 <= r <= 62   | 2**-r and above                |
+| ...            | ...                            |
+| 59             | 2**-59 and above               |
+| 60             | 2**-60 and above               |
+| 61             | 2**-61 and above               |
+| 62             | 2**-62 and above               |
 
 ##### Requirement: Out-of-range r-values unset both p and r
 
