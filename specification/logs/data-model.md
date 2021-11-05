@@ -398,8 +398,10 @@ Type: any.
 Description: A value containing the body of the log record (see the description
 of `any` type above). Can be for example a human-readable string message
 (including multi-line) describing the event in a free form or it can be a
-structured data composed of arrays and maps of other values. Can vary for each
-occurrence of the event coming from the same source. This field is optional.
+structured data composed of arrays and maps of other values. First-party
+Applications SHOULD use a string message. However, a structured body may be
+necessary to preserve the semantics of some existing log formats. Can vary for
+each occurrence of the event coming from the same source. This field is optional.
 
 ### Field: `Resource`
 
@@ -1316,8 +1318,8 @@ for an exhaustive list.
 |Warning      |Warning    |WARN  |Warn  | WARNING         |WARN          |
 |Error        |Error      |ERROR |Error | SEVERE          |ERROR         |
 |Critical     |Critical   |      |Dpanic|                 |ERROR2        |
-|Emergency    |           |      |Panic |                 |ERROR3        |
-|Alert        |           |FATAL |Fatal |                 |FATAL         |
+|Alert        |           |      |Panic |                 |ERROR3        |
+|Emergency    |           |FATAL |Fatal |                 |FATAL         |
 
 ## References
 

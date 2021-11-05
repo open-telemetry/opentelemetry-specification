@@ -36,6 +36,9 @@ release.
 
 ### Logs
 
+- Fix Syslog severity number mapping in the example.
+  ([#2091](https://github.com/open-telemetry/opentelemetry-specification/pull/2091))
+
 ### Resource
 
 ### Semantic Conventions
@@ -67,6 +70,9 @@ release.
 - Make OTLP/HTTP the recommended default transport ([#1969](https://github.com/open-telemetry/opentelemetry-specification/pull/1969))
 
 ### SDK Configuration
+
+- Unset and empty environment variables are equivalent.
+  ([#2045](https://github.com/open-telemetry/opentelemetry-specification/pull/2045))
 
 ### Telemetry Schemas
 
