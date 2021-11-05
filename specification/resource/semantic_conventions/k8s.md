@@ -87,7 +87,7 @@ to a running container.
 <!-- semconv k8s.container -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `k8s.container.name` | string | The name of the Container in a Pod template. | `redis` | No |
+| `k8s.container.name` | string | The name of the Container from Pod specification, must be unique within a Pod. Container runtime usually uses different globally unique name (`container.name`). | `redis` | No |
 | `k8s.container.restart_count` | int | Number of times the container was restarted. This attribute can be used to identify a particular container (running or stopped) within a container spec. | `0`; `2` | No |
 <!-- endsemconv -->
 
