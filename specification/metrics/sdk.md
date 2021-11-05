@@ -420,7 +420,7 @@ information:
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
-`Exemplar` sampling MUST be an opt-in feature. When not enabled, the SDK SHOULD not have overhead related to exemplar sampling.
+`Exemplar` sampling MUST be an opt-in feature. When not enabled, the SDK SHOULD NOT have overhead related to exemplar sampling.
 
 A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
 
