@@ -420,7 +420,7 @@ information:
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
-A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have overhead related to exemplar sampling.
+`Exemplar` sampling MUST be an opt-in feature. When not enabled, the SDK SHOULD not have overhead related to exemplar sampling.
 
 A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
 
@@ -477,8 +477,6 @@ are not preserved by aggregation or view configuration. Specifically, at a
 minimum, joining together attributes on an `Exemplar` with those available
 on its associated metric data point should result in the full set of attributes
 from the original sample measurement.
-
-The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar defaults
 
