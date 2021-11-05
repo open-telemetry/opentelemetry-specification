@@ -199,7 +199,6 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                                   |          |    |      |    |        |      |        |     |      |     |      |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
 
-
 ## Resource
 
 | Feature                                                                                                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
