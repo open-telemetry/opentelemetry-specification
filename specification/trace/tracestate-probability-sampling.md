@@ -147,13 +147,15 @@ probability is treated as a special, non-probabilistic case.
 
 #### Consistent probability sampler
 
-A consistent probability sampler is a Sampler that supports independent
-sampling decisions at each span in a trace while maintaining that 
-traces will be complete with probability equal to the minimum sampling 
-probability across the trace.  Consistent probability sampling requires that 
-for any span in a given trace, if a Sampler with lesser sampling probability 
-selects the span for sampling, then the span would also be selected by a
-Sampler configured with greater sampling probability.
+A consistent probability sampler is a Sampler that supports
+independent sampling decisions at each span in a trace while
+maintaining that traces will be complete with a certain minimum
+probability across the trace.
+
+Consistent probability sampling requires that for any span in a given
+trace, if a Sampler with lesser sampling probability selects the span
+for sampling, then the span would also be selected by a Sampler
+configured with greater sampling probability.
 
 #### Always-on sampler
 
@@ -218,6 +220,21 @@ ConsistentProbabilityBased sampler and to ensure statistically valid
 outcomes.  A test suite is included in this specification so that
 users and consumers of OpenTelemetry `tracestate` can be assured of
 accuracy in Span-to-metrics pipelines.
+
+### Completeness guarantee
+
+This specification defines consistent sampling for power-of-two
+sampling probabilities.  When a sampler is configured with a
+non-power-of-two sampling probability, the sampler will
+probabilistically choose between the nearest powers of two, and as a
+result, trace completeness is only ensured at the smallest power of
+two greater than or equal to the minimum sampling rate across the
+trace, with one exception.
+
+The root span in a trace can be configured for arbitrary sampling
+probability without risking incomplete traces, therefore
+non-power-of-two sampling probability is recomended for use only at
+trace roots.
 
 ### Context invariants
 
@@ -458,7 +475,16 @@ and a non-probability Sampler, and the probability Sampler decides not
 to sample but the non-probability does sample, p-value 63 MUST be set
 in the `tracestate`.
 
-### Consumer recommendations
+### Producer and consumer recommendations
+
+#### Trace producers
+
+As stated in the [completeness guarantee](#completeness-guarantee),
+traces will be possibly incomplete when the sampling probability is
+not a power of two for non-root spans.  When complete traces are
+desired, users are recommended to configure non-root spans for
+sampling by a parent-based sampler or an exact power-of-two consistent
+probability sampler.
 
 #### Trace consumers
 
