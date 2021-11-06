@@ -752,7 +752,7 @@ Metrics Data Model specification for more details.
 
 Note: it is highly recommended that implementors design the `Metric` data type
 _based on_ the [Data Model](./datamodel.md), rather than directly use the data
-types generated from the proto files (because the types generated from proto
+types generated from the [proto files](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto) (because the types generated from proto
 files are not guaranteed to be backward compatible).
 
 Returns: `ExportResult`
