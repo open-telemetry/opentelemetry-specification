@@ -863,7 +863,7 @@ cumulative aggregation temporality, the rate contributed to the
 timeseries by each point depends on the prior point value in the
 stream.
 
-To correctly compute the rate contribution of the first point in a
+To correctly compute the rate contribution of the first point in an
 unbroken sequence requires knowing whether it is the first point.
 Unknown start-time reset points appear with `TimeUnixNano` equal to
 the `StartTimeUnixNano` of a stream of points, in which case the rate
