@@ -157,7 +157,40 @@ trace, if a Sampler with lesser sampling probability selects the span
 for sampling, then the span would also be selected by a Sampler
 configured with greater sampling probability.
 
-#### Always-on sampler
+#### Trace completeness
+
+A trace is said to be complete when all of the spans belonging to the
+trace are collected.  When at least one span is collected but not all
+spans are collected, the trace is considered incomplete.
+
+Trace incompleteness may happen on purpose (e.g., through sampling
+configuration), or by accident (e.g., through collection errors).  The
+OpenTelemetry trace data model supports a _one-way_ test for
+incompleteness: for any non-root span, the trace is definitely
+incomplete if the span's parent span was not collected.
+
+Incomplete traces that result from sampling configuration (i.e., on
+purpose) are known as partial traces.  An important subset of the
+partial traces are those which are also complete subtraces.  A
+complete subtrace is defined at span S when:
+
+- S is not a root span
+- S's parent was not collected
+- S either has no children or all the children of S are also complete
+subtraces.
+
+Since the test for an incompleteness is one-way, it is important to
+know which sampling configurations may lead to incomplete traces.
+Sampling configurations that lead naturally to complete traces and
+complete subtraces are [discussed below](#trace-producers).
+
+#### Non-probability sampler
+
+A non-probability sampler is a Sampler that makes its decisions not
+based on chance, but instead uses arbitrary logic and internal state.
+The adjusted count of spans sampled by a non-probabiliy is unknown.
+
+#### Always-on consistent probability sampler
 
 An always-on sampler is another name for a consistent probability
 sampler with probability equal to one.
@@ -165,14 +198,9 @@ sampler with probability equal to one.
 #### Always-off sampler
 
 An always-off Sampler has the effect of disabling a span completely,
-effectively excluding it from the population.  This is not defined as
-a probability sampler with zero probability, because these spans are
-effectively unrepresented.
-
-#### Non-probability sampler
-
-A non-probability sampler is a Sampler that makes its decisions not
-based on chance, but instead uses arbitrary logic and internal state.
+effectively excluding it from the population.  This is defined as a
+non-probability sampler, not a zero-percent probability sampler,
+because the spans are effectively unrepresented.
 
 ## Consistent Probability sampling
 
@@ -216,7 +244,7 @@ interpreting span adjusted counts.
 
 Producers of OpenTelemetry `tracestate` containing p-value and r-value
 fields are required to meet the behavioral requirements stated for the
-ConsistentProbabilityBased sampler and to ensure statistically valid
+`ConsistentProbabilityBased` sampler and to ensure statistically valid
 outcomes.  A test suite is included in this specification so that
 users and consumers of OpenTelemetry `tracestate` can be assured of
 accuracy in Span-to-metrics pipelines.
@@ -226,15 +254,17 @@ accuracy in Span-to-metrics pipelines.
 This specification defines consistent sampling for power-of-two
 sampling probabilities.  When a sampler is configured with a
 non-power-of-two sampling probability, the sampler will
-probabilistically choose between the nearest powers of two, and as a
-result, trace completeness is only ensured at the smallest power of
-two greater than or equal to the minimum sampling rate across the
-trace, with one exception.
+probabilistically choose between the nearest powers of two
 
-The root span in a trace can be configured for arbitrary sampling
-probability without risking incomplete traces, therefore
-non-power-of-two sampling probability is recomended for use only at
-trace roots.
+When a single consistent probability sampler is used at the root of a
+trace, the resulting traces are always complete (ignoring collection
+errors).  This property holds even for non-power-of-two sampling
+probabilities.
+
+When multiple consistent probability samplers are used in the same
+trace, in general, trace completeness is ensured at the smallest power
+of two greater than or equal to the minimum sampling probability
+across the trace.
 
 ### Context invariants
 
@@ -480,22 +510,40 @@ in the `tracestate`.
 #### Trace producers
 
 As stated in the [completeness guarantee](#completeness-guarantee),
-traces will be possibly incomplete when the sampling probability is
-not a power of two for non-root spans.  When complete traces are
-desired, users are recommended to configure non-root spans for
-sampling by a parent-based sampler or an exact power-of-two consistent
-probability sampler.
+traces will be possibly incomplete when configuring multiple
+consistent probability samplers in the same trace.  One way to avoid
+producing incomplete traces is to use parent-based samplers except for
+root spans.
+
+There is a simple test for trace incompleteness, but it is a one-way
+test and does not detect when child spans are uncollected.  One way to
+avoid producing incomplete traces is to avoid configuring
+non-power-of-two sampling probabilities for non-root spans, because
+completeness is not guaranteed for non-power-of-two sampling
+probabilities.
+
+Complete subtraces will be produced when the sequence of sampling
+probabilities from the root of a trace to its leaves is
+non-descending.  To ensure complete sub-traces are produced, configure
+a child-span's sampler with probability greater than or equal to the
+parent span's sampling probability.
 
 #### Trace consumers
 
+Trace consumers are expected to apply the simple one-way test for
+incompleteness.  When non-root spans are configured with independent
+sampling probabilities, traces may be complete in a way that cannot be
+detected.  Because of the one-way test, consumers wanting to ensure
+complete traces are expected to know the minimum sampling probability
+across the system.
+
 Due to the `ConsistentProbabilityBased` Sampler requirement about
 setting `r` when it is unset for a non-root span, trace consumers are
-advised to check traces for r-value consistency.
-
-When a single trace contains more than a single distinct `r` value, it
-means the trace was not correctly sampled at the root for probability
-sampling.  While the adjusted count of each span is correct in this
-scenario, it may be impossible to detect complete traces.
+advised to check traces for r-value consistency.  When a single trace
+contains more than a single distinct `r` value, it means the trace was
+not correctly sampled at the root for probability sampling.  While the
+adjusted count of each span is correct in this scenario, it may be
+impossible to detect complete traces.
 
 ##### Recommendation: Recognize inconsistent r-values
 
