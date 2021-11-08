@@ -9,32 +9,33 @@ Some other fundamental terms are documented in the [overview document](overview.
 <!-- toc -->
 
 - [User Roles](#user-roles)
-  * [Application Owner](#application-owner)
-  * [Library Author](#library-author)
-  * [Instrumentation Author](#instrumentation-author)
-  * [Plugin Author](#plugin-author)
+  - [Application Owner](#application-owner)
+  - [Library Author](#library-author)
+  - [Instrumentation Author](#instrumentation-author)
+  - [Plugin Author](#plugin-author)
 - [Common](#common)
-  * [Signals](#signals)
-  * [Packages](#packages)
-  * [ABI Compatibility](#abi-compatibility)
-  * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
-  * [Manual Instrumentation](#manual-instrumentation)
-  * [Automatic Instrumentation](#automatic-instrumentation)
-  * [Telemetry SDK](#telemetry-sdk)
-  * [Constructors](#constructors)
-  * [SDK Plugins](#sdk-plugins)
-  * [Exporter Library](#exporter-library)
-  * [Instrumented Library](#instrumented-library)
-  * [Instrumentation Library](#instrumentation-library)
-  * [Tracer Name / Meter Name](#tracer-name--meter-name)
+  - [Signals](#signals)
+  - [Packages](#packages)
+  - [ABI Compatibility](#abi-compatibility)
+  - [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
+  - [Manual Instrumentation](#manual-instrumentation)
+  - [Automatic Instrumentation](#automatic-instrumentation)
+  - [Telemetry SDK](#telemetry-sdk)
+  - [Constructors](#constructors)
+  - [SDK Plugins](#sdk-plugins)
+  - [Exporter Library](#exporter-library)
+  - [Instrumented Library](#instrumented-library)
+  - [Instrumentation Library](#instrumentation-library)
+  - [Tracer Name / Meter Name](#tracer-name--meter-name)
+  - [Service](#service)
 - [Logs](#logs)
-  * [Log Record](#log-record)
-  * [Log](#log)
-  * [Embedded Log](#embedded-log)
-  * [Standalone Log](#standalone-log)
-  * [Log Attributes](#log-attributes)
-  * [Structured Logs](#structured-logs)
-  * [Flat File Logs](#flat-file-logs)
+  - [Log Record](#log-record)
+  - [Log](#log)
+  - [Embedded Log](#embedded-log)
+  - [Standalone Log](#standalone-log)
+  - [Log Attributes](#log-attributes)
+  - [Structured Logs](#structured-logs)
+  - [Flat File Logs](#flat-file-logs)
 
 <!-- tocstop -->
 
@@ -152,6 +153,12 @@ Synonyms: *Instrumenting Library*.
 This refers to the `name` and (optional) `version` arguments specified when
 creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider)).
 The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
+
+### Service
+
+`Services` expose unique functions to another and are identified by a namespace and a name. There are one or more instances of the same service called `Service Instance`. Often such a service instance is enclosed within an operating system process. There could be multiple versions of the same service.
+
+See [Resource Semantic Conventions - Service](resource/semantic_conventions/README.md#service) for more details and naming requirements.
 
 ## Logs
 
