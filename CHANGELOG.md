@@ -40,6 +40,8 @@ release.
 
 - Fix Syslog severity number mapping in the example.
   ([#2091](https://github.com/open-telemetry/opentelemetry-specification/pull/2091))
+- Add log.* attributes.
+  ([#2022](https://github.com/open-telemetry/opentelemetry-specification/pull/2022))
 
 ### Resource
 
