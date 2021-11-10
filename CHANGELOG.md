@@ -73,6 +73,8 @@ release.
 
 ### Semantic Conventions
 
+- Add `k8s.container.restart_count` Resource attribute.
+  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 - Add "IBM z/Architecture" (`s390x`) to `host.arch`
   ([#2055](https://github.com/open-telemetry/opentelemetry-specification/pull/2055))
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
@@ -96,6 +98,8 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Clarify default for OTLP endpoint should, not must, be https
+  ([#1997](https://github.com/open-telemetry/opentelemetry-specification/pull/1997))
 - Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
   ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975),
   [#1985](https://github.com/open-telemetry/opentelemetry-specification/pull/1985))
@@ -167,8 +171,6 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
-- Add `k8s.container.restart_count` Resource attribute.
-  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 
 ### Compatibility
 
