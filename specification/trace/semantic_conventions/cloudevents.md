@@ -37,13 +37,12 @@ In case a CloudEvent is passed to the instrumented library with the Distributed 
 
 ### Processing
 
-To trace the processing of one or more CloudEvents, instrumentation SHOULD create a new span.
-If a single event is processed, instrumentation SHOULD use the remote trace context from the Distributed Tracing Extension as a parent or MAY instead add it as a link on the processing span.
-
-If multiple events are processed together, for each event being processed, if the event has the Distributed Tracing Extension populated, instrumentation MUST add a link to the trace context from the extension on the processing span.
+When instrumented library supports processing of a single CloudEvent, instrumentation SHOULD create a new span to trace it. Instrumentation SHOULD set the remote trace context from the Distributed Tracing Extension as a link on the processing span.
 
 **Span name:** `CloudEvents Process <event_type>`
 **Span kind:** CONSUMER
+
+Note: CloudEvents processing does not follow a common pattern. Some "CloudEvents-enabled" libraries expose handlers for processing (e.g.  [CloudEvents Go SDK](https://github.com/cloudevents/sdk-go#receive-your-first-cloudevent)) and can auto-instrument the processing calls. Alternatively, a library might offer a handler, but the user chooses not to use it, or a library does not offer one at all. In such cases, the instrumentation responsibility falls under the application owner.
 
 ## Attributes
 
