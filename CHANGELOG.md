@@ -9,6 +9,28 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+## v1.8.0 (2021-11-10)
+
+### Context
+
 - Add a section for OTel specific values in TraceState.
   ([#1852](https://github.com/open-telemetry/opentelemetry-specification/pull/1852))
 - Add `none` as a possible value for `OTEL_PROPAGATORS` to disable context
@@ -16,6 +38,8 @@ release.
   ([#2052](https://github.com/open-telemetry/opentelemetry-specification/pull/2052))
 
 ### Traces
+
+- No changes.
 
 ### Metrics
 
@@ -45,6 +69,8 @@ release.
 
 ### Resource
 
+- No changes.
+
 ### Semantic Conventions
 
 - Add "IBM z/Architecture" (`s390x`) to `host.arch`
@@ -65,6 +91,8 @@ release.
   ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
 
 ### Compatibility
+
+- No changes.
 
 ### OpenTelemetry Protocol
 
