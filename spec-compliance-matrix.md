@@ -197,8 +197,6 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                                     |          |    |      |    |        |      |        |     |      |     |      |       |
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                                   | X        |    |      |    |        |      |        |     |      |     |      |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
-| The metrics exporter provides a `shutdown` function.                                                                                                                         |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
-| The metrics exporter `shutdown` function do not block indefinitely.                                                                                                          |          | +  |  -   |    |        |      |        |     |      |     |   +  |       |
 
 ## Resource
 
