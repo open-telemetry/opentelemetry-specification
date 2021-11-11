@@ -185,6 +185,18 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The metrics exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.                                                                           |          |    |      |    |        |      |        |     |      |     |   +  |       |
 | The metrics exporter provides a `shutdown` function.                                                                                                                         |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
 | The metrics exporter `shutdown` function do not block indefinitely.                                                                                                          |          | +  |  -   |    |        |      |        |     |      |     |   +  |       |
+| The metrics SDK samples `Exemplar`s from measurements.                                                                                                                       |          |    |      |    |        |      |        |     |      |     |      |       |
+| Exemplar sampling can be disabled.                                                                                                                                           |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics SDK samples measurements in the context of a sampled trace by default.                                                                                           |          |    |      |    |        |      |        |     |      |     |      |       |
+| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
+| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken.                                                      |          |    |      |    |        |      |        |     |      |     |      |       |
+| Exemplars contain the timestamp when the measurement was taken.                                                                                                              |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics SDK provides an `ExemplarReservoir` interface or extension point.                                                                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
+| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.                                                      | X        |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`.                                 |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                                     |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                                   | X        |    |      |    |        |      |        |     |      |     |      |       |
+| An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Resource
 
@@ -245,6 +257,7 @@ Note: Support for environment variables is optional.
 |OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 |OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_METRICS_EXEMPLAR_FILTER                  |   |    |   |      |    |      |   |    |   |    |     |
 
 ## Exporters
 
