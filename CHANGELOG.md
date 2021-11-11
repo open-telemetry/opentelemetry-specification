@@ -27,7 +27,7 @@ release.
 
 ### Telemetry Schemas
 
-## v1.8.0 (2021-11-10)
+## v1.8.0 (2021-11-11)
 
 ### Context
 
