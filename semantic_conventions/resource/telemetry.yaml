@@ -33,6 +33,8 @@ groups:
               value: "ruby"
             - id: webjs
               value: "webjs"
+            - id: swift
+              value: "swift"
         brief: >
           The language of the telemetry SDK.
       - id: sdk.version
