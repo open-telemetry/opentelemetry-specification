@@ -9,6 +9,28 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+## v1.8.0 (2021-11-12)
+
+### Context
+
 - Add a section for OTel specific values in TraceState.
   ([#1852](https://github.com/open-telemetry/opentelemetry-specification/pull/1852))
 - Add `none` as a possible value for `OTEL_PROPAGATORS` to disable context
@@ -16,6 +38,8 @@ release.
   ([#2052](https://github.com/open-telemetry/opentelemetry-specification/pull/2052))
 
 ### Traces
+
+- No changes.
 
 ### Metrics
 
@@ -35,6 +59,12 @@ release.
   [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2032))
 - Mark Metrics API spec as Stable.
   ([#2104](https://github.com/open-telemetry/opentelemetry-specification/pull/2104))
+- Clarify, fix and expand documentation sections:
+  ([#1966](https://github.com/open-telemetry/opentelemetry-specification/pull/1966)),
+  ([#1981](https://github.com/open-telemetry/opentelemetry-specification/pull/1981)),
+  ([#1995](https://github.com/open-telemetry/opentelemetry-specification/pull/1995)),
+  ([#2002](https://github.com/open-telemetry/opentelemetry-specification/pull/2002)),
+  ([#2010](https://github.com/open-telemetry/opentelemetry-specification/pull/2010))
 
 ### Logs
 
@@ -45,8 +75,12 @@ release.
 
 ### Resource
 
+- No changes.
+
 ### Semantic Conventions
 
+- Add `k8s.container.restart_count` Resource attribute.
+  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 - Add "IBM z/Architecture" (`s390x`) to `host.arch`
   ([#2055](https://github.com/open-telemetry/opentelemetry-specification/pull/2055))
 - BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
@@ -60,14 +94,20 @@ release.
 - Add attributes for Apache RocketMQ.
   ([#1904](https://github.com/open-telemetry/opentelemetry-specification/pull/1904))
 - Define http tracing attributes provided at span creation time
-  ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
+  ([#1916](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
 - Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
   ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
+- Clarify difference between container.name and k8s.container.name
+  ([#1980](https://github.com/open-telemetry/opentelemetry-specification/pull/1980))
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
 
+- Clarify default for OTLP endpoint should, not must, be https
+  ([#1997](https://github.com/open-telemetry/opentelemetry-specification/pull/1997))
 - Specify the behavior of the OTLP endpoint variables for OTLP/HTTP more strictly
   ([#1975](https://github.com/open-telemetry/opentelemetry-specification/pull/1975),
   [#1985](https://github.com/open-telemetry/opentelemetry-specification/pull/1985))
@@ -139,8 +179,6 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
   ([#1890](https://github.com/open-telemetry/opentelemetry-specification/pull/1890))
 - Add HTTP request and response headers semantic conventions.
   ([#1898](https://github.com/open-telemetry/opentelemetry-specification/pull/1898))
-- Add `k8s.container.restart_count` Resource attribute.
-  ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 
 ### Compatibility
 
