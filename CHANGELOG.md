@@ -33,11 +33,15 @@ release.
 - Add clarifications on how to determine aggregation temporality.
   ([#2013](https://github.com/open-telemetry/opentelemetry-specification/pull/2013),
   [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2032))
+- Mark Metrics API spec as Stable.
+  ([#2104](https://github.com/open-telemetry/opentelemetry-specification/pull/2104))
 
 ### Logs
 
 - Fix Syslog severity number mapping in the example.
   ([#2091](https://github.com/open-telemetry/opentelemetry-specification/pull/2091))
+- Add log.* attributes.
+  ([#2022](https://github.com/open-telemetry/opentelemetry-specification/pull/2022))
 
 ### Resource
 
