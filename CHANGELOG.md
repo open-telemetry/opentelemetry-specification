@@ -27,7 +27,7 @@ release.
 
 ### Telemetry Schemas
 
-## v1.8.0 (2021-11-11)
+## v1.8.0 (2021-11-12)
 
 ### Context
 
@@ -59,6 +59,12 @@ release.
   [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2032))
 - Mark Metrics API spec as Stable.
   ([#2104](https://github.com/open-telemetry/opentelemetry-specification/pull/2104))
+- Clarify, fix and expand documentation sections:
+  ([#1966](https://github.com/open-telemetry/opentelemetry-specification/pull/1966)),
+  ([#1981](https://github.com/open-telemetry/opentelemetry-specification/pull/1981)),
+  ([#1995](https://github.com/open-telemetry/opentelemetry-specification/pull/1995)),
+  ([#2002](https://github.com/open-telemetry/opentelemetry-specification/pull/2002)),
+  ([#2010](https://github.com/open-telemetry/opentelemetry-specification/pull/2010))
 
 ### Logs
 
@@ -88,9 +94,11 @@ release.
 - Add attributes for Apache RocketMQ.
   ([#1904](https://github.com/open-telemetry/opentelemetry-specification/pull/1904))
 - Define http tracing attributes provided at span creation time
-  ([#1919](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
+  ([#1916](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
 - Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
   ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
+- Clarify difference between container.name and k8s.container.name
+  ([#1980](https://github.com/open-telemetry/opentelemetry-specification/pull/1980))
 
 ### Compatibility
 
