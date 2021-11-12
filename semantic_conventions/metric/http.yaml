@@ -1,0 +1,123 @@
+groups:
+  - id: metric.http
+    prefix: http
+    brief: "This document defines semantic convention for HTTP client and server metrics."
+    note: >
+        These conventions can be used for http and https schemes
+        and various HTTP versions like 1.1, 2 and SPDY.
+    attributes:
+      - id: method
+        type: string
+        brief: 'The HTTP request method. E.g. `GET`.'
+        examples: ['GET', 'POST', 'PUT']
+      - id: host
+        type: string
+        brief: >
+            The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4).
+        note: >
+          When the header is present but empty the attribute SHOULD be set to
+          the empty string. Note that this is a valid situation that is expected
+          in certain cases, according the aforementioned
+          [section of RFC 7230](https://tools.ietf.org/html/rfc7230#section-5.4).
+          When the header is not set the attribute MUST NOT be set.
+        examples: ['www.example.org']
+      - id: scheme
+        type: string
+        brief: 'The URI scheme identifying the used protocol.'
+        examples: ['http', 'https']
+      - id: flavor
+        type:
+          allow_custom_values: true
+          members:
+            - id: http_1_0
+              value: '1.0'
+              brief: 'HTTP 1.0'
+            - id: http_1_1
+              value: '1.1'
+              brief: 'HTTP 1.1'
+            - id: http_2_0
+              value: '2.0'
+              brief: 'HTTP 2'
+            - id: spdy
+              value: 'SPDY'
+              brief: 'SPDY protocol.'
+            - id: quic
+              value: 'QUIC'
+              brief: 'QUIC protocol.'
+        brief: 'Kind of HTTP protocol used.'
+        note: >
+          If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor`
+          is `QUIC`, in which case `IP.UDP` is assumed.
+
+  - id: metric.http.client
+    prefix: http
+    extends: metric.http
+    brief: 'Semantic Convention for HTTP Client'
+    constraints:
+      - any_of:
+          - [http.url]
+          - [http.scheme, http.host, http.target]
+          - [http.scheme, net.peer.name, net.peer.port, http.target]
+          - [http.scheme, net.peer.ip, net.peer.port, http.target]
+    attributes:
+      - id: status_code
+        type: int
+        required:
+          conditional: If and only if one was received/sent.
+        brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
+        examples: [200]
+      - ref: net.peer.name
+      - ref: net.peer.port
+      - ref: net.peer.ip
+
+  - id: metric.http.server
+    prefix: http
+    extends: metric.http
+    brief: 'Semantic Convention for HTTP Server'
+    constraints:
+      - any_of:
+          - [http.scheme, http.host, http.target]
+          - [http.scheme, http.server_name, net.host.port, http.target]
+          - [http.scheme, net.host.name, net.host.port, http.target]
+          - [http.url]
+    attributes:
+      - id: server_name
+        type: string
+        brief: >
+            The primary server name of the matched virtual host. This should be obtained via configuration.
+            If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead).
+        note: >
+            `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and
+            sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148).
+            It is thus preferred to supply the raw data that is available.
+      - ref: net.host.name
+      - ref: net.host.port
+
+instruments:
+  - id: metric.http.client.duration
+    brief: "Measures the duration of the outbound HTTP request."
+    prefix: http
+    extends: metric.http.client
+    instrument: Histogram
+    units: milliseconds 
+
+  - id: metric.http.server.duration
+    brief: "Measures the duration of the inbound HTTP request."   
+    prefix: http
+    extends: metric.http.server
+    instrument: Histogram
+    units: milliseconds
+    attributes:
+      - id: status_code
+        type: int
+        required:
+          conditional: If and only if one was received/sent.
+        brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
+        examples: [200]
+
+  - id: metric.http.server.active_requests
+    brief: "Measures the number of concurrent HTTP requests that are currently in-flight."
+    prefix: http
+    extends: metric.http.server
+    instrument: "Asynchronous UpDownCounter."
+    units: requests
