@@ -157,9 +157,10 @@ are the inputs:
   stream](./datamodel.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` would be
     used by default.
-  * A list of `attribute keys` (optional). If not provided, all the attribute
-    keys will be used by default (TODO: once the Hint API is available, the
-    default behavior should respect the Hint if it is available).
+  * A list of `attribute keys` (optional). If provided, the attributes that are
+    not in the list will be ignored. If not provided, all the attribute keys
+    will be used by default (TODO: once the Hint API is available, the default
+    behavior should respect the Hint if it is available).
   * The `extra dimensions` which come from Baggage/Context (optional). If not
     provided, no extra dimension will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
@@ -292,9 +293,9 @@ meterProviderBuilder
   );
 ```
 
-**TBD:**
-The [View](./sdk.md#view) may configure an `Aggregation` to collect
-[Exemplars](./datamodel.md#exemplars).
+TODO: after we release the initial Stable version of Metrics SDK specification,
+we will explore how to allow configuring custom
+[ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./datamodel.md#metric-points) in the
