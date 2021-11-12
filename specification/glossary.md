@@ -156,7 +156,9 @@ The name/version pair identifies the [Instrumentation Library](#instrumentation-
 
 ### Service
 
-`Services` expose unique functions to another and are identified by a namespace and a name. There are one or more instances of the same service called `Service Instance`. Often such a service instance is enclosed within an operating system process. There could be multiple versions of the same service.
+A `service` is a component of a larger distributed `application`. A service logically represents a repeatable business activity with a specified outcome. A service exchanges information with other services via some form of inter-process communication mechanism, such as network or shared storage.
+
+A `service instance` is a physical manifestation of a service, usually running in its own operating system process. Multiple service instances are typically deployed at the same time for high availability and scalability.
 
 See [Resource Semantic Conventions - Service](resource/semantic_conventions/README.md#service) for more details and naming requirements.
 
