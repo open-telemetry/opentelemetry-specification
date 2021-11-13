@@ -13,3 +13,6 @@
 | `browser.version` | string | The web browser version | `90` | No |
 | `browser.platform` | string | The operating system | `Windows` | No |
 | `browser.mobile` | boolean | Flag indicating a mobile device | | No |
+| `browser.userAgent` | string | Full user-agent string provided by the browser [1] | `'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'` | No |
+
+**[1]:** The user-agent value should be provided only from browsers that do not have a mechanism to retrieve name, version, and platform individually (for example from the User-Agent Client Hints API). 
