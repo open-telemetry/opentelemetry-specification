@@ -90,6 +90,23 @@ namespace = Company
 service.name = Shop.shoppingcart
 ```
 
+## App
+
+**type:** `app`
+
+**Description:** A client application instance.
+
+<!-- semconv service -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `app.name` | string | Logical name of the client application. [1] | `web storefront` | Yes |
+| `app.namespace` | string | A namespace for `app.name`. [2] | `Shop` | No |
+| `app.version` | string | The version string of the app build or implementation. | `2.0.0` | No |
+
+**[1]:** MUST be the same for all instances of the application running on individual client devices. If the value was not specified, SDKs MUST fallback to `unknown_application`.
+
+**[2]:** A string value having a meaning that helps to distinguish a group of client applications, for example the team name that owns a group of applications or web site name that consists of multiple components. `app.name` is expected to be unique within the same namespace. If `app.namespace` is not specified in the Resource then `app.name` is expected to be unique for all applications that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
+
 ## Telemetry SDK
 
 **type:** `telemetry.sdk`
