@@ -4,7 +4,7 @@
 
 **type:** `browser`
 
-**Description**: The web browser in which the application represented by the resource is running. The `browser.*` attributes MUST be used only for resources that represent client-side devices - the presence of these attributes can be used to identify client-side telemetry.
+**Description**: The web browser in which the application represented by the resource is running. The `browser.*` attributes MUST be used only for resources that represent applications running in a web browser. The presence of these attributes is intended to identify client-side telemetry.
 
 <!-- semconv device -->
 | Attribute  | Type | Description  | Examples  | Required |

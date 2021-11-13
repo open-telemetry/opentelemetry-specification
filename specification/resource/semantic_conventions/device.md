@@ -4,7 +4,7 @@
 
 **type:** `device`
 
-**Description**: The device on which the process represented by this resource is running. The `device.*` attributes MUST be used only for resources that represent client-side devices - the presence of these attributes can be used to identify client-side telemetry.
+**Description**: The device on which the process represented by this resource is running. The `device.*` attributes MUST be used only for resources that are not part of a private infrastructure, for example a mobile or IoT device.
 
 <!-- semconv device -->
 | Attribute  | Type | Description  | Examples  | Required |
