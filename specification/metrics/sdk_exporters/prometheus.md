@@ -4,7 +4,7 @@
 
 Prometheus Exporter is a [MetricExporter](../sdk.md#metricexporter) which reacts
 to the Prometheus scraper and report the metrics passively to
-[Prometheus](https://prometheus.io/), or [push
+[Prometheus](https://prometheus.io/), or [pushes
 metrics](https://prometheus.io/docs/instrumenting/pushing/) to a [Prometheus
 Pushgateway](https://github.com/prometheus/pushgateway).
 
