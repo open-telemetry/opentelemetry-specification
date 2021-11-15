@@ -79,6 +79,12 @@ Methods:
   trace context related fields (TraceId,SpanId,TraceFlags) if applicable before
   making the call. Open Question: do we need to also pass the Baggage so that
   log processors and exporters can use it if they see the need?
+
+  Note: some languages may opt to avoid having a LogRecord data type and instead
+  use a more idiomatic builder pattern to prepare and emit a log record (see
+  e.g.
+  [Java discussion](https://github.com/open-telemetry/opentelemetry-java/pull/3759#discussion_r738019425))
+
 - Flush.
 
 ### LogRecord
