@@ -13,8 +13,9 @@ Table of Contents
 
 </details>
 
-<a id="attributes"></a>
 ## Attribute
+
+<a id="attributes"></a>
 
 An `Attribute` is a key-value pair, which MUST have the following properties:
 
