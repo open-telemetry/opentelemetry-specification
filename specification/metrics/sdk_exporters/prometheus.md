@@ -3,7 +3,7 @@
 **Status**: [Experimental](../../document-status.md)
 
 Prometheus Exporter is a [MetricExporter](../sdk.md#metricexporter) which reacts
-to the Prometheus scraper and report the metrics passively to
+to the Prometheus scraper and reports the metrics passively to
 [Prometheus](https://prometheus.io/), or [pushes
 metrics](https://prometheus.io/docs/instrumenting/pushing/) to a [Prometheus
 Pushgateway](https://github.com/prometheus/pushgateway).
