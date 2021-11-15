@@ -2,12 +2,19 @@
 
 **Status**: [Experimental](../../document-status.md)
 
-Prometheus Exporter is a [Pull Metric Exporter](../sdk.md#pull-metric-exporter)
-which reacts to the Prometheus scraper and report the metrics passively to
-[Prometheus](https://prometheus.io/). [Pushing
-Metrics](https://prometheus.io/docs/instrumenting/pushing/) to a [Prometheus
-Pushgateway](https://github.com/prometheus/pushgateway) is **not** in the scope
-for now.
+Prometheus Exporter is a [MetricExporter](../sdk.md#metricexporter) which reacts
+to the Prometheus scraper and report the metrics passively to
+[Prometheus](https://prometheus.io/), or [push
+metrics](https://prometheus.io/docs/instrumenting/pushing/) to a [Prometheus
+Pushgateway](https://github.com/prometheus/pushgateway).
+
+Prometheus Exporter SHOULD support [Pull mode](../sdk.md#pull-metric-exporter),
+if possible.
+
+Prometheus Exporter MAY support [Push mode](../sdk.md#push-metric-exporter), if
+there is a need to support short-lived applications (e.g. short-lived
+service-level batch jobs, a JavaScript application running inside a web
+browser).
 
 Prometheus Exporter MUST support version `0.0.4` of the [Text-based
 format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#text-based-format).
