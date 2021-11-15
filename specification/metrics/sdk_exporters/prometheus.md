@@ -13,8 +13,8 @@ if possible.
 
 Prometheus Exporter MAY support [Push mode](../sdk.md#push-metric-exporter), if
 there is a need to support short-lived applications (e.g. short-lived
-service-level batch jobs, a JavaScript application running inside a web
-browser).
+service-level batch jobs, JavaScript applications running inside web browsers,
+etc.).
 
 Prometheus Exporter MUST support version `0.0.4` of the [Text-based
 format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#text-based-format).
