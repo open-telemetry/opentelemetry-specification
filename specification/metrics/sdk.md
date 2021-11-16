@@ -165,9 +165,8 @@ are the inputs:
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
     apply a [default aggregation](#default-aggregation). If the aggregation has
-    temporality, the SDK SHOULD use the [temporality override
-    rules](#temporality-override-rules) to determine the aggregation
-    temporality.
+    temporality, the SDK SHOULD handle the aggregation temporality based on the
+    temporality of each [MetricReader](#metricreader) instance.
   * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
