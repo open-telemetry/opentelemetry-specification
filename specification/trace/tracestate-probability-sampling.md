@@ -254,12 +254,12 @@ accuracy in Span-to-metrics pipelines.
 This specification defines consistent sampling for power-of-two
 sampling probabilities.  When a sampler is configured with a
 non-power-of-two sampling probability, the sampler will
-probabilistically choose between the nearest powers of two
+probabilistically choose between the nearest powers of two.
 
 When a single consistent probability sampler is used at the root of a
-trace, the resulting traces are always complete (ignoring collection
-errors).  This property holds even for non-power-of-two sampling
-probabilities.
+trace and all other spans use a parent-based sampler, the resulting
+traces are always complete (ignoring collection errors).  This
+property holds even for non-power-of-two sampling probabilities.
 
 When multiple consistent probability samplers are used in the same
 trace, in general, trace completeness is ensured at the smallest power
@@ -431,7 +431,7 @@ The `ConsistentProbabilityBased` Sampler MUST unset `p` from the
 The `ConsistentProbabilityBased` Sampler MUST set `p` when it decides
 to sample according to its configured sampling probability.
 
-##### Requirement: ConsistentProbabilityBased records unbiased adjusted counts
+##### Requirement: ConsistentProbabilityBased sampler records unbiased adjusted counts
 
 The `ConsistentProbabilityBased` Sampler MUST set `p` so that the
 adjusted count interpreted from the `tracestate` is an unbiased
@@ -512,8 +512,8 @@ in the `tracestate`.
 As stated in the [completeness guarantee](#completeness-guarantee),
 traces will be possibly incomplete when configuring multiple
 consistent probability samplers in the same trace.  One way to avoid
-producing incomplete traces is to use parent-based samplers except for
-root spans.
+producing incomplete traces is to use parent-based samplers except forr
+oot spans.
 
 There is a simple test for trace incompleteness, but it is a one-way
 test and does not detect when child spans are uncollected.  One way to
@@ -523,10 +523,11 @@ completeness is not guaranteed for non-power-of-two sampling
 probabilities.
 
 Complete subtraces will be produced when the sequence of sampling
-probabilities from the root of a trace to its leaves is
-non-descending.  To ensure complete sub-traces are produced, configure
-a child-span's sampler with probability greater than or equal to the
-parent span's sampling probability.
+probabilities from the root of a trace to its leaves consists of
+non-descending powers of two.  To ensure complete sub-traces are
+produced, configure a child-span's sampler to a power-of-two
+probability greater than or equal to the parent span's sampling
+probability.
 
 #### Trace consumers
 
