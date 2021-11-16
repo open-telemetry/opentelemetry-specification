@@ -566,12 +566,14 @@ Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
 instance at the creation time. The following logic MUST be followed to determine
 which temporality to be used for a `MetricReader`:
 
-* If the temporality is explicitly specified during `MetricReader` creation, and
-  the specified temporality is not supported by the `MetricReader`, treat the
-  conflicts as an error. It is unspecified _how_ these error should be handled
-  (e.g. it could fail fast during the SDK configuration time). Please refer to
-  [Error handling in OpenTelemetry](../error-handling.md) for the general
-  guidance.
+* If the temporality is explicitly specified during `MetricReader` creation:
+  * If the specified temporality is supported by the `MetricReader`, use the
+    specified temporality.
+  * If the specified temporality is not supported by the `MetricReader`, treat
+    the conflicts as an error. It is unspecified _how_ these error should be
+    handled (e.g. it could fail fast during the SDK configuration time). Please
+    refer to [Error handling in OpenTelemetry](../error-handling.md) for the
+    general guidance.
 * If the temporality is not explicitly specified:
   * If the `MetricReader` only supports one temporality (either Cumulative or
     Delta), use the supported temporality.
