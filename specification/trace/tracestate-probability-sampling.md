@@ -476,8 +476,8 @@ effect signifying zero adjusted count.
 ##### Requirement: Combining multiple sampling decisions using logical `or`
 
 When multiple samplers are combined using composition, the sampling
-decision is to sample if at least one of the combined samplers decides to
-sample.
+decision MUST be to sample if at least one of the combined samplers
+decides to sample.
 
 ##### Requirement: Combine multiple consistent probability samplers using the minimum p-value
 
