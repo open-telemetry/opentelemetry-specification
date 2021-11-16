@@ -449,7 +449,7 @@ is being produced.
 ##### Requirement: ConsistentProbabilityBased sampler acts like AlwaysOff sampler for probabilities less than 2**-62
 
 If the configured sampling probability is less than `2**-62`, the
-Sampler should round down to zero probability and make the same
+Sampler SHOULD round down to zero probability and make the same
 sampling decision as the builtin `AlwaysOff` sampler would.
 
 ### Composition rules
@@ -476,7 +476,7 @@ effect signifying zero adjusted count.
 ##### Requirement: Combining multiple sampling decisions using logical `or`
 
 When multiple samplers are combined using composition, the sampling
-decision is to sample if at least of the combined samplers decies to
+decision is to sample if at least one of the combined samplers decides to
 sample.
 
 ##### Requirement: Combine multiple consistent probability samplers using the minimum p-value
