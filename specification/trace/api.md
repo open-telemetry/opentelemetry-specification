@@ -399,9 +399,9 @@ For example, a `Propagator` performing context extraction may need this.
 
 #### Specifying links
 
-During the `Span` creation user MUST have the ability to record links to other
-`Span`s. Linked `Span`s can be from the same or a different trace. See [Links
-description](../overview.md#links-between-spans). `Link`s cannot be added after
+During `Span` creation, a user MUST have the ability to record links to other
+`Span`s. Linked `Span`s can be from the same or a different trace -- see [Links
+between spans](../overview.md#links-between-spans). `Link`s cannot be added after
 Span creation.
 
 A `Link` is structurally defined by the following properties:
