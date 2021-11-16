@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Rename None aggregation to Drop.
+  ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
+
 ### Logs
 
 ### Resource
