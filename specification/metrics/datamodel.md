@@ -216,7 +216,7 @@ individual timeseries.
 While OpenTelemetry provides flexibility in how instruments can be transformed
 into metric streams, the instruments are defined such that a reasonable default
 mapping can be provided. The exact
-[OpenTelemetry instruments](api.md##instrument) are detailed in the API
+[OpenTelemetry instruments](api.md#instrument) are detailed in the API
 specification.
 
 In the Event model, the primary data are (instrument, number) points, originally
@@ -863,7 +863,7 @@ cumulative aggregation temporality, the rate contributed to the
 timeseries by each point depends on the prior point value in the
 stream.
 
-To correctly compute the rate contribution of the first point in a
+To correctly compute the rate contribution of the first point in an
 unbroken sequence requires knowing whether it is the first point.
 Unknown start-time reset points appear with `TimeUnixNano` equal to
 the `StartTimeUnixNano` of a stream of points, in which case the rate
