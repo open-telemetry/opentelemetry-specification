@@ -61,7 +61,9 @@ groups:
       - id: name
         type: string
         brief: >
-          The name of the Container in a Pod template.
+          The name of the Container from Pod specification, must be unique
+          within a Pod. Container runtime usually uses different globally unique
+          name (`container.name`).
         examples: ['redis']
       - id: restart_count
         type: int

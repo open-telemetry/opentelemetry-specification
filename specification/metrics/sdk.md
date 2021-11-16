@@ -157,9 +157,10 @@ are the inputs:
   stream](./datamodel.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` would be
     used by default.
-  * A list of `attribute keys` (optional). If not provided, all the attribute
-    keys will be used by default (TODO: once the Hint API is available, the
-    default behavior should respect the Hint if it is available).
+  * A list of `attribute keys` (optional). If provided, the attributes that are
+    not in the list will be ignored. If not provided, all the attribute keys
+    will be used by default (TODO: once the Hint API is available, the default
+    behavior should respect the Hint if it is available).
   * The `extra dimensions` which come from Baggage/Context (optional). If not
     provided, no extra dimension will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
@@ -292,24 +293,24 @@ meterProviderBuilder
   );
 ```
 
-**TBD:**
-The [View](./sdk.md#view) may configure an `Aggregation` to collect
-[Exemplars](./datamodel.md#exemplars).
+TODO: after we release the initial Stable version of Metrics SDK specification,
+we will explore how to allow configuring custom
+[ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./datamodel.md#metric-points) in the
 [Metrics Data Model](./datamodel.md).
 
-- [None](./sdk.md#none-aggregation)
+- [Drop](./sdk.md#drop-aggregation)
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
-#### None Aggregation
+#### Drop Aggregation
 
-The None Aggregation informs the SDK to ignore/drop all Instrument Measurements
+The Drop Aggregation informs the SDK to ignore/drop all Instrument Measurements
 for this Aggregation.
 
 This Aggregation does not have any configuration parameters.
