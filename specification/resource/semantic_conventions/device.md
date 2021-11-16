@@ -21,5 +21,4 @@
 **[3]:** It's recommended this value represents a human readable version of the device model rather than a machine readable alternative.
 
 **[4]:** Android devices provide this field via [Build](https://developer.android.com/reference/android/os/Build#MANUFACTURER)
-
 <!-- endsemconv -->
