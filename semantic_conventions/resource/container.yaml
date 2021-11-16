@@ -7,7 +7,7 @@ groups:
       - id: name
         type: string
         brief: >
-          Container name.
+          Container name used by container runtime.
         examples: ['opentelemetry-autoconf']
       - id: id
         type: string
