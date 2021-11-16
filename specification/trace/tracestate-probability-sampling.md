@@ -172,12 +172,8 @@ incomplete if the span's parent span was not collected.
 Incomplete traces that result from sampling configuration (i.e., on
 purpose) are known as partial traces.  An important subset of the
 partial traces are those which are also complete subtraces.  A
-complete subtrace is defined at span S when:
-
-- S is not a root span
-- S's parent was not collected
-- S either has no children or all the children of S are also complete
-subtraces.
+complete subtrace is defined at span S when every descendent span is
+collected.
 
 Since the test for an incompleteness is one-way, it is important to
 know which sampling configurations may lead to incomplete traces.
@@ -537,6 +533,11 @@ sampling probabilities, traces may be complete in a way that cannot be
 detected.  Because of the one-way test, consumers wanting to ensure
 complete traces are expected to know the minimum sampling probability
 across the system.
+
+Ignoring accidental data loss, a trace will be complete if all its
+spans are sampled with consistent probability samplers and the trace's
+r-value is larger than the corresponding smallest power of two greater
+than or equal to the minimum sampling probability across the trace.
 
 Due to the `ConsistentProbabilityBased` Sampler requirement about
 setting `r` when it is unset for a non-root span, trace consumers are
