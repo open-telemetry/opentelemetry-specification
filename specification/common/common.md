@@ -7,21 +7,23 @@
 Table of Contents
 </summary>
 
-- [Attributes](#attributes)
+- [Attribute](#attribute)
   - [Attribute Limits](#attribute-limits)
     - [Exempt Entities](#exempt-entities)
 
 </details>
 
-## Attributes
+## Attribute
 
-Attributes are a list of zero or more key-value pairs. An `Attribute` MUST have the following properties:
+<a id="attributes"></a>
 
-- The attribute key, which MUST be a non-`null` and non-empty string.
-- The attribute value, which is either:
+An `Attribute` is a key-value pair, which MUST have the following properties:
+
+- The attribute key MUST be a non-`null` and non-empty string.
+- The attribute value is either:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
-    i.e. it MUST NOT contain values of different types. For protocols that do
+    i.e., it MUST NOT contain values of different types. For protocols that do
     not natively support array values such values SHOULD be represented as JSON strings.
 
 Attribute values expressing a numerical value of zero, an empty string, or an
@@ -64,7 +66,7 @@ If an SDK provides a way to:
     values separately,
   - otherwise a value MUST NOT be truncated;
 - set a limit of unique attribute keys such that:
-  - for each unique attributes key, addition of which would result in exceeding
+  - for each unique attribute key, addition of which would result in exceeding
     the limit, SDK MUST discard that key/value pair.
 
 There MAY be a log emitted to indicate to the user that an attribute was
