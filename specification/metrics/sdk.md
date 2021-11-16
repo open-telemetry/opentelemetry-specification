@@ -301,16 +301,16 @@ The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./datamodel.md#metric-points) in the
 [Metrics Data Model](./datamodel.md).
 
-- [None](./sdk.md#none-aggregation)
+- [Drop](./sdk.md#drop-aggregation)
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
-#### None Aggregation
+#### Drop Aggregation
 
-The None Aggregation informs the SDK to ignore/drop all Instrument Measurements
+The Drop Aggregation informs the SDK to ignore/drop all Instrument Measurements
 for this Aggregation.
 
 This Aggregation does not have any configuration parameters.
