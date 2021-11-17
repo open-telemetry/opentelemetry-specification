@@ -98,8 +98,7 @@ pod, and container name.
 
 ### `/sdk/trace`
 
-The [trace directory](trace/sdk.md) describes the SDK implementation for
-api/trace.
+This directory describes the [Tracing SDK](trace/sdk.md) implementation.
 
 ### `/sdk/internal` (_Optional_)
 
