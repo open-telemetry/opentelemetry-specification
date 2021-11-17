@@ -94,6 +94,8 @@ pod, and container name.
 
 ### `/sdk/baggage`
 
+> TODO
+
 ### `/sdk/trace`
 
 The [trace directory](trace/sdk.md) describes the SDK implementation for
