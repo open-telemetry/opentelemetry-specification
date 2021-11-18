@@ -15,6 +15,8 @@ release.
 
 - Rename None aggregation to Drop.
   ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
+- Add details to the Prometheus Exporter requirements.
+  ([#2124](https://github.com/open-telemetry/opentelemetry-specification/pull/2124))
 
 ### Logs
 
