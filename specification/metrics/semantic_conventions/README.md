@@ -62,8 +62,8 @@ where similar metrics have significantly different implementations across the
 breadth of all existing metrics. For example, every garbage collected runtime
 has slightly different strategies and measures. Using a single set of metric
 names for GC, not divided by the runtime, could create dissimilar comparisons
-and confusion for end users. (For example, prefer `runtime.java.gc*` over
-`runtime.gc.*`.) Measures of many operating system metrics are similarly
+and confusion for end users. (For example, prefer `process.runtime.java.gc*` over
+`process.runtime.gc.*`.) Measures of many operating system metrics are similarly
 ambiguous.
 
 ### Units
