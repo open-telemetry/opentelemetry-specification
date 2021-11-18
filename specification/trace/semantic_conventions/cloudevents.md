@@ -17,6 +17,7 @@ Once the trace context is set on the event, it MUST not be modified.
 - [Spans](#spans)
   * [Creation](#creation)
   * [Processing](#processing)
+- [Instrumentation](#instrumentation)
 - [Attributes](#attributes)
 
 <!-- tocstop -->
@@ -44,10 +45,11 @@ When instrumented library supports processing of a single CloudEvent, instrument
 
 ## Instrumentation
 
-CloudEvents libraries SHOULD offer mechanisms to make the aforementioned Span
-operations (creation, extraction, and injection of context into events) transparent
-for application owners. CloudEvents libraries expose such mechanisms using
-language idiomatic approaches, for example, via handlers or middlewares.
+CloudEvents libraries SHOULD have built-in mechanisms to make the aforementioned
+Span operations (creation, extraction, and injection of context into events)
+transparent for application owners. When auto-instrumentation
+is not feasible, CloudEvents libraries SHOULD offer such mechanisms in a form that
+application owners can "plug in" to apply the Span operations above by themselves.
 
 ## Attributes
 
