@@ -562,8 +562,9 @@ functions.
 
 The SDK SHOULD provide a way to allow [Aggregation
 Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
-instance at the creation time. The following logic MUST be followed to determine
-which temporality to be used for a `MetricReader`:
+instance during the setup (e.g. initialization, registration, etc.) time. The
+following logic MUST be followed to determine which temporality to be used for a
+`MetricReader`:
 
 * If the temporality is explicitly specified during `MetricReader` creation:
   * If the specified temporality is supported by the `MetricReader`, use the
