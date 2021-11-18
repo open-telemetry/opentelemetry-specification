@@ -128,6 +128,7 @@ The identifier SHOULD be stable across different versions of an implementation.
 | `python` | python |
 | `ruby` | ruby |
 | `webjs` | webjs |
+| `swift` | swift |
 <!-- endsemconv -->
 
 ## Compute Unit

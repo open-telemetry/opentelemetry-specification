@@ -1,6 +1,6 @@
 # Metrics SDK
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Feature-freeze](../document-status.md)
 
 <details>
 <summary>
@@ -19,6 +19,7 @@ Table of Contents
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
 * [Defaults and configuration](#defaults-and-configuration)
+* [Temporality override rules](#temporality-override-rules)
 * [Numerical limits handling](#numerical-limits-handling)
 * [Compatibility requirements](#compatibility-requirements)
 * [Concurrency requirements](#concurrency-requirements)
@@ -156,15 +157,19 @@ are the inputs:
   stream](./datamodel.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` would be
     used by default.
-  * A list of `attribute keys` (optional). If not provided, all the attribute
-    keys will be used by default (TODO: once the Hint API is available, the
-    default behavior should respect the Hint if it is available).
+  * A list of `attribute keys` (optional). If provided, the attributes that are
+    not in the list will be ignored. If not provided, all the attribute keys
+    will be used by default (TODO: once the Hint API is available, the default
+    behavior should respect the Hint if it is available).
   * The `extra dimensions` which come from Baggage/Context (optional). If not
     provided, no extra dimension will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
-  * The `aggregation` (optional) to be used. If not provided, a default
-    aggregation will be applied by the SDK. The default aggregation is a TODO.
-  * The `exemplar_reservoir` (optional) to use for storing exemplars.  
+  * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
+    apply a [default aggregation](#default-aggregation). If the aggregation has
+    temporality, the SDK SHOULD use the [temporality override
+    rules](#temporality-override-rules) to determine the aggregation
+    temporality.
+  * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
 
@@ -288,24 +293,24 @@ meterProviderBuilder
   );
 ```
 
-**TBD:**
-The [View](./sdk.md#view) may configure an `Aggregation` to collect
-[Exemplars](./datamodel.md#exemplars).
+TODO: after we release the initial Stable version of Metrics SDK specification,
+we will explore how to allow configuring custom
+[ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./datamodel.md#metric-points) in the
 [Metrics Data Model](./datamodel.md).
 
-- [None](./sdk.md#none-aggregation)
+- [Drop](./sdk.md#drop-aggregation)
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
-#### None Aggregation
+#### Drop Aggregation
 
-The None Aggregation informs the SDK to ignore/drop all Instrument Measurements
+The Drop Aggregation informs the SDK to ignore/drop all Instrument Measurements
 for this Aggregation.
 
 This Aggregation does not have any configuration parameters.
@@ -332,12 +337,6 @@ This Aggregation does not have any configuration parameters.
 The Sum Aggregation informs the SDK to collect data for the
 [Sum Metric Point](./datamodel.md#sums).
 
-This Aggregation honors the following configuration parameters:
-
-| Key | Value | Default Value | Description |
-| --- | --- | --- | --- |
-| Temporality | Delta, Cumulative | Cumulative | |
-
 The monotonicity of the aggregation is determined by the instrument type:
 
 | Instrument Kind | `SumType` |
@@ -348,6 +347,8 @@ The monotonicity of the aggregation is determined by the instrument type:
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
+
+This Aggregation does not have any configuration parameters.
 
 This Aggregation informs the SDK to collect:
 
@@ -383,7 +384,6 @@ This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| Temporality | Delta, Cumulative | Cumulative | See [Temporality](./datamodel.md#temporality). |
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
@@ -578,6 +578,8 @@ authors MAY choose the best idiomatic design for their language:
   instance is set to use Cumulative, and it has an associated [Push Metric
   Exporter](#push-metric-exporter) instance which has the temporality set to
   Delta), would the SDK want to fail fast or use some fallback logic?
+* Refer to the [temporality override rules](#temporality-override-rules) for how
+  to determine the temporality.
 * Refer to the [supplementary
   guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
   more context and suggestions.
@@ -671,6 +673,8 @@ language:
   Exporter](./sdk_exporters/prometheus.md) instance is being used, and the
   temporality is set to Delta), would the SDK want to fail fast or use some
   fallback logic?
+* Refer to the [temporality override rules](#temporality-override-rules) for how
+  to determine the temporality.
 * Refer to the [supplementary
   guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
   more context and suggestions.
@@ -705,9 +709,12 @@ A Push Metric Exporter MUST support the following functions:
 
 ##### Export(batch)
 
-Exports a batch of `Metrics`. Protocol exporters that will implement this
-function are typically expected to serialize and transmit the data to the
-destination.
+Exports a batch of [Metric points](./datamodel.md#metric-points). Protocol
+exporters that will implement this function are typically expected to serialize
+and transmit the data to the destination.
+
+The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
+information (e.g. name, version, etc.) associated with each `Metric point`.
 
 `Export` will never be called concurrently for the same exporter instance.
 `Export` can be called again only after the current call returns.
@@ -722,8 +729,34 @@ are being sent to.
 
 **Parameters:**
 
-`batch` - a batch of `Metrics`. The exact data type of the batch is language
-specific, typically it is some kind of list.
+`batch` - a batch of `Metric point`s. The exact data type of the batch is
+language specific, typically it is some kind of list. The exact type of `Metric
+point` is language specific, and is typically optimized for high performance.
+Here are some examples:
+
+```text
+       +--------+ +--------+     +--------+
+Batch: | Metric | | Metric | ... | Metric |
+       +---+----+ +--------+     +--------+
+           |
+           +--> name, unit, description, meter information, ...
+           |
+           |                  +-------------+ +-------------+     +-------------+
+           +--> MetricPoints: | MetricPoint | | MetricPoint | ... | MetricPoint |
+                              +-----+-------+ +-------------+     +-------------+
+                                    |
+                                    +--> timestamps, dimensions, value (or buckets), exemplars, ...
+```
+
+Refer to the [Metric points](./datamodel.md#metric-points) section from the
+Metrics Data Model specification for more details.
+
+Note: it is highly recommended that implementors design the `Metric` data type
+_based on_ the [Data Model](./datamodel.md), rather than directly use the data
+types generated from the [proto
+files](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto)
+(because the types generated from proto files are not guaranteed to be backward
+compatible).
 
 Returns: `ExportResult`
 
@@ -819,6 +852,29 @@ modeled to interact with other components in the SDK:
 
 The SDK MUST provide configuration according to the [SDK environment
 variables](../sdk-environment-variables.md) specification.
+
+## Temporality override rules
+
+There are several places where [Aggregation
+Temporality](./datamodel.md#temporality) can be configured in the OpenTelemetry
+SDK. The SDK MUST use the following order to determine which temporality to be
+used:
+
+* If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader) only
+  supports one temporality (either Cumulative or Delta), use the supported
+  temporality and goto END.
+* If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
+  supports both Cumulative and Delta:
+  * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
+    has a preferred temporality, use the preferred temporality and goto END.
+  * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
+    does not have a preferred temporality, use Cumulative and goto END.
+* END.
+
+If the above process caused conflicts, the SDK SHOULD treat the conflicts as
+error. It is unspecified _how_ the SDK should handle these error (e.g. it could
+fail fast during the SDK configuration time). Please refer to [Error handling in
+OpenTelemetry](../error-handling.md) for the general guidance.
 
 ## Numerical limits handling
 

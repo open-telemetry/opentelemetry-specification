@@ -26,4 +26,4 @@ Exporter](../../protocol/exporter.md) specification once it reaches
 
 | Description | Default | Env variable |
 | ----------- | ------- | ------------ |
-| The output [Aggregation Temporality](../datamodel.md#temporality), either `CUMULATIVE` or `DELTA` (case insensitive) | `CUMULATIVE` | `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY`
+| The preferred output [Aggregation Temporality](../datamodel.md#temporality), either `CUMULATIVE` or `DELTA` (case insensitive) | `CUMULATIVE` | `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY`

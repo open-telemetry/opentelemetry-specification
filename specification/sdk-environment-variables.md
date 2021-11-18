@@ -4,6 +4,12 @@
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
+## Parsing empty value
+
+**Status**: [Stable](document-status.md)
+
+The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
+
 ## Special configuration types
 
 **Status**: [Stable](document-status.md)
@@ -16,6 +22,8 @@ If an SDK chooses to support an integer-valued environment variable, it SHOULD s
 
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
+
+If a null object (empty, no-op) value is acceptable, then the enum value representing it MUST be `"none"`.
 
 ### Duration
 
@@ -38,7 +46,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 | OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
 | OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.  |
 
-Known values for OTEL_PROPAGATORS are:
+Known values for `OTEL_PROPAGATORS` are:
 
 - `"tracecontext"`: [W3C Trace Context](https://www.w3.org/TR/trace-context/)
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
@@ -47,6 +55,7 @@ Known values for OTEL_PROPAGATORS are:
 - `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
+- `"none"`: No automatically configured propagator.
 
 Known values for `OTEL_TRACES_SAMPLER` are:
 
@@ -132,7 +141,7 @@ See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) d
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT    | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
 
 Addtionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
@@ -165,14 +174,14 @@ We define environment variables for setting one or more exporters per signal.
 
 The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 
-Known values for OTEL_TRACES_EXPORTER are:
+Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: [Jaeger gRPC](https://www.jaegertracing.io/docs/1.21/apis/#protobuf-via-grpc-stable)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"none"`: No automatically configured exporter for traces.
 
-Known values for OTEL_METRICS_EXPORTER are:
+Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
@@ -191,6 +200,13 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 - `"none"`: No measurements are eligble for exemplar sampling.
 - `"all"`: All measurements are eligible for exemplar sampling.
 - `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
+
+### Periodic exporting MetricReader
+
+| Name                          | Description                                                                   | Default | Notes |
+| ----------------------------- | ----------------------------------------------------------------------------- | ------- | ----- |
+| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   |       |
+| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   |       |
 
 ## Language Specific Environment Variables
 
