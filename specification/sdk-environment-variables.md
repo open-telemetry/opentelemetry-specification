@@ -4,6 +4,12 @@
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
+## Parsing empty value
+
+**Status**: [Stable](document-status.md)
+
+The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
+
 ## Special configuration types
 
 **Status**: [Stable](document-status.md)
@@ -16,6 +22,8 @@ If an SDK chooses to support an integer-valued environment variable, it SHOULD s
 
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
+
+If a null object (empty, no-op) value is acceptable, then the enum value representing it MUST be `"none"`.
 
 ### Duration
 
@@ -133,7 +141,7 @@ See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) d
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT    | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
 
 Addtionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
