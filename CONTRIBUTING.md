@@ -137,7 +137,8 @@ The following diagram shows the initial triaging of new issues.
 - The assignee makes a decision about the first response. It should be one of
   the 3 responses:
   - Yes, this is a good issue and we want to work on it.
-  - Maybe, this issue needs to be clarified before we can make a decision.
+  - Maybe, this issue needs to be clarified and/or others have to be pulled in
+    before we can make a decision.
   - No, this issue should not be accepted. This can happen when the issue is a
     duplicate, was discussed and rejected in the past, is out of the project
     scope, etc. The assignee labels the issue "won't do", closes it and provides
