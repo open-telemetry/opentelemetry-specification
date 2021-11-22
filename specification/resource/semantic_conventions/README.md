@@ -60,7 +60,7 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 
 **type:** `service`
 
-**Description:** A service instance.
+**Description:** A [service](../../glossary.md#service) instance.
 
 <!-- semconv service -->
 | Attribute  | Type | Description  | Examples  | Required |
