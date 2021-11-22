@@ -301,16 +301,16 @@ The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./datamodel.md#metric-points) in the
 [Metrics Data Model](./datamodel.md).
 
-- [None](./sdk.md#none-aggregation)
+- [Drop](./sdk.md#drop-aggregation)
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
-#### None Aggregation
+#### Drop Aggregation
 
-The None Aggregation informs the SDK to ignore/drop all Instrument Measurements
+The Drop Aggregation informs the SDK to ignore/drop all Instrument Measurements
 for this Aggregation.
 
 This Aggregation does not have any configuration parameters.
@@ -709,12 +709,12 @@ A Push Metric Exporter MUST support the following functions:
 
 ##### Export(batch)
 
-Exports a batch of `Metrics`. Protocol exporters that will implement this
-function are typically expected to serialize and transmit the data to the
-destination.
+Exports a batch of [Metric points](./datamodel.md#metric-points). Protocol
+exporters that will implement this function are typically expected to serialize
+and transmit the data to the destination.
 
 The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
-information (e.g. name, version, etc.) associated with each `Metric`.
+information (e.g. name, version, etc.) associated with each `Metric point`.
 
 `Export` will never be called concurrently for the same exporter instance.
 `Export` can be called again only after the current call returns.
@@ -729,8 +729,34 @@ are being sent to.
 
 **Parameters:**
 
-`batch` - a batch of `Metrics`. The exact data type of the batch is language
-specific, typically it is some kind of list.
+`batch` - a batch of `Metric point`s. The exact data type of the batch is
+language specific, typically it is some kind of list. The exact type of `Metric
+point` is language specific, and is typically optimized for high performance.
+Here are some examples:
+
+```text
+       +--------+ +--------+     +--------+
+Batch: | Metric | | Metric | ... | Metric |
+       +---+----+ +--------+     +--------+
+           |
+           +--> name, unit, description, meter information, ...
+           |
+           |                  +-------------+ +-------------+     +-------------+
+           +--> MetricPoints: | MetricPoint | | MetricPoint | ... | MetricPoint |
+                              +-----+-------+ +-------------+     +-------------+
+                                    |
+                                    +--> timestamps, dimensions, value (or buckets), exemplars, ...
+```
+
+Refer to the [Metric points](./datamodel.md#metric-points) section from the
+Metrics Data Model specification for more details.
+
+Note: it is highly recommended that implementors design the `Metric` data type
+_based on_ the [Data Model](./datamodel.md), rather than directly use the data
+types generated from the [proto
+files](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto)
+(because the types generated from proto files are not guaranteed to be backward
+compatible).
 
 Returns: `ExportResult`
 
