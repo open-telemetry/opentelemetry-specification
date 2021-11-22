@@ -1,0 +1,11 @@
+groups:
+  - id: redis
+    prefix: redis
+    brief: >
+        A redis instance
+    attributes:
+      - id: instance
+        type: string
+        brief: >
+          Reported name of the redis instance
+        examples: ['localhost:6379']
