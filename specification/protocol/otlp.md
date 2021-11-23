@@ -50,6 +50,9 @@ of OpenTelemetry project.
 Each signal has different support and stability in OTLP, described through its
 own maturity level, which in turn applies to **all** the OTLP Transports listed below.
 
+* Collector/trace: **Stable**
+* Collector/metrics: **Stable**
+* Collector/logs: **Beta**
 * Tracing: **Stable**
 * Metrics: **Stable**
 * Logs: **Beta**
@@ -259,7 +262,7 @@ Here is a sample Go code to illustrate:
   }
 
   return st.Err()
-  
+
   ...
 
   // Do this on client side.
