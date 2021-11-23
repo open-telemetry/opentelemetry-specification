@@ -277,6 +277,10 @@ informs the SDK on the ways and means to compute
 [Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model)
 from incoming Instrument [Measurements](./api.md#measurement).
 
+Note: the term _aggregation_ is used instead of _aggregator_. It is recommended
+that implementors reserve the "aggregator" term for the future when the SDK
+allows custom aggregation implementations.
+
 An `Aggregation` specifies an operation
 (i.e. [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
 like Sum, Histogram, Min, Max, Count)
