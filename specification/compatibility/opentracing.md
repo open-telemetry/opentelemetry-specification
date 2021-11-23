@@ -48,7 +48,7 @@ The OpenTracing Shim and the OpenTelemetry API/SDK are expected to be consumed
 simultaneously in a running service, in order to ease migration from the former
 to the latter.
 
-Observe that semantic convention mapping MUST NOT be performed, with the
+Semantic convention mapping SHOULD NOT be performed, with the
 exception of error mapping, as described in the [Set Tag](#set-tag) and
 [Log](#log) sections.
 
