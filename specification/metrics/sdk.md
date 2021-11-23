@@ -19,7 +19,6 @@ Table of Contents
   * [Push Metric Exporter](#push-metric-exporter)
   * [Pull Metric Exporter](#pull-metric-exporter)
 * [Defaults and configuration](#defaults-and-configuration)
-* [Temporality override rules](#temporality-override-rules)
 * [Numerical limits handling](#numerical-limits-handling)
 * [Compatibility requirements](#compatibility-requirements)
 * [Concurrency requirements](#concurrency-requirements)
@@ -165,10 +164,10 @@ are the inputs:
     provided, no extra dimension will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
-    apply a [default aggregation](#default-aggregation). If the aggregation has
-    temporality, the SDK SHOULD use the [temporality override
-    rules](#temporality-override-rules) to determine the aggregation
-    temporality.
+    apply a [default aggregation](#default-aggregation). If the aggregation
+    outputs metric points that use aggregation temporality (e.g. Histogram,
+    Sum), the SDK SHOULD handle the aggregation temporality based on the
+    temporality of each [MetricReader](#metricreader) instance.
   * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
@@ -564,7 +563,33 @@ functions.
 
 The SDK SHOULD provide a way to allow [Aggregation
 Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
-instance during the creation time. [OpenTelemetry SDK](../overview.md#sdk)
+instance during the setup (e.g. initialization, registration, etc.) time. The
+following logic MUST be followed to determine which temporality to be used for a
+`MetricReader`:
+
+* If the temporality is explicitly specified during `MetricReader` creation:
+  * If the specified temporality is supported by the `MetricReader`, use the
+    specified temporality.
+  * If the specified temporality is not supported by the `MetricReader`, treat
+    the conflicts as an error. It is unspecified _how_ these error should be
+    handled (e.g. it could fail fast during the SDK configuration time). Please
+    refer to [Error handling in OpenTelemetry](../error-handling.md) for the
+    general guidance.
+* If the temporality is not explicitly specified:
+  * If the `MetricReader` only supports one temporality (either Cumulative or
+    Delta), use the supported temporality.
+  * If the `MetricReader` supports both Cumulative and Delta:
+    * If the `MetricReader` has a preferred temporality, use the preferred
+      temporality.
+    * If the `MetricReader` does not have a preferred temporality, use
+      Cumulative.
+
+If a `MetricReader` is backed by a `MetricExporter` (e.g. a [Periodic exporting
+MetricReader](#periodic-exporting-metricreader) configured with an [OTLP
+Exporter](./sdk_exporters/otlp.md)) it MUST use the underlying
+`MetricExporter`'s preferred + supported temporality.
+
+[OpenTelemetry SDK](../overview.md#sdk)
 authors MAY choose the best idiomatic design for their language:
 
 * Whether to treat the temporality settings as recommendation or enforcement.
@@ -578,8 +603,6 @@ authors MAY choose the best idiomatic design for their language:
   instance is set to use Cumulative, and it has an associated [Push Metric
   Exporter](#push-metric-exporter) instance which has the temporality set to
   Delta), would the SDK want to fail fast or use some fallback logic?
-* Refer to the [temporality override rules](#temporality-override-rules) for how
-  to determine the temporality.
 * Refer to the [supplementary
   guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
   more context and suggestions.
@@ -654,30 +677,8 @@ example:
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
 
-The SDK SHOULD provide a way to allow [Aggregation
-Temporality](./datamodel.md#temporality) to be specified for a `MetricExporter`
-instance during the creation time, if the exporter supports both Cumulative and
-Delta [Temporality](./datamodel.md#temporality). [OpenTelemetry
-SDK](../overview.md#sdk) authors MAY choose the best idiomatic design for their
-language:
-
-* Whether to treat the temporality settings as recommendation or enforcement.
-  For example, if an [OTLP Exporter](./sdk_exporters/otlp.md) instance is being
-  used, and the temporality is set to Delta, would the SDK want to perform
-  Cumulative->Delta conversion for an [Asynchronous
-  Counter](./api.md#asynchronous-counter), or downgrade it to a
-  [Gauge](./datamodel.md#gauge), or keep exporting it as Cumulative due to the
-  consideration of [memory
-  efficiency](./supplementary-guidelines.md#memory-management)?
-* If an invalid combination of settings occurred (e.g. if a [Prometheus
-  Exporter](./sdk_exporters/prometheus.md) instance is being used, and the
-  temporality is set to Delta), would the SDK want to fail fast or use some
-  fallback logic?
-* Refer to the [temporality override rules](#temporality-override-rules) for how
-  to determine the temporality.
-* Refer to the [supplementary
-  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
-  more context and suggestions.
+`MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
+preferred and supported temporality.
 
 ### Push Metric Exporter
 
@@ -852,29 +853,6 @@ modeled to interact with other components in the SDK:
 
 The SDK MUST provide configuration according to the [SDK environment
 variables](../sdk-environment-variables.md) specification.
-
-## Temporality override rules
-
-There are several places where [Aggregation
-Temporality](./datamodel.md#temporality) can be configured in the OpenTelemetry
-SDK. The SDK MUST use the following order to determine which temporality to be
-used:
-
-* If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader) only
-  supports one temporality (either Cumulative or Delta), use the supported
-  temporality and goto END.
-* If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
-  supports both Cumulative and Delta:
-  * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
-    has a preferred temporality, use the preferred temporality and goto END.
-  * If the [MetricExporter](#metricexporter) or [MetricReader](#metricreader)
-    does not have a preferred temporality, use Cumulative and goto END.
-* END.
-
-If the above process caused conflicts, the SDK SHOULD treat the conflicts as
-error. It is unspecified _how_ the SDK should handle these error (e.g. it could
-fail fast during the SDK configuration time). Please refer to [Error handling in
-OpenTelemetry](../error-handling.md) for the general guidance.
 
 ## Numerical limits handling
 
