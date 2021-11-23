@@ -14,6 +14,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
 - [Status](#status)
 - [Common Attributes](#common-attributes)
   * [HTTP request and response headers](#http-request-and-response-headers)
+  * [HTTP request retries and redirects](#http-request-retries-and-redirects)
 - [HTTP client](#http-client)
 - [HTTP server](#http-server)
   * [HTTP server definitions](#http-server-definitions)
