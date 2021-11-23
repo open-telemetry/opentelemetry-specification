@@ -15,6 +15,8 @@ release.
 
 - Rename None aggregation to Drop.
   ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
+- Mark In-memory, OTLP and Stdout exporter specs as Feature-freeze.
+  ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
 
 ### Logs
 
