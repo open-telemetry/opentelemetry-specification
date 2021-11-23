@@ -17,6 +17,8 @@ release.
   ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
 - Mark In-memory, OTLP and Stdout exporter specs as Feature-freeze.
   ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
+- Mark Metrics SDK spec as Stable.
+  ([#2150](https://github.com/open-telemetry/opentelemetry-specification/pull/2150))
 
 ### Logs
 
