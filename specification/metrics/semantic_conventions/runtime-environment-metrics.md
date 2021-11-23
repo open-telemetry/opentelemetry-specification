@@ -13,7 +13,8 @@ semantic conventions when instrumenting runtime environments.
 <!-- toc -->
 
 - [Metric Instruments](#metric-instruments)
-  * [Runtime Environment Specific Metrics - `runtime.{environment}.`](#runtime-environment-specific-metrics---runtimeenvironment)
+  * [Runtime Environment Specific Metrics - `process.runtime.{environment}.`](#runtime-environment-specific-metrics---processruntimeenvironment)
+- [Attributes](#attributes)
 
 <!-- tocstop -->
 
@@ -27,10 +28,10 @@ does not propose any standard top-level runtime metric instruments. See [OTEP
 108](https://github.com/open-telemetry/oteps/pull/108/files) for additional
 discussion.
 
-### Runtime Environment Specific Metrics - `runtime.{environment}.`
+### Runtime Environment Specific Metrics - `process.runtime.{environment}.`
 
 Metrics specific to a certain runtime environment should be prefixed with
-`runtime.{environment}.` and follow the semantic conventions outlined in
+`process.runtime.{environment}.` and follow the semantic conventions outlined in
 [general metric semantic
 conventions](README.md#general-metric-semantic-conventions). Authors of
 runtime instrumentations are responsible for the choice of `{environment}` to
@@ -40,7 +41,11 @@ For example, some programming languages have multiple runtime environments
 that vary significantly in their implementation, like [Python which has many
 implementations](https://wiki.python.org/moin/PythonImplementations). For
 such languages, consider using specific `{environment}` prefixes to avoid
-ambiguity, like `runtime.cpython.` and `runtime.pypy.`.
+ambiguity, like `process.runtime.cpython.` and `process.runtime.pypy.`.
 
 There are other dimensions even within a given runtime environment to
 consider, for example pthreads vs green thread implementations.
+
+## Attributes
+
+[`process.runtime`](../../resource/semantic_conventions/process.md#process-runtimes) resource attributes SHOULD be included on runtime metric events as appropriate.
