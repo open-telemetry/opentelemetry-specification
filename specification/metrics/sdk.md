@@ -164,8 +164,9 @@ are the inputs:
     provided, no extra dimension will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
-    apply a [default aggregation](#default-aggregation). If the aggregation has
-    temporality, the SDK SHOULD handle the aggregation temporality based on the
+    apply a [default aggregation](#default-aggregation). If the aggregation
+    outputs metric points that use aggregation temporality (e.g. Histogram,
+    Sum), the SDK SHOULD handle the aggregation temporality based on the
     temporality of each [MetricReader](#metricreader) instance.
   * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
@@ -583,11 +584,10 @@ following logic MUST be followed to determine which temporality to be used for a
     * If the `MetricReader` does not have a preferred temporality, use
       Cumulative.
 
-If a `MetricReader` instance has an underlying `MetricExporter` instance (e.g. a
-[Periodic exporting MetricReader](#periodic-exporting-metricreader) configured
-with an [OTLP Exporter](./sdk_exporters/otlp.md)), the `MetricReader` SHOULD
-report its supported temporality and preferred temporality based on the
-temporality of the underlying `MetricExporter`.
+If a `MetricReader` is backed by a `MetricExporter` (e.g. a [Periodic exporting
+MetricReader](#periodic-exporting-metricreader) configured with an [OTLP
+Exporter](./sdk_exporters/otlp.md)) it MUST use the underlying
+`MetricExporter`'s preferred + supported temporality.
 
 [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY choose the best idiomatic design for their language:
