@@ -313,17 +313,15 @@ Note: Support for environment variables is optional.
 
 Languages not covered by the OpenTracing project do not need to be listed here, e.g. Erlang.
 
-| Feature                                                                      |Go |Java|JS |Python|Ruby|PHP|Rust|C++|.NET|Swift|
-|------------------------------------------------------------------------------|---|----|---|------|----|---|----|---|----|-----|
-| Create OpenTracing Shim                                                      |   |    |   |      |    |   |    |   |    |     |
-| Create OpenTracing Shim with custom propagators                              |   |    |   |      |    |   |    |   |    |     |
-| [Tracer](specification/compatibility/opentracing.md#tracer-shim)             |   |    |   |      |    |   |    |   |    |     |
-| [Span](specification/compatibility/opentracing.md#span-shim)                 |   |    |   |      |    |   |    |   |    |     |
-| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim)   |   |    |   |      |    |   |    |   |    |     |
-| [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim) |   |    |   |      |    |   |    |   |    |     |
-| ScopeManager caching Shim objects in Context                                 |   |    |   |      |    |   |    |   |    |     |
-| Error mapping for attributes/events                                          |   |    |   |      |    |   |    |   |    |     |
-| Migration to OpenTelemetry guide                                             |   |    |   |      |    |   |    |   |    |     |
+| Feature                                                                                                 |Go |Java|JS |Python|Ruby|PHP|Rust|C++|.NET|Swift|
+|---------------------------------------------------------------------------------------------------------|---|----|---|------|----|---|----|---|----|-----|
+| [Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim) |   |    |   |      |    |   |    |   |    |     |
+| [Tracer](specification/compatibility/opentracing.md#tracer-shim)                                        |   |    |   |      |    |   |    |   |    |     |
+| [Span](specification/compatibility/opentracing.md#span-shim)                                            |   |    |   |      |    |   |    |   |    |     |
+| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim)                              |   |    |   |      |    |   |    |   |    |     |
+| [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim)                            |   |    |   |      |    |   |    |   |    |     |
+| Error mapping for attributes/events                                                                     |   |    |   |      |    |   |    |   |    |     |
+| Migration to OpenTelemetry guide                                                                        |   |    |   |      |    |   |    |   |    |     |
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
 [py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059
