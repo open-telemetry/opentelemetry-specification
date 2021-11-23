@@ -1,6 +1,6 @@
 # OpenTelemetry Metrics Exporter - OTLP
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Feature-freeze](../../document-status.md)
 
 OTLP Metrics Exporter is a [Push Metric
 Exporter](../sdk.md#push-metric-exporter) which sends metrics via the

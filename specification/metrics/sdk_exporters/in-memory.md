@@ -1,6 +1,6 @@
 # OpenTelemetry Metrics Exporter - In-memory
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Feature-freeze](../../document-status.md)
 
 In-memory Metrics Exporter is a [Push Metric
 Exporter](../sdk.md#push-metric-exporter) which accumulates metrics data in the
