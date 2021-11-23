@@ -39,7 +39,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 | Name                     | Description                                       | Default                           | Notes                               |
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
-| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
+| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes | See [Resource semantic conventions](resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for details. | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](./resource/semantic_conventions/README.md#service) resource attribute | | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
@@ -129,8 +129,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent `compact` Thrift protocol              | 6831                                                                                             |
 | OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                                  | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export | 10s                                                                                              |
-| OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                | -                                                                                                |
-| OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                | -                                                                                                |
+| OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                |                                                                                                  |
+| OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                |                                                                                                  |
 
 See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
 
