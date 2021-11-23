@@ -1,6 +1,6 @@
 # OpenTelemetry Metrics Exporter - Standard output
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Feature-freeze](../../document-status.md)
 
 "Standard output" Metrics Exporter is a [Push Metric
 Exporter](../sdk.md#push-metric-exporter) which outputs the metrics to
