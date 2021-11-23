@@ -103,7 +103,7 @@ service.name = Shop.shoppingcart
 | `app.namespace` | string | A namespace for `app.name`. [2] | `Shop` | No |
 | `app.bundle` | string | Name of the bundle or package. [3] | `ShopApplication`, `com.example.ShopApplication` | No |
 | `app.version` | string | The version string of the app build or implementation. This can include more verbose information, such as the build number. [4] | `2.0.0` | No |
-| `app.shortVersion` | string | Human-readable version or version used to identify a release to end users. [5] | `10.14.1` | No |
+| `app.short_version` | string | Human-readable version or version used to identify a release to end users. [5] | `10.14.1` | No |
 
 **[1]:** MUST be the same for all instances of the application running on individual client devices. If the value was not specified, SDKs MUST fallback to `unknown_application`.
 
