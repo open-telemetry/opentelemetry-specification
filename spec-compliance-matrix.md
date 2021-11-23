@@ -320,10 +320,9 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 | [Tracer](specification/compatibility/opentracing.md#tracer-shim)             |   |    |   |      |    |   |    |   |    |     |
 | [Span](specification/compatibility/opentracing.md#span-shim)                 |   |    |   |      |    |   |    |   |    |     |
 | [SpanContext](specification/compatibility/opentracing.md#spancontext-shim)   |   |    |   |      |    |   |    |   |    |     |
-| SpanContext changes visible among different execution units                  |   |    |   |      |    |   |    |   |    |     |
 | [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim) |   |    |   |      |    |   |    |   |    |     |
 | ScopeManager caching Shim objects in Context                                 |   |    |   |      |    |   |    |   |    |     |
-| Semantic convention mapping for attributes/events                            |   |    |   |      |    |   |    |   |    |     |
+| Error mapping for attributes/events                                          |   |    |   |      |    |   |    |   |    |     |
 | Migration to OpenTelemetry guide                                             |   |    |   |      |    |   |    |   |    |     |
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
