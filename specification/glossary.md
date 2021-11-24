@@ -4,7 +4,8 @@ This document defines some terms that are used across this specification.
 
 Some other fundamental terms are documented in the [overview document](overview.md).
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+<details>
+<summary>Table of Contents</summary>
 
 <!-- toc -->
 
@@ -37,6 +38,8 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Flat File Logs](#flat-file-logs)
 
 <!-- tocstop -->
+
+</details>
 
 ## User Roles
 
