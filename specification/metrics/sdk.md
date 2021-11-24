@@ -172,6 +172,15 @@ are the inputs:
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
 
+The SDK MUST not allow the following configurations to be used together:
+
+- An instrument selection criteria lacking any parameters (matches everything)
+  combined with a specified `name` for the View. This leads to gauranteed
+  view conflicts between instruments.
+- An instrument selection criteria with wildcard name support and no specified
+  instrument type and a specified `name` for the View.  This leads to gauranteed
+  view conflicts between instruments.
+
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
@@ -195,6 +204,8 @@ made with an Instrument:
     implementations can decide what the default behavior is, and how to turn the
     default behavior off.
 * END.
+
+
 
 Here are some examples:
 
