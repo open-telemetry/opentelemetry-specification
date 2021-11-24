@@ -3,25 +3,45 @@
 **Status**: [Feature-freeze](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
 
-* [MeterProvider](#meterprovider)
-* [Attribute limits](#attribute-limits)
-* [Exemplar](#exemplar)
+<!-- toc -->
+
+- [MeterProvider](#meterprovider)
+  * [Meter Creation](#meter-creation)
+  * [Shutdown](#shutdown)
+  * [ForceFlush](#forceflush)
+  * [View](#view)
+  * [Aggregation](#aggregation)
+    + [Drop Aggregation](#drop-aggregation)
+    + [Default Aggregation](#default-aggregation)
+    + [Sum Aggregation](#sum-aggregation)
+    + [Last Value Aggregation](#last-value-aggregation)
+    + [Histogram Aggregation](#histogram-aggregation)
+    + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+- [Attribute limits](#attribute-limits)
+- [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
-* [MetricReader](#metricreader)
+- [MetricReader](#metricreader)
+  * [MetricReader operations](#metricreader-operations)
+    + [Collect](#collect)
+  * [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
-* [MetricExporter](#metricexporter)
+- [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
+    + [Interface Definition](#interface-definition)
+      - [Export(batch)](#exportbatch)
+      - [ForceFlush()](#forceflush)
+      - [Shutdown()](#shutdown)
   * [Pull Metric Exporter](#pull-metric-exporter)
-* [Defaults and configuration](#defaults-and-configuration)
-* [Numerical limits handling](#numerical-limits-handling)
-* [Compatibility requirements](#compatibility-requirements)
-* [Concurrency requirements](#concurrency-requirements)
+- [Defaults and configuration](#defaults-and-configuration)
+- [Numerical limits handling](#numerical-limits-handling)
+- [Compatibility requirements](#compatibility-requirements)
+- [Concurrency requirements](#concurrency-requirements)
+
+<!-- tocstop -->
 
 </details>
 
@@ -273,8 +293,8 @@ e.g. The View specifies an Aggregation by string name (i.e. "ExplicitBucketHisto
 # Use Histogram with custom boundaries
 meter_provider
   .add_view(
-    "X", 
-    aggregation="ExplicitBucketHistogram", 
+    "X",
+    aggregation="ExplicitBucketHistogram",
     aggregation_params={"Boundaries": [0, 10, 100]}
     )
 ```
@@ -424,7 +444,7 @@ A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance th
 
 A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
 
-A Metric SDK MUST allow exemplar sampling to leverage the configuration of a metric aggregator.  
+A Metric SDK MUST allow exemplar sampling to leverage the configuration of a metric aggregator.
 For example, Exemplar sampling of histograms should be able to leverage bucket boundaries.
 
 A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:

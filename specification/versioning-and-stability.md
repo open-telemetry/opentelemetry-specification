@@ -2,7 +2,8 @@
 
 **Status**: [Stable](document-status.md)
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+<details>
+<summary>Table of Contents</summary>
 
 <!-- toc -->
 
@@ -30,6 +31,8 @@
 - [OpenTelemetry GA](#opentelemetry-ga)
 
 <!-- tocstop -->
+
+</details>
 
 This document defines the stability guarantees offered by the OpenTelemetry clients, along with the rules and procedures for meeting those guarantees.
 
