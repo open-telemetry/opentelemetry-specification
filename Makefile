@@ -40,7 +40,6 @@ $(MARKDOWN_TOC):
 # The recommended way to prepate a .md file for markdown-toc is
 # to add these comments:
 #
-#   <!-- Re-generate TOC with `make markdown-toc` -->
 #   <!-- toc -->
 #   <!-- tocstop -->
 .PHONY: markdown-toc
