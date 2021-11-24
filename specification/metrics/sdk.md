@@ -160,8 +160,8 @@ are the inputs:
     not in the list will be ignored. If not provided, all the attribute keys
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
-  * The `extra dimensions` which come from Baggage/Context (optional). If not
-    provided, no extra dimension will be used. Please note that this only
+  * The `extra attributes` which come from Baggage/Context (optional). If not
+    provided, no extra attributes will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
     apply a [default aggregation](#default-aggregation). If the aggregation
