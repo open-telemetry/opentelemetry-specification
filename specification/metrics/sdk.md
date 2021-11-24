@@ -174,9 +174,9 @@ are the inputs:
 
 The SDK MUST not allow the following configurations to be used together:
 
-- An instrument selection criteria lacking any parameters (matches everything)
-  combined with a specified `name` for the View. This leads to gauranteed
-  view conflicts between instruments.
+- An instrument selection criteria lacking instrument type and instrument name
+  criteria combined with a specified `name` for the View. This leads to
+  gauranteed view conflicts between instruments.
 - An instrument selection criteria with wildcard name support and no specified
   instrument type and a specified `name` for the View.  This leads to gauranteed
   view conflicts between instruments.
