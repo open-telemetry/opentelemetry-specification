@@ -581,33 +581,11 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
-The SDK SHOULD provide a way to allow [Aggregation
+The SDK SHOULD provide a way to allow the preferred [Aggregation
 Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
-instance during the setup (e.g. initialization, registration, etc.) time. The
-following logic MUST be followed to determine which temporality to be used for a
-`MetricReader`:
-
-* If the temporality is explicitly specified during `MetricReader` creation:
-  * If the specified temporality is supported by the `MetricReader`, use the
-    specified temporality.
-  * If the specified temporality is not supported by the `MetricReader`, treat
-    the conflicts as an error. It is unspecified _how_ these error should be
-    handled (e.g. it could fail fast during the SDK configuration time). Please
-    refer to [Error handling in OpenTelemetry](../error-handling.md) for the
-    general guidance.
-* If the temporality is not explicitly specified:
-  * If the `MetricReader` only supports one temporality (either Cumulative or
-    Delta), use the supported temporality.
-  * If the `MetricReader` supports both Cumulative and Delta:
-    * If the `MetricReader` has a preferred temporality, use the preferred
-      temporality.
-    * If the `MetricReader` does not have a preferred temporality, use
-      Cumulative.
-
-If a `MetricReader` is backed by a `MetricExporter` (e.g. a [Periodic exporting
-MetricReader](#periodic-exporting-metricreader) configured with an [OTLP
-Exporter](./sdk_exporters/otlp.md)) it MUST use the underlying
-`MetricExporter`'s preferred + supported temporality.
+instance during the setup (e.g. initialization, registration, etc.) time. If the
+preferred temporality is explicitly specified then the SDK SHOULD respect that,
+otherwise use Cumulative.
 
 [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY choose the best idiomatic design for their language:
@@ -619,10 +597,6 @@ authors MAY choose the best idiomatic design for their language:
   [Gauge](./datamodel.md#gauge), or keep consuming it as Cumulative due to the
   consideration of [memory
   efficiency](./supplementary-guidelines.md#memory-management)?
-* If an invalid combination of settings occurred (e.g. if a `MetricReader`
-  instance is set to use Cumulative, and it has an associated [Push Metric
-  Exporter](#push-metric-exporter) instance which has the temporality set to
-  Delta), would the SDK want to fail fast or use some fallback logic?
 * Refer to the [supplementary
   guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
   more context and suggestions.
@@ -698,7 +672,7 @@ example:
   pipe.
 
 `MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
-preferred and supported temporality.
+preferred temporality.
 
 ### Push Metric Exporter
 
