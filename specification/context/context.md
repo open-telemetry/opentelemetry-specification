@@ -3,18 +3,20 @@
 **Status**: [Stable, Feature-freeze](../document-status.md).
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
 
 - [Overview](#overview)
 - [Create a key](#create-a-key)
 - [Get value](#get-value)
 - [Set value](#set-value)
-- [Optional global operations](#optional-global-operations)
-  - [Get current Context](#get-current-context)
-  - [Attach Context](#attach-context)
-  - [Detach Context](#detach-context)
+- [Optional Global operations](#optional-global-operations)
+  * [Get current Context](#get-current-context)
+  * [Attach Context](#attach-context)
+  * [Detach Context](#detach-context)
+
+<!-- tocstop -->
 
 </details>
 

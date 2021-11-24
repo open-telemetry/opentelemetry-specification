@@ -3,8 +3,14 @@
 <details>
 <summary>Table of Contents</summary>
 
-* [Abstract](#abstract)
-* [Configuration Interface](#configuration-interface)
+<!-- toc -->
+
+- [Abstract](#abstract)
+- [Configuration Interface](#configuration-interface)
+  * [Programmatic](#programmatic)
+  * [Other Mechanisms](#other-mechanisms)
+
+<!-- tocstop -->
 
 </details>
 

@@ -3,9 +3,9 @@
 **Status**: [Stable, Feature-Freeze](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
 
 - [Overview](#overview)
 - [Propagator Types](#propagator-types)
@@ -34,6 +34,10 @@ Table of Contents
   * [B3 Requirements](#b3-requirements)
     + [B3 Extract](#b3-extract)
     + [B3 Inject](#b3-inject)
+    + [Fields](#fields-1)
+    + [Configuration](#configuration)
+
+<!-- tocstop -->
 
 </details>
 
