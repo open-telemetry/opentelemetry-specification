@@ -7,9 +7,9 @@ and delivery mechanism of telemetry data between telemetry sources, intermediate
 nodes such as collectors and telemetry backends.
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
 
 - [Signals Maturity Level](#signals-maturity-level)
 - [Protocol Details](#protocol-details)
@@ -39,6 +39,8 @@ Table of Contents
 - [Future Versions and Interoperability](#future-versions-and-interoperability)
 - [Glossary](#glossary)
 - [References](#references)
+
+<!-- tocstop -->
 
 </details>
 
@@ -259,7 +261,7 @@ Here is a sample Go code to illustrate:
   }
 
   return st.Err()
-  
+
   ...
 
   // Do this on client side.
