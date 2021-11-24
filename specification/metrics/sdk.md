@@ -683,7 +683,7 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
-Metric Exporter has access to the [pre-aggregated metrics
+Metric Exporter has access to the [aggregated metrics
 data](./datamodel.md#timeseries-model).
 
 There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
