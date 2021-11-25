@@ -3,13 +3,16 @@
 **Status**: [Experimental](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
 
-- [Name Pluralization Guidelines](#name-pluralization-guidelines)
+<!-- toc -->
+
+- [Name Pluralization guidelines](#name-pluralization-guidelines)
 - [Recommendations for OpenTelemetry Authors](#recommendations-for-opentelemetry-authors)
 - [Recommendations for Application Developers](#recommendations-for-application-developers)
+- [otel.* Namespace](#otel-namespace)
+
+<!-- tocstop -->
 
 </details>
 
