@@ -3,11 +3,7 @@
 **Status**: [Stable](../document-status.md)
 
 <details>
-
 <summary>Table of Contents</summary>
-
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-<!-- https://github.com/jonschlinkert/markdown-toc -->
 
 <!-- toc -->
 

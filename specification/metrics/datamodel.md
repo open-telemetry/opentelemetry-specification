@@ -2,7 +2,8 @@
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- Re-generate TOC with `make markdown-toc` -->
+<details>
+<summary>Table of Contents</summary>
 
 <!-- toc -->
 
@@ -47,6 +48,8 @@
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
+
+</details>
 
 ## Overview
 
