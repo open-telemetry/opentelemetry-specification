@@ -28,6 +28,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Instrumented Library](#instrumented-library)
   * [Instrumentation Library](#instrumentation-library)
   * [Tracer Name / Meter Name](#tracer-name--meter-name)
+  * [Execution Unit](#execution-unit)
 - [Logs](#logs)
   * [Log Record](#log-record)
   * [Log](#log)
@@ -155,6 +156,10 @@ Synonyms: *Instrumenting Library*.
 This refers to the `name` and (optional) `version` arguments specified when
 creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider)).
 The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
+
+### Execution Unit
+
+An umbrella term for the smallest unit of sequential code execution, used in different concepts of multitasking. Examples are threads, coroutines or fibers.
 
 ## Logs
 

@@ -130,7 +130,7 @@ MUST be done by the Shim layer in order to retain these invariants.
 
 Because of the previous requirement, a given OpenTelemetry `Span`
 MUST be associated with ONE AND ONLY ONE `SpanContext` Shim object at all times
-for ALL execution units, in order to keep any linked `Baggage` consistent
+for ALL [execution units](../glossary.md#execution-unit), in order to keep any linked `Baggage` consistent
 at all times. It MUST BE safe to get and set the associated `SpanContext` Shim
 object for a specified OpenTelemetry `Span` from different execution units.
 
