@@ -48,6 +48,10 @@ The OpenTracing Shim and the OpenTelemetry API/SDK are expected to be consumed
 simultaneously in a running service, in order to ease migration from the former
 to the latter.
 
+Semantic convention mapping SHOULD NOT be performed, with the
+exception of error mapping, as described in the [Set Tag](#set-tag) and
+[Log](#log) sections.
+
 ## Create an OpenTracing Tracer Shim
 
 This operation is used to create a new OpenTracing `Tracer`:
@@ -239,14 +243,13 @@ Parameters:
 Calls `Set Attribute` on the underlying OpenTelemetry `Span` with the specified
 key/value pair.
 
-Certain values MUST be mapped from
-[OpenTracing Span Tags](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#standard-span-tags-and-log-fields)
-to the respective OpenTelemetry `Attribute`:
+The `error` tag MUST be
+[mapped](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#standard-span-tags-and-log-fields)
+to [StatusCode](../trace/api.md#set-status):
 
-- `error` maps to [StatusCode](../trace/api.md#set-status):
-  - `true` maps to `Error`.
-  - `false` maps to `Ok`.
-  - no value being set maps to `Unset`.
+- `true` maps to `Error`.
+- `false` maps to `Ok`.
+- no value being set maps to `Unset`.
 
 If the type of the specified value is not supported by the OTel API, the value
 MUST be converted to a string.
@@ -264,8 +267,8 @@ key/value pair set.
 The `Add Event`'s `name` parameter MUST be the value with the `event` key in
 the pair set, or else fallback to use the `log` literal string.
 
-If pair set contains a `event=error` entry, the values MUST be mapped from
-[OpenTracing Log Fields](https://github.com/opentracing/specification/blob/master/semantic_conventionsmd#log-fields-table)
+If pair set contains an `event=error` entry, the values MUST be
+[mapped](https://github.com/opentracing/specification/blob/master/semantic_conventionsmd#log-fields-table)
 to an `Event` with the conventions outlined in the
 [Exception semantic conventions](../trace/semantic_conventions/exceptions.md) document:
 
