@@ -43,6 +43,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 | OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](./resource/semantic_conventions/README.md#service) resource attribute | | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
+| OTEL_TRACES_PROCESSOR    | Span processor to be used                         | "batch"                           | See [Span processor](./trace/sdk.md#span-processor)                 |
 | OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
 | OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.  |
 
@@ -56,6 +57,12 @@ Known values for `OTEL_PROPAGATORS` are:
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
 - `"none"`: No automatically configured propagator.
+
+Known values for `OTEL_SPAN_PROCESSORS` are:
+
+- `"batch"` : [Batch span processor](./trace/sdk.md#batching-processor)
+- `"simple"` : [Simple span processor](./trace/sdk.md#simple-processor)
+- `"none"` : No automatically configured span processor.
 
 Known values for `OTEL_TRACES_SAMPLER` are:
 
