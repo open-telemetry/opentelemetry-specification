@@ -246,6 +246,7 @@ Note: Support for environment variables is optional.
 |OTEL_EXPORTER_JAEGER_*                        | + |    |   |      |    | -    | - |    | - | +  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | +  | -   |
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
+|OTEL_TRACES_PROCESSOR                         |   |    |   |      |    |      |   |    |   |    |     |
 |OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   | +  | - |    |     |
 |OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    |      |   |    |   |    |     |
