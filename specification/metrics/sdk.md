@@ -670,7 +670,7 @@ data](./datamodel.md#timeseries-model).
 
 There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
 Metric Exporters](#pull-metric-exporter) or even a mixture of both configured at
-the same time using one `MetricReader` for each exporter. Different exporters
+the same time on a given `MeterProvider` using one `MetricReader` for each exporter. Different exporters
 can run at different schedule, for example:
 
 * Exporter A is a push exporter which sends data every 1 minute.
