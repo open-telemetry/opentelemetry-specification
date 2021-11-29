@@ -182,17 +182,19 @@ are the inputs:
     not in the list will be ignored. If not provided, all the attribute keys
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
-  * The `extra dimensions` which come from Baggage/Context (optional). If not
-    provided, no extra dimension will be used. Please note that this only
-    applies to [synchronous Instruments](./api.md#synchronous-instrument).
+  * **Status**: [Experimental](../document-status.md) - the `extra dimensions`
+    which come from Baggage/Context (optional). If not provided, no extra
+    dimension will be used. Please note that this only applies to [synchronous
+    Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
     apply a [default aggregation](#default-aggregation). If the aggregation
     outputs metric points that use aggregation temporality (e.g. Histogram,
     Sum), the SDK SHOULD handle the aggregation temporality based on the
     temporality of each [MetricReader](#metricreader) instance.
-  * The `exemplar_reservoir` (optional) to use for storing exemplars.
-    This should be a factory or callback similar to aggregation which allows
-    different reservoirs to be chosen by the aggregation.
+  * **Status**: [Experimental](../document-status.md) - the `exemplar_reservoir`
+    (optional) to use for storing exemplars. This should be a factory or
+    callback similar to aggregation which allows different reservoirs to be
+    chosen by the aggregation.
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
