@@ -2,7 +2,8 @@
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- Re-generate TOC with `make markdown-toc` -->
+<details>
+<summary>Table of Contents</summary>
 
 <!-- toc -->
 
@@ -47,6 +48,8 @@
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
+
+</details>
 
 ## Overview
 
@@ -254,7 +257,7 @@ to map into, but is used as a reference throughout this document.
 
 ### OpenTelemetry Protocol data model
 
-The OpenTelmetry protocol data model is composed of Metric data streams. These
+The OpenTelemetry protocol data model is composed of Metric data streams. These
 streams are in turn composed of metric data points. Metric data streams
 can be converted directly into Timeseries, and share the same identity
 characteristics for a Timeseries. A metric stream is identified by:
@@ -863,7 +866,7 @@ cumulative aggregation temporality, the rate contributed to the
 timeseries by each point depends on the prior point value in the
 stream.
 
-To correctly compute the rate contribution of the first point in a
+To correctly compute the rate contribution of the first point in an
 unbroken sequence requires knowing whether it is the first point.
 Unknown start-time reset points appear with `TimeUnixNano` equal to
 the `StartTimeUnixNano` of a stream of points, in which case the rate

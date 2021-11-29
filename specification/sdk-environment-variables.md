@@ -4,6 +4,12 @@
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
+## Parsing empty value
+
+**Status**: [Stable](document-status.md)
+
+The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
+
 ## Special configuration types
 
 **Status**: [Stable](document-status.md)
@@ -16,6 +22,8 @@ If an SDK chooses to support an integer-valued environment variable, it SHOULD s
 
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
+
+If a null object (empty, no-op) value is acceptable, then the enum value representing it MUST be `"none"`.
 
 ### Duration
 
@@ -31,7 +39,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 | Name                     | Description                                       | Default                           | Notes                               |
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
-| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes |                                   | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
+| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes | See [Resource semantic conventions](resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for details. | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](./resource/semantic_conventions/README.md#service) resource attribute | | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
@@ -121,8 +129,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent `compact` Thrift protocol              | 6831                                                                                             |
 | OTEL_EXPORTER_JAEGER_ENDPOINT   | HTTP endpoint for Jaeger traces                                  | <!-- markdown-link-check-disable --> "http://localhost:14250"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export | 10s                                                                                              |
-| OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                | -                                                                                                |
-| OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                | -                                                                                                |
+| OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                |                                                                                                  |
+| OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                |                                                                                                  |
 
 See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
 
@@ -133,7 +141,7 @@ See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) d
 | Name                          | Description                | Default                                                                                                      |
 | ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT    | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
 
 Addtionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:

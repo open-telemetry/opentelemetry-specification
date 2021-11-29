@@ -426,8 +426,8 @@ Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
 information about the request context (other than TraceId/SpanId). SHOULD follow
-OpenTelemetry
-[semantic conventions for Attributes](../trace/semantic_conventions/README.md).
+OpenTelemetry [semantic conventions for Log Attributes](./semantic_conventions/README.md) or
+[semantic conventions for Span Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
 
 #### Errors and Exceptions
@@ -1318,8 +1318,8 @@ for an exhaustive list.
 |Warning      |Warning    |WARN  |Warn  | WARNING         |WARN          |
 |Error        |Error      |ERROR |Error | SEVERE          |ERROR         |
 |Critical     |Critical   |      |Dpanic|                 |ERROR2        |
-|Emergency    |           |      |Panic |                 |ERROR3        |
-|Alert        |           |FATAL |Fatal |                 |FATAL         |
+|Alert        |           |      |Panic |                 |ERROR3        |
+|Emergency    |           |FATAL |Fatal |                 |FATAL         |
 
 ## References
 

@@ -25,34 +25,35 @@ api
 
 > Use of lowercase, CamelCase or Snake Case (stylized as snake_case) names depends on the language.
 
-### `/context`
+### `/api/context`
 
 This directory describes the API that provides in-process context propagation.
 
-### [/metrics](./metrics/api.md)
+### `/api/metrics`
 
-This directory describes the Metrics API that can be used to record application metrics.
+This directory describes the [Metrics API](./metrics/api.md) that can be used to
+record application metrics.
 
-### [/baggage](baggage/api.md)
+### `/api/baggage`
 
-This directory describes the Baggage API that can be used to manage context propagation
-and metric event attributes.
+This directory describes the [Baggage API](baggage/api.md) that can be used to
+manage context propagation and metric event attributes.
 
-### [/trace](trace/api.md)
+### `/api/trace`
 
-This API consist of a few main classes:
+The [Trace API](trace/api.md) consist of a few main classes:
 
 - `Tracer` is used for all operations. See [Tracer](trace/api.md#tracer) section.
 - `Span` is a mutable object storing information about the current operation
    execution. See [Span](trace/api.md#span) section.
 
-### `/internal` (_Optional_)
+### `/api/internal` (_Optional_)
 
 Library components and implementations that shouldn't be exposed to the users.
 If a language has an idiomatic layout for internal components, please follow
 the language idiomatic style.
 
-### `/logs` (_In the future_)
+### `/api/logs` (_In the future_)
 
 > TODO: logs operations
 
@@ -83,18 +84,21 @@ This directory describes the SDK implementation for api/context.
 
 This directory describes the SDK implementation for api/metrics.
 
-### [/sdk/resource](resource/sdk.md)
+### `/sdk/resource`
 
-The resource directory primarily defines a type [Resource](overview.md#resources) that captures
-information about the entity for which stats or traces are recorded. For example, metrics exposed
-by a Kubernetes container can be linked to a resource that specifies the cluster, namespace, pod,
-and container name.
+The [resource directory](resource/sdk.md) primarily defines a type
+[Resource](overview.md#resources) that captures information about the entity for
+which stats or traces are recorded. For example, metrics exposed by a Kubernetes
+container can be linked to a resource that specifies the cluster, namespace,
+pod, and container name.
 
 ### `/sdk/baggage`
 
-### [/sdk/trace](trace/sdk.md)
+> TODO
 
-This directory describes the SDK implementation for api/trace.
+### `/sdk/trace`
+
+This directory describes the [Tracing SDK](trace/sdk.md) implementation.
 
 ### `/sdk/internal` (_Optional_)
 

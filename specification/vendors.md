@@ -3,10 +3,14 @@
 <details>
 <summary>Table of Contents</summary>
 
-* [Abstract](#abstract)
-* [Supports OpenTelemetry](#supports-opentelemetry)
-* [Implements OpenTelemetry](#implements-opentelemetry)
-* [Qualifications](#qualifications)
+<!-- toc -->
+
+- [Abstract](#abstract)
+- [Supports OpenTelemetry](#supports-opentelemetry)
+- [Implements OpenTelemetry](#implements-opentelemetry)
+- [Qualifications](#qualifications)
+
+<!-- tocstop -->
 
 </details>
 
