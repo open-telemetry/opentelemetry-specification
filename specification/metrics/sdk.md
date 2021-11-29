@@ -277,6 +277,10 @@ informs the SDK on the ways and means to compute
 [Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model)
 from incoming Instrument [Measurements](./api.md#measurement).
 
+Note: the term _aggregation_ is used instead of _aggregator_. It is recommended
+that implementors reserve the "aggregator" term for the future when the SDK
+allows custom aggregation implementations.
+
 An `Aggregation` specifies an operation
 (i.e. [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
 like Sum, Histogram, Min, Max, Count)
@@ -387,9 +391,9 @@ This Aggregation informs the SDK to collect:
 
 #### Histogram Aggregation
 
-The Histogram Aggregation informs the SDK to select the best
-Histogram Aggregation available.
-i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregation).
+The Histogram Aggregation informs the SDK to select the best Histogram
+Aggregation available. i.e. [Explicit Bucket Histogram
+Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
 
 This Aggregation does not have any configuration parameters.
 
@@ -406,8 +410,8 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-Note: This aggregator should not fill out `sum` when used with instruments
-that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
+Note: This aggregation should not fill out `sum` when used with instruments that
+record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
 
 This Aggregation informs the SDK to collect:
 
@@ -440,12 +444,15 @@ information:
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
-A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have overhead related to exemplar sampling.
+A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance
+the SDK SHOULD not have overhead related to exemplar sampling.
 
-A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
+A Metric SDK MUST sample `Exemplar`s only from measurements within the context
+of a sampled trace BY DEFAULT.
 
-A Metric SDK MUST allow exemplar sampling to leverage the configuration of a metric aggregator.
-For example, Exemplar sampling of histograms should be able to leverage bucket boundaries.
+A Metric SDK MUST allow exemplar sampling to leverage the configuration of a
+metric aggregation. For example, Exemplar sampling of histograms should be able
+to leverage bucket boundaries.
 
 A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
 
@@ -507,14 +514,15 @@ The SDK will come with two types of built-in exemplar reservoirs:
 1. SimpleFixedSizeExemplarReservoir
 2. AlignedHistogramBucketExemplarReservoir
 
-By default, explicit bucket histogram aggregators with more than 1 bucket will
-use `AlignedHistogramBucketExemplarReservoir`. All other aggregators will
-use `SimpleFixedSizeExemplarReservoir`.
+By default, explicit bucket histogram aggregation with more than 1 bucket will
+use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
+`SimpleFixedSizeExemplarReservoir`.
 
 *SimpleExemplarReservoir*
-This Exemplar reservoir MAY take a configuration parameter for the size of
-the reservoir pool.  The reservoir will accept measurements using an equivalent of
-the [naive reservoir sampling algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
+This Exemplar reservoir MAY take a configuration parameter for the size of the
+reservoir pool.  The reservoir will accept measurements using an equivalent of
+the [naive reservoir sampling
+algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
 
   ```
   bucket = random_integer(0, num_measurements_seen)
