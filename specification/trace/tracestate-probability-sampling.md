@@ -508,8 +508,8 @@ in the `tracestate`.
 As stated in the [completeness guarantee](#completeness-guarantee),
 traces will be possibly incomplete when configuring multiple
 consistent probability samplers in the same trace.  One way to avoid
-producing incomplete traces is to use parent-based samplers except forr
-oot spans.
+producing incomplete traces is to use parent-based samplers except for 
+root spans.
 
 There is a simple test for trace incompleteness, but it is a one-way
 test and does not detect when child spans are uncollected.  One way to
