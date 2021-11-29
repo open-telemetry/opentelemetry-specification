@@ -1,6 +1,6 @@
 # Metrics SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -46,6 +46,8 @@
 </details>
 
 ## MeterProvider
+
+**Status**: [Stable](../document-status.md)
 
 A `MeterProvider` MUST provide a way to allow a [Resource](../resource/sdk.md) to
 be specified. If a `Resource` is specified, it SHOULD be associated with all the
@@ -416,12 +418,16 @@ instruments that record negative measurements, e.g. `UpDownCounter` or `Observab
 
 ## Attribute limits
 
+**Status**: [Stable](../document-status.md)
+
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
 
 ## Exemplar
+
+**Status**: [Experimental](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
@@ -587,6 +593,8 @@ measurements using the equivalent of the following naive algorithm:
 
 ## MetricReader
 
+**Status**: [Stable](../document-status.md)
+
 `MetricReader` is an interface which provides the following capabilities:
 
 * Collecting metrics from the SDK.
@@ -708,6 +716,8 @@ from `MetricReader` and start a background task which calls the inherited
   exporter.
 
 ## MetricExporter
+
+**Status**: [Stable](../document-status.md)
 
 `MetricExporter` defines the interface that protocol-specific exporters MUST
 implement so that they can be plugged into OpenTelemetry SDK and support sending
@@ -930,6 +940,8 @@ errors/exceptions are taken care of.
 
 ## Compatibility requirements
 
+**Status**: [Stable](../document-status.md)
+
 All the metrics components SHOULD allow new methods to be added to existing
 components without introducing breaking changes.
 
@@ -937,6 +949,8 @@ All the metrics SDK methods SHOULD allow optional parameter(s) to be added to
 existing methods without introducing breaking changes, if possible.
 
 ## Concurrency requirements
+
+**Status**: [Stable](../document-status.md)
 
 For languages which support concurrent execution the Metrics SDKs provide
 specific guarantees and safeties.
