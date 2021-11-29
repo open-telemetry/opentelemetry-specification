@@ -19,7 +19,8 @@ release.
   ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
 - Remove the concept of supported temporality, keep preferred.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
-- Mark Metrics SDK spec as Stable.
+- Mark Metrics SDK spec as Mixed, with `MeterProvider`, `MetricReader` and
+  `MetricExporter` marked as Stable.
   ([#2150](https://github.com/open-telemetry/opentelemetry-specification/pull/2150))
 
 ### Logs
