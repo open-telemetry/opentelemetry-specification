@@ -28,6 +28,7 @@ release.
   ([#2124](https://github.com/open-telemetry/opentelemetry-specification/pull/2124))
 - Remove the concept of supported temporality, keep preferred.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
+<<<<<<< HEAD
 - Mark In-memory, OTLP and Stdout exporter specs as Stable.
   ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
 - Add to the supplemental guidelines for metric SDK authors text about implementing
@@ -42,6 +43,10 @@ release.
 - Changed default Prometheus Exporter host from `0.0.0.0` to `localhost`.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Mark Metrics SDK spec as Stable.
+=======
+- Mark Metrics SDK spec as Mixed, with `MeterProvider`, `MetricReader` and
+  `MetricExporter` marked as Stable.
+>>>>>>> 68952d1 (update changelog)
   ([#2150](https://github.com/open-telemetry/opentelemetry-specification/pull/2150))
 
 ### Logs
