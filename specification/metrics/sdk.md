@@ -170,11 +170,11 @@ are the inputs:
     refer to [Error handling in OpenTelemetry](../error-handling.md) for the
     general guidance.
 * The `name` of the View (optional). If not provided, the Instrument `name`
-  would be used by default. This will be used as the name of the [metrics
+  MUST be used by default. This will be used as the name of the [metrics
   stream](./datamodel.md#events--data-stream--timeseries).
 * The configuration for the resulting [metrics
   stream](./datamodel.md#events--data-stream--timeseries):
-  * The `description`. If not provided, the Instrument `description` would be
+  * The `description`. If not provided, the Instrument `description` MUST be
     used by default.
   * A list of `attribute keys` (optional). If provided, the attributes that are
     not in the list will be ignored. If not provided, all the attribute keys
