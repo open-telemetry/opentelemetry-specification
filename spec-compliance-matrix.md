@@ -284,16 +284,16 @@ Note: Support for environment variables is optional.
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V2 JSON                                                                 | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      |     | -    | -   | -    | -     |
+| Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      | -   | -    | -   | -    | -     |
 | Service name mapping                                                           |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | -   | +    | +   | +    | +     |
+| InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | +   | +    | +   | +    | +     |
 | Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    |             | +    | -      |     | +    | +   | +    | -     |
+| Error Status mapping                                                           |          | +  | + |    |             | +    | -      | +   | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      |     | +    | +   | +    | +     |
+| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
 | Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
@@ -308,6 +308,20 @@ Note: Support for environment variables is optional.
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 | Prometheus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
+
+## OpenTracing Compatibility
+
+Languages not covered by the OpenTracing project do not need to be listed here, e.g. Erlang.
+
+| Feature                                                                                                 |Go |Java|JS |Python|Ruby|PHP|Rust|C++|.NET|Swift|
+|---------------------------------------------------------------------------------------------------------|---|----|---|------|----|---|----|---|----|-----|
+| [Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim) |   |    |   |      |    |   |    |   |    |     |
+| [Tracer](specification/compatibility/opentracing.md#tracer-shim)                                        |   |    |   |      |    |   |    |   |    |     |
+| [Span](specification/compatibility/opentracing.md#span-shim)                                            |   |    |   |      |    |   |    |   |    |     |
+| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim)                              |   |    |   |      |    |   |    |   |    |     |
+| [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim)                            |   |    |   |      |    |   |    |   |    |     |
+| Error mapping for attributes/events                                                                     |   |    |   |      |    |   |    |   |    |     |
+| Migration to OpenTelemetry guide                                                                        |   |    |   |      |    |   |    |   |    |     |
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
 [py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059
