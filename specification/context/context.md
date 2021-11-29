@@ -3,25 +3,27 @@
 **Status**: [Stable, Feature-freeze](../document-status.md).
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
 
 - [Overview](#overview)
 - [Create a key](#create-a-key)
 - [Get value](#get-value)
 - [Set value](#set-value)
-- [Optional global operations](#optional-global-operations)
-  - [Get current Context](#get-current-context)
-  - [Attach Context](#attach-context)
-  - [Detach Context](#detach-context)
+- [Optional Global operations](#optional-global-operations)
+  * [Get current Context](#get-current-context)
+  * [Attach Context](#attach-context)
+  * [Detach Context](#detach-context)
+
+<!-- tocstop -->
 
 </details>
 
 ## Overview
 
 A `Context` is a propagation mechanism which carries execution-scoped values
-across API boundaries and between logically associated execution units.
+across API boundaries and between logically associated [execution units](../glossary.md#execution-unit).
 Cross-cutting concerns access their data in-process using the same shared
 `Context` object.
 
