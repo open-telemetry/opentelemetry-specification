@@ -625,6 +625,10 @@ SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
 filter, timeout). [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose the
 return value type, or do not return anything.
 
+Note: it is expected that the `MetricReader.Collect` implementations will be
+provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
+overriding it, if possible (e.g. `final` in C++ and Java, `sealed` in C#).
+
 ### Shutdown
 
 This method provides a way for the `MetricReader` to do any cleanup required.
