@@ -170,11 +170,11 @@ are the inputs:
     refer to [Error handling in OpenTelemetry](../error-handling.md) for the
     general guidance.
 * The `name` of the View (optional). If not provided, the Instrument `name`
-  would be used by default. This will be used as the name of the [metrics
+  MUST be used by default. This will be used as the name of the [metrics
   stream](./datamodel.md#events--data-stream--timeseries).
 * The configuration for the resulting [metrics
   stream](./datamodel.md#events--data-stream--timeseries):
-  * The `description`. If not provided, the Instrument `description` would be
+  * The `description`. If not provided, the Instrument `description` MUST be
     used by default.
   * A list of `attribute keys` (optional). If provided, the attributes that are
     not in the list will be ignored. If not provided, all the attribute keys
@@ -183,7 +183,7 @@ are the inputs:
   * The `extra dimensions` which come from Baggage/Context (optional). If not
     provided, no extra dimension will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
-  * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
+  * The `aggregation` (optional) to be used. If not provided, the SDK MUST
     apply a [default aggregation](#default-aggregation). If the aggregation
     outputs metric points that use aggregation temporality (e.g. Histogram,
     Sum), the SDK SHOULD handle the aggregation temporality based on the
