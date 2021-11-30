@@ -424,7 +424,7 @@ This Aggregation informs the SDK to collect:
 
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
-time. Attribute truncation or deletion could affect identitity of metric time
+time. Attribute truncation or deletion could affect identity of metric time
 series and it requires further analysis.
 
 ## Exemplar
