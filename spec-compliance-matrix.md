@@ -47,7 +47,7 @@ formats is required. Implementing more than one format is optional.
 | End with timestamp                                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording becomes false after End                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | -    | +     |
-| Set status with StatusCode (Unset, Ok, Error)                                                    |          | +  | +    | +  | +      | +    | -      | +   | +    | +   | +    | +     |
+| Set status with StatusCode (Unset, Ok, Error)                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | events collection size limit                                                                     |          | +  | +    | +  | +      | +    | -      | +   | +    | -   | -    | +     |
 | attribute collection size limit                                                                  |          | +  | +    | +  | +      | +    | -      | +   | +    | -   | -    | +     |
@@ -76,7 +76,7 @@ formats is required. Implementing more than one format is optional.
 | Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
 | ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      | +   | +    | +   | -    | +     |
-| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    | -      | +   | +    | +   |      | +     |
+| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    | +      | +   | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    | -      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    | +    |    | +      | +    | +      | +   | +    | +   |      |       |
 | [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |    | +    |    |        |      | -      | +   |      |     |      |       |
@@ -284,16 +284,16 @@ Note: Support for environment variables is optional.
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V2 JSON                                                                 | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      |     | -    | -   | -    | -     |
+| Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      | -   | -    | -   | -    | -     |
 | Service name mapping                                                           |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | -   | +    | +   | +    | +     |
+| InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | +   | +    | +   | +    | +     |
 | Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    |             | +    | -      |     | +    | +   | +    | -     |
+| Error Status mapping                                                           |          | +  | + |    |             | +    | -      | +   | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      |     | +    | +   | +    | +     |
+| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
 | Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
