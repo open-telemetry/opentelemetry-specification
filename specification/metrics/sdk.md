@@ -182,7 +182,7 @@ are the inputs:
     outputs metric points that use aggregation temporality (e.g. Histogram,
     Sum), the SDK SHOULD handle the aggregation temporality based on the
     temporality of each [MetricReader](#metricreader) instance.
-  * **Status**: [Experimental](../document-status.md) - the `exemplar_reservoir`
+  * **Status**: [Feature-freeze](../document-status.md) - the `exemplar_reservoir`
     (optional) to use for storing exemplars. This should be a factory or
     callback similar to aggregation which allows different reservoirs to be
     chosen by the aggregation.
@@ -428,7 +428,7 @@ series and the topic requires further analysis.
 
 ## Exemplar
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Feature-freeze](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
