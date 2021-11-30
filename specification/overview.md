@@ -1,10 +1,7 @@
 # Overview
 
 <details>
-<summary>
-Table of Contents
-</summary>
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+<summary>Table of Contents</summary>
 
 <!-- toc -->
 

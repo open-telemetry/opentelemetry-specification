@@ -17,6 +17,8 @@ release.
   ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
 - Mark In-memory, OTLP and Stdout exporter specs as Feature-freeze.
   ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
+- Remove the concept of supported temporality, keep preferred.
+  ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
 
 ### Logs
 
