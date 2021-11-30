@@ -19,6 +19,8 @@ release.
   ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
 - Add details to the Prometheus Exporter requirements.
   ([#2124](https://github.com/open-telemetry/opentelemetry-specification/pull/2124))
+- Remove the concept of supported temporality, keep preferred.
+  ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
 
 ### Logs
 

@@ -4,17 +4,23 @@ Note: this document is NOT a spec, it is provided to support the Metrics
 [API](./api.md) and [SDK](./sdk.md) specifications, it does NOT add any extra
 requirements to the existing specifications.
 
-Table of Contents:
+<details>
+<summary>Table of Contents</summary>
 
-* [Guidelines for instrumentation library
-  authors](#guidelines-for-instrumentation-library-authors)
+<!-- toc -->
+
+- [Guidelines for instrumentation library authors](#guidelines-for-instrumentation-library-authors)
   * [Instrument selection](#instrument-selection)
   * [Additive property](#additive-property)
   * [Monotonicity property](#monotonicity-property)
   * [Semantic convention](#semantic-convention)
-* [Guidelines for SDK authors](#guidelines-for-sdk-authors)
+- [Guidelines for SDK authors](#guidelines-for-sdk-authors)
   * [Aggregation temporality](#aggregation-temporality)
   * [Memory management](#memory-management)
+
+<!-- tocstop -->
+
+</details>
 
 ## Guidelines for instrumentation library authors
 

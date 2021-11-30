@@ -3,41 +3,46 @@
 **Status**: [Stable, Feature-freeze](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
 
-* [Data types](#data-types)
+<!-- toc -->
+
+- [Data types](#data-types)
   * [Time](#time)
-    * [Timestamp](#timestamp)
-    * [Duration](#duration)
-* [TracerProvider](#tracerprovider)
+    + [Timestamp](#timestamp)
+    + [Duration](#duration)
+- [TracerProvider](#tracerprovider)
   * [TracerProvider operations](#tracerprovider-operations)
-* [Context Interaction](#context-interaction)
-* [Tracer](#tracer)
+    + [Get a Tracer](#get-a-tracer)
+- [Context Interaction](#context-interaction)
+- [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
-* [SpanContext](#spancontext)
+- [SpanContext](#spancontext)
   * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [IsValid](#isvalid)
   * [IsRemote](#isremote)
-* [Span](#span)
-  * [Span creation](#span-creation)
-    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-    * [Specifying Links](#specifying-links)
+  * [TraceState](#tracestate)
+- [Span](#span)
+  * [Span Creation](#span-creation)
+    + [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+    + [Specifying links](#specifying-links)
   * [Span operations](#span-operations)
-    * [Get Context](#get-context)
-    * [IsRecording](#isrecording)
-    * [Set Attributes](#set-attributes)
-    * [Add Events](#add-events)
-    * [Set Status](#set-status)
-    * [UpdateName](#updatename)
-    * [End](#end)
-    * [Record Exception](#record-exception)
+    + [Get Context](#get-context)
+    + [IsRecording](#isrecording)
+    + [Set Attributes](#set-attributes)
+    + [Add Events](#add-events)
+    + [Set Status](#set-status)
+    + [UpdateName](#updatename)
+    + [End](#end)
+    + [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
-* [SpanKind](#spankind)
-* [Concurrency](#concurrency)
-* [Included Propagators](#included-propagators)
+- [SpanKind](#spankind)
+- [Concurrency](#concurrency)
+- [Included Propagators](#included-propagators)
+- [Behavior of the API in the absence of an installed SDK](#behavior-of-the-api-in-the-absence-of-an-installed-sdk)
+
+<!-- tocstop -->
 
 </details>
 
@@ -120,7 +125,7 @@ This API MUST accept the following parameters:
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
-  
+
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
 
