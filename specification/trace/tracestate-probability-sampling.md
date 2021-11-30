@@ -28,9 +28,10 @@
       - [Requirement: R-value is generated with the correct probabilities](#requirement-r-value-is-generated-with-the-correct-probabilities)
   * [Samplers](#samplers)
     + [ParentConsistentProbabilityBased sampler](#parentconsistentprobabilitybased-sampler)
-      - [Requirement: ParentBased API compatibility](#requirement-parentbased-api-compatibility)
+      - [Requirement: ParentConsistentProbabilityBased API](#requirement-parentconsistentprobabilitybased-api)
       - [Requirement: ParentConsistentProbabilityBased does not modify valid tracestate](#requirement-parentconsistentprobabilitybased-does-not-modify-valid-tracestate)
-      - [Requirement: ParentConsistentProbabilityBased and ParentBased make identical decisions](#requirement-parentconsistentprobabilitybased-and-parentbased-make-identical-decisions)
+      - [Requirement: ParentConsistentProbabilityBased calls the configured root sampler for root spans](#requirement-parentconsistentprobabilitybased-calls-the-configured-root-sampler-for-root-spans)
+      - [Requirement: ParentConsistentProbabilityBased respects the sampled flag for non-root spans](#requirement-parentconsistentprobabilitybased-respects-the-sampled-flag-for-non-root-spans)
     + [ConsistentProbabilityBased sampler](#consistentprobabilitybased-sampler)
       - [Requirement: TraceIdRatioBased API compatibility](#requirement-traceidratiobased-api-compatibility)
       - [Requirement: ConsistentProbabilityBased sampler sets r for root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-root-span)
@@ -379,24 +380,30 @@ produces each value with the specified probability.
 
 The `ParentConsistentProbabilityBased` sampler is meant as an optional
 replacement for the [`ParentBased` Sampler](sdk.md#parentbased). It is
-required to first validate the `tracestate` and then behave as the
-`ParentBased` sampler would.
+required to first validate the `tracestate` and then respect the
+`sampled` flag in the W3C traceparent.
 
-##### Requirement: ParentBased API compatibility
+##### Requirement: ParentConsistentProbabilityBased API
 
-The `ParentConsistentProbabilityBased` Sampler MUST have the same
-constructor signature as the built-in `ParentBased` sampler in each
-OpenTelemetry SDK.
+The `ParentConsistentProbabilityBased` Sampler constructor SHOULD take
+a single Sampler argument, which is the Sampler to use in case the
+`ParentConsistentProbabilityBased` Sampler is called for a root span.
 
 ##### Requirement: ParentConsistentProbabilityBased does not modify valid tracestate
 
 The `ParentConsistentProbabilityBased` Sampler MUST NOT modify a
 valid `tracestate`.
 
-##### Requirement: ParentConsistentProbabilityBased and ParentBased make identical decisions
+##### Requirement: ParentConsistentProbabilityBased calls the configured root sampler for root spans
 
-The `ParentConsistentProbabilityBased` Sampler MUST make the same
-decision specified for the `ParentBased` sampler.
+The `ParentConsistentProbabilityBased` Sampler MUST delegate to the
+configured root Sampler when there is not a valid parent trace context.
+
+##### Requirement: ParentConsistentProbabilityBased respects the sampled flag for non-root spans
+
+The `ParentConsistentProbabilityBased` Sampler MUST decide to sample
+the span according to the value of the `sampled` flag in the W3C
+traceparent header.
 
 #### ConsistentProbabilityBased sampler
 
