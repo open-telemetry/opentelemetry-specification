@@ -430,7 +430,7 @@ This Aggregation informs the SDK to collect:
 
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
-time. Attribute truncation or deletion could affect identitity of metric time
+time. Attribute truncation or deletion could affect identity of metric time
 series and it requires further analysis.
 
 ## Exemplar
@@ -635,6 +635,10 @@ SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
 filter, timeout). [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose the
 return value type, or do not return anything.
 
+Note: it is expected that the `MetricReader.Collect` implementations will be
+provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
+overriding it, if possible (e.g. `final` in C++ and Java, `sealed` in C#).
+
 ### Shutdown
 
 This method provides a way for the `MetricReader` to do any cleanup required.
@@ -681,9 +685,9 @@ Metric Exporter has access to the [aggregated metrics
 data](./datamodel.md#timeseries-model).
 
 There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
-Metric Exporters](#pull-metric-exporter) or even a mixture of both configured on
-a given `MeterProvider`. Different exporters can run at different schedule, for
-example:
+Metric Exporters](#pull-metric-exporter) or even a mixture of both configured at
+the same time on a given `MeterProvider` using one `MetricReader` for each exporter. Different exporters
+can run at different schedule, for example:
 
 * Exporter A is a push exporter which sends data every 1 minute.
 * Exporter B is a push exporter which sends data every 5 seconds.
