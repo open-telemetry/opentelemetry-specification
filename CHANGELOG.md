@@ -29,6 +29,9 @@ release.
 
 ### Common
 
+- Define semantic conventions and instrumentation stability.
+  ([#2180](https://github.com/open-telemetry/opentelemetry-specification/pull/2180))
+
 ## v1.10.0 (2022-04-01)
 
 ### Context
@@ -156,7 +159,7 @@ release.
 - Add "Mapping Arbitrary Data to OTLP AnyValue" document.
   ([#2385](https://github.com/open-telemetry/opentelemetry-specification/pull/2385))
 
-## v1.9.0 (2022-02-10)
+## v1.9.0 (2021-02-10)
 
 ### Context
 
