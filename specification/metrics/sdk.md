@@ -182,7 +182,7 @@ are the inputs:
     not in the list will be ignored. If not provided, all the attribute keys
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
-  * **Status**: [Experimental](../document-status.md) - the `extra dimensions`
+  * **Status**: [Feature-freeze](../document-status.md) - the `extra dimensions`
     which come from Baggage/Context (optional). If not provided, no extra
     dimension will be used. Please note that this only applies to [synchronous
     Instruments](./api.md#synchronous-instrument).
@@ -191,7 +191,7 @@ are the inputs:
     outputs metric points that use aggregation temporality (e.g. Histogram,
     Sum), the SDK SHOULD handle the aggregation temporality based on the
     temporality of each [MetricReader](#metricreader) instance.
-  * **Status**: [Experimental](../document-status.md) - the `exemplar_reservoir`
+  * **Status**: [Feature-freeze](../document-status.md) - the `exemplar_reservoir`
     (optional) to use for storing exemplars. This should be a factory or
     callback similar to aggregation which allows different reservoirs to be
     chosen by the aggregation.
@@ -435,7 +435,7 @@ series and it requires further analysis.
 
 ## Exemplar
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Feature-freeze](../document-status.md)
 
 An [Exemplar](./datamodel.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
