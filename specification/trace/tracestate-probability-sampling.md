@@ -279,7 +279,7 @@ information: the TraceId, the SpanId, and the trace flags.  The
 sample the context.
 
 The [Sampler API](sdk.md#sampler) is responsible for setting the
-`sampled` flag and the `tracestate`. 
+`sampled` flag and the `tracestate`.
 
 P-value and r-value are set in the OpenTelemetry `tracestate`, under
 the vendor tag `ot`, using the identifiers `p` and `r`.  P-value is an
@@ -517,7 +517,7 @@ in the `tracestate`.
 As stated in the [completeness guarantee](#completeness-guarantee),
 traces will be possibly incomplete when configuring multiple
 consistent probability samplers in the same trace.  One way to avoid
-producing incomplete traces is to use parent-based samplers except for 
+producing incomplete traces is to use parent-based samplers except for
 root spans.
 
 There is a simple test for trace incompleteness, but it is a one-way
@@ -663,7 +663,7 @@ this a strict test for random behavior, we take the following approach:
 - Generate a pre-determined list of 20 random seeds
 - Use fixed values for significance level (5%) and trials (20)
 - Use a population size of one million spans
-- For each trial, simulate the population and compute ChiSquared 
+- For each trial, simulate the population and compute ChiSquared
   test statistic
 - Locate the first seed value in the ordered list such that the
   Chi-Squared significance test fails exactly once out of 20 trials
@@ -756,7 +756,7 @@ For the teset with 20 trials and 1 million spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
 test statistic is below 0.003932 exactly 1 out of 20 times.
 
-#### Test implementation 
+#### Test implementation
 
 The recommended structure for this test uses a table listing the 20
 probability values, the expected p-values, whether the ChiSquared
@@ -764,31 +764,31 @@ statistic has one or two degrees of freedom, and the index into the
 predetermined list of seeds.
 
 ```
-	for _, test := range []testCase{
-		// Non-powers of two
-		{0.90000, 1, twoDegrees, 5},
-		{0.60000, 1, twoDegrees, 14},
-		{0.33000, 2, twoDegrees, 3},
-		{0.13000, 3, twoDegrees, 2},
-		{0.10000, 4, twoDegrees, 0},
-		{0.05000, 5, twoDegrees, 0},
-		{0.01700, 6, twoDegrees, 2},
-		{0.01000, 7, twoDegrees, 3},
-		{0.00500, 8, twoDegrees, 1},
-		{0.00290, 9, twoDegrees, 1},
-		{0.00100, 10, twoDegrees, 5},
-		{0.00050, 11, twoDegrees, 1},
-		{0.00026, 12, twoDegrees, 3},
-		{0.00023, 13, twoDegrees, 0},
-		{0.00010, 14, twoDegrees, 2},
+    for _, test := range []testCase{
+        // Non-powers of two
+        {0.90000, 1, twoDegrees, 5},
+        {0.60000, 1, twoDegrees, 14},
+        {0.33000, 2, twoDegrees, 3},
+        {0.13000, 3, twoDegrees, 2},
+        {0.10000, 4, twoDegrees, 0},
+        {0.05000, 5, twoDegrees, 0},
+        {0.01700, 6, twoDegrees, 2},
+        {0.01000, 7, twoDegrees, 3},
+        {0.00500, 8, twoDegrees, 1},
+        {0.00290, 9, twoDegrees, 1},
+        {0.00100, 10, twoDegrees, 5},
+        {0.00050, 11, twoDegrees, 1},
+        {0.00026, 12, twoDegrees, 3},
+        {0.00023, 13, twoDegrees, 0},
+        {0.00010, 14, twoDegrees, 2},
 
-		// Powers of two
-		{0x1p-1, 1, oneDegree, 0},
-		{0x1p-4, 4, oneDegree, 2},
-		{0x1p-7, 7, oneDegree, 3},
-		{0x1p-10, 10, oneDegree, 0},
-		{0x1p-13, 13, oneDegree, 1},
-	} {
+        // Powers of two
+        {0x1p-1, 1, oneDegree, 0},
+        {0x1p-4, 4, oneDegree, 2},
+        {0x1p-7, 7, oneDegree, 3},
+        {0x1p-10, 10, oneDegree, 0},
+        {0x1p-13, 13, oneDegree, 1},
+    } {
 ```
 
 Note that seed indexes in the example above have what appears to be
