@@ -191,10 +191,10 @@ are the inputs:
     outputs metric points that use aggregation temporality (e.g. Histogram,
     Sum), the SDK SHOULD handle the aggregation temporality based on the
     temporality of each [MetricReader](#metricreader) instance.
-  * **Status**: [Feature-freeze](../document-status.md) - the `exemplar_reservoir`
-    (optional) to use for storing exemplars. This should be a factory or
-    callback similar to aggregation which allows different reservoirs to be
-    chosen by the aggregation.
+  * **Status**: [Feature-freeze](../document-status.md) - the
+    `exemplar_reservoir` (optional) to use for storing exemplars. This should be
+    a factory or callback similar to aggregation which allows different
+    reservoirs to be chosen by the aggregation.
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
