@@ -3,20 +3,20 @@
 **Status**: [Experimental](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
 
-* [Overview](#overview)
+<!-- toc -->
+
+- [Overview](#overview)
   * [Design Goals](#design-goals)
   * [Concepts](#concepts)
-    * [API](#api)
-    * [SDK](#sdk)
-* [Specifications](#specifications)
-  * [Metrics API](./api.md)
-  * [Metrics SDK](./sdk.md)
-  * [Metrics Data Model and Protocol](./datamodel.md)
-  * [Semantic Conventions](./semantic_conventions/README.md)
+    + [API](#api)
+    + [SDK](#sdk)
+    + [Programming Model](#programming-model)
+- [Specifications](#specifications)
+- [References](#references)
+
+<!-- tocstop -->
 
 </details>
 

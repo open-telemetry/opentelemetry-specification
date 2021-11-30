@@ -3,25 +3,45 @@
 **Status**: [Feature-freeze](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
 
-* [MeterProvider](#meterprovider)
-* [Attribute limits](#attribute-limits)
-* [Exemplar](#exemplar)
+<!-- toc -->
+
+- [MeterProvider](#meterprovider)
+  * [Meter Creation](#meter-creation)
+  * [Shutdown](#shutdown)
+  * [ForceFlush](#forceflush)
+  * [View](#view)
+  * [Aggregation](#aggregation)
+    + [Drop Aggregation](#drop-aggregation)
+    + [Default Aggregation](#default-aggregation)
+    + [Sum Aggregation](#sum-aggregation)
+    + [Last Value Aggregation](#last-value-aggregation)
+    + [Histogram Aggregation](#histogram-aggregation)
+    + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+- [Attribute limits](#attribute-limits)
+- [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
-* [MetricReader](#metricreader)
+- [MetricReader](#metricreader)
+  * [MetricReader operations](#metricreader-operations)
+    + [Collect](#collect)
+  * [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
-* [MetricExporter](#metricexporter)
+- [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
+    + [Interface Definition](#interface-definition)
+      - [Export(batch)](#exportbatch)
+      - [ForceFlush()](#forceflush)
+      - [Shutdown()](#shutdown)
   * [Pull Metric Exporter](#pull-metric-exporter)
-* [Defaults and configuration](#defaults-and-configuration)
-* [Numerical limits handling](#numerical-limits-handling)
-* [Compatibility requirements](#compatibility-requirements)
-* [Concurrency requirements](#concurrency-requirements)
+- [Defaults and configuration](#defaults-and-configuration)
+- [Numerical limits handling](#numerical-limits-handling)
+- [Compatibility requirements](#compatibility-requirements)
+- [Concurrency requirements](#concurrency-requirements)
+
+<!-- tocstop -->
 
 </details>
 
@@ -150,11 +170,11 @@ are the inputs:
     refer to [Error handling in OpenTelemetry](../error-handling.md) for the
     general guidance.
 * The `name` of the View (optional). If not provided, the Instrument `name`
-  would be used by default. This will be used as the name of the [metrics
+  MUST be used by default. This will be used as the name of the [metrics
   stream](./datamodel.md#events--data-stream--timeseries).
 * The configuration for the resulting [metrics
   stream](./datamodel.md#events--data-stream--timeseries):
-  * The `description`. If not provided, the Instrument `description` would be
+  * The `description`. If not provided, the Instrument `description` MUST be
     used by default.
   * A list of `attribute keys` (optional). If provided, the attributes that are
     not in the list will be ignored. If not provided, all the attribute keys
@@ -163,7 +183,7 @@ are the inputs:
   * The `extra attributes` which come from Baggage/Context (optional). If not
     provided, no extra attributes will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
-  * The `aggregation` (optional) to be used. If not provided, the SDK SHOULD
+  * The `aggregation` (optional) to be used. If not provided, the SDK MUST
     apply a [default aggregation](#default-aggregation). If the aggregation
     outputs metric points that use aggregation temporality (e.g. Histogram,
     Sum), the SDK SHOULD handle the aggregation temporality based on the
@@ -257,6 +277,10 @@ informs the SDK on the ways and means to compute
 [Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model)
 from incoming Instrument [Measurements](./api.md#measurement).
 
+Note: the term _aggregation_ is used instead of _aggregator_. It is recommended
+that implementors reserve the "aggregator" term for the future when the SDK
+allows custom aggregation implementations.
+
 An `Aggregation` specifies an operation
 (i.e. [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
 like Sum, Histogram, Min, Max, Count)
@@ -273,8 +297,8 @@ e.g. The View specifies an Aggregation by string name (i.e. "ExplicitBucketHisto
 # Use Histogram with custom boundaries
 meter_provider
   .add_view(
-    "X", 
-    aggregation="ExplicitBucketHistogram", 
+    "X",
+    aggregation="ExplicitBucketHistogram",
     aggregation_params={"Boundaries": [0, 10, 100]}
     )
 ```
@@ -367,9 +391,9 @@ This Aggregation informs the SDK to collect:
 
 #### Histogram Aggregation
 
-The Histogram Aggregation informs the SDK to select the best
-Histogram Aggregation available.
-i.e. [Explicit Bucket Histogram Aggregator](./sdk.md#explicit-bucket-histogram-aggregation).
+The Histogram Aggregation informs the SDK to select the best Histogram
+Aggregation available. i.e. [Explicit Bucket Histogram
+Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
 
 This Aggregation does not have any configuration parameters.
 
@@ -386,8 +410,8 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-Note: This aggregator should not fill out `sum` when used with instruments
-that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
+Note: This aggregation should not fill out `sum` when used with instruments that
+record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
 
 This Aggregation informs the SDK to collect:
 
@@ -420,12 +444,15 @@ information:
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
 
-A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance the SDK SHOULD not have overhead related to exemplar sampling.
+A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance
+the SDK SHOULD not have overhead related to exemplar sampling.
 
-A Metric SDK MUST sample `Exemplar`s only from measurements within the context of a sampled trace BY DEFAULT.
+A Metric SDK MUST sample `Exemplar`s only from measurements within the context
+of a sampled trace BY DEFAULT.
 
-A Metric SDK MUST allow exemplar sampling to leverage the configuration of a metric aggregator.  
-For example, Exemplar sampling of histograms should be able to leverage bucket boundaries.
+A Metric SDK MUST allow exemplar sampling to leverage the configuration of a
+metric aggregation. For example, Exemplar sampling of histograms should be able
+to leverage bucket boundaries.
 
 A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
 
@@ -487,14 +514,15 @@ The SDK will come with two types of built-in exemplar reservoirs:
 1. SimpleFixedSizeExemplarReservoir
 2. AlignedHistogramBucketExemplarReservoir
 
-By default, explicit bucket histogram aggregators with more than 1 bucket will
-use `AlignedHistogramBucketExemplarReservoir`. All other aggregators will
-use `SimpleFixedSizeExemplarReservoir`.
+By default, explicit bucket histogram aggregation with more than 1 bucket will
+use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
+`SimpleFixedSizeExemplarReservoir`.
 
 *SimpleExemplarReservoir*
-This Exemplar reservoir MAY take a configuration parameter for the size of
-the reservoir pool.  The reservoir will accept measurements using an equivalent of
-the [naive reservoir sampling algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
+This Exemplar reservoir MAY take a configuration parameter for the size of the
+reservoir pool.  The reservoir will accept measurements using an equivalent of
+the [naive reservoir sampling
+algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
 
   ```
   bucket = random_integer(0, num_measurements_seen)
@@ -561,33 +589,11 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
-The SDK SHOULD provide a way to allow [Aggregation
+The SDK SHOULD provide a way to allow the preferred [Aggregation
 Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
-instance during the setup (e.g. initialization, registration, etc.) time. The
-following logic MUST be followed to determine which temporality to be used for a
-`MetricReader`:
-
-* If the temporality is explicitly specified during `MetricReader` creation:
-  * If the specified temporality is supported by the `MetricReader`, use the
-    specified temporality.
-  * If the specified temporality is not supported by the `MetricReader`, treat
-    the conflicts as an error. It is unspecified _how_ these error should be
-    handled (e.g. it could fail fast during the SDK configuration time). Please
-    refer to [Error handling in OpenTelemetry](../error-handling.md) for the
-    general guidance.
-* If the temporality is not explicitly specified:
-  * If the `MetricReader` only supports one temporality (either Cumulative or
-    Delta), use the supported temporality.
-  * If the `MetricReader` supports both Cumulative and Delta:
-    * If the `MetricReader` has a preferred temporality, use the preferred
-      temporality.
-    * If the `MetricReader` does not have a preferred temporality, use
-      Cumulative.
-
-If a `MetricReader` is backed by a `MetricExporter` (e.g. a [Periodic exporting
-MetricReader](#periodic-exporting-metricreader) configured with an [OTLP
-Exporter](./sdk_exporters/otlp.md)) it MUST use the underlying
-`MetricExporter`'s preferred + supported temporality.
+instance during the setup (e.g. initialization, registration, etc.) time. If the
+preferred temporality is explicitly specified then the SDK SHOULD respect that,
+otherwise use Cumulative.
 
 [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY choose the best idiomatic design for their language:
@@ -599,10 +605,6 @@ authors MAY choose the best idiomatic design for their language:
   [Gauge](./datamodel.md#gauge), or keep consuming it as Cumulative due to the
   consideration of [memory
   efficiency](./supplementary-guidelines.md#memory-management)?
-* If an invalid combination of settings occurred (e.g. if a `MetricReader`
-  instance is set to use Cumulative, and it has an associated [Push Metric
-  Exporter](#push-metric-exporter) instance which has the temporality set to
-  Delta), would the SDK want to fail fast or use some fallback logic?
 * Refer to the [supplementary
   guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
   more context and suggestions.
@@ -622,6 +624,10 @@ failed or timed out.
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
 filter, timeout). [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose the
 return value type, or do not return anything.
+
+Note: it is expected that the `MetricReader.Collect` implementations will be
+provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
+overriding it, if possible (e.g. `final` in C++ and Java, `sealed` in C#).
 
 ### Shutdown
 
@@ -663,13 +669,13 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
-Metric Exporter has access to the [pre-aggregated metrics
+Metric Exporter has access to the [aggregated metrics
 data](./datamodel.md#timeseries-model).
 
 There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
-Metric Exporters](#pull-metric-exporter) or even a mixture of both configured on
-a given `MeterProvider`. Different exporters can run at different schedule, for
-example:
+Metric Exporters](#pull-metric-exporter) or even a mixture of both configured at
+the same time on a given `MeterProvider` using one `MetricReader` for each exporter. Different exporters
+can run at different schedule, for example:
 
 * Exporter A is a push exporter which sends data every 1 minute.
 * Exporter B is a push exporter which sends data every 5 seconds.
@@ -678,7 +684,7 @@ example:
   pipe.
 
 `MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
-preferred and supported temporality.
+preferred temporality.
 
 ### Push Metric Exporter
 
