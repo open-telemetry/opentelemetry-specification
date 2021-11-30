@@ -186,7 +186,7 @@ collected.
 Since the test for an incompleteness is one-way, it is important to
 know which sampling configurations may lead to incomplete traces.
 Sampling configurations that lead naturally to complete traces and
-complete subtraces are [discussed below](#trace-producers).
+complete subtraces are [discussed below](#trace-producer-completeness).
 
 #### Non-probability sampler
 
