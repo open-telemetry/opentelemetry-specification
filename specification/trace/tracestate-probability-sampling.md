@@ -11,11 +11,13 @@
     + [Parent-based sampler](#parent-based-sampler)
     + [Probability sampler](#probability-sampler)
     + [Consistent probability sampler](#consistent-probability-sampler)
-    + [Always-on sampler](#always-on-sampler)
-    + [Always-off sampler](#always-off-sampler)
+    + [Trace completeness](#trace-completeness)
     + [Non-probability sampler](#non-probability-sampler)
+    + [Always-on consistent probability sampler](#always-on-consistent-probability-sampler)
+    + [Always-off sampler](#always-off-sampler)
 - [Consistent Probability sampling](#consistent-probability-sampling)
   * [Conformance](#conformance)
+  * [Completeness guarantee](#completeness-guarantee)
   * [Context invariants](#context-invariants)
     + [Sampled flag](#sampled-flag)
       - [Requirement: Inconsistent p-values are unset](#requirement-inconsistent-p-values-are-unset)
@@ -34,7 +36,7 @@
       - [Requirement: ConsistentProbabilityBased sampler sets r for root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-root-span)
       - [Requirement: ConsistentProbabilityBased sampler unsets p when not sampling](#requirement-consistentprobabilitybased-sampler-unsets-p-when-not-sampling)
       - [Requirement: ConsistentProbabilityBased sampler sets p when sampling](#requirement-consistentprobabilitybased-sampler-sets-p-when-sampling)
-      - [Requirement: ConsistentProbabilityBased records unbiased adjusted counts](#requirement-consistentprobabilitybased-records-unbiased-adjusted-counts)
+      - [Requirement: ConsistentProbabilityBased sampler records unbiased adjusted counts](#requirement-consistentprobabilitybased-sampler-records-unbiased-adjusted-counts)
       - [Requirement: ConsistentProbabilityBased sampler sets r for non-root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-non-root-span)
       - [Requirement: ConsistentProbabilityBased sampler acts like AlwaysOff sampler for probabilities less than 2**-62](#requirement-consistentprobabilitybased-sampler-acts-like-alwaysoff-sampler-for-probabilities-less-than-2-62)
   * [Composition rules](#composition-rules)
@@ -44,8 +46,14 @@
       - [Requirement: Unset p when multiple consistent probability samplers decide not to sample](#requirement-unset-p-when-multiple-consistent-probability-samplers-decide-not-to-sample)
       - [Requirement: Use probability sampler p-value when its decision to sample is combined with non-probability samplers](#requirement-use-probability-sampler-p-value-when-its-decision-to-sample-is-combined-with-non-probability-samplers)
       - [Requirement: Use p-value 63 when a probability sampler decision not to sample is combined with a non-probability sampler decision to sample](#requirement-use-p-value-63-when-a-probability-sampler-decision-not-to-sample-is-combined-with-a-non-probability-sampler-decision-to-sample)
-  * [Consumer recommendations](#consumer-recommendations)
-    + [Trace consumers](#trace-consumers)
+  * [Producer and consumer recommendations](#producer-and-consumer-recommendations)
+    + [Trace producer: completeness](#trace-producer-completeness)
+      - [Recommenendation: use non-descending power-of-two probabilities](#recommenendation-use-non-descending-power-of-two-probabilities)
+    + [Trace producer: correctness](#trace-producer-correctness)
+      - [Recommenendation: sampler delegation](#recommenendation-sampler-delegation)
+    + [Trace producer: interoperability with `ParentBased` sampler](#trace-producer-interoperability-with-parentbased-sampler)
+    + [Trace producer: interoperability with `TraceIDRatioBased` sampler](#trace-producer-interoperability-with-traceidratiobased-sampler)
+    + [Trace consumer](#trace-consumer)
       - [Recommendation: Recognize inconsistent r-values](#recommendation-recognize-inconsistent-r-values)
   * [Appendix: Statistical test requirements](#appendix-statistical-test-requirements)
     + [Test procedure: non-powers of two](#test-procedure-non-powers-of-two)
@@ -184,7 +192,8 @@ complete subtraces are [discussed below](#trace-producers).
 
 A non-probability sampler is a Sampler that makes its decisions not
 based on chance, but instead uses arbitrary logic and internal state.
-The adjusted count of spans sampled by a non-probabiliy is unknown.
+The adjusted count of spans sampled by a non-probability sampler is
+unknown.
 
 #### Always-on consistent probability sampler
 
@@ -503,7 +512,7 @@ in the `tracestate`.
 
 ### Producer and consumer recommendations
 
-#### Trace producers
+#### Trace producer: completeness
 
 As stated in the [completeness guarantee](#completeness-guarantee),
 traces will be possibly incomplete when configuring multiple
@@ -518,14 +527,95 @@ non-power-of-two sampling probabilities for non-root spans, because
 completeness is not guaranteed for non-power-of-two sampling
 probabilities.
 
+##### Recommenendation: use non-descending power-of-two probabilities
+
 Complete subtraces will be produced when the sequence of sampling
 probabilities from the root of a trace to its leaves consists of
 non-descending powers of two.  To ensure complete sub-traces are
-produced, configure a child-span's sampler to a power-of-two
+produced, child samplers SHOULD be configured with a power-of-two
 probability greater than or equal to the parent span's sampling
 probability.
 
-#### Trace consumers
+#### Trace producer: correctness
+
+The use of tracestate to convey adjusted count information rests upon
+trust between participants in a trace.  Users are advised not to use a
+Span-to-metrics pipeline when the parent sampling decision's
+corresponding adjusted count is untrustworthy.
+
+The `ConsistentProbabilityBased` and
+`ParentConsistentProbabilityBased` samplers can be used as delegates
+of another sampler, for conditioning the choice of sampler on span and
+other fixed attributes.  However, for adjusted counts to be
+trustworthy, the choice of non-root sampler cannot be conditioned on
+the parent's sampled trace flag or the OpenTelemetry tracestate
+r-value and p-value, as these decisions would lead to incorrect
+adjusted counts.
+
+For example, the built-in [`ParentBased` sampler](sdk.md#parentbased)
+supports configuring the delegated sampler based on whether the parent
+context is remote or non-remote, sampled or unsampled.  If a
+`ParentBased` sampler delegates to a `ConsistentProbabilityBased`
+sampler only for unsampled contexts, the resulting Span-to-metrics
+pipeline will (probably) overcount spans.
+
+##### Recommenendation: sampler delegation
+
+For non-root spans, composite samplers SHOULD NOT condition the choice
+of delegating sampler based on the parent's sampled flag or
+OpenTelemetry tracestate.
+
+#### Trace producer: interoperability with `ParentBased` sampler
+
+The OpenTelemetry built-in `ParentBased` sampler is interoperable with
+the `ConsistentProbabilityBased` sampler, provided that the
+delegated-to sampler does not change the decision that determined its
+selection.  For example, it is safe to configure an alternate
+`ParentBased` sampler delegate for unsampled spans, provided the
+decision does not change to sampled.
+
+Because the `ParentBased` sampler honors the sampled trace flag, and
+OpenTelemetry SDKs include the tracestate in the `Span` data, which
+means a system can be upgraded to probability sampling by just
+replacing `TraceIDRatioBased` samplers with conforming
+`ConsistentProbabilityBased` samplers everywhere in the trace.
+
+#### Trace producer: interoperability with `TraceIDRatioBased` sampler
+
+The [`TraceIDRatioBased` specification](sdk.md#traceidratiobased)
+includes a RECOMMENDATION against being used for non-root spans
+because it does not specify how to make the sampler decision
+consistent across the trace.  A `TraceIDRatioBased` sampler at the
+root span is interoperable with a `ConsistentParentProbabilityBased`
+sampler in terms of completeness, although the resulting spans will
+have unknown adjusted count.
+
+When a `TraceIDRatioBased` sampler is configured for a non-root span,
+several cases arise where an incorrect OpenTelemetry tracestate can be
+generated.  Consider for example a trace with three spans where the
+root (R) has a `ConsistentProbabilityBased` sampler, the root's child
+(P) has a `TraceIDRatioBased` sampler, and the grand-child (C) has a
+`ParentBased` sampler.  Because the `TraceIDRatioBased` sampler change
+the intermediate sampled flag without updating the OpenTelemetry
+tracestate, we have the following cases:
+
+1. If `TraceIDRatioBased` does not change P's decision, the trace is
+   complete and all spans' adjusted counts are correct.
+2. If `TraceIDRatioBased` changes P's decision from no to yes, the
+   consumer will observe a (definitely) incomplete trace containing P
+   and C.  Both spans will have invalid OpenTelemetry tracestate,
+   leading to unknown adjusted count in this case.
+3. If `TraceIDRatioBased` changes the sampling decision from yes to
+   no, the consumer will observe singleton trace with correct adjusted
+   count. The consumer cannot determine that R has two unsampled
+   descendents.
+
+As these cases demonstrate, users can expect incompleteness and
+unknown adjusted count when using `TraceIDRatioBased` samplers for
+non-root spans, but this goes against the originally specified
+warning.
+
+#### Trace consumer
 
 Trace consumers are expected to apply the simple one-way test for
 incompleteness.  When non-root spans are configured with independent
