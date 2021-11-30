@@ -47,7 +47,7 @@ formats is required. Implementing more than one format is optional.
 | End with timestamp                                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRecording becomes false after End                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | -    | +     |
-| Set status with StatusCode (Unset, Ok, Error)                                                    |          | +  | +    | +  | +      | +    | -      | +   | +    | +   | +    | +     |
+| Set status with StatusCode (Unset, Ok, Error)                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | events collection size limit                                                                     |          | +  | +    | +  | +      | +    | -      | +   | +    | -   | -    | +     |
 | attribute collection size limit                                                                  |          | +  | +    | +  | +      | +    | -      | +   | +    | -   | -    | +     |
@@ -76,7 +76,7 @@ formats is required. Implementing more than one format is optional.
 | Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
 | ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      | +   | +    | +   | -    | +     |
-| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    | -      | +   | +    | +   |      | +     |
+| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    | +      | +   | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    | -      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    | +    |    | +      | +    | +      | +   | +    | +   |      |       |
 | [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |    | +    |    |        |      | -      | +   |      |     |      |       |
@@ -127,25 +127,25 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | `create_asynchronous_counter` creates an `AsynchronousCounter`.                                                                                                              |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
 | The API for `AsynchronousCounter` accepts the name, unit and description of the instrument.                                                                                  |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
 | The API for `AsynchronousCounter` accepts a callback.                                                                                                                        |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
-| `create_up_down_counter` returns an `UpDownCounter`.                                                                                                                         |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The API for `UpDownCounter` accepts the name, unit and description of the instrument.                                                                                        |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `UpDownCounter` has an `add` method.                                                                                                                                         |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The `add` method returns no (or dummy) value.                                                                                                                                |  X       | +  |      |    |        |      |        |     |      |     |      |       |
-| The `add` method accepts optional attributes.                                                                                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The `add` method accepts the increment amount.                                                                                                                               |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `create_asynchronous_up_down_counter` creates an `AsynchronousUpDownCounter`.                                                                                                |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The API for `AsynchronousUpDownCounter` accepts the name, unit and description of the instrument.                                                                            |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The API for `AsynchronousUpDownCounter` accepts a callback.                                                                                                                  |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
-| `create_histogram` returns a `Histogram`.                                                                                                                                    |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The API for `Histogram` accepts the name, unit and description of the instrument.                                                                                            |          | +  |      |    |        |      |        |     |      |     |      |       |
-| `Histogram` has a `record` method.                                                                                                                                           |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The `record` method return no (or dummy) value.                                                                                                                              |  X       | +  |      |    |        |      |        |     |      |     |      |       |
-| The `record` method accepts optional attributes.                                                                                                                             |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The `record` method accepts a value.                                                                                                                                         |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The `record` method of `Histogram` accepts only positive amounts.                                                                                                            |          | -  |      |    |        |      |        |     |      |     |      |       |
-| `create_asynchronous_gauge` creates an `Asynchronous Gauge`.                                                                                                                  |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The API for `AsynchronousGauge` accepts the name, unit and description of the instrument.                                                                                    |          | +  |      |    |        |      |        |     |      |     |      |       |
-| The API for `AsynchronousGauge` accepts a callback.                                                                                                                          |          | +  |      |    |        |      |        |     |      |     |      |       |
+| `create_up_down_counter` returns an `UpDownCounter`.                                                                                                                         |          | +  |      |    |        |      |        |     |      |     |   -  |       |
+| The API for `UpDownCounter` accepts the name, unit and description of the instrument.                                                                                        |          | +  |      |    |        |      |        |     |      |     |   -  |       |
+| `UpDownCounter` has an `add` method.                                                                                                                                         |          | +  |      |    |        |      |        |     |      |     |   -  |       |
+| The `add` method returns no (or dummy) value.                                                                                                                                |  X       | +  |      |    |        |      |        |     |      |     |   -  |       |
+| The `add` method accepts optional attributes.                                                                                                                                |          | +  |      |    |        |      |        |     |      |     |   -  |       |
+| The `add` method accepts the increment amount.                                                                                                                               |          | +  |      |    |        |      |        |     |      |     |   -  |       |
+| `create_asynchronous_up_down_counter` creates an `AsynchronousUpDownCounter`.                                                                                                |          | +  |      |    |        |      |        |     |      |     |   -  |       |
+| The API for `AsynchronousUpDownCounter` accepts the name, unit and description of the instrument.                                                                            |          | +  |      |    |        |      |        |     |      |     |   -  |       |
+| The API for `AsynchronousUpDownCounter` accepts a callback.                                                                                                                  |          | +  |  +   |    |        |      |        |     |      |     |   -  |       |
+| `create_histogram` returns a `Histogram`.                                                                                                                                    |          | +  |      |    |        |      |        |     |      |     |   +  |       |
+| The API for `Histogram` accepts the name, unit and description of the instrument.                                                                                            |          | +  |      |    |        |      |        |     |      |     |   +  |       |
+| `Histogram` has a `record` method.                                                                                                                                           |          | +  |      |    |        |      |        |     |      |     |   +  |       |
+| The `record` method return no (or dummy) value.                                                                                                                              |  X       | +  |      |    |        |      |        |     |      |     |   +  |       |
+| The `record` method accepts optional attributes.                                                                                                                             |          | +  |      |    |        |      |        |     |      |     |   +  |       |
+| The `record` method accepts a value.                                                                                                                                         |          | +  |      |    |        |      |        |     |      |     |   +  |       |
+| The `record` method of `Histogram` accepts only positive amounts.                                                                                                            |          | -  |      |    |        |      |        |     |      |     |   +  |       |
+| `create_asynchronous_gauge` creates an `Asynchronous Gauge`.                                                                                                                 |          | +  |      |    |        |      |        |     |      |     |   +  |       |
+| The API for `AsynchronousGauge` accepts the name, unit and description of the instrument.                                                                                    |          | +  |      |    |        |      |        |     |      |     |   +  |       |
+| The API for `AsynchronousGauge` accepts a callback.                                                                                                                          |          | +  |      |    |        |      |        |     |      |     |   +  |       |
 | The callback function of an `Asynchronous` instrument does not block indefinitely.                                                                                           |          | -  |  -   |    |        |      |        |     |      |     |   ?  |       |
 | The callback function reports `Measurement`s.                                                                                                                                |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
 | There is a way to pass state to the callback.                                                                                                                                | X        | +  |  +   |    |        |      |        |     |      |     |   +  |       |
@@ -164,8 +164,8 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The `View` allows configuring the name description, attributes keys and aggregation of the resulting metric stream.                                                          |          |    |  ?   |    |        |      |        |     |      |     |   -  |       |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream.                                                                                             | X        |    |  ?   |    |        |      |        |     |      |     |   -  |       |
 | The SDK allows more than one `View` to be specified per instrument.                                                                                                          | X        |    |  ?   |    |        |      |        |     |      |     |   +  |       |
-| The `None` aggregation is available.                                                                                                                                         |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
-| The `None` aggregation drops all measurements and does not produce a metric stream.                                                                                          |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
+| The `Drop` aggregation is available.                                                                                                                                         |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
+| The `Drop` aggregation drops all measurements and does not produce a metric stream.                                                                                          |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
 | The `Default` aggregation is available.                                                                                                                                      |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
 | The `Default` aggregation uses the specified aggregation by instrument.                                                                                                      |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
 | The `Sum` aggregation is available.                                                                                                                                          |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
@@ -185,18 +185,18 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The metrics exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.                                                                           |          |    |      |    |        |      |        |     |      |     |   +  |       |
 | The metrics exporter provides a `shutdown` function.                                                                                                                         |          | +  |  +   |    |        |      |        |     |      |     |   +  |       |
 | The metrics exporter `shutdown` function do not block indefinitely.                                                                                                          |          | +  |  -   |    |        |      |        |     |      |     |   +  |       |
-| The metrics SDK samples `Exemplar`s from measurements.                                                                                                                       |          |    |      |    |        |      |        |     |      |     |      |       |
-| Exemplar sampling can be disabled.                                                                                                                                           |          |    |      |    |        |      |        |     |      |     |      |       |
-| The metrics SDK samples measurements in the context of a sampled trace by default.                                                                                           |          |    |      |    |        |      |        |     |      |     |      |       |
-| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
-| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken.                                                      |          |    |      |    |        |      |        |     |      |     |      |       |
-| Exemplars contain the timestamp when the measurement was taken.                                                                                                              |          |    |      |    |        |      |        |     |      |     |      |       |
-| The metrics SDK provides an `ExemplarReservoir` interface or extension point.                                                                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
-| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.                                                      | X        |    |      |    |        |      |        |     |      |     |      |       |
-| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`.                                 |          |    |      |    |        |      |        |     |      |     |      |       |
-| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                                     |          |    |      |    |        |      |        |     |      |     |      |       |
-| The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                                   | X        |    |      |    |        |      |        |     |      |     |      |       |
-| An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics SDK samples `Exemplar`s from measurements.                                                                                                                       |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| Exemplar sampling can be disabled.                                                                                                                                           |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| The metrics SDK samples measurements in the context of a sampled trace by default.                                                                                           |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.                                                    |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken.                                                      |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| Exemplars contain the timestamp when the measurement was taken.                                                                                                              |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| The metrics SDK provides an `ExemplarReservoir` interface or extension point.                                                                                                | X        |    |      |    |        |      |        |     |      |     |   -  |       |
+| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.                                                      | X        |    |      |    |        |      |        |     |      |     |   -  |       |
+| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`.                                 |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                                     |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                                   | X        |    |      |    |        |      |        |     |      |     |   -  |       |
+| An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                                | X        |    |      |    |        |      |        |     |      |     |   -  |       |
 
 ## Resource
 
@@ -208,7 +208,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      |     |      | +   | +    |       |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | [-][php225]   | +    | +   | +    | +     |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  |      |    |        |      | -      |     |      |     |      |       |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  |      |    |        |      | -      |     |      |     | -    |       |
 
 ## Context Propagation
 
@@ -238,13 +238,13 @@ Note: Support for environment variables is optional.
 |Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
 |----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_SERVICE_NAME                             | + |    |   |      |    | +    |   |    |   |    |     |
+|OTEL_SERVICE_NAME                             | + |    |   |      |    | +    |   |    |   | +  |     |
 |OTEL_LOG_LEVEL                                | - | -  | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
 |OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
 |OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | +    | - | +  | + | -  | -   |
+|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
 |OTEL_EXPORTER_JAEGER_*                        | + |    |   |      |    | -    | - |    | - | +  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | -  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | +  | -   |
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 |OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   | +  | - |    |     |
@@ -277,23 +277,23 @@ Note: Support for environment variables is optional.
 | Honors non-retryable responses                                                 | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Honors throttling response                                                     | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Multi-destination spec compliance                                              | X        | +  |   |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
-| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      | -      |     |      |     |      |       |
-| SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      | -      |     |      |     |      |       |
-| SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      | -      |     |      |     |      |       |
+| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      | -      |     |      |     | -    |       |
+| SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      | -      |     |      |     | -    |       |
+| SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      | -      |     |      |     | -    |       |
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V2 JSON                                                                 | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      |     | -    | -   | -    | -     |
+| Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      | -   | -    | -   | -    | -     |
 | Service name mapping                                                           |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | -   | +    | +   | +    | +     |
+| InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | +   | +    | +   | +    | +     |
 | Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    |             | +    | -      |     | +    | +   | +    | -     |
+| Error Status mapping                                                           |          | +  | + |    |             | +    | -      | +   | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      |     | +    | +   | +    | +     |
+| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
 | Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
@@ -308,6 +308,20 @@ Note: Support for environment variables is optional.
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 | Prometheus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
+
+## OpenTracing Compatibility
+
+Languages not covered by the OpenTracing project do not need to be listed here, e.g. Erlang.
+
+| Feature                                                                                                 |Go |Java|JS |Python|Ruby|PHP|Rust|C++|.NET|Swift|
+|---------------------------------------------------------------------------------------------------------|---|----|---|------|----|---|----|---|----|-----|
+| [Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim) |   |    |   |      |    |   |    |   |    |     |
+| [Tracer](specification/compatibility/opentracing.md#tracer-shim)                                        |   |    |   |      |    |   |    |   |    |     |
+| [Span](specification/compatibility/opentracing.md#span-shim)                                            |   |    |   |      |    |   |    |   |    |     |
+| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim)                              |   |    |   |      |    |   |    |   |    |     |
+| [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim)                            |   |    |   |      |    |   |    |   |    |     |
+| Error mapping for attributes/events                                                                     |   |    |   |      |    |   |    |   |    |     |
+| Migration to OpenTelemetry guide                                                                        |   |    |   |      |    |   |    |   |    |     |
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003
 [py1059]: https://github.com/open-telemetry/opentelemetry-python/issues/1059
