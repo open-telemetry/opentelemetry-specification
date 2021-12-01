@@ -17,11 +17,15 @@ release.
   ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
 - Mark In-memory, OTLP and Stdout exporter specs as Feature-freeze.
   ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
+- Add details to the Prometheus Exporter requirements.
+  ([#2124](https://github.com/open-telemetry/opentelemetry-specification/pull/2124))
 - Remove the concept of supported temporality, keep preferred.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
-- Mark Metrics SDK spec as Mixed, with `MeterProvider`, `MetricReader` and
-  `MetricExporter` marked as Stable.
-  ([#2150](https://github.com/open-telemetry/opentelemetry-specification/pull/2150))
+- Mark Metrics SDK spec as Mixed, with most compnents remaining in Feature-freeze 
+  while Attribute Limits, Compatibility Requirements, and Concurrency Requirements
+  moving to Stable. ([#2150](https://github.com/open-telemetry/opentelemetry-specification/pull/2150))
+- Mark In-memory, OTLP and Stdout exporter specs as Stable.
+  ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
 
 ### Logs
 
