@@ -17,6 +17,8 @@ release.
   ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
 - Mark In-memory, OTLP and Stdout exporter specs as Feature-freeze.
   ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
+- Add details to the Prometheus Exporter requirements.
+  ([#2124](https://github.com/open-telemetry/opentelemetry-specification/pull/2124))
 - Remove the concept of supported temporality, keep preferred.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
 - Mark In-memory, OTLP and Stdout exporter specs as Stable.
