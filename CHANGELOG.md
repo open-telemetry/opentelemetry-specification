@@ -19,6 +19,8 @@ release.
   ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
 - Remove the concept of supported temporality, keep preferred.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
+- Mark In-memory, OTLP and Stdout exporter specs as Stable.
+  ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
 
 ### Logs
 
