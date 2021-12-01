@@ -797,8 +797,10 @@ for how propagators are to be distributed.
 In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
 This means that operations on a Tracer, or on Spans, should have no side effects
 and do nothing. However, there is one important exception to this general rule,
-and that is related to propagation of a `SpanContext`: The API MUST return the
-`Span` in the parent `Context` (whether explicitly given or implicit current).
+and that is related to propagation of a `SpanContext`: The API MUST return a
+non-recording `Span` with the `SpanContext` in the parent `Context` (whether explicitly given or implicit current).
+If the `Span` in the parent `Context` is already non-recording, it SHOULD be returned directly
+without instantiating a new `Span`.
 If the parent `Context` contains no `Span`, an empty non-recording Span MUST be
 returned instead (i.e., having a `SpanContext` with all-zero Span and Trace IDs,
 empty Tracestate, and unsampled TraceFlags).  This means that a `SpanContext`
