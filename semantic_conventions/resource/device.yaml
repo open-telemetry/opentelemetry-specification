@@ -36,5 +36,5 @@ groups:
         type: string
         brief: 'The name of the device manufacturer'
         note: >
-          Android devices provide this field via [Build](https://developer.android.com/reference/android/os/Build#MANUFACTURER)
+          The Android OS provides this field via [Build](https://developer.android.com/reference/android/os/Build#MANUFACTURER). iOS apps SHOULD hardcode the value `Apple`.
         examples: ['Apple', 'Samsung']

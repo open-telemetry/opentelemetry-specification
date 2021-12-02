@@ -68,7 +68,9 @@ release.
 - Add `none` as a possible value for `OTEL_PROPAGATORS` to disable context
   propagation.
   ([#2052](https://github.com/open-telemetry/opentelemetry-specification/pull/2052))
-
+- Add `device.manufacturer` to describe mobile device manufacturers 
+  ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
+  
 ### Traces
 
 - No changes.
