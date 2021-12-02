@@ -194,8 +194,9 @@ Below is the detailed description of each field.
 
 Type: Timestamp, uint64 nanoseconds since Unix epoch.
 
-Description: Time when the event occurred measured by the origin clock. This
-field is optional, it may be missing if the timestamp is unknown.
+Description: Time when the event occurred measured by the origin clock, i.e. the
+time at the source. This field is optional, it may be missing if the source
+timestamp is unknown.
 
 ### Trace Context Fields
 
