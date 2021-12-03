@@ -54,7 +54,25 @@ as specified in [OpenTelemetry Environment Variable Specification](../../sdk-env
 These are the attributes which MUST be provided by the SDK
 as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource-attributes):
 
-- [`service.name`](#service)
+- [`telemetry.source.name`](#telemetry-source)
+
+## Telemetry Source
+
+**type:** `telemetry.source`
+
+**Description:** Generic description of the source of the telemetry data.
+
+Attributes in this namespace are intended to describe the telemetry source indpendently of the type of the resource (service, client-side etc.).
+
+<!-- semconv service -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| `telemetry.source.name` | string | Logical name of the source of the telemetry data. [1] | `shoppingcart` | Yes |
+| `telemetry.source.namespace` | string | A namespace for `telemetry.source.name`. [2] | `Shop` | No |
+
+**[1]:** If the value was not specified, SDKs MUST fallback to `unknown_source`.
+
+**[2]:** A string value having a meaning that helps to distinguish a group of related sources, for example the team name that owns a group of services. `telemetry.source.name` is expected to be unique within the same namespace. If `telemetry.source.namespace` is not specified in the Resource then `telemetry.source.name` is expected to be unique for all sources that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
 
 ## Service
 
@@ -65,7 +83,7 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 <!-- semconv service -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Yes |
+| `service.name` | string | Logical name of the service. [1] | `shoppingcart` | No |
 | `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | No |
 | `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | No |
 | `service.version` | string | The version string of the service API or implementation. | `2.0.0` | No |
