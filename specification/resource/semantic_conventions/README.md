@@ -19,6 +19,7 @@ This document defines standard attributes for resources. These attributes are ty
 - [Compute Unit](#compute-unit)
 - [Compute Instance](#compute-instance)
 - [Environment](#environment)
+- [Database](#database)
 - [Version attributes](#version-attributes)
 - [Cloud-Provider-Specific Attributes](#cloud-provider-specific-attributes)
 
@@ -156,6 +157,12 @@ Attributes defining a running environment (e.g. Operating System, Cloud, Data Ce
 - Deployment:
   - [Deployment Environment](./deployment_environment.md)
   - [Kubernetes](./k8s.md)
+
+## Database
+
+Attributes defining a database service.
+
+- [Redis](./redis.md)
 
 ## Version attributes
 
