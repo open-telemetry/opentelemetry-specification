@@ -33,11 +33,11 @@ Below is a table of RPC server metric instruments.
 
 | Name | Instrument | Units | Description | Status | Streaming |
 |------|------------|-------|-------------|--------|-----------|
-| `rpc.server.duration` | Histogram  | milliseconds | measures duration of inbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
-| `rpc.server.request.size` | Histogram  | bytes | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
-| `rpc.server.response.size` | Histogram  | bytes | measures size of RPC response messages (uncompressed) | Optional | Recorded per response in a streaming batch |
-| `rpc.server.requests_per_rpc` | Histogram  | count | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
-| `rpc.server.responses_per_rpc` | Histogram  | count | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
+| `rpc.server.duration` | Histogram  | ms | measures duration of inbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
+| `rpc.server.request.size` | Histogram  | By | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
+| `rpc.server.response.size` | Histogram  | By | measures size of RPC response messages (uncompressed) | Optional | Recorded per response in a streaming batch |
+| `rpc.server.requests_per_rpc` | Histogram  | {count} | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
+| `rpc.server.responses_per_rpc` | Histogram  | {count} | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
 
 ### RPC Client
 
@@ -46,11 +46,11 @@ RPC usage, not streaming RPCs.
 
 | Name | Instrument | Units | Description | Status | Streaming |
 |------|------------|-------|-------------|--------|-----------|
-| `rpc.client.duration` | Histogram | milliseconds | measures duration of outbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
-| `rpc.client.request.size` | Histogram | bytes | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
-| `rpc.client.response.size` | Histogram | bytes | measures size of RPC response messages (uncompressed) | Optional | Recorded per message in a streaming batch |
-| `rpc.client.requests_per_rpc` | Histogram | count | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
-| `rpc.client.responses_per_rpc` | Histogram | count | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
+| `rpc.client.duration` | Histogram | ms | measures duration of outbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
+| `rpc.client.request.size` | Histogram | By | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
+| `rpc.client.response.size` | Histogram | By | measures size of RPC response messages (uncompressed) | Optional | Recorded per message in a streaming batch |
+| `rpc.client.requests_per_rpc` | Histogram | {count} | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
+| `rpc.client.responses_per_rpc` | Histogram | {count} | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
 
 ## Attributes
 
