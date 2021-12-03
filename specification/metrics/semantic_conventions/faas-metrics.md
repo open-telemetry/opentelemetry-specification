@@ -34,20 +34,20 @@ Below is a table of FaaS invocation metric instruments.
 
 | Name | Instrument | Units | Description |
 |------|------------|----|-------------|
-| `faas.invoke_duration` | Histogram | milliseconds | Measures the duration of the invocation |
-| `faas.init_duration` | Histogram | milliseconds | Measures the duration of the function's initialization, such as a cold start |
-| `faas.coldstarts` | Counter | default unit | Number of invocation cold starts. |
-| `faas.errors` | Counter | default unit | Number of invocation errors. |
-| `faas.executions` | Counter | default unit  | Number of successful invocations. |
-| `faas.timeouts` | Counter | default unit | Number of invocation timeouts. |
+| `faas.invoke_duration` | Histogram | ms | Measures the duration of the invocation |
+| `faas.init_duration` | Histogram | ms | Measures the duration of the function's initialization, such as a cold start |
+| `faas.coldstarts` | Counter | 1 | Number of invocation cold starts. |
+| `faas.errors` | Counter | 1 | Number of invocation errors. |
+| `faas.executions` | Counter | 1 | Number of successful invocations. |
+| `faas.timeouts` | Counter | 1 | Number of invocation timeouts. |
 
 Optionally, when applicable:
 
 | Name | Instrument | Units | Description |
 |------|------------|----|-------------|
-| `faas.mem_usage` | Histogram | bytes | Distribution of max memory usage per invocation |
-| `faas.cpu_usage` | Histogram | milliseconds | Distribution of cpu usage per invocation |
-| `faas.net_io` | Histogram | bytes | Distribution of net I/O usage per invocation |
+| `faas.mem_usage` | Histogram | By | Distribution of max memory usage per invocation |
+| `faas.cpu_usage` | Histogram | ms | Distribution of cpu usage per invocation |
+| `faas.net_io` | Histogram | By | Distribution of net I/O usage per invocation |
 
 ## Attributes
 
