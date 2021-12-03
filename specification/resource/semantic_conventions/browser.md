@@ -15,4 +15,6 @@
 | `browser.mobile` | boolean | Flag indicating a mobile device | | No |
 | `browser.user_agent` | string | Full user-agent string provided by the browser [1] | `'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'` | No |
 
+All of these attributes can be provided by the user agent itself in the form of an HTTP header (e.g. Sec-CH-UA, Sec-CH-Platform, Sec-CH-Mobile, User-Agent). However, in order to support batches of data with different resources, these attributes should be used when possible.
+
 **[1]:** The user-agent value should be provided only from browsers that do not have a mechanism to retrieve name, version, and platform individually (for example from the User-Agent Client Hints API). 
