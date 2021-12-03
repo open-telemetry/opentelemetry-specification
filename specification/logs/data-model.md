@@ -203,12 +203,12 @@ field is optional, it may be missing if the timestamp is unknown.
 Type: Timestamp, uint64 nanoseconds since Unix epoch.
 
 Description: Time when the event was observed by the collection system. For
-events that originate in OpenTelemetry this timestamp is typically set at the
-generation time and is equal to Timestamp. For events originating externally and
-collected by OpenTelemetry (e.g. using Collector) this is the time when the
-OpenTelemetry's code observed the event measure by the clock of the
-OpenTelemetry code. This field SHOULD be set once the event is observed by
-OpenTelemetry.
+events that originate in OpenTelemetry (e.g. using OpenTelemetry Logging SDK)
+this timestamp is typically set at the generation time and is equal to
+Timestamp. For events originating externally and collected by OpenTelemetry
+(e.g. using Collector) this is the time when OpenTelemetry's code observed the
+event measured by the clock of the OpenTelemetry code. This field SHOULD be set
+once the event is observed by OpenTelemetry.
 
 For converting OpenTelemetry log data to formats that support only one timestamp
 or when receiving OpenTelemetry log data by recipients that support only one
