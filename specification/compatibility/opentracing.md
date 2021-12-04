@@ -327,8 +327,7 @@ Parameters:
 
 - A `Span`.
 
-Gets the [associated](#opentelemetry-span-and-spancontext-shim-relationship)
-`SpanContext` Shim for the specified `Span` and puts its OpenTelemetry
+Gets the current `SpanContext` of the specified `Span` and puts its OpenTelemetry
 `Span`, `Baggage` and `Span` Shim objects in a new `Context`,
 which is then set as the currently active instance.
 
