@@ -31,7 +31,7 @@ release.
 ### Logs
 
 - Add OTEL_LOGS_EXPORTER environment variable.
-  ([#](https://github.com/open-telemetry/opentelemetry-specification/pull/))
+  ([#2196](https://github.com/open-telemetry/opentelemetry-specification/pull/2196))
 
 ### Resource
 
