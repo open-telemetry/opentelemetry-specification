@@ -429,35 +429,43 @@ series and it requires further analysis.
 
 ## Exemplar
 
+Exemplars are example data points for aggregated data. They provide specific
+context to otherwise general aggregations. Exemplars allow correlation between
+aggregated metric data and the original API calls where measurements are
+recorded. Exemplars work for trace-metric correlation across any metric, not
+just those that can also be derived from `Span`s.
+
 An [Exemplar](./datamodel.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
 information:
 
-- The `value` that was recorded.
-- The `time` the `Measurement` was seen.
+- The `value` that was recorded at API call time.
+- The `time` the `Measurement` was sent to the API.
 - The set of [Attributes](../common/common.md#attributes) associated with the
   `Measurement` not already included in a metric data point.
+  **Note: Views may aggregate away `Attributes`, which is where this is used.**
 - The associated [trace id and span
   id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
   within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
-  the `Measurement`.
+  the `Measurement` at API call time.
 
-A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
+A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements
+via the `ExemplarFilter` and `ExemplarReservoir` hooks.
 
-A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance
+A Metric SDK MUST allow `Exemplar` sampling to be disabled. In this instance
 the SDK SHOULD not have overhead related to exemplar sampling.
 
 A Metric SDK MUST sample `Exemplar`s only from measurements within the context
 of a sampled trace BY DEFAULT.
 
-A Metric SDK MUST allow exemplar sampling to leverage the configuration of a
+A Metric SDK MUST allow exemplar sampling to leverage the configuration of
 metric aggregation. For example, Exemplar sampling of histograms should be able
 to leverage bucket boundaries.
 
 A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
 
-- `ExemplarFilter`: filter which measurements can become exemplars
-- `ExemplarReservoir`: determine how to store exemplars.
+- `ExemplarFilter`: filter which measurements can become exemplars.
+- `ExemplarReservoir`: storage and sampling of exemplars.
 
 ### ExemplarFilter
 
@@ -497,7 +505,10 @@ span context and baggage can be inspected at this point.
 The "offer" method does not need to store all measurements it is given and
 MAY further sample beyond the `ExemplarFilter`.
 
-The "collect" method MUST return accumulated `Exemplar`s.
+The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
+to abide by the `AggregationTemporality` of any metric point they are recorded
+with. SDKs are free to decide whether "collect" should also reset internal
+storage for delta aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain the any attributes available in the measurement that
 are not preserved by aggregation or view configuration. Specifically, at a
@@ -530,6 +541,9 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
     reservoir[bucket] = measurement
   end
   ```
+
+Additionally, the `num_measurements_seen` count SHOULD be reset at every
+collection cycle.
 
 *AlignedHistogramBucketExemplarReservoir*
 This Exemplar reservoir MUST take a configuration parameter that is the
