@@ -469,7 +469,6 @@ Then an examplar would consist of:
   resulting metric point.
 - The trace/span id for the `makeRequest` span.
 
-
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements
 via the `ExemplarFilter` and `ExemplarReservoir` hooks.
 
