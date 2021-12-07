@@ -216,7 +216,7 @@ values via the context, termed "p-value" and "r-value".
 Both fields are propagated via the OpenTelemetry `tracestate` under
 the `ot` vendor tag using the rules for [tracestate
 handling](tracestate-handling.md).  Both fields are represented as
-unsigned integers requiring at most 6 bits of information.
+unsigned decimal integers requiring at most 6 bits of information.
 
 This sampling scheme selects items from among a fixed set of 63
 distinct probability values. The set of supported probabilities
@@ -329,9 +329,9 @@ sampling probability:
 
 ##### Requirement: Out-of-range p-values are unset
 
-Consumers SHOULD unset `p` from the `tracestate` if the unsigned value
-is greater than 63 before using the `tracestate` to make a sampling
-decision or interpret adjusted count.
+Consumers SHOULD unset `p` from the `tracestate` if the unsigned
+decimal value is greater than 63 before using the `tracestate` to make
+a sampling decision or interpret adjusted count.
 
 #### R-value
 
@@ -366,13 +366,60 @@ to use this approach.
 ##### Requirement: Out-of-range r-values unset both p and r
 
 Samplers SHOULD unset both `r` and `p` from the `tracestate` if the
-unsigned value is of `r` is greater than 62 before using the
+unsigned decimal value of `r` is greater than 62 before using the
 `tracestate` to make a sampling decision.
 
 ##### Requirement: R-value is generated with the correct probabilities
 
 Samplers MUST generate r-values using a randomized scheme that
 produces each value with the specified probability.
+
+#### Examples
+
+Consider a trace context with the following headers:
+
+```
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+tracestate: ot=r:3;p:2
+```
+
+The `traceparent` contents in this example example are repeated from
+the [W3C specification](https://www.w3.org/TR/trace-context/#examples-of-http-traceparent-headers))
+and have the following base64-encoded field values:
+
+```
+base16(version) = 00
+base16(trace-id) = 4bf92f3577b34da6a3ce929d0e0e4736
+base16(parent-id) = 00f067aa0ba902b7
+base16(trace-flags) = 01  // (i.e., sampled)
+```
+
+The `tracestate` header contains OpenTelemetry string `r:3;p:2`,
+containing decimal-encoded p-value and r-value:
+
+```
+base10(r) = 3
+base10(p) = 2
+```
+
+Here, r-value 3 indicates that a consistent probability sampler
+configured with probability 12.5% (i.e., 1-in-2**3) or greater will
+sample the trace.  The p-value 2 indicates that the parent that set
+the `sampled` flag was configured to sample at 25% (i.e., 1-in-2**2).
+This trace context is consistent because `p <= r` is true and the
+`sampled` flag is set.
+
+Now, an example with an unsampled context where only the r-value is
+set.
+
+```
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00
+tracestate: ot=r:3
+```
+
+This supports consistent probability sampling in child contexts by
+virtue of having an r-value, although p-value is not set, consistent
+with an unsampled context.
 
 ### Samplers
 
