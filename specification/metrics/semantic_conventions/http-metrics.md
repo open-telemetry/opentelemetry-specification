@@ -19,7 +19,7 @@ Below is a table of HTTP server metric instruments.
 
 | Name                          | Instrument                 | Units      | Description |
 |-------------------------------|----------------------------|------------|-------------|
-| `http.server.duration`        | Histogram                  | ms         | measures the duration of the inbound HTTP request |
+| `http.server.duration`        | Histogram                  | ms         | measures the duration of the inbound HTTP request in milliseconds |
 | `http.server.active_requests` | Asynchronous UpDownCounter | {requests} | measures the number of concurrent HTTP requests that are currently in-flight |
 
 ### HTTP Client
@@ -28,7 +28,7 @@ Below is a table of HTTP client metric instruments.
 
 | Name                   | Instrument | Units | Description |
 |------------------------|------------|-------|-------------|
-| `http.client.duration` | Histogram  | ms    | measure the duration of the outbound HTTP request |
+| `http.client.duration` | Histogram  | ms    | measure the duration of the outbound HTTP request in milliseconds |
 
 ## Attributes
 
