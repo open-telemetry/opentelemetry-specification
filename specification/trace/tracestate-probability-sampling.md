@@ -124,6 +124,14 @@ Zero adjusted count is defined in a way that supports composition of
 probability and non-probability sampling.  Zero is assigned as the
 adjusted count when a probability sampler does not select a span.
 
+Thus, there are three meaningfully distinct categories of adjusted count:
+
+| Adjusted count is | Interpretation                                                                                                                     |
+| --                | --                                                                                                                                 |
+| _Unknown_         | The adjusted count is not known, possibly as a result of a non-probability sampler.  Items in this category should not be counted. |
+| _Zero_            | The adjusted count is known; the effective count of the item is zero.                                                              |
+| _Non-zero_        | The adjusted count is known; the effective count of the item is greater than zero.                                                 |
+
 #### Sampler
 
 A Sampler provides configurable logic, used by the SDK, for selecting
