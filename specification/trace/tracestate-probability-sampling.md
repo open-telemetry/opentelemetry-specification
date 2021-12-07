@@ -26,6 +26,7 @@
     + [R-value](#r-value)
       - [Requirement: Out-of-range r-values unset both p and r](#requirement-out-of-range-r-values-unset-both-p-and-r)
       - [Requirement: R-value is generated with the correct probabilities](#requirement-r-value-is-generated-with-the-correct-probabilities)
+    + [Examples](#examples)
   * [Samplers](#samplers)
     + [ParentConsistentProbabilityBased sampler](#parentconsistentprobabilitybased-sampler)
       - [Requirement: ParentConsistentProbabilityBased API](#requirement-parentconsistentprobabilitybased-api)
@@ -62,6 +63,8 @@
     + [Test procedure: exact powers of two](#test-procedure-exact-powers-of-two)
       - [Requirement: Pass 5 power-of-two statistical tests](#requirement-pass-5-power-of-two-statistical-tests)
     + [Test implementation](#test-implementation)
+- [Appendix](#appendix)
+  * [Methods for generating R-values](#methods-for-generating-r-values)
 
 <!-- tocstop -->
 
@@ -351,19 +354,19 @@ to participate in consistent probability sampling.
 R-value determines which sampling probabilities and will not sample
 for spans of a given trace, as follows:
 
-| r-value          | Probability of r-value   | Implied sampling probabilities |
-| ---------------- | ------------------------ | ----------------------         |
-| 0                | 1/2                      | 1                              |
-| 1                | 1/4                      | 1/2 and above                  |
-| 2                | 1/8                      | 1/4 and above                  |
-| 3                | 1/16                     | 1/8 and above                  |
-| ...              | ...                      | ...                            |
-| 0 <= r <= 61     | 2**-(r+1)                | 2**-r and above                |
-| ...              | ...                      | ...                            |
-| 59               | 2**-60                   | 2**-59 and above               |
-| 60               | 2**-61                   | 2**-60 and above               |
-| 61               | 2**-62                   | 2**-61 and above               |
-| 62               | 2**-62                   | 2**-62 and above               |
+| r-value          | Implied sampling probabilities |
+| ---------------- | ----------------------         |
+| 0                | 1                              |
+| 1                | 1/2 and above                  |
+| 2                | 1/4 and above                  |
+| 3                | 1/8 and above                  |
+| ...              | ...                            |
+| 0 <= r <= 61     | 2**-r and above                |
+| ...              | ...                            |
+| 59               | 2**-59 and above               |
+| 60               | 2**-60 and above               |
+| 61               | 2**-61 and above               |
+| 62               | 2**-62 and above               |
 
 These probabilities are specified to ensure that conforming Sampler
 implementations record spans with correct adjusted counts.  The
@@ -380,7 +383,9 @@ unsigned decimal value of `r` is greater than 62 before using the
 ##### Requirement: R-value is generated with the correct probabilities
 
 Samplers MUST generate r-values using a randomized scheme that
-produces each value with the specified probability.
+produces each value with the probabilities equivalent to those
+produced by counting the number of leading 0s in a string of 62 random
+bits.  See the appendix for details.
 
 #### Examples
 
@@ -859,3 +864,63 @@ two 5s demonstrate that it is relatively easy to find examples where
 there is exactly one failure.  Seed index 14, for probability 0.6 in
 this case, is a reminder that outliers exist.  Further significance
 testing of this distribution is not recommended.
+
+## Appendix
+
+### Methods for generating R-values
+
+The method used for generating r-values is not specified, in order to
+leave the implementation freedom to optimize.  Typically, when the
+TraceId is known to contain at a 62-bit substring of random bits,
+R-values can be derived directly from the 62 random bits of TraceId
+by:
+
+1. Count the leading zeros
+2. Count the leading ones
+3. Count the trailing zeros
+4. Count the trailing ones.
+
+```golang
+import (
+    "math/rand"
+    "math/bits"
+)
+
+func nextRValueLeading() int {
+    x := uint64(rand.Int63()) // 63 least-significant bits are random
+    y := x << 1 | 0x3         // 62 most-significant bits are random
+    return bits.LeadingZeros64(y)
+}
+```
+
+If the TraceId contains unknown or insufficient randomness, another
+approach is to generate random bits until the first true or false
+value.
+
+```
+func nextRValueGenerated() int {
+    for r := 0; r < 62; r++ {
+        if rand.Bool() == true {
+            return r
+        }
+    }
+    return 62
+}
+```
+
+Any scheme that produces r-values shown in the following table is
+considered conforming.
+
+| r-value          | Probability of r-value   |
+| ---------------- | ------------------------ |
+| 0                | 1/2                      |
+| 1                | 1/4                      |
+| 2                | 1/8                      |
+| 3                | 1/16                     |
+| ...              | ...                      |
+| 0 <= r <= 61     | 2**-(r+1)                |
+| ...              | ...                      |
+| 59               | 2**-60                   |
+| 60               | 2**-61                   |
+| 61               | 2**-62                   |
+| 62               | 2**-62                   |
