@@ -439,15 +439,36 @@ An [Exemplar](./datamodel.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
 information:
 
-- The `value` that was recorded at API call time.
-- The `time` the `Measurement` was sent to the API.
+- The `value` of the `Measurement` that was recorded by the API call.
+- The `time` the API call was made to record a `Measurement`.
 - The set of [Attributes](../common/common.md#attributes) associated with the
   `Measurement` not already included in a metric data point.
-  **Note: Views may aggregate away `Attributes`, which is where this is used.**
 - The associated [trace id and span
   id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
   within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
   the `Measurement` at API call time.
+
+For example, if a user has configured a `View` to preserve the attributes: `X`
+and `Y`, but the user records a measurement as follows:
+
+```javascript
+const span = tracer.startSpan('makeRequest');
+api.context.with(api.trace.setSpan(api.context.active(), span), () => {
+  // Record a measurement.
+  cache_miss_counter.add(1, {"X": "x-value", "Y": "y-value", "Z": "z-value"});
+  ...
+  span.end();
+})
+```
+
+Then an examplar would consist of:
+
+- The `value` of 1.
+- The `time` when the `add` method was called
+- The `Attributes` of `{"Z": "z-value"}`, as these are not preserved in the
+  resulting metric point.
+- The trace/span id for the `makeRequest` span.
+
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements
 via the `ExemplarFilter` and `ExemplarReservoir` hooks.
