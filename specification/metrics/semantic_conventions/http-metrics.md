@@ -17,18 +17,18 @@ type and units.
 
 Below is a table of HTTP server metric instruments.
 
-| Name                          | Instrument                 | Units      | Description |
-|-------------------------------|----------------------------|------------|-------------|
-| `http.server.duration`        | Histogram                  | ms         | measures the duration of the inbound HTTP request in milliseconds |
-| `http.server.active_requests` | Asynchronous UpDownCounter | {requests} | measures the number of concurrent HTTP requests that are currently in-flight |
+| Name                          | Instrument                 | Unit         | Unit (UCUM)  | Description |
+|-------------------------------|----------------------------|--------------|--------------|-------------|
+| `http.server.duration`        | Histogram                  | milliseconds | `ms`         | measures the duration of the inbound HTTP request |
+| `http.server.active_requests` | Asynchronous UpDownCounter | requests     | `{requests}` | measures the number of concurrent HTTP requests that are currently in-flight |
 
 ### HTTP Client
 
 Below is a table of HTTP client metric instruments.
 
-| Name                   | Instrument | Units | Description |
-|------------------------|------------|-------|-------------|
-| `http.client.duration` | Histogram  | ms    | measure the duration of the outbound HTTP request in milliseconds |
+| Name                   | Instrument | Unit         | Unit (UCUM) | Description |
+|------------------------|------------|--------------|-------------|-------------|
+| `http.client.duration` | Histogram  | milliseconds | `ms`        | measure the duration of the outbound HTTP request |
 
 ## Attributes
 
