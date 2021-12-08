@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Clarify `StartSpan` returning the parent as a non-recording Span when no SDK
+  is in use
+  ([#2121](https://github.com/open-telemetry/opentelemetry-specification/pull/2121))
+
 ### Metrics
 
 - Rename None aggregation to Drop.
@@ -25,6 +29,9 @@ release.
   ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
 
 ### Logs
+
+- Add OTEL_LOGS_EXPORTER environment variable.
+  ([#2196](https://github.com/open-telemetry/opentelemetry-specification/pull/2196))
 
 ### Resource
 
