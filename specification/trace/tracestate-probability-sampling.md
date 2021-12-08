@@ -26,7 +26,9 @@
     + [R-value](#r-value)
       - [Requirement: Out-of-range r-values unset both p and r](#requirement-out-of-range-r-values-unset-both-p-and-r)
       - [Requirement: R-value is generated with the correct probabilities](#requirement-r-value-is-generated-with-the-correct-probabilities)
-    + [Examples](#examples)
+    + [Examples: Context invariants](#examples-context-invariants)
+      - [Example: Probability sampled context](#example-probability-sampled-context)
+      - [Example: Probability unsampled](#example-probability-unsampled)
   * [Samplers](#samplers)
     + [ParentConsistentProbabilityBased sampler](#parentconsistentprobabilitybased-sampler)
       - [Requirement: ParentConsistentProbabilityBased API](#requirement-parentconsistentprobabilitybased-api)
@@ -48,6 +50,9 @@
       - [Requirement: Unset p when multiple consistent probability samplers decide not to sample](#requirement-unset-p-when-multiple-consistent-probability-samplers-decide-not-to-sample)
       - [Requirement: Use probability sampler p-value when its decision to sample is combined with non-probability samplers](#requirement-use-probability-sampler-p-value-when-its-decision-to-sample-is-combined-with-non-probability-samplers)
       - [Requirement: Use p-value 63 when a probability sampler decision not to sample is combined with a non-probability sampler decision to sample](#requirement-use-p-value-63-when-a-probability-sampler-decision-not-to-sample-is-combined-with-a-non-probability-sampler-decision-to-sample)
+    + [Examples: Composition](#examples-composition)
+      - [Example: Probability and non-probability sampler in a root context](#example-probability-and-non-probability-sampler-in-a-root-context)
+      - [Example: Two consistent probability samplers](#example-two-consistent-probability-samplers)
   * [Producer and consumer recommendations](#producer-and-consumer-recommendations)
     + [Trace producer: completeness](#trace-producer-completeness)
       - [Recommenendation: use non-descending power-of-two probabilities](#recommenendation-use-non-descending-power-of-two-probabilities)
@@ -387,7 +392,9 @@ produces each value with the probabilities equivalent to those
 produced by counting the number of leading 0s in a string of 62 random
 bits.  See the appendix for details.
 
-#### Examples
+#### Examples: Context invariants
+
+##### Example: Probability sampled context
 
 Consider a trace context with the following headers:
 
@@ -416,14 +423,15 @@ base10(p) = 2
 ```
 
 Here, r-value 3 indicates that a consistent probability sampler
-configured with probability 12.5% (i.e., 1-in-2**3) or greater will
+configured with probability 12.5% (i.e., 1-in-8) or greater will
 sample the trace.  The p-value 2 indicates that the parent that set
-the `sampled` flag was configured to sample at 25% (i.e., 1-in-2**2).
+the `sampled` flag was configured to sample at 25% (i.e., 1-in-4).
 This trace context is consistent because `p <= r` is true and the
 `sampled` flag is set.
 
-Now, an example with an unsampled context where only the r-value is
-set.
+##### Example: Probability unsampled
+
+This example has an unsampled context where only the r-value is set.
 
 ```
 traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00
@@ -431,8 +439,8 @@ tracestate: ot=r:3
 ```
 
 This supports consistent probability sampling in child contexts by
-virtue of having an r-value, although p-value is not set, consistent
-with an unsampled context.
+virtue of having an r-value.  P-value is not set, consistent with an
+unsampled context.
 
 ### Samplers
 
@@ -576,6 +584,44 @@ When combining Sampler decisions for a consistent probability Sampler
 and a non-probability Sampler, and the probability Sampler decides not
 to sample but the non-probability does sample, p-value 63 MUST be set
 in the `tracestate`.
+
+#### Examples: Composition
+
+##### Example: Probability and non-probability sampler in a root context
+
+In a new root context, a consistent probability sampler decides not to
+set the sampled flag, adds `r:4` indicating that the trace is
+consistently sampled at 6.5% (i.e., 1-in-16) and larger probabilities.
+
+The probability sampler decision is composed with a non-probability
+sampler that decides to sample the context.  Setting `sampled` when
+the probability sampler has not sampled requires setting `p:63`,
+indicating zero adjusted count.
+
+The resulting context:
+
+```
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+tracestate: ot=r:3;p:63
+```
+
+##### Example: Two consistent probability samplers
+
+Whether a root or non-root, if multiple consistent probability
+samplers make a decision to sample a given context, the minimum
+p-value is output in the tracestate.
+
+If a root context, the first of the samplers generates `r:15` and its
+own p-value `p:10` (i.e., adjusted count 1024).  The second of the two
+probability samplers outputs a smaller adjusted count `p:8` (i.e.,
+adjusted count 256).
+
+The resulting context takes the smaller p-value:
+
+```
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+tracestate: ot=r:15;p:8
+```
 
 ### Producer and consumer recommendations
 
