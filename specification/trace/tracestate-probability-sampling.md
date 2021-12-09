@@ -524,9 +524,9 @@ to sample according to its configured sampling probability.
 
 ##### Requirement: ConsistentProbabilityBased sampler records unbiased adjusted counts
 
-The `ConsistentProbabilityBased` Sampler with non-zero probability 
-MUST set `p` so that the adjusted count interpreted from the 
-`tracestate` is an unbiased estimate of the number of representative 
+The `ConsistentProbabilityBased` Sampler with non-zero probability
+MUST set `p` so that the adjusted count interpreted from the
+`tracestate` is an unbiased estimate of the number of representative
 spans in the population.
 
 A test specification for this requirement is given in the appendix.
@@ -542,6 +542,76 @@ is being produced.
 
 If the configured sampling probability is in the interval `[0,
 2**-62)`, the Sampler MUST decide not to sample.
+
+#### Examples: Consistent probability samplers
+
+##### Example: Setting R-value for a root span
+
+A new root span is sampled by a consistent probability sampler at 25%.
+A new r-value should be generated (see the appendix for suitable
+methods), in this example r-value 5 is used which happens 1.5625% of
+the time and indicates to sample:
+
+```
+tracestate: ot=r:5;p:2
+```
+
+The span would be sampled because p-value 2 is less than or equal to
+r-value 5.  An example `tracestate` where r-value 1 indicates not to
+sample at 25%:
+
+```
+tracestate: ot=r:1
+```
+
+This span would not be sampled because p-value 2 (corresponding with
+25% sampling) is greater than r-value 1.
+
+##### Example: Handling inconsistent P-value
+
+When either the consistent probability sampler or the parent-based
+consistent probability sampler receives a sampled context but
+invalid p-value, for example,
+
+```
+tracestate: ot=r:4;p:73
+```
+
+the `tracestate` will have its p-value stripped.  The r-value is kept,
+and the sampler should act as if the following had been received:
+
+```
+tracestate: ot=r:4
+```
+
+The consistent probability sampler will make its own (consistent)
+decision using the r-value that was received.
+
+The parent-based consistent probability sampler will in this case
+follow the `sampled` flag.  If the context is sampled, the resulting
+span will have an r-value without a p-value, which indicates unknown
+adjusted count.
+
+##### Example: Handling corrupt R-value
+
+A non-root span receives:
+
+```
+tracestate: ot=r:100;p:10
+```
+
+where the r-value is out of its valid range. The r-value and p-value
+are stripped during validation, according to the invariants.  In this
+case, the sampler will act as though no `tracestate` were received.
+
+The parent-based consistent probability sampler will sample or not
+sample based on the `sampled` flag, in this case.  If the context is
+sampled, the recorded span will have an r-value without a p-value,
+which indicates unknown adjusted count.
+
+The consistent probability sampler will generate a new r-value and
+make a new sampling decision while warning the user of a corrupt and
+potentially inconsistent r-value.
 
 ### Composition rules
 
@@ -677,7 +747,7 @@ r-value and p-value, as these decisions would lead to incorrect
 adjusted counts.
 
 For example, the built-in [`ParentBased` sampler](sdk.md#parentbased)
-supports configuring the delegated sampler based on whether the parent
+supports configuring the delegated-to sampler based on whether the parent
 context is remote or non-remote, sampled or unsampled.  If a
 `ParentBased` sampler delegates to a `ConsistentProbabilityBased`
 sampler only for unsampled contexts, the resulting Span-to-metrics
@@ -686,7 +756,7 @@ pipeline will (probably) overcount spans.
 ##### Recommenendation: sampler delegation
 
 For non-root spans, composite samplers SHOULD NOT condition the choice
-of delegating sampler based on the parent's sampled flag or
+of delegated-to sampler based on the parent's sampled flag or
 OpenTelemetry tracestate.
 
 #### Trace producer: interoperability with `ParentBased` sampler
