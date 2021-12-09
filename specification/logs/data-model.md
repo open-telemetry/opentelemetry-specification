@@ -183,7 +183,7 @@ SpanId         |Request span id.
 TraceFlags     |W3C trace flag.
 SeverityText   |The severity text (also known as log level).
 SeverityNumber |Numerical value of the severity.
-Name           |Short event identifier.
+Name           |Short low cardinality event type.
 Body           |The body of the log record.
 Resource       |Describes the source of the log.
 Attributes     |Additional information about the event.
@@ -386,10 +386,10 @@ corresponding short names).
 
 Type: string.
 
-Description: Short event identifier that does not contain varying parts.
-`Name` describes what happened (e.g. "ProcessStarted"). Recommended to be
-no longer than 50 characters. Not guaranteed to be unique in any way. Typically
-used for filtering and grouping purposes in backends. This field is optional.
+Description: Short low cardinality event type that does not contain varying
+parts. `Name` describes what happened (e.g. "ProcessStarted"). Recommended to be
+no longer than 50 characters. Typically used for filtering and grouping purposes
+in backends. This field is optional.
 
 ### Field: `Body`
 
