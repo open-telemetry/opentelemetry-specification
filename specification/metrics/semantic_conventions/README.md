@@ -149,5 +149,6 @@ more clarification in
 - Instruments for **utilization** metrics (that measure the fraction out of a
 total) are dimensionless and SHOULD use the default unit `1` (the unity).
 - Instruments that measure an integer count of something SHOULD only use
-annotations with curly braces to give additional meaning without the leading
-default unit (`1`). For example `{packets}`, `{errors}`, `{faults}`, etc.
+[annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
+give additional meaning without the leading default unit (`1`). For example
+`{packets}`, `{errors}`, `{faults}`, etc.
