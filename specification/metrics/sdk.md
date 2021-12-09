@@ -461,13 +461,16 @@ api.context.with(api.trace.setSpan(api.context.active(), span), () => {
 })
 ```
 
-Then an examplar would consist of:
+Then an examplar output in OTLP would consist of:
 
 - The `value` of 1.
 - The `time` when the `add` method was called
 - The `Attributes` of `{"Z": "z-value"}`, as these are not preserved in the
   resulting metric point.
 - The trace/span id for the `makeRequest` span.
+
+While the metric data point for the counter would carry the attributes `X` and
+`Y`.
 
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements
 via the `ExemplarFilter` and `ExemplarReservoir` hooks.
@@ -527,8 +530,10 @@ MAY further sample beyond the `ExemplarFilter`.
 
 The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
 to abide by the `AggregationTemporality` of any metric point they are recorded
-with. SDKs are free to decide whether "collect" should also reset internal
-storage for delta aggregation collection, or use a more optimal implementation.
+with. In other words, Exemplars reported against a metric data point SHOULD have
+occured within the start/stop timestamps of that point.  SDKs are free to decide
+whether "collect" should also reset internal storage for delta temporal
+aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain any attributes available in the measurement that
 are not preserved by aggregation or view configuration. Specifically, at a
