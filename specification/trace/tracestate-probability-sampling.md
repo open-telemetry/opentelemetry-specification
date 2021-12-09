@@ -1,5 +1,10 @@
 # TraceState: Probability Sampling
 
+**Status**: [Experimental](../document-status.md)
+
+<details>
+<summary>Table of Contents</summary>
+
 <!-- toc -->
 
 - [Approach used in this document](#approach-used-in-this-document)
@@ -73,7 +78,7 @@
 
 <!-- tocstop -->
 
-**Status**: [Experimental](../document-status.md)
+</details>
 
 Probability sampling allows OpenTelemetry tracing users to lower their
 collection costs with the use of randomized sampling techniques.
@@ -236,7 +241,11 @@ unsigned decimal integers requiring at most 6 bits of information.
 
 This sampling scheme selects items from among a fixed set of 63
 distinct probability values. The set of supported probabilities
-includes the integer powers of two between 1 and 2**-62.
+includes the integer powers of two between 1 and 2**-62.  Zero
+probability and probabilities smaller than 2**-62 are treated as a
+special case of "ConsistentAlwaysOff" sampler, just as unit
+probability (i.e., 100%) describes a special case of
+"ConsistentAlwaysOn" sampler.
 
 R-value encodes which among the 63 possibilities will consistently
 decide to sample for a given trace.  Specifically, r-value specifies
@@ -244,7 +253,9 @@ the smallest probability that will decide to sample a given trace in
 terms of the corresponding p-value.  For example, a trace with r-value
 0 will sample spans configured for 100% sampling, while r-value 1 will
 sample spans configured for 50% or 100% sampling, and so on through
-r-value 62 which will sample every span.
+r-value 62, for which a consistent probability sampler will decide
+"yes" at every supported probability (i.e., greater than or equal to
+2**-62).
 
 P-value encodes the adjusted count for child contexts (i.e., consumers
 of `tracestate`) and consumers of sampled spans to record for use in
@@ -513,9 +524,10 @@ to sample according to its configured sampling probability.
 
 ##### Requirement: ConsistentProbabilityBased sampler records unbiased adjusted counts
 
-The `ConsistentProbabilityBased` Sampler MUST set `p` so that the
-adjusted count interpreted from the `tracestate` is an unbiased
-estimate of the number of representative spans in the population.
+The `ConsistentProbabilityBased` Sampler with non-zero probability 
+MUST set `p` so that the adjusted count interpreted from the 
+`tracestate` is an unbiased estimate of the number of representative 
+spans in the population.
 
 A test specification for this requirement is given in the appendix.
 
@@ -526,11 +538,10 @@ root span, `ConsistentProbabilityBased` SHOULD set `r` as if it were a
 root span and MAY warn the user that a potentially inconsistent trace
 is being produced.
 
-##### Requirement: ConsistentProbabilityBased sampler acts like AlwaysOff sampler for probabilities less than 2**-62
+##### Requirement: ConsistentProbabilityBased sampler decides not to sample for probabilities less than 2**-62
 
-If the configured sampling probability is less than `2**-62`, the
-Sampler SHOULD round down to zero probability and make the same
-sampling decision as the builtin `AlwaysOff` sampler would.
+If the configured sampling probability is in the interval `[0,
+2**-62)`, the Sampler MUST decide not to sample.
 
 ### Composition rules
 
