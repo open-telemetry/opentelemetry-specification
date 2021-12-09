@@ -14,6 +14,9 @@ release.
 - Clarify `StartSpan` returning the parent as a non-recording Span when no SDK
   is in use
   ([#2121](https://github.com/open-telemetry/opentelemetry-specification/pull/2121))
+- Add support for probability sampling in the OpenTelemetry `tracestate` entry and
+  add optional specification for consistent probability sampling.
+  ([#2047](https://github.com/open-telemetry/opentelemetry-specification/pull/2047))
 
 ### Metrics
 
