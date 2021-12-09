@@ -319,7 +319,7 @@ If we export the metrics using **Cumulative Temporality**:
   * dimensions: {pid = `1001`, tid = `2`}, sum: `53`
   * dimensions: {pid = `1001`, tid = `3`}, sum: `5`
 
-The behavior in the first fuor periods is quite straightforward - we
+The behavior in the first four periods is quite straightforward - we
 just take the data being reported from the asynchronous instruments
 and send them.
 
