@@ -531,8 +531,8 @@ MAY further sample beyond the `ExemplarFilter`.
 The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
 to abide by the `AggregationTemporality` of any metric point they are recorded
 with. In other words, Exemplars reported against a metric data point SHOULD have
-occured within the start/stop timestamps of that point.  SDKs are free to decide
-whether "collect" should also reset internal storage for delta temporal
+occurred within the start/stop timestamps of that point.  SDKs are free to
+decide whether "collect" should also reset internal storage for delta temporal
 aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain any attributes available in the measurement that
