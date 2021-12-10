@@ -178,12 +178,13 @@ Here is the list of fields in a log record:
 Field Name     |Description
 ---------------|--------------------------------------------
 Timestamp      |Time when the event occurred.
+ObservedTimestamp|Time when the event was observed.
 TraceId        |Request trace id.
 SpanId         |Request span id.
 TraceFlags     |W3C trace flag.
 SeverityText   |The severity text (also known as log level).
 SeverityNumber |Numerical value of the severity.
-Name           |Short event identifier.
+Name           |Short low cardinality event type.
 Body           |The body of the log record.
 Resource       |Describes the source of the log.
 Attributes     |Additional information about the event.
@@ -194,8 +195,27 @@ Below is the detailed description of each field.
 
 Type: Timestamp, uint64 nanoseconds since Unix epoch.
 
-Description: Time when the event occurred measured by the origin clock. This
-field is optional, it may be missing if the timestamp is unknown.
+Description: Time when the event occurred measured by the origin clock, i.e. the
+time at the source. This field is optional, it may be missing if the source
+timestamp is unknown.
+
+### Field: `ObservedTimestamp`
+
+Type: Timestamp, uint64 nanoseconds since Unix epoch.
+
+Description: Time when the event was observed by the collection system. For
+events that originate in OpenTelemetry (e.g. using OpenTelemetry Logging SDK)
+this timestamp is typically set at the generation time and is equal to
+Timestamp. For events originating externally and collected by OpenTelemetry
+(e.g. using Collector) this is the time when OpenTelemetry's code observed the
+event measured by the clock of the OpenTelemetry code. This field SHOULD be set
+once the event is observed by OpenTelemetry.
+
+For converting OpenTelemetry log data to formats that support only one timestamp
+or when receiving OpenTelemetry log data by recipients that support only one
+timestamp internally the following logic is recommended:
+
+- Use `Timestamp` if it is present, otherwise use `ObservedTimestamp`.
 
 ### Trace Context Fields
 
@@ -386,10 +406,10 @@ corresponding short names).
 
 Type: string.
 
-Description: Short event identifier that does not contain varying parts.
-`Name` describes what happened (e.g. "ProcessStarted"). Recommended to be
-no longer than 50 characters. Not guaranteed to be unique in any way. Typically
-used for filtering and grouping purposes in backends. This field is optional.
+Description: Short low cardinality event type that does not contain varying
+parts. `Name` describes what happened (e.g. "ProcessStarted"). Recommended to be
+no longer than 50 characters. Typically used for filtering and grouping purposes
+in backends. This field is optional.
 
 ### Field: `Body`
 
@@ -973,7 +993,7 @@ Field            | Type               | Description                             
 -----------------|--------------------| ------------------------------------------------------- | ---------------------------
 timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
 resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
-log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Name
+log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Attributes["com.google.log_name"]
 json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
 proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
 text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
