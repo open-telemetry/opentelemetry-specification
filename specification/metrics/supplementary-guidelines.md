@@ -345,7 +345,7 @@ behaviors at T<sub>5</sub> are:
    observation in a stream more useful for diagnostics.  Receivers can
    perform overlap detection or duplicate suppression and do not
    require reset detection, in this case.
-3. Independent of above treaments, the SDK can add a staleness marker
+3. Independent of above treatments, the SDK can add a staleness marker
    to indicate the start of a gap in the stream when one thread dies
    by remembering which streams have previously reported but are not
    currently reporting.  If per-stream start timestamps are used,

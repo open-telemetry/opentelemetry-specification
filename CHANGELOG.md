@@ -29,7 +29,7 @@ release.
   ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
 - Add to the supplemental guidelines for metric SDK authors text about implementing
   attribute-removal Views for asynchronous instruments.
-  ([TODO]())
+  ([#2208](https://github.com/open-telemetry/opentelemetry-specification/pull/2208))
 
 ### Logs
 
