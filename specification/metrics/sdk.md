@@ -134,17 +134,17 @@ are output by the SDK. Here are some examples when a `View` might be needed:
   library might expose HTTP client request duration as
   [Histogram](./api.md#histogram) by default, but the application developer
   might only want the total count of outgoing requests.
-* Customize which attribute(s) are to be reported as metrics dimension(s). For
+* Customize which attribute(s) are to be reported on metrics. For
   example, an HTTP server library might expose HTTP verb (e.g. GET, POST) and
   HTTP status code (e.g. 200, 301, 404). The application developer might only
   care about HTTP status code (e.g. reporting the total count of HTTP requests
   for each HTTP status code). There could also be extreme scenarios in which the
-  application developer does not need any dimension (e.g. just get the total
+  application developer does not need any attributes (e.g. just get the total
   count of all incoming requests).
-* Add additional dimension(s) from the [Context](../context/context.md). For
+* Add additional attribute(s) from the [Context](../context/context.md). For
   example, a [Baggage](../baggage/api.md) value might be available indicating
   whether an HTTP request is coming from a bot/crawler or not. The application
-  developer might want this to be converted to a dimension for HTTP server
+  developer might want this to be converted to a attribute for HTTP server
   metrics (e.g. the request/second from bots vs. real users).
 
 The SDK MUST provide the means to register Views with a `MeterProvider`. Here
@@ -180,8 +180,8 @@ are the inputs:
     not in the list will be ignored. If not provided, all the attribute keys
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
-  * The `extra dimensions` which come from Baggage/Context (optional). If not
-    provided, no extra dimension will be used. Please note that this only
+  * The `extra attributes` which come from Baggage/Context (optional). If not
+    provided, no extra attributes will be used. Please note that this only
     applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
     apply a [default aggregation](#default-aggregation). If the aggregation
@@ -202,7 +202,7 @@ made with an Instrument:
   * For each View, if the Instrument could match the instrument selection
     criteria:
     * Try to apply the View configuration. If there is an error (e.g. the View
-      asks for extra dimensions from the Baggage, but the Instrument is
+      asks for extra attributes from the Baggage, but the Instrument is
       [asynchronous](./api.md#asynchronous-instrument) which doesn't have
       Context) or a conflict (e.g. the View requires to export the metrics using
       a certain name, but the name is already used by another View), provide a
@@ -263,7 +263,7 @@ meter_provider
 
 ```python
 # Counter X will be exported as delta sum
-# Histogram Y and Gauge Z will be exported with 2 dimensions (a and b)
+# Histogram Y and Gauge Z will be exported with 2 attributes (a and b)
 meter_provider
     .add_view("X", aggregation=SumAggregation(DELTA))
     .add_view("*", attribute_keys=["a", "b"])
@@ -791,7 +791,7 @@ Batch: | Metric | | Metric | ... | Metric |
            +--> MetricPoints: | MetricPoint | | MetricPoint | ... | MetricPoint |
                               +-----+-------+ +-------------+     +-------------+
                                     |
-                                    +--> timestamps, dimensions, value (or buckets), exemplars, ...
+                                    +--> timestamps, attributes, value (or buckets), exemplars, ...
 ```
 
 Refer to the [Metric points](./datamodel.md#metric-points) section from the
