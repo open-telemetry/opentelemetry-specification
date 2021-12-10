@@ -193,7 +193,7 @@ are the inputs:
     different reservoirs to be chosen by the aggregation.
 
 In order to avoid conflicts, views which specify a name SHOULD have an
-instrument selector which selects at most one instrument. For the registration
+instrument selector that selects at most one instrument. For the registration
 mechanism described above, where selection is provided via configuration, the
 SDK MUST NOT allow Views with a specified name to be declared with instrument
 selectors that select by instrument type or wildcard.
