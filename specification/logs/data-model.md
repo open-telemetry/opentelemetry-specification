@@ -178,6 +178,7 @@ Here is the list of fields in a log record:
 Field Name     |Description
 ---------------|--------------------------------------------
 Timestamp      |Time when the event occurred.
+ObservedTimestamp|Time when the event was observed.
 TraceId        |Request trace id.
 SpanId         |Request span id.
 TraceFlags     |W3C trace flag.
@@ -196,6 +197,24 @@ Type: Timestamp, uint64 nanoseconds since Unix epoch.
 
 Description: Time when the event occurred measured by the origin clock. This
 field is optional, it may be missing if the timestamp is unknown.
+
+### Field: `ObservedTimestamp`
+
+Type: Timestamp, uint64 nanoseconds since Unix epoch.
+
+Description: Time when the event was observed by the collection system. For
+events that originate in OpenTelemetry (e.g. using OpenTelemetry Logging SDK)
+this timestamp is typically set at the generation time and is equal to
+Timestamp. For events originating externally and collected by OpenTelemetry
+(e.g. using Collector) this is the time when OpenTelemetry's code observed the
+event measured by the clock of the OpenTelemetry code. This field SHOULD be set
+once the event is observed by OpenTelemetry.
+
+For converting OpenTelemetry log data to formats that support only one timestamp
+or when receiving OpenTelemetry log data by recipients that support only one
+timestamp internally the following logic is recommended:
+
+- Use `Timestamp` if it is present, otherwise use `ObservedTimestamp`.
 
 ### Trace Context Fields
 
