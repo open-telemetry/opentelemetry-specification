@@ -48,8 +48,9 @@ Semantic convention mapping SHOULD NOT be performed, with the
 exception of error mapping, as described in the [Set Tag](#set-tag) and
 [Log](#log) sections.
 
-It is not recommended the OpenTracing Shim and the OpenTelemetry API are
-consumed in the same codebase, as `Baggage` may not be properly propagated. See
+If the OpenTracing-instrumented code makes use of baggage, it is not recommended to
+consume both the OpenTracing Shim and the OpenTelemetry API in the same codebase,
+as `Baggage` may not be properly propagated. See
 [Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship).
 
 ## Create an OpenTracing Tracer Shim
