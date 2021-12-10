@@ -52,7 +52,7 @@ metrics.
 Common attributes SHOULD be consistently named. This aids in discoverability and
 disambiguates similar attributes to metric names.
 
-["As a rule of thumb, **aggregations** over all the dimensions of a given
+["As a rule of thumb, **aggregations** over all the attributes of a given
 metric **SHOULD** be
 meaningful,"](https://prometheus.io/docs/practices/naming/#metric-names) as
 Prometheus recommends.
