@@ -69,9 +69,8 @@ ambiguous.
 
 ### Name Reuse Prohibition
 
-It is prohibited to introduce a new metric with a name that matches a name of
-a metric that existed in the past but was renamed (with a corresponding
-schema file).
+A new metric MUST NOT be added with the same name as a metric that existed in
+the past but was renamed (with a corresponding schema file).
 
 When introducing a new metric name check all existing schema files to make sure
 the name does not appear as a key of any "rename_metrics" section (keys denote

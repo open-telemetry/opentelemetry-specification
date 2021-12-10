@@ -70,9 +70,8 @@ Names SHOULD follow these rules:
 
 ## Name Reuse Prohibition
 
-It is prohibited to introduce a new attribute with a name that matches a name of
-an attribute that existed in the past but was renamed (with a corresponding
-schema file).
+A new attribute MUST NOT be added with the same name as an attribute that
+existed in the past but was renamed (with a corresponding schema file).
 
 When introducing a new attribute name check all existing schema files to make
 sure the name does not appear as a key of any "rename_attributes" section (keys

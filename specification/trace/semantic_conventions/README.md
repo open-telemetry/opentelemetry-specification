@@ -34,9 +34,8 @@ OpenTelemetry also defines the concept of overarching [Resources](../../resource
 
 ## Event Name Reuse Prohibition
 
-It is prohibited to introduce a new event with a name that matches a name of an
-event that existed in the past but was renamed (with a corresponding schema
-file).
+A new event MUST NOT be added with the same name as an event that existed in
+the past but was renamed (with a corresponding schema file).
 
 When introducing a new event name check all existing schema files to make sure
 the name does not appear as a key of any "rename_events" section (keys denote
