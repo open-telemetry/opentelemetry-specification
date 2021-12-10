@@ -429,35 +429,66 @@ series and it requires further analysis.
 
 ## Exemplar
 
+Exemplars are example data points for aggregated data. They provide specific
+context to otherwise general aggregations. Exemplars allow correlation between
+aggregated metric data and the original API calls where measurements are
+recorded. Exemplars work for trace-metric correlation across any metric, not
+just those that can also be derived from `Span`s.
+
 An [Exemplar](./datamodel.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
 information:
 
-- The `value` that was recorded.
-- The `time` the `Measurement` was seen.
+- The `value` of the `Measurement` that was recorded by the API call.
+- The `time` the API call was made to record a `Measurement`.
 - The set of [Attributes](../common/common.md#attributes) associated with the
   `Measurement` not already included in a metric data point.
 - The associated [trace id and span
   id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
   within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
-  the `Measurement`.
+  the `Measurement` at API call time.
 
-A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements.
+For example, if a user has configured a `View` to preserve the attributes: `X`
+and `Y`, but the user records a measurement as follows:
 
-A Metric SDK MUST allow `Exemplar` sampling to be disabled.  In this instance
+```javascript
+const span = tracer.startSpan('makeRequest');
+api.context.with(api.trace.setSpan(api.context.active(), span), () => {
+  // Record a measurement.
+  cache_miss_counter.add(1, {"X": "x-value", "Y": "y-value", "Z": "z-value"});
+  ...
+  span.end();
+})
+```
+
+Then an examplar output in OTLP would consist of:
+
+- The `value` of 1.
+- The `time` when the `add` method was called
+- The `Attributes` of `{"Z": "z-value"}`, as these are not preserved in the
+  resulting metric point.
+- The trace/span id for the `makeRequest` span.
+
+While the metric data point for the counter would carry the attributes `X` and
+`Y`.
+
+A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements
+via the `ExemplarFilter` and `ExemplarReservoir` hooks.
+
+A Metric SDK MUST allow `Exemplar` sampling to be disabled. In this instance
 the SDK SHOULD not have overhead related to exemplar sampling.
 
 A Metric SDK MUST sample `Exemplar`s only from measurements within the context
 of a sampled trace BY DEFAULT.
 
-A Metric SDK MUST allow exemplar sampling to leverage the configuration of a
+A Metric SDK MUST allow exemplar sampling to leverage the configuration of
 metric aggregation. For example, Exemplar sampling of histograms should be able
 to leverage bucket boundaries.
 
 A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
 
-- `ExemplarFilter`: filter which measurements can become exemplars
-- `ExemplarReservoir`: determine how to store exemplars.
+- `ExemplarFilter`: filter which measurements can become exemplars.
+- `ExemplarReservoir`: storage and sampling of exemplars.
 
 ### ExemplarFilter
 
@@ -497,9 +528,14 @@ span context and baggage can be inspected at this point.
 The "offer" method does not need to store all measurements it is given and
 MAY further sample beyond the `ExemplarFilter`.
 
-The "collect" method MUST return accumulated `Exemplar`s.
+The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
+to abide by the `AggregationTemporality` of any metric point they are recorded
+with. In other words, Exemplars reported against a metric data point SHOULD have
+occurred within the start/stop timestamps of that point.  SDKs are free to
+decide whether "collect" should also reset internal storage for delta temporal
+aggregation collection, or use a more optimal implementation.
 
-`Exemplar`s MUST retain the any attributes available in the measurement that
+`Exemplar`s MUST retain any attributes available in the measurement that
 are not preserved by aggregation or view configuration. Specifically, at a
 minimum, joining together attributes on an `Exemplar` with those available
 on its associated metric data point should result in the full set of attributes
@@ -530,6 +566,9 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
     reservoir[bucket] = measurement
   end
   ```
+
+Additionally, the `num_measurements_seen` count SHOULD be reset at every
+collection cycle.
 
 *AlignedHistogramBucketExemplarReservoir*
 This Exemplar reservoir MUST take a configuration parameter that is the
