@@ -171,6 +171,7 @@ We define environment variables for setting one or more exporters per signal.
 | ------------- | ---------------------------------------------------------------------------- | ------- |
 | OTEL_TRACES_EXPORTER | Trace exporter to be used | "otlp"  |
 | OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  |
+| OTEL_LOGS_EXPORTER | Logs exporter to be used | "otlp"  |
 
 The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 
@@ -186,6 +187,11 @@ Known values for `OTEL_METRICS_EXPORTER` are:
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 - `"none"`: No automatically configured exporter for metrics.
+
+Known values for `OTEL_LOGS_EXPORTER` are:
+
+- `"otlp"`: [OTLP](./protocol/otlp.md)
+- `"none"`: No automatically configured exporter for logs.
 
 ## Metrics SDK Configuration
 
