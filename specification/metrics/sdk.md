@@ -192,6 +192,12 @@ are the inputs:
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
 
+In order to avoid conflicts, views which specify a name SHOULD have an
+instrument selector that selects at most one instrument. For the registration
+mechanism described above, where selection is provided via configuration, the
+SDK MUST NOT allow Views with a specified name to be declared with instrument
+selectors that select by instrument type or wildcard.
+
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
