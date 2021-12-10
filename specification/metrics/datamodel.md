@@ -107,8 +107,8 @@ collector. These transformations are:
 1. Temporal reaggregation: Metrics that are collected at a high-frequency can be
    re-aggregated into longer intervals, allowing low-resolution timeseries to be
    pre-calculated or used in place of the original metric data.
-2. Spatial reaggregation: Metrics that are produced with unwanted dimensions can
-   be re-aggregated into metrics having fewer dimensions.
+2. Spatial reaggregation: Metrics that are produced with unwanted attributes can
+   be re-aggregated into metrics having fewer attributes.
 3. Delta-to-Cumulative: Metrics that are input and output with Delta temporality
    unburden the client from keeping high-cardinality state. The use of deltas
    allows downstream services to bear the cost of conversion into cumulative
@@ -119,13 +119,13 @@ can be applied automatically to streams of the same type, subject to conditions
 outlined below. Every OTLP data stream has an intrinsic
 [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
 making it semantically well-defined to merge data points across both temporal
-and spatial dimensions. Every OTLP data point also has two meaningful timestamps
+and spatial attributes. Every OTLP data point also has two meaningful timestamps
 which, combined with intrinsic aggregation, make it possible to carry out the
 standard metric data transformations for each of the model’s basic points while
 ensuring that the result carries the intended meaning.
 
 As in OpenCensus Metrics, metrics data can be transformed into one or more
-Views, just by selecting the aggregation interval and the desired dimensions.
+Views, just by selecting the aggregation interval and the desired attributes.
 One stream of OTLP data can be transformed into multiple timeseries outputs by
 configuring different Views, and the required Views processing may be applied
 inside the SDK or by an external collector.
@@ -139,9 +139,9 @@ breadth of OTel metrics usage.
 1. OTel SDK exports 10 second resolution to a single OTel collector, using
   cumulative temporality for a stateful client, stateless server:
     - Collector passes-through original data to an OTLP destination
-    - Collector re-aggregates into longer intervals without changing dimensions
+    - Collector re-aggregates into longer intervals without changing attributes
     - Collector re-aggregates into several distinct views, each with a subset of
-      the available dimensions, outputs to the same destination
+      the available attributes, outputs to the same destination
 2. OTel SDK exports 10 second resolution to a single OTel collector, using delta
   temporality for a stateless client, stateful server:
     - Collector re-aggregates into 60 second resolution

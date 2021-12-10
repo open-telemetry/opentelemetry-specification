@@ -62,9 +62,9 @@ Here is one way of choosing the correct instrument:
 * I want to **record** or **time** something, and the **statistics** about this
   thing are likely to be meaningful - use a [Histogram](./api.md#histogram).
 * I want to **measure** something (by reporting an absolute value):
-  * If it makes NO sense to add up the values across different dimensions, use
+  * If it makes NO sense to add up the values across different sets of attributes, use
     an [Asynchronous Gauge](./api.md#asynchronous-gauge).
-  * If it makes sense to add up the values across different dimensions:
+  * If it makes sense to add up the values across different sets of attributes:
     * If the value is monotonically increasing - use an [Asynchronous
       Counter](./api.md#asynchronous-counter).
     * If the value is NOT monotonically increasing - use an [Asynchronous
@@ -183,20 +183,20 @@ and to simplify the story we will only have one histogram bucket `(-Inf, +Inf)`:
 If we export the metrics using **Delta Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
-  * dimensions: {verb = `GET`, status = `200`}, count: `2`, min: `50 (ms)`, max:
+  * attributes: {verb = `GET`, status = `200`}, count: `2`, min: `50 (ms)`, max:
     `100 (ms)`
-  * dimensions: {verb = `GET`, status = `500`}, count: `1`, min: `1 (ms)`, max:
+  * attributes: {verb = `GET`, status = `500`}, count: `1`, min: `1 (ms)`, max:
     `1 (ms)`
 * (T<sub>1</sub>, T<sub>2</sub>]
   * nothing since we don't have any Measurement received
 * (T<sub>2</sub>, T<sub>3</sub>]
-  * dimensions: {verb = `GET`, status = `500`}, count: `2`, min: `2 (ms)`, max:
+  * attributes: {verb = `GET`, status = `500`}, count: `2`, min: `2 (ms)`, max:
     `5 (ms)`
 * (T<sub>3</sub>, T<sub>4</sub>]
-  * dimensions: {verb = `GET`, status = `200`}, count: `1`, min: `100 (ms)`,
+  * attributes: {verb = `GET`, status = `200`}, count: `1`, min: `100 (ms)`,
     max: `100 (ms)`
 * (T<sub>4</sub>, T<sub>5</sub>]
-  * dimensions: {verb = `GET`, status = `200`}, count: `3`, min: `30 (ms)`, max:
+  * attributes: {verb = `GET`, status = `200`}, count: `3`, min: `30 (ms)`, max:
     `100 (ms)`
 
 You can see that the SDK **only needs to track what has happened after the
@@ -207,29 +207,29 @@ what has happened during (T<sub>0</sub>, T<sub>1</sub>].
 If we export the metrics using **Cumulative Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
-  * dimensions: {verb = `GET`, status = `200`}, count: `2`, min: `50 (ms)`, max:
+  * attributes: {verb = `GET`, status = `200`}, count: `2`, min: `50 (ms)`, max:
     `100 (ms)`
-  * dimensions: {verb = `GET`, status = `500`}, count: `1`, min: `1 (ms)`, max:
+  * attributes: {verb = `GET`, status = `500`}, count: `1`, min: `1 (ms)`, max:
     `1 (ms)`
 * (T<sub>0</sub>, T<sub>2</sub>]
-  * dimensions: {verb = `GET`, status = `200`}, count: `2`, min: `50 (ms)`, max:
+  * attributes: {verb = `GET`, status = `200`}, count: `2`, min: `50 (ms)`, max:
     `100 (ms)`
-  * dimensions: {verb = `GET`, status = `500`}, count: `1`, min: `1 (ms)`, max:
+  * attributes: {verb = `GET`, status = `500`}, count: `1`, min: `1 (ms)`, max:
     `1 (ms)`
 * (T<sub>0</sub>, T<sub>3</sub>]
-  * dimensions: {verb = `GET`, status = `200`}, count: `2`, min: `50 (ms)`, max:
+  * attributes: {verb = `GET`, status = `200`}, count: `2`, min: `50 (ms)`, max:
     `100 (ms)`
-  * dimensions: {verb = `GET`, status = `500`}, count: `3`, min: `1 (ms)`, max:
+  * attributes: {verb = `GET`, status = `500`}, count: `3`, min: `1 (ms)`, max:
     `5 (ms)`
 * (T<sub>0</sub>, T<sub>4</sub>]
-  * dimensions: {verb = `GET`, status = `200`}, count: `3`, min: `50 (ms)`, max:
+  * attributes: {verb = `GET`, status = `200`}, count: `3`, min: `50 (ms)`, max:
     `100 (ms)`
-  * dimensions: {verb = `GET`, status = `500`}, count: `3`, min: `1 (ms)`, max:
+  * attributes: {verb = `GET`, status = `500`}, count: `3`, min: `1 (ms)`, max:
     `5 (ms)`
 * (T<sub>0</sub>, T<sub>5</sub>]
-  * dimensions: {verb = `GET`, status = `200`}, count: `6`, min: `30 (ms)`, max:
+  * attributes: {verb = `GET`, status = `200`}, count: `6`, min: `30 (ms)`, max:
     `100 (ms)`
-  * dimensions: {verb = `GET`, status = `500`}, count: `3`, min: `1 (ms)`, max:
+  * attributes: {verb = `GET`, status = `500`}, count: `3`, min: `1 (ms)`, max:
     `5 (ms)`
 
 You can see that we are performing Delta->Cumulative conversion, and the SDK
@@ -238,7 +238,7 @@ in the worst case, the SDK **will have to remember what has happened since the
 beginning of the process**.
 
 Imagine if we have a long running service and we collect metrics with 7
-dimensions and each dimension can have 30 different values. We might eventually
+attributes and each attribute can have 30 different values. We might eventually
 end up having to remember the complete set of all `21,870,000,000` permutations!
 This **cardinality explosion** is a well-known challenge in the metrics space.
 
@@ -287,20 +287,20 @@ thread ever started:
 If we export the metrics using **Cumulative Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
-  * dimensions: {pid = `1001`, tid = `1`}, sum: `50`
-  * dimensions: {pid = `1001`, tid = `2`}, sum: `30`
+  * attributes: {pid = `1001`, tid = `1`}, sum: `50`
+  * attributes: {pid = `1001`, tid = `2`}, sum: `30`
 * (T<sub>0</sub>, T<sub>2</sub>]
-  * dimensions: {pid = `1001`, tid = `1`}, sum: `53`
-  * dimensions: {pid = `1001`, tid = `2`}, sum: `38`
+  * attributes: {pid = `1001`, tid = `1`}, sum: `53`
+  * attributes: {pid = `1001`, tid = `2`}, sum: `38`
 * (T<sub>0</sub>, T<sub>3</sub>]
-  * dimensions: {pid = `1001`, tid = `1`}, sum: `56`
-  * dimensions: {pid = `1001`, tid = `2`}, sum: `42`
+  * attributes: {pid = `1001`, tid = `1`}, sum: `56`
+  * attributes: {pid = `1001`, tid = `2`}, sum: `42`
 * (T<sub>0</sub>, T<sub>4</sub>]
-  * dimensions: {pid = `1001`, tid = `1`}, sum: `60`
-  * dimensions: {pid = `1001`, tid = `2`}, sum: `47`
+  * attributes: {pid = `1001`, tid = `1`}, sum: `60`
+  * attributes: {pid = `1001`, tid = `2`}, sum: `47`
 * (T<sub>0</sub>, T<sub>5</sub>]
-  * dimensions: {pid = `1001`, tid = `2`}, sum: `53`
-  * dimensions: {pid = `1001`, tid = `3`}, sum: `5`
+  * attributes: {pid = `1001`, tid = `2`}, sum: `53`
+  * attributes: {pid = `1001`, tid = `3`}, sum: `5`
 
 It is quite straightforward - we just take the data being reported from the
 asynchronous instruments and send them. We might want to consider if [Resets and
@@ -311,20 +311,20 @@ operating system, and we probably don't want to confuse the metrics backend.
 If we export the metrics using **Delta Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
-  * dimensions: {pid = `1001`, tid = `1`}, delta: `50`
-  * dimensions: {pid = `1001`, tid = `2`}, delta: `30`
+  * attributes: {pid = `1001`, tid = `1`}, delta: `50`
+  * attributes: {pid = `1001`, tid = `2`}, delta: `30`
 * (T<sub>1</sub>, T<sub>2</sub>]
-  * dimensions: {pid = `1001`, tid = `1`}, delta: `3`
-  * dimensions: {pid = `1001`, tid = `2`}, delta: `8`
+  * attributes: {pid = `1001`, tid = `1`}, delta: `3`
+  * attributes: {pid = `1001`, tid = `2`}, delta: `8`
 * (T<sub>2</sub>, T<sub>3</sub>]
-  * dimensions: {pid = `1001`, tid = `1`}, delta: `3`
-  * dimensions: {pid = `1001`, tid = `2`}, delta: `4`
+  * attributes: {pid = `1001`, tid = `1`}, delta: `3`
+  * attributes: {pid = `1001`, tid = `2`}, delta: `4`
 * (T<sub>3</sub>, T<sub>4</sub>]
-  * dimensions: {pid = `1001`, tid = `1`}, delta: `4`
-  * dimensions: {pid = `1001`, tid = `2`}, delta: `5`
+  * attributes: {pid = `1001`, tid = `1`}, delta: `4`
+  * attributes: {pid = `1001`, tid = `2`}, delta: `5`
 * (T<sub>4</sub>, T<sub>5</sub>]
-  * dimensions: {pid = `1001`, tid = `2`}, delta: `6`
-  * dimensions: {pid = `1001`, tid = `3`}, delta: `5`
+  * attributes: {pid = `1001`, tid = `2`}, delta: `6`
+  * attributes: {pid = `1001`, tid = `3`}, delta: `5`
 
 You can see that we are performing Cumulative->Delta conversion, and it requires
 us to remember the last value of **every single permutation we've encountered so
@@ -374,13 +374,13 @@ collection.
 
 **Limit the memory usage, and handle critical memory condition.** The general
 expectation is that a telemetry SDK should not fail the application. This can be
-done via some dimension-capping algorithm - e.g. start to combine/drop some data
+done via some cardinality-capping algorithm - e.g. start to combine/drop some data
 points when the SDK hits the memory limit, and provide a mechanism to report the
 data loss.
 
 **Provide configurations to the application owner.** The answer to _"what is an
 efficient memory usage"_ is ultimately depending on the goal of the application
 owner. For example, the application owners might want to spend more memory in
-order to keep more permutations of metrics dimensions, or they might want to use
-memory aggressively for certain dimensions that are important, and keep a
-conservative limit for dimensions that are less important.
+order to keep more permutations of metrics attributes, or they might want to use
+memory aggressively for certain attributes that are important, and keep a
+conservative limit for attributes that are less important.
