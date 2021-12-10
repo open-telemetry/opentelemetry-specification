@@ -178,12 +178,13 @@ Here is the list of fields in a log record:
 Field Name     |Description
 ---------------|--------------------------------------------
 Timestamp      |Time when the event occurred.
+ObservedTimestamp|Time when the event was observed.
 TraceId        |Request trace id.
 SpanId         |Request span id.
 TraceFlags     |W3C trace flag.
 SeverityText   |The severity text (also known as log level).
 SeverityNumber |Numerical value of the severity.
-Name           |Short event identifier.
+Name           |Short low cardinality event type.
 Body           |The body of the log record.
 Resource       |Describes the source of the log.
 Attributes     |Additional information about the event.
@@ -197,6 +198,24 @@ Type: Timestamp, uint64 nanoseconds since Unix epoch.
 Description: Time when the event occurred measured by the origin clock, i.e. the
 time at the source. This field is optional, it may be missing if the source
 timestamp is unknown.
+
+### Field: `ObservedTimestamp`
+
+Type: Timestamp, uint64 nanoseconds since Unix epoch.
+
+Description: Time when the event was observed by the collection system. For
+events that originate in OpenTelemetry (e.g. using OpenTelemetry Logging SDK)
+this timestamp is typically set at the generation time and is equal to
+Timestamp. For events originating externally and collected by OpenTelemetry
+(e.g. using Collector) this is the time when OpenTelemetry's code observed the
+event measured by the clock of the OpenTelemetry code. This field SHOULD be set
+once the event is observed by OpenTelemetry.
+
+For converting OpenTelemetry log data to formats that support only one timestamp
+or when receiving OpenTelemetry log data by recipients that support only one
+timestamp internally the following logic is recommended:
+
+- Use `Timestamp` if it is present, otherwise use `ObservedTimestamp`.
 
 ### Trace Context Fields
 
@@ -387,10 +406,10 @@ corresponding short names).
 
 Type: string.
 
-Description: Short event identifier that does not contain varying parts.
-`Name` describes what happened (e.g. "ProcessStarted"). Recommended to be
-no longer than 50 characters. Not guaranteed to be unique in any way. Typically
-used for filtering and grouping purposes in backends. This field is optional.
+Description: Short low cardinality event type that does not contain varying
+parts. `Name` describes what happened (e.g. "ProcessStarted"). Recommended to be
+no longer than 50 characters. Typically used for filtering and grouping purposes
+in backends. This field is optional.
 
 ### Field: `Body`
 
