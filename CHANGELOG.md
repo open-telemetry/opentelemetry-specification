@@ -43,6 +43,9 @@ release.
 
 ### Compatibility
 
+- Simplify Baggage handling in the OpenTracing Shim layer.
+  ([#2194](https://github.com/open-telemetry/opentelemetry-specification/pull/2194))
+
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
