@@ -186,10 +186,16 @@ following HTTP requests example:
   * verb = `GET`, status = `200`, duration = `30 (ms)`
   * verb = `GET`, status = `200`, duration = `50 (ms)`
 
-Let's imagine we export the metrics as [Histogram](./datamodel.md#histogram),
-and to simplify the story we will only have one histogram bucket `(-Inf, +Inf)`:
+
+Note that in the following examples, Delta aggregation temporality is
+discussed before Cumulative aggregation temporality because
+synchronous Counter and UpDownCounter measurements are input to the
+API with specified Delta aggregation temporality.
 
 ##### Synchronous example: Delta aggregation temporality
+
+Let's imagine we export the metrics as [Histogram](./datamodel.md#histogram),
+and to simplify the story we will only have one histogram bucket `(-Inf, +Inf)`:
 
 If we export the metrics using **Delta Temporality**:
 
@@ -298,6 +304,11 @@ thread ever started:
   * thread 1 died, thread 3 started
   * pid = `1001`, tid = `2`, #PF = `53`
   * pid = `1001`, tid = `3`, #PF = `5`
+  
+Note that in the following examples, Cumulative aggregation
+temporality is discussed before Delta aggregation temporality because
+asynchronous Counter and UpDownCounter measurements are input to the
+API with specified Cumulative aggregation temporality.
 
 ##### Asynchronous example: Cumulative temporality
 
