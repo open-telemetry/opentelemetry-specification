@@ -43,6 +43,9 @@ release.
 
 ### Semantic Conventions
 
+- Prohibit usage of retired names in semantic conventions.
+  ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
+
 ### Compatibility
 
 - Simplify Baggage handling in the OpenTracing Shim layer.
