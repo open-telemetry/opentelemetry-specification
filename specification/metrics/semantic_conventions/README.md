@@ -142,7 +142,7 @@ instrument creation, but can be added if there is ambiguity.
 
 ### Instrument Units
 
-Units should follow the 
+Units should follow the
 [Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html) (need
 more clarification in
 [#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
