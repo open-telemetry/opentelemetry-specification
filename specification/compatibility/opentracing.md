@@ -10,7 +10,7 @@
 * [Tracer Shim](#tracer-shim)
   * [Inject](#inject)
   * [Extract](#extract)
-* [OpenTelemetry Span and SpanContext Shim relationship](#opentelemetry-span-and-spancontext-shim-relationship)
+* [Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship)
 * [Span Shim](#span-shim)
   * [Get Context](#get-context)
   * [Get Baggage Item](#get-baggage-item)
@@ -44,13 +44,14 @@ upstream OpenTelemetry API.
 This functionality MUST be defined in its own OpenTracing Shim Layer, not in the
 OpenTracing nor the OpenTelemetry API or SDK.
 
-The OpenTracing Shim and the OpenTelemetry API/SDK are expected to be consumed
-simultaneously in a running service, in order to ease migration from the former
-to the latter.
-
 Semantic convention mapping SHOULD NOT be performed, with the
 exception of error mapping, as described in the [Set Tag](#set-tag) and
 [Log](#log) sections.
+
+If the OpenTracing-instrumented code makes use of baggage, it is not recommended to
+consume both the OpenTracing Shim and the OpenTelemetry API in the same codebase,
+as `Baggage` may not be properly propagated. See
+[Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship).
 
 ## Create an OpenTracing Tracer Shim
 
@@ -93,7 +94,7 @@ Parameters:
 - A `Format` descriptor.
 - A carrier.
 
-Inject the underlying OpenTelemetry `Span` and `Bagagge` using either the explicitly
+Inject the underlying OpenTelemetry `Span` and `Baggage` using either the explicitly
 registered or the global OpenTelemetry `Propagator`s, as configured at construction time.
 
 - `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
@@ -109,7 +110,7 @@ Parameters:
 - A `Format` descriptor.
 - A carrier.
 
-Extract the underlying OpenTelemetry `Span` and `Bagagge` using either the explicitly
+Extract the underlying OpenTelemetry `Span` and `Baggage` using either the explicitly
 registered or the global OpenTelemetry `Propagator`s, as configured at construction time.
 
 - `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
@@ -120,60 +121,63 @@ Returns a `SpanContext` Shim with the underlying extracted OpenTelemetry
 or no value could be extracted, depending on the specific OpenTracing Language API
 (e.g. Go and Python do, but Java may not).
 
-## OpenTelemetry Span and SpanContext Shim relationship
+## Span Shim and SpanContext Shim relationship
 
-OpenTracing `SpanContext`, just as OpenTelemetry `SpanContext`, MUST be
-immutable, but it MUST also store `Baggage`. Hence, it MUST be replaced
-every time baggage is updated through the OpenTracing
-[Span Set Baggage Item](#set-baggage-item) operation. Special handling
-MUST be done by the Shim layer in order to retain these invariants.
+As per the OpenTracing Specification, the OpenTracing `SpanContext` Shim
+MUST contain `Baggage` data and it MUST be immutable.
 
-Because of the previous requirement, a given OpenTelemetry `Span`
-MUST be associated with ONE AND ONLY ONE `SpanContext` Shim object at all times
-for ALL [execution units](../glossary.md#execution-unit), in order to keep any linked `Baggage` consistent
-at all times. It MUST BE safe to get and set the associated `SpanContext` Shim
-object for a specified OpenTelemetry `Span` from different execution units.
-
-An example showing the need for these requirements is having an OpenTracing `Span`
-have its [Set Baggage Item](#set-baggage-item) operation called from two different
-execution units (e.g. threads, coroutines), and afterwards have its
-[Context](#get-context) fetched in order to
-[iterate over its baggage values](#get-baggage-items).
-
-```java
-// Thread A: New SpanContextShim and Baggage values are created.
-openTracingSpan.setBaggageItem("1", "a")
-
-// Thread B: New SpanContextShim and Baggage values are created again.
-openTracingSpan.setBaggageItem("2", "b")
-
-// Thread C: Up-to-date SpanContextShim and Bagggage values are retrieved.
-for (Map.Entry<String, String> entry : openTracingSpan.context().baggageItems()) {
-  ...
-}
-```
+In turn, the OpenTracing `Span` Shim MUST contain a `SpanContext` Shim.
+When updating its associated baggage, the OpenTracing `Span` MUST set its
+OpenTracing `SpanContext` Shim to a new instance containing the updated
+`Baggage`.
 
 This is a simple graphical representation of the mentioned objects:
 
 ```
   Span Shim
-  +- OpenTelemetry Span
+  +- OpenTelemetry Span (read-only)
   +- SpanContext Shim
-        +- OpenTelemetry SpanContext
-        +- OpenTelemetry Baggage
+        +- OpenTelemetry SpanContext (read-only)
+        +- OpenTelemetry Baggage (read-only)
 ```
 
-The OpenTelemetry `Span` in the `Span` Shim object is used to get and set
-its currently associated `SpanContext` Shim.
+The OpenTracing Shim properly performs in-process and inter-process
+propagation of the OpenTelemetry `Span` along its associated `Baggage`
+leveraging the hierarchy of objects shown above.
 
-Managing this one-to-one relationship between an OpenTelemetry `Span` and
-a `SpanContext` Shim object is an implementation detail. It can be implemented,
-for example, with the help of a global synchronized dictionary, or with an
-additional attribute in each OpenTelemetry `Span` object for dynamic languages.
+As OpenTelemetry is not aware of this association, the related `Baggage`
+may not be properly propagated if the OpenTelemetry API is consumed
+along the OpenTracing Shim in the same codebase, as shown in the example
+below:
+
+```java
+// methodOne consumes the OpenTelemetry API.
+void methodOne(Span span) {
+  try (Scope scope = span.makeCurrent()) {
+    methodTwo();
+  }
+}
+
+// methodTwo consumes the OpenTracing Shim.
+void methodTwo() {
+  io.opentracing.Span span = io.opentracing.util.GlobalTracer.get()
+    .activeSpan();
+
+  // Correctly set in the underlying io.opentelemetry.api.trace.Span
+  span.setTag("tag", "value");
+
+  // Value is set in the Shim layer -- it may not be later propagated
+  // as OpenTelemetry is not aware of the Baggage associated
+  // to this Span.
+  span.setBaggageItem("baggage", "item");
+}
+```
+
+Operations accessing the associated `Baggage` MUST be safe to be called concurrently.
 
 ## Span Shim
 
-The OpenTracing `Span` operations MUST be implemented using underlying OpenTelemetry `Span`
+The OpenTracing `Span` operations MUST be implemented using the underlying OpenTelemetry `Span`
 and `Baggage` values with the help of a `SpanContext` Shim object.
 
 The `Log` operations MUST be implemented using the OpenTelemetry
@@ -184,8 +188,9 @@ The `Set Tag` operations MUST be implemented using the OpenTelemetry
 
 ### Get Context
 
-Returns the [associated](#opentelemetry-span-and-spancontext-shim-relationship)
-`SpanContext` Shim.
+Returns the current `SpanContext` Shim.
+
+This operation MUST be safe to be called concurrently.
 
 ### Get Baggage Item
 
@@ -193,17 +198,20 @@ Parameters:
 
 - The baggage key, a string.
 
-Returns a value for the specified key in the OpenTelemetry `Baggage` of the
-associated `SpanContext` Shim or null if none exists.
+Returns the value for the specified key in the OpenTelemetry `Baggage` of the
+current `SpanContext` Shim, or null if none exists.
 
-This is accomplished by getting the
-[associated](#opentelemetry-span-and-spancontext-shim-relationship)
-`SpanContext` Shim and do a lookup for the specified key in the OpenTelemetry
-`Baggage` instance.
+This operation MUST be safe to be called concurrently.
 
 ```java
 String getBaggageItem(String key) {
-  getSpanContextShim().getBaggage().getEntryValue(key);
+  synchronized(this) {
+    // Get the current SpanContext's Baggage.
+    io.opentelemetry.baggage.Baggage baggage = this.spanContextShim.getBaggage();
+
+    // Return the value for key.
+    return baggage.getEntryValue(key);
+  }
 }
 ```
 
@@ -215,21 +223,26 @@ Parameters:
 - The baggage value, a string.
 
 Creates a new `SpanContext` Shim with a new OpenTelemetry `Baggage` containing
-the specified `Baggage` key/value pair. The resulting `SpanContext` Shim is then
-[associated](#opentelemetry-span-and-spancontext-shim-relationship) to the underlying
-OpenTelemetry `Span`.
+the specified `Baggage` key/value pair, and sets it as the current instance for
+this `Span` Shim.
+
+This operation MUST be safe to be called concurrently.
 
 ```java
 void setBaggageItem(String key, String value) {
-  SpanContextShim spanContextShim = getSpanContextShim();
+  synchronized(this) {
+    // Add value/key to the existing Baggage.
+    Baggage newBaggage = this.spanContextShim.getBaggage().toBuilder()
+      .put(key, value)
+      .build();
 
-  // Add value/key to the existing Baggage.
-  Baggage newBaggage = spanContextShim.getBaggage().toBuilder()
-    .put(key, value)
-    .build();
+    // Create a new SpanContext with the updated Baggage.
+    SpanContextShim newSpanContextShim = this.spanContextShim
+      .newWithBaggage(newBaggage);
 
-  // Set a new SpanContext Shim object with the updated Baggage.
-  setSpanContextShim(spanContextShim.newWithBaggage(newBaggage));
+    // Update our SpanContext instance.
+    this.spanContextShim = newSpanContextShim;
+  }
 }
 ```
 
@@ -315,8 +328,7 @@ Parameters:
 
 - A `Span`.
 
-Gets the [associated](#opentelemetry-span-and-spancontext-shim-relationship)
-`SpanContext` Shim for the specified `Span` and puts its OpenTelemetry
+Gets the current `SpanContext` of the specified `Span` and puts its OpenTelemetry
 `Span`, `Baggage` and `Span` Shim objects in a new `Context`,
 which is then set as the currently active instance.
 
