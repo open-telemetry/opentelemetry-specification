@@ -150,6 +150,10 @@ The following diagram shows the initial triaging of new issues.
   contributor who can work on the issue and re-assign to them, label the issue
   as "backlog". If no-one is available to work on the issue the issue is labeled
   as "help wanted" and unassigned.
+- Any other spec approver can take over the issue before the original assignee's
+  first response if they prefer to drive it themselves. In this case the other
+  spec approver must re-assign the issue to themselves, if necessary first
+  ensuring that no-one else is already working on the issue.
 
 ## Pull Requests
 
