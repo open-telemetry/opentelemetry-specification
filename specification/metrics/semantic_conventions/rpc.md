@@ -31,8 +31,8 @@ MUST be of the specified type and units.
 
 Below is a table of RPC server metric instruments.
 
-| Name | Instrument | Unit | Unit (UCUM) | Description | Status | Streaming |
-|------|------------|------|-------------|-------------|--------|-----------|
+| Name | Instrument | Unit | Unit ([UCUM](README.md#instrument-units)) | Description | Status | Streaming |
+|------|------------|------|-------------------------------------------|-------------|--------|-----------|
 | `rpc.server.duration` | Histogram  | Bytes | `ms` | measures duration of inbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
 | `rpc.server.request.size` | Histogram  | Bytes | `By` | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
 | `rpc.server.response.size` | Histogram  | Bytes | `By` | measures size of RPC response messages (uncompressed) | Optional | Recorded per response in a streaming batch |
@@ -44,8 +44,8 @@ Below is a table of RPC server metric instruments.
 Below is a table of RPC client metric instruments.  These apply to traditional
 RPC usage, not streaming RPCs.
 
-| Name | Instrument | Unit | Unit (UCUM) | Description | Status | Streaming |
-|------|------------|------|-------------|-------------|--------|-----------|
+| Name | Instrument | Unit | Unit ([UCUM](README.md#instrument-units)) | Description | Status | Streaming |
+|------|------------|------|-------------------------------------------|-------------|--------|-----------|
 | `rpc.client.duration` | Histogram | milliseconds | `ms` | measures duration of outbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
 | `rpc.client.request.size` | Histogram | Bytes | `By` | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
 | `rpc.client.response.size` | Histogram | Bytes | `By` | measures size of RPC response messages (uncompressed) | Optional | Recorded per message in a streaming batch |
