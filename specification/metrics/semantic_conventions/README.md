@@ -7,6 +7,7 @@
 <!-- toc -->
 
 - [General Guidelines](#general-guidelines)
+  * [Name Reuse Prohibition](#name-reuse-prohibition)
   * [Units](#units)
   * [Pluralization](#pluralization)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
@@ -65,6 +66,15 @@ names for GC, not divided by the runtime, could create dissimilar comparisons
 and confusion for end users. (For example, prefer `process.runtime.java.gc*` over
 `process.runtime.gc.*`.) Measures of many operating system metrics are similarly
 ambiguous.
+
+### Name Reuse Prohibition
+
+A new metric MUST NOT be added with the same name as a metric that existed in
+the past but was renamed (with a corresponding schema file).
+
+When introducing a new metric name check all existing schema files to make sure
+the name does not appear as a key of any "rename_metrics" section (keys denote
+old metric names in rename operations).
 
 ### Units
 
