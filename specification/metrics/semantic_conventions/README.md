@@ -151,5 +151,5 @@ more clarification in
 total) are dimensionless and SHOULD use the default unit `1` (the unity).
 - Instruments that measure an integer count of something SHOULD only use
 [annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
-give additional meaning *without* the leading default unit (`1`). For example
-`{packets}`, `{errors}`, `{faults}`, etc.
+give additional meaning *without* the leading default unit (`1`). For example,
+use `{packets}`, `{errors}`, `{faults}`, etc.
