@@ -27,6 +27,8 @@ release.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
 - Mark In-memory, OTLP and Stdout exporter specs as Stable.
   ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
+- Use UCUM units in Metrics Semantic Conventions.
+  ([#2199](https://github.com/open-telemetry/opentelemetry-specification/pull/2199))
 
 ### Logs
 
@@ -40,6 +42,9 @@ release.
 ### Resource
 
 ### Semantic Conventions
+
+- Prohibit usage of retired names in semantic conventions.
+  ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
 
 ### Compatibility
 
