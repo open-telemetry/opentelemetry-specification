@@ -70,7 +70,7 @@ release.
   ([#2052](https://github.com/open-telemetry/opentelemetry-specification/pull/2052))
 - Add `device.manufacturer` to describe mobile device manufacturers 
   ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
-  
+
 ### Traces
 
 - No changes.
