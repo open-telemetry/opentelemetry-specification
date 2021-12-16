@@ -47,6 +47,8 @@ release.
 
 - Prohibit usage of retired names in semantic conventions.
   ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
+- Add `device.manufacturer` to describe mobile device manufacturers.
+  ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
 
 ### Compatibility
 
