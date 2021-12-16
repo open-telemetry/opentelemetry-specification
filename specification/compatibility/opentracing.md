@@ -59,9 +59,9 @@ This operation is used to create a new OpenTracing `Tracer`:
 
 This operation MUST accept the following parameters:
 
-- An OpenTelemetry `TracerProvider`, used to get a `Tracer` with
-  instrumentation name and version set to `opentracing-shim`
-  and the shim version respectively.
+- An OpenTelemetry `TracerProvider`. This operation MUST use this `TracerProvider`
+  to obtain a `Tracer` with the name `opentracing-shim` along with the current
+  shim library version.
 - OpenTelemetry `Propagator`s to be used to perform injection and extraction
   for the the OpenTracing `TextMap` and `HTTPHeaders` formats.
   If not specified, no `Propagator` values will be stored in the Shim, and
