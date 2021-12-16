@@ -141,11 +141,6 @@ are output by the SDK. Here are some examples when a `View` might be needed:
   for each HTTP status code). There could also be extreme scenarios in which the
   application developer does not need any attributes (e.g. just get the total
   count of all incoming requests).
-* Add additional attribute(s) from the [Context](../context/context.md). For
-  example, a [Baggage](../baggage/api.md) value might be available indicating
-  whether an HTTP request is coming from a bot/crawler or not. The application
-  developer might want this to be converted to a attribute for HTTP server
-  metrics (e.g. the request/second from bots vs. real users).
 
 The SDK MUST provide the means to register Views with a `MeterProvider`. Here
 are the inputs:
@@ -180,9 +175,6 @@ are the inputs:
     not in the list will be ignored. If not provided, all the attribute keys
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
-  * The `extra attributes` which come from Baggage/Context (optional). If not
-    provided, no extra attributes will be used. Please note that this only
-    applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
     apply a [default aggregation](#default-aggregation). If the aggregation
     outputs metric points that use aggregation temporality (e.g. Histogram,
@@ -207,13 +199,11 @@ made with an Instrument:
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
-    * Try to apply the View configuration. If there is an error (e.g. the View
-      asks for extra attributes from the Baggage, but the Instrument is
-      [asynchronous](./api.md#asynchronous-instrument) which doesn't have
-      Context) or a conflict (e.g. the View requires to export the metrics using
-      a certain name, but the name is already used by another View), provide a
-      way to let the user know (e.g. expose [self-diagnostics
-      logs](../error-handling.md#self-diagnostics)).
+    * Try to apply the View configuration. If there is an error or a conflict
+      (e.g. the View requires to export the metrics using a certain name, but
+      the name is already used by another View), provide a way to let the user
+      know (e.g. expose
+      [self-diagnostics logs](../error-handling.md#self-diagnostics)).
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
     the user to turn off the default behavior via MeterProvider (which means the
