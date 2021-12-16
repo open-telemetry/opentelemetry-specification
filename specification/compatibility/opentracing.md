@@ -355,6 +355,21 @@ Scope activate(Span span) {
 }
 ```
 
+Unsampled OpenTelemetry `Span`s can be perfectly activated,
+as they have valid `SpanContext`s (albeit with the
+`sampled` flag set to `false`):
+
+```java
+// The underlying OpenTelemetry TracerProvider's Sampler
+// decided to NOT sample this Span, hence
+// io.opentelemetry.api.trace.Span.getSpanContext().isSampled() == false.
+Span span = tracer.buildSpan("operationName").start();
+
+try (Scope scope = tracer.scopeManager().activate(span)) {
+  // tracer.scopeManager().activeSpan() == span
+}
+```
+
 ### Get the active Span
 
 Returns a `Span` Shim wrapping the currently active OpenTelemetry `Span`.
