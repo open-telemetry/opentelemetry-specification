@@ -95,8 +95,8 @@ See OpenTracing Propagation
 Parameters:
 
 - The operation name, a string.
-- An optional set of [Span references](#span-references).
-- An optional set of [tags](#set-tag).
+- An optional list of [Span references](#span-references).
+- An optional list of [tags](#set-tag).
 - An optional explicit start timestamp, a numeric value.
 
 For OpenTracing languages implementing the [ScopeManager](#scopemanager-shim)
@@ -105,9 +105,12 @@ interface, the folllowing parameters are defined as well:
 - An optional boolean specifying whether the current `Span`
   should be ignored as automatic parent.
 
-If a set of `Span` references is specified, the first `SpanContext`
-MUST be used as parent, and the following values MUST be added as
-[Link](../trace/api.md)s. The reference type values are currently ignored.
+If a list of `Span` references is specified, the first `SpanContext`
+with **Child Of** type in the entire list is used as parent, else the
+the first `SpanContext` is used as parent. The remaining values in the list
+MUST be added as [Link](../trace/api.md)s with the reference type value
+as a `Link` attribute, i.e. `opentracing.ref_type` set to `follows_from` or
+`child_of`.
 
 If an initial set of tags is specified, the values MUST be set at
 the creation time of the OpenTelemetry `Span`, as opposed to setting them
@@ -453,6 +456,6 @@ OpenTracing defines two types of references:
   way on the result of their child `Span`s.
 
 OpenTelemetry does not define strict equivalent semantics for these
-references, and the **Child Of** relationship can be assumed.
-These reference types must not be confused with the
-[Link](../trace/api.md##specifying-links) functionality.
+references. These reference types must not be confused with the
+[Link](../trace/api.md##specifying-links) functionality. This information
+is however preserved as the `opentracing.ref_type` attribute.
