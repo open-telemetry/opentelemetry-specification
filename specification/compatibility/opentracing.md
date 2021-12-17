@@ -8,6 +8,7 @@
 * [Abstract](#abstract)
 * [Create an OpenTracing Tracer Shim](#create-an-opentracing-tracer-shim)
 * [Tracer Shim](#tracer-shim)
+  * [Start a new Span](#start-a-new-span)
   * [Inject](#inject)
   * [Extract](#extract)
 * [Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship)
@@ -23,6 +24,7 @@
 * [ScopeManager Shim](#scopemanager-shim)
   * [Activate a Span](#activate-a-span)
   * [Get the active Span](#get-the-active-span)
+* [Span References](#span-references)
 
 </details>
 
@@ -87,6 +89,38 @@ See OpenTracing Propagation
 [Formats](https://github.com/opentracing/specification/blob/master/specification.md#extract-a-spancontext-from-a-carrier).
 
 ## Tracer Shim
+
+### Start a new Span
+
+Parameters:
+
+- The operation name, a string.
+- An optional set of [Span references](#span-references).
+- An optional set of [tags](#set-tag).
+- An optional explicit start timestamp, a numeric value.
+
+For OpenTracing languages implementing the [ScopeManager](#scope-manager-shim)
+interface, the folllowing parameters are defined as well:
+
+- An optional boolean specifying whether the current `Span`
+  should be ignored as automatic parent.
+
+If a set of `Span` references is specified, the first `SpanContext`
+MUST be used as parent, and the following values MUST be added as
+[Link](../trace/api.md)s. The reference type values are currently ignored.
+
+If an initial set of tags is specified, the values MUST be set at
+the creation time of the OpenTelemetry `Span`, as opposed to setting them
+after the `Span` is already created. This is done in order to make
+those values available to any pre-`Span`-creation hook, e.g. the reference
+SDK performs a [sampling](../trace/sdk.md#sampling) step that consults
+`Span` information, including the initial tags/attributes, to decide whether
+to sample or not.
+
+If an explicit start timestamp is specified, a conversion MUST be done to match the
+OpenTracing and OpenTelemetry units.
+
+The API MUST return an OpenTracing `Span`.
 
 ### Inject
 
@@ -402,3 +436,23 @@ Span active() {
   new SpanShim(Span.current());
 }
 ```
+
+## Span References
+
+As defined in the
+[OpenTracing Specification](https://github.com/opentracing/specification/blob/master/specification.md#references-between-spans),
+a `Span` may reference zero or more other `SpanContext`s that are
+causally related. The reference information itself consists of a
+`SpanContext` and the reference type.
+
+OpenTracing defines two types of references:
+
+* **Child Of**: The parent `Span` depends o the child `Span`
+  in some capacity.
+* **Follows From**: The parent `Span` does not depend in any
+  way on the result of their child `Span`s.
+
+OpenTelemetry does not define strict equivalent semantics for these
+references, and the **Child Of** relationship can be assumed.
+These reference types must not be confused with the
+[Link](#../trace/api.md##specifying-links) functionality.
