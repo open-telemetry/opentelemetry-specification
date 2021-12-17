@@ -455,4 +455,4 @@ OpenTracing defines two types of references:
 OpenTelemetry does not define strict equivalent semantics for these
 references, and the **Child Of** relationship can be assumed.
 These reference types must not be confused with the
-[Link](#../trace/api.md##specifying-links) functionality.
+[Link](../trace/api.md##specifying-links) functionality.
