@@ -99,7 +99,7 @@ Parameters:
 - An optional set of [tags](#set-tag).
 - An optional explicit start timestamp, a numeric value.
 
-For OpenTracing languages implementing the [ScopeManager](#scope-manager-shim)
+For OpenTracing languages implementing the [ScopeManager](#scopemanager-shim)
 interface, the folllowing parameters are defined as well:
 
 - An optional boolean specifying whether the current `Span`
