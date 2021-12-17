@@ -328,10 +328,10 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
 * This is a composite sampler. `ParentBased` helps distinguish between the
 following cases:
   * No parent (root span).
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `false`
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `true`
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `false`
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` set
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` not set
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` set
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` not set
 
 Required parameters:
 
