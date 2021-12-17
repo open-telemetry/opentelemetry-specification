@@ -59,7 +59,9 @@ This operation is used to create a new OpenTracing `Tracer`:
 
 This operation MUST accept the following parameters:
 
-- An OpenTelemetry `Tracer`, used to create `Span`s.
+- An OpenTelemetry `TracerProvider`. This operation MUST use this `TracerProvider`
+  to obtain a `Tracer` with the name `opentracing-shim` along with the current
+  shim library version.
 - OpenTelemetry `Propagator`s to be used to perform injection and extraction
   for the the OpenTracing `TextMap` and `HTTPHeaders` formats.
   If not specified, no `Propagator` values will be stored in the Shim, and
@@ -70,12 +72,12 @@ The API MUST return an OpenTracing `Tracer`.
 
 ```java
 // Create a Tracer Shim relying on the global propagators.
-createTracerShim(tracer);
+createTracerShim(tracerProvider);
 
 // Create a Tracer Shim using:
 // 1) TraceContext propagator for TextMap
 // 2) Jaeger propagator for HttPHeaders.
-createTracerShim(tracer, OTPropagatorsBuilder()
+createTracerShim(tracerProvider, OTPropagatorsBuilder()
   .setTextMap(W3CTraceContextPropagator.getInstance())
   .setHttpHeaders(JaegerPropagator.getInstance())
   .build());
