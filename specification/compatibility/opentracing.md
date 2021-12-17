@@ -328,22 +328,45 @@ Parameters:
 
 - A `Span`.
 
-Gets the current `SpanContext` of the specified `Span` and puts its OpenTelemetry
-`Span`, `Baggage` and `Span` Shim objects in a new `Context`,
-which is then set as the currently active instance.
+Stores the `Span` Shim and its underlying `Span` and `Baggage`
+in a new `Context`, which is then set as the currently active instance.
+
+If the specified `Span` is null, it MUST be set to a
+[NonRecordableSpan](../trace/api.md#wrapping-a-spancontext-in-a-span)
+wrapping an invalid `SpanContext`, to signal there is no active
+`Span` nor `Baggage`.
 
 ```java
 Scope activate(Span span) {
-  SpanContextShim spanContextShim = getSpanContextShim(span);
+  if (span == null) {
+    span = new SpanShim(io.opentelemetry.api.trace.Span.getInvalid());
+  }
 
-  // Put the associated Span and Baggage in the used Context.
+  SpanShim spanShim = (SpanShim)span;
+
+  // Put the associated Span and Baggage in a new Context.
   Context context = Context.current()
-    .withValue(spanContextShim.getSpan())
-    .withValue(spanContextShim.getBaggage())
-    .withValue((SpanShim)spanShim);
+    .withValue(spanShim)
+    .withValue(spanShim.getSpan())
+    .withValue(spanShim.getBaggage());
 
   // Set context as the current instance.
   return context.makeCurrent();
+}
+```
+
+Unsampled OpenTelemetry `Span`s can be perfectly activated,
+as they have valid `SpanContext`s (albeit with the
+`sampled` flag set to `false`):
+
+```java
+// The underlying OpenTelemetry TracerProvider's Sampler
+// decided to NOT sample this Span, hence
+// io.opentelemetry.api.trace.Span.getSpanContext().isSampled() == false.
+Span span = tracer.buildSpan("operationName").start();
+
+try (Scope scope = tracer.scopeManager().activate(span)) {
+  // tracer.scopeManager().activeSpan() == span
 }
 ```
 
@@ -351,16 +374,22 @@ Scope activate(Span span) {
 
 Returns a `Span` Shim wrapping the currently active OpenTelemetry `Span`.
 
-If there are related OpenTelemetry `Span` and `Span` Shim objects in the
+This operation MUST immediately return null if the current `Span`'s `SpanContext` is
+invalid, to signal there is no active `Span` nor `Baggage`.
+
+If there are associated OpenTelemetry `Span` and `Span` Shim objects in the
 current `Context`, the `Span` Shim MUST be returned. Else, a new `Span` Shim
 referencing the OpenTelemetry `Span` MUST be created and returned.
-
-The API MUST return null if no actual OpenTelemetry `Span` is set.
 
 ```java
 Span active() {
   io.opentelemetry.api.trace.Span span = Span.fromContext(Context.current());
   SpanShim spanShim = SpanShim.fromContext(Context.current());
+
+  // There is no actual current Span nor Baggage.
+  if (!span.getSpanContext().isValid()) {
+    return null;
+  }
 
   // Span was activated through the Shim layer, re-use it.
   if (spanShim != null && spanShim.getSpan() == span) {
