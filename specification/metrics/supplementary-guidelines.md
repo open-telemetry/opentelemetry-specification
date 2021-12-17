@@ -186,7 +186,6 @@ following HTTP requests example:
   * verb = `GET`, status = `200`, duration = `30 (ms)`
   * verb = `GET`, status = `200`, duration = `50 (ms)`
 
-
 Note that in the following examples, Delta aggregation temporality is
 discussed before Cumulative aggregation temporality because
 synchronous Counter and UpDownCounter measurements are input to the
