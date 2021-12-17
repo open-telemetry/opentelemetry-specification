@@ -30,6 +30,10 @@ release.
 - Add to the supplemental guidelines for metric SDK authors text about implementing
   attribute-removal Views for asynchronous instruments.
   ([#2208](https://github.com/open-telemetry/opentelemetry-specification/pull/2208))
+- Clarify integer count instrument units.
+  ([#2210](https://github.com/open-telemetry/opentelemetry-specification/pull/2210))
+- Use UCUM units in Metrics Semantic Conventions.
+  ([#2199](https://github.com/open-telemetry/opentelemetry-specification/pull/2199))
 
 ### Logs
 
@@ -44,7 +48,15 @@ release.
 
 ### Semantic Conventions
 
+- Prohibit usage of retired names in semantic conventions.
+  ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
+- Add `device.manufacturer` to describe mobile device manufacturers.
+  ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
+
 ### Compatibility
+
+- Simplify Baggage handling in the OpenTracing Shim layer.
+  ([#2194](https://github.com/open-telemetry/opentelemetry-specification/pull/2194))
 
 ### OpenTelemetry Protocol
 
