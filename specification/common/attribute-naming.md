@@ -8,6 +8,7 @@
 <!-- toc -->
 
 - [Name Pluralization guidelines](#name-pluralization-guidelines)
+- [Name Reuse Prohibition](#name-reuse-prohibition)
 - [Recommendations for OpenTelemetry Authors](#recommendations-for-opentelemetry-authors)
 - [Recommendations for Application Developers](#recommendations-for-application-developers)
 - [otel.* Namespace](#otel-namespace)
@@ -66,6 +67,15 @@ Names SHOULD follow these rules:
 - When an attribute represents a measurement,
   [Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
   SHOULD be followed for the attribute name.
+
+## Name Reuse Prohibition
+
+A new attribute MUST NOT be added with the same name as an attribute that
+existed in the past but was renamed (with a corresponding schema file).
+
+When introducing a new attribute name check all existing schema files to make
+sure the name does not appear as a key of any "rename_attributes" section (keys
+denote old attribute names in rename operations).
 
 ## Recommendations for OpenTelemetry Authors
 

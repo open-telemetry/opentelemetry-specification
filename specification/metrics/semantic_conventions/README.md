@@ -7,6 +7,7 @@
 <!-- toc -->
 
 - [General Guidelines](#general-guidelines)
+  * [Name Reuse Prohibition](#name-reuse-prohibition)
   * [Units](#units)
   * [Pluralization](#pluralization)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
@@ -52,7 +53,7 @@ metrics.
 Common attributes SHOULD be consistently named. This aids in discoverability and
 disambiguates similar attributes to metric names.
 
-["As a rule of thumb, **aggregations** over all the dimensions of a given
+["As a rule of thumb, **aggregations** over all the attributes of a given
 metric **SHOULD** be
 meaningful,"](https://prometheus.io/docs/practices/naming/#metric-names) as
 Prometheus recommends.
@@ -65,6 +66,15 @@ names for GC, not divided by the runtime, could create dissimilar comparisons
 and confusion for end users. (For example, prefer `process.runtime.java.gc*` over
 `process.runtime.gc.*`.) Measures of many operating system metrics are similarly
 ambiguous.
+
+### Name Reuse Prohibition
+
+A new metric MUST NOT be added with the same name as a metric that existed in
+the past but was renamed (with a corresponding schema file).
+
+When introducing a new metric name check all existing schema files to make sure
+the name does not appear as a key of any "rename_metrics" section (keys denote
+old metric names in rename operations).
 
 ### Units
 
@@ -142,14 +152,14 @@ instrument creation, but can be added if there is ambiguity.
 
 ### Instrument Units
 
-Units should follow the [UCUM](http://unitsofmeasure.org/ucum.html) (need
+Units should follow the
+[Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html) (need
 more clarification in
 [#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
 
 - Instruments for **utilization** metrics (that measure the fraction out of a
 total) are dimensionless and SHOULD use the default unit `1` (the unity).
-- Instruments that measure an integer count of something SHOULD use the
-default unit `1` (the unity) and
+- Instruments that measure an integer count of something SHOULD only use
 [annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
-give additional meaning. For example `{packets}`, `{errors}`, `{faults}`,
-etc.
+give additional meaning *without* the leading default unit (`1`). For example,
+use `{packets}`, `{errors}`, `{faults}`, etc.

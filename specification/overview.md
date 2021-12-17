@@ -232,7 +232,7 @@ The main classes used to record raw measurements are `Measure` and
 `Measurement`. List of `Measurement`s alongside the additional context can be
 recorded using OpenTelemetry API. So user may define to aggregate those
 `Measurement`s and use the context passed alongside to define additional
-dimensions of the resulting metric.
+attributes of the resulting metric.
 
 #### Measure
 
@@ -308,7 +308,7 @@ the same transaction. This helps to establish a causal relationship between thes
 While `Baggage` can be used to prototype other cross-cutting concerns, this mechanism is primarily intended
 to convey values for the OpenTelemetry observability systems.
 
-These values can be consumed from `Baggage` and used as additional dimensions for metrics,
+These values can be consumed from `Baggage` and used as additional attributes for metrics,
 or additional context for logs and traces. Some examples:
 
 - a web service can benefit from including context around what service has sent the request
