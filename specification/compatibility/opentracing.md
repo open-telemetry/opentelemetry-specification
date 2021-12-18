@@ -23,7 +23,7 @@
 * [ScopeManager Shim](#scopemanager-shim)
   * [Activate a Span](#activate-a-span)
   * [Get the active Span](#get-the-active-span)
-* [In-process propagation special cases](#in-process-propagation-special-cases)
+* [In-process propagation exceptions](#in-process-propagation-exceptions)
   * [Implicit and Explicit support mismatch](#implicit-and-explicit-support-mismatch)
 
 </details>
