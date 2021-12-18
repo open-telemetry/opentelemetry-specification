@@ -418,7 +418,7 @@ Span active() {
 For languages with **implicit** in-process propagation support in
 OpenTelemetry and none in OpenTracing (i.e. no [ScopeManager](#scopemanager-shim) support),
 the Shim MUST only use **explicit** context propagation in its operations
-(e.g. when starting a new `Span`). This is done to easily complain with the
+(e.g. when starting a new `Span`). This is done to easily comply with the
 explicit-only propagation semantics of the OpenTracing API:
 
 ```ts
