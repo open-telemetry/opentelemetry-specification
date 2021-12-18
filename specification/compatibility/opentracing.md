@@ -107,7 +107,7 @@ interface, the folllowing parameters are defined as well:
 
 If a list of `Span` references is specified, the first `SpanContext`
 with **Child Of** type in the entire list is used as parent, else the
-the first `SpanContext` is used as parent. The remaining values in the list
+the first `SpanContext` is used as parent. All values in the list
 MUST be added as [Link](../trace/api.md)s with the reference type value
 as a `Link` attribute, i.e. `opentracing.ref_type` set to `follows_from` or
 `child_of`.
