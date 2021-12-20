@@ -1,0 +1,129 @@
+# Version: 0.0.0
+# Status: Experimental
+# This document describes Azure SDK trace semantic conventions. For more details refer to https://azure.github.io/azure-sdk/distributed_tracing_conventions.html
+
+groups:
+  # common
+  - id: azure-sdk
+    brief: 'Describes Azure SDK spans.'
+    attributes:
+      - id: az.namespace
+        required: always
+        type: string
+        brief: '[Namespace](https://docs.microsoft.com/azure/azure-resource-manager/management/azure-services-resource-providers) of Azure service request is made against.'
+        examples: ['Microsoft.Storage', 'Microsoft.KeyVault', 'Microsoft.ServiceBus']
+
+  # public API
+  - id: azure-sdk.api
+    span_kind: internal
+    extends: azure-sdk
+    brief: 'Describes Azure SDK API calls spans.'
+    note: 'Represents public surface API calls that wrap an Azure service call.'
+
+  # http
+  - id: azure-sdk.http
+    extends: azure-sdk
+    span_kind: client
+    brief: 'Describes HTTP client spans created per HTTP request (try).'
+    note: >
+      Follows [OpenTelemetry HTTP conventions v1.6.x](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.x/specification/trace/semantic_conventions/http.md)
+      but omits all optional attributes, providing only `http.url` to describe destination. It adds request-id attributes supported by Azure services.
+    attributes:
+      - id: request_id
+        type: string
+        required: always
+        brief: 'Value of the [x-ms-client-request-id] header (or other request-id header, depending on the service) sent by the client.'
+        examples: ['eb178587-c05a-418c-a695-ae9466c5303c']
+      - id: service_request_id
+        type: string
+        required: always
+        brief: 'Value of the [x-ms-request-id]  header (or other request-id header, depending on the service) sent by the server in response.'
+        examples: ['3f828ae5-ecb9-40ab-88d9-db0420af30c6']
+      - id: http.method
+        type: string
+        required: always
+        sampling_relevant: true
+        brief: 'HTTP request method.'
+        examples: ["GET", "POST", "HEAD"]
+      - id: http.url
+        type: string
+        required: always
+        sampling_relevant: true
+        brief: Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`
+        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
+      - id: http.status_code
+        type: int
+        required:
+          conditional: If and only if one was received/sent.
+        brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
+        examples: [200]
+      - id: http.user_agent
+        type: string
+        required: always
+        brief: 'Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) or X-MS-UserAgent header sent by the client.'
+        examples: ['CERN-LineMode/2.15 libwww/2.17b3']
+
+  # messaging
+  - id: azure-sdk.messaging
+    brief: 'Describes Azure messaging SDKs spans.'
+    extends: azure-sdk
+    note: Implements OpenTracing MessageBus conventions https://opentracing.io/specification/conventions/
+    attributes:
+      - id: message_bus.destination
+        type: string
+        required: always
+        brief: 'Name of the messaging entity within namespace: e.g EventHubs name, ServiceBus queue or topic name.'
+        examples: ['myqueue', 'myhub']
+      - id: peer.address
+        type: string
+        brief: 'Fully qualified messaging service name.'
+        required: always
+        examples: ['myEventHubNamespace.servicebus.windows.net']
+  - id: azure-sdk.messaging.producer
+    span_kind: producer
+    extends: azure-sdk.messaging
+    brief: 'Describes producer span created per event.'
+
+  - id: azure-sdk.messaging.send
+    span_kind: client
+    extends: azure-sdk.messaging
+    brief: 'Describes send (transport call) span.'
+    note: 'Contains links to all messages contexts being sent.'
+
+  - id: azure-sdk.messaging.process
+    span_kind: consumer
+    extends: azure-sdk.messaging
+    brief: 'Describes consumption span.'
+    note: >
+      Contains links to all messages contexts being consumed. Each link has attribute `enqueuedTime` (with `long` type)
+      attribute with unix epoch time with milliseconds precision representing when message was enqueued.
+
+  # CosmosDB
+  - id: azure-sdk.cosmos
+    span_kind: client
+    brief: 'Describes Azure CosmosDB spans.'
+    note: >
+      Events with additional debug info are added for long running operations.
+      Implements https://github.com/open-telemetry/opentelemetry-specification/blob/v0.5.0/specification/trace/semantic_conventions/database.md
+    extends: azure-sdk
+    attributes:
+      - id: db.url
+        type: string
+        required: always
+        brief: 'Cosmos DB URI'
+        examples: ['https://my-cosmos.documents.azure.com:443/']
+      - id: db.statement
+        type: string
+        required: always
+        brief: 'Database statement'
+        examples: ['createContainerIfNotExists.myContainer']
+      - id: db.instance
+        type: string
+        required: always
+        brief: 'Database name'
+        examples: ['mydb']
+      - id: db.type
+        type: string
+        required: always
+        brief: 'Database type'
+        examples: ['Cosmos']
