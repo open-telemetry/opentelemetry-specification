@@ -11,25 +11,51 @@ release.
 
 ### Traces
 
+- Clarify `StartSpan` returning the parent as a non-recording Span when no SDK
+  is in use
+  ([#2121](https://github.com/open-telemetry/opentelemetry-specification/pull/2121))
+
 ### Metrics
 
 - Rename None aggregation to Drop.
   ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
 - Mark In-memory, OTLP and Stdout exporter specs as Feature-freeze.
   ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
+- Add details to the Prometheus Exporter requirements.
+  ([#2124](https://github.com/open-telemetry/opentelemetry-specification/pull/2124))
 - Remove the concept of supported temporality, keep preferred.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
+- Mark In-memory, OTLP and Stdout exporter specs as Stable.
+  ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
+- Clarify integer count instrument units.
+  ([#2210](https://github.com/open-telemetry/opentelemetry-specification/pull/2210))
+- Use UCUM units in Metrics Semantic Conventions.
+  ([#2199](https://github.com/open-telemetry/opentelemetry-specification/pull/2199))
 
 ### Logs
+
+- Add OTEL_LOGS_EXPORTER environment variable.
+  ([#2196](https://github.com/open-telemetry/opentelemetry-specification/pull/2196))
+- Added ObservedTimestamp to the Log Data Model.
+  ([#2184](https://github.com/open-telemetry/opentelemetry-specification/pull/2184))
+- Change mapping for log_name of Google Cloud Logging.
+  ([#2092](https://github.com/open-telemetry/opentelemetry-specification/pull/2092))
 
 ### Resource
 
 ### Semantic Conventions
 
+- Prohibit usage of retired names in semantic conventions.
+  ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
+- Add `device.manufacturer` to describe mobile device manufacturers.
+  ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
 - Add semantic conventions for [CloudEvents](https://cloudevents.io).
   ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 
 ### Compatibility
+
+- Simplify Baggage handling in the OpenTracing Shim layer.
+  ([#2194](https://github.com/open-telemetry/opentelemetry-specification/pull/2194))
 
 ### OpenTelemetry Protocol
 

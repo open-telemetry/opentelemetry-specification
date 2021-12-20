@@ -20,7 +20,7 @@ Prometheus exposition format in two ways:
 
 The OpenTelemetry collector implements a Prometheus receiver, which reads
 metrics in the OpenMetrics exposition format. For more information, refer to the
-[Prometheus Receiver Design Document](https://github.com/open-telemetry/opentelemetry-collector/blob/master/receiver/prometheusreceiver/DESIGN.md).
+[Prometheus Receiver Design Document](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/prometheusreceiver/DESIGN.md).
 
 ### OpenTelemetry to OpenMetrics
 
