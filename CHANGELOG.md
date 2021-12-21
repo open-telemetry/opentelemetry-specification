@@ -52,6 +52,8 @@ release.
   ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
 - Add `device.manufacturer` to describe mobile device manufacturers.
   ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
+- Add Azure SDK trace semantic conventions
+  ([#2233](https://github.com/open-telemetry/opentelemetry-specification/pull/2233))
 
 ### Compatibility
 

@@ -1,10 +1,10 @@
 # Version: 0.0.0
 # Status: Experimental
-# This document describes Azure SDK trace semantic conventions. For more details refer to https://azure.github.io/azure-sdk/distributed_tracing_conventions.html
+# This document describes Azure SDK trace semantic conventions. For more details refer to https://azure.github.io/azure.sdk/distributed_tracing_conventions.html
 
 groups:
   # common
-  - id: azure-sdk
+  - id: azure.sdk
     brief: 'Describes Azure SDK spans.'
     attributes:
       - id: az.namespace
@@ -14,19 +14,19 @@ groups:
         examples: ['Microsoft.Storage', 'Microsoft.KeyVault', 'Microsoft.ServiceBus']
 
   # public API
-  - id: azure-sdk.api
+  - id: azure.sdk.api
     span_kind: internal
-    extends: azure-sdk
+    extends: azure.sdk
     brief: 'Describes Azure SDK API calls spans.'
     note: 'Represents public surface API calls that wrap an Azure service call.'
 
   # http
-  - id: azure-sdk.http
-    extends: azure-sdk
+  - id: azure.sdk.http
+    extends: azure.sdk
     span_kind: client
     brief: 'Describes HTTP client spans created per HTTP request (try).'
     note: >
-      Follows [OpenTelemetry HTTP conventions v1.6.x](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.x/specification/trace/semantic_conventions/http.md)
+      Follows [OpenTelemetry HTTP conventions v1.8.0](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/trace/semantic_conventions/http.md)
       but omits all optional attributes, providing only `http.url` to describe destination. It adds request-id attributes supported by Azure services.
     attributes:
       - id: request_id
@@ -64,9 +64,9 @@ groups:
         examples: ['CERN-LineMode/2.15 libwww/2.17b3']
 
   # messaging
-  - id: azure-sdk.messaging
+  - id: azure.sdk.messaging
     brief: 'Describes Azure messaging SDKs spans.'
-    extends: azure-sdk
+    extends: azure.sdk
     note: Implements OpenTracing MessageBus conventions https://opentracing.io/specification/conventions/
     attributes:
       - id: message_bus.destination
@@ -79,33 +79,33 @@ groups:
         brief: 'Fully qualified messaging service name.'
         required: always
         examples: ['myEventHubNamespace.servicebus.windows.net']
-  - id: azure-sdk.messaging.producer
+  - id: azure.sdk.messaging.producer
     span_kind: producer
-    extends: azure-sdk.messaging
+    extends: azure.sdk.messaging
     brief: 'Describes producer span created per event.'
 
-  - id: azure-sdk.messaging.send
+  - id: azure.sdk.messaging.send
     span_kind: client
-    extends: azure-sdk.messaging
+    extends: azure.sdk.messaging
     brief: 'Describes send (transport call) span.'
     note: 'Contains links to all messages contexts being sent.'
 
-  - id: azure-sdk.messaging.process
+  - id: azure.sdk.messaging.process
     span_kind: consumer
-    extends: azure-sdk.messaging
+    extends: azure.sdk.messaging
     brief: 'Describes consumption span.'
     note: >
-      Contains links to all messages contexts being consumed. Each link has attribute `enqueuedTime` (with `long` type)
+      Contains links to all messages contexts being consumed. Each link has `enqueued_time` (with `long` type)
       attribute with unix epoch time with milliseconds precision representing when message was enqueued.
 
   # CosmosDB
-  - id: azure-sdk.cosmos
+  - id: azure.sdk.cosmos
     span_kind: client
     brief: 'Describes Azure CosmosDB spans.'
     note: >
       Events with additional debug info are added for long running operations.
       Implements https://github.com/open-telemetry/opentelemetry-specification/blob/v0.5.0/specification/trace/semantic_conventions/database.md
-    extends: azure-sdk
+    extends: azure.sdk
     attributes:
       - id: db.url
         type: string
