@@ -21,7 +21,6 @@ Once the trace context is set on the event, it MUST not be modified.
 - [Spans](#spans)
   * [Creation](#creation)
   * [Processing](#processing)
-- [Instrumentation](#instrumentation)
 - [Attributes](#attributes)
 
 <!-- tocstop -->
@@ -47,6 +46,7 @@ Distributed Tracing Extension already populated, instrumentation MUST NOT create
 a span and MUST NOT modify the Distributed Tracing Extension on the event.
 
 **Span name:** `CloudEvents Create <event_type>`
+
 **Span kind:** PRODUCER
 
 ### Processing
@@ -58,15 +58,8 @@ Instrumentation SHOULD set the remote trace context from the
 Distributed Tracing Extension as a link on the processing span.
 
 **Span name:** `CloudEvents Process <event_type>`
+
 **Span kind:** CONSUMER
-
-## Instrumentation
-
-CloudEvents libraries SHOULD have built-in mechanisms to make the aforementioned
-Span operations (creation, extraction, and injection of context into events)
-transparent for application owners. When auto-instrumentation
-is not feasible, CloudEvents libraries SHOULD offer such mechanisms in a form that
-application owners can "plug in" to apply the Span operations above by themselves.
 
 ## Attributes
 
@@ -75,11 +68,9 @@ The following attributes are applicable to creation and processing Spans.
 <!-- semconv cloudevents -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `cloudevents.event_id` | string | The [event_id](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md#id) uniquely identifies the event. [1] | `123e4567-e89b-12d3-a456-426614174000`; `0001` | No |
+| `cloudevents.event_id` | string | The [event_id](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md#id) uniquely identifies the event. | `123e4567-e89b-12d3-a456-426614174000`; `0001` | No |
 | `cloudevents.event_source` | string | The [source](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md#source-1) identifies the context in which an event happened. | `https://github.com/cloudevents`; `/cloudevents/spec/pull/123`; `my-service` | No |
 | `cloudevents.event_spec_version` | string | The [version of the CloudEvents specification](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md#specversion) which the event uses. | `1.0` | No |
 | `cloudevents.event_type` | string | The [event_type](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md#type) contains a value describing the type of event related to the originating occurrence. | `com.github.pull_request.opened`; `com.example.object.deleted.v2` | No |
 | `cloudevents.event_subject` | string | The [subject](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md#subject) of the event in the context of the event producer (identified by source). | `mynewfile.jpg` | No |
-
-**[1]:** Producers MUST ensure that event_source + event_id is unique for each distinct event. If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id. Consumers MAY assume that Events with identical event_source and event_id are duplicates.
 <!-- endsemconv -->
