@@ -785,8 +785,9 @@ degradation or loss of visibility.
 
 The notion of temporality refers to the way additive quantities are
 expressed, in relation to time, indicating whether reported values
-incorporate previous measurements or not.  Sum and Histogram data
-points, in particular, support a choice of aggregation temporality.
+incorporate previous measurements or not.  Sum, Histogram, and
+ExponentialHistogram data points, in particular, support a choice of aggregation
+temporality.
 
 Every OTLP metric data point has two associated timestamps.  The
 first, mandatory timestamp is the one associated with the observation,
@@ -796,11 +797,10 @@ to indicate when a sequence of points is unbroken, and is referred to as
 `StartTimeUnixNano`.
 
 The second timestamp is strongly recommended for Sum, Histogram, and
-Summary points, as it is necessary to correctly interpret the rate
-from an OTLP stream, in a manner that is aware of restarts.  The use
-of `StartTimeUnixNano` to indicate the start of an unbroken sequence
-of points means it can also be used to encode implicit gaps in
-the stream.
+ExponentialHistogram points, as it is necessary to correctly interpret the rate
+from an OTLP stream, in a manner that is aware of restarts.  The use of
+`StartTimeUnixNano` to indicate the start of an unbroken sequence of points
+means it can also be used to encode implicit gaps in the stream.
 
 - *Cumulative temporality* means that successive data points repeat the starting
   timestamp. For example, from start time T0, cumulative data points cover time
