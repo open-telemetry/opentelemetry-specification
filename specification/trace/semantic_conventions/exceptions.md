@@ -42,6 +42,8 @@ The table below indicates which attributes should be added to the `Event` and
 their types.
 
 <!-- semconv exception -->
+The event name MUST be `exception`.
+
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.net.ConnectException`; `OSError` | See below |
