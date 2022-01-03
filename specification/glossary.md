@@ -158,7 +158,7 @@ The name/version pair identifies the [Instrumentation Library](#instrumentation-
 
 A `service` is a component of a larger distributed `application`. A service logically represents a repeatable business activity with a specified outcome. A service exchanges information with other services via some form of inter-process communication mechanism, such as network or shared storage.
 
-A `service instance` is a physical manifestation of a service, usually running in its own operating system process. Multiple service instances are typically deployed at the same time for high availability and scalability.
+A `service instance` is a physical manifestation of a service, usually running in its own operating system process. Multiple service instances may be deployed at the same time for high availability and scalability.
 
 See [Resource Semantic Conventions - Service](resource/semantic_conventions/README.md#service) for more details and naming requirements.
 
