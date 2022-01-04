@@ -383,8 +383,8 @@ trace, in order to support consistent probability sampling.  When the
 value is omitted or not present, child spans in the trace are not able
 to participate in consistent probability sampling.
 
-R-value determines which sampling probabilities will and will not
-sample for spans of a given trace, as follows:
+R-value determines which sampling probabilities will decide to sample
+or not decide to sample for spans of a given trace, as follows:
 
 | r-value          | Implied sampling probabilities |
 | ---------------- | ----------------------         |
