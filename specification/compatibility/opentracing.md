@@ -23,6 +23,8 @@
 * [ScopeManager Shim](#scopemanager-shim)
   * [Activate a Span](#activate-a-span)
   * [Get the active Span](#get-the-active-span)
+* [In-process propagation exceptions](#in-process-propagation-exceptions)
+  * [Implicit and Explicit support mismatch](#implicit-and-explicit-support-mismatch)
 
 </details>
 
@@ -48,10 +50,16 @@ Semantic convention mapping SHOULD NOT be performed, with the
 exception of error mapping, as described in the [Set Tag](#set-tag) and
 [Log](#log) sections.
 
-If the OpenTracing-instrumented code makes use of baggage, it is not recommended to
-consume both the OpenTracing Shim and the OpenTelemetry API in the same codebase,
-as `Baggage` may not be properly propagated. See
-[Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship).
+Consuming both the OpenTracing Shim and the OpenTelemetry API in the same codebase
+is not recommended for the following scenarios:
+
+* If the OpenTracing-instrumented code consumes baggage, as the
+ `Baggage` itself may not be properly propagated.
+  See [Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship).
+* For languages with **implicit** in-process propagation support in OpenTelemetry
+  and none in OpenTracing (e.g. Javascript), as it breaks the expected propagation
+  semantics and may lead to incorrect `Context` usage and incorrect traces.
+  See [Implicit and Explicit support mismatch](#implicit-and-explicit-support-mismatch).
 
 ## Create an OpenTracing Tracer Shim
 
@@ -400,5 +408,53 @@ Span active() {
 
   // Span was NOT activated through the Shim layer.
   new SpanShim(Span.current());
+}
+```
+
+## In process Propagation exceptions
+
+### Implicit and Explicit support mismatch
+
+For languages with **implicit** in-process propagation support in
+OpenTelemetry and none in OpenTracing (i.e. no [ScopeManager](#scopemanager-shim) support),
+the Shim MUST only use **explicit** context propagation in its operations
+(e.g. when starting a new `Span`). This is done to easily comply with the
+explicit-only propagation semantics of the OpenTracing API:
+
+```ts
+// Tracer Shim
+startSpan(name: string, options: SpanOptions = {}): Span {
+  const otelSpanOptions = ...;
+
+  if (!options.childOf && !options.references) {
+    // Do NOT get nor set the current Context/Span,
+    // as it is part of the implicit propagation support.
+    otelSpanOptions.root = true;
+  }
+  ...
+}
+```
+
+Using both the OpenTracing Shim and the OpenTelemetry API in the same codebase
+may result in traces using the incorrect parent `Span`, given the different
+implicit/explicit propagation expectations. For this case, the Shim MAY offer
+**experimental** integration with the OpenTelemetry implicit in-process
+propagation via an **explicit** setting, warning the user incorrect parent
+values may be consumed:
+
+```ts
+// Tracer Shim
+startSpan(name: string, options: SpanOptions = {}): Span {
+  const otelSpanOptions = ...;
+
+  if (!options.childOf && !options.references) {
+    if (otShimOptions.supportImplicitPropagation) {
+      // Allow OpenTelemetry to consume the current Context
+      // to fetch the parent Span.
+      otelSpanOptions.root = false;
+    }
+    ...
+  }
+  ...
 }
 ```
