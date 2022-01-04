@@ -15,16 +15,16 @@ Azure SDK produces spans for public API calls and nested HTTP client spans. Non-
 
 Azure SDK semantic conventions pin specific versions of OpenTelemetry semantic conventions (where applicable) and are not updated regularly to the latest OpenTelemetry semantic conventions version. However OpenTelemetry-compatible changes should be expected.
 
-Azure SDK plans to fully adopt OpenTelemetry semantic conventions once conventions reach `Stable` status.
+Azure SDK plans to fully adopt OpenTelemetry semantic conventions once they reach `Stable` status.
 
 ## Common Attributes
 
 All Azure SDKs spans have `az.namespace` attribute to uniquely identify *Azure SDK* request is made *from*, usually the value matches the destination Azure service, but in some cases client library can support multiple services.
 
-<!-- semconv azure.sdk -->
+<!-- semconv azure -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `az.namespace` | string | [Namespace](https://docs.microsoft.com/azure/azure-resource-manager/management/azure-services-resource-providers) of Azure service request is made against. | `Microsoft.Storage`; `Microsoft.KeyVault`; `Microsoft.ServiceBus` | Yes |
+| `az.namespace` | string | [Namespace](https://docs.microsoft.com/azure/azure-resource-manager/management/azure-services-resource-providers) of Azure service that the request is made against. | `Microsoft.Storage`; `Microsoft.KeyVault`; `Microsoft.ServiceBus` | Yes |
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
@@ -42,7 +42,7 @@ Azure SDKs create a span for public API call (that involves communication with A
 
 ## HTTP Client
 
-Azure SDKs implement a valid subset of [OpenTelemetry HTTP conventions v1.6.x](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/trace/semantic_conventions/http.md) and create a span per HTTP call (try).
+Azure SDK implements a valid subset of [OpenTelemetry HTTP conventions v1.8.0](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/trace/semantic_conventions/http.md) and create a span per HTTP call (try).
 
 <!-- semconv azure.sdk.http -->
 | Attribute  | Type | Description  | Examples  | Required |
@@ -63,28 +63,28 @@ Following attributes MUST be provided **at span creation time** (when provided a
 * [`http.user_agent`](../http.md)
 <!-- endsemconv -->
 
-Instrumentation support [W3C Trace context](https://w3c.github.io/trace-context/) propagation and Azure Services legacy correlation protocols. Propagator configuration is not supported.
+Instrumentation supports [W3C Trace context](https://w3c.github.io/trace-context/) propagation and Azure legacy correlation protocols. Propagator configuration is not supported.
 
 ## Messaging SDKs
 
 Messaging span semantics apply to Azure Event Hubs and Service Bus SDKs.
 
-Attribute names predate OpenTelemetry and originates from [OpenTracing semantic conventions](https://opentracing.io/specification/conventions/)
+Attribute names predate OpenTelemetry and originate from [OpenTracing semantic conventions](https://opentracing.io/specification/conventions/)
 
 Messaging SDKs produce three kinds of spans:
 
 - `PRODUCER` - describes message creation and associates unique context with the message to trace them when they are sent in batches.
-  - Producer spans name follows `<ClientType>.message` pattern (e.g. `EventHubs.message`)
+  - Producer spans name follows `<client>.message` pattern (e.g. `EventHubs.message`)
 
 - `CLIENT` - describes message (or batch) publishing.
   - It has links pointing to each message being sent.
   - Links don't have attributes.
-  - Send spans name follows `<ClientType>.send` pattern (e.g. `EventHubs.send`)
+  - Send spans name follows `<client>.send` pattern (e.g. `EventHubs.send`)
 
 - `CONSUMER` - describes message (or batch) processing.
   - It is created when user leverages handler APIs that wrap message or batch processing.
   - Processing span has links to each message being processed (when context is present).
-  - Each link has `enqueued_time` attribute with `long` value with unix epoch time with milliseconds precision representing when message was enqueued on the broker.
+  - Each link has `enqueued_time` attribute with `long` value with unix epoch time (with milliseconds precision) representing when message was enqueued on the broker.
 
 ### Messaging attributes
 
@@ -98,7 +98,7 @@ Messaging SDKs produce three kinds of spans:
 ## CosmosDB
 
 CosmosDB SDK in [Direct mode](https://docs.microsoft.com/azure/cosmos-db/sql/sql-sdk-connection-modes#available-connectivity-modes) uses TCP-based protocol and traces public API calls only.
-CosmosDB trace conventions pinned to OpenTelemetry [Semantic Conventions v0.5.0](https://github.com/open-telemetry/opentelemetry-specification/blob/v0.5.0/specification/trace/semantic_conventions/database.md) version.
+CosmosDB semantic conventions are pinned to OpenTelemetry [Semantic Conventions v0.5.0](https://github.com/open-telemetry/opentelemetry-specification/blob/v0.5.0/specification/trace/semantic_conventions/database.md) version.
 
 Spans have `CLIENT` kind and the name matches `db.statement` value. When CosmosDB detects an error or long operation (with configurable threshold), it adds a span event with extended `CosmosDiagnostics` information.
 

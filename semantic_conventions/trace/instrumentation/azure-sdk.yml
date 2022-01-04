@@ -4,31 +4,30 @@
 
 groups:
   # common
-  - id: azure.sdk
-    brief: 'Describes Azure SDK spans.'
+  - id: azure
+    brief: 'Describes Azure spans.'
     attributes:
       - id: az.namespace
         required: always
         type: string
         sampling_relevant: true
-        brief: '[Namespace](https://docs.microsoft.com/azure/azure-resource-manager/management/azure-services-resource-providers) of Azure service request is made against.'
+        brief: '[Namespace](https://docs.microsoft.com/azure/azure-resource-manager/management/azure-services-resource-providers) of Azure service that the request is made against.'
         examples: ['Microsoft.Storage', 'Microsoft.KeyVault', 'Microsoft.ServiceBus']
 
   # public API
   - id: azure.sdk.api
     span_kind: internal
-    extends: azure.sdk
-    brief: 'Describes Azure SDK API calls spans.'
-    note: 'Represents public surface API calls that wrap an Azure service call.'
+    extends: azure
+    brief: 'Describes Azure SDK API calls that wrap an Azure service call(s).'
 
   # http
   - id: azure.sdk.http
-    extends: azure.sdk
+    extends: azure
     span_kind: client
-    brief: 'Describes HTTP client spans created per HTTP request (try).'
+    brief: 'Describes HTTP client spans created per HTTP request.'
     note: >
       Follows [OpenTelemetry HTTP conventions v1.8.0](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/trace/semantic_conventions/http.md)
-      but omits all optional attributes, providing only `http.url` to describe destination. It adds request-id attributes supported by Azure services.
+      but omits optional attributes, providing only `http.url` to describe destination. It adds request-id attributes supported by Azure services.
     attributes:
       - id: request_id
         type: string
@@ -56,7 +55,7 @@ groups:
   # messaging
   - id: azure.sdk.messaging
     brief: 'Describes Azure messaging SDKs spans.'
-    extends: azure.sdk
+    extends: azure
     note: Implements OpenTracing MessageBus conventions https://opentracing.io/specification/conventions/
     attributes:
       - id: message_bus.destination
@@ -72,7 +71,7 @@ groups:
   - id: azure.sdk.messaging.producer
     span_kind: producer
     extends: azure.sdk.messaging
-    brief: 'Describes producer span created per event.'
+    brief: 'Describes producer span created per message.'
 
   - id: azure.sdk.messaging.send
     span_kind: client
@@ -93,9 +92,9 @@ groups:
     span_kind: client
     brief: 'Describes Azure CosmosDB spans.'
     note: >
-      Events with additional debug info are added for long running operations.
+      Events with additional debug info are added for long running or failed operations.
       Implements https://github.com/open-telemetry/opentelemetry-specification/blob/v0.5.0/specification/trace/semantic_conventions/database.md
-    extends: azure.sdk
+    extends: azure
     attributes:
       - id: db.url
         type: string
