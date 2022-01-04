@@ -42,8 +42,8 @@
     + [ConsistentProbabilityBased sampler](#consistentprobabilitybased-sampler)
       - [Requirement: TraceIdRatioBased API compatibility](#requirement-traceidratiobased-api-compatibility)
       - [Requirement: ConsistentProbabilityBased sampler sets r for root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-root-span)
-      - [Requirement: ConsistentProbabilityBased sampler unsets p when not sampling](#requirement-consistentprobabilitybased-sampler-unsets-p-when-not-sampling)
-      - [Requirement: ConsistentProbabilityBased sampler sets p when sampling](#requirement-consistentprobabilitybased-sampler-sets-p-when-sampling)
+      - [Requirement: ConsistentProbabilityBased sampler unsets p when not sampled](#requirement-consistentprobabilitybased-sampler-unsets-p-when-not-sampled)
+      - [Requirement: ConsistentProbabilityBased sampler sets p when sampled](#requirement-consistentprobabilitybased-sampler-sets-p-when-sampled)
       - [Requirement: ConsistentProbabilityBased sampler records unbiased adjusted counts](#requirement-consistentprobabilitybased-sampler-records-unbiased-adjusted-counts)
       - [Requirement: ConsistentProbabilityBased sampler sets r for non-root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-non-root-span)
       - [Requirement: ConsistentProbabilityBased sampler decides not to sample for probabilities less than 2**-62](#requirement-consistentprobabilitybased-sampler-decides-not-to-sample-for-probabilities-less-than-2-62)
@@ -528,12 +528,12 @@ each OpenTelemetry SDK.
 The `ConsistentProbabilityBased` Sampler MUST set `r` when it makes a
 root sampling decision.
 
-##### Requirement: ConsistentProbabilityBased sampler unsets p when not sampling
+##### Requirement: ConsistentProbabilityBased sampler unsets p when not sampled
 
 The `ConsistentProbabilityBased` Sampler MUST unset `p` from the
 `tracestate` when it decides not to sample.
 
-##### Requirement: ConsistentProbabilityBased sampler sets p when sampling
+##### Requirement: ConsistentProbabilityBased sampler sets p when sampled
 
 The `ConsistentProbabilityBased` Sampler MUST set `p` when it decides
 to sample according to its configured sampling probability.
