@@ -274,7 +274,7 @@ __Note: The same `Resource`, `name` and `Attribute`s but differing point kind
 coming out of an OpenTelemetry SDK is considered an "error state" that SHOULD
 be handled by an SDK.__
 
-A metric stream can use one of three basic point kinds, all of
+A metric stream can use one of these basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
 same kind. <sup>[1](#otlpdatapointfn)</sup>
