@@ -7,8 +7,7 @@
 
 <!-- toc -->
 
-- [Approach used in this document](#approach-used-in-this-document)
-  * [Objective](#objective)
+- [Overview](#overview)
   * [Definitions](#definitions)
     + [Sampling](#sampling)
     + [Adjusted count](#adjusted-count)
@@ -84,27 +83,40 @@
 
 </details>
 
-Probability sampling allows OpenTelemetry tracing users to lower their
-collection costs with the use of randomized sampling techniques.
-OpenTelemetry specifies how to convey and record the results of
-probability sampling using the W3C `tracestate` in a way that allows
-Span-to-Metrics pipelines to be built that accurately count sampled
-spans.
+## Overview
 
-## Approach used in this document
+Probability sampling allows OpenTelemetry tracing users to lower span
+collection costs by the use of randomized sampling techniques.  The
+objectives are:
 
-### Objective
+- Compatible with the existing W3C trace context `sampled` flag
+- Spans can be accurately counted using a Span-to-metrics pipeline
+- Traces tend to be complete, even though spans may make independent sampling decisions.
 
-This document specifies two `tracestate` fields, known as "r-value"
-and "p-value" meant to support interoperable Sampler implementations.
-Rules are given for creating, validating, interpreting, and mutating
-these fields in an OpenTelemetry [context](../context/context.md).
+This document specifies an approach based on an "r-value" and a
+"p-value".  At a very high level, r-value is a source of randomness
+and p-value encodes the sampling probability.  A context is sampled
+when `p <= r`.
 
-Two Samplers are specified for optional inclusion in OpenTelemetry
-tracing SDKs, named `ParentConsistentProbabilitityBased` and
-`ConsistentProbabilityBased`.  These are meant as optional
-replacements for the built-in `ParentBased` and `TraceIdRatioBased`
-Samplers.
+Significantly, by including the r-value and p-value in the
+OpenTelemetry `tracestate`, these two values automatically propagate
+through the context and are recorded on every Span.  This allows Trace
+consumers to correctly count spans simply by interpreting the p-value
+on a given span.
+
+For efficiency, the supported sampling probabilities are limited to
+powers of two.  P-value is derived from sampling probability, which
+equals `2**-p`, thus p-value is encoded using an unsigned integer.
+
+For example, a p-value of 3 indicates a sampling probability of 1/8.
+
+Since the W3C trace context does not specify that any of the 128 bits
+in a TraceID are true uniform-distributed random bits, the r-value is
+introduced as an additional source of randomness.
+
+The recommended method of generating an "r-value" is to count the
+number of leading 0s in a string of 62 random bits, however, it is not
+required to use this approach.
 
 ### Definitions
 
