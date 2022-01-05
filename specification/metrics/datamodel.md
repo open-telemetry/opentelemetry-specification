@@ -803,13 +803,13 @@ from an OTLP stream, in a manner that is aware of restarts.  The use of
 means it can also be used to encode implicit gaps in the stream.
 
 - *Cumulative temporality* means that successive data points repeat the starting
-  timestamp. For example, from start time T0, cumulative data points cover time
-  ranges (T<sub>0</sub>, T<sub>1</sub>), (T<sub>0</sub>, T<sub>2</sub>),
-  (T<sub>0</sub>, T<sub>3</sub>), and so on.
+  timestamp. For example, from start time T<sub>0</sub>, cumulative data points cover time
+  ranges (T<sub>0</sub>, T<sub>1</sub>], (T<sub>0</sub>, T<sub>2</sub>],
+  (T<sub>0</sub>, T<sub>3</sub>], and so on.
 - *Delta temporality* means that successive data points advance the starting
-  timestamp. For example, from start time T0, delta data points cover time
-  ranges (T<sub>0</sub>, T<sub>1</sub>), (T<sub>1</sub>, T<sub>2</sub>),
-  (T<sub>2</sub>, T<sub>3</sub>), and so on.
+  timestamp. For example, from start time T<sub>0</sub>, delta data points cover time
+  ranges (T<sub>0</sub>, T<sub>1</sub>], (T<sub>1</sub>, T<sub>2</sub>],
+  (T<sub>2</sub>, T<sub>3</sub>], and so on.
 
 The use of cumulative temporality for monotonic sums is common, exemplified by
 Prometheus. Systems based in cumulative monotonic sums are naturally simpler, in
