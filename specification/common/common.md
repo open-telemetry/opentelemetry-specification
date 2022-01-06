@@ -10,6 +10,7 @@
 - [Attribute](#attribute)
   * [Attribute Limits](#attribute-limits)
     + [Exempt Entities](#exempt-entities)
+- [Attribute Collections](#attribute-collections)
 
 <!-- tocstop -->
 
@@ -105,3 +106,14 @@ attribute limits for Resources.
 Attributes, which belong to Metrics, are exempt from the limits described above
 at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
+
+## Attribute Collections
+
+[Resources](../resource/sdk.md),
+Metrics [data points](../metrics/datamodel.md#metric-points),
+[Spans](../trace/api.md#set-attributes),
+Span [Events](../trace/api.md#add-events),
+Span [Links](../trace/api.md#specifying-links)
+and [Log Records](../logs/data-model.md) may contain a collection of attributes.
+The keys in each such collection are unique, i.e. there cannot exist more than
+one key-value pair with the same key.
