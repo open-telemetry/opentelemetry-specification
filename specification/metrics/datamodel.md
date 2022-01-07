@@ -663,9 +663,10 @@ boundary `0x1p-1024`.
 
 ##### All Scales: Use the Logarithm Function
 
-For any scale, use the built-in natural logarithm function.  A
-multiplicative factor equal to `2**scale / ln(2)` proves useful (where
-`ln()` is the natural logarithm), for example:
+For any scale, the built-in natural logarithm function can be used to
+compute the bucket index.  A multiplicative factor equal to `2**scale
+/ ln(2)` proves useful (where `ln()` is the natural logarithm), for
+example:
 
 ```golang
     scaleFactor := math.Ldexp(math.Log2E, scale)
@@ -685,14 +686,19 @@ The reverse mapping function is:
 Implementations should verify that their mapping function and inverse
 mapping function are correct near the lowest and highest IEEE floating
 point value.  In the Golang reference implementation, for example, the
-above formula computes `+Inf` instead of a correct, finite boundary.
-In this case, it is appropriate to subtract `1<<scale` from the index
-and multiply the result by `2`.
+above formula computes `+Inf` for the maximum-index bucket.  In this
+case, it is appropriate to subtract `1<<scale` from the index and
+multiply the result by `2`.
 
 ```golang
+    // Use this form in case the equation above computes +Inf
+	// as the lower boundary of a valid bucket.
     inverseFactor := math.Ldexp(math.Ln2, -scale)
     return 2.0 * math.Exp((index - (1 << scale)) * inverseFactor), nil
 ```
+
+_Note that floating-point to integer type conversions have been
+omitted from the code fragments above, to improve readability._
 
 ##### Positive Scale: Use a Lookup Table
 

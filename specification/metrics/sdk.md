@@ -427,11 +427,11 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-Explicit buckets stated in terms of their upper boundary.  Buckets are
-exclusive of their lower boundary and inclusive of their upper bound
-(except at positive infinity).  A measurement is defined to fall into
-the least-numbered bucket with boundary that is greater than or equal
-to the measurement.
+Explicit buckets are stated in terms of their upper boundary.  Buckets
+are exclusive of their lower boundary and inclusive of their upper
+bound (except at positive infinity).  A measurement is defined to fall
+into the least-numbered bucket with boundary that is greater than or
+equal to the measurement.
 
 #### Exponential Histogram Aggregation
 
@@ -446,7 +446,7 @@ This Aggregation honors the following configuration parameters:
 | Key                    | Value           | Default Value | Description                                                                                                                                                                                                                                     |
 | --                     | --              | --            | --                                                                                                                                                                                                                                              |
 | MaxSize                | integer         | 320           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket.                                                                                                                                    |
-| RangeLimits (optional) | min, max double | _not set_    | When set, limit the range of positive measurements to the inclusive range [min, max] and limit the range of negative measurements to [-max, -min].  Paired with maximum size, this determines a fixed exponential scale during the constructor. |
+| RangeLimits (optional) | min, max double | _not set_     | When set, limit the range of positive measurements to the inclusive range [min, max] and limit the range of negative measurements to [-max, -min].  Paired with maximum size, this determines a fixed exponential scale during the constructor. |
 
 ##### Exponential Histogram Aggregation: Handle all normal values
 
