@@ -32,3 +32,9 @@ groups:
           It's recommended this value represents a human readable version of the
           device model rather than a machine readable alternative.
         examples: ['iPhone 6s Plus', 'Samsung Galaxy S6']
+      - id: manufacturer
+        type: string
+        brief: 'The name of the device manufacturer'
+        note: >
+          The Android OS provides this field via [Build](https://developer.android.com/reference/android/os/Build#MANUFACTURER). iOS apps SHOULD hardcode the value `Apple`.
+        examples: ['Apple', 'Samsung']
