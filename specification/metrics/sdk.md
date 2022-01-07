@@ -327,6 +327,10 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
+The SDK MAY provide the following `Aggregation`:
+
+- [Exponential Histogram Aggregation](./sdk.md#exponential-histogram-aggregation)
+
 #### Drop Aggregation
 
 The Drop Aggregation informs the SDK to ignore/drop all Instrument Measurements
@@ -393,6 +397,19 @@ Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
 
 This Aggregation does not have any configuration parameters.
 
+##### Histogram Aggregation common behavior
+
+Histogram aggregations should not fill out `sum` when used with
+instruments that record negative measurements, e.g. `UpDownCounter` or
+`ObservableGauge`.
+
+All histogram Aggregations inform the SDK to collect:
+
+- Count of `Measurement` values in population.
+- Arithmetic sum of `Measurement` values in population.
+- Min (optional) `Measurement` value in population.
+- Max (optional) `Measurement` value in population.
+
 #### Explicit Bucket Histogram Aggregation
 
 The Explicit Bucket Histogram Aggregation informs the SDK to collect data for
@@ -406,15 +423,43 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-Note: This aggregation should not fill out `sum` when used with instruments that
-record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
+Explicit buckets stated in terms of their upper boundary.  Buckets are
+exclusive of their lower boundary and inclusive of their upper bound
+(except at positive infinity).  A measurement is defined to fall into
+the least-numbered bucket with boundary that is greater than or equal
+to the measurement.
 
-This Aggregation informs the SDK to collect:
+#### Exponential Histogram Aggregation
 
-- Count of `Measurement` values falling within explicit bucket boundaries.
-- Arithmetic sum of `Measurement` values in population.
-- Min (optional) `Measurement` value in population.
-- Max (optional) `Measurement` value in population.
+The Exponential Histogram Aggregation informs the SDK to collect data
+for the [Exponential Histogram Metric
+Point](./datamodel.md#exponentialhistogram), which uses an exponential
+formula to determine bucket boundaries and an integer `scale`
+parameter to control resolution.
+
+This Aggregation honors the following configuration parameters:
+
+| Key                    | Value           | Default Value | Description                                                                                                                                                                                                                                     |
+| --                     | --              | --            | --                                                                                                                                                                                                                                              |
+| MaxSize                | integer         | 320           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket.                                                                                                                                    |
+| RangeLimits (optional) | min, max double | _see note_    | When set, limit the range of positive measurements to the inclusive range [min, max] and limit the range of negative measurements to [-max, -min].  Paired with maximum size, this determines a fixed exponential scale during the constructor. |
+
+##### Exponential Histogram Aggregation: Handle all normal values
+
+When RangeLimits are not set, implementations are REQUIRED to handle
+the entire normal range of IEEE floating point values (i.e., all
+values except for +Inf, -Inf and NaN values).  Implementations are
+permitted to round subnormal values away from zero to the nearest
+normal value where it simplifies the implementation.
+
+##### Exponential Histogram Aggregation: Maintain the ideal scale
+
+Implementations SHOULD adjust the histogram scale as necessary to
+maintain the best resolution possible, given the maximum size.  This
+results in histogram Aggregations where at least one of the positive
+or negative ranges of buckets is more than half full, such that
+increasing scale by one would not be possible given the size
+constraint.
 
 ## Attribute limits
 
