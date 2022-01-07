@@ -32,7 +32,7 @@ release.
 - Use UCUM units in Metrics Semantic Conventions.
   ([#2199](https://github.com/open-telemetry/opentelemetry-specification/pull/2199))
 - Specify optional support for an Exponential Histogram Aggregation.
-  ([#X](https://github.com/open-telemetry/opentelemetry-specification/pull/X))
+  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
 
 ### Logs
 

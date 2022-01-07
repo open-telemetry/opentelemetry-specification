@@ -442,7 +442,7 @@ This Aggregation honors the following configuration parameters:
 | Key                    | Value           | Default Value | Description                                                                                                                                                                                                                                     |
 | --                     | --              | --            | --                                                                                                                                                                                                                                              |
 | MaxSize                | integer         | 320           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket.                                                                                                                                    |
-| RangeLimits (optional) | min, max double | _see note_    | When set, limit the range of positive measurements to the inclusive range [min, max] and limit the range of negative measurements to [-max, -min].  Paired with maximum size, this determines a fixed exponential scale during the constructor. |
+| RangeLimits (optional) | min, max double | _not set_    | When set, limit the range of positive measurements to the inclusive range [min, max] and limit the range of negative measurements to [-max, -min].  Paired with maximum size, this determines a fixed exponential scale during the constructor. |
 
 ##### Exponential Histogram Aggregation: Handle all normal values
 
