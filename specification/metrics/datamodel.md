@@ -2,7 +2,8 @@
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- Re-generate TOC with `make markdown-toc` -->
+<details>
+<summary>Table of Contents</summary>
 
 <!-- toc -->
 
@@ -47,6 +48,8 @@
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
+
+</details>
 
 ## Overview
 
@@ -104,8 +107,8 @@ collector. These transformations are:
 1. Temporal reaggregation: Metrics that are collected at a high-frequency can be
    re-aggregated into longer intervals, allowing low-resolution timeseries to be
    pre-calculated or used in place of the original metric data.
-2. Spatial reaggregation: Metrics that are produced with unwanted dimensions can
-   be re-aggregated into metrics having fewer dimensions.
+2. Spatial reaggregation: Metrics that are produced with unwanted attributes can
+   be re-aggregated into metrics having fewer attributes.
 3. Delta-to-Cumulative: Metrics that are input and output with Delta temporality
    unburden the client from keeping high-cardinality state. The use of deltas
    allows downstream services to bear the cost of conversion into cumulative
@@ -116,13 +119,13 @@ can be applied automatically to streams of the same type, subject to conditions
 outlined below. Every OTLP data stream has an intrinsic
 [decomposable aggregate function](https://en.wikipedia.org/wiki/Aggregate_function#Decomposable_aggregate_functions)
 making it semantically well-defined to merge data points across both temporal
-and spatial dimensions. Every OTLP data point also has two meaningful timestamps
+and spatial attributes. Every OTLP data point also has two meaningful timestamps
 which, combined with intrinsic aggregation, make it possible to carry out the
 standard metric data transformations for each of the model’s basic points while
 ensuring that the result carries the intended meaning.
 
 As in OpenCensus Metrics, metrics data can be transformed into one or more
-Views, just by selecting the aggregation interval and the desired dimensions.
+Views, just by selecting the aggregation interval and the desired attributes.
 One stream of OTLP data can be transformed into multiple timeseries outputs by
 configuring different Views, and the required Views processing may be applied
 inside the SDK or by an external collector.
@@ -136,9 +139,9 @@ breadth of OTel metrics usage.
 1. OTel SDK exports 10 second resolution to a single OTel collector, using
   cumulative temporality for a stateful client, stateless server:
     - Collector passes-through original data to an OTLP destination
-    - Collector re-aggregates into longer intervals without changing dimensions
+    - Collector re-aggregates into longer intervals without changing attributes
     - Collector re-aggregates into several distinct views, each with a subset of
-      the available dimensions, outputs to the same destination
+      the available attributes, outputs to the same destination
 2. OTel SDK exports 10 second resolution to a single OTel collector, using delta
   temporality for a stateless client, stateful server:
     - Collector re-aggregates into 60 second resolution
@@ -254,7 +257,7 @@ to map into, but is used as a reference throughout this document.
 
 ### OpenTelemetry Protocol data model
 
-The OpenTelmetry protocol data model is composed of Metric data streams. These
+The OpenTelemetry protocol data model is composed of Metric data streams. These
 streams are in turn composed of metric data points. Metric data streams
 can be converted directly into Timeseries, and share the same identity
 characteristics for a Timeseries. A metric stream is identified by:
@@ -271,7 +274,7 @@ __Note: The same `Resource`, `name` and `Attribute`s but differing point kind
 coming out of an OpenTelemetry SDK is considered an "error state" that SHOULD
 be handled by an SDK.__
 
-A metric stream can use one of three basic point kinds, all of
+A metric stream can use one of these basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
 same kind. <sup>[1](#otlpdatapointfn)</sup>
@@ -326,7 +329,7 @@ in OTLP consist of the following:
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
       `00:00:00 UTC on 1 January 1970`
-    - (optional) a set of examplars (see [Exemplars](#exemplars)).
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 The aggregation temporality is used to understand the context in which the sum
 was calculated. When the aggregation temporality is "delta", we expect to have
@@ -782,8 +785,9 @@ degradation or loss of visibility.
 
 The notion of temporality refers to the way additive quantities are
 expressed, in relation to time, indicating whether reported values
-incorporate previous measurements or not.  Sum and Histogram data
-points, in particular, support a choice of aggregation temporality.
+incorporate previous measurements or not.  Sum, Histogram, and
+ExponentialHistogram data points, in particular, support a choice of aggregation
+temporality.
 
 Every OTLP metric data point has two associated timestamps.  The
 first, mandatory timestamp is the one associated with the observation,
@@ -793,20 +797,19 @@ to indicate when a sequence of points is unbroken, and is referred to as
 `StartTimeUnixNano`.
 
 The second timestamp is strongly recommended for Sum, Histogram, and
-Summary points, as it is necessary to correctly interpret the rate
-from an OTLP stream, in a manner that is aware of restarts.  The use
-of `StartTimeUnixNano` to indicate the start of an unbroken sequence
-of points means it can also be used to encode implicit gaps in
-the stream.
+ExponentialHistogram points, as it is necessary to correctly interpret the rate
+from an OTLP stream, in a manner that is aware of restarts.  The use of
+`StartTimeUnixNano` to indicate the start of an unbroken sequence of points
+means it can also be used to encode implicit gaps in the stream.
 
 - *Cumulative temporality* means that successive data points repeat the starting
-  timestamp. For example, from start time T0, cumulative data points cover time
-  ranges (T<sub>0</sub>, T<sub>1</sub>), (T<sub>0</sub>, T<sub>2</sub>),
-  (T<sub>0</sub>, T<sub>3</sub>), and so on.
+  timestamp. For example, from start time T<sub>0</sub>, cumulative data points cover time
+  ranges (T<sub>0</sub>, T<sub>1</sub>], (T<sub>0</sub>, T<sub>2</sub>],
+  (T<sub>0</sub>, T<sub>3</sub>], and so on.
 - *Delta temporality* means that successive data points advance the starting
-  timestamp. For example, from start time T0, delta data points cover time
-  ranges (T<sub>0</sub>, T<sub>1</sub>), (T<sub>1</sub>, T<sub>2</sub>),
-  (T<sub>2</sub>, T<sub>3</sub>), and so on.
+  timestamp. For example, from start time T<sub>0</sub>, delta data points cover time
+  ranges (T<sub>0</sub>, T<sub>1</sub>], (T<sub>1</sub>, T<sub>2</sub>],
+  (T<sub>2</sub>, T<sub>3</sub>], and so on.
 
 The use of cumulative temporality for monotonic sums is common, exemplified by
 Prometheus. Systems based in cumulative monotonic sums are naturally simpler, in

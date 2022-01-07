@@ -3,11 +3,7 @@
 **Status**: [Stable](../document-status.md)
 
 <details>
-
 <summary>Table of Contents</summary>
-
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-<!-- https://github.com/jonschlinkert/markdown-toc -->
 
 <!-- toc -->
 
@@ -332,10 +328,10 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
 * This is a composite sampler. `ParentBased` helps distinguish between the
 following cases:
   * No parent (root span).
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `true`
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` equals `false`
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `true`
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` equals `false`
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` set
+  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` not set
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` set
+  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` not set
 
 Required parameters:
 

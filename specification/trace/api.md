@@ -3,41 +3,46 @@
 **Status**: [Stable, Feature-freeze](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
 
-* [Data types](#data-types)
+<!-- toc -->
+
+- [Data types](#data-types)
   * [Time](#time)
-    * [Timestamp](#timestamp)
-    * [Duration](#duration)
-* [TracerProvider](#tracerprovider)
+    + [Timestamp](#timestamp)
+    + [Duration](#duration)
+- [TracerProvider](#tracerprovider)
   * [TracerProvider operations](#tracerprovider-operations)
-* [Context Interaction](#context-interaction)
-* [Tracer](#tracer)
+    + [Get a Tracer](#get-a-tracer)
+- [Context Interaction](#context-interaction)
+- [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
-* [SpanContext](#spancontext)
+- [SpanContext](#spancontext)
   * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [IsValid](#isvalid)
   * [IsRemote](#isremote)
-* [Span](#span)
-  * [Span creation](#span-creation)
-    * [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-    * [Specifying Links](#specifying-links)
+  * [TraceState](#tracestate)
+- [Span](#span)
+  * [Span Creation](#span-creation)
+    + [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+    + [Specifying links](#specifying-links)
   * [Span operations](#span-operations)
-    * [Get Context](#get-context)
-    * [IsRecording](#isrecording)
-    * [Set Attributes](#set-attributes)
-    * [Add Events](#add-events)
-    * [Set Status](#set-status)
-    * [UpdateName](#updatename)
-    * [End](#end)
-    * [Record Exception](#record-exception)
+    + [Get Context](#get-context)
+    + [IsRecording](#isrecording)
+    + [Set Attributes](#set-attributes)
+    + [Add Events](#add-events)
+    + [Set Status](#set-status)
+    + [UpdateName](#updatename)
+    + [End](#end)
+    + [Record Exception](#record-exception)
   * [Span lifetime](#span-lifetime)
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
-* [SpanKind](#spankind)
-* [Concurrency](#concurrency)
-* [Included Propagators](#included-propagators)
+- [SpanKind](#spankind)
+- [Concurrency](#concurrency)
+- [Included Propagators](#included-propagators)
+- [Behavior of the API in the absence of an installed SDK](#behavior-of-the-api-in-the-absence-of-an-installed-sdk)
+
+<!-- tocstop -->
 
 </details>
 
@@ -120,7 +125,7 @@ This API MUST accept the following parameters:
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
-  
+
 It is unspecified whether or under which conditions the same or different
 `Tracer` instances are returned from this functions.
 
@@ -790,14 +795,15 @@ for how propagators are to be distributed.
 ## Behavior of the API in the absence of an installed SDK
 
 In general, in the absence of an installed SDK, the Trace API is a "no-op" API.
-This means that operations on a Tracer, or on Spans, should have no side effects and do nothing. However, there
-is one important exception to this general rule, and that is related to propagation of a `SpanContext`:
-The API MUST create a [non-recording Span](#wrapping-a-spancontext-in-a-span) with the `SpanContext`
-that is in the `Span` in the parent `Context` (whether explicitly given or implicit current) or,
-if the parent is a non-recording Span (which it usually always is if no SDK is present),
-it MAY return the parent Span back from the creation method.
-If the parent `Context` contains no `Span`, an empty non-recording Span MUST be returned instead
-(i.e., having a `SpanContext` with all-zero Span and Trace IDs, empty Tracestate, and unsampled TraceFlags).
-This means that a `SpanContext` that has been provided by a configured `Propagator`
-will be propagated through to any child span and ultimately also `Inject`,
-but that no new `SpanContext`s will be created.
+This means that operations on a Tracer, or on Spans, should have no side effects
+and do nothing. However, there is one important exception to this general rule,
+and that is related to propagation of a `SpanContext`: The API MUST return a
+non-recording `Span` with the `SpanContext` in the parent `Context` (whether explicitly given or implicit current).
+If the `Span` in the parent `Context` is already non-recording, it SHOULD be returned directly
+without instantiating a new `Span`.
+If the parent `Context` contains no `Span`, an empty non-recording Span MUST be
+returned instead (i.e., having a `SpanContext` with all-zero Span and Trace IDs,
+empty Tracestate, and unsampled TraceFlags).  This means that a `SpanContext`
+that has been provided by a configured `Propagator` will be propagated through
+to any child span and ultimately also `Inject`, but that no new `SpanContext`s
+will be created.
