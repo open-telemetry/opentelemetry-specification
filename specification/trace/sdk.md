@@ -356,7 +356,7 @@ Optional parameters:
 
 #### JaegerRemoteSampler
 
-[Jaeger remote sampler](https://www.jaegertracing.io/docs/1.29/sampling/#collector-sampling-configuration) allows remotely controlling the sampling configuration for the SDKs. The sampling is typically configured at the collector and the SDKs actively poll for changes. The sampler uses `TraceIdRatioBased` or `RateLimiting` sampler under the hood. These samplers can be configured per whole service (a.k.a default), or per span name in a given service (a.k.a per operation).
+[Jaeger remote sampler](https://www.jaegertracing.io/docs/1.29/sampling/#collector-sampling-configuration) allows remotely controlling the sampling configuration for the SDKs. The sampling is typically configured at the collector and the SDKs actively poll for changes. The sampler uses `TraceIdRatioBased` or rate-limited sampler under the hood. These samplers can be configured per whole service (a.k.a default), or per span name in a given service (a.k.a per operation).
 
 The full Protobuf definition can be found at [jaegertracing/jaeger-idl/api_v2/sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/main/proto/api_v2/sampling.proto).
 
