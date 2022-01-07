@@ -406,9 +406,6 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-Note: This aggregation should not fill out `sum` when used with instruments that
-record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
-
 This Aggregation informs the SDK to collect:
 
 - Count of `Measurement` values falling within explicit bucket boundaries.
