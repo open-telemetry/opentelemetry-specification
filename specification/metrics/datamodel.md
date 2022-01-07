@@ -622,6 +622,21 @@ func GetExponent(value float64) int32 {
 }
 ```
 
+Implementations are permitted to round subnormal values up to the
+smallest normal value, which may permit the use of a built-in function:
+
+```golang
+
+func GetExponent(value float64) int {
+    // Note: Frexp() rounds submnormal values to the smallest normal
+    // value and returns an exponent corresponding to fractions in the
+    // range [0.5, 1), whereas we want [1, 2), so subtract 1 from the
+    // exponent.
+    _, exp := math.Frexp(value)
+    return exp - 1
+}
+```
+
 ##### Negative Scale: Extract and Shift the Exponent
 
 For negative scales, the index of a value equals the normalized
@@ -633,19 +648,51 @@ correct rounding for the negative indices.  This may be written as:
   return GetExponent(value) >> -scale
 ```
 
-##### All Scales: Use the Logarithm Function
-
-For any scale, use of the built-in natural logarithm
-function.  A multiplicative factor equal to `2**scale / ln(2)`
-proves useful (where `ln()` is the natural logarithm), for example:
+The reverse mapping function is:
 
 ```golang
-    scaleFactor := math.Log2E * math.Exp2(scale)
-    return int64(math.Floor(math.Log(value) * scaleFactor))
+    return math.Ldexp(1, index << -scale)
+```
+
+Note that the reverse mapping function is expected to produce
+subnormal values even when the mapping function rounds them into
+normal values, since the lower boundary of the bucket containing the
+smallest normal value may be subnormal.  For example, at scale -4 the
+smallest normal value `0x1p-1022` falls into a bucket with lower
+boundary `0x1p-1024`.
+
+##### All Scales: Use the Logarithm Function
+
+For any scale, use the built-in natural logarithm function.  A
+multiplicative factor equal to `2**scale / ln(2)` proves useful (where
+`ln()` is the natural logarithm), for example:
+
+```golang
+    scaleFactor := math.Ldexp(math.Log2E, scale)
+    return math.Floor(math.Log(value) * scaleFactor)
 ```
 
 Note that in the example Golang code above, the built-in `math.Log2E`
-is defined as `1 / ln(2)`.
+is defined as the inverse natural logarithm of 2.
+
+The reverse mapping function is:
+
+```golang
+    inverseFactor := math.Ldexp(math.Ln2, -scale)
+    return math.Exp(index * inverseFactor), nil
+```
+
+Implementations should verify that their mapping function and inverse
+mapping function are correct near the lowest and highest IEEE floating
+point value.  In the Golang reference implementation, for example, the
+above formula computes `+Inf` instead of a correct, finite boundary.
+In this case, it is appropriate to subtract `1<<scale` from the index
+and multiply the result by `2`.
+
+```golang
+    inverseFactor := math.Ldexp(math.Ln2, -scale)
+    return 2.0 * math.Exp((index - (1 << scale)) * inverseFactor), nil
+```
 
 ##### Positive Scale: Use a Lookup Table
 
