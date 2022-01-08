@@ -8,6 +8,7 @@
 * [Abstract](#abstract)
 * [Create an OpenTracing Tracer Shim](#create-an-opentracing-tracer-shim)
 * [Tracer Shim](#tracer-shim)
+  * [Start a new Span](#start-a-new-span)
   * [Inject](#inject)
   * [Extract](#extract)
 * [Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship)
@@ -23,6 +24,9 @@
 * [ScopeManager Shim](#scopemanager-shim)
   * [Activate a Span](#activate-a-span)
   * [Get the active Span](#get-the-active-span)
+* [Span References](#span-references)
+* [In-process propagation exceptions](#in-process-propagation-exceptions)
+  * [Implicit and Explicit support mismatch](#implicit-and-explicit-support-mismatch)
 
 </details>
 
@@ -48,10 +52,16 @@ Semantic convention mapping SHOULD NOT be performed, with the
 exception of error mapping, as described in the [Set Tag](#set-tag) and
 [Log](#log) sections.
 
-If the OpenTracing-instrumented code makes use of baggage, it is not recommended to
-consume both the OpenTracing Shim and the OpenTelemetry API in the same codebase,
-as `Baggage` may not be properly propagated. See
-[Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship).
+Consuming both the OpenTracing Shim and the OpenTelemetry API in the same codebase
+is not recommended for the following scenarios:
+
+* If the OpenTracing-instrumented code consumes baggage, as the
+ `Baggage` itself may not be properly propagated.
+  See [Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship).
+* For languages with **implicit** in-process propagation support in OpenTelemetry
+  and none in OpenTracing (e.g. Javascript), as it breaks the expected propagation
+  semantics and may lead to incorrect `Context` usage and incorrect traces.
+  See [Implicit and Explicit support mismatch](#implicit-and-explicit-support-mismatch).
 
 ## Create an OpenTracing Tracer Shim
 
@@ -87,6 +97,41 @@ See OpenTracing Propagation
 [Formats](https://github.com/opentracing/specification/blob/master/specification.md#extract-a-spancontext-from-a-carrier).
 
 ## Tracer Shim
+
+### Start a new Span
+
+Parameters:
+
+- The operation name, a string.
+- An optional list of [Span references](#span-references).
+- An optional list of [tags](#set-tag).
+- An optional explicit start timestamp, a numeric value.
+
+For OpenTracing languages implementing the [ScopeManager](#scopemanager-shim)
+interface, the folllowing parameters are defined as well:
+
+- An optional boolean specifying whether the current `Span`
+  should be ignored as automatic parent.
+
+If a list of `Span` references is specified, the first `SpanContext`
+with **Child Of** type in the entire list is used as parent, else the
+the first `SpanContext` is used as parent. All values in the list
+MUST be added as [Link](../trace/api.md)s with the reference type value
+as a `Link` attribute, i.e. `opentracing.ref_type` set to `follows_from` or
+`child_of`.
+
+If an initial set of tags is specified, the values MUST be set at
+the creation time of the OpenTelemetry `Span`, as opposed to setting them
+after the `Span` is already created. This is done in order to make
+those values available to any pre-`Span`-creation hook, e.g. the reference
+SDK performs a [sampling](../trace/sdk.md#sampling) step that consults
+`Span` information, including the initial tags/attributes, to decide whether
+to sample or not.
+
+If an explicit start timestamp is specified, a conversion MUST be done to match the
+OpenTracing and OpenTelemetry units.
+
+The API MUST return an OpenTracing `Span`.
 
 ### Inject
 
@@ -400,5 +445,73 @@ Span active() {
 
   // Span was NOT activated through the Shim layer.
   new SpanShim(Span.current());
+}
+```
+
+## Span References
+
+As defined in the
+[OpenTracing Specification](https://github.com/opentracing/specification/blob/master/specification.md#references-between-spans),
+a `Span` may reference zero or more other `SpanContext`s that are
+causally related. The reference information itself consists of a
+`SpanContext` and the reference type.
+
+OpenTracing defines two types of references:
+
+* **Child Of**: The parent `Span` depends o the child `Span`
+  in some capacity.
+* **Follows From**: The parent `Span` does not depend in any
+  way on the result of their child `Span`s.
+
+OpenTelemetry does not define strict equivalent semantics for these
+references. These reference types must not be confused with the
+[Link](../trace/api.md##specifying-links) functionality. This information
+is however preserved as the `opentracing.ref_type` attribute.
+
+## In process Propagation exceptions
+
+### Implicit and Explicit support mismatch
+
+For languages with **implicit** in-process propagation support in
+OpenTelemetry and none in OpenTracing (i.e. no [ScopeManager](#scopemanager-shim) support),
+the Shim MUST only use **explicit** context propagation in its operations
+(e.g. when starting a new `Span`). This is done to easily comply with the
+explicit-only propagation semantics of the OpenTracing API:
+
+```ts
+// Tracer Shim
+startSpan(name: string, options: SpanOptions = {}): Span {
+  const otelSpanOptions = ...;
+
+  if (!options.childOf && !options.references) {
+    // Do NOT get nor set the current Context/Span,
+    // as it is part of the implicit propagation support.
+    otelSpanOptions.root = true;
+  }
+  ...
+}
+```
+
+Using both the OpenTracing Shim and the OpenTelemetry API in the same codebase
+may result in traces using the incorrect parent `Span`, given the different
+implicit/explicit propagation expectations. For this case, the Shim MAY offer
+**experimental** integration with the OpenTelemetry implicit in-process
+propagation via an **explicit** setting, warning the user incorrect parent
+values may be consumed:
+
+```ts
+// Tracer Shim
+startSpan(name: string, options: SpanOptions = {}): Span {
+  const otelSpanOptions = ...;
+
+  if (!options.childOf && !options.references) {
+    if (otShimOptions.supportImplicitPropagation) {
+      // Allow OpenTelemetry to consume the current Context
+      // to fetch the parent Span.
+      otelSpanOptions.root = false;
+    }
+    ...
+  }
+  ...
 }
 ```

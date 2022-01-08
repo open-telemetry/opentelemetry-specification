@@ -103,6 +103,8 @@ and one received message will be recorded for both client and server spans.
 The event name MUST be `"message"`.
 
 <!-- semconv rpc.message -->
+The event name MUST be `message`.
+
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `message.type` | string | Whether this is a received or sent message. | `SENT` | No |
