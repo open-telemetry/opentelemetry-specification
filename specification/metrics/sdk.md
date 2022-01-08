@@ -694,6 +694,21 @@ Configurable parameters:
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
 
+One possible implementation of periodic exporting MetricReader is to inherit
+from `MetricReader` and start a background task which calls the inherited
+`Collect()` method at the requested `exportIntervalMillis`. The reader's
+`Collect()` method may still be invoked by other callers. For example,
+
+* A user configures periodic exporting MetricReader with a push exporter and a
+  30 second interval.
+* At the first 30 second interval, the background task calls `Collect()` which
+  passes metrics to the push exporter.
+* After 15 seconds, the user decides to flush metrics for just this reader. They
+  call `Collect()` which passes metrics to the push exporter.
+* After another 15 seconds (at the end of the second 30 second interval),
+  the background task calls `Collect()` which passes metrics to the push
+  exporter.
+
 ## MetricExporter
 
 `MetricExporter` defines the interface that protocol-specific exporters MUST
@@ -723,7 +738,9 @@ preferred temporality.
 
 ### Push Metric Exporter
 
-Push Metric Exporter sends the data on its own schedule. Here are some examples:
+Push Metric Exporter sends metric data it receives from a paired [periodic
+exporting MetricReader](#periodic-exporting-metricreader).  Here are some
+examples:
 
 * Sends the data based on a user configured schedule, e.g. every 1 minute.
 * Sends the data when there is a severe error.
