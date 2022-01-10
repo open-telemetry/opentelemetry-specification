@@ -9,7 +9,7 @@ _Curious about what OpenTelemetry is? Check out our [website](https://openteleme
 
 The OpenTelemetry specification describes the cross-language requirements and expectations for all OpenTelemetry implementations. Substantive changes to the specification must be proposed using the [OpenTelemetry Enhancement Proposal](https://github.com/open-telemetry/oteps) process. Small changes, such as clarifications, wording changes, spelling/grammar corrections, etc. can be made directly via pull requests.
 
-Questions that needs additional attention can be brought to the regular
+Questions that need additional attention can be brought to the regular
 specifications meeting. EU and US timezone friendly meeting is held every
 Tuesday at 8 AM pacific time. Meeting notes are held in the [google
 doc](https://docs.google.com/document/d/1-bCYkN-DWJq4jw1ybaDZYYmx-WAe6HnwfWbkm8d57v8/edit?usp=sharing).
