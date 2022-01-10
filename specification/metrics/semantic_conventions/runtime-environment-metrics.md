@@ -49,3 +49,10 @@ consider, for example pthreads vs green thread implementations.
 ## Attributes
 
 [`process.runtime`](../../resource/semantic_conventions/process.md#process-runtimes) resource attributes SHOULD be included on runtime metric events as appropriate.
+
+## JVM Metrics
+
+**Description:** JVM metrics captured under `process.runtime.jvm.`
+
+| Name | Description | Units | Instrument Type | Value Type | Attribute Key | Attribute Values |
+|------|-------------|-------|-----------------|------------|---------------|------------------|
