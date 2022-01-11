@@ -53,7 +53,7 @@ consider, for example pthreads vs green thread implementations.
 
 ## JVM Metrics
 
-**Description:** JVM metrics captured under `process.runtime.jvm.`
+**Description:** Java Virtual Machine (JVM) metrics captured under `process.runtime.jvm.`
 
 | Name | Description | Units | Instrument Type | Value Type | Attribute Key | Attribute Values |
 |------|-------------|-------|-----------------|------------|---------------|------------------|
