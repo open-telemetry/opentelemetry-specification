@@ -77,7 +77,7 @@ For performance reasons (e.g. [AWS lambda], or [Azure functions]), FaaS provider
 Developers exploit this fact to solve the **cold start** issue, caching expensive resource computations between different function executions.
 Furthermore, FaaS providers encourage this behavior, e.g. [Google functions].
 This field MAY be set to help correlate function executions that belong to the same execution environment.
-The span attribute `faas.execution` differs from the resource attribute `faas.instance` in the following:
+The span attribute `faas.execution` differs from the [resource attribute][FaaS resource attributes] `faas.instance` in the following:
 
 - `faas.execution` refers to the current request ID handled by the function;
 - `faas.instance` refers to the execution environment ID of the function.
