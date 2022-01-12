@@ -78,11 +78,9 @@ Example:
 
 ### Go Runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm the contents here
-
 | Value | Description |
 | --- | --- |
-| `gc` | Go compiler |
+| `go` | Go compiler |
 | `gccgo` | GCC Go frontend |
 
 ### Java runtimes
