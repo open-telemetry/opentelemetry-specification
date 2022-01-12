@@ -90,7 +90,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `SPDY` | SPDY protocol. |
 | `QUIC` | QUIC protocol. |
 
-Following attributes MUST be provided **at span creation time** (when provided at all):
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
 * `http.method`
 * `http.url`

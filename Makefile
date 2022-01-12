@@ -11,7 +11,7 @@ MARKDOWN_TOC=./node_modules/.bin/markdown-toc
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
-SEMCONVGEN_VERSION=0.7.0
+SEMCONVGEN_VERSION=0.8.0
 
 $(MISSPELL):
 	cd $(TOOLS_DIR) && go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
