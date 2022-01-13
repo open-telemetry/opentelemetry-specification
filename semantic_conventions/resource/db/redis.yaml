@@ -1,6 +1,6 @@
 groups:
   - id: redis
-    prefix: redis
+    prefix: db.redis
     brief: >
         A redis instance
     attributes:

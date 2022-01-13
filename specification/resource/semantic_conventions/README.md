@@ -162,7 +162,7 @@ Attributes defining a running environment (e.g. Operating System, Cloud, Data Ce
 
 Attributes defining a database service.
 
-- [Redis](./redis.md)
+- [Redis](./db/redis.md)
 
 ## Version attributes
 

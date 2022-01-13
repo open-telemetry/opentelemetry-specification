@@ -65,7 +65,7 @@ release.
   ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
 - Add JVM memory runtime semantic
   conventions. ([#2272](https://github.com/open-telemetry/opentelemetry-specification/pull/2272))
-- Add `redis.instance` Resource attribute in Redis.
+- Add `db.redis.instance` Resource attribute in Redis.
   ([#2145](https://github.com/open-telemetry/opentelemetry-specification/pull/2145))
 
 ### Compatibility
