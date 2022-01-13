@@ -43,8 +43,13 @@ release.
   ([#2184](https://github.com/open-telemetry/opentelemetry-specification/pull/2184))
 - Change mapping for log_name of Google Cloud Logging.
   ([#2092](https://github.com/open-telemetry/opentelemetry-specification/pull/2092))
+- Add the Kubernetes Event related semantic conventions
+  ([#2258](https://github.com/open-telemetry/opentelemetry-specification/pull/2258))
 
 ### Resource
+
+- Add the Kubernetes Object related semantic conventions
+  ([#2258](https://github.com/open-telemetry/opentelemetry-specification/pull/2258))
 
 ### Semantic Conventions
 
