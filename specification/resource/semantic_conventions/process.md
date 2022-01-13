@@ -80,7 +80,8 @@ Example:
 
 Go Runtimes should fill in the as follows:
 
-- `process.runtime.name` - Fill in an interpretation of Go's `runtime.Compiler` constant, according to the following rule: If the value is `gc`, fill in `go`. Otherwise, fill in the exact value of `runtime.Compiler`.
+- `process.runtime.name` - Fill in an interpretation of Go's [`runtime.Compiler`](https://pkg.go.dev/runtime#Compiler) constant, according to the following rule:
+  If the value is `gc`, fill in `go`. Otherwise, fill in the exact value of `runtime.Compiler`.
 
   This can be implemented with the following Go snippet:
 
