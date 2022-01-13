@@ -78,10 +78,30 @@ Example:
 
 ### Go Runtimes
 
-| Value | Description |
-| --- | --- |
-| `go` | Go compiler |
-| `gccgo` | GCC Go frontend |
+Go Runtimes should fill in the as follows:
+
+- `process.runtime.name` - Fill in an interpretation of Go's `runtime.Compiler` constant, according to the following rule: If the value is `gc`, fill in `go`. Otherwise, fill in the exact value of `runtime.Compiler`.
+
+  This can be implemented with the following Go snippet:
+
+  ```go
+  import "runtime"
+  
+  func getRuntimeName() string {
+    if runtime.Compiler == "gc" {
+      return "go"
+    }
+    return runtime.Compiler
+  }
+  ```
+
+- `process.runtime.version` - Fill in the exact value returned by `runtime.Version()`, i.e. `go1.17`.
+- `process.runtime.description` - Fill in a description corresponding to the value of `process.runtime.name`, as defined by the table below.
+
+| `runtime.Compiler` | `process.runtime.name` | `process.runtime.description` |
+| --- | --- | --- |
+| `gc` | go | cmd/compile |
+| `gccgo` | gccgo | gccgo front end |
 
 ### Java runtimes
 
