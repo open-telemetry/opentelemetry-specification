@@ -99,6 +99,12 @@ Go Runtimes should fill in the as follows:
 - `process.runtime.version` - Fill in the exact value returned by `runtime.Version()`, i.e. `go1.17`.
 - `process.runtime.description` - Use of this field is not recommended.
 
+| `process.runtime.name` | Description |
+| --- | --- |
+| `go` | Official Go compiler. Also known as `cmd/compile`. |
+| `gccgo` | [gccgo](https://go.dev/doc/install/gccgo) is a Go [front end for GCC](https://gcc.gnu.org/frontends.html). |
+| `tinygo` | [TinyGo](https://tinygo.org/) compiler. |
+
 ### Java runtimes
 
 Java instrumentation should fill in the values by copying from system properties.
