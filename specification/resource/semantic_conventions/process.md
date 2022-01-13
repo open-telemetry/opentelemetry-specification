@@ -97,12 +97,7 @@ Go Runtimes should fill in the as follows:
   ```
 
 - `process.runtime.version` - Fill in the exact value returned by `runtime.Version()`, i.e. `go1.17`.
-- `process.runtime.description` - Fill in a description corresponding to the value of `process.runtime.name`, as defined by the table below.
-
-| `runtime.Compiler` | `process.runtime.name` | `process.runtime.description` |
-| --- | --- | --- |
-| `gc` | go | cmd/compile |
-| `gccgo` | gccgo | gccgo front end |
+- `process.runtime.description` - Use of this field is not recommended.
 
 ### Java runtimes
 
