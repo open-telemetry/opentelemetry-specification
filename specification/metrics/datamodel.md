@@ -46,9 +46,10 @@
     + [Sums: detecting alignment issues](#sums-detecting-alignment-issues)
     + [Sums: Missing Timestamps](#sums-missing-timestamps)
 - [Prometheus Compatibility](#prometheus-compatibility)
-  * [Label Mapping](#label-mapping)
+  * [Prometheus Labels from Service Discovery](#prometheus-labels-from-service-discovery)
   * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
   * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
+    + [OpenTelemetry Attributes to Prometheus Labels](#opentelemetry-attributes-to-prometheus-labels)
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
@@ -1025,48 +1026,23 @@ This section denotes how to convert from prometheus scraped metrics to the
 OpenTelemetry metric data model and how to create Prometheus metrics from
 OpenTelemetry metric data.
 
-### Label Mapping
+### Prometheus Labels from Service Discovery
 
-Prometheus metric labels are split in OpenTelemetry across Resource attributes
-and Metric data stream attributes.   Some labels are used within metric
-families to denote semantics which OpenTelemetry captures within the structure
-of a data point.  When mapping from prometheus to OpenTelemetry, any label
-that is not explicitly called out as being handled specially will be included
-in the set of attributes for a metric data stream.
+When scraping a Prometheus endpoint, Prometheus service discovery discovers attributes from scraped targets prior to scraping them, and adds these as labels on incoming metrics. In OpenTelemetry, some of these labels are converted to Resource attributes, with the rest added as Metric data stream attributes.
 
 Here is a table of the set of prometheus labels that are lifted into Resource
 attributes when converting into OpenTelemetry.
 
 | Prometheus Label | OTLP Resource Attribute | Description |
 | -------------------- | ----------------------- | ----------- |
-| `job` | `service.name` | [Semantic convention](../../semantic_conventions/resource/service.yaml) |
-| `host` | `host.name` | [Semantic convention](../../semantic_conventions/trace/general.yaml) |
-| `instance` | `instance` | ... |
-| `port` | `port` | ... |
+| `job` | `service.name` | ... |
+| `job` | `job` | ... |
+| `instance` | `instace` | ... |
+| `instance` | `host.name` | instance is split into host:port |
+| `instance` | `port` | instance is split into host:port |
 | `__scheme__` | `scheme` | ... |
 
-Next, this set of attributes are "special" and used when converting from a
-metric family to a specific OTLP metric data point:
-
-- `le` label is used to identify histogram bucket boundaries and counts.
-- `quantile` label is used to identify quantile points in summary metrics.
-- `__name__` is used to identify the metric name of the data point.
-- `__metrics_path__` is ignored in OTLP.
-
-Additionally, in Prometheus metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
-from OpenTelemetry with unsupported Attribute names should replace invalid characters with the `_` character. This
-may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same
-location.  This is considered an unsupported case, and is highly unlikely.
-
 ### Prometheus Metric points to OTLP
-
-Prometheus allows metrics to reported in "metric family" groups.  While
-OpenTelemetry can assume some shape/structure to metric family groups, any
-metric belonging to a family that is not treated specially should be exported
-as its own metric stream.  For example, while histograms are expected to
-live in a metric family with metrics `{name}_sum`, `{name}_count` and `{name}`,
-any other metric also reported in the family should be exported as an
-independent metric in OpenTelemetry.
 
 TODO - A bit about detecting/using start_time.
 
@@ -1078,7 +1054,17 @@ Prometheus Unknown becomes an OTLP Gauge.
 
 Prometheus Histogram becomes an OTLP Histogram.
 
+Multiple Prometheus metrics are merged together into a single metric:
+
+* The `le` label on non-suffixed metrics is used to identify histogram bucket boundaries. Each Prometheus line produces one bucket on the resulting histogram.
+* Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
+
 Prometheus Summary becomes an OTLP Summary.
+
+Multiple Prometheus metrics are merged together into a single metric:
+
+* The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus metrics produces one quantile on the resulting summary.
+* Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
 
 Prometheus Gauge Histogram is dropped (TBD).
 
@@ -1135,6 +1121,13 @@ OpenTelemetry Summary becomes a metric family with the following:
   each point is the computed value of the quantile point.
 
 TODO: Example Summary conversion
+
+#### OpenTelemetry Attributes to Prometheus Labels
+
+In Prometheus metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
+from OpenTelemetry with unsupported Attribute names should replace invalid characters with the `_` character. This
+may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same
+location.  This is considered an unsupported case, and is highly unlikely.
 
 ## Footnotes
 
