@@ -15,6 +15,7 @@ semantic conventions when instrumenting runtime environments.
 - [Metric Instruments](#metric-instruments)
   * [Runtime Environment Specific Metrics - `process.runtime.{environment}.`](#runtime-environment-specific-metrics---processruntimeenvironment)
 - [Attributes](#attributes)
+- [JVM Metrics](#jvm-metrics)
 
 <!-- tocstop -->
 
@@ -49,3 +50,10 @@ consider, for example pthreads vs green thread implementations.
 ## Attributes
 
 [`process.runtime`](../../resource/semantic_conventions/process.md#process-runtimes) resource attributes SHOULD be included on runtime metric events as appropriate.
+
+## JVM Metrics
+
+**Description:** Java Virtual Machine (JVM) metrics captured under `process.runtime.jvm.`
+
+| Name | Description | Units | Instrument Type | Value Type | Attribute Key | Attribute Values |
+|------|-------------|-------|-----------------|------------|---------------|------------------|
