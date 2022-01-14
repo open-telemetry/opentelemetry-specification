@@ -77,6 +77,7 @@ and OpenTelemetry APIs minimum **language** version, as of
 January 2022:
 
 | Language   | OpenTracing API  | OpenTelemetry API |
+| ---------- | ---------------- | ----------------- |
 | Go         | 1.13             | 1.16              |
 | Java       | 7                | 8                 |
 | Python     | 2.7              | 3.6               |
