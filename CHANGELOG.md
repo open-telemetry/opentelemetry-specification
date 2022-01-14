@@ -60,6 +60,10 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Rename `OTEL_EXPORTER_OTLP_SPAN_INSECURE` to `OTEL_EXPORTER_OTLP_TRACES_INSECURE` and
+  `OTEL_EXPORTER_OTLP_METRIC_INSECURE` to `OTEL_EXPORTER_OTLP_METRICS_INSECURE`
+  so they match the naming of all other OTLP environment variables.
+
 ### SDK Configuration
 
 ### Telemetry Schemas
