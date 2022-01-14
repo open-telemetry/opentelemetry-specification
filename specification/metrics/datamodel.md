@@ -45,6 +45,10 @@
   * [Sums: Delta-to-Cumulative](#sums-delta-to-cumulative)
     + [Sums: detecting alignment issues](#sums-detecting-alignment-issues)
     + [Sums: Missing Timestamps](#sums-missing-timestamps)
+- [Prometheus Compatibility](#prometheus-compatibility)
+  * [Label Mapping](#label-mapping)
+  * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
+  * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
@@ -1018,25 +1022,25 @@ where all points are added, and lost points are ignored.
 **Status**: [Experimental](../document-status.md)
 
 This section denotes how to convert from prometheus scraped metrics to the
-OpenTelemtery metric data model and how to create prometheus metrics from
+OpenTelemetry metric data model and how to create Prometheus metrics from
 OpenTelemetry metric data.
 
 ### Label Mapping
 
 Prometheus metric labels are split in OpenTelemetry across Resource attributes
 and Metric data stream attributes.   Some labels are used within metric
-families to denote semantics which open-telemetry captures within the structure
+families to denote semantics which OpenTelemetry captures within the structure
 of a data point.  When mapping from prometheus to OpenTelemetry, any label
 that is not explicitly called out as being handled specially will be included
 in the set of attributes for a metric data stream.
 
-Here is a table of the sett of prometheus labels that are lifted into Resource
+Here is a table of the set of prometheus labels that are lifted into Resource
 attributes when converting into OpenTelemetry.
 
 | Prometheus Label | OTLP Resource Attribute | Description |
 | -------------------- | ----------------------- | ----------- |
-| `job` | `service.name` | [Semantic convention](../resource/semantic_conventions/README.md#Service) |
-| `host` | `host.name` | [Semantic convention](../resource/semantic_conventions/host.md) |
+| `job` | `service.name` | [Semantic convention](../../semantic_conventions/resource/service.yaml) |
+| `host` | `host.name` | [Semantic convention](../../semantic_conventions/trace/general.yaml) |
 | `instance` | `instance` | ... |
 | `port` | `port` | ... |
 | `__scheme__` | `scheme` | ... |
@@ -1051,8 +1055,8 @@ metric family to a specific OTLP metric data point:
 
 Additionally, in Prometheus metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
 from OpenTelemetry with unsupported Attribute names should replace invalid characters with the `_` character. This
-may cause ambiguity in scenarios where mulitple similar-named attributes share invalid characters at the same
-location.  This is considered  an unsupported case, and is highly unlikely.
+may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same
+location.  This is considered an unsupported case, and is highly unlikely.
 
 ### Prometheus Metric points to OTLP
 
