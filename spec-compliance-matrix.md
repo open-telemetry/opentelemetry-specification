@@ -49,9 +49,9 @@ formats is required. Implementing more than one format is optional.
 | IsRecording becomes false after End                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | -    | +     |
 | Set status with StatusCode (Unset, Ok, Error)                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| events collection size limit                                                                     |          | +  | +    | +  | +      | +    | -      | +   | +    | -   | -    | +     |
-| attribute collection size limit                                                                  |          | +  | +    | +  | +      | +    | -      | +   | +    | -   | -    | +     |
-| links collection size limit                                                                      |          | +  | +    | +  | +      | +    | -      |     | +    | -   | -    | +     |
+| events collection size limit                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | -    | +     |
+| attribute collection size limit                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | -    | +     |
+| links collection size limit                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | -   | -    | +     |
 | [Span attributes](specification/trace/api.md#set-attributes)                                     |          |    |      |    |        |      |        |     |      |     |      |       |
 | SetAttribute                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set order preserved                                                                              | X        | +  | -    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -77,9 +77,9 @@ formats is required. Implementing more than one format is optional.
 | ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      | +   | +    | +   | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    | +      | +   | +    | +   |      | +     |
-| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    | -      | +   |      | -   |      | +     |
+| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    | +      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    | +    |    | +      | +    | +      | +   | +    | +   |      |       |
-| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |    | +    |    |        |      | -      | +   |      |     |      |       |
+| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |    | +    |    |        |      | +      | +   |      |     |      |       |
 
 ## Baggage
 
@@ -248,23 +248,23 @@ Note: Support for environment variables is optional.
 |OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 |OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
 |OTEL_LOGS_EXPORTER                            |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | -    |   | +  | - |    |     |
-|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | -    |   | +  | - |    |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | -    |   | +  | - |    |     |
-|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | +    |   | +  | - |    |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    | +    |   |    |   |    |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | +    |   | +  | - |    |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | +    |   | +  | - |    |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    | +    |   |    |   |    |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    | +    |   |    |   |    |     |
 |OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - |    |     |
 |OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - |    |     |
-|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    | -    |   |    |   |    |     |
+|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    | -    |   |    |   |    |     |
 |OTEL_METRICS_EXEMPLAR_FILTER                  |   |    |   |      |    |      |   |    |   |    |     |
 
 ## Exporters
 
 | Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
-| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      |        | +   | +    | +   | +    |       |
+| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      | +      | +   | +    | +   | +    |       |
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      | +   | -    |     |      |       |
 | Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | +   | -    | +   | +    | +     |
@@ -278,7 +278,7 @@ Note: Support for environment variables is optional.
 | Honors non-retryable responses                                                 | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Honors throttling response                                                     | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Multi-destination spec compliance                                              | X        | +  |   |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
-| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      | -      |     |      |     | -    |       |
+| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      | +      |     |      |     | -    |       |
 | SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      | -      |     |      |     | -    |       |
 | SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      | -      |     |      |     | -    |       |
 | [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
