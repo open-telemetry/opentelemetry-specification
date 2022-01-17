@@ -192,12 +192,12 @@ A Kubernetes Object created from any Kubernetes Resources including any [CRD](ht
 
 **type:** `k8s.object`
 
-**Description:** A Kubernetes Resource Object.
+**Description:** A generic way to represent any Kubernetes objects including any [Custom Objects](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#create-custom-objects).
 
 <!-- semconv k8s.object -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `k8s.object.uid` | string | The UID of the Object. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
-| `k8s.object.name` | string | The name of the Object. | `opentelemetry-1` | No |
-| `k8s.object.kind` | string | A value representing the resource. | `opentelemetry` | No |
+| `k8s.object.name` | string | The name of the Object. | `opentelemetry-pod-autoconf` | No |
+| `k8s.object.kind` | string | A value representing kind of the Object. | `pod`; `replicaset` | No |
 <!-- endsemconv -->
