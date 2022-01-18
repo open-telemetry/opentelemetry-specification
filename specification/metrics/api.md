@@ -180,14 +180,33 @@ will have the following information:
 * An optional `unit` of measure
 * An optional `description`
 
-Instruments are associated with the Meter during creation, and are identified by
-the name:
+<a name="duplicate-instrument-handling"></a>
 
-* Meter implementations MUST return an error when multiple Instruments are
-  registered under the same Meter instance using the same name.
-* Different Meters MUST be treated as separate namespaces. The names of the
-  Instruments under one Meter SHOULD NOT interfere with Instruments under
-  another Meter.
+Instruments are associated with the Meter during creation and are
+identified by instrument name.  Duplicate registration of
+identically-named instruments within a Meter is treated as follows:
+
+* If the registration is semantically identical, meaning to have the
+  same `kind` and `unit` as a previously registered instrument of the
+  same `name`, the implementation MUST return a valid instrument.
+  It is unspecified whether or under which conditions the same or different
+  instrument instance will be returned as a result of duplicate registration.
+* If the registration is semantically not identical, the
+  implementation MUST return a registration error to the user when the
+  instrument is constructed.
+
+When determining whether a duplicate registration is valid,
+language-level features such the distinction between integer and
+floating point numbers SHOULD be considered.  Equivalently,
+implementations SHOULD NOT support an application in emitting both
+integer and floating point numbers for the same metric inside the same
+instrumentation library.
+
+<a name="instrument-namespace"></a>
+
+Different Meters MUST be treated as separate namespaces. The names of the
+Instruments under one Meter SHOULD NOT interfere with Instruments under
+another Meter.
 
 <a name="instrument-naming-rule"></a>
 
@@ -238,6 +257,11 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
   support more Unicode [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
+
+Note the `description` property of an instrument is explicitly
+disregarded when considering duplicate registration, because it is not
+semantic in nature.  Implementations SHOULD use any of the provided
+`description` values when emitting metrics that had duplicate registrations.
 
 Instruments can be categorized based on whether they are synchronous or
 asynchronous:
