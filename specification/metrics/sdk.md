@@ -971,3 +971,8 @@ implementation MUST eliminate the duplication at a later point using
 the [natural merge function](#opentelemetry-protocol-data-model) for
 those data points, as otherwise it would risk violating the
 single-writer rule.
+
+As another example, users are encouraged not to make duplicate
+observations from asynchronous instrument callbacks.  However,
+implementations MUST NOT violate the single-writer rule even when
+users make duplicate observations.

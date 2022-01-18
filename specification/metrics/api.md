@@ -288,6 +288,16 @@ Please note that the term _synchronous_ and _asynchronous_ have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
+When asynchronous instruments are used with duplicate registrations,
+meaning to have more than one callback provided, the order of callback
+execution is unspecified.  Callers SHOULD avoid making duplicate
+observations from asynchronous instrument callbacks.  However, if a
+user accidentally makes duplicate observations, meaning to provide
+more than one value for a given asynchronous instrument and attribute
+set, the caller SHOULD expect the last-observed value to be the one
+recorded.  This is sometimes referred to as "last-value wins" for
+asynchronous instruments.
+
 ### Counter
 
 `Counter` is a [synchronous Instrument](#synchronous-instrument) which supports
