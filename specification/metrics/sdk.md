@@ -952,3 +952,22 @@ called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
 concurrently.
+
+## Data model requirements
+
+The implementation is required to respect the OpenTelemetry Metrics
+data model [Single Writer](datamodel.md#single-writer) requirement.
+This rule stipulates that the implementation MUST avoid creating
+duplicate output streams from a given SDK.
+
+This rule is the basis of the output-name uniqueness check in for
+[Views](#view) above, and it also constrains how duplicate instrument
+registration is handled.
+
+For example, the implementation is not required to return the
+identical instrument when a duplicate instrument is registered, but
+assuming it does allow separate instances to co-exist, the
+implementation MUST eliminate the duplication at a later point using
+the [natural merge function](#opentelemetry-protocol-data-model) for
+those data points, as otherwise it would risk violating the
+single-writer rule.
