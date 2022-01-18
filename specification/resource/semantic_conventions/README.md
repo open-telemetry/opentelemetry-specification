@@ -70,7 +70,9 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 | `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | No |
 | `service.version` | string | The version string of the service API or implementation. | `2.0.0` | No |
 
-**[1]:** MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
+**[1]:** MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`
+or the name of the main program module like .NET entry assembly name, e.g. `unknown_service:MyProgram`.
+If none of these values is not available, the value MUST be set to `unknown_service`.
 
 **[2]:** A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
 
