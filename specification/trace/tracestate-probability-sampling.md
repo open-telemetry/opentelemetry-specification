@@ -417,7 +417,7 @@ unsigned decimal value of `r` is greater than 62 before using the
 Samplers MUST generate r-values using a randomized scheme that
 produces each value with the probabilities equivalent to those
 produced by counting the number of leading 0s in a string of 62 random
-bits.  See the appendix for details.
+bits.
 
 #### Examples: Context invariants
 
@@ -545,13 +545,11 @@ MUST set `p` so that the adjusted count interpreted from the
 `tracestate` is an unbiased estimate of the number of representative
 spans in the population.
 
-A test specification for this requirement is given in the appendix.
-
 ##### Requirement: ConsistentProbabilityBased sampler sets r for non-root span
 
 If `r` is not set on the input `tracecontext` and the Span is not a
 root span, `ConsistentProbabilityBased` SHOULD set `r` as if it were a
-root span and MAY warn the user that a potentially inconsistent trace
+root span and warn the user that a potentially inconsistent trace
 is being produced.
 
 ##### Requirement: ConsistentProbabilityBased sampler decides not to sample for probabilities less than 2**-62
