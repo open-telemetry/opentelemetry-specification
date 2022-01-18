@@ -67,6 +67,6 @@ consider, for example pthreads vs green thread implementations.
 |                                      |                                     |       |                                           |                            |            | pool          | Name of pool [1] |
 
 **[1]**: Pool names are generally obtained
-via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName())
+via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName())
 . Examples include `G1 Old Gen`, `G1 Eden space`, `G1 Survivor Space`
 , `Metaspace`, etc.
