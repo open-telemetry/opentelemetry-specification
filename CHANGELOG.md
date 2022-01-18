@@ -30,6 +30,9 @@ release.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
 - Mark In-memory, OTLP and Stdout exporter specs as Stable.
   ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
+- Add to the supplemental guidelines for metric SDK authors text about implementing
+  attribute-removal Views for asynchronous instruments.
+  ([#2208](https://github.com/open-telemetry/opentelemetry-specification/pull/2208))
 - Clarify integer count instrument units.
   ([#2210](https://github.com/open-telemetry/opentelemetry-specification/pull/2210))
 - Use UCUM units in Metrics Semantic Conventions.
@@ -59,6 +62,10 @@ release.
   ([#2194](https://github.com/open-telemetry/opentelemetry-specification/pull/2194))
 
 ### OpenTelemetry Protocol
+
+- Rename `OTEL_EXPORTER_OTLP_SPAN_INSECURE` to `OTEL_EXPORTER_OTLP_TRACES_INSECURE` and
+  `OTEL_EXPORTER_OTLP_METRIC_INSECURE` to `OTEL_EXPORTER_OTLP_METRICS_INSECURE`
+  so they match the naming of all other OTLP environment variables.
 
 ### SDK Configuration
 
