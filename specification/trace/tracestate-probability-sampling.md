@@ -697,7 +697,7 @@ The resulting context:
 
 ```
 traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
-tracestate: ot=r:3;p:63
+tracestate: ot=r:4;p:63
 ```
 
 ##### Example: Two consistent probability samplers
