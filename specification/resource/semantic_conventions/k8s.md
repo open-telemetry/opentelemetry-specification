@@ -200,4 +200,5 @@ A Kubernetes Object created from any Kubernetes Resources including any [CRD](ht
 | `k8s.object.uid` | string | The UID of the Object. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | No |
 | `k8s.object.name` | string | The name of the Object. | `opentelemetry-pod-autoconf` | No |
 | `k8s.object.kind` | string | A value representing kind of the Object. | `pod`; `replicaset` | No |
+| `k8s.object.fieldpath` | string | A value referring to a piece of an object instead of an entire Object. | `spec.containers{nginx}` | No |
 <!-- endsemconv -->

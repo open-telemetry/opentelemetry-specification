@@ -190,3 +190,8 @@ groups:
         brief: >
           A value representing kind of the Object.
         examples: ['pod', 'replicaset']
+      - id: fieldpath
+        type: string
+        brief: >
+          A value referring to a piece of an object instead of an entire Object.
+        examples: ['spec.containers{nginx}']
