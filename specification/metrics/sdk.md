@@ -975,4 +975,6 @@ single-writer rule.
 As another example, users are encouraged not to make duplicate
 observations from asynchronous instrument callbacks.  However,
 implementations MUST NOT violate the single-writer rule even when
-users make duplicate observations.
+users make duplicate observations.  This is also covered in the
+[supplemental guidelines for handling asynchronous instrument
+views](#asynchronous-example-attribute-removal-in-a-view).
