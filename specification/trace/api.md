@@ -25,11 +25,11 @@
 - [Span](#span)
   * [Span Creation](#span-creation)
     + [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
-    + [Specifying links](#specifying-links)
   * [Span operations](#span-operations)
     + [Get Context](#get-context)
     + [IsRecording](#isrecording)
     + [Set Attributes](#set-attributes)
+    + [Add Links](#add-links)
     + [Add Events](#add-events)
     + [Set Status](#set-status)
     + [UpdateName](#updatename)
@@ -284,7 +284,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A start timestamp
 - An end timestamp
 - [`Attributes`](../common/common.md#attributes)
-- A list of [`Link`s](#specifying-links) to other `Span`s
+- A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
@@ -369,8 +369,14 @@ The API MUST accept the following parameters:
   The API documentation MUST state that adding attributes at span creation is preferred
   to calling `SetAttribute` later, as samplers can only consider information
   already present during span creation.
+- [`Link`s](../overview.md#links-between-spans) - an ordered sequence of links.
+  Additionally, these links may be used to make a sampling decision as
+  noted in [sampling description](sdk.md#sampling). An empty collection will be
+  assumed if not specified.
 
-- `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
+  The API documentation MUST state that adding links at span creation is
+  preferred to calling `AddLink` later, as samplers can only consider information
+  already present during span creation.
 - `Start timestamp`, default to current time. This argument SHOULD only be set
   when span creation time has already passed. If API is called at a moment of
   a Span logical start, API user MUST NOT explicitly set this argument.
@@ -404,30 +410,6 @@ If there is no `Span` in the `Context`, the newly created `Span` will be a root 
 A `SpanContext` cannot be set as active in a `Context` directly, but by
 [wrapping it into a Span](#wrapping-a-spancontext-in-a-span).
 For example, a `Propagator` performing context extraction may need this.
-
-#### Specifying links
-
-During `Span` creation, a user MUST have the ability to record links to other
-`Span`s. Linked `Span`s can be from the same or a different trace -- see [Links
-between spans](../overview.md#links-between-spans). `Link`s cannot be added after
-Span creation.
-
-A `Link` is structurally defined by the following properties:
-
-- `SpanContext` of the `Span` to link to.
-- Zero or more [`Attributes`](../common/common.md#attributes) further describing
-  the link.
-
-The Span creation API MUST provide:
-
-- An API to record a single `Link` where the `Link` properties are passed as
-  arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
-  the `Span` to link to and optional `Attributes`, either as individual
-  parameters or as an immutable object encapsulating them, whichever is most
-  appropriate for the language. Implementations MAY ignore links with an
-  [invalid](#isvalid) `SpanContext`.
-
-Links SHOULD preserve the order in which they're set.
 
 ### Span operations
 
@@ -496,6 +478,38 @@ attributes"](semantic_conventions/README.md) that have prescribed semantic meani
 Note that [Samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any changes done later, including new or changed
 attributes, cannot change their decisions.
+
+#### Add Links
+
+A `Span` MUST have the ability to add `Link`s associated with it. Linked
+`Span`s can be from the same or a different trace (see
+[Links between spans](../overview.md#links-between-spans)).
+
+A `Link` is structurally defined by the following properties:
+
+- `SpanContext` of the `Span` to link to.
+- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+  the link.
+
+The Span interface MUST provide:
+
+- An API to record a single `Link` where the `Link` properties are passed as
+  arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
+  the `Span` to link to and optional `Attributes`, either as individual
+  parameters or as an immutable object encapsulating them, whichever is most
+  appropriate for the language. Implementations MAY ignore links with an
+  [invalid](#isvalid) `SpanContext`.
+
+The Span interface MAY provide:
+
+- An API to set multiple `Link`s at once, where the `Link`s are passed in a
+  single method call.
+
+Links SHOULD preserve the order in which they're set.
+
+Note that [Samplers](sdk.md#sampler) can only consider information already
+present during span creation. Any `Link`s added later cannot change their
+decisions.
 
 #### Add Events
 
