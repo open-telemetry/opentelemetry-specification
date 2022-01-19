@@ -1,0 +1,51 @@
+# General
+
+**Status**: [Experimental](../../document-status.md)
+
+The conventions described in this section are specific to SQL and NoSQL clients.
+
+**Disclaimer:** These are initial database client metric instruments and attributes but more may be added in the future.
+
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Metric Instruments](#metric-instruments)
+  * [Connection pools](#connection-pools)
+
+<!-- tocstop -->
+
+## Metric Instruments
+
+The following metric instruments MUST be used to describe database client operations. They MUST be of the specified type
+and units.
+
+### Connection pools
+
+Below is a table of database connection pool server metric instruments that MUST be used by connection pool
+instrumentations:
+
+| Name                        | Instrument                 | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description |
+|-----------------------------|----------------------------|--------------|-------------------------------------------|-------------|
+| `db.connection_pool.total`  | Asynchronous UpDownCounter | connections  | `{connections}`                           | The total number of open connections.
+| `db.connection_pool.active` | Asynchronous UpDownCounter | connections  | `{connections}`                           | The number of open connections that are currently in use.
+| `db.connection_pool.idle`   | Asynchronous UpDownCounter | connections  | `{connections}`                           | The number of open connections that are currently idle.
+
+Connection pool instrumentations SHOULD use the following metric instruments, if applicable:
+
+| Name                                 | Instrument                 | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description |
+|--------------------------------------|----------------------------|--------------|-------------------------------------------|-------------|
+| `db.connection_pool.idle.max`        | Asynchronous UpDownCounter | connections  | `{connections}`                           | The maximum number of idle open connections allowed.
+| `db.connection_pool.idle.min`        | Asynchronous UpDownCounter | connections  | `{connections}`                           | The minimum number of idle open connections allowed.
+| `db.connection_pool.max`             | Asynchronous UpDownCounter | connections  | `{connections}`                           | The maximum number of open connections allowed.
+| `db.connection_pool.pending_threads` | Asynchronous UpDownCounter | threads      | `{threads}`                               | The number of threads that are currently waiting for an open connection.
+| `db.connection_pool.timeouts`        | Counter                    | timeouts     | `{timeouts}`                              | The number of connection timeouts that have happened since the application start.
+| `db.connection_pool.create_time`     | Histogram                  | milliseconds | `ms`                                      | The time it took to create a new connection.
+| `db.connection_pool.wait_time`       | Histogram                  | milliseconds | `ms`                                      | The time it took to get an open connection from the pool.
+| `db.connection_pool.use_time`        | Histogram                  | milliseconds | `ms`                                      | The time between borrowing a connection and returning it to the pool.
+
+Below is a table of the attributes that are to be included on connection pool metric events:
+
+| Name   | Type   | Description                                                                  | Examples       | Required |
+|--------|--------|------------------------------------------------------------------------------|----------------|----------|
+| `name` | string | The name of the connection pool; unique within the instrumented application. | `myDataSource` | Yes      |
