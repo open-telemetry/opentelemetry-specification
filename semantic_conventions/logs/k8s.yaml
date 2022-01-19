@@ -34,3 +34,8 @@ groups:
         brief: >
           The component reporting the Event.
         examples: ['kubelet']
+      - id: reason
+        type: string
+        brief: >
+          The reason for the status transition of the Event causing object.
+        examples: ['ScalingReplicaSet']
