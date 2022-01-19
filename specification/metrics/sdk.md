@@ -27,7 +27,7 @@
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
-  * [Shutdown](#shutdown-1)
+    + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
