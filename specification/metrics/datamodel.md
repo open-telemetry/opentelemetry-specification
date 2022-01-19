@@ -774,7 +774,7 @@ misbehaving system. Receivers SHOULD presume a single writer was intended and
 eliminate overlap / deduplicate.
 
 Note: Identity is an important concept in most metrics systems.  For example,
-[Prometheus directly calls out uniqueness](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs):
+[Prometheus directly calls out uniqueness](https://Prometheus.io/docs/Prometheus/latest/configuration/configuration/#metric_relabel_configs):
 
 > Take care with `labeldrop` and `labelkeep` to ensure that metrics
 > are still uniquely labeled once the labels are removed.
@@ -1022,7 +1022,7 @@ where all points are added, and lost points are ignored.
 
 **Status**: [Experimental](../document-status.md)
 
-This section denotes how to convert from prometheus scraped metrics to the
+This section denotes how to convert from Prometheus scraped metrics to the
 OpenTelemetry metric data model and how to create Prometheus metrics from
 OpenTelemetry metric data.
 
@@ -1030,7 +1030,7 @@ OpenTelemetry metric data.
 
 When scraping a Prometheus endpoint, Prometheus service discovery discovers attributes from scraped targets prior to scraping them, and adds these as labels on incoming metrics. In OpenTelemetry, some of these labels are converted to Resource attributes, with the rest added as Metric data stream attributes.
 
-Here is a table of the set of prometheus labels that are lifted into Resource
+Here is a table of the set of Prometheus labels that are lifted into Resource
 attributes when converting into OpenTelemetry.
 
 | Prometheus Label | OTLP Resource Attribute | Description |
@@ -1044,7 +1044,7 @@ attributes when converting into OpenTelemetry.
 
 ### Prometheus Metric points to OTLP
 
-TODO - A bit about detecting/using start_time.
+Prometheus Counter metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, the `process_start_time_metric` may be used to provide the start time. If the start time is not provided by that mechanism, Prometheus conversion follows [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time).
 
 Prometheus Counter becomes an OTLP Sum.
 
@@ -1081,7 +1081,8 @@ TODO: Example Gauge Conversions
 OpenTelemetry Sum follows this logic:
 
 - If the aggregation temporality is cumulative and the sum is monotonic,
-  then it becomes a Prometheus Sum.
+  it becomes a Prometheus Sum.
+- If the aggregation temporality is delta and the sum is monotonic, it may be converted to a cumulative temporality and become a Prometheus Sum, or it may be dropped.
 - Otherwise the Sum becomes a Prometheus Gauge.
 
 TODO: Example Sum Conversions
@@ -1089,10 +1090,10 @@ TODO: Example Sum Conversions
 OpenTelemetry Histogram becomes a metric family with the following:
 
 - A single `{name}_count` metric denoting the count field of the histogram.
-  All attributes of the histogram point are converted to prometheus labels.
+  All attributes of the histogram point are converted to Prometheus labels.
 - `{name}_sum` metric denoting the sum field of the histogram, reported
   only if the sum is positive and monotonic. All attributes of the histogram
-  point are converted to prometheus labels.
+  point are converted to Prometheus labels.
 - A series of `{name}` metric points that contain all attributes of the
   histogram point recorded as labels.  Additionally, a label, denoted as `le`
   is added denoting a bucket boundary, and having its value be the stringified
@@ -1102,17 +1103,17 @@ OpenTelemetry Histogram becomes a metric family with the following:
   These points will include a single exemplar that falls within `le` label and
   no other `le` labelled point.
 
-_Note: OpenTelemetry DELTA histograms are not exported to prometheus._
+_Note: OpenTelemetry DELTA histograms are not exported to Prometheus._
 
 TODO: Example Histogram conversion
 
 OpenTelemetry Summary becomes a metric family with the following:
 
 - A single `{name}_count` metric denoting the count field of the summary.
-  All attributes of the summary point are converted to prometheus labels.
+  All attributes of the summary point are converted to Prometheus labels.
 - `{name}_sum` metric denoting the sum field of the summary, reported
   only if the sum is positive and monotonic. All attributes of the summary
-  point are converted to prometheus labels.
+  point are converted to Prometheus labels.
 - A series of `{name}` metric points that contain all attributes of the
   summary point recorded as labels.  Additionally, a label, denoted as
   `quantile` is added denoting a reported qunatile point, and having its value
