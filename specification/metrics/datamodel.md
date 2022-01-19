@@ -48,8 +48,23 @@
 - [Prometheus Compatibility](#prometheus-compatibility)
   * [Prometheus Labels from Service Discovery](#prometheus-labels-from-service-discovery)
   * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
+    + [Counters](#counters)
+    + [Gauges](#gauges)
+    + [Unknown-typed](#unknown-typed)
+    + [Histograms](#histograms)
+    + [Summaries](#summaries)
+    + [Dropped Types](#dropped-types)
+    + [Start Time](#start-time)
+    + [Exemplars](#exemplars-1)
   * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
-    + [OpenTelemetry Attributes to Prometheus Labels](#opentelemetry-attributes-to-prometheus-labels)
+    + [Gauges](#gauges-1)
+    + [Sums](#sums-1)
+    + [Histograms](#histograms-1)
+    + [Summaries](#summaries-1)
+    + [Dropped Types](#dropped-types-1)
+    + [OpenTelemetry Metric Attributes](#opentelemetry-metric-attributes)
+    + [OpenTelemetry Exemplars](#opentelemetry-exemplars)
+    + [OpenTelemetry Resource Attributes](#opentelemetry-resource-attributes)
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
@@ -1022,9 +1037,9 @@ where all points are added, and lost points are ignored.
 
 **Status**: [Experimental](../document-status.md)
 
-This section denotes how to convert from Prometheus scraped metrics to the
+This section denotes how to convert metrics scraped in the [Prometheus exposition](https://github.com/Showmax/prometheus-docs/blob/master/content/docs/instrumenting/exposition_formats.md#exposition-formats) or [OpenMetrics](https://openmetrics.io/) formats to the
 OpenTelemetry metric data model and how to create Prometheus metrics from
-OpenTelemetry metric data.
+OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types, "Prometheus" should be taken to mean "Prometheus or OpenMetrics".  "OpenMetrics" refers to OpenMetrics-only concepts.
 
 ### Prometheus Labels from Service Discovery
 
@@ -1044,50 +1059,68 @@ attributes when converting into OpenTelemetry.
 
 ### Prometheus Metric points to OTLP
 
-Prometheus Counter metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, the `process_start_time_metric` may be used to provide the start time. If the start time is not provided by that mechanism, Prometheus conversion follows [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time).
+#### Counters
 
-Prometheus Counter becomes an OTLP Sum.
+[Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) becomes an OTLP Sum.
 
-Prometheus Gauge becomes an OTLP Gauge.
+#### Gauges
 
-Prometheus Unknown becomes an OTLP Gauge.
+[Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gauge) becomes an OTLP Gauge.
 
-Prometheus Histogram becomes an OTLP Histogram.
+#### Unknown-typed
+
+[Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) becomes an OTLP Gauge.
+
+#### Histograms
+
+[Prometheus Histogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#histogram) becomes an OTLP Histogram.
 
 Multiple Prometheus metrics are merged together into a single metric:
 
 * The `le` label on non-suffixed metrics is used to identify histogram bucket boundaries. Each Prometheus line produces one bucket on the resulting histogram.
 * Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
 
-Prometheus Summary becomes an OTLP Summary.
+#### Summaries
+
+[Prometheus Summary](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#summary) becomes an OTLP Summary.
 
 Multiple Prometheus metrics are merged together into a single metric:
 
 * The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus metrics produces one quantile on the resulting summary.
 * Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
 
-Prometheus Gauge Histogram is dropped (TBD).
+#### Dropped Types
 
-Prometheus Stateset is dropped (TBD).
+* [OpenMetrics GaugeHistogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram)
+* [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset)
+* [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)
 
-Prometheus Info is dropped (TBD).
+#### Start Time
+
+Prometheus Cumulative metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, the `process_start_time_metric` may be used to provide the start time. If the start time is not provided by that mechanism, Prometheus conversion follows [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time).
+
+#### Exemplars
+
+[Prometheus Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars) may be attached to Prometheus Histogram bucket metrics, which should be converted to exemplars on OpenTelemetry histograms.  The Trace ID and Span ID should be retrieved from the `trace_id` and `span_id` label keys, respectively.
 
 ### OTLP Metric points to Prometheus
 
+#### Gauges
+
 OpenTelemetry Gauge becomes a Prometheus Gauge.
 
-TODO: Example Gauge Conversions
+#### Sums
 
 OpenTelemetry Sum follows this logic:
 
 - If the aggregation temporality is cumulative and the sum is monotonic,
   it becomes a Prometheus Sum.
-- If the aggregation temporality is delta and the sum is monotonic, it may be converted to a cumulative temporality and become a Prometheus Sum, or it may be dropped.
+- If the aggregation temporality is delta and the sum is monotonic, it should be converted to a cumulative temporality and become a Prometheus Sum, or it may be dropped.
 - Otherwise the Sum becomes a Prometheus Gauge.
 
-TODO: Example Sum Conversions
+#### Histograms
 
-OpenTelemetry Histogram becomes a metric family with the following:
+OpenTelemetry Histogram with a cumulative aggregation temporality becomes a metric family with the following:
 
 - A single `{name}_count` metric denoting the count field of the histogram.
   All attributes of the histogram point are converted to Prometheus labels.
@@ -1103,9 +1136,9 @@ OpenTelemetry Histogram becomes a metric family with the following:
   These points will include a single exemplar that falls within `le` label and
   no other `le` labelled point.
 
-_Note: OpenTelemetry DELTA histograms are not exported to Prometheus._
+OpenTelemetry Histograms with Delta aggregation temporality should be aggregated into a Cumulative aggregation temporality, or may be dropped.
 
-TODO: Example Histogram conversion
+#### Summaries
 
 OpenTelemetry Summary becomes a metric family with the following:
 
@@ -1121,14 +1154,24 @@ OpenTelemetry Summary becomes a metric family with the following:
   starting from lowest to highest, and all being non-negative.  The value of
   each point is the computed value of the quantile point.
 
-TODO: Example Summary conversion
+#### Dropped Types
 
-#### OpenTelemetry Attributes to Prometheus Labels
+* ExponentialHistogram
 
-In Prometheus metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
+#### OpenTelemetry Metric Attributes
+
+OpenTelemetry Metric Attributes are converted to [Prometheus labels](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  In Prometheus, metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
 from OpenTelemetry with unsupported Attribute names should replace invalid characters with the `_` character. This
 may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same
-location.  This is considered an unsupported case, and is highly unlikely.
+location.  In such unlikely cases, either value may be used.
+
+#### OpenTelemetry Exemplars
+
+Exemplars on OpenTelemetry Histograms should be converted to Prometheus exemplars. Exemplars on other OpenTelemetry metric types are dropped.  For Prometheus push exporters, multiple exemplars are permitted on each bucket, so all exemplars are converted.  For Prometheus pull endpoints, only a single exemplar can be added to each bucket, so the largest exemplar from each bucket is chosen.  If no exemplars exist on a bucket, the highest exemplar from a lower bucket should be used, even if it is a duplicate of another bucket.  Prometheus Exemplars should use the `trace_id` and `span_id` keys for the trace and span IDs, respectively.
+
+#### OpenTelemetry Resource Attributes
+
+In the collector, but not in SDKs, only the `job` and `instance` resource attributes are converted to Prometheus metric labels.  In all other cases, resource attributes are dropped, and are not attached to Prometheus metrics.
 
 ## Footnotes
 
