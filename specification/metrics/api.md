@@ -108,8 +108,9 @@ The `MeterProvider` MUST provide the following functions:
 This API MUST accept the following parameters:
 
 * `name` (required): This name must identify the [instrumentation
-  library](../overview.md#instrumentation-libraries) (e.g.
-  `io.opentelemetry.contrib.mongodb`). If an application or library has built-in
+  scope](../glossary.md#instrumentation-scope) (e.g.
+  `io.opentelemetry.contrib.mongodb`), such as the instrumentation library,
+  package, module or class name. If an application or library has built-in
   OpenTelemetry instrumentation, both [Instrumented
   library](../glossary.md#instrumented-library) and [Instrumentation
   library](../glossary.md#instrumentation-library) may refer to the same
