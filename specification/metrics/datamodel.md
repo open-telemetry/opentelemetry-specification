@@ -789,7 +789,7 @@ misbehaving system. Receivers SHOULD presume a single writer was intended and
 eliminate overlap / deduplicate.
 
 Note: Identity is an important concept in most metrics systems.  For example,
-[Prometheus directly calls out uniqueness](https://Prometheus.io/docs/Prometheus/latest/configuration/configuration/#metric_relabel_configs):
+[Prometheus directly calls out uniqueness](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs):
 
 > Take care with `labeldrop` and `labelkeep` to ensure that metrics
 > are still uniquely labeled once the labels are removed.
@@ -1052,7 +1052,7 @@ attributes when converting into OpenTelemetry.
 | -------------------- | ----------------------- | ----------- |
 | `job` | `service.name` | ... |
 | `job` | `job` | ... |
-| `instance` | `instace` | ... |
+| `instance` | `instance` | ... |
 | `instance` | `host.name` | instance is split into host:port |
 | `instance` | `port` | instance is split into host:port |
 | `__scheme__` | `scheme` | ... |
@@ -1086,7 +1086,7 @@ Multiple Prometheus metrics are merged together into a single metric:
 
 Multiple Prometheus metrics are merged together into a single metric:
 
-* The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus metrics produces one quantile on the resulting summary.
+* The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus line produces one quantile on the resulting summary.
 * Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
 
 #### Dropped Types
