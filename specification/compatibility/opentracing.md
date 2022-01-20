@@ -6,6 +6,7 @@
 <summary>Table of Contents</summary>
 
 * [Abstract](#abstract)
+* [Language version support](#language-version-support)
 * [Create an OpenTracing Tracer Shim](#create-an-opentracing-tracer-shim)
 * [Tracer Shim](#tracer-shim)
   * [Start a new Span](#start-a-new-span)
@@ -62,6 +63,31 @@ is not recommended for the following scenarios:
   and none in OpenTracing (e.g. Javascript), as it breaks the expected propagation
   semantics and may lead to incorrect `Context` usage and incorrect traces.
   See [Implicit and Explicit support mismatch](#implicit-and-explicit-support-mismatch).
+
+## Language version Support
+
+Users are encouraged to check and update their language and runtime
+components before using the Shim layer, as the OpenTelemetry APIs and SDKs
+may have higher version requirements than their OpenTracing counterparts.
+e.g. OpenTracing Python supports Python 2.6 and higher, whereas the
+OpenTelemetry Python API supports Python 3.5 and higher.
+
+For reference see the following table, listing the OpenTracing
+and OpenTelemetry APIs minimum **language** version, as of
+January 2022:
+
+| Language   | OpenTracing API  | OpenTelemetry API |
+| ---------- | ---------------- | ----------------- |
+| Go         | 1.13             | 1.16              |
+| Java       | 7                | 8                 |
+| Python     | 2.7              | 3.6               |
+| Javascript | 6                | 8.5               |
+| DotNet     | 1.3              | 1.4               |
+| CPP        | 11               | 11                |
+
+Observe that specific OpenTracing-compliant implementations may
+already have higher language requirements, e.g. the Jaeger Python tracer
+requires Python 3.7.
 
 ## Create an OpenTracing Tracer Shim
 
