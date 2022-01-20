@@ -1037,7 +1037,7 @@ where all points are added, and lost points are ignored.
 
 **Status**: [Experimental](../document-status.md)
 
-This section denotes how to convert metrics scraped in the [Prometheus exposition](https://github.com/Showmax/prometheus-docs/blob/master/content/docs/instrumenting/exposition_formats.md#exposition-formats) or [OpenMetrics](https://openmetrics.io/) formats to the
+This section denotes how to convert metrics scraped in the [Prometheus exposition](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#exposition-formats) or [OpenMetrics](https://openmetrics.io/) formats to the
 OpenTelemetry metric data model and how to create Prometheus metrics from
 OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types, "Prometheus" should be taken to mean "Prometheus or OpenMetrics".  "OpenMetrics" refers to OpenMetrics-only concepts.
 
