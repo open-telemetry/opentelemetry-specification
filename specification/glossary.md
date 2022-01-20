@@ -155,7 +155,7 @@ Synonyms: *Instrumenting Library*.
 ### Instrumentation Scope
 
 A logical unit of the application code with which the emitted telemetry can be
-associated with. It is typically the developer's choice to decide what denotes a
+associated. It is typically the developer's choice to decide what denotes a
 reasonable instrumentation scope. The most common approach is to use the
 [instrumentation library](#instrumentation-library) as the scope, however other
 scopes are also common, e.g. a module, a package, or a class can be chosen as
