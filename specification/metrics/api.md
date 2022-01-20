@@ -253,12 +253,13 @@ asynchronous:
 <a name="asynchronous-instrument"></a>
 
 * Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-gauge)) give
-  the user a way to register callback function, and the callback function will
+  the user a way to register one or more associated callback functions, which will
   only be invoked upon collection. For example, a piece of embedded software
   could use an asynchronous gauge to collect the temperature from a sensor every
   15 seconds, which means the callback function will only be invoked every 15
-  seconds. [Measurements](#measurement) recorded by asynchronous instruments
-  cannot be associated with the [Context](../context/context.md).
+  seconds. Multiple callbacks may be associated with one instrument as a result
+  of duplicate instrument registration. [Measurements](#measurement) recorded by 
+  asynchronous instruments cannot be associated with the [Context](../context/context.md).
 
 Please note that the term _synchronous_ and _asynchronous_ have nothing to do
 with the [asynchronous
@@ -396,12 +397,11 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* A `callback` function.
 
-The `callback` function is responsible for reporting the
-[Measurement](#measurement)s. It will only be called when the Meter is being
-observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
-this callback function needs to be reentrant safe / thread safe or not.
+The API MUST provide a way to associate instruments with `callback` functions 
+responsible for reporting the associated [Measurement](#measurement)s.  The
+callbacks will only be called when the Meter is being observed. [OpenTelemetry API](../overview.md#api) 
+authors SHOULD define whether callback functions needs to be reentrant safe / thread safe or not.
 
 Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
 callback function reports the absolute value of the counter. To determine the
@@ -418,6 +418,7 @@ approach. Here are some examples:
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
 * Use an observable result argument to allow individual `Measurement`s to be
   reported.
+* Allow use of more than one instrument in a single callback.
 
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, [OpenTelemetry
