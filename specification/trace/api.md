@@ -481,7 +481,7 @@ attributes, cannot change their decisions.
 
 #### Add Links
 
-A `Span` MUST have the ability to add `Link`s associated with it. Linked
+A `Span` SHOULD have the ability to add `Link`s associated with it. Linked
 `Span`s can be from the same or a different trace (see
 [Links between spans](../overview.md#links-between-spans)).
 
@@ -491,7 +491,7 @@ A `Link` is structurally defined by the following properties:
 - Zero or more [`Attributes`](../common/common.md#attributes) further describing
   the link.
 
-The Span interface MUST provide:
+The Span interface SHOULD provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
