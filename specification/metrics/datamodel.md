@@ -46,7 +46,6 @@
     + [Sums: detecting alignment issues](#sums-detecting-alignment-issues)
     + [Sums: Missing Timestamps](#sums-missing-timestamps)
 - [Prometheus Compatibility](#prometheus-compatibility)
-  * [Prometheus Labels from Service Discovery](#prometheus-labels-from-service-discovery)
   * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
     + [Counters](#counters)
     + [Gauges](#gauges)
@@ -56,15 +55,16 @@
     + [Dropped Types](#dropped-types)
     + [Start Time](#start-time)
     + [Exemplars](#exemplars-1)
+    + [Resource Attributes](#resource-attributes)
   * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
     + [Gauges](#gauges-1)
     + [Sums](#sums-1)
     + [Histograms](#histograms-1)
     + [Summaries](#summaries-1)
     + [Dropped Types](#dropped-types-1)
-    + [OpenTelemetry Metric Attributes](#opentelemetry-metric-attributes)
-    + [OpenTelemetry Exemplars](#opentelemetry-exemplars)
-    + [OpenTelemetry Resource Attributes](#opentelemetry-resource-attributes)
+    + [Metric Attributes](#metric-attributes)
+    + [Exemplars](#exemplars-2)
+    + [Resource Attributes](#resource-attributes-1)
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
@@ -1037,25 +1037,9 @@ where all points are added, and lost points are ignored.
 
 **Status**: [Experimental](../document-status.md)
 
-This section denotes how to convert metrics scraped in the [Prometheus exposition](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#exposition-formats) or [OpenMetrics](https://openmetrics.io/) formats to the
+This section denotes how to convert metrics scraped in the [Prometheus exposition](https://github.com/Prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#exposition-formats) or [OpenMetrics](https://openmetrics.io/) formats to the
 OpenTelemetry metric data model and how to create Prometheus metrics from
-OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types, "Prometheus" should be taken to mean "Prometheus or OpenMetrics".  "OpenMetrics" refers to OpenMetrics-only concepts.
-
-### Prometheus Labels from Service Discovery
-
-When scraping a Prometheus endpoint, Prometheus service discovery discovers attributes from scraped targets prior to scraping them, and adds these as labels on incoming metrics. In OpenTelemetry, some of these labels are converted to Resource attributes, with the rest added as Metric data stream attributes.
-
-Here is a table of the set of Prometheus labels that are lifted into Resource
-attributes when converting into OpenTelemetry.
-
-| Prometheus Label | OTLP Resource Attribute | Description |
-| -------------------- | ----------------------- | ----------- |
-| `job` | `service.name` | ... |
-| `job` | `job` | ... |
-| `instance` | `instance` | ... |
-| `instance` | `host.name` | instance is split into host:port |
-| `instance` | `port` | instance is split into host:port |
-| `__scheme__` | `scheme` | ... |
+OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types, "Prometheus" is taken to mean "Prometheus or OpenMetrics".  "OpenMetrics" refers to OpenMetrics-only concepts.
 
 ### Prometheus Metric points to OTLP
 
@@ -1102,6 +1086,21 @@ Prometheus Cumulative metrics do not include the start time of the metric. When 
 #### Exemplars
 
 [Prometheus Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars) may be attached to Prometheus Histogram bucket metrics, which should be converted to exemplars on OpenTelemetry histograms.  The Trace ID and Span ID should be retrieved from the `trace_id` and `span_id` label keys, respectively.
+
+#### Resource Attributes
+
+When scraping a Prometheus endpoint, resource attributes must be added to the scraped metrics to distinguish them from metrics from other Prometheus endpoints.  In particular, `job` and `instance`, [as defined by Prometheus](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances), are needed to ensure Prometheus exporters can disambiguate metrics as [described below](#resource-attributes-1).
+
+The following resource attributes must be added to scraped metrics, and may not be added as metric attributes:
+
+| OTLP Resource Attribute | Description |
+| ----------------------- | ----------- |
+| `service.name` | The configured name of the service that the target belongs to |
+| `job` | Identical to `service.name` |
+| `instance` | The <host>:<port> of the target's URL that was scraped. |
+| `host.name` | `instance` is split into <host>:<port> |
+| `port` | `instance` is split into <host>:<port> |
+| `scheme` | `http` or `https` |
 
 ### OTLP Metric points to Prometheus
 
@@ -1158,20 +1157,22 @@ OpenTelemetry Summary becomes a metric family with the following:
 
 * ExponentialHistogram
 
-#### OpenTelemetry Metric Attributes
+#### Metric Attributes
 
-OpenTelemetry Metric Attributes are converted to [Prometheus labels](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  In Prometheus, metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
+OpenTelemetry Metric Attributes are converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  In Prometheus, metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
 from OpenTelemetry with unsupported Attribute names should replace invalid characters with the `_` character. This
 may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same
 location.  In such unlikely cases, either value may be used.
 
-#### OpenTelemetry Exemplars
+#### Exemplars
 
 Exemplars on OpenTelemetry Histograms should be converted to Prometheus exemplars. Exemplars on other OpenTelemetry metric types are dropped.  For Prometheus push exporters, multiple exemplars are permitted on each bucket, so all exemplars are converted.  For Prometheus pull endpoints, only a single exemplar can be added to each bucket, so the largest exemplar from each bucket is chosen.  If no exemplars exist on a bucket, the highest exemplar from a lower bucket should be used, even if it is a duplicate of another bucket.  Prometheus Exemplars should use the `trace_id` and `span_id` keys for the trace and span IDs, respectively.
 
-#### OpenTelemetry Resource Attributes
+#### Resource Attributes
 
-In the collector, but not in SDKs, only the `job` and `instance` resource attributes are converted to Prometheus metric labels.  In all other cases, resource attributes are dropped, and are not attached to Prometheus metrics.
+In SDK Prometheus (pull) exporters, all resource attributes are dropped, and are not attached as labels. The scraper of the endpoint is expected to discover resource attributes of the endpoint it is scraping.
+
+In the Collector's Prometheus pull and push (remote-write) exporters, metrics from multiple targets may be sent together, and must be disambiguated from one another.  However, the Prometheus exposition format and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto) formats do not include a notion of resource, and expect metric labels to distinguish scraped targets.  By convention, [`job` and `instance`](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances) labels distinguish targets and are expected to be present on metrics exposed on a Prometheus pull exporter (a ["federated"](https://Prometheus.io/docs/Prometheus/latest/federation/) Prometheus endpoint) or pushed via Prometheus remote-write. In the collector, only the `job` and `instance` resource attributes are converted to Prometheus metric labels.
 
 ## Footnotes
 
