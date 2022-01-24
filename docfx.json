@@ -1,7 +1,5 @@
 {
   "files": "**/*.{md,png}",
-  "exclude": [
-    "*"
-  ],
+  "exclude": "*",
   "warningsAsErrors": true
 }
