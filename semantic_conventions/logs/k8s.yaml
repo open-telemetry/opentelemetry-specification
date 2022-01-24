@@ -29,11 +29,6 @@ groups:
         brief: >
           The number of times the Event has occurred.
         examples: [1, 2]
-      - id: source
-        type: string
-        brief: >
-          The component reporting the Event.
-        examples: ['kubelet']
       - id: reason
         type: string
         brief: >
