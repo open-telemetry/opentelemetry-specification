@@ -1,8 +1,7 @@
 {
-  "files": "**/*.md",
-  "warningsAsErrors": true,
-  "rules": {
-    "liquid-not-found": "off",
-    "link-out-of-scope": "off"
-  }
+  "files": "**/*.{md,png}",
+  "exclude": [
+    "*"
+  ],
+  "warningsAsErrors": true
 }
