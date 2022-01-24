@@ -55,6 +55,8 @@ consider, for example pthreads vs green thread implementations.
 
 **Description:** Java Virtual Machine (JVM) metrics captured under `process.runtime.jvm.`
 
+All JVM metric attributes are required unless otherwise indicated. 
+
 | Name                                 | Description                         | Unit  | Unit ([UCUM](README.md#instrument-units)) | Instrument Type            | Value Type | Attribute Key | Attribute Values |
 |--------------------------------------|-------------------------------------|-------|-------------------------------------------|----------------------------|------------|---------------|------------------|
 | process.runtime.jvm.memory.usage     | Measure of memory used              | Bytes | `By`                                      | Asynchronous UpDownCounter | Int64      | type          | heap, nonheap    |
