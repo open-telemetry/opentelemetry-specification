@@ -7,8 +7,8 @@ groups:
       - id: instance
         type: string
         brief: >
-          Reported name of the Redis instance. This can be in the form
+          The reported name of the Redis instance. This can be in the form of
           `{host}:{port}` or any other name provided manually while configuring
-          the instrumentation and defaults to the `endpoint` value provided in the
-          configuration.
+          the instrumentation. If not provided, the default value is the `endpoint`
+          value provided in the configuration.
         examples: ['localhost:6379', 'product_info_redis']
