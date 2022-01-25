@@ -55,5 +55,13 @@ consider, for example pthreads vs green thread implementations.
 
 **Description:** Java Virtual Machine (JVM) metrics captured under `process.runtime.jvm.`
 
-| Name | Description | Units | Instrument Type | Value Type | Attribute Key | Attribute Values |
-|------|-------------|-------|-----------------|------------|---------------|------------------|
+All JVM metric attributes are required unless otherwise indicated.
+
+| Name                                           | Description                                              | Unit    | Unit ([UCUM](README.md#instrument-units)) | Instrument Type            | Value Type | Attribute Key | Attribute Values      |
+|------------------------------------------------|----------------------------------------------------------|---------|-------------------------------------------|----------------------------|------------|---------------|-----------------------|
+| process.runtime.jvm.cpu.time                   | The CPU time used by the process                         | seconds | `s`                                       | Asynchronous Counter       | Double     |               |                       |
+| process.runtime.jvm.cpu.usage                  | The "recent cpu usage" for the process                   | 1       | 1                                         | Gauge                      | Double     |               |                       |
+| process.runtime.jvm.common.pool.parallelism    | Targeted parallelism level of the common pool            | 1       | 1                                         | Gauge                      | Int32      |               |                       |
+| process.runtime.jvm.system.cpu.usage           | The "recent cpu usage" for the whole system              | 1       | 1                                         | Gauge                      | Double     |               |                       |
+| process.runtime.jvm.system.cpu.count           | Number of processors available to use                    | 1       | 1                                         | Gauge                      | Int32      |               |                       |
+| process.runtime.jvm.system.cpu.load.average.1m | Average CPU load of the whole system for the last minute | 1       | 1                                         | Gauge                      | Double     |               |                       |
