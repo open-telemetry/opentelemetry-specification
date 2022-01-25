@@ -16,9 +16,24 @@ metrics](runtime-environment-metrics.md).
 <!-- toc -->
 
 - [Metric Instruments](#metric-instruments)
+  * [Process](#process)
+- [Attributes](#attributes)
 
 <!-- tocstop -->
 
 ## Metric Instruments
 
-TODO
+### Process
+
+Below is a table of Process metric instruments.
+
+| Name | Instrument | Units | Description | Labels |
+|------|------------|-------|-------------|--------|
+| `process.cpu.time` | Asynchronous Counter | s | Total CPU seconds broken down by different states. | `state`, if specified, SHOULD be one of: `system`, `user`, `wait`. A process SHOULD be characterized _either_ by data points with no `state` labels, _or only_ data points with `state` labels. |
+| `process.memory.usage` | Asynchronous UpDownCounter | By | The amount of physical memory in use. |  |
+| `process.memory.virtual` | Asynchronous UpDownCounter | By | The amount of committed virtual memory. |  |
+| `process.disk.io` | Asynchronous Counter | By | Disk bytes transferred. | `direction` SHOULD be one of: `read`, `write` |
+
+## Attributes
+
+Process metrics SHOULD be associated with a [`process`](../../resource/semantic_conventions/process.md#process) resource whose attributes provide additional context about the process.
