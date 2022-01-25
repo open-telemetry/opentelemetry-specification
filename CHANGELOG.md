@@ -50,6 +50,8 @@ release.
 
 ### Semantic Conventions
 
+- Define JavaScript runtime semantic conventions.
+  ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
 - Prohibit usage of retired names in semantic conventions.
   ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
 - Add `device.manufacturer` to describe mobile device manufacturers.
