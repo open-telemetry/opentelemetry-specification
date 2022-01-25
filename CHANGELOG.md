@@ -34,6 +34,8 @@ release.
   ([#2210](https://github.com/open-telemetry/opentelemetry-specification/pull/2210))
 - Use UCUM units in Metrics Semantic Conventions.
   ([#2199](https://github.com/open-telemetry/opentelemetry-specification/pull/2199))
+- Changed default Prometheus Exporter host from `0.0.0.0` to `localhost`.
+  ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 
 ### Logs
 
