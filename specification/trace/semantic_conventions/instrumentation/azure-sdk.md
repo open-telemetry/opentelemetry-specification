@@ -42,13 +42,13 @@ Azure SDKs create a span for public API call (that involves communication with A
 
 ## HTTP Client
 
-Azure SDK implements a valid subset of [OpenTelemetry HTTP conventions v1.8.0](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/trace/semantic_conventions/http.md) and create a span per HTTP call (try).
+Azure SDK implements a valid subset of [OpenTelemetry HTTP conventions v1.8.0](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/trace/semantic_conventions/http.md) and create a span per HTTP call (attempt).
 
 <!-- semconv azure.sdk.http -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `request_id` | string | Value of the [x-ms-client-request-id] header (or other request-id header, depending on the service) sent by the client. | `eb178587-c05a-418c-a695-ae9466c5303c` | Yes |
-| `service_request_id` | string | Value of the [x-ms-request-id]  header (or other request-id header, depending on the service) sent by the server in response. | `3f828ae5-ecb9-40ab-88d9-db0420af30c6` | Yes |
+| `request_id` | string | Value of the "x-ms-client-request-id" header (or other "*-request-id" header, depending on the service) sent by the client. | `eb178587-c05a-418c-a695-ae9466c5303c` | Yes |
+| `service_request_id` | string | Value of the "x-ms-request-id" header (or other "*-request-id" header, depending on the service) sent by the server in response. | `3f828ae5-ecb9-40ab-88d9-db0420af30c6` | Yes |
 | [`http.method`](../http.md) | string | HTTP request method. | `GET`; `POST`; `HEAD` | Yes |
 | [`http.status_code`](../http.md) | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Yes |
 | [`http.url`](../http.md) | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Yes |

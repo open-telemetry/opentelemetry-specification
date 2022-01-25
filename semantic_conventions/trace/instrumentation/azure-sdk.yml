@@ -6,8 +6,9 @@ groups:
   # common
   - id: azure
     brief: 'Describes Azure spans.'
+    prefix: az
     attributes:
-      - id: az.namespace
+      - id: namespace
         required: always
         type: string
         sampling_relevant: true
@@ -32,12 +33,12 @@ groups:
       - id: request_id
         type: string
         required: always
-        brief: 'Value of the [x-ms-client-request-id] header (or other request-id header, depending on the service) sent by the client.'
+        brief: 'Value of the "x-ms-client-request-id" header (or other "*-request-id" header, depending on the service) sent by the client.'
         examples: ['eb178587-c05a-418c-a695-ae9466c5303c']
       - id: service_request_id
         type: string
         required: always
-        brief: 'Value of the [x-ms-request-id]  header (or other request-id header, depending on the service) sent by the server in response.'
+        brief: 'Value of the "x-ms-request-id" header (or other "*-request-id" header, depending on the service) sent by the server in response.'
         examples: ['3f828ae5-ecb9-40ab-88d9-db0420af30c6']
       - ref: http.method
         required: always
