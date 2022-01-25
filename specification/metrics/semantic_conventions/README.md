@@ -121,8 +121,10 @@ for the total amount of memory on a system.
 amount of memory in a each state. Where appropriate, the sum of **usage**
 over all attribute values SHOULD be equal to the **limit**.
 
-  A measure of the amount of an unlimited resource consumed is differentiated
-  from **usage**.
+  A measure of the amount consumed of an unlimited resource, or of a resource
+  whose limit is unknowable, is differentiated from **usage**. For example, the
+  maximum possible amount of virtual memory that a process may consume may
+  fluctuate over time and is not typically known.
 
 - **utilization** - an instrument that measures the *fraction* of **usage**
 out of its **limit** should be called `entity.utilization`. For example,

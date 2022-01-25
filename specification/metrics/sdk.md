@@ -27,7 +27,7 @@
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
-  * [Shutdown](#shutdown-1)
+    + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
@@ -662,7 +662,7 @@ Note: it is expected that the `MetricReader.Collect` implementations will be
 provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
 overriding it, if possible (e.g. `final` in C++ and Java, `sealed` in C#).
 
-### Shutdown
+#### Shutdown
 
 This method provides a way for the `MetricReader` to do any cleanup required.
 
