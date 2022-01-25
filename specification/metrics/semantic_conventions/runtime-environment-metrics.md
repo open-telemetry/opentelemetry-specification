@@ -59,7 +59,7 @@ All JVM metric attributes are required unless otherwise indicated.
 
 | Name                                 | Description                         | Unit  | Unit ([UCUM](README.md#instrument-units)) | Instrument Type            | Value Type | Attribute Key | Attribute Values |
 |--------------------------------------|-------------------------------------|-------|-------------------------------------------|----------------------------|------------|---------------|------------------|
-| process.runtime.jvm.memory.usage     | Measure of memory used              | Bytes | `By`                                      | Asynchronous UpDownCounter | Int64      | type          | heap, nonheap    |
+| process.runtime.jvm.memory.usage     | Measure of memory used              | Bytes | `By`                                      | Asynchronous UpDownCounter | Int64      | type          | `"heap"`, `"nonheap"`    |
 |                                      |                                     |       |                                           |                            |            | pool          | Name of pool [1] |
 | process.runtime.jvm.memory.init      | Measure of initial memory requested | Bytes | `By`                                      | Asynchronous UpDownCounter | Int64      | type          | heap, nonheap    |
 |                                      |                                     |       |                                           |                            |            | pool          | Name of pool [1] |
