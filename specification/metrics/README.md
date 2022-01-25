@@ -3,20 +3,20 @@
 **Status**: [Experimental](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
 
-* [Overview](#overview)
+<!-- toc -->
+
+- [Overview](#overview)
   * [Design Goals](#design-goals)
   * [Concepts](#concepts)
-    * [API](#api)
-    * [SDK](#sdk)
-* [Specifications](#specifications)
-  * [Metrics API](./api.md)
-  * [Metrics SDK](./sdk.md)
-  * [Metrics Data Model and Protocol](./datamodel.md)
-  * [Semantic Conventions](./semantic_conventions/README.md)
+    + [API](#api)
+    + [SDK](#sdk)
+    + [Programming Model](#programming-model)
+- [Specifications](#specifications)
+- [References](#references)
+
+<!-- tocstop -->
 
 </details>
 
@@ -28,7 +28,7 @@ Given there are many well-established metrics solutions that exist today, it is
 important to understand the goals of OpenTelemetry’s metrics effort:
 
 * **Being able to connect metrics to other signals**. For example, metrics and
-  traces can be correlated via exemplars, and metrics dimensions can be enriched
+  traces can be correlated via exemplars, and metrics attributes can be enriched
   via [Baggage](../baggage/api.md) and [Context](../context/context.md).
   Additionally, [Resource](../resource/sdk.md) can be applied to
   [logs](../overview.md#log-signal)/[metrics](../overview.md#metric-signal)/[traces](../overview.md#tracing-signal)

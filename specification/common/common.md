@@ -3,13 +3,15 @@
 **Status**: [Stable, Feature-freeze](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
 
 - [Attribute](#attribute)
-  - [Attribute Limits](#attribute-limits)
-    - [Exempt Entities](#exempt-entities)
+  * [Attribute Limits](#attribute-limits)
+    + [Exempt Entities](#exempt-entities)
+
+<!-- tocstop -->
 
 </details>
 

@@ -123,6 +123,38 @@ To quickly fix typos, use
 make misspell-correction
 ```
 
+## Issue Triaging
+
+The following diagram shows the initial triaging of new issues.
+
+![Issue Triaging](img/issue-triage-workflow.png)
+
+- Newly created issues are automatically assigned to a spec approver
+  (round-robin). The assignee has 3 business days for the first response.
+- The assignee checks if they are the right person to handle the first response
+  and if not re-assigns to a more appropriate person (typically based on the
+  [areas of interest](https://github.com/open-telemetry/community/blob/main/areas-of-interest.md)).
+- The assignee makes a decision about the first response. It should be one of
+  the 3 responses:
+  - Yes, this is a good issue and we want to work on it.
+  - Maybe, this issue needs to be clarified and/or others have to be pulled in
+    before we can make a decision.
+  - No, this issue should not be accepted. This can happen when the issue is a
+    duplicate, was discussed and rejected in the past, is out of the project
+    scope, etc. The assignee labels the issue "won't do", closes it and provides
+    the reason for closing. The issue author has the choice to appeal the
+    decision, in which case the issue is reopened and the assignee asks other
+    spec approvers to help triage and facilitate the discussion.
+- If the first response is Yes, the assignee decides if they are the right
+  person to work on the issue long-term. If not, they will look for another
+  contributor who can work on the issue and re-assign to them, label the issue
+  as "backlog". If no-one is available to work on the issue the issue is labeled
+  as "help wanted" and unassigned.
+- Any other spec approver can take over the issue before the original assignee's
+  first response if they prefer to drive it themselves. In this case the other
+  spec approver must re-assign the issue to themselves, if necessary first
+  ensuring that no-one else is already working on the issue.
+
 ## Pull Requests
 
 ### How to create a PR

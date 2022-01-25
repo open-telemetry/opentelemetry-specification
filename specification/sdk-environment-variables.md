@@ -65,17 +65,18 @@ Known values for `OTEL_TRACES_SAMPLER` are:
 - `"parentbased_always_on"`: `ParentBased(root=AlwaysOnSampler)`
 - `"parentbased_always_off"`: `ParentBased(root=AlwaysOffSampler)`
 - `"parentbased_traceidratio"`: `ParentBased(root=TraceIdRatioBased)`
+- `"parentbased_jaeger_remote"`: `ParentBased(root=JaegerRemoteSampler)`
 - `"jaeger_remote"`: `JaegerRemoteSampler`
 - `"xray"`: [AWS X-Ray Centralized Sampling](https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html) (_third party_)
 
 Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may be set as follows:
 
 - For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25". Default is 1.0 if unset.
-- For `jaeger_remote`: The value is a comma separated list:
-  - `endpoint`: the endpoint in form of `host:port` of gRPC server that serves the sampling strategy for the service ([sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/sampling.proto)).
+- For `jaeger_remote` and `parentbased_jaeger_remote`: The value is a comma separated list:
+  - `endpoint`: the endpoint in form of `scheme://host:port` of gRPC server that serves the sampling strategy for the service ([sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/sampling.proto)).
   - `pollingIntervalMs`:  in milliseconds indicating how often the sampler will poll the backend for updates to sampling strategy.
   - `initialSamplingRate`:  in the [0..1] range, which is used as the sampling probability when the backend cannot be reached to retrieve a sampling strategy. This value stops having an effect once a sampling strategy is retrieved successfully, as the remote strategy will be used until a new update is retrieved.
-  - Example: `endpoint=localhost:14250,pollingIntervalMs=5000,initialSamplingRate=0.25`
+  - Example: `endpoint=http://localhost:14250,pollingIntervalMs=5000,initialSamplingRate=0.25`
 
 ## Batch Span Processor
 
@@ -158,7 +159,7 @@ thrift or protobuf.  As of 1.0 of the specification, there
 
 | Name                          | Description                     | Default                      |
 | ----------------------------- | --------------------------------| ---------------------------- |
-| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
+| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | "localhost"             |
 | OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
 
 ## Exporter Selection
@@ -171,6 +172,7 @@ We define environment variables for setting one or more exporters per signal.
 | ------------- | ---------------------------------------------------------------------------- | ------- |
 | OTEL_TRACES_EXPORTER | Trace exporter to be used | "otlp"  |
 | OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  |
+| OTEL_LOGS_EXPORTER | Logs exporter to be used | "otlp"  |
 
 The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 
@@ -186,6 +188,11 @@ Known values for `OTEL_METRICS_EXPORTER` are:
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 - `"none"`: No automatically configured exporter for metrics.
+
+Known values for `OTEL_LOGS_EXPORTER` are:
+
+- `"otlp"`: [OTLP](./protocol/otlp.md)
+- `"none"`: No automatically configured exporter for logs.
 
 ## Metrics SDK Configuration
 

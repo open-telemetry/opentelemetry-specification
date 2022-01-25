@@ -3,37 +3,43 @@
 **Status**: [Stable](../document-status.md)
 
 <details>
-<summary>
-Table of Contents
-</summary>
+<summary>Table of Contents</summary>
 
-* [Overview](#overview)
-* [MeterProvider](#meterprovider)
+<!-- toc -->
+
+- [Overview](#overview)
+- [MeterProvider](#meterprovider)
   * [MeterProvider operations](#meterprovider-operations)
-* [Meter](#meter)
+    + [Get a Meter](#get-a-meter)
+- [Meter](#meter)
   * [Meter operations](#meter-operations)
-* [Instrument](#instrument)
+- [Instrument](#instrument)
   * [Counter](#counter)
-    * [Counter creation](#counter-creation)
-    * [Counter operations](#counter-operations)
+    + [Counter creation](#counter-creation)
+    + [Counter operations](#counter-operations)
+      - [Add](#add)
   * [Asynchronous Counter](#asynchronous-counter)
-    * [Asynchronous Counter creation](#asynchronous-counter-creation)
-    * [Asynchronous Counter operations](#asynchronous-counter-operations)
-  * [Asynchronous Gauge](#asynchronous-gauge)
-    * [Asynchronous Gauge creation](#asynchronous-gauge-creation)
-    * [Asynchronous Gauge operations](#asynchronous-gauge-operations)
+    + [Asynchronous Counter creation](#asynchronous-counter-creation)
+    + [Asynchronous Counter operations](#asynchronous-counter-operations)
   * [Histogram](#histogram)
-    * [Histogram creation](#histogram-creation)
-    * [Histogram operations](#histogram-operations)
+    + [Histogram creation](#histogram-creation)
+    + [Histogram operations](#histogram-operations)
+      - [Record](#record)
+  * [Asynchronous Gauge](#asynchronous-gauge)
+    + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
+    + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
   * [UpDownCounter](#updowncounter)
-    * [UpDownCounter creation](#updowncounter-creation)
-    * [UpDownCounter operations](#updowncounter-operations)
+    + [UpDownCounter creation](#updowncounter-creation)
+    + [UpDownCounter operations](#updowncounter-operations)
+      - [Add](#add-1)
   * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
-    * [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
-    * [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
-* [Measurement](#measurement)
-* [Compatibility requirements](#compatibility-requirements)
-* [Concurrency requirements](#concurrency-requirements)
+    + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
+    + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
+- [Measurement](#measurement)
+- [Compatibility requirements](#compatibility-requirements)
+- [Concurrency requirements](#concurrency-requirements)
+
+<!-- tocstop -->
 
 </details>
 
@@ -410,7 +416,7 @@ function(s) independently.
 approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observer result argument to allow individual `Measurement`s to be
+* Use an observable result argument to allow individual `Measurement`s to be
   reported.
 
 User code is recommended not to provide more than one `Measurement` with the
@@ -622,7 +628,7 @@ function(s) independently.
 approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observer result argument to allow individual `Measurement`s to be reported.
+* Use an observable result argument to allow individual `Measurement`s to be reported.
 
 User code is recommended not to provide more than one `Measurement` with the
 same `attributes` in a single callback. If it happens, the
@@ -899,7 +905,7 @@ function(s) independently.
 approach. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observer result argument to allow individual `Measurement`s to be
+* Use an observable result argument to allow individual `Measurement`s to be
   reported.
 
 User code is recommended not to provide more than one `Measurement` with the
