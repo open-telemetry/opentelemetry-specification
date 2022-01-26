@@ -56,6 +56,8 @@ release.
   ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
 - Add `device.manufacturer` to describe mobile device manufacturers.
   ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
+- Add JVM memory runtime semantic
+  conventions. ([#2272](https://github.com/open-telemetry/opentelemetry-specification/pull/2272))
 
 ### Compatibility
 
