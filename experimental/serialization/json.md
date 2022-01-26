@@ -16,7 +16,7 @@
 
 ## Overview
 
-This document describes the serialization of OpenTelemetry data as JSON objects, and their serialization to files.
+This document describes the serialization of OpenTelemetry data as JSON objects that can be stored in files.
 
 ## Requirements
 
