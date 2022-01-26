@@ -61,7 +61,7 @@ jobs:
       run: make misspell
 
   docfx:
-    runs-on: unbuntu-latest
+    runs-on: ubuntu-latest
     steps:
     - name: check out code
       uses: actions/checkout@v2
