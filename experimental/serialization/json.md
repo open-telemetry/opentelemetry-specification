@@ -61,7 +61,7 @@ This allows streaming data to the file.
 
 #### Compression
 
-The file may be stored as uncompressed. Implementors are free to compress the file using gzip or tar compression algorithm as they see fit.
+The file may be stored as uncompressed. Implementors are free to compress the file as they see fit.
 
 ## Example
 
