@@ -27,7 +27,7 @@
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
-  * [Shutdown](#shutdown-1)
+    + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
@@ -141,11 +141,6 @@ are output by the SDK. Here are some examples when a `View` might be needed:
   for each HTTP status code). There could also be extreme scenarios in which the
   application developer does not need any attributes (e.g. just get the total
   count of all incoming requests).
-* Add additional attribute(s) from the [Context](../context/context.md). For
-  example, a [Baggage](../baggage/api.md) value might be available indicating
-  whether an HTTP request is coming from a bot/crawler or not. The application
-  developer might want this to be converted to a attribute for HTTP server
-  metrics (e.g. the request/second from bots vs. real users).
 
 The SDK MUST provide the means to register Views with a `MeterProvider`. Here
 are the inputs:
@@ -180,9 +175,6 @@ are the inputs:
     not in the list will be ignored. If not provided, all the attribute keys
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
-  * The `extra attributes` which come from Baggage/Context (optional). If not
-    provided, no extra attributes will be used. Please note that this only
-    applies to [synchronous Instruments](./api.md#synchronous-instrument).
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
     apply a [default aggregation](#default-aggregation). If the aggregation
     outputs metric points that use aggregation temporality (e.g. Histogram,
@@ -207,13 +199,11 @@ made with an Instrument:
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
-    * Try to apply the View configuration. If there is an error (e.g. the View
-      asks for extra attributes from the Baggage, but the Instrument is
-      [asynchronous](./api.md#asynchronous-instrument) which doesn't have
-      Context) or a conflict (e.g. the View requires to export the metrics using
-      a certain name, but the name is already used by another View), provide a
-      way to let the user know (e.g. expose [self-diagnostics
-      logs](../error-handling.md#self-diagnostics)).
+    * Try to apply the View configuration. If there is an error or a conflict
+      (e.g. the View requires to export the metrics using a certain name, but
+      the name is already used by another View), provide a way to let the user
+      know (e.g. expose
+      [self-diagnostics logs](../error-handling.md#self-diagnostics)).
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
     the user to turn off the default behavior via MeterProvider (which means the
@@ -416,13 +406,11 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-Note: This aggregation should not fill out `sum` when used with instruments that
-record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
-
 This Aggregation informs the SDK to collect:
 
 - Count of `Measurement` values falling within explicit bucket boundaries.
-- Arithmetic sum of `Measurement` values in population.
+- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
+instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
 - Min (optional) `Measurement` value in population.
 - Max (optional) `Measurement` value in population.
 
@@ -431,7 +419,7 @@ This Aggregation informs the SDK to collect:
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
-series and it requires further analysis.
+series and the topic requires further analysis.
 
 ## Exemplar
 
@@ -674,7 +662,7 @@ Note: it is expected that the `MetricReader.Collect` implementations will be
 provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
 overriding it, if possible (e.g. `final` in C++ and Java, `sealed` in C#).
 
-### Shutdown
+#### Shutdown
 
 This method provides a way for the `MetricReader` to do any cleanup required.
 
@@ -703,6 +691,21 @@ Configurable parameters:
   consecutive exports. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
+
+One possible implementation of periodic exporting MetricReader is to inherit
+from `MetricReader` and start a background task which calls the inherited
+`Collect()` method at the requested `exportIntervalMillis`. The reader's
+`Collect()` method may still be invoked by other callers. For example,
+
+* A user configures periodic exporting MetricReader with a push exporter and a
+  30 second interval.
+* At the first 30 second interval, the background task calls `Collect()` which
+  passes metrics to the push exporter.
+* After 15 seconds, the user decides to flush metrics for just this reader. They
+  call `Collect()` which passes metrics to the push exporter.
+* After another 15 seconds (at the end of the second 30 second interval),
+  the background task calls `Collect()` which passes metrics to the push
+  exporter.
 
 ## MetricExporter
 
@@ -733,7 +736,9 @@ preferred temporality.
 
 ### Push Metric Exporter
 
-Push Metric Exporter sends the data on its own schedule. Here are some examples:
+Push Metric Exporter sends metric data it receives from a paired [periodic
+exporting MetricReader](#periodic-exporting-metricreader).  Here are some
+examples:
 
 * Sends the data based on a user configured schedule, e.g. every 1 minute.
 * Sends the data when there is a severe error.

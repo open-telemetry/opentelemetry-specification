@@ -16,6 +16,13 @@ requirements to the existing specifications.
   * [Semantic convention](#semantic-convention)
 - [Guidelines for SDK authors](#guidelines-for-sdk-authors)
   * [Aggregation temporality](#aggregation-temporality)
+    + [Synchronous example](#synchronous-example)
+      - [Synchronous example: Delta aggregation temporality](#synchronous-example-delta-aggregation-temporality)
+      - [Synchronous example: Cumulative aggregation temporality](#synchronous-example-cumulative-aggregation-temporality)
+    + [Asynchronous example](#asynchronous-example)
+      - [Asynchronous example: Cumulative temporality](#asynchronous-example-cumulative-temporality)
+      - [Asynchronous example: Delta temporality](#asynchronous-example-delta-temporality)
+      - [Asynchronous example: attribute removal in a view](#asynchronous-example-attribute-removal-in-a-view)
   * [Memory management](#memory-management)
 
 <!-- tocstop -->
@@ -155,6 +162,8 @@ Conventions`, rather than inventing your own semantics.
 
 ### Aggregation temporality
 
+#### Synchronous example
+
 The OpenTelemetry Metrics [Data Model](./datamodel.md) and [SDK](./sdk.md) are
 designed to support both Cumulative and Delta
 [Temporality](./datamodel.md#temporality). It is important to understand that
@@ -176,6 +185,13 @@ following HTTP requests example:
   * verb = `GET`, status = `200`, duration = `100 (ms)`
   * verb = `GET`, status = `200`, duration = `30 (ms)`
   * verb = `GET`, status = `200`, duration = `50 (ms)`
+
+Note that in the following examples, Delta aggregation temporality is
+discussed before Cumulative aggregation temporality because
+synchronous Counter and UpDownCounter measurements are input to the
+API with specified Delta aggregation temporality.
+
+##### Synchronous example: Delta aggregation temporality
 
 Let's imagine we export the metrics as [Histogram](./datamodel.md#histogram),
 and to simplify the story we will only have one histogram bucket `(-Inf, +Inf)`:
@@ -203,6 +219,8 @@ You can see that the SDK **only needs to track what has happened after the
 latest collection/export cycle**. For example, when the SDK started to process
 measurements in (T<sub>1</sub>, T<sub>2</sub>], it can completely forget about
 what has happened during (T<sub>0</sub>, T<sub>1</sub>].
+
+##### Synchronous example: Cumulative aggregation temporality
 
 If we export the metrics using **Cumulative Temporality**:
 
@@ -259,6 +277,8 @@ So here are some suggestions that we encourage SDK implementers to consider:
   stream hasn't received any updates for a long period of time, would it be okay
   to reset the start time?
 
+#### Asynchronous example
+
 In the above case, we have Measurements reported by a [Histogram
 Instrument](./api.md#histogram). What if we collect measurements from an
 [Asynchronous Counter](./api.md#asynchronous-counter)?
@@ -283,6 +303,13 @@ thread ever started:
   * thread 1 died, thread 3 started
   * pid = `1001`, tid = `2`, #PF = `53`
   * pid = `1001`, tid = `3`, #PF = `5`
+  
+Note that in the following examples, Cumulative aggregation
+temporality is discussed before Delta aggregation temporality because
+asynchronous Counter and UpDownCounter measurements are input to the
+API with specified Cumulative aggregation temporality.
+
+##### Asynchronous example: Cumulative temporality
 
 If we export the metrics using **Cumulative Temporality**:
 
@@ -302,11 +329,45 @@ If we export the metrics using **Cumulative Temporality**:
   * attributes: {pid = `1001`, tid = `2`}, sum: `53`
   * attributes: {pid = `1001`, tid = `3`}, sum: `5`
 
-It is quite straightforward - we just take the data being reported from the
-asynchronous instruments and send them. We might want to consider if [Resets and
-Gaps](./datamodel.md#resets-and-gaps) should be used to denote the end of a
-metric stream - e.g. thread 1 died, the thread ID might be reused by the
-operating system, and we probably don't want to confuse the metrics backend.
+The behavior in the first four periods is quite straightforward - we
+just take the data being reported from the asynchronous instruments
+and send them.
+
+The data model prescribes several valid behaviors at T<sub>5</sub> in
+this case, where one stream dies and another starts.  The [Resets and
+Gaps](./datamodel.md#resets-and-gaps) section describes how start
+timestamps and staleness markers can be used to increase the
+receiver's understanding of these events.
+
+Consider whether the SDK maintains individual timestamps for the
+individual stream, or just one per process.  In this example, where a
+thread can die and start counting page faults from zero, the valid
+behaviors at T<sub>5</sub> are:
+
+1. If all streams in the process share a start time, and the SDK is
+   not required to remember all past streams: the thread restarts with
+   zero sum.  Receivers with reset detection are able to calculate a
+   correct rate (except for frequent restarts relative to the
+   collection interval), however the precise time of a reset will be
+   unknown.
+2. If the SDK maintains per-stream start times, it signals to the
+   receiver precisely when a stream started, making the first
+   observation in a stream more useful for diagnostics.  Receivers can
+   perform overlap detection or duplicate suppression and do not
+   require reset detection, in this case.
+3. Independent of above treatments, the SDK can add a staleness marker
+   to indicate the start of a gap in the stream when one thread dies
+   by remembering which streams have previously reported but are not
+   currently reporting.  If per-stream start timestamps are used,
+   staleness markers can be issued to precisely start a gap in the
+   stream and permit forgetting streams that have stopped reporting.
+
+It's OK to ignore the options to use per-stream start timestamps and
+staleness markers. The first course of action above requires no
+additional memory or code to achieve and is correct in terms of the
+data model.
+
+##### Asynchronous example: Delta temporality
 
 If we export the metrics using **Delta Temporality**:
 
@@ -350,6 +411,71 @@ So here are some suggestions that we encourage SDK implementers to consider:
 * If you have to do Cumulative->Delta conversion, and you encountered min/max,
   rather than drop the data on the floor, you might want to convert them to
   something useful - e.g. [Gauge](./datamodel.md#gauge).
+
+##### Asynchronous example: attribute removal in a view
+
+Suppose the metrics in the asynchronous example above are exported
+through a view configured to remove the `tid` attribute, leaving a
+single-dimensional count of page faults by `pid`.  For each metric
+stream, two measurements are produced covering the same interval of
+time, which the SDK is expected to aggregate before producing the
+output.
+
+The data model specifies to use the "natural merge" function, in this
+case meaning to add the current point values together because they
+are `Sum` data points.  The expected output is, still in **Cumulative
+Temporality**:
+
+* (T<sub>0</sub>, T<sub>1</sub>]
+  * dimensions: {pid = `1001`}, sum: `80`
+* (T<sub>0</sub>, T<sub>2</sub>]
+  * dimensions: {pid = `1001`}, sum: `91`
+* (T<sub>0</sub>, T<sub>3</sub>]
+  * dimensions: {pid = `1001`}, sum: `98`
+* (T<sub>0</sub>, T<sub>4</sub>]
+  * dimensions: {pid = `1001`}, sum: `107`
+* (T<sub>0</sub>, T<sub>5</sub>]
+  * dimensions: {pid = `1001`}, sum: `58`
+
+As discussed in the asynchronous cumulative temporality example above,
+there are various treatments available for detecting resets.  Even if
+the first course is taken, which means doing nothing, a receiver that
+follows the data model's rules for [unknown start
+time](datamodel.md#cumulative-streams-handling-unknown-start-time) and
+[inserting true start
+times](datamodel.md#cumulative-streams-inserting-true-reset-points)
+will calculate a correct rate in this case.  The "58" received at
+T<sub>5</sub> resets the stream - the change from "107" to "58" will
+register as a gap and rate calculations will resume correctly at
+T<sub>6</sub>.  The rules for reset handling are provided so that the
+unknown portion of "58" that was counted reflected in the "107" at
+T<sub>4</sub> is not double-counted at T<sub>5</sub> in the reset.
+
+If the option to use per-stream start timestamps is taken above, it
+lightens the duties of the receiver, making it possible to monitor
+gaps precisely and detect overlapping streams.  When per-stream state
+is available, the SDK has several approaches for calculating Views
+available in the presence of attributes that stop reporting and then
+reset some time later:
+
+1. By remembering the cumulative value for all streams across the
+   lifetime of the process, the cumulative sum will be correct despite
+   `attributes` that come and go.  The SDK has to detect per-stream resets
+   itself in this case, otherwise the View will be calculated incorrectly.
+2. When the cost of remembering all streams `attributes` becomes too
+   high, reset the View and all its state, give it a new start
+   timestamp, and let the caller see a a gap in the stream.
+
+When considering this matter, note also that the metrics API has a
+recommendation for each asynchronous instrument: [User code is
+recommended not to provide more than one `Measurement` with the same
+`attributes` in a single callback.](api.md#instrument).  Consider
+whether the impact of user error in this regard will impact the
+correctness of the view.  When maintaining per-stream state for the
+purpose of View correctness, SDK authors may want to consider
+detecting when the user makes duplicate measurements.  Without
+checking for duplicate measurements, Views may be calculated
+incorrectly.
 
 ### Memory management
 

@@ -271,7 +271,7 @@ OpenTelemetry recommends to collect application logs using Collector's
 [filelog receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver).
 Alternatively, another log collection agent, such as FluentBit, can collect
 logs,
-[then send](https://github.com/open-telemetry/opentelemetry-collector/tree/master/receiver/fluentforwardreceiver)
+[then send](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver/fluentforwardreceiver)
 to OpenTelemetry Collector where the logs can be further processed and enriched.
 
 ### Legacy First-Party Applications Logs
@@ -325,7 +325,7 @@ using OpenTelemetry
 Alternatively, if the Collector does not have the necessary file reading and
 parsing capabilities, another log collection agent, such as FluentBit can
 collect the logs,
-[then send the logs](https://github.com/open-telemetry/opentelemetry-collector/tree/master/receiver/fluentforwardreceiver)
+[then send the logs](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver/fluentforwardreceiver)
 to OpenTelemetry Collector.
 
 ![Application to File Logs](img/app-to-file-logs-fb.png)
@@ -404,7 +404,7 @@ The following functionality exists to enable log collection:
 
 - Support for log data type and log pipelines based on the
   [log data model](data-model.md). This includes processors such as
-  [attributesprocessor](https://github.com/open-telemetry/opentelemetry-collector/tree/main/processor/attributesprocessor)
+  [attributesprocessor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/attributesprocessor)
   that can operate on log data.
 
 - Ability to read logs from text files, tail the files, understand common log
