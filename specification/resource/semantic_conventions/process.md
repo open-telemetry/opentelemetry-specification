@@ -117,16 +117,13 @@ JavaScript instrumentation should fill in the values by copying from built-in ru
 - `process.runtime.version`:
   - When the runtime is Node.js, fill in the value of `process.versions.node`.
   - When the runtime is Web Browser, fill in the value of `navigator.userAgent`.
-- `process.runtime.description`:
-  - When the runtime is Node.js, fill in the values of `"Node.js"`, `process.version` in that order, separated by spaces.
-  - When the runtime is Web Browser, fill in the constant value `Web Browser`.
 
 Examples for some JavaScript runtimes
 
-| Name | `process.runtime.name` | `process.runtime.version` | `process.runtime.description` |
-| --- | --- | --- | --- |
-| Node.js | nodejs | 14.15.4 | Node.js v14.15.4 |
-| Web Browser | browser | Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 | Web Browser |
+| Name | `process.runtime.name` | `process.runtime.version` |
+| --- | --- | --- |
+| Node.js | nodejs | 14.15.4 |
+| Web Browser | browser | Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 |
 
 ### .NET Runtimes
 
