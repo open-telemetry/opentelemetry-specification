@@ -346,7 +346,7 @@ consider:
 # Python
 
 exception_counter.Add(1, {"exception_type": "IOError", "handled_by_user": True})
-exception_counter.Add(1, exception_type="IOError", handled_by_user=True})
+exception_counter.Add(1, exception_type="IOError", handled_by_user=True)
 ```
 
 ```csharp
