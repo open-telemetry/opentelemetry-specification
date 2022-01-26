@@ -31,7 +31,7 @@ instrumentations:
 | `db.connection_pool.active` | Asynchronous UpDownCounter | connections  | `{connections}`                           | The number of open connections that are currently in use.
 | `db.connection_pool.idle`   | Asynchronous UpDownCounter | connections  | `{connections}`                           | The number of open connections that are currently idle.
 
-Connection pool instrumentations SHOULD use the following metric instruments, if applicable:
+Instrumentation libraries for database server connection pools that collect data for the following data MUST use the following metric instruments. Otherwise, if the instrumentation library does not collect this data, these instruments MUST NOT be used.
 
 | Name                                 | Instrument                 | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description |
 |--------------------------------------|----------------------------|--------------|-------------------------------------------|-------------|
@@ -44,7 +44,7 @@ Connection pool instrumentations SHOULD use the following metric instruments, if
 | `db.connection_pool.wait_time`       | Histogram                  | milliseconds | `ms`                                      | The time it took to get an open connection from the pool.
 | `db.connection_pool.use_time`        | Histogram                  | milliseconds | `ms`                                      | The time between borrowing a connection and returning it to the pool.
 
-Below is a table of the attributes that are to be included on connection pool metric events:
+Below is a table of the attributes that MUST be included on connection pool metric events:
 
 | Name   | Type   | Description                                                                  | Examples       | Required |
 |--------|--------|------------------------------------------------------------------------------|----------------|----------|
