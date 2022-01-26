@@ -159,7 +159,7 @@ thrift or protobuf.  As of 1.0 of the specification, there
 
 | Name                          | Description                     | Default                      |
 | ----------------------------- | --------------------------------| ---------------------------- |
-| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | All addresses: "0.0.0.0"|
+| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | "localhost"             |
 | OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
 
 ## Exporter Selection
