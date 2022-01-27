@@ -44,6 +44,8 @@ release.
 
 ### Logs
 
+- Fix attributes names in Google Cloud Logging mapping.
+  ([#2093](https://github.com/open-telemetry/opentelemetry-specification/pull/2093))
 - Add OTEL_LOGS_EXPORTER environment variable.
   ([#2196](https://github.com/open-telemetry/opentelemetry-specification/pull/2196))
 - Added ObservedTimestamp to the Log Data Model.
