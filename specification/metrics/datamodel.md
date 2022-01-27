@@ -1081,7 +1081,7 @@ Multiple Prometheus metrics are merged together into a single metric:
 
 #### Start Time
 
-Prometheus Cumulative metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, the `process_start_time_metric` may be used to provide the start time. If the start time is not provided by that mechanism, Prometheus conversion follows [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time).
+Prometheus Cumulative metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, conversion must follow [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time).
 
 #### Exemplars
 
