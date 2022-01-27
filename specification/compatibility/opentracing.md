@@ -160,7 +160,7 @@ SDK performs a [sampling](../trace/sdk.md#sampling) step that consults
 to sample or not.
 
 If an initial set of tags is specified and the OpenTracing `error` tag is
-specified, after the OpenTelemetry `Span` was created the Shim layer MUST
+included, after the OpenTelemetry `Span` was created the Shim layer MUST
 perform the same error handling as described in the [Set Tag](#set-tag) operation.
 
 If an explicit start timestamp is specified, a conversion MUST be done to match the
