@@ -24,17 +24,19 @@ This document describes the serialization of OpenTelemetry data as JSON objects 
 
 #### Versioning
 
-Each object serialized to JSON should be identified with a version tagging the version of the serializer.
+Each object serialized to JSON should be identified with a version tagging the version of the serialization scheme.
 
 The deserializer must support and maintain compatibility with versions explicitly supported by this specification.
 
 The version is serialized as a string under the key "version" of the JSON document.
 
+### Serialization schema v1
+
+This defines the first version of the serialization scheme.
+
 #### Resource level
 
-The JSON serialization operates at the level of `ResourceSpans`, `ResourceMetrics` and `ResourceLogs`.
-
-There is no support for serializing objects at a lower level.
+The JSON serialization accept top-level resource objects: `ResourceSpans`, `ResourceMetrics` and `ResourceLogs`.
 
 Resources are serialized under the key "traces", "metrics" and "logs" respectively for `ResourceSpans`, `ResourceMetrics` and `ResourceLogs`.
 
