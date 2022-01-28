@@ -10,6 +10,7 @@
 - [Attribute](#attribute)
   * [Attribute Limits](#attribute-limits)
     + [Exempt Entities](#exempt-entities)
+- [Attribute Collections](#attribute-collections)
 
 <!-- tocstop -->
 
@@ -105,3 +106,35 @@ attribute limits for Resources.
 Attributes, which belong to Metrics, are exempt from the limits described above
 at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
+
+## Attribute Collections
+
+[Resources](../resource/sdk.md), Metrics
+[data points](../metrics/datamodel.md#metric-points),
+[Spans](../trace/api.md#set-attributes), Span
+[Events](../trace/api.md#add-events), Span
+[Links](../trace/api.md#specifying-links) and
+[Log Records](../logs/data-model.md) may contain a collection of attributes. The
+keys in each such collection are unique, i.e. there MUST NOT exist more than one
+key-value pair with the same key. The enforcement of uniqueness may be performed
+in a variety of ways as it best fits the limitations of the particular
+implementation.
+
+Normally for the telemetry generated using OpenTelemetry SDKs the attribute
+key-value pairs are set via an API that either accepts a single key-value pair
+or a collection of key-value pairs. Setting an attribute with the same key as an
+existing attribute SHOULD overwrite the existing attribute's value. See for
+example Span's [SetAttribute](../trace/api.md#set-attributes) API.
+
+A typical implementation of [SetAttribute](../trace/api.md#set-attributes) API
+will enforce the uniqueness by overwriting any existing attribute values pending
+to be exported, so that when the Span is eventually exported the exporters see
+only unique attributes. The OTLP format in particular requires that exported
+Resources, Spans, Metric data points and Log Records contain only unique
+attributes.
+
+Some other implementations may use a streaming approach where every
+[SetAttribute](../trace/api.md#set-attributes) API call immediately results in
+that individual attribute value being exported using a streaming wire protocol.
+In such cases the enforcement of uniqueness will likely be the responsibility of
+the recipient of this data.
