@@ -3,7 +3,7 @@
 **Status**: [Experimental](../../document-status.md)
 
 This document defines trace semantic conventions used by the
-[compatibility](../../compatibility) components.
+compatibility components, e.g. OpenTracing Shim layer.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
