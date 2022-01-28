@@ -54,6 +54,8 @@ release.
   ([#2092](https://github.com/open-telemetry/opentelemetry-specification/pull/2092))
 - Drop Log name.
   field ([#2271](https://github.com/open-telemetry/opentelemetry-specification/pull/2271))
+- Add the Kubernetes Event related semantic conventions
+  ([#2299](https://github.com/open-telemetry/opentelemetry-specification/pull/2299))
 
 ### Resource
 
