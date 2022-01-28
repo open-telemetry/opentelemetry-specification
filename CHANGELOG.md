@@ -55,6 +55,9 @@ release.
 
 ### Resource
 
+- Add the Kubernetes Object related semantic conventions
+  ([#2300](https://github.com/open-telemetry/opentelemetry-specification/pull/2300))
+
 ### Semantic Conventions
 
 - Prohibit usage of retired names in semantic conventions.
