@@ -10,7 +10,7 @@ When setting [TraceState](api.md#tracestate) values that are part of the OTel ec
 they MUST all be contained in a single entry using the `ot` key, with the value being
 a semicolon separated list of key-value pairs such as:
 
-* `ot=p:8;r:64`
+* `ot=p:8;r:62`
 * `ot=foo:bar;k1:13`
 
 The [TraceContext](https://www.w3.org/TR/trace-context/) specification defines support for multiple "tenants" each to use their own `tracestate` entry by prefixing `tenant@` to tenant-specific values in a mixed tracing environment. OpenTelemetry recognizes this syntax but does not specify an interpretation for multi-tenant `tracestate`.
@@ -65,8 +65,8 @@ Set values MUST be either updated or added to the `ot` entry in `TraceState`,
 in order to preserve existing values belonging to other OTel concerns. For example,
 if a given concern K wants to set `k1:13`:
 
-* `ot=p:8;r:64` will become `ot=p:8;r:64;k1:13`.
-* `ot=p:8;k1:7;r:64` will become `ot=p8;r:64;k1:13`. Preserving the order is not required.
+* `ot=p:8;r:62` will become `ot=p:8;r:62;k1:13`.
+* `ot=p:8;k1:7;r:62` will become `ot=p8;r:62;k1:13`. Preserving the order is not required.
 
 If setting a value ends up making the entire `ot` entry exceed the 256 characters limit,
 SDKs are advised to abort the operation and signal the user about the error, e.g.
