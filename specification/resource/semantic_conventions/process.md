@@ -78,12 +78,34 @@ Example:
 
 ### Go Runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm the contents here
+Go Runtimes should fill in the as follows:
 
-| Value | Description |
+- `process.runtime.name` - Fill in an interpretation of Go's [`runtime.Compiler`](https://pkg.go.dev/runtime#Compiler) constant, according to the following rule:
+  If the value is `gc`, fill in `go`. Otherwise, fill in the exact value of `runtime.Compiler`.
+
+  This can be implemented with the following Go snippet:
+
+  ```go
+  import "runtime"
+  
+  func getRuntimeName() string {
+    if runtime.Compiler == "gc" {
+      return "go"
+    }
+    return runtime.Compiler
+  }
+  ```
+
+- `process.runtime.version` - Fill in the exact value returned by `runtime.Version()`, i.e. `go1.17`.
+- `process.runtime.description` - Use of this field is not recommended.
+
+Examples for some Go compilers/runtimes:
+
+| `process.runtime.name` | Description |
 | --- | --- |
-| `gc` | Go compiler |
-| `gccgo` | GCC Go frontend |
+| `go` | Official Go compiler. Also known as `cmd/compile`. |
+| `gccgo` | [gccgo](https://go.dev/doc/install/gccgo) is a Go [front end for GCC](https://gcc.gnu.org/frontends.html). |
+| `tinygo` | [TinyGo](https://tinygo.org/) compiler. |
 
 ### Java runtimes
 
