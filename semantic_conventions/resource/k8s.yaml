@@ -168,3 +168,30 @@ groups:
         brief: >
           The name of the CronJob.
         examples: ['opentelemetry']
+
+  - id: k8s.object
+    prefix: k8s.object
+    brief: >
+      A generic way to represent any Kubernetes objects including any
+      [Custom Objects](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#create-custom-objects).
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the Object.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the Object.
+        examples: ['opentelemetry-pod-autoconf']
+      - id: kind
+        type: string
+        brief: >
+          A value representing kind of the Object.
+        examples: ['pod', 'replicaset']
+      - id: fieldpath
+        type: string
+        brief: >
+          A value referring to a piece of an object instead of an entire Object.
+        examples: ['spec.containers{nginx}']
