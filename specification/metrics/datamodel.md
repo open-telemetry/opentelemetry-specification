@@ -61,7 +61,7 @@
     + [Sums](#sums-1)
     + [Histograms](#histograms-1)
     + [Summaries](#summaries-1)
-    + [Dropped Types](#dropped-types-1)
+    + [Dropped Data Points](#dropped-data-points)
     + [Metric Attributes](#metric-attributes)
     + [Exemplars](#exemplars-2)
     + [Resource Attributes](#resource-attributes-1)
@@ -1106,11 +1106,11 @@ The following resource attributes must be added to scraped metrics, and may not 
 
 #### Gauges
 
-OpenTelemetry Gauge becomes a Prometheus Gauge.
+[OpenTelemetry Gauges](#gauge) becomes a Prometheus Gauge.
 
 #### Sums
 
-OpenTelemetry Sum follows this logic:
+[OpenTelemetry Sums](#sums) follows this logic:
 
 - If the aggregation temporality is cumulative and the sum is monotonic,
   it becomes a Prometheus Sum.
@@ -1119,7 +1119,7 @@ OpenTelemetry Sum follows this logic:
 
 #### Histograms
 
-OpenTelemetry Histogram with a cumulative aggregation temporality becomes a metric family with the following:
+[OpenTelemetry Histograms](#histogram) with a cumulative aggregation temporality becomes a metric family with the following:
 
 - A single `{name}_count` metric denoting the count field of the histogram.
   All attributes of the histogram point are converted to Prometheus labels.
@@ -1139,7 +1139,7 @@ OpenTelemetry Histograms with Delta aggregation temporality should be aggregated
 
 #### Summaries
 
-OpenTelemetry Summary becomes a metric family with the following:
+[OpenTelemetry Summary](#summary-legacy) becomes a metric family with the following:
 
 - A single `{name}_count` metric denoting the count field of the summary.
   All attributes of the summary point are converted to Prometheus labels.
@@ -1153,9 +1153,9 @@ OpenTelemetry Summary becomes a metric family with the following:
   starting from lowest to highest, and all being non-negative.  The value of
   each point is the computed value of the quantile point.
 
-#### Dropped Types
+#### Dropped Data Points
 
-* ExponentialHistogram
+* [ExponentialHistogram](#exponentialhistogram)
 
 #### Metric Attributes
 
@@ -1166,7 +1166,7 @@ location.  In such unlikely cases, either value may be used.
 
 #### Exemplars
 
-Exemplars on OpenTelemetry Histograms should be converted to Prometheus exemplars. Exemplars on other OpenTelemetry metric types are dropped.  For Prometheus push exporters, multiple exemplars are permitted on each bucket, so all exemplars are converted.  For Prometheus pull endpoints, only a single exemplar can be added to each bucket, so the largest exemplar from each bucket is chosen.  If no exemplars exist on a bucket, the highest exemplar from a lower bucket should be used, even if it is a duplicate of another bucket.  Prometheus Exemplars should use the `trace_id` and `span_id` keys for the trace and span IDs, respectively.
+[Exemplars](#exemplars) on OpenTelemetry Histograms should be converted to Prometheus exemplars. Exemplars on other OpenTelemetry data points are dropped.  For Prometheus push exporters, multiple exemplars are permitted on each bucket, so all exemplars are converted.  For Prometheus pull endpoints, only a single exemplar can be added to each bucket, so the largest exemplar from each bucket is chosen.  If no exemplars exist on a bucket, the highest exemplar from a lower bucket should be used, even if it is a duplicate of another bucket.  Prometheus Exemplars should use the `trace_id` and `span_id` keys for the trace and span IDs, respectively.
 
 #### Resource Attributes
 
