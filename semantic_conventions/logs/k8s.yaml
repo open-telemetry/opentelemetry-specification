@@ -1,0 +1,36 @@
+groups:
+  - id: k8s.event
+    prefix: k8s.event
+    brief: >
+      A Kubernetes Event object.
+    attributes:
+      - id: uid
+        type: string
+        brief: >
+          The UID of the Event.
+        examples: ['275ecb36-5aa8-4c2a-9c47-d8bb681b9aff']
+      - id: name
+        type: string
+        brief: >
+          The name of the Event.
+        examples: ['opentelemetry-depl-5c8bf76b5b-tn9h5.16a678548ba4963c']
+      - id: start_time
+        type: string
+        brief: >
+          The start time of the Event.
+        examples: ['2021-09-20T07:50:19Z']
+      - id: action
+        type: string
+        brief: >
+          The action was taken/failed regarding the related object of the Event.
+        examples: ['Binding']
+      - id: count
+        type: int
+        brief: >
+          The number of times the Event has occurred.
+        examples: [1, 2]
+      - id: reason
+        type: string
+        brief: >
+          The reason for the status transition of the Event causing object.
+        examples: ['ScalingReplicaSet']
