@@ -20,7 +20,6 @@ with one of the accepted values, describing the direct causal relationships
 between a child Span and a parent Span, as defined by
 [OpenTracing](https://github.com/opentracing/specification/blob/master/specification.md).
 
-
 <!-- semconv opentracing -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
