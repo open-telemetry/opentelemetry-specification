@@ -254,7 +254,7 @@ asynchronous:
 
 * Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-gauge)) give
   the user a way to register callback function, and the callback function will
-  only be invoked upon [collection](../sdk.md#collect). For example, a piece of embedded software
+  only be invoked upon [collection](sdk.md#collect). For example, a piece of embedded software
   could use an asynchronous gauge to collect the temperature from a sensor every
   15 seconds, which means the callback function will only be invoked every 15
   seconds. [Measurements](#measurement) recorded by asynchronous instruments
