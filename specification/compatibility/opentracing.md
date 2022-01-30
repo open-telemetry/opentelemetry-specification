@@ -146,6 +146,11 @@ MUST be added as [Link](../trace/api.md)s with the reference type value
 as a `Link` attribute, i.e. `opentracing.ref_type` set to `follows_from` or
 `child_of`.
 
+If a list of `Span` references is specified, the union of their
+`Baggage` values MUST be used as the initial `Baggage` of the newly created
+`Span`. It is unspecified which `Baggage` value is used in the case of
+repeated keys.
+
 If an initial set of tags is specified, the values MUST be set at
 the creation time of the OpenTelemetry `Span`, as opposed to setting them
 after the `Span` is already created. This is done in order to make
@@ -153,6 +158,10 @@ those values available to any pre-`Span`-creation hook, e.g. the reference
 SDK performs a [sampling](../trace/sdk.md#sampling) step that consults
 `Span` information, including the initial tags/attributes, to decide whether
 to sample or not.
+
+If an initial set of tags is specified and the OpenTracing `error` tag is
+included, after the OpenTelemetry `Span` was created the Shim layer MUST
+perform the same error handling as described in the [Set Tag](#set-tag) operation.
 
 If an explicit start timestamp is specified, a conversion MUST be done to match the
 OpenTracing and OpenTelemetry units.
