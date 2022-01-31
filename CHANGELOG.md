@@ -41,9 +41,8 @@ release.
   [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2061)
 - Changed default Prometheus Exporter host from `0.0.0.0` to `localhost`.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
-- Mark Metrics SDK spec as Mixed, with most compnents remaining in
-  Feature-freeze while Attribute Limits, Compatibility Requirements, and
-  Concurrency Requirements moving to Stable.
+- Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
+  Exemplar remaining Feature-freeze.
   ([#2150](https://github.com/open-telemetry/opentelemetry-specification/pull/2150))
 
 ### Logs
