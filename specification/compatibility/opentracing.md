@@ -143,8 +143,9 @@ If a list of `Span` references is specified, the first `SpanContext`
 with **Child Of** type in the entire list is used as parent, else the
 the first `SpanContext` is used as parent. All values in the list
 MUST be added as [Link](../trace/api.md)s with the reference type value
-as a `Link` attribute, i.e. `opentracing.ref_type` set to `follows_from` or
-`child_of`.
+as a `Link` attribute, i.e.
+[opentracing.ref_type](../trace/semantic_conventions/compatibility.md#opentracing)
+set to `follows_from` or `child_of`.
 
 If a list of `Span` references is specified, the union of their
 `Baggage` values MUST be used as the initial `Baggage` of the newly created
