@@ -65,6 +65,8 @@ release.
   ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
 - Add JVM memory runtime semantic
   conventions. ([#2272](https://github.com/open-telemetry/opentelemetry-specification/pull/2272))
+- Add opentracing.ref_type semantic convention.
+  ([#2297](https://github.com/open-telemetry/opentelemetry-specification/pull/2297))
 
 ### Compatibility
 
