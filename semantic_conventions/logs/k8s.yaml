@@ -17,7 +17,9 @@ groups:
       - id: start_time
         type: string
         brief: >
-          The start time of the Event.
+          The start time of the [Event](https://docs.openshift.com/container-platform/4.8/rest_api/objects/index.html#objectmeta-meta-v1) 
+          as the native [Timestamp](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#field-timestamp)
+          can be used for the Timestamp of the [related object](https://docs.openshift.com/container-platform/4.8/rest_api/metadata_apis/event-core-v1.html) of the Event.
         examples: ['2021-09-20T07:50:19Z']
       - id: action
         type: string
