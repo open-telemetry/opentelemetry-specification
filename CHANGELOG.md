@@ -43,7 +43,7 @@ release.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
   Exemplar remaining Feature-freeze.
-  ([#2150](https://github.com/open-telemetry/opentelemetry-specification/pull/2150))
+  ([#2150](https://github.com/open-telemetry/opentelemetry-specification/pull/2304))
 
 ### Logs
 
