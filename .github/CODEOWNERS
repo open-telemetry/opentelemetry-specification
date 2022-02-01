@@ -28,6 +28,7 @@ experimental/logs/      @open-telemetry/technical-committee @open-telemetry/spec
 specification/logs/     @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-logs-approvers
 
 # Semantic Conventions owners (global + trace/metrics/logs + instr-wg)
+semantic_conventions @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/instr-wg
 specification/trace/semantic_conventions @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers @open-telemetry/instr-wg
 specification/metrics/semantic_conventions @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-metrics-approvers @open-telemetry/instr-wg
 specification/logs/semantic_conventions @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-logs-approvers @open-telemetry/instr-wg
