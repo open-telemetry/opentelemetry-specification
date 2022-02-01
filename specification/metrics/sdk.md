@@ -33,7 +33,7 @@
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
-  * [Shutdown](#shutdown-1)
+    + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
@@ -412,7 +412,8 @@ instruments that record negative measurements, e.g. `UpDownCounter` or
 All histogram Aggregations inform the SDK to collect:
 
 - Count of `Measurement` values in population.
-- Arithmetic sum of `Measurement` values in population.
+- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
+instruments that record negative measurements (e.g. `UpDownCounter` or `ObservableGauge`).
 - Min (optional) `Measurement` value in population.
 - Max (optional) `Measurement` value in population.
 
@@ -512,12 +513,21 @@ scale.
 Implementations SHOULD adjust the histogram scale as necessary to
 maintain the best-possible resolution at the configured maximum size.
 
+This Aggregation informs the SDK to collect:
+
+- Count of `Measurement` values falling within explicit bucket boundaries.
+- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
+instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
+- Min (optional) `Measurement` value in population.
+- Max (optional) `Measurement` value in population.
+>>>>>>> b024a66950ccd2e5aaf84faeaa14206959cf8a93
+
 ## Attribute limits
 
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
-series and it requires further analysis.
+series and the topic requires further analysis.
 
 ## Exemplar
 
@@ -760,7 +770,7 @@ Note: it is expected that the `MetricReader.Collect` implementations will be
 provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
 overriding it, if possible (e.g. `final` in C++ and Java, `sealed` in C#).
 
-### Shutdown
+#### Shutdown
 
 This method provides a way for the `MetricReader` to do any cleanup required.
 
@@ -789,6 +799,21 @@ Configurable parameters:
   consecutive exports. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
+
+One possible implementation of periodic exporting MetricReader is to inherit
+from `MetricReader` and start a background task which calls the inherited
+`Collect()` method at the requested `exportIntervalMillis`. The reader's
+`Collect()` method may still be invoked by other callers. For example,
+
+* A user configures periodic exporting MetricReader with a push exporter and a
+  30 second interval.
+* At the first 30 second interval, the background task calls `Collect()` which
+  passes metrics to the push exporter.
+* After 15 seconds, the user decides to flush metrics for just this reader. They
+  call `Collect()` which passes metrics to the push exporter.
+* After another 15 seconds (at the end of the second 30 second interval),
+  the background task calls `Collect()` which passes metrics to the push
+  exporter.
 
 ## MetricExporter
 
@@ -819,7 +844,9 @@ preferred temporality.
 
 ### Push Metric Exporter
 
-Push Metric Exporter sends the data on its own schedule. Here are some examples:
+Push Metric Exporter sends metric data it receives from a paired [periodic
+exporting MetricReader](#periodic-exporting-metricreader).  Here are some
+examples:
 
 * Sends the data based on a user configured schedule, e.g. every 1 minute.
 * Sends the data when there is a severe error.
