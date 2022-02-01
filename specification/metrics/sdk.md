@@ -513,15 +513,6 @@ scale.
 Implementations SHOULD adjust the histogram scale as necessary to
 maintain the best-possible resolution at the configured maximum size.
 
-This Aggregation informs the SDK to collect:
-
-- Count of `Measurement` values falling within explicit bucket boundaries.
-- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
-instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
-- Min (optional) `Measurement` value in population.
-- Max (optional) `Measurement` value in population.
->>>>>>> b024a66950ccd2e5aaf84faeaa14206959cf8a93
-
 ## Attribute limits
 
 Attributes which belong to Metrics are exempt from the
