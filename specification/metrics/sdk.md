@@ -21,10 +21,10 @@
       - [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
     + [Exponential Histogram Aggregation](#exponential-histogram-aggregation)
-      - [Exponential Histogram Aggregation: Handle range limits](#exponential-histogram-aggregation-handle-range-limits)
       - [Exponential Histogram Aggregation: Handle all normal values](#exponential-histogram-aggregation-handle-all-normal-values)
-      - [Exponential Histogram Aggregation: Maintain the ideal scale when values are not limited in both directions](#exponential-histogram-aggregation-maintain-the-ideal-scale-when-values-are-not-limited-in-both-directions)
-      - [Exponential Histogram Aggregation: Maintain fixed scale when values are limited in both directions](#exponential-histogram-aggregation-maintain-fixed-scale-when-values-are-limited-in-both-directions)
+      - [Exponential Histogram Aggregation: Support a minimum and maximum scale](#exponential-histogram-aggregation-support-a-minimum-and-maximum-scale)
+      - [Exponential Histogram Aggregation: Use the maximum scale for single measurements](#exponential-histogram-aggregation-use-the-maximum-scale-for-single-measurements)
+      - [Exponential Histogram Aggregation: Maintain the ideal scale](#exponential-histogram-aggregation-maintain-the-ideal-scale)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -443,13 +443,13 @@ Point](./datamodel.md#exponentialhistogram), which uses an exponential
 formula to determine bucket boundaries and an integer `scale`
 parameter to control resolution.
 
-This Aggregation honors the following configuration parameters:
+Scale is not a configurable property of this Aggregation, the
+implementation will adjust it as necessary given the data.  This
+Aggregation honors the following configuration parameter:
 
-| Key                 | Value   | Default Value | Description                                                                                                  |
-|---------------------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
-| MaxSize             | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
-| MinValue (optional) | double  | _not set_     | When set, limit the absolute value of measurements to be greater than or equal to this minimum value      |
-| MaxValue (optional) | double  | _not set_     | When set, limit the absolute value of measurements to be less than or equal to this maximum value         |
+| Key     | Value   | Default Value | Description                                                                                                  |
+|---------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
+| MaxSize | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
 
 The default of 160 buckets is selected to establish default support
 for a high-resolution histogram able to cover a long-tail latency
@@ -481,35 +481,36 @@ Using the bucket from [1, base), we have `(bucketWidth / 2) /
 bucketMidpoint = ((base - 1) / 2) / ((base + 1) / 2) = (base - 1) /
 (base + 1)`.
 
-##### Exponential Histogram Aggregation: Handle range limits
+This Aggregation uses the notion of "ideal" scale.  The ideal scale is
+either:
 
-When either the MinValue or MaxValue range limit is configured, the
-implementation is REQUIRED to reject out-of-range measurements and
-signal an error to the user.
+1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
+2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
 
 ##### Exponential Histogram Aggregation: Handle all normal values
 
-Range limits aside, implementations are REQUIRED to accept the entire
-normal range of IEEE floating point values (i.e., all values except
-for +Inf, -Inf and NaN values).
+Implementations are REQUIRED to accept the entire normal range of IEEE
+floating point values (i.e., all values except for +Inf, -Inf and NaN
+values).
 
 Implementations are permitted to round subnormal values away from zero
 to the nearest normal value when it simplifies the implementation.
 
-##### Exponential Histogram Aggregation: Maintain the ideal scale when values are not limited in both directions
+##### Exponential Histogram Aggregation: Support a minimum and maximum scale
+
+The implementation MUST maintain reasonable minimum and maximum scale
+parameters, values that the automatic scale parameter will not exceed.
+
+##### Exponential Histogram Aggregation: Use the maximum scale for single measurements
+
+When the histogram contains not more than one value in either of the
+positive or negative ranges, the implementation SHOULD use the maximum
+scale.
+
+##### Exponential Histogram Aggregation: Maintain the ideal scale
 
 Implementations SHOULD adjust the histogram scale as necessary to
-maintain the best resolution possible, given the maximum size, unless
-both MinValue and MaxValue range limits are set.  This results in
-histogram Aggregations where at least one of the positive or negative
-ranges of buckets is more than half the maximum size, such that
-increasing scale by one would not be possible given the size
-constraint.
-
-##### Exponential Histogram Aggregation: Maintain fixed scale when values are limited in both directions
-
-Implementations SHOULD fix the histogram scale to the ideal scale of
-the configured MinValue and MaxValue when both limits are set.
+maintain the best-possible resolution at the configured maximum size.
 
 ## Attribute limits
 
