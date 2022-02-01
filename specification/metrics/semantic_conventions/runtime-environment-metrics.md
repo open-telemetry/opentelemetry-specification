@@ -55,5 +55,20 @@ consider, for example pthreads vs green thread implementations.
 
 **Description:** Java Virtual Machine (JVM) metrics captured under `process.runtime.jvm.`
 
-| Name | Description | Units | Instrument Type | Value Type | Attribute Key | Attribute Values |
-|------|-------------|-------|-----------------|------------|---------------|------------------|
+All JVM metric attributes are required unless otherwise indicated.
+
+| Name                                 | Description                         | Unit  | Unit ([UCUM](README.md#instrument-units)) | Instrument Type            | Value Type | Attribute Key | Attribute Values      |
+|--------------------------------------|-------------------------------------|-------|-------------------------------------------|----------------------------|------------|---------------|-----------------------|
+| process.runtime.jvm.memory.usage     | Measure of memory used              | Bytes | `By`                                      | Asynchronous UpDownCounter | Int64      | type          | `"heap"`, `"nonheap"` |
+|                                      |                                     |       |                                           |                            |            | pool          | Name of pool [1]      |
+| process.runtime.jvm.memory.init      | Measure of initial memory requested | Bytes | `By`                                      | Asynchronous UpDownCounter | Int64      | type          | `"heap"`, `"nonheap"` |
+|                                      |                                     |       |                                           |                            |            | pool          | Name of pool [1]      |
+| process.runtime.jvm.memory.committed | Measure of memory committed         | Bytes | `By`                                      | Asynchronous UpDownCounter | Int64      | type          | `"heap"`, `"nonheap"` |
+|                                      |                                     |       |                                           |                            |            | pool          | Name of pool [1]      |
+| process.runtime.jvm.memory.max       | Measure of max obtainable memory    | Bytes | `By`                                      | Asynchronous UpDownCounter | Int64      | type          | `"heap"`, `"nonheap"` |
+|                                      |                                     |       |                                           |                            |            | pool          | Name of pool [1]      |
+
+**[1]**: Pool names are generally obtained
+via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName())
+. Examples include `G1 Old Gen`, `G1 Eden space`, `G1 Survivor Space`
+, `Metaspace`, etc.
