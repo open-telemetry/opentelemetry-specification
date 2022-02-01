@@ -20,6 +20,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
   * [HTTP server definitions](#http-server-definitions)
   * [HTTP Server semantic conventions](#http-server-semantic-conventions)
 - [HTTP client-server example](#http-client-server-example)
+- [HTTP retries and redirects examples](#http-retries-and-redirects-examples)
 
 <!-- tocstop -->
 
@@ -125,9 +126,22 @@ Users MAY explicitly configure instrumentations to capture them even though it i
 
 ### HTTP request retries and redirects
 
-A span for each subsequent HTTP request re-sending attempt MUST be created and it SHOULD be linked with a previous one by creating a single `Link`. `http.retry_count` attribute SHOULD be added to each retry span with the value that reflects the ordinal number of request retry attempt.
+Retries and redirects cause more than one physical HTTP request to be sent.
+A CLIENT span SHOULD be created for each one of these physical requests.
+No span is created corresponding to the "logical" (encompassing) request.
 
-A span for each subsequent HTTP request redirect MUST be created and it SHOULD be linked with a span for initial request or previous redirect by creating a single `Link`.
+In order to represent relationship between multiple spans created for retries
+or redirects, `Link` SHOULD be used with each subsequent span linked to the
+span for the immediately previous physical request. These spans SHOULD be
+created as siblings. In case there is no trace started before retries or
+redirects execution, these spans will correspond to different traces. Users are
+expected to interpret span links to understand the behavior of a "logical"
+request in the presence of retries and redirects.
+
+For retries, `http.retry_count` attribute SHOULD be added to each retry span
+with the value that reflects the ordinal number of request retry attempt.
+
+See [examples](#http-retries-and-redirects-examples) for more details.
 
 ## HTTP client
 
@@ -288,3 +302,65 @@ If set, it would be
 but due to `http.scheme`, `http.host` and `http.target` being set, it would be redundant.
 As explained above, these separate values are preferred but if for some reason the URL is available but the other values are not,
 URL can replace `http.scheme`, `http.host` and `http.target`.
+
+## HTTP retries and redirects examples
+
+Example of retries in the presence of a trace started by an inbound request:
+
+```
+request (SERVER, trace=t1, span=s1)
+  |
+  -- GET / - 500 (CLIENT, trace=t1, span=s2)
+  |   |
+  |   --- server (SERVER, trace=t1, span=s3)
+  |
+  -- GET / - 500 (CLIENT, trace=t1, span=s4, links=[ {trace=t1, span=s2} ], http.retry_count=1)
+  |   |
+  |   --- server (SERVER, trace=t1, span=s5)
+  |
+  -- GET / - 200 (CLIENT, trace=t1, span=s6, Links=[ {trace=t1, span=s4} ], http.retry_count=2)
+      |
+      --- server (SERVER, trace=t1, span=s7)
+```
+
+Example of retries with no trace started upfront:
+
+```
+GET / - 500 (CLIENT, trace=t1, span=s1)
+ |
+ --- server (SERVER, trace=t1, span=s2)
+
+GET / - 500 (CLIENT, trace=t2, span=s1, Links=[ {trace=t1, span=s1} ], http.retry_count=1)
+ |
+ --- server (SERVER, trace=t2, span=s2)
+
+GET / - 200 (CLIENT, trace=t3, span=s1, Links=[ {trace=t2, span=s1} ], http.retry_count=2)
+ |
+ --- server (SERVER, trace=t3, span=s1)
+```
+
+Example of redirect in the presence of a trace started by an inbound request:
+
+```
+request (SERVER, trace=t1, span=s1)
+  |
+  -- GET / - 302 (CLIENT, trace=t1, span=s2)
+  |   |
+  |   --- server (SERVER, trace=t1, span=s3)
+  |
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, Links=[ {trace=t1, span=s2} ])
+      |
+      --- server (SERVER, trace=t1, span=s5)
+```
+
+Example of redirect with no trace started upfront:
+
+```
+GET / - 302 (CLIENT, trace=t1, span=s1)
+ |
+ --- server (SERVER, trace=t1, span=s2)
+
+GET /hello - 200 (CLIENT, trace=t2, span=s1, Links=[ {trace=t1, span=s1} ])
+ |
+ --- server (SERVER, trace=t2, span=s2)
+```
