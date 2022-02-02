@@ -318,7 +318,7 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s5)
   |
-  -- GET / - 200 (CLIENT, trace=t1, span=s6, Links=[ {trace=t1, span=s4} ], http.retry_count=2)
+  -- GET / - 200 (CLIENT, trace=t1, span=s6, links=[ {trace=t1, span=s4} ], http.retry_count=2)
       |
       --- server (SERVER, trace=t1, span=s7)
 ```
@@ -330,11 +330,11 @@ GET / - 500 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET / - 500 (CLIENT, trace=t2, span=s1, Links=[ {trace=t1, span=s1} ], http.retry_count=1)
+GET / - 500 (CLIENT, trace=t2, span=s1, links=[ {trace=t1, span=s1} ], http.retry_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
 
-GET / - 200 (CLIENT, trace=t3, span=s1, Links=[ {trace=t2, span=s1} ], http.retry_count=2)
+GET / - 200 (CLIENT, trace=t3, span=s1, links=[ {trace=t2, span=s1} ], http.retry_count=2)
  |
  --- server (SERVER, trace=t3, span=s1)
 ```
@@ -348,7 +348,7 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, Links=[ {trace=t1, span=s2} ])
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, links=[ {trace=t1, span=s2} ])
       |
       --- server (SERVER, trace=t1, span=s5)
 ```
@@ -360,7 +360,7 @@ GET / - 302 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET /hello - 200 (CLIENT, trace=t2, span=s1, Links=[ {trace=t1, span=s1} ])
+GET /hello - 200 (CLIENT, trace=t2, span=s1, links=[ {trace=t1, span=s1} ])
  |
  --- server (SERVER, trace=t2, span=s2)
 ```
