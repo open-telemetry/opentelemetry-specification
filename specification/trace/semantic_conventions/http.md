@@ -130,7 +130,7 @@ Retries and redirects cause more than one physical HTTP request to be sent.
 A CLIENT span SHOULD be created for each one of these physical requests.
 No span is created corresponding to the "logical" (encompassing) request.
 
-In order to represent relationship between multiple spans created for retries
+In order to represent the relationship between multiple spans created for retries
 or redirects, `Link` SHOULD be used with each subsequent span linked to the
 span for the immediately previous physical request. These spans SHOULD be
 created as siblings. In case there is no trace started before retries or
