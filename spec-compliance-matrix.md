@@ -63,8 +63,8 @@ formats is required. Implementing more than one format is optional.
 | `null` values documented as invalid/undefined                                                    |          | +   | +    | +   | +      | +    | N/A    | +   |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      |          |     |      |     |        |      |        |     |      |     |      |       |
-| Links can be recorded on span creation                                                           |          | +   | +    |     |        | +    | +      | +   | +    | +   |      |       |
-| Links order is preserved                                                                         |          | +   | +    |     |        | +    | +      | +   | +    | +   |      |       |
+| Links can be recorded on span creation                                                           |          | +   | +    |     |        | +    | +      | +   | +    | +   | +    |       |
+| Links order is preserved                                                                         |          | +   | +    |     |        | +    | +      | +   | +    | +   | +    |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
 | AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Add order preserved                                                                              |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
