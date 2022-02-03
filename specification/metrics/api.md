@@ -129,11 +129,16 @@ This API MUST accept the following parameters:
 * [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
 
-It is unspecified whether or under which conditions the same or different
-`Meter` instances are returned from this functions.
+Meters are identified by all of these fields.  When more than one
+Meter of the same `name`, `version`, and `schema_url` is created, it
+is unspecified whether or under which conditions the same or different
+`Meter` instances are returned.  Meter identity, and the terms
+_identical_ and _distinct_ applied to Meters in this specification
+describes Meter instances that have identical and/or distinct values
+for all three of their `name`, `version`, and `schema_url` attributes.
 
-Implementations MUST NOT require users to repeatedly obtain a `Meter` again with
-the same name+version+schema_url to pick up configuration changes. This can be
+Implementations MUST NOT require users to repeatedly obtain a `Meter` with
+the same identity to pick up configuration changes. This can be
 achieved either by allowing to work with an outdated configuration or by
 ensuring that new configuration applies also to previously returned `Meter`s.
 
@@ -141,7 +146,7 @@ Note: This could, for example, be implemented by storing any mutable
 configuration in the `MeterProvider` and having `Meter` implementation objects
 have a reference to the `MeterProvider` from which they were obtained. If
 configuration must be stored per-meter (such as disabling a certain meter), the
-meter could, for example, do a look-up with its name+version+schema_url in a map
+meter could, for example, do a look-up with its identity in a map
 in the `MeterProvider`, or the `MeterProvider` could maintain a registry of all
 returned `Meter`s and actively update their configuration if it changes.
 
@@ -175,38 +180,50 @@ Instruments are used to report [Measurements](#measurement). Each Instrument
 will have the following information:
 
 * The `name` of the Instrument
-* The `kind` of the Instrument - whether it is a [Counter](#counter) or other
-  instruments, whether it is synchronous or asynchronous
+* The `kind` of the Instrument - whether it is a [Counter](#counter) or 
+  one of the other kinds, whether it is synchronous or asynchronous
 * An optional `unit` of measure
 * An optional `description`
 
-<a name="duplicate-instrument-handling"></a>
+Instruments are associated with the Meter during creation. Instruments
+are identified by all of these fields.
 
-Instruments are associated with the Meter during creation and are
-identified by instrument name.  Duplicate registration of
-identically-named instruments within a Meter is treated as follows:
+<a name="instrument-type-conflict-detection"></a>
 
-* If the registration is semantically identical, meaning to have the
-  same `kind` and `unit` as a previously registered instrument of the
-  same `name`, the implementation MUST return a valid instrument.
-  It is unspecified whether or under which conditions the same or different
-  instrument instance will be returned as a result of duplicate registration.
-* If the registration is semantically not identical, the
-  implementation MUST return a registration error to the user when the
-  instrument is constructed.
+When more than one Instrument of the same `name`, `kind`, `unit`, and
+`description` is created for identical Meters, denoted _duplicate
+instrument registration_, the implementation MUST return a valid
+Instrument in every case.
 
-When determining whether a duplicate registration is valid,
-language-level features such the distinction between integer and
-floating point numbers SHOULD be considered.  Equivalently,
-implementations SHOULD NOT support an application in emitting both
-integer and floating point numbers for the same metric inside the same
-instrumentation library.
+It is unspecified whether or under which conditions the same or
+different Instrument instance will be returned as a result of
+duplicate instrument registration.  Instrument identity, and the terms
+_identical_ and _distinct_ applied to Instruments in this
+specification describes Instrument instances that have identical
+and/or distinct values for all four of their `name`, `kind`, `unit`,
+and `description` attributes.  Language-level features such the
+distinction between integer and floating point numbers SHOULD be
+considered as identifying, as well.
+
+The implementation SHOULD aggregate data from identical Instruments
+together in its export pipeline.
+
+When through duplicate registration more than one distinct Instrument
+is registered with the same `name` for identical Meters, the
+implementation SHOULD emit a warning to the user informing them of
+duplicate registration conflict(s).
+
+__Note the warning about duplicate instrumentation registration
+conflicts is meant to help avoid the semantic error state described in
+the [OpenTelemetry Metrics data
+model](datamodel.md#opentelemetry-data-model) when more than one kind
+of point is written for a given instrument `name` and Meter identity.
 
 <a name="instrument-namespace"></a>
 
-Different Meters MUST be treated as separate namespaces. The names of the
-Instruments under one Meter SHOULD NOT interfere with Instruments under
-another Meter.
+Distinct Meters MUST be treated as separate namespaces for the
+purposes of [Instrument type conflict
+detection](#instrument-type-conflict-detection).
 
 <a name="instrument-naming-rule"></a>
 
@@ -229,7 +246,7 @@ DIGIT = %x30-39 ; 0-9
 
 <a name="instrument-unit"></a>
 
-The `unit` is an optional string provided by the author of the instrument. It
+The `unit` is an optional string provided by the author of the Instrument. It
 SHOULD be treated as an opaque string from the API and SDK (e.g. the SDK is not
 expected to validate the unit of measurement, or perform the unit conversion).
 
@@ -258,12 +275,7 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
 
-Note the `description` property of an instrument is explicitly
-disregarded when considering duplicate registration, because it is not
-semantic in nature.  Implementations SHOULD use any of the provided
-`description` values when emitting metrics that had duplicate registrations.
-
-Instruments can be categorized based on whether they are synchronous or
+Instruments are categorized based on whether they are synchronous or
 asynchronous:
 
 <a name="synchronous-instrument"></a>
@@ -288,15 +300,16 @@ Please note that the term _synchronous_ and _asynchronous_ have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
-When asynchronous instruments are used with duplicate registrations,
-meaning to have more than one callback provided, the order of callback
-execution is unspecified.  Callers SHOULD avoid making duplicate
-observations from asynchronous instrument callbacks.  However, if a
-user accidentally makes duplicate observations, meaning to provide
-more than one value for a given asynchronous instrument and attribute
-set, the caller SHOULD expect the last-observed value to be the one
-recorded.  This is sometimes referred to as "last-value wins" for
-asynchronous instruments.
+Considering duplicate registration, of asynchronous instruments, the
+implementation MUST register every callback, even for conflicting-type
+instruments.
+
+Callers SHOULD avoid making duplicate observations from asynchronous
+instrument callbacks.  However, if a user accidentally makes duplicate
+observations, meaning to provide more than one value for a given
+asynchronous instrument and attribute set, the caller SHOULD expect
+the last-observed value to be the one recorded.  This is sometimes
+referred to as "last-value wins" for asynchronous instruments.
 
 ### Counter
 
@@ -430,7 +443,7 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* A `callback` function.
+* An optional `callback` function.
 
 The `callback` function is responsible for reporting the
 [Measurement](#measurement)s. It will only be called when the Meter is being

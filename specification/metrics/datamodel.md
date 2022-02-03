@@ -263,18 +263,33 @@ can be converted directly into Timeseries, and share the same identity
 characteristics for a Timeseries. A metric stream is identified by:
 
 - The originating `Resource`
+- The metric's associated Meter details (`name`, `version`, and `schema_url`)
 - The metric stream's `name`.
 - The attached `Attribute`s
-- The metric stream's point kind.
+- The metric stream's point kind (`Sum`, `Gauge`, `Histogram` `ExponentialHistogram`)
 
 It is possible (and likely) that more than one metric stream is created per
 `Instrument` in the event model.
 
-__Note: The same `Resource`, `name` and `Attribute`s but differing point kind
-coming out of an OpenTelemetry SDK is considered an "error state" that SHOULD
-be handled by an SDK.__
+Points with identical `name`, `Resource`, and Meter details but
+different point kind SHOULD be considered an "error state", due to
+semantic disagreement, whether or not they use distinct `Attribute`
+values.
 
-A metric stream can use one of these basic point kinds, all of
+Consumers of OpenTelemetry metrics data streams MAY reject data
+containing the multiple point kinds for identical `name`, `Resource`,
+and Meter details, even though the [Single-Writer](#single-writer)
+rule is only broken when distinct `Attribute` values are involved.
+
+__Note: The OpenTelemetry SDK specification is written to explicitly
+permit duplicate instrumentation registration, which means the
+potential to produce the error state.  This is considered to be in the
+user's best interest.  Although the SDK has permission to pass-through
+duplicate instrument registration conflicts, consumers of
+OpenTelemetry metrics are given equal permission to reject the data
+because of semantic disagreement.
+
+A metric stream can use one of the basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
 same kind. <sup>[1](#otlpdatapointfn)</sup>
@@ -749,6 +764,7 @@ All metric data streams within OTLP MUST have one logical writer.  This means,
 conceptually, that any Timeseries created from the Protocol MUST have one
 originating source of truth.  In practical terms, this implies the following:
 
+@@@
 - All metric data streams produced by OTel SDKs MUST be globally uniquely
   produced and free from duplicates.   All metric data streams can be uniquely
   identified in some way.
