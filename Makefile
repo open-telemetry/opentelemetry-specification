@@ -6,6 +6,7 @@ TOOLS_DIR := ./internal/tools
 MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 MARKDOWN_LINK_CHECK=./node_modules/.bin/markdown-link-check
+MARKDOWN_LINK_ANCHOR_DOUBLE_HASH_CHECK=grep -E "[^\# ]\#\#+"
 MARKDOWN_LINT=./node_modules/.bin/markdownlint
 MARKDOWN_TOC=./node_modules/.bin/markdown-toc
 
@@ -33,7 +34,13 @@ $(MARKDOWN_LINK_CHECK):
 
 .PHONY: markdown-link-check
 markdown-link-check:	$(MARKDOWN_LINK_CHECK)
-	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f; done
+	@for f in $(ALL_DOCS); do \
+		$(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f && \
+		$(MARKDOWN_LINK_ANCHOR_DOUBLE_HASH_CHECK) -q $$f && \
+			echo "\nError: link anchor contains double ## on these line(s):" && \
+			$(MARKDOWN_LINK_ANCHOR_DOUBLE_HASH_CHECK) -n $$f && echo && \
+			exit 1; \
+	done
 
 $(MARKDOWN_TOC):
 	npm install markdown-toc
