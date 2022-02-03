@@ -1155,7 +1155,7 @@ The following OTLP data points must be dropped:
 
 #### Metric Attributes
 
-OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  In Prometheus, metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
+OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  String Attribute values are converted directly to Metric Attributes, and non-string Attribute values SHOULD be replaced with an empty string.  In Prometheus, metric labels must match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics
 from OpenTelemetry with unsupported Attribute names SHOULD replace invalid characters with the `_` character. This
 may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same
 location.  In such unlikely cases, either value MAY be used.
