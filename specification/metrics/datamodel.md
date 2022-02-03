@@ -1063,6 +1063,8 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 
 * The `le` label on non-suffixed metrics is used to identify histogram bucket boundaries. Each Prometheus line produces one bucket on the resulting histogram.
 * Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
+* If `_count` is not present, the metric MUST be dropped.
+* If `_sum` is not present, it MUST be computed from the buckets.
 
 #### Summaries
 
@@ -1123,19 +1125,9 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
 
 An [OpenTelemetry Histogram](#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus metric family with the following metrics:
 
-- A single `{name}_count` metric denoting the count field of the histogram.
-  All attributes of the histogram point are converted to Prometheus labels.
-- `{name}_sum` metric denoting the sum field of the histogram, reported
-  only if the sum is positive and monotonic. All attributes of the histogram
-  point are converted to Prometheus labels.
-- A series of `{name}` metric points that contain all attributes of the
-  histogram point recorded as labels.  Additionally, a label, denoted as `le`
-  is added denoting a bucket boundary, and having its value be the stringified
-  floating point value of bucket boundaries, starting from lowest to highest,
-  and all being non-negative.  The value of each point is the sum of the count
-  of all histogram buckets up the the boundary reported in the `le` label.
-  These points will include a single exemplar that falls within `le` label and
-  no other `le` labelled point.
+- A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
+- `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
+- A series of `{name}` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up the the boundary reported in the `le` label. These points will include a single exemplar that falls within `le` label and no other `le` labelled point.  The final bucket metric MUST have an `+Inf` threshold.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MAY be dropped.
 
