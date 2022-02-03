@@ -1091,7 +1091,7 @@ Prometheus Cumulative metrics do not include the start time of the metric. When 
 
 When scraping a Prometheus endpoint, resource attributes must be added to the scraped metrics to distinguish them from metrics from other Prometheus endpoints.  In particular, `job` and `instance`, [as defined by Prometheus](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances), are needed to ensure Prometheus exporters can disambiguate metrics as [described below](#resource-attributes-1).
 
-The following resource attributes must be added to scraped metrics, and may not be added as metric attributes:
+The following attributes MUST be associated with scraped metrics as resource attributes, and MUST NOT be added as attributes to the metric instruments themselves:
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
@@ -1129,7 +1129,7 @@ The following resource attributes must be added to scraped metrics, and may not 
 - A series of `{name}` metric points that contain all attributes of the
   histogram point recorded as labels.  Additionally, a label, denoted as `le`
   is added denoting a bucket boundary, and having its value be the stringified
-  floating point value of bucket boundaries, starting form lowest to highest,
+  floating point value of bucket boundaries, starting from lowest to highest,
   and all being non-negative.  The value of each point is the sum of the count
   of all histogram buckets up the the boundary reported in the `le` label.
   These points will include a single exemplar that falls within `le` label and
