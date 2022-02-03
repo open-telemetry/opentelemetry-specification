@@ -1142,7 +1142,7 @@ An [OpenTelemetry Summary](#summary-legacy) MUST be converted to a Prometheus me
   point are converted to Prometheus labels.
 - A series of `{name}` metric points that contain all attributes of the
   summary point recorded as labels.  Additionally, a label, denoted as
-  `quantile` is added denoting a reported qunatile point, and having its value
+  `quantile` is added denoting a reported quantile point, and having its value
   be the stringified floating point value of quantiles (between 0.0 and 1.0),
   starting from lowest to highest, and all being non-negative.  The value of
   each point is the computed value of the quantile point.
