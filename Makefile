@@ -35,11 +35,11 @@ $(MARKDOWN_LINK_CHECK):
 .PHONY: markdown-link-check
 markdown-link-check:	$(MARKDOWN_LINK_CHECK)
 	@for f in $(ALL_DOCS); do \
-		$(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f && \
-		$(MARKDOWN_LINK_ANCHOR_DOUBLE_HASH_CHECK) -q $$f && \
+		$(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f; \
+		! ($(MARKDOWN_LINK_ANCHOR_DOUBLE_HASH_CHECK) -q $$f || \
 			echo "\nError: link anchor contains double ## on these line(s):" && \
-			$(MARKDOWN_LINK_ANCHOR_DOUBLE_HASH_CHECK) -n $$f && echo && \
-			exit 1; \
+			$(MARKDOWN_LINK_ANCHOR_DOUBLE_HASH_CHECK) -n $$f && echo) \
+		|| exit 1; \
 	done
 
 $(MARKDOWN_TOC):
