@@ -23,7 +23,6 @@
       - [Error Semantics](#error-semantics)
       - [Displaying Severity](#displaying-severity)
       - [Comparing Severity](#comparing-severity)
-    - [Field: `Name`](#field-name)
     - [Field: `Body`](#field-body)
     - [Field: `Resource`](#field-resource)
     - [Field: `Attributes`](#field-attributes)
@@ -184,7 +183,6 @@ SpanId         |Request span id.
 TraceFlags     |W3C trace flag.
 SeverityText   |The severity text (also known as log level).
 SeverityNumber |Numerical value of the severity.
-Name           |Short low cardinality event type.
 Body           |The body of the log record.
 Resource       |Describes the source of the log.
 Attributes     |Additional information about the event.
@@ -402,15 +400,6 @@ comparisons `SeverityNumber` field should be used. `SeverityNumber` can be
 compared to another `SeverityNumber` or to numbers in the 1..24 range (or to the
 corresponding short names).
 
-### Field: `Name`
-
-Type: string.
-
-Description: Short low cardinality event type that does not contain varying
-parts. `Name` describes what happened (e.g. "ProcessStarted"). Recommended to be
-no longer than 50 characters. Typically used for filtering and grouping purposes
-in backends. This field is optional.
-
 ### Field: `Body`
 
 Type: any.
@@ -585,7 +574,7 @@ this data model.
     <td>MSGID</td>
     <td>string</td>
     <td>Defines the type of the event. Part of event source identity. Example: "TCPIN"</td>
-    <td>Name</td>
+    <td>Attributes["syslog.msgid"]</td>
   </tr>
   <tr>
     <td>STRUCTURED-DATA</td>
@@ -639,7 +628,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>EventID</td>
     <td>uint</td>
     <td>The identifier that the provider used to identify the event.</td>
-    <td>Name</td>
+    <td>Attributes["winlog.event_id"]</td>
   </tr>
   <tr>
     <td>Message</td>
@@ -674,7 +663,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>EventType</td>
     <td>string</td>
     <td>Short machine understandable string describing the event type. SignalFx specific concept. Non-namespaced. Example: k8s Event Reason field.</td>
-    <td>Name</td>
+    <td>Attributes["com.splunk.signalfx.event_type"]</td>
   </tr>
   <tr>
     <td>Category</td>
@@ -971,7 +960,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>errorCode</td>
     <td>string</td>
     <td>The AWS service error if the request returns an error.</td>
-    <td>Name</td>
+    <td>Attributes["cloudtrail.error_code"]</td>
   </tr>
   <tr>
     <td>errorMessage</td>
@@ -1307,12 +1296,6 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
     <td>string</td>
     <td>Version of the service the data was collected from.</td>
     <td>Resource["service.version"]</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
   </tr>
 </table>
 
