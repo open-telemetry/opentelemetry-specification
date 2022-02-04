@@ -972,7 +972,7 @@ concurrently.
 
 The [OpenTelemetry Metrics data
 model](datamodel.md#opentelemetry-protocol-data-model) has a [Single
-Writer](datamodel.md#single-writer) rule which the SDK is required to
+Writer](datamodel.md#single-writer) rule that the SDK is REQUIRED to
 enforce, with one exception noted below.  This rule is the origin of
 the output-name uniqueness requirement for [Views](#view) and is the
 reason the API specifies that implementations MUST aggregate data for
