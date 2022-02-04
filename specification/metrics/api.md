@@ -200,17 +200,16 @@ duplicate instrument registration.  Instrument identity, and the terms
 _identical_ and _distinct_ applied to Instruments in this
 specification describes Instrument instances that have identical
 and/or distinct values for all four of their `name`, `kind`, `unit`,
-and `description` attributes.  Language-level features such the
+and `description` attributes.  Language-level features such as the
 distinction between integer and floating point numbers SHOULD be
 considered as identifying, as well.
 
 The implementation MUST aggregate data from identical Instruments
 together in its export pipeline.
 
-When through duplicate registration more than one distinct Instrument
-is registered with the same `name` for identical Meters, the
-implementation SHOULD emit a warning to the user informing them of
-duplicate registration conflict(s).
+When more than one distinct Instrument is registered with the same
+`name` for identical Meters, the implementation SHOULD emit a warning
+to the user informing them of duplicate registration conflict(s).
 
 __Note the warning about duplicate instrumentation registration
 conflicts is meant to help avoid the semantic error state described in
