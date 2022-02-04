@@ -253,17 +253,17 @@ meter_provider
 ```python
 # Counter X will be exported as cumulative sum
 meter_provider
-    .add_view("X", aggregation=SumAggregation(CUMULATIVE))
-    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
+    .add_view("X", aggregation=SumAggregation())
+    .add_metric_reader(PeriodicExportingMetricReader(AggregationTemporality.CUMULATIVE, ConsoleExporter()))
 ```
 
 ```python
 # Counter X will be exported as delta sum
 # Histogram Y and Gauge Z will be exported with 2 attributes (a and b)
 meter_provider
-    .add_view("X", aggregation=SumAggregation(DELTA))
+    .add_view("X", aggregation=SumAggregation())
     .add_view("*", attribute_keys=["a", "b"])
-    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
+    .add_metric_reader(PeriodicExportingMetricReader(AggregationTemporality.DELTA, ConsoleExporter()))
 ```
 
 ### Aggregation
