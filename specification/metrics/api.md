@@ -204,7 +204,7 @@ and `description` attributes.  Language-level features such the
 distinction between integer and floating point numbers SHOULD be
 considered as identifying, as well.
 
-The implementation SHOULD aggregate data from identical Instruments
+The implementation MUST aggregate data from identical Instruments
 together in its export pipeline.
 
 When through duplicate registration more than one distinct Instrument
@@ -300,12 +300,24 @@ Please note that the term _synchronous_ and _asynchronous_ have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
-Considering duplicate registration, of asynchronous instruments, the
-implementation MUST register every callback, even for conflicting-type
-instruments.
+Considering duplicate registration of asynchronous instruments, the
+implementation MUST support multiple callbacks registered per
+identical instrument.
+
+The API MAY provide support for registration of a single callback
+having multiple asynchronous instruments, where idiomatic.  The
+implementation is REQUIRED to maintain a mapping from every regsitered
+callback to the associated instrument(s).
+
+The implementation MUST provide a way to unregister callbacks
+associated with asynchronous instruments.
+
+The implementation SHOULD reject observations that are made outside of
+a callback registered for the instrument.
 
 Callers SHOULD avoid making duplicate observations from asynchronous
-instrument callbacks.
+instrument callbacks, as the result of making duplicate observations
+is not specified.
 
 ### Counter
 
@@ -439,7 +451,10 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* An optional `callback` function.
+
+The API MUST support an idiomatic way to associate one or more
+`callback` functions with each instrument, whether through the
+instrument constructor or a separate registration method.
 
 The `callback` function is responsible for reporting the
 [Measurement](#measurement)s. It will only be called when the Meter is being
@@ -656,7 +671,10 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* A `callback` function.
+
+The API MUST support an idiomatic way to associate one or more
+`callback` functions with each instrument, whether through the
+instrument constructor or a separate registration method.
 
 The `callback` function is responsible for reporting the
 [Measurement](#measurement)s. It will only be called when the Meter is being
@@ -928,7 +946,10 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* A `callback` function.
+
+The API MUST support an idiomatic way to associate one or more
+`callback` functions with each instrument, whether through the
+instrument constructor or a separate registration method.
 
 The `callback` function is responsible for reporting the
 [Measurement](#measurement)s. It will only be called when the Meter is being

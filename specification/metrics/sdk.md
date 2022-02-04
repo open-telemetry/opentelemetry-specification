@@ -955,26 +955,23 @@ concurrently.
 
 ## Data model requirements
 
-The implementation is required to respect the OpenTelemetry Metrics
-data model [Single Writer](datamodel.md#single-writer) requirement.
-This rule stipulates that the implementation MUST avoid creating
-duplicate output streams from a given SDK.
+The [OpenTelemetry Metrics data
+model](datamodel.md#opentelemetry-protocol-data-model) has a [Single
+Writer](datamodel.md#single-writer) rule which the SDK is required to
+enforce, with one exception noted below.  This rule is the origin of
+the output-name uniqueness requirement for [Views](#view) and is the
+reason the API specifies that implementations MUST aggregate data for
+identical instruments in its pipeline.
 
-This rule is the basis of the output-name uniqueness check in for
-[Views](#view) above, and it also constrains how duplicate instrument
-registration is handled.
+The implementation has permission to pass-through violations of the
+semantic "error state" described in the [OpenTelemetry Metrics data
+model](datamodel.md#opentelemetry-protocol-data-model).  This is to
+address the exceptional case of duplicate instrument registration
+conflicts, which are tolerated with warnings in the API.
 
-For example, the implementation is not required to return the
-identical instrument when a duplicate instrument is registered, but
-assuming it does allow separate instances to co-exist, the
-implementation MUST eliminate the duplication at a later point using
-the [natural merge function](#opentelemetry-protocol-data-model) for
-those data points, as otherwise it would risk violating the
-single-writer rule.
-
-As another example, users are encouraged not to make duplicate
-observations from asynchronous instrument callbacks.  However,
-implementations MUST NOT violate the single-writer rule even when
-users make duplicate observations.  This is also covered in the
-[supplemental guidelines for handling asynchronous instrument
-views](#asynchronous-example-attribute-removal-in-a-view).
+Duplicate instrument registration conflicts can produce this semantic
+error state, which may lead to violations of the single-writer rule.
+SDKs are permitted to allow these conflicts to take place to avoid
+user data loss.  Since the semantic conflict may not be resolvable
+downstream, Metrics data consumers MAY reject semantically conflicting
+data and SHOULD notify the user of the error, somehow, in such cases.
