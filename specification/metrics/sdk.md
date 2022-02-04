@@ -414,6 +414,21 @@ instruments that record negative measurements, e.g. `UpDownCounter` or `Observab
 - Min (optional) `Measurement` value in population.
 - Max (optional) `Measurement` value in population.
 
+### Resolving duplicate instrument registration conflicts
+
+Implementation are required by the API specification to tolerate
+duplicate instrument registration conflicts.  View configuration
+offers the user an opportunity to configure a workaround in cases
+where the conflict involves the instrument type.
+
+To help the user manage such conflicts, the implementation SHOULD warn
+about dupliclate instrument registration conflicts after applying the
+Views configuration.  For conflicts that can be resolved through a
+View configuration, which includes instrument-type conflicts but not
+unit or description conflicts, the implementation's warning SHOULD
+include an example suggesting a View configuration to resolve the
+conflict.
+
 ## Attribute limits
 
 Attributes which belong to Metrics are exempt from the
