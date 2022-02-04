@@ -19,6 +19,7 @@
     + [Last Value Aggregation](#last-value-aggregation)
     + [Histogram Aggregation](#histogram-aggregation)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+  * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -40,6 +41,7 @@
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
+- [Data model requirements](#data-model-requirements)
 
 <!-- tocstop -->
 

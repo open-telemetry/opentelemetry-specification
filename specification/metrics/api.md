@@ -180,7 +180,7 @@ Instruments are used to report [Measurements](#measurement). Each Instrument
 will have the following information:
 
 * The `name` of the Instrument
-* The `kind` of the Instrument - whether it is a [Counter](#counter) or 
+* The `kind` of the Instrument - whether it is a [Counter](#counter) or
   one of the other kinds, whether it is synchronous or asynchronous
 * An optional `unit` of measure
 * An optional `description`
@@ -305,7 +305,7 @@ identical instrument.
 
 The API MAY provide support for registration of a single callback
 having multiple asynchronous instruments, where idiomatic.  The
-implementation is REQUIRED to maintain a mapping from every regsitered
+implementation is REQUIRED to maintain a mapping from every registered
 callback to the associated instrument(s).
 
 The implementation MUST provide a way to unregister callbacks

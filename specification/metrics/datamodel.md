@@ -765,7 +765,6 @@ All metric data streams within OTLP MUST have one logical writer.  This means,
 conceptually, that any Timeseries created from the Protocol MUST have one
 originating source of truth.  In practical terms, this implies the following:
 
-@@@
 - All metric data streams produced by OTel SDKs MUST be globally uniquely
   produced and free from duplicates.   All metric data streams can be uniquely
   identified in some way.
