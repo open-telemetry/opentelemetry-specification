@@ -190,10 +190,9 @@ are identified by all of these fields.
 
 <a name="instrument-type-conflict-detection"></a>
 
-When more than one Instrument of the same `name`, `kind`, `unit`, and
-`description` is created for identical Meters, denoted _duplicate
-instrument registration_, the implementation MUST return a valid
-Instrument in every case.
+When more than one Instrument of the same `name` is created for
+identical Meters, denoted _duplicate instrument registration_, the
+implementation MUST return a valid Instrument in every case.
 
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of
@@ -217,13 +216,14 @@ __Note the warning about duplicate instrumentation registration
 conflicts is meant to help avoid the semantic error state described in
 the [OpenTelemetry Metrics data
 model](datamodel.md#opentelemetry-data-model) when more than one kind
-of point is written for a given instrument `name` and Meter identity.
+of point is written for a given instrument `name` and Meter identity
+from the same process.
 
 <a name="instrument-namespace"></a>
 
 Distinct Meters MUST be treated as separate namespaces for the
-purposes of [Instrument type conflict
-detection](#instrument-type-conflict-detection).
+purposes of detecting [duplicate instrument registration
+conflicts](#instrument-type-conflict-detection).
 
 <a name="instrument-naming-rule"></a>
 
@@ -305,11 +305,7 @@ implementation MUST register every callback, even for conflicting-type
 instruments.
 
 Callers SHOULD avoid making duplicate observations from asynchronous
-instrument callbacks.  However, if a user accidentally makes duplicate
-observations, meaning to provide more than one value for a given
-asynchronous instrument and attribute set, the caller SHOULD expect
-the last-observed value to be the one recorded.  This is sometimes
-referred to as "last-value wins" for asynchronous instruments.
+instrument callbacks.
 
 ### Counter
 
