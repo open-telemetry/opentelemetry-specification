@@ -163,7 +163,10 @@ the instrumentation scope.
 
 If the unit of code has a version then the instrumentation scope is defined by
 the (name,version) pair otherwise the version is omitted and only the name is
-used.
+used. The name or (name,version) pair uniquely identify the logical unit of the
+code that emits the telemetry. A typical approach to ensure uniqueness is to use
+fully qualified name of the emitting code (e.g. fully qualified library name or
+fully qualified class name).
 
 The instrumentation scope is used to obtain a
 [Tracer or Meter](#tracer-name--meter-name).

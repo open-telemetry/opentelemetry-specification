@@ -58,8 +58,7 @@ suggestions regarding how to implement this efficiently.
 New `Meter` instances are always created through a `MeterProvider` (see
 [API](./api.md#meterprovider)). The `name`, `version` (optional), and
 `schema_url` (optional) arguments supplied to the `MeterProvider` MUST be used
-to create an
-[`InstrumentationLibrary`](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
+to create an [`InstrumentationScope`](../glossary.md#instrumentation-scope)
 instance which is stored on the created `Meter`.
 
 Configuration (i.e., [MetricExporters](#metricexporter),

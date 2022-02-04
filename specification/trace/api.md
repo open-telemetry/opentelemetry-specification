@@ -106,11 +106,11 @@ The `TracerProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-- `name` (required): This name must identify the [instrumentation
-  scope](../glossary.md#instrumentation-scope) (e.g.
-  `io.opentelemetry.contrib.mongodb`), such as the instrumentation library,
-  package, module or class name. If an application or library has built-in
-  OpenTelemetry instrumentation, both
+- `name` (required): This name SHOULD uniquely identify the
+  [instrumentation scope](../glossary.md#instrumentation-scope) , such as the
+  [instrumentation library](../glossary.md#instrumentation-library) (e.g.
+  `io.opentelemetry.contrib.mongodb`), package, module or class name. If an
+  application or library has built-in OpenTelemetry instrumentation, both
   [Instrumented library](../glossary.md#instrumented-library) and
   [Instrumentation library](../glossary.md#instrumentation-library) may refer to
   the same library. In that scenario, the `name` denotes a module name or
