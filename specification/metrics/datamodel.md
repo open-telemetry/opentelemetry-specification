@@ -267,14 +267,15 @@ characteristics for a Timeseries. A metric stream is identified by:
 - The metric stream's `name`.
 - The attached `Attribute`s
 - The metric stream's point kind (`Sum`, `Gauge`, `Histogram` `ExponentialHistogram`)
+- Intrinsic properties of the point, including temporality and monotonicity
 
 It is possible (and likely) that more than one metric stream is created per
 `Instrument` in the event model.
 
 Points with identical `name`, `Resource`, and Meter details but
-different point kind SHOULD be considered an "error state", due to
-semantic disagreement, whether or not they use distinct `Attribute`
-values.
+different point kind or different point kind intrinsic properties
+SHOULD be considered an "error state", due to semantic disagreement,
+whether or not they use distinct `Attribute` values.
 
 Consumers of OpenTelemetry metrics data streams MAY reject data
 containing the multiple point kinds for identical `name`, `Resource`,
