@@ -629,19 +629,17 @@ The SDK SHOULD provide a way to allow the preferred [Aggregation
 Temporality](./datamodel.md#temporality) to be specified for a
 `MetricReader` instance during the setup (e.g. initialization,
 registration, etc.) time.  This preference gives the user control over
-the amount of long-term memory dedicated to reading metrics, and has
-considerable cost implications.
+the amount of long-term memory dedicated to reading metrics.
 
 The synchronous instruments generally define data points having
 aggregation temporality (e.g., `Sum`, `Histogram`).  For these points,
 when a `MetricReader` is configured with Cumulative aggregation
-temporality, there is an implied long-term memory cost.  The preferred
-aggregation temporality is meant to give users control over this cost.
+temporality, there is an implied long-term memory cost.
 
 The asynchronous `Counter` and `UpDownCounter` instruments are defined
-by observations having cumulative aggregation temporality to begin
-with.  For these points, a change of aggregation temporality implies
-conversion from Cumulative into Delta aggregation temporality.
+by observations that are cumulative values to begin with.  For these
+points, a change of aggregation temporality implies conversion from
+Cumulative into Delta aggregation temporality.
 
 Because of these differences, synchronous and asynchronous instruments
 are given separate treatment.  When configuring the preferred
@@ -652,13 +650,13 @@ following named preferences:
   with Cumulative aggregation temporality (i.e., all data point kinds
   except for `Gauge`).  This implies maintaining long-term Cumulative 
   state for metric streams deriving from synchronous instruments.
-- "Stateless": Data points that define the concept deriving from
+- "Stateless": Data points having aggregation temporality deriving from
   synchonous instruments are exported with Delta aggregation
   temporality (e.g., Delta `Sum` and Delta `Histogram` points), while
-  data points that define the concept deriving from asynchronous
+  data points having aggregation temporality deriving from asynchronous
   instruments are exported with Cumulative aggregation temporality.
-  This preference is so named because it avoids long-term memory costs
-  in the SDK for metrics.
+  This preference is so named because it avoids long-term Cumulative 
+  state in the metrics SDK.
 
 If the preferred temporality is explicitly specified then the SDK
 SHOULD respect that, otherwise use Cumulative.

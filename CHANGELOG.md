@@ -41,6 +41,7 @@ release.
   [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2061)
 - Changed default Prometheus Exporter host from `0.0.0.0` to `localhost`.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
+- Clarify what is meant by "preferred" aggregation temporality.
 
 ### Logs
 
