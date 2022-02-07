@@ -28,7 +28,7 @@ HTTP spans MUST follow the overall [guidelines for span names](../api.md#span).
 Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
 is a user id, which creates high cardinality value space not suitable for span
 names. In case of HTTP servers, these endpoints are often mapped by the server
-frameworks to more concise _HTTP routes_, e.g. `/api/users/{user_id}`, which are
+frameworks to more concise *HTTP routes*, e.g. `/api/users/{user_id}`, which are
 recommended as the low cardinality span names. However, the same approach usually
 does not work for HTTP client spans, especially when instrumentation is provided
 by a lower-level middleware that is not aware of the specifics of how the URIs

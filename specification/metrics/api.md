@@ -260,7 +260,7 @@ asynchronous:
   seconds. [Measurements](#measurement) recorded by asynchronous instruments
   cannot be associated with the [Context](../context/context.md).
 
-Please note that the term _synchronous_ and _asynchronous_ have nothing to do
+Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
@@ -575,13 +575,13 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 ### Asynchronous Gauge
 
 Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument)
-which reports non-additive value(s) (_e.g. the room temperature - it makes no
-sense to report the temperature value from multiple rooms and sum them up_) when
+which reports non-additive value(s) (e.g. the room temperature - it makes no
+sense to report the temperature value from multiple rooms and sum them up) when
 the instrument is being observed.
 
-Note: if the values are additive (_e.g. the process heap size - it makes sense
+Note: if the values are additive (e.g. the process heap size - it makes sense
 to report the heap size from multiple processes and sum them up, so we get the
-total heap usage_), use [Asynchronous Counter](#asynchronous-counter) or
+total heap usage), use [Asynchronous Counter](#asynchronous-counter) or
 [Asynchronous UpDownCounter](#asynchronous-updowncounter).
 
 Example uses for Asynchronous Gauge:
@@ -845,9 +845,9 @@ customersInStore.Add(-1, new Account { Type = "residential" });
 ### Asynchronous UpDownCounter
 
 Asynchronous UpDownCounter is an [asynchronous
-Instrument](#asynchronous-instrument) which reports additive value(s) (_e.g. the
+Instrument](#asynchronous-instrument) which reports additive value(s) (e.g. the
 process heap size - it makes sense to report the heap size from multiple
-processes and sum them up, so we get the total heap usage_) when the instrument
+processes and sum them up, so we get the total heap usage) when the instrument
 is being observed.
 
 Note: if the value is
