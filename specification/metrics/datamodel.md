@@ -266,7 +266,7 @@ characteristics for a Timeseries. A metric stream is identified by:
 - The metric's associated Meter details (`name`, `version`, and `schema_url`)
 - The metric stream's `name`.
 - The attached `Attribute`s
-- The metric stream's point kind (`Sum`, `Gauge`, `Histogram` `ExponentialHistogram`, `Summary`)
+- The metric stream's point kind (e.g. `Sum`, `Gauge`, `Histogram` `ExponentialHistogram`, `Summary`)
 - Intrinsic properties of the point, including temporality and monotonicity
 
 It is possible (and likely) that more than one metric stream is created per
