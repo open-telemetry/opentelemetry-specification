@@ -52,6 +52,8 @@ release.
   ([#2184](https://github.com/open-telemetry/opentelemetry-specification/pull/2184))
 - Change mapping for log_name of Google Cloud Logging.
   ([#2092](https://github.com/open-telemetry/opentelemetry-specification/pull/2092))
+- Drop Log name.
+  field ([#2271](https://github.com/open-telemetry/opentelemetry-specification/pull/2271))
 
 ### Resource
 
@@ -63,6 +65,8 @@ release.
   ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
 - Add JVM memory runtime semantic
   conventions. ([#2272](https://github.com/open-telemetry/opentelemetry-specification/pull/2272))
+- Add opentracing.ref_type semantic convention.
+  ([#2297](https://github.com/open-telemetry/opentelemetry-specification/pull/2297))
 - Add semantic conventions for [CloudEvents](https://cloudevents.io).
   ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 
