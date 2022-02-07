@@ -1,5 +1,7 @@
 {
   "files": "**/*.{md,png}",
-  "exclude": "*",
-  "warningsAsErrors": true
+  "warningsAsErrors": true,
+  "rules": {
+    "link-out-of-scope": "off"
+  }
 }
