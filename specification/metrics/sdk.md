@@ -418,7 +418,7 @@ instruments that record negative measurements, e.g. `UpDownCounter` or `Observab
 
 ### Resolving duplicate instrument registration conflicts
 
-Implementation are required by the API specification to tolerate
+Implementations are required by the API specification to tolerate
 duplicate instrument registration conflicts.  View configuration
 offers the user an opportunity to configure a workaround in cases
 where the conflict involves the instrument type.
