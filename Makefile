@@ -5,9 +5,6 @@ PWD := $(shell pwd)
 TOOLS_DIR := ./internal/tools
 MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
-MARKDOWN_LINK_CHECK=./node_modules/.bin/markdown-link-check
-MARKDOWN_LINT=./node_modules/.bin/markdownlint
-MARKDOWN_TOC=./node_modules/.bin/markdown-toc
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
@@ -28,15 +25,10 @@ misspell:	$(MISSPELL)
 misspell-correction:	$(MISSPELL)
 	$(MISSPELL) -w $(ALL_DOCS)
 
-$(MARKDOWN_LINK_CHECK):
-	npm install markdown-link-check
-
 .PHONY: markdown-link-check
-markdown-link-check:	$(MARKDOWN_LINK_CHECK)
-	@for f in $(ALL_DOCS); do $(MARKDOWN_LINK_CHECK) --quiet --config .markdown_link_check_config.json $$f; done
-
-$(MARKDOWN_TOC):
-	npm install markdown-toc
+markdown-link-check:
+	@if ! npm ls markdown-link-check; then npm install; fi
+	@for f in $(ALL_DOCS); do npx markdown-link-check --quiet --config .markdown_link_check_config.json $$f; done
 
 # This target runs markdown-toc on all files that contain
 # a comment <!-- tocstop -->.
@@ -47,22 +39,21 @@ $(MARKDOWN_TOC):
 #   <!-- toc -->
 #   <!-- tocstop -->
 .PHONY: markdown-toc
-markdown-toc:	$(MARKDOWN_TOC)
+markdown-toc:
+	@if ! npm ls markdown-toc; then npm install; fi
 	@for f in $(ALL_DOCS); do \
 		if grep -q '<!-- tocstop -->' $$f; then \
 			echo markdown-toc: processing $$f; \
-			$(MARKDOWN_TOC) --no-first-h1 --no-stripHeadingTags -i $$f; \
+			npx markdown-toc --no-first-h1 --no-stripHeadingTags -i $$f; \
 		else \
 			echo markdown-toc: no TOC markers, skipping $$f; \
 		fi; \
 	done
 
-$(MARKDOWN_LINT):
-	npm install markdownlint-cli@0.31.0
-
 .PHONY: markdownlint
-markdownlint:	$(MARKDOWN_LINT)
-	@for f in $(ALL_DOCS); do echo $$f; $(MARKDOWN_LINT) -c .markdownlint.yaml $$f || exit 1;	done
+markdownlint:
+	@if ! npm ls markdownlint; then npm install; fi
+	@for f in $(ALL_DOCS); do echo $$f; npx markdownlint -c .markdownlint.yaml $$f || exit 1;	done
 
 .PHONY: install-yamllint
 install-yamllint:
@@ -101,5 +92,5 @@ fix: table-generation misspell-correction
 
 # Attempt to install all the tools
 .PHONY: install-tools
-install-tools: $(MISSPELL) $(MARKDOWN_LINT) $(MARKDOWN_LINK_CHECK) $(MARKDOWN_TOC)
+install-tools: $(MISSPELL) markdownlint markdown-link-check markdown-toc
 	@echo "All tools installed"
