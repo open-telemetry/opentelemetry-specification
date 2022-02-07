@@ -31,7 +31,7 @@ pairs associated with the Span using the following mapping:
 | `InstrumentationScope.name`|`otel.scope.name`|since 1.9.0|
 | `InstrumentationScope.version`|`otel.scope.version`|since 1.9.0|
 
-The following deprecated aliases are also reported with exact same values for
+The following deprecated aliases MUST also be reported with exact same values for
 backward compatibility reasons:
 
 | non-OTLP Key | Alias for | Notes |
