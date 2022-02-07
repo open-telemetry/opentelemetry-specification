@@ -20,6 +20,7 @@ formats is required. Implementing more than one format is optional.
 | Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer with schema_url                                                                     |          | +   | +    |     |        |      |        |     |      | +   |      |       |
+| Associate Tracer with InstrumentationScope                                                       |          |     |      |     |        |      |        |     |      |     |      |       |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | ForceFlush (SDK only required)                                                                   |          | +   | +    | -   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -80,6 +81,7 @@ formats is required. Implementing more than one format is optional.
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   |      |       |
 | [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
+| Fetch InstrumentationScope from ReadableSpan                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -102,6 +104,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | `get_meter` accepts name, `version` and `schema_url`.                                                                                                                        |          | +  |  +   |    |    +   |      |        |     |      |     |   -  |       |
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.                                                                              |          | +  |  +   |    |    -   |      |        |     |      |     |   -  |       |
 | The fallback `Meter` `name` property keeps its original invalid value.                                                                                                       | X        | -  |  -   |    |    -   |      |        |     |      |     |   -  |       |
+| Associate `Meter` with `InstrumentationScope`.                                                                                                                               |          |    |      |    |        |      |        |     |      |     |      |       |
 | The meter provides functions to create a new `Counter`.                                                                                                                      |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The meter provides functions to create a new `AsynchronousCounter`.                                                                                                          |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The meter provides functions to create a new `Histogram`.                                                                                                                    |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
