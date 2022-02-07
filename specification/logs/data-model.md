@@ -11,7 +11,7 @@
   * [Requirements](#requirements)
   * [Definitions Used in this Document](#definitions-used-in-this-document)
     + [Type `any`](#type-any)
-    + [Type `map`](#type-map)
+    + [Type `map`](#type-mapstring-any)
   * [Field Kinds](#field-kinds)
 - [Log and Event Record Definition](#log-and-event-record-definition)
   * [Field: `Timestamp`](#field-timestamp)
