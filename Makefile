@@ -27,7 +27,6 @@ misspell-correction:	$(MISSPELL)
 
 .PHONY: markdown-link-check
 markdown-link-check:
-	@if ! npm ls markdown-link-check; then npm install; fi
 	@for f in $(ALL_DOCS); do npx markdown-link-check --quiet --config .markdown_link_check_config.json $$f; done
 
 # This target runs markdown-toc on all files that contain
@@ -40,7 +39,6 @@ markdown-link-check:
 #   <!-- tocstop -->
 .PHONY: markdown-toc
 markdown-toc:
-	@if ! npm ls markdown-toc; then npm install; fi
 	@for f in $(ALL_DOCS); do \
 		if grep -q '<!-- tocstop -->' $$f; then \
 			echo markdown-toc: processing $$f; \
@@ -90,7 +88,7 @@ check: misspell markdownlint markdown-link-check
 fix: table-generation misspell-correction
 	@echo "All autofixes complete"
 
-# Attempt to install all the tools
 .PHONY: install-tools
-install-tools: $(MISSPELL) markdownlint markdown-link-check markdown-toc
+install-tools: $(MISSPELL)
+	npm install
 	@echo "All tools installed"
