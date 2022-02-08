@@ -345,8 +345,8 @@ consider:
 ```python
 # Python
 
-exception_counter.Add(1, {"exception_type": "IOError", "handled_by_user": True})
-exception_counter.Add(1, exception_type="IOError", handled_by_user=True})
+exception_counter.add(1, {"exception_type": "IOError", "handled_by_user": True})
+exception_counter.add(1, exception_type="IOError", handled_by_user=True)
 ```
 
 ```csharp
@@ -832,8 +832,8 @@ API](../overview.md#api) authors might consider:
 
 ```python
 # Python
-customers_in_store.Add(1, {"account.type": "commercial"})
-customers_in_store.Add(-1, account_type="residential")
+customers_in_store.add(1, {"account.type": "commercial"})
+customers_in_store.add(-1, account_type="residential")
 ```
 
 ```csharp
