@@ -1116,10 +1116,10 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
 
 [OpenTelemetry Sums](#sums) follows this logic:
 
-- If the aggregation temporality is cumulative and the sum is monotonic,
-  it MUST be converted to a Prometheus Sum.
-- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum, or it MAY be dropped.
-- Otherwise the Sum MUST be converted to a Prometheus Gauge.
+- If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Sum.
+- If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
+- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum
+- Otherwise, it MUST be dropped.
 
 #### Histograms
 
