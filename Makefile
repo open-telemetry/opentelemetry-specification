@@ -54,7 +54,7 @@ markdown-toc:	$(MARKDOWN_TOC)
 	done
 
 $(MARKDOWN_LINT):
-	npm install markdownlint-cli
+	npm install markdownlint-cli@0.31.0
 
 .PHONY: markdownlint
 markdownlint:	$(MARKDOWN_LINT)
