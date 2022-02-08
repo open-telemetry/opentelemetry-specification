@@ -245,20 +245,20 @@ Note: Support for environment variables is optional.
 |OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
 |OTEL_EXPORTER_JAEGER_*                        | + |    |   |      |    | -    | - |    | - | +  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | +  | -   |
-|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
+|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
 |OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
-|OTEL_LOGS_EXPORTER                            |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | +    |   | +  | - |    |     |
-|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    | +    |   |    |   |    |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | +    |   | +  | - |    |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | +    |   | +  | - |    |     |
-|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    | +    |   |    |   |    |     |
-|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    | +    |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - |    |     |
-|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - |    |     |
-|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    | -    |   |    |   |    |     |
-|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    | -    |   |    |   |    |     |
-|OTEL_METRICS_EXEMPLAR_FILTER                  |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_LOGS_EXPORTER                            |   |    |   |      |    |      |   |    |   | -  |     |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_METRICS_EXEMPLAR_FILTER                  |   |    |   |      |    |      |   |    |   | -  |     |
 
 ## Exporters
 
@@ -298,7 +298,7 @@ Note: Support for environment variables is optional.
 | [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
 | Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
 | Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
-| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    | -      |     | +    | +   | -    | -     |
+| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
 | Service name mapping                                                           |          | +  | + |    | +           | +    | -      |     |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
