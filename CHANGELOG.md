@@ -14,6 +14,9 @@ release.
 - Clarify `StartSpan` returning the parent as a non-recording Span when no SDK
   is in use
   ([#2121](https://github.com/open-telemetry/opentelemetry-specification/pull/2121))
+- Add support for probability sampling in the OpenTelemetry `tracestate` entry and
+  add optional specification for consistent probability sampling.
+  ([#2047](https://github.com/open-telemetry/opentelemetry-specification/pull/2047))
 
 ### Metrics
 
@@ -41,12 +44,16 @@ release.
 
 ### Logs
 
+- Fix attributes names in Google Cloud Logging mapping.
+  ([#2093](https://github.com/open-telemetry/opentelemetry-specification/pull/2093))
 - Add OTEL_LOGS_EXPORTER environment variable.
   ([#2196](https://github.com/open-telemetry/opentelemetry-specification/pull/2196))
 - Added ObservedTimestamp to the Log Data Model.
   ([#2184](https://github.com/open-telemetry/opentelemetry-specification/pull/2184))
 - Change mapping for log_name of Google Cloud Logging.
   ([#2092](https://github.com/open-telemetry/opentelemetry-specification/pull/2092))
+- Drop Log name.
+  field ([#2271](https://github.com/open-telemetry/opentelemetry-specification/pull/2271))
 
 ### Resource
 
@@ -56,6 +63,10 @@ release.
   ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
 - Add `device.manufacturer` to describe mobile device manufacturers.
   ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
+- Add JVM memory runtime semantic
+  conventions. ([#2272](https://github.com/open-telemetry/opentelemetry-specification/pull/2272))
+- Add opentracing.ref_type semantic convention.
+  ([#2297](https://github.com/open-telemetry/opentelemetry-specification/pull/2297))
 
 ### Compatibility
 
