@@ -150,9 +150,7 @@ are the inputs:
   * The `name` of the Instrument(s). [OpenTelemetry SDK](../overview.md#sdk)
     authors MAY choose to support wildcard characters, with the
     question mark (`?`) matching exactly one character and the asterisk
-    character (`*`) matching zero or more characters. In addition, the
-    OpenTelemetry SDK authors MAY choose to support additional predicates that
-    are idiomatic for their language (e.g. regular expressions, callbacks).
+    character (`*`) matching zero or more characters.
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
