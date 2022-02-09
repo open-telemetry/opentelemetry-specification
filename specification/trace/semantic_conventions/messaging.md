@@ -178,7 +178,7 @@ For message consumers, the following additional attributes may be set:
 | `process` | process |
 <!-- endsemconv -->
 
-The _receive_ span is be used to track the time used for receiving the message(s), whereas the _process_ span(s) track the time for processing the message(s).
+The *receive* span is be used to track the time used for receiving the message(s), whereas the *process* span(s) track the time for processing the message(s).
 Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive`.
 The distinction between receiving and processing of messages is not always of particular interest or sometimes hidden away in a framework (see the [Message consumption](#message-consumption) section above) and therefore the attribute can be left out.
 For batch receiving and processing (see the [Batch receiving](#batch-receiving) and [Batch processing](#batch-processing) examples below) in particular, the attribute SHOULD be set.
@@ -189,7 +189,7 @@ Instead span kind should be set to either `CONSUMER` or `SERVER` according to th
 
 #### RabbitMQ
 
-In RabbitMQ, the destination is defined by an _exchange_ and a _routing key_.
+In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
 `messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
 
 <!-- semconv messaging.rabbitmq -->

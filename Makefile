@@ -1,5 +1,5 @@
 # All documents to be used in spell check.
-ALL_DOCS := $(shell find . -name '*.md' -not -path './.github/*' -type f | grep -v ^./node_modules | sort)
+ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' | sort)
 PWD := $(shell pwd)
 
 TOOLS_DIR := ./internal/tools
@@ -54,7 +54,7 @@ markdown-toc:	$(MARKDOWN_TOC)
 	done
 
 $(MARKDOWN_LINT):
-	npm install markdownlint-cli
+	npm install markdownlint-cli@0.31.0
 
 .PHONY: markdownlint
 markdownlint:	$(MARKDOWN_LINT)

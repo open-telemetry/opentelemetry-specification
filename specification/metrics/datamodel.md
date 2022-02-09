@@ -270,9 +270,9 @@ characteristics for a Timeseries. A metric stream is identified by:
 It is possible (and likely) that more than one metric stream is created per
 `Instrument` in the event model.
 
-__Note: The same `Resource`, `name` and `Attribute`s but differing point kind
+**Note: The same `Resource`, `name` and `Attribute`s but differing point kind
 coming out of an OpenTelemetry SDK is considered an "error state" that SHOULD
-be handled by an SDK.__
+be handled by an SDK.**
 
 A metric stream can use one of these basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
@@ -599,7 +599,7 @@ reference implementations.
 ##### Scale Zero: Extract the Exponent
 
 For scale zero, the index of a value equals its normalized base-2
-exponent, meaning the value of _exponent_ in the base-2 fractional
+exponent, meaning the value of *exponent* in the base-2 fractional
 representation `1._significand_ * 2**_exponent_`.  Normal IEEE 754
 double-width floating point values have indices in the range
 `[-1022, +1023]` and subnormal values have indices in the range
@@ -754,7 +754,7 @@ originating source of truth.  In practical terms, this implies the following:
   identified in some way.
 - Aggregations of metric streams MUST only be written from a single logical
   source.
-  __Note: This implies aggregated metric streams must reach one destination__.
+  **Note: This implies aggregated metric streams must reach one destination**.
 
 In systems, there is the possibility of multiple writers sending data for the
 same metric stream (duplication).  For example, if an SDK implementation fails
