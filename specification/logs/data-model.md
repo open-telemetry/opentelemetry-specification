@@ -2,45 +2,54 @@
 
 **Status**: [Experimental](../document-status.md)
 
-- [Log Data Model](#log-data-model)
-  - [Design Notes](#design-notes)
-    - [Requirements](#requirements)
-    - [Definitions Used in this Document](#definitions-used-in-this-document)
-      - [Type `any`](#type-any)
-      - [Type `map<string, any>`](#type-mapstring-any)
-    - [Field Kinds](#field-kinds)
-  - [Log and Event Record Definition](#log-and-event-record-definition)
-    - [Field: `Timestamp`](#field-timestamp)
-    - [Trace Context Fields](#trace-context-fields)
-      - [Field: `TraceId`](#field-traceid)
-      - [Field: `SpanId`](#field-spanid)
-      - [Field: `TraceFlags`](#field-traceflags)
-    - [Severity Fields](#severity-fields)
-      - [Field: `SeverityText`](#field-severitytext)
-      - [Field: `SeverityNumber`](#field-severitynumber)
-      - [Mapping of `SeverityNumber`](#mapping-of-severitynumber)
-      - [Reverse Mapping](#reverse-mapping)
-      - [Error Semantics](#error-semantics)
-      - [Displaying Severity](#displaying-severity)
-      - [Comparing Severity](#comparing-severity)
-    - [Field: `Body`](#field-body)
-    - [Field: `Resource`](#field-resource)
-    - [Field: `Attributes`](#field-attributes)
-      - [Errors and Exceptions](#errors-and-exceptions)
-  - [Example Log Records](#example-log-records)
-  - [Appendix A. Example Mappings](#appendix-a-example-mappings)
-    - [RFC5424 Syslog](#rfc5424-syslog)
-    - [Windows Event Log](#windows-event-log)
-    - [SignalFx Events](#signalfx-events)
-    - [Splunk HEC](#splunk-hec)
-    - [Log4j](#log4j)
-    - [Zap](#zap)
-    - [Apache HTTP Server access log](#apache-http-server-access-log)
-    - [CloudTrail Log Event](#cloudtrail-log-event)
-    - [Google Cloud Logging](#google-cloud-logging)
-  - [Elastic Common Schema](#elastic-common-schema)
-  - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
-  - [References](#references)
+<details>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
+
+- [Design Notes](#design-notes)
+  * [Requirements](#requirements)
+  * [Definitions Used in this Document](#definitions-used-in-this-document)
+    + [Type `any`](#type-any)
+    + [Type `map`](#type-mapstring-any)
+  * [Field Kinds](#field-kinds)
+- [Log and Event Record Definition](#log-and-event-record-definition)
+  * [Field: `Timestamp`](#field-timestamp)
+  * [Field: `ObservedTimestamp`](#field-observedtimestamp)
+  * [Trace Context Fields](#trace-context-fields)
+    + [Field: `TraceId`](#field-traceid)
+    + [Field: `SpanId`](#field-spanid)
+    + [Field: `TraceFlags`](#field-traceflags)
+  * [Severity Fields](#severity-fields)
+    + [Field: `SeverityText`](#field-severitytext)
+    + [Field: `SeverityNumber`](#field-severitynumber)
+    + [Mapping of `SeverityNumber`](#mapping-of-severitynumber)
+    + [Reverse Mapping](#reverse-mapping)
+    + [Error Semantics](#error-semantics)
+    + [Displaying Severity](#displaying-severity)
+    + [Comparing Severity](#comparing-severity)
+  * [Field: `Body`](#field-body)
+  * [Field: `Resource`](#field-resource)
+  * [Field: `Attributes`](#field-attributes)
+    + [Errors and Exceptions](#errors-and-exceptions)
+- [Example Log Records](#example-log-records)
+- [Appendix A. Example Mappings](#appendix-a-example-mappings)
+  * [RFC5424 Syslog](#rfc5424-syslog)
+  * [Windows Event Log](#windows-event-log)
+  * [SignalFx Events](#signalfx-events)
+  * [Splunk HEC](#splunk-hec)
+  * [Log4j](#log4j)
+  * [Zap](#zap)
+  * [Apache HTTP Server access log](#apache-http-server-access-log)
+  * [CloudTrail Log Event](#cloudtrail-log-event)
+  * [Google Cloud Logging](#google-cloud-logging)
+- [Elastic Common Schema](#elastic-common-schema)
+- [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
+- [References](#references)
+
+<!-- tocstop -->
+
+</details>
 
 This is a data model and semantic conventions that allow to represent logs from
 various sources: application log files, machine generated events, system logs,
@@ -144,7 +153,7 @@ The reasons for having these 2 kinds of fields are:
 - Ability to efficiently represent named top-level fields, which are almost
   always present (e.g. when using encodings like Protocol Buffers where fields
   are enumerated but not named on the wire).
-  
+
 - Ability to enforce types of named fields, which is very useful for compiled
   languages with type checks.
 
@@ -162,7 +171,7 @@ decision about when to use a top-level named field:
 
 - The field’s semantics must be the same for all known log and event formats and
   can be mapped directly and unambiguously to this data model.
-  
+
 Both of the above conditions were required to give the field a place in the
 top-level structure of the record.
 
@@ -784,7 +793,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>string</td>
     <td>W3C trace flags.</td>
     <td>fields['trace_flags']</td>
-  </tr>  
+  </tr>
 </table>
 
 ### Log4j
