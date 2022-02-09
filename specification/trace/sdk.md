@@ -119,10 +119,10 @@ Thus, the SDK specification defines sets of possible requirements for
 * **Readable span**: A function receiving this as argument MUST be able to
   access all information that was added to the span, as listed
   [in the API spec](api.md#span-data-members). In particular, it MUST also be
-  able to access the `InstrumentationScope` [since 1.9.0] and `Resource`
+  able to access the `InstrumentationScope` [since 1.10.0] and `Resource`
   information (implicitly) associated with the span. For backwards compatibility
   it MUST also be able to access the `InstrumentationLibrary`
-  [deprecated since 1.9.0] having the same name and version values as the
+  [deprecated since 1.10.0] having the same name and version values as the
   `InstrumentationScope`.
 
   It must also be able to reliably determine whether the Span has ended

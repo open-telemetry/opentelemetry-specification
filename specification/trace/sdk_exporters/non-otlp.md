@@ -28,16 +28,16 @@ pairs associated with the Span using the following mapping:
 
 | OpenTelemetry InstrumentationScope Field | non-OTLP Key | Notes |
 | ------------------- | --- | --- |
-| `InstrumentationScope.name`|`otel.scope.name`|since 1.9.0|
-| `InstrumentationScope.version`|`otel.scope.version`|since 1.9.0|
+| `InstrumentationScope.name`|`otel.scope.name`|since 1.10.0|
+| `InstrumentationScope.version`|`otel.scope.version`|since 1.10.0|
 
 The following deprecated aliases MUST also be reported with exact same values for
 backward compatibility reasons:
 
 | non-OTLP Key | Alias for | Notes |
 | --- | --- | --- |
-|`otel.library.name`|`otel.scope.name`|deprecated since since 1.9.0|
-|`otel.library.version`|`otel.scope.version`|deprecated since since 1.9.0|
+|`otel.library.name`|`otel.scope.name`|deprecated since 1.10.0|
+|`otel.library.version`|`otel.scope.version`|deprecated since 1.10.0|
 
 ### Span Status
 
