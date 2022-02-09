@@ -32,7 +32,7 @@ from this SDK package are intended to be used by Logging Libraries only and are
 NOT intended to be used by the end user and will NOT be exposed in the
 OpenTelemetry API package.
 
-Logging Library SDK is comprised of the following.
+Logging Library SDK contains the following components:
 
 ### LogEmitterProvider
 
@@ -140,6 +140,10 @@ supports is via intermediary files. When configuring the LogEmitterProvider,
 OTLP File exporter should be used to write logs to a file or stdout in either
 OTLP JSON or OTLP Protobuf binary format.
 
+TODO: clarify how this functionality co-exists with the overlapping
+functionality in logging libraries that allow specifying how logs are written to
+a file.
+
 ![Logging to File](img/logging-library-sdk/otlp-file.png)
 
 ### Logging Directly to OTLP Network Destination
@@ -161,6 +165,9 @@ span context and inject it into the log records, since it usually allows
 fetching of the context to work correctly even when log records are emitted
 asynchronously (which otherwise can result in the incorrect implicit context
 being fetched.
+
+TODO: clarify how works or doesn't work when the log statement call site and the
+log appender are executed on different threads.
 
 ### Explicit Context
 
