@@ -6,6 +6,9 @@ This document describes attributes for log media in OpenTelemetry. Log media are
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
+<details>
+<summary>Table of Contents</summary>
+
 <!-- toc -->
 
 - [Log Media](#log-media)
@@ -13,6 +16,8 @@ This document describes attributes for log media in OpenTelemetry. Log media are
   * [I/O Stream](#io-stream)
 
 <!-- tocstop -->
+
+</details>
 
 ## Log Media
 

@@ -191,7 +191,7 @@ In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
 mechanism described above, where selection is provided via configuration, the
 SDK MUST NOT allow Views with a specified name to be declared with instrument
-selectors that select by instrument type or wildcard.
+selectors that select more than one instrument (e.g. wild card instrument name).
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -256,17 +256,17 @@ meter_provider
 ```python
 # Counter X will be exported as cumulative sum
 meter_provider
-    .add_view("X", aggregation=SumAggregation(CUMULATIVE))
-    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
+    .add_view("X", aggregation=SumAggregation())
+    .add_metric_reader(PeriodicExportingMetricReader(AggregationTemporality.CUMULATIVE, ConsoleExporter()))
 ```
 
 ```python
 # Counter X will be exported as delta sum
 # Histogram Y and Gauge Z will be exported with 2 attributes (a and b)
 meter_provider
-    .add_view("X", aggregation=SumAggregation(DELTA))
+    .add_view("X", aggregation=SumAggregation())
     .add_view("*", attribute_keys=["a", "b"])
-    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
+    .add_metric_reader(PeriodicExportingMetricReader(AggregationTemporality.DELTA, ConsoleExporter()))
 ```
 
 ### Aggregation
@@ -555,7 +555,7 @@ By default, explicit bucket histogram aggregation with more than 1 bucket will
 use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
 `SimpleFixedSizeExemplarReservoir`.
 
-*SimpleExemplarReservoir*
+_SimpleExemplarReservoir_
 This Exemplar reservoir MAY take a configuration parameter for the size of the
 reservoir pool.  The reservoir will accept measurements using an equivalent of
 the [naive reservoir sampling
@@ -571,7 +571,7 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
 Additionally, the `num_measurements_seen` count SHOULD be reset at every
 collection cycle.
 
-*AlignedHistogramBucketExemplarReservoir*
+_AlignedHistogramBucketExemplarReservoir_
 This Exemplar reservoir MUST take a configuration parameter that is the
 configuration of a Histogram.  This implementation MUST keep the last seen
 measurement that falls within a histogram bucket.  The reservoir will accept
