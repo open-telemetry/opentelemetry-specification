@@ -2,20 +2,35 @@
 
 **Status**: [Experimental](../document-status.md)
 
-* [Introduction](#introduction)
-* [Limitations of non-OpenTelemetry Solutions](#limitations-of-non-opentelemetry-solutions)
-* [OpenTelemetry Solution](#opentelemetry-solution)
-* [Log Correlation](#log-correlation)
-* [Events and Logs](#events-and-logs)
-* [Legacy and Modern Log Sources](#legacy-and-modern-log-sources)
+<details>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
+
+- [Introduction](#introduction)
+- [Limitations of non-OpenTelemetry Solutions](#limitations-of-non-opentelemetry-solutions)
+- [OpenTelemetry Solution](#opentelemetry-solution)
+- [Log Correlation](#log-correlation)
+- [Events and Logs](#events-and-logs)
+- [Legacy and Modern Log Sources](#legacy-and-modern-log-sources)
   * [System Logs](#system-logs)
   * [Infrastructure Logs](#infrastructure-logs)
   * [Third-party Application Logs](#third-party-application-logs)
   * [Legacy First-Party Applications Logs](#legacy-first-party-applications-logs)
+    + [Via File or Stdout Logs](#via-file-or-stdout-logs)
+    + [Direct to Collector](#direct-to-collector)
   * [New First-Party Application Logs](#new-first-party-application-logs)
-* [OpenTelemetry Collector](#opentelemetry-collector)
-* [Auto-Instrumenting Existing Logging](#auto-instrumenting-existing-logging)
-* [Trace Context in Legacy Formats](#trace-context-in-legacy-formats)
+- [OpenTelemetry Collector](#opentelemetry-collector)
+- [Auto-Instrumenting Existing Logging](#auto-instrumenting-existing-logging)
+- [Trace Context in Legacy Formats](#trace-context-in-legacy-formats)
+  * [Syslog RFC5424](#syslog-rfc5424)
+  * [Plain Text Formats](#plain-text-formats)
+  * [JSON Formats](#json-formats)
+  * [Other Structured Formats](#other-structured-formats)
+
+<!-- tocstop -->
+
+</details>
 
 ## Introduction
 
@@ -168,7 +183,7 @@ Logs can be correlated with the rest of observability data in a few dimensions:
   OpenTelemetry traces and metrics contain information about the Resource they
   come from. We extend this practice to logs by including the
   [Resource](data-model.md#field-resource) in log records.
-  
+
 These 3 correlations can be the foundation of powerful navigational, filtering,
 querying and analytical capabilities. OpenTelemetry aims to record and collects
 logs in a manner that enables such correlations.
