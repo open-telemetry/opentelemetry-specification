@@ -286,11 +286,11 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
-The _span name_ concisely identifies the work represented by the Span,
+The *span name* concisely identifies the work represented by the Span,
 for example, an RPC method name, a function name,
 or the name of a subtask or stage within a larger computation.
 The span name SHOULD be the most general string that identifies a
-(statistically) interesting _class of Spans_,
+(statistically) interesting *class of Spans*,
 rather than individual Span instances while still being human-readable.
 That is, "get_user" is a reasonable name, while "get_user/314159",
 where "314159" is a user ID, is not a good name due to its high cardinality.
@@ -374,14 +374,14 @@ The API MUST accept the following parameters:
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
-trace. A span is said to be a _root span_ if it does not have a parent. Each
+trace. A span is said to be a *root span* if it does not have a parent. Each
 trace includes a single root span, which is the shared ancestor of all other
 spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 For a Span with a parent, the `TraceId` MUST be the same as the parent.
 Also, the child span MUST inherit all `TraceState` values of its parent by default.
 
-A `Span` is said to have a _remote parent_ if it is the child of a `Span`
+A `Span` is said to have a *remote parent* if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
