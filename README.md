@@ -25,10 +25,11 @@ Technical committee holds regular meetings, notes are held
 
 - [Overview](specification/overview.md)
 - [Glossary](specification/glossary.md)
-- [Versioning and stability for OpenTelemetry clients](specification/versioning-and-stability.md)
+- [Versioning and stability for OpenTelemetry users](specification/versioning-and-stability.md)
 - [Library Guidelines](specification/library-guidelines.md)
   - [Package/Library Layout](specification/library-layout.md)
   - [General error handling guidelines](specification/error-handling.md)
+- [Specification compiance matrix by language](./spec-compliance-matrix.md)
 - API Specification
   - [Context](specification/context/context.md)
     - [Propagators](specification/context/api-propagators.md)
