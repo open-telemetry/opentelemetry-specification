@@ -126,14 +126,16 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 | Name                            | Description                                                      | Default                                                                                          |
 |---------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent                                    | "localhost"                                                                                      |
+| OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent (1)                                | "localhost"                                                                                      |
 | OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent `compact` Thrift protocol              | 6831                                                                                             |
-| OTEL_EXPORTER_JAEGER_ENDPOINT   | Full URL of [Thrift over HTTP][[jaeger_http]] endpoint for Jaeger traces | <!-- markdown-link-check-disable --> "http://localhost:14268/api/traces"<!-- markdown-link-check-enable --> |
+| OTEL_EXPORTER_JAEGER_ENDPOINT   | Full URL of [Thrift over HTTP][[jaeger_http]] endpoint for Jaeger traces (2) | <!-- markdown-link-check-disable --> "http://localhost:14268/api/traces"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export | 10s                                                                                              |
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                |                                                                                                  |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                |                                                                                                  |
 
-See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
+(1) See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
+
+(2) If SDK defaults to using gRPC, then OTEL_EXPORTER_JAEGER_ENDPOINT refers to gRPC endpoint, e.g. `http://localhost:14250`.
 
 ## Zipkin Exporter
 
