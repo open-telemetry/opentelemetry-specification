@@ -233,7 +233,7 @@ consisting of several metadata properties:
 
 - Metric name
 - Attributes (dimensions)
-- Kind of point (integer, floating point, etc)
+- Value type of the point (integer, floating point, etc)
 - Unit of measurement
 
 The primary data of each timeseries are ordered (timestamp, value) points, with
@@ -257,43 +257,69 @@ to map into, but is used as a reference throughout this document.
 
 ### OpenTelemetry Protocol data model
 
-The OpenTelemetry protocol data model is composed of Metric data streams. These
-streams are in turn composed of metric data points. Metric data streams
-can be converted directly into Timeseries, and share the same identity
-characteristics for a Timeseries. A metric stream is identified by:
+The OpenTelemetry protocol (OTLP) data model is composed of Metric data
+streams.  These streams are in turn composed of metric data points.
+Metric data streams can be converted directly into Timeseries.
 
-- The originating `Resource`
-- The metric's associated Meter details (`name`, `version`, and `schema_url`)
-- The metric stream's `name`.
-- The attached `Attribute`s
-- The point kind (e.g. `Sum`, `Gauge`, `Histogram` `ExponentialHistogram`, `Summary`)
-- The metric stream's unit
-- Intrinsic properties of the point, including temporality and monotonicity
+Metric streams are grouped into individual `Metric` objects,
+identified by:
 
-It is possible (and likely) that more than one metric stream is created per
-`Instrument` in the event model.
+- The originating `Resource` attributes
+- The instrumentation `Scope` (e.g., instrumentation library name, version)
+- The metric stream's `name`
 
-Points with identical `name`, `Resource`, and Meter details but
-different point kind or different point kind intrinsic properties
-SHOULD be considered an "error state", due to semantic disagreement,
-whether or not they use distinct `Attribute` values.
+Aside from `name`, the `Metric` object is defined by the following
+properties:
 
-Consumers of OpenTelemetry metrics data streams MAY reject data
-containing the multiple point kinds for identical `name`, `Resource`,
-and Meter details, even though the [Single-Writer](#single-writer)
-rule is only broken when distinct `Attribute` values are involved.
+- The data point type (e.g. `Sum`, `Gauge`, `Histogram` `ExponentialHistogram`, `Summary`)
+- The metric stream's `unit`
+- The metric stream's `description`
+- Intrinsic data point properties (e.g., `AggregationTemporality`, `Monotonic`)
 
-__Note: The OpenTelemetry SDK specification is written to explicitly
-permit duplicate instrumentation registration, which means the
-potential to produce the error state.  This is considered to be in the
-user's best interest.  Although the SDK has permission to pass-through
-duplicate instrument registration conflicts, consumers of
-OpenTelemetry metrics are given equal permission to reject the data
-because of semantic disagreement.
+The data point type, `unit`, and intrinsic properties are considered
+identifying, whereas the `description` field is explicitly not
+identifying in nature.
 
-**Note: The same `Resource`, `name` and `Attribute`s but differing point kind
-coming out of an OpenTelemetry SDK is considered an "error state" that SHOULD
-be handled by an SDK.**
+The `Metric` object contains individual streams, identified by the set
+of `Attributes`.  Within the individual streams, points are identified
+by one or two timestamps, details vary by data point type.
+
+Within certain data point types (e.g., `Sum` and `Gauge`) there is
+variation permitted in the numeric point value; in this case, the
+associated variation (i.e., floating-point vs. integer) is not
+considered identifying.
+
+#### Producer expectations
+
+The presence of multiple `Metric` identities for a given `name` with
+the same `Resource` and `Scope` attributes is considered a conflict, a
+"semantic error" is said to occur.
+
+Multiple `Metric` objects SHOULD be avoided by producers, if possible,
+using one of several remedies:
+
+1. For identical definitions, the producer MUST aggregate the data
+   into a single `Metric` object to avoid the conflict
+2. If the conflict involves a non-identifying property (i.e.,
+   `description`), the producer SHOULD choose a single value.
+3. For remaining types of conflict, if the OpenTelemetry Metrics SDK
+   Views configuration supports an action to correct the conflict, the
+   SDK SHOULD recommend a View configuration to mitigate the error.
+
+When no automatic remedy can be applied, producers SHOULD pass through
+conflicting data containing semantic errors to be handled by the
+consumer.
+
+#### Consumer recommendations
+
+Consumers MAY reject OpenTelemetry Metrics data containing semantic
+errors (i.e., more than one `Metric` identity for a given `name`,
+`Resource`, and `Scope`).
+
+OpenTelemetry does not specify any means for conveying such an outcome
+to the end user.
+
+#### Point kinds
 
 A metric stream can use one of these basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
