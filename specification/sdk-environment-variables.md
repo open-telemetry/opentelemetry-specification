@@ -183,7 +183,7 @@ Known values for `OTEL_TRACES_EXPORTER` are:
 - `"otlp"`: [OTLP](./protocol/otlp.md)
 - `"jaeger"`: export in Jaeger data model. If no additional configuration is
   provided the default protocol SHOULD be [Thrift over HTTP][jaeger_http] unless
-  SDKs have good reasons to choose [Protobuf/gRPC][jaeger_grpc] as the default
+  SDKs have good reasons to choose [gRPC][jaeger_grpc] as the default
   (e.g. for backward compatibility reasons when gRPC was already the default
   in a stable SDK release).
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
