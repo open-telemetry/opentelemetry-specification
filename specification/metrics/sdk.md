@@ -418,18 +418,33 @@ instruments that record negative measurements, e.g. `UpDownCounter` or `Observab
 
 ### Resolving duplicate instrument registration conflicts
 
-Implementations are required by the API specification to tolerate
-duplicate instrument registration conflicts.  View configuration
-offers the user an opportunity to configure a workaround in cases
-where the conflict involves the instrument type.
+Implementations are REQUIRED by the API specification to allow
+duplicate instrument registration to occur, regardless of conflicting
+identities.  This ensures that user data is at least delivered to the
+exporter, recognizing that such data MAY create a [semantic error
+state](datamodel.md#opentelemetry-protocol-data-model-producer-expectations)
+indicated by data having multiple `Metric` objects for a given
+`Resource` and `Scope`.
 
-To help the user manage such conflicts, the implementation SHOULD warn
-about dupliclate instrument registration conflicts after applying the
-Views configuration.  For conflicts that can be resolved through a
-View configuration, which includes instrument-type conflicts but not
-unit or description conflicts, the implementation's warning SHOULD
-include an example suggesting a View configuration to resolve the
-conflict.
+The SDK is required to issue warnings when instrumentation conflicts
+arise, because they lead to semantic errors.  To help the user manage
+such conflicts, the implementation SHOULD warn about dupliclate
+instrument registration conflicts after applying View configuration.
+
+View configuration cannot work around every conflict, and in some
+cases the user will want to repair faulty instrumentation instead.
+When a potential conflict arises between two `Metric` identities
+having the same `name`:
+
+1. If the potential conflict involves a multiple `description`
+   properties, setting the `description` through a configured View
+   SHOULD avoid the warning.
+2. If the potential conflict involves instruments that can be
+   distinguished by a supported View selector (e.g., instrument type)
+   a View recipe SHOULD be printed advising the user how to avoid the
+   warning by renaming one of the conflicting instruments.
+3. Otherwise (e.g., use of multiple units), the implementation SHOULD
+   pass through the semantic error and report both `Metric` objects.
 
 ## Attribute limits
 
@@ -969,26 +984,3 @@ called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
 concurrently.
-
-## Data model requirements
-
-The [OpenTelemetry Metrics data
-model](datamodel.md#opentelemetry-protocol-data-model) has a [Single
-Writer](datamodel.md#single-writer) rule that the SDK is REQUIRED to
-enforce, with one exception noted below.  This rule is the origin of
-the output-name uniqueness requirement for [Views](#view) and is the
-reason the API specifies that implementations MUST aggregate data for
-identical instruments in its pipeline.
-
-The implementation has permission to pass-through violations of the
-semantic "error state" described in the [OpenTelemetry Metrics data
-model](datamodel.md#opentelemetry-protocol-data-model).  This is to
-address the exceptional case of duplicate instrument registration
-conflicts, which are tolerated with warnings in the API.
-
-Duplicate instrument registration conflicts can produce this semantic
-error state, which may lead to violations of the single-writer rule.
-SDKs are permitted to allow these conflicts to take place to avoid
-user data loss.  Since the semantic conflict may not be resolvable
-downstream, Metrics data consumers MAY reject semantically conflicting
-data and SHOULD notify the user of the error, somehow, in such cases.

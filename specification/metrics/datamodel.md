@@ -268,17 +268,23 @@ identified by:
 - The instrumentation `Scope` (e.g., instrumentation library name, version)
 - The metric stream's `name`
 
-Aside from `name`, the `Metric` object is defined by the following
+Including `name`, the `Metric` object is defined by the following
 properties:
 
 - The data point type (e.g. `Sum`, `Gauge`, `Histogram` `ExponentialHistogram`, `Summary`)
 - The metric stream's `unit`
 - The metric stream's `description`
-- Intrinsic data point properties (e.g., `AggregationTemporality`, `Monotonic`)
+- Intrinsic data point properties, where applicable: `AggregationTemporality`, `Monotonic`
 
 The data point type, `unit`, and intrinsic properties are considered
 identifying, whereas the `description` field is explicitly not
 identifying in nature.
+
+Extrinsic properties of specific points are not considered
+identifying; these include but are not limited to:
+
+- Bucket boundaries of a `Histogram` data point
+- Scale or bucket count of a `ExponentialHistogram` data point.
 
 The `Metric` object contains individual streams, identified by the set
 of `Attributes`.  Within the individual streams, points are identified
@@ -289,35 +295,50 @@ variation permitted in the numeric point value; in this case, the
 associated variation (i.e., floating-point vs. integer) is not
 considered identifying.
 
-#### Producer expectations
+#### OpenTelemetry Protocol data model: Producer recomendations
 
-The presence of multiple `Metric` identities for a given `name` with
-the same `Resource` and `Scope` attributes is considered a conflict, a
-"semantic error" is said to occur.
+Producers SHOULD prevent the presence of multiple `Metric` identities
+for a given `name` with the same `Resource` and `Scope` attributes.
+Producers are expected to aggregate data for identical `Metric`
+objects as a basic feature, so the appearance of multiple `Metric`,
+considered a "semantic error", generally requires duplicate
+conflicting instrument registration to have occurred somewhere.
 
-Multiple `Metric` objects SHOULD be avoided by producers, if possible,
-using one of several remedies:
+Producers MAY be able to remediate the problem, depending on whether
+they are an SDK, a downstream processor, or a consumer at the
+destination:
 
-1. For identical definitions, the producer MUST aggregate the data
-   into a single `Metric` object to avoid the conflict
-2. If the conflict involves a non-identifying property (i.e.,
-   `description`), the producer SHOULD choose a single value.
-3. For remaining types of conflict, if the OpenTelemetry Metrics SDK
-   Views configuration supports an action to correct the conflict, the
-   SDK SHOULD recommend a View configuration to mitigate the error.
+1. If the potential conflict involves a non-identifying property (i.e.,
+   `description`), the producer SHOULD choose the longer string.
+2. If the potential conflict involves similar but disagreeing units
+   (e.g., "ms" and "s"), an implementation MAY convert units to avoid
+   semantic errors; otherwise an implementation SHOULD inform the user
+   of a semantic error and pass through both `Metric` objects.
+3. If the potential conflict involves an `AggregationTemporality`
+   property, an implementation MAY convert temporality using a
+   Cumulative-to-Delta or a Delta-to-Cumulative transformation;
+   otherwise, an implementation SHOULD inform the user of a semantic
+   error and pass through both `Metric` objects.
+4. Generally, for potential conflicts involving an identifying
+   property (i.e., all properties except `description`), the producer
+   SHOULD pass through the semantic error to the consumer and pass
+   through both `Metric` objects.
 
-When no automatic remedy can be applied, producers SHOULD pass through
-conflicting data containing semantic errors to be handled by the
-consumer.
+When semantic errors such as these occur inside an implementation of
+the OpenTelemetry API, there is an presumption of a fixed `Resource`
+value.  Consequently, SDKs implementing the OpenTelemetry API have
+complete information about the origin of duplicate instrument
+registration conflicts and are sometimes able to help users avoid
+semantic errors.  See the SDK specification for specific details.
 
-#### Consumer recommendations
+#### OpenTelemetry Protocol data model: Consumer recommendations
 
 Consumers MAY reject OpenTelemetry Metrics data containing semantic
 errors (i.e., more than one `Metric` identity for a given `name`,
 `Resource`, and `Scope`).
 
 OpenTelemetry does not specify any means for conveying such an outcome
-to the end user.
+to the end user, although this subject deserves attention.
 
 #### Point kinds
 
@@ -700,7 +721,7 @@ For positive scales, lookup table methods have been demonstrated
 that are able to exactly compute the index in constant time from a
 lookup table with `O(2**scale)` entries.
 
-##### Producer Recommendations
+#### ExponentialHistogram: Producer Recommendations
 
 At the lowest or highest end of the 64 bit IEEE floating point, a
 bucket's range may only be partially representable by the floating
@@ -721,7 +742,7 @@ perform an exact computation.  As a result, ExponentialHistogram
 exemplars could map into buckets with zero count.  We expect to find
 such values counted in the adjacent buckets.
 
-#### Consumer Expectations
+#### ExponentialHistogram: Consumer Recommendations
 
 ExponentialHistogram bucket indices are expected to map into buckets
 where both the upper and lower boundaries can be represented
@@ -825,6 +846,13 @@ For OTLP, the Single-Writer principle grants a way to reason over error
 scenarios and take corrective actions.  Additionally, it ensures that
 well-behaved systems can perform metric stream manipulation without undesired
 degradation or loss of visibility.
+
+Note that violations of the Single-Writer principle are not semantic
+errors, generally they result from misconfiguration.  Whereas semantic
+errors can sometimes be corrected by configuring Views, violations of
+the Single-Writer principle can be corrected by differentiating the
+`Resource` used or by ensuring that streams for a given `Resource` and
+`Attribute` set do not overlap.
 
 ## Temporality
 
