@@ -108,6 +108,9 @@ denote old attribute names in rename operations).
   the following Unicode code points: Latin alphabet, Numeric, Underscore, Dot
   (as namespace delimiter).
 
+- See also recommendations about [classification](attribute-classification.md)
+  using attributes.
+
 ## Recommendations for Application Developers
 
 As an application developer when you need to record an attribute first consult
