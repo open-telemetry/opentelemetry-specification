@@ -1163,7 +1163,7 @@ OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https:/
 
 #### Resource Attributes
 
-In SDK Prometheus (pull) exporters, all resource attributes MUST be dropped, and MUST NOT be not attached as labels. The scraper of the endpoint is expected to discover resource attributes of the endpoint it is scraping.
+In SDK Prometheus (pull) exporters, all resource attributes MUST be dropped, and MUST NOT be attached as labels. The scraper of the endpoint is expected to discover resource attributes of the endpoint it is scraping.
 
 In the Collector's Prometheus pull and push (remote-write) exporters, it is possible for metrics from multiple targets to be sent together, so targets must be disambiguated from one another.  However, the Prometheus exposition format and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto) formats do not include a notion of resource, and expect metric labels to distinguish scraped targets.  By convention, [`job` and `instance`](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances) labels distinguish targets and are expected to be present on metrics exposed on a Prometheus pull exporter (a ["federated"](https://Prometheus.io/docs/Prometheus/latest/federation/) Prometheus endpoint) or pushed via Prometheus remote-write. In the collector Prometheus exporters, the `job` and `instance` resource attributes MUST be converted to Prometheus metric labels, and other resource attributes SHOULD NOT be converted to metric labels.
 
