@@ -56,7 +56,8 @@ Methods:
   LogProcessors and LogExporter. It is expected that the caller will populate
   trace context related fields (TraceId,SpanId,TraceFlags) if applicable before
   making the call. Open Question: do we need to also pass the Baggage so that
-  log processors and exporters can use it if they see the need?
+  log processors and exporters can use it if they see the need (see e.g.
+  [Java issue](https://github.com/open-telemetry/opentelemetry-java/issues/4147))?
 
   Note: some languages may opt to avoid having a LogRecord data type and instead
   use a more idiomatic builder pattern to prepare and emit a log record (see
@@ -130,7 +131,7 @@ This same approach can be also used for example for:
 Appenders can be created in OpenTelemetry language libraries by OpenTelemetry
 maintainers, or by 3rd parties for any logging library that supports a similar
 extension mechanism. This specification recommends each OpenTelemetry language
-library to include out-of-the-box Appender implementation for at least one most
+library to include out-of-the-box Appender implementation for at least one
 popular logging library.
 
 ### Logging to File
