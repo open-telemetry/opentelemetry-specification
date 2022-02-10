@@ -1149,7 +1149,7 @@ An [OpenTelemetry Summary](#summary-legacy) MUST be converted to a Prometheus me
 
 #### Dropped Data Points
 
-The following OTLP data points must be dropped:
+The following OTLP data points MUST be dropped:
 
 * [ExponentialHistogram](#exponentialhistogram)
 
