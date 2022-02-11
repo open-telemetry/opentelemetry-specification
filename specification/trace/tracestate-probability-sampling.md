@@ -870,7 +870,7 @@ this a strict test for random behavior, we take the following approach:
 
 - Generate a pre-determined list of 20 random seeds
 - Use fixed values for significance level (5%) and trials (20)
-- Use a population size of one hundred thousand spans
+- Use a population size of 100,000 spans
 - For each trial, simulate the population and compute ChiSquared
   test statistic
 - Locate the first seed value in the ordered list such that the
@@ -934,18 +934,17 @@ test statistic is below 0.102587 exactly 1 out of 20 times.
 In this case there is one degree of freedom for the Chi-Squared test.
 The following table summarizes the test parameters.
 
-| Test case | Sampling probability | P-value when sampled | Expect<sub>sampled</sub> | Expect<sub>unsampled</sub> |          |
-|-----------|----------------------|----------------------|--------------------------|----------------------------|----------|
-| 13        | 0x1p-01 (0.500000)   | 1                    | 50000                    | n/a                        | 50000    |
-| 14        | 0x1p-04 (0.062500)   | 4                    | 6250                     | n/a                        | 93750    |
-| 15        | 0x1p-07 (0.007812)   | 7                    | 781.25                   | n/a                        | 99218.75 |
-
+| Test case | Sampling probability | P-value when sampled | Expect<sub>sampled</sub> | Expect<sub>unsampled</sub> |
+|-----------|----------------------|----------------------|--------------------------|----------------------------|
+| 13        | 0x1p-01 (0.500000)   | 1                    | 50000                    | 50000                      |
+| 14        | 0x1p-04 (0.062500)   | 4                    | 6250                     | 93750                      |
+| 15        | 0x1p-07 (0.007812)   | 7                    | 781.25                   | 99218.75                   |
 
 The formula for computing Chi-Squared in this case is:
 
 ```
 ChiSquared = math.Pow(sampled - expect_sampled, 2) / expect_sampled +
-             math.Pow(1000000 - sampled - expect_unsampled, 2) / expect_unsampled
+             math.Pow(100000 - sampled - expect_unsampled, 2) / expect_unsampled
 ```
 
 This should be compared with 0.003932, the value of the Chi-Squared
@@ -969,24 +968,24 @@ predetermined list of seeds.
 
 ```
     for _, test := range []testCase{
-		// Non-powers of two
-		{0.90000, 1, twoDegrees, 3},
-		{0.60000, 1, twoDegrees, 2},
-		{0.33000, 2, twoDegrees, 2},
-		{0.13000, 3, twoDegrees, 1},
-		{0.10000, 4, twoDegrees, 0},
-		{0.05000, 5, twoDegrees, 0},
-		{0.01700, 6, twoDegrees, 2},
-		{0.01000, 7, twoDegrees, 2},
-		{0.00500, 8, twoDegrees, 2},
-		{0.00290, 9, twoDegrees, 4},
-		{0.00100, 10, twoDegrees, 6},
-		{0.00050, 11, twoDegrees, 0},
+        // Non-powers of two
+        {0.90000, 1, twoDegrees, 3},
+        {0.60000, 1, twoDegrees, 2},
+        {0.33000, 2, twoDegrees, 2},
+        {0.13000, 3, twoDegrees, 1},
+        {0.10000, 4, twoDegrees, 0},
+        {0.05000, 5, twoDegrees, 0},
+        {0.01700, 6, twoDegrees, 2},
+        {0.01000, 7, twoDegrees, 2},
+        {0.00500, 8, twoDegrees, 2},
+        {0.00290, 9, twoDegrees, 4},
+        {0.00100, 10, twoDegrees, 6},
+        {0.00050, 11, twoDegrees, 0},
 
-		// Powers of two
-		{0x1p-1, 1, oneDegree, 0},
-		{0x1p-4, 4, oneDegree, 0},
-		{0x1p-7, 7, oneDegree, 1},
+        // Powers of two
+        {0x1p-1, 1, oneDegree, 0},
+        {0x1p-4, 4, oneDegree, 0},
+        {0x1p-7, 7, oneDegree, 1},
     } {
 ```
 
