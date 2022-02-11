@@ -1085,7 +1085,7 @@ The following Prometheus types MUST be dropped:
 
 #### Start Time
 
-Prometheus Cumulative metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, conversion MUST follow [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time.
+Prometheus Cumulative metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, conversion MUST follow [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
 
 #### Exemplars
 
