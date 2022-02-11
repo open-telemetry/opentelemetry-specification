@@ -132,10 +132,10 @@ This API MUST accept the following parameters:
 Meters are identified by all of these fields.  When more than one
 Meter of the same `name`, `version`, and `schema_url` is created, it
 is unspecified whether or under which conditions the same or different
-`Meter` instances are returned.  Meter identity, and the terms
-_identical_ and _distinct_ applied to Meters in this specification
-describes Meter instances that have identical and/or distinct values
-for all three of their `name`, `version`, and `schema_url` attributes.
+`Meter` instances are returned.  The term _identical_ applied to
+Meters describes instances where all identifying fields are equal.
+The term _distinct_ applied to Meters describes instances where at
+least one identifying field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Meter` with
 the same identity to pick up configuration changes. This can be
@@ -188,6 +188,9 @@ will have the following information:
 Instruments are associated with the Meter during creation. Instruments
 are identified by all of these fields.
 
+Language-level features such as the distinction between integer and
+floating point numbers SHOULD be considered as identifying.
+
 <a name="instrument-type-conflict-detection"></a>
 
 When more than one Instrument of the same `name` is created for
@@ -196,13 +199,10 @@ implementation MUST return a valid Instrument in every case.
 
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of
-duplicate instrument registration.  Instrument identity, and the terms
-_identical_ and _distinct_ applied to Instruments in this
-specification describes Instrument instances that have identical
-and/or distinct values for all four of their `name`, `kind`, `unit`,
-and `description` attributes.  Language-level features such as the
-distinction between integer and floating point numbers SHOULD be
-considered as identifying, as well.
+duplicate instrument registration.  The term _identical_ applied to
+Instruments describes instances where all identifying fields are
+equal.  The term _distinct_ applied to Instruments describes instances
+where at least one field value is different.
 
 The implementation MUST aggregate data from identical Instruments
 together in its export pipeline.
