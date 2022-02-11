@@ -135,7 +135,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 [1] See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
 
-[2] If SDK defaults to using gRPC, then OTEL_EXPORTER_JAEGER_ENDPOINT refers to gRPC endpoint, e.g. `http://localhost:14250`.
+[2] When the exporter uses the gRPC protocol, the environment variable refers to the gRPC endpoint and the default value should be `http://localhost:14250`.
 
 ## Zipkin Exporter
 
