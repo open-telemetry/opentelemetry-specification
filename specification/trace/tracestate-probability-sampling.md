@@ -914,7 +914,7 @@ The formula for computing Chi-Squared in this case is:
 ```
 ChiSquared = math.Pow(sampled_lowerP - expect_lowerP, 2) / expect_lowerP +
              math.Pow(sampled_upperP - expect_upperP, 2) / expect_upperP +
-             math.Pow(1000000 - sampled_lowerP - sampled_upperP - expect_unsampled, 2) / expect_unsampled
+             math.Pow(100000 - sampled_lowerP - sampled_upperP - expect_unsampled, 2) / expect_unsampled
 ```
 
 This should be compared with 0.102587, the value of the Chi-Squared
