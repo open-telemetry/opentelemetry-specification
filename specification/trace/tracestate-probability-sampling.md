@@ -923,7 +923,7 @@ For each probability in the table above, the test is required to
 demonstrate a seed that produces exactly one ChiSquared value less
 than 0.102587.
 
-##### Requirement: Pass 15 non-power-of-two statistical tests
+##### Requirement: Pass 12 non-power-of-two statistical tests
 
 For the test with 20 trials and 100,000 spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
@@ -953,9 +953,9 @@ For each probability in the table above, the test is required to
 demonstrate a seed that produces exactly one ChiSquared value less
 than 0.003932.
 
-##### Requirement: Pass 5 power-of-two statistical tests
+##### Requirement: Pass 3 power-of-two statistical tests
 
-For the teset with 20 trials and 100,000 spans each, the test MUST
+For the test with 20 trials and 100,000 spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
 test statistic is below 0.003932 exactly 1 out of 20 times.
 
