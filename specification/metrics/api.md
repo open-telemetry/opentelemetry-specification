@@ -215,12 +215,12 @@ When more than one distinct Instrument is registered with the same
 `name` for identical Meters, the implementation SHOULD emit a warning
 to the user informing them of duplicate registration conflict(s).
 
-__Note the warning about duplicate instrumentation registration
-conflicts is meant to help avoid the semantic error state described in
-the [OpenTelemetry Metrics data
-model](datamodel.md#opentelemetry-data-model) when more than one kind
-of point is written for a given instrument `name` and Meter identity
-from the same process.
+__Note the warning about duplicate Instrument registration conflicts
+is meant to help avoid the semantic error state described in the
+[OpenTelemetry Metrics data
+model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+when more than one `Metric` is written for a given instrument `name`
+and Meter identity by the same MeterProvider.
 
 <a name="instrument-namespace"></a>
 
@@ -278,7 +278,7 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
 
-Instruments are categorized based on whether they are synchronous or
+Instruments are categorized on whether they are synchronous or
 asynchronous:
 
 <a name="synchronous-instrument"></a>
@@ -303,24 +303,24 @@ Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
-Considering duplicate registration of asynchronous instruments, the
-implementation MUST support multiple callbacks registered per
-identical instrument.
+The API MUST support creation of asynchronous instruments by passing a
+single callback function to be registered to the newly created
+instrument.
 
-The API MAY provide support for registration of a single callback
-having multiple asynchronous instruments, where idiomatic.  The
-implementation is REQUIRED to maintain a mapping from every registered
-callback to the associated instrument(s).
+The API SHOULD support creation of asynchronous instruments
+by passing a variable number of callback functions, greater than or
+equal to zero, to be registered to the newly created instrument.
 
-The implementation MUST provide a way to unregister callbacks
-associated with asynchronous instruments.
+The API SHOULD support registration of callbacks bound to
+one or more instruments outside of instrument construcotrs, provided
+the API declaratively states which instrument(s) will be be used.
 
-The implementation SHOULD reject observations that are made outside of
-a callback registered for the instrument.
+The API SHOULD support unregistration of callbacks.
 
 Callers SHOULD avoid making duplicate observations from asynchronous
-instrument callbacks, as the result of making duplicate observations
-is not specified.
+instrument callbacks.  The resulting behavior when a callback observes
+multiple values for identical instrument and attributes is explicitly
+not specified.
 
 ### Counter
 

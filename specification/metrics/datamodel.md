@@ -854,7 +854,7 @@ errors, generally they result from misconfiguration.  Whereas semantic
 errors can sometimes be corrected by configuring Views, violations of
 the Single-Writer principle can be corrected by differentiating the
 `Resource` used or by ensuring that streams for a given `Resource` and
-`Attribute` set do not overlap.
+`Attribute` set do not overlap in time.
 
 ## Temporality
 

@@ -19,6 +19,7 @@
     + [Last Value Aggregation](#last-value-aggregation)
     + [Histogram Aggregation](#histogram-aggregation)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+  * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
@@ -417,6 +418,20 @@ This Aggregation informs the SDK to collect:
 instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
 - Min (optional) `Measurement` value in population.
 - Max (optional) `Measurement` value in population.
+
+### Observations inside asynchronous callbacks
+
+Callback functions MUST be invoked in the context of a specific
+`MetricReader` performing collection, such that observations made or
+produced by executing callbacks only apply to the intended
+`MetricReader` during collection.
+
+The implementation SHOULD disregard the accidental use of APIs
+appurtenant to asynchronous instruments outside of registered
+callbacks in the context of a single `MetricReader` collection.
+
+The implementation MUST complete the execution of all callbacks for a
+given instrument before starting a subsequent round of collection.
 
 ### Resolving duplicate instrument registration conflicts
 
