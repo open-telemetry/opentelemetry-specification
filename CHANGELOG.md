@@ -41,6 +41,8 @@ release.
   [#2032](https://github.com/open-telemetry/opentelemetry-specification/pull/2061)
 - Changed default Prometheus Exporter host from `0.0.0.0` to `localhost`.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
+- Clarified wildcard and predicate support in metrics SDK View API.
+  ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
 
 ### Logs
 
