@@ -29,6 +29,7 @@ Technical committee holds regular meetings, notes are held
 - [Library Guidelines](specification/library-guidelines.md)
   - [Package/Library Layout](specification/library-layout.md)
   - [General error handling guidelines](specification/error-handling.md)
+- [Specification compiance matrix by language](./spec-compliance-matrix.md)
 - API Specification
   - [Context](specification/context/context.md)
     - [Propagators](specification/context/api-propagators.md)
