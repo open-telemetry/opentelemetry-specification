@@ -151,7 +151,7 @@ usage in Zipkin Exporter configuration:
 
 This will be used to specify whether or not the exporter uses v1 or v2, json,
 thrift or protobuf.  As of 1.0 of the specification, there
-*is no specified default, or configuration via environment variables*.
+_is no specified default, or configuration via environment variables_.
 
 ## Prometheus Exporter
 
