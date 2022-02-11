@@ -177,7 +177,7 @@ Also see the respective sections below for more information on instrument creati
 ## Instrument
 
 Instruments are used to report [Measurements](#measurement). Each Instrument
-will have the following information:
+will have the following fields:
 
 * The `name` of the Instrument
 * The `kind` of the Instrument - whether it is a [Counter](#counter) or
@@ -195,7 +195,11 @@ floating point numbers SHOULD be considered as identifying.
 
 When more than one Instrument of the same `name` is created for
 identical Meters, denoted _duplicate instrument registration_, the
-implementation MUST return a valid Instrument in every case.
+implementation MUST create a valid Instrument in every case.  Here,
+"valid" means an instrument that is functional and can expected to
+export data, despite potentially creating a [semantic error in the
+data
+model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations).
 
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of

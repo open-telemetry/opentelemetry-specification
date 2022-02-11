@@ -41,7 +41,6 @@
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
-- [Data model requirements](#data-model-requirements)
 
 <!-- tocstop -->
 
@@ -421,25 +420,20 @@ instruments that record negative measurements, e.g. `UpDownCounter` or `Observab
 
 ### Resolving duplicate instrument registration conflicts
 
-Implementations are REQUIRED by the API specification to allow
-duplicate instrument registration to occur, regardless of conflicting
-identities.  This ensures that user data is at least delivered to the
-exporter, recognizing that such data MAY create a [semantic error
-state](datamodel.md#opentelemetry-protocol-data-model-producer-expectations)
-indicated by data having multiple `Metric` objects for a given
-`Resource` and `Scope`.
+As [stated in the API
+specification](api.md#instrument-type-conflict-detection),
+implemetations are REQUIRED to create valid instruments in case of
+duplicate instrument registration, and the [data model includes
+RECOMMENDATIONS on how to treat the consequent duplicate
+conflicting](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+`Metric` definitions.
 
-The SDK is required to issue warnings when instrumentation conflicts
-arise, because they lead to semantic errors.  To help the user manage
-such conflicts, the implementation SHOULD warn about dupliclate
-instrument registration conflicts after applying View configuration.
+The implementation SHOULD assist the user in managing conflicts by
+reporting each duplicate-conflicting instrument registration that was
+not corrected by a View as follows.  When a potential conflict arises
+between two non-identical `Metric` instances having the same `name`:
 
-View configuration cannot work around every conflict, and in some
-cases the user will want to repair faulty instrumentation instead.
-When a potential conflict arises between two `Metric` identities
-having the same `name`:
-
-1. If the potential conflict involves a multiple `description`
+1. If the potential conflict involves multiple `description`
    properties, setting the `description` through a configured View
    SHOULD avoid the warning.
 2. If the potential conflict involves instruments that can be
@@ -447,7 +441,7 @@ having the same `name`:
    a View recipe SHOULD be printed advising the user how to avoid the
    warning by renaming one of the conflicting instruments.
 3. Otherwise (e.g., use of multiple units), the implementation SHOULD
-   pass through the semantic error and report both `Metric` objects.
+   pass through the data by reporting both `Metric` objects.
 
 ## Attribute limits
 

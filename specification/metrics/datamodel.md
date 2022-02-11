@@ -15,6 +15,9 @@
   * [Event Model](#event-model)
   * [Timeseries Model](#timeseries-model)
   * [OpenTelemetry Protocol data model](#opentelemetry-protocol-data-model)
+    + [OpenTelemetry Protocol data model: Producer recommendations](#opentelemetry-protocol-data-model-producer-recommendations)
+    + [OpenTelemetry Protocol data model: Consumer recommendations](#opentelemetry-protocol-data-model-consumer-recommendations)
+    + [Point kinds](#point-kinds)
 - [Metric points](#metric-points)
   * [Sums](#sums)
   * [Gauge](#gauge)
@@ -28,8 +31,8 @@
       - [Negative Scale: Extract and Shift the Exponent](#negative-scale-extract-and-shift-the-exponent)
       - [All Scales: Use the Logarithm Function](#all-scales-use-the-logarithm-function)
       - [Positive Scale: Use a Lookup Table](#positive-scale-use-a-lookup-table)
-      - [Producer Recommendations](#producer-recommendations)
-    + [Consumer Expectations](#consumer-expectations)
+    + [ExponentialHistogram: Producer Recommendations](#exponentialhistogram-producer-recommendations)
+    + [ExponentialHistogram: Consumer Recommendations](#exponentialhistogram-consumer-recommendations)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -295,7 +298,7 @@ variation permitted in the numeric point value; in this case, the
 associated variation (i.e., floating-point vs. integer) is not
 considered identifying.
 
-#### OpenTelemetry Protocol data model: Producer recomendations
+#### OpenTelemetry Protocol data model: Producer recommendations
 
 Producers SHOULD prevent the presence of multiple `Metric` identities
 for a given `name` with the same `Resource` and `Scope` attributes.
@@ -305,24 +308,23 @@ considered a "semantic error", generally requires duplicate
 conflicting instrument registration to have occurred somewhere.
 
 Producers MAY be able to remediate the problem, depending on whether
-they are an SDK, a downstream processor, or a consumer at the
-destination:
+they are an SDK or a downstream processor:
 
 1. If the potential conflict involves a non-identifying property (i.e.,
    `description`), the producer SHOULD choose the longer string.
 2. If the potential conflict involves similar but disagreeing units
    (e.g., "ms" and "s"), an implementation MAY convert units to avoid
    semantic errors; otherwise an implementation SHOULD inform the user
-   of a semantic error and pass through both `Metric` objects.
+   of a semantic error and pass through conflicting data.
 3. If the potential conflict involves an `AggregationTemporality`
    property, an implementation MAY convert temporality using a
    Cumulative-to-Delta or a Delta-to-Cumulative transformation;
    otherwise, an implementation SHOULD inform the user of a semantic
-   error and pass through both `Metric` objects.
+   error and pass through conflicting data.
 4. Generally, for potential conflicts involving an identifying
    property (i.e., all properties except `description`), the producer
-   SHOULD pass through the semantic error to the consumer and pass
-   through both `Metric` objects.
+   SHOULD inform the user of a semantic error and pass through
+   conflicting data.
 
 When semantic errors such as these occur inside an implementation of
 the OpenTelemetry API, there is an presumption of a fixed `Resource`
@@ -817,11 +819,11 @@ All metric data streams within OTLP MUST have one logical writer.  This means,
 conceptually, that any Timeseries created from the Protocol MUST have one
 originating source of truth.  In practical terms, this implies the following:
 
-- All metric data streams produced by OTel SDKs MUST be globally uniquely
-  produced and free from duplicates.   All metric data streams can be uniquely
-  identified in some way.
+- All metric data streams produced by OTel SDKs SHOULD have globally
+  unique identity at any given point in time. [`Metric` identity is defined
+  above.](#opentelemetry-protocol-data-model-producer-recommendations)
 - Aggregations of metric streams MUST only be written from a single logical
-  source.
+  source at any given point time.
   **Note: This implies aggregated metric streams must reach one destination**.
 
 In systems, there is the possibility of multiple writers sending data for the
