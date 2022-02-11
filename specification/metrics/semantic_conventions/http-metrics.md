@@ -96,7 +96,7 @@ path.
 * `http.scheme`, `net.peer.ip`, `net.peer.port`, `http.target`
 
 **[2]** For server metric attributes, `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. <https://github.com/open-telemetry/opentelemetry-python/pull/148>).
-It is thus preferred to supply the raw data that *is* available.
+It is thus preferred to supply the raw data that _is_ available.
 Namely, one of the following sets is RECOMMENDED (in order of usual preference unless for a particular web server/framework it is known that some other set is preferable for some reason; all strings must be non-empty):
 
 * `http.scheme`, `http.host`, `http.target`
