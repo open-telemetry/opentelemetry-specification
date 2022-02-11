@@ -1045,7 +1045,7 @@ OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types
 
 #### Counters
 
-A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum.
+A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
 
 #### Gauges
 
@@ -1061,7 +1061,7 @@ A [Prometheus Histogram](https://github.com/OpenObservability/OpenMetrics/blob/m
 
 Multiple Prometheus histogram metrics MUST be merged together into a single OTLP Histogram:
 
-* The `le` label on non-suffixed metrics is used to identify histogram bucket boundaries. Each Prometheus line produces one bucket on the resulting histogram.
+* The `le` label on non-suffixed metrics is used to identify and order histogram bucket boundaries. Each Prometheus line produces one bucket count on the resulting histogram. Each value for the `le` label except `+Inf` produces one bucket boundary.
 * Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, it MUST be computed from the buckets.
@@ -1116,7 +1116,7 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
 
 [OpenTelemetry Sums](#sums) follows this logic:
 
-- If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Sum.
+- If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum
 - Otherwise, it MUST be dropped.
