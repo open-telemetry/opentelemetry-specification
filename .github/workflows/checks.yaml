@@ -13,10 +13,11 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
+    - name: npm install
+      run: npm install
+
     - name: run markdownlint
-      run: |
-        npm install
-        make markdownlint
+      run: make markdownlint
 
   yamllint:
     runs-on: ubuntu-latest
@@ -38,10 +39,11 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
+    - name: npm install
+      run: npm install
+
     - name: run markdown-link-check
-      run: |
-        npm install
-        make markdown-link-check
+      run: make markdown-link-check
 
   markdown-toc-check:
     runs-on: ubuntu-latest
@@ -49,10 +51,11 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
+    - name: npm install
+      run: npm install
+
     - name: run markdown-toc
-      run: |
-        npm install
-        make markdown-toc
+      run: make markdown-toc
 
     - name: validate markdown-toc
       run: git diff --exit-code ':*.md' || (echo 'Generated markdown Table of Contents is out of date, please run "make markdown-toc" and commit the changes in this PR.' && exit 1)
