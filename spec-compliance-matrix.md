@@ -268,7 +268,7 @@ Note: Support for environment variables is optional.
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      | +   | -    |     |      |       |
 | Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | +   | -    | +   | +    | +     |
-| [OTLP](specification/protocol/otlp.md)                                         |          |    |   |    |             |      |        |     |      |     |      |       |
+| **[OTLP](specification/protocol/otlp.md)**                                     |          |    |   |    |             |      |        |     |      |     |      |       |
 | OTLP/gRPC Exporter                                                             | *        | +  | + | +  | +           |      | +      | +   | +    | +   | +    | +     |
 | OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | + | +  | +           | +    | +      |     | +    | +   | +    | -     |
 | OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | - | +  | [-][py1003] |      | -      |     |      | +   | -    | -     |
@@ -281,7 +281,7 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      | +      |     |      |     | -    |       |
 | SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      | -      |     |      |     | -    |       |
 | SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      | -      |     |      |     | -    |       |
-| [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
+| **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V2 JSON                                                                 | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
@@ -295,19 +295,19 @@ Note: Support for environment variables is optional.
 | Error Status mapping                                                           |          | +  | + |    |             | +    | -      | +   | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
-| Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
-| Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
-| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
+| **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
+| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
+| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
 | Service name mapping                                                           |          | +  | + |    | +           | +    | -      |     |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
 | Status mapping                                                                 |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | +     |
 | Error Status mapping                                                           |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
 | Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | +     |
-| OpenCensus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
+| **OpenCensus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
-| Prometheus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
+| **Prometheus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 
 ## OpenTracing Compatibility
@@ -332,3 +332,6 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 [py1437]: https://github.com/open-telemetry/opentelemetry-python/issues/1437
 [py1779]: https://github.com/open-telemetry/opentelemetry-python/issues/1779
 [php225]: https://github.com/open-telemetry/opentelemetry-php/issues/225
+[jaegerThriftUDP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
+[jaegerProtobuf]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
+[jaegerThriftHTTP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable
