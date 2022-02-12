@@ -317,7 +317,9 @@ the API declaratively states which instrument(s) will be be used.
 
 The API SHOULD support unregistration of callbacks.
 
-Callers SHOULD avoid making duplicate observations from asynchronous
+Callback functions SHOULD NOT take an indefinite amount of time.
+
+Callback functions SHOULD NOT make duplicate observations from asynchronous
 instrument callbacks.  The resulting behavior when a callback observes
 multiple values for identical instrument and attributes is explicitly
 not specified.
@@ -454,12 +456,9 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* Zero or more `callback` functions.  [See the general requirements](#asynchronous-instrument).
 
-The API MUST support an idiomatic way to associate one or more
-`callback` functions with each instrument, whether through the
-instrument constructor or a separate registration method.
-
-The `callback` function is responsible for reporting the
+The `callback` function is responsible for reporting
 [Measurement](#measurement)s. It will only be called when the Meter is being
 observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
 this callback function needs to be reentrant safe / thread safe or not.
@@ -468,10 +467,6 @@ Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
 callback function reports the absolute value of the counter. To determine the
 reported rate the counter is changing, the difference between successive
 measurements is used.
-
-The callback function SHOULD NOT take indefinite amount of time. If multiple
-independent SDKs coexist in a running process, they MUST invoke the callback
-function(s) independently.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach. Here are some examples:
@@ -674,19 +669,12 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* Zero or more `callback` functions.  [See the general requirements](#asynchronous-instrument).
 
-The API MUST support an idiomatic way to associate one or more
-`callback` functions with each instrument, whether through the
-instrument constructor or a separate registration method.
-
-The `callback` function is responsible for reporting the
+The `callback` function is responsible for reporting
 [Measurement](#measurement)s. It will only be called when the Meter is being
 observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
 this callback function needs to be reentrant safe / thread safe or not.
-
-The callback function SHOULD NOT take indefinite amount of time. If multiple
-independent SDKs coexist in a running process, they MUST invoke the callback
-function(s) independently.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach. Here are some examples:
@@ -949,12 +937,9 @@ The API MUST accept the following parameters:
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* Zero or more `callback` functions.  [See the general requirements](#asynchronous-instrument).
 
-The API MUST support an idiomatic way to associate one or more
-`callback` functions with each instrument, whether through the
-instrument constructor or a separate registration method.
-
-The `callback` function is responsible for reporting the
+The `callback` function is responsible for reporting
 [Measurement](#measurement)s. It will only be called when the Meter is being
 observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
 this callback function needs to be reentrant safe / thread safe or not.
@@ -963,10 +948,6 @@ Note: Unlike [UpDownCounter.Add()](#add-1) which takes the increment/delta value
 the callback function reports the absolute value of the Asynchronous
 UpDownCounter. To determine the reported rate the Asynchronous UpDownCounter is
 changing, the difference between successive measurements is used.
-
-The callback function SHOULD NOT take indefinite amount of time. If multiple
-independent SDKs coexist in a running process, they MUST invoke the callback
-function(s) independently.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach. Here are some examples:

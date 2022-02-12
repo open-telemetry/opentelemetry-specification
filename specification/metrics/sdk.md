@@ -430,6 +430,9 @@ The implementation SHOULD disregard the accidental use of APIs
 appurtenant to asynchronous instruments outside of registered
 callbacks in the context of a single `MetricReader` collection.
 
+The implementation SHOULD use a timeout to prevent indefinite callback
+execution.
+
 The implementation MUST complete the execution of all callbacks for a
 given instrument before starting a subsequent round of collection.
 
