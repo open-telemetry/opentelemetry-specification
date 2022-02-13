@@ -17,6 +17,9 @@ release.
 - Add support for probability sampling in the OpenTelemetry `tracestate` entry and
   add optional specification for consistent probability sampling.
   ([#2047](https://github.com/open-telemetry/opentelemetry-specification/pull/2047))
+- Change description and default value of OTEL_EXPORTER_JAEGER_ENDPOINT env var
+  to point to the correct HTTP port and correct description of OTEL_TRACES_EXPORTER
+  ([#2333](https://github.com/open-telemetry/opentelemetry-specification/pull/2333)).
 
 ### Metrics
 
