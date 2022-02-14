@@ -11,9 +11,37 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+## v1.9.0 (2021-02-10)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Clarify `StartSpan` returning the parent as a non-recording Span when no SDK
   is in use
   ([#2121](https://github.com/open-telemetry/opentelemetry-specification/pull/2121))
+- Align Jaeger remote sampler endpoint with OTLP endpoint.
+  ([#2246](https://github.com/open-telemetry/opentelemetry-specification/pull/2246))
+- Add JaegerRemoteSampler spec.
+  ([#2222](https://github.com/open-telemetry/opentelemetry-specification/pull/2222))
 - Add support for probability sampling in the OpenTelemetry `tracestate` entry and
   add optional specification for consistent probability sampling.
   ([#2047](https://github.com/open-telemetry/opentelemetry-specification/pull/2047))
@@ -25,14 +53,18 @@ release.
 
 - Rename None aggregation to Drop.
   ([#2101](https://github.com/open-telemetry/opentelemetry-specification/pull/2101))
-- Mark In-memory, OTLP and Stdout exporter specs as Feature-freeze.
-  ([#2131](https://github.com/open-telemetry/opentelemetry-specification/pull/2131))
 - Add details to the Prometheus Exporter requirements.
   ([#2124](https://github.com/open-telemetry/opentelemetry-specification/pull/2124))
+- Consolidate the aggregation/aggregator term.
+  ([#2153](https://github.com/open-telemetry/opentelemetry-specification/pull/2153))
 - Remove the concept of supported temporality, keep preferred.
   ([#2154](https://github.com/open-telemetry/opentelemetry-specification/pull/2154))
+- Rename extra dimensions to extra attributes.
+  ([#2162](https://github.com/open-telemetry/opentelemetry-specification/pull/2162))
 - Mark In-memory, OTLP and Stdout exporter specs as Stable.
   ([#2175](https://github.com/open-telemetry/opentelemetry-specification/pull/2175))
+- Remove usage of baggage in View from initial SDK specification.
+  ([#2215](https://github.com/open-telemetry/opentelemetry-specification/pull/2215))
 - Add to the supplemental guidelines for metric SDK authors text about implementing
   attribute-removal Views for asynchronous instruments.
   ([#2208](https://github.com/open-telemetry/opentelemetry-specification/pull/2208))
@@ -62,12 +94,18 @@ release.
 
 ### Resource
 
+- No changes.
+
 ### Semantic Conventions
 
+- Align runtime metric and resource namespaces
+  ([#2112](https://github.com/open-telemetry/opentelemetry-specification/pull/2112))
 - Prohibit usage of retired names in semantic conventions.
   ([#2191](https://github.com/open-telemetry/opentelemetry-specification/pull/2191))
 - Add `device.manufacturer` to describe mobile device manufacturers.
   ([2100](https://github.com/open-telemetry/opentelemetry-specification/pull/2100))
+- Change golang namespace to 'go', rather than 'gc'
+  ([#2262](https://github.com/open-telemetry/opentelemetry-specification/pull/2262))
 - Add JVM memory runtime semantic
   conventions. ([#2272](https://github.com/open-telemetry/opentelemetry-specification/pull/2272))
 - Add opentracing.ref_type semantic convention.
@@ -77,16 +115,27 @@ release.
 
 - Simplify Baggage handling in the OpenTracing Shim layer.
   ([#2194](https://github.com/open-telemetry/opentelemetry-specification/pull/2194))
+- State that ONLY error mapping can happen in the OpenTracing Shim layer.
+  ([#2148](https://github.com/open-telemetry/opentelemetry-specification/pull/2148))
+- Define the instrumentation library name for the OpenTracing Shim.
+  ([#2227](https://github.com/open-telemetry/opentelemetry-specification/pull/2227))
+- Add a Start Span section to the OpenTracing Shim.
+  ([#2228](https://github.com/open-telemetry/opentelemetry-specification/pull/2228))
 
 ### OpenTelemetry Protocol
 
 - Rename `OTEL_EXPORTER_OTLP_SPAN_INSECURE` to `OTEL_EXPORTER_OTLP_TRACES_INSECURE` and
   `OTEL_EXPORTER_OTLP_METRIC_INSECURE` to `OTEL_EXPORTER_OTLP_METRICS_INSECURE`
   so they match the naming of all other OTLP environment variables.
+  ([#2240](https://github.com/open-telemetry/opentelemetry-specification/pull/2240))
 
 ### SDK Configuration
 
+- No changes.
+
 ### Telemetry Schemas
+
+- No changes.
 
 ## v1.8.0 (2021-11-12)
 
