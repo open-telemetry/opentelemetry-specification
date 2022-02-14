@@ -24,7 +24,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
 
 - The attribute key MUST be a non-`null` and non-empty string.
 - The attribute value is either:
-  - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer. For protocols that do not natively support non-string values, such values SHOULD be represented as JSON strings.
+  - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer. For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON strings.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types. For protocols that do
     not natively support array values, such values SHOULD be represented as JSON strings.
