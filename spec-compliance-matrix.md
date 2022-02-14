@@ -158,6 +158,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | `MeterProvider` allows a `Resource` to be specified.                                                                                                                         |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`.                                                            |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`.       |          | +  |  +   |    |    +   |      |        |     |      |     |   -  |       |
+| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`.         |          |    |      |    |        |      |        |     |      |     |      |       |
 | Configuration is managed solely by the `MeterProvider`.                                                                                                                      |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The `MeterProvider` provides methods to update the configuration                                                                                                             | X        | -  |  -   |    |    +   |      |        |     |      |     |   +  |       |
 | The updated configuration applies to all already returned `Meter`s.                                                                                                          | if above | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
@@ -292,6 +293,7 @@ Note: Support for environment variables is optional.
 | Service name mapping                                                           |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | +   | +    | +   | +    | +     |
+| InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
 | Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
@@ -305,6 +307,7 @@ Note: Support for environment variables is optional.
 | Service name mapping                                                           |          | +  | + |    | +           | +    | -      |     |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
+| InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
 | Status mapping                                                                 |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | +     |
 | Error Status mapping                                                           |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
 | Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | +     |
