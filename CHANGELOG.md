@@ -11,7 +11,15 @@ release.
 
 ### Traces
 
+- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
+  Library. The Tracer is now associated with Instrumentation Scope
+  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+
 ### Metrics
+
+- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
+  Library. The Meter is now associated with Instrumentation Scope
+  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
 
 ### Logs
 
@@ -48,9 +56,6 @@ release.
 - Change description and default value of OTEL_EXPORTER_JAEGER_ENDPOINT env var
   to point to the correct HTTP port and correct description of OTEL_TRACES_EXPORTER
   ([#2333](https://github.com/open-telemetry/opentelemetry-specification/pull/2333)).
-- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
-  Library. The Tracer is now associated with Instrumentation Scope
-  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
 
 ### Metrics
 
@@ -81,9 +86,6 @@ release.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Clarified wildcard and predicate support in metrics SDK View API.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
-- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
-  Library. The Meter is now associated with Instrumentation Scope
-  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
 
 ### Logs
 
