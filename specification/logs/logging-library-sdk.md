@@ -4,7 +4,6 @@
 
 This document contains the first cut from the
 [OTEP0150](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
-This a draft that requires cleanup and clarifications.
 
 This specification defines how the OpenTelemetry Logging Library SDK exposes its
 functionality to authors of extensions to language-specific 3rd party logging
