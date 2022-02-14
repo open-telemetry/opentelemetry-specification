@@ -21,8 +21,8 @@ release.
   variable to point to the correct HTTP port and correct description of
   `OTEL_TRACES_EXPORTER`.
   ([#2333](https://github.com/open-telemetry/opentelemetry-specification/pull/2333))
-- Add `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable to select the protcol used
-  by the Jaeger exporter.
+- Add `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable to select the protocol
+  used by the Jaeger exporter.
   ([#2341](https://github.com/open-telemetry/opentelemetry-specification/pull/2341))
 
 ### Metrics
