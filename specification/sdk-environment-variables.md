@@ -128,16 +128,16 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 |---------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent [1]                                | "localhost"                                                                                      |
 | OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent [1]                                    | 6831                                                                                              |
-| OTEL_EXPORTER_JAEGER_ENDPOINT   | Full URL of endpoint for Jaeger traces [2] | `http://localhost:14268/api/traces` for `http/thrift.binary` protocol, `http://localhost:14250` for `grpc` protocol |
+| OTEL_EXPORTER_JAEGER_ENDPOINT   | Full URL of endpoint for Jaeger traces [2] | `http://localhost:14268/api/traces` for `http/thrift.binary` protocol, `http://localhost:14250` for `grpc` protocol    |
 | OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export | 10s                                                                                              |
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                |                                                                                                  |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                |                                                                                                  |
-| OTEL_EXPORTER_JAEGER_PROTOCOL   | The transport protocol. Options MAY include `http/thrift.binary`, `grpc`, `udp/thrift.compact` | `http/thrift.binary` [3]                                                       |
+| OTEL_EXPORTER_JAEGER_PROTOCOL   | The transport protocol. Options MAY include `http/thrift.binary`, `grpc`, `udp/thrift.compact` | `http/thrift.binary` [3]                                            |
 
-[1] Used when `udp/thrift.compact` protocol is used.
+[1] Used when `udp/thrift.compact` protocol is selected.
   See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
 
-[2] Used when `http/thrift.binary` or `grpc` protocol is used.
+[2] Used when `http/thrift.binary` or `grpc` protocol is selected.
 
 [3] The default transport SHOULD be [Thrift over HTTP][jaeger_http] unless
   SDKs have good reasons to choose other as the default
