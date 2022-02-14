@@ -312,7 +312,7 @@ by passing a variable number of callback functions, greater than or
 equal to zero, to be registered to the newly created instrument.
 
 The API SHOULD support registration of callbacks bound to
-one or more instruments outside of instrument construcotrs, provided
+one or more instruments outside of instrument constructors, provided
 the API declaratively states which instrument(s) will be be used.
 
 The API SHOULD support unregistration of callbacks.
