@@ -127,15 +127,21 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 | Name                            | Description                                                      | Default                                                                                          |
 |---------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname for the Jaeger agent [1]                                | "localhost"                                                                                      |
-| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent `compact` Thrift protocol              | 6831                                                                                             |
-| OTEL_EXPORTER_JAEGER_ENDPOINT   | Full URL of [Thrift over HTTP][jaeger_http] endpoint for Jaeger traces [2] | <!-- markdown-link-check-disable --> `"http://localhost:14268/api/traces"` <!-- markdown-link-check-enable --> |
+| OTEL_EXPORTER_JAEGER_AGENT_PORT | Port for the Jaeger agent [1]                                    | 6831                                                                                              |
+| OTEL_EXPORTER_JAEGER_ENDPOINT   | Full URL of endpoint for Jaeger traces [2] | `http://localhost:14268/api/traces` for `http/thrift.binary` protocol, `http://localhost:14250` for `grpc` protocol |
 | OTEL_EXPORTER_JAEGER_TIMEOUT    | Maximum time the Jaeger exporter will wait for each batch export | 10s                                                                                              |
 | OTEL_EXPORTER_JAEGER_USER       | Username to be used for HTTP basic authentication                |                                                                                                  |
 | OTEL_EXPORTER_JAEGER_PASSWORD   | Password to be used for HTTP basic authentication                |                                                                                                  |
+| OTEL_EXPORTER_JAEGER_PROTOCOL   | The transport protocol. Options MAY include `http/thrift.binary`, `grpc`, `udp/thrift.compact` | `http/thrift.binary` [3]                                                       |
 
-[1] See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
+[1] Used when `udp/thrift.compact` protocol is used.
+  See [Jaeger Agent](https://www.jaegertracing.io/docs/latest/deployment/#agent) documentation.
 
-[2] When the exporter uses the gRPC protocol, the environment variable refers to the gRPC endpoint and the default value should be `http://localhost:14250`.
+[2] Used when `http/thrift.binary` or `grpc` protocol is used.
+
+[3] The default transport SHOULD be [Thrift over HTTP][jaeger_http] unless
+  SDKs have good reasons to choose other as the default
+  (e.g. for backward compatibility reasons).
 
 ## Zipkin Exporter
 
@@ -181,11 +187,7 @@ The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](./protocol/otlp.md)
-- `"jaeger"`: export in Jaeger data model. If no additional configuration is
-  provided the default protocol SHOULD be [Thrift over HTTP][jaeger_http] unless
-  SDKs have good reasons to choose [gRPC][jaeger_grpc] as the default
-  (e.g. for backward compatibility reasons when gRPC was already the default
-  in a stable SDK release).
+- `"jaeger"`: export in Jaeger data model
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"none"`: No automatically configured exporter for traces.
 
