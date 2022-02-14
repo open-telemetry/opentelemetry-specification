@@ -315,7 +315,11 @@ The API SHOULD support registration of callbacks bound to
 one or more instruments outside of instrument construcotrs, provided
 the API declaratively states which instrument(s) will be be used.
 
-The API SHOULD support unregistration of callbacks.
+The API SHOULD support unregistration of callbacks, in order to cease
+making observations.  Note that unregistration of callbacks does not
+undo the effect of instrument registration itself; duplicate
+instrument registration conflicts SHOULD still occur for instruments
+with no registered callbacks.
 
 Callback functions SHOULD NOT take an indefinite amount of time.
 
@@ -538,9 +542,31 @@ meter.CreateObservableCounter<UInt64>("caesium_oscillates", () => clock.GetCaesi
 
 #### Asynchronous Counter operations
 
-Asynchronous Counter is only intended for an asynchronous scenario. The only
-operation is provided by the `callback`, which is registered during the
+Asynchronous Counter uses an idiomatic interface for reporting
+measurements through a `callback`, which is registered during
 [Asynchronous Counter creation](#asynchronous-counter-creation).
+
+The API SHOULD provide support for unregistering callbacks.  For
+example:
+
+```python
+# Python
+class Device:
+    """A device with one counter"""
+
+    def __init__(self, meter, x):
+        self.x = x
+        self.cb = meter.create_observable_counter(name="usage", description="count of items used", self.counter_callback)
+
+    def counter_callback(self, result):
+        result.Observe(self.read_counter(), {'x', self.x})
+
+    def read_counter(self):
+        return 100  # ...
+    
+    def stop(self):
+        self.cb.unregister()
+```
 
 ### Histogram
 
@@ -749,9 +775,31 @@ meter.CreateObservableGauge<double>("temperature", () => sensor.GetTemperature()
 
 #### Asynchronous Gauge operations
 
-Asynchronous Gauge is only intended for an asynchronous scenario. The only
-operation is provided by the `callback`, which is registered during the
+Asynchronous Gauge uses an idiomatic interface for reporting
+measurements through a `callback`, which is registered during
 [Asynchronous Gauge creation](#asynchronous-gauge-creation).
+
+The API SHOULD provide support for unregistering callbacks.  For
+example:
+
+```python
+# Python
+class Device:
+    """A device with one gauge"""
+
+    def __init__(self, meter, x):
+        self.x = x
+        self.cb = meter.create_observable_gauge(name="pressure", description="force/area", self.gauge_callback)
+
+    def gauge_callback(self, result):
+        result.Observe(self.read_gauge(), {'x', self.x})
+
+    def read_gauge(self):
+        return 100  # ...
+    
+    def stop(self):
+        self.cb.unregister()
+```
 
 ### UpDownCounter
 
@@ -1021,9 +1069,31 @@ meter.CreateObservableUpDownCounter<UInt64>("memory.physical.free", () => WMI.Qu
 
 #### Asynchronous UpDownCounter operations
 
-Asynchronous UpDownCounter is only intended for an asynchronous scenario. The
-only operation is provided by the `callback`, which is registered during the
-[Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation).
+Asynchronous Updowncounter uses an idiomatic interface for reporting
+measurements through a `callback`, which is registered during
+[Asynchronous Updowncounter creation](#asynchronous-updowncounter-creation).
+
+The API SHOULD provide support for unregistering callbacks.  For
+example:
+
+```python
+# Python
+class Device:
+    """A device with one updowncounter"""
+
+    def __init__(self, meter, x):
+        self.x = x
+        self.cb = meter.create_observable_updowncounter(name="queue_size", description="items in process", self.updowncounter_callback)
+
+    def updowncounter_callback(self, result):
+        result.Observe(self.read_updowncounter(), {'x', self.x})
+
+    def read_updowncounter(self):
+        return 100  # ...
+    
+    def stop(self):
+        self.cb.unregister()
+```
 
 ## Measurement
 
