@@ -542,9 +542,8 @@ measurements through a `callback`, which is registered during
 
 For callback functions registered after an asynchronous instrument is
 created, the API is required to support a mechanism for
-unregistration.  For example, the object returned from `register_callback` 
-can suport an `unregister()` method directly.
-
+unregistration.  For example, the object returned from `register_callback`
+can support an `unregister()` method directly.
 
 ```python
 # Python
@@ -561,7 +560,7 @@ class Device:
 
     def read_counter(self):
         return 100  # ...
-    
+
     def stop(self):
         self.cb.unregister()
 ```
@@ -779,8 +778,8 @@ measurements through a `callback`, which is registered during
 
 For callback functions registered after an asynchronous instrument is
 created, the API is required to support a mechanism for
-unregistration.  For example, the object returned from `register_callback` 
-can suport an `unregister()` method directly.
+unregistration.  For example, the object returned from `register_callback`
+can support an `unregister()` method directly.
 
 ```python
 # Python
@@ -797,7 +796,7 @@ class Device:
 
     def read_gauge(self):
         return 100  # ...
-    
+
     def stop(self):
         self.cb.unregister()
 ```
@@ -1076,8 +1075,8 @@ measurements through a `callback`, which is registered during
 
 For callback functions registered after an asynchronous instrument is
 created, the API is required to support a mechanism for
-unregistration.  For example, the object returned from `register_callback` 
-can suport an `unregister()` method directly.
+unregistration.  For example, the object returned from `register_callback`
+can support an `unregister()` method directly.
 
 ```python
 # Python
@@ -1094,7 +1093,7 @@ class Device:
 
     def read_updowncounter(self):
         return 100  # ...
-    
+
     def stop(self):
         self.cb.unregister()
 ```
