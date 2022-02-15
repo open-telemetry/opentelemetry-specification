@@ -445,6 +445,9 @@ RECOMMENDATIONS on how to treat the consequent duplicate
 conflicting](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
 `Metric` definitions.
 
+The implementation MUST aggregate data from identical Instruments
+together in its export pipeline.
+
 The implementation SHOULD assist the user in managing conflicts by
 reporting each duplicate-conflicting instrument registration that was
 not corrected by a View as follows.  When a potential conflict arises

@@ -210,9 +210,6 @@ Instruments describes instances where all identifying fields are
 equal.  The term _distinct_ applied to Instruments describes instances
 where at least one field value is different.
 
-The implementation MUST aggregate data from identical Instruments
-together in its export pipeline.
-
 When more than one distinct Instrument is registered with the same
 `name` for identical Meters, the implementation SHOULD emit a warning
 to the user informing them of duplicate registration conflict(s).
