@@ -305,25 +305,17 @@ Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
-The API MUST support creation of asynchronous instruments by passing a
-single callback function to be registered to the newly created
+The API MUST support creation of asynchronous instruments by passing
+one or more callback functions to be registered to the newly created
 instrument.
 
-The API SHOULD support creation of asynchronous instruments
-by passing a variable number of callback functions, greater than or
-equal to zero, to be registered to the newly created instrument.
+The API SHOULD support registration of callback functions to
+asynchronous instruments after they are created.
 
-The API MAY support registration of callbacks bound to
-one or more instruments outside of instrument constructors, provided
-the API declaratively states which instrument(s) will be be used from
-each callback.
-
-The API SHOULD support unregistration of callbacks, in order to cease
-making observations.  Note that unregistration of callbacks does not
-undo the effect of instrument registration itself; duplicate
-instrument registration conflicts SHOULD still occur for instruments
-with no registered callbacks.  The effect of unregistering a callback
-more than once is unspecified.
+Where the API supports registration of callback functions after
+asynchronous instrumentation creation, it MUST return something (e.g.,
+a registration handle, receipt or token) to the user that supports
+undoing the effect of callback registation.
 
 Callback functions SHOULD NOT take an indefinite amount of time.
 
@@ -1109,40 +1101,6 @@ for the interaction between the API and SDK.
 
 * A value
 * [`Attributes`](../common/common.md#attributes)
-
-## Multi-instrument asynchronous callback example
-
-Where idiomatic, [the Metrics API supports the use of multiple
-instruments from a single registered
-callback](#asynchronous-instrument).  Provided there is runtime
-support for dynamic scope (e.g., thread-local state, context
-variables), this can be achieved by an API similar to the synchronous
-instruments.  For example,
-
-```Python
-# Python
-class Device:
-    """A device with one counter"""
-
-    def __init__(self, meter, x):
-        self.x = x
-        self.usage = meter.create_observable_counter(name="usage", description="count of items used")
-        self.pressure = meter.create_observable_gauge(name="pressure", description="force per unit area")
-        self.cb = meter.register_callback([self.usage, self.pressure], self.observe)
-
-    def observe(self):
-        self.usage.observe(self.read_usage(), {'x', self.x})
-        self.pressure.observe(self.read_pressure(), {'x', self.x})
-
-    def read_usage(self):
-        return 100  # ...
-
-    def read_pressure(self):
-        return 10  # ...
-
-    def stop(self):
-        self.cb.unregister()
-```
 
 ## Compatibility requirements
 
