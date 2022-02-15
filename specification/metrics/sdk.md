@@ -440,7 +440,7 @@ given instrument before starting a subsequent round of collection.
 
 As [stated in the API
 specification](api.md#instrument-type-conflict-detection),
-implemetations are REQUIRED to create valid instruments in case of
+implementations are REQUIRED to create valid instruments in case of
 duplicate instrument registration, and the [data model includes
 RECOMMENDATIONS on how to treat the consequent duplicate
 conflicting](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
