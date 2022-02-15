@@ -306,8 +306,9 @@ with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
 The API MUST support creation of asynchronous instruments by passing
-one or more callback functions to be registered to the newly created
-instrument.
+zero or more callback functions to be permanently registered to the
+newly created instrument.  Callbacks functions passed to the
+instrument constructor cannot be unregistered.
 
 The API SHOULD support registration of callback functions to
 asynchronous instruments after they are created.
@@ -542,8 +543,11 @@ Asynchronous Counter uses an idiomatic interface for reporting
 measurements through a `callback`, which is registered during
 [Asynchronous Counter creation](#asynchronous-counter-creation).
 
-The API SHOULD provide support for unregistering callbacks.  For
-example:
+For callback functions registered after an asynchronous instrument is
+created, the API is required to support a mechanism for
+unregistration.  For example, the object returned from `register_callback` 
+can suport an `unregister()` method directly.
+
 
 ```python
 # Python
@@ -776,8 +780,10 @@ Asynchronous Gauge uses an idiomatic interface for reporting
 measurements through a `callback`, which is registered during
 [Asynchronous Gauge creation](#asynchronous-gauge-creation).
 
-The API SHOULD provide support for unregistering callbacks.  For
-example:
+For callback functions registered after an asynchronous instrument is
+created, the API is required to support a mechanism for
+unregistration.  For example, the object returned from `register_callback` 
+can suport an `unregister()` method directly.
 
 ```python
 # Python
@@ -1071,8 +1077,10 @@ Asynchronous UpDownCounter uses an idiomatic interface for reporting
 measurements through a `callback`, which is registered during
 [Asynchronous Updowncounter creation](#asynchronous-updowncounter-creation).
 
-The API SHOULD provide support for unregistering callbacks.  For
-example:
+For callback functions registered after an asynchronous instrument is
+created, the API is required to support a mechanism for
+unregistration.  For example, the object returned from `register_callback` 
+can suport an `unregister()` method directly.
 
 ```python
 # Python
