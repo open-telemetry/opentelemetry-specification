@@ -552,7 +552,8 @@ class Device:
 
     def __init__(self, meter, x):
         self.x = x
-        self.cb = meter.create_observable_counter(name="usage", description="count of items used", self.counter_callback)
+        counter = meter.create_observable_counter(name="usage", description="count of items used")
+        self.cb = counter.register_callback(self.counter_callback)
 
     def counter_callback(self, result):
         result.Observe(self.read_counter(), {'x', self.x})
@@ -785,7 +786,8 @@ class Device:
 
     def __init__(self, meter, x):
         self.x = x
-        self.cb = meter.create_observable_gauge(name="pressure", description="force/area", self.gauge_callback)
+        gauge = meter.create_observable_gauge(name="pressure", description="force/area")
+        self.cb = gauge.register_callback(self.gauge_callback)
 
     def gauge_callback(self, result):
         result.Observe(self.read_gauge(), {'x', self.x})
@@ -1079,7 +1081,8 @@ class Device:
 
     def __init__(self, meter, x):
         self.x = x
-        self.cb = meter.create_observable_updowncounter(name="queue_size", description="items in process", self.updowncounter_callback)
+        updowncounter = meter.create_observable_updowncounter(name="queue_size", description="items in process")
+        self.cb = updowncounter.register_callback(self.updowncounter_callback)
 
     def updowncounter_callback(self, result):
         result.Observe(self.read_updowncounter(), {'x', self.x})
