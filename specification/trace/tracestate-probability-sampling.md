@@ -72,9 +72,9 @@
       - [Recommendation: Recognize inconsistent r-values](#recommendation-recognize-inconsistent-r-values)
   * [Appendix: Statistical test requirements](#appendix-statistical-test-requirements)
     + [Test procedure: non-powers of two](#test-procedure-non-powers-of-two)
-      - [Requirement: Pass 15 non-power-of-two statistical tests](#requirement-pass-15-non-power-of-two-statistical-tests)
+      - [Requirement: Pass 12 non-power-of-two statistical tests](#requirement-pass-12-non-power-of-two-statistical-tests)
     + [Test procedure: exact powers of two](#test-procedure-exact-powers-of-two)
-      - [Requirement: Pass 5 power-of-two statistical tests](#requirement-pass-5-power-of-two-statistical-tests)
+      - [Requirement: Pass 3 power-of-two statistical tests](#requirement-pass-3-power-of-two-statistical-tests)
     + [Test implementation](#test-implementation)
 - [Appendix](#appendix)
   * [Methods for generating R-values](#methods-for-generating-r-values)
@@ -870,7 +870,7 @@ this a strict test for random behavior, we take the following approach:
 
 - Generate a pre-determined list of 20 random seeds
 - Use fixed values for significance level (5%) and trials (20)
-- Use a population size of one million spans
+- Use a population size of 100,000 spans
 - For each trial, simulate the population and compute ChiSquared
   test statistic
 - Locate the first seed value in the ordered list such that the
@@ -895,29 +895,26 @@ In this case there are two degrees of freedom for the Chi-Squared test.
 The following table summarizes the test parameters.
 
 | Test case | Sampling probability | Lower, Upper p-value when sampled | Expect<sub>lower</sub> | Expect<sub>upper</sub> | Expect<sub>unsampled</sub> |
-| ---       | ---                  | ---                               | ---                    | ---                    | ---                        |
-| 1         | 0.900000             | 0, 1                              | 100000                 | 800000                 | 100000                     |
-| 2         | 0.600000             | 0, 1                              | 400000                 | 200000                 | 400000                     |
-| 3         | 0.330000             | 1, 2                              | 170000                 | 160000                 | 670000                     |
-| 4         | 0.130000             | 2, 3                              | 120000                 | 10000                  | 870000                     |
-| 5         | 0.100000             | 3, 4                              | 25000                  | 75000                  | 900000                     |
-| 6         | 0.050000             | 4, 5                              | 12500                  | 37500                  | 950000                     |
-| 7         | 0.017000             | 5, 6                              | 14250                  | 2750                   | 983000                     |
-| 8         | 0.010000             | 6, 7                              | 5625                   | 4375                   | 990000                     |
-| 9         | 0.005000             | 7, 8                              | 2812.5                 | 2187.5                 | 995000                     |
-| 10        | 0.002900             | 8, 9                              | 1006.25                | 1893.75                | 997100                     |
-| 11        | 0.001000             | 9, 10                             | 953.125                | 46.875                 | 999000                     |
-| 12        | 0.000500             | 10, 11                            | 476.5625               | 23.4375                | 999500                     |
-| 13        | 0.000260             | 11, 12                            | 228.28125              | 31.71875               | 999740                     |
-| 14        | 0.000230             | 12, 13                            | 14.140625              | 215.859375             | 999770                     |
-| 15        | 0.000100             | 13, 14                            | 22.0703125             | 77.9296875             | 999900                     |
+|-----------|----------------------|-----------------------------------|------------------------|------------------------|----------------------------|
+| 1         | 0.900000             | 0, 1                              | 10000                  | 80000                  | 10000                      |
+| 2         | 0.600000             | 0, 1                              | 40000                  | 20000                  | 40000                      |
+| 3         | 0.330000             | 1, 2                              | 17000                  | 16000                  | 67000                      |
+| 4         | 0.130000             | 2, 3                              | 12000                  | 1000                   | 87000                      |
+| 5         | 0.100000             | 3, 4                              | 2500                   | 7500                   | 90000                      |
+| 6         | 0.050000             | 4, 5                              | 1250                   | 3750                   | 95000                      |
+| 7         | 0.017000             | 5, 6                              | 1425                   | 275                    | 98300                      |
+| 8         | 0.010000             | 6, 7                              | 562.5                  | 437.5                  | 99000                      |
+| 9         | 0.005000             | 7, 8                              | 281.25                 | 218.75                 | 99500                      |
+| 10        | 0.002900             | 8, 9                              | 100.625                | 189.375                | 99710                      |
+| 11        | 0.001000             | 9, 10                             | 95.3125                | 4.6875                 | 99900                      |
+| 12        | 0.000500             | 10, 11                            | 47.65625               | 2.34375                | 99950                      |
 
 The formula for computing Chi-Squared in this case is:
 
 ```
 ChiSquared = math.Pow(sampled_lowerP - expect_lowerP, 2) / expect_lowerP +
              math.Pow(sampled_upperP - expect_upperP, 2) / expect_upperP +
-             math.Pow(1000000 - sampled_lowerP - sampled_upperP - expect_unsampled, 2) / expect_unsampled
+             math.Pow(100000 - sampled_lowerP - sampled_upperP - expect_unsampled, 2) / expect_unsampled
 ```
 
 This should be compared with 0.102587, the value of the Chi-Squared
@@ -926,9 +923,9 @@ For each probability in the table above, the test is required to
 demonstrate a seed that produces exactly one ChiSquared value less
 than 0.102587.
 
-##### Requirement: Pass 15 non-power-of-two statistical tests
+##### Requirement: Pass 12 non-power-of-two statistical tests
 
-For the test with 20 trials and 1 million spans each, the test MUST
+For the test with 20 trials and 100,000 spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
 test statistic is below 0.102587 exactly 1 out of 20 times.
 
@@ -937,19 +934,17 @@ test statistic is below 0.102587 exactly 1 out of 20 times.
 In this case there is one degree of freedom for the Chi-Squared test.
 The following table summarizes the test parameters.
 
-| Test case | Sampling probability | P-value when sampled | Expect<sub>sampled</sub> | Expect<sub>unsampled</sub> |             |
-| ---       | ---                  | ---                  | ---                      | ---                        |             |
-| 16        | 0x1p-01 (0.500000)   | 1                    | 500000                   | n/a                        | 500000      |
-| 17        | 0x1p-04 (0.062500)   | 4                    | 62500                    | n/a                        | 937500      |
-| 18        | 0x1p-07 (0.007812)   | 7                    | 7812.5                   | n/a                        | 992187.5    |
-| 19        | 0x1p-10 (0.000977)   | 10                   | 976.5625                 | n/a                        | 999023.4375 |
-| 20        | 0x1p-13 (0.000122)   | 13                   | 122.0703125              | n/a                        | 999877.9297 |
+| Test case | Sampling probability | P-value when sampled | Expect<sub>sampled</sub> | Expect<sub>unsampled</sub> |
+|-----------|----------------------|----------------------|--------------------------|----------------------------|
+| 13        | 0x1p-01 (0.500000)   | 1                    | 50000                    | 50000                      |
+| 14        | 0x1p-04 (0.062500)   | 4                    | 6250                     | 93750                      |
+| 15        | 0x1p-07 (0.007812)   | 7                    | 781.25                   | 99218.75                   |
 
 The formula for computing Chi-Squared in this case is:
 
 ```
 ChiSquared = math.Pow(sampled - expect_sampled, 2) / expect_sampled +
-             math.Pow(1000000 - sampled - expect_unsampled, 2) / expect_unsampled
+             math.Pow(100000 - sampled - expect_unsampled, 2) / expect_unsampled
 ```
 
 This should be compared with 0.003932, the value of the Chi-Squared
@@ -958,15 +953,15 @@ For each probability in the table above, the test is required to
 demonstrate a seed that produces exactly one ChiSquared value less
 than 0.003932.
 
-##### Requirement: Pass 5 power-of-two statistical tests
+##### Requirement: Pass 3 power-of-two statistical tests
 
-For the teset with 20 trials and 1 million spans each, the test MUST
+For the test with 20 trials and 100,000 spans each, the test MUST
 demonstrate a random number generator seed such that the ChiSquared
 test statistic is below 0.003932 exactly 1 out of 20 times.
 
 #### Test implementation
 
-The recommended structure for this test uses a table listing the 20
+The recommended structure for this test uses a table listing the 15
 probability values, the expected p-values, whether the ChiSquared
 statistic has one or two degrees of freedom, and the index into the
 predetermined list of seeds.
@@ -974,35 +969,30 @@ predetermined list of seeds.
 ```
     for _, test := range []testCase{
         // Non-powers of two
-        {0.90000, 1, twoDegrees, 5},
-        {0.60000, 1, twoDegrees, 14},
-        {0.33000, 2, twoDegrees, 3},
-        {0.13000, 3, twoDegrees, 2},
+        {0.90000, 1, twoDegrees, 3},
+        {0.60000, 1, twoDegrees, 2},
+        {0.33000, 2, twoDegrees, 2},
+        {0.13000, 3, twoDegrees, 1},
         {0.10000, 4, twoDegrees, 0},
         {0.05000, 5, twoDegrees, 0},
         {0.01700, 6, twoDegrees, 2},
-        {0.01000, 7, twoDegrees, 3},
-        {0.00500, 8, twoDegrees, 1},
-        {0.00290, 9, twoDegrees, 1},
-        {0.00100, 10, twoDegrees, 5},
-        {0.00050, 11, twoDegrees, 1},
-        {0.00026, 12, twoDegrees, 3},
-        {0.00023, 13, twoDegrees, 0},
-        {0.00010, 14, twoDegrees, 2},
+        {0.01000, 7, twoDegrees, 2},
+        {0.00500, 8, twoDegrees, 2},
+        {0.00290, 9, twoDegrees, 4},
+        {0.00100, 10, twoDegrees, 6},
+        {0.00050, 11, twoDegrees, 0},
 
         // Powers of two
         {0x1p-1, 1, oneDegree, 0},
-        {0x1p-4, 4, oneDegree, 2},
-        {0x1p-7, 7, oneDegree, 3},
-        {0x1p-10, 10, oneDegree, 0},
-        {0x1p-13, 13, oneDegree, 1},
+        {0x1p-4, 4, oneDegree, 0},
+        {0x1p-7, 7, oneDegree, 1},
     } {
 ```
 
 Note that seed indexes in the example above have what appears to be
-the correct distribution.  The five 0s, four 1s, four 2s, four 3s, and
-two 5s demonstrate that it is relatively easy to find examples where
-there is exactly one failure.  Seed index 14, for probability 0.6 in
+the correct distribution.  The five 0s, two 1s, five 2s, one 3s, and
+one 4 demonstrate that it is relatively easy to find examples where
+there is exactly one failure.  Probability 0.001, with seed index 6 in
 this case, is a reminder that outliers exist.  Further significance
 testing of this distribution is not recommended.
 

@@ -147,7 +147,10 @@ are the inputs:
 
 * The Instrument selection criteria (required), which covers:
   * The `type` of the Instrument(s) (optional).
-  * The `name` of the Instrument(s), with wildcard support (optional).
+  * The `name` of the Instrument(s). [OpenTelemetry SDK](../overview.md#sdk)
+    authors MAY choose to support wildcard characters, with the question mark
+    (`?`) matching exactly one character and the asterisk character (`*`)
+    matching zero or more characters.
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
