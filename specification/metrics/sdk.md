@@ -420,10 +420,10 @@ instruments that record negative measurements, e.g. `UpDownCounter` or `Observab
 
 ### Observations inside asynchronous callbacks
 
-Callback functions MUST be invoked in the context of a specific
-`MetricReader` performing collection, such that observations made or
-produced by executing callbacks only apply to the intended
-`MetricReader` during collection.
+Callback functions MUST be invoked for the specific `MetricReader`
+performing collection, such that observations made or produced by
+executing callbacks only apply to the intended `MetricReader` during
+collection.
 
 The implementation SHOULD disregard the accidental use of APIs
 appurtenant to asynchronous instruments outside of registered
