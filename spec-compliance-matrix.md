@@ -20,6 +20,7 @@ formats is required. Implementing more than one format is optional.
 | Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer with schema_url                                                                     |          | +   | +    |     |        |      |        |     |      | +   |      |       |
+| Associate Tracer with InstrumentationScope                                                       |          |     |      |     |        |      |        |     |      |     |      |       |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | ForceFlush (SDK only required)                                                                   |          | +   | +    | -   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -80,6 +81,7 @@ formats is required. Implementing more than one format is optional.
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   |      |       |
 | [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
+| Fetch InstrumentationScope from ReadableSpan                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -102,6 +104,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | `get_meter` accepts name, `version` and `schema_url`.                                                                                                                        |          | +  |  +   |    |    +   |      |        |     |      |     |   -  |       |
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.                                                                              |          | +  |  +   |    |    -   |      |        |     |      |     |   -  |       |
 | The fallback `Meter` `name` property keeps its original invalid value.                                                                                                       | X        | -  |  -   |    |    -   |      |        |     |      |     |   -  |       |
+| Associate `Meter` with `InstrumentationScope`.                                                                                                                               |          |    |      |    |        |      |        |     |      |     |      |       |
 | The meter provides functions to create a new `Counter`.                                                                                                                      |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The meter provides functions to create a new `AsynchronousCounter`.                                                                                                          |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The meter provides functions to create a new `Histogram`.                                                                                                                    |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
@@ -155,6 +158,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | `MeterProvider` allows a `Resource` to be specified.                                                                                                                         |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`.                                                            |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`.       |          | +  |  +   |    |    +   |      |        |     |      |     |   -  |       |
+| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`.         |          |    |      |    |        |      |        |     |      |     |      |       |
 | Configuration is managed solely by the `MeterProvider`.                                                                                                                      |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The `MeterProvider` provides methods to update the configuration                                                                                                             | X        | -  |  -   |    |    +   |      |        |     |      |     |   +  |       |
 | The updated configuration applies to all already returned `Meter`s.                                                                                                          | if above | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
@@ -289,6 +293,7 @@ Note: Support for environment variables is optional.
 | Service name mapping                                                           |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | +   | +    | +   | +    | +     |
+| InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
 | Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
@@ -302,6 +307,7 @@ Note: Support for environment variables is optional.
 | Service name mapping                                                           |          | +  | + |    | +           | +    | -      |     |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
+| InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
 | Status mapping                                                                 |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | +     |
 | Error Status mapping                                                           |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
 | Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | +     |
