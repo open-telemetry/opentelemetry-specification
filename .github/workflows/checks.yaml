@@ -13,7 +13,7 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
-    - name: npm install
+    - name: install dependencies
       run: npm install
 
     - name: run markdownlint
@@ -39,7 +39,7 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
-    - name: npm install
+    - name: install dependencies
       run: npm install
 
     - name: run markdown-link-check
@@ -51,7 +51,7 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
-    - name: npm install
+    - name: install dependencies
       run: npm install
 
     - name: run markdown-toc
