@@ -1071,7 +1071,7 @@ meter.CreateObservableUpDownCounter<UInt64>("memory.physical.free", () => WMI.Qu
 
 #### Asynchronous UpDownCounter operations
 
-Asynchronous Updowncounter uses an idiomatic interface for reporting
+Asynchronous UpDownCounter uses an idiomatic interface for reporting
 measurements through a `callback`, which is registered during
 [Asynchronous Updowncounter creation](#asynchronous-updowncounter-creation).
 
