@@ -876,7 +876,9 @@ Implementors MAY choose the best idiomatic design for their language. For
 example, they could generalize the [Push Metric Exporter
 interface](#push-metric-exporter) design and use that for consistency, they
 could model the pull exporter as [MetricReader](#metricreader), or they could
-design a completely different pull exporter interface.
+design a completely different pull exporter interface. If the pull exporter is
+modeled as MetricReader, implementors MAY name the MetricExporter interface as
+PushMetricExporter to prevent naming confusion.
 
 The following diagram gives some examples on how `Pull Metric Exporter` can be
 modeled to interact with other components in the SDK:
