@@ -106,22 +106,24 @@ The `TracerProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-- `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
-  (e.g. `io.opentelemetry.contrib.mongodb`).
-  If an application or library has built-in OpenTelemetry instrumentation, both
+- `name` (required): This name SHOULD uniquely identify the
+  [instrumentation scope](../glossary.md#instrumentation-scope), such as the
+  [instrumentation library](../glossary.md#instrumentation-library) (e.g.
+  `io.opentelemetry.contrib.mongodb`), package, module or class name. If an
+  application or library has built-in OpenTelemetry instrumentation, both
   [Instrumented library](../glossary.md#instrumented-library) and
-  [Instrumentation library](../glossary.md#instrumentation-library) may refer to the same library.
-  In that scenario, the `name` denotes a module name or component name within that library
-  or application.
-  In case an invalid name (null or empty string) is specified, a working
-  Tracer implementation MUST be returned as a fallback rather than returning
-  null or throwing an exception, its `name` property SHOULD be set to an **empty** string,
-  and a message reporting that the specified value is invalid SHOULD be logged.
-  A library, implementing the OpenTelemetry API *may* also ignore this name and
-  return a default instance for all calls, if it does not support "named"
-  functionality (e.g. an implementation which is not even observability-related).
-  A TracerProvider could also return a no-op Tracer here if application owners configure
-  the SDK to suppress telemetry produced by this library.
+  [Instrumentation library](../glossary.md#instrumentation-library) may refer to
+  the same library. In that scenario, the `name` denotes a module name or
+  component name within that library or application. In case an invalid name
+  (null or empty string) is specified, a working Tracer implementation MUST be
+  returned as a fallback rather than returning null or throwing an exception,
+  its `name` property SHOULD be set to an **empty** string, and a message
+  reporting that the specified value is invalid SHOULD be logged. A library,
+  implementing the OpenTelemetry API *may* also ignore this name and return a
+  default instance for all calls, if it does not support "named" functionality
+  (e.g. an implementation which is not even observability-related). A
+  TracerProvider could also return a no-op Tracer here if application owners
+  configure the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
@@ -286,11 +288,11 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
 
-The _span name_ concisely identifies the work represented by the Span,
+The *span name* concisely identifies the work represented by the Span,
 for example, an RPC method name, a function name,
 or the name of a subtask or stage within a larger computation.
 The span name SHOULD be the most general string that identifies a
-(statistically) interesting _class of Spans_,
+(statistically) interesting *class of Spans*,
 rather than individual Span instances while still being human-readable.
 That is, "get_user" is a reasonable name, while "get_user/314159",
 where "314159" is a user ID, is not a good name due to its high cardinality.
@@ -374,14 +376,14 @@ The API MUST accept the following parameters:
 
 Each span has zero or one parent span and zero or more child spans, which
 represent causally related operations. A tree of related spans comprises a
-trace. A span is said to be a _root span_ if it does not have a parent. Each
+trace. A span is said to be a *root span* if it does not have a parent. Each
 trace includes a single root span, which is the shared ancestor of all other
 spans in the trace. Implementations MUST provide an option to create a `Span` as
 a root span, and MUST generate a new `TraceId` for each root span created.
 For a Span with a parent, the `TraceId` MUST be the same as the parent.
 Also, the child span MUST inherit all `TraceState` values of its parent by default.
 
-A `Span` is said to have a _remote parent_ if it is the child of a `Span`
+A `Span` is said to have a *remote parent* if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.

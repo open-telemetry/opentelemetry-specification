@@ -1,5 +1,5 @@
 # All documents to be used in spell check.
-ALL_DOCS := $(shell find . -name '*.md' -not -path './.github/*' -type f | grep -v ^./node_modules | sort)
+ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' | sort)
 PWD := $(shell pwd)
 
 TOOLS_DIR := ./internal/tools
@@ -12,6 +12,10 @@ MARKDOWN_TOC=./node_modules/.bin/markdown-toc
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
 SEMCONVGEN_VERSION=0.8.0
+
+# TODO: add `yamllint` step to `all` after making sure it works on Mac.
+.PHONY: all
+all: markdownlint markdown-link-check misspell table-check schema-check
 
 $(MISSPELL):
 	cd $(TOOLS_DIR) && go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
@@ -47,14 +51,14 @@ markdown-toc:	$(MARKDOWN_TOC)
 	@for f in $(ALL_DOCS); do \
 		if grep -q '<!-- tocstop -->' $$f; then \
 			echo markdown-toc: processing $$f; \
-			$(MARKDOWN_TOC) --no-first-h1 -i $$f; \
+			$(MARKDOWN_TOC) --no-first-h1 --no-stripHeadingTags -i $$f; \
 		else \
 			echo markdown-toc: no TOC markers, skipping $$f; \
 		fi; \
 	done
 
 $(MARKDOWN_LINT):
-	npm install markdownlint-cli
+	npm install markdownlint-cli@0.31.0
 
 .PHONY: markdownlint
 markdownlint:	$(MARKDOWN_LINT)

@@ -55,10 +55,10 @@
 ### Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider` (see
-[API](api.md#tracerprovider)). The `name` and `version` arguments
-supplied to the `TracerProvider` must be used to create an
-[`InstrumentationLibrary`][otep-83] instance which is stored on the created
-`Tracer`.
+[API](api.md#tracerprovider)). The `name` and `version` arguments supplied to
+the `TracerProvider` must be used to create an
+[`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which is
+stored on the created `Tracer`.
 
 Configuration (i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators),
 [SpanLimits](#span-limits) and [`Sampler`](#sampling)) MUST be managed solely by
@@ -117,11 +117,14 @@ Thus, the SDK specification defines sets of possible requirements for
 `Span`-like parameters:
 
 * **Readable span**: A function receiving this as argument MUST be able to
-  access all information that was added to the span,
-  as listed [in the API spec](api.md#span-data-members).
-  In particular, it MUST also be able to access
-  the `InstrumentationLibrary` and `Resource` information (implicitly)
-  associated with the span.
+  access all information that was added to the span, as listed
+  [in the API spec](api.md#span-data-members). In particular, it MUST also be
+  able to access the `InstrumentationScope` [since 1.10.0] and `Resource`
+  information (implicitly) associated with the span. For backwards compatibility
+  it MUST also be able to access the `InstrumentationLibrary`
+  [deprecated since 1.10.0] having the same name and version values as the
+  `InstrumentationScope`.
+
   It must also be able to reliably determine whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).

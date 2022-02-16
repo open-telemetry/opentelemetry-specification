@@ -107,10 +107,12 @@ The `MeterProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-* `name` (required): This name must identify the [instrumentation
-  library](../overview.md#instrumentation-libraries) (e.g.
-  `io.opentelemetry.contrib.mongodb`). If an application or library has built-in
-  OpenTelemetry instrumentation, both [Instrumented
+* `name` (required): This name SHOULD uniquely identify the [instrumentation
+  scope](../glossary.md#instrumentation-scope), such as the
+  [instrumentation library](../glossary.md#instrumentation-library) (e.g.
+  `io.opentelemetry.contrib.mongodb`), package,
+  module or class name. If an application or library has built-in OpenTelemetry
+  instrumentation, both [Instrumented
   library](../glossary.md#instrumented-library) and [Instrumentation
   library](../glossary.md#instrumentation-library) may refer to the same
   library. In that scenario, the `name` denotes a module name or component name
@@ -254,13 +256,13 @@ asynchronous:
 
 * Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-gauge)) give
   the user a way to register callback function, and the callback function will
-  only be invoked upon collection. For example, a piece of embedded software
+  be invoked only on demand (see SDK [collection](sdk.md#collect) for reference). For example, a piece of embedded software
   could use an asynchronous gauge to collect the temperature from a sensor every
   15 seconds, which means the callback function will only be invoked every 15
   seconds. [Measurements](#measurement) recorded by asynchronous instruments
   cannot be associated with the [Context](../context/context.md).
 
-Please note that the term _synchronous_ and _asynchronous_ have nothing to do
+Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
@@ -345,8 +347,8 @@ consider:
 ```python
 # Python
 
-exception_counter.Add(1, {"exception_type": "IOError", "handled_by_user": True})
-exception_counter.Add(1, exception_type="IOError", handled_by_user=True})
+exception_counter.add(1, {"exception_type": "IOError", "handled_by_user": True})
+exception_counter.add(1, exception_type="IOError", handled_by_user=True)
 ```
 
 ```csharp
@@ -575,13 +577,13 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 ### Asynchronous Gauge
 
 Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument)
-which reports non-additive value(s) (_e.g. the room temperature - it makes no
-sense to report the temperature value from multiple rooms and sum them up_) when
+which reports non-additive value(s) (e.g. the room temperature - it makes no
+sense to report the temperature value from multiple rooms and sum them up) when
 the instrument is being observed.
 
-Note: if the values are additive (_e.g. the process heap size - it makes sense
+Note: if the values are additive (e.g. the process heap size - it makes sense
 to report the heap size from multiple processes and sum them up, so we get the
-total heap usage_), use [Asynchronous Counter](#asynchronous-counter) or
+total heap usage), use [Asynchronous Counter](#asynchronous-counter) or
 [Asynchronous UpDownCounter](#asynchronous-updowncounter).
 
 Example uses for Asynchronous Gauge:
@@ -832,8 +834,8 @@ API](../overview.md#api) authors might consider:
 
 ```python
 # Python
-customers_in_store.Add(1, {"account.type": "commercial"})
-customers_in_store.Add(-1, account_type="residential")
+customers_in_store.add(1, {"account.type": "commercial"})
+customers_in_store.add(-1, account_type="residential")
 ```
 
 ```csharp
@@ -845,9 +847,9 @@ customersInStore.Add(-1, new Account { Type = "residential" });
 ### Asynchronous UpDownCounter
 
 Asynchronous UpDownCounter is an [asynchronous
-Instrument](#asynchronous-instrument) which reports additive value(s) (_e.g. the
+Instrument](#asynchronous-instrument) which reports additive value(s) (e.g. the
 process heap size - it makes sense to report the heap size from multiple
-processes and sum them up, so we get the total heap usage_) when the instrument
+processes and sum them up, so we get the total heap usage) when the instrument
 is being observed.
 
 Note: if the value is
