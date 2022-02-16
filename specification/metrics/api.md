@@ -14,6 +14,15 @@
 - [Meter](#meter)
   * [Meter operations](#meter-operations)
 - [Instrument](#instrument)
+  * [General characteristics](#general-characteristics)
+    + [Instrument type conflict detection](#instrument-type-conflict-detection)
+    + [Instrument namespace](#instrument-namespace)
+    + [Instrument naming rule](#instrument-naming-rule)
+    + [Instrument unit](#instrument-unit)
+    + [Instrument description](#instrument-description)
+    + [Synchronous/Asynchronous property](#synchronousasynchronous-property)
+    + [Synchronous Instrument](#synchronous-instrument)
+    + [Asynchronous Instrument](#asynchronous-instrument)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -21,6 +30,8 @@
   * [Asynchronous Counter](#asynchronous-counter)
     + [Asynchronous Counter creation](#asynchronous-counter-creation)
     + [Asynchronous Counter operations](#asynchronous-counter-operations)
+      - [Asynchronous Counter Observe](#asynchronous-counter-observe)
+      - [Asynchonous Counter Callback Unregister](#asynchonous-counter-callback-unregister)
   * [Histogram](#histogram)
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
@@ -28,6 +39,8 @@
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
+      - [Asynchronous Gauge Observe](#asynchronous-gauge-observe)
+      - [Asynchonous Gauge Callback Unregister](#asynchonous-gauge-callback-unregister)
   * [UpDownCounter](#updowncounter)
     + [UpDownCounter creation](#updowncounter-creation)
     + [UpDownCounter operations](#updowncounter-operations)
@@ -35,7 +48,10 @@
   * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
     + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
+      - [Asynchronous UpDownCounter Observe](#asynchronous-updowncounter-observe)
+      - [Asynchonous UpDownCounter Callback Unregister](#asynchonous-updowncounter-callback-unregister)
 - [Measurement](#measurement)
+  * [Example API for multiple-instrument callbacks](#example-api-for-multiple-instrument-callbacks)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
 
@@ -369,8 +385,10 @@ Callback functions MUST be documented as follows for the end user:
   
 Where idiomatic, a secondary callback API may be provided that enables
 the use of multiple asynchronous instruments from individual
-callbacks.  See the [example API for multiple-instrument callbacks]
-for below.
+callbacks.  When registering callbacks associated with multiple
+instruments, the API MUST make the association between instruments and
+callbacks explicit.  See the [example API for multiple-instrument
+callbacks] for below.
 
 ### Counter
 
@@ -1033,6 +1051,8 @@ class Device:
         self.property = property
         self.usage = meter.create_observable_counter(name="usage", description="count of items used")
         self.pressure = meter.create_observable_gauge(name="pressure", description="force per unit area")
+		
+		# Note the two associated instruments are passed to the callback.
 		meter.register_callback([self.usage, self.pressure], self.observe)
 
     def observe(self, result):
