@@ -41,7 +41,7 @@ The data must be encoded according to the format specified in the [OTLP/HTTP sta
 
 Only top-level objects, `ExportTraceServiceRequest`, `ExportMetricsServiceRequest`, and `ExportLogsServiceRequest` are supported.
 
-Files must contain exactly one type of data: traces, metrics, or logs. Mixed content is not supported.
+Files must contain exactly one type of data: traces, metrics, or logs.
 
 ## Examples
 
