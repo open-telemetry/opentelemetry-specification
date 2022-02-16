@@ -406,7 +406,7 @@ observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
 this callback function needs to be reentrant safe / thread safe or not.
 
 Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
-callback function reports the cumulative value of the counter. To determine the
+callback function reports the current value of the counter. To determine the
 reported rate the counter is changing, the difference between successive
 measurements is used.
 
@@ -895,7 +895,7 @@ observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
 this callback function needs to be reentrant safe / thread safe or not.
 
 Note: Unlike [UpDownCounter.Add()](#add-1) which takes the increment/delta value,
-the callback function reports the cumulative value of the Asynchronous
+the callback function reports the current value of the Asynchronous
 UpDownCounter. To determine the reported rate the Asynchronous UpDownCounter is
 changing, the difference between successive measurements is used.
 
