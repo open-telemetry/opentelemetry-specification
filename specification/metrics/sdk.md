@@ -58,8 +58,7 @@ suggestions regarding how to implement this efficiently.
 New `Meter` instances are always created through a `MeterProvider` (see
 [API](./api.md#meterprovider)). The `name`, `version` (optional), and
 `schema_url` (optional) arguments supplied to the `MeterProvider` MUST be used
-to create an
-[`InstrumentationLibrary`](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
+to create an [`InstrumentationScope`](../glossary.md#instrumentation-scope)
 instance which is stored on the created `Meter`.
 
 Configuration (i.e., [MetricExporters](#metricexporter),
@@ -147,7 +146,10 @@ are the inputs:
 
 * The Instrument selection criteria (required), which covers:
   * The `type` of the Instrument(s) (optional).
-  * The `name` of the Instrument(s), with wildcard support (optional).
+  * The `name` of the Instrument(s). [OpenTelemetry SDK](../overview.md#sdk)
+    authors MAY choose to support wildcard characters, with the question mark
+    (`?`) matching exactly one character and the asterisk character (`*`)
+    matching zero or more characters.
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
@@ -873,7 +875,9 @@ Implementors MAY choose the best idiomatic design for their language. For
 example, they could generalize the [Push Metric Exporter
 interface](#push-metric-exporter) design and use that for consistency, they
 could model the pull exporter as [MetricReader](#metricreader), or they could
-design a completely different pull exporter interface.
+design a completely different pull exporter interface. If the pull exporter is
+modeled as MetricReader, implementors MAY name the MetricExporter interface as
+PushMetricExporter to prevent naming confusion.
 
 The following diagram gives some examples on how `Pull Metric Exporter` can be
 modeled to interact with other components in the SDK:
