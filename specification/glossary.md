@@ -27,6 +27,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Exporter Library](#exporter-library)
   * [Instrumented Library](#instrumented-library)
   * [Instrumentation Library](#instrumentation-library)
+  * [Instrumentation Scope](#instrumentation-scope)
   * [Tracer Name / Meter Name](#tracer-name--meter-name)
   * [Execution Unit](#execution-unit)
 - [Logs](#logs)
@@ -151,11 +152,34 @@ Example: `io.opentelemetry.contrib.mongodb`.
 
 Synonyms: *Instrumenting Library*.
 
+### Instrumentation Scope
+
+A logical unit of the application code with which the emitted telemetry can be
+associated. It is typically the developer's choice to decide what denotes a
+reasonable instrumentation scope. The most common approach is to use the
+[instrumentation library](#instrumentation-library) as the scope, however other
+scopes are also common, e.g. a module, a package, or a class can be chosen as
+the instrumentation scope.
+
+If the unit of code has a version then the instrumentation scope is defined by
+the (name,version) pair otherwise the version is omitted and only the name is
+used. The name or (name,version) pair uniquely identify the logical unit of the
+code that emits the telemetry. A typical approach to ensure uniqueness is to use
+fully qualified name of the emitting code (e.g. fully qualified library name or
+fully qualified class name).
+
+The instrumentation scope is used to obtain a
+[Tracer or Meter](#tracer-name--meter-name).
+
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
-creating a new `Tracer` or `Meter` (see [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider)).
-The name/version pair identifies the [Instrumentation Library](#instrumentation-library).
+creating a new `Tracer` or `Meter` (see
+[Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider)).
+The name/version pair identifies the
+[Instrumentation Scope](#instrumentation-scope), for example the
+[Instrumentation Library](#instrumentation-library) or another unit of
+application in the scope of which the telemetry is emitted.
 
 ### Execution Unit
 

@@ -11,7 +11,15 @@ release.
 
 ### Traces
 
+- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
+  Library. The Tracer is now associated with Instrumentation Scope
+  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+
 ### Metrics
+
+- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
+  Library. The Meter is now associated with Instrumentation Scope
+  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
 
 ### Logs
 
