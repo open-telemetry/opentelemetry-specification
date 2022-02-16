@@ -17,4 +17,4 @@
 
 All of these attributes can be provided by the user agent itself in the form of an HTTP header (e.g. Sec-CH-UA, Sec-CH-Platform, Sec-CH-Mobile, User-Agent). However, in order to support batches of data with different resources, these attributes should be used when possible.
 
-**[1]:** The user-agent value should be provided only from browsers that do not have a mechanism to retrieve name, version, and platform individually (for example from the User-Agent Client Hints API). 
+**[1]:** The user-agent value should be provided only from browsers that do not have a mechanism to retrieve name, version, and platform individually (for example from the User-Agent Client Hints API).
