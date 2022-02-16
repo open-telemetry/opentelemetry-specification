@@ -2,9 +2,36 @@
 
 **Status**: [Experimental](../../document-status.md)
 
-This specification defines semantic conventions for [CloudEvents](https://cloudevents.io/).
-It covers creation, processing and context propagation between producer and consumer.
-It does not cover transport aspects of publishing and receiving cloud events.
+## Definitions
+
+ From the
+ [CloudEvents specification:](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#overview)
+
+> CloudEvents is a specification for describing event data in common formats
+to provide interoperability across services, platforms and systems.
+
+For more information and background on the history of how CloudEvents came to
+fruition, consult the
+[CloudEvents Primer](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/primer.md)
+document.
+
+CloudEvents are typically used in distributed, event-based systems.
+Tracing such event-based systems can be a challenging task to achieve.
+Many components can produce and consume events and such events can trigger
+the dispatch of further events, all in an asynchronous manner.
+
+The semantic conventions below, define how to model the different stages of a
+CloudEvent in event-based systems. It covers creation, processing,
+context propagation between producer and consumer and how to enrich spans
+with CloudEvent-specific attributes.
+
+With the proposed model, it is possible to have an overview of everything
+that happened as the result of an event. One can, for example, answer the
+following questions:
+
+- Which components in a system reacted to an event
+- What further events were sent due to an incoming event
+- Which event caused an exception in the chain
 
 ## Overview
 
