@@ -407,8 +407,8 @@ this callback function needs to be reentrant safe / thread safe or not.
 
 Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
 callback function reports the cumulative value of the counter. To determine the
-reported rate the counter is changing, the difference between successive
-measurements is used.
+reported rate at which the counter is changing, the difference between successive
+measurements should be used.
 
 The callback function SHOULD NOT take indefinite amount of time. If multiple
 independent SDKs coexist in a running process, they MUST invoke the callback
