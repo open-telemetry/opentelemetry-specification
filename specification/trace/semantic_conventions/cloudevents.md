@@ -29,9 +29,9 @@ With the proposed model, it is possible to have an overview of everything
 that happened as the result of an event. One can, for example, answer the
 following questions:
 
-- Which components in a system reacted to an event
+- What components in a system reacted to an event
 - What further events were sent due to an incoming event
-- Which event caused an exception in the chain
+- Which event caused the exception
 
 ## Overview
 
