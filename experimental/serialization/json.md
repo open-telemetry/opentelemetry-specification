@@ -41,7 +41,7 @@ This defines the first version of the serialization scheme.
 
 The data must be encoded according to the format specified in the [OTLP/HTTP standard](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/otlp.md#otlphttp).
 
-Only top-level objects, `ResourceSpans`, `ResourceMetrics`, and `ResourceLogs` are supported.
+Only top-level objects, `ExportTraceServiceRequest`, `ExportMetricsServiceRequest `, and `ExportLogsServiceRequest` are supported.
 
 Files must contain exactly one type of data: traces, metrics, or logs. Mixed content is not supported.
 
