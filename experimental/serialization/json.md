@@ -32,9 +32,9 @@ This file is a [JSON lines file](https://jsonlines.org/), and therefore follows 
 
 #### Streaming appending
 
-Data is appended sequentially to the file, irrespective of the timestamp.
+There is no guarantee that the data in the file is ordered.
 
-This allows streaming data to the file.
+There is no guarantee in particular that timestamps will be monotically increasing.
 
 ### Telemetry data requirements
 
