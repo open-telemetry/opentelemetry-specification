@@ -33,6 +33,8 @@ release.
 
 ### SDK Configuration
 
+- Correct default value of OTEL_PROPAGATORS to align with API requirements. (#TBD)
+
 ### Telemetry Schemas
 
 ## v1.9.0 (2021-02-10)
