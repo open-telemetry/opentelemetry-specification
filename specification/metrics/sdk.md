@@ -629,14 +629,14 @@ functions.
 
 The SDK SHOULD provide a way to allow the preferred [Aggregation
 Temporality](./datamodel.md#temporality) to be specified for a
-`MetricReader` instance during the setup (e.g. initialization,
-registration, etc.) time.  This preference gives the user control over
-the amount of long-term memory dedicated to reading metrics.
+`MetricReader` instance during setup (e.g. initialization,
+registration, etc.). This preference gives the SDK user control over the
+amount of long-term memory dedicated to reading metrics.
 
 The synchronous instruments generally define data points having
 aggregation temporality (e.g., `Sum`, `Histogram`).  For these points,
-when a `MetricReader` is configured with Cumulative aggregation
-temporality, there is an implied long-term memory cost.
+a `MetricReader` configured with Cumulative aggregation temporality
+implies conversion from Delta into Cumulative aggregation temporality.
 
 The asynchronous `Counter` and `UpDownCounter` instruments are defined
 by observations that are cumulative values to begin with.  For these
@@ -645,46 +645,35 @@ Cumulative into Delta aggregation temporality.
 
 Because of these differences, synchronous and asynchronous instruments
 are given separate treatment.  When configuring the preferred
-aggregation temporality, the implementation MUST provide at least the
-following named preferences:
+aggregation temporality for a `MetricReaderExporter`, the
+implementation MUST provide a mechanism that supports configuring the
+exporter's preferred temporality on the basis of instrument kind for
+the five instruments `Counter`, `Asynchronous Counter`,
+`UpDownCounter`, `Asynchronous UpDownCounter`, and `Histogram`.
 
-- "Cumulative": All data points that define the concept are exported
-  with Cumulative aggregation temporality (i.e., all data point kinds
-  except for `Gauge`).  This implies maintaining long-term Cumulative 
-  state for metric streams deriving from synchronous instruments.
-- "Stateless": Data points having aggregation temporality deriving from
-  synchonous instruments are exported with Delta aggregation
-  temporality (e.g., Delta `Sum` and Delta `Histogram` points), while
-  data points having aggregation temporality deriving from asynchronous
-  instruments are exported with Cumulative aggregation temporality.
-  This preference is so named because it avoids long-term Cumulative 
-  state in the metrics SDK.
+A configured `MetricReader` instance MUST expose data in the preferred
+aggregation temporality for points deriving from the five instruments
+that define aggregation temporality.
 
-If the preferred temporality is explicitly specified then the SDK
-SHOULD respect that, otherwise use Cumulative.
+Two well-known preferences are named, offering a simple way to express
+exporter preferences through environment variables and in
+configuration files.  The following named preferences SHOULD be
+supported:
 
-A configured `MetricReader` instance MUST support reading the
-preferred aggregation temporality for synchronous instruments.
+- **AllCumulative**: All data points with aggregation temporality are
+  exported using Cumulative aggregation temporality. 
+- **DeltaPreferred**: Data points from `Counter`, `Asynchronous
+  Counter`, and `Histogram` instruments use Delta aggregation
+  temporality, whereas whereas data points from `UpDownCounter` and
+  `Asynchronous UpDownCounter` are exported with Cumualtive
+  aggregation temporality.
 
-An optional aggregation temporality preference "Delta" MAY be
-supported by implementations, making it possible for users to convert
-data points from asynchronous `UpDownCounter` and `Counter`
-instruments into Delta aggregation temporality inside their SDK.
+If the preferred temporality is not explicitly specified, the SDK
+SHOULD use the AllCumulative aggregation temporality preference.
 
-SDK support for converting Cumulative to Delta aggregation is optional
-because it is not considered widely useful; in metrics data formats
-that emphasize Delta aggregation temporality such as StatsD, it is
-conventional to convert cumulative values into `Gauge` data points,
-for example, and this is not typically encountered for `Histogram`
-measurements.
-
-Users that wish to convert Cumulative into Delta aggregation
-temporality may consider using an [OpenTelemetry Collector metrics
-processor meant for this purpose](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/cumulativetodeltaprocessor).
-
-Refer to the [supplementary
-guidelines](./supplementary-guidelines.md#aggregation-temporality),
-which have more context and suggestions.
+Refer to the [data model section on Stream
+Manipulations](datamodel.md#stream-manipulations) for more detail on
+changing aggregation temporality.
 
 ### MetricReader operations
 
