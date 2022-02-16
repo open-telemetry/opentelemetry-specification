@@ -100,8 +100,6 @@ In the lifetime of an RPC stream, an event for each message sent/received on
 client and server spans SHOULD be created. In case of unary calls only one sent
 and one received message will be recorded for both client and server spans.
 
-The event name MUST be `"message"`.
-
 <!-- semconv rpc.message -->
 The event name MUST be `message`.
 
