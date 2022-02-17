@@ -134,9 +134,9 @@ This API MUST accept the following parameters:
 Meters are identified by all of these fields.  When more than one
 Meter of the same `name`, `version`, and `schema_url` is created, it
 is unspecified whether or under which conditions the same or different
-`Meter` instances are returned.  The term _identical_ applied to
+`Meter` instances are returned.  The term *identical* applied to
 Meters describes instances where all identifying fields are equal.
-The term _distinct_ applied to Meters describes instances where at
+The term *distinct* applied to Meters describes instances where at
 least one identifying field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Meter` with
@@ -196,7 +196,7 @@ floating point numbers SHOULD be considered as identifying.
 <a name="instrument-type-conflict-detection"></a>
 
 When more than one Instrument of the same `name` is created for
-identical Meters, denoted _duplicate instrument registration_, the
+identical Meters, denoted *duplicate instrument registration*, the
 implementation MUST create a valid Instrument in every case.  Here,
 "valid" means an instrument that is functional and can be expected to
 export data, despite potentially creating a [semantic error in the
@@ -205,9 +205,9 @@ model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations).
 
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of
-duplicate instrument registration.  The term _identical_ applied to
+duplicate instrument registration.  The term *identical* applied to
 Instruments describes instances where all identifying fields are
-equal.  The term _distinct_ applied to Instruments describes instances
+equal.  The term *distinct* applied to Instruments describes instances
 where at least one field value is different.
 
 When more than one distinct Instrument is registered with the same
