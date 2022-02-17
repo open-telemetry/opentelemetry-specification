@@ -15,6 +15,9 @@
   * [Event Model](#event-model)
   * [Timeseries Model](#timeseries-model)
   * [OpenTelemetry Protocol data model](#opentelemetry-protocol-data-model)
+    + [OpenTelemetry Protocol data model: Producer recommendations](#opentelemetry-protocol-data-model-producer-recommendations)
+    + [OpenTelemetry Protocol data model: Consumer recommendations](#opentelemetry-protocol-data-model-consumer-recommendations)
+    + [Point kinds](#point-kinds)
 - [Metric points](#metric-points)
   * [Sums](#sums)
   * [Gauge](#gauge)
@@ -28,8 +31,8 @@
       - [Negative Scale: Extract and Shift the Exponent](#negative-scale-extract-and-shift-the-exponent)
       - [All Scales: Use the Logarithm Function](#all-scales-use-the-logarithm-function)
       - [Positive Scale: Use a Lookup Table](#positive-scale-use-a-lookup-table)
-      - [Producer Recommendations](#producer-recommendations)
-    + [Consumer Expectations](#consumer-expectations)
+    + [ExponentialHistogram: Producer Recommendations](#exponentialhistogram-producer-recommendations)
+    + [ExponentialHistogram: Consumer Recommendations](#exponentialhistogram-consumer-recommendations)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -233,7 +236,7 @@ consisting of several metadata properties:
 
 - Metric name
 - Attributes (dimensions)
-- Kind of point (integer, floating point, etc)
+- Value type of the point (integer, floating point, etc)
 - Unit of measurement
 
 The primary data of each timeseries are ordered (timestamp, value) points, with
@@ -257,22 +260,89 @@ to map into, but is used as a reference throughout this document.
 
 ### OpenTelemetry Protocol data model
 
-The OpenTelemetry protocol data model is composed of Metric data streams. These
-streams are in turn composed of metric data points. Metric data streams
-can be converted directly into Timeseries, and share the same identity
-characteristics for a Timeseries. A metric stream is identified by:
+The OpenTelemetry protocol (OTLP) data model is composed of Metric data
+streams.  These streams are in turn composed of metric data points.
+Metric data streams can be converted directly into Timeseries.
 
-- The originating `Resource`
-- The metric stream's `name`.
-- The attached `Attribute`s
-- The metric stream's point kind.
+Metric streams are grouped into individual `Metric` objects,
+identified by:
 
-It is possible (and likely) that more than one metric stream is created per
-`Instrument` in the event model.
+- The originating `Resource` attributes
+- The instrumentation `Scope` (e.g., instrumentation library name, version)
+- The metric stream's `name`
 
-**Note: The same `Resource`, `name` and `Attribute`s but differing point kind
-coming out of an OpenTelemetry SDK is considered an "error state" that SHOULD
-be handled by an SDK.**
+Including `name`, the `Metric` object is defined by the following
+properties:
+
+- The data point type (e.g. `Sum`, `Gauge`, `Histogram` `ExponentialHistogram`, `Summary`)
+- The metric stream's `unit`
+- The metric stream's `description`
+- Intrinsic data point properties, where applicable: `AggregationTemporality`, `Monotonic`
+
+The data point type, `unit`, and intrinsic properties are considered
+identifying, whereas the `description` field is explicitly not
+identifying in nature.
+
+Extrinsic properties of specific points are not considered
+identifying; these include but are not limited to:
+
+- Bucket boundaries of a `Histogram` data point
+- Scale or bucket count of a `ExponentialHistogram` data point.
+
+The `Metric` object contains individual streams, identified by the set
+of `Attributes`.  Within the individual streams, points are identified
+by one or two timestamps, details vary by data point type.
+
+Within certain data point types (e.g., `Sum` and `Gauge`) there is
+variation permitted in the numeric point value; in this case, the
+associated variation (i.e., floating-point vs. integer) is not
+considered identifying.
+
+#### OpenTelemetry Protocol data model: Producer recommendations
+
+Producers SHOULD prevent the presence of multiple `Metric` identities
+for a given `name` with the same `Resource` and `Scope` attributes.
+Producers are expected to aggregate data for identical `Metric`
+objects as a basic feature, so the appearance of multiple `Metric`,
+considered a "semantic error", generally requires duplicate
+conflicting instrument registration to have occurred somewhere.
+
+Producers MAY be able to remediate the problem, depending on whether
+they are an SDK or a downstream processor:
+
+1. If the potential conflict involves a non-identifying property (i.e.,
+   `description`), the producer SHOULD choose the longer string.
+2. If the potential conflict involves similar but disagreeing units
+   (e.g., "ms" and "s"), an implementation MAY convert units to avoid
+   semantic errors; otherwise an implementation SHOULD inform the user
+   of a semantic error and pass through conflicting data.
+3. If the potential conflict involves an `AggregationTemporality`
+   property, an implementation MAY convert temporality using a
+   Cumulative-to-Delta or a Delta-to-Cumulative transformation;
+   otherwise, an implementation SHOULD inform the user of a semantic
+   error and pass through conflicting data.
+4. Generally, for potential conflicts involving an identifying
+   property (i.e., all properties except `description`), the producer
+   SHOULD inform the user of a semantic error and pass through
+   conflicting data.
+
+When semantic errors such as these occur inside an implementation of
+the OpenTelemetry API, there is an presumption of a fixed `Resource`
+value.  Consequently, SDKs implementing the OpenTelemetry API have
+complete information about the origin of duplicate instrument
+registration conflicts and are sometimes able to help users avoid
+semantic errors.  See the SDK specification for specific details.
+
+#### OpenTelemetry Protocol data model: Consumer recommendations
+
+Consumers MAY reject OpenTelemetry Metrics data containing semantic
+errors (i.e., more than one `Metric` identity for a given `name`,
+`Resource`, and `Scope`).
+
+OpenTelemetry does not specify any means for conveying such an outcome
+to the end user, although this subject deserves attention.
+
+#### Point kinds
 
 A metric stream can use one of these basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
@@ -653,7 +723,7 @@ For positive scales, lookup table methods have been demonstrated
 that are able to exactly compute the index in constant time from a
 lookup table with `O(2**scale)` entries.
 
-##### Producer Recommendations
+#### ExponentialHistogram: Producer Recommendations
 
 At the lowest or highest end of the 64 bit IEEE floating point, a
 bucket's range may only be partially representable by the floating
@@ -674,7 +744,7 @@ perform an exact computation.  As a result, ExponentialHistogram
 exemplars could map into buckets with zero count.  We expect to find
 such values counted in the adjacent buckets.
 
-#### Consumer Expectations
+#### ExponentialHistogram: Consumer Recommendations
 
 ExponentialHistogram bucket indices are expected to map into buckets
 where both the upper and lower boundaries can be represented
@@ -749,11 +819,11 @@ All metric data streams within OTLP MUST have one logical writer.  This means,
 conceptually, that any Timeseries created from the Protocol MUST have one
 originating source of truth.  In practical terms, this implies the following:
 
-- All metric data streams produced by OTel SDKs MUST be globally uniquely
-  produced and free from duplicates.   All metric data streams can be uniquely
-  identified in some way.
+- All metric data streams produced by OTel SDKs SHOULD have globally
+  unique identity at any given point in time. [`Metric` identity is defined
+  above.](#opentelemetry-protocol-data-model-producer-recommendations)
 - Aggregations of metric streams MUST only be written from a single logical
-  source.
+  source at any given point time.
   **Note: This implies aggregated metric streams must reach one destination**.
 
 In systems, there is the possibility of multiple writers sending data for the
@@ -778,6 +848,13 @@ For OTLP, the Single-Writer principle grants a way to reason over error
 scenarios and take corrective actions.  Additionally, it ensures that
 well-behaved systems can perform metric stream manipulation without undesired
 degradation or loss of visibility.
+
+Note that violations of the Single-Writer principle are not semantic
+errors, generally they result from misconfiguration.  Whereas semantic
+errors can sometimes be corrected by configuring Views, violations of
+the Single-Writer principle can be corrected by differentiating the
+`Resource` used or by ensuring that streams for a given `Resource` and
+`Attribute` set do not overlap in time.
 
 ## Temporality
 
