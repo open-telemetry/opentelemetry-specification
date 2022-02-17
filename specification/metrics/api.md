@@ -304,8 +304,7 @@ pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
 The API MUST support creation of asynchronous instruments by passing
 zero or more callback functions to be permanently registered to the
-newly created instrument.  Callbacks functions passed to the
-instrument constructor cannot be unregistered.
+newly created instrument.
 
 The API SHOULD support registration of callback functions to
 asynchronous instruments after they are created.
