@@ -21,6 +21,7 @@ release.
   Library. The Meter is now associated with Instrumentation Scope
   ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
 - Add optional API support for multi-instrument callbacks.
+  ([#2263](https://github.com/open-telemetry/opentelemetry-specification/pull/2263)).
 
 ### Logs
 
