@@ -314,12 +314,16 @@ asynchronous instrumentation creation, it MUST return something (e.g.,
 a registration handle, receipt or token) to the user that supports
 undoing the effect of callback registation.
 
-Callback functions SHOULD NOT take an indefinite amount of time.
+Callback functions MUST be documented as follows for the end user:
 
-Callback functions SHOULD NOT make duplicate observations from asynchronous
-instrument callbacks.  The resulting behavior when a callback observes
-multiple values for identical instrument and attributes is explicitly
-not specified.
+- Callbacks SHOULD be reentrant safe.  The SDK expects to evaluate
+  callbacks for each MetricReader independently.
+- Callbacks SHOULD NOT take an indefinite amount of time.
+- Callbacks SHOULD NOT provide more than one `Measurement` with the
+  same `attributes` in a single callback.
+  
+The resulting behavior when a callback violates any of these
+RECOMMENDATIONS is explicitly not specified.
 
 ### Counter
 
