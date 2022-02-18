@@ -36,6 +36,7 @@
     + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
 - [Measurement](#measurement)
+  * [Multiple-instrument callbacks](#multiple-instrument-callbacks)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
 
@@ -320,6 +321,12 @@ Callback functions SHOULD NOT make duplicate observations from asynchronous
 instrument callbacks.  The resulting behavior when a callback observes
 multiple values for identical instrument and attributes is explicitly
 not specified.
+
+Where idiomatic, a secondary callback API MAY be provided that enables
+the use of multiple asynchronous instruments from individual
+callbacks.  When registering callbacks associated with multiple
+instruments, the API MUST make the association between instruments and
+callbacks explicit.  See the [Multiple-instrument callbacks](#multiple-instrument-callbacks) section below.
 
 ### Counter
 
@@ -1107,6 +1114,47 @@ for the interaction between the API and SDK.
 
 * A value
 * [`Attributes`](../common/common.md#attributes)
+
+### Multiple-instrument callbacks
+
+Where idiomatic, [the Metrics API supports an option to use multiple
+instruments from a single registered
+callback](#asynchronous-instrument).  The key requirement for the API
+is that the association between Callbacks and Instruments be explicit
+so that the SDK knows which callbacks to execute when observing
+specific instruments.
+
+Some suggestions for the API author:
+
+* the Observable result used in multi-instrument callbacks receives an
+  additional instrument argument
+* asynchronous instruments have an `Observe()` method that can be used
+  from appropriately registered callbacks.
+
+This interface is typically a more performant way to report multiple
+measurements when they are obtained through an expensive process, such
+as reading `/proc` files or probing the garbage collection subsystem.
+
+For example,
+
+```Python
+# Python
+class Device:
+    """A device with two instruments"""
+
+    def __init__(self, meter, proeprty):
+        self.property = property
+        self.usage = meter.create_observable_counter(name="usage", description="count of items used")
+        self.pressure = meter.create_observable_gauge(name="pressure", description="force per unit area")
+
+        # Note the two associated instruments are passed to the callback.
+        meter.register_callback([self.usage, self.pressure], self.observe)
+
+    def observe(self, result):
+        usage, pressure = expensive_system_call()
+        self.usage.observe(result, usage, {'property', self.property})
+        self.pressure.observe(result, pressure, {'property', self.property})
+```
 
 ## Compatibility requirements
 
