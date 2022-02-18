@@ -48,6 +48,26 @@
   * [Sums: Delta-to-Cumulative](#sums-delta-to-cumulative)
     + [Sums: detecting alignment issues](#sums-detecting-alignment-issues)
     + [Sums: Missing Timestamps](#sums-missing-timestamps)
+- [Prometheus Compatibility](#prometheus-compatibility)
+  * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
+    + [Counters](#counters)
+    + [Gauges](#gauges)
+    + [Unknown-typed](#unknown-typed)
+    + [Histograms](#histograms)
+    + [Summaries](#summaries)
+    + [Dropped Types](#dropped-types)
+    + [Start Time](#start-time)
+    + [Exemplars](#exemplars-1)
+    + [Resource Attributes](#resource-attributes)
+  * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
+    + [Gauges](#gauges-1)
+    + [Sums](#sums-1)
+    + [Histograms](#histograms-1)
+    + [Summaries](#summaries-1)
+    + [Dropped Data Points](#dropped-data-points)
+    + [Metric Attributes](#metric-attributes)
+    + [Exemplars](#exemplars-2)
+    + [Resource Attributes](#resource-attributes-1)
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
@@ -1089,6 +1109,140 @@ every data point due to not being able to determine alignment or point overlap.
 For comparison, see the simple logic used in
 [statsd sums](https://github.com/statsd/statsd/blob/master/stats.js#L281)
 where all points are added, and lost points are ignored.
+
+## Prometheus Compatibility
+
+**Status**: [Experimental](../document-status.md)
+
+This section denotes how to convert metrics scraped in the [Prometheus exposition](https://github.com/Prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#exposition-formats) or [OpenMetrics](https://openmetrics.io/) formats to the
+OpenTelemetry metric data model and how to create Prometheus metrics from
+OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types, "Prometheus" is taken to mean "Prometheus or OpenMetrics".  "OpenMetrics" refers to OpenMetrics-only concepts.
+
+### Prometheus Metric points to OTLP
+
+#### Counters
+
+A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
+
+#### Gauges
+
+A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gauge) MUST be converted to an OTLP Gauge.
+
+#### Unknown-typed
+
+A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge.
+
+#### Histograms
+
+A [Prometheus Histogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#histogram) MUST be converted to an OTLP Histogram.
+
+Multiple Prometheus histogram metrics MUST be merged together into a single OTLP Histogram:
+
+* The `le` label on non-suffixed metrics is used to identify and order histogram bucket boundaries. Each Prometheus line produces one bucket count on the resulting histogram. Each value for the `le` label except `+Inf` produces one bucket boundary.
+* Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
+* If `_count` is not present, the metric MUST be dropped.
+* If `_sum` is not present, it MUST be computed from the buckets.
+
+#### Summaries
+
+[Prometheus Summary](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#summary) MUST be converted to an OTLP Summary.
+
+Multiple Prometheus metrics are merged together into a single OTLP Summary:
+
+* The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus line produces one quantile on the resulting summary.
+* Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
+
+#### Dropped Types
+
+The following Prometheus types MUST be dropped:
+
+* [OpenMetrics GaugeHistogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram)
+* [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset)
+* [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)
+
+#### Start Time
+
+Prometheus Cumulative metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, conversion MUST follow [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
+
+#### Exemplars
+
+[Prometheus Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars) can be attached to Prometheus Histogram bucket metrics, which SHOULD be converted to exemplars on OpenTelemetry histograms.  The Trace ID and Span ID SHOULD be retrieved from the `trace_id` and `span_id` label keys, respectively.
+
+#### Resource Attributes
+
+When scraping a Prometheus endpoint, resource attributes MUST be added to the scraped metrics to distinguish them from metrics from other Prometheus endpoints.  In particular, `job` and `instance`, [as defined by Prometheus](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances), are needed to ensure Prometheus exporters can disambiguate metrics as [described below](#resource-attributes-1).
+
+The following attributes MUST be associated with scraped metrics as resource attributes, and MUST NOT be added as metric attributes:
+
+| OTLP Resource Attribute | Description |
+| ----------------------- | ----------- |
+| `service.name` | The configured name of the service that the target belongs to |
+| `job` | Identical to `service.name` |
+| `instance` | The <host>:<port> of the target's URL that was scraped. |
+| `host.name` | `instance` The <host> portion of `instance` |
+| `port` | `instance` The <port> portion of `instance` |
+| `scheme` | `http` or `https` |
+
+### OTLP Metric points to Prometheus
+
+#### Gauges
+
+An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
+
+#### Sums
+
+[OpenTelemetry Sums](#sums) follows this logic:
+
+- If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
+- If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
+- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum
+- Otherwise, it MUST be dropped.
+
+#### Histograms
+
+An [OpenTelemetry Histogram](#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus metric family with the following metrics:
+
+- A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
+- `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
+- A series of `{name}` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up the the boundary reported in the `le` label. These points will include a single exemplar that falls within `le` label and no other `le` labelled point.  The final bucket metric MUST have an `+Inf` threshold.
+
+OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
+
+#### Summaries
+
+An [OpenTelemetry Summary](#summary-legacy) MUST be converted to a Prometheus metric family with the following metrics:
+
+- A single `{name}_count` metric denoting the count field of the summary.
+  All attributes of the summary point are converted to Prometheus labels.
+- `{name}_sum` metric denoting the sum field of the summary, reported
+  only if the sum is positive and monotonic. All attributes of the summary
+  point are converted to Prometheus labels.
+- A series of `{name}` metric points that contain all attributes of the
+  summary point recorded as labels.  Additionally, a label, denoted as
+  `quantile` is added denoting a reported quantile point, and having its value
+  be the stringified floating point value of quantiles (between 0.0 and 1.0),
+  starting from lowest to highest, and all being non-negative.  The value of
+  each point is the computed value of the quantile point.
+
+#### Dropped Data Points
+
+The following OTLP data points MUST be dropped:
+
+* [ExponentialHistogram](#exponentialhistogram)
+
+#### Metric Attributes
+
+OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  String Attribute values are converted directly to Metric Attributes, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/common.md#attribute).  Prometheus metric label keys are required to match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics from OpenTelemetry with unsupported Attribute names MUST replace invalid characters with the `_` character. This may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same location.  In such unlikely cases, if multiple key-value pairs are converted to have the same Prometheus key, the values MUST be concatenated together, separated by `;`, and ordered by the lexicographical order of the original keys.
+
+#### Exemplars
+
+[Exemplars](#exemplars) on OpenTelemetry Histograms SHOULD be converted to Prometheus exemplars. Exemplars on other OpenTelemetry data points MUST be dropped.  For Prometheus push exporters, multiple exemplars are able to be added to each bucket, so all exemplars SHOULD be converted.  For Prometheus pull endpoints, only a single exemplar is able to be added to each bucket, so the largest exemplar from each bucket MUST be used, if attaching exemplars.  If no exemplars exist on a bucket, the highest exemplar from a lower bucket MUST be used, even though it is a duplicate of another bucket's exemplar.  Prometheus Exemplars MUST use the `trace_id` and `span_id` keys for the trace and span IDs, respectively.
+
+#### Resource Attributes
+
+In SDK Prometheus (pull) exporters, all resource attributes MUST be dropped, and MUST NOT be attached as labels. The scraper of the endpoint is expected to discover resource attributes of the endpoint it is scraping.
+
+In the Collector's Prometheus pull and push (remote-write) exporters, it is possible for metrics from multiple targets to be sent together, so targets must be disambiguated from one another.  However, the Prometheus exposition format and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto) formats do not include a notion of resource, and expect metric labels to distinguish scraped targets.  By convention, [`job` and `instance`](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances) labels distinguish targets and are expected to be present on metrics exposed on a Prometheus pull exporter (a ["federated"](https://Prometheus.io/docs/Prometheus/latest/federation/) Prometheus endpoint) or pushed via Prometheus remote-write. In the collector Prometheus exporters, the `job` and `instance` resource attributes MUST be converted to Prometheus metric labels, and other resource attributes SHOULD NOT be converted to metric labels.
 
 ## Footnotes
 
