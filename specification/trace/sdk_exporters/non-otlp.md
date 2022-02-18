@@ -21,15 +21,23 @@ over the generic rules defined in this document.
 
 ## Mappings
 
-### InstrumentationLibrary
+### InstrumentationScope
 
-OpenTelemetry `InstrumentationLibrary`'s fields MUST be reported as key-value
+OpenTelemetry `InstrumentationScope`'s fields MUST be reported as key-value
 pairs associated with the Span using the following mapping:
 
-| OpenTelemetry InstrumentationLibrary Field | non-OTLP Key |
-| ------------------- | --- |
-| `InstrumentationLibrary.name`|`otel.library.name`|
-| `InstrumentationLibrary.version`|`otel.library.version`|
+| OpenTelemetry InstrumentationScope Field | non-OTLP Key | Notes |
+| ------------------- | --- | --- |
+| `InstrumentationScope.name`|`otel.scope.name`|since 1.10.0|
+| `InstrumentationScope.version`|`otel.scope.version`|since 1.10.0|
+
+The following deprecated aliases MUST also be reported with exact same values for
+backward compatibility reasons:
+
+| non-OTLP Key | Alias for | Notes |
+| --- | --- | --- |
+|`otel.library.name`|`otel.scope.name`|deprecated since 1.10.0|
+|`otel.library.version`|`otel.scope.version`|deprecated since 1.10.0|
 
 ### Span Status
 

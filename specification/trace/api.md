@@ -106,22 +106,24 @@ The `TracerProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-- `name` (required): This name must identify the [instrumentation library](../overview.md#instrumentation-libraries)
-  (e.g. `io.opentelemetry.contrib.mongodb`).
-  If an application or library has built-in OpenTelemetry instrumentation, both
+- `name` (required): This name SHOULD uniquely identify the
+  [instrumentation scope](../glossary.md#instrumentation-scope), such as the
+  [instrumentation library](../glossary.md#instrumentation-library) (e.g.
+  `io.opentelemetry.contrib.mongodb`), package, module or class name. If an
+  application or library has built-in OpenTelemetry instrumentation, both
   [Instrumented library](../glossary.md#instrumented-library) and
-  [Instrumentation library](../glossary.md#instrumentation-library) may refer to the same library.
-  In that scenario, the `name` denotes a module name or component name within that library
-  or application.
-  In case an invalid name (null or empty string) is specified, a working
-  Tracer implementation MUST be returned as a fallback rather than returning
-  null or throwing an exception, its `name` property SHOULD be set to an **empty** string,
-  and a message reporting that the specified value is invalid SHOULD be logged.
-  A library, implementing the OpenTelemetry API *may* also ignore this name and
-  return a default instance for all calls, if it does not support "named"
-  functionality (e.g. an implementation which is not even observability-related).
-  A TracerProvider could also return a no-op Tracer here if application owners configure
-  the SDK to suppress telemetry produced by this library.
+  [Instrumentation library](../glossary.md#instrumentation-library) may refer to
+  the same library. In that scenario, the `name` denotes a module name or
+  component name within that library or application. In case an invalid name
+  (null or empty string) is specified, a working Tracer implementation MUST be
+  returned as a fallback rather than returning null or throwing an exception,
+  its `name` property SHOULD be set to an **empty** string, and a message
+  reporting that the specified value is invalid SHOULD be logged. A library,
+  implementing the OpenTelemetry API *may* also ignore this name and return a
+  default instance for all calls, if it does not support "named" functionality
+  (e.g. an implementation which is not even observability-related). A
+  TracerProvider could also return a no-op Tracer here if application owners
+  configure the SDK to suppress telemetry produced by this library.
 - `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
