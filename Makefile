@@ -12,7 +12,7 @@ SEMCONVGEN_VERSION=0.8.0
 
 # TODO: add `yamllint` step to `all` after making sure it works on Mac.
 .PHONY: all
-all: markdownlint markdown-link-check misspell table-check schema-check
+all: install-tools markdownlint markdown-link-check misspell table-check schema-check
 
 $(MISSPELL):
 	cd $(TOOLS_DIR) && go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
