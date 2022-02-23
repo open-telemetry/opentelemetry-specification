@@ -16,9 +16,9 @@ groups:
             - id: java_rmi
               value: 'java_rmi'
               brief: 'Java RMI'
-            - id: wcf
-              value: 'wcf'
-              brief: 'WCF'
+            - id: dotnet_wcf
+              value: 'dotnet_wcf'
+              brief: '.NET WCF'
       - id: service
         type: string
         required:
