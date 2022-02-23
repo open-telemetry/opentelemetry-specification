@@ -79,7 +79,7 @@ Examples of span names:
 |---|---|
 | `grpc` | gRPC |
 | `java_rmi` | Java RMI |
-| `wcf` | WCF |
+| `dotnet_wcf` | .NET WCF |
 <!-- endsemconv -->
 
 For client-side spans `net.peer.port` is required if the connection is IP-based and the port is available (it describes the server port they are connecting to).

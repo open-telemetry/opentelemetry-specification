@@ -83,7 +83,7 @@ or not they should be on the server, client or both.
 |---|---|
 | `grpc` | gRPC |
 | `java_rmi` | Java RMI |
-| `wcf` | WCF |
+| `dotnet_wcf` | .NET WCF |
 <!-- endsemconv -->
 
 To avoid high cardinality, implementations should prefer the most stable of `net.peer.name` or
