@@ -42,11 +42,16 @@ one that is needlessly restrictive and complex.
 ### Consistency Checks
 
 The Specification has a number of tools it uses to check things like style,
-spelling and link validity. You can run all of these locally via:
+spelling and link validity. Before using the tools, run:
 
 ```bash
-npm install # get the tools
-make check  # run all checks
+npm install
+```
+
+You can perform all checks locally using this command:
+
+```bash
+make check
 ```
 
 Note: This can take a long time as it checks all links. You should use this
