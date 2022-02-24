@@ -378,7 +378,7 @@ or something else).
 
 ### Counter
 
-`Counter` is a [synchronous Instrument](#synchronous-instrument) which supports
+`Counter` is a [synchronous Instrument](#synchronous-instrument-api) which supports
 non-negative increments.
 
 Example uses for `Counter`:
@@ -601,7 +601,7 @@ class Device:
 
 ### Histogram
 
-`Histogram` is a [synchronous Instrument](#synchronous-instrument) which can be
+`Histogram` is a [synchronous Instrument](#synchronous-instrument-api) which can be
 used to report arbitrary values that are likely to be statistically meaningful.
 It is intended for statistics such as histograms, summaries, and percentile.
 
@@ -795,7 +795,7 @@ class Device:
 
 ### UpDownCounter
 
-`UpDownCounter` is a [synchronous Instrument](#synchronous-instrument) which
+`UpDownCounter` is a [synchronous Instrument](#synchronous-instrument-api) which
 supports increments and decrements.
 
 Note: if the value is
