@@ -359,7 +359,7 @@ multiple values for identical instrument and attributes is explicitly
 not specified.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
-approach for capturing measurements from calblack functions. Here are some examples:
+approach for capturing measurements from callback functions. Here are some examples:
 
 * Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
 * Use an observable result argument to allow individual `Measurement`s to be
