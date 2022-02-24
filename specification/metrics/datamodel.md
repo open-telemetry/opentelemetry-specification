@@ -55,6 +55,8 @@
     + [Unknown-typed](#unknown-typed)
     + [Histograms](#histograms)
     + [Summaries](#summaries)
+    + [Info](#info)
+    + [StateSet](#stateset)
     + [Dropped Types](#dropped-types)
     + [Start Time](#start-time)
     + [Exemplars](#exemplars-1)
@@ -1152,13 +1154,19 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 * The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus line produces one quantile on the resulting summary.
 * Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
 
+#### Info
+
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Gauge.
+
+#### StateSet
+
+An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Gauge.
+
 #### Dropped Types
 
 The following Prometheus types MUST be dropped:
 
 * [OpenMetrics GaugeHistogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram)
-* [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset)
-* [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)
 
 #### Start Time
 
