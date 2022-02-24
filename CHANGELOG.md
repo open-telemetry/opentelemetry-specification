@@ -20,6 +20,10 @@ release.
 - Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
   Library. The Meter is now associated with Instrumentation Scope
   ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+- Specify the behavior of duplicate instrumentation registration in the API, specify
+  duplicate conflicts in the data model, specify how the SDK is meant to report and
+  assist the user when these conflicts arise.
+  ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 
 ### Logs
 
