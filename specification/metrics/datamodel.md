@@ -1196,11 +1196,12 @@ attributes, and MUST NOT be added as metric attributes:
 
 In addition to the attributes above, the
 ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
-metric family, if present, MUST be dropped from the batch of metrics.
-Additionally, all labels from the "target" info metric MUST be converted to
-resource attributes, which MUST be attached to all other metrics which are part
-of the same scrape. By default, labels MUST NOT be altered (such as replacing
-`_` with `.` characters in keys).
+metric family is used to supply additional resource attributes. If present,
+"target" info MUST be dropped from the batch of metrics, and all labels from
+the "target" info metric family MUST be converted to resource attributes
+attached to all other metrics which are part of the scrape. By default, label
+keys and values MUST NOT be altered (such as replacing `_` with `.` characters
+in keys).
 
 ### OTLP Metric points to Prometheus
 
@@ -1259,7 +1260,7 @@ OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https:/
 
 #### Resource Attributes
 
-In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to the ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems) metric; otherwise, they MUST be dropped, and MUST NOT be attached as labels to other metrics. The "target" info metric MUST be an info-typed metric whose labels MUST include the resource attributes, and MUST NOT include any other labels. There MUST be at most one "target" info metric exposed on a Prometheus endpoint.
+In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to the ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems) metric family; otherwise, they MUST be dropped, and MUST NOT be attached as labels to other metric families. The "target" info metric family MUST be an info-typed metric family whose labels MUST include the resource attributes, and MUST NOT include any other labels. There MUST be at most one "target" info metric family exposed on a Prometheus endpoint.
 
 In the Collector's Prometheus pull and push (remote-write) exporters, it is
 possible for metrics from multiple targets to be sent together, so targets must
@@ -1280,12 +1281,12 @@ attributes MUST be combined as `<service.namespace>;<service.name>`, or
 `instance` label; otherwise, `instance` should be added with an empty value.
 Other resource attributes SHOULD be converted to a
 ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
-metric, or MUST be dropped. The "target" info metric is an info-typed metric
+metric family, or MUST be dropped. The "target" info metric family is an info-typed metric family
 whose labels MUST include the resource attributes, and MUST NOT include any
 other labels other than `job` and `instance`.  There MUST be at most one
-"target" info metric exported for each unique combination of `job` and `instance`.
+"target" info metric point exported for each unique combination of `job` and `instance`.
 
-If info-typed metrics are not yet supported by the language Prometheus client library, a gauge-typed metric named "target" info with a constant value of 1 MUST be used instead.
+If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named "target" info with a constant value of 1 MUST be used instead.
 
 To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/common.md#attribute).
 
