@@ -52,11 +52,11 @@
   * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
     + [Counters](#counters)
     + [Gauges](#gauges)
+    + [Info](#info)
+    + [StateSet](#stateset)
     + [Unknown-typed](#unknown-typed)
     + [Histograms](#histograms)
     + [Summaries](#summaries)
-    + [Info](#info)
-    + [StateSet](#stateset)
     + [Dropped Types](#dropped-types)
     + [Start Time](#start-time)
     + [Exemplars](#exemplars-1)
@@ -1130,6 +1130,14 @@ A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/mai
 
 A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gauge) MUST be converted to an OTLP Gauge.
 
+#### Info
+
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Gauge. An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process.
+
+#### StateSet
+
+An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Gauge. An OpenMetrics StateSet can be thought of as a special-case of the OpenMetrics Gauge which has a 0 or 1 value, and has one metric for every possible state.
+
 #### Unknown-typed
 
 A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge.
@@ -1153,14 +1161,6 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 
 * The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus line produces one quantile on the resulting summary.
 * Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
-
-#### Info
-
-An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Gauge.
-
-#### StateSet
-
-An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Gauge.
 
 #### Dropped Types
 
