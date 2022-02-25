@@ -1170,16 +1170,37 @@ Prometheus Cumulative metrics do not include the start time of the metric. When 
 
 #### Resource Attributes
 
-When scraping a Prometheus endpoint, resource attributes MUST be added to the scraped metrics to distinguish them from metrics from other Prometheus endpoints.  In particular, `job` and `instance`, [as defined by Prometheus](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances), are needed to ensure Prometheus exporters can disambiguate metrics as [described below](#resource-attributes-1).
+When scraping a Prometheus endpoint, resource attributes MUST be added to the
+scraped metrics to distinguish them from metrics from other Prometheus
+endpoints. In particular, `service.name` and `service.instance.id`, are needed
+to ensure Prometheus exporters can disambiguate metrics using
+[`job` and `instance` labels]([as defined by Prometheus](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances))
+as [described below](#resource-attributes-1).
 
-The following attributes MUST be associated with scraped metrics as resource attributes, and MUST NOT be added as metric attributes:
+The following attributes MUST be associated with scraped metrics as resource
+attributes, and MUST NOT be added as metric attributes:
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
 | `service.name` | The configured name of the service that the target belongs to |
+| `service.instance.id` | A unique identifier of the target.  By default, it should be the scraped URL |
+
+The following attributes SHOULD be associated with scraped metrics as resource
+attributes, and MUST NOT be added as metric attributes:
+
+| OTLP Resource Attribute | Description |
+| ----------------------- | ----------- |
 | `net.host.name` | The <host> portion of the target's URL that was scraped |
 | `net.host.port` | The <port> portion of the target's URL that was scraped |
 | `http.scheme` | `http` or `https` |
+
+In addition to the attributes above, the
+["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+metric family, if present, MUST be dropped from the batch of metrics.
+Additionally, all labels from the "target" info metric MUST be converted to
+resource attributes, which MUST be attached to all other metrics which are part
+of the same scrape. By default, labels MUST NOT be altered (such as replacing
+`_` with `.` characters in keys).
 
 ### OTLP Metric points to Prometheus
 
@@ -1248,12 +1269,17 @@ formats do not include a notion of resource, and expect metric labels to
 distinguish scraped targets. By convention, [`job` and `instance`](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances)
 labels distinguish targets and are expected to be present on metrics exposed on
 a Prometheus pull exporter (a ["federated"](https://Prometheus.io/docs/Prometheus/latest/federation/)
-Prometheus endpoint) or pushed via Prometheus remote-write. In the collector
-Prometheus exporters, the `service.name` attribute MUST be converted to the
-`job` metric label, and the `net.host.name` and `net.host.port` attributes, if
-present, MUST be converted to the `instance` label as `<net.host.name>:<net.host.port>`.
-If `job` and `instance` are successfully added, other resource attributes
-SHOULD be converted to a ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+Prometheus endpoint) or pushed via Prometheus remote-write. In OTLP, the
+`service.name`, `service.namespace`, and `service.instance.id` triplet is
+[required to be unique](https://github.com/open-telemetry/opentelemetry-specification/blob/da74730bf835010229a9612c281f052e26553218/specification/resource/semantic_conventions/README.md#service),
+which makes them good candidates to use to construct `job` and `instance`. In
+the collector Prometheus exporters, the `service.name` and `service.namespace`
+attributes MUST be combined as `<service.namespace>;<service.name>`, or
+`<service.name>` if namespace is empty, to form the `job` metric label.  The
+`service.instance.id` attribute, if present, MUST be converted to the
+`instance` label; otherwise, `instance` should be added with an empty value.
+Other resource attributes SHOULD be converted to a
+["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 metric, or MUST be dropped. The "target" info metric is an info-typed metric
 whose labels MUST include the resource attributes, and MUST NOT include any
 other labels other than `job` and `instance`.  There MUST be at most one
