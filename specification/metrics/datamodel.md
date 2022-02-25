@@ -1238,7 +1238,7 @@ OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https:/
 
 #### Resource Attributes
 
-In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to the ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems) metric, or MUST be dropped, and MUST NOT be attached as labels to other metrics. The "target" info metric MUST info-typed metric whose labels MUST include the resource attributes, and MUST NOT include any other labels. There MUST be at most one "target" info metric exposed on a Prometheus endpoint.
+In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to the ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems) metric; otherwise, they MUST be dropped, and MUST NOT be attached as labels to other metrics. The "target" info metric MUST be an info-typed metric whose labels MUST include the resource attributes, and MUST NOT include any other labels. There MUST be at most one "target" info metric exposed on a Prometheus endpoint.
 
 In the Collector's Prometheus pull and push (remote-write) exporters, it is
 possible for metrics from multiple targets to be sent together, so targets must
