@@ -2,6 +2,20 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+
+<!-- toc -->
+
+- [Definitions](#definitions)
+- [Overview](#overview)
+- [Conventions](#conventions)
+  * [Spans](#spans)
+    + [Creation](#creation)
+    + [Processing](#processing)
+  * [Attributes](#attributes)
+
+<!-- tocstop -->
+
 ## Definitions
 
  From the
@@ -9,21 +23,69 @@
 
 > CloudEvents is a specification for describing event data in common formats
 to provide interoperability across services, platforms and systems.
+>
 
-For more information and background on the history of how CloudEvents came to
-fruition, consult the
+For more information on the concepts, terminology and background of CloudEvents
+consult the
 [CloudEvents Primer](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/primer.md)
 document.
 
-CloudEvents are typically used in distributed, event-based systems.
-Tracing such event-based systems can be a challenging task to achieve.
-Many components can produce and consume events and such events can trigger
-the dispatch of further events, all in an asynchronous manner.
+## Overview
 
-The semantic conventions below, define how to model the different stages of a
-CloudEvent in event-based systems. It covers creation, processing,
-context propagation between producer and consumer and how to enrich spans
-with CloudEvent-specific attributes.
+A CloudEvent can be sent directly from producer to consumer.
+For such a scenario, the traditional parent-child trace model works well.
+However, CloudEvents are also used in distributed systems where an event
+can go through many [hops](https://en.wikipedia.org/wiki/Hop_(networking))
+until it reaches a consumer. In this scenario, the traditional parent-child
+trace model is not sufficient to produce a meaningful trace.
+
+Consider the following scenario:
+
+```
+      +----------+                  +--------------+                                                                           
+      | Producer | ---------------> | Intermediary |                                                                           
+      +----------+                  +--------------+                                                                           
+                                           |                                                                                   
+                                           |                                                                                   
+                                           |                                                                                   
+                                           v                                                                                   
+      +----------+                    +----------+                                                                             
+      | Consumer | <----------------- |  Queue   |                                                                             
+      +----------+                    +----------+ 
+```
+
+With the traditional parent-child trace model, the above scenario would produce
+two traces, completely independent from each other. It is not possible to
+correlate a producer with a consumer(s).
+
+```
++---------------------------------------------------+
+|     Trace 1                                       |
+|                                                   |
+|     +---------------------------------------+     |
+|     | Send (auto-instr)                     |     |
+|     +---------------------------------------+     |
+|        +------------------------------------+     |
+|        | Intermediary: Received (auto-instr)|     |
+|        +------------------------------------+     |
+|        +------------------------------------+     |
+|        | Intermediary: Send (auto-instr)    |     |
+|        +------------------------------------+     |
+|                                                   |
+|     Trace 2                                       |
+|                                                   |
+|     +---------------------------------------+     |
+|     | Consumer: Receive (auto-instr)        |     |
+|     +---------------------------------------+     |
+|                                                   |
++---------------------------------------------------+
+```
+
+This document defines semantic conventions to model the different stages
+a CloudEvent can go through in a system, making it possible to create traces
+that are meaningful and consistent. It covers creation, processing,
+context propagation between producer and consumer(s) and attributes
+to be added to spans.
 
 With the proposed model, it is possible to have an overview of everything
 that happened as the result of an event. One can, for example, answer the
@@ -33,28 +95,59 @@ following questions:
 - What further events were sent due to an incoming event
 - Which event caused the exception
 
-## Overview
+With the conventions in this document, the application scenario above would
+produce a trace where it is possible to correlate a producer with a consumer(s):
 
-To be individually traceable, each CloudEvent has to have its own trace context.
-The trace context is populated in the event using the
+```
++-------------------------------------------------------+
+|          Trace 1                                      |
+|                                                       |
+|          +---------------------------------------+    |
+|    +---> | Create event                          |    |
+|    |     +---------------------------------------+    |
+|    |     +---------------------------------------+    |
+|    |     | Send (auto-instr)                     |    |
+|    |     +---------------------------------------+    |
+|    |        +------------------------------------+    |
+|    |        | Intermediary: Received (auto-instr)|    |
+|    |        +------------------------------------+    |
+|    |        +------------------------------------+    |
+|    |        | Intermediary: Send (auto-instr)    |    |
+|    |Link    +------------------------------------+    |
+|    |                                                  |
+|    |                                                  |
+|    |                                                  |
+|    |     Trace 2                                      |
+|    |                                                  |
+|    |     +---------------------------------------+    |
+|    |     | Consumer: Receive (auto-instr)        |    |
+|    |     +---------------------------------------+    |
+|    |       +-------------------------------------+    |
+|    +------ | Consumer: Process                   |    |
+|            +-------------------------------------+    |
+|                                                       |
++-------------------------------------------------------+
+```
+
+## Conventions
+
+To achieve the trace above, it is necessary to capture the context of
+the event creation so that when the CloudEvent reaches its destination(s), this
+context can be continued. Each CloudEvent acts then as the medium of this
+context propagation.
+
+This document relies on the CloudEvents specification, which defines this
+context propagation mechanism via the
 [CloudEvents Distributed Tracing Extension](https://github.com/cloudevents/spec/blob/v1.0.1/extensions/distributed-tracing.md).
+Once the trace context is set on the event
+via the Distributed Tracing Extension, it MUST not be modified.
 
-Once the trace context is set on the event, it MUST not be modified.
+The remainder of this section describes the semantic conventions for Spans
+required to achieve the proposed trace.
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+### Spans
 
-<!-- toc -->
-
-- [Spans](#spans)
-  * [Creation](#creation)
-  * [Processing](#processing)
-- [Attributes](#attributes)
-
-<!-- tocstop -->
-
-## Spans
-
-### Creation
+#### Creation
 
 Instrumentation SHOULD create a new span and populate the
 [CloudEvents Distributed Tracing Extension](https://github.com/cloudevents/spec/blob/v1.0.1/extensions/distributed-tracing.md)
@@ -76,7 +169,7 @@ a span and MUST NOT modify the Distributed Tracing Extension on the event.
 
 **Span kind:** PRODUCER
 
-### Processing
+#### Processing
 
 When an instrumented library supports processing of a single CloudEvent,
 instrumentation SHOULD create a new span to trace it.
@@ -88,7 +181,7 @@ Distributed Tracing Extension as a link on the processing span.
 
 **Span kind:** CONSUMER
 
-## Attributes
+### Attributes
 
 The following attributes are applicable to creation and processing Spans.
 
