@@ -1183,7 +1183,7 @@ attributes, and MUST NOT be added as metric attributes:
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
 | `service.name` | The configured name of the service that the target belongs to |
-| `service.instance.id` | A unique identifier of the target.  By default, it should be the scraped URL |
+| `service.instance.id` | A unique identifier of the target.  By default, it should be the <host>:<port> of the scraped URL |
 
 The following attributes SHOULD be associated with scraped metrics as resource
 attributes, and MUST NOT be added as metric attributes:
