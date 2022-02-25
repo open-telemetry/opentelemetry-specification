@@ -35,6 +35,7 @@ instruments not explicitly defined in the specification.
 |                        |             |       |                      |            | cpu              | CPU number [0..n-1]                 |
 | system.cpu.utilization |             | 1     | Asynchronous Gauge   | Double     | state            | idle, user, system, interrupt, etc. |
 |                        |             |       |                      |            | cpu              | CPU number (0..n)                   |
+| system.cpu.count       |             | 1     | Asynchronous UpDownCounter | Int64 |                 |                                     |
 
 ### `system.memory.` - Memory metrics
 
