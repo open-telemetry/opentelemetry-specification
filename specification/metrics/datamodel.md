@@ -1174,7 +1174,7 @@ When scraping a Prometheus endpoint, resource attributes MUST be added to the
 scraped metrics to distinguish them from metrics from other Prometheus
 endpoints. In particular, `service.name` and `service.instance.id`, are needed
 to ensure Prometheus exporters can disambiguate metrics using
-[`job` and `instance` labels]([as defined by Prometheus](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances))
+[`job` and `instance` labels](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances)
 as [described below](#resource-attributes-1).
 
 The following attributes MUST be associated with scraped metrics as resource
