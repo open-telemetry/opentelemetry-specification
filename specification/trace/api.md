@@ -124,7 +124,8 @@ This API MUST accept the following parameters:
   (e.g. an implementation which is not even observability-related). A
   TracerProvider could also return a no-op Tracer here if application owners
   configure the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
+- `version` (optional): Specifies the version of the instrumentation scope if the scope
+  has a version (e.g. a library version). Example value: `1.0.0`.
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
 
