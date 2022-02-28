@@ -787,8 +787,8 @@ multiply the result by `2`.
     return 2.0 * math.Exp((index - (1 << scale)) * inverseFactor), nil
 ```
 
-_Note that floating-point to integer type conversions have been
-omitted from the code fragments above, to improve readability._
+*Note that floating-point to integer type conversions have been
+omitted from the code fragments above, to improve readability.*
 
 ##### Positive Scale: Use a Lookup Table
 
