@@ -696,7 +696,7 @@ authors MAY choose the best idiomatic design for their language:
 #### Collect
 
 Collects the metrics from the SDK. If there are [asynchronous
-Instruments](./api.md#asynchronous-instrument) involved, their callback
+Instruments](./api.md#asynchronous-instrument-api) involved, their callback
 functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
