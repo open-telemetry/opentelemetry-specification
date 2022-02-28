@@ -20,11 +20,6 @@
     + [Histogram Aggregation](#histogram-aggregation)
       - [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
-    + [Exponential Histogram Aggregation](#exponential-histogram-aggregation)
-      - [Exponential Histogram Aggregation: Handle all normal values](#exponential-histogram-aggregation-handle-all-normal-values)
-      - [Exponential Histogram Aggregation: Support a minimum and maximum scale](#exponential-histogram-aggregation-support-a-minimum-and-maximum-scale)
-      - [Exponential Histogram Aggregation: Use the maximum scale for single measurements](#exponential-histogram-aggregation-use-the-maximum-scale-for-single-measurements)
-      - [Exponential Histogram Aggregation: Maintain the ideal scale](#exponential-histogram-aggregation-maintain-the-ideal-scale)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -64,8 +59,7 @@ suggestions regarding how to implement this efficiently.
 New `Meter` instances are always created through a `MeterProvider` (see
 [API](./api.md#meterprovider)). The `name`, `version` (optional), and
 `schema_url` (optional) arguments supplied to the `MeterProvider` MUST be used
-to create an
-[`InstrumentationLibrary`](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
+to create an [`InstrumentationScope`](../glossary.md#instrumentation-scope)
 instance which is stored on the created `Meter`.
 
 Configuration (i.e., [MetricExporters](#metricexporter),
@@ -516,6 +510,51 @@ scale.
 Implementations SHOULD adjust the histogram scale as necessary to
 maintain the best-possible resolution at the configured maximum size.
 
+### Observations inside asynchronous callbacks
+
+Callback functions MUST be invoked for the specific `MetricReader`
+performing collection, such that observations made or produced by
+executing callbacks only apply to the intended `MetricReader` during
+collection.
+
+The implementation SHOULD disregard the accidental use of APIs
+appurtenant to asynchronous instruments outside of registered
+callbacks in the context of a single `MetricReader` collection.
+
+The implementation SHOULD use a timeout to prevent indefinite callback
+execution.
+
+The implementation MUST complete the execution of all callbacks for a
+given instrument before starting a subsequent round of collection.
+
+### Resolving duplicate instrument registration conflicts
+
+As [stated in the API
+specification](api.md#instrument-type-conflict-detection),
+implementations are REQUIRED to create valid instruments in case of
+duplicate instrument registration, and the [data model includes
+RECOMMENDATIONS on how to treat the consequent duplicate
+conflicting](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+`Metric` definitions.
+
+The implementation MUST aggregate data from identical Instruments
+together in its export pipeline.
+
+The implementation SHOULD assist the user in managing conflicts by
+reporting each duplicate-conflicting instrument registration that was
+not corrected by a View as follows.  When a potential conflict arises
+between two non-identical `Metric` instances having the same `name`:
+
+1. If the potential conflict involves multiple `description`
+   properties, setting the `description` through a configured View
+   SHOULD avoid the warning.
+2. If the potential conflict involves instruments that can be
+   distinguished by a supported View selector (e.g., instrument type)
+   a View recipe SHOULD be printed advising the user how to avoid the
+   warning by renaming one of the conflicting instruments.
+3. Otherwise (e.g., use of multiple units), the implementation SHOULD
+   pass through the data by reporting both `Metric` objects.
+
 ## Attribute limits
 
 Attributes which belong to Metrics are exempt from the
@@ -749,7 +788,7 @@ authors MAY choose the best idiomatic design for their language:
 #### Collect
 
 Collects the metrics from the SDK. If there are [asynchronous
-Instruments](./api.md#asynchronous-instrument) involved, their callback
+Instruments](./api.md#asynchronous-instrument-api) involved, their callback
 functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
@@ -975,7 +1014,9 @@ Implementors MAY choose the best idiomatic design for their language. For
 example, they could generalize the [Push Metric Exporter
 interface](#push-metric-exporter) design and use that for consistency, they
 could model the pull exporter as [MetricReader](#metricreader), or they could
-design a completely different pull exporter interface.
+design a completely different pull exporter interface. If the pull exporter is
+modeled as MetricReader, implementors MAY name the MetricExporter interface as
+PushMetricExporter to prevent naming confusion.
 
 The following diagram gives some examples on how `Pull Metric Exporter` can be
 modeled to interact with other components in the SDK:
