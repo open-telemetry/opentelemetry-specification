@@ -24,6 +24,8 @@ release.
   duplicate conflicts in the data model, specify how the SDK is meant to report and
   assist the user when these conflicts arise.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
+- Specify optional support for an Exponential Histogram Aggregation.
+  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
 
 ### Logs
 
@@ -94,8 +96,6 @@ release.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Clarified wildcard and predicate support in metrics SDK View API.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
-- Specify optional support for an Exponential Histogram Aggregation.
-  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
 
 ### Logs
 
