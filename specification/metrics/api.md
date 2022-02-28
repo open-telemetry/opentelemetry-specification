@@ -20,7 +20,7 @@
     + [Instrument naming rule](#instrument-naming-rule)
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
-    + [Synchronous/Asynchronous property](#synchronousasynchronous-property)
+    + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
     + [Synchronous Instrument API](#synchronous-instrument-api)
     + [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [Counter](#counter)
@@ -291,7 +291,7 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 Instruments are categorized on whether they are synchronous or
 asynchronous:
 
-#### Synchronous/Asynchronous property
+#### Synchronous and Asynchronous instruments
 
 * Synchronous instruments (e.g. [Counter](#counter)) are meant to be invoked
   inline with application/business processing logic. For example, an HTTP client
@@ -465,7 +465,7 @@ counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_gree
 
 ### Asynchronous Counter
 
-Asynchronous Counter is an [asynchronous Instrument](#asynchronous-instrument)
+Asynchronous Counter is an [asynchronous Instrument](#asynchronous-instrument-api)
 which reports [monotonically](https://wikipedia.org/wiki/Monotonic_function)
 increasing value(s) when the instrument is being observed.
 
@@ -680,7 +680,7 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 
 ### Asynchronous Gauge
 
-Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument)
+Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument-api)
 which reports non-additive value(s) (e.g. the room temperature - it makes no
 sense to report the temperature value from multiple rooms and sum them up) when
 the instrument is being observed.
@@ -930,7 +930,7 @@ customersInStore.Add(-1, new Account { Type = "residential" });
 ### Asynchronous UpDownCounter
 
 Asynchronous UpDownCounter is an [asynchronous
-Instrument](#asynchronous-instrument) which reports additive value(s) (e.g. the
+Instrument](#asynchronous-instrument-api) which reports additive value(s) (e.g. the
 process heap size - it makes sense to report the heap size from multiple
 processes and sum them up, so we get the total heap usage) when the instrument
 is being observed.
