@@ -367,7 +367,7 @@ The API MUST accept the following parameters:
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
 
-  Documentation MUST state that adding attributes at span creation is preferred
+  The API documentation MUST state that adding attributes at span creation is preferred
   to calling `SetAttribute` later, as samplers can only consider information
   already present during span creation.
 
