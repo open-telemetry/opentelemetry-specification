@@ -338,19 +338,27 @@ The API to construct asynchronous instruments MUST accept the following paramete
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* Zero or more `callback` functions.
+* Zero or more `callback` functions, responsible for reporting
+  [Measurement](#measurement) values of the created instrument.
 
 The API MUST support creation of asynchronous instruments by passing
-zero or more callback functions to be permanently registered to the
+zero or more `callback` functions to be permanently registered to the
 newly created instrument.
 
-The API SHOULD support registration of callback functions to
+The API SHOULD support registration of `callback` functions associated with
 asynchronous instruments after they are created.
 
-Where the API supports registration of callback functions after
+Where the API supports registration of `callback` functions after
 asynchronous instrumentation creation, it MUST return something (e.g.,
 a registration handle, receipt or token) to the user that supports
-undoing the effect of callback registation.
+undoing the effect of `callback` registation.
+
+A Callback is the conceptual entity created each time a `callback`
+function is registered through an OpenTelemetry API.  
+
+Every currently registered Callback associated with an instrument MUST
+be evaluted exactly once during collection prior to reading data for
+that instrument.
 
 Callback functions MUST be documented as follows for the end user:
 
@@ -364,20 +372,27 @@ Callback functions MUST be documented as follows for the end user:
 The resulting behavior when a callback violates any of these
 RECOMMENDATIONS is explicitly not specified at the API level.
 
-Where idiomatic, a secondary callback API MAY be provided that enables
-the use of multiple asynchronous instruments from individual
-callbacks.  When registering callbacks associated with multiple
-instruments, the API MUST make the association between instruments and
-callbacks explicit.  See the [Multiple-instrument callbacks](#multiple-instrument-callbacks) section below.
-
 [OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach for capturing measurements from callback functions. Here are some examples:
 
-* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observable result argument to allow individual `Measurement`s to be
-  reported.
+* Return a list (or tuple, generator, enumerator, etc.) of individual
+  `Measurement` values.
+* Pass an *Observable Result* as a formal parameter of the callback,
+  where `result.Observe()` captures individual `Measurement` values.
 
-The API MUST treat observations from a single callback as logically
+Callbacks registered at the time of instrument creation MUST apply to
+the single instruments which is under construction.
+
+Callbacks registered after the time of instrument creation MAY be
+associated with multiple instruments.
+
+Idiomatic APIs for multiple-instrument Callbacks MUST distinguish the
+instrument associated with each observed `Measurement` value.
+
+Multiple-instrument Callbacks MUST be associated with a pre-determined
+set of asynchronous instruments from the same `Meter` instance.
+
+The API MUST treat observations from a single Callback as logically
 taking place at a single instant, such that when recorded,
 observations from a single callback MUST be reported with identical
 timestamps.
