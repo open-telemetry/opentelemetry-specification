@@ -786,11 +786,12 @@ preferred temporality.
 
 ### Push Metric Exporter
 
-Push Metric Exporter sends metric data it receives from a paired [periodic
-exporting MetricReader](#periodic-exporting-metricreader).  Here are some
-examples:
+Push Metric Exporter sends metric data it receives from a paired
+[MetricReader](#metricreader). Here are some examples:
 
 * Sends the data based on a user configured schedule, e.g. every 1 minute.
+  This MAY be accomplished by pairing the exporter with a
+  [periodic exporting MetricReader](#periodic-exporting-metricreader).
 * Sends the data when there is a severe error.
 
 The following diagram shows `Push Metric Exporter`'s relationship to other
