@@ -33,6 +33,9 @@ release.
 
 ### Semantic Conventions
 
+- Add `process.cpu.count` metric.
+  ([#2392](https://github.com/open-telemetry/opentelemetry-specification/pull/2392))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
