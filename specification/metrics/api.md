@@ -14,6 +14,15 @@
 - [Meter](#meter)
   * [Meter operations](#meter-operations)
 - [Instrument](#instrument)
+  * [General characteristics](#general-characteristics)
+    + [Instrument type conflict detection](#instrument-type-conflict-detection)
+    + [Instrument namespace](#instrument-namespace)
+    + [Instrument naming rule](#instrument-naming-rule)
+    + [Instrument unit](#instrument-unit)
+    + [Instrument description](#instrument-description)
+    + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
+    + [Synchronous Instrument API](#synchronous-instrument-api)
+    + [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -127,8 +136,8 @@ This API MUST accept the following parameters:
   implementation which is not even observability-related). A MeterProvider could
   also return a no-op Meter here if application owners configure the SDK to
   suppress telemetry produced by this library.
-* `version` (optional): Specifies the version of the instrumentation library
-  (e.g. `1.0.0`).
+* `version` (optional): Specifies the version of the instrumentation scope if the scope
+  has a version (e.g. a library version). Example value: `1.0.0`.
 * [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
 
@@ -194,7 +203,9 @@ are identified by all of these fields.
 Language-level features such as the distinction between integer and
 floating point numbers SHOULD be considered as identifying.
 
-<a name="instrument-type-conflict-detection"></a>
+### General characteristics
+
+#### Instrument type conflict detection
 
 When more than one Instrument of the same `name` is created for
 identical Meters, denoted *duplicate instrument registration*, the
@@ -222,13 +233,13 @@ model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
 when more than one `Metric` is written for a given instrument `name`
 and Meter identity by the same MeterProvider.
 
-<a name="instrument-namespace"></a>
+#### Instrument namespace
 
 Distinct Meters MUST be treated as separate namespaces for the
 purposes of detecting [duplicate instrument registration
 conflicts](#instrument-type-conflict-detection).
 
-<a name="instrument-naming-rule"></a>
+#### Instrument naming rule
 
 Instrument names MUST conform to the following syntax (described using the
 [Augmented Backus-Naur Form](https://tools.ietf.org/html/rfc5234)):
@@ -247,7 +258,7 @@ DIGIT = %x30-39 ; 0-9
   and '-'.
 * They can have a maximum length of 63 characters.
 
-<a name="instrument-unit"></a>
+#### Instrument unit
 
 The `unit` is an optional string provided by the author of the Instrument. It
 SHOULD be treated as an opaque string from the API and SDK (e.g. the SDK is not
@@ -262,7 +273,7 @@ expected to validate the unit of measurement, or perform the unit conversion).
   runtimes) to be stored and compared as fixed size array/struct when
   performance is critical.
 
-<a name="instrument-description"></a>
+#### Instrument description
 
 The `description` is an optional free-form text provided by the author of the
 instrument. It MUST be treated as an opaque string from the API and SDK.
@@ -281,15 +292,13 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 Instruments are categorized on whether they are synchronous or
 asynchronous:
 
-<a name="synchronous-instrument"></a>
+#### Synchronous and Asynchronous instruments
 
 * Synchronous instruments (e.g. [Counter](#counter)) are meant to be invoked
   inline with application/business processing logic. For example, an HTTP client
   could use a Counter to record the number of bytes it has received.
   [Measurements](#measurement) recorded by synchronous instruments can be
   associated with the [Context](../context/context.md).
-
-<a name="asynchronous-instrument"></a>
 
 * Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-gauge)) give
   the user a way to register callback function, and the callback function will
@@ -303,6 +312,29 @@ Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
+#### Synchronous Instrument API
+
+The API to construct synchronous instruments MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit` of measure, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+
+#### Asynchronous Instrument API
+
+The API to construct asynchronous instruments MUST accept the following parameters:
+
+* The `name` of the Instrument, following the [instrument naming
+  rule](#instrument-naming-rule).
+* An optional `unit` of measure, following the [instrument unit
+  rule](#instrument-unit).
+* An optional `description`, following the [instrument description
+  rule](#instrument-description).
+* Zero or more `callback` functions.
+
 The API MUST support creation of asynchronous instruments by passing
 zero or more callback functions to be permanently registered to the
 newly created instrument.
@@ -314,6 +346,11 @@ Where the API supports registration of callback functions after
 asynchronous instrumentation creation, it MUST return something (e.g.,
 a registration handle, receipt or token) to the user that supports
 undoing the effect of callback registation.
+
+The `callback` function is responsible for reporting
+[Measurement](#measurement)s. It will only be called when the Meter is being
+observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
+this callback function needs to be reentrant safe / thread safe or not.
 
 Callback functions SHOULD NOT take an indefinite amount of time.
 
@@ -328,9 +365,27 @@ callbacks.  When registering callbacks associated with multiple
 instruments, the API MUST make the association between instruments and
 callbacks explicit.  See the [Multiple-instrument callbacks](#multiple-instrument-callbacks) section below.
 
+[OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
+approach for capturing measurements from callback functions. Here are some examples:
+
+* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
+* Use an observable result argument to allow individual `Measurement`s to be
+  reported.
+
+The API MUST treat observations from a single callback as logically
+taking place at a single instant, such that when recorded,
+observations from a single callback MUST be reported with identical
+timestamps.
+
+The API SHOULD provide some way to pass `state` to the
+callback. [OpenTelemetry API](../overview.md#api) authors MAY decide
+what is the idiomatic approach (e.g.  it could be an additional
+parameter to the callback function, or captured by the lambda closure,
+or something else).
+
 ### Counter
 
-`Counter` is a [synchronous Instrument](#synchronous-instrument) which supports
+`Counter` is a [synchronous Instrument](#synchronous-instrument-api) which supports
 non-negative increments.
 
 Example uses for `Counter`:
@@ -349,14 +404,7 @@ desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
 idiomatic name(s), for example `CreateUInt64Counter`, `CreateDoubleCounter`,
 `CreateCounter<UInt64>`, `CreateCounter<double>`.
 
-The API MUST accept the following parameters:
-
-* The `name` of the Instrument, following the [instrument naming
-  rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
+See the [general requirements for synchronous instruments](#synchronous-instrument-api).
 
 Here are some examples that [OpenTelemetry API](../overview.md#api) authors
 might consider:
@@ -424,7 +472,7 @@ counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_gree
 
 ### Asynchronous Counter
 
-Asynchronous Counter is an [asynchronous Instrument](#asynchronous-instrument)
+Asynchronous Counter is an [asynchronous Instrument](#asynchronous-instrument-api)
 which reports [monotonically](https://wikipedia.org/wiki/Monotonic_function)
 increasing value(s) when the instrument is being observed.
 
@@ -452,20 +500,7 @@ a strong reason not to do so. Please note that the name has nothing to do with
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
 
-The API MUST accept the following parameters:
-
-* The `name` of the Instrument, following the [instrument naming
-  rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
-* Zero or more `callback` functions.  [See the general requirements](#asynchronous-instrument).
-
-The `callback` function is responsible for reporting
-[Measurement](#measurement)s. It will only be called when the Meter is being
-observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
-this callback function needs to be reentrant safe / thread safe or not.
+See the [general requirements for asynchronous instruments](#asynchronous-instrument-api).
 
 Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
 callback function reports the absolute value of the counter. To determine the
@@ -573,7 +608,7 @@ class Device:
 
 ### Histogram
 
-`Histogram` is a [synchronous Instrument](#synchronous-instrument) which can be
+`Histogram` is a [synchronous Instrument](#synchronous-instrument-api) which can be
 used to report arbitrary values that are likely to be statistically meaningful.
 It is intended for statistics such as histograms, summaries, and percentile.
 
@@ -590,14 +625,7 @@ desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
 idiomatic name(s), for example `CreateUInt64Histogram`, `CreateDoubleHistogram`,
 `CreateHistogram<UInt64>`, `CreateHistogram<double>`.
 
-The API MUST accept the following parameters:
-
-* The `name` of the Instrument, following the [instrument naming
-  rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
+See the [general requirements for synchronous instruments](#synchronous-instrument-api).
 
 Here are some examples that [OpenTelemetry API](../overview.md#api) authors
 might consider:
@@ -659,7 +687,7 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 
 ### Asynchronous Gauge
 
-Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument)
+Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument-api)
 which reports non-additive value(s) (e.g. the room temperature - it makes no
 sense to report the temperature value from multiple rooms and sum them up) when
 the instrument is being observed.
@@ -690,42 +718,7 @@ a strong reason not to do so. Please note that the name has nothing to do with
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
 
-The API MUST accept the following parameters:
-
-* The `name` of the Instrument, following the [instrument naming
-  rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
-* Zero or more `callback` functions.  [See the general requirements](#asynchronous-instrument).
-
-The `callback` function is responsible for reporting
-[Measurement](#measurement)s. It will only be called when the Meter is being
-observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
-this callback function needs to be reentrant safe / thread safe or not.
-
-[OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
-approach. Here are some examples:
-
-* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observable result argument to allow individual `Measurement`s to be reported.
-
-User code is recommended not to provide more than one `Measurement` with the
-same `attributes` in a single callback. If it happens, the
-[SDK](./README.md#sdk) can decide how to handle it. For example, during the
-callback invocation if two measurements `value=3.38, attributes={cpu:1, core:2}`
-and `value=3.51, attributes={cpu:1, core:2}` are reported, the SDK can decide to
-simply let them pass through (so the downstream consumer can handle
-duplication), drop the entire data, pick the last one, or something else. The
-API MUST treat observations from a single callback as logically taking place at
-a single instant, such that when recorded, observations from a single callback
-MUST be reported with identical timestamps.
-
-The API SHOULD provide some way to pass `state` to the callback. [OpenTelemetry
-API](../overview.md#api) authors MAY decide what is the idiomatic approach (e.g.
-it could be an additional parameter to the callback function, or captured by the
-lambda closure, or something else).
+See the [general requirements for asynchronous instruments](#asynchronous-instrument-api).
 
 Here are some examples that [OpenTelemetry API](../overview.md#api) authors
 might consider:
@@ -809,7 +802,7 @@ class Device:
 
 ### UpDownCounter
 
-`UpDownCounter` is a [synchronous Instrument](#synchronous-instrument) which
+`UpDownCounter` is a [synchronous Instrument](#synchronous-instrument-api) which
 supports increments and decrements.
 
 Note: if the value is
@@ -885,14 +878,7 @@ idiomatic name(s), for example `CreateInt64UpDownCounter`,
 `CreateDoubleUpDownCounter`, `CreateUpDownCounter<Int64>`,
 `CreateUpDownCounter<double>`.
 
-The API MUST accept the following parameters:
-
-* The `name` of the Instrument, following the [instrument naming
-  rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
+See the [general requirements for synchronous instruments](#synchronous-instrument-api).
 
 Here are some examples that [OpenTelemetry API](../overview.md#api) authors
 might consider:
@@ -951,7 +937,7 @@ customersInStore.Add(-1, new Account { Type = "residential" });
 ### Asynchronous UpDownCounter
 
 Asynchronous UpDownCounter is an [asynchronous
-Instrument](#asynchronous-instrument) which reports additive value(s) (e.g. the
+Instrument](#asynchronous-instrument-api) which reports additive value(s) (e.g. the
 process heap size - it makes sense to report the heap size from multiple
 processes and sum them up, so we get the total heap usage) when the instrument
 is being observed.
@@ -983,48 +969,12 @@ note that the name has nothing to do with [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
 
-The API MUST accept the following parameters:
-
-* The `name` of the Instrument, following the [instrument naming
-  rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
-* Zero or more `callback` functions.  [See the general requirements](#asynchronous-instrument).
-
-The `callback` function is responsible for reporting
-[Measurement](#measurement)s. It will only be called when the Meter is being
-observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
-this callback function needs to be reentrant safe / thread safe or not.
+See the [general requirements for asynchronous instruments](#asynchronous-instrument-api).
 
 Note: Unlike [UpDownCounter.Add()](#add-1) which takes the increment/delta value,
 the callback function reports the absolute value of the Asynchronous
 UpDownCounter. To determine the reported rate the Asynchronous UpDownCounter is
 changing, the difference between successive measurements is used.
-
-[OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
-approach. Here are some examples:
-
-* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observable result argument to allow individual `Measurement`s to be
-  reported.
-
-User code is recommended not to provide more than one `Measurement` with the
-same `attributes` in a single callback. If it happens, the
-[SDK](./README.md#sdk) MAY decide how to handle it. For example, during the
-callback invocation if two measurements `value=1, attributes={pid:4,
-bitness:64}` and `value=2, attributes={pid:4, bitness:64}` are reported, the SDK
-can decide to simply let them pass through (so the downstream consumer can
-handle duplication), drop the entire data, pick the last one, or something else.
-The API MUST treat observations from a single callback as logically taking place
-at a single instant, such that when recorded, observations from a single
-callback MUST be reported with identical timestamps.
-
-The API SHOULD provide some way to pass `state` to the callback. [OpenTelemetry
-API](../overview.md#api) authors MAY decide what is the idiomatic approach (e.g.
-it could be an additional parameter to the callback function, or captured by the
-lambda closure, or something else).
 
 Here are some examples that [OpenTelemetry API](../overview.md#api) authors
 might consider:
