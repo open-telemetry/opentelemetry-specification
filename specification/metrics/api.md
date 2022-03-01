@@ -324,9 +324,10 @@ The API to construct synchronous instruments MUST accept the following parameter
 
 #### Asynchronous Instrument API
 
-Asynchronous instruments have an associated `callback` function which
-is responsible for reporting [Measurement](#measurement)s. It will be
-called only when the Meter is being observed.
+Asynchronous instruments have associated `callback` functions which
+are responsible for reporting [Measurement](#measurement)s. Callback
+functions will be called only when the Meter is being observed.  The
+order of callback execution is unspecified.
 
 The API to construct asynchronous instruments MUST accept the following parameters:
 
@@ -349,10 +350,6 @@ Where the API supports registration of callback functions after
 asynchronous instrumentation creation, it MUST return something (e.g.,
 a registration handle, receipt or token) to the user that supports
 undoing the effect of callback registation.
-
-The `callback` function is responsible for reporting
-[Measurement](#measurement)s. It will only be called when the Meter is
-being observed.
 
 Callback functions MUST be documented as follows for the end user:
 
