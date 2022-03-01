@@ -31,6 +31,9 @@ release.
 
 ### Semantic Conventions
 
+- Add thread semantic attributes for logs.
+  ([#2389](https://github.com/open-telemetry/opentelemetry-specification/pull/2389))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
