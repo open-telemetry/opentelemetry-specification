@@ -323,7 +323,7 @@ Callback functions MUST be documented as follows for the end user:
   same `attributes` in a single callback.
   
 The resulting behavior when a callback violates any of these
-RECOMMENDATIONS is explicitly not specified.
+RECOMMENDATIONS is explicitly not specified at the API level.
 
 ### Counter
 
