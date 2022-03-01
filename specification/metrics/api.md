@@ -356,13 +356,13 @@ being observed.
 
 Callback functions MUST be documented as follows for the end user:
 
-- Callbacks SHOULD be reentrant safe.  The SDK expects to evaluate
+- Callback functions SHOULD be reentrant safe.  The SDK expects to evaluate
   callbacks for each MetricReader independently.
-- Callbacks SHOULD NOT take an indefinite amount of time.
-- Callbacks SHOULD NOT make duplicate observations (more than one
-  `Measurement` with the same `attributes`) from asynchronous
-  instrument callbacks.
-  
+- Callback functions SHOULD NOT take an indefinite amount of time.
+- Callback functions SHOULD NOT make duplicate observations (more than one
+  `Measurement` with the same `attributes`) across all registered 
+  callbacks.
+
 The resulting behavior when a callback violates any of these
 RECOMMENDATIONS is explicitly not specified at the API level.
 
