@@ -357,7 +357,7 @@ Callback functions MUST be documented as follows for the end user:
   callbacks for each MetricReader independently.
 - Callback functions SHOULD NOT take an indefinite amount of time.
 - Callback functions SHOULD NOT make duplicate observations (more than one
-  `Measurement` with the same `attributes`) across all registered 
+  `Measurement` with the same `attributes`) across all registered
   callbacks.
 
 The resulting behavior when a callback violates any of these
