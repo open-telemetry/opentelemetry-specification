@@ -191,8 +191,9 @@ are the inputs:
 In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
 mechanism described above, where selection is provided via configuration, the
-SDK MUST NOT allow Views with a specified name to be declared with instrument
-selectors that select more than one instrument (e.g. wild card instrument name).
+SDK SHOULD NOT allow Views with a specified name to be declared with instrument
+selectors that may select more than one instrument (e.g. wild card instrument name)
+in the same Meter.
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -696,7 +697,7 @@ authors MAY choose the best idiomatic design for their language:
 #### Collect
 
 Collects the metrics from the SDK. If there are [asynchronous
-Instruments](./api.md#asynchronous-instrument) involved, their callback
+Instruments](./api.md#asynchronous-instrument-api) involved, their callback
 functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
