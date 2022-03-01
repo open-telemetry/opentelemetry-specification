@@ -324,6 +324,11 @@ The API to construct synchronous instruments MUST accept the following parameter
 
 #### Asynchronous Instrument API
 
+Asynchronous instruments have associated `callback` functions which
+are responsible for reporting [Measurement](#measurement)s. Callback
+functions will be called only when the Meter is being observed.  The
+order of callback execution is not specified.
+
 The API to construct asynchronous instruments MUST accept the following parameters:
 
 * The `name` of the Instrument, following the [instrument naming
@@ -346,17 +351,17 @@ asynchronous instrumentation creation, it MUST return something (e.g.,
 a registration handle, receipt or token) to the user that supports
 undoing the effect of callback registation.
 
-The `callback` function is responsible for reporting
-[Measurement](#measurement)s. It will only be called when the Meter is being
-observed. [OpenTelemetry API](../overview.md#api) authors SHOULD define whether
-this callback function needs to be reentrant safe / thread safe or not.
+Callback functions MUST be documented as follows for the end user:
 
-Callback functions SHOULD NOT take an indefinite amount of time.
+- Callback functions SHOULD be reentrant safe.  The SDK expects to evaluate
+  callbacks for each MetricReader independently.
+- Callback functions SHOULD NOT take an indefinite amount of time.
+- Callback functions SHOULD NOT make duplicate observations (more than one
+  `Measurement` with the same `attributes`) across all registered
+  callbacks.
 
-Callback functions SHOULD NOT make duplicate observations from asynchronous
-instrument callbacks.  The resulting behavior when a callback observes
-multiple values for identical instrument and attributes is explicitly
-not specified.
+The resulting behavior when a callback violates any of these
+RECOMMENDATIONS is explicitly not specified at the API level.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach for capturing measurements from callback functions. Here are some examples:
