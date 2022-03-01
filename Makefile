@@ -27,6 +27,7 @@ misspell-correction:	$(MISSPELL)
 
 .PHONY: markdown-link-check
 markdown-link-check:
+	@if ! npm ls markdown-link-check; then npm install; fi
 	@for f in $(ALL_DOCS); do \
 		npx --no -- markdown-link-check --quiet --config .markdown_link_check_config.json $$f \
 			|| exit 1; \
@@ -42,6 +43,7 @@ markdown-link-check:
 #   <!-- tocstop -->
 .PHONY: markdown-toc
 markdown-toc:
+	@if ! npm ls markdown-toc; then npm install; fi
 	@for f in $(ALL_DOCS); do \
 		if grep -q '<!-- tocstop -->' $$f; then \
 			echo markdown-toc: processing $$f; \
@@ -53,6 +55,7 @@ markdown-toc:
 
 .PHONY: markdownlint
 markdownlint:
+	@if ! npm ls markdownlint; then npm install; fi
 	@for f in $(ALL_DOCS); do \
 		echo $$f; \
 		npx --no -p markdownlint-cli markdownlint -c .markdownlint.yaml $$f \
