@@ -8,7 +8,7 @@ conventions](README.md#general-metric-semantic-conventions) when creating
 instruments not explicitly defined in the specification.
 
 When reporting `system.*` metrics from inside a container, they SHOULD be
-container metrics and not host metrics, unless the resource attributes
+reported for the container and not the host, unless the resource attributes
 specifically describe the host.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
