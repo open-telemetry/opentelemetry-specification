@@ -13,7 +13,7 @@
     + [Enumerations](#enumerations)
     + [Floating Point Values](#floating-point-values)
     + [String Values](#string-values)
-    + [Bytes Sequences](#bytes-sequences)
+    + [Byte Sequences](#byte-sequences)
   * [Composite Values](#composite-values)
     + [Array Values](#array-values)
     + [Associative Arrays With Unique Keys](#associative-arrays-with-unique-keys)
@@ -211,6 +211,7 @@ AnyValue{
     }
 }
 ```
+
 The rules described in this document should be applied recursively to each value
 of the associative array.
 
