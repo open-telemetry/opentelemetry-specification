@@ -27,6 +27,7 @@
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
+  * [Preferred aggregation temporality](#preferred-aggregation-temporality)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
