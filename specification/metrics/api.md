@@ -389,8 +389,12 @@ associated with multiple instruments.
 Idiomatic APIs for multiple-instrument Callbacks MUST distinguish the
 instrument associated with each observed `Measurement` value.
 
-Multiple-instrument Callbacks MUST be associated with a pre-determined
-set of asynchronous instruments from the same `Meter` instance.
+Multiple-instrument Callbacks MUST be associated at the time of
+registration with a declared set of asynchronous instruments from the
+same `Meter` instance.  This REQUIREMENT that Instruments be
+declaratively associated with Callbacks allows an SDK to execute only
+those Callbacks that are necessary to evaluate instruments that are in
+use by a configured [View](sdk.md#view).
 
 The API MUST treat observations from a single Callback as logically
 taking place at a single instant, such that when recorded,
@@ -1087,19 +1091,21 @@ for the interaction between the API and SDK.
 
 ### Multiple-instrument callbacks
 
-Where idiomatic, [the Metrics API supports an option to use multiple
+[The Metrics API MAY support an interface allowing the use of multiple
 instruments from a single registered
-callback](#asynchronous-instrument).  The key requirement for the API
-is that the association between Callbacks and Instruments be explicit
-so that the SDK knows which callbacks to execute when observing
-specific instruments.
+Callback](#asynchronous-instrument-api).  The API to register a new
+Callback SHOULD accept:
 
-Some suggestions for the API author:
+- A `callback` function
+- A list (or tuple, etc.) of Instruments used in the `callback` function.
 
-* the Observable result used in multi-instrument callbacks receives an
-  additional instrument argument
-* asynchronous instruments have an `Observe()` method that can be used
-  from appropriately registered callbacks.
+It is RECOMMENDED that the API authors use one of the following forms
+for the `callback` function:
+
+* The list (or tuple, etc.) returned by the `callback` function
+  contains `(Instrument, Measurement)` pairs.
+* the Observable Result parameter receives an additional `(Instrument,
+  Measurement)` pairs
 
 This interface is typically a more performant way to report multiple
 measurements when they are obtained through an expensive process, such
