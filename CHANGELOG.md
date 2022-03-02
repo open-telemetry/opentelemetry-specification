@@ -29,7 +29,6 @@ release.
 - Clarify what is meant by "preferred" aggregation temporality.
   ([#2314](https://github.com/open-telemetry/opentelemetry-specification/pull/2314))
 
-
 ### Logs
 
 ### Resource
