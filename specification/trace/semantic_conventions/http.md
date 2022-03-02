@@ -130,14 +130,6 @@ Retries and redirects cause more than one physical HTTP request to be sent.
 A CLIENT span SHOULD be created for each one of these physical requests.
 No span is created corresponding to the "logical" (encompassing) request.
 
-In order to represent the relationship between multiple spans created for retries
-or redirects, `Link` SHOULD be used with each subsequent span linked to the
-span for the immediately previous physical request. These spans SHOULD be
-created as siblings. In case there is no trace started before retries or
-redirects execution, these spans will correspond to different traces. Users are
-expected to interpret span links to understand the behavior of a "logical"
-request in the presence of retries and redirects.
-
 For retries, `http.retry_count` attribute SHOULD be added to each retry span
 with the value that reflects the ordinal number of request retry attempt.
 
@@ -314,11 +306,11 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET / - 500 (CLIENT, trace=t1, span=s4, links=[ {trace=t1, span=s2} ], http.retry_count=1)
+  -- GET / - 500 (CLIENT, trace=t1, span=s4, http.retry_count=1)
   |   |
   |   --- server (SERVER, trace=t1, span=s5)
   |
-  -- GET / - 200 (CLIENT, trace=t1, span=s6, links=[ {trace=t1, span=s4} ], http.retry_count=2)
+  -- GET / - 200 (CLIENT, trace=t1, span=s6, http.retry_count=2)
       |
       --- server (SERVER, trace=t1, span=s7)
 ```
@@ -330,11 +322,11 @@ GET / - 500 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET / - 500 (CLIENT, trace=t2, span=s1, links=[ {trace=t1, span=s1} ], http.retry_count=1)
+GET / - 500 (CLIENT, trace=t2, span=s1, http.retry_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
 
-GET / - 200 (CLIENT, trace=t3, span=s1, links=[ {trace=t2, span=s1} ], http.retry_count=2)
+GET / - 200 (CLIENT, trace=t3, span=s1, http.retry_count=2)
  |
  --- server (SERVER, trace=t3, span=s1)
 ```
@@ -348,7 +340,7 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, links=[ {trace=t1, span=s2} ])
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4 ])
       |
       --- server (SERVER, trace=t1, span=s5)
 ```
@@ -360,7 +352,7 @@ GET / - 302 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET /hello - 200 (CLIENT, trace=t2, span=s1, links=[ {trace=t1, span=s1} ])
+GET /hello - 200 (CLIENT, trace=t2, span=s1 ])
  |
  --- server (SERVER, trace=t2, span=s2)
 ```
