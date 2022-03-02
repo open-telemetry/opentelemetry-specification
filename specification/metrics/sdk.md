@@ -348,12 +348,12 @@ to select an aggregation and configuration parameters.
 
 | Instrument Kind | Selected Aggregation |
 | --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
+| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) with preferred temporality strategy |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) with preferred temporality strategy |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) with cumulative temporality strategy |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) with cumulative temporality strategy |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) |
-| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) |
+| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) with preferred temporality strategy |
 
 This Aggregation does not have any configuration parameters.
 
@@ -373,7 +373,9 @@ The monotonicity of the aggregation is determined by the instrument type:
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
-This Aggregation does not have any configuration parameters.
+This Aggregation the following configuration parameters:
+
+- Aggregation temporality `strategy` [determines how the temporality choice is made](#preferred-aggregation-temporality).
 
 This Aggregation informs the SDK to collect:
 
@@ -397,7 +399,9 @@ The Histogram Aggregation informs the SDK to select the best Histogram
 Aggregation available. i.e. [Explicit Bucket Histogram
 Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
 
-This Aggregation does not have any configuration parameters.
+This Aggregation has the following configuration parameters:
+
+- Aggregation temporality `strategy` [determines how the temporality choice is made](#preferred-aggregation-temporality).
 
 #### Explicit Bucket Histogram Aggregation
 
@@ -419,6 +423,7 @@ This Aggregation informs the SDK to collect:
 instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
 - Min (optional) `Measurement` value in population.
 - Max (optional) `Measurement` value in population.
+- Aggregation temporality `strategy` [determines how the temporality choice is made](#preferred-aggregation-temporality).
 
 ### Observations inside asynchronous callbacks
 
@@ -691,33 +696,34 @@ by observations that are cumulative values to begin with.  For these
 points, a change of aggregation temporality implies conversion from
 Cumulative into Delta aggregation temporality.
 
-Because of these differences, synchronous and asynchronous instruments
-are given separate treatment.  When configuring the preferred
-aggregation temporality for a `MetricReader`, the
-implementation MUST provide a mechanism that supports configuring the
-exporter's preferred temporality on the basis of instrument kind for
-the five instruments `Counter`, `Asynchronous Counter`,
-`UpDownCounter`, `Asynchronous UpDownCounter`, and `Histogram`.
+Because of these differences, when configuring Aggregations that
+support aggregation temporality, there is a choice of Aggregation
+temporality strategy.
 
-A configured `MetricReader` instance MUST expose data in the preferred
-aggregation temporality for points deriving from the five instruments
-that define aggregation temporality.
+Typically (and by default), `UpDownCounter` instruments are converted
+to Cumulative temporality, ignoring the `MetricReader` preference.
 
-Two well-known preferences are named, offering a simple way to express
-exporter preferences through environment variables and in
-configuration files.  The following named preferences SHOULD be
-supported:
+The Aggregation temporality preference of the `MetricReader` combined
+with the Aggregation temporality strategy of the `Aggregation`
+determines the exported aggregation temporality.
 
-- **AllCumulative**: All data points with aggregation temporality are
-  exported using Cumulative aggregation temporality. 
-- **DeltaPreferred**: Data points from `Counter`, `Asynchronous
-  Counter`, and `Histogram` instruments use Delta aggregation
-  temporality, whereas data points from `UpDownCounter` and
-  `Asynchronous UpDownCounter` are exported with Cumulative
-  aggregation temporality.
+The two supported `Aggregation` temporality strategies are:
+
+- **Cumulative**: The Aggregation Temporality will be selected as
+  Cumulative, overriding the `MetricReader` preference.
+- **Preferred**: The Aggregation Temporality will be selected
+  according to the `MetricReader` preference.
+
+Three `MetricReader` preferences are available:
+
+- **Cumulative**: The Metric Exporter prefers Cumulative temporality.
+- **Delta**: The Metric Exporter prefers Delta temporality.
+- **Stateless**: The Metric Exporter prefers Delta temporality for
+synchronous instruments and Cumulative temporality for asynchronous
+instruments to avoid long-term memory.
 
 If the preferred temporality is not explicitly specified, the SDK
-SHOULD use the AllCumulative aggregation temporality preference.
+SHOULD use the Cumulative aggregation temporality preference.
 
 Refer to the [data model section on Stream
 Manipulations](datamodel.md#stream-manipulations) for more detail on
