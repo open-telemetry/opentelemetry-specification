@@ -1128,8 +1128,8 @@ class Device:
 
     def observe(self, result):
         usage, pressure = expensive_system_call()
-        self.usage.observe(result, usage, {'property', self.property})
-        self.pressure.observe(result, pressure, {'property', self.property})
+        result.observe(self.usage, usage, {'property', self.property})
+        result.observe(self.pressure, pressure, {'property', self.property})
 ```
 
 ## Compatibility requirements
