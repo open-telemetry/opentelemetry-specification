@@ -30,6 +30,7 @@
     + [Comparing Severity](#comparing-severity)
   * [Field: `Body`](#field-body)
   * [Field: `Resource`](#field-resource)
+  * [Field: `InstrumentationScope`](#field-instrumentationscope)
   * [Field: `Attributes`](#field-attributes)
     + [Errors and Exceptions](#errors-and-exceptions)
 - [Example Log Records](#example-log-records)
@@ -194,6 +195,7 @@ SeverityText   |The severity text (also known as log level).
 SeverityNumber |Numerical value of the severity.
 Body           |The body of the log record.
 Resource       |Describes the source of the log.
+InstrumentationScope|Describes the scope that emitted the log.
 Attributes     |Additional information about the event.
 
 Below is the detailed description of each field.
@@ -435,6 +437,20 @@ that represent this data model may be designed in a manner that allows the
 from the same source. SHOULD follow OpenTelemetry
 [semantic conventions for Resources](../resource/semantic_conventions/README.md).
 This field is optional.
+
+### Field: `InstrumentationScope`
+
+Type: (Name,Version) tuple of strings.
+
+Description: the [instrumentation scope](../glossary.md#instrumentation-scope).
+Multiple occurrences of events coming from the same scope can happen across time and
+they all have the same value of `InstrumentationScope`. For log sources which define
+a logger name (e.g. Java
+[Logger Name](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)))
+the Logger Name SHOULD be recorded as the Instrumentation Scope name.
+
+Version is optional. Name SHOULD be specified if version is specified, otherwise Name
+is optional.
 
 ### Field: `Attributes`
 

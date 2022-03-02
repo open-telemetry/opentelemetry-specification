@@ -19,6 +19,8 @@
     + [Last Value Aggregation](#last-value-aggregation)
     + [Histogram Aggregation](#histogram-aggregation)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+  * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
+  * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -190,8 +192,9 @@ are the inputs:
 In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
 mechanism described above, where selection is provided via configuration, the
-SDK MUST NOT allow Views with a specified name to be declared with instrument
-selectors that select more than one instrument (e.g. wild card instrument name).
+SDK SHOULD NOT allow Views with a specified name to be declared with instrument
+selectors that may select more than one instrument (e.g. wild card instrument name)
+in the same Meter.
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -416,6 +419,51 @@ This Aggregation informs the SDK to collect:
 instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
 - Min (optional) `Measurement` value in population.
 - Max (optional) `Measurement` value in population.
+
+### Observations inside asynchronous callbacks
+
+Callback functions MUST be invoked for the specific `MetricReader`
+performing collection, such that observations made or produced by
+executing callbacks only apply to the intended `MetricReader` during
+collection.
+
+The implementation SHOULD disregard the accidental use of APIs
+appurtenant to asynchronous instruments outside of registered
+callbacks in the context of a single `MetricReader` collection.
+
+The implementation SHOULD use a timeout to prevent indefinite callback
+execution.
+
+The implementation MUST complete the execution of all callbacks for a
+given instrument before starting a subsequent round of collection.
+
+### Resolving duplicate instrument registration conflicts
+
+As [stated in the API
+specification](api.md#instrument-type-conflict-detection),
+implementations are REQUIRED to create valid instruments in case of
+duplicate instrument registration, and the [data model includes
+RECOMMENDATIONS on how to treat the consequent duplicate
+conflicting](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+`Metric` definitions.
+
+The implementation MUST aggregate data from identical Instruments
+together in its export pipeline.
+
+The implementation SHOULD assist the user in managing conflicts by
+reporting each duplicate-conflicting instrument registration that was
+not corrected by a View as follows.  When a potential conflict arises
+between two non-identical `Metric` instances having the same `name`:
+
+1. If the potential conflict involves multiple `description`
+   properties, setting the `description` through a configured View
+   SHOULD avoid the warning.
+2. If the potential conflict involves instruments that can be
+   distinguished by a supported View selector (e.g., instrument type)
+   a View recipe SHOULD be printed advising the user how to avoid the
+   warning by renaming one of the conflicting instruments.
+3. Otherwise (e.g., use of multiple units), the implementation SHOULD
+   pass through the data by reporting both `Metric` objects.
 
 ## Attribute limits
 
@@ -680,7 +728,7 @@ changing aggregation temporality.
 #### Collect
 
 Collects the metrics from the SDK. If there are [asynchronous
-Instruments](./api.md#asynchronous-instrument) involved, their callback
+Instruments](./api.md#asynchronous-instrument-api) involved, their callback
 functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
@@ -769,11 +817,12 @@ preferred temporality.
 
 ### Push Metric Exporter
 
-Push Metric Exporter sends metric data it receives from a paired [periodic
-exporting MetricReader](#periodic-exporting-metricreader).  Here are some
-examples:
+Push Metric Exporter sends metric data it receives from a paired
+[MetricReader](#metricreader). Here are some examples:
 
 * Sends the data based on a user configured schedule, e.g. every 1 minute.
+  This MAY be accomplished by pairing the exporter with a
+  [periodic exporting MetricReader](#periodic-exporting-metricreader).
 * Sends the data when there is a severe error.
 
 The following diagram shows `Push Metric Exporter`'s relationship to other

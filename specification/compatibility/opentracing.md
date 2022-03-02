@@ -1,6 +1,6 @@
 # OpenTracing Compatibility
 
-**Status**: [Experimental](../document-status.md).
+**Status**: [Stable](../document-status.md).
 
 <details>
 <summary>Table of Contents</summary>
