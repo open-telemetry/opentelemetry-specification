@@ -30,12 +30,12 @@ This document defines how to map (convert) arbitrary data (e.g. in-memory
 objects) to OTLP's [AnyValue](https://github.com/open-telemetry/opentelemetry-proto/blob/cc4ed55c082cb75e084d40b4ddf3805eda099f97/opentelemetry/proto/common/v1/common.proto#L27).
 
 The mapping is needed when OpenTelemetry needs to convert a value produced outside
-OpenTelemetry into a value that can be exported using OTLP exporter, or otherwise be
+OpenTelemetry into a value that can be exported using an OTLP exporter, or otherwise be
 converted to be used inside OpenTelemetry boundaries. Example use cases are the following:
 
-- In [Logging Library SDK](../logs/logging-library-sdk.md) to convert values received
+- In [Logging Library SDK](../logs/logging-library-sdk.md)s, to convert values received
   from logging libraries into OpenTelemetry representation.
-- In the Collector to convert values received from various data sources into
+- In the Collector, to convert values received from various data sources into
   [pdata](https://github.com/open-telemetry/opentelemetry-collector/blob/4998703dadd19fa91a88eabf7ccc68d728bee3fd/model/pdata/common.go#L84)
   internal representation.
 
@@ -44,7 +44,7 @@ converted to be used inside OpenTelemetry boundaries. Example use cases are the 
 [AnyValue](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L27)
 is capable of representing primitive and structured data of certain types.
 
-Implementations that have a source data in any form, such as in-memory objects
+Implementations that have source data in any form, such as in-memory objects
 or data coming from other formats that needs to be converted to AnyValue SHOULD
 follow the rules described below.
 
@@ -65,18 +65,18 @@ field using decimal representation.
 #### Enumerations
 
 Values, which belong to a limited enumerated set (e.g. a Java
-[enum](https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html)) SHOULD be
+[enum](https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html)), SHOULD be
 converted to AnyValue's
 [string_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L31)
 field with the value of the string set to the symbolic name of the enumeration.
 
-If the symbolic name of the enumeration is not possible to obtain the
-implementation SHOULD map enumeration's value to AnyValue's
+If it is not possible to obtain the symbolic name of the enumeration, the
+implementation SHOULD map enumeration values to AnyValue's
 [int_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L33)
-field set equal to enum's ordinal number when such ordinal number is naturally
+field set to the enum's ordinal value, when such an ordinal number is naturally
 obtainable.
 
-If the ordinal value is also not possible to obtain the enumeration SHOULD be
+If it is also not possible to obtain the ordinal value, the enumeration SHOULD be
 converted to AnyValue's
 [bytes_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L37)
 field in any manner that the implementation deems reasonable.
@@ -108,7 +108,7 @@ AnyValue's
 with the bytes representing the string in the original order and format of the
 source string.
 
-#### Bytes Sequences
+#### Byte Sequences
 
 Byte sequences (e.g. Go's `[]byte` slice or raw byte content of a file) SHOULD
 be converted to AnyValue's
@@ -126,8 +126,11 @@ Values that represent ordered sequences of other values (such as
 [slices](https://golang.org/ref/spec#Slice_types)) SHOULD be converted to
 AnyValue's
 [array_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L35)
-field. String Values and Byte Sequences are an exception from this rule (see
+field. String values and byte sequences are an exception from this rule (see
 above).
+
+The rules described in this document should be applied recursively to each element
+of the array.
 
 #### Associative Arrays With Unique Keys
 
@@ -136,7 +139,7 @@ as maps, dictionaries or key-value stores) SHOULD be converted to AnyValue's
 [kvlist_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L36)
 field.
 
-If the keys of the source array are not strings they MUST be converted to
+If the keys of the source array are not strings, they MUST be converted to
 strings by any means available, often via a toString() or stringify functions
 available in programming languages. The conversion function MUST be chosen in a
 way that ensures that the resulting string keys are unique in the target array.
@@ -156,6 +159,9 @@ AnyValue{
     }
 }
 ```
+
+The rules described in this document should be applied recursively to each value
+of the associative array.
 
 #### Associative Arrays With Non-Unique Keys
 
@@ -205,16 +211,21 @@ AnyValue{
     }
 }
 ```
+The rules described in this document should be applied recursively to each value
+of the associative array.
 
 #### Sets
 
-Unordered collections of non-duplicate values (such as
+Unordered collections of unique values (such as
 [Java Sets](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html),
 [C++ sets](https://en.cppreference.com/w/cpp/container/set),
 [Python Sets](https://docs.python.org/3/tutorial/datastructures.html#sets)) SHOULD be
 converted to AnyValue's
 [array_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L35)
 field, where each element of the set becomes an element of the array.
+
+The rules described in this document should be applied recursively to each value
+of the set.
 
 ### Other Values
 
