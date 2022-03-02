@@ -42,7 +42,13 @@ one that is needlessly restrictive and complex.
 ### Consistency Checks
 
 The Specification has a number of tools it uses to check things like style,
-spelling and link validity. You can run all of these locally via:
+spelling and link validity. Before using the tools, run:
+
+```bash
+npm install
+```
+
+You can perform all checks locally using this command:
 
 ```bash
 make check
@@ -92,11 +98,10 @@ wide. There are tools that can do it for you effectively. Please submit proposal
 to include your editor settings required to enable this behavior so the out of
 the box settings for this repository will be consistent.
 
-To check for style violations, use
+To check for style violations, run:
 
 ```bash
-make install-markdownlint # install markdownlint if not installed
-make markdownlint # run at the root of the repo
+make markdownlint
 ```
 
 To fix style violations, follow the
@@ -109,13 +114,14 @@ you can also use the `fixAll` command of the
 
 In addition, please make sure to clean up typos before you submit the change.
 
-To check for typos, use
+To check for typos, run the following command:
 
 ```bash
-# Golang is needed for the misspell tool.
-make install-misspell
 make misspell
 ```
+
+> **NOTE**: The `misspell` make target will also fetch and build the tool if
+> necessary. You'll need [Go](https://go.dev) to build the spellchecker.
 
 To quickly fix typos, use
 
