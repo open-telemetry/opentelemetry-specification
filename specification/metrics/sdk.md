@@ -693,7 +693,7 @@ Cumulative into Delta aggregation temporality.
 
 Because of these differences, synchronous and asynchronous instruments
 are given separate treatment.  When configuring the preferred
-aggregation temporality for a `MetricReaderExporter`, the
+aggregation temporality for a `MetricReader`, the
 implementation MUST provide a mechanism that supports configuring the
 exporter's preferred temporality on the basis of instrument kind for
 the five instruments `Counter`, `Asynchronous Counter`,
@@ -712,8 +712,8 @@ supported:
   exported using Cumulative aggregation temporality. 
 - **DeltaPreferred**: Data points from `Counter`, `Asynchronous
   Counter`, and `Histogram` instruments use Delta aggregation
-  temporality, whereas whereas data points from `UpDownCounter` and
-  `Asynchronous UpDownCounter` are exported with Cumualtive
+  temporality, whereas data points from `UpDownCounter` and
+  `Asynchronous UpDownCounter` are exported with Cumulative
   aggregation temporality.
 
 If the preferred temporality is not explicitly specified, the SDK
