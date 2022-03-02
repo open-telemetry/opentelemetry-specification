@@ -14,72 +14,74 @@ formats is required. Implementing more than one format is optional.
 
 ## Traces
 
-| Feature                                                                                          | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|--------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           |          |    |      |    |        |      |        |     |      |     |      |       |
-| Create TracerProvider                                                                            |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Get a Tracer                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Get a Tracer with schema_url                                                                     |          | +  | +    |    |        |      |        |     |      | +   |      |       |
-| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Shutdown (SDK only required)                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| ForceFlush (SDK only required)                                                                   |          | +  | +    | -  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |    |      |    |        |      |        |     |      |     |      |       |
-| Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| Set active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Tracer](specification/trace/api.md#tracer-operations)                                           |          |    |      |    |        |      |        |     |      |     |      |       |
-| Create a new Span                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Get active Span                                                                                  |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Mark Span active                                                                                 |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [SpanContext](specification/trace/api.md#spancontext)                                            |          |    |      |    |        |      |        |     |      |     |      |       |
-| IsValid                                                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRemote                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Conforms to the W3C TraceContext spec                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
-| [Span](specification/trace/api.md#span)                                                          |          |    |      |    |        |      |        |     |      |     |      |       |
-| Create root span                                                                                 |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Create with default parent (active span)                                                         |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Create with parent from Context                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| No explicit parent Span/SpanContext allowed                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
-| SpanProcessor.OnStart receives parent Context                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | -    | +     |
-| UpdateName                                                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| User-defined start timestamp                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| End                                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| End with timestamp                                                                               |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRecording                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| IsRecording becomes false after End                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | -    | +     |
-| Set status with StatusCode (Unset, Ok, Error)                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| events collection size limit                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | -    | +     |
-| attribute collection size limit                                                                  |          | +  | +    | +  | +      | +    | +      | +   | +    | -   | -    | +     |
-| links collection size limit                                                                      |          | +  | +    | +  | +      | +    | +      |     | +    | -   | -    | +     |
-| [Span attributes](specification/trace/api.md#set-attributes)                                     |          |    |      |    |        |      |        |     |      |     |      |       |
-| SetAttribute                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Set order preserved                                                                              | X        | +  | -    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| String type                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Boolean type                                                                                     |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Double floating-point type                                                                       |          | +  | +    | +  | +      | +    | +      | -   | +    | +   | +    | +     |
-| Signed int64 type                                                                                |          | +  | +    | +  | +      | +    | +      | -   | +    | +   | +    | +     |
-| Array of primitives (homogeneous)                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| `null` values documented as invalid/undefined                                                    |          | +  | +    | +  | +      | +    | N/A    |     |      | +   |      | N/A   |
-| Unicode support for keys and string values                                                       |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Span linking](specification/trace/api.md#specifying-links)                                      |          |    |      |    |        |      |        |     |      |     |      |       |
-| Links can be recorded on span creation                                                           |          | +  | +    |    |        | +    | +      | +   | +    | +   |      |       |
-| Links order is preserved                                                                         |          | +  | +    |    |        | +    | +      |     | +    | +   |      |       |
-| [Span events](specification/trace/api.md#add-events)                                             |          |    |      |    |        |      |        |     |      |     |      |       |
-| AddEvent                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Add order preserved                                                                              |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Safe for concurrent calls                                                                        |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Span exceptions](specification/trace/api.md#record-exception)                                   |          |    |      |    |        |      |        |     |      |     |      |       |
-| RecordException                                                                                  |          | -  | +    | +  | +      | +    | +      | +   | +    | -   | +    | -     |
-| RecordException with extra parameters                                                            |          | -  | +    | +  | +      | +    | +      | +   | +    | -   | +    | -     |
-| [Sampling](specification/trace/sdk.md#sampling)                                                  |          |    |      |    |        |      |        |     |      |     |      |       |
-| Allow samplers to modify tracestate                                                              |          | +  | +    |    | +      | +    | +      |     | +    | +   | -    | +     |
-| ShouldSample gets full parent Context                                                            |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
-| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +  | +    |    | +      | +    | +      | +   | +    | +   | -    | +     |
-| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +  | +    |    | +      | +    | +      | +   | +    | +   |      | +     |
-| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +  | +    |    | +      | +    | +      | +   |      | -   |      | +     |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |    | +    |    | +      | +    | +      | +   | +    | +   |      |       |
-| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |    | +    |    |        |      | +      | +   |      |     |      |       |
+| Feature                                                                                          | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|--------------------------------------------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
+| [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           |          |     |      |     |        |      |        |     |      |     |      |       |
+| Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get a Tracer with schema_url                                                                     |          | +   | +    |     |        |      |        |     |      | +   |      |       |
+| Associate Tracer with InstrumentationScope                                                       |          |     |      |     |        |      |        |     |      |     |      |       |
+| Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| ForceFlush (SDK only required)                                                                   |          | +   | +    | -   | +      | +    | +      | +   | +    | +   | +    | +     |
+| [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |     |      |     |        |      |        |     |      |     |      |       |
+| Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Set active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| [Tracer](specification/trace/api.md#tracer-operations)                                           |          |     |      |     |        |      |        |     |      |     |      |       |
+| Create a new Span                                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Mark Span active                                                                                 |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| [SpanContext](specification/trace/api.md#spancontext)                                            |          |     |      |     |        |      |        |     |      |     |      |       |
+| IsValid                                                                                          |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| IsRemote                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Conforms to the W3C TraceContext spec                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| [Span](specification/trace/api.md#span)                                                          |          |     |      |     |        |      |        |     |      |     |      |       |
+| Create root span                                                                                 |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Create with default parent (active span)                                                         |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Create with parent from Context                                                                  |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| No explicit parent Span/SpanContext allowed                                                      |          | +   | +    | +   | +      | +    | +      |     | +    | +   | -    | +     |
+| SpanProcessor.OnStart receives parent Context                                                    |          | +   | +    | +   | +      | +    | +      | +   | +    | -   | -    | +     |
+| UpdateName                                                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| User-defined start timestamp                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| End                                                                                              |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| End with timestamp                                                                               |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| IsRecording                                                                                      |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| IsRecording becomes false after End                                                              |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | -    | +     |
+| Set status with StatusCode (Unset, Ok, Error)                                                    |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| events collection size limit                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | -   | -    | +     |
+| attribute collection size limit                                                                  |          | +   | +    | +   | +      | +    | +      | +   | +    | -   | -    | +     |
+| links collection size limit                                                                      |          | +   | +    | +   | +      | +    | +      | +   | +    | -   | -    | +     |
+| [Span attributes](specification/trace/api.md#set-attributes)                                     |          |     |      |     |        |      |        |     |      |     |      |       |
+| SetAttribute                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Set order preserved                                                                              | X        | +   | -    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| String type                                                                                      |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Boolean type                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Double floating-point type                                                                       |          | +   | +    | +   | +      | +    | +      | -   | +    | +   | +    | +     |
+| Signed int64 type                                                                                |          | +   | +    | +   | +      | +    | +      | -   | +    | +   | +    | +     |
+| Array of primitives (homogeneous)                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| `null` values documented as invalid/undefined                                                    |          | +   | +    | +   | +      | +    | N/A    | +   |      | +   |      | N/A   |
+| Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| [Span linking](specification/trace/api.md#specifying-links)                                      |          |     |      |     |        |      |        |     |      |     |      |       |
+| Links can be recorded on span creation                                                           |          | +   | +    |     |        | +    | +      | +   | +    | +   | +    |       |
+| Links order is preserved                                                                         |          | +   | +    |     |        | +    | +      | +   | +    | +   | +    |       |
+| [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
+| AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Add order preserved                                                                              |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| [Span exceptions](specification/trace/api.md#record-exception)                                   |          |     |      |     |        |      |        |     |      |     |      |       |
+| RecordException                                                                                  |          | -   | +    | +   | +      | +    | +      | +   | +    | -   | +    | -     |
+| RecordException with extra parameters                                                            |          | -   | +    | +   | +      | +    | +      | +   | +    | -   | +    | -     |
+| [Sampling](specification/trace/sdk.md#sampling)                                                  |          |     |      |     |        |      |        |     |      |     |      |       |
+| Allow samplers to modify tracestate                                                              |          | +   | +    |     | +      | +    | +      | +   | +    | +   | -    | +     |
+| ShouldSample gets full parent Context                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | -    | +     |
+| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +   | +    |     | +      | +    | +      | +   | +    | +   | -    | +     |
+| [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   |      | +     |
+| [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   |      |       |
+| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
+| Fetch InstrumentationScope from ReadableSpan                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -102,6 +104,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | `get_meter` accepts name, `version` and `schema_url`.                                                                                                                        |          | +  |  +   |    |    +   |      |        |     |      |     |   -  |       |
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.                                                                              |          | +  |  +   |    |    -   |      |        |     |      |     |   -  |       |
 | The fallback `Meter` `name` property keeps its original invalid value.                                                                                                       | X        | -  |  -   |    |    -   |      |        |     |      |     |   -  |       |
+| Associate `Meter` with `InstrumentationScope`.                                                                                                                               |          |    |      |    |        |      |        |     |      |     |      |       |
 | The meter provides functions to create a new `Counter`.                                                                                                                      |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The meter provides functions to create a new `AsynchronousCounter`.                                                                                                          |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The meter provides functions to create a new `Histogram`.                                                                                                                    |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
@@ -155,6 +158,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | `MeterProvider` allows a `Resource` to be specified.                                                                                                                         |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`.                                                            |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`.       |          | +  |  +   |    |    +   |      |        |     |      |     |   -  |       |
+| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`.         |          |    |      |    |        |      |        |     |      |     |      |       |
 | Configuration is managed solely by the `MeterProvider`.                                                                                                                      |          | +  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The `MeterProvider` provides methods to update the configuration                                                                                                             | X        | -  |  -   |    |    +   |      |        |     |      |     |   +  |       |
 | The updated configuration applies to all already returned `Meter`s.                                                                                                          | if above | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
@@ -245,20 +249,20 @@ Note: Support for environment variables is optional.
 |OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
 |OTEL_EXPORTER_JAEGER_*                        | + |    |   |      |    | -    | - |    | - | +  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | +  | -   |
-|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - |    |     |
+|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
 |OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
-|OTEL_LOGS_EXPORTER                            |   |    |   |      |    |      |   |    |   |    |     |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | +    |   | +  | - |    |     |
-|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    | +    |   |    |   |    |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | +    |   | +  | - |    |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | +    |   | +  | - |    |     |
-|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    | +    |   |    |   |    |     |
-|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    | +    |   |    |   |    |     |
-|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - |    |     |
-|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - |    |     |
-|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    | -    |   |    |   |    |     |
-|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    | -    |   |    |   |    |     |
-|OTEL_METRICS_EXEMPLAR_FILTER                  |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_LOGS_EXPORTER                            |   |    |   |      |    |      |   |    |   | -  |     |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_METRICS_EXEMPLAR_FILTER                  |   |    |   |      |    |      |   |    |   | -  |     |
 
 ## Exporters
 
@@ -268,7 +272,7 @@ Note: Support for environment variables is optional.
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      | +   | -    |     |      |       |
 | Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | +   | -    | +   | +    | +     |
-| [OTLP](specification/protocol/otlp.md)                                         |          |    |   |    |             |      |        |     |      |     |      |       |
+| **[OTLP](specification/protocol/otlp.md)**                                     |          |    |   |    |             |      |        |     |      |     |      |       |
 | OTLP/gRPC Exporter                                                             | *        | +  | + | +  | +           |      | +      | +   | +    | +   | +    | +     |
 | OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | + | +  | +           | +    | +      |     | +    | +   | +    | -     |
 | OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | - | +  | [-][py1003] |      | -      |     |      | +   | -    | -     |
@@ -281,7 +285,7 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      | +      |     |      |     | -    |       |
 | SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      | -      |     |      |     | -    |       |
 | SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      | -      |     |      |     | -    |       |
-| [Zipkin](specification/trace/sdk_exporters/zipkin.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
+| **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V2 JSON                                                                 | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
@@ -289,25 +293,27 @@ Note: Support for environment variables is optional.
 | Service name mapping                                                           |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | +   | +    | +   | +    | +     |
+| InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
 | Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Error Status mapping                                                           |          | +  | + |    |             | +    | -      | +   | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| [Jaeger](specification/trace/sdk_exporters/jaeger.md)                          |          |    |   |    |             |      |        |     |      |     |      |       |
-| Jaeger Thrift over UDP                                                         | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
-| Jaeger Protobuf via gRPC                                                       | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
-| Jaeger Thrift over HTTP                                                        | *        | +  | + |    | +           | +    | -      |     | +    | +   | -    | -     |
+| **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
+| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
+| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
 | Service name mapping                                                           |          | +  | + |    | +           | +    | -      |     |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
+| InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
 | Status mapping                                                                 |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | +     |
 | Error Status mapping                                                           |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
 | Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | +     |
-| OpenCensus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
+| **OpenCensus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
-| Prometheus                                                                     |          |    |   |    |             |      |        |     |      |     |      |       |
+| **Prometheus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 
 ## OpenTracing Compatibility
@@ -332,3 +338,6 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 [py1437]: https://github.com/open-telemetry/opentelemetry-python/issues/1437
 [py1779]: https://github.com/open-telemetry/opentelemetry-python/issues/1779
 [php225]: https://github.com/open-telemetry/opentelemetry-php/issues/225
+[jaegerThriftUDP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
+[jaegerProtobuf]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
+[jaegerThriftHTTP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable

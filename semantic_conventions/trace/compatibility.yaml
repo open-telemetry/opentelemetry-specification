@@ -1,0 +1,20 @@
+groups:
+  - id: opentracing
+    prefix: opentracing
+    brief: 'This document defines semantic conventions for the OpenTracing Shim'
+    note: >
+        These conventions are used by the OpenTracing Shim layer.
+    attributes:
+      - id: ref_type
+        brief: 'Parent-child Reference type'
+        note: >
+            The causal relationship between a child Span and a parent Span.
+        type:
+          allow_custom_values: false
+          members:
+            - id: child_of
+              value: 'child_of'
+              brief: 'The parent Span depends on the child Span in some capacity'
+            - id: follows_from
+              value: 'follows_from'
+              brief: 'The parent Span does not depend in any way on the result of the child Span'
