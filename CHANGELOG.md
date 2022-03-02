@@ -33,6 +33,9 @@ release.
 
 ### Semantic Conventions
 
+- Define JavaScript runtime semantic conventions.
+  ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
