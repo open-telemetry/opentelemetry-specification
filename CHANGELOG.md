@@ -26,12 +26,17 @@ release.
   duplicate conflicts in the data model, specify how the SDK is meant to report and
   assist the user when these conflicts arise.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
+- Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
+  ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
 
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
+
+- Define JavaScript runtime semantic conventions.
+  ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
 
 ### Compatibility
 
