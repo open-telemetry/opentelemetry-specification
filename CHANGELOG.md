@@ -11,13 +11,30 @@ release.
 
 ### Traces
 
+- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
+  Library. The Tracer is now associated with Instrumentation Scope
+  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+
 ### Metrics
+
+- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
+  Library. The Meter is now associated with Instrumentation Scope
+  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+- Specify the behavior of duplicate instrumentation registration in the API, specify
+  duplicate conflicts in the data model, specify how the SDK is meant to report and
+  assist the user when these conflicts arise.
+  ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
+- Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
+  ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
 
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
+
+- Define JavaScript runtime semantic conventions.
+  ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
 
 ### Compatibility
 
@@ -36,7 +53,7 @@ release.
 ### Traces
 
 - Clarify `StartSpan` returning the parent as a non-recording Span when no SDK
-  is in use
+  is in use.
   ([#2121](https://github.com/open-telemetry/opentelemetry-specification/pull/2121))
 - Align Jaeger remote sampler endpoint with OTLP endpoint.
   ([#2246](https://github.com/open-telemetry/opentelemetry-specification/pull/2246))
@@ -45,9 +62,13 @@ release.
 - Add support for probability sampling in the OpenTelemetry `tracestate` entry and
   add optional specification for consistent probability sampling.
   ([#2047](https://github.com/open-telemetry/opentelemetry-specification/pull/2047))
-- Change description and default value of OTEL_EXPORTER_JAEGER_ENDPOINT env var
-  to point to the correct HTTP port and correct description of OTEL_TRACES_EXPORTER
-  ([#2333](https://github.com/open-telemetry/opentelemetry-specification/pull/2333)).
+- Change description and default value of `OTEL_EXPORTER_JAEGER_ENDPOINT` environment
+  variable to point to the correct HTTP port and correct description of
+  `OTEL_TRACES_EXPORTER`.
+  ([#2333](https://github.com/open-telemetry/opentelemetry-specification/pull/2333))
+- Add `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable to select the protocol
+  used by the Jaeger exporter.
+  ([#2341](https://github.com/open-telemetry/opentelemetry-specification/pull/2341))
 
 ### Metrics
 

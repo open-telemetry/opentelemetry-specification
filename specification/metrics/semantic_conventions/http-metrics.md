@@ -28,7 +28,7 @@ Below is a table of HTTP client metric instruments.
 
 | Name                   | Instrument | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description |
 |------------------------|------------|--------------|-------------------------------------------|-------------|
-| `http.client.duration` | Histogram  | milliseconds | `ms`                                      | measure the duration of the outbound HTTP request |
+| `http.client.duration` | Histogram  | milliseconds | `ms`                                      | measures the duration of the outbound HTTP request |
 
 ## Attributes
 
