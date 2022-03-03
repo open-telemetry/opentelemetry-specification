@@ -374,7 +374,7 @@ The monotonicity of the aggregation is determined by the instrument type:
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
 | [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
-This Aggregation the following configuration parameters:
+This Aggregation has the following configuration parameters:
 
 - Aggregation temporality `strategy` [determines how the temporality choice is made](#preferred-aggregation-temporality).
 
