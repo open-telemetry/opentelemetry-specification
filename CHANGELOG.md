@@ -35,6 +35,9 @@ release.
 
 ### Semantic Conventions
 
+- Changed `rpc.system` to an enum (allowing custom values), and changed the
+  `rpc.system` value for .NET WCF from `wcf` to `dotnet_wcf`.
+  ([#2377](https://github.com/open-telemetry/opentelemetry-specification/pull/2377))
 - Define JavaScript runtime semantic conventions.
   ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
 

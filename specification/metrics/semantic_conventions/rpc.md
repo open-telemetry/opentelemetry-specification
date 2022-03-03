@@ -60,7 +60,7 @@ or not they should be on the server, client or both.
 <!-- semconv rpc -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. | `grpc`; `java_rmi`; `wcf` | Yes |
+| [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Yes |
 | [`rpc.service`](../../trace/semantic_conventions/rpc.md) | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | No, but recommended |
 | [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | No, but recommended |
 | [`net.peer.ip`](../../trace/semantic_conventions/span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
@@ -76,6 +76,14 @@ or not they should be on the server, client or both.
 
 * [`net.peer.ip`](../../trace/semantic_conventions/span-general.md)
 * [`net.peer.name`](../../trace/semantic_conventions/span-general.md)
+
+`rpc.system` MUST be one of the following or, if none of the listed values apply, a custom value:
+
+| Value  | Description |
+|---|---|
+| `grpc` | gRPC |
+| `java_rmi` | Java RMI |
+| `dotnet_wcf` | .NET WCF |
 <!-- endsemconv -->
 
 To avoid high cardinality, implementations should prefer the most stable of `net.peer.name` or
