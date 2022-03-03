@@ -35,8 +35,8 @@ requirements to the existing specifications.
 
 The [Instruments](./api.md#instrument) are part of the [Metrics API](./api.md).
 They allow [Measurements](./api.md#measurement) to be recorded
-[synchronously](./api.md#synchronous-instrument) or
-[asynchronously](./api.md#asynchronous-instrument).
+[synchronously](./api.md#synchronous-instrument-api) or
+[asynchronously](./api.md#asynchronous-instrument-api).
 
 Choosing the correct instrument is important, because:
 
