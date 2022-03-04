@@ -501,7 +501,7 @@ pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 See the [general requirements for asynchronous instruments](#asynchronous-instrument-api).
 
 Note: Unlike [Counter.Add()](#add) which takes the increment/delta value, the
-callback function reports the current value of the counter. To determine the
+callback function reports the absolute value of the counter. To determine the
 reported rate the counter is changing, the difference between successive
 measurements is used.
 
@@ -970,7 +970,7 @@ pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 See the [general requirements for asynchronous instruments](#asynchronous-instrument-api).
 
 Note: Unlike [UpDownCounter.Add()](#add-1) which takes the increment/delta value,
-the callback function reports the current value of the Asynchronous
+the callback function reports the absolute value of the Asynchronous
 UpDownCounter. To determine the reported rate the Asynchronous UpDownCounter is
 changing, the difference between successive measurements is used.
 
