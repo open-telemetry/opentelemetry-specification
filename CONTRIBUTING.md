@@ -42,11 +42,20 @@ one that is needlessly restrictive and complex.
 ### Consistency Checks
 
 The Specification has a number of tools it uses to check things like style,
-spelling and link validity. Before using the tools, run:
+spelling and link validity. Before using the tools:
 
-```bash
-npm install
-```
+- Install the latest [LTS release][] of **Node**. For example, using **[nvm][]**
+  under Linux run:
+
+  ```bash
+  nvm install --lts
+  ```
+
+- Install tooling packages:
+
+  ```bash
+  npm install
+  ```
 
 You can perform all checks locally using this command:
 
@@ -234,3 +243,6 @@ on each other), the owner should try to get people aligned by:
 If none of the above worked and the PR has been stuck for more than 2 weeks, the
 owner should bring it to the [OpenTelemetry Specification SIG
 meeting](https://github.com/open-telemetry/community#cross-language-specification).
+
+[LTS release]: https://nodejs.org/en/about/releases/
+[nvm]: https://github.com/nvm-sh/nvm/blob/master/README.md#installing-and-updating
