@@ -26,7 +26,9 @@ release.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 - Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
   ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
-- Clarify what is meant by "preferred" aggregation temporality.
+- Clarify what is meant by "preferred" aggregation temporality.  Introduce aggregation
+  strategy to Sum, Histogram, and ExponentialHistogram Aggregations, for use in 
+  View configuration to override the exporter preference.
   ([#2314](https://github.com/open-telemetry/opentelemetry-specification/pull/2314))
 
 ### Logs
