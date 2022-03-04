@@ -30,7 +30,7 @@ Below is a table of Process metric instruments.
 | Name | Instrument | Units | Description | Labels |
 |------|------------|-------|-------------|--------|
 | `process.cpu.time` | Asynchronous Counter | s | Total CPU seconds broken down by different states. | `state`, if specified, SHOULD be one of: `system`, `user`, `wait`. A process SHOULD be characterized _either_ by data points with no `state` labels, _or only_ data points with `state` labels. |
-| `process.cpu.count` | Asynchronous UpDownCounter | 1 | The number of CPUs available to the process. |  |
+| `process.cpu.count` | Asynchronous UpDownCounter | 1 | The number of available logical CPUs. |  |
 | `process.memory.usage` | Asynchronous UpDownCounter | By | The amount of physical memory in use. |  |
 | `process.memory.virtual` | Asynchronous UpDownCounter | By | The amount of committed virtual memory. |  |
 | `process.disk.io` | Asynchronous Counter | By | Disk bytes transferred. | `direction` SHOULD be one of: `read`, `write` |
