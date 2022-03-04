@@ -715,7 +715,7 @@ The two supported `Aggregation` temporality strategies are:
 - **Preferred**: The Aggregation Temporality will be selected
   according to the `MetricReader` preference.
 
-Three `MetricReader` preferences are available:
+Two `MetricReader` preferences are available:
 
 - **Cumulative**: The Metric Exporter prefers Cumulative temporality.
 - **Delta**: The Metric Exporter prefers Delta temporality.
