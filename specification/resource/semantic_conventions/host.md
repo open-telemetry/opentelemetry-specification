@@ -17,7 +17,7 @@
 | `host.image.id` | string | VM image ID. For Cloud, this value is from the provider. | `ami-07b06b442921831e5` | No |
 | `host.image.version` | string | The version string of the VM image as defined in [Version Attributes](README.md#version-attributes). | `0.1` | No |
 
-`host.arch` MUST be one of the following or, if none of the listed values apply, a custom value:
+`host.arch` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
