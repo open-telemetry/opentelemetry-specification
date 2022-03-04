@@ -719,9 +719,6 @@ Three `MetricReader` preferences are available:
 
 - **Cumulative**: The Metric Exporter prefers Cumulative temporality.
 - **Delta**: The Metric Exporter prefers Delta temporality.
-- **Stateless**: The Metric Exporter prefers Delta temporality for
-synchronous instruments and Cumulative temporality for asynchronous
-instruments to avoid long-term memory.
 
 If the preferred temporality is not explicitly specified, the SDK
 SHOULD use the Cumulative aggregation temporality preference.
