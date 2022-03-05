@@ -5,10 +5,20 @@ groups:
     events: [rpc.message]
     attributes:
       - id: system
-        type: string
         required: always
-        brief: 'A string identifying the remoting system.'
-        examples: ["grpc", "java_rmi", "wcf"]
+        brief: 'A string identifying the remoting system. See below for a list of well-known identifiers.'
+        type:
+          allow_custom_values: true
+          members:
+            - id: grpc
+              value: 'grpc'
+              brief: 'gRPC'
+            - id: java_rmi
+              value: 'java_rmi'
+              brief: 'Java RMI'
+            - id: dotnet_wcf
+              value: 'dotnet_wcf'
+              brief: '.NET WCF'
       - id: service
         type: string
         required:

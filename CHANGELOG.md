@@ -14,6 +14,8 @@ release.
 - Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
   Library. The Tracer is now associated with Instrumentation Scope
   ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+- Add documentation REQUIREMENT for adding attributes at span creation.
+  ([#2383](https://github.com/open-telemetry/opentelemetry-specification/pull/2383)).
 
 ### Metrics
 
@@ -32,6 +34,12 @@ release.
 ### Resource
 
 ### Semantic Conventions
+
+- Changed `rpc.system` to an enum (allowing custom values), and changed the
+  `rpc.system` value for .NET WCF from `wcf` to `dotnet_wcf`.
+  ([#2377](https://github.com/open-telemetry/opentelemetry-specification/pull/2377))
+- Define JavaScript runtime semantic conventions.
+  ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
 
 ### Compatibility
 
