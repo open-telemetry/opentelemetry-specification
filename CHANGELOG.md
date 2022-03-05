@@ -28,6 +28,10 @@ release.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 - Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
   ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
+- Allows Sum, Histogram, and ExponentialHistogram View Aggregations to
+  define the temporality to "cumulative", "delta", or "default", where
+  "default" is the default determined by the MetricReader on a per-instrument basis.
+  ([#2403](https://github.com/open-telemetry/opentelemetry-specification/pull/2403)).
 
 ### Logs
 
