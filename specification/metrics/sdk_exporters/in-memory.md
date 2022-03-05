@@ -9,6 +9,7 @@ local memory and allows to inspect it (useful for e.g. unit tests).
 In-memory Metrics Exporter MUST support both Cumulative and Delta
 [Temporality](../datamodel.md#temporality).
 
-In-memory Metrics Exporter MUST allow [Aggregation
-Temporality](../datamodel.md#temporality) to be specified, as described in
+In-memory Metrics Exporter MUST allow the default [Aggregation
+Temporality](../datamodel.md#temporality) to be specified in a
+per-instrument basis, as described in
 [MetricExporter](../sdk.md#metricexporter).

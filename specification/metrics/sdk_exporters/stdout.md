@@ -14,5 +14,6 @@ StreamExporter, etc.
 [Temporality](../datamodel.md#temporality).
 
 "Standard output" Metrics Exporter MUST allow [Aggregation
-Temporality](../datamodel.md#temporality) to be specified, as described in
+Temporality](../datamodel.md#temporality) to be specified in a
+per-instrumebt basis, as described in
 [MetricExporter](../sdk.md#metricexporter).
