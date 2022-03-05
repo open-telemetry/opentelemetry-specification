@@ -180,10 +180,15 @@ are the inputs:
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
-    apply a [default aggregation](#default-aggregation). If the aggregation
-    outputs metric points that use aggregation temporality (e.g. Histogram,
-    Sum), the SDK SHOULD handle the aggregation temporality based on the
-    temporality of each [MetricReader](#metricreader) instance.
+    apply a [default aggregation](#default-aggregation) configurable on a
+	per-instrument basis according to the [MetricReader](#metricreader) instance.
+  * The aggregation `temporality` (optional), which may be one of
+    "cumulative", "delta", or "default".  If the aggregation outputs
+    metric points that use aggregation temporality (e.g. Histogram,
+    Sum), then the SDK MUST export this View using this aggregation
+    temporality.  The "default" value means the SDK SHOULD set the
+    aggregation temporality, configurable on a per-instrument basis
+    according to the [MetricReader](#metricreader) instance.
   * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
@@ -199,8 +204,11 @@ The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
-* If the `MeterProvider` has no `View` registered, take the Instrument and apply
-    the default configuration.
+* If the `MeterProvider` has no `View` registered, take the Instrument
+    and apply the default configuration for Aggregation and
+    Aggregation Temporality.  The SDK MUST support configuring the
+    Aggregation and default Aggregation Temporality on a
+    per-instrument basis through this configuration.
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
@@ -672,12 +680,6 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
-The SDK SHOULD provide a way to allow the preferred [Aggregation
-Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
-instance during the setup (e.g. initialization, registration, etc.) time. If the
-preferred temporality is explicitly specified then the SDK SHOULD respect that,
-otherwise use Cumulative.
-
 [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY choose the best idiomatic design for their language:
 
@@ -782,7 +784,7 @@ can run at different schedule, for example:
   pipe.
 
 `MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
-preferred temporality.
+preferred Aggregation Temporality on a per-instrument basis.
 
 ### Push Metric Exporter
 
