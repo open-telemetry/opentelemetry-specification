@@ -63,7 +63,6 @@ Methods:
   e.g.
   [Java discussion](https://github.com/open-telemetry/opentelemetry-java/pull/3759#discussion_r738019425))
 
-- Flush.
 
 ### LogRecord
 
