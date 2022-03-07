@@ -367,8 +367,9 @@ The API MUST accept the following parameters:
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
 
-  Whenever possible, users SHOULD set any already known attributes at span creation
-  instead of calling `SetAttribute` later.
+  The API documentation MUST state that adding attributes at span creation is preferred
+  to calling `SetAttribute` later, as samplers can only consider information
+  already present during span creation.
 
 - `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
