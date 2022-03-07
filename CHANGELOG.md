@@ -28,6 +28,9 @@ release.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 - Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
   ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
+- Clarify that the periodic metric reader is the default metric reader to be
+  paired with push metric exporters (OTLP, stdout, in-memory)
+  ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
 
 ### Logs
 
