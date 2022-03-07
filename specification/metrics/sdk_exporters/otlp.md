@@ -18,12 +18,3 @@ as the default temporality.
 
 The exporter MUST provide configuration according to the [OpenTelemetry Protocol
 Exporter](../../protocol/exporter.md) specification.
-
-In addition, the exporter MUST provide the following configuration (note: this
-section will be merged to the [OpenTelemetry Protocol
-Exporter](../../protocol/exporter.md) specification once it reaches
-[Stable](../../document-status.md)):
-
-| Description | Default | Env variable |
-| ----------- | ------- | ------------ |
-| The preferred output [Aggregation Temporality](../datamodel.md#temporality), either `CUMULATIVE` or `DELTA` (case insensitive) | `CUMULATIVE` | `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY`

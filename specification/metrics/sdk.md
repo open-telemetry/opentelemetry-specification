@@ -672,25 +672,11 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
-The SDK SHOULD provide a way to allow the preferred [Aggregation
-Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
-instance during the setup (e.g. initialization, registration, etc.) time. If the
+The SDK SHOULD provide a way to allow the preferred [Aggregation](#aggregation) and [Aggregation
+Temporality](./datamodel.md#temporality) to be specified on the basis of instrument kind 
+for a `MetricReader` instance during setup (e.g. initialization, registration, etc.) time. If the
 preferred temporality is explicitly specified then the SDK SHOULD respect that,
 otherwise use Cumulative.
-
-[OpenTelemetry SDK](../overview.md#sdk)
-authors MAY choose the best idiomatic design for their language:
-
-* Whether to treat the temporality settings as recommendation or enforcement.
-  For example, if the temporality is set to Delta, would the SDK want to perform
-  Cumulative->Delta conversion for an [Asynchronous
-  Counter](./api.md#asynchronous-counter), or downgrade it to a
-  [Gauge](./datamodel.md#gauge), or keep consuming it as Cumulative due to the
-  consideration of [memory
-  efficiency](./supplementary-guidelines.md#memory-management)?
-* Refer to the [supplementary
-  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
-  more context and suggestions.
 
 ### MetricReader operations
 
@@ -782,7 +768,21 @@ can run at different schedule, for example:
   pipe.
 
 `MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
-preferred temporality.
+preferred Aggregation and Aggregation Temporality on a per-instrument basis.
+
+[OpenTelemetry Exporter](#metric-exporter) authors MAY choose the best
+idiomatic design for the corresponding protocol:
+
+* Whether to treat the temporality settings as recommendation or enforcement.
+  For example, if the temporality is set to Delta, would the MetricExporter want to perform
+  Cumulative->Delta conversion for an [Asynchronous
+  Counter](./api.md#asynchronous-counter), or downgrade it to a
+  [Gauge](./datamodel.md#gauge), or keep consuming it as Cumulative due to the
+  consideration of [memory
+  efficiency](./supplementary-guidelines.md#memory-management)?
+* Refer to the [supplementary
+  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
+  more context and suggestions.
 
 ### Push Metric Exporter
 
