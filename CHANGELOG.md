@@ -28,6 +28,9 @@ release.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 - Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
   ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
+- Specify that preferred Aggregation and Aggregation Temporality are provided on a 
+  per-instrument basis by the Exporter for the Reader's information.
+  ([#2407](https://github.com/open-telemetry/opentelemetry-specification/pull/2407))
 
 ### Logs
 
