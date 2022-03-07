@@ -28,6 +28,8 @@ release.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 - Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
   ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
+- Clarify that MetricReader has one-to-one mapping to MeterProvider.
+  ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
 
 ### Logs
 
