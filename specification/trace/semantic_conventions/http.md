@@ -20,7 +20,8 @@ and various HTTP versions like 1.1, 2 and SPDY.
   * [HTTP server definitions](#http-server-definitions)
   * [HTTP Server semantic conventions](#http-server-semantic-conventions)
 - [HTTP client-server example](#http-client-server-example)
-- [HTTP retries and redirects examples](#http-retries-and-redirects-examples)
+- [HTTP retries examples](#http-retries-examples)
+- [HTTP redirects examples](#http-redirects-examples)
 
 <!-- tocstop -->
 
@@ -295,7 +296,7 @@ but due to `http.scheme`, `http.host` and `http.target` being set, it would be r
 As explained above, these separate values are preferred but if for some reason the URL is available but the other values are not,
 URL can replace `http.scheme`, `http.host` and `http.target`.
 
-## HTTP retries and redirects examples
+## HTTP retries examples
 
 Example of retries in the presence of a trace started by an inbound request:
 
@@ -331,7 +332,9 @@ GET / - 200 (CLIENT, trace=t3, span=s1, http.retry_count=2)
  --- server (SERVER, trace=t3, span=s1)
 ```
 
-Example of redirect in the presence of a trace started by an inbound request:
+## HTTP redirects examples
+
+Example of redirects in the presence of a trace started by an inbound request:
 
 ```
 request (SERVER, trace=t1, span=s1)
@@ -345,7 +348,7 @@ request (SERVER, trace=t1, span=s1)
       --- server (SERVER, trace=t1, span=s5)
 ```
 
-Example of redirect with no trace started upfront:
+Example of redirects with no trace started upfront:
 
 ```
 GET / - 302 (CLIENT, trace=t1, span=s1)
