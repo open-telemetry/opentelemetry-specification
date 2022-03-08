@@ -13,8 +13,31 @@ Agreement](https://identity.linuxfoundation.org/projects/cncf).
 
 ## Proposing a change
 
-Significant changes should go through the [OpenTelemetry Enhancement
-Proposal](https://github.com/open-telemetry/oteps) process.
+OpenTelemetry is designed to work across many programming languages and 
+operational environments. Once stable, backwards compatibility is a strict 
+requirement for every component. Because of this, specification proposals need
+to be well researched and have broad community support in order to be accepted. 
+
+For small changes which do not intend to alter the meaning of the specification,
+a Pull Request is sufficient.
+
+However, we ask that proposals be taken to the community before significant work 
+is done on them, in order to ensure that there is alignment and that they have a 
+good chance of being accepted.
+
+### Get a sponsor before you start an OTEP
+For proposals that represent a significant addition to the spec, an 
+[OTEP](https://github.com/open-telemetry/oteps) (OpenTelemetry Enhancement 
+Proposal) needs to be written and approved before the spec can be changed.
+it is recommended that you first propose the change as an issue, and ideally come to a spec meeting
+to discuss it. If there is interest in the community in pursuing the proposal, a
+sponsor can be assigned to guide you through creating an OTEP.
+
+### Create a Spec SIG
+For large, wide ranging changes which will require a sustained effort in order 
+to be completed, we suggest proposing a SIG (Special Interest Group) and 
+developing a proposal with a broad group of relevant experts and community 
+members.
 
 ## Writing specs
 
