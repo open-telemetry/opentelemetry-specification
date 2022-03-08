@@ -137,7 +137,7 @@ The value MUST be one of:
 [jaeger_grpc]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
 [jaeger_udp]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
 
-The default transport SHOULD protocol be `http/thrift.binary` unless
+The default transport protocol SHOULD be `http/thrift.binary` unless
 SDKs have good reasons to choose other as the default
 (e.g. for backward compatibility reasons).
 
