@@ -242,18 +242,29 @@ Any [spec
 maintainer](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto) can
 merge the PR once it is **ready to merge**.
 
-If a PR has been stuck (e.g. there are lots of debates and people couldn't agree
-on each other), the owner should try to get people aligned by:
+## What happens when an Issue or Pull Request becomes stuck?
 
+If a PR is stuck because a code owner has requested changes, but has not responded
+to further discussion, please do the following:
+
+* On GitHub, ping the code owner in question and the person assigned to the Issue/PR.
+* Contact your sponsor, if you have one.
+* Reaching out to the above people on the [#otel-specification Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](http://slack.cncf.io/).
+
+If a PR is stuck because there are lots of debates and people couldn't agree
+on each other, the owner should try to get people aligned by:
+
+* Working with your sponsor to resolve the issue.
 * Consolidating the perspectives and putting a summary in the PR. It is
   recommended to add a link into the PR description, which points to a comment
   with a summary in the PR conversation.
 * Tagging subdomain experts (by looking at the change history) in the PR asking
   for suggestion.
-* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](http://slack.cncf.io/).
+* Reaching out to more people on the [#otel-specification Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](http://slack.cncf.io/).
 * Stepping back to see if it makes sense to narrow down the scope of the PR or
   split it up.
-
-If none of the above worked and the PR has been stuck for more than 2 weeks, the
-owner should bring it to the [OpenTelemetry Specification SIG
+* Bring the PR/Issue to the [OpenTelemetry Specification SIG
 meeting](https://github.com/open-telemetry/community#cross-language-specification).
+
+If none of the above worked, the owner should ask the person assigned to the Issue/PR
+to make a decision as to how to move forwards.
