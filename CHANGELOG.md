@@ -14,8 +14,8 @@ release.
 - Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
   Library. The Tracer is now associated with Instrumentation Scope
   ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
-- Add documentation REQUIREMENT for adding attributes at span creation.
-  ([#2383](https://github.com/open-telemetry/opentelemetry-specification/pull/2383)).
+- Allow adding links after span creation, add new `AddLink` method.
+  ([#2278](https://github.com/open-telemetry/opentelemetry-specification/pull/2278))
 
 ### Metrics
 
@@ -49,6 +49,9 @@ release.
 - Add `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable to select the protocol
   used by the Jaeger exporter.
   ([#2341](https://github.com/open-telemetry/opentelemetry-specification/pull/2341))
+- Add documentation REQUIREMENT for adding attributes at span creation.
+  ([#2383](https://github.com/open-telemetry/opentelemetry-specification/pull/2383)).
+
 ### Metrics
 
 - Initial Prometheus <-> OTLP datamodel specification
@@ -181,14 +184,9 @@ release.
   variable to point to the correct HTTP port and correct description of
   `OTEL_TRACES_EXPORTER`.
   ([#2333](https://github.com/open-telemetry/opentelemetry-specification/pull/2333))
-<<<<<<< HEAD
-=======
 - Add `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable to select the protocol
   used by the Jaeger exporter.
   ([#2341](https://github.com/open-telemetry/opentelemetry-specification/pull/2341))
-- Allow adding links after span creation, require new `AddLink` method.
-  ([#2278](https://github.com/open-telemetry/opentelemetry-specification/pull/2278))
->>>>>>> 477857e (Add changelog and adapt spec compliance matrix)
 
 ### Metrics
 
