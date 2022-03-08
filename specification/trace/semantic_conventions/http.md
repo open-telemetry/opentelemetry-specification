@@ -134,7 +134,7 @@ No span is created corresponding to the "logical" (encompassing) request.
 For retries, `http.retry_count` attribute SHOULD be added to each retry span
 with the value that reflects the ordinal number of request retry attempt.
 
-See [examples](#http-retries-and-redirects-examples) for more details.
+See [examples](#http-retries-examples) for more details.
 
 ## HTTP client
 
