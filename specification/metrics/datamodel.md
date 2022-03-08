@@ -1166,7 +1166,13 @@ Prometheus Cumulative metrics do not include the start time of the metric. When 
 
 #### Exemplars
 
-[Prometheus Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars) can be attached to Prometheus Histogram bucket metrics, which SHOULD be converted to exemplars on OpenTelemetry histograms.  The Trace ID and Span ID SHOULD be retrieved from the `trace_id` and `span_id` label keys, respectively.
+[OpenMetrics Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars)
+can be attached to Prometheus Histogram bucket metrics, which SHOULD be
+converted to exemplars on OpenTelemetry histograms. If present, the timestamp
+MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
+retrieved from the `trace_id` and `span_id` label keys, respectively.  All
+labels not used for the trace and span ids MUST be added to the OpenTelemetry
+exemplar as attributes.
 
 #### Resource Attributes
 
@@ -1256,7 +1262,19 @@ OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https:/
 
 #### Exemplars
 
-[Exemplars](#exemplars) on OpenTelemetry Histograms SHOULD be converted to Prometheus exemplars. Exemplars on other OpenTelemetry data points MUST be dropped.  For Prometheus push exporters, multiple exemplars are able to be added to each bucket, so all exemplars SHOULD be converted.  For Prometheus pull endpoints, only a single exemplar is able to be added to each bucket, so the largest exemplar from each bucket MUST be used, if attaching exemplars.  If no exemplars exist on a bucket, the highest exemplar from a lower bucket MUST be used, even though it is a duplicate of another bucket's exemplar.  Prometheus Exemplars MUST use the `trace_id` and `span_id` keys for the trace and span IDs, respectively.
+[Exemplars](#exemplars) on OpenTelemetry Histograms SHOULD be converted to
+OpenMetrics exemplars. Exemplars on other OpenTelemetry data points MUST be
+dropped. For Prometheus push exporters, multiple exemplars are able to be
+added to each bucket, so all exemplars SHOULD be converted. For Prometheus
+pull endpoints, only a single exemplar is able to be added to each bucket, so
+the largest exemplar from each bucket MUST be used, if attaching exemplars. If
+no exemplars exist on a bucket, the highest exemplar from a lower bucket MUST
+be used, even though it is a duplicate of another bucket's exemplar.
+OpenMetrics Exemplars MUST use the `trace_id` and `span_id` keys for the trace
+and span IDs, respectively. Timestamps MUST be added as timestamps on the
+OpenMetrics exemplar, and `filtered_attributes` MUST be added as labels on the
+OpenMetrics exemplar unless they would exceed the OpenMetrics
+[limit on characters](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars).
 
 #### Resource Attributes
 
