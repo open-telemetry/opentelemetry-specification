@@ -31,6 +31,7 @@ formats is required. Implementing more than one format is optional.
 | [Tracer](specification/trace/api.md#tracer-operations)                                           | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create a new Span                                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Documentation defines adding attributes at span creation as preferred                            |          |     |      |     | +      | +    |        | +   |      |     | +    |       |
+| Documentation defines adding links at span creation as preferred                                 |          |     |      |     |        |      |        |     |      |     |      |       |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Mark Span active                                                                                 |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
