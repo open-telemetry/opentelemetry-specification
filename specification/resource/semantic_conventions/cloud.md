@@ -21,7 +21,7 @@
 
 **[3]:** The prefix of the service SHOULD match the one specified in `cloud.provider`.
 
-`cloud.provider` MUST be one of the following or, if none of the listed values apply, a custom value:
+`cloud.provider` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -31,7 +31,7 @@
 | `gcp` | Google Cloud Platform |
 | `tencent_cloud` | Tencent Cloud |
 
-`cloud.platform` MUST be one of the following or, if none of the listed values apply, a custom value:
+`cloud.platform` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
