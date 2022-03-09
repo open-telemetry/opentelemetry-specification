@@ -17,7 +17,7 @@ In-memory Metrics Exporter MUST support both Cumulative and Delta
 [Temporality](../datamodel.md#temporality).
 
 In-memory Metrics Exporter MUST allow the default [Aggregation
-Temporality](../datamodel.md#temporality) to be specified on the basis of 
+Temporality](../datamodel.md#temporality) to be specified on the basis of
 instrument kind, as described in [MetricExporter](../sdk.md#metricexporter).
 
 If the default Aggregation Temporality is not specified, In-memory Metrics

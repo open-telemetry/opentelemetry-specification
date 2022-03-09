@@ -673,7 +673,7 @@ idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
 The SDK MUST provide a way to allow the default [Aggregation](#aggregation) and [Aggregation
-Temporality](./datamodel.md#temporality) to be determined on the basis of instrument kind 
+Temporality](./datamodel.md#temporality) to be determined on the basis of instrument kind
 for a `MetricReader` instance during setup (e.g. initialization, registration, etc.) time.
 
 ### MetricReader operations
