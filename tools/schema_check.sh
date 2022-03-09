@@ -6,10 +6,13 @@
 
 set -e
 
+BUILD_TOOL_SCHEMAS_VERSION=0.11.0
+
 # List of vesions that do not require or have a schema.
 declare -a skip_versions=("1.0.0" "1.0.1" "1.1.0" "1.2.0" "1.3.0" "1.6.0")
 
 schemas_dir="../schemas"
+current_dir=$PWD
 
 # Find all version sections in CHANGELOG that start with a number in 1..9 range.
 grep -o -e '## v[1-9].*\s' ../CHANGELOG.md | grep -o '[1-9].*' | while read ver; do
@@ -48,5 +51,9 @@ for file in $schemas_dir/*; do
     echo "FAILED: schema_url is not found in $file"
     exit 2
   fi
+
+  docker run -v $current_dir/../schemas:/schemas \
+  		otel/build-tool-schemas:$BUILD_TOOL_SCHEMAS_VERSION --file /schemas/$ver --version=$ver
+
   echo "OK"
 done
