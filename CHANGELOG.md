@@ -236,6 +236,8 @@ release.
   ([#1916](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
 - Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
   ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
+- Define span structure for HTTP retries and redirects.
+  ([#2078](https://github.com/open-telemetry/opentelemetry-specification/pull/2078))
 - Clarify difference between container.name and k8s.container.name
   ([#1980](https://github.com/open-telemetry/opentelemetry-specification/pull/1980))
 
