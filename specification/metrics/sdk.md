@@ -672,8 +672,8 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
-The SDK SHOULD provide a way to allow the default [Aggregation](#aggregation) and [Aggregation
-Temporality](./datamodel.md#temporality) to be specified on the basis of instrument kind 
+The SDK MUST provide a way to allow the default [Aggregation](#aggregation) and [Aggregation
+Temporality](./datamodel.md#temporality) to be determined on the basis of instrument kind 
 for a `MetricReader` instance during setup (e.g. initialization, registration, etc.) time.
 
 ### MetricReader operations
@@ -765,7 +765,7 @@ can run at different schedule, for example:
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
 
-`MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
+`MetricExporter` MUST provide a way to allow `MetricReader` to retrieve its
 default Aggregation and Aggregation Temporality on the basis of instrument kind.
 
 For Exporters not specified in the [supported SDK exporters for
