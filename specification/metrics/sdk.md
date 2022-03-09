@@ -207,7 +207,7 @@ made with an Instrument:
 * If the `MeterProvider` has no `View` registered, take the Instrument
     and apply the default configuration for Aggregation and
     Aggregation Temporality.  The SDK MUST support configuring the
-    Aggregation and default Aggregation Temporality on a
+    Aggregation and Aggregation Temporality on a
     per-instrument basis through this configuration.
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection

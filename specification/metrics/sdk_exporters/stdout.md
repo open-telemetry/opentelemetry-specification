@@ -22,5 +22,5 @@ StreamExporter, etc.
 
 "Standard output" Metrics Exporter MUST allow [Aggregation
 Temporality](../datamodel.md#temporality) to be specified in a
-per-instrumebt basis, as described in
+per-instrument basis, as described in
 [MetricExporter](../sdk.md#metricexporter).
