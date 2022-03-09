@@ -672,11 +672,9 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
-The SDK SHOULD provide a way to allow the preferred [Aggregation](#aggregation) and [Aggregation
+The SDK SHOULD provide a way to allow the default [Aggregation](#aggregation) and [Aggregation
 Temporality](./datamodel.md#temporality) to be specified on the basis of instrument kind 
-for a `MetricReader` instance during setup (e.g. initialization, registration, etc.) time. If the
-preferred temporality is explicitly specified then the SDK SHOULD respect that,
-otherwise use Cumulative.
+for a `MetricReader` instance during setup (e.g. initialization, registration, etc.) time.
 
 ### MetricReader operations
 
@@ -768,10 +766,11 @@ can run at different schedule, for example:
   pipe.
 
 `MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
-preferred Aggregation and Aggregation Temporality on a per-instrument basis.
+default Aggregation and Aggregation Temporality on the basis of instrument kind.
 
-[OpenTelemetry Exporter](#metric-exporter) authors MAY choose the best
-idiomatic design for the corresponding protocol:
+For Exporters not specified in the [supported SDK exporters for
+metrics](./sdk_exporters), [OpenTelemetry Exporter](#metric-exporter)
+authors MAY choose the best design for the corresponding protocol:
 
 * Whether to treat the temporality settings as recommendation or enforcement.
   For example, if the temporality is set to Delta, would the MetricExporter want to perform

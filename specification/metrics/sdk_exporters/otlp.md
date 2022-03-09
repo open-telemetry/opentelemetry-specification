@@ -16,12 +16,12 @@ by default the exporter MUST be paired with a
 OTLP Metrics Exporter MUST support both Cumulative and Delta
 [Temporality](../datamodel.md#temporality).
 
-OTLP Metrics Exporter MUST allow [Aggregation
-Temporality](../datamodel.md#temporality) to be specified, as described in
-[MetricExporter](../sdk.md#metricexporter).
+OTLP Metrics Exporter MUST allow the default [Aggregation
+Temporality](../datamodel.md#temporality) to be specified on the basis of 
+instrument kind, as described in [MetricExporter](../sdk.md#metricexporter).
 
-If the temporality is not specified, OTLP Metrics Exporter SHOULD use Cumulative
-as the default temporality.
+If the default Aggregation Temporality is not specified, OTLP Metrics
+Exporter SHOULD use Cumulative as the default.
 
 The exporter MUST provide configuration according to the [OpenTelemetry Protocol
 Exporter](../../protocol/exporter.md) specification.

@@ -31,8 +31,8 @@ release.
 - Clarify that the periodic metric reader is the default metric reader to be
   paired with push metric exporters (OTLP, stdout, in-memory)
   ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
-- Specify that preferred Aggregation and Aggregation Temporality are provided on a 
-  per-instrument basis by the Exporter for the Reader's information.
+- Specify that preferred Aggregation and Aggregation Temporality are provided on the
+  basis of instrument kind by the Exporter for the Reader's information.
   ([#2407](https://github.com/open-telemetry/opentelemetry-specification/pull/2407))
 
 ### Logs
