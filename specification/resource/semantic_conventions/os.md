@@ -16,7 +16,7 @@ In case of virtualized environments, this is the operating system as it is obser
 | `os.name` | string | Human readable operating system name. | `iOS`; `Android`; `Ubuntu` | No |
 | `os.version` | string | The version string of the operating system as defined in [Version Attributes](../../resource/semantic_conventions/README.md#version-attributes). | `14.2.1`; `18.04.1` | No |
 
-`os.type` MUST be one of the following or, if none of the listed values apply, a custom value:
+`os.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|

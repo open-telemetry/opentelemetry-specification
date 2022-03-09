@@ -77,7 +77,7 @@ or not they should be on the server, client or both.
 * [`net.peer.ip`](../../trace/semantic_conventions/span-general.md)
 * [`net.peer.name`](../../trace/semantic_conventions/span-general.md)
 
-`rpc.system` MUST be one of the following or, if none of the listed values apply, a custom value:
+`rpc.system` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|

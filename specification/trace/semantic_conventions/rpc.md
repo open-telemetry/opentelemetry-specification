@@ -73,7 +73,7 @@ Examples of span names:
 * [`net.peer.ip`](span-general.md)
 * [`net.peer.name`](span-general.md)
 
-`rpc.system` MUST be one of the following or, if none of the listed values apply, a custom value:
+`rpc.system` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
