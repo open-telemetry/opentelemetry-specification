@@ -97,7 +97,7 @@ field using decimal floating point representation.
 
 #### String Values
 
-String values which are valid Unicode sequences SHOULD be converted to
+String values which are valid UTF-8 sequences SHOULD be converted to
 AnyValue's
 [string_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L31)
 field.
