@@ -30,8 +30,8 @@ The `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY` environment variable
 (case-insensitive) defines the default aggregation temporality policy
 to use on the basis of instrument kind.  The recognized values are:
 
-| Value      | Definition                                                                                                                                             |
-|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| CUMULATIVE | Choose Cumulative aggregation temporality for all instrument kinds                                                                                     |
-| DELTA      | Choose Delta aggregation temporality for Counter and Histogram instruments (but choose Cumulative aggregation for UpDownCounter instruments) |
+| Value      | Definition                                                                                                    |
+|------------|---------------------------------------------------------------------------------------------------------------|
+| CUMULATIVE | Choose Cumulative aggregation temporality for all instrument kinds.                                           |
+| DELTA      | Choose Delta aggregation temporality for Counter and Histogram instrument kinds, otherwise choose Cumulative. |
 

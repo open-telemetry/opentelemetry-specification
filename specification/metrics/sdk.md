@@ -180,15 +180,9 @@ are the inputs:
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
-    apply a [default aggregation](#default-aggregation) configurable on a
-    per-instrument basis according to the [MetricReader](#metricreader) instance.
-  * The aggregation `temporality` (optional) to be used, which may be one of
-    "cumulative", "delta", or "default".  If the configured `aggregation` outputs
-    metric points that define aggregation temporality (e.g. Histogram,
-    Sum), then the SDK MUST export the View using the configured aggregation
-    temporality.  The "default" value means the SDK SHOULD set the default
-    aggregation temporality on a per-instrument basis according to the
-    [MetricReader](#metricreader) instance.
+    apply a [default aggregation](#default-aggregation) configurable on the
+    basis of instrument kind according to the [MetricReader](#metricreader)
+	instance.
   * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
@@ -205,9 +199,9 @@ made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
 * If the `MeterProvider` has no `View` registered, take the Instrument
-    and apply the default Aggregation and default Aggregation
-    Temporality according to the [MetricReader](#metricreader)
-    instance's `aggregation` and `temporality` properties by default..
+    and apply the default Aggregation on the basis of instrument kind
+    according to the [MetricReader](#metricreader) instance's
+    `aggregation` property.
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
@@ -217,9 +211,10 @@ made with an Instrument:
       know (e.g. expose
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
   * If the Instrument could not match with any of the registered
-    `View`(s), the SDK SHOULD whether to use the default `aggregation`
-    and `temporality` according to the [MetricReader](#metricreader)
-    instance's `default_enabled` property.
+    `View`(s), the SDK SHOULD whether to enable the instrument using
+    the default Aggregation, on the basis of instrument kind,
+    according to the [MetricReader](#metricreader) instance's
+    `aggregation` and `default_enabled` properties.
 * END.
 
 Here are some examples:
@@ -264,7 +259,7 @@ meter_provider
 # Counter X will be exported as cumulative sum
 meter_provider
     .add_view("X", aggregation=SumAggregation())
-    .add_metric_reader(PeriodicExportingMetricReader(AggregationTemporality.CUMULATIVE, ConsoleExporter()))
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
@@ -273,7 +268,7 @@ meter_provider
 meter_provider
     .add_view("X", aggregation=SumAggregation())
     .add_view("*", attribute_keys=["a", "b"])
-    .add_metric_reader(PeriodicExportingMetricReader(AggregationTemporality.DELTA, ConsoleExporter()))
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ### Aggregation
@@ -654,11 +649,12 @@ To construct a `MetricReader` when setting up an SDK, the caller
 SHOULD provide at least the following:
 
 * The `exporter` to use, which is a `MetricExporter` instance.
-* The default View `aggregation` (optional), a function of instrument kind.
-* The default View `temporality` (optional), a function of instrument kind.
-* The `default_enabled` option, which determines whether instruments
-  that do not match a configured `View` use Default `aggregation`
-  (i.e., enabled) or Drop `aggrgation` (i.e., disabled).
+* The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
+* The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
+* The boolean property `default_enabled` (optional), which determines
+  whether instruments that do not match a configured `View` output the
+  default `aggregation` for the instrument (i.e., enabled) or Drop
+  `aggrgation` (i.e., disabled).  If not configured, the default is `true`.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -765,11 +761,12 @@ from `MetricReader` and start a background task which calls the inherited
 implement so that they can be plugged into OpenTelemetry SDK and support sending
 of telemetry data.
 
-Metric Exporters always have an _associated_ MetricReader.  Default
-behaviors of the OpenTelemetry Metric SDK are determined when
-registering Metric Exporters through their associated MetricReader.
-OpenTelemetry language implementations MAY support automatically
-configuring the [MetricReader](#metricreader) to use for an Exporter.
+Metric Exporters always have an _associated_ MetricReader.  The
+`aggregation`, `temporality`, `default_enabled` properties used by the
+OpenTelemetry Metric SDK are determined when registering Metric
+Exporters through their associated MetricReader.  OpenTelemetry
+language implementations MAY support automatically configuring the
+[MetricReader](#metricreader) to use for an Exporter.
 
 The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
