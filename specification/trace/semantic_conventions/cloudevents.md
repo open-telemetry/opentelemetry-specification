@@ -42,16 +42,16 @@ trace model is not sufficient to produce a meaningful trace.
 Consider the following scenario:
 
 ```
-      +----------+                  +--------------+                                                                           
-      | Producer | ---------------> | Intermediary |                                                                           
-      +----------+                  +--------------+                                                                           
-                                           |                                                                                   
-                                           |                                                                                   
-                                           |                                                                                   
-                                           v                                                                                   
-      +----------+                    +----------+                                                                             
-      | Consumer | <----------------- |  Queue   |                                                                             
-      +----------+                    +----------+ 
++----------+                  +--------------+
+| Producer | ---------------> | Intermediary |
++----------+                  +--------------+
+                                     |        
+                                     |        
+                                     |        
+                                     v        
++----------+                    +----------+  
+| Consumer | <----------------- |  Queue   |  
++----------+                    +----------+  
 ```
 
 With the traditional parent-child trace model, the above scenario would produce
@@ -60,26 +60,26 @@ starts receiving (and thus has to specify a parent span) before it receives the 
 It is not possible to correlate a producer with a consumer(s) solely via a parent-child relationship.
 
 ```
-+---------------------------------------------------+
-|     Trace 1                                       |
-|                                                   |
-|     +---------------------------------------+     |
-|     | Send (auto-instr)                     |     |
-|     +---------------------------------------+     |
-|        +------------------------------------+     |
-|        | Intermediary: Received (auto-instr)|     |
-|        +------------------------------------+     |
-|        +------------------------------------+     |
-|        | Intermediary: Send (auto-instr)    |     |
-|        +------------------------------------+     |
-|                                                   |
-|     Trace 2                                       |
-|                                                   |
-|     +---------------------------------------+     |
-|     | Consumer: Receive (auto-instr)        |     |
-|     +---------------------------------------+     |
-|                                                   |
-+---------------------------------------------------+
++-------------------------------------------------+
+|    Trace 1                                      |
+|                                                 |
+|    +---------------------------------------+    |
+|    | Send (auto-instr)                     |    |
+|    +---------------------------------------+    |
+|       +------------------------------------+    |
+|       | Intermediary: Received (auto-instr)|    |
+|       +------------------------------------+    |
+|       +------------------------------------+    |
+|       | Intermediary: Send (auto-instr)    |    |
+|       +------------------------------------+    |
+|                                                 |
+|    Trace 2                                      |
+|                                                 |
+|    +---------------------------------------+    |
+|    | Consumer: Receive (auto-instr)        |    |
+|    +---------------------------------------+    |
+|                                                 |
++-------------------------------------------------+
 ```
 
 This document defines semantic conventions to model the different stages
