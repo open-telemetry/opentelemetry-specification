@@ -6,24 +6,32 @@ OTLP Metrics Exporter is a [Push Metric
 Exporter](../sdk.md#push-metric-exporter) which sends metrics via the
 [OpenTelemetry Protocol](../../protocol/README.md).
 
-If a language provides a mechanism to automatically configure a
-[MetricReader](../sdk.md#metricreader) to pair with the exporter (e.g., using
-the
-[`OTEL_METRICS_EXPORTER` environment variable](../../sdk-environment-variables.md#exporter-selection)),
-by default the exporter MUST be paired with a
-[periodic exporting MetricReader](../sdk.md#periodic-exporting-metricreader).
-
 OTLP Metrics Exporter MUST support both Cumulative and Delta
 [Aggregation Temporality](../datamodel.md#temporality).
 
-OTLP Metrics Exporter MUST allow the default [Aggregation
-Temporality](../datamodel.md#temporality) to be specified on a
-per-instrument basis, as described in
-[MetricExporter](../sdk.md#metricexporter).
-
-If the default Aggregation Temporality preference is not specified,
-OTLP Metrics Exporter SHOULD use Cumulative as the default aggregation
-temporality.
-
 The exporter MUST provide configuration according to the [OpenTelemetry Protocol
 Exporter](../../protocol/exporter.md) specification.
+
+If a language provides a mechanism to automatically configure a
+[MetricReader](../sdk.md#metricreader) to pair with the associated
+Exporter (e.g., using the [`OTEL_METRICS_EXPORTER` environment
+variable](../../sdk-environment-variables.md#exporter-selection)),
+then by default:
+
+- the exporter MUST be paired with a [periodic exporting
+MetricReader](../sdk.md#periodic-exporting-metricreader).
+- the exporter MUST configure the default aggregation temporality on a
+  per-instrument basis using the
+  `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY` variable as described
+  below, otherwise the exporter MUST use Cumulative as the default
+  aggregation temporality for all instrument kinds.
+
+The `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY` environment variable
+(case-insensitive) defines the default aggregation temporality policy
+to use on the basis of instrument kind.  The recognized values are:
+
+| Value      | Definition                                                                                                                                             |
+|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| CUMULATIVE | Choose Cumulative aggregation temporality for all instrument kinds                                                                                     |
+| DELTA      | Choose Delta aggregation temporality for Counter and Histogram instruments (but choose Cumulative aggregation for UpDownCounter instruments) |
+

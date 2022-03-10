@@ -181,14 +181,14 @@ are the inputs:
     behavior should respect the Hint if it is available).
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
     apply a [default aggregation](#default-aggregation) configurable on a
-	per-instrument basis according to the [MetricReader](#metricreader) instance.
-  * The aggregation `temporality` (optional), which may be one of
-    "cumulative", "delta", or "default".  If the aggregation outputs
-    metric points that use aggregation temporality (e.g. Histogram,
-    Sum), then the SDK MUST export this View using this aggregation
-    temporality.  The "default" value means the SDK SHOULD set the
-    aggregation temporality, configurable on a per-instrument basis
-    according to the [MetricReader](#metricreader) instance.
+    per-instrument basis according to the [MetricReader](#metricreader) instance.
+  * The aggregation `temporality` (optional) to be used, which may be one of
+    "cumulative", "delta", or "default".  If the configured `aggregation` outputs
+    metric points that define aggregation temporality (e.g. Histogram,
+    Sum), then the SDK MUST export the View using the configured aggregation
+    temporality.  The "default" value means the SDK SHOULD set the default
+    aggregation temporality on a per-instrument basis according to the
+    [MetricReader](#metricreader) instance.
   * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
@@ -205,10 +205,9 @@ made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
 * If the `MeterProvider` has no `View` registered, take the Instrument
-    and apply the default configuration for Aggregation and
-    Aggregation Temporality.  The SDK MUST support configuring the
-    Aggregation and Aggregation Temporality on a
-    per-instrument basis through this configuration.
+    and apply the default Aggregation and default Aggregation
+    Temporality according to the [MetricReader](#metricreader)
+    instance's `aggregation` and `temporality` properties by default..
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
@@ -217,12 +216,10 @@ made with an Instrument:
       the name is already used by another View), provide a way to let the user
       know (e.g. expose
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
-  * If the Instrument could not match with any of the registered `View`(s), the
-    SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
-    the user to turn off the default behavior via MeterProvider (which means the
-    Instrument will be ignored when there is no match). Individual
-    implementations can decide what the default behavior is, and how to turn the
-    default behavior off.
+  * If the Instrument could not match with any of the registered
+    `View`(s), the SDK SHOULD whether to use the default `aggregation`
+    and `temporality` according to the [MetricReader](#metricreader)
+    instance's `default_enabled` property.
 * END.
 
 Here are some examples:
@@ -645,11 +642,29 @@ measurements using the equivalent of the following naive algorithm:
 
 ## MetricReader
 
-`MetricReader` is an interface which provides the following capabilities:
+`MetricReader` is an SDK implementation object that provides the
+common configurable aspects of the OpenTelemetry Metrics SDK and
+determines the following capabilities:
 
-* Collecting metrics from the SDK.
+* Collecting metrics from the SDK on demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
+
+To construct a `MetricReader` when setting up an SDK, the caller
+SHOULD provide at least the following:
+
+* The `exporter` to use, which is a `MetricExporter` instance.
+* The default View `aggregation` (optional), a function of instrument kind.
+* The default View `temporality` (optional), a function of instrument kind.
+* The `default_enabled` option, which determines whether instruments
+  that do not match a configured `View` use Default `aggregation`
+  (i.e., enabled) or Drop `aggrgation` (i.e., disabled).
+
+The [MetricReader.Collect](#collect) method allows general-purpose
+`MetricExporter` instances to explicitly initiate collection, commonly
+used with pull-based metrics collection.  A common sub-class of
+`MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
+to be used typically with push-based metrics collection.
 
 The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
@@ -679,20 +694,6 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 [OpenTelemetry SDK](../overview.md#sdk) authors MAY decide the language
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
-
-[OpenTelemetry SDK](../overview.md#sdk)
-authors MAY choose the best idiomatic design for their language:
-
-* Whether to treat the temporality settings as recommendation or enforcement.
-  For example, if the temporality is set to Delta, would the SDK want to perform
-  Cumulative->Delta conversion for an [Asynchronous
-  Counter](./api.md#asynchronous-counter), or downgrade it to a
-  [Gauge](./datamodel.md#gauge), or keep consuming it as Cumulative due to the
-  consideration of [memory
-  efficiency](./supplementary-guidelines.md#memory-management)?
-* Refer to the [supplementary
-  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
-  more context and suggestions.
 
 ### MetricReader operations
 
@@ -738,7 +739,6 @@ a user-configurable time interval, and passes the metrics to the configured
 
 Configurable parameters:
 
-* `exporter` - the push exporter where the metrics are sent to.
 * `exportIntervalMillis` - the time interval in milliseconds between two
   consecutive exports. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
@@ -765,6 +765,12 @@ from `MetricReader` and start a background task which calls the inherited
 implement so that they can be plugged into OpenTelemetry SDK and support sending
 of telemetry data.
 
+Metric Exporters always have an _associated_ MetricReader.  Default
+behaviors of the OpenTelemetry Metric SDK are determined when
+registering Metric Exporters through their associated MetricReader.
+OpenTelemetry language implementations MAY support automatically
+configuring the [MetricReader](#metricreader) to use for an Exporter.
+
 The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
@@ -782,9 +788,6 @@ can run at different schedule, for example:
 * Exporter C is a pull exporter which reacts to a scraper over HTTP.
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
-
-`MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
-preferred Aggregation Temporality on a per-instrument basis.
 
 ### Push Metric Exporter
 

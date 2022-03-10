@@ -31,11 +31,10 @@ release.
 - Clarify that the periodic metric reader is the default metric reader to be
   paired with push metric exporters (OTLP, stdout, in-memory)
   ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
-- Allows Sum, Histogram, and ExponentialHistogram View Aggregations to
+- Allow Sum, Histogram, and ExponentialHistogram View Aggregations to
   define the temporality to "cumulative", "delta", or "default", where
-  "default" is the default determined by the MetricReader on a per-instrument basis.
+  "default" is the default determined by the MetricExporter on a per-instrument basis.
   ([#2404](https://github.com/open-telemetry/opentelemetry-specification/pull/2404)).
-
 
 ### Logs
 
