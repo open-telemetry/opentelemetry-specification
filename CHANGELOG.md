@@ -43,6 +43,8 @@ release.
   ([#2377](https://github.com/open-telemetry/opentelemetry-specification/pull/2377))
 - Define JavaScript runtime semantic conventions.
   ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
+- Add semantic conventions for [CloudEvents](https://cloudevents.io).
+  ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 
 ### Compatibility
 
