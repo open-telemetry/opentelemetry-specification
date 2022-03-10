@@ -166,9 +166,12 @@ In case a CloudEvent is passed to the instrumented library with the
 Distributed Tracing Extension already populated, instrumentation MUST NOT create
 a span and MUST NOT modify the Distributed Tracing Extension on the event.
 
-**Span name:** `CloudEvents Create <event_type>`
+- Span name: `CloudEvents Create <event_type>`
 
-**Span kind:** PRODUCER
+- Span kind: PRODUCER
+
+- Span attributes: Instrumentation MUST add the required attributes defined
+in the [table below](#attributes).
 
 #### Processing
 
@@ -178,9 +181,12 @@ instrumentation SHOULD create a new span to trace it.
 Instrumentation SHOULD set the remote trace context from the
 Distributed Tracing Extension as a link on the processing span.
 
-**Span name:** `CloudEvents Process <event_type>`
+- Span name: `CloudEvents Process <event_type>`
 
-**Span kind:** CONSUMER
+- Span kind: CONSUMER
+
+- Span attributes: Instrumentation MUST add the required attributes defined
+in the [table below](#attributes).
 
 ### Attributes
 
