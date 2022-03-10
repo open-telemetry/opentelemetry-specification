@@ -14,11 +14,14 @@ and various HTTP versions like 1.1, 2 and SPDY.
 - [Status](#status)
 - [Common Attributes](#common-attributes)
   * [HTTP request and response headers](#http-request-and-response-headers)
+  * [HTTP request retries and redirects](#http-request-retries-and-redirects)
 - [HTTP client](#http-client)
 - [HTTP server](#http-server)
   * [HTTP server definitions](#http-server-definitions)
   * [HTTP Server semantic conventions](#http-server-semantic-conventions)
 - [HTTP client-server example](#http-client-server-example)
+- [HTTP retries examples](#http-retries-examples)
+- [HTTP redirects examples](#http-redirects-examples)
 
 <!-- tocstop -->
 
@@ -28,7 +31,7 @@ HTTP spans MUST follow the overall [guidelines for span names](../api.md#span).
 Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
 is a user id, which creates high cardinality value space not suitable for span
 names. In case of HTTP servers, these endpoints are often mapped by the server
-frameworks to more concise _HTTP routes_, e.g. `/api/users/{user_id}`, which are
+frameworks to more concise *HTTP routes*, e.g. `/api/users/{user_id}`, which are
 recommended as the low cardinality span names. However, the same approach usually
 does not work for HTTP client spans, especially when instrumentation is provided
 by a lower-level middleware that is not aware of the specifics of how the URIs
@@ -70,6 +73,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `http.request_content_length_uncompressed` | int | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
 | `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
 | `http.response_content_length_uncompressed` | int | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
+| `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | If and only if a request was retried. |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | No |
 | [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | No |
@@ -80,7 +84,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 
 **[3]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
-`http.flavor` MUST be one of the following or, if none of the listed values apply, a custom value:
+`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -120,6 +124,17 @@ Users MAY explicitly configure instrumentations to capture them even though it i
 **[2]:** The attribute value MUST consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
 
 [network attributes]: span-general.md#general-network-connection-attributes
+
+### HTTP request retries and redirects
+
+Retries and redirects cause more than one physical HTTP request to be sent.
+A CLIENT span SHOULD be created for each one of these physical requests.
+No span is created corresponding to the "logical" (encompassing) request.
+
+For retries, `http.retry_count` attribute SHOULD be added to each retry span
+with the value that reflects the ordinal number of request retry attempt.
+
+See [examples](#http-retries-examples) for more details.
 
 ## HTTP client
 
@@ -280,3 +295,67 @@ If set, it would be
 but due to `http.scheme`, `http.host` and `http.target` being set, it would be redundant.
 As explained above, these separate values are preferred but if for some reason the URL is available but the other values are not,
 URL can replace `http.scheme`, `http.host` and `http.target`.
+
+## HTTP retries examples
+
+Example of retries in the presence of a trace started by an inbound request:
+
+```
+request (SERVER, trace=t1, span=s1)
+  |
+  -- GET / - 500 (CLIENT, trace=t1, span=s2)
+  |   |
+  |   --- server (SERVER, trace=t1, span=s3)
+  |
+  -- GET / - 500 (CLIENT, trace=t1, span=s4, http.retry_count=1)
+  |   |
+  |   --- server (SERVER, trace=t1, span=s5)
+  |
+  -- GET / - 200 (CLIENT, trace=t1, span=s6, http.retry_count=2)
+      |
+      --- server (SERVER, trace=t1, span=s7)
+```
+
+Example of retries with no trace started upfront:
+
+```
+GET / - 500 (CLIENT, trace=t1, span=s1)
+ |
+ --- server (SERVER, trace=t1, span=s2)
+
+GET / - 500 (CLIENT, trace=t2, span=s1, http.retry_count=1)
+ |
+ --- server (SERVER, trace=t2, span=s2)
+
+GET / - 200 (CLIENT, trace=t3, span=s1, http.retry_count=2)
+ |
+ --- server (SERVER, trace=t3, span=s1)
+```
+
+## HTTP redirects examples
+
+Example of redirects in the presence of a trace started by an inbound request:
+
+```
+request (SERVER, trace=t1, span=s1)
+  |
+  -- GET / - 302 (CLIENT, trace=t1, span=s2)
+  |   |
+  |   --- server (SERVER, trace=t1, span=s3)
+  |
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4 ])
+      |
+      --- server (SERVER, trace=t1, span=s5)
+```
+
+Example of redirects with no trace started upfront:
+
+```
+GET / - 302 (CLIENT, trace=t1, span=s1)
+ |
+ --- server (SERVER, trace=t1, span=s2)
+
+GET /hello - 200 (CLIENT, trace=t2, span=s1 ])
+ |
+ --- server (SERVER, trace=t2, span=s2)
+```

@@ -78,12 +78,34 @@ Example:
 
 ### Go Runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-go/issues/1181>): Confirm the contents here
+Go Runtimes should fill in the as follows:
 
-| Value | Description |
+- `process.runtime.name` - Fill in an interpretation of Go's [`runtime.Compiler`](https://pkg.go.dev/runtime#Compiler) constant, according to the following rule:
+  If the value is `gc`, fill in `go`. Otherwise, fill in the exact value of `runtime.Compiler`.
+
+  This can be implemented with the following Go snippet:
+
+  ```go
+  import "runtime"
+  
+  func getRuntimeName() string {
+    if runtime.Compiler == "gc" {
+      return "go"
+    }
+    return runtime.Compiler
+  }
+  ```
+
+- `process.runtime.version` - Fill in the exact value returned by `runtime.Version()`, i.e. `go1.17`.
+- `process.runtime.description` - Use of this field is not recommended.
+
+Examples for some Go compilers/runtimes:
+
+| `process.runtime.name` | Description |
 | --- | --- |
-| `gc` | Go compiler |
-| `gccgo` | GCC Go frontend |
+| `go` | Official Go compiler. Also known as `cmd/compile`. |
+| `gccgo` | [gccgo](https://go.dev/doc/install/gccgo) is a Go [front end for GCC](https://gcc.gnu.org/frontends.html). |
+| `tinygo` | [TinyGo](https://tinygo.org/) compiler. |
 
 ### Java runtimes
 
@@ -109,16 +131,21 @@ Examples for some Java runtimes
 
 ### JavaScript runtimes
 
-TODO(<https://github.com/open-telemetry/opentelemetry-js/issues/1544>): Confirm the contents here
+JavaScript instrumentation should fill in the values by copying from built-in runtime constants.
 
-| Value | Description |
-| --- | --- |
-| `nodejs` | NodeJS |
-| `browser` | Web Browser |
-| `iojs` | io.js |
-| `graalvm` | GraalVM |
+- `process.runtime.name`:
+  - When the runtime is Node.js, fill in the constant value `nodejs`.
+  - When the runtime is Web Browser, fill in the constant value `browser`.
+- `process.runtime.version`:
+  - When the runtime is Node.js, fill in the value of `process.versions.node`.
+  - When the runtime is Web Browser, fill in the value of `navigator.userAgent`.
 
-When the value is `browser`, `process.runtime.version` SHOULD be set to the User-Agent header.
+Examples for some JavaScript runtimes
+
+| Name | `process.runtime.name` | `process.runtime.version` |
+| --- | --- | --- |
+| Node.js | nodejs | 14.15.4 |
+| Web Browser | browser | Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 |
 
 ### .NET Runtimes
 
