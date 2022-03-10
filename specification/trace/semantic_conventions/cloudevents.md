@@ -42,20 +42,16 @@ trace model is not sufficient to produce a meaningful trace.
 Consider the following scenario:
 
 ```
-+--------------------------------------------------+
-|                                                  |
-|  +----------+                  +--------------+  |
-|  | Producer | ---------------> | Intermediary |  |
-|  +----------+                  +--------------+  |
-|                                       |          |
-|                                       |          |
-|                                       |          |
-|                                       v          |
-|  +----------+                    +----------+    |
-|  | Consumer | <----------------- |  Queue   |    |
-|  +----------+                    +----------+    |
-|                                                  |
-+--------------------------------------------------+
++----------+                  +--------------+
+| Producer | ---------------> | Intermediary |
++----------+                  +--------------+
+                                     |        
+                                     |        
+                                     |        
+                                     v        
++----------+                    +----------+  
+| Consumer | <----------------- |  Queue   |  
++----------+                    +----------+ 
 ```
 
 With the traditional parent-child trace model, the above scenario would produce
@@ -184,6 +180,7 @@ instrumentation SHOULD create a new span to trace it.
 
 Instrumentation SHOULD set the remote trace context from the
 Distributed Tracing Extension as a link on the processing span.
+Instrumentation MAY add attributes to the link to further describe it.
 
 - Span name: `CloudEvents Process <event_type>`
 
