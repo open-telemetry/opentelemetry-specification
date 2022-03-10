@@ -19,7 +19,7 @@
 ## Definitions
 
  From the
- [CloudEvents specification:](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#overview)
+ [CloudEvents specification](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#overview):
 
 > CloudEvents is a specification for describing event data in common formats
 to provide interoperability across services, platforms and systems.
@@ -55,8 +55,9 @@ Consider the following scenario:
 ```
 
 With the traditional parent-child trace model, the above scenario would produce
-two traces, completely independent from each other. It is not possible to
-correlate a producer with a consumer(s).
+two traces, completely independent from each other because the consumer
+starts receiving (and thus has to specify a parent span) before it receives the event.
+It is not possible to correlate a producer with a consumer(s) solely via a parent-child relationship.
 
 ```
 +---------------------------------------------------+
@@ -138,7 +139,7 @@ context propagation.
 
 This document relies on the CloudEvents specification, which defines this
 context propagation mechanism via the
-[CloudEvents Distributed Tracing Extension](https://github.com/cloudevents/spec/blob/v1.0.1/extensions/distributed-tracing.md).
+[CloudEvents Distributed Tracing Extension](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/extensions/distributed-tracing.md).
 Once the trace context is set on the event
 via the Distributed Tracing Extension, it MUST not be modified.
 
@@ -150,7 +151,7 @@ required to achieve the proposed trace.
 #### Creation
 
 Instrumentation SHOULD create a new span and populate the
-[CloudEvents Distributed Tracing Extension](https://github.com/cloudevents/spec/blob/v1.0.1/extensions/distributed-tracing.md)
+[CloudEvents Distributed Tracing Extension](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/extensions/distributed-tracing.md)
 on the event. This applies when:
 
 - A CloudEvent is created by the instrumented library.
