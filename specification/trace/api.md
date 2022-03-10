@@ -124,7 +124,8 @@ This API MUST accept the following parameters:
   (e.g. an implementation which is not even observability-related). A
   TracerProvider could also return a no-op Tracer here if application owners
   configure the SDK to suppress telemetry produced by this library.
-- `version` (optional): Specifies the version of the instrumentation library (e.g. `1.0.0`).
+- `version` (optional): Specifies the version of the instrumentation scope if the scope
+  has a version (e.g. a library version). Example value: `1.0.0`.
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
 
@@ -366,8 +367,9 @@ The API MUST accept the following parameters:
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
 
-  Whenever possible, users SHOULD set any already known attributes at span creation
-  instead of calling `SetAttribute` later.
+  The API documentation MUST state that adding attributes at span creation is preferred
+  to calling `SetAttribute` later, as samplers can only consider information
+  already present during span creation.
 
 - `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
