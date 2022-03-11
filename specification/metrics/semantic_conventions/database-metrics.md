@@ -29,7 +29,7 @@ instrumentations:
 |------------------------|----------------------------|-------------|-------------------------------------------|-------------|
 | `db.connections.usage` | Asynchronous UpDownCounter | connections | `{connections}`                           | The number of connections that are currently in state described by the `state` attribute.
 
-The `db.connections.usage` metric events MUST include the following attribute:
+All `db.connections.usage` measurements MUST include the following attribute:
 
 | Name    | Type   | Description                                                                  | Examples | Required |
 |---------|--------|------------------------------------------------------------------------------|----------|----------|
@@ -48,13 +48,13 @@ MUST NOT be used.
 | `db.connections.timeouts`         | Counter                    | timeouts     | `{timeouts}`                              | The number of connection timeouts that have happened since the application start.
 | `db.connections.time`             | Histogram                  | milliseconds | `ms`                                      | The time it took to apply an operation described by the `operation` attribute.
 
-The `db.connections.time` metric events MUST include the following attribute:
+All `db.connections.time` measurements MUST include the following attribute:
 
 | Name        | Type   | Description                                                                                   | Examples | Required |
 |-------------|--------|-----------------------------------------------------------------------------------------------|----------|----------|
 | `operation` | string | The type of operation applied to a connection. Valid values include: `create`, `use`, `wait`. | `create` | Yes      |
 
-Below is a table of the attributes that MUST be included on all connection pool metric events:
+Below is a table of the attributes that MUST be included on all connection pool measurements:
 
 | Name        | Type   | Description                                                                  | Examples       | Required |
 |-------------|--------|------------------------------------------------------------------------------|----------------|----------|
