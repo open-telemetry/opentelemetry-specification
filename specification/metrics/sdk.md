@@ -652,6 +652,9 @@ that SDK will update the time range - e.g. from (T<sub>n</sub>, T<sub>n+1</sub>]
 to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 `MetricReader` instance.
 
+The SDK MUST NOT allow a `MetricReader` instance to be registered on more than
+one `MeterProvider` instance.
+
 ```text
 +-----------------+            +--------------+
 |                 | Metrics... |              |
