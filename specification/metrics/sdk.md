@@ -211,7 +211,7 @@ made with an Instrument:
       know (e.g. expose
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
   * If the Instrument could not match with any of the registered
-    `View`(s), the SDK SHOULD whether to enable the instrument using
+    `View`(s), the SDK SHOULD determine whether to enable the instrument using
     the default Aggregation, on the basis of instrument kind,
     according to the [MetricReader](#metricreader) instance's
     `aggregation` and `default_enabled` properties.
@@ -654,7 +654,7 @@ SHOULD provide at least the following:
 * The boolean property `default_enabled` (optional), which determines
   whether instruments that do not match a configured `View` output the
   default `aggregation` for the instrument (i.e., enabled) or Drop
-  `aggrgation` (i.e., disabled).  If not configured, the default is `true`.
+  `aggregation` (i.e., disabled).  If not configured, the default is `true`.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
