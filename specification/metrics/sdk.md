@@ -210,13 +210,12 @@ made with an Instrument:
       the name is already used by another View), provide a way to let the user
       know (e.g. expose
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
-  * If the Instrument could not match with any of the registered
-    `View`(s), the SDK SHOULD determine whether to enable the instrument using
-    the default Aggregation, on the basis of instrument kind,
-    according to the [MetricReader](#metricreader) instance's
-    `aggregation` and `default_enabled` properties.
->>>>>>> 5f9bb1a426f6f614e5c2ac7dddab8a28a1deeb18
-* END.
+  * If the Instrument could not match with any of the registered `View`(s), the
+    SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
+    the user to turn off the default behavior via MeterProvider (which means the
+    Instrument will be ignored when there is no match). Individual
+    implementations can decide what the default behavior is, and how to turn the
+    default behavior off.
 
 Here are some examples:
 

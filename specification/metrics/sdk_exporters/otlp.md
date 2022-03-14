@@ -22,16 +22,16 @@ then by default:
 MetricReader](../sdk.md#periodic-exporting-metricreader).
 - the exporter MUST configure the default aggregation temporality on a
   per-instrument basis using the
-  `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY` variable as described
+  `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` variable as described
   below, otherwise the exporter MUST use Cumulative as the default
   aggregation temporality for all instrument kinds.
 
-The `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY` environment variable
+The `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` environment variable
 (case-insensitive) defines the default aggregation temporality policy
 to use on the basis of instrument kind.  The recognized values are:
 
 | Value      | Definition                                                                                                    |
 |------------|---------------------------------------------------------------------------------------------------------------|
 | CUMULATIVE | Choose Cumulative aggregation temporality for all instrument kinds.                                           |
-| DELTA      | Choose Delta aggregation temporality for Counter and Histogram instrument kinds, otherwise choose Cumulative. |
+| DELTA      | Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, otherwise choose Cumulative. |
 
