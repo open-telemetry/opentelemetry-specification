@@ -33,6 +33,9 @@ release.
   ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
 - Clarify that MetricReader has one-to-one mapping to MeterProvider.
   ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
+- Specify default configuration for a periodic metric reader that is associated with
+  the stdout and in-memory metric exporters.
+  ([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD)).
 
 ### Logs
 

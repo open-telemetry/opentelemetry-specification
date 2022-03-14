@@ -11,7 +11,10 @@ If a language provides a mechanism to automatically configure a
 the
 [`OTEL_METRICS_EXPORTER` environment variable](../../sdk-environment-variables.md#exporter-selection)),
 by default the exporter MUST be paired with a
-[periodic exporting MetricReader](../sdk.md#periodic-exporting-metricreader).
+[periodic exporting MetricReader](../sdk.md#periodic-exporting-metricreader)
+with a default `exportIntervalMilliseconds` and
+`exportTimeoutMilliseconds` of positive infinity (i.e., a manual flush of the
+`MetricReader` is required).
 
 In-memory Metrics Exporter MUST support both Cumulative and Delta
 [Temporality](../datamodel.md#temporality).

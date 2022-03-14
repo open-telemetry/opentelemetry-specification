@@ -11,7 +11,9 @@ If a language provides a mechanism to automatically configure a
 the
 [`OTEL_METRICS_EXPORTER` environment variable](../../sdk-environment-variables.md#exporter-selection)),
 by default the exporter MUST be paired with a
-[periodic exporting MetricReader](../sdk.md#periodic-exporting-metricreader).
+[periodic exporting MetricReader](../sdk.md#periodic-exporting-metricreader)
+with a default `exportIntervalMilliseconds` of 10000 and
+`exportTimeoutMilliseconds` of 5000.
 
 [OpenTelemetry SDK](../../overview.md#sdk) authors MAY choose the best idiomatic
 name for their language. For example, ConsoleExporter, StdoutExporter,
