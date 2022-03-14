@@ -33,5 +33,5 @@ to use on the basis of instrument kind.  The recognized values are:
 | Value      | Definition                                                                                                    |
 |------------|---------------------------------------------------------------------------------------------------------------|
 | CUMULATIVE | Choose Cumulative aggregation temporality for all instrument kinds.                                           |
-| DELTA      | Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, otherwise choose Cumulative. |
+| DELTA      | Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, choose Cumulative aggregation temporality for UpDownCounter and Asynchronous UpDownCounter instrument kinds. |
 
