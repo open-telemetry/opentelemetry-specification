@@ -104,6 +104,13 @@ groups:
         brief: >
           The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used.
         examples: 5493
+      - id: retry_count
+        type: int
+        brief: >
+          The ordinal number of request re-sending attempt.
+        required:
+          conditional: If and only if a request was retried.
+        examples: 3
       - ref: net.peer.name
         sampling_relevant: true
       - ref: net.peer.ip
