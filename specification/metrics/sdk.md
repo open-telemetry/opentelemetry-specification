@@ -210,11 +210,12 @@ made with an Instrument:
       the name is already used by another View), provide a way to let the user
       know (e.g. expose
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
-  * If the Instrument could not match with any of the registered
-    `View`(s), the SDK SHOULD whether to enable the instrument using
-    the default Aggregation, on the basis of instrument kind,
-    according to the [MetricReader](#metricreader) instance's
-    `aggregation` and `default_enabled` properties.
+  * If the Instrument could not match with any of the registered `View`(s), the
+    SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
+    the user to turn off the default behavior via MeterProvider (which means the
+    Instrument will be ignored when there is no match). Individual
+    implementations can decide what the default behavior is, and how to turn the
+    default behavior off.
 * END.
 
 Here are some examples:
@@ -651,10 +652,6 @@ SHOULD provide at least the following:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
-* The boolean property `default_enabled` (optional), which determines
-  whether instruments that do not match a configured `View` output the
-  default `aggregation` for the instrument (i.e., enabled) or Drop
-  `aggrgation` (i.e., disabled).  If not configured, the default is `true`.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -762,7 +759,7 @@ implement so that they can be plugged into OpenTelemetry SDK and support sending
 of telemetry data.
 
 Metric Exporters always have an _associated_ MetricReader.  The
-`aggregation`, `temporality`, `default_enabled` properties used by the
+`aggregation` and `temporality` properties used by the
 OpenTelemetry Metric SDK are determined when registering Metric
 Exporters through their associated MetricReader.  OpenTelemetry
 language implementations MAY support automatically configuring the
