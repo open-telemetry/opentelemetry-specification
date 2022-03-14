@@ -20,8 +20,8 @@ then by default:
 
 - the exporter MUST be paired with a [periodic exporting
 MetricReader](../sdk.md#periodic-exporting-metricreader).
-- the exporter MUST configure the default aggregation temporality on a
-  per-instrument basis using the
+- the exporter MUST configure the default aggregation temporality on the
+  basis of instrument kind using the
   `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` variable as described
   below, otherwise the exporter MUST use Cumulative as the default
   aggregation temporality for all instrument kinds.
