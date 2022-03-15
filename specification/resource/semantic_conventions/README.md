@@ -114,7 +114,7 @@ The identifier SHOULD be stable across different versions of an implementation.
 | `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | No |
 | `telemetry.auto.version` | string | The version string of the auto instrumentation agent, if used. | `1.2.3` | No |
 
-`telemetry.sdk.language` MUST be one of the following or, if none of the listed values apply, a custom value:
+`telemetry.sdk.language` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
