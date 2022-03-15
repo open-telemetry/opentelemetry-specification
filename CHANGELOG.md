@@ -14,6 +14,8 @@ release.
 - Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
   Library. The Tracer is now associated with Instrumentation Scope
   ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+- Add documentation REQUIREMENT for adding attributes at span creation.
+  ([#2383](https://github.com/open-telemetry/opentelemetry-specification/pull/2383)).
 
 ### Metrics
 
@@ -26,12 +28,25 @@ release.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 - Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
   ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
+- Clarify that the periodic metric reader is the default metric reader to be
+  paired with push metric exporters (OTLP, stdout, in-memory)
+  ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
+- Clarify that MetricReader has one-to-one mapping to MeterProvider.
+  ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
 
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
+
+- Changed `rpc.system` to an enum (allowing custom values), and changed the
+  `rpc.system` value for .NET WCF from `wcf` to `dotnet_wcf`.
+  ([#2377](https://github.com/open-telemetry/opentelemetry-specification/pull/2377))
+- Define JavaScript runtime semantic conventions.
+  ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
+- Add semantic conventions for [CloudEvents](https://cloudevents.io).
+  ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 
 ### Compatibility
 
@@ -96,6 +111,8 @@ release.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Clarified wildcard and predicate support in metrics SDK View API.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
+- Changed the Exemplar wording, exemplar should be turned off by default.
+  ([#2414](https://github.com/open-telemetry/opentelemetry-specification/pull/2414))
 
 ### Logs
 

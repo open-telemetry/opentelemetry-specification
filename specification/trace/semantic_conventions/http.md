@@ -20,7 +20,12 @@ and various HTTP versions like 1.1, 2 and SPDY.
   * [HTTP server definitions](#http-server-definitions)
   * [HTTP Server semantic conventions](#http-server-semantic-conventions)
 - [HTTP client-server example](#http-client-server-example)
+<<<<<<< HEAD
 - [HTTP retries and redirects examples](#http-retries-and-redirects-examples)
+=======
+- [HTTP retries examples](#http-retries-examples)
+- [HTTP redirects examples](#http-redirects-examples)
+>>>>>>> main
 
 <!-- tocstop -->
 
@@ -83,7 +88,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 
 **[3]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
-`http.flavor` MUST be one of the following or, if none of the listed values apply, a custom value:
+`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -130,6 +135,7 @@ Retries and redirects cause more than one physical HTTP request to be sent.
 A CLIENT span SHOULD be created for each one of these physical requests.
 No span is created corresponding to the "logical" (encompassing) request.
 
+<<<<<<< HEAD
 In order to represent the relationship between multiple spans created for retries
 or redirects, `Link` SHOULD be used with each subsequent span linked to the
 span for the immediately previous physical request. These spans SHOULD be
@@ -142,6 +148,12 @@ For retries, `http.retry_count` attribute SHOULD be added to each retry span
 with the value that reflects the ordinal number of request retry attempt.
 
 See [examples](#http-retries-and-redirects-examples) for more details.
+=======
+For retries, `http.retry_count` attribute SHOULD be added to each retry span
+with the value that reflects the ordinal number of request retry attempt.
+
+See [examples](#http-retries-examples) for more details.
+>>>>>>> main
 
 ## HTTP client
 
@@ -303,7 +315,11 @@ but due to `http.scheme`, `http.host` and `http.target` being set, it would be r
 As explained above, these separate values are preferred but if for some reason the URL is available but the other values are not,
 URL can replace `http.scheme`, `http.host` and `http.target`.
 
+<<<<<<< HEAD
 ## HTTP retries and redirects examples
+=======
+## HTTP retries examples
+>>>>>>> main
 
 Example of retries in the presence of a trace started by an inbound request:
 
@@ -314,11 +330,19 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
+<<<<<<< HEAD
   -- GET / - 500 (CLIENT, trace=t1, span=s4, links=[ {trace=t1, span=s2} ], http.retry_count=1)
   |   |
   |   --- server (SERVER, trace=t1, span=s5)
   |
   -- GET / - 200 (CLIENT, trace=t1, span=s6, links=[ {trace=t1, span=s4} ], http.retry_count=2)
+=======
+  -- GET / - 500 (CLIENT, trace=t1, span=s4, http.retry_count=1)
+  |   |
+  |   --- server (SERVER, trace=t1, span=s5)
+  |
+  -- GET / - 200 (CLIENT, trace=t1, span=s6, http.retry_count=2)
+>>>>>>> main
       |
       --- server (SERVER, trace=t1, span=s7)
 ```
@@ -330,16 +354,30 @@ GET / - 500 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
+<<<<<<< HEAD
 GET / - 500 (CLIENT, trace=t2, span=s1, links=[ {trace=t1, span=s1} ], http.retry_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
 
 GET / - 200 (CLIENT, trace=t3, span=s1, links=[ {trace=t2, span=s1} ], http.retry_count=2)
+=======
+GET / - 500 (CLIENT, trace=t2, span=s1, http.retry_count=1)
+ |
+ --- server (SERVER, trace=t2, span=s2)
+
+GET / - 200 (CLIENT, trace=t3, span=s1, http.retry_count=2)
+>>>>>>> main
  |
  --- server (SERVER, trace=t3, span=s1)
 ```
 
+<<<<<<< HEAD
 Example of redirect in the presence of a trace started by an inbound request:
+=======
+## HTTP redirects examples
+
+Example of redirects in the presence of a trace started by an inbound request:
+>>>>>>> main
 
 ```
 request (SERVER, trace=t1, span=s1)
@@ -348,19 +386,31 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
+<<<<<<< HEAD
   -- GET /hello - 200 (CLIENT, trace=t1, span=s4, links=[ {trace=t1, span=s2} ])
+=======
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4 ])
+>>>>>>> main
       |
       --- server (SERVER, trace=t1, span=s5)
 ```
 
+<<<<<<< HEAD
 Example of redirect with no trace started upfront:
+=======
+Example of redirects with no trace started upfront:
+>>>>>>> main
 
 ```
 GET / - 302 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
+<<<<<<< HEAD
 GET /hello - 200 (CLIENT, trace=t2, span=s1, links=[ {trace=t1, span=s1} ])
+=======
+GET /hello - 200 (CLIENT, trace=t2, span=s1 ])
+>>>>>>> main
  |
  --- server (SERVER, trace=t2, span=s2)
 ```
