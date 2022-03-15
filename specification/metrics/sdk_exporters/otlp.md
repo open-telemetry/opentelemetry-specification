@@ -34,4 +34,3 @@ to use on the basis of instrument kind.  The recognized (case-insensitive) value
 |------------|---------------------------------------------------------------------------------------------------------------|
 | CUMULATIVE | Choose Cumulative aggregation temporality for all instrument kinds.                                           |
 | DELTA      | Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, choose Cumulative aggregation temporality for UpDownCounter and Asynchronous UpDownCounter instrument kinds. |
-

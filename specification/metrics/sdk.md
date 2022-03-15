@@ -269,7 +269,7 @@ meter_provider
     .add_view("X", aggregation=SumAggregation())
     .add_view("*", attribute_keys=["a", "b"])
     .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()),
-	          temporality=lambda kind: Delta if kind in [Counter, AsyncCounter, Histogram] else Cumulative)
+              temporality=lambda kind: Delta if kind in [Counter, AsyncCounter, Histogram] else Cumulative)
 ```
 
 ### Aggregation
