@@ -27,8 +27,8 @@ MetricReader](../sdk.md#periodic-exporting-metricreader).
   aggregation temporality for all instrument kinds.
 
 The `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` environment variable
-(case-insensitive) defines the default aggregation temporality policy
-to use on the basis of instrument kind.  The recognized values are:
+defines the default aggregation temporality policy
+to use on the basis of instrument kind.  The recognized (case-insensitive) values are:
 
 | Value      | Definition                                                                                                    |
 |------------|---------------------------------------------------------------------------------------------------------------|
