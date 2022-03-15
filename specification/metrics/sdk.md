@@ -182,7 +182,7 @@ are the inputs:
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
     apply a [default aggregation](#default-aggregation) configurable on the
     basis of instrument kind according to the [MetricReader](#metricreader)
-	instance.
+    instance.
   * The `exemplar_reservoir` (optional) to use for storing exemplars.
     This should be a factory or callback similar to aggregation which allows
     different reservoirs to be chosen by the aggregation.
