@@ -35,7 +35,7 @@ release.
   ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
 - Specify default configuration for a periodic metric reader that is associated with
   the stdout and in-memory metric exporters.
-  ([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD)).
+  ([#2415](https://github.com/open-telemetry/opentelemetry-specification/pull/2415)).
 
 ### Logs
 
