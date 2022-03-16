@@ -30,7 +30,7 @@ The following configuration options MUST be available to configure the OTLP expo
 
 - **Client certificate file**: Client certificate/chain trust for clients private key to use in mTLS communication in PEM format.
   - Default: n/a
-  - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE`
+  - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE`
 
 - **Headers**: Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.
   - Default: n/a
