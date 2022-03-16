@@ -111,6 +111,8 @@ release.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Clarified wildcard and predicate support in metrics SDK View API.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
+- Changed the Exemplar wording, exemplar should be turned off by default.
+  ([#2414](https://github.com/open-telemetry/opentelemetry-specification/pull/2414))
 
 ### Logs
 
