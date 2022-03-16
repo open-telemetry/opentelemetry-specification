@@ -656,6 +656,15 @@ used with pull-based metrics collection.  A common sub-class of
 `MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
 to be used typically with push-based metrics collection.
 
+The `MetricReader` MUST ensure that data points are output in the
+configured aggregation temporality for each instrument kind.  For
+synchronous instruments being output with Cumulative temporality, this
+means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
+aggregation temporality.  For asynchronous instruments being output
+with Delta temporality, this means converting [Cumulative to
+Delta](#asynchronous-example-delta-temporality) aggregation
+temporality.
+
 The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
 `MetricReader` instance SHOULD NOT introduce side-effects to other `MetricReader`
@@ -770,7 +779,10 @@ protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
 Metric Exporter has access to the [aggregated metrics
-data](./datamodel.md#timeseries-model).
+data](./datamodel.md#timeseries-model).  Metric Exporters SHOULD
+report an error condition for data output by the `MetricReader` with
+unsupported Aggregation or Aggregation Temporality, as this condition
+can be corrected by a change of `MetricReader` configuration.
 
 There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
 Metric Exporters](#pull-metric-exporter) or even a mixture of both configured at
