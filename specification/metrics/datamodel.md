@@ -60,6 +60,7 @@
     + [Dropped Types](#dropped-types)
     + [Start Time](#start-time)
     + [Exemplars](#exemplars-1)
+    + [Instrumentation Scope](#instrumentation-scope)
     + [Resource Attributes](#resource-attributes)
   * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
     + [Gauges](#gauges-1)
@@ -69,6 +70,7 @@
     + [Dropped Data Points](#dropped-data-points)
     + [Metric Attributes](#metric-attributes)
     + [Exemplars](#exemplars-2)
+    + [Instrumentation Scope](#instrumentation-scope-1)
     + [Resource Attributes](#resource-attributes-1)
 - [Footnotes](#footnotes)
 
@@ -1182,6 +1184,11 @@ retrieved from the `trace_id` and `span_id` label keys, respectively.  All
 labels not used for the trace and span ids MUST be added to the OpenTelemetry
 exemplar as attributes.
 
+#### Instrumentation Scope
+
+Instrumentation Scope MUST be left unset for metrics scraped from Prometheus
+endpoints.
+
 #### Resource Attributes
 
 When scraping a Prometheus endpoint, resource attributes MUST be added to the
@@ -1283,6 +1290,17 @@ and span IDs, respectively. Timestamps MUST be added as timestamps on the
 OpenMetrics exemplar, and `filtered_attributes` MUST be added as labels on the
 OpenMetrics exemplar unless they would exceed the OpenMetrics
 [limit on characters](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars).
+
+#### Instrumentation Scope
+
+The OpenMetrics equivalent of Instrumentation Scope is the
+[metric namespace](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metric-naming-and-namespaces),
+which is a single-word prefix for metrics which identifies the source of the
+metric. However, the Instrumentation Scope Name in OpenTelemetry isn't
+generally suitable to use as a prefix because of how verbose it is.  Exporters
+MUST not attach the instrumentation scope name as a prefix or label to metrics.
+The Instrumentation Scope MAY be added as an info-type metric family with the
+name "opentelemetry_instrumentation_scope", and labels "name" and "version".
 
 #### Resource Attributes
 
