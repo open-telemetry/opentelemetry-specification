@@ -61,7 +61,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
 
-`net.host.connection.type` MUST be one of the following or, if none of the listed values apply, a custom value:
+`net.host.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -71,7 +71,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `unavailable` | unavailable |
 | `unknown` | unknown |
 
-`net.host.connection.subtype` MUST be one of the following or, if none of the listed values apply, a custom value:
+`net.host.connection.subtype` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|

@@ -148,8 +148,8 @@ Attribute names that start with `otel.` are reserved to be defined by
 OpenTelemetry specification. These are typically used to express OpenTelemetry
 concepts in formats that don't have a corresponding concept.
 
-For example, the `otel.library.name` attribute is used to record the
-instrumentation library name, which is an OpenTelemetry concept that is natively
+For example, the `otel.scope.name` attribute is used to record the
+instrumentation scope name, which is an OpenTelemetry concept that is natively
 represented in OTLP, but does not have an equivalent in other telemetry formats
 and protocols.
 

@@ -1,6 +1,6 @@
 # OpenTracing Compatibility
 
-**Status**: [Experimental](../document-status.md).
+**Status**: [Stable](../document-status.md).
 
 <details>
 <summary>Table of Contents</summary>
@@ -143,13 +143,15 @@ If a list of `Span` references is specified, the first `SpanContext`
 with **Child Of** type in the entire list is used as parent, else the
 the first `SpanContext` is used as parent. All values in the list
 MUST be added as [Link](../trace/api.md)s with the reference type value
-as a `Link` attribute, i.e. `opentracing.ref_type` set to `follows_from` or
-`child_of`.
+as a `Link` attribute, i.e.
+[opentracing.ref_type](../trace/semantic_conventions/compatibility.md#opentracing)
+set to `follows_from` or `child_of`.
 
 If a list of `Span` references is specified, the union of their
 `Baggage` values MUST be used as the initial `Baggage` of the newly created
 `Span`. It is unspecified which `Baggage` value is used in the case of
-repeated keys.
+repeated keys. If no such lisf of references is specified, the current
+`Baggage` MUST be used as the initial value of the newly created `Span`.
 
 If an initial set of tags is specified, the values MUST be set at
 the creation time of the OpenTelemetry `Span`, as opposed to setting them
@@ -182,6 +184,8 @@ registered or the global OpenTelemetry `Propagator`s, as configured at construct
 - `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
   if any, or else use the global `TextMapPropagator`.
 
+It MUST inject any non-empty `Baggage` even amidst no valid `SpanContext`.
+
 Errors MAY be raised if the specified `Format` is not recognized, depending
 on the specific OpenTracing Language API (e.g. Go and Python do, but Java may not).
 
@@ -198,8 +202,19 @@ registered or the global OpenTelemetry `Propagator`s, as configured at construct
 - `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
   if any, or else use the global `TextMapPropagator`.
 
-Returns a `SpanContext` Shim with the underlying extracted OpenTelemetry
-`Span` and `Baggage`. Errors MAY be raised if either the `Format` is not recognized
+If the extracted `SpanContext` is invalid AND the extracted `Baggage` is empty, this operation
+MUST return a null value, and otherwise it MUST return a `SpanContext` Shim instance with
+the extracted values.
+
+```java
+if (!extractedSpanContext.isValid() && extractedBaggage.isEmpty()) {
+  return null;
+}
+
+return SpanContextShim(extractedSpanContext, extractedBaggage);
+```
+
+Errors MAY be raised if either the `Format` is not recognized
 or no value could be extracted, depending on the specific OpenTracing Language API
 (e.g. Go and Python do, but Java may not).
 
@@ -456,21 +471,33 @@ try (Scope scope = tracer.scopeManager().activate(span)) {
 
 Returns a `Span` Shim wrapping the currently active OpenTelemetry `Span`.
 
-This operation MUST immediately return null if the current `Span`'s `SpanContext` is
-invalid, to signal there is no active `Span` nor `Baggage`.
+This operation MUST immediately return null if the current OpenTelemetry
+`Span`'s `SpanContext` is invalid and the current `Baggage` is empty,
+to signal there is no active `Span` nor `Baggage`.
 
-If there are associated OpenTelemetry `Span` and `Span` Shim objects in the
+If the current OpenTelemetry `Span`'s `SpanContext` is invalid but
+the current `Baggage` is not empty, this operation MUST return a new
+`Span` Shim containing a no-op OpenTelemetry `Span` and the non-empty `Baggage`.
+
+If there are **matching** OpenTelemetry `Span` and `Span` Shim objects in the
 current `Context`, the `Span` Shim MUST be returned. Else, a new `Span` Shim
-referencing the OpenTelemetry `Span` MUST be created and returned.
+containing the current OpenTelemetry `Span` and `Baggage` MUST be returned.
 
 ```java
 Span active() {
   io.opentelemetry.api.trace.Span span = Span.fromContext(Context.current());
+  io.opentelemetry.api.baggage.Baggage baggage = Baggage.fromContext(Context.current());
   SpanShim spanShim = SpanShim.fromContext(Context.current());
 
-  // There is no actual current Span nor Baggage.
+  // There is no actual currently active Span.
   if (!span.getSpanContext().isValid()) {
-    return null;
+    // Immediately return null if there is no Baggage.
+    if (baggage.isEmpty()) {
+      return null;
+    }
+
+    // Else return a no-op Span with the Baggage.
+    return SpanShim(baggage);
   }
 
   // Span was activated through the Shim layer, re-use it.
@@ -478,8 +505,9 @@ Span active() {
     return spanShim;
   }
 
-  // Span was NOT activated through the Shim layer.
-  new SpanShim(Span.current());
+  // Span was NOT activated through the Shim layer,
+  // do a best effort with the current values.
+  new SpanShim(span, baggage);
 }
 ```
 
@@ -500,7 +528,7 @@ OpenTracing defines two types of references:
 
 OpenTelemetry does not define strict equivalent semantics for these
 references. These reference types must not be confused with the
-[Link](../trace/api.md##specifying-links) functionality. This information
+[Link](../trace/api.md#specifying-links) functionality. This information
 is however preserved as the `opentracing.ref_type` attribute.
 
 ## In process Propagation exceptions
