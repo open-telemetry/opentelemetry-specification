@@ -406,8 +406,6 @@ temporality. For example:
 
 So here are some suggestions that we encourage SDK implementers to consider:
 
-* You probably don't want to encourage your users to do Cumulative->Delta
-  conversion. Actually, you might want to discourage them from doing this.
 * If you have to do Cumulative->Delta conversion, and you encountered min/max,
   rather than drop the data on the floor, you might want to convert them to
   something useful - e.g. [Gauge](./datamodel.md#gauge).
