@@ -181,15 +181,18 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The `Histogram` aggregation performs as specified.                                                                                                                           |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
 | The explicit bucket `Histogram` aggregation is available.                                                                                                                    |          | -  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The explicit bucket `Histogram` aggregation performs as specified.                                                                                                           |          | -  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter has access to the aggregated metrics data (aggregated points, not raw measurements).                                                                    |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `export` function can not be called concurrently from the same exporter instance.                                                                       |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `export` function does not block indefinitely.                                                                                                          |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `export` function receives a batch of metrics.                                                                                                          |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `export` function returns `Success` or `Failure`.                                                                                                       |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter provides a `ForceFlush` function.                                                                                                                       |          | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.                                                                           |          |    |      |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter provides a `shutdown` function.                                                                                                                         |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `shutdown` function do not block indefinitely.                                                                                                          |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Reader implementation supports registering metric Exporters                                                                                                      |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.                                                              |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.                                                              |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).                                                                    |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `export` function can not be called concurrently from the same Exporter instance.                                                                       |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `export` function does not block indefinitely.                                                                                                          |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `export` function receives a batch of metrics.                                                                                                          |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `export` function returns `Success` or `Failure`.                                                                                                       |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter provides a `ForceFlush` function.                                                                                                                       |          | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.                                                                           |          |    |      |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter provides a `shutdown` function.                                                                                                                         |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `shutdown` function do not block indefinitely.                                                                                                          |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
 | The metrics SDK samples `Exemplar`s from measurements.                                                                                                                       |          |    |      |    |    -   |      |        |     |      |     |   -  |       |
 | Exemplar sampling can be disabled.                                                                                                                                           |          |    |      |    |    -   |      |        |     |      |     |   -  |       |
 | The metrics SDK samples measurements in the context of a sampled trace by default.                                                                                           |          |    |      |    |    -   |      |        |     |      |     |   -  |       |
@@ -240,30 +243,31 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 Note: Support for environment variables is optional.
 
-|Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
-|----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
-|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_SERVICE_NAME                             | + |    |   |      |    | +    |   |    |   | +  |     |
-|OTEL_LOG_LEVEL                                | - | -  | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
-|OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
-|OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_EXPORTER_JAEGER_*                        | + |    |   |      |    | -    | - |    | - | +  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | +  | -   |
-|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
-|OTEL_LOGS_EXPORTER                            |   |    |   |      |    |      |   |    |   | -  |     |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    | +    |   |    |   | -  |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    | +    |   |    |   | -  |     |
-|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    | +    |   |    |   | -  |     |
-|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    | -    |   |    |   | -  |     |
-|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    | -    |   |    |   | -  |     |
-|OTEL_METRICS_EXEMPLAR_FILTER                  |   |    |   |      |    |      |   |    |   | -  |     |
+|Feature                                           |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
+|--------------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
+|OTEL_RESOURCE_ATTRIBUTES                          | + | +  | + | +    | +  | +    | - | +  | + | +  | -   |
+|OTEL_SERVICE_NAME                                 | + |    |   |      |    | +    |   |    |   | +  |     |
+|OTEL_LOG_LEVEL                                    | - | -  | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
+|OTEL_PROPAGATORS                                  | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
+|OTEL_BSP_*                                        | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                              | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
+|OTEL_EXPORTER_JAEGER_*                            | + |    |   |      |    | -    | - |    | - | +  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                            | - |    |   |      |    | -    | - | -  | - | +  | -   |
+|OTEL_TRACES_EXPORTER                              | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_METRICS_EXPORTER                             | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
+|OTEL_LOGS_EXPORTER                                |   |    |   |      |    |      |   |    |   | -  |     |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                   | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT            |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                       | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                        | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                  |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                   |   |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_TRACES_SAMPLER                               | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_TRACES_SAMPLER_ARG                           | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 |   |    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_ATTRIBUTE_COUNT_LIMIT                        |   |    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_METRICS_EXEMPLAR_FILTER                      |   |    |   |      |    |      |   |    |   | -  |     |
+|OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE |   |    |   |      |    |      |   |    |   |    |     |
 
 ## Exporters
 
