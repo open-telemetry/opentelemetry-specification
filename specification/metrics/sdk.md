@@ -662,7 +662,7 @@ synchronous instruments being output with Cumulative temporality, this
 means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
 aggregation temporality.  For asynchronous instruments being output
 with Delta temporality, this means converting [Cumulative to
-Delta](#asynchronous-example-delta-temporality) aggregation
+Delta](supplementary-guidelines.md#asynchronous-example-delta-temporality) aggregation
 temporality.
 
 The SDK MUST support multiple `MetricReader` instances to be registered on the
