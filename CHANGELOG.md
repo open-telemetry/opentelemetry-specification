@@ -28,6 +28,20 @@ release.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 - Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
   ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
+- Clarify that the periodic metric reader is the default metric reader to be
+  paired with push metric exporters (OTLP, stdout, in-memory)
+  ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
+- Clarify that MetricReader has one-to-one mapping to MeterProvider.
+  ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
+- Clarify the manner in which aggregation and temporality preferences
+  are encoded via MetricReader parameters "on the basis of instrument
+  kind".  Rename the environment variable
+  `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` used to set the
+  preference to be used when auto-configuring an OTLP Exporter,
+  defaults to CUMULATIVE, with DELTA an option that makes Counter,
+  Asynchronous Counter, and Histogram instruments choose Delta
+  temporality by default.
+  ([#2404](https://github.com/open-telemetry/opentelemetry-specification/pull/2404)).
 
 ### Logs
 
@@ -40,6 +54,8 @@ release.
   ([#2377](https://github.com/open-telemetry/opentelemetry-specification/pull/2377))
 - Define JavaScript runtime semantic conventions.
   ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
+- Add semantic conventions for [CloudEvents](https://cloudevents.io).
+  ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 - Add `process.cpu.count` metric.
   ([#2392](https://github.com/open-telemetry/opentelemetry-specification/pull/2392))
 
@@ -106,6 +122,8 @@ release.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Clarified wildcard and predicate support in metrics SDK View API.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
+- Changed the Exemplar wording, exemplar should be turned off by default.
+  ([#2414](https://github.com/open-telemetry/opentelemetry-specification/pull/2414))
 
 ### Logs
 
@@ -235,6 +253,8 @@ release.
   ([#1916](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
 - Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
   ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
+- Define span structure for HTTP retries and redirects.
+  ([#2078](https://github.com/open-telemetry/opentelemetry-specification/pull/2078))
 - Clarify difference between container.name and k8s.container.name
   ([#1980](https://github.com/open-telemetry/opentelemetry-specification/pull/1980))
 
