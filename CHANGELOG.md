@@ -31,6 +31,8 @@ release.
 - Clarify that the periodic metric reader is the default metric reader to be
   paired with push metric exporters (OTLP, stdout, in-memory)
   ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
+- Clarify that MetricReader has one-to-one mapping to MeterProvider.
+  ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
 
 ### Logs
 
@@ -109,10 +111,12 @@ release.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Clarified wildcard and predicate support in metrics SDK View API.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
+- Changed the Exemplar wording, exemplar should be turned off by default.
+  ([#2414](https://github.com/open-telemetry/opentelemetry-specification/pull/2414))
 - Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
   Exemplar remaining Feature-freeze.
   ([#2304](https://github.com/open-telemetry/opentelemetry-specification/pull/2304))
- 
+
 ### Logs
 
 - Fix attributes names in Google Cloud Logging mapping.
