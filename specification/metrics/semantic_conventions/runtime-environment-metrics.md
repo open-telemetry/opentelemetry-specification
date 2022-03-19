@@ -69,7 +69,7 @@ All JVM metric attributes are required unless otherwise indicated.
 |                                                |                                                          |         |                                           |                            |            | pool          | Name of pool [1]      |
 | process.runtime.jvm.cpu.utilization            | The "recent cpu usage" for the process                   | 1       | 1                                         | Gauge                      | Double     |               |                       |
 | process.runtime.jvm.system.cpu.utilization     | The "recent cpu usage" for the whole system              | 1       | 1                                         | Gauge                      | Double     |               |                       |
-| process.runtime.jvm.system.cpu.load.average.1m | Average CPU load of the whole system for the last minute | 1       | 1                                         | Gauge                      | Double     |               |                       |
+| process.runtime.jvm.system.cpu.load_1m | Average CPU load of the whole system for the last minute | 1       | 1                                         | Gauge                      | Double     |               |                       |
 
 **[1]**: Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 Examples include `G1 Old Gen`, `G1 Eden space`, `G1 Survivor Space`, `Metaspace`, etc.
