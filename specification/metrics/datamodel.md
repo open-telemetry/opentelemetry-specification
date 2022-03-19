@@ -52,6 +52,8 @@
   * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
     + [Counters](#counters)
     + [Gauges](#gauges)
+    + [Info](#info)
+    + [StateSet](#stateset)
     + [Unknown-typed](#unknown-typed)
     + [Histograms](#histograms)
     + [Summaries](#summaries)
@@ -1128,6 +1130,14 @@ A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/mai
 
 A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gauge) MUST be converted to an OTLP Gauge.
 
+#### Info
+
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the "target" info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+
+#### StateSet
+
+An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum. An OpenMetrics StateSet can be thought of as a special-case of the OpenMetrics Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+
 #### Unknown-typed
 
 A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge.
@@ -1157,8 +1167,6 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 The following Prometheus types MUST be dropped:
 
 * [OpenMetrics GaugeHistogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram)
-* [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset)
-* [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)
 
 #### Start Time
 
