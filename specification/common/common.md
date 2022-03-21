@@ -88,7 +88,7 @@ it isn't set, then the SDK MUST attempt to use the general limit. If neither are
 defined, then the SDK MUST try to use the model-specific limit default value,
 followed by the global limit default value.
 
-<a name="attribute-limits-configuration"></a>
+<a id="attribute-limits-configuration"></a>
 **Configurable parameters:**
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
