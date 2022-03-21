@@ -48,6 +48,9 @@ release.
 
 ### Logs
 
+- Remove `flush` method on LogEmitter
+  ([#2405](https://github.com/open-telemetry/opentelemetry-specification/pull/2405))
+
 ### Resource
 
 ### Semantic Conventions
