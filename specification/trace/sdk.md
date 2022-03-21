@@ -404,7 +404,7 @@ public final class SpanLimits {
 
 **Configurable parameters:**
 
-* [all common options applicable to attributes](../common/common.md#attribute-limits-configuration)
+* [all common options applicable to attributes](../common/common.md#configurable-parameters)
 * `EventCountLimit` (Default=128) - Maximum allowed span event count;
 * `LinkCountLimit` (Default=128) - Maximum allowed span link count;
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
