@@ -52,6 +52,8 @@
   * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
     + [Counters](#counters)
     + [Gauges](#gauges)
+    + [Info](#info)
+    + [StateSet](#stateset)
     + [Unknown-typed](#unknown-typed)
     + [Histograms](#histograms)
     + [Summaries](#summaries)
@@ -1128,6 +1130,14 @@ A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/mai
 
 A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gauge) MUST be converted to an OTLP Gauge.
 
+#### Info
+
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the "target" info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+
+#### StateSet
+
+An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum. An OpenMetrics StateSet can be thought of as a special-case of the OpenMetrics Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+
 #### Unknown-typed
 
 A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge.
@@ -1157,8 +1167,6 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 The following Prometheus types MUST be dropped:
 
 * [OpenMetrics GaugeHistogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram)
-* [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset)
-* [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)
 
 #### Start Time
 
@@ -1166,22 +1174,48 @@ Prometheus Cumulative metrics do not include the start time of the metric. When 
 
 #### Exemplars
 
-[Prometheus Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars) can be attached to Prometheus Histogram bucket metrics, which SHOULD be converted to exemplars on OpenTelemetry histograms.  The Trace ID and Span ID SHOULD be retrieved from the `trace_id` and `span_id` label keys, respectively.
+[OpenMetrics Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars)
+can be attached to Prometheus Histogram bucket metrics, which SHOULD be
+converted to exemplars on OpenTelemetry histograms. If present, the timestamp
+MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
+retrieved from the `trace_id` and `span_id` label keys, respectively.  All
+labels not used for the trace and span ids MUST be added to the OpenTelemetry
+exemplar as attributes.
 
 #### Resource Attributes
 
-When scraping a Prometheus endpoint, resource attributes MUST be added to the scraped metrics to distinguish them from metrics from other Prometheus endpoints.  In particular, `job` and `instance`, [as defined by Prometheus](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances), are needed to ensure Prometheus exporters can disambiguate metrics as [described below](#resource-attributes-1).
+When scraping a Prometheus endpoint, resource attributes MUST be added to the
+scraped metrics to distinguish them from metrics from other Prometheus
+endpoints. In particular, `service.name` and `service.instance.id`, are needed
+to ensure Prometheus exporters can disambiguate metrics using
+[`job` and `instance` labels](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances)
+as [described below](#resource-attributes-1).
 
-The following attributes MUST be associated with scraped metrics as resource attributes, and MUST NOT be added as metric attributes:
+The following attributes MUST be associated with scraped metrics as resource
+attributes, and MUST NOT be added as metric attributes:
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
 | `service.name` | The configured name of the service that the target belongs to |
-| `job` | Identical to `service.name` |
-| `instance` | The <host>:<port> of the target's URL that was scraped. |
-| `host.name` | `instance` The <host> portion of `instance` |
-| `port` | `instance` The <port> portion of `instance` |
-| `scheme` | `http` or `https` |
+| `service.instance.id` | A unique identifier of the target.  By default, it should be the `<host>:<port>` of the scraped URL |
+
+The following attributes SHOULD be associated with scraped metrics as resource
+attributes, and MUST NOT be added as metric attributes:
+
+| OTLP Resource Attribute | Description |
+| ----------------------- | ----------- |
+| `net.host.name` | The `<host>` portion of the target's URL that was scraped |
+| `net.host.port` | The `<port>` portion of the target's URL that was scraped |
+| `http.scheme` | `http` or `https` |
+
+In addition to the attributes above, the
+["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+metric family is used to supply additional resource attributes. If present,
+"target" info MUST be dropped from the batch of metrics, and all labels from
+the "target" info metric family MUST be converted to resource attributes
+attached to all other metrics which are part of the scrape. By default, label
+keys and values MUST NOT be altered (such as replacing `_` with `.` characters
+in keys).
 
 ### OTLP Metric points to Prometheus
 
@@ -1236,13 +1270,51 @@ OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https:/
 
 #### Exemplars
 
-[Exemplars](#exemplars) on OpenTelemetry Histograms SHOULD be converted to Prometheus exemplars. Exemplars on other OpenTelemetry data points MUST be dropped.  For Prometheus push exporters, multiple exemplars are able to be added to each bucket, so all exemplars SHOULD be converted.  For Prometheus pull endpoints, only a single exemplar is able to be added to each bucket, so the largest exemplar from each bucket MUST be used, if attaching exemplars.  If no exemplars exist on a bucket, the highest exemplar from a lower bucket MUST be used, even though it is a duplicate of another bucket's exemplar.  Prometheus Exemplars MUST use the `trace_id` and `span_id` keys for the trace and span IDs, respectively.
+[Exemplars](#exemplars) on OpenTelemetry Histograms SHOULD be converted to
+OpenMetrics exemplars. Exemplars on other OpenTelemetry data points MUST be
+dropped. For Prometheus push exporters, multiple exemplars are able to be
+added to each bucket, so all exemplars SHOULD be converted. For Prometheus
+pull endpoints, only a single exemplar is able to be added to each bucket, so
+the largest exemplar from each bucket MUST be used, if attaching exemplars. If
+no exemplars exist on a bucket, the highest exemplar from a lower bucket MUST
+be used, even though it is a duplicate of another bucket's exemplar.
+OpenMetrics Exemplars MUST use the `trace_id` and `span_id` keys for the trace
+and span IDs, respectively. Timestamps MUST be added as timestamps on the
+OpenMetrics exemplar, and `filtered_attributes` MUST be added as labels on the
+OpenMetrics exemplar unless they would exceed the OpenMetrics
+[limit on characters](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars).
 
 #### Resource Attributes
 
-In SDK Prometheus (pull) exporters, all resource attributes MUST be dropped, and MUST NOT be attached as labels. The scraper of the endpoint is expected to discover resource attributes of the endpoint it is scraping.
+In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to the ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems) metric family; otherwise, they MUST be dropped, and MUST NOT be attached as labels to other metric families. The "target" info metric family MUST be an info-typed metric family whose labels MUST include the resource attributes, and MUST NOT include any other labels. There MUST be at most one "target" info metric family exposed on a Prometheus endpoint.
 
-In the Collector's Prometheus pull and push (remote-write) exporters, it is possible for metrics from multiple targets to be sent together, so targets must be disambiguated from one another.  However, the Prometheus exposition format and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto) formats do not include a notion of resource, and expect metric labels to distinguish scraped targets.  By convention, [`job` and `instance`](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances) labels distinguish targets and are expected to be present on metrics exposed on a Prometheus pull exporter (a ["federated"](https://Prometheus.io/docs/Prometheus/latest/federation/) Prometheus endpoint) or pushed via Prometheus remote-write. In the collector Prometheus exporters, the `job` and `instance` resource attributes MUST be converted to Prometheus metric labels, and other resource attributes SHOULD NOT be converted to metric labels.
+In the Collector's Prometheus pull and push (remote-write) exporters, it is
+possible for metrics from multiple targets to be sent together, so targets must
+be disambiguated from one another. However, the Prometheus exposition format
+and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto)
+formats do not include a notion of resource, and expect metric labels to
+distinguish scraped targets. By convention, [`job` and `instance`](https://Prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances)
+labels distinguish targets and are expected to be present on metrics exposed on
+a Prometheus pull exporter (a ["federated"](https://Prometheus.io/docs/Prometheus/latest/federation/)
+Prometheus endpoint) or pushed via Prometheus remote-write. In OTLP, the
+`service.name`, `service.namespace`, and `service.instance.id` triplet is
+[required to be unique](https://github.com/open-telemetry/opentelemetry-specification/blob/da74730bf835010229a9612c281f052e26553218/specification/resource/semantic_conventions/README.md#service),
+which makes them good candidates to use to construct `job` and `instance`. In
+the collector Prometheus exporters, the `service.name` and `service.namespace`
+attributes MUST be combined as `<service.namespace>/<service.name>`, or
+`<service.name>` if namespace is empty, to form the `job` metric label.  The
+`service.instance.id` attribute, if present, MUST be converted to the
+`instance` label; otherwise, `instance` should be added with an empty value.
+Other resource attributes SHOULD be converted to a
+["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+metric family, or MUST be dropped. The "target" info metric family is an info-typed metric family
+whose labels MUST include the resource attributes, and MUST NOT include any
+other labels other than `job` and `instance`.  There MUST be at most one
+"target" info metric point exported for each unique combination of `job` and `instance`.
+
+If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named "target" info with a constant value of 1 MUST be used instead.
+
+To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/common.md#attribute).
 
 ## Footnotes
 
