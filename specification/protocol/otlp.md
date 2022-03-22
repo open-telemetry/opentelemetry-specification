@@ -492,7 +492,7 @@ for. When one of the servers acknowledges the data and the other server does not
 (yet) acknowledges the client needs to make a decision about how to move
 forward.
 
-In such situation the the client SHOULD implement queuing, acknowledgement
+In such situation the client SHOULD implement queuing, acknowledgement
 handling and retrying logic per destination. This ensures that servers do not
 block each other. The queues SHOULD reference shared, immutable data to be sent,
 thus minimizing the memory overhead caused by having multiple queues.

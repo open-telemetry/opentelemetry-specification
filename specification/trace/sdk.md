@@ -13,6 +13,7 @@
   * [ForceFlush](#forceflush)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
+  * [Recording Sampled reaction table](#recording-sampled-reaction-table)
   * [SDK Span creation](#sdk-span-creation)
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
@@ -118,7 +119,7 @@ Thus, the SDK specification defines sets of possible requirements for
 
 * **Readable span**: A function receiving this as argument MUST be able to
   access all information that was added to the span, as listed
-  [in the API spec](api.md#span-data-members). In particular, it MUST also be
+  [in the API spec](api.md#span). In particular, it MUST also be
   able to access the `InstrumentationScope` [since 1.10.0] and `Resource`
   information (implicitly) associated with the span. For backwards compatibility
   it MUST also be able to access the `InstrumentationLibrary`
@@ -187,7 +188,7 @@ The flag combination `SampledFlag == true` and `IsRecording == false`
 could cause gaps in the distributed trace, and because of this OpenTelemetry API
 MUST NOT allow this combination.
 
-<a name="recording-sampled-reaction-table"></a>
+### Recording Sampled reaction table
 
 The following table summarizes the expected behavior for each combination of
 `IsRecording` and `SampledFlag`.
@@ -404,7 +405,7 @@ public final class SpanLimits {
 
 **Configurable parameters:**
 
-* [all common options applicable to attributes](../common/common.md#attribute-limits-configuration)
+* [all common options applicable to attributes](../common/common.md#configurable-parameters)
 * `EventCountLimit` (Default=128) - Maximum allowed span event count;
 * `LinkCountLimit` (Default=128) - Maximum allowed span link count;
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
