@@ -71,6 +71,11 @@ release.
 
 ### Telemetry Schemas
 
+### Common
+
+- Add "Mapping Arbitrary Data to OTLP AnyValue" document.
+  ([#2385](https://github.com/open-telemetry/opentelemetry-specification/pull/2385))
+
 ## v1.9.0 (2021-02-10)
 
 ### Context
