@@ -159,7 +159,7 @@ Furthermore, it is strongly recommended to add the [`net.transport`][] attribute
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
 [network attributes]: span-general.md#general-network-connection-attributes
-[`net.transport`]: span-general.md#nettransport-attribute
+[`net.transport`]: span-general.md#network-transport-attributes
 [Hangfire]: https://www.hangfire.io/
 
 For message consumers, the following additional attributes may be set:

@@ -101,7 +101,7 @@ See the SDK [Attribute Limits](common/common.md#attribute-limits) section for th
 | OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
 | OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
 
-## Span Limits <a name="span-collection-limits"></a>
+## Span Limits
 
 **Status**: [Stable](document-status.md)
 
