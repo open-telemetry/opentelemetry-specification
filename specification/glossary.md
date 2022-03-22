@@ -83,9 +83,6 @@ An ABI (application binary interface) is an interface which defines interactions
 
 ABI compatibility is important for some languages, especially those which provide a form of machine code. For other languages, ABI compatibility may not be a relevant requirement.
 
-<a name="in-band"></a>
-<a name="out-of-band"></a>
-
 ### In-band and Out-of-band Data
 
 > In telecommunications, **in-band signaling** is the sending of control information within the same band or channel used for data such as voice or video. This is in contrast to **out-of-band signaling** which is sent over a different channel, or even over a separate network ([Wikipedia](https://en.wikipedia.org/wiki/In-band_signaling)).
