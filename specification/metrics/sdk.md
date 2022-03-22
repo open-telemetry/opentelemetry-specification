@@ -153,7 +153,9 @@ are the inputs:
   * The `name` of the Instrument(s). [OpenTelemetry SDK](../overview.md#sdk)
     authors MAY choose to support wildcard characters, with the question mark
     (`?`) matching exactly one character and the asterisk character (`*`)
-    matching zero or more characters.
+    matching zero or more characters.  If wildcards are not supported in general,
+    OpenTelemetry SDKs MUST specifically recognize the single `*` wildcard
+    as matching all instruments.
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
@@ -214,11 +216,9 @@ made with an Instrument:
       know (e.g. expose
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
   * If the Instrument could not match with any of the registered `View`(s), the
-    SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
-    the user to turn off the default behavior via MeterProvider (which means the
-    Instrument will be ignored when there is no match). Individual
-    implementations can decide what the default behavior is, and how to turn the
-    default behavior off.
+    SDK SHOULD enable the instrument using the default aggregation and temporality.
+    Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
+    to disable instruments by default.
 
 Here are some examples:
 
