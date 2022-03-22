@@ -45,6 +45,10 @@ release.
   Asynchronous Counter, and Histogram instruments choose Delta
   temporality by default.
   ([#2404](https://github.com/open-telemetry/opentelemetry-specification/pull/2404)).
+- Clarify that instruments are enabled by default, even when Views are configured.
+  Require support for the match-all View expression having `name=*` to support
+  disabling instruments by default.
+  ([#2417](https://github.com/open-telemetry/opentelemetry-specification/pull/2417)).
 
 ### Logs
 
