@@ -33,12 +33,27 @@ release.
   ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
 - Clarify that MetricReader has one-to-one mapping to MeterProvider.
   ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
+- Specify default configuration for a periodic metric reader that is associated with
+  the stdout metric exporter.
+  ([#2415](https://github.com/open-telemetry/opentelemetry-specification/pull/2415)).
+- Clarify the manner in which aggregation and temporality preferences
+  are encoded via MetricReader parameters "on the basis of instrument
+  kind".  Rename the environment variable
+  `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` used to set the
+  preference to be used when auto-configuring an OTLP Exporter,
+  defaults to CUMULATIVE, with DELTA an option that makes Counter,
+  Asynchronous Counter, and Histogram instruments choose Delta
+  temporality by default.
+  ([#2404](https://github.com/open-telemetry/opentelemetry-specification/pull/2404)).
 - Clarify that instruments are enabled by default, even when Views are configured.
   Require support for the match-all View expression having `name=*` to support 
   disabling instruments by default.
   ([#2417](https://github.com/open-telemetry/opentelemetry-specification/pull/2417)).
 
 ### Logs
+
+- Remove `flush` method on LogEmitter
+  ([#2405](https://github.com/open-telemetry/opentelemetry-specification/pull/2405))
 
 ### Resource
 
@@ -59,6 +74,11 @@ release.
 ### SDK Configuration
 
 ### Telemetry Schemas
+
+### Common
+
+- Add "Mapping Arbitrary Data to OTLP AnyValue" document.
+  ([#2385](https://github.com/open-telemetry/opentelemetry-specification/pull/2385))
 
 ## v1.9.0 (2021-02-10)
 
