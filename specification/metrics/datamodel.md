@@ -1318,5 +1318,5 @@ To convert OTLP resource attributes to Prometheus labels, string Attribute value
 
 ## Footnotes
 
-OTLP supports data point kinds that do not satisfy these conditions; they are
+\[1\] OTLP supports data point kinds that do not satisfy these conditions; they are
 well-defined but do not support standard metric data transformations.
