@@ -1151,7 +1151,7 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 * The `le` label on non-suffixed metrics is used to identify and order histogram bucket boundaries. Each Prometheus line produces one bucket count on the resulting histogram. Each value for the `le` label except `+Inf` produces one bucket boundary.
 * Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
 * If `_count` is not present, the metric MUST be dropped.
-* If `_sum` is not present, it MUST be computed from the buckets.
+* If `_sum` is not present, the histogram's sum MUST be unset.
 
 #### Summaries
 
