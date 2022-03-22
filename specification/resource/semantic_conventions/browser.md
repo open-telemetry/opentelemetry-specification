@@ -9,13 +9,13 @@
 <!-- semconv device -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `browser.name` | string | The web browser name | `Chrome` | No |
-| `browser.version` | string | The web browser version | `90` | No |
-| `browser.platform` | string | The operating system | `Windows` | No |
-| `browser.mobile` | boolean | Flag indicating a mobile device | | No |
-| `browser.user_agent` | string | Full user-agent string provided by the browser [1] | `'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'` | No |
+| `browser.brands` | array of strings | Array of brand name and version separated by a space. [1] | `[' Not A;Brand 99','Chromium 99',Chrome 99']` | No |
+| `browser.platform` | string | The platform on which the browser is running | `Windows` | No |
+| `browser.user_agent` | string | Full user-agent string provided by the browser [2] | `'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'` | No |
 
-All of these attributes can be provided by the user agent itself in the form of an HTTP header (e.g. Sec-CH-UA, Sec-CH-Platform, Sec-CH-Mobile, User-Agent). However, in order to support batches of data with different resources, these attributes should be used when possible.
+All of these attributes can be provided by the user agent itself in the form of an HTTP header (e.g. Sec-CH-UA, Sec-CH-Platform, User-Agent). However, in order to support sending telemetry through the Collector, these attributes should be used when possible.
 
-**[1]:** The user-agent value should be provided only from browsers that do not have a mechanism to retrieve name, version, and platform individually (for example from the User-Agent Client Hints API).
+**[1]:** This value is intended to be taken from the [UA client hints API](https://wicg.github.io/ua-client-hints/#interface) (navigator.userAgentData.brands).
+
+**[2]:** The user-agent value should be provided only from browsers that do not have a mechanism to retrieve name, version, and platform individually (for example from the User-Agent Client Hints API). To retrieve the value, the legacy `navigator.userAgent` API can be used.
 <!-- endsemconv -->
