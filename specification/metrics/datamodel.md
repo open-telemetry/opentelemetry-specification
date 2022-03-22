@@ -369,7 +369,7 @@ to the end user, although this subject deserves attention.
 A metric stream can use one of these basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
-same kind. <sup>[1](#otlpdatapointfn)</sup>
+same kind. <sup>[1](#footnotes)</sup>
 
 The basic point kinds are:
 
@@ -1318,6 +1318,5 @@ To convert OTLP resource attributes to Prometheus labels, string Attribute value
 
 ## Footnotes
 
-<a name="otlpdatapointfn">[1]</a>: OTLP supports data point kinds that do not
-satisfy these conditions; they are well-defined but do not support standard
-metric data transformations.
+\[1\] OTLP supports data point kinds that do not satisfy these conditions; they are
+well-defined but do not support standard metric data transformations.

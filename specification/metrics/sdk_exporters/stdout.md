@@ -18,4 +18,5 @@ If a language provides a mechanism to automatically configure a
 exporter (e.g., using the [`OTEL_METRICS_EXPORTER` environment
 variable](../../sdk-environment-variables.md#exporter-selection)), by
 default the exporter MUST be paired with a [periodic exporting
-MetricReader](../sdk.md#periodic-exporting-metricreader).
+MetricReader](../sdk.md#periodic-exporting-metricreader)
+with a default `exportIntervalMilliseconds` of 10000.
