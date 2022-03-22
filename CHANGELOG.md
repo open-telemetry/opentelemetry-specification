@@ -133,6 +133,9 @@ release.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
 - Changed the Exemplar wording, exemplar should be turned off by default.
   ([#2414](https://github.com/open-telemetry/opentelemetry-specification/pull/2414))
+- Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
+  Exemplar remaining Feature-freeze.
+  ([#2304](https://github.com/open-telemetry/opentelemetry-specification/pull/2304))
 
 ### Logs
 
