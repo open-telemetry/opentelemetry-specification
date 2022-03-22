@@ -94,7 +94,7 @@ For client-side metrics `net.peer.port` is required if the connection is IP-base
 For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
 Furthermore, setting [net.transport][] is required for non-IP connection like named pipe bindings.
 
-[net.transport]: ../../trace/semantic_conventions/span-general.md#nettransport-attribute
+[net.transport]: ../../trace/semantic_conventions/span-general.md#network-transport-attributes
 
 ### Service name
 

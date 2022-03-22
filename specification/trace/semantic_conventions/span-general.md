@@ -11,6 +11,7 @@ Particular operations may refer to or require some of these attributes.
 <!-- toc -->
 
 - [General network connection attributes](#general-network-connection-attributes)
+  * [Network transport attributes](network-transport-attributes)
   * [`net.*.name` attributes](#netname-attributes)
 - [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
@@ -27,6 +28,8 @@ The `net.peer.*` attributes describe properties of the remote end of the network
 while the `net.host.*` properties describe the local end.
 In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
 the `net.peer.*` properties of a client are equal to the `net.host.*` properties of the server and vice versa.
+
+### Network transport attributes
 
 <!-- semconv network -->
 | Attribute  | Type | Description  | Examples  | Required |
