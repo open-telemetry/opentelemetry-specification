@@ -216,7 +216,6 @@ made with an Instrument:
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
     to disable instruments by default.
-* END.
 
 Here are some examples:
 
