@@ -17,7 +17,6 @@
     + [Default Aggregation](#default-aggregation)
     + [Sum Aggregation](#sum-aggregation)
     + [Last Value Aggregation](#last-value-aggregation)
-    + [Histogram Aggregation](#histogram-aggregation)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
@@ -333,7 +332,6 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
-- [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
 #### Drop Aggregation
@@ -349,14 +347,14 @@ The Default Aggregation informs the SDK to use the Instrument Kind
 (e.g. at View registration OR at first seen measurement)
 to select an aggregation and configuration parameters.
 
-| Instrument Kind | Selected Aggregation |
-| --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) |
-| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) |
+| Instrument Kind | Selected Aggregation                                                                    |
+| --- |-----------------------------------------------------------------------------------------|
+| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation)                               |
+| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation) |
 
 This Aggregation does not have any configuration parameters.
 
@@ -393,14 +391,6 @@ This Aggregation informs the SDK to collect:
 
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
-
-#### Histogram Aggregation
-
-The Histogram Aggregation informs the SDK to select the best Histogram
-Aggregation available. i.e. [Explicit Bucket Histogram
-Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
-
-This Aggregation does not have any configuration parameters.
 
 #### Explicit Bucket Histogram Aggregation
 
