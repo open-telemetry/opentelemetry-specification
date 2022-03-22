@@ -8,7 +8,7 @@ This document specifies the configuration options available to the OpenTelemetry
 
 The following configuration options MUST be available to configure the OTLP exporter. Each configuration option MUST be overridable by a signal specific option.
 
-- **Endpoint (OTLP/HTTP)**: Target URL to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, MAY contain a port, SHOULD contain a path and MUST NOT contain other parts (such as query string or fragment). A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters MUST construct per-signal URLs as  [described below](#per-signal-urls). The per-signal endpoint configuration options take precedence and can be used to override this behavior (the URL is used as-is for them, without any modifications). See the [OTLP Specification][otlphttp-req] for more details.
+- **Endpoint (OTLP/HTTP)**: Target URL to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, MAY contain a port, SHOULD contain a path and MUST NOT contain other parts (such as query string or fragment). A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters MUST construct per-signal URLs as  [described below](#endpoint-urls-for-otlphttp). The per-signal endpoint configuration options take precedence and can be used to override this behavior (the URL is used as-is for them, without any modifications). See the [OTLP Specification][otlphttp-req] for more details.
   - Default:  `http://localhost:4318` [1]
   - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`
 
@@ -67,8 +67,6 @@ Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
 
 - `none` if compression is disabled.
 - `gzip` is the only specified compression method for now.
-
-<a name="per-signal-urls"></a>
 
 ### Endpoint URLs for OTLP/HTTP
 

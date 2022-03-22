@@ -28,8 +28,6 @@ while the `net.host.*` properties describe the local end.
 In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
 the `net.peer.*` properties of a client are equal to the `net.host.*` properties of the server and vice versa.
 
-<a name="nettransport-attribute"></a>
-
 <!-- semconv network -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
@@ -99,8 +97,6 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 <!-- endsemconv -->
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
-
-<a name="net.name"></a>
 
 ### `net.*.name` attributes
 
