@@ -213,7 +213,7 @@ made with an Instrument:
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
-	Users can configure match-all Views using Drop aggregation to disable instruments 
+    Users can configure match-all Views using [Drop aggregation](#drop-aggregation) to disable instruments
 	by default.
 * END.
 
