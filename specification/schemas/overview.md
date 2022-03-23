@@ -104,7 +104,7 @@ how the schemas work:
   specification version number).
 
 - OpenTelemetry instrumentation libraries include the OpenTelemetry Schema URL
-  in all emitted telemetry. This is currently a work in progress,
+  in all emitted telemetry. This is currently work-in-progress,
   [here is an example](https://github.com/open-telemetry/opentelemetry-go/blob/8ba6da8f3e5380629fcd72057fe0f827a9e23493/sdk/resource/os.go#L50)
   of how it is done in Go SDK's Resource detectors.
 
