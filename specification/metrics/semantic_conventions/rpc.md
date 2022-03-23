@@ -61,7 +61,7 @@ or not they should be on the server, client or both.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | [`rpc.type`](../../trace/semantic_conventions/rpc.md) | string | An RPC request consists of a caller and a callee, the name of the type is server or client. | `server`;`client` | Yes |
-| [`rpc.status`](../../trace/semantic_conventions/rpc.md) | string |  status only represents network and a RPC internal execution state in both client and server, not bussiness logic.  | `Unset`;`OK`;`Error` | Yes |
+| [`rpc.status`](../../trace/semantic_conventions/rpc.md) | string |  Status only represents network and a RPC internal execution state in both client and server, not bussiness logic.  | `Unset`;`OK`;`Error` | Yes |
 | [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Yes |
 | [`rpc.service`](../../trace/semantic_conventions/rpc.md) | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | No, but recommended |
 | [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | No, but recommended |
