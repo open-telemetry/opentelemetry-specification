@@ -4,6 +4,28 @@ groups:
     brief: 'This document defines semantic conventions for remote procedure calls.'
     events: [rpc.message]
     attributes:
+      - id: type
+        requires: always
+        brief: 'An RPC request consists of a caller and a callee, the name of the type is server or client.'
+        type:
+          allow_custom_values: false
+          members:
+            - id: server
+              value: 'server'
+            - id: client
+              value: "client"
+      - id: status
+        requires: always
+        brief: 'Status only represents network and a RPC internal execution state in both client and server, not bussiness logic.'
+        type:
+          allow_custom_value: false
+          members:
+            - id: Unset
+              value: 'Unset'
+            - id: OK
+              value: 'OK'
+            - id: Error
+              value: 'Error'
       - id: system
         required: always
         brief: 'A string identifying the remoting system. See below for a list of well-known identifiers.'
