@@ -67,7 +67,7 @@ release.
 - Add semantic conventions for [CloudEvents](https://cloudevents.io).
   ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 - Add `process.cpu.utilization` metric.
-  ([#9999](https://github.com/open-telemetry/opentelemetry-specification/pull/9999))
+  ([#2436](https://github.com/open-telemetry/opentelemetry-specification/pull/2436))
 
 ### Compatibility
 
