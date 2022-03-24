@@ -1186,8 +1186,38 @@ exemplar as attributes.
 
 #### Instrumentation Scope
 
-Instrumentation Scope MUST be left unset for metrics scraped from Prometheus
-endpoints.
+Each `opentelemetry_instrumentation_scope` info metric point present in a batch
+of metrics MUST be converted to an instrumentation scope, and the
+`opentelemetry_instrumentation_scope` metric must be dropped.  Metrics in the
+batch that have a prefix equal to the `short_name` of the instrumentation scope
+have the matching prefix removed, and are added under that scope.  For example,
+the OpenMetrics metrics:
+
+```
+# TYPE opentelemetry_instrumentation_scope info
+opentelemetry_instrumentation_scope{name=go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp,short_name=otelhttp,version=v0.24.0} 1
+# TYPE otelhttp_http_server_duration counter
+otelhttp_http_server_duration{...} 1
+```
+
+become:
+
+```yaml
+# within a resource_metrics
+scope_metrics:
+  scope:
+    name: go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp
+    short_name: otelhttp
+    version: v0.24.0
+  metrics:
+  - name: http_server_duration
+    data:
+      sum:
+        data_points:
+        - value: 1
+```
+
+Metrics which are not found to be associated with an instrumentation scope are all placed within an empty instrumentation scope, and do not have any prefixes trimmed.
 
 #### Resource Attributes
 
@@ -1293,14 +1323,17 @@ OpenMetrics exemplar unless they would exceed the OpenMetrics
 
 #### Instrumentation Scope
 
-The OpenMetrics equivalent of Instrumentation Scope is the
-[metric namespace](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metric-naming-and-namespaces),
-which is a single-word prefix for metrics which identifies the source of the
-metric. However, the Instrumentation Scope Name in OpenTelemetry isn't
-generally suitable to use as a prefix because of how verbose it is.  Exporters
-MUST not attach the instrumentation scope name as a prefix or label to metrics.
-The Instrumentation Scope MAY be added as an info-type metric family with the
-name "opentelemetry_instrumentation_scope", and labels "name" and "version".
+The OpenMetrics prevents naming collisions for metrics from different libraries
+by adding a [metric namespace](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metric-naming-and-namespaces),
+which is a single-word prefix, to metrics. The [Instrumentation Scope Short Name](TODO)
+is the equivalent in OpenTelemetry, and MUST be attached as a prefix to all
+metrics from an Instrumentation Scope, if the short name is present. The full
+format of metrics is `<instrumentation scope short_name>_<metric_name>`.
+
+Additionally, for each Instrumentation Scope with a short name, Prometheus
+exporters SHOULD generate a metric point in the info-typed metric family named
+"otel_scope". It MUST have "name", "version", and "short_name" labels, which
+MAY be empty if the corresponding metric scope field is unset.
 
 #### Resource Attributes
 

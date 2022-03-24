@@ -440,7 +440,7 @@ This field is optional.
 
 ### Field: `InstrumentationScope`
 
-Type: (Name,Version) tuple of strings.
+Type: (Name,ShortName,Version) tuple of strings.
 
 Description: the [instrumentation scope](../glossary.md#instrumentation-scope).
 Multiple occurrences of events coming from the same scope can happen across time and
@@ -449,7 +449,7 @@ a logger name (e.g. Java
 [Logger Name](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)))
 the Logger Name SHOULD be recorded as the Instrumentation Scope name.
 
-Version is optional. Name SHOULD be specified if version is specified, otherwise Name
+ShortName and Version are optional. Name SHOULD be specified if version or short name is specified, otherwise Name
 is optional.
 
 ### Field: `Attributes`
