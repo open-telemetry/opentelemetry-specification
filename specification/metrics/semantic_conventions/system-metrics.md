@@ -66,13 +66,13 @@ memory](#systempaging---pagingswap-metrics).
 |                                                           |                                                 |              |                          |            | direction     | read, write      |
 | system.disk.operations                                    |                                                 | {operations} | Asynchronous Counter     | Int64      | device        | (identifier)     |
 |                                                           |                                                 |              |                          |            | direction     | read, write      |
-| system.disk.io_time<sup>[1](#io_time)</sup>               | Time disk spent activated                       | s            | Asynchronous Counter     | Double     | device        | (identifier)     |
-| system.disk.operation_time<sup>[2](#operation_time)</sup> | Sum of the time each operation took to complete | s            | Asynchronous Counter     | Double     | device        | (identifier)     |
+| system.disk.io_time<sup>\[1\]</sup>                       | Time disk spent activated                       | s            | Asynchronous Counter     | Double     | device        | (identifier)     |
+| system.disk.operation_time<sup>\[2\]</sup>                | Sum of the time each operation took to complete | s            | Asynchronous Counter     | Double     | device        | (identifier)     |
 |                                                           |                                                 |              |                          |            | direction     | read, write      |
 | system.disk.merged                                        |                                                 | {operations} | Asynchronous Counter     | Int64      | device        | (identifier)     |
 |                                                           |                                                 |              |                          |            | direction     | read, write      |
 
-<sup><a name="io_time">1</a></sup> The real elapsed time ("wall clock")
+<sup>1</sup> The real elapsed time ("wall clock")
 used in the I/O path (time from operations running in parallel are not
 counted). Measured as:
 
@@ -82,7 +82,7 @@ counted). Measured as:
 Time"](https://docs.microsoft.com/en-us/archive/blogs/askcore/windows-performance-monitor-disk-counters-explained#windows-performance-monitor-disk-counters-explained:~:text=%25%20Idle%20Time,Idle\)%20to%200%20(meaning%20always%20busy).)
 performance counter: `uptime * (100 - "Disk\% Idle Time") / 100`
 
-<sup><a name="operation_time">2</a></sup> Because it is the sum of time each
+<sup>2</sup> Because it is the sum of time each
 request took, parallel-issued requests each contribute to make the count
 grow. Measured as:
 
@@ -112,11 +112,11 @@ perf counter (similar for Writes)
 **Description:** System level network metrics.
 | Name                                           | Description                                                                   | Units         | Instrument Type            | Value Type | Attribute Key | Attribute Values                                                                               |
 | ---------------------------------------------- | ----------------------------------------------------------------------------- | ------------- | -------------------------- | ---------- | ------------- | ---------------------------------------------------------------------------------------------- |
-| system.network.dropped<sup>[1](#dropped)</sup> | Count of packets that are dropped or discarded even though there was no error | {packets}     | Asynchronous Counter       | Int64      | device        | (identifier)                                                                                   |
+| system.network.dropped<sup>\[1\]</sup>         | Count of packets that are dropped or discarded even though there was no error | {packets}     | Asynchronous Counter       | Int64      | device        | (identifier)                                                                                   |
 |                                                |                                                                               |               |                            |            | direction     | transmit, receive                                                                              |
 | system.network.packets                         |                                                                               | {packets}     | Asynchronous Counter       | Int64      | device        | (identifier)                                                                                   |
 |                                                |                                                                               |               |                            |            | direction     | transmit, receive                                                                              |
-| system.network.errors<sup>[2](#errors)</sup>   | Count of network errors detected                                              | {errors}      | Asynchronous Counter       | Int64      | device        | (identifier)                                                                                   |
+| system.network.errors<sup>\[2\]</sup>          | Count of network errors detected                                              | {errors}      | Asynchronous Counter       | Int64      | device        | (identifier)                                                                                   |
 |                                                |                                                                               |               |                            |            | direction     | transmit, receive                                                                              |
 | system<!--notlink-->.network.io                |                                                                               | By            | Asynchronous Counter       | Int64      | device        | (identifier)                                                                                   |
 |                                                |                                                                               |               |                            |            | direction     | transmit, receive                                                                              |
@@ -124,7 +124,7 @@ perf counter (similar for Writes)
 |                                                |                                                                               |               |                            |            | protocol      | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
 |                                                |                                                                               |               |                            |            | state         | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
 
-<sup><a name="dropped">1</a></sup> Measured as:
+<sup>1</sup> Measured as:
 
 - Linux: the `drop` column in `/proc/dev/net`
 ([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).
@@ -133,7 +133,7 @@ perf counter (similar for Writes)
 from
 [`GetIfEntry2`](https://docs.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-getifentry2).
 
-<sup><a name="errors">2</a></sup> Measured as:
+<sup>2</sup> Measured as:
 
 - Linux: the `errs` column in `/proc/dev/net`
 ([source](https://web.archive.org/web/20180321091318/http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html)).

@@ -56,7 +56,7 @@ Examples of span names:
 <!-- semconv rpc -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `rpc.system` | string | A string identifying the remoting system. | `grpc`; `java_rmi`; `wcf` | Yes |
+| `rpc.system` | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Yes |
 | `rpc.service` | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | No, but recommended |
 | `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | No, but recommended |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
@@ -72,6 +72,14 @@ Examples of span names:
 
 * [`net.peer.ip`](span-general.md)
 * [`net.peer.name`](span-general.md)
+
+`rpc.system` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+
+| Value  | Description |
+|---|---|
+| `grpc` | gRPC |
+| `java_rmi` | Java RMI |
+| `dotnet_wcf` | .NET WCF |
 <!-- endsemconv -->
 
 For client-side spans `net.peer.port` is required if the connection is IP-based and the port is available (it describes the server port they are connecting to).
@@ -90,7 +98,7 @@ In this example, spans representing client request should have their `peer.servi
 Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service name.
 
 [network attributes]: span-general.md#general-network-connection-attributes
-[net.transport]: span-general.md#nettransport-attribute
+[net.transport]: span-general.md#network-transport-attributes
 [`service.name`]: ../../resource/semantic_conventions/README.md#service
 [`peer.service`]: span-general.md#general-remote-service-attributes
 
@@ -99,8 +107,6 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 In the lifetime of an RPC stream, an event for each message sent/received on
 client and server spans SHOULD be created. In case of unary calls only one sent
 and one received message will be recorded for both client and server spans.
-
-The event name MUST be `"message"`.
 
 <!-- semconv rpc.message -->
 The event name MUST be `message`.

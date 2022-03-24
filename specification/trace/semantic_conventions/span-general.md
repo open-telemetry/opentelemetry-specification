@@ -11,6 +11,7 @@ Particular operations may refer to or require some of these attributes.
 <!-- toc -->
 
 - [General network connection attributes](#general-network-connection-attributes)
+  * [Network transport attributes](#network-transport-attributes)
   * [`net.*.name` attributes](#netname-attributes)
 - [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
@@ -28,7 +29,7 @@ while the `net.host.*` properties describe the local end.
 In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
 the `net.peer.*` properties of a client are equal to the `net.host.*` properties of the server and vice versa.
 
-<a name="nettransport-attribute"></a>
+### Network transport attributes
 
 <!-- semconv network -->
 | Attribute  | Type | Description  | Examples  | Required |
@@ -61,7 +62,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
 
-`net.host.connection.type` MUST be one of the following or, if none of the listed values apply, a custom value:
+`net.host.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -71,7 +72,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `unavailable` | unavailable |
 | `unknown` | unknown |
 
-`net.host.connection.subtype` MUST be one of the following or, if none of the listed values apply, a custom value:
+`net.host.connection.subtype` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -99,8 +100,6 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 <!-- endsemconv -->
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
-
-<a name="net.name"></a>
 
 ### `net.*.name` attributes
 

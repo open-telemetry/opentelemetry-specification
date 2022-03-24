@@ -11,13 +11,61 @@ release.
 
 ### Traces
 
+- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
+  Library. The Tracer is now associated with Instrumentation Scope
+  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+- Add documentation REQUIREMENT for adding attributes at span creation.
+  ([#2383](https://github.com/open-telemetry/opentelemetry-specification/pull/2383)).
+
 ### Metrics
 
+- Introduce the concept of Instrumentation Scope to replace/extend Instrumentation
+  Library. The Meter is now associated with Instrumentation Scope
+  ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
+- Specify the behavior of duplicate instrumentation registration in the API, specify
+  duplicate conflicts in the data model, specify how the SDK is meant to report and
+  assist the user when these conflicts arise.
+  ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
+- Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
+  ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
+- Clarify that the periodic metric reader is the default metric reader to be
+  paired with push metric exporters (OTLP, stdout, in-memory)
+  ([#2379](https://github.com/open-telemetry/opentelemetry-specification/pull/2379)).
+- Clarify that MetricReader has one-to-one mapping to MeterProvider.
+  ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
+- Specify default configuration for a periodic metric reader that is associated with
+  the stdout metric exporter.
+  ([#2415](https://github.com/open-telemetry/opentelemetry-specification/pull/2415)).
+- Clarify the manner in which aggregation and temporality preferences
+  are encoded via MetricReader parameters "on the basis of instrument
+  kind".  Rename the environment variable
+  `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` used to set the
+  preference to be used when auto-configuring an OTLP Exporter,
+  defaults to CUMULATIVE, with DELTA an option that makes Counter,
+  Asynchronous Counter, and Histogram instruments choose Delta
+  temporality by default.
+  ([#2404](https://github.com/open-telemetry/opentelemetry-specification/pull/2404)).
+- Clarify that instruments are enabled by default, even when Views are configured.
+  Require support for the match-all View expression having `name=*` to support
+  disabling instruments by default.
+  ([#2417](https://github.com/open-telemetry/opentelemetry-specification/pull/2417)).
+
 ### Logs
+
+- Remove `flush` method on LogEmitter
+  ([#2405](https://github.com/open-telemetry/opentelemetry-specification/pull/2405))
 
 ### Resource
 
 ### Semantic Conventions
+
+- Changed `rpc.system` to an enum (allowing custom values), and changed the
+  `rpc.system` value for .NET WCF from `wcf` to `dotnet_wcf`.
+  ([#2377](https://github.com/open-telemetry/opentelemetry-specification/pull/2377))
+- Define JavaScript runtime semantic conventions.
+  ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
+- Add semantic conventions for [CloudEvents](https://cloudevents.io).
+  ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 
 ### Compatibility
 
@@ -26,6 +74,11 @@ release.
 ### SDK Configuration
 
 ### Telemetry Schemas
+
+### Common
+
+- Add "Mapping Arbitrary Data to OTLP AnyValue" document.
+  ([#2385](https://github.com/open-telemetry/opentelemetry-specification/pull/2385))
 
 ## v1.9.0 (2021-02-10)
 
@@ -36,7 +89,7 @@ release.
 ### Traces
 
 - Clarify `StartSpan` returning the parent as a non-recording Span when no SDK
-  is in use
+  is in use.
   ([#2121](https://github.com/open-telemetry/opentelemetry-specification/pull/2121))
 - Align Jaeger remote sampler endpoint with OTLP endpoint.
   ([#2246](https://github.com/open-telemetry/opentelemetry-specification/pull/2246))
@@ -45,9 +98,13 @@ release.
 - Add support for probability sampling in the OpenTelemetry `tracestate` entry and
   add optional specification for consistent probability sampling.
   ([#2047](https://github.com/open-telemetry/opentelemetry-specification/pull/2047))
-- Change description and default value of OTEL_EXPORTER_JAEGER_ENDPOINT env var
-  to point to the correct HTTP port and correct description of OTEL_TRACES_EXPORTER
-  ([#2333](https://github.com/open-telemetry/opentelemetry-specification/pull/2333)).
+- Change description and default value of `OTEL_EXPORTER_JAEGER_ENDPOINT` environment
+  variable to point to the correct HTTP port and correct description of
+  `OTEL_TRACES_EXPORTER`.
+  ([#2333](https://github.com/open-telemetry/opentelemetry-specification/pull/2333))
+- Add `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable to select the protocol
+  used by the Jaeger exporter.
+  ([#2341](https://github.com/open-telemetry/opentelemetry-specification/pull/2341))
 
 ### Metrics
 
@@ -78,6 +135,11 @@ release.
   ([#2282](https://github.com/open-telemetry/opentelemetry-specification/pull/2282))
 - Clarified wildcard and predicate support in metrics SDK View API.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
+- Changed the Exemplar wording, exemplar should be turned off by default.
+  ([#2414](https://github.com/open-telemetry/opentelemetry-specification/pull/2414))
+- Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
+  Exemplar remaining Feature-freeze.
+  ([#2304](https://github.com/open-telemetry/opentelemetry-specification/pull/2304))
 
 ### Logs
 
@@ -207,6 +269,8 @@ release.
   ([#1916](https://github.com/open-telemetry/opentelemetry-specification/pull/1916))
 - Change meaning and discourage use of `faas.trigger` for FaaS clients (outgoing).
   ([#1921](https://github.com/open-telemetry/opentelemetry-specification/pull/1921))
+- Define span structure for HTTP retries and redirects.
+  ([#2078](https://github.com/open-telemetry/opentelemetry-specification/pull/2078))
 - Clarify difference between container.name and k8s.container.name
   ([#1980](https://github.com/open-telemetry/opentelemetry-specification/pull/1980))
 
