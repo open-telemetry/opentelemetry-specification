@@ -78,7 +78,7 @@ how the schemas work:
   telemetry schemas.
 
 - Telemetry schemas are versioned. Over time the schema may evolve and telemetry
-  sources may emit data confirming to newer versions of the schema.
+  sources may emit data conforming to newer versions of the schema.
 
 - Telemetry schemas explicitly define transformations that are necessary to
   convert telemetry data between different versions of the schema, provided that
@@ -99,12 +99,12 @@ how the schemas work:
 
 - OpenTelemetry publishes a telemetry schema as part of the specification. The
   schema contains the list of transformations that semantic conventions undergo.
-  The schema is be available to be referred and downloaded at well known URL:
+  The schema is to be available, to be referred and downloaded at a well known URL:
   `https://opentelemetry.io/schemas/<version>` (where `<version>` matches the
   specification version number).
 
 - OpenTelemetry instrumentation libraries include the OpenTelemetry Schema URL
-  in all emitted telemetry. This is currently work in progress,
+  in all emitted telemetry. This is currently work-in-progress,
   [here is an example](https://github.com/open-telemetry/opentelemetry-go/blob/8ba6da8f3e5380629fcd72057fe0f827a9e23493/sdk/resource/os.go#L50)
   of how it is done in Go SDK's Resource detectors.
 
@@ -155,7 +155,7 @@ pair as the telemetry data is emitted, delivered and stored:
 ![Source and Backend](img/0152-source-and-backend.png)
 
 In this example the telemetry source produces spans that comply with version
-1.2.0 of OpenTelemetry schema, where "deployment.environment" attribute is used
+1.2.0 of OpenTelemetry schema, where the "deployment.environment" attribute is used
 to record that the span is coming from production.
 
 The telemetry consumer desires to store the telemetry in version 1.1.0 of
