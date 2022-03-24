@@ -1325,7 +1325,7 @@ OpenMetrics exemplar unless they would exceed the OpenMetrics
 
 The OpenMetrics prevents naming collisions for metrics from different libraries
 by adding a [metric namespace](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metric-naming-and-namespaces),
-which is a single-word prefix, to metrics. The [Instrumentation Scope Short Name](TODO)
+which is a single-word prefix, to metrics. The [Instrumentation Scope Short Name](../glossary.md#instrumentation-scope)
 is the equivalent in OpenTelemetry, and MUST be attached as a prefix to all
 metrics from an Instrumentation Scope, if the short name is present. The full
 format of metrics is `<instrumentation scope short_name>_<metric_name>`.
