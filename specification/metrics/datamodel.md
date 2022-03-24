@@ -1126,11 +1126,18 @@ OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types
 
 #### Metric Metadata
 
-The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily), if present, MUST be converted to the unit of the OTLP metric.  After trimming type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed from the suffix as well, if the metric suffix matches the unit.
+The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be converted to the unit of the OTLP metric.  After trimming
+type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
+from the suffix as well, if the metric suffix matches the unit.
 
-The [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily), if present, MUST be added as the desciption of the OTLP metric.
+The [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be added as the desciption of the OTLP metric.
 
-The [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily), if present, MUST be used to determine the OTLP data type, and dictates type-specific conversion rules listed below. Metric families without type metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
+The [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be used to determine the OTLP data type, and dictates
+type-specific conversion rules listed below. Metric families without type
+metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
 
 #### Counters
 
@@ -1231,11 +1238,19 @@ in keys).
 
 #### Metric Metadata
 
-The Unit of an OTLP metric point MUST be added as [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily). Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD use [base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units) recommended by OpenMetrics where possible.  The unit suffix comes before any type-specific suffixes.
+The Unit of an OTLP metric point MUST be added as
+[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD
+be converted to[base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units)
+recommended by OpenMetrics when possible.  The unit suffix comes before any
+type-specific suffixes.
 
-The description of an OTLP metrics point MUST be added as [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+The description of an OTLP metrics point MUST be added as
+[OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
 
-The data point type of an OTLP metric MUST be added as [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily). It also dictates type-specific conversion rules listed below.
+The data point type of an OTLP metric MUST be added as
+[OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+It also dictates type-specific conversion rules listed below.
 
 #### Gauges
 
