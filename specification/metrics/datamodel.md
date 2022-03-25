@@ -1241,7 +1241,7 @@ in keys).
 The Unit of an OTLP metric point MUST be added as
 [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
 Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD
-be converted to[base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units)
+be converted to [base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units)
 recommended by OpenMetrics when possible.  The unit suffix comes before any
 type-specific suffixes.
 
