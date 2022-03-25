@@ -10,7 +10,6 @@
   * [Concepts](#concepts)
     + [API](#api)
     + [SDK](#sdk)
-    + [Programming Model](#programming-model)
 - [Specifications](#specifications)
 - [References](#references)
 
@@ -71,24 +70,6 @@ OpenTelemetry requires a [separation of the API from the
 SDK](../library-guidelines.md#requirements), so that different SDKs can be
 configured at run time. Please refer to the overall [OpenTelemetry
 SDK](../overview.md#sdk) concept for more information.
-
-#### Programming Model
-
-```text
-+------------------+
-| MeterProvider    |                 +-----------------+             +--------------+
-|   Meter A        | Measurements... |                 | Metrics...  |              |
-|     Instrument X +-----------------> In-memory state +-------------> MetricReader |
-|     Instrument Y |                 |                 |             |              |
-|   Meter B        |                 +-----------------+             +--------------+
-|     Instrument Z |
-|     ...          |                 +-----------------+             +--------------+
-|     ...          | Measurements... |                 | Metrics...  |              |
-|     ...          +-----------------> In-memory state +-------------> MetricReader |
-|     ...          |                 |                 |             |              |
-|     ...          |                 +-----------------+             +--------------+
-+------------------+
-```
 
 ## Specifications
 
