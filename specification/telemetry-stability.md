@@ -41,8 +41,8 @@ Span or metric names, attributes of any telemetry items may change without any
 restrictions. The produced telemetry MAY specify a Schema URL if the telemetry data
 conforms to a particular Schema.
 
-Unstable instrumentations authored by OpenTelemetry MAY produce telemetry that is
-not described by OpenTelemetry semantic conventions.
+Unstable instrumentations authored by OpenTelemetry MAY produce additional telemetry that
+is not described by OpenTelemetry semantic conventions.
 
 TODO: decide if it is necessary to indicate on the wire if the produced telemetry is
 coming from an unstable instrumentation.
@@ -87,11 +87,11 @@ After April 1, 2023, stable instrumentations are allowed to change the produced 
 if all the following conditions are fulfilled:
 
 - The change is part of OpenTelemetry semantic conventions and is in a released
-  version of the specification,
+  version of the specification.
 - The change has a corresponding
   [published](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/schemas/overview.md#opentelemetry-schema)
   OpenTelemetry Schema File that describes the change.
-- The produced telemetry correctly specifies the Schema URL.
+- The produced telemetry correctly specifies the respective Schema URL.
 
 If the change was introduced in the semantic conventions specification before
 April 1, 2023, the instrumentations must wait until April 1, 2023 before they can adopt

@@ -139,7 +139,7 @@ and compatible with the latest versions of the API, SDK, and Semantic
 Conventions. If a release of the API, SDK, or Semantic Conventions contains
 changes which are relevant to a contrib package, that package SHOULD be updated
 and released in a timely fashion. (See limitations on instrumentation stability
-in [Telemetry Stability](telemetry-stability.md)). The goal is to ensure users can
+in [Telemetry Stability](telemetry-stability.md).) The goal is to ensure users can
 update to the latest version of OpenTelemetry, and not be held back by the
 plugins that they depend on.
 
@@ -158,13 +158,13 @@ Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid
 breaking analysis tools, such as dashboards and alerts. To achieve this, while
 allowing the evolution of telemetry and semantic conventions, OpenTelemetry
 relies on the concept of
-[schemas](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/schemas/overview.md).
+[Telemetry Schemas](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/schemas/overview.md).
 
 Changes to semantic conventions in this specification are allowed, provided that
 the changes can be described by schema files. The following changes can be
 currently described and are allowed:
 
-- Renaming of attributes.
+- Renaming of span, metric, log and resource attributes.
 - Renaming of metrics.
 - Renaming of span events.
 
@@ -175,7 +175,7 @@ and published
 For details see [how OpenTelemetry Schemas are
 published](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/schemas/overview.md#opentelemetry-schema).
 
-See [Telemetry Stability](telemetry-stability.md) document for details on how
+See the [Telemetry Stability](telemetry-stability.md) document for details on how
 instrumentations can use schemas to change the instrumentation they produce.
 
 In addition to the 3 types of changes described above there are certain types
@@ -183,7 +183,8 @@ that are always allowed. Such changes do not need to be described (and are not
 described) by schema files. Here is the list of such changes:
 
 - Adding new attributes to the existing semantic conventions for resources,
-  spans, span events or log records.
+  spans, span events or log records. Note that adding attributes to existing metrics is
+  considered to be a breaking change.
 - Adding semantic conventions for new types of resources, spans, span events,
   metrics or log records.
 
@@ -194,7 +195,7 @@ capable of describing such changes.
 
 #### Telemetry Stability
 
-For stability of telemetry produced by instrumentation see
+For stability of telemetry produced by instrumentation see the
 [Telemetry Stability](telemetry-stability.md) document.
 
 ### Deprecated
