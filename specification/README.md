@@ -52,10 +52,10 @@ the [specification][].
 
 See the [project repository][] for information about the following, and more:
 
-- [Change / contribution process](../#change--contribution-process)
-- [Project timeline](../#project-timeline)
-- [Versioning the specification](../#versioning-the-specification)
-- [License](../#license)
+- [Change / contribution process](../README.md#change--contribution-process)
+- [Project timeline](../README.md#project-timeline)
+- [Versioning the specification](../README.md#versioning-the-specification)
+- [License](../README.md#license)
 
 [project repository]: https://github.com/open-telemetry/opentelemetry-specification
 [specification]: overview.md

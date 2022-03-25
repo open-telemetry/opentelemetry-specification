@@ -26,8 +26,8 @@ correctly on GitHub.
 
 Be sure to clearly define the specification requirements using appropriate
 keywords as defined in [Notation Conventions and
-Compliance](specification#notation-conventions-and-compliance), while making
-sure to heed the guidance laid out in
+Compliance](./specification/README.md#notation-conventions-and-compliance),
+while making sure to heed the guidance laid out in
 [RFC2119](https://tools.ietf.org/html/rfc2119) about the sparing use of
 imperatives:
 

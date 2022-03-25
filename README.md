@@ -10,7 +10,7 @@ requirements and expectations for all OpenTelemetry implementations.
 
 - The [latest release][] is hosted at
   [opentelemetry.io/docs/reference/specification][]
-- Markdown sources are under [specification](specification)
+- Markdown sources are under [specification](./specification/README.md)
 
 ## Change / contribution process
 
