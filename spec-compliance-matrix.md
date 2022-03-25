@@ -29,7 +29,7 @@ formats is required. Implementing more than one format is optional.
 | Set active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |     |      |     |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| Documentation defines adding attributes at span creation as preferred                            |          |     |      |     |        |      |        |     |      |     |      |       |
+| Documentation defines adding attributes at span creation as preferred                            |          |     |      |     |        |      |        |     |      |     | +    |       |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Mark Span active                                                                                 |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -80,7 +80,7 @@ formats is required. Implementing more than one format is optional.
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +   | +    |     | +      | +    | +      | +   | +    | +   | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   |      |       |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
 
@@ -165,8 +165,8 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The updated configuration applies to all already returned `Meter`s.                                                                                                          | if above | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
 | There is a way to register `View`s with a `MeterProvider`.                                                                                                                   |          | -  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The `View` instrument selection criteria is as specified.                                                                                                                    |          |    |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The `View` instrument selection criteria supports wildcards.                                                                                                                 | X        |    |      |    |        |      |        |     |      |     |      |       |
-| The `View` instrument selection criteria supports the match-all wildcard.                                                                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
+| The `View` instrument selection criteria supports wildcards.                                                                                                                 | X        |    |      |    |        |      |        |     |      |     |   +  |       |
+| The `View` instrument selection criteria supports the match-all wildcard.                                                                                                    |          |    |      |    |        |      |        |     |      |     |   +  |       |
 | The name of the `View` can be specified.                                                                                                                                     |          |    |  +   |    |    -   |      |        |     |      |     |   +  |       |
 | The `View` allows configuring the name description, attributes keys and aggregation of the resulting metric stream.                                                          |          |    |  ?   |    |    -   |      |        |     |      |     |   -  |       |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream.                                                                                             | X        |    |  ?   |    |    -   |      |        |     |      |     |   -  |       |
@@ -183,8 +183,8 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The `Histogram` aggregation performs as specified.                                                                                                                           |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
 | The explicit bucket `Histogram` aggregation is available.                                                                                                                    |          | -  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The explicit bucket `Histogram` aggregation performs as specified.                                                                                                           |          | -  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics Reader implementation supports registering metric Exporters                                                                                                      |          |    |      |    |        |      |        |     |      |     |      |       |
-| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.                                                              |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics Reader implementation supports registering metric Exporters                                                                                                      |          |    |      |    |        |      |        |     |      |     |   +  |       |
+| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.                                                              |          |    |      |    |        |      |        |     |      |     |   -  |       |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.                                                              |          |    |      |    |        |      |        |     |      |     |      |       |
 | The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).                                                                    |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
 | The metrics Exporter `export` function can not be called concurrently from the same Exporter instance.                                                                       |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
@@ -269,14 +269,14 @@ Note: Support for environment variables is optional.
 |OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 |   |    |   |      |    | -    |   |    |   | -  |     |
 |OTEL_ATTRIBUTE_COUNT_LIMIT                        |   |    |   |      |    | -    |   |    |   | -  |     |
 |OTEL_METRICS_EXEMPLAR_FILTER                      |   |    |   |      |    |      |   |    |   | -  |     |
-|OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE |   |    |   |      |    |      |   |    |   |    |     |
+|OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE |   |    |   |      |    |      |   |    |   | -  |     |
 
 ## Exporters
 
 | Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
 | [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      | +      | +   | +    | +   | +    |       |
-| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      | +   | -    |     |      |       |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
 | Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | +   | -    | +   | +    | +     |
 | **[OTLP](specification/protocol/otlp.md)**                                     |          |    |   |    |             |      |        |     |      |     |      |       |
