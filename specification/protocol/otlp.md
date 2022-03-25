@@ -320,7 +320,7 @@ The default network port for OTLP/gRPC is 4317.
 
 ### OTLP/HTTP
 
-**Status**: Binary format is [Stable](../document-status.md), 
+**Status**: Binary format is [Stable](../document-status.md),
   JSON format is [Experimental](../document-status.md)
 
 OTLP/HTTP uses Protobuf payloads encoded either in binary format or in JSON
