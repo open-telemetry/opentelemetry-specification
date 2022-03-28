@@ -88,8 +88,7 @@ if all the following conditions are fulfilled:
 
 - The change is part of OpenTelemetry semantic conventions and is in a released
   version of the specification.
-- The change has a corresponding
-  [published](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/schemas/overview.md#opentelemetry-schema)
+- The change has a corresponding [published](schemas/overview.md#opentelemetry-schema)
   OpenTelemetry Schema File that describes the change.
 - The produced telemetry correctly specifies the respective Schema URL.
 
