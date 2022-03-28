@@ -33,7 +33,7 @@ instruments not explicitly defined in the specification.
 | ---------------------- | ----------- | ----- | ---------------------| ---------- | ---------------- | ----------------------------------- |
 | system.cpu.time        |             | s     | Asynchronous Counter | Double     | state            | idle, user, system, interrupt, etc. |
 |                        |             |       |                      |            | cpu              | CPU number [0..n-1]                 |
-| system.cpu.utilization |             | 1     | Asynchronous Gauge   | Double     | state            | idle, user, system, interrupt, etc. |
+| system.cpu.utilization | Difference in system.cpu.time since the last measurement, divided by the elapsed time and number of CPUs | 1     | Asynchronous Gauge   | Double     | state            | idle, user, system, interrupt, etc. |
 |                        |             |       |                      |            | cpu              | CPU number (0..n)                   |
 
 ### `system.memory.` - Memory metrics
