@@ -62,7 +62,7 @@ groups:
     prefix: rpc
     extends: rpc
     span_kind: server
-    brief: 'Semantic Convention for RPC Server'
+    brief: 'Semantic Convention for RPC server spans'
     attributes:
       - ref: net.host.name
       - ref: net.host.ip
