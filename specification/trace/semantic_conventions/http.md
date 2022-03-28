@@ -146,7 +146,9 @@ before any HTTP-redirects that may happen when executing the request.
 <!-- semconv http.client -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | See below |
+
+**[1]:** `net.peer.name` SHOULD NOT be set if capturing it requires a reverse DNS lookup.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 

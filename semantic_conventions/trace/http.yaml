@@ -126,6 +126,8 @@ groups:
     attributes:
       - ref: net.peer.name
         sampling_relevant: true
+        note: >
+          `net.peer.name` SHOULD NOT be set if capturing it requires a reverse DNS lookup.
     constraints:
       - any_of:
           - [http.url]
