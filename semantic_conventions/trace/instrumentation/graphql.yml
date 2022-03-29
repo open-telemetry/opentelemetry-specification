@@ -1,0 +1,20 @@
+groups:
+  - id: graphql
+    prefix: graphql
+    brief: >
+      This document defines semantic conventions to apply when instrumenting the GraphQL Server. They map GraphQL query
+      to attributes on a Span.
+    attributes:
+      - id: graphql.operation.name
+        brief: "The name of the query being executed."
+        type: string
+        examples: 'findBookById'
+      - id: graphql.operation.type
+        brief: "The name of the operation being executed."
+        type: string
+        examples: ['QUERY', 'MUTATION', 'SUBSCRIPTION']
+      - id: graphql.source
+        brief: "The GraphQL query being executed."
+        type: string
+        note: The value may be sanitized to exclude sensitive information.
+        examples: 'query findBookById { bookById(id: ?) { name } }'
