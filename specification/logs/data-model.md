@@ -1335,19 +1335,19 @@ for an exhaustive list.
 
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog       |WinEvtLog  |Log4j |Zap   |java.util.logging|SeverityNumber|
-|-------------|-----------|------|------|-----------------|--------------|
-|             |           |TRACE |      | FINEST          |TRACE         |
-|Debug        |Verbose    |DEBUG |Debug | FINER           |DEBUG         |
-|             |           |      |      | FINE            |DEBUG2        |
-|             |           |      |      | CONFIG          |DEBUG3        |
-|Informational|Information|INFO  |Info  | INFO            |INFO          |
-|Notice       |           |      |      |                 |INFO2         |
-|Warning      |Warning    |WARN  |Warn  | WARNING         |WARN          |
-|Error        |Error      |ERROR |Error | SEVERE          |ERROR         |
-|Critical     |Critical   |      |Dpanic|                 |ERROR2        |
-|Alert        |           |      |Panic |                 |ERROR3        |
-|Emergency    |           |FATAL |Fatal |                 |FATAL         |
+|Syslog       |WinEvtLog  |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
+|-------------|-----------|------|------|-----------------|-----------------------------------|--------------|
+|             |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE         |
+|Debug        |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG         |
+|             |           |      |      | FINE            |                                   |DEBUG2        |
+|             |           |      |      | CONFIG          |                                   |DEBUG3        |
+|Informational|Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO          |
+|Notice       |           |      |      |                 |                                   |INFO2         |
+|Warning      |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN          |
+|Error        |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR         |
+|Critical     |Critical   |      |Dpanic|                 |                                   |ERROR2        |
+|Alert        |           |      |Panic |                 |                                   |ERROR3        |
+|Emergency    |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL         |
 
 ## References
 
