@@ -67,7 +67,7 @@ release.
 - Add semantic conventions for [CloudEvents](https://cloudevents.io).
   ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 - Add `rpc.system` value for Apache Dubbo.
-  ([#9999](https://github.com/open-telemetry/opentelemetry-specification/pull/9999))
+  ([#2453](https://github.com/open-telemetry/opentelemetry-specification/pull/2453))
 
 ### Compatibility
 
