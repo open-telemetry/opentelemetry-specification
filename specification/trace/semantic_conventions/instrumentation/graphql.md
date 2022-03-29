@@ -8,9 +8,9 @@ attributes on a Span.
 <!-- semconv graphql -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
-| `graphql.graphql.operation.name` | string | The name of the query being executed. | `findBookById` | No |
-| `graphql.graphql.operation.type` | string | The name of the operation being executed. | `QUERY`; `MUTATION`; `SUBSCRIPTION` | No |
-| `graphql.graphql.source` | string | The GraphQL query being executed. [1] | `query findBookById { bookById(id: ?) { name } }` | No |
+| `graphql.operation.name` | string | The name of the query being executed. | `findBookById` | No |
+| `graphql.operation.type` | string | The name of the operation being executed. | `QUERY`; `MUTATION`; `SUBSCRIPTION` | No |
+| `graphql.source` | string | The GraphQL query being executed. [1] | `query findBookById { bookById(id: ?) { name } }` | No |
 
 **[1]:** The value may be sanitized to exclude sensitive information.
 <!-- endsemconv -->
