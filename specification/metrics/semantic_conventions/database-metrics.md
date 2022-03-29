@@ -45,7 +45,7 @@ MUST NOT be used.
 | `db.client.connections.idle.min`         | Asynchronous UpDownCounter | connections  | `{connections}`                           | The minimum number of idle open connections allowed.                                                                                         |
 | `db.client.connections.max`              | Asynchronous UpDownCounter | connections  | `{connections}`                           | The maximum number of open connections allowed.                                                                                              |
 | `db.client.connections.waiting_requests` | Asynchronous UpDownCounter | requests     | `{requests}`                              | The number of pending requests for an open connection, cumulative for the entire pool.                                                       |
-| `db.client.connections.timeouts`         | Counter                    | timeouts     | `{timeouts}`                              | The number of connection timeouts happened when trying to obtaing a connection from the pool that have happened since the application start. |
+| `db.client.connections.timeouts`         | Counter                    | timeouts     | `{timeouts}`                              | The number of connection timeouts that have occurred trying to obtain a connection from the pool. |
 | `db.client.connections.time`             | Histogram                  | milliseconds | `ms`                                      | The time it took to apply an operation described by the `operation` attribute.                                                               |
 
 All `db.client.connections.time` measurements MUST include the following attribute:
