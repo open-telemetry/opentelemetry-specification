@@ -615,15 +615,19 @@ function are typically expected to serialize and transmit the data to the
 destination.
 
 Export() will never be called concurrently for the same exporter instance.
-Export() can be called again only after the current call returns.
+Export() can be called again only after the current call returns. This does not
+mean Export() is required to block until the batch is successfully sent. What
+Export() does before returning is language and exporter dependent. 
 
 Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
 
-Any retry logic that is required by the exporter is the responsibility
-of the exporter. The default SDK SHOULD NOT implement retry logic, as
-the required logic is likely to depend heavily on the specific protocol
-and backend the spans are being sent to.
+Concurrent requests and retry logic is the responsibility of the exporter. The
+default SDK's Span Processors SHOULD NOT implement retry logic, as the required
+logic is likely to depend heavily on the specific protocol and backend the spans
+are being sent to. For example, the [OpenTelemetry Protocol (OTLP)
+specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/otlp.md)
+defines logic for both sending concurrent requests and retrying requests.
 
 **Parameters:**
 
