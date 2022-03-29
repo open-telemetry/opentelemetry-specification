@@ -2,7 +2,7 @@
 
 **Status**: [Experimental](../../../document-status.md)
 
-This document defines semantic conventions to apply when instrumenting the GraphQL Server. They map GraphQL query to
+This document defines semantic conventions to apply when instrumenting the GraphQL Server. They map GraphQL queries to
 attributes on a Span.
 
 <!-- semconv graphql -->
