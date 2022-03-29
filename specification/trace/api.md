@@ -580,7 +580,7 @@ When the status is set to `Error` by Instrumentation Libraries, the `Description
 SHOULD be documented and predictable. The status code should only be set to `Error`
 according to the rules defined within the semantic conventions. For operations
 not covered by the semantic conventions, Instrumentation Libraries SHOULD
-publish their own conventions, including all possible values of `Description`
+publish their own conventions, including possible values of `Description`
 and what they mean.
 
 Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
