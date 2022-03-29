@@ -141,7 +141,7 @@ be less than or greater than the real wall time between measurements.
   values. **utilization** for time instruments can be derived automatically
   using metric event timestamps. For example, `system.cpu.utilization` is
   defined as the difference in `system.cpu.time` measurements divided by the
-  elapsed time.
+  elapsed time and number of CPUs.
 
 - **io** - an instrument that measures bidirectional data flow should be
 called `entity.io` and have attributes for direction. For example,
