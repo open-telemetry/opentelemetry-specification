@@ -39,14 +39,14 @@ Instrumentation libraries for database client connection pools that collect data
 following metric instruments. Otherwise, if the instrumentation library does not collect this data, these instruments
 MUST NOT be used.
 
-| Name                                     | Instrument                 | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                                                                                                                  |
-|------------------------------------------|----------------------------|--------------|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `db.client.connections.idle.max`         | Asynchronous UpDownCounter | connections  | `{connections}`                           | The maximum number of idle open connections allowed.                                                                                         |
-| `db.client.connections.idle.min`         | Asynchronous UpDownCounter | connections  | `{connections}`                           | The minimum number of idle open connections allowed.                                                                                         |
-| `db.client.connections.max`              | Asynchronous UpDownCounter | connections  | `{connections}`                           | The maximum number of open connections allowed.                                                                                              |
-| `db.client.connections.waiting_requests` | Asynchronous UpDownCounter | requests     | `{requests}`                              | The number of pending requests for an open connection, cumulative for the entire pool.                                                       |
+| Name                                     | Instrument                 | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                                                                       |
+|------------------------------------------|----------------------------|--------------|-------------------------------------------|---------------------------------------------------------------------------------------------------|
+| `db.client.connections.idle.max`         | Asynchronous UpDownCounter | connections  | `{connections}`                           | The maximum number of idle open connections allowed.                                              |
+| `db.client.connections.idle.min`         | Asynchronous UpDownCounter | connections  | `{connections}`                           | The minimum number of idle open connections allowed.                                              |
+| `db.client.connections.max`              | Asynchronous UpDownCounter | connections  | `{connections}`                           | The maximum number of open connections allowed.                                                   |
+| `db.client.connections.pending_requests` | Asynchronous UpDownCounter | requests     | `{requests}`                              | The number of pending requests for an open connection, cumulative for the entire pool.            |
 | `db.client.connections.timeouts`         | Counter                    | timeouts     | `{timeouts}`                              | The number of connection timeouts that have occurred trying to obtain a connection from the pool. |
-| `db.client.connections.time`             | Histogram                  | milliseconds | `ms`                                      | The time it took to apply an operation described by the `operation` attribute.                                                               |
+| `db.client.connections.time`             | Histogram                  | milliseconds | `ms`                                      | The time it took to apply an operation described by the `operation` attribute.                    |
 
 All `db.client.connections.time` measurements MUST include the following attribute:
 
