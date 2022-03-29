@@ -1,29 +1,7 @@
 {
-  "build": {
-    "content": [
-      {
-        "files": [
-          "**.md",
-          "toc.yml"
-        ]
-      }
-    ],
-    "resource": [
-      {
-        "files": [
-          ".github/CODEOWNERS",
-          ".markdownlint.yaml",
-          ".vscode/settings.json",
-          "**.png"
-        ]
-      }
-    ],
-    "dest": "_site",
-    "globalMetadataFiles": [],
-    "fileMetadataFiles": [],
-    "noLangKeyword": false,
-    "keepFileLink": false,
-    "cleanupCacheHistory": true,
-    "disableGitFeatures": true
+  "files": "**/*.{md,png}",
+  "warningsAsErrors": true,
+  "rules": {
+    "link-out-of-scope": "off"
   }
 }
