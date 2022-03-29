@@ -263,3 +263,19 @@ To ensure consistent naming across projects, this specification recommends that 
 ```
 OTEL_{LANGUAGE}_{FEATURE}
 ```
+
+## HTTP request and response headers
+
+See [HTTP request and response headers](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/http.md#http-request-and-response-headers)
+
+Environment variables for capturing http request and response headers:
+
+| Name                                                      | Description                                                                                                                                         |
+|-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| OTEL_INSTRUMENTATION_HTTP_CAPTURE_HEADERS_SERVER_REQUEST  | A comma-separated list of HTTP header names. HTTP server instrumentations will capture HTTP request header values for all configured header names.  |
+| OTEL_INSTRUMENTATION_HTTP_CAPTURE_HEADERS_SERVER_RESPONSE | A comma-separated list of HTTP header names. HTTP server instrumentations will capture HTTP response header values for all configured header names. |
+| OTEL_INSTRUMENTATION_HTTP_CAPTURE_HEADERS_CLIENT_REQUEST  | A comma-separated list of HTTP header names. HTTP client instrumentations will capture HTTP request header values for all configured header names.  |
+| OTEL_INSTRUMENTATION_HTTP_CAPTURE_HEADERS_CLIENT_RESPONSE | A comma-separated list of HTTP header names. HTTP client instrumentations will capture HTTP response header values for all configured header names. |
+
+For example,
+``OTEL_INSTRUMENTATION_HTTP_CAPTURE_HEADERS_SERVER_REQUEST="Custom-Header-1,Content-Type"`` will capture ``Custom-Header-1`` and ``Content-Type`` headers from request headers and add them as span attributes. The names of the added span attributes will be normalised to ``http.request.header.custom_header_1`` and ``http.request.header.content_type`` as per the [semantic convention](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/http.md#http-request-and-response-headers).
