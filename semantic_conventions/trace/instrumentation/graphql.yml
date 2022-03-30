@@ -6,14 +6,14 @@ groups:
       to attributes on a Span.
     attributes:
       - id: operation.name
-        brief: "The name of the query being executed."
+        brief: "The name of the operation being executed."
         type: string
         examples: 'findBookById'
       - id: operation.type
-        brief: "The name of the operation being executed."
+        brief: "The type of the operation being executed."
         type: string
         examples: ['QUERY', 'MUTATION', 'SUBSCRIPTION']
-      - id: source
+      - id: query
         brief: "The GraphQL query being executed."
         type: string
         note: The value may be sanitized to exclude sensitive information.
