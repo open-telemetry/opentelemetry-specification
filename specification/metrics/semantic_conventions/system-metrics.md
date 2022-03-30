@@ -29,22 +29,22 @@ instruments not explicitly defined in the specification.
 
 **Description:** System level processor metrics.
 
-| Name                   | Description | Units | Instrument Type      | Value Type | Attribute Key(s) | Attribute Values                    |
-| ---------------------- | ----------- | ----- | ---------------------| ---------- | ---------------- | ----------------------------------- |
-| system.cpu.time        |             | s     | Counter | Double     | state            | idle, user, system, interrupt, etc. |
-|                        |             |       |                      |            | cpu              | CPU number [0..n-1]                 |
-| system.cpu.utilization | Difference in system.cpu.time since the last measurement, divided by the elapsed time and number of CPUs | 1     | Asynchronous Gauge   | Double     | state            | idle, user, system, interrupt, etc. |
-|                        |             |       |                      |            | cpu              | CPU number (0..n)                   |
+| Name                   | Description                                                                                              | Units | Instrument Type | Value Type | Attribute Key(s) | Attribute Values                    |
+| ---------------------- |----------------------------------------------------------------------------------------------------------| ----- |-----------------| ---------- | ---------------- | ----------------------------------- |
+| system.cpu.time        |                                                                                                          | s     | Counter         | Double     | state            | idle, user, system, interrupt, etc. |
+|                        |                                                                                                          |       |                 |            | cpu              | CPU number [0..n-1]                 |
+| system.cpu.utilization | Difference in system.cpu.time since the last measurement, divided by the elapsed time and number of CPUs | 1     | Gauge           | Double     | state            | idle, user, system, interrupt, etc. |
+|                        |                                                                                                          |       |                 |            | cpu              | CPU number (0..n)                   |
 
 ### `system.memory.` - Memory metrics
 
 **Description:** System level memory metrics. This does not include [paging/swap
 memory](#systempaging---pagingswap-metrics).
 
-| Name                      | Description | Units | Instrument Type   | Value Type | Attribute Key | Attribute Values         |
-| ------------------------- | ----------- | ----- | ----------------- | ---------- | ------------- | ------------------------ |
-| system.memory.usage       |             | By    | UpDownCounter | Int64      | state         | used, free, cached, etc. |
-| system.memory.utilization |             | 1     | Asynchronous Gauge         | Double     | state         | used, free, cached, etc. |
+| Name                      | Description | Units | Instrument Type | Value Type | Attribute Key | Attribute Values         |
+| ------------------------- | ----------- | ----- |-----------------| ---------- | ------------- | ------------------------ |
+| system.memory.usage       |             | By    | UpDownCounter   | Int64      | state         | used, free, cached, etc. |
+| system.memory.utilization |             | 1     | Gauge           | Double     | state         | used, free, cached, etc. |
 
 ### `system.paging.` - Paging/swap metrics
 
@@ -94,18 +94,18 @@ perf counter (similar for Writes)
 ### `system.filesystem.` - Filesystem metrics
 
 **Description:** System level filesystem metrics.
-| Name                          | Description | Units | Instrument Type            | Value Type | Attribute Key  | Attribute Values     |
-| ----------------------------- | ----------- | ----- | -------------------------- | ---------- | -------------- | -------------------- |
-| system.filesystem.usage       |             | By    | UpDownCounter | Int64      | device         | (identifier)         |
-|                               |             |       |                            |            | state          | used, free, reserved |
-|                               |             |       |                            |            | type           | ext4, tmpfs, etc.    |
-|                               |             |       |                            |            | mode           | rw, ro, etc.         |
-|                               |             |       |                            |            | mountpoint     | (path)               |
-| system.filesystem.utilization |             | 1     | Asynchronous Gauge         | Double     | device         | (identifier)         |
-|                               |             |       |                            |            | state          | used, free, reserved |
-|                               |             |       |                            |            | type           | ext4, tmpfs, etc.    |
-|                               |             |       |                            |            | mode           | rw, ro, etc.         |
-|                               |             |       |                            |            | mountpoint     | (path)               |
+| Name                          | Description | Units | Instrument Type | Value Type | Attribute Key  | Attribute Values     |
+| ----------------------------- | ----------- | ----- | --------------- | ---------- | -------------- | -------------------- |
+| system.filesystem.usage       |             | By    | UpDownCounter   | Int64      | device         | (identifier)         |
+|                               |             |       |                 |            | state          | used, free, reserved |
+|                               |             |       |                 |            | type           | ext4, tmpfs, etc.    |
+|                               |             |       |                 |            | mode           | rw, ro, etc.         |
+|                               |             |       |                 |            | mountpoint     | (path)               |
+| system.filesystem.utilization |             | 1     | Gauge           | Double     | device         | (identifier)         |
+|                               |             |       |                 |            | state          | used, free, reserved |
+|                               |             |       |                 |            | type           | ext4, tmpfs, etc.    |
+|                               |             |       |                 |            | mode           | rw, ro, etc.         |
+|                               |             |       |                 |            | mountpoint     | (path)               |
 
 ### `system.network.` - Network metrics
 
