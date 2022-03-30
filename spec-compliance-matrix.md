@@ -308,16 +308,16 @@ Note: Support for environment variables is optional.
 | Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
-| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
-| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
-| Service name mapping                                                           |          | +  | + |    | +           | +    | -      |     |      | +   | +    | +     |
-| Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
-| InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
+| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |   |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | + |    | [-][py1437] | -    | -      | -   |      | -   | -    | -     |
+| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | -     |
+| Service name mapping                                                           |          | +  | + |    | +           | +    | -      | +   |      | +   | +    | +     |
+| Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | -     |
+| InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | -     |
 | InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
-| Status mapping                                                                 |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
-| Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | +     |
+| Status mapping                                                                 |          | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| Error Status mapping                                                           |          | +  | + |    | +           | +    | -      | +   | +    | +   | +    | -     |
+| Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | +     |
 | **OpenCensus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 | **Prometheus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
