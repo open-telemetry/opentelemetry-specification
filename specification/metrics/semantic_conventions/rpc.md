@@ -84,6 +84,7 @@ or not they should be on the server, client or both.
 | `grpc` | gRPC |
 | `java_rmi` | Java RMI |
 | `dotnet_wcf` | .NET WCF |
+| `apache_dubbo` | Apache Dubbo |
 <!-- endsemconv -->
 
 To avoid high cardinality, implementations should prefer the most stable of `net.peer.name` or

@@ -19,6 +19,9 @@ groups:
             - id: dotnet_wcf
               value: 'dotnet_wcf'
               brief: '.NET WCF'
+            - id: apache_dubbo
+              value: 'apache_dubbo'
+              brief: 'Apache Dubbo'
       - id: service
         type: string
         required:

@@ -68,6 +68,8 @@ release.
   ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
 - Add `process.cpu.utilization` metric.
   ([#2436](https://github.com/open-telemetry/opentelemetry-specification/pull/2436))
+- Add `rpc.system` value for Apache Dubbo.
+  ([#2453](https://github.com/open-telemetry/opentelemetry-specification/pull/2453))
 
 ### Compatibility
 
