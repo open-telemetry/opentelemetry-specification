@@ -66,8 +66,8 @@ release.
   ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
 - Add semantic conventions for [CloudEvents](https://cloudevents.io).
   ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
-- `net.peer.name` moved from common http attributes to just client http attributes,
-  and note added that it SHOULD NOT be set if capturing it requires a reverse DNS lookup.
+- Note added that `net.peer.name` SHOULD NOT be set if capturing it requires a reverse DNS lookup.
+  And moved `net.peer.name` from common http attributes to just client http attributes.
   ([#2446](https://github.com/open-telemetry/opentelemetry-specification/pull/2446))
 
 ### Compatibility
