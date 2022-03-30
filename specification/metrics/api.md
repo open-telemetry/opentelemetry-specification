@@ -818,9 +818,9 @@ pre-calculated value is already available or fetching the snapshot of the
 "current value" is straightforward, use [Asynchronous
 UpDownCounter](#asynchronous-updowncounter) instead.
 
-There are cases when the runtime APIs won't provide sufficient information, e.g.
+UpDownCounter supports counting **the size of a collection** incrementally, e.g.
 reporting the number of items in a concurrent bag by the "color" and "material"
-properties.
+properties as they are added and removed.
 
 | Color    | Material     | Count |
 | -------- | -----------  | ----- |
