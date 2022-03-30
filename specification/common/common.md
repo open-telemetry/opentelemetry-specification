@@ -9,6 +9,7 @@
 
 - [Attribute](#attribute)
   * [Attribute Limits](#attribute-limits)
+    + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
 - [Attribute Collections](#attribute-collections)
 
@@ -50,6 +51,9 @@ both containing an array of strings to represent a mapping
 
 See [Attribute Naming](attribute-naming.md) for naming guidelines.
 
+See [this document](attribute-type-mapping.md) to find out how to map values obtained
+outside OpenTelemetry into OpenTelemetry attribute values.
+
 ### Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there are no
@@ -57,7 +61,7 @@ limits placed on attributes, they can quickly exhaust available memory, resultin
 in crashes that are difficult to recover from safely.
 
 By default an SDK SHOULD apply truncation as per the list of
-[configurable parameters](#attribute-limits-configuration) below.
+[configurable parameters](#configurable-parameters) below.
 
 If an SDK provides a way to:
 
@@ -88,8 +92,7 @@ it isn't set, then the SDK MUST attempt to use the general limit. If neither are
 defined, then the SDK MUST try to use the model-specific limit default value,
 followed by the global limit default value.
 
-<a name="attribute-limits-configuration"></a>
-**Configurable parameters:**
+#### Configurable Parameters
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;

@@ -273,7 +273,6 @@ A `Span` represents a single operation within a trace. Spans can be nested to
 form a trace tree. Each trace contains a root span, which typically describes
 the entire operation and, optionally, one or more sub-spans for its sub-operations.
 
-<a name="span-data-members"></a>
 `Span`s encapsulate:
 
 - The span name

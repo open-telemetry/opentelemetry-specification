@@ -50,8 +50,11 @@
     + [Sums: Missing Timestamps](#sums-missing-timestamps)
 - [Prometheus Compatibility](#prometheus-compatibility)
   * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
+    + [Metric Metadata](#metric-metadata)
     + [Counters](#counters)
     + [Gauges](#gauges)
+    + [Info](#info)
+    + [StateSet](#stateset)
     + [Unknown-typed](#unknown-typed)
     + [Histograms](#histograms)
     + [Summaries](#summaries)
@@ -60,6 +63,7 @@
     + [Exemplars](#exemplars-1)
     + [Resource Attributes](#resource-attributes)
   * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
+    + [Metric Metadata](#metric-metadata-1)
     + [Gauges](#gauges-1)
     + [Sums](#sums-1)
     + [Histograms](#histograms-1)
@@ -367,7 +371,7 @@ to the end user, although this subject deserves attention.
 A metric stream can use one of these basic point kinds, all of
 which satisfy the requirements above, meaning they define a decomposable
 aggregate function (also known as a “natural merge” function) for points of the
-same kind. <sup>[1](#otlpdatapointfn)</sup>
+same kind. <sup>[1](#footnotes)</sup>
 
 The basic point kinds are:
 
@@ -1120,13 +1124,36 @@ OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types
 
 ### Prometheus Metric points to OTLP
 
+#### Metric Metadata
+
+The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be converted to the unit of the OTLP metric.  After trimming
+type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
+from the suffix as well, if the metric suffix matches the unit.
+
+The [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be added as the desciption of the OTLP metric.
+
+The [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be used to determine the OTLP data type, and dictates
+type-specific conversion rules listed below. Metric families without type
+metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
+
 #### Counters
 
-A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
+A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.  If the counter has a `_total` suffix, it MUST be removed.
 
 #### Gauges
 
 A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gauge) MUST be converted to an OTLP Gauge.
+
+#### Info
+
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the "target" info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.  If it has an `_info` suffix, the suffix MUST be removed from the metric name.
+
+#### StateSet
+
+An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum. An OpenMetrics StateSet can be thought of as a special-case of the OpenMetrics Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 #### Unknown-typed
 
@@ -1141,7 +1168,7 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 * The `le` label on non-suffixed metrics is used to identify and order histogram bucket boundaries. Each Prometheus line produces one bucket count on the resulting histogram. Each value for the `le` label except `+Inf` produces one bucket boundary.
 * Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
 * If `_count` is not present, the metric MUST be dropped.
-* If `_sum` is not present, it MUST be computed from the buckets.
+* If `_sum` is not present, the histogram's sum MUST be unset.
 
 #### Summaries
 
@@ -1157,8 +1184,6 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 The following Prometheus types MUST be dropped:
 
 * [OpenMetrics GaugeHistogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram)
-* [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset)
-* [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)
 
 #### Start Time
 
@@ -1211,6 +1236,22 @@ in keys).
 
 ### OTLP Metric points to Prometheus
 
+#### Metric Metadata
+
+The Unit of an OTLP metric point MUST be added as
+[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD
+be converted to [base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units)
+recommended by OpenMetrics when possible.  The unit suffix comes before any
+type-specific suffixes.
+
+The description of an OTLP metrics point MUST be added as
+[OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+
+The data point type of an OTLP metric MUST be added as
+[OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+It also dictates type-specific conversion rules listed below.
+
 #### Gauges
 
 An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
@@ -1223,6 +1264,8 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum
 - Otherwise, it MUST be dropped.
+
+Sum metric points MUST have `_total` added as a suffix to the metric name.
 
 #### Histograms
 
@@ -1310,6 +1353,5 @@ To convert OTLP resource attributes to Prometheus labels, string Attribute value
 
 ## Footnotes
 
-<a name="otlpdatapointfn">[1]</a>: OTLP supports data point kinds that do not
-satisfy these conditions; they are well-defined but do not support standard
-metric data transformations.
+\[1\] OTLP supports data point kinds that do not satisfy these conditions; they are
+well-defined but do not support standard metric data transformations.
