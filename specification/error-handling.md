@@ -15,7 +15,7 @@ OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
 1. API methods MUST NOT throw unhandled exceptions when used incorrectly by end users.
    The API and SDK SHOULD provide safe defaults for missing or invalid arguments.
    For instance, a name like `empty` may be used if the user passes in `null` as the span name argument during `Span` construction.
-2. The API or SDK may _fail fast_ and cause the application to fail on initialization, e.g. because of a bad user config or environment, but MUST NOT cause the application to fail later at run time, e.g. due to dynamic config settings received from the Collector.
+2. The API or SDK MAY _fail fast_ and cause the application to fail on initialization, e.g. because of a bad user config or environment, but MUST NOT cause the application to fail later at run time, e.g. due to dynamic config settings received from the Collector.
 3. The SDK MUST NOT throw unhandled exceptions for errors in their own operations.
    For example, an exporter should not throw an exception when it cannot reach the endpoint to which it sends telemetry data.
 
