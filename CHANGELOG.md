@@ -16,6 +16,8 @@ release.
   ([#2276](https://github.com/open-telemetry/opentelemetry-specification/pull/2276)).
 - Add documentation REQUIREMENT for adding attributes at span creation.
   ([#2383](https://github.com/open-telemetry/opentelemetry-specification/pull/2383)).
+- Add environment variables for capturing Http headers.
+  ([#2461](https://github.com/open-telemetry/opentelemetry-specification/pull/2461)).
 
 ### Metrics
 
