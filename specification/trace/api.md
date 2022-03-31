@@ -575,11 +575,12 @@ The status code SHOULD remain unset, except for the following circumstances:
 
 An attempt to set value `Unset` SHOULD be ignored.
 
-When the status is set to `Error` by Instrumentation Libraries, the status codes
+When the status is set to `Error` by Instrumentation Libraries, the `Description`
 SHOULD be documented and predictable. The status code should only be set to `Error`
 according to the rules defined within the semantic conventions. For operations
 not covered by the semantic conventions, Instrumentation Libraries SHOULD
-publish their own conventions, including status codes.
+publish their own conventions, including possible values of `Description`
+and what they mean.
 
 Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
 unless explicitly configured to do so. Instrumention libraries SHOULD leave the
