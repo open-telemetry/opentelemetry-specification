@@ -48,7 +48,7 @@ groups:
         brief: 'Remote hostname or similar, see note below.'
         examples: 'example.com'
         note: >
-          `net.peer.name` SHOULD NOT be set if capturing it requires a reverse DNS lookup.
+          `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
       - id: host.ip
         type: string
         brief: 'Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.'
