@@ -214,10 +214,10 @@ made with an Instrument:
   * For each View, if the Instrument could match the instrument selection
     criteria:
     * Try to apply the View configuration. If applying the View results
-      in [duplicate instruments](./api.md#instrument-type-conflict-detection)
-      with the same name, the implementation SHOULD apply the View and emit a
-      warning. If it is not possible to apply the View without producing
-      semantic errors (e.g. the View sets an asynchronous instrument to use
+      in [conflicting metric identities](./datamodel.md#exponentialhistogram-producer-recommendations)
+      the implementation SHOULD apply the View and emit a warning. If it is not
+      possible to apply the View without producing semantic errors (e.g. the
+      View sets an asynchronous instrument to use
       the [Histogram aggregation](#histogram-aggregation)) the implementation
       SHOULD drop the View and emit a warning.
   * If the Instrument could not match with any of the registered `View`(s), the
