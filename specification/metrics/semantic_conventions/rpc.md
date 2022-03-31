@@ -31,26 +31,26 @@ MUST be of the specified type and units.
 
 Below is a table of RPC server metric instruments.
 
-| Name | Instrument | Unit | Unit ([UCUM](README.md#instrument-units)) | Description | Status | Streaming |
-|------|------------|------|-------------------------------------------|-------------|--------|-----------|
-| `rpc.server.duration` | Histogram  | milliseconds | `ms` | measures duration of inbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
-| `rpc.server.request.size` | Histogram  | Bytes | `By` | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
-| `rpc.server.response.size` | Histogram  | Bytes | `By` | measures size of RPC response messages (uncompressed) | Optional | Recorded per response in a streaming batch |
-| `rpc.server.requests_per_rpc` | Histogram  | count | `{count}` | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
-| `rpc.server.responses_per_rpc` | Histogram  | count | `{count}` | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
+| Name                           | Instrument | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                                                               | Status      | Streaming                                                                                                                |
+|--------------------------------|------------|--------------|-------------------------------------------|-------------------------------------------------------------------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------|
+| `rpc.server.duration`          | Histogram  | milliseconds | `ms`                                      | measures duration of inbound RPC                                                          | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
+| `rpc.server.request.size`      | Histogram  | Bytes        | `By`                                      | measures size of RPC request messages (uncompressed)                                      | Optional    | Recorded per message in a streaming batch                                                                                |
+| `rpc.server.response.size`     | Histogram  | Bytes        | `By`                                      | measures size of RPC response messages (uncompressed)                                     | Optional    | Recorded per response in a streaming batch                                                                               |
+| `rpc.server.requests_per_rpc`  | Histogram  | count        | `{count}`                                 | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional    | Required                                                                                                                 |
+| `rpc.server.responses_per_rpc` | Histogram  | count        | `{count}`                                 | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs     | Optional    | Required                                                                                                                 |
 
 ### RPC Client
 
 Below is a table of RPC client metric instruments.  These apply to traditional
 RPC usage, not streaming RPCs.
 
-| Name | Instrument | Unit | Unit ([UCUM](README.md#instrument-units)) | Description | Status | Streaming |
-|------|------------|------|-------------------------------------------|-------------|--------|-----------|
-| `rpc.client.duration` | Histogram | milliseconds | `ms` | measures duration of outbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
-| `rpc.client.request.size` | Histogram | Bytes | `By` | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
-| `rpc.client.response.size` | Histogram | Bytes | `By` | measures size of RPC response messages (uncompressed) | Optional | Recorded per message in a streaming batch |
-| `rpc.client.requests_per_rpc` | Histogram | count | `{count}` | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
-| `rpc.client.responses_per_rpc` | Histogram | count | `{count}` | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs | Optional | Required |
+| Name                           | Instrument | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                                                               | Status      | Streaming                                                                                                                |
+|--------------------------------|------------|--------------|-------------------------------------------|-------------------------------------------------------------------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------|
+| `rpc.client.duration`          | Histogram  | milliseconds | `ms`                                      | measures duration of outbound RPC                                                         | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
+| `rpc.client.request.size`      | Histogram  | Bytes        | `By`                                      | measures size of RPC request messages (uncompressed)                                      | Optional    | Recorded per message in a streaming batch                                                                                |
+| `rpc.client.response.size`     | Histogram  | Bytes        | `By`                                      | measures size of RPC response messages (uncompressed)                                     | Optional    | Recorded per message in a streaming batch                                                                                |
+| `rpc.client.requests_per_rpc`  | Histogram  | count        | `{count}`                                 | measures the number of messages received per RPC.  Should be 1 for all non-streaming RPCs | Optional    | Required                                                                                                                 |
+| `rpc.client.responses_per_rpc` | Histogram  | count        | `{count}`                                 | measures the number of messages sent per RPC.  Should be 1 for all non-streaming RPCs     | Optional    | Required                                                                                                                 |
 
 ## Attributes
 
@@ -58,15 +58,15 @@ Below is a table of attributes that SHOULD be included on metric events and whet
 or not they should be on the server, client or both.
 
 <!-- semconv rpc -->
-| Attribute  | Type | Description  | Examples  | Required |
-|---|---|---|---|---|
-| [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Yes |
-| [`rpc.service`](../../trace/semantic_conventions/rpc.md) | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | No, but recommended |
-| [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | No, but recommended |
-| [`net.peer.ip`](../../trace/semantic_conventions/span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
-| [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Remote hostname or similar, see note below. [3] | `example.com` | See below |
-| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Remote port number. | `80`; `8080`; `443` | See below |
-| [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | See below |
+| Attribute                                                           | Type   | Description                                                                                                     | Examples                | Required            |
+|---------------------------------------------------------------------|--------|-----------------------------------------------------------------------------------------------------------------|-------------------------|---------------------|
+| [`rpc.system`](../../trace/semantic_conventions/rpc.md)             | string | A string identifying the remoting system. See below for a list of well-known identifiers.                       | `grpc`                  | Yes                 |
+| [`rpc.service`](../../trace/semantic_conventions/rpc.md)            | string | The full (logical) name of the service being called, including its package name, if applicable. [1]             | `myservice.EchoService` | No, but recommended |
+| [`rpc.method`](../../trace/semantic_conventions/rpc.md)             | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2]          | `exampleMethod`         | No, but recommended |
+| [`net.peer.ip`](../../trace/semantic_conventions/span-general.md)   | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1`             | See below           |
+| [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Remote hostname or similar, see note below. [3]                                                                 | `example.com`           | See below           |
+| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | int    | Remote port number.                                                                                             | `80`; `8080`; `443`     | See below           |
+| [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below.                                                                        | `ip_tcp`                | See below           |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
 
@@ -81,11 +81,11 @@ or not they should be on the server, client or both.
 
 `rpc.system` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
-| Value  | Description |
-|---|---|
-| `grpc` | gRPC |
-| `java_rmi` | Java RMI |
-| `dotnet_wcf` | .NET WCF |
+| Value          | Description  |
+|----------------|--------------|
+| `grpc`         | gRPC         |
+| `java_rmi`     | Java RMI     |
+| `dotnet_wcf`   | .NET WCF     |
 | `apache_dubbo` | Apache Dubbo |
 <!-- endsemconv -->
 
