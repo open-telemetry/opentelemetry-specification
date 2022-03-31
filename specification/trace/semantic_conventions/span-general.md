@@ -48,7 +48,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | No |
 | `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | No |
 
-**[1]:** `net.peer.name` SHOULD NOT be set if capturing it requires a reverse DNS lookup.
+**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 `net.transport` MUST be one of the following:
 

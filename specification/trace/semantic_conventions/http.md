@@ -148,7 +148,7 @@ before any HTTP-redirects that may happen when executing the request.
 |---|---|---|---|---|
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | See below |
 
-**[1]:** `net.peer.name` SHOULD NOT be set if capturing it requires a reverse DNS lookup.
+**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 

@@ -68,7 +68,7 @@ Examples of span names:
 
 **[2]:** This is the logical name of the method from the RPC interface perspective, which can be different from the name of any implementing method/function. The `code.function` attribute may be used to store the latter (e.g., method actually executing the call on the server side, RPC client stub method on the client side).
 
-**[3]:** `net.peer.name` SHOULD NOT be set if capturing it requires a reverse DNS lookup.
+**[3]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 

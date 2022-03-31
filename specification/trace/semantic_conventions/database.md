@@ -47,7 +47,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditional [2] |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditional [3] |
 
-**[1]:** `net.peer.name` SHOULD NOT be set if capturing it requires a reverse DNS lookup.
+**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[2]:** Required if using a port other than the default port for this DBMS.
 
