@@ -45,6 +45,10 @@ release.
   Asynchronous Counter, and Histogram instruments choose Delta
   temporality by default.
   ([#2404](https://github.com/open-telemetry/opentelemetry-specification/pull/2404)).
+- Clarify that instruments are enabled by default, even when Views are configured.
+  Require support for the match-all View expression having `name=*` to support
+  disabling instruments by default.
+  ([#2417](https://github.com/open-telemetry/opentelemetry-specification/pull/2417)).
 
 ### Logs
 
@@ -62,6 +66,10 @@ release.
   ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
 - Add semantic conventions for [CloudEvents](https://cloudevents.io).
   ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
+- Add `process.cpu.utilization` metric.
+  ([#2436](https://github.com/open-telemetry/opentelemetry-specification/pull/2436))
+- Add `rpc.system` value for Apache Dubbo.
+  ([#2453](https://github.com/open-telemetry/opentelemetry-specification/pull/2453))
 
 ### Compatibility
 
@@ -70,6 +78,11 @@ release.
 ### SDK Configuration
 
 ### Telemetry Schemas
+
+### Common
+
+- Add "Mapping Arbitrary Data to OTLP AnyValue" document.
+  ([#2385](https://github.com/open-telemetry/opentelemetry-specification/pull/2385))
 
 ## v1.9.0 (2021-02-10)
 
@@ -128,6 +141,9 @@ release.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
 - Changed the Exemplar wording, exemplar should be turned off by default.
   ([#2414](https://github.com/open-telemetry/opentelemetry-specification/pull/2414))
+- Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
+  Exemplar remaining Feature-freeze.
+  ([#2304](https://github.com/open-telemetry/opentelemetry-specification/pull/2304))
 
 ### Logs
 

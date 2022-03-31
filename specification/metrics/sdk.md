@@ -1,6 +1,6 @@
 # Metrics SDK
 
-**Status**: [Feature-freeze](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -48,6 +48,8 @@
 </details>
 
 ## MeterProvider
+
+**Status**: [Stable](../document-status.md)
 
 A `MeterProvider` MUST provide a way to allow a [Resource](../resource/sdk.md) to
 be specified. If a `Resource` is specified, it SHOULD be associated with all the
@@ -151,7 +153,9 @@ are the inputs:
   * The `name` of the Instrument(s). [OpenTelemetry SDK](../overview.md#sdk)
     authors MAY choose to support wildcard characters, with the question mark
     (`?`) matching exactly one character and the asterisk character (`*`)
-    matching zero or more characters.
+    matching zero or more characters.  If wildcards are not supported in general,
+    OpenTelemetry SDKs MUST specifically recognize the single `*` wildcard
+    as matching all instruments.
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
@@ -183,9 +187,10 @@ are the inputs:
     apply a [default aggregation](#default-aggregation) configurable on the
     basis of instrument kind according to the [MetricReader](#metricreader)
     instance.
-  * The `exemplar_reservoir` (optional) to use for storing exemplars.
-    This should be a factory or callback similar to aggregation which allows
-    different reservoirs to be chosen by the aggregation.
+  * **Status**: [Feature-freeze](../document-status.md) - the
+    `exemplar_reservoir` (optional) to use for storing exemplars. This should be
+    a factory or callback similar to aggregation which allows different
+    reservoirs to be chosen by the aggregation.
 
 In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
@@ -211,11 +216,9 @@ made with an Instrument:
       know (e.g. expose
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
   * If the Instrument could not match with any of the registered `View`(s), the
-    SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
-    the user to turn off the default behavior via MeterProvider (which means the
-    Instrument will be ignored when there is no match). Individual
-    implementations can decide what the default behavior is, and how to turn the
-    default behavior off.
+    SDK SHOULD enable the instrument using the default aggregation and temporality.
+    Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
+    to disable instruments by default.
 
 Here are some examples:
 
@@ -467,12 +470,16 @@ between two non-identical `Metric` instances having the same `name`:
 
 ## Attribute limits
 
+**Status**: [Stable](../document-status.md)
+
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
 
 ## Exemplar
+
+**Status**: [Feature-freeze](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
@@ -635,6 +642,8 @@ measurements using the equivalent of the following naive algorithm:
 
 ## MetricReader
 
+**Status**: [Stable](../document-status.md)
+
 `MetricReader` is an SDK implementation object that provides the
 common configurable aspects of the OpenTelemetry Metrics SDK and
 determines the following capabilities:
@@ -762,6 +771,8 @@ from `MetricReader` and start a background task which calls the inherited
   exporter.
 
 ## MetricExporter
+
+**Status**: [Stable](../document-status.md)
 
 `MetricExporter` defines the interface that protocol-specific exporters MUST
 implement so that they can be plugged into OpenTelemetry SDK and support sending
@@ -994,6 +1005,8 @@ errors/exceptions are taken care of.
 
 ## Compatibility requirements
 
+**Status**: [Stable](../document-status.md)
+
 All the metrics components SHOULD allow new methods to be added to existing
 components without introducing breaking changes.
 
@@ -1001,6 +1014,8 @@ All the metrics SDK methods SHOULD allow optional parameter(s) to be added to
 existing methods without introducing breaking changes, if possible.
 
 ## Concurrency requirements
+
+**Status**: [Stable](../document-status.md)
 
 For languages which support concurrent execution the Metrics SDKs provide
 specific guarantees and safeties.

@@ -51,6 +51,9 @@ both containing an array of strings to represent a mapping
 
 See [Attribute Naming](attribute-naming.md) for naming guidelines.
 
+See [this document](attribute-type-mapping.md) to find out how to map values obtained
+outside OpenTelemetry into OpenTelemetry attribute values.
+
 ### Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there are no
