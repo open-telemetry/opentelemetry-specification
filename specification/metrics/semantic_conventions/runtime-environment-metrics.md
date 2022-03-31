@@ -12,10 +12,10 @@ semantic conventions when instrumenting runtime environments.
 
 <!-- toc -->
 
-- [Metric Instruments](#metric-instruments)
+  - [Metric Instruments](#metric-instruments)
   * [Runtime Environment Specific Metrics - `process.runtime.{environment}.`](#runtime-environment-specific-metrics---processruntimeenvironment)
-- [Attributes](#attributes)
-- [JVM Metrics](#jvm-metrics)
+  - [Attributes](#attributes)
+  - [JVM Metrics](#jvm-metrics)
 
 <!-- tocstop -->
 
@@ -73,3 +73,4 @@ All JVM metric attributes are required unless otherwise indicated.
 
 **[1]**: Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 Examples include `G1 Old Gen`, `G1 Eden space`, `G1 Survivor Space`, `Metaspace`, etc.
+**[2]**: These utilizations are not defined as being for the specific interval since last measurement (unlike `system.cpu.utilization`).
