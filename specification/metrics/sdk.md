@@ -210,11 +210,13 @@ made with an Instrument:
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
-    * Try to apply the View configuration. If there is an error or a conflict
-      (e.g. the View requires to export the metrics using a certain name, but
-      the name is already used by another View), provide a way to let the user
-      know (e.g. expose
-      [self-diagnostics logs](../error-handling.md#self-diagnostics)).
+    * Try to apply the View configuration. If applying the View results
+      in [duplicate instruments](./api.md#instrument-type-conflict-detection)
+      with the same name, the implementation SHOULD apply the View and emit a
+      warning. If it is not possible to apply the View without producing
+      semantic errors (e.g. the View sets an asynchronous instrument to use
+      the [Histogram aggregation](#histogram-aggregation)) the implementation
+      SHOULD drop the View and emit a warning.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
