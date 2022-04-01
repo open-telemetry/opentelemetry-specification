@@ -1,6 +1,6 @@
 # Metrics SDK
 
-**Status**: [Feature-freeze](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -48,6 +48,8 @@
 </details>
 
 ## MeterProvider
+
+**Status**: [Stable](../document-status.md)
 
 A `MeterProvider` MUST provide a way to allow a [Resource](../resource/sdk.md) to
 be specified. If a `Resource` is specified, it SHOULD be associated with all the
@@ -151,7 +153,9 @@ are the inputs:
   * The `name` of the Instrument(s). [OpenTelemetry SDK](../overview.md#sdk)
     authors MAY choose to support wildcard characters, with the question mark
     (`?`) matching exactly one character and the asterisk character (`*`)
-    matching zero or more characters.
+    matching zero or more characters.  If wildcards are not supported in general,
+    OpenTelemetry SDKs MUST specifically recognize the single `*` wildcard
+    as matching all instruments.
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
@@ -180,13 +184,13 @@ are the inputs:
     will be used by default (TODO: once the Hint API is available, the default
     behavior should respect the Hint if it is available).
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
-    apply a [default aggregation](#default-aggregation). If the aggregation
-    outputs metric points that use aggregation temporality (e.g. Histogram,
-    Sum), the SDK SHOULD handle the aggregation temporality based on the
-    temporality of each [MetricReader](#metricreader) instance.
-  * The `exemplar_reservoir` (optional) to use for storing exemplars.
-    This should be a factory or callback similar to aggregation which allows
-    different reservoirs to be chosen by the aggregation.
+    apply a [default aggregation](#default-aggregation) configurable on the
+    basis of instrument kind according to the [MetricReader](#metricreader)
+    instance.
+  * **Status**: [Feature-freeze](../document-status.md) - the
+    `exemplar_reservoir` (optional) to use for storing exemplars. This should be
+    a factory or callback similar to aggregation which allows different
+    reservoirs to be chosen by the aggregation.
 
 In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
@@ -199,8 +203,10 @@ The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
-* If the `MeterProvider` has no `View` registered, take the Instrument and apply
-    the default configuration.
+* If the `MeterProvider` has no `View` registered, take the Instrument
+    and apply the default Aggregation on the basis of instrument kind
+    according to the [MetricReader](#metricreader) instance's
+    `aggregation` property.
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
@@ -210,12 +216,9 @@ made with an Instrument:
       know (e.g. expose
       [self-diagnostics logs](../error-handling.md#self-diagnostics)).
   * If the Instrument could not match with any of the registered `View`(s), the
-    SDK SHOULD provide a default behavior. The SDK SHOULD also provide a way for
-    the user to turn off the default behavior via MeterProvider (which means the
-    Instrument will be ignored when there is no match). Individual
-    implementations can decide what the default behavior is, and how to turn the
-    default behavior off.
-* END.
+    SDK SHOULD enable the instrument using the default aggregation and temporality.
+    Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
+    to disable instruments by default.
 
 Here are some examples:
 
@@ -259,7 +262,7 @@ meter_provider
 # Counter X will be exported as cumulative sum
 meter_provider
     .add_view("X", aggregation=SumAggregation())
-    .add_metric_reader(PeriodicExportingMetricReader(AggregationTemporality.CUMULATIVE, ConsoleExporter()))
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ```python
@@ -268,7 +271,8 @@ meter_provider
 meter_provider
     .add_view("X", aggregation=SumAggregation())
     .add_view("*", attribute_keys=["a", "b"])
-    .add_metric_reader(PeriodicExportingMetricReader(AggregationTemporality.DELTA, ConsoleExporter()))
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()),
+              temporality=lambda kind: Delta if kind in [Counter, AsyncCounter, Histogram] else Cumulative)
 ```
 
 ### Aggregation
@@ -466,12 +470,16 @@ between two non-identical `Metric` instances having the same `name`:
 
 ## Attribute limits
 
+**Status**: [Stable](../document-status.md)
+
 Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/common.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
 
 ## Exemplar
+
+**Status**: [Feature-freeze](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
@@ -519,11 +527,8 @@ While the metric data point for the counter would carry the attributes `X` and
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements
 via the `ExemplarFilter` and `ExemplarReservoir` hooks.
 
-A Metric SDK MUST allow `Exemplar` sampling to be disabled. In this instance
-the SDK SHOULD not have overhead related to exemplar sampling.
-
-A Metric SDK MUST sample `Exemplar`s only from measurements within the context
-of a sampled trace BY DEFAULT.
+`Exemplar` sampling SHOULD be turned off by default. If `Exemplar` sampling is
+off, the SDK MUST NOT have overhead related to exemplar sampling.
 
 A Metric SDK MUST allow exemplar sampling to leverage the configuration of
 metric aggregation. For example, Exemplar sampling of histograms should be able
@@ -637,11 +642,37 @@ measurements using the equivalent of the following naive algorithm:
 
 ## MetricReader
 
-`MetricReader` is an interface which provides the following capabilities:
+**Status**: [Stable](../document-status.md)
 
-* Collecting metrics from the SDK.
+`MetricReader` is an SDK implementation object that provides the
+common configurable aspects of the OpenTelemetry Metrics SDK and
+determines the following capabilities:
+
+* Collecting metrics from the SDK on demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
+
+To construct a `MetricReader` when setting up an SDK, the caller
+SHOULD provide at least the following:
+
+* The `exporter` to use, which is a `MetricExporter` instance.
+* The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
+* The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
+
+The [MetricReader.Collect](#collect) method allows general-purpose
+`MetricExporter` instances to explicitly initiate collection, commonly
+used with pull-based metrics collection.  A common sub-class of
+`MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
+to be used typically with push-based metrics collection.
+
+The `MetricReader` MUST ensure that data points are output in the
+configured aggregation temporality for each instrument kind.  For
+synchronous instruments being output with Cumulative temporality, this
+means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
+aggregation temporality.  For asynchronous instruments being output
+with Delta temporality, this means converting [Cumulative to
+Delta](supplementary-guidelines.md#asynchronous-example-delta-temporality) aggregation
+temporality.
 
 The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
@@ -651,6 +682,9 @@ points that have [delta temporality](./datamodel.md#temporality), it is expected
 that SDK will update the time range - e.g. from (T<sub>n</sub>, T<sub>n+1</sub>]
 to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 `MetricReader` instance.
+
+The SDK MUST NOT allow a `MetricReader` instance to be registered on more than
+one `MeterProvider` instance.
 
 ```text
 +-----------------+            +--------------+
@@ -671,26 +705,6 @@ The SDK SHOULD provide a way to allow `MetricReader` to respond to
 [OpenTelemetry SDK](../overview.md#sdk) authors MAY decide the language
 idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
-
-The SDK SHOULD provide a way to allow the preferred [Aggregation
-Temporality](./datamodel.md#temporality) to be specified for a `MetricReader`
-instance during the setup (e.g. initialization, registration, etc.) time. If the
-preferred temporality is explicitly specified then the SDK SHOULD respect that,
-otherwise use Cumulative.
-
-[OpenTelemetry SDK](../overview.md#sdk)
-authors MAY choose the best idiomatic design for their language:
-
-* Whether to treat the temporality settings as recommendation or enforcement.
-  For example, if the temporality is set to Delta, would the SDK want to perform
-  Cumulative->Delta conversion for an [Asynchronous
-  Counter](./api.md#asynchronous-counter), or downgrade it to a
-  [Gauge](./datamodel.md#gauge), or keep consuming it as Cumulative due to the
-  consideration of [memory
-  efficiency](./supplementary-guidelines.md#memory-management)?
-* Refer to the [supplementary
-  guidelines](./supplementary-guidelines.md#aggregation-temporality), which have
-  more context and suggestions.
 
 ### MetricReader operations
 
@@ -736,7 +750,6 @@ a user-configurable time interval, and passes the metrics to the configured
 
 Configurable parameters:
 
-* `exporter` - the push exporter where the metrics are sent to.
 * `exportIntervalMillis` - the time interval in milliseconds between two
   consecutive exports. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
@@ -759,16 +772,28 @@ from `MetricReader` and start a background task which calls the inherited
 
 ## MetricExporter
 
+**Status**: [Stable](../document-status.md)
+
 `MetricExporter` defines the interface that protocol-specific exporters MUST
 implement so that they can be plugged into OpenTelemetry SDK and support sending
 of telemetry data.
+
+Metric Exporters always have an _associated_ MetricReader.  The
+`aggregation` and `temporality` properties used by the
+OpenTelemetry Metric SDK are determined when registering Metric
+Exporters through their associated MetricReader.  OpenTelemetry
+language implementations MAY support automatically configuring the
+[MetricReader](#metricreader) to use for an Exporter.
 
 The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
 Metric Exporter has access to the [aggregated metrics
-data](./datamodel.md#timeseries-model).
+data](./datamodel.md#timeseries-model).  Metric Exporters SHOULD
+report an error condition for data output by the `MetricReader` with
+unsupported Aggregation or Aggregation Temporality, as this condition
+can be corrected by a change of `MetricReader` configuration.
 
 There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
 Metric Exporters](#pull-metric-exporter) or even a mixture of both configured at
@@ -780,9 +805,6 @@ can run at different schedule, for example:
 * Exporter C is a pull exporter which reacts to a scraper over HTTP.
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
-
-`MetricExporter` SHOULD provide a way to allow `MetricReader` to retrieve its
-preferred temporality.
 
 ### Push Metric Exporter
 
@@ -983,6 +1005,8 @@ errors/exceptions are taken care of.
 
 ## Compatibility requirements
 
+**Status**: [Stable](../document-status.md)
+
 All the metrics components SHOULD allow new methods to be added to existing
 components without introducing breaking changes.
 
@@ -990,6 +1014,8 @@ All the metrics SDK methods SHOULD allow optional parameter(s) to be added to
 existing methods without introducing breaking changes, if possible.
 
 ## Concurrency requirements
+
+**Status**: [Stable](../document-status.md)
 
 For languages which support concurrent execution the Metrics SDKs provide
 specific guarantees and safeties.

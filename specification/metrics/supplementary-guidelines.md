@@ -102,7 +102,7 @@ to record the total number of bytes received:
 You can see that the total increment during (T<sub>0</sub>, T<sub>1</sub>] is
 `0`, the total increment during (T<sub>1</sub>, T<sub>2</sub>] is `280` (`30 +
 200 + 50`), the total increment during (T<sub>2</sub>, T<sub>3</sub>] is `100`,
-and the total increment during (T<s3ub>0</sub>, T<sub>3</sub>] is `380` (`0 +
+and the total increment during (T<sub>0</sub>, T<sub>3</sub>] is `380` (`0 +
 280 + 100`). All the increments are non-negative, in other words, the **sum is
 monotonically increasing**.
 
@@ -406,8 +406,6 @@ temporality. For example:
 
 So here are some suggestions that we encourage SDK implementers to consider:
 
-* You probably don't want to encourage your users to do Cumulative->Delta
-  conversion. Actually, you might want to discourage them from doing this.
 * If you have to do Cumulative->Delta conversion, and you encountered min/max,
   rather than drop the data on the floor, you might want to convert them to
   something useful - e.g. [Gauge](./datamodel.md#gauge).

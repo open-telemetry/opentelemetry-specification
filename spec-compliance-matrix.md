@@ -29,6 +29,7 @@ formats is required. Implementing more than one format is optional.
 | Set active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |     |      |     |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Documentation defines adding attributes at span creation as preferred                            |          |     |      |     |        |      |        |     |      |     | +    |       |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Mark Span active                                                                                 |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -79,7 +80,7 @@ formats is required. Implementing more than one format is optional.
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +   | +    |     | +      | +    | +      | +   | +    | +   | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   |      |       |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
 
@@ -164,6 +165,8 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The updated configuration applies to all already returned `Meter`s.                                                                                                          | if above | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
 | There is a way to register `View`s with a `MeterProvider`.                                                                                                                   |          | -  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The `View` instrument selection criteria is as specified.                                                                                                                    |          |    |  +   |    |    -   |      |        |     |      |     |   +  |       |
+| The `View` instrument selection criteria supports wildcards.                                                                                                                 | X        |    |      |    |        |      |        |     |      |     |   +  |       |
+| The `View` instrument selection criteria supports the match-all wildcard.                                                                                                    |          |    |      |    |        |      |        |     |      |     |   +  |       |
 | The name of the `View` can be specified.                                                                                                                                     |          |    |  +   |    |    -   |      |        |     |      |     |   +  |       |
 | The `View` allows configuring the name description, attributes keys and aggregation of the resulting metric stream.                                                          |          |    |  ?   |    |    -   |      |        |     |      |     |   -  |       |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream.                                                                                             | X        |    |  ?   |    |    -   |      |        |     |      |     |   -  |       |
@@ -180,15 +183,18 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The `Histogram` aggregation performs as specified.                                                                                                                           |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
 | The explicit bucket `Histogram` aggregation is available.                                                                                                                    |          | -  |  +   |    |    +   |      |        |     |      |     |   +  |       |
 | The explicit bucket `Histogram` aggregation performs as specified.                                                                                                           |          | -  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter has access to the aggregated metrics data (aggregated points, not raw measurements).                                                                    |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `export` function can not be called concurrently from the same exporter instance.                                                                       |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `export` function does not block indefinitely.                                                                                                          |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `export` function receives a batch of metrics.                                                                                                          |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `export` function returns `Success` or `Failure`.                                                                                                       |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter provides a `ForceFlush` function.                                                                                                                       |          | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.                                                                           |          |    |      |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter provides a `shutdown` function.                                                                                                                         |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
-| The metrics exporter `shutdown` function do not block indefinitely.                                                                                                          |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Reader implementation supports registering metric Exporters                                                                                                      |          |    |      |    |        |      |        |     |      |     |   +  |       |
+| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.                                                              |          |    |      |    |        |      |        |     |      |     |   -  |       |
+| The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.                                                              |          |    |      |    |        |      |        |     |      |     |      |       |
+| The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).                                                                    |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `export` function can not be called concurrently from the same Exporter instance.                                                                       |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `export` function does not block indefinitely.                                                                                                          |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `export` function receives a batch of metrics.                                                                                                          |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `export` function returns `Success` or `Failure`.                                                                                                       |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter provides a `ForceFlush` function.                                                                                                                       |          | -  |  -   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.                                                                           |          |    |      |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter provides a `shutdown` function.                                                                                                                         |          | +  |  +   |    |    -   |      |        |     |      |     |   +  |       |
+| The metrics Exporter `shutdown` function do not block indefinitely.                                                                                                          |          | +  |  -   |    |    -   |      |        |     |      |     |   +  |       |
 | The metrics SDK samples `Exemplar`s from measurements.                                                                                                                       |          |    |      |    |    -   |      |        |     |      |     |   -  |       |
 | Exemplar sampling can be disabled.                                                                                                                                           |          |    |      |    |    -   |      |        |     |      |     |   -  |       |
 | The metrics SDK samples measurements in the context of a sampled trace by default.                                                                                           |          |    |      |    |    -   |      |        |     |      |     |   -  |       |
@@ -239,37 +245,38 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 Note: Support for environment variables is optional.
 
-|Feature                                       |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
-|----------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
-|OTEL_RESOURCE_ATTRIBUTES                      | + | +  | + | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_SERVICE_NAME                             | + |    |   |      |    | +    |   |    |   | +  |     |
-|OTEL_LOG_LEVEL                                | - | -  | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
-|OTEL_PROPAGATORS                              | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
-|OTEL_BSP_*                                    | - | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                          | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_EXPORTER_JAEGER_*                        | + |    |   |      |    | -    | - |    | - | +  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                        | - |    |   |      |    | -    | - | -  | - | +  | -   |
-|OTEL_TRACES_EXPORTER                          | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_METRICS_EXPORTER                         | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
-|OTEL_LOGS_EXPORTER                            |   |    |   |      |    |      |   |    |   | -  |     |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT               | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT        |   |    |   |      |    | +    |   |    |   | -  |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                   | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                    | - | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT              |   |    |   |      |    | +    |   |    |   | -  |     |
-|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT               |   |    |   |      |    | +    |   |    |   | -  |     |
-|OTEL_TRACES_SAMPLER                           | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_TRACES_SAMPLER_ARG                       | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT             |   |    |   |      |    | -    |   |    |   | -  |     |
-|OTEL_ATTRIBUTE_COUNT_LIMIT                    |   |    |   |      |    | -    |   |    |   | -  |     |
-|OTEL_METRICS_EXEMPLAR_FILTER                  |   |    |   |      |    |      |   |    |   | -  |     |
+|Feature                                           |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
+|--------------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
+|OTEL_RESOURCE_ATTRIBUTES                          | + | +  | + | +    | +  | +    | - | +  | + | +  | -   |
+|OTEL_SERVICE_NAME                                 | + |    |   |      |    | +    |   |    |   | +  |     |
+|OTEL_LOG_LEVEL                                    | - | -  | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
+|OTEL_PROPAGATORS                                  | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
+|OTEL_BSP_*                                        | + | +  |   | +    | +  | +    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                              | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
+|OTEL_EXPORTER_JAEGER_*                            | + |    |   |      |    | -    | - |    | - | +  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                            | - |    |   |      |    | -    | - | -  | - | +  | -   |
+|OTEL_TRACES_EXPORTER                              | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_METRICS_EXPORTER                             | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
+|OTEL_LOGS_EXPORTER                                | - |    |   |      |    |      |   |    |   | -  |     |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                   | + | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT            | + |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                       | + | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                        | + | +  |   | +    | +  | +    |   | +  | - | -  |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                  | + |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                   | + |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_TRACES_SAMPLER                               | + | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_TRACES_SAMPLER_ARG                           | + | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + |    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_ATTRIBUTE_COUNT_LIMIT                        | + |    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_METRICS_EXEMPLAR_FILTER                      | - |    |   |      |    |      |   |    |   | -  |     |
+|OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | - |    |   |      |    |      |   |    |   | -  |     |
 
 ## Exporters
 
 | Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
 | [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      | +      | +   | +    | +   | +    |       |
-| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      | +   | -    |     |      |       |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
 | Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | +   | -    | +   | +    | +     |
 | **[OTLP](specification/protocol/otlp.md)**                                     |          |    |   |    |             |      |        |     |      |     |      |       |
@@ -301,16 +308,16 @@ Note: Support for environment variables is optional.
 | Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |   |    | +           | +    | -      |     | +    | +   | +    | +     |
-| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | + |    | [-][py1437] | -    | -      |     |      | -   | -    | -     |
-| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
-| Service name mapping                                                           |          | +  | + |    | +           | +    | -      |     |      | +   | +    | +     |
-| Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
-| InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | -     |
+| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |   |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | + |    | [-][py1437] | -    | -      | -   |      | -   | -    | -     |
+| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | -     |
+| Service name mapping                                                           |          | +  | + |    | +           | +    | -      | +   |      | +   | +    | +     |
+| Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | -     |
+| InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | -     |
 | InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
-| Status mapping                                                                 |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    | +           | +    | -      |     | +    | +   | +    | -     |
-| Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      |     | +    | -   | +    | +     |
+| Status mapping                                                                 |          | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| Error Status mapping                                                           |          | +  | + |    | +           | +    | -      | +   | +    | +   | +    | -     |
+| Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | +     |
 | **OpenCensus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
 | **Prometheus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |

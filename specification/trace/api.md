@@ -273,7 +273,6 @@ A `Span` represents a single operation within a trace. Spans can be nested to
 form a trace tree. Each trace contains a root span, which typically describes
 the entire operation and, optionally, one or more sub-spans for its sub-operations.
 
-<a name="span-data-members"></a>
 `Span`s encapsulate:
 
 - The span name
@@ -367,8 +366,9 @@ The API MUST accept the following parameters:
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
 
-  Whenever possible, users SHOULD set any already known attributes at span creation
-  instead of calling `SetAttribute` later.
+  The API documentation MUST state that adding attributes at span creation is preferred
+  to calling `SetAttribute` later, as samplers can only consider information
+  already present during span creation.
 
 - `Link`s - an ordered sequence of Links, see API definition [here](#specifying-links).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
@@ -575,11 +575,12 @@ The status code SHOULD remain unset, except for the following circumstances:
 
 An attempt to set value `Unset` SHOULD be ignored.
 
-When the status is set to `Error` by Instrumentation Libraries, the status codes
+When the status is set to `Error` by Instrumentation Libraries, the `Description`
 SHOULD be documented and predictable. The status code should only be set to `Error`
 according to the rules defined within the semantic conventions. For operations
 not covered by the semantic conventions, Instrumentation Libraries SHOULD
-publish their own conventions, including status codes.
+publish their own conventions, including possible values of `Description`
+and what they mean.
 
 Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
 unless explicitly configured to do so. Instrumention libraries SHOULD leave the
