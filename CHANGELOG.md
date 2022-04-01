@@ -140,6 +140,8 @@ release.
 
 ### Common
 
+- Describe how to convert non-string primitives for protocols which only support strings
+  ([#2343](https://github.com/open-telemetry/opentelemetry-specification/pull/2343))
 - Add "Mapping Arbitrary Data to OTLP AnyValue" document.
   ([#2385](https://github.com/open-telemetry/opentelemetry-specification/pull/2385))
 
@@ -200,6 +202,8 @@ release.
 - Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
   Exemplar remaining Feature-freeze.
   ([#2304](https://github.com/open-telemetry/opentelemetry-specification/pull/2304))
+- Clarify how metric metadata and type suffixes are handled
+  ([#2440](https://github.com/open-telemetry/opentelemetry-specification/pull/2440))
 
 ### Logs
 
