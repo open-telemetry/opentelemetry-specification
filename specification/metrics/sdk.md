@@ -414,10 +414,6 @@ This Aggregation does not have any configuration parameters.
 
 ##### Histogram Aggregation common behavior
 
-Histogram aggregations should not fill out `sum` when used with
-instruments that record negative measurements, e.g. `UpDownCounter` or
-`ObservableGauge`.
-
 All histogram Aggregations inform the SDK to collect:
 
 - Count of `Measurement` values in population.
@@ -442,8 +438,8 @@ This Aggregation honors the following configuration parameters:
 Explicit buckets are stated in terms of their upper boundary.  Buckets
 are exclusive of their lower boundary and inclusive of their upper
 bound (except at positive infinity).  A measurement is defined to fall
-into the least-numbered bucket with boundary that is greater than or
-equal to the measurement.
+into the greatest-numbered bucket with boundary that is greater than
+or equal to the measurement.
 
 #### Exponential Histogram Aggregation
 
@@ -520,7 +516,7 @@ scale.
 ##### Exponential Histogram Aggregation: Maintain the ideal scale
 
 Implementations SHOULD adjust the histogram scale as necessary to
-maintain the best-possible resolution at the configured maximum size.
+maintain the ideal resolution at the configured maximum size.
 
 ### Observations inside asynchronous callbacks
 

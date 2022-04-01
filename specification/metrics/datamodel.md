@@ -777,12 +777,12 @@ The reverse mapping function is:
     return math.Exp(index * inverseFactor), nil
 ```
 
-Implementations should verify that their mapping function and inverse
-mapping function are correct near the lowest and highest IEEE floating
-point value.  In the Golang reference implementation, for example, the
-above formula computes `+Inf` for the maximum-index bucket.  In this
-case, it is appropriate to subtract `1<<scale` from the index and
-multiply the result by `2`.
+Implementations are expected to verify that their mapping function and 
+inverse mapping function are correct near the lowest and highest IEEE 
+floating point values.  In the Golang reference implementation, for 
+example, the above formula computes `+Inf` for the maximum-index bucket.
+In this case, it is appropriate to subtract `1<<scale` from the index
+and multiply the result by `2`.
 
 ```golang
     // Use this form in case the equation above computes +Inf
