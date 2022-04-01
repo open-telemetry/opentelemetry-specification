@@ -9,6 +9,7 @@
 
 - [Attribute](#attribute)
   * [Attribute Limits](#attribute-limits)
+    + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
 - [Attribute Collections](#attribute-collections)
 
@@ -26,8 +27,9 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
 - The attribute value is either:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
-    i.e., it MUST NOT contain values of different types. For protocols that do
-    not natively support array values such values SHOULD be represented as JSON strings.
+    i.e., it MUST NOT contain values of different types.
+
+For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
 Attribute values expressing a numerical value of zero, an empty string, or an
 empty array are considered meaningful and MUST be stored and passed on to
@@ -49,6 +51,9 @@ both containing an array of strings to represent a mapping
 
 See [Attribute Naming](attribute-naming.md) for naming guidelines.
 
+See [this document](attribute-type-mapping.md) to find out how to map values obtained
+outside OpenTelemetry into OpenTelemetry attribute values.
+
 ### Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there are no
@@ -56,7 +61,7 @@ limits placed on attributes, they can quickly exhaust available memory, resultin
 in crashes that are difficult to recover from safely.
 
 By default an SDK SHOULD apply truncation as per the list of
-[configurable parameters](#attribute-limits-configuration) below.
+[configurable parameters](#configurable-parameters) below.
 
 If an SDK provides a way to:
 
@@ -87,8 +92,7 @@ it isn't set, then the SDK MUST attempt to use the general limit. If neither are
 defined, then the SDK MUST try to use the model-specific limit default value,
 followed by the global limit default value.
 
-<a name="attribute-limits-configuration"></a>
-**Configurable parameters:**
+#### Configurable Parameters
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;

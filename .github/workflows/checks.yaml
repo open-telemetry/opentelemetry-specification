@@ -13,6 +13,9 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
+    - name: install dependencies
+      run: npm install
+
     - name: run markdownlint
       run: make markdownlint
 
@@ -36,6 +39,9 @@ jobs:
     - name: check out code
       uses: actions/checkout@v2
 
+    - name: install dependencies
+      run: npm install
+
     - name: run markdown-link-check
       run: make markdown-link-check
 
@@ -44,6 +50,9 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@v2
+
+    - name: install dependencies
+      run: npm install
 
     - name: run markdown-toc
       run: make markdown-toc
@@ -61,17 +70,18 @@ jobs:
       run: make misspell
 
   docfx:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
-    - name: check out code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
 
     - name: install docfx
-      run: choco install docfx -y
+      run: dotnet tool update -g docfx --version "3.0.0-*" --add-source https://docfx.pkgs.visualstudio.com/docfx/_packaging/docs-public-packages/nuget/v3/index.json
 
-    - name: run .\docfx.cmd
-      shell: cmd
-      run: .\docfx.cmd
+    - name: run docfx
+      run: docfx build --dry-run
 
   semantic-conventions:
     runs-on: ubuntu-latest
