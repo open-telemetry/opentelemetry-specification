@@ -86,6 +86,11 @@ release.
   Require support for the match-all View expression having `name=*` to support
   disabling instruments by default.
   ([#2417](https://github.com/open-telemetry/opentelemetry-specification/pull/2417)).
+- Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
+  Exemplar remaining Feature-freeze.
+  ([#2304](https://github.com/open-telemetry/opentelemetry-specification/pull/2304))
+- Clarify how metric metadata and type suffixes are handled
+  ([#2440](https://github.com/open-telemetry/opentelemetry-specification/pull/2440))
 
 ### Logs
 
@@ -199,11 +204,6 @@ release.
   ([#2325](https://github.com/open-telemetry/opentelemetry-specification/pull/2325))
 - Changed the Exemplar wording, exemplar should be turned off by default.
   ([#2414](https://github.com/open-telemetry/opentelemetry-specification/pull/2414))
-- Mark Metrics SDK spec as Mixed, with most components moving to Stable, while
-  Exemplar remaining Feature-freeze.
-  ([#2304](https://github.com/open-telemetry/opentelemetry-specification/pull/2304))
-- Clarify how metric metadata and type suffixes are handled
-  ([#2440](https://github.com/open-telemetry/opentelemetry-specification/pull/2440))
 
 ### Logs
 
