@@ -345,16 +345,15 @@ The API MUST support creation of asynchronous instruments by passing
 zero or more `callback` functions to be permanently registered to the
 newly created instrument.
 
+A Callback is the conceptual entity created each time a `callback`
+function is registered through an OpenTelemetry API.
+
 The API SHOULD support registration of `callback` functions associated with
 asynchronous instruments after they are created.
 
 Where the API supports registration of `callback` functions after
-asynchronous instrumentation creation, it MUST return something (e.g.,
-a registration handle, receipt or token) to the user that supports
-undoing the effect of `callback` registation.
-
-A Callback is the conceptual entity created each time a `callback`
-function is registered through an OpenTelemetry API.  
+asynchronous instrumentation creation, the user MUST be able to undo
+registration of the specific callback after its registration somehow.
 
 Every currently registered Callback associated with an instrument MUST
 be evaluted exactly once during collection prior to reading data for
