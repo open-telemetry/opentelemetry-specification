@@ -391,7 +391,7 @@ instrument associated with each observed `Measurement` value.
 
 Multiple-instrument Callbacks MUST be associated at the time of
 registration with a declared set of asynchronous instruments from the
-same `Meter` instance.  This REQUIREMENT that Instruments be
+same `Meter` instance.  This requirement that Instruments be
 declaratively associated with Callbacks allows an SDK to execute only
 those Callbacks that are necessary to evaluate instruments that are in
 use by a configured [View](sdk.md#view).
