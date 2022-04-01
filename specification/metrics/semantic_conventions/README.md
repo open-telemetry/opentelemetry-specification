@@ -13,6 +13,7 @@
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
   * [Instrument Units](#instrument-units)
+  * [Instrument Types](#instrument-types)
 
 <!-- tocstop -->
 
@@ -165,3 +166,11 @@ total) are dimensionless and SHOULD use the default unit `1` (the unity).
 [annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
 give additional meaning *without* the leading default unit (`1`). For example,
 use `{packets}`, `{errors}`, `{faults}`, etc.
+
+### Instrument Types
+
+The semantic metric conventions specification is written to use the names of the synchronous instrument types,
+like `Counter` or `UpDownCounter`. However, compliant implementations MAY use the asynchronous equivalent instead,
+like `Asynchronous Counter` or `Asynchronous UpDownCounter`.
+Whether implementations choose the synchronous type or the asynchronous equivalent is considered to be an
+implementation detail. Both choices are compliant with this specification.
