@@ -122,6 +122,10 @@ release.
   ([#2436](https://github.com/open-telemetry/opentelemetry-specification/pull/2436))
 - Add `rpc.system` value for Apache Dubbo.
   ([#2453](https://github.com/open-telemetry/opentelemetry-specification/pull/2453))
+- Note added that `net.peer.name` SHOULD NOT be set if capturing it would require an
+  extra reverse DNS lookup. And moved `net.peer.name` from common http attributes to
+  just client http attributes.
+  ([#2446](https://github.com/open-telemetry/opentelemetry-specification/pull/2446))
 
 ### Compatibility
 
