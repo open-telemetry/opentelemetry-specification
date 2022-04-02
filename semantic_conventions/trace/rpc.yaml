@@ -60,6 +60,16 @@ groups:
           - net.peer.ip
           - net.peer.name
       - include: network
+
+  - id: rpc.server
+    prefix: rpc
+    extends: rpc
+    span_kind: server
+    brief: 'Semantic Convention for RPC server spans'
+    attributes:
+      - ref: net.host.name
+      - ref: net.host.ip
+
   - id: rpc.grpc
     prefix: rpc.grpc
     extends: rpc
@@ -121,6 +131,7 @@ groups:
               value: 16
         required: always
         brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."
+
   - id: rpc.jsonrpc
     prefix: rpc.jsonrpc
     extends: rpc
@@ -155,6 +166,7 @@ groups:
         note: >
           This is always required for jsonrpc. See the note in the general
           RPC conventions for more information.
+
   - id: rpc.message
     prefix: "message"  # TODO: Change the prefix to rpc.message?
     type: event

@@ -126,6 +126,8 @@ release.
   extra reverse DNS lookup. And moved `net.peer.name` from common http attributes to
   just client http attributes.
   ([#2446](https://github.com/open-telemetry/opentelemetry-specification/pull/2446))
+- Add `net.host.name` and `net.host.ip` conventions for rpc server spans.
+  ([#2447](https://github.com/open-telemetry/opentelemetry-specification/pull/2447))
 
 ### Compatibility
 

@@ -11,8 +11,9 @@ This document defines how to describe remote procedure calls
 
 - [Common remote procedure call conventions](#common-remote-procedure-call-conventions)
   * [Span name](#span-name)
-  * [Attributes](#attributes)
+  * [Common attributes](#common-attributes)
     + [Service name](#service-name)
+  * [Server attributes](#server-attributes)
   * [Events](#events)
   * [Distinction from HTTP spans](#distinction-from-http-spans)
 - [gRPC](#grpc)
@@ -51,7 +52,7 @@ Examples of span names:
   `MyServiceReference.ICalculator/Add` reported by the client for .NET WCF calls
 - `MyServiceWithNoPackage/theMethod`
 
-### Attributes
+### Common attributes
 
 <!-- semconv rpc -->
 | Attribute  | Type | Description  | Examples  | Required |
@@ -104,6 +105,15 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 [net.transport]: span-general.md#network-transport-attributes
 [`service.name`]: ../../resource/semantic_conventions/README.md#service
 [`peer.service`]: span-general.md#general-remote-service-attributes
+
+### Server attributes
+
+<!-- semconv rpc.server -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| [`net.host.ip`](span-general.md) | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
+| [`net.host.name`](span-general.md) | string | Local hostname or similar, see note below. | `localhost` | No |
+<!-- endsemconv -->
 
 ### Events
 
