@@ -353,7 +353,7 @@ asynchronous instruments after they are created.
 
 Where the API supports registration of `callback` functions after
 asynchronous instrumentation creation, the user MUST be able to undo
-registration of the specific callback after its registration somehow.
+registration of the specific callback after its registration by some means.
 
 Every currently registered Callback associated with an instrument MUST
 be evaluted exactly once during collection prior to reading data for
