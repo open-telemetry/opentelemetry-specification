@@ -29,7 +29,7 @@ release.
 
 ### Common
 
-## v1.10.0 (2021-04-01)
+## v1.10.0 (2022-04-01)
 
 ### Context
 
@@ -122,6 +122,12 @@ release.
   ([#2436](https://github.com/open-telemetry/opentelemetry-specification/pull/2436))
 - Add `rpc.system` value for Apache Dubbo.
   ([#2453](https://github.com/open-telemetry/opentelemetry-specification/pull/2453))
+- Note added that `net.peer.name` SHOULD NOT be set if capturing it would require an
+  extra reverse DNS lookup. And moved `net.peer.name` from common http attributes to
+  just client http attributes.
+  ([#2446](https://github.com/open-telemetry/opentelemetry-specification/pull/2446))
+- Add `net.host.name` and `net.host.ip` conventions for rpc server spans.
+  ([#2447](https://github.com/open-telemetry/opentelemetry-specification/pull/2447))
 
 ### Compatibility
 
@@ -150,7 +156,7 @@ release.
 - Add "Mapping Arbitrary Data to OTLP AnyValue" document.
   ([#2385](https://github.com/open-telemetry/opentelemetry-specification/pull/2385))
 
-## v1.9.0 (2021-02-10)
+## v1.9.0 (2022-02-10)
 
 ### Context
 

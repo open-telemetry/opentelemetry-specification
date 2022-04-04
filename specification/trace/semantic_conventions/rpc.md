@@ -11,8 +11,9 @@ This document defines how to describe remote procedure calls
 
 - [Common remote procedure call conventions](#common-remote-procedure-call-conventions)
   * [Span name](#span-name)
-  * [Attributes](#attributes)
+  * [Common attributes](#common-attributes)
     + [Service name](#service-name)
+  * [Server attributes](#server-attributes)
   * [Events](#events)
   * [Distinction from HTTP spans](#distinction-from-http-spans)
 - [gRPC](#grpc)
@@ -51,7 +52,7 @@ Examples of span names:
   `MyServiceReference.ICalculator/Add` reported by the client for .NET WCF calls
 - `MyServiceWithNoPackage/theMethod`
 
-### Attributes
+### Common attributes
 
 <!-- semconv rpc -->
 | Attribute  | Type | Description  | Examples  | Required |
@@ -60,13 +61,15 @@ Examples of span names:
 | `rpc.service` | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | No, but recommended |
 | `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | No, but recommended |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [3] | `example.com` | See below |
 | [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | See below |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | See below |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
 
 **[2]:** This is the logical name of the method from the RPC interface perspective, which can be different from the name of any implementing method/function. The `code.function` attribute may be used to store the latter (e.g., method actually executing the call on the server side, RPC client stub method on the client side).
+
+**[3]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -102,6 +105,15 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 [net.transport]: span-general.md#network-transport-attributes
 [`service.name`]: ../../resource/semantic_conventions/README.md#service
 [`peer.service`]: span-general.md#general-remote-service-attributes
+
+### Server attributes
+
+<!-- semconv rpc.server -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| [`net.host.ip`](span-general.md) | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
+| [`net.host.name`](span-general.md) | string | Local hostname or similar, see note below. | `localhost` | No |
+<!-- endsemconv -->
 
 ### Events
 
