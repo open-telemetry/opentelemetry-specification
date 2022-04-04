@@ -818,26 +818,9 @@ pre-calculated value is already available or fetching the snapshot of the
 "current value" is straightforward, use [Asynchronous
 UpDownCounter](#asynchronous-updowncounter) instead.
 
-Taking the **the size of a collection** as an example, almost all the language
-runtimes would provide APIs for retrieving the size of a collection, whether the
-size is internally maintained or calculated on the fly. If the intention is to
-report the size that can be retrieved from these APIs, use [Asynchronous
-UpDownCounter](#asynchronous-updowncounter).
-
-```python
-# Python
-
-items = []
-
-meter.create_observable_up_down_counter(
-    name="store.inventory",
-    description="the number of the items available",
-    callback=lambda result: result.Observe(len(items)))
-```
-
-There are cases when the runtime APIs won't provide sufficient information, e.g.
+UpDownCounter supports counting **the size of a collection** incrementally, e.g.
 reporting the number of items in a concurrent bag by the "color" and "material"
-properties.
+properties as they are added and removed.
 
 | Color    | Material     | Count |
 | -------- | -----------  | ----- |
