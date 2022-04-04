@@ -499,8 +499,8 @@ Implementations are REQUIRED to accept the entire normal range of IEEE
 floating point values (i.e., all values except for +Inf, -Inf and NaN
 values).
 
-Implementations are permitted to round subnormal values away from zero
-to the nearest normal value when it simplifies the implementation.
+Implementations MAY round subnormal values away from zero to the
+nearest normal value.
 
 ##### Exponential Histogram Aggregation: Support a minimum and maximum scale
 
