@@ -111,8 +111,6 @@ groups:
         required:
           conditional: If and only if a request was retried.
         examples: 3
-      - ref: net.peer.name
-        sampling_relevant: true
       - ref: net.peer.ip
         sampling_relevant: true
       - ref: net.peer.port
@@ -125,6 +123,9 @@ groups:
     extends: http
     span_kind: client
     brief: 'Semantic Convention for HTTP Client'
+    attributes:
+      - ref: net.peer.name
+        sampling_relevant: true
     constraints:
       - any_of:
           - [http.url]
