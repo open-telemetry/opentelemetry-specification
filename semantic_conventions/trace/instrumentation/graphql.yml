@@ -2,8 +2,8 @@ groups:
   - id: graphql
     prefix: graphql
     brief: >
-      This document defines semantic conventions to apply when instrumenting the GraphQL Server. They map GraphQL
-      operations to attributes on a Span.
+      This document defines semantic conventions to apply when instrumenting the GraphQL implementation. They map
+      GraphQL operations to attributes on a Span.
     attributes:
       - id: operation.name
         brief: "The name of the operation being executed."

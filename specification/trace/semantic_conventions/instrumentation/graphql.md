@@ -2,10 +2,8 @@
 
 **Status**: [Experimental](../../../document-status.md)
 
-This document defines semantic conventions to apply when instrumenting the GraphQL Server. They map GraphQL operations
-to attributes on a Span.
-
-**Span kind:** MUST always be `INTERNAL`.
+This document defines semantic conventions to apply when instrumenting the GraphQL implementation. They map GraphQL
+operations to attributes on a Span.
 
 The **span name** MUST be of the format `<graphql.operation.type> <graphql.operation.name>` provided that
 `graphql.operation.type` and `graphql.operation.name` are available. If `graphql.operation.name` is not available, the
