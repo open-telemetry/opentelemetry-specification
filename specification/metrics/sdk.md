@@ -213,7 +213,7 @@ made with an Instrument:
   * For each View, if the Instrument could match the instrument selection
     criteria:
     * Try to apply the View configuration. If applying the View results
-      in [conflicting metric identities](./datamodel.md#exponentialhistogram-producer-recommendations)
+      in [conflicting metric identities](./datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
       the implementation SHOULD apply the View and emit a warning. If it is not
       possible to apply the View without producing semantic errors (e.g. the
       View sets an asynchronous instrument to use
