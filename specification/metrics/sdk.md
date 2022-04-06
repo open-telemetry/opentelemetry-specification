@@ -199,8 +199,7 @@ SDK SHOULD NOT allow Views with a specified name to be declared with instrument
 selectors that may select more than one instrument (e.g. wild card instrument
 name) in the same Meter. For this and other cases where registering a view will
 cause a conflict, SDKs MAY fail fast in accordance with
-initialization [error handling principles](../error-handling.md#basic-error-handling-principles)
-.
+initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -219,7 +218,7 @@ made with an Instrument:
       possible to apply the View without producing semantic errors (e.g. the
       View sets an asynchronous instrument to use
       the [Histogram aggregation](#histogram-aggregation)) the implementation
-      SHOULD drop the View and emit a warning.
+      SHOULD emit a warning and proceed as if the View did not exist.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
