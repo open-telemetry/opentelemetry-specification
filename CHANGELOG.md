@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Clarify SDK behavior when view conflicts are present
+  ([#2462](https://github.com/open-telemetry/opentelemetry-specification/pull/2462)).
+
 ### Logs
 
 ### Resource
