@@ -43,13 +43,15 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | No |
 | `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | No |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below. |
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | See below. |
-| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditional [1] |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditional [2] |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | See below. |
+| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditional [2] |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditional [3] |
 
-**[1]:** Required if using a port other than the default port for this DBMS.
+**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[2]:** Recommended in general, required for in-process databases (`"inproc"`).
+**[2]:** Required if using a port other than the default port for this DBMS.
+
+**[3]:** Recommended in general, required for in-process databases (`"inproc"`).
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
