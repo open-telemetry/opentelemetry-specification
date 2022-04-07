@@ -93,10 +93,6 @@ formats is required. Implementing more than one format is optional.
 
 ## Metrics
 
-**Status**: [Experimental](./specification/document-status.md)
-
-Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
-
 | Feature                                                                                                                                                                      | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | The API provides a way to set and get a global default `MeterProvider`.                                                                                                      | X        | +  |  +   |    |    +   |      |        |     |      |     |   -  |       |
