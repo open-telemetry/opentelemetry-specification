@@ -23,6 +23,8 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Clarify gRPC insecure option #2476
+
 ### SDK Configuration
 
 ### Telemetry Schemas
