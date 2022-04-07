@@ -204,6 +204,27 @@ formats is required. Implementing more than one format is optional.
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                                   | X        |    |      |    |    -   |      |        |     |      |     |   -  |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                                | X        |    |      |    |    -   |      |        |     |      |     |   -  |       |
 
+## Logs
+
+Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
+
+| Feature                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|-------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| **[Logging SDK](specification/logs/logging-library-sdk.md)**| Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| Get LogEmitter                                              |          |    |      |    |        |      |        |     |      |     |      |       |
+| LogEmitter.Emit(LogRecord)                                  |          |    |      |    |        |      |        |     |      |     |      |       |
+| LogEmitter.Shutdown                                         |          |    |      |    |        |      |        |     |      |     |      |       |
+| LogEmitter.ForceFlush                                       |          |    |      |    |        |      |        |     |      |     |      |       |
+| SimpleLogProcessor                                          |          |    |      |    |        |      |        |     |      |     |      |       |
+| BatchLogProcessor                                           |          |    |      |    |        |      |        |     |      |     |      |       |
+| Can plug custom log processor                               |          |    |      |    |        |      |        |     |      |     |      |       |
+| OTLP/gRPC exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
+| OTLP/HTTP exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
+| OTLP File exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
+| Can plug custom log exporter                                |          |    |      |    |        |      |        |     |      |     |      |       |
+| Implicit Context Injection                                  |          |    |      |    |        |      |        |     |      |     |      |       |
+| Explicit Context                                            |          |    |      |    |        |      |        |     |      |     |      |       |
+
 ## Resource
 
 | Feature                                                                                                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
