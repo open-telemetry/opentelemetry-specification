@@ -236,7 +236,7 @@ When retrying, the client SHOULD implement an exponential backoff strategy. An
 exception to this is the Throttling case explained below, which provides
 explicit instructions about retrying interval.
 
-The client SHOULD interpret `RESOURCE_EXHAUSTED` code as retryable only if the server signals backpressure to indicate a possible recovery.
+The client SHOULD interpret `RESOURCE_EXHAUSTED` code as retryable only if the server supplies [RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40) via [status details](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails) to signal backpressure and indicate a possible recovery. For details, see [OTLP/gRPC Throttling](#otlpgrpc-throttling).
 
 #### OTLP/gRPC Throttling
 
