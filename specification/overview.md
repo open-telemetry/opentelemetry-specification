@@ -153,8 +153,8 @@ the following state:
 
 - An operation name
 - A start and finish timestamp
-- [**Attributes**](./common/common.md#attributes): A list of key-value pairs.
-- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
+- [**Attributes**](./common/README.md#attribute): A list of key-value pairs.
+- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/README.md#attribute)). The name must be strings.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
   (via the **SpanContext** of those related **Spans**).
@@ -213,7 +213,7 @@ scenarios.
 ## Metric Signal
 
 OpenTelemetry allows to record raw measurements or metrics with predefined
-aggregation and a [set of attributes](./common/common.md#attributes).
+aggregation and a [set of attributes](./common/README.md#attribute).
 
 Recording raw measurements using OpenTelemetry API allows to defer to end-user
 the decision on what aggregation algorithm should be applied for this metric as
