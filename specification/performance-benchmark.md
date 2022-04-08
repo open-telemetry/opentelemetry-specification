@@ -18,7 +18,7 @@ platform.
   `service.name`, `service.version` and 10 characters string value for each
   attribute, and attribute `service.instance.id` with a unique UUID. See
   [Service](./resource/semantic_conventions/README.md#service) for details.
-- 1 [attribute](./common/common.md#attributes) with a signed 64-bit integer
+- 1 [attribute](./common/README.md#attribute) with a signed 64-bit integer
   value.
 - 1 [event](./trace/api.md#add-events) without any attributes.
 - The `AlwaysOn` sampler should be enabled.
