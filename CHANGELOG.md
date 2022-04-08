@@ -29,6 +29,9 @@ release.
 
 ### Common
 
+- Define semantic conventions and instrumentation stability.
+  ([#2180](https://github.com/open-telemetry/opentelemetry-specification/pull/2180))
+
 ## v1.10.0 (2022-04-01)
 
 ### Context
