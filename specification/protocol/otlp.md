@@ -223,7 +223,7 @@ not-retryable according to the following table:
 |ALREADY_EXISTS|No|
 |PERMISSION_DENIED|No|
 |UNAUTHENTICATED|No|
-|RESOURCE_EXHAUSTED|Yes|
+|RESOURCE_EXHAUSTED|Only if the server can recover (see below)|
 |FAILED_PRECONDITION|No|
 |ABORTED|Yes|
 |OUT_OF_RANGE|Yes|
@@ -235,6 +235,8 @@ not-retryable according to the following table:
 When retrying, the client SHOULD implement an exponential backoff strategy. An
 exception to this is the Throttling case explained below, which provides
 explicit instructions about retrying interval.
+
+The client SHOULD interpret `RESOURCE_EXHAUSTED` code as retryable only if the server signals backpressure to indicate a possible recovery.
 
 #### OTLP/gRPC Throttling
 
