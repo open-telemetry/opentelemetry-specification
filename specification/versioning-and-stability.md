@@ -15,8 +15,8 @@
       - [Extending Existing API Calls](#extending-existing-api-calls)
     + [SDK Stability](#sdk-stability)
     + [Contrib Stability](#contrib-stability)
-    + [NOT DEFINED: Telemetry Stability](#not-defined-telemetry-stability)
-    + [NOT DEFINED: Semantic Conventions Stability](#not-defined-semantic-conventions-stability)
+    + [Semantic Conventions Stability](#semantic-conventions-stability)
+    + [Telemetry Stability](#telemetry-stability)
   * [Deprecated](#deprecated)
   * [Removed](#removed)
   * [A note on replacing signals](#a-note-on-replacing-signals)
@@ -134,11 +134,14 @@ Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.
 
 #### Contrib Stability
 
-**NOTE: Until telemetry stability is defined, Contrib instrumentation MUST NOT be marked as stable. See below.**
-
-Plugins, instrumentation, and other contrib packages SHOULD be kept up to date and compatible with the latest versions of the API, SDK, and Semantic Conventions.
-If a release of the API, SDK, or Semantic Conventions contains changes which are relevant to a contrib package, that package SHOULD be updated and released in a timely fashion.
-The goal is to ensure users can update to the latest version of OpenTelemetry, and not be held back by the plugins that they depend on.
+Plugins, instrumentation, and other contrib packages SHOULD be kept up to date
+and compatible with the latest versions of the API, SDK, and Semantic
+Conventions. If a release of the API, SDK, or Semantic Conventions contains
+changes which are relevant to a contrib package, that package SHOULD be updated
+and released in a timely fashion. (See limitations on instrumentation stability
+in [Telemetry Stability](telemetry-stability.md).) The goal is to ensure users can
+update to the latest version of OpenTelemetry, and not be held back by the
+plugins that they depend on.
 
 Public portions of contrib packages (constructors, configuration, interfaces) SHOULD remain backwards compatible.
 
@@ -149,20 +152,48 @@ For example, a database integration may break stability if the required database
 However, it is strongly RECOMMENDED that older contrib packages remain stable.
 A new, incompatible version of an integration SHOULD be released as a separate contrib package, rather than break the existing contrib package.
 
-#### NOT DEFINED: Telemetry Stability
+#### Semantic Conventions Stability
 
-**Telemetry stability guarantees are TBD.**
+Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid
+breaking analysis tools, such as dashboards and alerts. To achieve this, while
+allowing the evolution of telemetry and semantic conventions, OpenTelemetry
+relies on the concept of
+[Telemetry Schemas](schemas/overview.md).
 
-Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid breaking analysis tools, such as dashboards and alerts.
-However, it is not clear at this time what type of instrumentation changes (for example, adding additional spans and attributes) would actually cause a breaking change.
+Changes to semantic conventions in this specification are allowed, provided that
+the changes can be described by schema files. The following changes can be
+currently described and are allowed:
 
-#### NOT DEFINED: Semantic Conventions Stability
+- Renaming of span, metric, log and resource attributes.
+- Renaming of metrics.
+- Renaming of span events.
 
-Telemetry stability, including semantic conventions, is not currently defined. The following practices are recommended.
+All such changes MUST be described in the OpenTelemetry
+[Schema File Format](schemas/file_format_v1.0.0.md) and published in this repository.
+For details see [how OpenTelemetry Schemas are published](schemas/overview.md#opentelemetry-schema).
 
-Semantic Conventions SHOULD NOT be removed once they are added.
-New conventions MAY be added to replace usage of older conventions, but the older conventions SHOULD NOT be removed.
-Older conventions SHOULD be marked as deprecated when they are replaced by newer conventions.
+See the [Telemetry Stability](telemetry-stability.md) document for details on how
+instrumentations can use schemas to change the instrumentation they produce.
+
+In addition to the 3 types of changes described above there are certain types
+that are always allowed. Such changes do not need to be described (and are not
+described) by schema files. Here is the list of such changes:
+
+- Adding new attributes to the existing semantic conventions for resources,
+  spans, span events or log records. Note that adding attributes to existing metrics is
+  considered to be a breaking change.
+- Adding semantic conventions for new types of resources, spans, span events,
+  metrics or log records.
+
+Any other changes to semantic conventions are currently prohibited. Other types
+of changes MAY be introduced in the future versions of this specification. This
+is only allowed if OpenTelemetry introduces a new schema file format that is
+capable of describing such changes.
+
+#### Telemetry Stability
+
+For stability of telemetry produced by instrumentation see the
+[Telemetry Stability](telemetry-stability.md) document.
 
 ### Deprecated
 
