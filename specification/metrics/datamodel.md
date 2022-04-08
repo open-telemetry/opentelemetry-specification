@@ -50,6 +50,7 @@
     + [Sums: Missing Timestamps](#sums-missing-timestamps)
 - [Prometheus Compatibility](#prometheus-compatibility)
   * [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
+    + [Metric Metadata](#metric-metadata)
     + [Counters](#counters)
     + [Gauges](#gauges)
     + [Info](#info)
@@ -62,6 +63,7 @@
     + [Exemplars](#exemplars-1)
     + [Resource Attributes](#resource-attributes)
   * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
+    + [Metric Metadata](#metric-metadata-1)
     + [Gauges](#gauges-1)
     + [Sums](#sums-1)
     + [Histograms](#histograms-1)
@@ -1122,9 +1124,24 @@ OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types
 
 ### Prometheus Metric points to OTLP
 
+#### Metric Metadata
+
+The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be converted to the unit of the OTLP metric.  After trimming
+type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
+from the suffix as well, if the metric suffix matches the unit.
+
+The [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be added as the desciption of the OTLP metric.
+
+The [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be used to determine the OTLP data type, and dictates
+type-specific conversion rules listed below. Metric families without type
+metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
+
 #### Counters
 
-A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
+A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.  If the counter has a `_total` suffix, it MUST be removed.
 
 #### Gauges
 
@@ -1132,7 +1149,7 @@ A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/
 
 #### Info
 
-An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the "target" info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the "target" info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.  If it has an `_info` suffix, the suffix MUST be removed from the metric name.
 
 #### StateSet
 
@@ -1219,6 +1236,22 @@ in keys).
 
 ### OTLP Metric points to Prometheus
 
+#### Metric Metadata
+
+The Unit of an OTLP metric point MUST be added as
+[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD
+be converted to [base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units)
+recommended by OpenMetrics when possible.  The unit suffix comes before any
+type-specific suffixes.
+
+The description of an OTLP metrics point MUST be added as
+[OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+
+The data point type of an OTLP metric MUST be added as
+[OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+It also dictates type-specific conversion rules listed below.
+
 #### Gauges
 
 An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
@@ -1231,6 +1264,8 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum
 - Otherwise, it MUST be dropped.
+
+Sum metric points MUST have `_total` added as a suffix to the metric name.
 
 #### Histograms
 
@@ -1266,7 +1301,7 @@ The following OTLP data points MUST be dropped:
 
 #### Metric Attributes
 
-OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  String Attribute values are converted directly to Metric Attributes, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/common.md#attribute).  Prometheus metric label keys are required to match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics from OpenTelemetry with unsupported Attribute names MUST replace invalid characters with the `_` character. This may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same location.  In such unlikely cases, if multiple key-value pairs are converted to have the same Prometheus key, the values MUST be concatenated together, separated by `;`, and ordered by the lexicographical order of the original keys.
+OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  String Attribute values are converted directly to Metric Attributes, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute).  Prometheus metric label keys are required to match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics from OpenTelemetry with unsupported Attribute names MUST replace invalid characters with the `_` character. This may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same location.  In such unlikely cases, if multiple key-value pairs are converted to have the same Prometheus key, the values MUST be concatenated together, separated by `;`, and ordered by the lexicographical order of the original keys.
 
 #### Exemplars
 
@@ -1314,7 +1349,7 @@ other labels other than `job` and `instance`.  There MUST be at most one
 
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named "target" info with a constant value of 1 MUST be used instead.
 
-To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/common.md#attribute).
+To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute).
 
 ## Footnotes
 

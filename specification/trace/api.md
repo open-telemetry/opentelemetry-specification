@@ -283,7 +283,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
-- [`Attributes`](../common/common.md#attributes)
+- [`Attributes`](../common/README.md#attribute)
 - A list of [`Link`s](#specifying-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
@@ -361,7 +361,7 @@ The API MUST accept the following parameters:
   The semantic parent of the Span MUST be determined according to the rules
   described in [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context).
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
-- [`Attributes`](../common/common.md#attributes). Additionally,
+- [`Attributes`](../common/README.md#attribute). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
@@ -415,7 +415,7 @@ Span creation.
 A `Link` is structurally defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
-- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+- Zero or more [`Attributes`](../common/README.md#attribute) further describing
   the link.
 
 The Span creation API MUST provide:
@@ -474,7 +474,7 @@ propagators.
 
 #### Set Attributes
 
-A `Span` MUST have the ability to set [`Attributes`](../common/common.md#attributes) associated with it.
+A `Span` MUST have the ability to set [`Attributes`](../common/README.md#attribute) associated with it.
 
 The Span interface MUST provide:
 
@@ -507,7 +507,7 @@ An `Event` is structurally defined by the following properties:
 - Name of the event.
 - A timestamp for the event. Either the time at which the event was
   added or a custom timestamp provided by the user.
-- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+- Zero or more [`Attributes`](../common/README.md#attribute) further describing
   the event.
 
 The Span interface MUST provide:
@@ -575,11 +575,12 @@ The status code SHOULD remain unset, except for the following circumstances:
 
 An attempt to set value `Unset` SHOULD be ignored.
 
-When the status is set to `Error` by Instrumentation Libraries, the status codes
+When the status is set to `Error` by Instrumentation Libraries, the `Description`
 SHOULD be documented and predictable. The status code should only be set to `Error`
 according to the rules defined within the semantic conventions. For operations
 not covered by the semantic conventions, Instrumentation Libraries SHOULD
-publish their own conventions, including status codes.
+publish their own conventions, including possible values of `Description`
+and what they mean.
 
 Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
 unless explicitly configured to do so. Instrumention libraries SHOULD leave the
