@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Add a log sampling specification.
+  ([#2482](https://github.com/open-telemetry/opentelemetry-specification/pull/2482))
+
 ### Resource
 
 ### Semantic Conventions
