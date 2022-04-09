@@ -1,7 +1,5 @@
 # OpenTelemetry Metrics
 
-**Status**: [Experimental](../document-status.md)
-
 <details>
 <summary>Table of Contents</summary>
 

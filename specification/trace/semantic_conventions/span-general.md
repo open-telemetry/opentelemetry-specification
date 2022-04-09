@@ -37,7 +37,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | No |
 | `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
 | `net.peer.port` | int | Remote port number. | `80`; `8080`; `443` | No |
-| `net.peer.name` | string | Remote hostname or similar, see note below. | `example.com` | No |
+| `net.peer.name` | string | Remote hostname or similar, see note below. [1] | `example.com` | No |
 | `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
 | `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
 | `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
@@ -47,6 +47,8 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | No |
 | `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | No |
 | `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | No |
+
+**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 `net.transport` MUST be one of the following:
 
@@ -106,7 +108,8 @@ For `Unix` and `pipe`, since the connection goes over the file system instead of
 For IP-based communication, the name should be a DNS host name.
 For `net.peer.name`, this should be the name that was used to look up the IP address that was connected to
 (i.e., matching `net.peer.ip` if that one is set; e.g., `"example.com"` if connecting to an URL `https://example.com/foo`).
-If only the IP address but no host name is available, reverse-lookup of the IP may optionally be used to obtain it.
+If only the IP address but no host name is available, reverse DNS lookup SHOULD NOT be used to obtain `net.peer.name`,
+and `net.peer.name` SHOULD NOT be set.
 `net.host.name` should be the host name of the local host,
 preferably the one that the peer used to connect for the current operation.
 If that is not known, a public hostname should be preferred over a private one. However, in that case it may be redundant with information already contained in resources and may be left out.

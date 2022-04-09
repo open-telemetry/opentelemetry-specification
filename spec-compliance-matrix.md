@@ -81,7 +81,7 @@ formats is required. Implementing more than one format is optional.
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
+| [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
@@ -92,10 +92,6 @@ formats is required. Implementing more than one format is optional.
 | Use official header name `baggage` |          | +  | +    | +  | +      | +    | +      | +   | +    |  +  | +    | +     |
 
 ## Metrics
-
-**Status**: [Experimental](./specification/document-status.md)
-
-Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
 | Feature                                                                                                                                                                      | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
@@ -208,6 +204,27 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                                   | X        |    |      |    |    -   |      |        |     |      |     |   -  |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                                | X        |    |      |    |    -   |      |        |     |      |     |   -  |       |
 
+## Logs
+
+Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
+
+| Feature                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|-------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| **[Logging SDK](specification/logs/logging-library-sdk.md)**| Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| Get LogEmitter                                              |          |    |      |    |        |      |        |     |      |     |      |       |
+| LogEmitter.Emit(LogRecord)                                  |          |    |      |    |        |      |        |     |      |     |      |       |
+| LogEmitter.Shutdown                                         |          |    |      |    |        |      |        |     |      |     |      |       |
+| LogEmitter.ForceFlush                                       |          |    |      |    |        |      |        |     |      |     |      |       |
+| SimpleLogProcessor                                          |          |    |      |    |        |      |        |     |      |     |      |       |
+| BatchLogProcessor                                           |          |    |      |    |        |      |        |     |      |     |      |       |
+| Can plug custom log processor                               |          |    |      |    |        |      |        |     |      |     |      |       |
+| OTLP/gRPC exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
+| OTLP/HTTP exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
+| OTLP File exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
+| Can plug custom log exporter                                |          |    |      |    |        |      |        |     |      |     |      |       |
+| Implicit Context Injection                                  |          |    |      |    |        |      |        |     |      |     |      |       |
+| Explicit Context                                            |          |    |      |    |        |      |        |     |      |     |      |       |
+
 ## Resource
 
 | Feature                                                                                                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
@@ -247,23 +264,23 @@ Note: Support for environment variables is optional.
 
 |Feature                                           |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
 |--------------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
-|OTEL_RESOURCE_ATTRIBUTES                          | + | +  | + | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_SERVICE_NAME                                 | + |    |   |      |    | +    |   |    |   | +  |     |
+|OTEL_RESOURCE_ATTRIBUTES                          | + | +  | + | +    | +  | +    | + | +  | + | +  | -   |
+|OTEL_SERVICE_NAME                                 | + |    |   |      |    | +    | + |    |   | +  |     |
 |OTEL_LOG_LEVEL                                    | - | -  | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
 |OTEL_PROPAGATORS                                  | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
 |OTEL_BSP_*                                        | + | +  |   | +    | +  | +    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_OTLP_*                              | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
 |OTEL_EXPORTER_JAEGER_*                            | + |    |   |      |    | -    | - |    | - | +  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                            | - |    |   |      |    | -    | - | -  | - | +  | -   |
-|OTEL_TRACES_EXPORTER                              | - | +  |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_TRACES_EXPORTER                              | - | +  |   | +    | +  | +    | + | -  | - | -  |     |
 |OTEL_METRICS_EXPORTER                             | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
 |OTEL_LOGS_EXPORTER                                | - |    |   |      |    |      |   |    |   | -  |     |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                   | + | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT            | + |    |   |      |    | +    |   |    |   | -  |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                       | + | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                        | + | +  |   | +    | +  | +    |   | +  | - | -  |     |
-|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                  | + |    |   |      |    | +    |   |    |   | -  |     |
-|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                   | + |    |   |      |    | +    |   |    |   | -  |     |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                   | + | +  |   | +    | +  | +    | + | +  | - | -  |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT            | + |    |   |      |    | +    | + |    |   | -  |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                       | + | +  |   | +    | +  | +    | + | +  | - | -  |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                        | + | +  |   | +    | +  | +    | + | +  | - | -  |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                  | + |    |   |      |    | +    | + |    |   | -  |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                   | + |    |   |      |    | +    | + |    |   | -  |     |
 |OTEL_TRACES_SAMPLER                               | + | +  |   | +    | +  | +    |   | -  | - | -  |     |
 |OTEL_TRACES_SAMPLER_ARG                           | + | +  |   | +    | +  | +    |   | -  | - | -  |     |
 |OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + |    |   |      |    | -    |   |    |   | -  |     |

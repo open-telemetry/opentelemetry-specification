@@ -374,7 +374,7 @@ Following configuration properties should be available when creating the sampler
 
 ## Span Limits
 
-Span attributes MUST adhere to the [common rules of attribute limits](../common/common.md#attribute-limits).
+Span attributes MUST adhere to the [common rules of attribute limits](../common/README.md#attribute-limits).
 
 SDK Spans MAY also discard links and events that would increase the number of
 elements of each collection beyond the configured limit.
@@ -405,7 +405,7 @@ public final class SpanLimits {
 
 **Configurable parameters:**
 
-* [all common options applicable to attributes](../common/common.md#configurable-parameters)
+* [all common options applicable to attributes](../common/README.md#configurable-parameters)
 * `EventCountLimit` (Default=128) - Maximum allowed span event count;
 * `LinkCountLimit` (Default=128) - Maximum allowed span link count;
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
