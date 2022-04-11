@@ -560,7 +560,7 @@ make the flush timeout configurable.
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below. Other common processing scenarios should be first considered
-for implementation out-of-process in [OpenTelemetry Collector](../overview.md#collector)
+for implementation out-of-process in [OpenTelemetry Collector](../overview.md#collector).
 
 #### Simple processor
 
