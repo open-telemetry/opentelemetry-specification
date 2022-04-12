@@ -32,33 +32,33 @@ type and units.
 
 Below is a table of FaaS invocation metric instruments.
 
-| Name | Instrument | Unit | Unit ([UCUM](README.md#instrument-units)) | Description |
-|------|------------|------|-------------------------------------------|-------------|
-| `faas.invoke_duration` | Histogram | milliseconds | `ms` | Measures the duration of the invocation |
-| `faas.init_duration` | Histogram | milliseconds | `ms` | Measures the duration of the function's initialization, such as a cold start |
-| `faas.coldstarts` | Counter | default unit | `{coldstarts}` | Number of invocation cold starts. |
-| `faas.errors` | Counter | default unit | `{errors}` | Number of invocation errors. |
-| `faas.executions` | Counter | default unit | `{executions}` | Number of successful invocations. |
-| `faas.timeouts` | Counter | default unit | `{timeouts}` | Number of invocation timeouts. |
+| Name                   | Instrument Type ([*](README.md#instrument-types)) | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                                                  |
+|------------------------|---------------------------------------------------|--------------|-------------------------------------------|------------------------------------------------------------------------------|
+| `faas.invoke_duration` | Histogram                                         | milliseconds | `ms`                                      | Measures the duration of the invocation                                      |
+| `faas.init_duration`   | Histogram                                         | milliseconds | `ms`                                      | Measures the duration of the function's initialization, such as a cold start |
+| `faas.coldstarts`      | Counter                                           | default unit | `{coldstarts}`                            | Number of invocation cold starts.                                            |
+| `faas.errors`          | Counter                                           | default unit | `{errors}`                                | Number of invocation errors.                                                 |
+| `faas.executions`      | Counter                                           | default unit | `{executions}`                            | Number of successful invocations.                                            |
+| `faas.timeouts`        | Counter                                           | default unit | `{timeouts}`                              | Number of invocation timeouts.                                               |
 
 Optionally, when applicable:
 
-| Name | Instrument | Unit | Unit ([UCUM](README.md#instrument-units)) | Description |
-|------|------------|------|-------------------------------------------|-------------|
-| `faas.mem_usage` | Histogram | Bytes | `By` | Distribution of max memory usage per invocation |
-| `faas.cpu_usage` | Histogram | milliseconds | `ms` | Distribution of cpu usage per invocation |
-| `faas.net_io` | Histogram | Bytes | `By` | Distribution of net I/O usage per invocation |
+| Name             | Instrument Type ([*](README.md#instrument-types)) | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                     |
+|------------------|---------------------------------------------------|--------------|-------------------------------------------|-------------------------------------------------|
+| `faas.mem_usage` | Histogram                                         | Bytes        | `By`                                      | Distribution of max memory usage per invocation |
+| `faas.cpu_usage` | Histogram                                         | milliseconds | `ms`                                      | Distribution of cpu usage per invocation        |
+| `faas.net_io`    | Histogram                                         | Bytes        | `By`                                      | Distribution of net I/O usage per invocation    |
 
 ## Attributes
 
 Below is a table of the attributes to be included on FaaS metric events.
 
-| Name | Recommended | Notes and examples |
-|------|-------------|--------------------|
-| `faas.trigger` | Yes | Type of the trigger on which the function is invoked. SHOULD be one of: `datasource`, `http`, `pubsub`, `timer`, `other` |
-| `faas.invoked_name` | Yes | Name of the invoked function. Example: `my-function` |
-| `faas.invoked_provider` | Yes | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws` |
-| `faas.invoked_region` | Yes | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1` |
+| Name                    | Recommended | Notes and examples                                                                                                       |
+|-------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------|
+| `faas.trigger`          | Yes         | Type of the trigger on which the function is invoked. SHOULD be one of: `datasource`, `http`, `pubsub`, `timer`, `other` |
+| `faas.invoked_name`     | Yes         | Name of the invoked function. Example: `my-function`                                                                     |
+| `faas.invoked_provider` | Yes         | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws`                     |
+| `faas.invoked_region`   | Yes         | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1`                  |
 
 More details on these attributes, the function name and the difference compared to the faas.invoked_name can be found at the related [FaaS tracing specification](../../trace/semantic_conventions/faas.md).
 For incoming FaaS executions, the function for which metrics are reported is already described by its [FaaS resource attributes](../../resource/semantic_conventions/faas.md).
