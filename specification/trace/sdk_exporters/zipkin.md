@@ -25,7 +25,7 @@ and Zipkin.
 | Span.Kind                  | Span.kind        | See [SpanKind](#spankind) for values mapping                                                  |
 | Span.StartTime             | Span.timestamp   | See [Unit of time](#unit-of-time)                                                             |
 | Span.EndTime               | Span.duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
-| Span.Attributes            | Add to Span.tags | See [Attributes](../../common/common.md#attributes) for data types for the mapping.           |
+| Span.Attributes            | Add to Span.tags | See [Attributes](../../common/README.md#attribute) for data types for the mapping.           |
 | Span.DroppedAttributesCount| Add to Span.tags | See [Dropped Attributes Count](non-otlp.md#dropped-attributes-count) for tag name to use.     |
 | Span.Events                | Span.annotations | See [Events](#events) for the mapping format.                                                 |
 | Span.DroppedEventsCount    | Add to Span.tags | See [Dropped Events Count](non-otlp.md#dropped-events-count) for tag name to use.             |

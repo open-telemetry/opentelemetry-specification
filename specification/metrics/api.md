@@ -438,11 +438,11 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 Required parameters:
 
-* Optional [attributes](../common/common.md#attributes).
+* Optional [attributes](../common/README.md#attribute).
 * The increment amount, which MUST be a non-negative numeric value.
 
 The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
-[attributes](../common/common.md#attributes) to be passed in as arguments. If
+[attributes](../common/README.md#attribute) to be passed in as arguments. If
 the attribute names and types are provided during the [counter
 creation](#counter-creation), the [OpenTelemetry API](../overview.md#api)
 authors MAY allow attribute values to be passed in using a more efficient way
@@ -660,10 +660,10 @@ certain programming languages or systems, for example `null`, `undefined`).
 Parameters:
 
 * The amount of the `Measurement`, which MUST be a non-negative numeric value.
-* Optional [attributes](../common/common.md#attributes).
+* Optional [attributes](../common/README.md#attribute).
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
-[attributes](../common/common.md#attributes) to be passed in as individual
+[attributes](../common/README.md#attribute) to be passed in as individual
 arguments. [OpenTelemetry API](../overview.md#api) authors MAY allow attribute
 values to be passed in using a more efficient way (e.g. strong typed struct
 allocated on the callstack, tuple). Here are some examples that [OpenTelemetry
@@ -894,10 +894,10 @@ certain programming languages or systems, for example `null`, `undefined`).
 Parameters:
 
 * The amount to be added, can be positive, negative or zero.
-* Optional [attributes](../common/common.md#attributes).
+* Optional [attributes](../common/README.md#attribute).
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
-[attributes](../common/common.md#attributes) to be passed in as individual
+[attributes](../common/README.md#attribute) to be passed in as individual
 arguments. [OpenTelemetry API](../overview.md#api) authors MAY allow attribute
 values to be passed in using a more efficient way (e.g. strong typed struct
 allocated on the callstack, tuple). Here are some examples that [OpenTelemetry
@@ -1044,7 +1044,7 @@ for the interaction between the API and SDK.
 `Measurement`s encapsulate:
 
 * A value
-* [`Attributes`](../common/common.md#attributes)
+* [`Attributes`](../common/README.md#attribute)
 
 ## Compatibility requirements
 
