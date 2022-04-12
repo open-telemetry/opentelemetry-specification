@@ -473,7 +473,7 @@ between two non-identical `Metric` instances having the same `name`:
 **Status**: [Stable](../document-status.md)
 
 Attributes which belong to Metrics are exempt from the
-[common rules of attribute limits](../common/common.md#attribute-limits) at this
+[common rules of attribute limits](../common/README.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
 
@@ -493,7 +493,7 @@ information:
 
 - The `value` of the `Measurement` that was recorded by the API call.
 - The `time` the API call was made to record a `Measurement`.
-- The set of [Attributes](../common/common.md#attributes) associated with the
+- The set of [Attributes](../common/README.md#attribute) associated with the
   `Measurement` not already included in a metric data point.
 - The associated [trace id and span
   id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
