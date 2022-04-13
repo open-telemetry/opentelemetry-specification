@@ -26,11 +26,16 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Clarify gRPC insecure option ([#2476](https://github.com/open-telemetry/opentelemetry-specification/pull/2476))
+
 ### SDK Configuration
 
 ### Telemetry Schemas
 
 ### Common
+
+- Define semantic conventions and instrumentation stability.
+  ([#2180](https://github.com/open-telemetry/opentelemetry-specification/pull/2180))
 
 ## v1.10.0 (2022-04-01)
 
@@ -121,6 +126,8 @@ release.
   ([#2290](https://github.com/open-telemetry/opentelemetry-specification/pull/2290))
 - Add semantic conventions for [CloudEvents](https://cloudevents.io).
   ([#1978](https://github.com/open-telemetry/opentelemetry-specification/pull/1978))
+- Allow all metric conventions to be either synchronous or asynchronous.
+  ([#2458](https://github.com/open-telemetry/opentelemetry-specification/pull/2458)
 - Add `process.cpu.utilization` metric.
   ([#2436](https://github.com/open-telemetry/opentelemetry-specification/pull/2436))
 - Add `rpc.system` value for Apache Dubbo.

@@ -3,7 +3,7 @@
 **Status**: [Stable](../document-status.md)
 
 A [Resource](../overview.md#resources) is an immutable representation of the entity producing
-telemetry as [Attributes](../common/common.md#attributes).
+telemetry as [Attributes](../common/README.md#attribute).
 For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
@@ -49,13 +49,13 @@ The SDK must support two ways to instantiate new resources. Those are:
 
 ### Create
 
-The interface MUST provide a way to create a new resource, from [`Attributes`](../common/common.md#attributes).
+The interface MUST provide a way to create a new resource, from [`Attributes`](../common/README.md#attribute).
 Examples include a factory method or a constructor for a resource
 object. A factory method is recommended to enable support for cached objects.
 
 Required parameters:
 
-- [`Attributes`](../common/common.md#attributes)
+- [`Attributes`](../common/README.md#attribute)
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted resource. If the `schema_url` parameter is unspecified
   then the created resource will have an empty Schema URL.

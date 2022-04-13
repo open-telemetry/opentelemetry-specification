@@ -81,7 +81,7 @@ formats is required. Implementing more than one format is optional.
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| [Attribute Limits](specification/common/common.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
+| [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
@@ -92,10 +92,6 @@ formats is required. Implementing more than one format is optional.
 | Use official header name `baggage` |          | +  | +    | +  | +      | +    | +      | +   | +    |  +  | +    | +     |
 
 ## Metrics
-
-**Status**: [Experimental](./specification/document-status.md)
-
-Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
 | Feature                                                                                                                                                                      | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
@@ -207,6 +203,27 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                                     |          |    |      |    |    -   |      |        |     |      |     |   -  |       |
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                                   | X        |    |      |    |    -   |      |        |     |      |     |   -  |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                                | X        |    |      |    |    -   |      |        |     |      |     |   -  |       |
+
+## Logs
+
+Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
+
+| Feature                                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|--------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
+| **[Logging SDK](specification/logs/logging-library-sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| LogEmitterProvider.Get LogEmitter                            |          |     | +    |     |        |      |        |     |      |     |      |       |
+| LogEmitterProvider.Shutdown                                  |          |     | +    |     |        |      |        |     |      |     |      |       |
+| LogEmitterProvider.ForceFlush                                |          |     | +    |     |        |      |        |     |      |     |      |       |
+| LogEmitter.Emit(LogRecord)                                   |          |     | +    |     |        |      |        |     |      |     |      |       |
+| SimpleLogProcessor                                           |          |     | +    |     |        |      |        |     |      |     |      |       |
+| BatchLogProcessor                                            |          |     | +    |     |        |      |        |     |      |     |      |       |
+| Can plug custom log processor                                |          |     | +    |     |        |      |        |     |      |     |      |       |
+| OTLP/gRPC exporter                                           |          |     | +    |     |        |      |        |     |      |     |      |       |
+| OTLP/HTTP exporter                                           |          |     | +    |     |        |      |        |     |      |     |      |       |
+| OTLP File exporter                                           |          |     | -    |     |        |      |        |     |      |     |      |       |
+| Can plug custom log exporter                                 |          |     | +    |     |        |      |        |     |      |     |      |       |
+| Implicit Context Injection                                   |          |     | -    |     |        |      |        |     |      |     |      |       |
+| Explicit Context                                             |          |     | +    |     |        |      |        |     |      |     |      |       |
 
 ## Resource
 
