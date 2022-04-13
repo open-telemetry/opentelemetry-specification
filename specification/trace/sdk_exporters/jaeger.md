@@ -15,7 +15,7 @@ Jaeger accepts spans in two formats:
 See also:
 
 * [Jaeger APIs](https://www.jaegertracing.io/docs/latest/apis/)
-* [Reference implementation of this translation in the OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector/blob/master/translator/trace/jaeger/traces_to_jaegerproto.go)
+* [Reference implementation of this translation in the OpenTelemetry Collector Contrib repository](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/translator/jaeger/traces_to_jaegerproto.go)
 
 ## Summary
 
