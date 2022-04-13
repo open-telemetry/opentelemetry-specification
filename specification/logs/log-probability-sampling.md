@@ -1,4 +1,4 @@
-# Logs Sampling
+# Log Probability Sampling
 
 **Status**: [Experimental](../document-status.md)
 
