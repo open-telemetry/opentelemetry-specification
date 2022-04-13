@@ -24,6 +24,7 @@ release.
 ### OpenTelemetry Protocol
 
 - Clarify gRPC insecure option ([#2476](https://github.com/open-telemetry/opentelemetry-specification/pull/2476))
+- Specify that OTLP/gRPC clients should retry on `RESOURCE_EXHAUSTED` code only if the server signals backpressure to indicate a possible recovery. ([#2480](https://github.com/open-telemetry/opentelemetry-specification/pull/2480))
 
 ### SDK Configuration
 
