@@ -216,8 +216,9 @@ made with an Instrument:
       the implementation SHOULD apply the View and emit a warning. If it is not
       possible to apply the View without producing semantic errors (e.g. the
       View sets an asynchronous instrument to use
-      the [Histogram aggregation](#histogram-aggregation)) the implementation
-      SHOULD emit a warning and proceed as if the View did not exist.
+      the [Explicit bucket histogram aggregation](#explicit-bucket-histogram-aggregation))
+      the implementation SHOULD emit a warning and proceed as if the View did
+      not exist.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
