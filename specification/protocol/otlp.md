@@ -223,7 +223,7 @@ not-retryable according to the following table:
 |ALREADY_EXISTS|No|
 |PERMISSION_DENIED|No|
 |UNAUTHENTICATED|No|
-|RESOURCE_EXHAUSTED|Yes|
+|RESOURCE_EXHAUSTED|Only if the server can recover (see below)|
 |FAILED_PRECONDITION|No|
 |ABORTED|Yes|
 |OUT_OF_RANGE|Yes|
@@ -235,6 +235,11 @@ not-retryable according to the following table:
 When retrying, the client SHOULD implement an exponential backoff strategy. An
 exception to this is the Throttling case explained below, which provides
 explicit instructions about retrying interval.
+
+The client SHOULD interpret `RESOURCE_EXHAUSTED` code as retryable only if the server signals that the recovery from resource exhaustion is possible. This is signalled by the server by returning [a status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails)
+containing
+[RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40). In this case the behavior of the server and the client is exactly as described in [OTLP/gRPC Throttling](#otlpgrpc-throttling) section.
+If no such status is returned then the `RESOURCE_EXHAUSTED` code SHOULD be treated as non-retryable.
 
 #### OTLP/gRPC Throttling
 
