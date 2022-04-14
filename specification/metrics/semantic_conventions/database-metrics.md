@@ -46,13 +46,9 @@ MUST NOT be used.
 | `db.client.connections.max`              | Asynchronous UpDownCounter | connections  | `{connections}`                           | The maximum number of open connections allowed.                                                   |
 | `db.client.connections.pending_requests` | Asynchronous UpDownCounter | requests     | `{requests}`                              | The number of pending requests for an open connection, cumulative for the entire pool.            |
 | `db.client.connections.timeouts`         | Counter                    | timeouts     | `{timeouts}`                              | The number of connection timeouts that have occurred trying to obtain a connection from the pool. |
-| `db.client.connections.time`             | Histogram                  | milliseconds | `ms`                                      | The time it took to apply an operation described by the `operation` attribute.                    |
-
-All `db.client.connections.time` measurements MUST include the following attribute:
-
-| Name        | Type   | Description                                                                                                                                                                                                                                | Examples | Required |
-|-------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|----------|
-| `operation` | string | The type of operation applied to a connection. Valid values include: `create` (time it took to create a new connection), `use` (time spent using a connection obtained from the pool), `wait` (time spent waiting for an open connection). | `create` | Yes      |
+| `db.client.connections.create_time`      | Histogram                  | milliseconds | `ms`                                      | The time it took to create a new connection.                                                      |
+| `db.client.connections.wait_time`        | Histogram                  | milliseconds | `ms`                                      | The time it took to obtain an open connection from the pool.                                      |
+| `db.client.connections.use_time`         | Histogram                  | milliseconds | `ms`                                      | The time between borrowing a connection and returning it to the pool.                             |
 
 Below is a table of the attributes that MUST be included on all connection pool measurements:
 
