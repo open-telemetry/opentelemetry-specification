@@ -19,7 +19,7 @@
 
 ## Overview
 
-This specification defines how logs are sampled with OpenTelemetry.
+This specification defines how probability sampling works for logs in OpenTelemetry.
 
 Log sampling inherits from the logic defined in tracing sampling. By default, a log will use its trace ID to determine
 whether it should be sampled, in a similar manner as [Trace state probability sampling](../trace/tracestate-probability-sampling.md).
@@ -33,7 +33,7 @@ Log sampling can consider another attribute as the source of its sampling. In th
 When the attribute is not set, the trace ID will be used instead if present.
 
 If no explicit attribute is set or no attribute has been defined, and no trace ID is present or trace ID sampling is disabled,
-the log is not considered as part of the sampling process and must be collected.
+the log is not considered as part of the sampling process and MUST be collected.
 
 Additionally, the log record may define an attribute to be considered as a sampling priority in a similar manner to how
 traces rely on a `sampling.priority` field to set the priority of the trace sampling.
