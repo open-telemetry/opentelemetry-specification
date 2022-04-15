@@ -4,7 +4,7 @@
 
 **type:** `device`
 
-**Description**: The device on which the process represented by this resource is running. The `device.*` attributes MUST be used only for resources that represent client-side applications, for example a mobile or IoT device.
+**Description**: The device on which the process represented by this resource is running.
 
 <!-- semconv device -->
 | Attribute  | Type | Description  | Examples  | Required |
