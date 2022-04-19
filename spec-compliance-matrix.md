@@ -19,7 +19,7 @@ formats is required. Implementing more than one format is optional.
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           |          |     |      |     |        |      |        |     |      |     |      |       |
 | Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| Get a Tracer with schema_url                                                                     |          | +   | +    |     |        |      |        |     |      | +   |      |       |
+| Get a Tracer with schema_url                                                                     |          | +   | +    |     |        |      |        | +   |      | +   |      |       |
 | Associate Tracer with InstrumentationScope                                                       |          |     |      |     |        |      |        |     |      |     |      |       |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -208,22 +208,22 @@ formats is required. Implementing more than one format is optional.
 
 Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
-| Feature                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|-------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| **[Logging SDK](specification/logs/logging-library-sdk.md)**| Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| Get LogEmitter                                              |          |    |      |    |        |      |        |     |      |     |      |       |
-| LogEmitter.Emit(LogRecord)                                  |          |    |      |    |        |      |        |     |      |     |      |       |
-| LogEmitter.Shutdown                                         |          |    |      |    |        |      |        |     |      |     |      |       |
-| LogEmitter.ForceFlush                                       |          |    |      |    |        |      |        |     |      |     |      |       |
-| SimpleLogProcessor                                          |          |    |      |    |        |      |        |     |      |     |      |       |
-| BatchLogProcessor                                           |          |    |      |    |        |      |        |     |      |     |      |       |
-| Can plug custom log processor                               |          |    |      |    |        |      |        |     |      |     |      |       |
-| OTLP/gRPC exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
-| OTLP/HTTP exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
-| OTLP File exporter                                          |          |    |      |    |        |      |        |     |      |     |      |       |
-| Can plug custom log exporter                                |          |    |      |    |        |      |        |     |      |     |      |       |
-| Implicit Context Injection                                  |          |    |      |    |        |      |        |     |      |     |      |       |
-| Explicit Context                                            |          |    |      |    |        |      |        |     |      |     |      |       |
+| Feature                                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|--------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
+| **[Logging SDK](specification/logs/logging-library-sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| LogEmitterProvider.Get LogEmitter                            |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
+| LogEmitterProvider.Shutdown                                  |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
+| LogEmitterProvider.ForceFlush                                |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
+| LogEmitter.Emit(LogRecord)                                   |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
+| SimpleLogProcessor                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
+| BatchLogProcessor                                            |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
+| Can plug custom log processor                                |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
+| OTLP/gRPC exporter                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
+| OTLP/HTTP exporter                                           |          |     | +    |     |   -    |      |        |     |      |     | -    |       |
+| OTLP File exporter                                           |          |     | -    |     |   -    |      |        |     |      |     | -    |       |
+| Can plug custom log exporter                                 |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
+| Implicit Context Injection                                   |          |     | -    |     |   +    |      |        |     |      |     | +    |       |
+| Explicit Context                                             |          |     | +    |     |   -    |      |        |     |      |     | -    |       |
 
 ## Resource
 
@@ -234,7 +234,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          | +  | +    |    | +      | +    | +      | +   | +    | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      |     |      | +   | +    |       |
-| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | [-][php225]   | +    | +   | +    | +     |
+| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  |      |    |        |      | -      |     |      |     | -    |       |
 
 ## Context Propagation
