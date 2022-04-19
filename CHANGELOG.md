@@ -13,6 +13,11 @@ release.
 
 ### Metrics
 
+- Clarify SDK behavior when view conflicts are present
+  ([#2462](https://github.com/open-telemetry/opentelemetry-specification/pull/2462)).
+- Add database connection pool metrics semantic conventions
+  ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
+
 ### Logs
 
 ### Resource
@@ -22,6 +27,9 @@ release.
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Clarify gRPC insecure option ([#2476](https://github.com/open-telemetry/opentelemetry-specification/pull/2476))
+- Specify that OTLP/gRPC clients should retry on `RESOURCE_EXHAUSTED` code only if the server signals backpressure to indicate a possible recovery. ([#2480](https://github.com/open-telemetry/opentelemetry-specification/pull/2480))
 
 ### SDK Configuration
 
