@@ -27,7 +27,7 @@ instrumentations:
 
 | Name                          | Instrument                 | Unit        | Unit ([UCUM](README.md#instrument-units)) | Description                                                                               |
 |-------------------------------|----------------------------|-------------|-------------------------------------------|-------------------------------------------------------------------------------------------|
-| `db.client.connections.usage` | Asynchronous UpDownCounter | connections | `{connections}`                           | The number of connections that are currently in state described by the `state` attribute. |
+| `db.client.connections.usage` | UpDownCounter | connections | `{connections}`                           | The number of connections that are currently in state described by the `state` attribute. |
 
 All `db.client.connections.usage` measurements MUST include the following attribute:
 
