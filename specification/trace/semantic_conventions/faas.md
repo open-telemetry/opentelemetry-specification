@@ -15,6 +15,8 @@ See also the [additional instructions for instrumenting AWS Lambda](instrumentat
   * [Function Name](#function-name)
   * [Difference between execution and instance](#difference-between-execution-and-instance)
 - [Incoming Invocations](#incoming-invocations)
+  * [Incoming FaaS Span attributes](#incoming-faas-span-attributes)
+  * [Resource attributes as incoming FaaS span attributes](#resource-attributes-as-incoming-faas-span-attributes)
 - [Outgoing Invocations](#outgoing-invocations)
 - [Function Trigger Type](#function-trigger-type)
   * [Datasource](#datasource)
