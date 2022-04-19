@@ -75,7 +75,6 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `http.response_content_length_uncompressed` | int | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
 | `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | If and only if a request was retried. |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. | `example.com` | No |
 | [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | No |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
@@ -102,7 +101,6 @@ Following attributes MUST be provided **at span creation time** (when provided a
 * `http.host`
 * `http.scheme`
 * [`net.peer.ip`](span-general.md)
-* [`net.peer.name`](span-general.md)
 * [`net.peer.port`](span-general.md)
 <!-- endsemconv -->
 
@@ -146,6 +144,11 @@ If set, `http.url` must be the originally requested URL,
 before any HTTP-redirects that may happen when executing the request.
 
 <!-- semconv http.client -->
+| Attribute  | Type | Description  | Examples  | Required |
+|---|---|---|---|---|
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | See below |
+
+**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -153,6 +156,10 @@ before any HTTP-redirects that may happen when executing the request.
 * `http.scheme`, `http.host`, `http.target`
 * `http.scheme`, [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
 * `http.scheme`, [`net.peer.ip`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
+
+* [`net.peer.name`](span-general.md)
 <!-- endsemconv -->
 
 Note that in some cases `http.host` might be different
