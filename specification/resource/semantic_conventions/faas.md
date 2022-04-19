@@ -11,6 +11,8 @@ See also:
 - The [Trace semantic conventions for FaaS](../../trace/semantic_conventions/faas.md)
 - The [Cloud resource conventions](cloud.md)
 
+## FaaS resource attributes
+
 <!-- semconv faas_resource -->
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
@@ -20,7 +22,15 @@ See also:
 | `faas.instance` | string | The execution environment ID as a string, that will be potentially reused for other invocations to the same function/function version. [4] | `2021/06/28/[$LATEST]2f399eb14537447da05ab2a2e39309de` | No |
 | `faas.max_memory` | int | The amount of memory available to the serverless function in MiB. [5] | `128` | No |
 
-**[1]:** This is the name of the function as configured/deployed on the FaaS platform and is usually different from the name of the callback function (which may be stored in the [`code.namespace`/`code.function`](../../trace/semantic_conventions/span-general.md#source-code-attributes) span attributes).
+**[1]:** This is the name of the function as configured/deployed on the FaaS
+platform and is usually different from the name of the callback
+function (which may be stored in the
+[`code.namespace`/`code.function`](../../trace/semantic_conventions/span-general.md#source-code-attributes)
+span attributes).
+
+On Azure, an Azure function app can host multiple functions that would usually share
+a TracerProvider, so this MUST be set as a span attribute instead on Azure. See also
+`faas.id`.
 
 **[2]:** Depending on the cloud provider, use:
 
@@ -29,9 +39,12 @@ Take care not to use the "invoked ARN" directly but replace any
 [alias suffix](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html) with the resolved function version, as the same runtime instance may be invokable with multiple
 different aliases.
 * **GCP:** The [URI of the resource](https://cloud.google.com/iam/docs/full-resource-names)
-* **Azure:** The [Fully Qualified Resource ID](https://docs.microsoft.com/en-us/rest/api/resources/resources/get-by-id).
+* **Azure:** The [Fully Qualified Resource ID](https://docs.microsoft.com/en-us/rest/api/resources/resources/get-by-id) of the invoked function, *not* the function app,
+having the form `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>`. This means that a span attribute MUST
+be used, as an Azure function app can host multiple functions that would usually share
+a TracerProvider (see also the paragraph below).
 
-On some providers, it may not be possible to determine the full ID at startup,
+On some cloud providers, it may not be possible to determine the full ID at startup,
 which is why this field cannot be made required. For example, on AWS the account ID
 part of the ARN is not available without calling another AWS API
 which may be deemed too slow for a short-running lambda function.
@@ -53,3 +66,9 @@ As an alternative, consider setting `faas.id` as a span attribute instead.
 <!-- endsemconv -->
 
 Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/faas.md#difference-between-execution-and-instance).
+
+## Using span attributes instead of resource attributes
+
+There are cases where a FaaS resoruce attribute is better applied as a span
+attribute instead.
+See the [FaaS trace conventions](../../trace/semantic_conventions/faas.md) for more.
