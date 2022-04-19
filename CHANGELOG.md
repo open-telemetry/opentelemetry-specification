@@ -17,6 +17,8 @@ release.
   ([#2263](https://github.com/open-telemetry/opentelemetry-specification/pull/2263)).
 - Clarify SDK behavior when view conflicts are present
   ([#2462](https://github.com/open-telemetry/opentelemetry-specification/pull/2462)).
+- Add database connection pool metrics semantic conventions
+  ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
 
 ### Logs
 
