@@ -711,7 +711,7 @@ functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Collect` operation fails or times out on
-part of the instruments, the SDK MAY return successfully collected results
+some of the instruments, the SDK MAY return successfully collected results
 and a failed reasons list to the caller.
 
 `Collect` does not have any required parameters, however, [OpenTelemetry
