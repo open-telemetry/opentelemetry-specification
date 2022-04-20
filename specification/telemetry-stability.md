@@ -1,6 +1,6 @@
 # Telemetry Stability
 
-+**Status**: [Experimental](document-status.md)
+**Status**: [Experimental](document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
