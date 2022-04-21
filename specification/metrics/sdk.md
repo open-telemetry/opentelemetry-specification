@@ -476,7 +476,7 @@ calculated as a function of the input range:
 | 1ms - 100s  | 10**5    | 3           | 1.090508 | 4.329%         |
 | 1μs - 10s   | 10**7    | 2           | 1.189207 | 8.643%         |
 
-Note that relative error is calculated as the half of the bucket width
+Note that relative error is calculated as half of the bucket width
 divided by the bucket midpoint, which is the same in every bucket.
 Using the bucket from [1, base), we have `(bucketWidth / 2) /
 bucketMidpoint = ((base - 1) / 2) / ((base + 1) / 2) = (base - 1) /
