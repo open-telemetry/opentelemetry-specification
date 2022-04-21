@@ -500,7 +500,7 @@ nearest normal value.
 ##### Exponential Histogram Aggregation: Support a minimum and maximum scale
 
 The implementation MUST maintain reasonable minimum and maximum scale
-parameters, values that the automatic scale parameter will not exceed.
+parameters that the automatic scale parameter will not exceed.
 
 ##### Exponential Histogram Aggregation: Use the maximum scale for single measurements
 
