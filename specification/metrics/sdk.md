@@ -710,7 +710,9 @@ Instruments](./api.md#asynchronous-instrument-api) involved, their callback
 functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out.
+failed or timed out. When the `Collect` operation fails or times out on
+some of the instruments, the SDK MAY return successfully collected results
+and a failed reasons list to the caller.
 
 `Collect` does not have any required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
