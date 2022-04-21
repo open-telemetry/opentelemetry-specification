@@ -768,7 +768,7 @@ example:
 ```
 
 Note that in the example Golang code above, the built-in `math.Log2E`
-is defined as the inverse natural logarithm of 2.
+is defined as the inverse of the natural logarithm of 2, i.e., `1 / ln(2)`.
 
 The reverse mapping function is:
 

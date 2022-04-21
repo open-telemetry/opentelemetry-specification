@@ -17,7 +17,6 @@
     + [Default Aggregation](#default-aggregation)
     + [Sum Aggregation](#sum-aggregation)
     + [Last Value Aggregation](#last-value-aggregation)
-    + [Histogram Aggregation](#histogram-aggregation)
       - [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
     + [Exponential Histogram Aggregation](#exponential-histogram-aggregation)
@@ -408,14 +407,6 @@ This Aggregation informs the SDK to collect:
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
 
-#### Histogram Aggregation
-
-The Histogram Aggregation informs the SDK to select the best Histogram
-Aggregation available. i.e. [Explicit Bucket Histogram
-Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
-
-This Aggregation does not have any configuration parameters.
-
 ##### Histogram Aggregation common behavior
 
 All histogram Aggregations inform the SDK to collect:
@@ -520,7 +511,11 @@ scale.
 ##### Exponential Histogram Aggregation: Maintain the ideal scale
 
 Implementations SHOULD adjust the histogram scale as necessary to
-maintain the ideal resolution at the configured maximum size.
+maintain the best resolution possible, within the constraint of
+maximum size (max number of buckets). Best resolution (highest scale)
+is achieved when the number of positive or negative range buckets
+exceeds half the maximum size, such that increasing scale by one would
+not be possible given the size constraint.
 
 ### Observations inside asynchronous callbacks
 
