@@ -26,6 +26,9 @@ release.
 
 ### Semantic Conventions
 
+- Update JVM metrics with JMX Gatherer values
+  ([#2478](https://github.com/open-telemetry/opentelemetry-specification/pull/2478))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
