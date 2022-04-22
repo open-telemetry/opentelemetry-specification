@@ -66,6 +66,9 @@ groups:
             - id: http_2_0
               value: '2.0'
               brief: 'HTTP 2'
+            - id: http_3_0
+              value: '3.0'
+              brief: 'HTTP 3'
             - id: spdy
               value: 'SPDY'
               brief: 'SPDY protocol.'
