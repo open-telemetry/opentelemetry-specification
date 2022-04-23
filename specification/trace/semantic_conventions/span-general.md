@@ -203,7 +203,7 @@ Examples of where `thread.id` and `thread.name` can be extracted from:
 | JVM                   | `Thread.currentThread().getId()`       | `Thread.currentThread().getName()` |
 | .NET                  | `Thread.CurrentThread.ManagedThreadId` | `Thread.CurrentThread.Name`        |
 | Python                | `threading.current_thread().ident`     | `threading.current_thread().name`  |
-| Ruby                  |                                        | `Thread.current.name`              |
+| Ruby                  | `Thread.current.object_id`             | `Thread.current.name`              |
 | C++                   | `std::this_thread::get_id()`             |                                    |
 | Erlang               | `erlang:system_info(scheduler_id)` |                                  |
 
