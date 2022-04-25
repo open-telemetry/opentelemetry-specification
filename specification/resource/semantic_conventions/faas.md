@@ -70,6 +70,6 @@ Note: The resource attribute `faas.instance` differs from the span attribute `fa
 
 ## Using span attributes instead of resource attributes
 
-There are cases where a FaaS resoruce attribute is better applied as a span
+There are cases where a FaaS resource attribute is better applied as a span
 attribute instead.
 See the [FaaS trace conventions](../../trace/semantic_conventions/faas.md) for more.
