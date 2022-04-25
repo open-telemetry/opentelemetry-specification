@@ -15,6 +15,8 @@ release.
 
 - Clarify SDK behavior when view conflicts are present
   ([#2462](https://github.com/open-telemetry/opentelemetry-specification/pull/2462)).
+- Clarify MetricReader.Collect result
+  ([#2495](https://github.com/open-telemetry/opentelemetry-specification/pull/2495)).
 - Add database connection pool metrics semantic conventions
   ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
 
@@ -27,6 +29,8 @@ release.
 - Add details for FaaS conventions for Azure Functions and allow FaaS/Cloud
   resources as span attributes on incoming FaaS spans
   ([#2502](https://github.com/open-telemetry/opentelemetry-specification/pull/2502))
+- Update JVM metrics with JMX Gatherer values
+  ([#2478](https://github.com/open-telemetry/opentelemetry-specification/pull/2478))
 
 ### Compatibility
 
