@@ -254,7 +254,7 @@ When a signal becomes stable, the version MUST be bumped to match the other stab
 
 ### Major version bump
 
-Major version bumps MUST occur when there is a breaking change to a stable interface, the removal of a deprecated signal, or a drop in support for a language or runtime version.
+Major version bumps MUST occur when there is a breaking change to a stable interface, the removal of a deprecated signal.
 Major version bumps SHOULD NOT occur for changes which do not result in a drop in support of some form.
 
 ### Minor version bump
