@@ -46,10 +46,7 @@ be used, as an Azure function app can host multiple functions that would usually
 a TracerProvider (see also the paragraph below).
 
 On some cloud providers, it may not be possible to determine the full ID at startup,
-which is why this field cannot be made required. For example, on AWS the account ID
-part of the ARN is not available without calling another AWS API
-which may be deemed too slow for a short-running lambda function.
-As an alternative, consider setting `faas.id` as a span attribute instead.
+so consider setting `faas.id` as a span attribute instead.
 
 **[3]:** Depending on the cloud provider and platform, use:
 
