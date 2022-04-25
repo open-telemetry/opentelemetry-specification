@@ -213,11 +213,11 @@ precalculated information about a distribution of measurements named
 - **H.avg** - A Gauge conveying the average-value measurement in the distribution (original units)
 - **H.min** - A Gauge conveying the minimum-value measurement in the distribution (original units)
 - **H.max** - A Gauge conveying the maximum-value measurement in the distribution (original units)
-- **H.pXY** - A Gauge calculated value of the percentile described by two decimal digits XY expressing quantile `(10X+Y)/100` in the distribution, used for percentiles 1% through 99% (unitless)
+- **H.XYp** - A Gauge calculated value of the percentile described by two decimal digits XY expressing quantile `(10X+Y)/100` in the distribution, used for percentiles 1% through 99% (unitless)
 
 For example, the median of the distribution with name `H` SHOULD be
-named `H.p50`, and the 99th percentile of the distribution with name
-`H` SHOULD be named `H.p99`.
+named `H.50p`, and the 99th percentile of the distribution with name
+`H` SHOULD be named `H.99p`.
 
 The expanded form specified here SHOULD be used as a normative
 reference when deriving metric names using standard aggregations over
