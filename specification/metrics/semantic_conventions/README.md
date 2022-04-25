@@ -170,7 +170,7 @@ use `{packets}`, `{errors}`, `{faults}`, etc.
 
 ### Instrument Conventions
 
-Metrics semantic conventions are specificatied using the names of the synchronous instrument types,
+Metrics semantic conventions are specified using the names of the synchronous instrument types,
 like `Counter` or `UpDownCounter`.  Implementations MAY use the asynchronous equivalent instead,
 like `Asynchronous Counter` or `Asynchronous UpDownCounter`.
 Whether implementations choose the synchronous type or the asynchronous equivalent is considered to be an
