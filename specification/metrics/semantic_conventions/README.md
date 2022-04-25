@@ -168,10 +168,66 @@ total) are dimensionless and SHOULD use the default unit `1` (the unity).
 give additional meaning *without* the leading default unit (`1`). For example,
 use `{packets}`, `{errors}`, `{faults}`, etc.
 
-### Instrument Types
+### Instrument Conventions
 
-The semantic metric conventions specification is written to use the names of the synchronous instrument types,
-like `Counter` or `UpDownCounter`. However, compliant implementations MAY use the asynchronous equivalent instead,
+Metrics semantic conventions are specificatied using the names of the synchronous instrument types,
+like `Counter` or `UpDownCounter`.  Implementations MAY use the asynchronous equivalent instead,
 like `Asynchronous Counter` or `Asynchronous UpDownCounter`.
 Whether implementations choose the synchronous type or the asynchronous equivalent is considered to be an
 implementation detail. Both choices are compliant with this specification.
+
+Semantic conventions for capturing a distribution of recorded
+measurements SHOULD specify the use of a `Histogram` instrument (e.g.,
+`http.server.duration`).  Generally, consumers of data compliant with
+this specification SHOULD support any of the OpenTelemetry metrics
+data points defined for aggregating measurements, such as the
+Explicit-boundary Histogram or the Exponential Histogram.
+
+When reporting Metrics that have been previously calculated, in the
+case of metrics conventionally specified using `Histogram`
+instruments, consumers SHOULD support receiving OpenTelemetry
+`Summary` data points that were written by the external system.
+
+### Precalculated Summary Conventions
+
+The OpenTelemetry protocol (OTLP) Summary data point includes two
+fields in common with the OpenTelemetry Histogram data points,
+including the `sum` of recorded measurements and `count` of
+observations, which allows drawing a semantic correspondence between
+the two.
+
+The Summary data point is defined exactly as in the OpenMetrics
+specification.  Semantic-conventional metrics specified for
+`Histogram` instruments MAY be expressed using Summary data points
+instead, as they have equivalent semantic interpretation, when they
+originate from OpenMetrics instrumentation.
+
+Receivers and exporters that handle precalculated metrics that cannot
+use an existing OpenTelemetry or OpenMetrics data point definition MAY
+use an expanded form containing multiple metrics to convey
+precalculated information about a distribution of measurements named
+`H`.
+
+- **H.sum** - A Counter (if monotonic) or an UpDownCounter (if non-monotonic) conveying the Sum of measurements in the distribution with the original units
+- **H.count** - A Counter conveying the Count of measurements in the distribution (units is implied, e.g., "{measurements}")
+- **H.avg** - A Gauge conveying the average-value measurement in the distribution (original units)
+- **H.min** - A Gauge conveying the minimum-value measurement in the distribution (original units)
+- **H.max** - A Gauge conveying the maximum-value measurement in the distribution (original units)
+- **H.pXY** - A Gauge calculated value of the percentile described by two decimal digits XY expressing quantile `(10X+Y)/100` in the distribution, used for percentiles 1% through 99% (unitless)
+
+For example, the median of the distribution with name `H` SHOULD be
+named `H.p50`, and the 99th percentile of the distribution with name
+`H` SHOULD be named `H.p99`.
+
+The expanded form specified here SHOULD be used as a normative
+reference when deriving metric names using standard aggregations over
+Histogram events.  For example, to when aggregating the Sum and Count
+of a Histogram named `H` use the names `H.sum` and `H.count`
+respectively.
+
+Note that the OpenTelemetry explicit-boundary histogram contains
+fields suitable for representing precalculated `sum`, `count`, `min`,
+`avg`, and `max` values, particularly when expressed in Delta
+aggregation temporality; OpenTelemetry exporters MAY convert
+pre-calculated data from the expanded form here into 0-bucket
+histograms using Delta temporality when no percentiles are present.
