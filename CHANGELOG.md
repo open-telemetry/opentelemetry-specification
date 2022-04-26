@@ -28,6 +28,8 @@ release.
 
 - Update JVM metrics with JMX Gatherer values
   ([#2478](https://github.com/open-telemetry/opentelemetry-specification/pull/2478))
+- Add Configuration
+  ([#2515](https://github.com/open-telemetry/opentelemetry-specification/pull/2515))
 
 ### Compatibility
 
