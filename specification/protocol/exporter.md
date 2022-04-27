@@ -82,6 +82,7 @@ for each signal as follow:
 
    * Traces: `v1/traces`
    * Metrics: `v1/metrics`.
+   * Logs: `v1/logs`.
 
    Non-normatively, this could be implemented by ensuring that the base URL ends with
    a slash and then appending the relative URLs as strings.
@@ -99,8 +100,8 @@ The following configuration sends all signals to the same collector:
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
 ```
 
-Traces are sent to `http://collector:4318/v1/traces` and metrics to
-`http://collector:4318/v1/metrics`.
+Traces are sent to `http://collector:4318/v1/traces`, metrics to
+`http://collector:4318/v1/metrics` and logs to `http://collector:4318/v1/logs`.
 
 #### Example 2
 
@@ -125,7 +126,8 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318/mycollector/
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics/
 ```
 
-Traces are sent to `http://collector:4318/mycollector/v1/traces`
+Traces are sent to `http://collector:4318/mycollector/v1/traces`,
+logs to `http://collector:4318/mycollector/v1/logs`
 and metrics to `https://collector.example.com/v1/metrics/`, using the default
 https port (443).
 Other signals, (if there were any) would be sent to their specific paths
