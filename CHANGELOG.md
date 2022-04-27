@@ -13,15 +13,30 @@ release.
 
 ### Metrics
 
+- Clarify that API support for multi-instrument callbacks is permitted.
+  ([#2263](https://github.com/open-telemetry/opentelemetry-specification/pull/2263)).
+- Clarify SDK behavior when view conflicts are present
+  ([#2462](https://github.com/open-telemetry/opentelemetry-specification/pull/2462)).
+- Clarify MetricReader.Collect result
+  ([#2495](https://github.com/open-telemetry/opentelemetry-specification/pull/2495)).
+- Add database connection pool metrics semantic conventions
+  ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
+
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
 
+- Update JVM metrics with JMX Gatherer values
+  ([#2478](https://github.com/open-telemetry/opentelemetry-specification/pull/2478))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Clarify gRPC insecure option ([#2476](https://github.com/open-telemetry/opentelemetry-specification/pull/2476))
+- Specify that OTLP/gRPC clients should retry on `RESOURCE_EXHAUSTED` code only if the server signals backpressure to indicate a possible recovery. ([#2480](https://github.com/open-telemetry/opentelemetry-specification/pull/2480))
 
 ### SDK Configuration
 
