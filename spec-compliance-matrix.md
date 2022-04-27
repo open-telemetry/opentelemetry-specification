@@ -219,7 +219,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | BatchLogProcessor                                            |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
 | Can plug custom log processor                                |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
 | OTLP/gRPC exporter                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| OTLP/HTTP exporter                                           |          |     | +    |     |   -    |      |        |     |      |     | -    |       |
+| OTLP/HTTP exporter                                           |          |     | +    |     |   -    |      |        |     |      |     | +    |       |
 | OTLP File exporter                                           |          |     | -    |     |   -    |      |        |     |      |     | -    |       |
 | Can plug custom log exporter                                 |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
 | Implicit Context Injection                                   |          |     | -    |     |   +    |      |        |     |      |     | +    |       |
