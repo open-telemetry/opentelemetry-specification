@@ -24,6 +24,7 @@
   * [Major version bump](#major-version-bump)
   * [Minor version bump](#minor-version-bump)
   * [Patch version bump](#patch-version-bump)
+  * [Language version support](#language-version-support)
 - [Long Term Support](#long-term-support)
   * [API support](#api-support)
   * [SDK Support](#sdk-support)
@@ -280,6 +281,14 @@ The following are examples of patch fixes.
 Currently, the OpenTelemetry project does NOT have plans to backport bug and security fixes to prior minor versions of the SDK.
 Security and bug fixes MAY only be applied to the latest minor version.
 We are committed to making it feasible for end users to stay up to date with the latest version of the OpenTelemetry SDK.
+
+### Language version support
+
+Each language implementation SHOULD define
+how the removal of a supported language/runtime version
+affects its versioning.
+As a rule of thumb,
+it SHOULD take the recommended approach in the given ecosystem
 
 ## Long Term Support
 
