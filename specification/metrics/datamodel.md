@@ -22,6 +22,7 @@
   * [Sums](#sums)
   * [Gauge](#gauge)
   * [Histogram](#histogram)
+    + [Histogram: Bucket inclusivity](#histogram-bucket-inclusivity)
   * [ExponentialHistogram](#exponentialhistogram)
     + [Exponential Scale](#exponential-scale)
     + [Exponential Buckets](#exponential-buckets)
@@ -33,6 +34,7 @@
       - [Positive Scale: Use a Lookup Table](#positive-scale-use-a-lookup-table)
     + [ExponentialHistogram: Producer Recommendations](#exponentialhistogram-producer-recommendations)
     + [ExponentialHistogram: Consumer Recommendations](#exponentialhistogram-consumer-recommendations)
+    + [ExponentialHistogram: Bucket inclusivity](#exponentialhistogram-bucket-inclusivity)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -522,6 +524,8 @@ Bucket counts are optional.  A Histogram without buckets conveys a
 population in terms of only the sum and count, and may be interpreted
 as a histogram with single bucket covering `(-Inf, +Inf)`.
 
+#### Histogram: Bucket inclusivity
+
 Bucket upper-bounds are inclusive (except for the case where the
 upper-bound is +Inf) while bucket lower-bounds are exclusive. That is,
 buckets express the number of values that are greater than their lower
@@ -835,6 +839,12 @@ Consumers SHOULD reject ExponentialHistogram data with `scale` and
 bucket indices that overflow or underflow this representation.
 Consumers that reject such data SHOULD warn the user through error
 logging that out-of-range data was received.
+
+#### ExponentialHistogram: Bucket inclusivity
+
+The [specification on bucket inclusivity made for explicit-boundary
+Histogram data](#histogram-bucket-inclusivity) applies equally to
+ExponentialHistogram data.
 
 ### Summary (Legacy)
 
