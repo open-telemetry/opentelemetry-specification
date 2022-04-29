@@ -67,6 +67,9 @@ All JVM metric attributes are required unless otherwise indicated.
 |                                      |                                     |       |                                           |                                                   |            | pool          | Name of pool [1]      |
 | process.runtime.jvm.memory.max       | Measure of max obtainable memory    | Bytes | `By`                                      | UpDownCounter                                     | Int64      | type          | `"heap"`, `"nonheap"` |
 |                                      |                                     |       |                                           |                                                   |            | pool          | Name of pool [1]      |
+| process.runtime.jvm.threads.count    | Number of executing threads         | threads | `{threads}`                             | UpDownCounter                                     | Int64      |               |                       |
+| process.runtime.jvm.classes.loaded   | Number of classes currently loaded         | classes | `{classes}`                             | UpDownCounter                                     | Int64      |               |                       |
+| process.runtime.jvm.classes.unloaded | Number of classes unloaded since JVM start | classes | `{classes}`                             | UpDownCounter                                     | Int64      |               |                       |
 
 **[1]**: Pool names are generally obtained
 via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName())
