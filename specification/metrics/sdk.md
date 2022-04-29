@@ -494,6 +494,10 @@ Implementations are REQUIRED to accept the entire normal range of IEEE
 floating point values (i.e., all values except for +Inf, -Inf and NaN
 values).
 
+Implementations SHOULD NOT incorporate non-normal values (i.e., +Inf,
+-Inf, and NaNs) into the `sum`, `min`, and `max` fields, because these
+values do not map into a valid bucket.
+
 Implementations MAY round subnormal values away from zero to the
 nearest normal value.
 
