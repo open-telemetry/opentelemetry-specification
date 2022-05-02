@@ -39,7 +39,10 @@ definition of function name MUST be used for this attribute
   app can host multiple functions that would usually share
   a TracerProvider (see also the `faas.id` attribute).
 
-**[2]:** Depending on the cloud provider, use:
+**[2]:** On some cloud providers, it may not be possible to determine the full ID at startup,
+so consider setting `faas.id` as a span attribute instead.
+
+The exact value to use for `faas.id` depends on the cloud provider:
 
 * **AWS Lambda:** The function [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html).
   Take care not to use the "invoked ARN" directly but replace any
@@ -52,9 +55,6 @@ definition of function name MUST be used for this attribute
   `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>`.
   This means that a span attribute MUST be used, as an Azure function app can host multiple functions that would usually share
   a TracerProvider (see also the paragraph below).
-
-On some cloud providers, it may not be possible to determine the full ID at startup,
-so consider setting `faas.id` as a span attribute instead.
 
 **[3]:** Depending on the cloud provider and platform, use:
 
