@@ -118,11 +118,11 @@ call to invoke the lambda, which is often HTTP).
 In addition to the attributes listed above, any [FaaS](../../resource/semantic_conventions/faas.md) or [cloud](../../resource/semantic_conventions/cloud.md) resource attributes MAY
 instead be set as span attributes on incoming FaaS invocation spans: In some
 FaaS environments some of the information required for resource
-attributes is only readily available as part of a request context
+attributes is only readily available in the context of an invocation (e.g. as part of a "request context" argument)
 (a separate API call to look up the resource information is often possible but
 may be prohibitively expensive due to cold start duration concerns).
-The `faas.id` and `cloud.account.id` attributes on AWS in particular, are known
-for this, but the above considerations in principle apply to any resource
+The `faas.id` and `cloud.account.id` attributes on AWS are some examples.
+In principle, the above considerations apply to any resource attribute that fulfills the criteria above (not being readily available without some extra effort that could be expensive) 
 attribute in FaaS environments.
 
 ## Outgoing Invocations

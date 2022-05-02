@@ -19,7 +19,7 @@ groups:
           On Azure, an Azure function app can host multiple functions that would usually share
           a TracerProvider, so this MUST be set as a span attribute instead on Azure. See also
           `faas.id`. Additionally, the full name `<FUNCAPP>/<FUNC>` MUST be used for this attribute, i.e., function app name followed by a forward slash followed by the function
-          name (this form can also be seen in resource JSON for the function).
+          name (this form can also be seen in the resource JSON for the function).
         examples: ['my-function']
       - id: id
         type: string
