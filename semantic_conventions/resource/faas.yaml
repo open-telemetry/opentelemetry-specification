@@ -16,11 +16,17 @@ groups:
           [`code.namespace`/`code.function`](../../trace/semantic_conventions/span-general.md#source-code-attributes)
           span attributes).
 
-          On Azure, an Azure function app can host multiple functions that would usually share
-          a TracerProvider, so this MUST be set as a span attribute instead on Azure. See also
-          `faas.id`. Additionally, the full name `<FUNCAPP>/<FUNC>` MUST be used for this attribute, i.e., function app name followed by a forward slash followed by the function
-          name (this form can also be seen in the resource JSON for the function).
-        examples: ['my-function']
+          For some cloud providers, the above definision is ambiguous. The following
+          definition of function name MUST be used for this attribute
+          (and consequently the span name) for the listed cloud providers/products:
+
+          * **Azure:**  The full name `<FUNCAPP>/<FUNC>`, i.e., function app name
+            followed by a forward slash followed by the function name (this form
+            can also be seen in the resource JSON for the function).
+            This means that a span attribute MUST be used, as an Azure function
+            app can host multiple functions that would usually share
+            a TracerProvider (see also the `faas.id` attribute).
+        examples: ['my-function', 'myazurefunctionapp/some-function-name']
       - id: id
         type: string
         brief: >
@@ -29,14 +35,16 @@ groups:
           Depending on the cloud provider, use:
 
           * **AWS Lambda:** The function [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html).
-          Take care not to use the "invoked ARN" directly but replace any
-          [alias suffix](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html) with the resolved function version, as the same runtime instance may be invokable with multiple
-          different aliases.
+            Take care not to use the "invoked ARN" directly but replace any
+            [alias suffix](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html)
+            with the resolved function version, as the same runtime instance may be invokable with
+            multiple different aliases.
           * **GCP:** The [URI of the resource](https://cloud.google.com/iam/docs/full-resource-names)
-          * **Azure:** The [Fully Qualified Resource ID](https://docs.microsoft.com/en-us/rest/api/resources/resources/get-by-id) of the invoked function, *not* the function app,
-          having the form `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>`. This means that a span attribute MUST
-          be used, as an Azure function app can host multiple functions that would usually share
-          a TracerProvider (see also the paragraph below).
+          * **Azure:** The [Fully Qualified Resource ID](https://docs.microsoft.com/en-us/rest/api/resources/resources/get-by-id) of the invoked function,
+            *not* the function app, having the form
+            `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>`.
+            This means that a span attribute MUST be used, as an Azure function app can host multiple functions that would usually share
+            a TracerProvider (see also the paragraph below).
 
           On some cloud providers, it may not be possible to determine the full ID at startup,
           so consider setting `faas.id` as a span attribute instead.

@@ -119,11 +119,11 @@ In addition to the attributes listed above, any [FaaS](../../resource/semantic_c
 instead be set as span attributes on incoming FaaS invocation spans: In some
 FaaS environments some of the information required for resource
 attributes is only readily available in the context of an invocation (e.g. as part of a "request context" argument)
-(a separate API call to look up the resource information is often possible but
-may be prohibitively expensive due to cold start duration concerns).
+and while a separate API call to look up the resource information is often possible, it
+may be prohibitively expensive due to cold start duration concerns.
 The `faas.id` and `cloud.account.id` attributes on AWS are some examples.
-In principle, the above considerations apply to any resource attribute that fulfills the criteria above (not being readily available without some extra effort that could be expensive) 
-attribute in FaaS environments.
+In principle, the above considerations apply to any resource attribute that fulfills the criteria above
+(not being readily available without some extra effort that could be expensive).
 
 ## Outgoing Invocations
 
