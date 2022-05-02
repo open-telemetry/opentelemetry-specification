@@ -26,6 +26,8 @@ release.
 
 ### Resource
 
+- Add browser.* attributes ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
+
 ### Semantic Conventions
 
 - Update JVM metrics with JMX Gatherer values
