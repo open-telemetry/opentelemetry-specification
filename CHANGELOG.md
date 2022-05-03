@@ -56,7 +56,7 @@ release.
 
 ### Logs
 
-- Update com.google.* to gcp.* in logs data model
+- Update `com.google.*` to `gcp.*` in logs data model
   ([#2514](https://github.com/open-telemetry/opentelemetry-specification/pull/2514))
 
 ### Resource
