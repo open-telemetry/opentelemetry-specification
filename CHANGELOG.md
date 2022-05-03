@@ -103,7 +103,7 @@ release.
 - Define semantic conventions and instrumentation stability.
   ([#2180](https://github.com/open-telemetry/opentelemetry-specification/pull/2180))
 - Loosen requirement for a major version bump
-  ([#2510](https://github.com/open-telemetry/opentelemetry-specification/pull/2510))
+  ([#2510](https://github.com/open-telemetry/opentelemetry-specification/pull/2510)).
 
 ## v1.10.0 (2022-04-01)
 
