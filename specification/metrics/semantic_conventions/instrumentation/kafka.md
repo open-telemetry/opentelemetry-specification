@@ -17,11 +17,7 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 | Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
 | ------------------------------------ | ------------- | ---------- | ------ | ----------------------------------------- | -------------- | ------------- | ---------------- |
 | kafka.message.count                  | Counter       | Int64      | messages | `{messages}` | The number of messages received by the broker. | | |
-| kafka.request.count                  | Counter       | Int64      | requests | `{requests}` | The number of requests received by the broker. | `type` | `produce`, `fetch` |
 | kafka.request.failed                 | Counter       | Int64      | requests | `{requests}` | The number of requests to the broker resulting in a failure. | `type`  | `produce`, `fetch` |
-| kafka.request.time.total             | Counter       | Int64      | milliseconds | `ms` | The total time the broker has taken to service requests. | `type` | `Produce`, `FetchConsumer`, `FetchFollower` |
-| kafka.request.time.50p               | Gauge         | Double     | milliseconds | `ms` | The 50th percentile time the broker has taken to service requests. | `type` | `Produce`, `FetchConsumer`, `FetchFollower` |
-| kafka.request.time.99p               | Gauge         | Double     | milliseconds | `ms` | The 99th percentile time the broker has taken to service requests. | `type` | `Produce`, `FetchConsumer`, `FetchFollower` |
 | kafka.request.queue                  | UpDownCounter | Int64      | requests | `{requests}` | The number of requests in the request queue. | | |
 | kafka.network.io                     | Counter       | Int64      | bytes | `by` | The bytes received or sent by the broker. | `state` | `in`, `out` |
 | kafka.purgatory.size                 | UpDownCounter | Int64      | requests | `{requests}` | The number of requests waiting in the purgatory.  | `type` | `produce`, `fetch` |
@@ -33,9 +29,6 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 | kafka.controller.active.count        | UpDownCounter | Int64      | controllers | `{controllers}` | The number of active controllers in the broker. | | |
 | kafka.leader.election.rate           | Counter       | Int64      | elections | `{elections}` | Leader election rate (increasing values indicates broker failures). | | |
 | kafka.unclean.election.rate          | Counter       | Int64      | elections | `{elections}` | Unclean leader election rate (increasing values indicates broker failures). | | |
-| kafka.logs.flush.time.count          | Counter       | Int64      | milliseconds | `ms` | The time it has taken to flush logs. | | |
-| kafka.logs.flush.time.50th           | Gauge         | Double     | milliseconds | `ms` | The 50th percentile time it has taken to flush logs. | | |
-| kafka.logs.flush.time.99th           | Gauge         | Double     | milliseconds | `ms` | The 99th percentile time it has taken to flush logs. | | |
 
 ## Kafka Producer Metrics
 
@@ -43,10 +36,7 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 | Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
 | ------------------------------------ | ------------- | ---------- | ------ | ----------------------------------------- | -------------- | ------------- | ---------------- |
-| kafka.producer.io-wait-time-ns-avg   | UpDownCounter | Double     | nanoseconds | `ns` | The average length of time the I/O thread spent waiting for a socket ready for reads or writes. | client-id | `client-id` value |
 | kafka.producer.outgoing-byte-rate    | UpDownCounter | Double     | bytes | `by`| The average number of outgoing bytes sent per second to all servers. | `client-id` | `client-id` value |
-| kafka.producer.request-latency-avg   | UpDownCounter | Double     | milliseconds | `ms` | The average request latency. | `client-id` | `client-id` value |
-| kafka.producer.request-rate          | UpDownCounter | Double     | requests | `{requests}` | The average number of requests sent per second. | `client-id` | `client-id` value |
 | kafka.producer.response-rate         | UpDownCounter | Double     | responses | `{responses}` | The average number of responses received per second. | `client-id` | `client-id` value |
 | kafka.producer.byte-rate             | UpDownCounter | Double     | bytes | `by` | The average number of bytes sent per second for a specific topic. | `client-id` | `client-id` value |
 |                                      |               |            |       |      |                                                                   | `topic`     | topic name        |
