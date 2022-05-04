@@ -21,6 +21,9 @@ release.
   ([#2495](https://github.com/open-telemetry/opentelemetry-specification/pull/2495)).
 - Add database connection pool metrics semantic conventions
   ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
+- Add nginx metrics semantic conventions
+  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO)).
+  TODO(@nslaughter) add PR # here when you have it
 
 ### Logs
 
