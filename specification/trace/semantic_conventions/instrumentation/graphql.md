@@ -14,8 +14,16 @@ MAY be used as span name.
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `graphql.operation.name` | string | The name of the operation being executed. | `findBookById` | No |
-| `graphql.operation.type` | string | The type of the operation being executed. | `QUERY`; `MUTATION`; `SUBSCRIPTION` | No |
+| `graphql.operation.type` | string | The type of the operation being executed. | `query`; `mutation`; `subscription` | No |
 | `graphql.operation.body` | string | The GraphQL query being executed. [1] | `query findBookById { bookById(id: ?) { name } }` | No |
 
 **[1]:** The value may be sanitized to exclude sensitive information.
+
+`graphql.operation.type` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `query` | GraphQL query |
+| `mutation` | GraphQL mutation |
+| `subscription` | GraphQL subscription |
 <!-- endsemconv -->

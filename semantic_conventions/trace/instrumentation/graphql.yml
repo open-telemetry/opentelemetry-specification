@@ -11,8 +11,19 @@ groups:
         examples: 'findBookById'
       - id: operation.type
         brief: "The type of the operation being executed."
-        type: string
-        examples: ['QUERY', 'MUTATION', 'SUBSCRIPTION']
+        type:
+          allow_custom_values: false
+          members:
+            - id: query
+              value: "query"
+              brief: "GraphQL query"
+            - id: mutation
+              value: "mutation"
+              brief: "GraphQL mutation"
+            - id: subscription
+              value: "subscription"
+              brief: "GraphQL subscription"
+        examples: ['query', 'mutation', 'subscription']
       - id: operation.body
         brief: "The GraphQL query being executed."
         type: string
