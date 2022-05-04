@@ -1,5 +1,5 @@
 groups:
-  - id: browser 
+  - id: browser
     prefix: browser
     brief: >
         The web browser in which the application represented by the resource is running.
