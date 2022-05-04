@@ -198,7 +198,7 @@ a thread that started a span.
 
 Examples of where `thread.id` and `thread.name` can be extracted from:
 
-| Launguage or platform | `thread.id`                            | `thread.name`                      |
+| Language or platform | `thread.id`                            | `thread.name`                      |
 |-----------------------|----------------------------------------|------------------------------------|
 | JVM                   | `Thread.currentThread().getId()`       | `Thread.currentThread().getName()` |
 | .NET                  | `Thread.CurrentThread.ManagedThreadId` | `Thread.CurrentThread.Name`        |
