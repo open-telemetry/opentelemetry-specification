@@ -19,8 +19,8 @@ Following attribute requirement levels are specified:
 
 - **Required**. All instrumentations MUST populate the attribute. Semantic convention defining required attribute expects that an absolute majority instrumentation libraries and applications are able to efficiently retrieve and populate it, can ensure cardinality, security, and other requirements specific to signal defined by the convention. `http.method` is an example of a required attribute.
 
-- **Conditional**. All instrumentations SHOULD add the attribute when instrumented entity supports corresponding feature and the attribute value can be [efficiently retrieved and populated](#performance-suggestions). Semantic convention assigning `conditional` level on an attribute, SHOULD clarify when attribute is expected to be populated.
-For example, `http.route` is widely supported by HTTP web frameworks, but some low-level HTTP server implementations do not support it.
+- **Conditional**. All instrumentations SHOULD add the attribute when instrumented entity supports corresponding feature and the attribute value can be [efficiently retrieved and populated](#performance-suggestions). Semantic convention assigning `Conditional` level on an attribute, SHOULD clarify when attribute is expected to be populated.
+`http.route` is an example of a conditional attribute: is widely supported by HTTP web frameworks, but some low-level HTTP server implementations do not support it.
 _Note: For producers of telemetry `Required` and `Conditional` levels are semantically the same (under the assumption that `Required` attributes are always available). However, consumers may use this distinction to identify conventions or validate telemetry._
 < TODO need a better name, took 'conditional' from schema definition>
 
