@@ -17,5 +17,5 @@ This document defines how to apply semantic conventions when instrumenting NGINX
 | nginx.requests              | Counter       | Int64      | requests    | `{requests}`                              | The total number of requests made to the server since it started. | | |
 | nginx.connections_accepted  | Counter       | Int64      | connections | `{connections}`                           | The total number of accepted client connections.   | | |
 | nginx.connections_handled   | Counter       | Int64      | connections | `{connections}`                           | The total number of handled connections. Generally, the parameter value is the same as nginx.connections.accepted unless some resource limits have been reached (for example, the worker.connections limit) | | |
-| nginx.connections_current   | UpDownCounter | Int64      | connections | `{connections}`                           | The current number of nginx.connections by state. | `state` | `active`, `reading`, `writing`, `waiting` |
+| nginx.connections_current   | Guage         | Int64      | connections | `{connections}`                           | The current number of nginx.connections by state. | `state` | `active`, `reading`, `writing`, `waiting` |
 
