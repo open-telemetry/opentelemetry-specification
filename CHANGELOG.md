@@ -19,6 +19,9 @@ release.
 
 ### Semantic Conventions
 
+- Define attribute requirement levels
+  ([#2522](https://github.com/open-telemetry/opentelemetry-specification/pull/2522)).
+
 ### Compatibility
 
 ### OpenTelemetry Protocol

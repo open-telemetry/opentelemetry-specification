@@ -17,9 +17,9 @@ _This section applies to Log, and Metric, Resource, and Span describes requireme
 
 Following attribute requirement levels are specified:
 
-- **Required**. All instrumentations MUST populate the attribute. Semantic convention defining required attribute expects that an absolute majority instrumentation libraries and applications are able to efficiently retrieve and populate it, can ensure cardinality, security, and other requirements specific to signal defined by the convention. `http.method` is an example of required attribute.
+- **Required**. All instrumentations MUST populate the attribute. Semantic convention defining required attribute expects that an absolute majority instrumentation libraries and applications are able to efficiently retrieve and populate it, can ensure cardinality, security, and other requirements specific to signal defined by the convention. `http.method` is an example of a required attribute.
 
-- **Conditional**. All instrumentations SHOULD add the attribute when instrumented entity supports corresponding feature and the attribute value can be [efficiently retrieved and populated](#performance-suggestions).
+- **Conditional**. All instrumentations SHOULD add the attribute when instrumented entity supports corresponding feature and the attribute value can be [efficiently retrieved and populated](#performance-suggestions). Semantic convention assigning `conditional` level on an attribute, SHOULD clarify when attribute is expected to be populated.
 For example, `http.route` is widely supported by HTTP web frameworks, but some low-level HTTP server implementations do not support it.
 _Note: For producers of telemetry `Required` and `Conditional` levels are semantically the same (under the assumption that `Required` attributes are always available). However, consumers may use this distinction to identify conventions or validate telemetry._
 < TODO need a better name, took 'conditional' from schema definition>
@@ -32,7 +32,7 @@ The requirement level for attribute is defined by semantic conventions depending
 
 Semantic convention that refers to an attribute from another (e.g. general) semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from referred semantic convention applies.
 
-Instrumentation that cannot populate `Conditional` or `Recommended` attribute due to performance, security, privacy, or other consideration, MUST use **Opt-in** requirement level on it.
+Instrumentations that decide not to populate `Conditional` or `Recommended` attributes due to performance, security, privacy, or other consideration by default, SHOULD use the **Opt-in** requirement level on them if the attributes are logically applicable.
 
 ## Performance suggestions
 
