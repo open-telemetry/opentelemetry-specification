@@ -6,7 +6,8 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 <!-- toc -->
 
-<!-- Re-generate TOC with `markdown-toc no-first-h1 -i` -->
+- [Kafka Metrics](#kafka-metrics)
+- [Kafka Producer Metrics](#kafka-producer-metrics)
 
 <!-- tocstop -->
 
@@ -14,8 +15,8 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 **Description:** General Kafka metrics.
 
-| Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
-| ------------------------------------ | ------------- | ---------- | ------ | ----------------------------------------- | -------------- | ------------- | ---------------- |
+| Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](../README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
+| ------------------------------------ | ------------- | ---------- | ------ | -------------------------------------------- | -------------- | ------------- | ---------------- |
 | kafka.message.count                  | Counter       | Int64      | messages | `{messages}` | The number of messages received by the broker. | | |
 | kafka.request.failed                 | Counter       | Int64      | requests | `{requests}` | The number of requests to the broker resulting in a failure. | `type`  | `produce`, `fetch` |
 | kafka.request.queue                  | UpDownCounter | Int64      | requests | `{requests}` | The number of requests in the request queue. | | |
@@ -34,8 +35,8 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 **Description:** Kafka Producer level metrics.
 
-| Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
-| ------------------------------------ | ------------- | ---------- | ------ | ----------------------------------------- | -------------- | ------------- | ---------------- |
+| Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](../README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
+| ------------------------------------ | ------------- | ---------- | ------ | -------------------------------------------- | -------------- | ------------- | ---------------- |
 | kafka.producer.outgoing-byte.rate    | UpDownCounter | Double     | bytes | `by`| The average number of outgoing bytes sent per second to all servers. | `client-id` | `client-id` value |
 | kafka.producer.response.rate         | UpDownCounter | Double     | responses | `{responses}` | The average number of responses received per second. | `client-id` | `client-id` value |
 | kafka.producer.byte-rate             | UpDownCounter | Double     | bytes | `by` | The average number of bytes sent per second for a specific topic. | `client-id` | `client-id` value |
@@ -48,4 +49,3 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 |                                      |               |            |            |               |                                                                             | `topic`     | topic name         |
 | kafka.producer.record-sent.rate      | Gauge         | Double     | records sent rate | `{records_sent}` | The average number of records sent per second for a specific topic.  | `client-id` | `client-id` value  |
 |                                      |               |            |                   |                     |                                                                      | `topic`     | topic name         |
-
