@@ -28,7 +28,7 @@ function (which may be stored in the
 [`code.namespace`/`code.function`](../../trace/semantic_conventions/span-general.md#source-code-attributes)
 span attributes).
 
-For some cloud providers, the above definision is ambiguous. The following
+For some cloud providers, the above definition is ambiguous. The following
 definition of function name MUST be used for this attribute
 (and consequently the span name) for the listed cloud providers/products:
 
@@ -54,7 +54,7 @@ The exact value to use for `faas.id` depends on the cloud provider:
   *not* the function app, having the form
   `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>`.
   This means that a span attribute MUST be used, as an Azure function app can host multiple functions that would usually share
-  a TracerProvider (see also the paragraph below).
+  a TracerProvider.
 
 **[3]:** Depending on the cloud provider and platform, use:
 
