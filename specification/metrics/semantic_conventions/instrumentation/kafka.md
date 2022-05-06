@@ -17,7 +17,7 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 | Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](../README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
 | ------------------------------------ | ------------- | ---------- | ------ | -------------------------------------------- | -------------- | ------------- | ---------------- |
-| kafka.message.count                  | Counter       | Int64      | messages | `{messages}` | The number of messages received by the broker. | | |
+| kafka.messages                 | Counter       | Int64      | messages | `{messages}` | The number of messages received by the broker. | | |
 | kafka.request.failed                 | Counter       | Int64      | requests | `{requests}` | The number of requests to the broker resulting in a failure. | `type`  | `produce`, `fetch` |
 | kafka.request.queue                  | UpDownCounter | Int64      | requests | `{requests}` | The number of requests in the request queue. | | |
 | kafka.network.io                     | Counter       | Int64      | bytes | `by` | The bytes received or sent by the broker. | `state` | `in`, `out` |
