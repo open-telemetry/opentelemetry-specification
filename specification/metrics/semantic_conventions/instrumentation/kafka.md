@@ -6,7 +6,7 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 <!-- toc -->
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
+<!-- Re-generate TOC with `markdown-toc no-first-h1 -i` -->
 
 <!-- tocstop -->
 
@@ -27,8 +27,8 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 | kafka.isr.operation.count            | Counter       | Int64      | operations | `{operations}` | The number of in-sync replica shrink and expand operations. | `operation` | `shrink`, `expand` |
 | kafka.max.lag                        | UpDownCounter | Int64      | messages   | `{messages}`   | Max lag in messages between follower and leader replicas. | | |
 | kafka.controller.active.count        | UpDownCounter | Int64      | controllers | `{controllers}` | The number of active controllers in the broker. | | |
-| kafka.leader.election.rate           | Counter       | Int64      | elections | `{elections}` | Leader election rate (increasing values indicates broker failures). | | |
-| kafka.unclean.election.rate          | Counter       | Int64      | elections | `{elections}` | Unclean leader election rate (increasing values indicates broker failures). | | |
+| kafka.leader.elections               | Counter       | Int64      | elections | `{elections}` | Leader election rate (increasing values indicates broker failures). | | |
+| kafka.leader.unclean-elections       | Counter       | Int64      | elections | `{elections}` | Unclean leader election rate (increasing values indicates broker failures). | | |
 
 ## Kafka Producer Metrics
 
@@ -40,12 +40,12 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 | kafka.producer.response-rate         | UpDownCounter | Double     | responses | `{responses}` | The average number of responses received per second. | `client-id` | `client-id` value |
 | kafka.producer.byte-rate             | UpDownCounter | Double     | bytes | `by` | The average number of bytes sent per second for a specific topic. | `client-id` | `client-id` value |
 |                                      |               |            |       |      |                                                                   | `topic`     | topic name        |
-| kafka.producer.compression-rate      | UpDownCounter | Double     | compression rate | `{compressionrate}` | The average compression rate of record batches for a specific topic. | `client-id` | `client-id` value |
+| kafka.producer.compression-ratio     | Gauge         | Double     | compression ratio | `{compression}` | The average compression ratio of record batches for a specific topic. | `client-id` | `client-id` value |
 |                                      |               |            |                  |                     |                                                                      | `topic`     | topic name        |
-| kafka.producer.record-error-rate     | UpDownCounter | Double     | error rate | `{errorrate}` | The average per-second number of record sends that resulted in errors for a specific topic.  | `client-id` | `client-id` value |
+| kafka.producer.record-errors.rate    | Gauge         | Double     | error rate | `{error}s` | The average per-second number of record sends that resulted in errors for a specific topic.  | `client-id` | `client-id` value |
 |                                      |               |            |            |               |                                                                                              | `topic`     | topic name        |
-| kafka.producer.record-retry-rate     | UpDownCounter | Double     | retry rate | `{retryrate}` | The average per-second number of retried record sends for a specific topic. | `client-id` | `client-id` value  |
+| kafka.producer.record-retry.rate     | Gauge         | Double     | retry rate | `{retries}` | The average per-second number of retried record sends for a specific topic. | `client-id` | `client-id` value  |
 |                                      |               |            |            |               |                                                                             | `topic`     | topic name         |
-| kafka.producer.record-send-rate      | UpDownCounter | Double     | records sent rate | `{recordssentrate}` | The average number of records sent per second for a specific topic.  | `client-id` | `client-id` value  |
+| kafka.producer.record-sent.rate      | Gauge         | Double     | records sent rate | `{records_sent}` | The average number of records sent per second for a specific topic.  | `client-id` | `client-id` value  |
 |                                      |               |            |                   |                     |                                                                      | `topic`     | topic name         |
 
