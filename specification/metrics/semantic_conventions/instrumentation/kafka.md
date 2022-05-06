@@ -37,15 +37,15 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 | Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](../README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
 | ------------------------------------ | ------------- | ---------- | ------ | -------------------------------------------- | -------------- | ------------- | ---------------- |
-| kafka.producer.outgoing-bytes.rate   | Gauge         | Double     | bytes per second | `by`| The average number of outgoing bytes sent per second to all servers. | `client-id` | `client-id` value |
-| kafka.producer.responses.rate        | Gauge         | Double     | responses per second | `{responses}` | The average number of responses received per second. | `client-id` | `client-id` value |
-| kafka.producer.bytes.rate            | Gauge         | Double     | bytes per second | `by` | The average number of bytes sent per second for a specific topic. | `client-id` | `client-id` value |
+| kafka.producer.outgoing-bytes.rate   | Gauge         | Double     | bytes per second | `by`/s | The average number of outgoing bytes sent per second to all servers. | `client-id` | `client-id` value |
+| kafka.producer.responses.rate        | Gauge         | Double     | responses per second | `{responses}/s` | The average number of responses received per second. | `client-id` | `client-id` value |
+| kafka.producer.bytes.rate            | Gauge         | Double     | bytes per second | `by/s` | The average number of bytes sent per second for a specific topic. | `client-id` | `client-id` value |
 |                                      |               |            |       |      |                                                                   | `topic`     | topic name        |
 | kafka.producer.compression-ratio     | Gauge         | Double     | compression ratio | `{compression}` | The average compression ratio of record batches for a specific topic. | `client-id` | `client-id` value |
 |                                      |               |            |                  |                     |                                                                      | `topic`     | topic name        |
-| kafka.producer.record-error.rate     | Gauge         | Double     | error rate | `{error}s` | The average per-second number of record sends that resulted in errors for a specific topic.  | `client-id` | `client-id` value |
+| kafka.producer.record-error.rate     | Gauge         | Double     | error rate | `{errors}/s` | The average per-second number of record sends that resulted in errors for a specific topic.  | `client-id` | `client-id` value |
 |                                      |               |            |            |               |                                                                                              | `topic`     | topic name        |
-| kafka.producer.record-retry.rate     | Gauge         | Double     | retry rate | `{retries}` | The average per-second number of retried record sends for a specific topic. | `client-id` | `client-id` value  |
+| kafka.producer.record-retry.rate     | Gauge         | Double     | retry rate | `{retries}/s` | The average per-second number of retried record sends for a specific topic. | `client-id` | `client-id` value  |
 |                                      |               |            |            |               |                                                                             | `topic`     | topic name         |
-| kafka.producer.record-sent.rate      | Gauge         | Double     | records sent rate | `{records_sent}` | The average number of records sent per second for a specific topic.  | `client-id` | `client-id` value  |
+| kafka.producer.record-sent.rate      | Gauge         | Double     | records sent rate | `{records_sent}/s` | The average number of records sent per second for a specific topic.  | `client-id` | `client-id` value  |
 |                                      |               |            |                   |                     |                                                                      | `topic`     | topic name         |
