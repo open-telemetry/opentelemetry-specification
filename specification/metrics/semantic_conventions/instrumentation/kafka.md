@@ -36,13 +36,13 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 | Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
 | ------------------------------------ | ------------- | ---------- | ------ | ----------------------------------------- | -------------- | ------------- | ---------------- |
-| kafka.producer.outgoing-byte-rate    | UpDownCounter | Double     | bytes | `by`| The average number of outgoing bytes sent per second to all servers. | `client-id` | `client-id` value |
-| kafka.producer.response-rate         | UpDownCounter | Double     | responses | `{responses}` | The average number of responses received per second. | `client-id` | `client-id` value |
+| kafka.producer.outgoing-byte.rate    | UpDownCounter | Double     | bytes | `by`| The average number of outgoing bytes sent per second to all servers. | `client-id` | `client-id` value |
+| kafka.producer.response.rate         | UpDownCounter | Double     | responses | `{responses}` | The average number of responses received per second. | `client-id` | `client-id` value |
 | kafka.producer.byte-rate             | UpDownCounter | Double     | bytes | `by` | The average number of bytes sent per second for a specific topic. | `client-id` | `client-id` value |
 |                                      |               |            |       |      |                                                                   | `topic`     | topic name        |
 | kafka.producer.compression-ratio     | Gauge         | Double     | compression ratio | `{compression}` | The average compression ratio of record batches for a specific topic. | `client-id` | `client-id` value |
 |                                      |               |            |                  |                     |                                                                      | `topic`     | topic name        |
-| kafka.producer.record-errors.rate    | Gauge         | Double     | error rate | `{error}s` | The average per-second number of record sends that resulted in errors for a specific topic.  | `client-id` | `client-id` value |
+| kafka.producer.record-error.rate     | Gauge         | Double     | error rate | `{error}s` | The average per-second number of record sends that resulted in errors for a specific topic.  | `client-id` | `client-id` value |
 |                                      |               |            |            |               |                                                                                              | `topic`     | topic name        |
 | kafka.producer.record-retry.rate     | Gauge         | Double     | retry rate | `{retries}` | The average per-second number of retried record sends for a specific topic. | `client-id` | `client-id` value  |
 |                                      |               |            |            |               |                                                                             | `topic`     | topic name         |
