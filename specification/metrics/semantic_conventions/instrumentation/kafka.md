@@ -17,17 +17,17 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 | Name                                 | Instrument    | Value type | Unit   | Unit ([UCUM](../README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
 | ------------------------------------ | ------------- | ---------- | ------ | -------------------------------------------- | -------------- | ------------- | ---------------- |
-| kafka.messages                 | Counter       | Int64      | messages | `{messages}` | The number of messages received by the broker. | | |
+| kafka.messages                       | Counter       | Int64      | messages | `{messages}` | The number of messages received by the broker. | | |
 | kafka.request.failed                 | Counter       | Int64      | requests | `{requests}` | The number of requests to the broker resulting in a failure. | `type`  | `produce`, `fetch` |
 | kafka.request.queue                  | UpDownCounter | Int64      | requests | `{requests}` | The number of requests in the request queue. | | |
 | kafka.network.io                     | Counter       | Int64      | bytes | `by` | The bytes received or sent by the broker. | `state` | `in`, `out` |
 | kafka.purgatory.size                 | UpDownCounter | Int64      | requests | `{requests}` | The number of requests waiting in the purgatory.  | `type` | `produce`, `fetch` |
-| kafka.partition.count                | UpDownCounter | Int64      | partitions | `{partitions}` | The number of partitions in the broker.  | | |
-| kafka.partition.offline              | UpDownCounter | Int64      | partitions | `{partitions}` | The number of offline partitions. | | |
-| kafka.partition.under_replicated     | UpDownCounter | Int64      | partition  | `{partitions}` | The number of under replicated partitions. | | |
-| kafka.isr.operation.count            | Counter       | Int64      | operations | `{operations}` | The number of in-sync replica shrink and expand operations. | `operation` | `shrink`, `expand` |
+| kafka.partitions.all                 | UpDownCounter | Int64      | partitions | `{partitions}` | The number of partitions in the broker.  | | |
+| kafka.partitions.offline             | UpDownCounter | Int64      | partitions | `{partitions}` | The number of offline partitions. | | |
+| kafka.partitions.under-replicated    | UpDownCounter | Int64      | partition  | `{partitions}` | The number of under replicated partitions. | | |
+| kafka.isr.operations                 | Counter       | Int64      | operations | `{operations}` | The number of in-sync replica shrink and expand operations. | `operation` | `shrink`, `expand` |
 | kafka.max.lag                        | UpDownCounter | Int64      | messages   | `{messages}`   | Max lag in messages between follower and leader replicas. | | |
-| kafka.controller.active.count        | UpDownCounter | Int64      | controllers | `{controllers}` | The number of active controllers in the broker. | | |
+| kafka.controllers.active             | UpDownCounter | Int64      | controllers | `{controllers}` | The number of active controllers in the broker. | | |
 | kafka.leader.elections               | Counter       | Int64      | elections | `{elections}` | Leader election rate (increasing values indicates broker failures). | | |
 | kafka.leader.unclean-elections       | Counter       | Int64      | elections | `{elections}` | Unclean leader election rate (increasing values indicates broker failures). | | |
 
