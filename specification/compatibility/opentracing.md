@@ -365,7 +365,7 @@ The `Add Event`'s `name` parameter MUST be the value with the `event` key in
 the pair set, or else fallback to use the `log` literal string.
 
 If pair set contains an `event=error` entry, the values MUST be
-[mapped](https://github.com/opentracing/specification/blob/master/semantic_conventionsmd#log-fields-table)
+[mapped](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#log-fields-table)
 to an `Event` with the conventions outlined in the
 [Exception semantic conventions](../trace/semantic_conventions/exceptions.md) document:
 

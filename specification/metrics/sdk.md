@@ -17,7 +17,6 @@
     + [Default Aggregation](#default-aggregation)
     + [Sum Aggregation](#sum-aggregation)
     + [Last Value Aggregation](#last-value-aggregation)
-    + [Histogram Aggregation](#histogram-aggregation)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
@@ -196,8 +195,10 @@ In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
 mechanism described above, where selection is provided via configuration, the
 SDK SHOULD NOT allow Views with a specified name to be declared with instrument
-selectors that may select more than one instrument (e.g. wild card instrument name)
-in the same Meter.
+selectors that may select more than one instrument (e.g. wild card instrument
+name) in the same Meter. For this and other cases where registering a view will
+cause a conflict, SDKs MAY fail fast in accordance with
+initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -210,11 +211,14 @@ made with an Instrument:
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
-    * Try to apply the View configuration. If there is an error or a conflict
-      (e.g. the View requires to export the metrics using a certain name, but
-      the name is already used by another View), provide a way to let the user
-      know (e.g. expose
-      [self-diagnostics logs](../error-handling.md#self-diagnostics)).
+    * Try to apply the View configuration. If applying the View results
+      in [conflicting metric identities](./datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+      the implementation SHOULD apply the View and emit a warning. If it is not
+      possible to apply the View without producing semantic errors (e.g. the
+      View sets an asynchronous instrument to use
+      the [Explicit bucket histogram aggregation](#explicit-bucket-histogram-aggregation))
+      the implementation SHOULD emit a warning and proceed as if the View did
+      not exist.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
@@ -333,7 +337,6 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
-- [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
 #### Drop Aggregation
@@ -349,14 +352,14 @@ The Default Aggregation informs the SDK to use the Instrument Kind
 (e.g. at View registration OR at first seen measurement)
 to select an aggregation and configuration parameters.
 
-| Instrument Kind | Selected Aggregation |
-| --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) |
-| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) |
+| Instrument Kind | Selected Aggregation                                                                    |
+| --- |-----------------------------------------------------------------------------------------|
+| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation)                               |
+| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation) |
 
 This Aggregation does not have any configuration parameters.
 
@@ -393,14 +396,6 @@ This Aggregation informs the SDK to collect:
 
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
-
-#### Histogram Aggregation
-
-The Histogram Aggregation informs the SDK to select the best Histogram
-Aggregation available. i.e. [Explicit Bucket Histogram
-Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
-
-This Aggregation does not have any configuration parameters.
 
 #### Explicit Bucket Histogram Aggregation
 
@@ -715,7 +710,9 @@ Instruments](./api.md#asynchronous-instrument-api) involved, their callback
 functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out.
+failed or timed out. When the `Collect` operation fails or times out on
+some of the instruments, the SDK MAY return successfully collected results
+and a failed reasons list to the caller.
 
 `Collect` does not have any required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
