@@ -20,7 +20,7 @@ formats is required. Implementing more than one format is optional.
 | Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer with schema_url                                                                     |          | +   | +    |     |        |      |        | +   |      | +   |      |       |
-| Associate Tracer with InstrumentationScope                                                       |          |     |      |     |        |      |        |     |      |     |      |       |
+| Associate Tracer with InstrumentationScope                                                       |          |     |      |     |        |      |        | +   |      |     |      |       |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | ForceFlush (SDK only required)                                                                   |          | +   | +    | -   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -233,7 +233,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          | +  | +    |    | +      | +    | +      | +   | +    | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      |     |      | +   | +    |       |
+| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      | +   |      | +   | +    |       |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  |      |    |        |      | -      |     |      |     | -    |       |
 
