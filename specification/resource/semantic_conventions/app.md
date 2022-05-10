@@ -16,7 +16,7 @@
 
 **[1]:** An opaque configuration version identifier for applications with versioned configuration files. This may be a hash, semantic version, or similar identifying value.
 
-**[2]:** Identifies the language translation being used by the running application as a  [BCP 47 language tag](https://tools.ietf.org/rfc/bcp/bcp47.txt). Note that this may match one of the values listed in `os.langs`, or be a fallback language, depending on the application's bundled localizations.
+**[2]:** Identifies the language translation being used by the running application as a [BCP 47 language tag](https://tools.ietf.org/rfc/bcp/bcp47.txt). Note that this may match one of the values listed in `os.langs`, or be a fallback language, depending on the application's bundled localizations.
 
 **[3]:** Identifies the configured region of the running application using an [ISO 3166 alpha 2](https://www.iso.org/iso-3166-country-codes.html) country code or a [UN M49](https://en.wikipedia.org/wiki/UN_M49) code. This may be derived from OS APIs, such as `Locale.current.regionCode` on iOS, `Locale.getDefault().getCountry()` on Android, or `GlobalizationPreferences.HomeGeographicRegion` on Windows.
 <!-- endsemconv -->
