@@ -87,9 +87,10 @@ Don't set the span status description if the reason can be inferred from `http.s
 
 | Value  | Description |
 |---|---|
-| `1.0` | HTTP 1.0 |
-| `1.1` | HTTP 1.1 |
-| `2.0` | HTTP 2 |
+| `1.0` | HTTP/1.0 |
+| `1.1` | HTTP/1.1 |
+| `2.0` | HTTP/2 |
+| `3.0` | HTTP/3 |
 | `SPDY` | SPDY protocol. |
 | `QUIC` | QUIC protocol. |
 

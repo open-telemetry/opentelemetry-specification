@@ -24,6 +24,7 @@
   * [Major version bump](#major-version-bump)
   * [Minor version bump](#minor-version-bump)
   * [Patch version bump](#patch-version-bump)
+  * [Language version support](#language-version-support)
 - [Long Term Support](#long-term-support)
   * [API support](#api-support)
   * [SDK Support](#sdk-support)
@@ -254,7 +255,7 @@ When a signal becomes stable, the version MUST be bumped to match the other stab
 
 ### Major version bump
 
-Major version bumps MUST occur when there is a breaking change to a stable interface, the removal of a deprecated signal, or a drop in support for a language or runtime version.
+Major version bumps MUST occur when there is a breaking change to a stable interface or a deprecated signal is removed.
 Major version bumps SHOULD NOT occur for changes which do not result in a drop in support of some form.
 
 ### Minor version bump
@@ -280,6 +281,14 @@ The following are examples of patch fixes.
 Currently, the OpenTelemetry project does NOT have plans to backport bug and security fixes to prior minor versions of the SDK.
 Security and bug fixes MAY only be applied to the latest minor version.
 We are committed to making it feasible for end users to stay up to date with the latest version of the OpenTelemetry SDK.
+
+### Language version support
+
+Each language implementation SHOULD define
+how the removal of a supported language/runtime version
+affects its versioning.
+As a rule of thumb,
+it SHOULD follow the conventions in the given ecosystem.
 
 ## Long Term Support
 

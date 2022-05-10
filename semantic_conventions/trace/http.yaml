@@ -59,13 +59,16 @@ groups:
           members:
             - id: http_1_0
               value: '1.0'
-              brief: 'HTTP 1.0'
+              brief: 'HTTP/1.0'
             - id: http_1_1
               value: '1.1'
-              brief: 'HTTP 1.1'
+              brief: 'HTTP/1.1'
             - id: http_2_0
               value: '2.0'
-              brief: 'HTTP 2'
+              brief: 'HTTP/2'
+            - id: http_3_0
+              value: '3.0'
+              brief: 'HTTP/3'
             - id: spdy
               value: 'SPDY'
               brief: 'SPDY protocol.'
