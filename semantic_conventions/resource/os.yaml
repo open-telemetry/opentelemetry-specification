@@ -52,10 +52,31 @@ groups:
           Human readable (not intended to be parsed) OS version information,
           like e.g. reported by `ver` or `lsb_release -a` commands.
         examples: ['Microsoft Windows [Version 10.0.18363.778]', 'Ubuntu 18.04.1 LTS']
+      - id: langs
+        type: string[]
+        brief: 'A list of BCP 47 language tags'
+        note: >
+          A list of [BCP 47 language tags](https://tools.ietf.org/rfc/bcp/bcp47.txt),
+          in user-configured preference order. This may be derived from OS APIs, such as
+          `Locale.preferredLanguages` on macOS/iOS, `LocaleList.getDefault()` on Android,
+          and `GlobalizationPreferences.Languages` on Windows.
+        examples: ['en-US', 'zh-Hant-CN']
       - id: name
         type: string
         brief: 'Human readable operating system name.'
         examples: ['iOS', 'Android', 'Ubuntu']
+      - id: tz
+        type: string
+        brief: 'An IANA Time Zone Database name or NormalizedCustomID value'
+        note: >
+          Identifies the timezone of the operating system instance, using a timezone
+          identifier from the IANA [Time Zone Database](https://www.iana.org/time-zones).
+          This may be derived from OS APIs, such as `TimeZone.current` on iOS or
+          `TimeZone.getDefault()` on Android. Systems without a means of converting to
+          IANA identifiers may use Java's
+          [NormalizedCustomID](https://docs.oracle.com/javase/8/docs/api/java/util/TimeZone.html#NormalizedCustomID)
+          format.
+        examples: ['America/Los_Angeles', 'UTC', 'GMT-08:00']
       - id: version
         type: string
         brief: >
