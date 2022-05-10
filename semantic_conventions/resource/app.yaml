@@ -14,7 +14,7 @@ groups:
           An opaque configuration version identifier for applications with versioned
           configuration files. This may be a hash, semantic version, or similar
           identifying value.
-        examples: ['42', '5.6.2', '808c8a73edef058f84e4b51da57c07779e48ed94']    
+        examples: ['42', '5.6.2', '808c8a73edef058f84e4b51da57c07779e48ed94']
       - id: lang
         type: string
         brief: 'A BCP 47 language tag'
