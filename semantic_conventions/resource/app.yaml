@@ -19,7 +19,7 @@ groups:
         type: string
         brief: 'A BCP 47 language tag'
         note: >
-          Identifies the language translation being used by the running application as a 
+          Identifies the language translation being used by the running application as a
           [BCP 47 language tag](https://tools.ietf.org/rfc/bcp/bcp47.txt).
           Note that this may match one of the values listed in `os.langs`, or be a
           fallback language, depending on the application's bundled localizations.
