@@ -40,7 +40,7 @@ groups:
               brief: "AIX (Advanced Interactive eXecutive)"
             - id: solaris
               value: 'solaris'
-              brief: "Oracle Solaris"
+              brief: "SunOS, Oracle Solaris"
             - id: z_os
               value: 'z_os'
               brief: "IBM z/OS"
