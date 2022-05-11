@@ -18,11 +18,10 @@ _This section applies to Log, and Metric, Resource, and Span describes requireme
 Following attribute requirement levels are specified:
 
 - **Required**. All instrumentations MUST populate the attribute. Semantic convention defining required attribute expects that an absolute majority instrumentation libraries and applications are able to efficiently retrieve and populate it, can ensure cardinality, security, and other requirements specific to signal defined by the convention. `http.method` is an example of a required attribute.
+_Note: Consumers of the telemetry may use `Required` attributes to identify specific semantic convention(s) the given telemetry item follows._
 
-- **Conditional**. All instrumentations SHOULD add the attribute when instrumented entity supports corresponding feature and the attribute value can be [efficiently retrieved and populated](#performance-suggestions). Semantic convention assigning `Conditional` level on an attribute, SHOULD clarify when attribute is expected to be populated.
-`http.route` is an example of a conditional attribute: is widely supported by HTTP web frameworks, but some low-level HTTP server implementations do not support it.
-_Note: For producers of telemetry `Required` and `Conditional` levels are semantically the same (under the assumption that `Required` attributes are always available). However, consumers may use this distinction to identify conventions or validate telemetry._
-< TODO need a better name, took 'conditional' from schema definition>
+- **Conditionally required**. All instrumentations MUST add the attribute when given condition is satisfied and the attribute value can be [efficiently retrieved and populated](#performance-suggestions). Semantic convention of a `Conditionally required` level of an attribute MUST clarify the condition under which the attribute is expected to be populated.
+`http.route` is an example of a conditionally required attribute to be populated when instrumented HTTP framework provides route information for the instrumented request. Some low-level HTTP server implementations do not support routing and corresponding instrumentations can't provide the attribute.
 
 - **Recommended**. Instrumentations SHOULD add the attribute by default if it's readily available and can be [efficiently populated](#performance-suggestions). Instrumentation MAY allow explicit configuration to disable recommended attributes.
 
@@ -30,15 +29,14 @@ _Note: For producers of telemetry `Required` and `Conditional` levels are semant
 
 The requirement level for attribute is defined by semantic conventions depending on attribute availability across instrumented entities, performance, security, and other factors. When defining requirement levels, semantic conventions MUST take into account signal-specific requirements. For example, Metric attributes that may have high cardinality can only be defined with **Opt-in** level.
 
-Semantic convention that refers to an attribute from another (e.g. general) semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from referred semantic convention applies.
+Semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from referred semantic convention applies.
+For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally required` level on it.
 
-Instrumentations that decide not to populate `Conditional` or `Recommended` attributes due to performance, security, privacy, or other consideration by default, SHOULD use the **Opt-in** requirement level on them if the attributes are logically applicable.
+Instrumentations that decide not to populate `Conditionally required` or `Recommended` attributes due to performance, security, privacy, or other consideration by default, SHOULD use the **Opt-in** requirement level on them if the attributes are logically applicable.
 
 ## Performance suggestions
 
-In some cases instrumented entities do not have `Conditional` or `Recommended` attribute value readily available and retrieval can be expensive. Instrumentations SHOULD NOT perform expensive resource-consuming operation to obtain attribute values. Corresponding attributes SHOULD NOT be populated by default.
-
-Here are several examples of expensive operations:
+Here are several examples of expensive operations to be avoided by default:
 
 - DNS lookup to populate `net.peer.name` if only IP address is available to the instrumentation.
 - forcing `http.route` calculation before HTTP framework calculates it
