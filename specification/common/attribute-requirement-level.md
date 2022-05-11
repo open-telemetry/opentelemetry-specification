@@ -20,19 +20,19 @@ Following attribute requirement levels are specified:
 - **Required**. All instrumentations MUST populate the attribute. Semantic convention defining required attribute expects that an absolute majority instrumentation libraries and applications are able to efficiently retrieve and populate it, can ensure cardinality, security, and other requirements specific to signal defined by the convention. `http.method` is an example of a required attribute.
 _Note: Consumers of the telemetry may use `Required` attributes to identify specific semantic convention(s) the given telemetry item follows._
 
-- **Conditionally required**. All instrumentations MUST add the attribute when given condition is satisfied and the attribute value can be [efficiently retrieved and populated](#performance-suggestions). Semantic convention of a `Conditionally required` level of an attribute MUST clarify the condition under which the attribute is expected to be populated.
-`http.route` is an example of a conditionally required attribute to be populated when instrumented HTTP framework provides route information for the instrumented request. Some low-level HTTP server implementations do not support routing and corresponding instrumentations can't provide the attribute.
+- **Conditionally Required**. All instrumentations MUST add the attribute when given condition is satisfied and the attribute value can be [efficiently retrieved and populated](#performance-suggestions). Semantic convention of a `Conditionally Required` level of an attribute MUST clarify the condition under which the attribute is expected to be populated.
+`http.route` is an example of a conditionally required attribute to be populated when instrumented HTTP framework provides route information for the instrumented request. Some low-level HTTP server implementations do not support routing and corresponding instrumentations can't populate the attribute.
 
-- **Recommended**. Instrumentations SHOULD add the attribute by default if it's readily available and can be [efficiently populated](#performance-suggestions). Instrumentation MAY allow explicit configuration to disable recommended attributes.
+- **Recommended**. Instrumentations SHOULD add the attribute by default if it's readily available and can be [efficiently populated](#performance-suggestions). Instrumentation MAY offer a configuration option to disable recommended attributes.
 
-- **Opt-in**. Instrumentations SHOULD NOT add the attribute by default. Instrumentation SHOULD populate the attribute if and only if user configures instrumentation to do so. Instrumentation that doesn't support configuration MUST NOT populate **Opt-in** attributes.
+- **Optional**. Instrumentations MAY populate the attribute. Instrumentation SHOULD populate the attribute if and only if user configures instrumentation to do so. Instrumentation that doesn't support configuration MUST NOT populate **Optional** attributes.
 
-The requirement level for attribute is defined by semantic conventions depending on attribute availability across instrumented entities, performance, security, and other factors. When defining requirement levels, semantic conventions MUST take into account signal-specific requirements. For example, Metric attributes that may have high cardinality can only be defined with **Opt-in** level.
+The requirement level for attribute is defined by semantic conventions depending on attribute availability across instrumented entities, performance, security, and other factors. When defining requirement levels, semantic conventions MUST take into account signal-specific requirements. For example, Metric attributes that may have high cardinality can only be defined with **Optional** level.
 
 Semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from referred semantic convention applies.
-For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally required` level on it.
+For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
 
-Instrumentations that decide not to populate `Conditionally required` or `Recommended` attributes due to performance, security, privacy, or other consideration by default, SHOULD use the **Opt-in** requirement level on them if the attributes are logically applicable.
+Instrumentations that decide not to populate `Conditionally Required` or `Recommended` attributes due to performance, security, privacy, or other consideration by default, SHOULD use the **Optional** requirement level on them if the attributes are logically applicable.
 
 ## Performance suggestions
 
