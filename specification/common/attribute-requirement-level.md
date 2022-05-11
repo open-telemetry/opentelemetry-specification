@@ -25,7 +25,7 @@ _Note: Consumers of telemetry may want to know if telemetry item follows specifi
 
 - **Recommended**. Instrumentations SHOULD add the attribute by default if it's readily available and can be [efficiently populated](#performance-suggestions). Instrumentation MAY offer a configuration option to disable recommended attributes.
 
-- **Optional**. Instrumentations MAY populate the attribute. Instrumentation SHOULD populate the attribute if and only if user configures instrumentation to do so. Instrumentation that doesn't support configuration MUST NOT populate **Optional** attributes.
+- **Optional**. Instrumentation SHOULD populate the attribute if and only if user configures instrumentation to do so. Instrumentation that doesn't support configuration MUST NOT populate **Optional** attributes.
 
 The requirement level for attribute is defined by semantic conventions depending on attribute availability across instrumented entities, performance, security, and other factors. When defining requirement levels, semantic conventions MUST take into account signal-specific requirements. For example, Metric attributes that may have high cardinality can only be defined with **Optional** level.
 
