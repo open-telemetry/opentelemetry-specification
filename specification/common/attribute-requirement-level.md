@@ -32,12 +32,15 @@ The requirement level for attribute is defined by semantic conventions depending
 Semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from referred semantic convention applies.
 For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
 
-Instrumentations that decide not to populate `Conditionally Required` or `Recommended` attributes due to [performance](#performance-suggestions), security, privacy, or other consideration by default, SHOULD use the **Optional** requirement level on them if the attributes are logically applicable.
+When condition on `Conditionally Required` attribute is not satisfied and there is no requirement to populate attribute, semantic conventions MAY provide special instructions on how to handle it. If no instructions are given and if instrumentation can populate the attribute, instrumentation SHOULD use the **Optional** requirement level on the attribute.
+For example, `net.peer.name` is `Conditionally Required` by [Database convention](../trace/semantic_conventions/database.md) when available. When only `net.peer.ip` is available,  instrumentation can do DNS lookup, cache and populate `net.peer.name` but only if user explicitly enables instrumentation to do so considering performance issues DNS lookup introduces.
+
+Instrumentations that decide not to populate `Recommended` attributes due to [performance](#performance-suggestions), security, privacy, or other consideration by default, SHOULD use the **Optional** requirement level on them if the attributes are logically applicable.
 
 ## Performance suggestions
 
 Here are several examples of expensive operations to be avoided by default:
 
-- DNS lookup to populate `net.peer.name` if only IP address is available to the instrumentation.
+- DNS lookup to populate `net.peer.name` if only IP address is available to the instrumentation. Caching lookup results does not solve the issue for all possible cases and should be avoided by default too.
 - forcing `http.route` calculation before HTTP framework calculates it
 - reading response stream to find `http.response_content_length` when `Content-Length` header is not available
