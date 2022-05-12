@@ -43,8 +43,6 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 | messaging.kafka.partition.replicas_in_sync   | Gauge         | Int64      | replicas | `{replicas}` | Number of synchronized replicas of partition | `topic` | The ID (integer) of a topic |
 |                                              |               |            |          |              |                                              | `partition` | The number (integer) of the partition|
 
-|                                              |               |            |                  |                      |                                       | `a` |  |
-
 ## Kafka Producer Metrics
 
 **Description:** Kafka Producer level metrics.
