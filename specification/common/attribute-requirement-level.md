@@ -18,7 +18,7 @@ _This section applies to Log, and Metric, Resource, and Span describes requireme
 Following attribute requirement levels are specified:
 
 - **Required**. All instrumentations MUST populate the attribute. Semantic convention defining required attribute expects that an absolute majority instrumentation libraries and applications are able to efficiently retrieve and populate it, can ensure cardinality, security, and other requirements specific to signal defined by the convention. `http.method` is an example of a required attribute.
-_Note: Consumers of telemetry may want to know if telemetry item follows specific semantic convention. They can rely on presence of `Required` attribute defined by such convention. For example, `db.system` attribute on a span can be used as an indication that span follows database semantics._
+_Note: Consumers of telemetry can detect if telemetry item follows specific semantic convention by checking presence of a `Required` attribute defined by such convention. For example, `db.system` attribute on a span can be used as an indication that span follows database semantics._
 
 - **Conditionally Required**. All instrumentations MUST add the attribute when given condition is satisfied and the attribute value can be [efficiently retrieved and populated](#performance-suggestions). Semantic convention of a `Conditionally Required` level of an attribute MUST clarify the condition under which the attribute is expected to be populated.
 `http.route` is an example of a conditionally required attribute to be populated when instrumented HTTP framework provides route information for the instrumented request. Some low-level HTTP server implementations do not support routing and corresponding instrumentations can't populate the attribute.
