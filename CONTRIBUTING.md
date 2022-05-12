@@ -145,7 +145,7 @@ make misspell-correction
 
 The following diagram shows the initial triaging of new issues.
 
-![Issue Triaging](img/issue-triage-workflow.png)
+![Issue Triaging](internal/img/issue-triage-workflow.png)
 
 - Newly created issues are automatically assigned to a spec approver
   (round-robin). The assignee has 3 business days for the first response.
