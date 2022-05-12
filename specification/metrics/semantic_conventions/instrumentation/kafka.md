@@ -8,6 +8,7 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 
 - [Kafka Metrics](#kafka-metrics)
 - [Kafka Producer Metrics](#kafka-producer-metrics)
+- [Kafka Consumer Metrics](#kafka-consumer-metrics)
 
 <!-- tocstop -->
 
@@ -30,6 +31,19 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 | messaging.kafka.controllers.active           | UpDownCounter | Int64      | controllers | `{controllers}` | The number of active controllers in the broker. | | |
 | messaging.kafka.leader.elections             | Counter       | Int64      | elections | `{elections}` | Leader election rate (increasing values indicates broker failures). | | |
 | messaging.kafka.leader.unclean-elections     | Counter       | Int64      | elections | `{elections}` | Unclean leader election rate (increasing values indicates broker failures). | | |
+| messaging.kafka.brokers                      | Gauge         | Int64      | brokers   | `{brokers}`   | Number of brokers in the cluster. | | |
+| messaging.kafka.topic.partitions             | Gauge         | Int64      | partitions | `{partitions}`   | Number of partitions in topic. | `topic` | The ID (integer) of a topic |
+| messaging.kafka.partition.current_offset     | Gauge         | Int64      | partition offset | `{partition offset}` | Current offset of partition of topic. | `topic` | The ID (integer) of a topic |
+|                                              |               |            |                  |                      |                                       | `partition` | The number (integer) of the partition |
+
+| messaging.kafka.partition.oldest_offset      | Gauge         | Int64      | partition offset | `{partition offset}` | Oldest offset of partition of topic | `topic` | The ID (integer) of a topic |
+|                                              |               |            |                  |                      |                                     | `partition` | The number (integer) of the partition |
+| messaging.kafka.partition.replicas           | Gauge         | Int64      | replicas | `{replicas}` | Number of replicas for partition of topic | `topic` | The ID (integer) of a topic |
+|                                              |               |            |          |              |                                           | `partition` | The number (integer) of the partition |
+| messaging.kafka.partition.replicas_in_sync   | Gauge         | Int64      | replicas | `{replicas}` | Number of synchronized replicas of partition | `topic` | The ID (integer) of a topic |
+|                                              |               |            |          |              |                                              | `partition` | The number (integer) of the partition|
+
+|                                              |               |            |                  |                      |                                       | `a` |  |
 
 ## Kafka Producer Metrics
 
@@ -49,3 +63,21 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 |                                               |               |            |            |               |                                                                             | `topic`     | topic name         |
 | messaging.kafka.producer.record-sent.rate     | Gauge         | Double     | records sent rate | `{records_sent}/s` | The average number of records sent per second for a specific topic.  | `client-id` | `client-id` value  |
 |                                               |               |            |                   |                    |                                                                      | `topic`     | topic name         |
+
+## Kafka Consumer Metrics
+
+**Description:** Kafka Consumer level metrics.
+
+| Name                                          | Instrument    | Value type | Unit   | Unit ([UCUM](../README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
+| messaging.kafka.consumer_group.members        | Gauge         | Int64      | members | `{members}` | Count of members in the consumer group | `group` | The ID (string) of a consumer group |
+| messaging.kafka.consumer_group.offset         | Gauge         | Int64      | offset | `{offset}` | Current offset of the consumer group at partition of topic | `group` | The ID (string) of a consumer group |
+|                                               |               |            |        |            |                                                            | `topic` | The ID (integer) of a topic |
+|                                               |               |            |        |            |                                                            | `partition` | The number (integer) of the partition |
+| messaging.kafka.consumer_group.offset_sum     | Gauge         | Int64      | offset sum | `{offset sum}` | Sum of consumer group offset across partitions of topic | `group` | The ID (string) of a consumer group |
+|                                               |               |            |            |                |                                                         | `topic` | The ID (integer) of a topic |
+
+| messaging.kafka.consumer_group.lag            | Gauge         | Int64      | lag | `{lag}` | Current approximate lag of consumer group at partition of topic | `group` | The ID (string) of a consumer group |
+|                                               |               |            |     |         |                                                                 | `topic` | The ID (integer) of a topic |
+|                                               |               |            |     |         |                                                                 | `partition` | The number (integer) of the partition |
+| messaging.kafka.consumer_group.lag_sum        | Gauge         | Int64      | lag sum | `{lag sum}` | Current approximate sum of consumer group lag across all partitions of topic | `group` | The ID (string) of a consumer group |
+|                                               |               |            |         |             |                                                                              | `topic` | The ID (integer) of a topic |
