@@ -30,6 +30,10 @@ release.
 
 ### Semantic Conventions
 
+- Add details for FaaS conventions for Azure Functions and allow FaaS/Cloud
+  resources as span attributes on incoming FaaS spans
+  ([#2502](https://github.com/open-telemetry/opentelemetry-specification/pull/2502))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
