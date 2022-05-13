@@ -1,4 +1,4 @@
-# Attribute Requirement Level
+# Attribute Requirement Levels for Semantic Conventions
 
 **Status**: [Experimental](../document-status.md)
 
@@ -13,7 +13,7 @@
 
 </details>
 
-_This section applies to Log, Metric, Resource, and Span, and describes requirement levels for attributes._
+_This section applies to Log, Metric, Resource, and Span, and describes requirement levels for attributes defined in semantic conventions._
 
 The following attribute requirement levels are specified:
 
@@ -33,7 +33,7 @@ Semantic convention that refers to an attribute from another semantic convention
 For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
 
 When the condition on `Conditionally Required` attribute is not satisfied and there is no requirement to populate attribute, semantic conventions MAY provide special instructions on how to handle it. If no instructions are given and if instrumentation can populate the attribute, instrumentation SHOULD use the **Optional** requirement level on the attribute.
-For example, `net.peer.name` is `Conditionally Required` by [Database convention](../trace/semantic_conventions/database.md) when available. When only `net.peer.ip` is available,  instrumentation can do a DNS lookup, cache and populate `net.peer.name` but only if user explicitly enables instrumentation to do so considering performance issues the DNS lookup introduces.
+For example, `net.peer.name` is `Conditionally Required` by [Database convention](../trace/semantic_conventions/database.md) when available. When only `net.peer.ip` is available,  instrumentation can do a DNS lookup, cache and populate `net.peer.name` but only if user explicitly enables instrumentation to do so, considering performance issues the DNS lookup introduces.
 
 Instrumentations that decide not to populate `Recommended` attributes due to [performance](#performance-suggestions), security, privacy, or other consideration by default, SHOULD use the **Optional** requirement level on them if the attributes are logically applicable.
 
