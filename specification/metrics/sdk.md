@@ -17,7 +17,13 @@
     + [Default Aggregation](#default-aggregation)
     + [Sum Aggregation](#sum-aggregation)
     + [Last Value Aggregation](#last-value-aggregation)
+      - [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+    + [Exponential Histogram Aggregation](#exponential-histogram-aggregation)
+      - [Exponential Histogram Aggregation: Handle all normal values](#exponential-histogram-aggregation-handle-all-normal-values)
+      - [Exponential Histogram Aggregation: Support a minimum and maximum scale](#exponential-histogram-aggregation-support-a-minimum-and-maximum-scale)
+      - [Exponential Histogram Aggregation: Use the maximum scale for single measurements](#exponential-histogram-aggregation-use-the-maximum-scale-for-single-measurements)
+      - [Exponential Histogram Aggregation: Maintain the ideal scale](#exponential-histogram-aggregation-maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
@@ -339,6 +345,10 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
+The SDK MAY provide the following `Aggregation`:
+
+- [Exponential Histogram Aggregation](./sdk.md#exponential-histogram-aggregation)
+
 #### Drop Aggregation
 
 The Drop Aggregation informs the SDK to ignore/drop all Instrument Measurements
@@ -397,6 +407,16 @@ This Aggregation informs the SDK to collect:
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
 
+##### Histogram Aggregation common behavior
+
+All histogram Aggregations inform the SDK to collect:
+
+- Count of `Measurement` values in population.
+- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
+instruments that record negative measurements (e.g. `UpDownCounter` or `ObservableGauge`).
+- Min (optional) `Measurement` value in population.
+- Max (optional) `Measurement` value in population.
+
 #### Explicit Bucket Histogram Aggregation
 
 The Explicit Bucket Histogram Aggregation informs the SDK to collect data for
@@ -410,13 +430,96 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-This Aggregation informs the SDK to collect:
+Explicit buckets are stated in terms of their upper boundary.  Buckets
+are exclusive of their lower boundary and inclusive of their upper
+bound (except at positive infinity).  A measurement is defined to fall
+into the greatest-numbered bucket with boundary that is greater than
+or equal to the measurement.
 
-- Count of `Measurement` values falling within explicit bucket boundaries.
-- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
-instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
-- Min (optional) `Measurement` value in population.
-- Max (optional) `Measurement` value in population.
+#### Exponential Histogram Aggregation
+
+The Exponential Histogram Aggregation informs the SDK to collect data
+for the [Exponential Histogram Metric
+Point](./datamodel.md#exponentialhistogram), which uses an exponential
+formula to determine bucket boundaries and an integer `scale`
+parameter to control resolution.
+
+Scale is not a configurable property of this Aggregation, the
+implementation will adjust it as necessary given the data.  This
+Aggregation honors the following configuration parameter:
+
+| Key     | Value   | Default Value | Description                                                                                                  |
+|---------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
+| MaxSize | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
+
+The default of 160 buckets is selected to establish default support
+for a high-resolution histogram able to cover a long-tail latency
+distribution from 1ms to 100s with less than 5% relative error.
+Because 160 can be factored into `10 * 2**K`, maximum contrast is
+relatively simple to derive for scale `K`:
+
+| Scale | Maximum data contrast at 10 * 2**K buckets |
+|-------|--------------------------------------------|
+| K+2   | 5.657 (2**(10/4))                          |
+| K+1   | 32 (2**(10/2))                             |
+| K     | 1024 (2**10)                               |
+| K-1   | 1048576 (2**20)                            |
+
+The following table shows how the ideal scale for 160 buckets is
+calculated as a function of the input range:
+
+| Input range | Contrast | Ideal Scale | Base     | Relative error |
+|-------------|----------|-------------|----------|----------------|
+| 1ms - 4ms   | 4        | 6           | 1.010889 | 0.542%         |
+| 1ms - 20ms  | 20       | 5           | 1.021897 | 1.083%         |
+| 1ms - 1s    | 10**3    | 4           | 1.044274 | 2.166%         |
+| 1ms - 100s  | 10**5    | 3           | 1.090508 | 4.329%         |
+| 1μs - 10s   | 10**7    | 2           | 1.189207 | 8.643%         |
+
+Note that relative error is calculated as half of the bucket width
+divided by the bucket midpoint, which is the same in every bucket.
+Using the bucket from [1, base), we have `(bucketWidth / 2) /
+bucketMidpoint = ((base - 1) / 2) / ((base + 1) / 2) = (base - 1) /
+(base + 1)`.
+
+This Aggregation uses the notion of "ideal" scale.  The ideal scale is
+either:
+
+1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
+2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
+
+##### Exponential Histogram Aggregation: Handle all normal values
+
+Implementations are REQUIRED to accept the entire normal range of IEEE
+floating point values (i.e., all values except for +Inf, -Inf and NaN
+values).
+
+Implementations SHOULD NOT incorporate non-normal values (i.e., +Inf,
+-Inf, and NaNs) into the `sum`, `min`, and `max` fields, because these
+values do not map into a valid bucket.
+
+Implementations MAY round subnormal values away from zero to the
+nearest normal value.
+
+##### Exponential Histogram Aggregation: Support a minimum and maximum scale
+
+The implementation MUST maintain reasonable minimum and maximum scale
+parameters that the automatic scale parameter will not exceed.
+
+##### Exponential Histogram Aggregation: Use the maximum scale for single measurements
+
+When the histogram contains not more than one value in either of the
+positive or negative ranges, the implementation SHOULD use the maximum
+scale.
+
+##### Exponential Histogram Aggregation: Maintain the ideal scale
+
+Implementations SHOULD adjust the histogram scale as necessary to
+maintain the best resolution possible, within the constraint of
+maximum size (max number of buckets). Best resolution (highest scale)
+is achieved when the number of positive or negative range buckets
+exceeds half the maximum size, such that increasing scale by one would
+not be possible given the size constraint.
 
 ### Observations inside asynchronous callbacks
 
