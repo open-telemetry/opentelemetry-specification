@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Clarify async instrument callback identity.
+  ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
+
 ### Logs
 
 ### Resource
