@@ -22,6 +22,7 @@
   * [Sums](#sums)
   * [Gauge](#gauge)
   * [Histogram](#histogram)
+    + [Histogram: Bucket inclusivity](#histogram-bucket-inclusivity)
   * [ExponentialHistogram](#exponentialhistogram)
     + [Exponential Scale](#exponential-scale)
     + [Exponential Buckets](#exponential-buckets)
@@ -33,6 +34,7 @@
       - [Positive Scale: Use a Lookup Table](#positive-scale-use-a-lookup-table)
     + [ExponentialHistogram: Producer Recommendations](#exponentialhistogram-producer-recommendations)
     + [ExponentialHistogram: Consumer Recommendations](#exponentialhistogram-consumer-recommendations)
+    + [ExponentialHistogram: Bucket inclusivity](#exponentialhistogram-bucket-inclusivity)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -522,6 +524,8 @@ Bucket counts are optional.  A Histogram without buckets conveys a
 population in terms of only the sum and count, and may be interpreted
 as a histogram with single bucket covering `(-Inf, +Inf)`.
 
+#### Histogram: Bucket inclusivity
+
 Bucket upper-bounds are inclusive (except for the case where the
 upper-bound is +Inf) while bucket lower-bounds are exclusive. That is,
 buckets express the number of values that are greater than their lower
@@ -716,6 +720,21 @@ func GetExponent(value float64) int32 {
 }
 ```
 
+Implementations are permitted to round subnormal values up to the
+smallest normal value, which may permit the use of a built-in function:
+
+```golang
+
+func GetExponent(value float64) int {
+    // Note: Frexp() rounds submnormal values to the smallest normal
+    // value and returns an exponent corresponding to fractions in the
+    // range [0.5, 1), whereas we want [1, 2), so subtract 1 from the
+    // exponent.
+    _, exp := math.Frexp(value)
+    return exp - 1
+}
+```
+
 ##### Negative Scale: Extract and Shift the Exponent
 
 For negative scales, the index of a value equals the normalized
@@ -727,19 +746,59 @@ correct rounding for the negative indices.  This may be written as:
   return GetExponent(value) >> -scale
 ```
 
-##### All Scales: Use the Logarithm Function
-
-For any scale, use of the built-in natural logarithm
-function.  A multiplicative factor equal to `2**scale / ln(2)`
-proves useful (where `ln()` is the natural logarithm), for example:
+The reverse mapping function is:
 
 ```golang
-    scaleFactor := math.Log2E * math.Exp2(scale)
-    return int64(math.Floor(math.Log(value) * scaleFactor))
+    return math.Ldexp(1, index << -scale)
+```
+
+Note that the reverse mapping function is expected to produce
+subnormal values even when the mapping function rounds them into
+normal values, since the lower boundary of the bucket containing the
+smallest normal value may be subnormal.  For example, at scale -4 the
+smallest normal value `0x1p-1022` falls into a bucket with lower
+boundary `0x1p-1024`.
+
+##### All Scales: Use the Logarithm Function
+
+For any scale, the built-in natural logarithm function can be used to
+compute the bucket index.  A multiplicative factor equal to `2**scale
+/ ln(2)` proves useful (where `ln()` is the natural logarithm), for
+example:
+
+```golang
+    scaleFactor := math.Ldexp(math.Log2E, scale)
+    return math.Floor(math.Log(value) * scaleFactor)
 ```
 
 Note that in the example Golang code above, the built-in `math.Log2E`
-is defined as `1 / ln(2)`.
+is defined as the inverse of the natural logarithm of 2, i.e., `1 / ln(2)`.
+
+The reverse mapping function is:
+
+```golang
+    inverseFactor := math.Ldexp(math.Ln2, -scale)
+    return math.Exp(index * inverseFactor), nil
+```
+
+Implementations are expected to verify that their mapping function and
+inverse mapping function are correct near the lowest and highest IEEE
+floating point values.  A mathematically correct formula may produce
+wrong result, because of accumulated floating point calculation error
+or underflow/overflow of intermediate results.  In the Golang
+reference implementation, for example, the above formula computes
+`+Inf` for the maximum-index bucket.  In this case, it is appropriate
+to subtract `1<<scale` from the index and multiply the result by `2`.
+
+```golang
+    // Use this form in case the equation above computes +Inf
+    // as the lower boundary of a valid bucket.
+    inverseFactor := math.Ldexp(math.Ln2, -scale)
+    return 2.0 * math.Exp((index - (1 << scale)) * inverseFactor), nil
+```
+
+*Note that floating-point to integer type conversions have been
+omitted from the code fragments above, to improve readability.*
 
 ##### Positive Scale: Use a Lookup Table
 
@@ -780,6 +839,12 @@ Consumers SHOULD reject ExponentialHistogram data with `scale` and
 bucket indices that overflow or underflow this representation.
 Consumers that reject such data SHOULD warn the user through error
 logging that out-of-range data was received.
+
+#### ExponentialHistogram: Bucket inclusivity
+
+The [specification on bucket inclusivity made for explicit-boundary
+Histogram data](#histogram-bucket-inclusivity) applies equally to
+ExponentialHistogram data.
 
 ### Summary (Legacy)
 
