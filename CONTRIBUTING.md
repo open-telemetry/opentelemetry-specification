@@ -16,8 +16,19 @@ Agreement](https://identity.linuxfoundation.org/projects/cncf).
 Significant changes should go through the [OpenTelemetry Enhancement
 Proposal](https://github.com/open-telemetry/oteps) process.
 
-Small changes, such as clarifications, wording changes, spelling/grammar
-corrections, etc. can be made directly via pull requests.
+Smaller changes can follow a shorter process:
+
+- [Create an issue](https://github.com/open-telemetry/opentelemetry-specification/issues/new/choose)
+  in this repo and describe the proposed change.
+- Follow the [issue workflow](#issue-triaging) and make sure the issue is accepted with
+  a "Yes" response. If the response to the issue is not "Yes" then do not create a PR
+  that implements the change since it will be rejected.
+- Once the issue is accepted the assignee can work on it and create a PR that implements
+  the change described in the issue.
+
+Trivial changes, such as clarifications, wording changes, spelling/grammar
+corrections, etc. can be made directly via pull requests and do not require an associated
+issue.
 
 ## Writing specs
 
