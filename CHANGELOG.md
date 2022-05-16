@@ -33,6 +33,8 @@ release.
 - Add details for FaaS conventions for Azure Functions and allow FaaS/Cloud
   resources as span attributes on incoming FaaS spans
   ([#2502](https://github.com/open-telemetry/opentelemetry-specification/pull/2502))
+- Define attribute requirement levels
+  ([#2522](https://github.com/open-telemetry/opentelemetry-specification/pull/2522))
 
 ### Compatibility
 
