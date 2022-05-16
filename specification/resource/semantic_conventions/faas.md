@@ -14,13 +14,13 @@ See also:
 ## FaaS resource attributes
 
 <!-- semconv faas_resource -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `faas.name` | string | The name of the single function that this runtime instance executes. [1] | `my-function`; `myazurefunctionapp/some-function-name` | Yes |
-| `faas.id` | string | The unique ID of the single function that this runtime instance executes. [2] | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | No |
-| `faas.version` | string | The immutable version of the function being executed. [3] | `26`; `pinkfroid-00002` | No |
-| `faas.instance` | string | The execution environment ID as a string, that will be potentially reused for other invocations to the same function/function version. [4] | `2021/06/28/[$LATEST]2f399eb14537447da05ab2a2e39309de` | No |
-| `faas.max_memory` | int | The amount of memory available to the serverless function in MiB. [5] | `128` | No |
+| `faas.name` | string | The name of the single function that this runtime instance executes. [1] | `my-function`; `myazurefunctionapp/some-function-name` | Required |
+| `faas.id` | string | The unique ID of the single function that this runtime instance executes. [2] | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Recommended |
+| `faas.version` | string | The immutable version of the function being executed. [3] | `26`; `pinkfroid-00002` | Recommended |
+| `faas.instance` | string | The execution environment ID as a string, that will be potentially reused for other invocations to the same function/function version. [4] | `2021/06/28/[$LATEST]2f399eb14537447da05ab2a2e39309de` | Recommended |
+| `faas.max_memory` | int | The amount of memory available to the serverless function in MiB. [5] | `128` | Recommended |
 
 **[1]:** This is the name of the function as configured/deployed on the FaaS
 platform and is usually different from the name of the callback

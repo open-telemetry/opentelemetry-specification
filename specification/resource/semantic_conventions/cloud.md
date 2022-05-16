@@ -7,13 +7,13 @@
 **Description:** A cloud infrastructure (e.g. GCP, Azure, AWS).
 
 <!-- semconv cloud -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `cloud.provider` | string | Name of the cloud provider. | `alibaba_cloud` | No |
-| `cloud.account.id` | string | The cloud account ID the resource is assigned to. | `111111111111`; `opentelemetry` | No |
-| `cloud.region` | string | The geographical region the resource is running. [1] | `us-central1`; `us-east-1` | No |
-| `cloud.availability_zone` | string | Cloud regions often have multiple, isolated locations known as zones to increase availability. Availability zone represents the zone where the resource is running. [2] | `us-east-1c` | No |
-| `cloud.platform` | string | The cloud platform in use. [3] | `alibaba_cloud_ecs` | No |
+| `cloud.provider` | string | Name of the cloud provider. | `alibaba_cloud` | Recommended |
+| `cloud.account.id` | string | The cloud account ID the resource is assigned to. | `111111111111`; `opentelemetry` | Recommended |
+| `cloud.region` | string | The geographical region the resource is running. [1] | `us-central1`; `us-east-1` | Recommended |
+| `cloud.availability_zone` | string | Cloud regions often have multiple, isolated locations known as zones to increase availability. Availability zone represents the zone where the resource is running. [2] | `us-east-1c` | Recommended |
+| `cloud.platform` | string | The cloud platform in use. [3] | `alibaba_cloud_ecs` | Recommended |
 
 **[1]:** Refer to your provider's docs to see the available regions, for example [Alibaba Cloud regions](https://www.alibabacloud.com/help/doc-detail/40654.htm), [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), [Google Cloud regions](https://cloud.google.com/about/locations), or [Tencent Cloud regions](https://intl.cloud.tencent.com/document/product/213/6091).
 

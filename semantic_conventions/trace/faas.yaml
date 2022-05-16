@@ -50,14 +50,14 @@ groups:
     attributes:
       - id: collection
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The name of the source on which the triggering operation was performed.
           For example, in Cloud Storage or S3 corresponds to the bucket name,
           and in Cosmos DB to the database name.
         examples: ['myBucketName', 'myDbName']
       - id: operation
-        required: always
+        requirement_level: required
         type:
           allow_custom_values: true
           members:
@@ -73,7 +73,7 @@ groups:
         brief: 'Describes the type of the operation that was performed on the data.'
       - id: time
         type: string
-        required: always
+        requirement_level: required
         brief: >
           A string containing the time when the data was accessed in the
           [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)
@@ -111,7 +111,7 @@ groups:
     attributes:
       - id: time
         type: string
-        required: always
+        requirement_level: required
         brief: >
           A string containing the function invocation time in the
           [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)
@@ -137,7 +137,7 @@ groups:
           A boolean that is true if the serverless function is executed for the
           first time (aka cold-start).
       - ref: faas.trigger
-        required: always
+        requirement_level: required
 
   - id: faas_span.out
     extends: faas_span
@@ -148,7 +148,7 @@ groups:
     attributes:
       - id: invoked_name
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The name of the invoked function.
         note: >
@@ -174,7 +174,7 @@ groups:
             - id: 'tencent_cloud'
               value: 'tencent_cloud'
               brief: 'Tencent Cloud'
-        required: always
+        requirement_level: required
         brief: >
           The cloud provider of the invoked function.
         note: >
@@ -182,8 +182,8 @@ groups:
           invoked function.
       - id: invoked_region
         type: string
-        required:
-          conditional: >
+        requirement_level:
+          conditionally_required: >
             For some cloud providers, like AWS or GCP, the region in which a
             function is hosted is essential to uniquely identify the function
             and also part of its endpoint. Since it's part of the endpoint

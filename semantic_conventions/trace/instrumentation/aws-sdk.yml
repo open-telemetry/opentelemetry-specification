@@ -12,7 +12,7 @@ groups:
     attributes:
       - ref: rpc.system
         brief: "The value `aws-api`."
-        required: always
+        requirement_level: required
         examples:
           - aws-api
       - ref: rpc.service
@@ -31,7 +31,7 @@ groups:
     attributes:
       - ref: db.system
         brief: "The value `dynamodb`."
-        required: always
+        requirement_level: required
         examples:
           - dynamodb
 

@@ -63,12 +63,12 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 **Description:** A service instance.
 
 <!-- semconv service -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Yes |
-| `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | No |
-| `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | No |
-| `service.version` | string | The version string of the service API or implementation. | `2.0.0` | No |
+| `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Required |
+| `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | Recommended |
+| `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | Recommended |
+| `service.version` | string | The version string of the service API or implementation. | `2.0.0` | Recommended |
 
 **[1]:** MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
 
@@ -107,12 +107,12 @@ The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
 The identifier SHOULD be stable across different versions of an implementation.
 
 <!-- semconv telemetry -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | No |
-| `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | No |
-| `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | No |
-| `telemetry.auto.version` | string | The version string of the auto instrumentation agent, if used. | `1.2.3` | No |
+| `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | Recommended |
+| `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | Recommended |
+| `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | Recommended |
+| `telemetry.auto.version` | string | The version string of the auto instrumentation agent, if used. | `1.2.3` | Recommended |
 
 `telemetry.sdk.language` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 

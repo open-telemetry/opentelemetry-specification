@@ -8,25 +8,25 @@ groups:
     attributes:
       - id: event_id
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The [event_id](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#id) uniquely identifies the event.
         examples: ['123e4567-e89b-12d3-a456-426614174000', '0001']
       - id: event_source
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The [source](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#source-1) identifies the context in which an event happened.
         examples: ['https://github.com/cloudevents', '/cloudevents/spec/pull/123', 'my-service' ]
       - id: event_spec_version
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The [version of the CloudEvents specification](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#specversion) which the event uses.
         examples: '1.0'
       - id: event_type
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The [event_type](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#type) contains a value describing the type of event related to the originating occurrence.
         examples: ['com.github.pull_request.opened', 'com.example.object.deleted.v2']

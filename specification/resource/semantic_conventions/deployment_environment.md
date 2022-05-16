@@ -7,7 +7,7 @@
 **Description:** The software deployment.
 
 <!-- semconv deployment -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `deployment.environment` | string | Name of the [deployment environment](https://en.wikipedia.org/wiki/Deployment_environment) (aka deployment tier). | `staging`; `production` | No |
+| `deployment.environment` | string | Name of the [deployment environment](https://en.wikipedia.org/wiki/Deployment_environment) (aka deployment tier). | `staging`; `production` | Recommended |
 <!-- endsemconv -->
