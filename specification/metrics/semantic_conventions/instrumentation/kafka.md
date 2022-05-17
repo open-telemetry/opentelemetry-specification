@@ -67,7 +67,7 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 **Description:** Kafka Consumer level metrics.
 
 | Name                                          | Instrument    | Value type | Unit   | Unit ([UCUM](../README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
-| messaging.kafka.consumer_group.members        | Gauge         | Int64      | members | `{members}` | Count of members in the consumer group | `group` | The ID (string) of a consumer group |
+| messaging.kafka.consumer_group.members        | UpDownCounter         | Int64      | members | `{members}` | Count of members in the consumer group | `group` | The ID (string) of a consumer group |
 | messaging.kafka.consumer_group.offset         | Gauge         | Int64      | offset | `{offset}` | Current offset of the consumer group at partition of topic | `group` | The ID (string) of a consumer group |
 |                                               |               |            |        |            |                                                            | `topic` | The ID (integer) of a topic |
 |                                               |               |            |        |            |                                                            | `partition` | The number (integer) of the partition |
