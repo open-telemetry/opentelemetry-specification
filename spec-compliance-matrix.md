@@ -286,7 +286,7 @@ Note: Support for environment variables is optional.
 |OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + |    |   |      |    | -    |   |    |   | -  |     |
 |OTEL_ATTRIBUTE_COUNT_LIMIT                        | + |    |   |      |    | -    |   |    |   | -  |     |
 |OTEL_METRICS_EXEMPLAR_FILTER                      | - |    |   |      |    |      |   |    |   | -  |     |
-|OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | - |    |   |      |    |      |   |    |   | -  |     |
+|OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | - | +  |   |      |    |      |   |    |   | -  |     |
 
 ## Exporters
 
