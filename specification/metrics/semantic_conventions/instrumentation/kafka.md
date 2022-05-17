@@ -31,8 +31,8 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 | messaging.kafka.controllers.active           | UpDownCounter | Int64      | controllers | `{controllers}` | The number of active controllers in the broker. | | |
 | messaging.kafka.leader.elections             | Counter       | Int64      | elections | `{elections}` | Leader election rate (increasing values indicates broker failures). | | |
 | messaging.kafka.leader.unclean-elections     | Counter       | Int64      | elections | `{elections}` | Unclean leader election rate (increasing values indicates broker failures). | | |
-| messaging.kafka.brokers                      | Gauge         | Int64      | brokers   | `{brokers}`   | Number of brokers in the cluster. | | |
-| messaging.kafka.topic.partitions             | Gauge         | Int64      | partitions | `{partitions}`   | Number of partitions in topic. | `topic` | The ID (integer) of a topic |
+| messaging.kafka.brokers                      | UpDownCounter         | Int64      | brokers   | `{brokers}`   | Number of brokers in the cluster. | | |
+| messaging.kafka.topic.partitions             | UpDownCounter         | Int64      | partitions | `{partitions}`   | Number of partitions in topic. | `topic` | The ID (integer) of a topic |
 | messaging.kafka.partition.current_offset     | Gauge         | Int64      | partition offset | `{partition offset}` | Current offset of partition of topic. | `topic` | The ID (integer) of a topic |
 |                                              |               |            |                  |                      |                                       | `partition` | The number (integer) of the partition |
 
