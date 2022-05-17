@@ -16,10 +16,10 @@ This document defines how to apply semantic conventions when instrumenting Postg
 
 | Name                                        | Instrument    | Value type | Unit   | Unit ([UCUM](../README.md#instrument-units)) | Description    | Attribute Key | Attribute Values |
 |---------------------------------------------| ------------- | ---------- | ------ | -------------------------------------------- | -------------- | ------------- | ---------------- |
-| postgresql.blocks_read                      | UpDownCounter | Int64      | 1 | `{1}` | The number of blocks read. | | |
-| postgresql.commits                          | UpDownCounter | Int64      | 1 | `{1}` | The number of commits. | | |
-| postgresql.db_size                          | Counter       | Int64      | bytes | `{By}` | The database disk usage. | | |
-| postgresql.backends                         | Counter       | Int64      | 1 | `{1}` | The number of backends. | | |
-| postgresql.rows                             | Counter       | Int64      | 1 | `{1}` | The number of rows in the database.  | | |
-| postgresql.operations                       | UpDownCounter | Int64      | 1 | `{1}` | The number of db row operations.  | | |
-| postgresql.rollbacks                        | UpDownCounter | Int64      | 1 | `{1}` | The number of rollbacks. | | |
+| db.postgresql.blocks_read                   | Counter       | Int64      | blocks | `{blocks}`                                   | The number of blocks read. | | |
+| db.postgresql.commits                       | Counter       | Int64      | commits      | `{commits}`                                        | The number of commits. | | |
+| db.postgresql.db_size                       | UpDownCounter | Int64      | bytes  | `{by}`                                       | The database disk usage. | `state` | `in`, `out` |
+| db.postgresql.backends                      | UpDownCounter | Int64      | backends      | `{backends}`                                        | The number of backends. | | |
+| db.postgresql.rows                          | UpDownCounter | Int64      | rows   | `{rows}`                                     | The number of rows in the database.  | | |
+| db.postgresql.operations                    | Counter       | Int64      | operations | `{operations}`                           | The number of db row operations.  | | |
+| db.postgresql.rollbacks                     | Counter       | Int64      | rollbacks      | `{rollbacks}`                                        | The number of rollbacks. | | |
