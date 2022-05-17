@@ -12,11 +12,11 @@ The following configuration options MUST be available to configure the OTLP expo
   - Default:  `http://localhost:4318` [1]
   - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`
 
-- **Endpoint (OTLP/gRPC)**: Target to which the exporter is going to send spans or metrics. The endpoint SHOULD accept any form allowed by the underlying gRPC client implementation. Additionally, the endpoint MUST accept a URL with a scheme of either `http` or `https`. A scheme of `https` indicates a secure connection and takes precedence over the `insecure` configuration setting. If the gRPC client implementation does not support an endpoint with a scheme of `http` or `https` then the endpoint SHOULD be transformed to the most sensible format for that implementation.
+- **Endpoint (OTLP/gRPC)**: Target to which the exporter is going to send spans or metrics. The endpoint SHOULD accept any form allowed by the underlying gRPC client implementation. Additionally, the endpoint MUST accept a URL with a scheme of either `http` or `https`. A scheme of `https` indicates a secure connection and takes precedence over the `insecure` configuration setting. A scheme of `http` indicates an insecure connection and takes precedence over the `insecure` configuration setting. If the gRPC client implementation does not support an endpoint with a scheme of `http` or `https` then the endpoint SHOULD be transformed to the most sensible format for that implementation.
   - Default: `http://localhost:4317` [1]
   - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`
 
-- **Insecure**: Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation.
+- **Insecure**: Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC when an endpoint is provided without the `http` or `https` scheme - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation.
   - Default: `false`
   - Env vars: `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_TRACES_INSECURE` `OTEL_EXPORTER_OTLP_METRICS_INSECURE` `OTEL_EXPORTER_OTLP_SPAN_INSECURE` `OTEL_EXPORTER_OTLP_METRIC_INSECURE` [2]
 
@@ -82,6 +82,7 @@ for each signal as follow:
 
    * Traces: `v1/traces`
    * Metrics: `v1/metrics`.
+   * Logs: `v1/logs`.
 
    Non-normatively, this could be implemented by ensuring that the base URL ends with
    a slash and then appending the relative URLs as strings.
@@ -99,8 +100,8 @@ The following configuration sends all signals to the same collector:
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
 ```
 
-Traces are sent to `http://collector:4318/v1/traces` and metrics to
-`http://collector:4318/v1/metrics`.
+Traces are sent to `http://collector:4318/v1/traces`, metrics to
+`http://collector:4318/v1/metrics` and logs to `http://collector:4318/v1/logs`.
 
 #### Example 2
 
@@ -125,7 +126,8 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318/mycollector/
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=https://collector.example.com/v1/metrics/
 ```
 
-Traces are sent to `http://collector:4318/mycollector/v1/traces`
+Traces are sent to `http://collector:4318/mycollector/v1/traces`,
+logs to `http://collector:4318/mycollector/v1/logs`
 and metrics to `https://collector.example.com/v1/metrics/`, using the default
 https port (443).
 Other signals, (if there were any) would be sent to their specific paths

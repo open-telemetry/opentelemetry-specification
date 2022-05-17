@@ -17,8 +17,13 @@
     + [Default Aggregation](#default-aggregation)
     + [Sum Aggregation](#sum-aggregation)
     + [Last Value Aggregation](#last-value-aggregation)
-    + [Histogram Aggregation](#histogram-aggregation)
+      - [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+    + [Exponential Histogram Aggregation](#exponential-histogram-aggregation)
+      - [Exponential Histogram Aggregation: Handle all normal values](#exponential-histogram-aggregation-handle-all-normal-values)
+      - [Exponential Histogram Aggregation: Support a minimum and maximum scale](#exponential-histogram-aggregation-support-a-minimum-and-maximum-scale)
+      - [Exponential Histogram Aggregation: Use the maximum scale for single measurements](#exponential-histogram-aggregation-use-the-maximum-scale-for-single-measurements)
+      - [Exponential Histogram Aggregation: Maintain the ideal scale](#exponential-histogram-aggregation-maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
@@ -196,8 +201,10 @@ In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
 mechanism described above, where selection is provided via configuration, the
 SDK SHOULD NOT allow Views with a specified name to be declared with instrument
-selectors that may select more than one instrument (e.g. wild card instrument name)
-in the same Meter.
+selectors that may select more than one instrument (e.g. wild card instrument
+name) in the same Meter. For this and other cases where registering a view will
+cause a conflict, SDKs MAY fail fast in accordance with
+initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -210,11 +217,14 @@ made with an Instrument:
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
-    * Try to apply the View configuration. If there is an error or a conflict
-      (e.g. the View requires to export the metrics using a certain name, but
-      the name is already used by another View), provide a way to let the user
-      know (e.g. expose
-      [self-diagnostics logs](../error-handling.md#self-diagnostics)).
+    * Try to apply the View configuration. If applying the View results
+      in [conflicting metric identities](./datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+      the implementation SHOULD apply the View and emit a warning. If it is not
+      possible to apply the View without producing semantic errors (e.g. the
+      View sets an asynchronous instrument to use
+      the [Explicit bucket histogram aggregation](#explicit-bucket-histogram-aggregation))
+      the implementation SHOULD emit a warning and proceed as if the View did
+      not exist.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
@@ -333,8 +343,11 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
-- [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
+
+The SDK MAY provide the following `Aggregation`:
+
+- [Exponential Histogram Aggregation](./sdk.md#exponential-histogram-aggregation)
 
 #### Drop Aggregation
 
@@ -349,14 +362,14 @@ The Default Aggregation informs the SDK to use the Instrument Kind
 (e.g. at View registration OR at first seen measurement)
 to select an aggregation and configuration parameters.
 
-| Instrument Kind | Selected Aggregation |
-| --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) |
-| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) |
+| Instrument Kind | Selected Aggregation                                                                    |
+| --- |-----------------------------------------------------------------------------------------|
+| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation)                               |
+| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation) |
 
 This Aggregation does not have any configuration parameters.
 
@@ -394,13 +407,15 @@ This Aggregation informs the SDK to collect:
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
 
-#### Histogram Aggregation
+##### Histogram Aggregation common behavior
 
-The Histogram Aggregation informs the SDK to select the best Histogram
-Aggregation available. i.e. [Explicit Bucket Histogram
-Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
+All histogram Aggregations inform the SDK to collect:
 
-This Aggregation does not have any configuration parameters.
+- Count of `Measurement` values in population.
+- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
+instruments that record negative measurements (e.g. `UpDownCounter` or `ObservableGauge`).
+- Min (optional) `Measurement` value in population.
+- Max (optional) `Measurement` value in population.
 
 #### Explicit Bucket Histogram Aggregation
 
@@ -415,13 +430,96 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-This Aggregation informs the SDK to collect:
+Explicit buckets are stated in terms of their upper boundary.  Buckets
+are exclusive of their lower boundary and inclusive of their upper
+bound (except at positive infinity).  A measurement is defined to fall
+into the greatest-numbered bucket with boundary that is greater than
+or equal to the measurement.
 
-- Count of `Measurement` values falling within explicit bucket boundaries.
-- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
-instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
-- Min (optional) `Measurement` value in population.
-- Max (optional) `Measurement` value in population.
+#### Exponential Histogram Aggregation
+
+The Exponential Histogram Aggregation informs the SDK to collect data
+for the [Exponential Histogram Metric
+Point](./datamodel.md#exponentialhistogram), which uses an exponential
+formula to determine bucket boundaries and an integer `scale`
+parameter to control resolution.
+
+Scale is not a configurable property of this Aggregation, the
+implementation will adjust it as necessary given the data.  This
+Aggregation honors the following configuration parameter:
+
+| Key     | Value   | Default Value | Description                                                                                                  |
+|---------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
+| MaxSize | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
+
+The default of 160 buckets is selected to establish default support
+for a high-resolution histogram able to cover a long-tail latency
+distribution from 1ms to 100s with less than 5% relative error.
+Because 160 can be factored into `10 * 2**K`, maximum contrast is
+relatively simple to derive for scale `K`:
+
+| Scale | Maximum data contrast at 10 * 2**K buckets |
+|-------|--------------------------------------------|
+| K+2   | 5.657 (2**(10/4))                          |
+| K+1   | 32 (2**(10/2))                             |
+| K     | 1024 (2**10)                               |
+| K-1   | 1048576 (2**20)                            |
+
+The following table shows how the ideal scale for 160 buckets is
+calculated as a function of the input range:
+
+| Input range | Contrast | Ideal Scale | Base     | Relative error |
+|-------------|----------|-------------|----------|----------------|
+| 1ms - 4ms   | 4        | 6           | 1.010889 | 0.542%         |
+| 1ms - 20ms  | 20       | 5           | 1.021897 | 1.083%         |
+| 1ms - 1s    | 10**3    | 4           | 1.044274 | 2.166%         |
+| 1ms - 100s  | 10**5    | 3           | 1.090508 | 4.329%         |
+| 1μs - 10s   | 10**7    | 2           | 1.189207 | 8.643%         |
+
+Note that relative error is calculated as half of the bucket width
+divided by the bucket midpoint, which is the same in every bucket.
+Using the bucket from [1, base), we have `(bucketWidth / 2) /
+bucketMidpoint = ((base - 1) / 2) / ((base + 1) / 2) = (base - 1) /
+(base + 1)`.
+
+This Aggregation uses the notion of "ideal" scale.  The ideal scale is
+either:
+
+1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
+2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
+
+##### Exponential Histogram Aggregation: Handle all normal values
+
+Implementations are REQUIRED to accept the entire normal range of IEEE
+floating point values (i.e., all values except for +Inf, -Inf and NaN
+values).
+
+Implementations SHOULD NOT incorporate non-normal values (i.e., +Inf,
+-Inf, and NaNs) into the `sum`, `min`, and `max` fields, because these
+values do not map into a valid bucket.
+
+Implementations MAY round subnormal values away from zero to the
+nearest normal value.
+
+##### Exponential Histogram Aggregation: Support a minimum and maximum scale
+
+The implementation MUST maintain reasonable minimum and maximum scale
+parameters that the automatic scale parameter will not exceed.
+
+##### Exponential Histogram Aggregation: Use the maximum scale for single measurements
+
+When the histogram contains not more than one value in either of the
+positive or negative ranges, the implementation SHOULD use the maximum
+scale.
+
+##### Exponential Histogram Aggregation: Maintain the ideal scale
+
+Implementations SHOULD adjust the histogram scale as necessary to
+maintain the best resolution possible, within the constraint of
+maximum size (max number of buckets). Best resolution (highest scale)
+is achieved when the number of positive or negative range buckets
+exceeds half the maximum size, such that increasing scale by one would
+not be possible given the size constraint.
 
 ### Observations inside asynchronous callbacks
 
@@ -473,7 +571,7 @@ between two non-identical `Metric` instances having the same `name`:
 **Status**: [Stable](../document-status.md)
 
 Attributes which belong to Metrics are exempt from the
-[common rules of attribute limits](../common/common.md#attribute-limits) at this
+[common rules of attribute limits](../common/README.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
 
@@ -493,7 +591,7 @@ information:
 
 - The `value` of the `Measurement` that was recorded by the API call.
 - The `time` the API call was made to record a `Measurement`.
-- The set of [Attributes](../common/common.md#attributes) associated with the
+- The set of [Attributes](../common/README.md#attribute) associated with the
   `Measurement` not already included in a metric data point.
 - The associated [trace id and span
   id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
@@ -715,7 +813,9 @@ Instruments](./api.md#asynchronous-instrument-api) involved, their callback
 functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out.
+failed or timed out. When the `Collect` operation fails or times out on
+some of the instruments, the SDK MAY return successfully collected results
+and a failed reasons list to the caller.
 
 `Collect` does not have any required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,

@@ -1007,7 +1007,7 @@ Field            | Type               | Description                             
 -----------------|--------------------| ------------------------------------------------------- | ---------------------------
 timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
 resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
-log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Attributes["com.google.log_name"]
+log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Attributes["gcp.log_name"]
 json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
 proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
 text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
@@ -1015,8 +1015,8 @@ severity         | LogSeverity        | The severity of the log entry.          
 trace            | string             | The trace associated with the log entry, if any.        | TraceId
 span_id          | string             | The span ID within the trace associated with the log entry. | SpanId
 labels           | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes
-http_request     | HttpRequest        | The HTTP request associated with the log entry, if any. | Attributes["com.google.httpRequest"]
-All other fields |                    |                                                         | Attributes["com.google.*"]
+http_request     | HttpRequest        | The HTTP request associated with the log entry, if any. | Attributes["gcp.http_request"]
+All other fields |                    |                                                         | Attributes["gcp.*"]
 
 ## Elastic Common Schema
 
@@ -1335,19 +1335,19 @@ for an exhaustive list.
 
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog       |WinEvtLog  |Log4j |Zap   |java.util.logging|SeverityNumber|
-|-------------|-----------|------|------|-----------------|--------------|
-|             |           |TRACE |      | FINEST          |TRACE         |
-|Debug        |Verbose    |DEBUG |Debug | FINER           |DEBUG         |
-|             |           |      |      | FINE            |DEBUG2        |
-|             |           |      |      | CONFIG          |DEBUG3        |
-|Informational|Information|INFO  |Info  | INFO            |INFO          |
-|Notice       |           |      |      |                 |INFO2         |
-|Warning      |Warning    |WARN  |Warn  | WARNING         |WARN          |
-|Error        |Error      |ERROR |Error | SEVERE          |ERROR         |
-|Critical     |Critical   |      |Dpanic|                 |ERROR2        |
-|Alert        |           |      |Panic |                 |ERROR3        |
-|Emergency    |           |FATAL |Fatal |                 |FATAL         |
+|Syslog       |WinEvtLog  |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
+|-------------|-----------|------|------|-----------------|-----------------------------------|--------------|
+|             |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE         |
+|Debug        |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG         |
+|             |           |      |      | FINE            |                                   |DEBUG2        |
+|             |           |      |      | CONFIG          |                                   |DEBUG3        |
+|Informational|Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO          |
+|Notice       |           |      |      |                 |                                   |INFO2         |
+|Warning      |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN          |
+|Error        |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR         |
+|Critical     |Critical   |      |Dpanic|                 |                                   |ERROR2        |
+|Alert        |           |      |Panic |                 |                                   |ERROR3        |
+|Emergency    |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL         |
 
 ## References
 

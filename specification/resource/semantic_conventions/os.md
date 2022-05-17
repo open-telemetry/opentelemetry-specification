@@ -29,6 +29,6 @@ In case of virtualized environments, this is the operating system as it is obser
 | `dragonflybsd` | DragonFly BSD |
 | `hpux` | HP-UX (Hewlett Packard Unix) |
 | `aix` | AIX (Advanced Interactive eXecutive) |
-| `solaris` | Oracle Solaris |
+| `solaris` | SunOS, Oracle Solaris |
 | `z_os` | IBM z/OS |
 <!-- endsemconv -->
