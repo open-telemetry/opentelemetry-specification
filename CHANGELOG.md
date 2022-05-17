@@ -23,6 +23,8 @@ release.
   ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
 - Specify optional support for an Exponential Histogram Aggregation.
   ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
+- Add Redis metrics semantic conventions
+  ([#2547](https://github.com/open-telemetry/opentelemetry-specification/pull/2547)).
 
 ### Logs
 
