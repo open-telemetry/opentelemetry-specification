@@ -617,7 +617,9 @@ destination.
 Export() will never be called concurrently for the same exporter instance.
 Export() can be called again only after the current call returns. This does not
 mean Export() is required to block until the batch is successfully sent. What
-Export() does before returning is language and exporter dependent. 
+Export() does before returning is language and exporter dependent. However, the
+implementation MUST document the concurrency characteristics the SDK requires of
+the exporter.
 
 Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
