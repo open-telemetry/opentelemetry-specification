@@ -377,9 +377,9 @@ same kind. <sup>[1](#footnotes)</sup>
 
 The basic point kinds are:
 
-1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L198)
-2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L192)
-3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L211)
+1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.0/opentelemetry/proto/metrics/v1/metrics.proto#L198)
+2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.0/opentelemetry/proto/metrics/v1/metrics.proto#L192)
+3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.0/opentelemetry/proto/metrics/v1/metrics.proto#L211)
 4. [Exponential Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/27a10cd70f63afdbddf460881969f9ad7ae4af5d/opentelemetry/proto/metrics/v1/metrics.proto#L239)
 
 Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
