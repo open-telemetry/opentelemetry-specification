@@ -84,6 +84,9 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     |        |      |        |     |      |     |      |       |
+| [SamplerProvider](specification/trace/sdk.md#sampler-provider)                           |          |     |      |     |        |      |        |     |      |     |      |       |
+| Create SamplerProvider                                                                            |          |     |      |     |        |      |        |     |      |     |      |       |
+| Get a Sampler                                                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 

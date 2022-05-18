@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add SamplerProvider for configuring Samplers
+  per-InstrumentationScope.([#2555](https://github.com/open-telemetry/opentelemetry-specification/pull/2555)).
+
 ### Metrics
 
 ### Logs

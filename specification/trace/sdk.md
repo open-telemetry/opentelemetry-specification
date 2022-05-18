@@ -61,10 +61,11 @@ the `TracerProvider` must be used to create an
 [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which is
 stored on the created `Tracer`.
 
-Configuration (i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators),
-[SpanLimits](#span-limits) and [`Sampler`](#sampling)) MUST be managed solely by
-the `TracerProvider` and it MUST provide some way to configure all of them that
-are implemented in the SDK, at least when creating or initializing it.
+Configuration (i.e., [SpanProcessors](#span-processor),
+[IdGenerator](#id-generators), [SpanLimits](#span-limits) and
+[`SamplerProvider`](#sampling)) MUST be managed solely by the `TracerProvider`
+and it MUST provide some way to configure all of them that are implemented in
+the SDK, at least when creating or initializing it.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -225,6 +226,33 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    A non-recording span MAY be implemented using the same mechanism as when a
    `Span` is created without an SDK installed or as described in
    [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
+
+### Sampler Provider
+
+Each `TracerProvider` is configured to use a `SamplerProvider` to get the
+`Sampler` for a `Tracer` to use when starting a `Span`. The `SamplerProvider` is
+passed the [`InstrumentationScope`](../glossary.md#instrumentation-scope) for a
+`Tracer` and returns the `Sampler` to use.
+
+By default the builtin `SamplerProvider` MUST return the `Sampler`
+`ParentBased(root=AlwaysOn)` for any `InstrumentationScope`. The builtin
+provider MUST also support configuring a specific `Sampler` to be returned based
+on the name or (name,version) pair of the `InstrumentationScope`. For example,
+in an HTTP server the user may define an `InstrumentationScope` for each route
+in their service and configure the `SamplerProvider` to return the `AlwaysOff`
+sampler for the `/healthcheck` scope.
+
+#### GetSampler
+
+**Required arguments:**
+
+* [`InstrumentationScope`](../glossary.md#instrumentation-scope): The
+  `InstrumentationScope` associated with the `Tracer` the `TracerProvider` is
+  returning.
+  
+**Return value:**
+
+The `Sampler` to be used by the `Tracer`.
 
 ### Sampler
 
