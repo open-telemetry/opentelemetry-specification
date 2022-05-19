@@ -15,6 +15,8 @@ See also the [additional instructions for instrumenting AWS Lambda](instrumentat
   * [Function Name](#function-name)
   * [Difference between execution and instance](#difference-between-execution-and-instance)
 - [Incoming Invocations](#incoming-invocations)
+  * [Incoming FaaS Span attributes](#incoming-faas-span-attributes)
+  * [Resource attributes as incoming FaaS span attributes](#resource-attributes-as-incoming-faas-span-attributes)
 - [Outgoing Invocations](#outgoing-invocations)
 - [Function Trigger Type](#function-trigger-type)
   * [Datasource](#datasource)
@@ -76,7 +78,7 @@ weaker "SHOULD" requirement). Consumers that needs such guarantee can use
 For performance reasons (e.g. [AWS lambda], or [Azure functions]), FaaS providers allocate an execution environment for a single instance of a function that is used to serve multiple requests.
 Developers exploit this fact to solve the **cold start** issue, caching expensive resource computations between different function executions.
 Furthermore, FaaS providers encourage this behavior, e.g. [Google functions].
-This field MAY be set to help correlate function executions that belong to the same execution environment.
+The `faas.instance` resource attribute MAY be set to help correlate function executions that belong to the same execution environment.
 The span attribute `faas.execution` differs from the [resource attribute][FaaS resource attributes] `faas.instance` in the following:
 
 - `faas.execution` refers to the current request ID handled by the function;
@@ -91,6 +93,8 @@ The span attribute `faas.execution` differs from the [resource attribute][FaaS r
 This section describes incoming FaaS invocations as they are reported by the FaaS instance itself.
 
 For incoming FaaS spans, the span kind MUST be `Server`.
+
+### Incoming FaaS Span attributes
 
 <!-- semconv faas_span.in -->
 | Attribute  | Type | Description  | Examples  | Required |
@@ -108,6 +112,18 @@ trigger that corresponding incoming would have (i.e., this has
 nothing to do with the underlying transport used to make the API
 call to invoke the lambda, which is often HTTP).
 <!-- endsemconv -->
+
+### Resource attributes as incoming FaaS span attributes
+
+In addition to the attributes listed above, any [FaaS](../../resource/semantic_conventions/faas.md) or [cloud](../../resource/semantic_conventions/cloud.md) resource attributes MAY
+instead be set as span attributes on incoming FaaS invocation spans: In some
+FaaS environments some of the information required for resource
+attributes is only readily available in the context of an invocation (e.g. as part of a "request context" argument)
+and while a separate API call to look up the resource information is often possible, it
+may be prohibitively expensive due to cold start duration concerns.
+The `faas.id` and `cloud.account.id` attributes on AWS are some examples.
+In principle, the above considerations apply to any resource attribute that fulfills the criteria above
+(not being readily available without some extra effort that could be expensive).
 
 ## Outgoing Invocations
 
