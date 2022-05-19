@@ -78,7 +78,7 @@ release.
 
 ### Resource
 
-- No changes.
+- Add browser.* attributes ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
 
 ### Semantic Conventions
 
