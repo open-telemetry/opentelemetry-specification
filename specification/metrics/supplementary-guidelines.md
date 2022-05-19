@@ -79,6 +79,104 @@ Here is one way of choosing the correct instrument:
 
 ### Additive property
 
+In OpenTelemetry a [Measurement](./api.md#measurement) encapsulates a value and
+a set of [`Attributes`](../common/README.md#attribute). Depending on the nature
+of the measurements, they can be additive, non-additive or somewhere in the
+middle. Here are some examples:
+
+* The server temperature is non-additive, the value `226.2` (`58.8 + 86.1 +
+81.3`) has no practical meaning.
+
+  | Host Name | Temperature (F) |
+  | --------- | --------------- |
+  | MachineA  | 58.8            |
+  | MachineB  | 86.1            |
+  | MachineC  | 81.3            |
+
+* The mass of planets is additive, the value `1.18e25` (`3.30e23 + 6.42e23 +
+  4.87e24 + 5.97e24`) means the total mass of terrestrial planets in the solar
+  system.
+
+  | Planet Name | Mass (kg)       |
+  | ----------- | --------------- |
+  | Mercury     | 3.30e23         |
+  | Mars        | 6.42e23         |
+  | Venus       | 4.87e24         |
+  | Earth       | 5.97e24         |
+
+* The voltage of battery cells can be added up if the batteries are connected in
+  series. However, if the batteries are connected in parallel, it makes no sense
+  to add up the voltage values anymore.
+
+In OpenTelemetry, each [Instrument](./api.md#instrument) implies the additive
+property. For example, [Counter](./api.md#counter) is additive while
+[Asynchronous Gauge](./api.md#asynchronous-gauge) is non-additive.
+
+For Instruments which take increments and/or decrements as the input (e.g.
+[Counter](./api.md#counter) and [UpDownCounter](./api.md#updowncounter)), the
+underlying numeric types (e.g. signed integer, unsigned integer, double) being
+used have direct impact on the dynamic range, precision and how the data is
+interpreted. Typically, integers are precise but have limited dynamic range, and
+might see overflow/underflow. [IEEE 754 double-precision floating-point
+format](https://wikipedia.org/wiki/Double-precision_floating-point_format) has a
+wide dynamic range of numeric values with the sacrifice on precision. Here are
+some examples that help to explain the differences:
+
+* A 16-bit signed integer is used to count the committed transactions in a
+  database, reported as cumulative sum every 15 seconds:
+
+  * During (T<sub>0</sub>, T<sub>1</sub>], we reported `70`.
+  * During (T<sub>1</sub>, T<sub>2</sub>], we reported `115`.
+  * During (T<sub>2</sub>, T<sub>3</sub>], we reported `116`.
+  * During (T<sub>3</sub>, T<sub>4</sub>], we reported `128`.
+  * During (T<sub>4</sub>, T<sub>5</sub>], we reported `128`.
+  * During (T<sub>5</sub>, T<sub>6</sub>], we reported `173`.
+  * ...
+  * During (T<sub>n</sub>, T<sub>n+1</sub>], we reported `1,872`.
+  * During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `35`.
+  * During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `76`.
+
+  In the above case, the backend system could tell that there was likely a
+  system restart (and the counter was reset to zero) during (T<sub>n+1</sub>,
+  T<sub>n+2</sub>], so it has chance to adjust the data to:
+
+  * (T<sub>n+1</sub>, T<sub>n+2</sub>] : `1,907` (1,872 + 35).
+  * (T<sub>n+2</sub>, T<sub>n+3</sub>] : `1,948` (1,872 + 76).
+
+  Imagine we keep the database running:
+
+  * During (T<sub>m</sub>, T<sub>m+1</sub>], we reported `32,758`.
+  * During (T<sub>m+1</sub>, T<sub>m+2</sub>], we reported `32,762`.
+  * During (T<sub>m+2</sub>, T<sub>m+3</sub>], we reported `-32,738`.
+  * During (T<sub>m+3</sub>, T<sub>m+4</sub>], we reported `-32,712`.
+
+  In the above case, the backend system could tell that there was an integer
+  overflow during (T<sub>m+2</sub>, T<sub>m+3</sub>], so it has chance to adjust
+  the data to:
+
+  * (T<sub>m+2</sub>, T<sub>n+3</sub>] : `32,798` (32,762 + 36).
+  * (T<sub>m+3</sub>, T<sub>n+4</sub>] : `32,824` (32,762 + 62).
+
+  The backend system could tell that there was an integer overflow during
+  (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "correct" the data.
+
+  As we can see in this example, even with the limitation of 16-bit integer, we
+  can count the database transactions with high fidelity, without having to
+  worry about information loss caused by integer overflows.
+
+  It is important to understand that we are handling counter reset and integer
+  overflow based on the assumption that we've picked the proper dynamic range.
+  Imagine if we use the same 16-bit signed integer to count the transactions in
+  a data center (which could have thousands if not millions of transactions per
+  second), we wouldn't be able to tell if `-32,738` was a result of `32,762 +
+  36` or `32,762 + 65,572` or even `32,762 + 131,108`.
+
+* A [Counter](./api.md#counter) which has [IEEE 754
+  double](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
+  as the underlying numeric type:
+
+Dynamic range vs accuracy, round trip
+
 ### Monotonicity property
 
 In the OpenTelemetry Metrics [Data Model](./datamodel.md) and [API](./api.md)
@@ -123,6 +221,8 @@ the total number of bytes received in a cumulative sum data stream:
 
 The backend system could tell that there was integer overflow or system restart
 during (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "fix" the data.
+Refer to [additive property](#additive-property) for more information about
+integer overflow.
 
 Let's take another example with a process using an [Asynchronous
 Counter](./api.md#asynchronous-counter) to report the total page faults of the
