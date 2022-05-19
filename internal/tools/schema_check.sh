@@ -11,11 +11,11 @@ BUILD_TOOL_SCHEMAS_VERSION=0.11.0
 # List of vesions that do not require or have a schema.
 declare -a skip_versions=("1.0.0" "1.0.1" "1.1.0" "1.2.0" "1.3.0" "1.6.0")
 
-schemas_dir="../schemas"
-current_dir=$PWD
+root_dir=$PWD
+schemas_dir=$root_dir/schemas
 
 # Find all version sections in CHANGELOG that start with a number in 1..9 range.
-grep -o -e '## v[1-9].*\s' ../CHANGELOG.md | grep -o '[1-9].*' | while read ver; do
+grep -o -e '## v[1-9].*\s' $root_dir/CHANGELOG.md | grep -o '[1-9].*' | while read ver; do
   if [[ " ${skip_versions[*]} " == *" $ver "* ]]; then
     # Skip this version, it does not need a schema file.
     continue
@@ -52,7 +52,7 @@ for file in $schemas_dir/*; do
     exit 2
   fi
 
-  docker run -v $current_dir/../schemas:/schemas \
+  docker run -v $schemas_dir:/schemas \
   		otel/build-tool-schemas:$BUILD_TOOL_SCHEMAS_VERSION --file /schemas/$ver --version=$ver
 
   echo "OK"
