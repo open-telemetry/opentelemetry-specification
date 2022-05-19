@@ -27,7 +27,7 @@ important to understand the goals of OpenTelemetry’s metrics effort:
 
 * **Being able to connect metrics to other signals**. For example, metrics and
   traces can be correlated via exemplars, and metrics attributes can be enriched
-  via [Baggage](../baggage/api.md) and [Context](../context/context.md).
+  via [Baggage](../baggage/api.md) and [Context](../context/README.md).
   Additionally, [Resource](../resource/sdk.md) can be applied to
   [logs](../overview.md#log-signal)/[metrics](../overview.md#metric-signal)/[traces](../overview.md#tracing-signal)
   in a consistent way.
