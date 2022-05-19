@@ -377,10 +377,10 @@ same kind. <sup>[1](#footnotes)</sup>
 
 The basic point kinds are:
 
-1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L198)
-2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L192)
-3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L211)
-4. [Exponential Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/27a10cd70f63afdbddf460881969f9ad7ae4af5d/opentelemetry/proto/metrics/v1/metrics.proto#L239)
+1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L247)
+2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L241)
+3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L260)
+4. [Exponential Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L270)
 
 Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
 not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
