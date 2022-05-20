@@ -6,6 +6,7 @@ content of "Unreleased" section content will generate release notes for the
 release.
 
 ## Unreleased
+- Add otlp-version identifier metadata/header to requests
 
 ### Context
 
