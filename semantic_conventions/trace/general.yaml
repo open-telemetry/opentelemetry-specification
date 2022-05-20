@@ -33,6 +33,14 @@ groups:
               brief: 'Something else (non IP-based).'
         brief: >
           Transport protocol used. See note below.
+      - id: protocol.name
+        type: string
+        brief: 'Application layer protocol used. The value SHOULD be normalized to lowercase.'
+        examples: ['amqp', 'http', 'nntp']
+      - id: protocol.version
+        type: string
+        brief: 'Version of the application layer protocol used.'
+        examples: '0.9.1'
       - id: peer.ip
         type: string
         brief: >

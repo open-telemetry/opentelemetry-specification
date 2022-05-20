@@ -35,6 +35,8 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | No |
+| `net.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `nntp` | No |
+| `net.protocol.version` | string | Version of the application layer protocol used. | `0.9.1` | No |
 | `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
 | `net.peer.port` | int | Remote port number. | `80`; `8080`; `443` | No |
 | `net.peer.name` | string | Remote hostname or similar, see note below. [1] | `example.com` | No |
