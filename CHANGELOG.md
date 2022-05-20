@@ -13,6 +13,16 @@ release.
 
 ### Metrics
 
+- Clarify that API support for multi-instrument callbacks is permitted.
+  ([#2263](https://github.com/open-telemetry/opentelemetry-specification/pull/2263)).
+- Clarify SDK behavior when view conflicts are present
+  ([#2462](https://github.com/open-telemetry/opentelemetry-specification/pull/2462)).
+- Clarify MetricReader.Collect result
+  ([#2495](https://github.com/open-telemetry/opentelemetry-specification/pull/2495)).
+- Add database connection pool metrics semantic conventions
+  ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
+- Specify optional support for an Exponential Histogram Aggregation.
+  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
 - Clarify async instrument callback identity.
   ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
 
@@ -21,6 +31,12 @@ release.
 ### Resource
 
 ### Semantic Conventions
+
+- Add details for FaaS conventions for Azure Functions and allow FaaS/Cloud
+  resources as span attributes on incoming FaaS spans
+  ([#2502](https://github.com/open-telemetry/opentelemetry-specification/pull/2502))
+- Define attribute requirement levels
+  ([#2522](https://github.com/open-telemetry/opentelemetry-specification/pull/2522))
 
 ### Compatibility
 
@@ -64,7 +80,7 @@ release.
 
 ### Resource
 
-- No changes.
+- Add browser.* attributes ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
 
 ### Semantic Conventions
 

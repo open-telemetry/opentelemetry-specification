@@ -1,3 +1,6 @@
+<!---
+aliases: [/docs/reference/specification/common/common]
+--->
 # Common specification concepts
 
 **Status**: [Stable, Feature-freeze](../document-status.md)
@@ -50,6 +53,8 @@ both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
 See [Attribute Naming](attribute-naming.md) for naming guidelines.
+
+See [Requirement Level](attribute-requirement-level.md) for requirement levels guidelines.
 
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
