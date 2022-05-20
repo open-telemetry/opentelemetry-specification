@@ -82,7 +82,7 @@ formats is required. Implementing more than one format is optional.
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
-| Fetch InstrumentationScope from ReadableSpan                                                     |          |     |      |     |        |      |        |     |      |     |      |       |
+| Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -114,8 +114,8 @@ formats is required. Implementing more than one format is optional.
 | Instruments have an optional description.                                                                                                                                    |          | +  | +    |    |    +   |      |        |     |      |  +  |   +  |       |
 | An error is returned when multiple instruments are registered under the same `Meter` using the same `name`.                                                                  |          | +  | +    |    |    -   |      |        |     |      |     |   +  |       |
 | It is possible to register two instruments with same `name` under different `Meter`s.                                                                                        |          | +  | +    |    |    +   |      |        |     |      |     |   +  |       |
-| Instrument names conform to the specified syntax.                                                                                                                            |          | -  | -    |    |    -   |      |        |     |      |     |   +  |       |
-| Instrument units conform to the specified syntax.                                                                                                                            |          | -  | -    |    |    -   |      |        |     |      |     |   +  |       |
+| Instrument names conform to the specified syntax.                                                                                                                            |          | -  | +    |    |    -   |      |        |     |      |     |   +  |       |
+| Instrument units conform to the specified syntax.                                                                                                                            |          | -  | +    |    |    -   |      |        |     |      |     |   +  |       |
 | Instrument descriptions conform to the specified syntax.                                                                                                                     |          | -  | +    |    |    -   |      |        |     |      |     |   +  |       |
 | `create_counter` returns a `Counter`.                                                                                                                                        |          | +  | +    |    |    +   |      |        |     |      |  +  |   +  |       |
 | The API for `Counter` accepts the name, unit and description of the instrument.                                                                                              |          | +  | +    |    |    +   |      |        |     |      |  +  |   +  |       |
@@ -235,7 +235,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      | +   |      | +   | +    |       |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  |      |    |        |      | -      |     |      |     | -    |       |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  | +    |    |        |      | -      |     |      |     | -    |       |
 
 ## Context Propagation
 
@@ -252,7 +252,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | -     |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  |      |    |        |      |        |     |      |     |      |       |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    |        |      |        |     |      |     |      |       |
 | Fields                                                                           |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
 | Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
@@ -262,83 +262,83 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 Note: Support for environment variables is optional.
 
-|Feature                                           |Go |Java|JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
-|--------------------------------------------------|---|----|---|------|----|------|---|----|---|----|-----|
-|OTEL_RESOURCE_ATTRIBUTES                          | + | +  | + | +    | +  | +    | + | +  | + | +  | -   |
-|OTEL_SERVICE_NAME                                 | + |    |   |      |    | +    | + |    |   | +  |     |
-|OTEL_LOG_LEVEL                                    | - | -  | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
-|OTEL_PROPAGATORS                                  | - | +  |   | +    | +  | +    | - | -  | - | -  | -   |
-|OTEL_BSP_*                                        | + | +  |   | +    | +  | +    | - | +  | - | -  | -   |
-|OTEL_EXPORTER_OTLP_*                              | + | +  |   | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_EXPORTER_JAEGER_*                            | + |    |   |      |    | -    | - |    | - | +  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                            | - |    |   |      |    | -    | - | -  | - | +  | -   |
-|OTEL_TRACES_EXPORTER                              | - | +  |   | +    | +  | +    | + | -  | - | -  |     |
-|OTEL_METRICS_EXPORTER                             | - | +  |   | +    | -  | -    |   | -  | - | -  | -   |
-|OTEL_LOGS_EXPORTER                                | - |    |   |      |    |      |   |    |   | -  |     |
-|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                   | + | +  |   | +    | +  | +    | + | +  | - | -  |     |
-|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT            | + |    |   |      |    | +    | + |    |   | -  |     |
-|OTEL_SPAN_EVENT_COUNT_LIMIT                       | + | +  |   | +    | +  | +    | + | +  | - | -  |     |
-|OTEL_SPAN_LINK_COUNT_LIMIT                        | + | +  |   | +    | +  | +    | + | +  | - | -  |     |
-|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                  | + |    |   |      |    | +    | + |    |   | -  |     |
-|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                   | + |    |   |      |    | +    | + |    |   | -  |     |
-|OTEL_TRACES_SAMPLER                               | + | +  |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_TRACES_SAMPLER_ARG                           | + | +  |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + |    |   |      |    | -    |   |    |   | -  |     |
-|OTEL_ATTRIBUTE_COUNT_LIMIT                        | + |    |   |      |    | -    |   |    |   | -  |     |
-|OTEL_METRICS_EXEMPLAR_FILTER                      | - |    |   |      |    |      |   |    |   | -  |     |
-|OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | - | +  |   |      |    |      |   |    |   | -  |     |
+|Feature                                           |Go | Java |JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
+|--------------------------------------------------|---|------|---|------|----|------|---|----|---|----|-----|
+|OTEL_RESOURCE_ATTRIBUTES                          | + | +    | + | +    | +  | +    | + | +  | + | +  | -   |
+|OTEL_SERVICE_NAME                                 | + | +    |   |      |    | +    | + |    |   | +  |     |
+|OTEL_LOG_LEVEL                                    | - | -    | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
+|OTEL_PROPAGATORS                                  | - | +    |   | +    | +  | +    | - | -  | - | -  | -   |
+|OTEL_BSP_*                                        | + | +    |   | +    | +  | +    | - | +  | - | -  | -   |
+|OTEL_EXPORTER_OTLP_*                              | + | +    |   | +    | +  | +    | - | +  | + | +  | -   |
+|OTEL_EXPORTER_JAEGER_*                            | + | +    |   |      |    | -    | - |    | - | +  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                            | - | +    |   |      |    | -    | - | -  | - | +  | -   |
+|OTEL_TRACES_EXPORTER                              | - | +    |   | +    | +  | +    | + | -  | - | -  |     |
+|OTEL_METRICS_EXPORTER                             | - | +    |   | +    | -  | -    |   | -  | - | -  | -   |
+|OTEL_LOGS_EXPORTER                                | - | +    |   |      |    |      |   |    |   | -  |     |
+|OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                   | + | +    |   | +    | +  | +    | + | +  | - | -  |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT            | + | +    |   |      |    | +    | + |    |   | -  |     |
+|OTEL_SPAN_EVENT_COUNT_LIMIT                       | + | +    |   | +    | +  | +    | + | +  | - | -  |     |
+|OTEL_SPAN_LINK_COUNT_LIMIT                        | + | +    |   | +    | +  | +    | + | +  | - | -  |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                  | + | -    |   |      |    | +    | + |    |   | -  |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                   | + | -    |   |      |    | +    | + |    |   | -  |     |
+|OTEL_TRACES_SAMPLER                               | + | +    |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_TRACES_SAMPLER_ARG                           | + | +    |   | +    | +  | +    |   | -  | - | -  |     |
+|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + | -    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_ATTRIBUTE_COUNT_LIMIT                        | + | -    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_METRICS_EXEMPLAR_FILTER                      | - | +    |   |      |    |      |   |    |   | -  |     |
+|OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | - | +    |   |      |    |      |   |    |   | -  |     |
 
 ## Exporters
 
 | Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
-| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | + |    | +           |      | +      | +   | +    | +   | +    |       |
-| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | + |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
-| Standard output (logging)                                                      |          | +  | + | +  | +           | +    | +      | -   | +    | +   | +    | +     |
-| In-memory (mock exporter)                                                      |          | +  | + | +  | +           | +    | +      | +   | -    | +   | +    | +     |
-| **[OTLP](specification/protocol/otlp.md)**                                     |          |    |   |    |             |      |        |     |      |     |      |       |
-| OTLP/gRPC Exporter                                                             | *        | +  | + | +  | +           |      | +      | +   | +    | +   | +    | +     |
-| OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | + | +  | +           | +    | +      |     | +    | +   | +    | -     |
-| OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | - | +  | [-][py1003] |      | -      |     |      | +   | -    | -     |
-| OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | + | +  | +           | +    | -      |     |      | -   | -    | -     |
-| Concurrent sending                                                             |          | -  | + | +  | [-][py1108] |      | -      |     | +    | -   | -    | -     |
-| Honors retryable responses with backoff                                        | X        | +  |   | +  | +           | +    | -      |     |      | -   | -    | -     |
-| Honors non-retryable responses                                                 | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
-| Honors throttling response                                                     | X        | +  |   | -  | +           | +    | -      |     |      | -   | -    | -     |
-| Multi-destination spec compliance                                              | X        | +  |   |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
-| SchemaURL in ResourceSpans and InstrumentationLibrarySpans                     |          | +  |   |    |             |      | +      |     |      |     | -    |       |
-| SchemaURL in ResourceMetrics and InstrumentationLibraryMetrics                 |          |    |   |    |             |      | -      |     |      |     | -    |       |
-| SchemaURL in ResourceLogs and InstrumentationLibraryLogs                       |          |    |   |    |             |      | -      |     |      |     | -    |       |
+| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | +    |    | +           |      | +      | +   | +    | +   | +    |       |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | +    |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
+| Standard output (logging)                                                      |          | +  | +    | +  | +           | +    | +      | -   | +    | +   | +    | +     |
+| In-memory (mock exporter)                                                      |          | +  | +    | +  | +           | +    | +      | +   | -    | +   | +    | +     |
+| **[OTLP](specification/protocol/otlp.md)**                                     |          |    |      |    |             |      |        |     |      |     |      |       |
+| OTLP/gRPC Exporter                                                             | *        | +  | +    | +  | +           |      | +      | +   | +    | +   | +    | +     |
+| OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | +    | +  | +           | +    | +      |     | +    | +   | +    | -     |
+| OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | -    | +  | [-][py1003] |      | -      |     |      | +   | -    | -     |
+| OTLP/HTTP gzip Content-Encoding support                                        | X        | +  | +    | +  | +           | +    | -      |     |      | -   | -    | -     |
+| Concurrent sending                                                             |          | -  | +    | +  | [-][py1108] |      | -      |     | +    | -   | -    | -     |
+| Honors retryable responses with backoff                                        | X        | +  | -    | +  | +           | +    | -      |     |      | -   | -    | -     |
+| Honors non-retryable responses                                                 | X        | +  | -    | -  | +           | +    | -      |     |      | -   | -    | -     |
+| Honors throttling response                                                     | X        | +  | -    | -  | +           | +    | -      |     |      | -   | -    | -     |
+| Multi-destination spec compliance                                              | X        | +  | -    |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
+| SchemaURL in ResourceSpans and ScopeSpans                                      |          | +  | +    |    |             |      | +      |     |      |     | -    |       |
+| SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    |             |      | -      |     |      |     | -    |       |
+| SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    |             |      | -      |     |      |     | -    |       |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| Zipkin V1 JSON                                                                 | X        | -  | + |    | +           | -    | -      | -   | -    | -   | -    | -     |
-| Zipkin V1 Thrift                                                               | X        | -  | + |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
-| Zipkin V2 JSON                                                                 | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| Zipkin V2 Protobuf                                                             | *        | -  | + |    | +           | -    | +      | -   | -    | -   | -    | -     |
-| Service name mapping                                                           |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| SpanKind mapping                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| InstrumentationLibrary mapping                                                 |          | +  | + | -  | +           | +    | -      | +   | +    | +   | +    | +     |
-| InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
-| Boolean attributes                                                             |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Array attributes                                                               |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Status mapping                                                                 |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    |             | +    | -      | +   | +    | +   | +    | -     |
-| Event attributes mapping to Annotations                                        |          | +  | + | +  | +           | +    | +      | +   | +    | +   | +    | +     |
-| Integer microseconds in timestamps                                             |          | N/A| + |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
+| Zipkin V1 Thrift                                                               | X        | -  | +    |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
+| Zipkin V2 JSON                                                                 | *        | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| Zipkin V2 Protobuf                                                             | *        | -  | +    |    | +           | -    | +      | -   | -    | -   | -    | -     |
+| Service name mapping                                                           |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
+| SpanKind mapping                                                               |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
+| InstrumentationLibrary mapping                                                 |          | +  | +    | -  | +           | +    | -      | +   | +    | +   | +    | +     |
+| InstrumentationScope mapping                                                   |          |    | +    |    |             |      |        |     |      |     |      |       |
+| Boolean attributes                                                             |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
+| Array attributes                                                               |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
+| Status mapping                                                                 |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
+| Error Status mapping                                                           |          | +  | +    |    |             | +    | -      | +   | +    | +   | +    | -     |
+| Event attributes mapping to Annotations                                        |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
+| Integer microseconds in timestamps                                             |          | N/A| +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |   |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | + |    | [-][py1437] | -    | -      | -   |      | -   | -    | -     |
-| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | + |    | +           | +    | -      | +   | +    | +   | +    | -     |
-| Service name mapping                                                           |          | +  | + |    | +           | +    | -      | +   |      | +   | +    | +     |
-| Resource to Process mapping                                                    |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | -     |
-| InstrumentationLibrary mapping                                                 |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | -     |
-| InstrumentationScope mapping                                                   |          |    |   |    |             |      |        |     |      |     |      |       |
-| Status mapping                                                                 |          | +  | + |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | + |    | +           | +    | -      | +   | +    | +   | +    | -     |
-| Events converted to Logs                                                       |          | +  | + |    | +           | +    | -      | +   | +    | -   | +    | +     |
-| **OpenCensus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
-| TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
-| **Prometheus**                                                                 |          |    |   |    |             |      |        |     |      |     |      |       |
-| TBD                                                                            |          |    |   |    |             |      |        |     |      |     |      |       |
+| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |      |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | +    |    | [-][py1437] | -    | -      | -   |      | -   | -    | -     |
+| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | -     |
+| Service name mapping                                                           |          | +  | +    |    | +           | +    | -      | +   |      | +   | +    | +     |
+| Resource to Process mapping                                                    |          | +  | +    |    | +           | +    | -      | +   | +    | -   | +    | -     |
+| InstrumentationLibrary mapping                                                 |          | +  | +    |    | +           | +    | -      | +   | +    | -   | +    | -     |
+| InstrumentationScope mapping                                                   |          |    | +    |    |             |      |        |     |      |     |      |       |
+| Status mapping                                                                 |          | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
+| Error Status mapping                                                           |          | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | -     |
+| Events converted to Logs                                                       |          | +  | +    |    | +           | +    | -      | +   | +    | -   | +    | +     |
+| **OpenCensus**                                                                 |          |    |      |    |             |      |        |     |      |     |      |       |
+| TBD                                                                            |          |    |      |    |             |      |        |     |      |     |      |       |
+| **Prometheus**                                                                 |          |    |      |    |             |      |        |     |      |     |      |       |
+| TBD                                                                            |          |    |      |    |             |      |        |     |      |     |      |       |
 
 ## OpenTracing Compatibility
 
