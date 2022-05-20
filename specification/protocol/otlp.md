@@ -323,6 +323,13 @@ some in beta.
 
 The default network port for OTLP/gRPC is 4317.
 
+### OTLP/gRPC Metadata
+
+The client MUST set the "x-otlp-version: {otlp version}" metadata entry.
+Where {otlp version} is the OTLP proto version used to encode the payload.
+
+For example: "x-otlp-version: 0.17.0"
+
 ### OTLP/HTTP
 
 **Status**: Binary format is [Stable](../document-status.md),
@@ -353,6 +360,11 @@ the request body is a Protobuf-encoded `ExportMetricsServiceRequest` message.
 
 The default URL path for requests that carry log data is `/v1/logs` and the
 request body is a Protobuf-encoded `ExportLogsServiceRequest` message.
+
+The client MUST set the "x-otlp-version: {otlp version}" request header.
+Where {otlp version} is the OTLP proto version used to encode the payload.
+
+For example: "x-otlp-version: 0.17.0"
 
 The client MUST set "Content-Type: application/x-protobuf" request header when
 sending binary-encoded Protobuf or "Content-Type: application/json" request
