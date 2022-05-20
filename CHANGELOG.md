@@ -26,6 +26,9 @@ release.
 
 ### Logs
 
+- OTLP Logs are now Stable
+  ([#2565](https://github.com/open-telemetry/opentelemetry-specification/pull/2565))
+
 ### Resource
 
 ### Semantic Conventions
