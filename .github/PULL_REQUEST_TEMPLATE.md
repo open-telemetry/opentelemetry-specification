@@ -2,9 +2,13 @@ Fixes #
 
 ## Changes
 
-Please provide a brief description of the changes here. Update the
-`CHANGELOG.md` for non-trivial changes. If `CHANGELOG.md` is updated,
-also be sure to update `spec-compliance-matrix.md` if necessary.
+Please provide a brief description of the changes here.
+
+For non-trivial changes, follow the [change proposal
+process](../CONTRIBUTING.md#proposing-a-change) and link to the related issue(s)
+and/or [oteps](https://github.com/open-telemetry/oteps), update the
+[`CHANGELOG.md`](../CHANGELOG.md), and also be sure to update
+[`spec-compliance-matrix.md`](../spec-compliance-matrix.md) if necessary.
 
 Related issues #
 
