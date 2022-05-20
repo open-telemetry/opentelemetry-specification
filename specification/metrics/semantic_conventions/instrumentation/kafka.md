@@ -37,9 +37,9 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 |                                              |               |            |                  |                      |                                       | `partition` | The number (integer) of the partition |
 | messaging.kafka.partition.oldest_offset      | Gauge         | Int64      | partition offset | `{partition offset}` | Oldest offset of partition of topic | `topic` | The ID (integer) of a topic |
 |                                              |               |            |                  |                      |                                     | `partition` | The number (integer) of the partition |
-| messaging.kafka.partition.replicas           | UpDownCounter | Int64      | replicas | `{replicas}` | Number of replicas for partition of topic | `topic` | The ID (integer) of a topic |
+| messaging.kafka.partition.replicas.all       | UpDownCounter | Int64      | replicas | `{replicas}` | Number of replicas for partition of topic | `topic` | The ID (integer) of a topic |
 |                                              |               |            |          |              |                                           | `partition` | The number (integer) of the partition |
-| messaging.kafka.partition.replicas_in_sync   | UpDownCounter | Int64      | replicas | `{replicas}` | Number of synchronized replicas of partition | `topic` | The ID (integer) of a topic |
+| messaging.kafka.partition.replicas.in_sync   | UpDownCounter | Int64      | replicas | `{replicas}` | Number of synchronized replicas of partition | `topic` | The ID (integer) of a topic |
 |                                              |               |            |          |              |                                              | `partition` | The number (integer) of the partition|
 
 ## Kafka Producer Metrics
