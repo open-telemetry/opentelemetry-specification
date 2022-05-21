@@ -54,7 +54,7 @@ own maturity level, which in turn applies to **all** the OTLP Transports listed 
 
 * Tracing: **Stable**
 * Metrics: **Stable**
-* Logs: **Beta**
+* Logs: **Stable**
 
 See [OTLP Maturity Level](https://github.com/open-telemetry/opentelemetry-proto#maturity-level).
 
