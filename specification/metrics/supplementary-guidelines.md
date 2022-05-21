@@ -165,17 +165,41 @@ some examples that help to explain the differences:
   worry about information loss caused by integer overflows.
 
   It is important to understand that we are handling counter reset and integer
-  overflow based on the assumption that we've picked the proper dynamic range.
-  Imagine if we use the same 16-bit signed integer to count the transactions in
-  a data center (which could have thousands if not millions of transactions per
-  second), we wouldn't be able to tell if `-32,738` was a result of `32,762 +
-  36` or `32,762 + 65,572` or even `32,762 + 131,108`.
+  overflow/underflow based on the assumption that we've picked the proper
+  dynamic range and reporting frequency. Imagine if we use the same 16-bit
+  signed integer to count the transactions in a data center (which could have
+  thousands if not millions of transactions per second), we wouldn't be able to
+  tell if `-32,738` was a result of `32,762 + 36` or `32,762 + 65,572` or even
+  `32,762 + 131,108` if we report the data every 15 seconds. In this situation,
+  either using a larger number (e.g. 32-bit integer) or increasing the reporting
+  frequency (e.g. every microsecond) would help.
 
-* A [Counter](./api.md#counter) which has [IEEE 754
+* An [IEEE 754
   double](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
-  as the underlying numeric type:
+  is used to count the number of positrons detected by an alpha magnetic
+  spectrometer. Each time a positron is detected, the spectrometer will invoke
+  `counter.Add(1)`, and the result is reported as cumulative sum every 1 second:
 
-Dynamic range vs accuracy, round trip
+  * During (T<sub>0</sub>, T<sub>1</sub>], we reported `131,108`.
+  * During (T<sub>1</sub>, T<sub>2</sub>], we reported `375,463`.
+  * During (T<sub>2</sub>, T<sub>3</sub>], we reported `832,019`.
+  * During (T<sub>3</sub>, T<sub>4</sub>], we reported `1,257,308`.
+  * During (T<sub>4</sub>, T<sub>5</sub>], we reported `1,860,103`.
+  * ...
+  * During (T<sub>n</sub>, T<sub>n+1</sub>], we reported `9,007,199,254,325,789`.
+  * During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `9,007,199,254,740,992`.
+  * During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `9,007,199,254,740,992`.
+
+  In the above case, the counter stopped increasing at some point between
+  T<sub>n+1</sub> and T<sub>n+2</sub>, because the IEEE 754 double counter is
+  "saturated", `9,007,199,254,740,992 + 1` will result in
+  `9,007,199,254,740,992` so the number stopped growing.
+
+  In addition to the "saturation" issue, we should also understand that IEEE 754
+  double also supports [subnormal
+  numbers](https://en.wikipedia.org/wiki/Subnormal_number). For example,
+  `1.0E308 + 1.0E308` would result in `+Inf` (positive infinity). Certain
+  metrics backend might have trouble handling subnormal numbers.
 
 ### Monotonicity property
 
