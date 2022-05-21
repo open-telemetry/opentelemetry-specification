@@ -172,7 +172,7 @@ some examples that help to explain the differences:
   tell if `-32,738` was a result of `32,762 + 36` or `32,762 + 65,572` or even
   `32,762 + 131,108` if we report the data every 15 seconds. In this situation,
   either using a larger number (e.g. 32-bit integer) or increasing the reporting
-  frequency (e.g. every microsecond) would help.
+  frequency (e.g. every microsecond, if we can afford the cost) would help.
 
 * An [IEEE 754
   double](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
