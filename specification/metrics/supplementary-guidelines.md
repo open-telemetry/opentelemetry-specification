@@ -196,7 +196,7 @@ some examples that help to explain the differences:
   `9,007,199,254,740,992` so the number stopped growing.
 
   In addition to the "saturation" issue, we should also understand that IEEE 754
-  double also supports [subnormal
+  double supports [subnormal
   numbers](https://en.wikipedia.org/wiki/Subnormal_number). For example,
   `1.0E308 + 1.0E308` would result in `+Inf` (positive infinity). Certain
   metrics backend might have trouble handling subnormal numbers.
