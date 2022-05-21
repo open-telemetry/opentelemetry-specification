@@ -1161,7 +1161,7 @@ that some data was lost, and reset the counter.
 We detect alignment via two mechanisms:
 
 - If the incoming delta time interval has significant overlap with the previous
-  time interval, we assume a violation of the single-writer principle and can be handled with on of the following options:
+  time interval, we assume a violation of the single-writer principle and can be handled with one of the following options:
   - Simply report the inconsistencies in time intervals, as the error condition could be caused by a misconfiguration.
   - Eliminate the overlap / deduplicate on the receiver side.
   - Correct the inconsistent time intervals by differentiating the given `Resource` and `Attribute` set used from overlapping time.
