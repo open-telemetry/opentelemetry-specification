@@ -1,4 +1,4 @@
-# Log Data Model
+# Logs Data Model
 
 **Status**: [Stable](../document-status.md)
 
