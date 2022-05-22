@@ -84,8 +84,7 @@ a set of [`Attributes`](../common/README.md#attribute). Depending on the nature
 of the measurements, they can be additive, non-additive or somewhere in the
 middle. Here are some examples:
 
-* The server temperature is non-additive, the value `226.2` (`58.8 + 86.1 +
-81.3`) has no practical meaning.
+* The server temperature is non-additive. The temperatures in the table below add up to `226.2`, but this value has no practical meaning.
 
   | Host Name | Temperature (F) |
   | --------- | --------------- |
