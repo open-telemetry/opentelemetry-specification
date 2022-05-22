@@ -12,6 +12,9 @@ requirements to the existing specifications.
 - [Guidelines for instrumentation library authors](#guidelines-for-instrumentation-library-authors)
   * [Instrument selection](#instrument-selection)
   * [Additive property](#additive-property)
+    * [Numeric type selection](#numeric-type-selection)
+      * [Integer](#integer)
+      * [Float](#float)
   * [Monotonicity property](#monotonicity-property)
   * [Semantic convention](#semantic-convention)
 - [Guidelines for SDK authors](#guidelines-for-sdk-authors)
@@ -84,7 +87,8 @@ a set of [`Attributes`](../common/README.md#attribute). Depending on the nature
 of the measurements, they can be additive, non-additive or somewhere in the
 middle. Here are some examples:
 
-* The server temperature is non-additive. The temperatures in the table below add up to `226.2`, but this value has no practical meaning.
+* The server temperature is non-additive. The temperatures in the table below
+  add up to `226.2`, but this value has no practical meaning.
 
   | Host Name | Temperature (F) |
   | --------- | --------------- |
@@ -107,98 +111,109 @@ middle. Here are some examples:
   series. However, if the batteries are connected in parallel, it makes no sense
   to add up the voltage values anymore.
 
-In OpenTelemetry, each [Instrument](./api.md#instrument) implies the additive
-property. For example, [Counter](./api.md#counter) is additive while
+In OpenTelemetry, each [Instrument](./api.md#instrument) implies whether it is
+additive or not. For example, [Counter](./api.md#counter) is additive while
 [Asynchronous Gauge](./api.md#asynchronous-gauge) is non-additive.
+
+#### Numeric type selection
 
 For Instruments which take increments and/or decrements as the input (e.g.
 [Counter](./api.md#counter) and [UpDownCounter](./api.md#updowncounter)), the
 underlying numeric types (e.g. signed integer, unsigned integer, double) being
 used have direct impact on the dynamic range, precision and how the data is
 interpreted. Typically, integers are precise but have limited dynamic range, and
-might see overflow/underflow. [IEEE 754 double-precision floating-point
+might see overflow/underflow. [IEEE-754 double-precision floating-point
 format](https://wikipedia.org/wiki/Double-precision_floating-point_format) has a
-wide dynamic range of numeric values with the sacrifice on precision. Here are
-some examples that help to explain the differences:
+wide dynamic range of numeric values with the sacrifice on precision.
 
-* A 16-bit signed integer is used to count the committed transactions in a
-  database, reported as cumulative sum every 15 seconds:
+##### Integer
 
-  * During (T<sub>0</sub>, T<sub>1</sub>], we reported `70`.
-  * During (T<sub>1</sub>, T<sub>2</sub>], we reported `115`.
-  * During (T<sub>2</sub>, T<sub>3</sub>], we reported `116`.
-  * During (T<sub>3</sub>, T<sub>4</sub>], we reported `128`.
-  * During (T<sub>4</sub>, T<sub>5</sub>], we reported `128`.
-  * During (T<sub>5</sub>, T<sub>6</sub>], we reported `173`.
-  * ...
-  * During (T<sub>n</sub>, T<sub>n+1</sub>], we reported `1,872`.
-  * During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `35`.
-  * During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `76`.
+Let's take an example: a 16-bit signed integer is used to count the committed
+transactions in a database, reported as cumulative sum every 15 seconds:
 
-  In the above case, the backend system could tell that there was likely a
-  system restart (and the counter was reset to zero) during (T<sub>n+1</sub>,
-  T<sub>n+2</sub>], so it has chance to adjust the data to:
+* During (T<sub>0</sub>, T<sub>1</sub>], we reported `70`.
+* During (T<sub>1</sub>, T<sub>2</sub>], we reported `115`.
+* During (T<sub>2</sub>, T<sub>3</sub>], we reported `116`.
+* During (T<sub>3</sub>, T<sub>4</sub>], we reported `128`.
+* During (T<sub>4</sub>, T<sub>5</sub>], we reported `128`.
+* During (T<sub>5</sub>, T<sub>6</sub>], we reported `173`.
+* ...
+* During (T<sub>n</sub>, T<sub>n+1</sub>], we reported `1,872`.
+* During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `35`.
+* During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `76`.
 
-  * (T<sub>n+1</sub>, T<sub>n+2</sub>] : `1,907` (1,872 + 35).
-  * (T<sub>n+2</sub>, T<sub>n+3</sub>] : `1,948` (1,872 + 76).
+In the above case, the backend system could tell that there was likely a system
+restart (and the counter was reset to zero) during (T<sub>n+1</sub>,
+T<sub>n+2</sub>], so it has chance to adjust the data to:
 
-  Imagine we keep the database running:
+* (T<sub>n+1</sub>, T<sub>n+2</sub>] : `1,907` (1,872 + 35).
+* (T<sub>n+2</sub>, T<sub>n+3</sub>] : `1,948` (1,872 + 76).
 
-  * During (T<sub>m</sub>, T<sub>m+1</sub>], we reported `32,758`.
-  * During (T<sub>m+1</sub>, T<sub>m+2</sub>], we reported `32,762`.
-  * During (T<sub>m+2</sub>, T<sub>m+3</sub>], we reported `-32,738`.
-  * During (T<sub>m+3</sub>, T<sub>m+4</sub>], we reported `-32,712`.
+Imagine we keep the database running:
 
-  In the above case, the backend system could tell that there was an integer
-  overflow during (T<sub>m+2</sub>, T<sub>m+3</sub>], so it has chance to adjust
-  the data to:
+* During (T<sub>m</sub>, T<sub>m+1</sub>], we reported `32,758`.
+* During (T<sub>m+1</sub>, T<sub>m+2</sub>], we reported `32,762`.
+* During (T<sub>m+2</sub>, T<sub>m+3</sub>], we reported `-32,738`.
+* During (T<sub>m+3</sub>, T<sub>m+4</sub>], we reported `-32,712`.
 
-  * (T<sub>m+2</sub>, T<sub>n+3</sub>] : `32,798` (32,762 + 36).
-  * (T<sub>m+3</sub>, T<sub>n+4</sub>] : `32,824` (32,762 + 62).
+In the above case, the backend system could tell that there was an integer
+overflow during (T<sub>m+2</sub>, T<sub>m+3</sub>], so it has chance to adjust
+the data to:
 
-  The backend system could tell that there was an integer overflow during
-  (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "correct" the data.
+* (T<sub>m+2</sub>, T<sub>n+3</sub>] : `32,798` (32,762 + 36).
+* (T<sub>m+3</sub>, T<sub>n+4</sub>] : `32,824` (32,762 + 62).
 
-  As we can see in this example, even with the limitation of 16-bit integer, we
-  can count the database transactions with high fidelity, without having to
-  worry about information loss caused by integer overflows.
+The backend system could tell that there was an integer overflow during
+(T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "correct" the data.
 
-  It is important to understand that we are handling counter reset and integer
-  overflow/underflow based on the assumption that we've picked the proper
-  dynamic range and reporting frequency. Imagine if we use the same 16-bit
-  signed integer to count the transactions in a data center (which could have
-  thousands if not millions of transactions per second), we wouldn't be able to
-  tell if `-32,738` was a result of `32,762 + 36` or `32,762 + 65,572` or even
-  `32,762 + 131,108` if we report the data every 15 seconds. In this situation,
-  either using a larger number (e.g. 32-bit integer) or increasing the reporting
-  frequency (e.g. every microsecond, if we can afford the cost) would help.
+As we can see in this example, even with the limitation of 16-bit integer, we
+can count the database transactions with high fidelity, without having to
+worry about information loss caused by integer overflows.
 
-* An [IEEE 754
-  double](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
-  is used to count the number of positrons detected by an alpha magnetic
-  spectrometer. Each time a positron is detected, the spectrometer will invoke
-  `counter.Add(1)`, and the result is reported as cumulative sum every 1 second:
+It is important to understand that we are handling counter reset and integer
+overflow/underflow based on the assumption that we've picked the proper
+dynamic range and reporting frequency. Imagine if we use the same 16-bit
+signed integer to count the transactions in a data center (which could have
+thousands if not millions of transactions per second), we wouldn't be able to
+tell if `-32,738` was a result of `32,762 + 36` or `32,762 + 65,572` or even
+`32,762 + 131,108` if we report the data every 15 seconds. In this situation,
+either using a larger number (e.g. 32-bit integer) or increasing the reporting
+frequency (e.g. every microsecond, if we can afford the cost) would help.
 
-  * During (T<sub>0</sub>, T<sub>1</sub>], we reported `131,108`.
-  * During (T<sub>1</sub>, T<sub>2</sub>], we reported `375,463`.
-  * During (T<sub>2</sub>, T<sub>3</sub>], we reported `832,019`.
-  * During (T<sub>3</sub>, T<sub>4</sub>], we reported `1,257,308`.
-  * During (T<sub>4</sub>, T<sub>5</sub>], we reported `1,860,103`.
-  * ...
-  * During (T<sub>n</sub>, T<sub>n+1</sub>], we reported `9,007,199,254,325,789`.
-  * During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `9,007,199,254,740,992`.
-  * During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `9,007,199,254,740,992`.
+##### Float
 
-  In the above case, the counter stopped increasing at some point between
-  T<sub>n+1</sub> and T<sub>n+2</sub>, because the IEEE 754 double counter is
-  "saturated", `9,007,199,254,740,992 + 1` will result in
-  `9,007,199,254,740,992` so the number stopped growing.
+Let's take an example: an [IEEE-754 double precision floating
+point](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) is
+used to count the number of positrons detected by an alpha magnetic
+spectrometer. Each time a positron is detected, the spectrometer will invoke
+`counter.Add(1)`, and the result is reported as cumulative sum every 1 second:
 
-  In addition to the "saturation" issue, we should also understand that IEEE 754
-  double supports [subnormal
-  numbers](https://en.wikipedia.org/wiki/Subnormal_number). For example,
-  `1.0E308 + 1.0E308` would result in `+Inf` (positive infinity). Certain
-  metrics backend might have trouble handling subnormal numbers.
+* During (T<sub>0</sub>, T<sub>1</sub>], we reported `131,108`.
+* During (T<sub>1</sub>, T<sub>2</sub>], we reported `375,463`.
+* During (T<sub>2</sub>, T<sub>3</sub>], we reported `832,019`.
+* During (T<sub>3</sub>, T<sub>4</sub>], we reported `1,257,308`.
+* During (T<sub>4</sub>, T<sub>5</sub>], we reported `1,860,103`.
+* ...
+* During (T<sub>n</sub>, T<sub>n+1</sub>], we reported `9,007,199,254,325,789`.
+* During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `9,007,199,254,740,992`.
+* During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `9,007,199,254,740,992`.
+
+In the above case, the counter stopped increasing at some point between
+T<sub>n+1</sub> and T<sub>n+2</sub>, because the IEEE-754 double counter is
+"saturated", `9,007,199,254,740,992 + 1` will result in `9,007,199,254,740,992`
+so the number stopped growing.
+
+Note: in ECMAScript 6 the number `9,007,199,254,740,991` (`2 ^ 53 - 1`) is known
+as `Number.MAX_SAFE_INTEGER`, which is the maximum integer that can be exactly
+represented as an IEEE-754 double precision number, and whose IEEE-754
+representation cannot be the result of rounding any other integer to fit the
+IEEE-754 representation.
+
+In addition to the "saturation" issue, we should also understand that IEEE-754
+double supports [subnormal
+numbers](https://en.wikipedia.org/wiki/Subnormal_number). For example,
+`1.0E308 + 1.0E308` would result in `+Inf` (positive infinity). Certain metrics
+backend might have trouble handling subnormal numbers.
 
 ### Monotonicity property
 
