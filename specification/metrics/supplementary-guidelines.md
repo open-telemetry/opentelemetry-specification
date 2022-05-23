@@ -142,7 +142,7 @@ transactions in a database, reported as cumulative sum every 15 seconds:
 * During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `35`.
 * During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `76`.
 
-In the above case, the backend system could tell that there was likely a system
+In the above case, a backend system could tell that there was likely a system
 restart (and the counter was reset to zero) during (T<sub>n+1</sub>,
 T<sub>n+2</sub>], so it has chance to adjust the data to:
 
