@@ -161,7 +161,7 @@ overflow during (T<sub>m+2</sub>, T<sub>m+3</sub>], so it has chance to adjust
 the data to:
 
 * (T<sub>m+2</sub>, T<sub>m+3</sub>] : `32,798` (32,762 + 36).
-* (T<sub>m+3</sub>, T<sub>n+4</sub>] : `32,824` (32,762 + 62).
+* (T<sub>m+3</sub>, T<sub>m+4</sub>] : `32,824` (32,762 + 62).
 
 The backend system could tell that there was an integer overflow during
 (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "correct" the data.
