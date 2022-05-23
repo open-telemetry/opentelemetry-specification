@@ -34,4 +34,4 @@ This document defines how to apply semantic conventions when instrumenting Postg
 | db.mysql.row_operations             | Counter       | Int64      | operations | `{operations}` | The number of InnoDB row operations. | `row_operations` | `deleted`, `inserted`, `read`, `updated` |
 | db.mysql.locks                      | Counter       | int64      | locks      | `{locks}`      | The number of MySQL locks. | `locks` | `immediate`, `waited` |
 | db.mysql.sorts                      | Counter       | Int64      | sorts      | `{sorts}`      | The number of MySQL sorts. | `sorts` | `merge_passes`, `range`, `rows`, `scan` |
-| db. mysql.threads                   | UpDownCounter | Int64      | threads    | `{threads}`    | The state of MySQL threads. | `threads` | `cached`, `connected`, `created`, `running` |
+| db.mysql.threads                    | UpDownCounter | Int64      | threads    | `{threads}`    | The state of MySQL threads. | `threads` | `cached`, `connected`, `created`, `running` |
