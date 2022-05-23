@@ -17,7 +17,7 @@ This document defines how to apply semantic conventions when instrumenting Postg
 | Name                                | Instrument    | Value type | Unit       | Unit ([UCUM](../README.md#instrument-units)) | Description                         | Attribute Key | Attribute Values |
 |-------------------------------------| ------------- | ---------- | ---------- | -------------------------------------------- | ----------------------------------- | ------------- | ---------------- |
 | db.mysql.buffer_pool.pages          | UpDownCounter | Int64      | pages      | `{pages}`  | The number of pages in the InnoDB buffer pool. | `buffer_pool_pages` | `data`, `free`, `misc`            |
-| db.mysql.buffer_pool.data_pages     | UpDownCounter | Int64      | pages      | `{pages} ` | The number of data pages in the InnoDB buffer pool. | `buffer_pool_data` | `dirty`, `clean`             |
+| db.mysql.buffer_pool.data_pages     | UpDownCounter | Int64      | pages      | `{pages} ` | The number of data pages in the InnoDB buffer pool. | `buffer_pool_data` | `dirty`, `clean`              |
 | db.mysql.buffer_pool.page_flushes   | Counter       | Int64      | flushes    | `{flushes}` | The number of requests to flush pages from the InnoDB buffer pool. | |               |
 | db.mysql.buffer_pool.operations     | Counter       | Int64      | operations | `{operations}` | The number of operations on the InnoDB buffer pool. | `buffer_pool_operations` | The buffer pool operations types. |
 |                                     |               |            |            |              |                                                   |           | `read_ahead_rnd`, `read_ahead`, `read_ahead_evicted`, `read_requests`, `reads`, `wait_free`, `write_requests` |
