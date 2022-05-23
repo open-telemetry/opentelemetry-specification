@@ -23,6 +23,9 @@ Smaller changes can follow a shorter process:
 - Follow the [issue workflow](#issue-triaging) and make sure the issue is accepted with
   a "Yes" response. If the response to the issue is not "Yes" then do not create a PR
   that implements the change since it will be rejected.
+- If a Pull Request would be beneficial to illustrate the idea better and to show its effect on the specification, a
+  [Draft PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests#draft-pull-requests)
+  may be opened and linked to the issue even before the proposed idea is accepted there.
 - Once the issue is accepted the assignee can work on it and create a PR that implements
   the change described in the issue.
 
