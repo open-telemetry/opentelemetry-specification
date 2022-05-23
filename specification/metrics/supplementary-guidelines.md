@@ -119,8 +119,8 @@ additive or not. For example, [Counter](./api.md#counter) is additive while
 
 For Instruments which take increments and/or decrements as the input (e.g.
 [Counter](./api.md#counter) and [UpDownCounter](./api.md#updowncounter)), the
-underlying numeric types (e.g. signed integer, unsigned integer, double) being
-used have direct impact on the dynamic range, precision and how the data is
+underlying numeric types (e.g., signed integer, unsigned integer, double) 
+have direct impact on the dynamic range, precision, and how the data is
 interpreted. Typically, integers are precise but have limited dynamic range, and
 might see overflow/underflow. [IEEE-754 double-precision floating-point
 format](https://wikipedia.org/wiki/Double-precision_floating-point_format) has a
