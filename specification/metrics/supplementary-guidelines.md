@@ -119,10 +119,10 @@ additive or not. For example, [Counter](./api.md#counter) is additive while
 
 For Instruments which take increments and/or decrements as the input (e.g.
 [Counter](./api.md#counter) and [UpDownCounter](./api.md#updowncounter)), the
-underlying numeric types (e.g., signed integer, unsigned integer, double) 
-have direct impact on the dynamic range, precision, and how the data is
-interpreted. Typically, integers are precise but have limited dynamic range, and
-might see overflow/underflow. [IEEE-754 double-precision floating-point
+underlying numeric types (e.g., signed integer, unsigned integer, double) have
+direct impact on the dynamic range, precision, and how the data is interpreted.
+Typically, integers are precise but have limited dynamic range, and might see
+overflow/underflow. [IEEE-754 double-precision floating-point
 format](https://wikipedia.org/wiki/Double-precision_floating-point_format) has a
 wide dynamic range of numeric values with the sacrifice on precision.
 
@@ -171,14 +171,14 @@ can count the database transactions with high fidelity, without having to
 worry about information loss caused by integer overflows.
 
 It is important to understand that we are handling counter reset and integer
-overflow/underflow based on the assumption that we've picked the proper
-dynamic range and reporting frequency. Imagine if we use the same 16-bit
-signed integer to count the transactions in a data center (which could have
-thousands if not millions of transactions per second), we wouldn't be able to
-tell if `-32,738` was a result of `32,762 + 36` or `32,762 + 65,572` or even
-`32,762 + 131,108` if we report the data every 15 seconds. In this situation,
-either using a larger number (e.g. 32-bit integer) or increasing the reporting
-frequency (e.g. every microsecond, if we can afford the cost) would help.
+overflow/underflow based on the assumption that we've picked the proper dynamic
+range and reporting frequency. Imagine if we use the same 16-bit signed integer
+to count the transactions in a data center (which could have thousands if not
+millions of transactions per second), we wouldn't be able to tell if `-32,738`
+was a result of `32,762 + 36` or `32,762 + 65,572` or even `32,762 + 131,108` if
+we report the data every 15 seconds. In this situation, either using a larger
+number (e.g. 32-bit integer) or increasing the reporting frequency (e.g. every
+microsecond, if we can afford the cost) would help.
 
 ##### Float
 
