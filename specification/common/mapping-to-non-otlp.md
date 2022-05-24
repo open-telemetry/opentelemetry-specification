@@ -74,3 +74,12 @@ OpenTelemetry Span's dropped links count MUST be reported as a key-value pair
 associated with the Span. The key name MUST be `otel.dropped_links_count`.
 
 This key-value pair should only be recorded when it contains a non-zero value.
+
+### Instrumentation Scope Attributes
+
+Exporters to formats that don't have a concept that is equivalent to the Scope
+will record the attributes at the most suitable place in their corresponding format,
+typically at the Span, Metric or LogRecord equivalent.
+
+If the same attribute is specified both at the Span/Metric/LogRecord and at the Scope
+then the attribute value at Span/Metric/LogRecord takes precedence.
