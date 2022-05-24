@@ -132,39 +132,38 @@ Let's take an example: a 16-bit signed integer is used to count the committed
 transactions in a database, reported as cumulative sum every 15 seconds:
 
 * During (T<sub>0</sub>, T<sub>1</sub>], we reported `70`.
-* During (T<sub>1</sub>, T<sub>2</sub>], we reported `115`.
-* During (T<sub>2</sub>, T<sub>3</sub>], we reported `116`.
-* During (T<sub>3</sub>, T<sub>4</sub>], we reported `128`.
-* During (T<sub>4</sub>, T<sub>5</sub>], we reported `128`.
-* During (T<sub>5</sub>, T<sub>6</sub>], we reported `173`.
+* During (T<sub>0</sub>, T<sub>2</sub>], we reported `115`.
+* During (T<sub>0</sub>, T<sub>3</sub>], we reported `116`.
+* During (T<sub>0</sub>, T<sub>4</sub>], we reported `128`.
+* During (T<sub>0</sub>, T<sub>5</sub>], we reported `128`.
+* During (T<sub>0</sub>, T<sub>6</sub>], we reported `173`.
 * ...
-* During (T<sub>n</sub>, T<sub>n+1</sub>], we reported `1,872`.
-* During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `35`.
-* During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `76`.
+* During (T<sub>0</sub>, T<sub>n+1</sub>], we reported `1,872`.
+* During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `35`.
+* During (T<sub>n+2</sub>, T<sub>n+4</sub>], we reported `76`.
 
 In the above case, a backend system could tell that there was likely a system
-restart (and the counter was reset to zero) during (T<sub>n+1</sub>,
-T<sub>n+2</sub>], so it has chance to adjust the data to:
+restart (because the start time has changed from T<sub>0</sub> to
+T<sub>n+2</sub>) during (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to
+adjust the data to:
 
-* (T<sub>n+1</sub>, T<sub>n+2</sub>] : `1,907` (1,872 + 35).
-* (T<sub>n+2</sub>, T<sub>n+3</sub>] : `1,948` (1,872 + 76).
+* (T<sub>0</sub>, T<sub>n+3</sub>] : `1,907` (1,872 + 35).
+* (T<sub>0</sub>, T<sub>n+4</sub>] : `1,948` (1,872 + 76).
 
 Imagine we keep the database running:
 
-* During (T<sub>m</sub>, T<sub>m+1</sub>], we reported `32,758`.
-* During (T<sub>m+1</sub>, T<sub>m+2</sub>], we reported `32,762`.
-* During (T<sub>m+2</sub>, T<sub>m+3</sub>], we reported `-32,738`.
-* During (T<sub>m+3</sub>, T<sub>m+4</sub>], we reported `-32,712`.
+* During (T<sub>0</sub>, T<sub>m+1</sub>], we reported `32,758`.
+* During (T<sub>0</sub>, T<sub>m+2</sub>], we reported `32,762`.
+* During (T<sub>0</sub>, T<sub>m+3</sub>], we reported `-32,738`.
+* During (T<sub>0</sub>, T<sub>m+4</sub>], we reported `-32,712`.
 
 In the above case, the backend system could tell that there was an integer
-overflow during (T<sub>m+2</sub>, T<sub>m+3</sub>], so it has chance to adjust
-the data to:
+overflow during (T<sub>m+2</sub>, T<sub>m+3</sub>] (because the start time
+remains the same as before, and the value becomes negative), so it has chance to
+adjust the data to:
 
-* (T<sub>m+2</sub>, T<sub>m+3</sub>] : `32,798` (32,762 + 36).
-* (T<sub>m+3</sub>, T<sub>m+4</sub>] : `32,824` (32,762 + 62).
-
-The backend system could tell that there was an integer overflow during
-(T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "correct" the data.
+* (T<sub>0</sub>, T<sub>m+3</sub>] : `32,798` (32,762 + 36).
+* (T<sub>0</sub>, T<sub>m+4</sub>] : `32,824` (32,762 + 62).
 
 As we can see in this example, even with the limitation of 16-bit integer, we
 can count the database transactions with high fidelity, without having to
@@ -189,14 +188,14 @@ spectrometer. Each time a positron is detected, the spectrometer will invoke
 `counter.Add(1)`, and the result is reported as cumulative sum every 1 second:
 
 * During (T<sub>0</sub>, T<sub>1</sub>], we reported `131,108`.
-* During (T<sub>1</sub>, T<sub>2</sub>], we reported `375,463`.
-* During (T<sub>2</sub>, T<sub>3</sub>], we reported `832,019`.
-* During (T<sub>3</sub>, T<sub>4</sub>], we reported `1,257,308`.
-* During (T<sub>4</sub>, T<sub>5</sub>], we reported `1,860,103`.
+* During (T<sub>0</sub>, T<sub>2</sub>], we reported `375,463`.
+* During (T<sub>0</sub>, T<sub>3</sub>], we reported `832,019`.
+* During (T<sub>0</sub>, T<sub>4</sub>], we reported `1,257,308`.
+* During (T<sub>0</sub>, T<sub>5</sub>], we reported `1,860,103`.
 * ...
-* During (T<sub>n</sub>, T<sub>n+1</sub>], we reported `9,007,199,254,325,789`.
-* During (T<sub>n+1</sub>, T<sub>n+2</sub>], we reported `9,007,199,254,740,992`.
-* During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `9,007,199,254,740,992`.
+* During (T<sub>0</sub>, T<sub>n+1</sub>], we reported `9,007,199,254,325,789`.
+* During (T<sub>0</sub>, T<sub>n+2</sub>], we reported `9,007,199,254,740,992`.
+* During (T<sub>0</sub>, T<sub>n+3</sub>], we reported `9,007,199,254,740,992`.
 
 In the above case, the counter stopped increasing at some point between
 T<sub>n+1</sub> and T<sub>n+2</sub>, because the IEEE-754 double counter is
