@@ -112,8 +112,9 @@ middle. Here are some examples:
   to add up the voltage values anymore.
 
 In OpenTelemetry, each [Instrument](./api.md#instrument) implies whether it is
-additive or not. For example, [Counter](./api.md#counter) is additive while
-[Asynchronous Gauge](./api.md#asynchronous-gauge) is non-additive.
+additive or not. For example, [Counter](./api.md#counter) and
+[UpDownCounter](./api.md#updowncounter) are additive while [Asynchronous
+Gauge](./api.md#asynchronous-gauge) is non-additive.
 
 #### Numeric type selection
 
