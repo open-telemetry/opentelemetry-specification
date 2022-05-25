@@ -38,6 +38,8 @@ release.
   ([#2502](https://github.com/open-telemetry/opentelemetry-specification/pull/2502))
 - Define attribute requirement levels
   ([#2522](https://github.com/open-telemetry/opentelemetry-specification/pull/2522))
+- Add network metrics to process semantic conventions
+  ([#2556](https://github.com/open-telemetry/opentelemetry-specification/pull/2556))
 
 ### Compatibility
 
