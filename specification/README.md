@@ -9,7 +9,7 @@
   - [Package/Library Layout](library-layout.md)
   - [General error handling guidelines](error-handling.md)
 - API Specification
-  - [Context](context/context.md)
+  - [Context](context/README.md)
     - [Propagators](context/api-propagators.md)
   - [Baggage](baggage/api.md)
   - [Tracing](trace/api.md)

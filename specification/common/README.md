@@ -1,3 +1,6 @@
+<!---
+aliases: [/docs/reference/specification/common/common]
+--->
 # Common specification concepts
 
 **Status**: [Stable, Feature-freeze](../document-status.md)
