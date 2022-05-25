@@ -145,9 +145,10 @@ This API MUST accept the following parameters:
 
 Meters are identified by all of these parameters.
 
-The implementation MUST NOT return the same `Meter` when called repeatedly with
-different values of parameters. The only exception to this rule is no-op `Meter`, the
-implementation MAY return the same instance regardless of parameter values.
+The implementation MUST return different `Meter` instances when called repeatedly
+with different values of parameters. Note that always returning a new tracer instance
+is a valid implementation. The only exception to this rule is no-op `Meter`:
+the implementation MAY return the same instance regardless of parameter values.
 
 It is unspecified whether or under which conditions the same or different
 `Meter` instances are returned from this function when the same

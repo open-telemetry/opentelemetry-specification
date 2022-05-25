@@ -131,13 +131,10 @@ This API MUST accept the following parameters:
 - [since 1.12.0] `attributes` (optional): Specifies the instrumentation scope attributes
   to associate with emitted telemetry.
 
-The implementation MUST NOT return the same `Tracer` when called repeatedly with
-different values of parameters. The only exception to this rule is no-op `Tracer`, the
-implementation MAY return the same instance regardless of parameter values.
-
-It is unspecified whether or under which conditions the same or different
-`Tracer` instances are returned from this function when the same
-(name,version,schema_url,attributes) parameters are used.
+The implementation MUST return different `Tracer` instances when called repeatedly
+with different values of parameters. Note that always returning a new tracer instance
+is a valid implementation. The only exception to this rule is no-op `Tracer`:
+the implementation MAY return the same instance regardless of parameter values.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
 with the same name+version+schema_url to pick up configuration changes.
