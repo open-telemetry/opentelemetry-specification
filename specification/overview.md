@@ -342,7 +342,7 @@ All of OpenTelemetry cross-cutting concerns, such as traces and metrics,
 share an underlying `Context` mechanism for storing state and
 accessing data across the lifespan of a distributed transaction.
 
-See the [Context](context/context.md)
+See the [Context](context/README.md)
 
 ## Propagators
 

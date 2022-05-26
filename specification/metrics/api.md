@@ -298,7 +298,7 @@ asynchronous:
   inline with application/business processing logic. For example, an HTTP client
   could use a Counter to record the number of bytes it has received.
   [Measurements](#measurement) recorded by synchronous instruments can be
-  associated with the [Context](../context/context.md).
+  associated with the [Context](../context/README.md).
 
 * Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-gauge)) give
   the user a way to register callback function, and the callback function will
@@ -306,7 +306,7 @@ asynchronous:
   could use an asynchronous gauge to collect the temperature from a sensor every
   15 seconds, which means the callback function will only be invoked every 15
   seconds. [Measurements](#measurement) recorded by asynchronous instruments
-  cannot be associated with the [Context](../context/context.md).
+  cannot be associated with the [Context](../context/README.md).
 
 Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
