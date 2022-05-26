@@ -12,10 +12,10 @@ semantic conventions when instrumenting runtime environments.
 
 <!-- toc -->
 
-  - [Metric Instruments](#metric-instruments)
+- [Metric Instruments](#metric-instruments)
   * [Runtime Environment Specific Metrics - `process.runtime.{environment}.`](#runtime-environment-specific-metrics---processruntimeenvironment)
-  - [Attributes](#attributes)
-  - [JVM Metrics](#jvm-metrics)
+- [Attributes](#attributes)
+- [JVM Metrics](#jvm-metrics)
 
 <!-- tocstop -->
 
