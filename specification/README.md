@@ -22,7 +22,7 @@
 - Data Specification
   - [Semantic Conventions](overview.md#semantic-conventions)
   - [Protocol](protocol/README.md)
-    - [Metrics](metrics/datamodel.md)
+    - [Metrics](metrics/data-model.md)
     - [Logs](logs/data-model.md)
 
 ## Notation Conventions and Compliance

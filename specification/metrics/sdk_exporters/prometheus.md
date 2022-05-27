@@ -12,7 +12,7 @@ A Prometheus Exporter MUST NOT support [Push
 mode](../sdk.md#push-metric-exporter).
 
 A Prometheus Exporter MUST only support [Cumulative
-Temporality](../datamodel.md#temporality).
+Temporality](../data-model.md#temporality).
 
 A Prometheus Exporter MUST support version `0.0.4` of the [Text-based
 format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#text-based-format).
