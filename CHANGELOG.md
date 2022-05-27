@@ -33,7 +33,7 @@ release.
 
 ### Semantic Conventions
 
-- Add semantic conventions for jvm cpu metrics
+- Add semantic conventions for JVM CPU metrics
   ([#2292](https://github.com/open-telemetry/opentelemetry-specification/pull/2292))
 - Add details for FaaS conventions for Azure Functions and allow FaaS/Cloud
   resources as span attributes on incoming FaaS spans
