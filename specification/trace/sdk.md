@@ -131,7 +131,7 @@ Thus, the SDK specification defines sets of possible requirements for
   others might have an explicit `hasEnded` boolean).
 
   Counts for attributes, events and links dropped due to collection limits MUST be
-  available for exporters to report as described in the [exporters](./sdk_exporters/non-otlp.md#dropped-attributes-count)
+  available for exporters to report as described in the [exporters](../common/mapping-to-non-otlp.md#dropped-attributes-count)
   specification.
 
   A function receiving this as argument might not be able to modify the Span.
