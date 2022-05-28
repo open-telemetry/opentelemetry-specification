@@ -646,7 +646,7 @@ This interface SHOULD have access to:
 
 - The `value` of the measurement.
 - The complete set of `Attributes` of the measurement.
-- The [Context](../context/context.md) of the measurement, which covers the
+- The [Context](../context/README.md) of the measurement, which covers the
   [Baggage](../baggage/api.md) and the current active
   [Span](../trace/api.md#span).
 - A `timestamp` that best represents when the measurement was taken.
@@ -663,7 +663,7 @@ The "offer" method SHOULD accept measurements, including:
 
 - The `value` of the measurement.
 - The complete set of `Attributes` of the measurement.
-- The [Context](../context/context.md) of the measurement, which covers the
+- The [Context](../context/README.md) of the measurement, which covers the
   [Baggage](../baggage/api.md) and the current active
   [Span](../trace/api.md#span).
 - A `timestamp` that best represents when the measurement was taken.

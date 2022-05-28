@@ -26,6 +26,9 @@ release.
 
 ### Logs
 
+- OTLP Logs are now Stable
+  ([#2565](https://github.com/open-telemetry/opentelemetry-specification/pull/2565))
+
 ### Resource
 
 ### Semantic Conventions
@@ -35,6 +38,8 @@ release.
   ([#2502](https://github.com/open-telemetry/opentelemetry-specification/pull/2502))
 - Define attribute requirement levels
   ([#2522](https://github.com/open-telemetry/opentelemetry-specification/pull/2522))
+- Add semantic conventions for Kafka consumer metrics
+  ([#2536](https://github.com/open-telemetry/opentelemetry-specification/pull/2536))
 
 ### Compatibility
 
@@ -78,7 +83,7 @@ release.
 
 ### Resource
 
-- No changes.
+- Add browser.* attributes ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
 
 ### Semantic Conventions
 

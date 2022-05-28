@@ -238,7 +238,7 @@ Returns the sampling Decision for a `Span` to be created.
 
 **Required arguments:**
 
-* [`Context`](../context/context.md) with parent `Span`.
+* [`Context`](../context/README.md) with parent `Span`.
   The Span's SpanContext may be invalid to indicate a root span.
 * `TraceId` of the `Span` to be created.
   If the parent `SpanContext` contains a valid `TraceId`, they MUST always match.

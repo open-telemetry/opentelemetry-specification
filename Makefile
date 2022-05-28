@@ -85,7 +85,7 @@ table-check:
 
 .PHONY: schema-check
 schema-check:
-	cd tools && ./schema_check.sh
+	$(TOOLS_DIR)/schema_check.sh
 
 # Run all checks in order of speed / likely failure.
 .PHONY: check

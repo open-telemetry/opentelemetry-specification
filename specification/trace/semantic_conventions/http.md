@@ -266,9 +266,7 @@ It is strongly recommended to set `http.server_name` to allow associating reques
 
 As an example, if a browser request for `https://example.com:8080/webshop/articles/4?s=1` is invoked from a host with IP 192.0.2.4, we may have the following Span on the client side:
 
-Span name: `/webshop/articles/4` (NOTE: This is subject to change, see [open-telemetry/opentelemetry-specification#270][].)
-
-[open-telemetry/opentelemetry-specification#270]: https://github.com/open-telemetry/opentelemetry-specification/issues/270
+Span name: `HTTP GET`
 
 |   Attribute name   |                                       Value             |
 | :----------------- | :-------------------------------------------------------|

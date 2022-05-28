@@ -153,7 +153,7 @@ association.
 ## Context Interaction
 
 This section defines all operations within the Tracing API that interact with the
-[`Context`](../context/context.md).
+[`Context`](../context/README.md).
 
 The API MUST provide the following functionality to interact with a `Context`
 instance:
@@ -162,10 +162,10 @@ instance:
 - Insert the `Span` to a `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
-access to the [Context Key](../context/context.md#create-a-key) used by the Tracing API implementation.
+access to the [Context Key](../context/README.md#create-a-key) used by the Tracing API implementation.
 
 If the language has support for implicitly propagated `Context` (see
-[here](../context/context.md#optional-global-operations)), the API SHOULD also provide
+[here](../context/README.md#optional-global-operations)), the API SHOULD also provide
 the following functionality:
 
 - Get the currently active span from the implicit context. This is equivalent to getting the implicit context, then extracting the `Span` from the context.

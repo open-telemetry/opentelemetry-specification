@@ -377,10 +377,10 @@ same kind. <sup>[1](#footnotes)</sup>
 
 The basic point kinds are:
 
-1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.0/opentelemetry/proto/metrics/v1/metrics.proto#L198)
-2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.0/opentelemetry/proto/metrics/v1/metrics.proto#L192)
-3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.0/opentelemetry/proto/metrics/v1/metrics.proto#L211)
-4. [Exponential Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/27a10cd70f63afdbddf460881969f9ad7ae4af5d/opentelemetry/proto/metrics/v1/metrics.proto#L239)
+1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L247)
+2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L241)
+3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L260)
+4. [Exponential Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L270)
 
 Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
 not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
@@ -1149,7 +1149,7 @@ The algorithm is scheduled out as follows:
 When the next delta sum reported for a given metric stream does not align with
 where we expect it, one of several things could have occurred:
 
-- the process reporting metrics was rebooted, leading to a new reporting
+- The process reporting metrics was rebooted, leading to a new reporting
   interval for the metric.
 - A Single-Writer principle violation where multiple processes are reporting the
   same metric stream.
@@ -1161,7 +1161,10 @@ that some data was lost, and reset the counter.
 We detect alignment via two mechanisms:
 
 - If the incoming delta time interval has significant overlap with the previous
-  time interval, we assume a violation of the single-writer principle.
+  time interval, we assume a violation of the single-writer principle and can be handled with one of the following options:
+  - Simply report the inconsistencies in time intervals, as the error condition could be caused by a misconfiguration.
+  - Eliminate the overlap / deduplicate on the receiver side.
+  - Correct the inconsistent time intervals by differentiating the given `Resource` and `Attribute` set used from overlapping time.
 - If the incoming delta time interval has a significant gap from the last seen
   time, we assume some kind of reboot/restart and reset the cumulative counter.
 
@@ -1329,7 +1332,9 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
-- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum
+- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum. The following behaviors are expected:
+  - The new data point type must be the same as the accumulated data point type.
+  - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues].(#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
 Sum metric points MUST have `_total` added as a suffix to the metric name.
