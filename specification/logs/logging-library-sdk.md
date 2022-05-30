@@ -43,7 +43,7 @@ Accepts the following parameters: instrumentation scope name, optional version a
 attributes. Returns a LogEmitter associated with the parameters.
 
 The implementation MUST return different `LogEmitter` instances when called repeatedly
-with different values of parameters. Note that always returning a new tracer instance
+with different values of parameters. Note that always returning a new `LogEmitter` instance
 is a valid implementation. The only exception to this rule is no-op `LogEmitter`:
 the implementation MAY return the same instance regardless of parameter values.
 
