@@ -225,9 +225,7 @@ where at least one field value is different.
 When more than one distinct Instrument is registered with the same
 `name` for identical Meters, the implementation SHOULD emit a warning
 to the user informing them of duplicate registration conflict(s).
-
-__Note the warning about duplicate Instrument registration conflicts
-is meant to help avoid the semantic error state described in the
+The warning helps to avoid the semantic error state described in the
 [OpenTelemetry Metrics data
 model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
 when more than one `Metric` is written for a given instrument `name`
