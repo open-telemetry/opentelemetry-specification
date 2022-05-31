@@ -137,7 +137,7 @@ is a valid implementation. The only exception to this rule is no-op `Tracer`:
 the implementation MAY return the same instance regardless of parameter values.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
-with the same name+version+schema_url to pick up configuration changes.
+with the same name+version+schema_url+attributes to pick up configuration changes.
 This can be achieved either by allowing to work with an outdated configuration or
 by ensuring that new configuration applies also to previously returned `Tracer`s.
 
@@ -145,7 +145,7 @@ Note: This could, for example, be implemented by storing any mutable
 configuration in the `TracerProvider` and having `Tracer` implementation objects
 have a reference to the `TracerProvider` from which they were obtained. If
 configuration must be stored per-tracer (such as disabling a certain tracer),
-the tracer could, for example, do a look-up with its name+version+schema_url in
+the tracer could, for example, do a look-up with its name+version+schema_url+attributes in
 a map in the `TracerProvider`, or the `TracerProvider` could maintain a registry
 of all returned `Tracer`s and actively update their configuration if it changes.
 
