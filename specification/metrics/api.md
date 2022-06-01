@@ -354,7 +354,7 @@ asynchronous instrumentation creation, the user MUST be able to undo
 registration of the specific callback after its registration by some means.
 
 Every currently registered Callback associated with an instrument MUST
-be evaluted exactly once during collection prior to reading data for
+be evaluated exactly once during collection prior to reading data for
 that instrument.
 
 Callback functions MUST be documented as follows for the end user:
@@ -1098,7 +1098,7 @@ For example,
 class Device:
     """A device with two instruments"""
 
-    def __init__(self, meter, proeprty):
+    def __init__(self, meter, property):
         self.property = property
         self.usage = meter.create_observable_counter(name="usage", description="count of items used")
         self.pressure = meter.create_observable_gauge(name="pressure", description="force per unit area")
