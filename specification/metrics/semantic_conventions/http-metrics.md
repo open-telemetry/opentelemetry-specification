@@ -20,8 +20,8 @@ Below is a table of HTTP server metric instruments.
 | Name                          | Instrument Type ([*](README.md#instrument-types)) | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                                                  |
 |-------------------------------|---------------------------------------------------|--------------|-------------------------------------------|------------------------------------------------------------------------------|
 | `http.server.duration`        | Histogram                                         | milliseconds | `ms`                                      | measures the duration inbound HTTP requests                                  |
-| `http.server.request.size`    | Histogram                                         | Bytes        | `By`                                      | measures the size of HTTP request messages (compressed)                      |
-| `http.server.response.size`   | Histogram                                         | Bytes        | `By`                                      | measures the size of HTTP response messages (compressed)                     |
+| `http.server.request.size`    | Histogram                                         | bytes        | `by`                                      | measures the size of HTTP request messages (compressed)                      |
+| `http.server.response.size`   | Histogram                                         | bytes        | `by`                                      | measures the size of HTTP response messages (compressed)                     |
 | `http.server.active_requests` | UpDownCounter                                     | requests     | `{requests}`                              | measures the number of concurrent HTTP requests that are currently in-flight |
 
 ### HTTP Client
@@ -31,8 +31,8 @@ Below is a table of HTTP client metric instruments.
 | Name                        | Instrument Type ([*](README.md#instrument-types)) | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                              |
 |-----------------------------|---------------------------------------------------|--------------|-------------------------------------------|----------------------------------------------------------|
 | `http.client.duration`      | Histogram                                         | milliseconds | `ms`                                      | measures the duration outbound HTTP requests             |
-| `http.client.request.size`  | Histogram                                         | milliseconds | `ms`                                      | measures the size of HTTP request messages (compressed)  |
-| `http.client.response.size` | Histogram                                         | milliseconds | `ms`                                      | measures the size of HTTP response messages (compressed) |
+| `http.client.request.size`  | Histogram                                         | bytes        | `by`                                      | measures the size of HTTP request messages (compressed)  |
+| `http.client.response.size` | Histogram                                         | bytes        | `by`                                      | measures the size of HTTP response messages (compressed) |
 
 ## Attributes
 
