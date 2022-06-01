@@ -367,7 +367,7 @@ to select an aggregation and configuration parameters.
 | [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
 | [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation)                               |
 | [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation) |
 
@@ -387,7 +387,7 @@ The monotonicity of the aggregation is determined by the instrument type:
 | [Histogram](./api.md#histogram) | Monotonic |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
 This Aggregation does not have any configuration parameters.
 
@@ -611,7 +611,7 @@ api.context.with(api.trace.setSpan(api.context.active(), span), () => {
 })
 ```
 
-Then an examplar output in OTLP would consist of:
+Then an exemplar output in OTLP would consist of:
 
 - The `value` of 1.
 - The `time` when the `add` method was called
