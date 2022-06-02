@@ -12,6 +12,7 @@
 - [Recommended](#recommended)
 - [Optional](#optional)
 - [Performance suggestions](#performance-suggestions)
+- [Changing requirement level](#changing-requirement-level)
 
 <!-- tocstop -->
 
@@ -33,6 +34,8 @@ For example, Metric attributes that may have high cardinality can only be define
 Semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from the referred semantic convention applies.
 
 For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
+
+Semantic conventions MAY changed requirement level on attribute in a backward-compatible manner, see [Changing requirement level](#changing-requirement-level) for details.
 
 ## Required
 
@@ -67,3 +70,31 @@ Here are several examples of expensive operations to be avoided by default:
 - DNS lookup to populate `net.peer.name` if only IP address is available to the instrumentation. Caching lookup results does not solve the issue for all possible cases and should be avoided by default too.
 - forcing `http.route` calculation before HTTP framework calculates it
 - reading response stream to find `http.response_content_length` when `Content-Length` header is not available
+
+## Changing requirement level
+
+Requirement level change is backward compatible if and only if the set of cases when previous version populates it, is a subset of cases when new version would populate it.
+
+- Requirement level MAY be increased from relaxed to more strict level if it does not add new conditions that limit when attribute is populated. Examples of such changes are:
+  - `Optional` to `Recommended`
+  - `Recommended` to `Required`
+  - `Conditionally Required` to `Required`
+  - `Optional` to `Conditionally Required` is allowed if the condition does not restrict attribute from being populated if explicitly enabled.
+  - `Recommended` to `Conditionally Required` is allowed if the condition allows to populate the attribute when it's not satisfied
+
+- Condition for `Conditionally Required` attribute can be changed as long as previous condition still satisfies the new one.
+
+Semantic conventions SHOULD start with relaxed requirement levels and non-restrictive conditions whenever possible and SHOULD increase levels only when necessary based on telemetry consumers needs.
+
+_Note: There could be other requirements on [Telemetry Stability](../telemetry-stability.md) that can limit semantic convention evolution or prevent instrumentations from adopting new versions._
+
+Examples of backward-compatible changes:
+
+- Changing `http.url` requirement level from `Recommended` to `Required`. `http.url` would be populated in all cases it was populated before; Consumers of telemetry don't have to change their behavior.
+- Changing condition on `db.operation` from "If `db.statement` is not applicable" to "If `db.statement` is not applicable or not provided".
+- Changing `http.request.header.host` level from `Optional` to `Conditionally Required` with following condition: 'if request-target is in absolute-form and authority component is not the same as `Host` header'.  There is no need to mention that attribute can be explicitly enabled - when condition is not satisfied, `Conditionally Required` attributes are considered `Optional` by default.
+
+Examples of backward-incompatible changes:
+
+- Changing [`faas.invoked_name`](../trace/semantic_conventions/faas.md) level from `Required` to `Recommended`. Telemetry consumers which used to rely on the presence of this attribute have to change their behavior.
+- Changing condition on [`rpc.jsonrpc.version`](../trace/semantic_conventions/rpc.md) from "If different than the default version `1.0`" to "If different than the default version `2.0`"
