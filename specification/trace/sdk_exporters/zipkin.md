@@ -3,7 +3,7 @@
 **Status**: [Stable](../../document-status.md)
 
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
-The generic transformation [rules specified here](non-otlp.md) also apply. If a
+The generic transformation [rules specified here](../../common/mapping-to-non-otlp.md) also apply. If a
 particular generic transformation rule and the rule in this document contradict
 then the rule in this document MUST be used.
 
@@ -26,11 +26,11 @@ and Zipkin.
 | Span.StartTime             | Span.timestamp   | See [Unit of time](#unit-of-time)                                                             |
 | Span.EndTime               | Span.duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
 | Span.Attributes            | Add to Span.tags | See [Attributes](../../common/README.md#attribute) for data types for the mapping.           |
-| Span.DroppedAttributesCount| Add to Span.tags | See [Dropped Attributes Count](non-otlp.md#dropped-attributes-count) for tag name to use.     |
+| Span.DroppedAttributesCount| Add to Span.tags | See [Dropped Attributes Count](../../common/mapping-to-non-otlp.md#dropped-attributes-count) for tag name to use.     |
 | Span.Events                | Span.annotations | See [Events](#events) for the mapping format.                                                 |
-| Span.DroppedEventsCount    | Add to Span.tags | See [Dropped Events Count](non-otlp.md#dropped-events-count) for tag name to use.             |
+| Span.DroppedEventsCount    | Add to Span.tags | See [Dropped Events Count](../../common/mapping-to-non-otlp.md#dropped-events-count) for tag name to use.             |
 | Span.Links                 | TBD              | TBD                                                                                           |
-| Span.DroppedLinksCount     | Add to Span.tags | See [Dropped Links Count](non-otlp.md#dropped-links-count) for tag name to use.               |
+| Span.DroppedLinksCount     | Add to Span.tags | See [Dropped Links Count](../../common/mapping-to-non-otlp.md#dropped-links-count) for tag name to use.               |
 | Span.Status                | Add to Span.tags | See [Status](#status) for tag names to use.                                                   |
 
 TBD : This is work in progress document and it is currently doesn't specify
@@ -131,7 +131,7 @@ TBD: add examples
 ### Status
 
 This section overrides the
-[generic Status mapping rule](non-otlp.md#span-status).
+[generic Status mapping rule](../../common/mapping-to-non-otlp.md#span-status).
 
 Span `Status` MUST be reported as a key-value pair in `tags` to Zipkin, unless it is `UNSET`.
 In the latter case it MUST NOT be reported.
