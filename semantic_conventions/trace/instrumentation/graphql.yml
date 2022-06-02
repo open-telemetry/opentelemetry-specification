@@ -24,8 +24,8 @@ groups:
               value: "subscription"
               brief: "GraphQL subscription"
         examples: ['query', 'mutation', 'subscription']
-      - id: operation.body
-        brief: "The GraphQL query being executed."
+      - id: document
+        brief: "The GraphQL document being executed."
         type: string
         note: The value may be sanitized to exclude sensitive information.
         examples: 'query findBookById { bookById(id: ?) { name } }'
