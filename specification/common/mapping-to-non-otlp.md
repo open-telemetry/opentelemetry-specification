@@ -1,8 +1,8 @@
 # OpenTelemetry Transformation to non-OTLP Formats
 
-**Status**: [Stable](../../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-All OpenTelemetry concepts and span data recorded using OpenTelemetry API can be
+All OpenTelemetry concepts and data recorded using OpenTelemetry API can be
 directly and precisely represented using corresponding messages and fields of
 OTLP format. However, for other formats this is not always the case. Sometimes a
 format will not have a native way to represent a particular OpenTelemetry
@@ -15,16 +15,17 @@ equivalent in those other formats.
 Note: when a format has a direct semantic equivalent for a particular field or
 concept then the recommendation in this document MUST be ignored.
 
-See also additional specific transformation rules for [Jaeger](jaeger.md) and
-[Zipkin](zipkin.md). The specific rules for Jaeger and Zipkin take precedence
-over the generic rules defined in this document.
+See also additional specific transformation rules for
+[Jaeger](../trace/sdk_exporters/jaeger.md) and [Zipkin](../trace/sdk_exporters/zipkin.md).
+The specific rules for Jaeger and Zipkin take precedence over the generic rules defined
+in this document.
 
 ## Mappings
 
 ### InstrumentationScope
 
 OpenTelemetry `InstrumentationScope`'s fields MUST be reported as key-value
-pairs associated with the Span using the following mapping:
+pairs associated with the Span, Metric Data Point or LogRecord using the following mapping:
 
 | OpenTelemetry InstrumentationScope Field | non-OTLP Key | Notes |
 | ------------------- | --- | --- |
@@ -54,11 +55,9 @@ key-value pairs:
 
 ### Dropped Attributes Count
 
-OpenTelemetry Span's dropped attributes count MUST be reported as a key-value
-pair associated with the Span. Similarly, Span Event's dropped attributes count
-MUST be reported as a key-value pair associated with the Span Event and Span Link's
-dropped attributes count MUST be reported as a key-value pair associated with the
-Span Link. In all cases the key name MUST be `otel.dropped_attributes_count`.
+OpenTelemetry dropped attributes count MUST be reported as a key-value
+pair associated with the corresponding data entity (e.g. Span, Span Link, Span Event,
+Metric data point, LogRecord, etc). The key name MUST be `otel.dropped_attributes_count`.
 
 This key-value pair should only be recorded when it contains a non-zero value.
 
