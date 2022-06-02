@@ -115,7 +115,7 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 ### gRPC Attributes
 
-Below is a table of attributes that SHOULD be included on client and server RPC measurements when `rpc.system` is `"grpc"`. 
+Below is a table of attributes that SHOULD be included on client and server RPC measurements when `rpc.system` is `"grpc"`.
 
 <!-- semconv rpc -->
 | Attribute                                                                         | Type | Description                                                                                                  | Examples | Required |
