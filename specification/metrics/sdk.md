@@ -173,10 +173,9 @@ are the inputs:
     _instrument name == "Foobar"_ and _instrument type is Histogram_, it will be
     treated as _(instrument name == "Foobar") AND (instrument type is
     Histogram)_.
-  * If _none_ the optional criteria is provided, the SDK SHOULD treat it as an
-    error. It is recommended that the SDK implementations fail fast. Please
-    refer to [Error handling in OpenTelemetry](../error-handling.md) for the
-    general guidance.
+  * If no criteria is provided, the SDK SHOULD treat it as an error. It is
+    recommended that the SDK implementations fail fast. Please refer to [Error
+    handling in OpenTelemetry](../error-handling.md) for the general guidance.
 * The `name` of the View (optional). If not provided, the Instrument `name`
   MUST be used by default. This will be used as the name of the [metrics
   stream](./datamodel.md#events--data-stream--timeseries).
