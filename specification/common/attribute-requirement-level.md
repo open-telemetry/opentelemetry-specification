@@ -73,6 +73,8 @@ Here are several examples of expensive operations to be avoided by default:
 
 ## Changing requirement level
 
+_Note: Requirement level compatibility applies to telemetry consumers only. When semantic convention is updated from version `X` to version `Y` in a backward-compatible manner, consumers that only support version `X` would be fully compatible with telemetry version `Y`._
+
 Requirement level change is backward compatible if and only if the set of cases when previous version populates it, is a subset of cases when new version would populate it.
 
 - Requirement level MAY be increased from relaxed to more strict level if it does not add new conditions that limit when attribute is populated. Examples of such changes are:
