@@ -80,6 +80,3 @@ This key-value pair should only be recorded when it contains a non-zero value.
 Exporters to formats that don't have a concept that is equivalent to the Scope
 SHOULD record the attributes at the most suitable place in their corresponding format,
 typically at the Span, Metric or LogRecord equivalent.
-
-If the same attribute is specified both at the Span/Metric/LogRecord and at the Scope
-then the attribute value at Span/Metric/LogRecord takes precedence.
