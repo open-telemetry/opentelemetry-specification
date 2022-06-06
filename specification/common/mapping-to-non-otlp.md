@@ -78,7 +78,7 @@ This key-value pair should only be recorded when it contains a non-zero value.
 ### Instrumentation Scope Attributes
 
 Exporters to formats that don't have a concept that is equivalent to the Scope
-will record the attributes at the most suitable place in their corresponding format,
+SHOULD record the attributes at the most suitable place in their corresponding format,
 typically at the Span, Metric or LogRecord equivalent.
 
 If the same attribute is specified both at the Span/Metric/LogRecord and at the Scope

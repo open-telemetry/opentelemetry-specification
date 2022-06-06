@@ -42,10 +42,10 @@ Methods:
 Accepts the following parameters: instrumentation scope name, optional version and
 attributes. Returns a LogEmitter associated with the parameters.
 
-The implementation MUST return different `LogEmitter` instances when called repeatedly
+Implementations MUST return different `LogEmitter` instances when called repeatedly
 with different values of parameters. Note that always returning a new `LogEmitter` instance
-is a valid implementation. The only exception to this rule is no-op `LogEmitter`:
-the implementation MAY return the same instance regardless of parameter values.
+is a valid implementation. The only exception to this rule is the no-op `LogEmitter`:
+implementations MAY return the same instance regardless of parameter values.
 
 It is unspecified whether or under which conditions the same or different
 `LogEmitter` instances are returned from this functions when the same
