@@ -128,7 +128,7 @@ This API MUST accept the following parameters:
   has a version (e.g. a library version). Example value: `1.0.0`.
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
-- [since 1.12.0] `attributes` (optional): Specifies the instrumentation scope attributes
+- [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
   to associate with emitted telemetry.
 
 Implementations MUST return different `Tracer` instances when called repeatedly
