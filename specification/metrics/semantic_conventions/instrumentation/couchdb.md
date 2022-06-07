@@ -17,7 +17,7 @@ This document defines how to apply semantic conventions when instrumenting Couch
 | Name                                | Instrument    | Value type | Unit       | Unit ([UCUM](../README.md#instrument-units)) | Description                         | Attribute Key | Attribute Values |
 |-------------------------------------| ------------- | ---------- | ---------- | -------------------------------------------- | ----------------------------------- | ------------- | ---------------- |
 | db.couchdb.average.request.time     | Gauge         | Double     | average    | `{average}`  | The average duration of a served request. | | |
-| db.couchdb.httpd.bulk.request.count | UpDownCounter | Int64      | count      | `{count} ` |The number of bulk requests. | | |
+| db.couchdb.httpd.bulk.request.count | UpDownCounter | Int64      | count      | `{count}` |The number of bulk requests. | | |
 | db.couchdb.httpd.request.count      | Counter       | Int64      | size       | `{count}` | The number of HTTP requests by method. | `http.method` | `COPY`, `DELETE`, `GET`, `HEAD`, `OPTIONS`, `POST`, `PUT` |
 | db.couchdb.httpd.response.count     | Counter       | Int64      | count      | `{count}` | The number of connections. | ` http.status_code` | An HTTP status code. |
 | db.couchdb.httpd.view.count         | Counter       | Int64      | count      | `{count}` | The number of views read. | `view` | `temporary_view_reads`, `view_reads` | 

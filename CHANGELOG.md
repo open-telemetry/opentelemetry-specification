@@ -938,6 +938,8 @@ New:
   ([#1154](https://github.com/open-telemetry/opentelemetry-specification/pull/1154))
 - Add OTEL_TRACE_SAMPLER_ARG env variable definition
   ([#1202](https://github.com/open-telemetry/opentelemetry-specification/pull/1202))
+- Add semantic conventions for Mongodb and add specific attributes.
+  ([#2582](https://github.com/open-telemetry/opentelemetry-specification/pull/2582))
 
 Updates:
 
