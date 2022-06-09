@@ -24,7 +24,7 @@ release.
 - Specify optional support for an Exponential Histogram Aggregation.
   ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252)).
 - Change JVM runtime metric `process.runtime.jvm.memory.max`
-  to `process.runtime.jvm.memory.limit` 
+  to `process.runtime.jvm.memory.limit`
 - ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).
 
 ### Logs
