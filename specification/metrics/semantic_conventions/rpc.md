@@ -146,5 +146,3 @@ Below is a table of attributes that SHOULD be included on client and server RPC 
 <!-- endsemconv -->
 
 [gRPC]: https://grpc.io/
-
-[gRPC]: https://grpc.io/

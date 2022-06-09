@@ -22,7 +22,9 @@ release.
 - Add database connection pool metrics semantic conventions
   ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
 - Specify optional support for an Exponential Histogram Aggregation.
-  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
+  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252)).
+- Add `rpc.grpc.status_code` to RPC metric semantic conventions
+  ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604)).
 
 ### Logs
 
