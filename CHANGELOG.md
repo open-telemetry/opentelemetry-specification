@@ -22,7 +22,10 @@ release.
 - Add database connection pool metrics semantic conventions
   ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
 - Specify optional support for an Exponential Histogram Aggregation.
-  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
+  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252)).
+- Add `http.*.*.size` metric semantic conventions for tracking size of requests
+  / responses for http servers / clients
+  ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588)).
 
 ### Logs
 
