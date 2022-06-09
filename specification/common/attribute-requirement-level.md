@@ -81,12 +81,11 @@ Requirement level change is backward compatible if and only if the set of cases 
   - `Optional` to `Recommended`
   - `Recommended` to `Required`
   - `Conditionally Required` to `Required`
-  - `Optional` to `Conditionally Required` is allowed if the condition does not restrict attribute from being populated if explicitly enabled.
-  - `Recommended` to `Conditionally Required` is allowed if the condition allows to populate the attribute when it's not satisfied
-
+  - `Optional` to `Conditionally Required` is allowed if the condition does not restrict attribute from being populated if explicitly enabled
+  - `Recommended` to `Conditionally Required` is allowed if the condition allows the attribute to be populated when it's not satisfied
 - Condition for `Conditionally Required` attribute can be changed as long as previous condition still satisfies the new one.
 
-Semantic conventions SHOULD start with relaxed requirement levels and non-restrictive conditions whenever possible and SHOULD increase levels only when necessary based on telemetry consumers needs.
+Semantic conventions SHOULD start with relaxed requirement levels and non-restrictive conditions whenever possible and SHOULD increase levels only when necessary based on telemetry consumer needs.
 
 _Note: There could be other requirements on [Telemetry Stability](../telemetry-stability.md) that can limit semantic convention evolution or prevent instrumentations from adopting new versions._
 
