@@ -73,9 +73,7 @@ Here are several examples of expensive operations to be avoided by default:
 
 ## Changing requirement level
 
-_Note: Requirement level compatibility applies to telemetry consumers only. When semantic convention is updated from version `X` to version `Y` in a backward-compatible manner, consumers that only support version `X` would be fully compatible with telemetry version `Y`._
-
-Requirement level change is backward compatible if and only if the set of cases when previous version populates it, is a subset of cases when new version would populate it.
+Semantic conventions may change requirement levels for attributes. Such change is considered backward-compatible if and only if telemetry consumers that only support initial version will stay fully compatible with the new version if this change is implemented by instrumentations.
 
 - Requirement level MAY be increased from relaxed to more strict level if it does not add new conditions that limit when attribute is populated. Examples of such changes are:
   - `Optional` to `Recommended`
@@ -85,7 +83,7 @@ Requirement level change is backward compatible if and only if the set of cases 
   - `Recommended` to `Conditionally Required` is allowed if the condition allows the attribute to be populated when it's not satisfied
 - Condition for `Conditionally Required` attribute can be changed as long as previous condition still satisfies the new one.
 
-Semantic conventions SHOULD start with relaxed requirement levels and non-restrictive conditions whenever possible and SHOULD increase levels only when necessary based on telemetry consumer needs.
+Semantic conventions SHOULD start with relaxed requirement levels and non-restrictive conditions and increase levels only when necessary based on telemetry consumer needs.
 
 _Note: There could be other requirements on [Telemetry Stability](../telemetry-stability.md) that can limit semantic convention evolution or prevent instrumentations from adopting new versions._
 
@@ -98,4 +96,4 @@ Examples of backward-compatible changes:
 Examples of backward-incompatible changes:
 
 - Changing [`faas.invoked_name`](../trace/semantic_conventions/faas.md) level from `Required` to `Recommended`. Telemetry consumers which used to rely on the presence of this attribute have to change their behavior.
-- Changing condition on [`rpc.jsonrpc.version`](../trace/semantic_conventions/rpc.md) from "If different than the default version `1.0`" to "If different than the default version `2.0`"
+- Changing condition on [`rpc.jsonrpc.version`](../trace/semantic_conventions/rpc.md) from "If different than the default version `1.0`" to "If different than the default version `2.0`".
