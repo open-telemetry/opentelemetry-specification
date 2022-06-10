@@ -173,10 +173,9 @@ are the inputs:
     _instrument name == "Foobar"_ and _instrument type is Histogram_, it will be
     treated as _(instrument name == "Foobar") AND (instrument type is
     Histogram)_.
-  * If _none_ the optional criteria is provided, the SDK SHOULD treat it as an
-    error. It is recommended that the SDK implementations fail fast. Please
-    refer to [Error handling in OpenTelemetry](../error-handling.md) for the
-    general guidance.
+  * If no criteria is provided, the SDK SHOULD treat it as an error. It is
+    recommended that the SDK implementations fail fast. Please refer to [Error
+    handling in OpenTelemetry](../error-handling.md) for the general guidance.
 * The `name` of the View (optional). If not provided, the Instrument `name`
   MUST be used by default. This will be used as the name of the [metrics
   stream](./datamodel.md#events--data-stream--timeseries).
@@ -367,7 +366,7 @@ to select an aggregation and configuration parameters.
 | [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
 | [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation)                               |
 | [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation) |
 
@@ -387,7 +386,7 @@ The monotonicity of the aggregation is determined by the instrument type:
 | [Histogram](./api.md#histogram) | Monotonic |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
 This Aggregation does not have any configuration parameters.
 
@@ -611,7 +610,7 @@ api.context.with(api.trace.setSpan(api.context.active(), span), () => {
 })
 ```
 
-Then an examplar output in OTLP would consist of:
+Then an exemplar output in OTLP would consist of:
 
 - The `value` of 1.
 - The `time` when the `add` method was called

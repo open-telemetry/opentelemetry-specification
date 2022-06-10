@@ -35,11 +35,15 @@ release.
 
 ### Semantic Conventions
 
+- Add semantic conventions for JVM CPU metrics
+  ([#2292](https://github.com/open-telemetry/opentelemetry-specification/pull/2292))
 - Add details for FaaS conventions for Azure Functions and allow FaaS/Cloud
   resources as span attributes on incoming FaaS spans
   ([#2502](https://github.com/open-telemetry/opentelemetry-specification/pull/2502))
 - Define attribute requirement levels
   ([#2522](https://github.com/open-telemetry/opentelemetry-specification/pull/2522))
+- Add semantic conventions for Kafka consumer metrics
+  ([#2536](https://github.com/open-telemetry/opentelemetry-specification/pull/2536))
 
 ### Compatibility
 

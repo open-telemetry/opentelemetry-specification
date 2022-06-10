@@ -225,9 +225,7 @@ where at least one field value is different.
 When more than one distinct Instrument is registered with the same
 `name` for identical Meters, the implementation SHOULD emit a warning
 to the user informing them of duplicate registration conflict(s).
-
-__Note the warning about duplicate Instrument registration conflicts
-is meant to help avoid the semantic error state described in the
+The warning helps to avoid the semantic error state described in the
 [OpenTelemetry Metrics data
 model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
 when more than one `Metric` is written for a given instrument `name`
@@ -355,9 +353,9 @@ Where the API supports registration of `callback` functions after
 asynchronous instrumentation creation, the user MUST be able to undo
 registration of the specific callback after its registration by some means.
 
-Every registered Callback associated with a set of instruments MUST
+Every currently registered Callback associated with a set of instruments MUST
 be evaluated exactly once during collection prior to reading data for
-that instrument. The evaluation is identified using a combination of the
+that set. The evaluation is identified using a combination of the
 callback itself, and the instruments set.
 
 Callback functions MUST be documented as follows for the end user:
@@ -1101,7 +1099,7 @@ For example,
 class Device:
     """A device with two instruments"""
 
-    def __init__(self, meter, proeprty):
+    def __init__(self, meter, property):
         self.property = property
         self.usage = meter.create_observable_counter(name="usage", description="count of items used")
         self.pressure = meter.create_observable_gauge(name="pressure", description="force per unit area")
