@@ -18,7 +18,7 @@ metrics can be filtered for finer grain analysis.
 - [Attributes](#attributes)
   * [Service name](#service-name)
 - [gRPC conventions](#grpc-conventions)
-  * [gRPC attributes](#grpc-attributes)
+  * [gRPC Attributes](#grpc-attributes)
 
 <!-- tocstop -->
 
