@@ -51,7 +51,6 @@ release.
 - Clarify MetricReader.Collect result
   ([#2495](https://github.com/open-telemetry/opentelemetry-specification/pull/2495)).
 - Specify optional support for an Exponential Histogram Aggregation.
-  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252)).
   ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
 - Update Prometheus Sums for handling delta counter case
   ([#2570](https://github.com/open-telemetry/opentelemetry-specification/pull/2570)).
