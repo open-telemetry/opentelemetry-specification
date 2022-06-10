@@ -87,6 +87,8 @@ release.
 - Change JVM runtime metric `process.runtime.jvm.memory.max`
   to `process.runtime.jvm.memory.limit`
 - ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).
+- Add `net.app.protocol.*` attributes
+  ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
 
 ### Compatibility
 
