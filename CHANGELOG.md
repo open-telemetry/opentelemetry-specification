@@ -84,6 +84,9 @@ release.
   ([#2550](https://github.com/open-telemetry/opentelemetry-specification/pull/2550)).
 - Add browser.* attributes
   ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
+- Change JVM runtime metric `process.runtime.jvm.memory.max`
+  to `process.runtime.jvm.memory.limit`
+- ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).
 
 ### Compatibility
 
