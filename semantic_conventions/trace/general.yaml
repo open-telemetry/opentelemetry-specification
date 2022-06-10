@@ -6,18 +6,12 @@ groups:
     attributes:
       - id: transport
         type:
-          allow_custom_values: false
+          allow_custom_values: true
           members:
             - id: ip_tcp
               value: "ip_tcp"
             - id: ip_udp
               value: "ip_udp"
-            - id: ip
-              value: "ip"
-              brief: 'Another IP-based protocol'
-            - id: unix
-              value: "unix"
-              brief: 'Unix Domain socket. See below.'
             - id: pipe
               value: "pipe"
               brief: 'Named or anonymous pipe. See note below.'
@@ -48,31 +42,80 @@ groups:
       - id: peer.ip
         type: string
         brief: >
-          Remote address of the peer (dotted decimal for IPv4 or
+          Remote address of the logical peer (dotted decimal for IPv4 or
           [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6)
         examples: '127.0.0.1'
-      - id: peer.port
+      - id: sock.peer.name
+        type: string
+        brief: >
+          Remote socket peer name.
+        examples: proxy.example.com
+      - id: sock.peer.addr
+        type: string
+        brief: >
+          Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
+           [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)).
+        note: >
+          Can be obtained by calling `getpeername` method on [Linux](https://man7.org/linux/man-pages/man2/getpeername.2.html)
+          or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getpeername)
+          with format specific to protocol address family.
+        examples: ['127.0.0.1', '/tmp/mysql.sock' ]
+      - id: sock.peer.port
         type: int
-        brief: 'Remote port number.'
-        examples: [80, 8080, 443]
+        requirement_level: 
+          conditionally_required: if `net.sock.peer.addr` is set and `net.sock.family` has a notion of port
+        brief: 'Remote socket peer port (if defined for the address family).'
+        examples: 16456
+      - id: sock.family
+        type:
+          allow_custom_values: true
+          members:
+            - id: inet
+              value: 'AF_INET'
+              brief: "IPv4 address"
+            - id: inet6
+              value: 'AF_INET6'
+              brief: "IPv6 address"
+            - id: unix
+              value: 'AF_UNIX'
+              brief: "Unix domain socket path/"
+        requirement_level: 
+          conditionally_required: if different than `AF_INET` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set
+        brief: >
+          Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication.
+        examples: ['AF_INET', 'AF_BLUETOOTH']
       - id: peer.name
         type: string
-        brief: 'Remote hostname or similar, see note below.'
+        brief: 'Logical remote hostname, see note below.'
         examples: 'example.com'
         note: >
           `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
-      - id: host.ip
-        type: string
-        brief: 'Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.'
-        examples: '192.168.0.1'
-      - id: host.port
+      - id: peer.port
         type: int
-        brief: 'Like `net.peer.port` but for the host port.'
-        examples: 35555
+        brief: 'Logical remote port number'
+        examples: [80, 8080, 443]
       - id: host.name
         type: string
-        brief: 'Local hostname or similar, see note below.'
+        brief: 'Logical local hostname or similar, see note below.'
         examples: 'localhost'
+      - id: host.port
+        type: int
+        brief: 'Logical local port number, preferably the one that the peer used to connect'
+        examples: 8080
+      - id: sock.host.addr
+        type: string
+        brief: 'Like `net.sock.peer.addr` but for the host IP. Useful in case of a multi-IP host.'
+        note: >
+          Can be obtained by calling `getsockname` method on [Linux](https://man7.org/linux/man-pages/man2/getsockname.2.html)
+          or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getsockname)
+          with format specific to protocol address family.
+        examples: '192.168.0.1'
+      - id: sock.host.port
+        type: int
+        requirement_level:
+          conditionally_required: if `net.sock.host.addr` is set and `net.sock.family` has a notion of port
+        brief: 'Local socket peer port (if defined for the address family).'
+        examples: 35555
       - id: host.connection.type
         type:
           allow_custom_values: true
