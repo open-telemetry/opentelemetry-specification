@@ -37,10 +37,27 @@ Logging Library SDK contains the following components:
 
 Methods:
 
-- Get LogEmitter. Accepts the instrumentation scope name and version and returns
-  a LogEmitter associated with the instrumentation scope.
-- Shutdown.
-- ForceFlush.
+#### Get LogEmitter
+
+Accepts the following parameters: instrumentation scope name, optional version and
+attributes. Returns a LogEmitter associated with the parameters.
+
+Implementations MUST return different `LogEmitter` instances when called repeatedly
+with different values of parameters. Note that always returning a new `LogEmitter` instance
+is a valid implementation. The only exception to this rule is the no-op `LogEmitter`:
+implementations MAY return the same instance regardless of parameter values.
+
+It is unspecified whether or under which conditions the same or different
+`LogEmitter` instances are returned from this functions when the same
+(name,version,attributes) parameters are used.
+
+#### Shutdown
+
+TBD
+
+#### ForceFlush
+
+TBD
 
 LogEmitterProvider can be configured at startup time, to be associated with a
 Resource and with LogProcessor/LogExporter pipeline.
