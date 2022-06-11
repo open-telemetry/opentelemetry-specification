@@ -32,6 +32,9 @@ release.
 
 ### Common
 
+- Introduce Instrumentation Scope Attributes
+  ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
+
 ## v1.12.0 (2022-06-10)
 
 ### Context
