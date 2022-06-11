@@ -35,9 +35,11 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | Attribute  | Type | Description  | Examples  | Required |
 |---|---|---|---|---|
 | `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | No |
+| `net.app.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | No |
+| `net.app.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | No |
 | `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
 | `net.peer.port` | int | Remote port number. | `80`; `8080`; `443` | No |
-| `net.peer.name` | string | Remote hostname or similar, see note below. [1] | `example.com` | No |
+| `net.peer.name` | string | Remote hostname or similar, see note below. [2] | `example.com` | No |
 | `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
 | `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
 | `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
@@ -48,7 +50,9 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | No |
 | `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | No |
 
-**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
+**[1]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+
+**[2]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 `net.transport` MUST be one of the following:
 
