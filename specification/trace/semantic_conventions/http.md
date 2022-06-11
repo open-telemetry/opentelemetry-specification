@@ -349,7 +349,7 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET /hello - 200 (CLIENT, trace=t1, span=s4 ])
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4)
       |
       --- server (SERVER, trace=t1, span=s5)
 ```
@@ -361,7 +361,7 @@ GET / - 302 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET /hello - 200 (CLIENT, trace=t2, span=s1 ])
+GET /hello - 200 (CLIENT, trace=t2, span=s1)
  |
  --- server (SERVER, trace=t2, span=s2)
 ```
