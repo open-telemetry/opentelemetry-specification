@@ -15,6 +15,8 @@
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
   * [SDK Span creation](#sdk-span-creation)
+  * [Sampler Provider](#sampler-provider)
+    + [GetSampler](#getsampler)
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
     + [GetDescription](#getdescription)
