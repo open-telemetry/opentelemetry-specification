@@ -63,9 +63,9 @@ stored on the created `Tracer`.
 
 Configuration (i.e., [SpanProcessors](#span-processor),
 [IdGenerator](#id-generators), [SpanLimits](#span-limits) and
-[`SamplerProvider`](#sampling)) MUST be managed solely by the `TracerProvider`
-and it MUST provide some way to configure all of them that are implemented in
-the SDK, at least when creating or initializing it.
+[`Sampler`](#sampling) or [`SamplerProvider`](#sampling)) MUST be managed solely
+by the `TracerProvider` and it MUST provide some way to configure all of them
+that are implemented in the SDK, at least when creating or initializing it.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -229,10 +229,11 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
 
 ### Sampler Provider
 
-Each `TracerProvider` is configured to use a `SamplerProvider` to get the
-`Sampler` for a `Tracer` to use when starting a `Span`. The `SamplerProvider` is
-passed the [`InstrumentationScope`](../glossary.md#instrumentation-scope) for a
-`Tracer` and returns the `Sampler` to use.
+The SDK MAY support the `TracerProvider` being configured to use a
+`SamplerProvider` to get the `Sampler` for a `Tracer` to use when starting a
+`Span`. The `SamplerProvider` is passed the
+[`InstrumentationScope`](../glossary.md#instrumentation-scope) for a `Tracer`
+and returns the `Sampler` to use.
 
 By default the builtin `SamplerProvider` MUST return the `Sampler`
 `ParentBased(root=AlwaysOn)` for any `InstrumentationScope`. The builtin
@@ -241,6 +242,9 @@ on the name or (name,version) pair of the `InstrumentationScope`. For example,
 in an HTTP server the user may define an `InstrumentationScope` for each route
 in their service and configure the `SamplerProvider` to return the `AlwaysOff`
 sampler for the `/healthcheck` scope.
+
+Alternatively, the `Sampler` `ShouldSample` function can be extended to accept
+the `InstrumentationScope` as an additional argument.
 
 #### GetSampler
 
@@ -276,6 +280,11 @@ Returns the sampling Decision for a `Span` to be created.
 * Collection of links that will be associated with the `Span` to be created.
   Typically useful for batch operations, see
   [Links Between Spans](../overview.md#links-between-spans).
+
+**Optional arguments:**
+
+* `InstrumentationScope`: If the SDK does not support `SamplerProviders` then it
+  MUST include the `InstrumentationScope` as an argument.
 
 Note: Implementations may "bundle" all or several arguments together in a single
 object.
