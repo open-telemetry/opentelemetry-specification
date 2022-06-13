@@ -270,7 +270,7 @@ supports both - push and pull model of setting the `Metric` value.
 
 ### Metrics data model and SDK
 
-Metrics data model is [specified here](metrics/datamodel.md) and is based on
+Metrics data model is [specified here](metrics/data-model.md) and is based on
 [metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
 This data model defines three semantics: An Event model used by the API, an
 in-flight data model used by the SDK and OTLP, and a TimeSeries model which
@@ -288,7 +288,7 @@ validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
-See [Metrics Data Model Specification](metrics/datamodel.md) for more
+See [Metrics Data Model Specification](metrics/data-model.md) for more
 information.
 
 ## Log Signal
