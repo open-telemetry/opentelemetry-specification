@@ -94,7 +94,7 @@ SDK](../overview.md#sdk) concept for more information.
 
 * [Metrics API](./api.md)
 * [Metrics SDK](./sdk.md)
-* [Metrics Data Model and Protocol](./datamodel.md)
+* [Metrics Data Model and Protocol](./data-model.md)
 * [Semantic Conventions](./semantic_conventions/README.md)
 
 ## References

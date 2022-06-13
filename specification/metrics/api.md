@@ -222,7 +222,7 @@ implementation MUST create a valid Instrument in every case.  Here,
 "valid" means an instrument that is functional and can be expected to
 export data, despite potentially creating a [semantic error in the
 data
-model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations).
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
 
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of
@@ -236,7 +236,7 @@ When more than one distinct Instrument is registered with the same
 to the user informing them of duplicate registration conflict(s).
 The warning helps to avoid the semantic error state described in the
 [OpenTelemetry Metrics data
-model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
 when more than one `Metric` is written for a given instrument `name`
 and Meter identity by the same MeterProvider.
 
