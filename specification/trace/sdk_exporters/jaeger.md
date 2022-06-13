@@ -3,7 +3,7 @@
 **Status**: [Stable](../../document-status.md)
 
 This document defines the transformation between OpenTelemetry and Jaeger Spans.
-The generic transformation [rules specified here](non-otlp.md) also apply. If a
+The generic transformation [rules specified here](../../common/mapping-to-non-otlp.md) also apply. If a
 particular generic transformation rule and the rule in this document contradict
 then the rule in this document MUST be used.
 
@@ -33,11 +33,11 @@ and Jaeger.
 | Span.StartTime             | Span.startTime | Span.start_time | See [Unit of time](#unit-of-time) |
 | Span.EndTime               | Span.duration | same | Calculated as EndTime - StartTime. See also [Unit of time](#unit-of-time) |
 | Span.Attributes            | Span.tags | same | See [Attributes](#attributes) for data types for the mapping.            |
-| Span.DroppedAttributesCount| Add to Span.tags | same | See [Dropped Attributes Count](non-otlp.md#dropped-attributes-count) for tag name to use. |
+| Span.DroppedAttributesCount| Add to Span.tags | same | See [Dropped Attributes Count](../../common/mapping-to-non-otlp.md#dropped-attributes-count) for tag name to use. |
 | Span.Events                | Span.logs | same | See [Events](#events) for the mapping format. |
-| Span.DroppedEventsCount    | Add to Span.tags | same | See [Dropped Events Count](non-otlp.md#dropped-events-count) for tag name to use. |
+| Span.DroppedEventsCount    | Add to Span.tags | same | See [Dropped Events Count](../../common/mapping-to-non-otlp.md#dropped-events-count) for tag name to use. |
 | Span.Links                 | Span.references | same | See [Links](#links) |
-| Span.DroppedLinksCount     | Add to Span.tags | same | See [Dropped Links Count](non-otlp.md#dropped-links-count) for tag name to use. |
+| Span.DroppedLinksCount     | Add to Span.tags | same | See [Dropped Links Count](../../common/mapping-to-non-otlp.md#dropped-links-count) for tag name to use. |
 | Span.Status                | Add to Span.tags | same | See [Status](#status) for tag names to use. |
 
 ## Mappings
@@ -119,7 +119,7 @@ with nanosecond precision using `google.protobuf.Timestamp` and
 
 ### Status
 
-The Status is recorded as Span tags. See [Status](non-otlp.md#span-status) for
+The Status is recorded as Span tags. See [Status](../../common/mapping-to-non-otlp.md#span-status) for
 tag names to use.
 
 #### Error flag
