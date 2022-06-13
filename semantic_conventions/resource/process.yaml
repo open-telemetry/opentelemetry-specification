@@ -64,11 +64,11 @@ groups:
         examples: 'root'
     constraints:
       - any_of:
-        - process.executable.name
-        - process.executable.path
-        - process.command
-        - process.command_line
-        - process.command_args
+          - process.executable.name
+          - process.executable.path
+          - process.command
+          - process.command_line
+          - process.command_args
 
   - id: process.runtime
     prefix: process.runtime
