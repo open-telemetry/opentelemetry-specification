@@ -217,7 +217,7 @@ backend might have trouble handling subnormal numbers.
 
 ### Monotonicity property
 
-In the OpenTelemetry Metrics [Data Model](./datamodel.md) and [API](./api.md)
+In the OpenTelemetry Metrics [Data Model](./data-model.md) and [API](./api.md)
 specifications, the word `monotonic` has been used frequently.
 
 It is important to understand that different
@@ -302,9 +302,9 @@ Conventions`, rather than inventing your own semantics.
 
 #### Synchronous example
 
-The OpenTelemetry Metrics [Data Model](./datamodel.md) and [SDK](./sdk.md) are
+The OpenTelemetry Metrics [Data Model](./data-model.md) and [SDK](./sdk.md) are
 designed to support both Cumulative and Delta
-[Temporality](./datamodel.md#temporality). It is important to understand that
+[Temporality](./data-model.md#temporality). It is important to understand that
 temporality will impact how the SDK could manage memory usage. Let's take the
 following HTTP requests example:
 
@@ -331,7 +331,7 @@ API with specified Delta aggregation temporality.
 
 ##### Synchronous example: Delta aggregation temporality
 
-Let's imagine we export the metrics as [Histogram](./datamodel.md#histogram),
+Let's imagine we export the metrics as [Histogram](./data-model.md#histogram),
 and to simplify the story we will only have one histogram bucket `(-Inf, +Inf)`:
 
 If we export the metrics using **Delta Temporality**:
@@ -411,7 +411,7 @@ So here are some suggestions that we encourage SDK implementers to consider:
   things that are no longer needed**.
 * You probably don't want to keep exporting the same thing over and over again,
   if there is no updates. You might want to consider [Resets and
-  Gaps](./datamodel.md#resets-and-gaps). For example, if a Cumulative metrics
+  Gaps](./data-model.md#resets-and-gaps). For example, if a Cumulative metrics
   stream hasn't received any updates for a long period of time, would it be okay
   to reset the start time?
 
@@ -473,7 +473,7 @@ and send them.
 
 The data model prescribes several valid behaviors at T<sub>5</sub> in
 this case, where one stream dies and another starts.  The [Resets and
-Gaps](./datamodel.md#resets-and-gaps) section describes how start
+Gaps](./data-model.md#resets-and-gaps) section describes how start
 timestamps and staleness markers can be used to increase the
 receiver's understanding of these events.
 
@@ -546,7 +546,7 @@ So here are some suggestions that we encourage SDK implementers to consider:
 
 * If you have to do Cumulative->Delta conversion, and you encountered min/max,
   rather than drop the data on the floor, you might want to convert them to
-  something useful - e.g. [Gauge](./datamodel.md#gauge).
+  something useful - e.g. [Gauge](./data-model.md#gauge).
 
 ##### Asynchronous example: attribute removal in a view
 
@@ -577,9 +577,9 @@ As discussed in the asynchronous cumulative temporality example above,
 there are various treatments available for detecting resets.  Even if
 the first course is taken, which means doing nothing, a receiver that
 follows the data model's rules for [unknown start
-time](datamodel.md#cumulative-streams-handling-unknown-start-time) and
+time](data-model.md#cumulative-streams-handling-unknown-start-time) and
 [inserting true start
-times](datamodel.md#cumulative-streams-inserting-true-reset-points)
+times](data-model.md#cumulative-streams-inserting-true-reset-points)
 will calculate a correct rate in this case.  The "58" received at
 T<sub>5</sub> resets the stream - the change from "107" to "58" will
 register as a gap and rate calculations will resume correctly at
