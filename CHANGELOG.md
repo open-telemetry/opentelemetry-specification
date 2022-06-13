@@ -19,6 +19,8 @@ release.
 
 ### Semantic Conventions
 
+- Add `net.app.protocol.*` attributes
+  ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
 - Add `rpc.grpc.status_code` to RPC metric semantic conventions
   ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604)).
 
@@ -31,6 +33,9 @@ release.
 ### Telemetry Schemas
 
 ### Common
+
+- Introduce Instrumentation Scope Attributes
+  ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
 
 ## v1.12.0 (2022-06-10)
 
