@@ -50,9 +50,9 @@ Also consider setting other attributes of the [`faas` resource][faasres] and [tr
 and the [cloud resource conventions][cloud]. The following AWS Lambda-specific attribute MAY also be set:
 
 <!-- semconv aws.lambda -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `aws.lambda.invoked_arn` | string | The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable). [1] | `arn:aws:lambda:us-east-1:123456:function:myfunction:myalias` | No |
+| `aws.lambda.invoked_arn` | string | The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable). [1] | `arn:aws:lambda:us-east-1:123456:function:myfunction:myalias` | Recommended |
 
 **[1]:** This may be different from `faas.id` if an alias is involved.
 <!-- endsemconv -->

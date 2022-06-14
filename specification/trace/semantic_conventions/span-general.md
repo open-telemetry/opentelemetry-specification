@@ -32,23 +32,23 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 ### Network transport attributes
 
 <!-- semconv network -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | No |
-| `net.app.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | No |
-| `net.app.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | No |
-| `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
-| `net.peer.port` | int | Remote port number. | `80`; `8080`; `443` | No |
-| `net.peer.name` | string | Remote hostname or similar, see note below. [2] | `example.com` | No |
-| `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
-| `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | No |
-| `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | No |
-| `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | No |
-| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | No |
-| `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | No |
-| `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | No |
-| `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | No |
-| `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | No |
+| `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | Recommended |
+| `net.app.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| `net.app.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
+| `net.peer.ip` | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Recommended |
+| `net.peer.port` | int | Remote port number. | `80`; `8080`; `443` | Recommended |
+| `net.peer.name` | string | Remote hostname or similar, see note below. [2] | `example.com` | Recommended |
+| `net.host.ip` | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
+| `net.host.port` | int | Like `net.peer.port` but for the host port. | `35555` | Recommended |
+| `net.host.name` | string | Local hostname or similar, see note below. | `localhost` | Recommended |
+| `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
+| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
+| `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
+| `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | Recommended |
+| `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
+| `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
 
 **[1]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -130,9 +130,9 @@ Users can define what the name of a service is based on their particular semanti
 Instrumentations SHOULD provide a way for users to configure this name.
 
 <!-- semconv peer -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `peer.service` | string | The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. | `AuthTokenCache` | No |
+| `peer.service` | string | The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. | `AuthTokenCache` | Recommended |
 <!-- endsemconv -->
 
 Examples of `peer.service` that users may specify:
@@ -145,11 +145,11 @@ Examples of `peer.service` that users may specify:
 These attributes may be used for any operation with an authenticated and/or authorized enduser.
 
 <!-- semconv identity -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `enduser.id` | string | Username or client_id extracted from the access token or [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2) header in the inbound request from outside the system. | `username` | No |
-| `enduser.role` | string | Actual/assumed role the client is making the request under extracted from token or application security context. | `admin` | No |
-| `enduser.scope` | string | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3) or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html). | `read:message, write:files` | No |
+| `enduser.id` | string | Username or client_id extracted from the access token or [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2) header in the inbound request from outside the system. | `username` | Recommended |
+| `enduser.role` | string | Actual/assumed role the client is making the request under extracted from token or application security context. | `admin` | Recommended |
+| `enduser.scope` | string | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3) or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html). | `read:message, write:files` | Recommended |
 <!-- endsemconv -->
 
 These attributes describe the authenticated user driving the user agent making requests to the instrumented
@@ -194,10 +194,10 @@ These attributes may be used for any operation to store information about
 a thread that started a span.
 
 <!-- semconv thread -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `thread.id` | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | No |
-| `thread.name` | string | Current thread name. | `main` | No |
+| `thread.id` | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | Recommended |
+| `thread.name` | string | Current thread name. | `main` | Recommended |
 <!-- endsemconv -->
 
 Examples of where `thread.id` and `thread.name` can be extracted from:
@@ -220,10 +220,10 @@ The attributes listed below allow to report this unit of code and therefore to p
 about the span.
 
 <!-- semconv code -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `code.function` | string | The method or function name, or equivalent (usually rightmost part of the code unit's name). | `serveRequest` | No |
-| `code.namespace` | string | The "namespace" within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit. | `com.example.MyHttpService` | No |
-| `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | No |
-| `code.lineno` | int | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | No |
+| `code.function` | string | The method or function name, or equivalent (usually rightmost part of the code unit's name). | `serveRequest` | Recommended |
+| `code.namespace` | string | The "namespace" within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit. | `com.example.MyHttpService` | Recommended |
+| `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | Recommended |
+| `code.lineno` | int | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | Recommended |
 <!-- endsemconv -->
