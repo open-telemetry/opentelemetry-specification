@@ -8,7 +8,7 @@ groups:
       - id: system
         tag: connection-level
         brief: An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
-        required: always
+        requirement_level: required
         type:
           allow_custom_values: true
           members:
@@ -175,8 +175,8 @@ groups:
       - id: name
         tag: call-level
         type: string
-        required:
-          conditional: Required, if applicable.
+        requirement_level:
+          conditionally_required: If applicable.
         brief: >
           This attribute is used to report the name of the database being accessed.
           For commands that switch the database, this should be set to the target database
@@ -190,9 +190,9 @@ groups:
       - id: statement
         tag: call-level
         type: string
-        required:
-          conditional: >
-            Required if applicable and not explicitly disabled via instrumentation configuration.
+        requirement_level:
+          conditionally_required: >
+            If applicable and not explicitly disabled via instrumentation configuration.
         brief: >
           The database statement being executed.
         note: The value may be sanitized to exclude sensitive information.
@@ -200,8 +200,8 @@ groups:
       - id: operation
         tag: call-level
         type: string
-        required:
-          conditional: Required, if `db.statement` is not applicable.
+        requirement_level:
+          conditionally_required: If `db.statement` is not applicable.
         brief: >
           The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations)
           such as `findAndModify`, or the SQL keyword.
@@ -215,20 +215,20 @@ groups:
         examples: ['findAndModify', 'HMSET', 'SELECT']
       - ref: net.peer.name
         tag: connection-level
-        required:
-          conditional: See below.
+        requirement_level:
+          conditionally_required: See alternative attributes below.
       - ref: net.peer.ip
         tag: connection-level
-        required:
-          conditional: See below.
+        requirement_level:
+          conditionally_required: See alternative attributes below.
       - ref: net.peer.port
         tag: connection-level
-        required:
-          conditional: Required if using a port other than the default port for this DBMS.
+        requirement_level:
+          conditionally_required: If using a port other than the default port for this DBMS.
       - ref: net.transport
         tag: connection-level
-        required:
-          conditional: Recommended in general, required for in-process databases (`"inproc"`).
+        requirement_level:
+          conditionally_required: If database type is in-process (`"inproc"`), recommended for other database types.
     constraints:
       - any_of:
           - 'net.peer.name'
@@ -294,8 +294,7 @@ groups:
       - id: table
         type: string
         tag: call-level-tech-specific-cassandra
-        required:
-          conditional: Recommended if available.
+        requirement_level: recommended
         brief: The name of the primary table that the operation is acting upon, including the keyspace name (if applicable).
         note: >
           This mirrors the db.sql.table attribute but references cassandra rather than sql.
@@ -337,8 +336,8 @@ groups:
     attributes:
       - id: database_index
         type: int
-        required:
-          conditional: Required, if other than the default database (`0`).
+        requirement_level:
+          conditionally_required: If other than the default database (`0`).
         tag: call-level-tech-specific
         brief: >
           The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer.
@@ -353,7 +352,7 @@ groups:
     attributes:
       - id: collection
         type: string
-        required: always
+        requirement_level: required
         tag: call-level-tech-specific
         brief: >
           The collection being accessed within the database stated in `db.name`.
@@ -368,8 +367,7 @@ groups:
       - id: table
         tag: call-level-tech-specific
         type: string
-        required:
-          conditional: Recommended if available.
+        requirement_level: recommended
         brief: The name of the primary table that the operation is acting upon, including the database name (if applicable).
         note: >
           It is not recommended to attempt any client-side parsing of
