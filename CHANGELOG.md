@@ -21,6 +21,8 @@ release.
 
 - Add `net.app.protocol.*` attributes
   ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
+- Adopt attribute requirement levels in semantic conventions
+  ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 
 ### Compatibility
 

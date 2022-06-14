@@ -31,9 +31,9 @@ instrumentations:
 
 All `db.client.connections.usage` measurements MUST include the following attribute:
 
-| Name    | Type   | Description                                                                  | Examples | Required |
-|---------|--------|------------------------------------------------------------------------------|----------|----------|
-| `state` | string | The state of a connection in the pool. Valid values include: `idle`, `used`. | `idle`   | Yes      |
+| Name    | Type   | Description                                                                  | Examples | Requirement Level |
+|---------|--------|------------------------------------------------------------------------------|----------|-------------------|
+| `state` | string | The state of a connection in the pool. Valid values include: `idle`, `used`. | `idle`   | Required          |
 
 Instrumentation libraries for database client connection pools that collect data for the following data MUST use the
 following metric instruments. Otherwise, if the instrumentation library does not collect this data, these instruments
@@ -52,6 +52,6 @@ MUST NOT be used.
 
 Below is a table of the attributes that MUST be included on all connection pool measurements:
 
-| Name        | Type   | Description                                                                  | Examples       | Required |
-|-------------|--------|------------------------------------------------------------------------------|----------------|----------|
-| `pool.name` | string | The name of the connection pool; unique within the instrumented application. | `myDataSource` | Yes      |
+| Name        | Type   | Description                                                                  | Examples       | Requirement Level |
+|-------------|--------|------------------------------------------------------------------------------|----------------|-------------------|
+| `pool.name` | string | The name of the connection pool; unique within the instrumented application. | `myDataSource` | Required          |

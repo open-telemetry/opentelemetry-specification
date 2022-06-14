@@ -126,25 +126,27 @@ The following operations related to messages are defined for these semantic conv
 ## Messaging attributes
 
 <!-- semconv messaging -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `rocketmq`; `activemq`; `AmazonSQS` | Yes |
-| `messaging.destination` | string | The message destination name. This might be equal to the span name but is required nevertheless. | `MyQueue`; `MyTopic` | Yes |
-| `messaging.destination_kind` | string | The kind of message destination | `queue` | Conditional [1] |
-| `messaging.temp_destination` | boolean | A boolean that is true if the message destination is temporary. |  | If missing, it is assumed to be false. |
-| `messaging.protocol` | string | The name of the transport protocol. | `AMQP`; `MQTT` | No |
-| `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | No |
-| `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`; `https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | No |
-| `messaging.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | No |
-| `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | No |
-| `messaging.message_payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | No |
-| `messaging.message_payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | No |
-| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | If available. |
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [2] | `example.com` | If available. |
+| `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `rocketmq`; `activemq`; `AmazonSQS` | Required |
+| `messaging.destination` | string | The message destination name. This might be equal to the span name but is required nevertheless. | `MyQueue`; `MyTopic` | Required |
+| `messaging.destination_kind` | string | The kind of message destination | `queue` | Conditionally Required: [1] |
+| `messaging.temp_destination` | boolean | A boolean that is true if the message destination is temporary. |  | Conditionally Required: [2] |
+| `messaging.protocol` | string | The name of the transport protocol. | `AMQP`; `MQTT` | Recommended |
+| `messaging.protocol_version` | string | The version of the transport protocol. | `0.9.1` | Recommended |
+| `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`; `https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | Recommended |
+| `messaging.message_id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended |
+| `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended |
+| `messaging.message_payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended |
+| `messaging.message_payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended |
+| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Conditionally Required: If available. |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [3] | `example.com` | Conditionally Required: If available. |
 
-**[1]:** Required only if the message destination is either a `queue` or `topic`.
+**[1]:** If the message destination is either a `queue` or `topic`.
 
-**[2]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+**[2]:** If value is `true`. When missing, the value is assumed to be `false`.
+
+**[3]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
 `messaging.destination_kind` MUST be one of the following:
 
@@ -165,10 +167,10 @@ These attributes should be set to the broker to which the message is sent/from w
 For message consumers, the following additional attributes may be set:
 
 <!-- semconv messaging.consumer -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.operation` | string | A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is "send", this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case. | `receive` | No |
-| `messaging.consumer_id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | No |
+| `messaging.operation` | string | A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is "send", this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case. | `receive` | Recommended |
+| `messaging.consumer_id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | Recommended |
 
 `messaging.operation` MUST be one of the following:
 
@@ -193,9 +195,9 @@ In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
 `messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
 
 <!-- semconv messaging.rabbitmq -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.rabbitmq.routing_key` | string | RabbitMQ message routing key. | `myKey` | Unless it is empty. |
+| `messaging.rabbitmq.routing_key` | string | RabbitMQ message routing key. | `myKey` | Conditionally Required: If not empty. |
 <!-- endsemconv -->
 
 #### Apache Kafka
@@ -203,15 +205,17 @@ In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
 For Apache Kafka, the following additional attributes are defined:
 
 <!-- semconv messaging.kafka -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.kafka.message_key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message_id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | No |
-| `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | No |
-| `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | No |
-| `messaging.kafka.partition` | int | Partition the message is sent to. | `2` | No |
-| `messaging.kafka.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | If missing, it is assumed to be false. |
+| `messaging.kafka.message_key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message_id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
+| `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
+| `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | Recommended |
+| `messaging.kafka.partition` | int | Partition the message is sent to. | `2` | Recommended |
+| `messaging.kafka.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
 
 **[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
+
+**[2]:** If value is `true`. When missing, the value is assumed to be `false`.
 <!-- endsemconv -->
 
 For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-service-attributes) SHOULD be set to the name of the broker or service the message will be sent to.
@@ -223,15 +227,15 @@ If an intermediary broker is present, `service.name` and `peer.service` will not
 Specific attributes for Apache RocketMQ are defined below.
 
 <!-- semconv messaging.rocketmq -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.rocketmq.namespace` | string | Namespace of RocketMQ resources, resources in different namespaces are individual. | `myNamespace` | Yes |
-| `messaging.rocketmq.client_group` | string | Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind. | `myConsumerGroup` | Yes |
-| `messaging.rocketmq.client_id` | string | The unique identifier for each client. | `myhost@8742@s8083jm` | Yes |
-| `messaging.rocketmq.message_type` | string | Type of message. | `normal` | No |
-| `messaging.rocketmq.message_tag` | string | The secondary classifier of message besides topic. | `tagA` | No |
-| `messaging.rocketmq.message_keys` | string[] | Key(s) of message, another way to mark message besides message id. | `[keyA, keyB]` | No |
-| `messaging.rocketmq.consumption_model` | string | Model of message consumption. This only applies to consumer spans. | `clustering` | No |
+| `messaging.rocketmq.namespace` | string | Namespace of RocketMQ resources, resources in different namespaces are individual. | `myNamespace` | Required |
+| `messaging.rocketmq.client_group` | string | Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind. | `myConsumerGroup` | Required |
+| `messaging.rocketmq.client_id` | string | The unique identifier for each client. | `myhost@8742@s8083jm` | Required |
+| `messaging.rocketmq.message_type` | string | Type of message. | `normal` | Recommended |
+| `messaging.rocketmq.message_tag` | string | The secondary classifier of message besides topic. | `tagA` | Recommended |
+| `messaging.rocketmq.message_keys` | string[] | Key(s) of message, another way to mark message besides message id. | `[keyA, keyB]` | Recommended |
+| `messaging.rocketmq.consumption_model` | string | Model of message consumption. This only applies to consumer spans. | `clustering` | Recommended |
 
 `messaging.rocketmq.message_type` MUST be one of the following:
 
