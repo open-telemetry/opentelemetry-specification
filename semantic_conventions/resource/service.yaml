@@ -6,7 +6,7 @@ groups:
     attributes:
       - id: name
         type: string
-        required: always
+        requirement_level: required
         brief: >
           Logical name of the service.
         note: >
