@@ -23,6 +23,9 @@ release.
   ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
 - Adopt attribute requirement levels in semantic conventions
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
+- Remove `direction` dimension, instead creating metrics with names reflecting those
+  dimensions.
+  ([#2617](https://github.com/open-telemetry/opentelemetry-specification/pull/2617))
 
 ### Compatibility
 
