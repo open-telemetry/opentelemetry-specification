@@ -11,16 +11,15 @@ instruments not explicitly defined in the specification.
 
 <!-- toc -->
 
-- [Semantic Conventions for System Metrics](#semantic-conventions-for-system-metrics)
-  - [Metric Instruments](#metric-instruments)
-    - [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
-    - [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
-    - [`system.paging.` - Paging/swap metrics](#systempaging---pagingswap-metrics)
-    - [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
-    - [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
-    - [`system.network.` - Network metrics](#systemnetwork---network-metrics)
-    - [`system.processes.` - Aggregate system process metrics](#systemprocesses---aggregate-system-process-metrics)
-    - [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
+- [Metric Instruments](#metric-instruments)
+  * [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
+  * [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
+  * [`system.paging.` - Paging/swap metrics](#systempaging---pagingswap-metrics)
+  * [`system.disk.` - Disk controller metrics](#systemdisk---disk-controller-metrics)
+  * [`system.filesystem.` - Filesystem metrics](#systemfilesystem---filesystem-metrics)
+  * [`system.network.` - Network metrics](#systemnetwork---network-metrics)
+  * [`system.processes.` - Aggregate system process metrics](#systemprocesses---aggregate-system-process-metrics)
+  * [`system.{os}.` - OS Specific System Metrics](#systemos---os-specific-system-metrics)
 
 <!-- tocstop -->
 
