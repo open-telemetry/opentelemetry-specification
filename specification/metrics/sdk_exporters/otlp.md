@@ -7,7 +7,7 @@ Exporter](../sdk.md#push-metric-exporter) which sends metrics via the
 [OpenTelemetry Protocol](../../protocol/README.md).
 
 OTLP Metrics Exporter MUST support both Cumulative and Delta
-[Aggregation Temporality](../datamodel.md#temporality).
+[Aggregation Temporality](../data-model.md#temporality).
 
 The exporter MUST provide configuration according to the [OpenTelemetry Protocol
 Exporter](../../protocol/exporter.md) specification.

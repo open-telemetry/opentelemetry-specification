@@ -7,12 +7,12 @@ groups:
     attributes:
       - id: system
         type: string
-        required: always
+        requirement_level: required
         brief: 'A string identifying the messaging system.'
         examples: ['kafka', 'rabbitmq', 'rocketmq', 'activemq', 'AmazonSQS']
       - id: destination
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The message destination name. This might be equal to the span name
           but is required nevertheless.
@@ -27,13 +27,13 @@ groups:
             - id: topic
               value: "topic"
               brief: "A message sent to a topic"
-        required:
-          conditional: 'Required only if the message destination is either a `queue` or `topic`.'
+        requirement_level:
+          conditionally_required: If the message destination is either a `queue` or `topic`.
         brief: 'The kind of message destination'
       - id: temp_destination
         type: boolean
-        required:
-          conditional: 'If missing, it is assumed to be false.'
+        requirement_level:
+          conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
         brief: 'A boolean that is true if the message destination is temporary.'
       - id: protocol
         type: string
@@ -70,12 +70,12 @@ groups:
       - ref: net.peer.name
         note: >
           This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
-        required:
-          conditional: If available.
+        requirement_level:
+          conditionally_required: If available.
       - ref: net.peer.ip
         tag: connection-level
-        required:
-          conditional: If available.
+        requirement_level:
+          conditionally_required: If available.
     constraints:
       - include: network
 
@@ -137,8 +137,8 @@ groups:
     attributes:
       - id: routing_key
         type: string
-        required:
-          conditional: Unless it is empty.
+        requirement_level:
+          conditionally_required: If not empty.
         brief: >
           RabbitMQ message routing key.
         examples: 'myKey'
@@ -177,8 +177,8 @@ groups:
         examples: 2
       - id: tombstone
         type: boolean
-        required:
-          conditional: 'If missing, it is assumed to be false.'
+        requirement_level:
+          conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
         brief: 'A boolean that is true if the message is a tombstone.'
 
   - id: messaging.rocketmq
@@ -189,19 +189,19 @@ groups:
     attributes:
       - id: namespace
         type: string
-        required: always
+        requirement_level: required
         brief: >
           Namespace of RocketMQ resources, resources in different namespaces are individual.
         examples: 'myNamespace'
       - id: client_group
         type: string
-        required: always
+        requirement_level: required
         brief: >
           Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind.
         examples: 'myConsumerGroup'
       - id: client_id
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The unique identifier for each client.
         examples: 'myhost@8742@s8083jm'
