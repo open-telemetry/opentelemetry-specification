@@ -103,6 +103,8 @@ release.
 
 - Clarify that Scope is defined at build time
   ([#2878](https://github.com/open-telemetry/opentelemetry-specification/pull/2878))
+- Clarify Attribute Value definition to match Protobuf AnyValue implementation
+  ([#2581](https://github.com/open-telemetry/opentelemetry-specification/issues/2581))
 
 ## v1.14.0 (2022-10-04)
 

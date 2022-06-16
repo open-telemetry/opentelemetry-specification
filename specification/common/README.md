@@ -31,6 +31,9 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types.
+  - It MAY also contain another valid Attribute value resulting in `nested` Attributes
+    and the referenced Attribute MUST not be recursive. i.e. The value of the
+    key-value pair will itself be a key-value pair.
 
 For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
@@ -51,6 +54,17 @@ This is required for map/dictionary structures represented as two arrays with
 indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
+
+`nested` Attribute support MAY be protocol, signal, language, SDK or Exporter
+specific as not all SDKs, exporters or backends support the storing or sending
+of a hierarchy of Attributes. In those cases they SHOULD implement a strategy to
+handle how nested Attributes are stored or transmitted, like using a JSON-encoded
+string value as highlighted for protocols above. The depth of the any resulting
+hierarchy SHOULD be limited and MUST not include recursive references.
+
+`nested` Attributes are also how consumers MAY provide custom attributes that
+are domain specific and have no defined semantic conventions beyond the specific
+name used for the signal.
 
 See [Attribute Naming](attribute-naming.md) for naming guidelines.
 
@@ -81,6 +95,13 @@ If an SDK provides a way to:
 - set a limit of unique attribute keys such that:
   - for each unique attribute key, addition of which would result in exceeding
     the limit, SDK MUST discard that key/value pair.
+- set a limit on the supported depth of nested attributes:
+  - when this limit is exceeded it MAY provide a configurable strategy for handling
+    items beyond this limit which MAY include:
+    - Dropping the excessive depth,
+    - Replacing the value with a relevant token indicating values have been truncated,
+    - Converted to a string representation, which MUST also comply with the value
+      length limits;
 
 There MAY be a log emitted to indicate to the user that an attribute was
 truncated or discarded. To prevent excessive logging, the log MUST NOT be
@@ -101,6 +122,7 @@ followed by the global limit default value.
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
+* `AttributeNestedLengthLimit` (Default=10; if supported) - Maximum allowed number of nested attribute value;
 
 #### Exempt Entities
 
@@ -147,3 +169,8 @@ Some other implementations may use a streaming approach where every
 that individual attribute value being exported using a streaming wire protocol.
 In such cases the enforcement of uniqueness will likely be the responsibility of
 the recipient of this data.
+
+An Attribute Collection does not infer a hierarchy or `nested` collection of
+Attributes, it represents a single flat definition which MAY be represented
+logically as an array, list, set or map as `nested` Attributes support is
+provided by the Attribute Value.
