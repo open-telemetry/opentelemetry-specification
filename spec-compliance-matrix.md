@@ -20,6 +20,7 @@ formats is required. Implementing more than one format is optional.
 | Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer with schema_url                                                                     |          | +   | +    |     |        |      |        | +   |      | +   |      |       |
+| Get a Tracer with scope attributes                                                               |          |     |      |     |        |      |        |     |      |     |      |       |
 | Associate Tracer with InstrumentationScope                                                       |          |     |      |     |        |      |        | +   |      |     |      |       |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -99,6 +100,7 @@ formats is required. Implementing more than one format is optional.
 | It is possible to create any number of `MeterProvider`s.                                                                                                                     | X        | +  | +    |    |    +   |      |        |     |      |     |   +  |       |
 | `MeterProvider` provides a way to get a `Meter`.                                                                                                                             |          | +  | +    |    |    +   |      |        |     |      |  +  |   -  |       |
 | `get_meter` accepts name, `version` and `schema_url`.                                                                                                                        |          | +  | +    |    |    +   |      |        |     |      |  +  |   -  |       |
+| `get_meter` accepts `attributes`.                                                                                                                                            |          |    |      |    |        |      |        |     |      |     |      |       |
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.                                                                              |          | +  | +    |    |    -   |      |        |     |      |  +  |   -  |       |
 | The fallback `Meter` `name` property keeps its original invalid value.                                                                                                       | X        | -  | -    |    |    -   |      |        |     |      |  -  |   -  |       |
 | Associate `Meter` with `InstrumentationScope`.                                                                                                                               |          |    | +    |    |        |      |        |     |      |     |      |       |
@@ -212,6 +214,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 |--------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
 | **[Logging SDK](specification/logs/logging-library-sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | LogEmitterProvider.Get LogEmitter                            |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
+| LogEmitterProvider.Get LogEmitter accepts attributes         |          |     |      |     |        |      |        |     |      |     |      |       |
 | LogEmitterProvider.Shutdown                                  |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
 | LogEmitterProvider.ForceFlush                                |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
 | LogEmitter.Emit(LogRecord)                                   |          |     | +    |     |   +    |      |        |     |      |     | -    |       |

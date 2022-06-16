@@ -19,6 +19,12 @@ release.
 
 ### Semantic Conventions
 
+- Add `net.app.protocol.*` attributes
+  ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
+- Adopt attribute requirement levels in semantic conventions
+  ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
+- Add semantic conventions for GraphQL
+  ([#2456](https://github.com/open-telemetry/opentelemetry-specification/pull/2456))
 - Add `http.*.*.size` metric semantic conventions for tracking size of requests
   / responses for http servers / clients
   ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588)).
@@ -32,6 +38,9 @@ release.
 ### Telemetry Schemas
 
 ### Common
+
+- Introduce Instrumentation Scope Attributes
+  ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
 
 ## v1.12.0 (2022-06-10)
 

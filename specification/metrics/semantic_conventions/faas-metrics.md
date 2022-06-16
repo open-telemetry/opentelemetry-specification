@@ -53,12 +53,12 @@ Optionally, when applicable:
 
 Below is a table of the attributes to be included on FaaS metric events.
 
-| Name                    | Recommended | Notes and examples                                                                                                       |
-|-------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------|
-| `faas.trigger`          | Yes         | Type of the trigger on which the function is invoked. SHOULD be one of: `datasource`, `http`, `pubsub`, `timer`, `other` |
-| `faas.invoked_name`     | Yes         | Name of the invoked function. Example: `my-function`                                                                     |
-| `faas.invoked_provider` | Yes         | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws`                     |
-| `faas.invoked_region`   | Yes         | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1`                  |
+| Name                    | Requirement Level | Notes and examples                                                                                                       |
+|-------------------------|-------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `faas.trigger`          | Required          | Type of the trigger on which the function is invoked. SHOULD be one of: `datasource`, `http`, `pubsub`, `timer`, `other` |
+| `faas.invoked_name`     | Required          | Name of the invoked function. Example: `my-function`                                                                     |
+| `faas.invoked_provider` | Required          | Cloud provider of the invoked function. Corresponds to the resource `cloud.provider`. Example: `aws`                     |
+| `faas.invoked_region`   | Required          | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1`                  |
 
 More details on these attributes, the function name and the difference compared to the faas.invoked_name can be found at the related [FaaS tracing specification](../../trace/semantic_conventions/faas.md).
 For incoming FaaS executions, the function for which metrics are reported is already described by its [FaaS resource attributes](../../resource/semantic_conventions/faas.md).

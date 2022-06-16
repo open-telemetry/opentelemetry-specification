@@ -178,9 +178,9 @@ are the inputs:
     handling in OpenTelemetry](../error-handling.md) for the general guidance.
 * The `name` of the View (optional). If not provided, the Instrument `name`
   MUST be used by default. This will be used as the name of the [metrics
-  stream](./datamodel.md#events--data-stream--timeseries).
+  stream](./data-model.md#events--data-stream--timeseries).
 * The configuration for the resulting [metrics
-  stream](./datamodel.md#events--data-stream--timeseries):
+  stream](./data-model.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` MUST be
     used by default.
   * A list of `attribute keys` (optional). If provided, the attributes that are
@@ -217,7 +217,7 @@ made with an Instrument:
   * For each View, if the Instrument could match the instrument selection
     criteria:
     * Try to apply the View configuration. If applying the View results
-      in [conflicting metric identities](./datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+      in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
       the implementation SHOULD apply the View and emit a warning. If it is not
       possible to apply the View without producing semantic errors (e.g. the
       View sets an asynchronous instrument to use
@@ -288,7 +288,7 @@ meter_provider
 
 An `Aggregation`, as configured via the [View](./sdk.md#view),
 informs the SDK on the ways and means to compute
-[Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model)
+[Aggregated Metrics](./data-model.md#opentelemetry-protocol-data-model)
 from incoming Instrument [Measurements](./api.md#measurement).
 
 Note: the term _aggregation_ is used instead of _aggregator_. It is recommended
@@ -335,8 +335,8 @@ we will explore how to allow configuring custom
 [ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
 The SDK MUST provide the following `Aggregation` to support the
-[Metric Points](./datamodel.md#metric-points) in the
-[Metrics Data Model](./datamodel.md).
+[Metric Points](./data-model.md#metric-points) in the
+[Metrics Data Model](./data-model.md).
 
 - [Drop](./sdk.md#drop-aggregation)
 - [Default](./sdk.md#default-aggregation)
@@ -375,7 +375,7 @@ This Aggregation does not have any configuration parameters.
 #### Sum Aggregation
 
 The Sum Aggregation informs the SDK to collect data for the
-[Sum Metric Point](./datamodel.md#sums).
+[Sum Metric Point](./data-model.md#sums).
 
 The monotonicity of the aggregation is determined by the instrument type:
 
@@ -397,7 +397,7 @@ This Aggregation informs the SDK to collect:
 #### Last Value Aggregation
 
 The Last Value Aggregation informs the SDK to collect data for the
-[Gauge Metric Point](./datamodel.md#gauge).
+[Gauge Metric Point](./data-model.md#gauge).
 
 This Aggregation does not have any configuration parameters.
 
@@ -419,7 +419,7 @@ instruments that record negative measurements (e.g. `UpDownCounter` or `Observab
 #### Explicit Bucket Histogram Aggregation
 
 The Explicit Bucket Histogram Aggregation informs the SDK to collect data for
-the [Histogram Metric Point](./datamodel.md#histogram) using a set of
+the [Histogram Metric Point](./data-model.md#histogram) using a set of
 explicit boundary values for histogram bucketing.
 
 This Aggregation honors the following configuration parameters:
@@ -439,7 +439,7 @@ or equal to the measurement.
 
 The Exponential Histogram Aggregation informs the SDK to collect data
 for the [Exponential Histogram Metric
-Point](./datamodel.md#exponentialhistogram), which uses an exponential
+Point](./data-model.md#exponentialhistogram), which uses an exponential
 formula to determine bucket boundaries and an integer `scale`
 parameter to control resolution.
 
@@ -544,7 +544,7 @@ specification](api.md#instrument-type-conflict-detection),
 implementations are REQUIRED to create valid instruments in case of
 duplicate instrument registration, and the [data model includes
 RECOMMENDATIONS on how to treat the consequent duplicate
-conflicting](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+conflicting](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
 `Metric` definitions.
 
 The implementation MUST aggregate data from identical Instruments
@@ -584,7 +584,7 @@ aggregated metric data and the original API calls where measurements are
 recorded. Exemplars work for trace-metric correlation across any metric, not
 just those that can also be derived from `Span`s.
 
-An [Exemplar](./datamodel.md#exemplars) is a recorded
+An [Exemplar](./data-model.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
 information:
 
@@ -775,7 +775,7 @@ The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
 `MetricReader` instance SHOULD NOT introduce side-effects to other `MetricReader`
 instances. For example, if a `MetricReader` instance is receiving metric data
-points that have [delta temporality](./datamodel.md#temporality), it is expected
+points that have [delta temporality](./data-model.md#temporality), it is expected
 that SDK will update the time range - e.g. from (T<sub>n</sub>, T<sub>n+1</sub>]
 to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 `MetricReader` instance.
@@ -889,7 +889,7 @@ protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
 Metric Exporter has access to the [aggregated metrics
-data](./datamodel.md#timeseries-model).  Metric Exporters SHOULD
+data](./data-model.md#timeseries-model).  Metric Exporters SHOULD
 report an error condition for data output by the `MetricReader` with
 unsupported Aggregation or Aggregation Temporality, as this condition
 can be corrected by a change of `MetricReader` configuration.
@@ -938,7 +938,7 @@ A Push Metric Exporter MUST support the following functions:
 
 ##### Export(batch)
 
-Exports a batch of [Metric points](./datamodel.md#metric-points). Protocol
+Exports a batch of [Metric points](./data-model.md#metric-points). Protocol
 exporters that will implement this function are typically expected to serialize
 and transmit the data to the destination.
 
@@ -977,11 +977,11 @@ Batch: | Metric | | Metric | ... | Metric |
                                     +--> timestamps, attributes, value (or buckets), exemplars, ...
 ```
 
-Refer to the [Metric points](./datamodel.md#metric-points) section from the
+Refer to the [Metric points](./data-model.md#metric-points) section from the
 Metrics Data Model specification for more details.
 
 Note: it is highly recommended that implementors design the `Metric` data type
-_based on_ the [Data Model](./datamodel.md), rather than directly use the data
+_based on_ the [Data Model](./data-model.md), rather than directly use the data
 types generated from the [proto
 files](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto)
 (because the types generated from proto files are not guaranteed to be backward
