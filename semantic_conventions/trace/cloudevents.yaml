@@ -20,13 +20,11 @@ groups:
         examples: ['https://github.com/cloudevents', '/cloudevents/spec/pull/123', 'my-service' ]
       - id: event_spec_version
         type: string
-        requirement_level: required
         brief: >
           The [version of the CloudEvents specification](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#specversion) which the event uses.
         examples: '1.0'
       - id: event_type
         type: string
-        requirement_level: required
         brief: >
           The [event_type](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#type) contains a value describing the type of event related to the originating occurrence.
         examples: ['com.github.pull_request.opened', 'com.example.object.deleted.v2']
