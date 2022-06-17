@@ -50,4 +50,4 @@ The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGR
 
 * `explicit_bucket_histogram`:
   Use [Explicit Bucket Histogram Aggregation](../sdk.md#explicit-bucket-histogram-aggregation).
-* `exponential_hisotgram`: Use [Exponential Histogram Aggregation](../sdk.md#exponential-histogram-aggregation).
+* `exponential_histogram`: Use [Exponential Histogram Aggregation](../sdk.md#exponential-histogram-aggregation).
