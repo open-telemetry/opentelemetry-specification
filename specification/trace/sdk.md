@@ -614,12 +614,15 @@ Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
 destination.
 
-By default Export() will never be called concurrently for the same exporter
-instance and can be called again only after the current call returns. This does
-not mean Export() is required to block until the batch is successfully sent.
-What Export() does before returning is language and exporter dependent. However,
-the implementation MUST document the concurrency characteristics the SDK
-requires of the exporter.
+Export() will never be called concurrently for the same exporter instance.
+Depending on the implementation the result of the export may be returned to the
+Processor not in the return value of the call to Export() but in a language
+specific way for signaling completion of an asynchronous task. This means that
+while an instance of an exporter will never have its Export() called
+concurrently it does not mean that the task of exporting can not be done
+concurrently. How this is done is outside the scope of this specification. Each
+implementation MUST document the concurrency characteristics the SDK requires of
+the exporter.
 
 Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
@@ -639,15 +642,20 @@ e.g. for spans in Java it will be typically `Collection<SpanData>`.
 
 **Returns:** ExportResult:
 
-ExportResult is one of:
+The return of Export() is implementation specific. In what is idiomatic for the
+language the Exporter must send an `ExportResult` to the Processor.
+`ExportResult` has values of either `Success` or `Failure`:
 
-* `Success` - The batch has been successfully passed to the Exporter.
-* `Failure` - The Exporter failed to accept the batch. The batch must be
-  dropped. For example, this can happen when the batch contains bad data and
-  cannot be serialized.
+* `Success` - The batch has been successfully exported.
+  For protocol exporters this typically means that the data is sent over
+  the wire and delivered to the destination server.
+* `Failure` - exporting failed. The batch must be dropped. For example, this
+  can happen when the batch contains bad data and cannot be serialized.
 
-Note: this result may be returned via an async mechanism or a callback, if that
-is idiomatic for the language implementation.
+For example, in Java the return of Export() would be a Future which when
+completed returns the `ExportResult` object. While in Erlang the Exporter sends
+a message to the Processor with the `ExportResult` for a particular batch of
+spans.
 
 #### `Shutdown()`
 
