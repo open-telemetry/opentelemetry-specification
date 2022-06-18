@@ -29,8 +29,8 @@ Who is currently planning to work on the project? If a project requires speciali
 #### Required staffing
 
 Projects cannot be started until they the following participants have been identified:
-* Every project needs a project leader, who is willing to bottom line the project and address any issues which are not handled by other project members.
-* At least one or two TC members are dedicated to attending meetings, reviewing proposals, and in general being aware of the state of the project and it’s technical details. TC members guide the project through the spec process, and help ensure relevant community members provide input at the needed times.
+* Every project needs a project lead, who is willing to bottom line the project and address any issues which are not handled by other project members.
+* At least two sponsoring TC members. TC sponsors are dedicated to attending meetings, reviewing proposals, and in general being aware of the state of the project and it’s technical details. TC sponsors guide the project through the spec process, keep the tracking issue up to date, and help to ensure that relevant community members provide input at the appropriate times.
 * Engineers willing to write prototypes in at least two languages (if relevant to project). Languages should be fairly different from each other (for example. Java and Python).
 * Maintainers or approvers from those languages committed to reviewing the prototypes.
 
