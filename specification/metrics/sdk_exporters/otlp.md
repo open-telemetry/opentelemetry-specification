@@ -2,7 +2,7 @@
 
 **Status**: [Mixed](../../document-status.md)
 
-## Overview
+## General
 
 **Status**: [Stable](../../document-status.md)
 
@@ -29,7 +29,7 @@ then by default:
   `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` variable as described
   below.
 * The exporter MUST configure the default aggregation on the basis of instrument kind using
-  the `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable as described below.
+  the `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable as described below if it is implemented.
 
 ## Additional Configuration
 
@@ -44,7 +44,7 @@ The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_TEMPORA
 
 * `cumulative`: Choose cumulative aggregation temporality for all instrument kinds.
 * `delta`: Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, choose
-  Cumulative aggregation for UpDownCount and Asynchronous UpDownCounter instrument kinds.
+  Cumulative aggregation for UpDownCounter and Asynchronous UpDownCounter instrument kinds.
 
 The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` are:
 
