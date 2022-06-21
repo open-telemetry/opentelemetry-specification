@@ -10,9 +10,9 @@ Describe the goals, objectives, and requirements for the project. This include t
 
 ### Project Board
 
-Once approved, a project should be managed using a github project board. This project board should be pre-populated with issues that cover all known deliverables, organized by timeline milestones.
+Once approved, a project should be managed using a GitHub project board. This project board should be pre-populated with issues that cover all known deliverables, organized by timeline milestones.
 
-A TC member associated with the project can create the board, along with a new github label to automatically associate issues and PRs with the project. The project lead and all other relevant project members should have edit access to the board.
+A TC member associated with the project can create the board, along with a new GitHub label to automatically associate issues and PRs with the project. The project lead and all other relevant project members should have edit access to the board.
 
 Once created, please link to the project board here.
 
@@ -30,8 +30,8 @@ Who is currently planning to work on the project? If a project requires speciali
 
 Projects cannot be started until they the following participants have been identified:
 * Every project needs a project lead, who is willing to bottom line the project and address any issues which are not handled by other project members.
-* At least two sponsoring TC members. TC sponsors are dedicated to attending meetings, reviewing proposals, and in general being aware of the state of the project and it’s technical details. TC sponsors guide the project through the spec process, keep the tracking issue up to date, and help to ensure that relevant community members provide input at the appropriate times.
-* Engineers willing to write prototypes in at least two languages (if relevant to project). Languages should be fairly different from each other (for example. Java and Python).
+* At least two sponsoring TC members. TC sponsors are dedicated to attending meetings, reviewing proposals, and in general being aware of the state of the project and it's technical details. TC sponsors guide the project through the spec process, keep the tracking issue up to date, and help to ensure that relevant community members provide input at the appropriate times.
+* Engineers willing to write prototypes in at least two languages (if relevant to project). Languages should be fairly different from each other (for example: Java and Python).
 * Maintainers or approvers from those languages committed to reviewing the prototypes.
 
 ### Meeting Times

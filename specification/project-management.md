@@ -1,6 +1,6 @@
 # Project Management
 
-Some specification changes are  small enough in scope such that they can be resolved with a single PR or an OTEP written by a single person. However, this is rarely the case for large, meaningful changes. Most spec work ends up being organized into projects. 
+Some specification changes are small enough in scope such that they can be resolved with a single PR or an OTEP written by a single person. However, this is rarely the case for large, meaningful changes. Most spec work ends up being organized into projects. 
 
 At minimum, specification projects require the following resources to be successful:
 * A group of designers and subject matter experts need to dedicate a significant amount of their work time to the project. These participants are needed to design the spec, write a set of OTEPs, and create multiple prototypes. This group needs to meet with each other (and  with TC members) on a regular basis to develop a  successful set of  proposals.
