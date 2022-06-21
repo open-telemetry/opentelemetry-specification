@@ -364,8 +364,7 @@ registration of the specific callback after its registration by some means.
 
 Every currently registered Callback associated with a set of instruments MUST
 be evaluated exactly once during collection prior to reading data for
-that set. The evaluation is identified using a combination of the
-callback itself, and the instruments set.
+that set.
 
 Callback functions MUST be documented as follows for the end user:
 
