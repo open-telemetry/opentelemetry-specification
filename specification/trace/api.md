@@ -128,12 +128,16 @@ This API MUST accept the following parameters:
   has a version (e.g. a library version). Example value: `1.0.0`.
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
+- [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
+  to associate with emitted telemetry.
 
-It is unspecified whether or under which conditions the same or different
-`Tracer` instances are returned from this functions.
+Implementations MUST return different `Tracer` instances when called repeatedly
+with different values of parameters. Note that always returning a new `Tracer` instance
+is a valid implementation. The only exception to this rule is the no-op `Tracer`:
+implementations MAY return the same instance regardless of parameter values.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
-with the same name+version+schema_url to pick up configuration changes.
+with the same name+version+schema_url+attributes to pick up configuration changes.
 This can be achieved either by allowing to work with an outdated configuration or
 by ensuring that new configuration applies also to previously returned `Tracer`s.
 
@@ -141,7 +145,7 @@ Note: This could, for example, be implemented by storing any mutable
 configuration in the `TracerProvider` and having `Tracer` implementation objects
 have a reference to the `TracerProvider` from which they were obtained. If
 configuration must be stored per-tracer (such as disabling a certain tracer),
-the tracer could, for example, do a look-up with its name+version+schema_url in
+the tracer could, for example, do a look-up with its name+version+schema_url+attributes in
 a map in the `TracerProvider`, or the `TracerProvider` could maintain a registry
 of all returned `Tracer`s and actively update their configuration if it changes.
 

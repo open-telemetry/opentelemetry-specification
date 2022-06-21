@@ -140,13 +140,22 @@ This API MUST accept the following parameters:
   has a version (e.g. a library version). Example value: `1.0.0`.
 * [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
+* [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
+    to associate with emitted telemetry.
 
-Meters are identified by all of these fields.  When more than one
-Meter of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different
-`Meter` instances are returned.  The term *identical* applied to
-Meters describes instances where all identifying fields are equal.
-The term *distinct* applied to Meters describes instances where at
+Meters are identified by all of these parameters.
+
+Implementations MUST return different `Meter` instances when called repeatedly
+with different values of parameters. Note that always returning a new `Meter` instance
+is a valid implementation. The only exception to this rule is the no-op `Meter`:
+implementations MAY return the same instance regardless of parameter values.
+
+It is unspecified whether or under which conditions the same or different
+`Meter` instances are returned from this function when the same
+(name,version,schema_url,attributes) parameters are used.
+
+The term *identical* applied to Meters describes instances where all identifying fields
+are equal. The term *distinct* applied to Meters describes instances where at
 least one identifying field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Meter` with
@@ -213,7 +222,7 @@ implementation MUST create a valid Instrument in every case.  Here,
 "valid" means an instrument that is functional and can be expected to
 export data, despite potentially creating a [semantic error in the
 data
-model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations).
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
 
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of
@@ -227,7 +236,7 @@ When more than one distinct Instrument is registered with the same
 to the user informing them of duplicate registration conflict(s).
 The warning helps to avoid the semantic error state described in the
 [OpenTelemetry Metrics data
-model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
 when more than one `Metric` is written for a given instrument `name`
 and Meter identity by the same MeterProvider.
 

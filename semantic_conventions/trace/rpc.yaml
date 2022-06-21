@@ -5,7 +5,7 @@ groups:
     events: [rpc.message]
     attributes:
       - id: system
-        required: always
+        requirement_level: required
         brief: 'A string identifying the remoting system. See below for a list of well-known identifiers.'
         type:
           allow_custom_values: true
@@ -24,8 +24,7 @@ groups:
               brief: 'Apache Dubbo'
       - id: service
         type: string
-        required:
-          conditional: "No, but recommended"
+        requirement_level: recommended
         brief: 'The full (logical) name of the service being called, including its package name, if applicable.'
         note: >
           This is the logical name of the service from the RPC interface perspective,
@@ -37,8 +36,7 @@ groups:
         examples: "myservice.EchoService"
       - id: method
         type: string
-        required:
-          conditional: "No, but recommended"
+        requirement_level: recommended
         brief: 'The name of the (logical) method being called, must be equal to the $method part in the span name.'
         note: >
           This is the logical name of the method from the RPC interface perspective,
@@ -50,11 +48,11 @@ groups:
       - ref: net.peer.ip
       - ref: net.peer.name
       - ref: net.peer.port
-        required:
-          conditional: "See below"
+        requirement_level:
+          conditionally_required: See below
       - ref: net.transport
-        required:
-          conditional: "See below"
+        requirement_level:
+          conditionally_required: See below
     constraints:
       - any_of:
           - net.peer.ip
@@ -129,7 +127,7 @@ groups:
             - id: unauthenticated
               brief: UNAUTHENTICATED
               value: 16
-        required: always
+        requirement_level: required
         brief: "The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request."
 
   - id: rpc.jsonrpc
@@ -139,8 +137,8 @@ groups:
     attributes:
       - id: version
         type: string
-        required:
-          conditional: 'If missing, it is assumed to be "1.0".'
+        requirement_level:
+          conditionally_required: If other than the default version (`1.0`)
         brief: "Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted."
         examples: ['2.0', '1.0']
       - id: request_id
@@ -153,8 +151,8 @@ groups:
         examples: ['10', 'request-7', '']
       - id: error_code
         type: int
-        required:
-          conditional: 'If missing, response is assumed to be successful.'
+        requirement_level:
+          conditionally_required: If response is not successful.
         brief: "`error.code` property of response if it is an error response."
         examples: [-32700, 100]
       - id: error_message
@@ -162,7 +160,7 @@ groups:
         brief: "`error.message` property of response if it is an error response."
         examples: ['Parse error', 'User already exists']
       - ref: rpc.method
-        required: always
+        requirement_level: required
         note: >
           This is always required for jsonrpc. See the note in the general
           RPC conventions for more information.

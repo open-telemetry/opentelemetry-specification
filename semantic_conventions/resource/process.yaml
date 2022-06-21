@@ -11,8 +11,8 @@ groups:
         examples: [1234]
       - id: executable.name
         type: string
-        required:
-          conditional: "See below"
+        requirement_level:
+          conditionally_required: See alternative attributes below.
         brief: >
           The name of the process executable. On Linux based systems, can be set
           to the `Name` in `proc/[pid]/status`. On Windows, can be set to the
@@ -20,8 +20,8 @@ groups:
         examples: ['otelcol']
       - id: executable.path
         type: string
-        required:
-          conditional: "See below"
+        requirement_level:
+          conditionally_required: See alternative attributes below.
         brief: >
           The full path to the process executable. On Linux based systems, can
           be set to the target of `proc/[pid]/exe`. On Windows, can be set to the
@@ -29,8 +29,8 @@ groups:
         examples: ['/usr/bin/cmd/otelcol']
       - id: command
         type: string
-        required:
-          conditional: "See below"
+        requirement_level:
+          conditionally_required: See alternative attributes below.
         brief: >
           The command used to launch the process (i.e. the command name). On Linux
           based systems, can be set to the zeroth string in `proc/[pid]/cmdline`.
@@ -38,8 +38,8 @@ groups:
         examples: ['cmd/otelcol']
       - id: command_line
         type: string
-        required:
-          conditional: "See below"
+        requirement_level:
+          conditionally_required: See alternative attributes below.
         brief: >
           The full command used to launch the process as a single string representing
           the full command. On Windows, can be set to the result of `GetCommandLineW`.
@@ -48,8 +48,8 @@ groups:
         examples: ['C:\cmd\otecol --config="my directory\config.yaml"']
       - id: command_args
         type: string[]
-        required:
-          conditional: "See below"
+        requirement_level:
+          conditionally_required: See alternative attributes below.
         brief: >
           All the command arguments (including the command/executable itself) as
           received by the process. On Linux-based systems (and some other Unixoid
@@ -62,6 +62,14 @@ groups:
         brief: >
           The username of the user that owns the process.
         examples: 'root'
+    constraints:
+      - any_of:
+          - process.executable.name
+          - process.executable.path
+          - process.command
+          - process.command_line
+          - process.command_args
+
   - id: process.runtime
     prefix: process.runtime
     brief: >

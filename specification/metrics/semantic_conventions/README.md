@@ -10,6 +10,7 @@
   * [Name Reuse Prohibition](#name-reuse-prohibition)
   * [Units](#units)
   * [Pluralization](#pluralization)
+    + [Use `count` Instead of Pluralization](#use-count-instead-of-pluralization)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
   * [Instrument Units](#instrument-units)
@@ -104,6 +105,17 @@ Examples:
 should not be pluralized, even if many data points are recorded.
 * `system.paging.faults`, `system.disk.operations`, and `system.network.packets`
 should be pluralized, even if only a single data point is recorded.
+
+#### Use `count` Instead of Pluralization
+
+If the value being recorded represents the count of concepts signified
+by the namespace then the metric should be named `count` (within its namespace).
+The pluralization rule does not apply in this case.
+
+For example if we have a namespace `system.processes` which contains all metrics related
+to the processes then to represent the count of the processes we can have a metric named
+`system.processes.count`. The suffix `count` here indicates that it is the count of
+`system.processes`.
 
 ## General Metric Semantic Conventions
 

@@ -59,23 +59,23 @@ Don't set the span status description if the reason can be inferred from `http.s
 ## Common Attributes
 
 <!-- semconv http -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Yes |
-| `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | No |
-| `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/path/12314/?q=ddds#123` | No |
-| `http.host` | string | The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4). An empty Host header should also be reported, see note. [2] | `www.example.org` | No |
-| `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | No |
-| `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | If and only if one was received/sent. |
-| `http.flavor` | string | Kind of HTTP protocol used. [3] | `1.0` | No |
-| `http.user_agent` | string | Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | No |
-| `http.request_content_length` | int | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
-| `http.request_content_length_uncompressed` | int | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
-| `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | No |
-| `http.response_content_length_uncompressed` | int | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | No |
-| `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | If and only if a request was retried. |
-| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | No |
-| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | No |
+| `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Recommended |
+| `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/path/12314/?q=ddds#123` | Recommended |
+| `http.host` | string | The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4). An empty Host header should also be reported, see note. [2] | `www.example.org` | Recommended |
+| `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Recommended |
+| `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
+| `http.flavor` | string | Kind of HTTP protocol used. [3] | `1.0` | Recommended |
+| `http.user_agent` | string | Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
+| `http.request_content_length` | int | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
+| `http.request_content_length_uncompressed` | int | The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used. | `5493` | Recommended |
+| `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
+| `http.response_content_length_uncompressed` | int | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | Recommended |
+| `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | Recommended: If and only if a request was retried. |
+| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Recommended |
+| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Recommended |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
@@ -109,10 +109,10 @@ It is recommended to also use the general [network attributes][], especially `ne
 
 ### HTTP request and response headers
 
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.request.header.content_type=["application/json"]`; `http.request.header.x_forwarded_for=["1.2.3.4", "1.2.3.5"]` | No |
-| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.response.header.content_type=["application/json"]`; `http.response.header.my_custom_header=["abc", "def"]` | No |
+| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.request.header.content_type=["application/json"]`; `http.request.header.x_forwarded_for=["1.2.3.4", "1.2.3.5"]` | Optional |
+| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.response.header.content_type=["application/json"]`; `http.response.header.my_custom_header=["abc", "def"]` | Optional |
 
 **[1]:** Instrumentations SHOULD require an explicit configuration of which headers are to be captured.
 Including all request/response headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
@@ -145,7 +145,7 @@ If set, `http.url` must be the originally requested URL,
 before any HTTP-redirects that may happen when executing the request.
 
 <!-- semconv http.client -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | See below |
 
@@ -229,11 +229,11 @@ If the route does not include the application root, it SHOULD be prepended to th
 If the route cannot be determined, the `name` attribute MUST be set as defined in the general semantic conventions for HTTP.
 
 <!-- semconv http.server -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `http.server_name` | string | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). [1] | `example.com` | See below |
-| `http.route` | string | The matched route (path template). | `/users/:userID?` | No |
-| `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | No |
+| `http.route` | string | The matched route (path template). | `/users/:userID?` | Recommended |
+| `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | Recommended |
 
 **[1]:** `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148). It is thus preferred to supply the raw data that is available.
 
