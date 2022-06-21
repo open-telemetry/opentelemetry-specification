@@ -164,11 +164,11 @@ Socket-level attributes identify peer and host that are directly connected to ea
 
 `net.sock.family` identifies address family specified when connecting to the socket. For example, it matches `sa_family` field of `sockaddr` structure on [Linux](https://man7.org/linux/man-pages/man0/sys_socket.h.0p.html) and [Windows](https://docs.microsoft.com/windows/win32/api/winsock/ns-winsock-sockaddr).
 
-_Note: Specific structures and methods to obtain socket-level attributes are mentioned here only as examples. Instrumentations would usually use Socket API provided by their runtime or sockets implementations._
+_Note: Specific structures and methods to obtain socket-level attributes are mentioned here only as examples. Instrumentations would usually use Socket API provided by their environment or sockets implementations._
 
 #### Peer
 
-`net.sock.peer.addr`, `net.sock.peer.port` (when applicable) identify remote peer - the address used to connect to the socket. For example, when connecting using `connect(2)`
+`net.sock.peer.addr`, `net.sock.peer.port` identify remote peer - the address used to connect to the socket. For example, when connecting using `connect(2)`
 on [Linux](https://man7.org/linux/man-pages/man2/connect.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-connect)
 with `AF_INET` address family, represent `sin_addr` and `sin_port` fields of [`sockaddr_in`](https://man7.org/linux/man-pages/man7/ip.7.html) structure.
 Port SHOULD only be populated for families that have notion of port.
@@ -189,9 +189,9 @@ in addition to DNS name.
 
 #### Host
 
-`net.sock.host.addr`, `net.sock.host.port` (when applicable) identify local socket address - the address used to bind to the socket. For example, when using `bind(2)`
+`net.sock.host.addr`, `net.sock.host.port`  identify local socket address - the address used to bind to the socket. For example, when using `bind(2)`
 on [Linux](https://man7.org/linux/man-pages/man2/bind.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-bind)
-with `AF_INET` address family, `sin_addr` and `sin_port` fields of `sockaddr_in` structure.
+with `AF_INET` address family, represent `sin_addr` and `sin_port` fields of `sockaddr_in` structure.
 
 `net.sock.host.port` SHOULD only be populated for families that have notion of port.
 
