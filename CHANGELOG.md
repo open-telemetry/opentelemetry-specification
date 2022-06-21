@@ -25,6 +25,8 @@ release.
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 - Add semantic conventions for GraphQL
   ([#2456](https://github.com/open-telemetry/opentelemetry-specification/pull/2456))
+- Change `cloudevents.event_spec_version` and `cloudevents.event_type` level from `required` to `recommended`
+  ([#2618](https://github.com/open-telemetry/opentelemetry-specification/pull/2618))
 
 ### Compatibility
 
