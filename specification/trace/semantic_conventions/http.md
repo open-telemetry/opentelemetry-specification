@@ -166,6 +166,7 @@ before any HTTP-redirects that may happen when executing the request.
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
 * `http.scheme`, [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.sock.peer.addr`](span-general.md), [`net.sock.peer.port`](span-general.md), `http.target`
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 

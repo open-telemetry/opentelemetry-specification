@@ -152,12 +152,13 @@ groups:
         note: >
           When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
           URI port component, otherwise it MUST match `Host` header port component.
+
     constraints:
       - any_of:
           - [http.url]
           - [http.scheme, http.host, http.target]
           - [http.scheme, net.peer.name, net.peer.port, http.target]
-
+          - [http.scheme, net.sock.peer.addr, net.sock.peer.port, http.target]
   - id: http.server
     prefix: http
     extends: http

@@ -64,7 +64,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[1]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[2]:** if different than `AF_INET` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set
+**[2]:** if different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set
 
 **[3]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
@@ -84,9 +84,9 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 | Value  | Description |
 |---|---|
-| `AF_INET` | IPv4 address |
-| `AF_INET6` | IPv6 address |
-| `AF_UNIX` | Unix domain socket path/ |
+| `inet` | IPv4 address |
+| `inet6` | IPv6 address |
+| `unix` | Unix domain socket path/ |
 
 `net.host.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
