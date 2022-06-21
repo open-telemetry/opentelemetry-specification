@@ -8,7 +8,7 @@ This document contains the first cut from the
 This specification defines how the OpenTelemetry Logging Library SDK exposes its
 functionality to authors of extensions to language-specific 3rd party logging
 libraries and to end users that want to produce logs in the
-[OpenTelemetry manner](overview.md).
+[OpenTelemetry manner](README.md).
 
 The specification defines SDK elements that to some extent mirror the
 OpenTelemetry [Trace SDK](../trace/sdk.md). This ensures uniformity and
@@ -120,7 +120,7 @@ Methods:
 An Appender implementation can be used to allow emitting log records via
 OpenTelemetry Logging Library exporters. This approach is typically used for
 applications which are fine with changing the log transport and is
-[one of the supported](overview.md#direct-to-collector) log collection
+[one of the supported](README.md#direct-to-collector) log collection
 approaches.
 
 The Appender implementation will typically acquire a LogEmitter from the global
