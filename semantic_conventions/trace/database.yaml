@@ -218,23 +218,24 @@ groups:
         requirement_level:
           conditionally_required: See alternative attributes below.
         brief: >
-          Database hostname.
+          Name of the database host.
       - ref: net.peer.port
         tag: connection-level
         requirement_level:
           conditionally_required: If using a port other than the default port for this DBMS.
       - ref: net.sock.peer.addr
         tag: connection-level
-        requirement_level:
-          conditionally_required: See alternative attributes below.
       - ref: net.sock.peer.port
-        tag: connection-level
         requirement_level:
-          conditionally_required: if using a port other than the default port for this DBMS.
+          recommended: If different than `net.peer.port` and if `net.sock.peer.addr` is set.
+        tag: connection-level
       - ref: net.sock.family
         tag: connection-level
         requirement_level:
-          conditionally_required: if applicable and if `net.sock.peer.addr` is set.
+          conditionally_required: If and only if `net.sock.peer.addr` is set.
+      - ref: net.sock.peer.name
+        requirement_level:
+          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
       - ref: net.transport
         tag: connection-level
         requirement_level:

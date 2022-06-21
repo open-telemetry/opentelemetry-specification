@@ -12,9 +12,12 @@ Particular operations may refer to or require some of these attributes.
 
 - [General network connection attributes](#general-network-connection-attributes)
   * [Network transport attributes](#network-transport-attributes)
-  * [`net.*.name` attributes](#netname-attributes)
+  * [`net.peer.name` and `net.host.name` attributes](#netpeername-and-nethostname-attributes)
     + [`net.peer.name`](#netpeername)
     + [`net.host.name`](#nethostname)
+  * [`net.sock.*` attributes](#netsock-attributes)
+    + [Peer](#peer)
+    + [Host](#host)
     + [Connecting through intermediary](#connecting-through-intermediary)
 - [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
@@ -43,15 +46,15 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.peer.ip` | string | Remote address of the logical peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Recommended |
 | `net.sock.peer.name` | string | Remote socket peer name. | `proxy.example.com` | Recommended |
 | `net.sock.peer.addr` | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
- [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). [2] | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
-| `net.sock.peer.port` | int | Remote socket peer port (if defined for the address family). | `16456` | Conditionally Required: [3] |
-| `net.sock.family` | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Conditionally Required: [4] |
-| `net.peer.name` | string | Logical remote hostname, see note below. [5] | `example.com` | Recommended |
+ [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
+| `net.sock.peer.port` | int | Remote socket peer port (if defined for the address family). | `16456` | Recommended |
+| `net.sock.family` | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Conditionally Required: [2] |
+| `net.peer.name` | string | Logical remote hostname, see note below. [3] | `example.com` | Recommended |
 | `net.peer.port` | int | Logical remote port number | `80`; `8080`; `443` | Recommended |
 | `net.host.name` | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
 | `net.host.port` | int | Logical local port number, preferably the one that the peer used to connect | `8080` | Recommended |
-| `net.sock.host.addr` | string | Like `net.sock.peer.addr` but for the host IP. Useful in case of a multi-IP host. [6] | `192.168.0.1` | Recommended |
-| `net.sock.host.port` | int | Local socket peer port (if defined for the address family). | `35555` | Conditionally Required: [7] |
+| `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Recommended |
+| `net.sock.host.port` | int | Local socket peer port (if defined for the address family). | `35555` | Recommended |
 | `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
 | `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
 | `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
@@ -61,17 +64,9 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[1]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[2]:** Can be obtained by calling `getpeername` method on [Linux](https://man7.org/linux/man-pages/man2/getpeername.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getpeername) with format specific to protocol address family.
+**[2]:** if different than `AF_INET` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set
 
-**[3]:** if `net.sock.peer.addr` is set and `net.sock.family` has a notion of port
-
-**[4]:** if different than `AF_INET` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set
-
-**[5]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
-
-**[6]:** Can be obtained by calling `getsockname` method on [Linux](https://man7.org/linux/man-pages/man2/getsockname.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getsockname) with format specific to protocol address family.
-
-**[7]:** if `net.sock.host.addr` is set and `net.sock.family` has a notion of port
+**[3]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 `net.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -132,18 +127,19 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 
-### `net.*.name` attributes
+### `net.peer.name` and `net.host.name` attributes
 
 `net.peer.name` and `net.host.name` represent logical host names. Semantic conventions that refer to these attributes SHOULD
 specify what these attributes mean in their context.
 
-Semantic conventions and instrumentations that populate both logical (`net.peer.name`, `net.host.name`) and socket-level (`net.sock.*.name`) attributes SHOULD only set socket-level attributes when they don't match logical ones. For example, when direct connection to the remote destination is established and when `net.peer.name` is populated, `net.sock.peer.name` SHOULD NOT be set. Check out [Connecting through intermediary](#connecting-through-intermediary) for more information.
+Semantic conventions and instrumentations that populate both logical (`net.peer.name`, `net.host.name`) and socket-level (`net.sock.*.name`) attributes SHOULD set socket-level attributes only when they don't match logical ones. For example, when direct connection to the remote destination is established and `net.peer.name` is populated, `net.sock.peer.name` SHOULD NOT be set. Check out [Connecting through intermediary](#connecting-through-intermediary) for more information.
 
 #### `net.peer.name`
 
 For IP-based communication, the name should be a DNS host name.
 
-`net.peer.name` should be the name of logical remote destination, e.g., `"example.com"` if connecting to an URL `https://example.com/foo`.
+`net.peer.name` should be the name of logical remote destination, e.g., `"example.com"` if connecting to an URL `https://example.com/foo`. Usually, application pass it as configuration to client libraries in form of URL, connection string, host name, etc.
+
 Sometimes host name is only available to instrumentation as a string which may contain DNS name or IP address. `net.peer.name` SHOULD be set to the available known hostname (e.g., `"127.0.0.1"` if connecting to an URL `https://127.0.0.1.com/foo`).
 
 If only IP address is available via `net.sock.peer.addr`, `net.peer.name` SHOULD NOT be set. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
@@ -160,14 +156,51 @@ For Unix domain socket, `net.sock.peer.addr` attribute represents destination na
 If that is not known, a public hostname should be preferred over a private one. However, in that case it may be redundant with information already contained in resources and may be left out.
 It will usually not make sense to use reverse-lookup to obtain `net.host.name`, as that would result in static information that is better stored as resource information.
 
+### `net.sock.*` attributes
+
+_Note: this section applies to socket connections visible to instrumentations. Instrumentations have limited knowledge about intermediaries communications goes through such as [transparent proxies](https://www.rfc-editor.org/rfc/rfc3040.html#section-2.5) or VPN servers. Higher-level instrumentations such as HTTP don't always have access to the socket-level information and may not be able to populate socket-level attributes._
+
+Socket-level attributes identify peer and host that are directly connected to each other. Since instrumentations may have limited knowledge on network information, instrumentations SHOULD populate such attributes to the best of their knowledge when populate them at all.
+
+`net.sock.family` identifies address family specified when connecting to the socket. For example, it matches `sa_family` field of `sockaddr` structure on [Linux](https://man7.org/linux/man-pages/man0/sys_socket.h.0p.html) and [Windows](https://docs.microsoft.com/windows/win32/api/winsock/ns-winsock-sockaddr).
+
+_Note: Specific structures and methods to obtain socket-level attributes are mentioned here only as examples. Instrumentations would usually use Socket API provided by their runtime or sockets implementations._
+
+#### Peer
+
+`net.sock.peer.addr`, `net.sock.peer.port` (when applicable) identify remote peer - the address used to connect to the socket. For example, when connecting using `connect(2)`
+on [Linux](https://man7.org/linux/man-pages/man2/connect.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-connect)
+with `AF_INET` address family, represent `sin_addr` and `sin_port` fields of [`sockaddr_in`](https://man7.org/linux/man-pages/man7/ip.7.html) structure.
+Port SHOULD only be populated for families that have notion of port.
+
+Address and port can be obtained by calling `getpeername` method on [Linux](https://man7.org/linux/man-pages/man2/getpeername.2.html),
+[Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getpeername).
+
+`net.sock.peer.port` SHOULD only be populated for families that have notion of port.
+
+`net.sock.peer.name` SHOULD be set to the DNS name used to resolve `net.sock.peer.addr` if it's readily available. Instrumentations
+SHOULD NOT do DNS lookups to obtain `net.sock.peer.addr` or `net.sock.peer.name`. If peer information available to instrumentation
+can represent DNS name or IP address, instrumentation SHOULD NOT attempt to parse it and SHOULD only set `net.sock.peer.name`.
+
+For example, [URL Host component](https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2) can contain IP address or DNS name and
+instrumentations that don't have access to socket-level communication can only populate `net.sock.peer.name`.
+Instrumentations that have access to socket connection, may be able to populate valid `net.sock.peer.addr` instead of or
+in addition to DNS name.
+
+#### Host
+
+`net.sock.host.addr`, `net.sock.host.port` (when applicable) identify local socket address - the address used to bind to the socket. For example, when using `bind(2)`
+on [Linux](https://man7.org/linux/man-pages/man2/bind.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-bind)
+with `AF_INET` address family, `sin_addr` and `sin_port` fields of `sockaddr_in` structure.
+
+`net.sock.host.port` SHOULD only be populated for families that have notion of port.
+
+Address and port can be obtained by calling `getsockname` method on [Linux](https://man7.org/linux/man-pages/man2/getsockname.2.html),
+[Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getsockname).
+
 #### Connecting through intermediary
 
-When connecting to the remote destination through an intermediary (e.g. proxy), client instrumentations SHOULD set `net.peer.name` and `net.peer.port` to logical remote destination address and `net.sock.peer.addr` and `net.sock.peer.port` to the intermediary address and port respectively. `net.sock.peer.name` SHOULD be set to intermediary DNS name if readily available.
-
-Instrumentations SHOULD NOT do DNS lookups to obtain `net.sock.peer.addr` or `net.sock.peer.name`. If intermediary information available to instrumentation can represent DNS name or address,
-it SHOULD NOT attempt parsing it and SHOULD set `net.sock.peer.name`.
-
-For example, [WebProxy in .NET](https://docs.microsoft.com/dotnet/api/system.net.webproxy.address) does not differentiate IP address and DNS name and HTTP instrumentations that don't have access to socket-level communication can only populate `net.sock.peer.name`. Instrumentations that have access to socket-level information, may be able to populate valid `net.sock.peer.addr` instead of or in addition to DNS name.
+When connecting to the remote destination through an intermediary (e.g. proxy), client instrumentations SHOULD set `net.peer.name` and `net.peer.port` to logical remote destination address and `net.sock.peer.addr` and `net.sock.peer.port` to the socket peer connection is established with - the intermediary.
 
 Server instrumentations that use `net.host.name` and `net.host.port` SHOULD set them to logical local host; If `net.sock.peer.addr` and `net.sock.peer.port` are used, they SHOULD be set to the address of intermediary connection is established with.
 Server semantic conventions SHOULD define additional attribute(s) representing originating peer address for reverse-proxy scenarios when such information is available.

@@ -61,11 +61,12 @@ Examples of span names:
 | `rpc.service` | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | Recommended |
 | `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | Recommended |
 | [`net.peer.name`](span-general.md) | string | RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html). [3] | `example.com` | Required |
-| [`net.peer.port`](span-general.md) | int | RPC server [port](https://grpc.github.io/grpc/core/md_doc_naming.html) | `80`; `8080`; `443` | Conditionally Required: See below |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Recommended |
+| [`net.peer.port`](span-general.md) | int | Logical remote port number | `80`; `8080`; `443` | Conditionally Required: See below |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Conditionally Required: If and only if `net.sock.peer.addr` is set. |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
- [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). [4] | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port (if defined for the address family). | `16456` | Recommended |
+ [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
+| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [4] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port (if defined for the address family). | `16456` | Recommended: [5] |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: See below |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
@@ -74,10 +75,13 @@ Examples of span names:
 
 **[3]:** May contain server IP address, DNS name, or local socket name. When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set `net.peer.name` to the IP address provided in the host component.
 
-**[4]:** Can be obtained by calling `getpeername` method on [Linux](https://man7.org/linux/man-pages/man2/getpeername.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getpeername) with format specific to protocol address family.
+**[4]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
+**[5]:** If different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
+* [`net.sock.peer.addr`](span-general.md)
 * [`net.peer.name`](span-general.md)
 
 `rpc.system` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
@@ -116,11 +120,13 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | [`net.host.name`](span-general.md) | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Recommended |
-| [`net.sock.host.addr`](span-general.md) | string | Like `net.sock.peer.addr` but for the host IP. Useful in case of a multi-IP host. [1] | `192.168.0.1` | Recommended |
-| [`net.sock.host.port`](span-general.md) | int | Local socket peer port (if defined for the address family). | `35555` | Recommended |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Conditionally Required: [1] |
+| [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Recommended |
+| [`net.sock.host.port`](span-general.md) | int | Local socket peer port (if defined for the address family). | `35555` | Recommended: [2] |
 
-**[1]:** Can be obtained by calling `getsockname` method on [Linux](https://man7.org/linux/man-pages/man2/getsockname.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getsockname) with format specific to protocol address family.
+**[1]:** If and only if `net.sock.peer.addr` or `net.sock.host.addr` are set.
+
+**[2]:** If different than `net.host.port` and if `net.sock.host.addr` is set.
 <!-- endsemconv -->
 
 ### Events

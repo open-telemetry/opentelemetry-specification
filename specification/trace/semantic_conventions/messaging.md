@@ -140,10 +140,11 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.message_payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended |
 | `messaging.message_payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended |
 | [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [3] | `example.com` | Conditionally Required: If available. |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Recommended |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Conditionally Required: If and only if `net.sock.peer.addr` is set. |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
- [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). [4] | `127.0.0.1`; `/tmp/mysql.sock` | Conditionally Required: If available. |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port (if defined for the address family). | `16456` | Recommended |
+ [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
+| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [4] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port (if defined for the address family). | `16456` | Recommended: [5] |
 
 **[1]:** If the message destination is either a `queue` or `topic`.
 
@@ -151,7 +152,9 @@ The following operations related to messages are defined for these semantic conv
 
 **[3]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
-**[4]:** Can be obtained by calling `getpeername` method on [Linux](https://man7.org/linux/man-pages/man2/getpeername.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getpeername) with format specific to protocol address family.
+**[4]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
+**[5]:** If different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
 `messaging.destination_kind` MUST be one of the following:
 
