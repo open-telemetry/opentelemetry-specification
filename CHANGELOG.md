@@ -25,6 +25,8 @@ release.
 
 - Add `net.app.protocol.*` attributes
   ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
+- Add network metrics to process semantic conventions
+  ([#2556](https://github.com/open-telemetry/opentelemetry-specification/pull/2556))
 - Adopt attribute requirement levels in semantic conventions
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 - Add semantic conventions for GraphQL
