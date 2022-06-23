@@ -1,3 +1,7 @@
+<!---
+linkTitle: Metrics
+--->
+
 # OpenTelemetry Metrics
 
 <details>

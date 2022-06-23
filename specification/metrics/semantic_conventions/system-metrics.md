@@ -1,3 +1,7 @@
+<!---
+linkTitle: System
+--->
+
 # Semantic Conventions for System Metrics
 
 **Status**: [Experimental](../../document-status.md)
