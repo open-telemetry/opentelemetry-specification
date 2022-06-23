@@ -1,4 +1,8 @@
-# General
+<!---
+linkTitle: FaaS
+--->
+
+# Semantic Conventions for FaaS Metrics
 
 **Status**: [Experimental](../../document-status.md)
 
