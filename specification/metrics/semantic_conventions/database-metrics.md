@@ -1,4 +1,8 @@
-# General
+<!---
+linkTitle: Database
+--->
+
+# Semantic Conventions for Database Metrics
 
 **Status**: [Experimental](../../document-status.md)
 

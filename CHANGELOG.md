@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Add experimental `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable for
+  configuring default histogram aggregation of OTLP metric exporter
+  ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
+
 ### Logs
 
 ### Resource
