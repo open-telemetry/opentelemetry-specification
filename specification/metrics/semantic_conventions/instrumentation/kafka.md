@@ -1,3 +1,7 @@
+<!---
+linkTitle: Kafka
+--->
+
 # Instrumenting Kafka
 
 **Status**: [Experimental](../../../document-status.md)

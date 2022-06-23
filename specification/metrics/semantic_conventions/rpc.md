@@ -1,3 +1,7 @@
+<!---
+linkTitle: RPC
+--->
+
 # General RPC conventions
 
 **Status**: [Experimental](../../document-status.md)
