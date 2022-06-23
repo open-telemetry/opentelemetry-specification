@@ -23,11 +23,11 @@ linkTitle: SDK
     + [Last Value Aggregation](#last-value-aggregation)
       - [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
-    + [Exponential Histogram Aggregation](#exponential-histogram-aggregation)
-      - [Exponential Histogram Aggregation: Handle all normal values](#exponential-histogram-aggregation-handle-all-normal-values)
-      - [Exponential Histogram Aggregation: Support a minimum and maximum scale](#exponential-histogram-aggregation-support-a-minimum-and-maximum-scale)
-      - [Exponential Histogram Aggregation: Use the maximum scale for single measurements](#exponential-histogram-aggregation-use-the-maximum-scale-for-single-measurements)
-      - [Exponential Histogram Aggregation: Maintain the ideal scale](#exponential-histogram-aggregation-maintain-the-ideal-scale)
+    + [Exponential Bucket Histogram Aggregation](#exponential-bucket-histogram-aggregation)
+      - [Exponential Bucket Histogram Aggregation: Handle all normal values](#exponential-bucket-histogram-aggregation-handle-all-normal-values)
+      - [Exponential Bucket Histogram Aggregation: Support a minimum and maximum scale](#exponential-bucket-histogram-aggregation-support-a-minimum-and-maximum-scale)
+      - [Exponential Bucket Histogram Aggregation: Use the maximum scale for single measurements](#exponential-bucket-histogram-aggregation-use-the-maximum-scale-for-single-measurements)
+      - [Exponential Bucket Histogram Aggregation: Maintain the ideal scale](#exponential-bucket-histogram-aggregation-maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
@@ -350,7 +350,7 @@ The SDK MUST provide the following `Aggregation` to support the
 
 The SDK MAY provide the following `Aggregation`:
 
-- [Exponential Histogram Aggregation](./sdk.md#exponential-histogram-aggregation)
+- [Exponential Bucket Histogram Aggregation](./sdk.md#exponential-bucket-histogram-aggregation)
 
 #### Drop Aggregation
 
@@ -439,7 +439,7 @@ bound (except at positive infinity).  A measurement is defined to fall
 into the greatest-numbered bucket with boundary that is greater than
 or equal to the measurement.
 
-#### Exponential Histogram Aggregation
+#### Exponential Bucket Histogram Aggregation
 
 The Exponential Histogram Aggregation informs the SDK to collect data
 for the [Exponential Histogram Metric
@@ -491,7 +491,7 @@ either:
 1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
 2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
 
-##### Exponential Histogram Aggregation: Handle all normal values
+##### Exponential Bucket Histogram Aggregation: Handle all normal values
 
 Implementations are REQUIRED to accept the entire normal range of IEEE
 floating point values (i.e., all values except for +Inf, -Inf and NaN
@@ -504,18 +504,18 @@ values do not map into a valid bucket.
 Implementations MAY round subnormal values away from zero to the
 nearest normal value.
 
-##### Exponential Histogram Aggregation: Support a minimum and maximum scale
+##### Exponential Bucket Histogram Aggregation: Support a minimum and maximum scale
 
 The implementation MUST maintain reasonable minimum and maximum scale
 parameters that the automatic scale parameter will not exceed.
 
-##### Exponential Histogram Aggregation: Use the maximum scale for single measurements
+##### Exponential Bucket Histogram Aggregation: Use the maximum scale for single measurements
 
 When the histogram contains not more than one value in either of the
 positive or negative ranges, the implementation SHOULD use the maximum
 scale.
 
-##### Exponential Histogram Aggregation: Maintain the ideal scale
+##### Exponential Bucket Histogram Aggregation: Maintain the ideal scale
 
 Implementations SHOULD adjust the histogram scale as necessary to
 maintain the best resolution possible, within the constraint of

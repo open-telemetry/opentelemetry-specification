@@ -4,6 +4,10 @@ linkTitle: OTLP
 
 # OpenTelemetry Metrics Exporter - OTLP
 
+**Status**: [Mixed](../../document-status.md)
+
+## General
+
 **Status**: [Stable](../../document-status.md)
 
 OTLP Metrics Exporter is a [Push Metric
@@ -23,18 +27,32 @@ variable](../../sdk-environment-variables.md#exporter-selection)),
 then by default:
 
 * The exporter MUST be paired with a [periodic exporting
-MetricReader](../sdk.md#periodic-exporting-metricreader).
+  MetricReader](../sdk.md#periodic-exporting-metricreader).
 * The exporter MUST configure the default aggregation temporality on the
   basis of instrument kind using the
   `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` variable as described
-  below, otherwise the exporter MUST use Cumulative as the default
-  aggregation temporality for all instrument kinds.
+  below.
+* The exporter MUST configure the default aggregation on the basis of instrument kind using
+  the `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable as described below if it is implemented.
 
-The `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` environment variable
-defines the default aggregation temporality policy
-to use on the basis of instrument kind.  The recognized (case-insensitive) values are:
+## Additional Configuration
 
-| Value      | Definition                                                                                                    |
-|------------|---------------------------------------------------------------------------------------------------------------|
-| CUMULATIVE | Choose Cumulative aggregation temporality for all instrument kinds.                                           |
-| DELTA      | Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, choose Cumulative aggregation temporality for UpDownCounter and Asynchronous UpDownCounter instrument kinds. |
+**Status**: [Mixed](../../document-status.md)
+
+| Name                                                | Status       | Description                                                         | Default                     |
+|-----------------------------------------------------|--------------|---------------------------------------------------------------------|-----------------------------|
+| `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` | Stable       | The aggregation temporality to use on the basis of instrument kind. | `cumulative`                |
+| `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION`  | Experimental | The default aggregation to use for histogram instruments.           | `explicit_bucket_histogram` |
+
+The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` are:
+
+* `cumulative`: Choose cumulative aggregation temporality for all instrument kinds.
+* `delta`: Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, choose
+  Cumulative aggregation for UpDownCounter and Asynchronous UpDownCounter instrument kinds.
+
+The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` are:
+
+* `explicit_bucket_histogram`:
+  Use [Explicit Bucket Histogram Aggregation](../sdk.md#explicit-bucket-histogram-aggregation).
+* `exponential_bucket_histogram`:
+  Use [Exponential Bucket Histogram Aggregation](../sdk.md#exponential-bucket-histogram-aggregation).
