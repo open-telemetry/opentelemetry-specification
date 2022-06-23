@@ -16,6 +16,10 @@ release.
 
 ### Metrics
 
+- Add experimental `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable for
+  configuring default histogram aggregation of OTLP metric exporter
+  ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
+
 ### Logs
 
 ### Resource
@@ -28,6 +32,8 @@ release.
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 - Add semantic conventions for GraphQL
   ([#2456](https://github.com/open-telemetry/opentelemetry-specification/pull/2456))
+- Change `cloudevents.event_spec_version` and `cloudevents.event_type` level from `required` to `recommended`
+  ([#2618](https://github.com/open-telemetry/opentelemetry-specification/pull/2618))
 
 ### Compatibility
 

@@ -1,3 +1,8 @@
+<!---
+linkTitle: Logs
+aliases: [/docs/reference/specification/logs/overview]
+--->
+
 # OpenTelemetry Logging Overview
 
 **Status**: [Experimental](../document-status.md)
