@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Clarify the return of `Export(batch)` in the Batch Span Processor and exporter
+  concurrency ([#2452](https://github.com/open-telemetry/opentelemetry-specification/pull/2452))
+
 ### Metrics
 
 - Add experimental `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable for
