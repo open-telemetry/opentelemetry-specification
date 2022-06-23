@@ -1,3 +1,7 @@
+<!---
+linkTitle: OTLP
+--->
+
 # OpenTelemetry Metrics Exporter - OTLP
 
 **Status**: [Mixed](../../document-status.md)
