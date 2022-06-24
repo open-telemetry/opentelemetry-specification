@@ -33,7 +33,7 @@ then by default:
   `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` variable as described
   below.
 * The exporter MUST configure the default aggregation on the basis of instrument kind using
-  the `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable as described below if it is implemented.
+  the `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION` variable as described below if it is implemented.
 
 ## Additional Configuration
 
@@ -42,7 +42,7 @@ then by default:
 | Name                                                | Status       | Description                                                         | Default                     |
 |-----------------------------------------------------|--------------|---------------------------------------------------------------------|-----------------------------|
 | `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` | Stable       | The aggregation temporality to use on the basis of instrument kind. | `cumulative`                |
-| `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION`  | Experimental | The default aggregation to use for histogram instruments.           | `explicit_bucket_histogram` |
+| `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION`  | Experimental | The default aggregation to use for histogram instruments.           | `explicit_bucket_histogram` |
 
 The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` are:
 
@@ -50,7 +50,7 @@ The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_TEMPORA
 * `delta`: Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, choose
   Cumulative aggregation for UpDownCounter and Asynchronous UpDownCounter instrument kinds.
 
-The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` are:
+The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION` are:
 
 * `explicit_bucket_histogram`:
   Use [Explicit Bucket Histogram Aggregation](../sdk.md#explicit-bucket-histogram-aggregation).
