@@ -587,7 +587,7 @@ publish their own conventions, including possible values of `Description`
 and what they mean.
 
 Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
-unless explicitly configured to do so. Instrumention libraries SHOULD leave the
+unless explicitly configured to do so. Instrumentation Libraries SHOULD leave the
 status code as `Unset` unless there is an error, as described above.
 
 Application developers and Operators may set the status code to `Ok`.
