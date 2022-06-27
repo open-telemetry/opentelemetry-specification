@@ -55,15 +55,15 @@ Examples of span names:
 ### Common attributes
 
 <!-- semconv rpc -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `rpc.system` | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Yes |
-| `rpc.service` | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | No, but recommended |
-| `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | No, but recommended |
+| `rpc.system` | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Required |
+| `rpc.service` | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | Recommended |
+| `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | Recommended |
 | [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
 | [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [3] | `example.com` | See below |
-| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | See below |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | See below |
+| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditionally Required: See below |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: See below |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
 
@@ -109,10 +109,10 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 ### Server attributes
 
 <!-- semconv rpc.server -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`net.host.ip`](span-general.md) | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | No |
-| [`net.host.name`](span-general.md) | string | Local hostname or similar, see note below. | `localhost` | No |
+| [`net.host.ip`](span-general.md) | string | Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
+| [`net.host.name`](span-general.md) | string | Local hostname or similar, see note below. | `localhost` | Recommended |
 <!-- endsemconv -->
 
 ### Events
@@ -124,12 +124,12 @@ and one received message will be recorded for both client and server spans.
 <!-- semconv rpc.message -->
 The event name MUST be `message`.
 
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `message.type` | string | Whether this is a received or sent message. | `SENT` | No |
-| `message.id` | int | MUST be calculated as two different counters starting from `1` one for sent messages and one for received message. [1] |  | No |
-| `message.compressed_size` | int | Compressed size of the message in bytes. |  | No |
-| `message.uncompressed_size` | int | Uncompressed size of the message in bytes. |  | No |
+| `message.type` | string | Whether this is a received or sent message. | `SENT` | Recommended |
+| `message.id` | int | MUST be calculated as two different counters starting from `1` one for sent messages and one for received message. [1] |  | Recommended |
+| `message.compressed_size` | int | Compressed size of the message in bytes. |  | Recommended |
+| `message.uncompressed_size` | int | Uncompressed size of the message in bytes. |  | Recommended |
 
 **[1]:** This way we guarantee that the values will be consistent between different implementations.
 
@@ -156,9 +156,9 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 ### gRPC Attributes
 
 <!-- semconv rpc.grpc -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `rpc.grpc.status_code` | int | The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0` | Yes |
+| `rpc.grpc.status_code` | int | The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0` | Required |
 
 `rpc.grpc.status_code` MUST be one of the following:
 
@@ -198,13 +198,13 @@ Conventions specific to [JSON RPC](https://www.jsonrpc.org/).
 ### JSON RPC Attributes
 
 <!-- semconv rpc.jsonrpc -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `rpc.jsonrpc.version` | string | Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted. | `2.0`; `1.0` | If missing, it is assumed to be "1.0". |
-| `rpc.jsonrpc.request_id` | string | `id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification. | `10`; `request-7`; `` | No |
-| `rpc.jsonrpc.error_code` | int | `error.code` property of response if it is an error response. | `-32700`; `100` | If missing, response is assumed to be successful. |
-| `rpc.jsonrpc.error_message` | string | `error.message` property of response if it is an error response. | `Parse error`; `User already exists` | No |
-| `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [1] | `exampleMethod` | Yes |
+| `rpc.jsonrpc.version` | string | Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted. | `2.0`; `1.0` | Conditionally Required: If other than the default version (`1.0`) |
+| `rpc.jsonrpc.request_id` | string | `id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification. | `10`; `request-7`; `` | Recommended |
+| `rpc.jsonrpc.error_code` | int | `error.code` property of response if it is an error response. | `-32700`; `100` | Conditionally Required: If response is not successful. |
+| `rpc.jsonrpc.error_message` | string | `error.message` property of response if it is an error response. | `Parse error`; `User already exists` | Recommended |
+| `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [1] | `exampleMethod` | Required |
 
 **[1]:** This is always required for jsonrpc. See the note in the general RPC conventions for more information.
 <!-- endsemconv -->
