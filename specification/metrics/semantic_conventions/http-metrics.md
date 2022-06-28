@@ -1,4 +1,8 @@
-# General
+<!---
+linkTitle: HTTP
+--->
+
+# Semantic Conventions for HTTP Metrics
 
 **Status**: [Experimental](../../document-status.md)
 
