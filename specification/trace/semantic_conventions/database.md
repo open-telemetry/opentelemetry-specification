@@ -47,7 +47,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Conditionally Required: If and only if `net.sock.peer.addr` is set. |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
  [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port (if defined for the address family). | `16456` | Recommended: [3] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [3] |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [4] |
 
 **[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.

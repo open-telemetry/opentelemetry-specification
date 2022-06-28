@@ -144,7 +144,7 @@ The following operations related to messages are defined for these semantic conv
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
  [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [4] |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port (if defined for the address family). | `16456` | Recommended: [5] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [5] |
 
 **[1]:** If the message destination is either a `queue` or `topic`.
 

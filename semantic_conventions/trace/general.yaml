@@ -48,6 +48,8 @@ groups:
       - id: sock.peer.name
         type: string
         brief: Remote socket peer name.
+        requirement_level:
+          recommended: If available and different than `net.peer.name` and if `net.sock.peer.addr` is set.
         examples: proxy.example.com
       - id: sock.peer.addr
         type: string
@@ -57,7 +59,9 @@ groups:
         examples: ['127.0.0.1', '/tmp/mysql.sock' ]
       - id: sock.peer.port
         type: int
-        brief: Remote socket peer port (if defined for the address family).
+        brief: Remote socket peer port.
+        requirement_level:
+          recommended: If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
         examples: 16456
       - id: sock.family
         type:
@@ -71,9 +75,13 @@ groups:
               brief: "IPv6 address"
             - id: unix
               value: 'unix'
-              brief: "Unix domain socket path/"
+              brief: "Unix domain socket path"
         requirement_level:
-          conditionally_required: if different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set
+          conditionally_required: >
+            If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set.
+            Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr`
+            without `net.sock.family` coming from instrumentations that follow previous versions
+            of this document.
         brief: >
           Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication.
         examples: ['AF_INET', 'AF_BLUETOOTH']

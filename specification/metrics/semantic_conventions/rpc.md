@@ -75,7 +75,7 @@ measurements.
 | [`net.sock.peer.addr`](../../trace/semantic_conventions/span-general.md) | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
  [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
 | [`net.sock.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [4] |
-| [`net.sock.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Remote socket peer port (if defined for the address family). | `16456` | Recommended: [5] |
+| [`net.sock.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [5] |
 | [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: See below |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
