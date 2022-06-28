@@ -34,7 +34,7 @@ instruments not explicitly defined in the specification.
 **Description:** System level processor metrics.
 
 | Name                   | Description                                                                                              | Units | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key(s) | Attribute Values                    |
-|------------------------|----------------------------------------------------------------------------------------------------------|-------|---------------------------------------------------|------------|------------------|-------------------------------------|
+| ---------------------- | -------------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------------- | ---------- | ---------------- | ----------------------------------- |
 | system.cpu.time        |                                                                                                          | s     | Counter                                           | Double     | state            | idle, user, system, interrupt, etc. |
 |                        |                                                                                                          |       |                                                   |            | cpu              | CPU number [0..n-1]                 |
 | system.cpu.utilization | Difference in system.cpu.time since the last measurement, divided by the elapsed time and number of CPUs | 1     | Gauge                                             | Double     | state            | idle, user, system, interrupt, etc. |
@@ -46,7 +46,7 @@ instruments not explicitly defined in the specification.
 memory](#systempaging---pagingswap-metrics).
 
 | Name                      | Description | Units | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values         |
-|---------------------------|-------------|-------|---------------------------------------------------|------------|---------------|--------------------------|
+| ------------------------- | ----------- | ----- | ------------------------------------------------- | ---------- | ------------- | ------------------------ |
 | system.memory.usage       |             | By    | UpDownCounter                                     | Int64      | state         | used, free, cached, etc. |
 | system.memory.utilization |             | 1     | Gauge                                             | Double     | state         | used, free, cached, etc. |
 
@@ -54,29 +54,39 @@ memory](#systempaging---pagingswap-metrics).
 
 **Description:** System level paging/swap memory metrics.
 
-| Name                      | Description                         | Units        | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values |
-|---------------------------|-------------------------------------|--------------|---------------------------------------------------|------------|---------------|------------------|
-| system.paging.usage       | Unix swap or windows pagefile usage | By           | UpDownCounter                                     | Int64      | state         | used, free       |
-| system.paging.utilization |                                     | 1            | Gauge                                             | Double     | state         | used, free       |
-| system.paging.faults      |                                     | {faults}     | Counter                                           | Int64      | type          | major, minor     |
-| system.paging.operations  |                                     | {operations} | Counter                                           | Int64      | type          | major, minor     |
-|                           |                                     |              |                                                   |            | direction     | in, out          |
+| Name                                  | Description                         | Units        | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values |
+| ------------------------------------- | ----------------------------------- | ------------ | ------------------------------------------------- | ---------- | ------------- | ---------------- |
+| system.paging.usage                   | Unix swap or windows pagefile usage | By           | UpDownCounter                                     | Int64      | state         | used, free       |
+| system.paging.utilization             |                                     | 1            | Gauge                                             | Double     | state         | used, free       |
+| system.paging.faults                  |                                     | {faults}     | Counter                                           | Int64      | type          | major, minor     |
+| system.paging.operations (deprecated) |                                     | {operations} | Counter                                           | Int64      | type          | major, minor     |
+|                                       |                                     |              |                                                   |            | direction     | in, out          |
+| system.paging.operations.in           |                                     | {operations} | Counter                                           | Int64      | type          | major, minor     |
+| system.paging.operations.out          |                                     | {operations} | Counter                                           | Int64      | type          | major, minor     |
 
 ### `system.disk.` - Disk controller metrics
 
 **Description:** System level disk performance metrics.
 
-| Name                                       | Description                                     | Units        | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values |
-|--------------------------------------------|-------------------------------------------------|--------------|---------------------------------------------------|------------|---------------|------------------|
-| system.disk.io<!--notlink-->               |                                                 | By           | Counter                                           | Int64      | device        | (identifier)     |
-|                                            |                                                 |              |                                                   |            | direction     | read, write      |
-| system.disk.operations                     |                                                 | {operations} | Counter                                           | Int64      | device        | (identifier)     |
-|                                            |                                                 |              |                                                   |            | direction     | read, write      |
-| system.disk.io_time<sup>\[1\]</sup>        | Time disk spent activated                       | s            | Counter                                           | Double     | device        | (identifier)     |
-| system.disk.operation_time<sup>\[2\]</sup> | Sum of the time each operation took to complete | s            | Counter                                           | Double     | device        | (identifier)     |
-|                                            |                                                 |              |                                                   |            | direction     | read, write      |
-| system.disk.merged                         |                                                 | {operations} | Counter                                           | Int64      | device        | (identifier)     |
-|                                            |                                                 |              |                                                   |            | direction     | read, write      |
+| Name                                             | Description                                     | Units        | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values |
+| ------------------------------------------------ | ----------------------------------------------- | ------------ | ------------------------------------------------- | ---------- | ------------- | ---------------- |
+| system.disk.io<!--notlink--> (deprecated)        |                                                 | By           | Counter                                           | Int64      | device        | (identifier)     |
+|                                                  |                                                 |              |                                                   |            | direction     | read, write      |
+| system.disk.io.read                              |                                                 | By           | Counter                                           | Int64      | device        | (identifier)     |
+| system.disk.io.write                             |                                                 | By           | Counter                                           | Int64      | device        | (identifier)     |
+| system.disk.operations (deprecated)              |                                                 | {operations} | Counter                                           | Int64      | device        | (identifier)     |
+|                                                  |                                                 |              |                                                   |            | direction     | read, write      |
+| system.disk.operations.read                      |                                                 | {operations} | Counter                                           | Int64      | device        | (identifier)     |
+| system.disk.operations.write                     |                                                 | {operations} | Counter                                           | Int64      | device        | (identifier)     |
+| system.disk.io_time<sup>\[1\]</sup>              | Time disk spent activated                       | s            | Counter                                           | Double     | device        | (identifier)     |
+| system.disk.operation_time (deprecated)          | Sum of the time each operation took to complete | s            | Counter                                           | Double     | device        | (identifier)     |
+|                                                  |                                                 |              |                                                   |            | direction     | read, write      |
+| system.disk.operation_time.read<sup>\[2\]</sup>  | Sum of the time each operation took to complete | s            | Counter                                           | Double     | device        | (identifier)     |
+| system.disk.operation_time.write<sup>\[2\]</sup> | Sum of the time each operation took to complete | s            | Counter                                           | Double     | device        | (identifier)     |
+| system.disk.merged (deprecated)                  |                                                 | {operations} | Counter                                           | Int64      | device        | (identifier)     |
+|                                                  |                                                 |              |                                                   |            | direction     | read, write      |
+| system.disk.merged.read                          |                                                 | {operations} | Counter                                           | Int64      | device        | (identifier)     |
+| system.disk.merged.write                         |                                                 | {operations} | Counter                                           | Int64      | device        | (identifier)     |
 
 <sup>1</sup> The real elapsed time ("wall clock")
 used in the I/O path (time from operations running in parallel are not
@@ -102,7 +112,7 @@ perf counter (similar for Writes)
 **Description:** System level filesystem metrics.
 
 | Name                          | Description | Units | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values     |
-|-------------------------------|-------------|-------|---------------------------------------------------|------------|---------------|----------------------|
+| ----------------------------- | ----------- | ----- | ------------------------------------------------- | ---------- | ------------- | -------------------- |
 | system.filesystem.usage       |             | By    | UpDownCounter                                     | Int64      | device        | (identifier)         |
 |                               |             |       |                                                   |            | state         | used, free, reserved |
 |                               |             |       |                                                   |            | type          | ext4, tmpfs, etc.    |
@@ -118,19 +128,27 @@ perf counter (similar for Writes)
 
 **Description:** System level network metrics.
 
-| Name                                   | Description                                                                   | Units         | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values                                                                               |
-|----------------------------------------|-------------------------------------------------------------------------------|---------------|---------------------------------------------------|------------|---------------|------------------------------------------------------------------------------------------------|
-| system.network.dropped<sup>\[1\]</sup> | Count of packets that are dropped or discarded even though there was no error | {packets}     | Counter                                           | Int64      | device        | (identifier)                                                                                   |
-|                                        |                                                                               |               |                                                   |            | direction     | transmit, receive                                                                              |
-| system.network.packets                 |                                                                               | {packets}     | Counter                                           | Int64      | device        | (identifier)                                                                                   |
-|                                        |                                                                               |               |                                                   |            | direction     | transmit, receive                                                                              |
-| system.network.errors<sup>\[2\]</sup>  | Count of network errors detected                                              | {errors}      | Counter                                           | Int64      | device        | (identifier)                                                                                   |
-|                                        |                                                                               |               |                                                   |            | direction     | transmit, receive                                                                              |
-| system<!--notlink-->.network.io        |                                                                               | By            | Counter                                           | Int64      | device        | (identifier)                                                                                   |
-|                                        |                                                                               |               |                                                   |            | direction     | transmit, receive                                                                              |
-| system.network.connections             |                                                                               | {connections} | UpDownCounter                                     | Int64      | device        | (identifier)                                                                                   |
-|                                        |                                                                               |               |                                                   |            | protocol      | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
-|                                        |                                                                               |               |                                                   |            | state         | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
+| Name                                            | Description                                                                               | Units         | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values                                                                               |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------- | ---------- | ------------- | ---------------------------------------------------------------------------------------------- |
+| system.network.dropped (deprecated)             | Count of packets that are dropped or discarded even though there was no error             | {packets}     | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+|                                                 |                                                                                           |               |                                                   |            | direction     | transmit, receive                                                                              |
+| system.network.dropped.transmit<sup>\[1\]</sup> | Count of packets that are dropped or discarded on transmit even though there was no error | {packets}     | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+| system.network.dropped.receive<sup>\[1\]</sup>  | Count of packets that are dropped or discarded on receive even though there was no error  | {packets}     | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+| system.network.packets (deprecated)             |                                                                                           | {packets}     | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+|                                                 |                                                                                           |               |                                                   |            | direction     | transmit, receive                                                                              |
+| system.network.packets.transmit                 | Count of packets transmitted                                                              | {packets}     | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+| system.network.packets.receive                  | Count of packets received                                                                 | {packets}     | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+| system.network.errors (deprecated)              | Count of network errors detected                                                          | {errors}      | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+|                                                 |                                                                                           |               |                                                   |            | direction     | transmit, receive                                                                              |
+| system.network.errors.transmit<sup>\[2\]</sup>  | Count of network errors detected on transmit                                              | {errors}      | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+| system.network.errors.receive<sup>\[2\]</sup>   | Count of network errors detected on receive                                               | {errors}      | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+| system<!--notlink-->.network.io (deprecated)    |                                                                                           | By            | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+|                                                 |                                                                                           |               |                                                   |            | direction     | transmit, receive                                                                              |
+| system<!--notlink-->.network.io.transmit        | Bytes sent                                                                                | By            | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+| system<!--notlink-->.network.io.receive         | Bytes received                                                                            | By            | Counter                                           | Int64      | device        | (identifier)                                                                                   |
+| system.network.connections                      |                                                                                           | {connections} | UpDownCounter                                     | Int64      | device        | (identifier)                                                                                   |
+|                                                 |                                                                                           |               |                                                   |            | protocol      | tcp, udp, [etc.](https://en.wikipedia.org/wiki/Transport_layer#Protocols)                      |
+|                                                 |                                                                                           |               |                                                   |            | state         | [e.g. for tcp](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation) |
 
 <sup>1</sup> Measured as:
 
@@ -156,7 +174,7 @@ from
 individual process level, see [process metrics](process-metrics.md).
 
 | Name                     | Description                                               | Units       | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values                                                                               |
-|--------------------------|-----------------------------------------------------------|-------------|---------------------------------------------------|------------|---------------|------------------------------------------------------------------------------------------------|
+| ------------------------ | --------------------------------------------------------- | ----------- | ------------------------------------------------- | ---------- | ------------- | ---------------------------------------------------------------------------------------------- |
 | system.processes.count   | Total number of processes in each state                   | {processes} | UpDownCounter                                     | Int64      | status        | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
 | system.processes.created | Total number of processes created over uptime of the host | {processes} | Counter                                           | Int64      | -             | -                                                                                              |
 
