@@ -73,7 +73,6 @@ groups:
         brief: 'Describes the type of the operation that was performed on the data.'
       - id: time
         type: string
-        requirement_level: required
         brief: >
           A string containing the time when the data was accessed in the
           [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)
@@ -111,7 +110,6 @@ groups:
     attributes:
       - id: time
         type: string
-        requirement_level: required
         brief: >
           A string containing the function invocation time in the
           [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)

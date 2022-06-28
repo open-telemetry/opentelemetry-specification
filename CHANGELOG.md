@@ -36,6 +36,8 @@ release.
   ([#2456](https://github.com/open-telemetry/opentelemetry-specification/pull/2456))
 - Change `cloudevents.event_spec_version` and `cloudevents.event_type` level from `required` to `recommended`
   ([#2618](https://github.com/open-telemetry/opentelemetry-specification/pull/2618))
+- Change `faas.document.time` and `faas.time` level from `required` to `recommended`
+  ([#2627](https://github.com/open-telemetry/opentelemetry-specification/pull/2627))
 - Remove `direction` dimension, instead creating metrics with names reflecting those
   dimensions.
   ([#2617](https://github.com/open-telemetry/opentelemetry-specification/pull/2617))
