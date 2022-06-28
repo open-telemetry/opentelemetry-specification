@@ -1,3 +1,7 @@
+<!---
+linkTitle: OpenMetrics
+--->
+
 # Guidance for Interoperating with OpenMetrics
 
 **Status**: [Experimental](../../document-status.md)
