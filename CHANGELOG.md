@@ -11,7 +11,14 @@ release.
 
 ### Traces
 
+- Clarify the return of `Export(batch)` in the Batch Span Processor and exporter
+  concurrency ([#2452](https://github.com/open-telemetry/opentelemetry-specification/pull/2452))
+
 ### Metrics
+
+- Add experimental `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable for
+  configuring default histogram aggregation of OTLP metric exporter
+  ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
 
 ### Logs
 
@@ -21,6 +28,8 @@ release.
 
 - Add `net.app.protocol.*` attributes
   ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
+- Add network metrics to process semantic conventions
+  ([#2556](https://github.com/open-telemetry/opentelemetry-specification/pull/2556))
 - Adopt attribute requirement levels in semantic conventions
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 - Add semantic conventions for GraphQL
