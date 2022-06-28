@@ -78,7 +78,7 @@ Examples: physical server, switch or disk array.
 | `hw.host.ambient_temperature` | Ambient (external) temperature of the physical host                                                                                                   | Cel   | Gauge                                             | Double     |                  |                  |
 | `hw.host.energy`              | Total energy consumed by the physical host, in joules                                                                                                 | J     | Counter                                           | Int64      |                  |                  |
 | `hw.host.heating_margin`      | By how many degrees Celsius the temperature of the physical host can be increased, before reaching a warning threshold on one of the internal sensors | Cel   | Gauge                                             | Double     |                  |                  |
-| `hw.host.power`               | Instantaneous power consumed by the physical host in Watts (`hw.energy` is preferred)                                                                 | W     | Gauge                                             | Double     |                  |                  |
+| `hw.host.power`               | Instantaneous power consumed by the physical host in Watts (`hw.host.energy` is preferred)                                                                 | W     | Gauge                                             | Double     |                  |                  |
 
 > **Note**
 > Host energy usage must be reported using the specific `hw.host.energy` and `hw.host.power` metrics instead of the generic `hw.energy` and `hw.power` described above, to avoid the risk of summing up overlapping values.
