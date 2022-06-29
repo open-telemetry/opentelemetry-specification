@@ -32,6 +32,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Add support for partial success in an OTLP export response
+  ([#2636](https://github.com/open-telemetry/opentelemetry-specification/pull/2636)).
+
 ### SDK Configuration
 
 ### Telemetry Schemas
