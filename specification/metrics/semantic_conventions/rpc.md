@@ -7,9 +7,10 @@ linkTitle: RPC
 **Status**: [Experimental](../../document-status.md)
 
 The conventions described in this section are RPC specific. When RPC operations
-occur, metric events about those operations will be generated and reported to
-provide insight into those operations. By adding RPC properties as attributes
-on metric events it allows for finely tuned filtering.
+occur, measurements about those operations are recorded to instruments. The
+measurements are aggregated and exported as metrics, which provide insight into
+those operations. By including RPC properties as attributes on measurements, the
+metrics can be filtered for finer grain analysis.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
@@ -21,6 +22,7 @@ on metric events it allows for finely tuned filtering.
 - [Attributes](#attributes)
   * [Service name](#service-name)
 - [gRPC conventions](#grpc-conventions)
+  * [gRPC Attributes](#grpc-attributes)
 
 <!-- tocstop -->
 
@@ -58,8 +60,8 @@ RPC usage, not streaming RPCs.
 
 ## Attributes
 
-Below is a table of attributes that SHOULD be included on metric events and whether
-or not they should be on the server, client or both.
+Below is a table of attributes that SHOULD be included on client and server RPC
+measurements.
 
 <!-- semconv rpc -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -115,5 +117,37 @@ One process can expose multiple RPC endpoints and thus have multiple RPC service
 For remote procedure calls via [gRPC][], additional conventions are described in this section.
 
 `rpc.system` MUST be set to `"grpc"`.
+
+### gRPC Attributes
+
+Below is a table of attributes that SHOULD be included on client and server RPC measurements when `rpc.system` is `"grpc"`.
+
+<!-- semconv rpc.grpc -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| [`rpc.grpc.status_code`](../../trace/semantic_conventions/rpc.md) | int | The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0` | Required |
+
+`rpc.grpc.status_code` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `0` | OK |
+| `1` | CANCELLED |
+| `2` | UNKNOWN |
+| `3` | INVALID_ARGUMENT |
+| `4` | DEADLINE_EXCEEDED |
+| `5` | NOT_FOUND |
+| `6` | ALREADY_EXISTS |
+| `7` | PERMISSION_DENIED |
+| `8` | RESOURCE_EXHAUSTED |
+| `9` | FAILED_PRECONDITION |
+| `10` | ABORTED |
+| `11` | OUT_OF_RANGE |
+| `12` | UNIMPLEMENTED |
+| `13` | INTERNAL |
+| `14` | UNAVAILABLE |
+| `15` | DATA_LOSS |
+| `16` | UNAUTHENTICATED |
+<!-- endsemconv -->
 
 [gRPC]: https://grpc.io/
