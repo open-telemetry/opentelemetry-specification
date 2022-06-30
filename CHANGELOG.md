@@ -41,6 +41,8 @@ release.
 - Remove `direction` dimension, instead creating metrics with names reflecting those
   dimensions.
   ([#2617](https://github.com/open-telemetry/opentelemetry-specification/pull/2617))
+- Add `rpc.grpc.status_code` to RPC metric semantic conventions
+  ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604)).
 
 ### Compatibility
 
