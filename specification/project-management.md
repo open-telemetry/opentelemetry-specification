@@ -9,7 +9,7 @@ At minimum, specification projects require the following resources to be success
 
 ## Project Tracking Issue
 
-Every project has a high level **Project Tracking Issue**, which describes the project. This issue is frequently edited and kept up to date by the working group. To create a tracking issue, please use the Project Tracing Issue template.
+Every project has a high level **Project Tracking Issue**, which describes the project. This issue is frequently edited and kept up to date by the working group. To create a tracking issue, please use the Project Tracking Issue template.
 
 The project tracking issue must contain the following information:
 
