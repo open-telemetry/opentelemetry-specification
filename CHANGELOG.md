@@ -43,6 +43,9 @@ release.
   ([#2617](https://github.com/open-telemetry/opentelemetry-specification/pull/2617))
 - Add `rpc.grpc.status_code` to RPC metric semantic conventions
   ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604)).
+- Add `http.*.*.size` metric semantic conventions for tracking size of requests
+  / responses for http servers / clients
+  ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588)).
 
 ### Compatibility
 
