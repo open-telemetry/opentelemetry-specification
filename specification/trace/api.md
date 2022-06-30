@@ -173,7 +173,7 @@ If the language has support for implicitly propagated `Context` (see
 the following functionality:
 
 - Get the currently active span from the implicit context. This is equivalent to getting the implicit context, then extracting the `Span` from the context.
-- Set the currently active span to the implicit context. This is equivalent to getting the implicit context, then inserting the `Span` to the context.
+- Set the currently active span into a new context, and make that the implicit context. This is equivalent to getting the implicit context, copying it, and then inserting the `Span` into the copy.
 
 All the above functionalities operate solely on the context API, and they MAY be
 exposed as either static methods on the trace module, or as static methods on a class
