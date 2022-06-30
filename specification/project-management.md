@@ -70,7 +70,7 @@ The project lifecycle is as follows:
 
 ## Project Board
 
-To track our specification projects, we use a GitHub project board. This board only contains Project Tracing Issues, and is organized into the following collumns:
+To track our specification projects, we use a GitHub project board. This board only contains Project Tracking Issues, and is organized into the following columns:
 
 ### Current Projects
 
