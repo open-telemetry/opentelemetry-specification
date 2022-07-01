@@ -163,7 +163,7 @@ The API MUST provide the following functionality to interact with a `Context`
 instance:
 
 - Extract the `Span` from a `Context` instance
-- Insert the `Span` to a `Context` instance
+- Combine the `Span` with a `Context` instance, creating a new `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
 access to the [Context Key](../context/README.md#create-a-key) used by the Tracing API implementation.
