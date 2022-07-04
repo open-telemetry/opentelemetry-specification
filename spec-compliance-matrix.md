@@ -30,7 +30,7 @@ formats is required. Implementing more than one format is optional.
 | Set active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |     |      |     |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| Documentation defines adding attributes at span creation as preferred                            |          |     |      |     |        |      |        |     |      |     | +    |       |
+| Documentation defines adding attributes at span creation as preferred                            |          |     |      |     |        | +    |        |     |      |     | +    |       |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Mark Span active                                                                                 |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -82,7 +82,7 @@ formats is required. Implementing more than one format is optional.
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     |        |      | +      | +   |      |     |      |       |
+| [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     |        | +    | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     |        |      |        | +   |      |     |      |       |
 
 ## Baggage
@@ -255,7 +255,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | -     |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    |        |      |        |     |      |     |      |       |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    |        | +    |        |     |      |     |      |       |
 | Fields                                                                           |          | +  | +    | +  | +      | +    | +      |     | +    | +   | +    | +     |
 | Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
 | Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
@@ -268,26 +268,26 @@ Note: Support for environment variables is optional.
 |Feature                                           |Go | Java |JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
 |--------------------------------------------------|---|------|---|------|----|------|---|----|---|----|-----|
 |OTEL_RESOURCE_ATTRIBUTES                          | + | +    | + | +    | +  | +    | + | +  | + | +  | -   |
-|OTEL_SERVICE_NAME                                 | + | +    |   |      |    | +    | + |    |   | +  |     |
+|OTEL_SERVICE_NAME                                 | + | +    |   |      | +  | +    | + |    |   | +  |     |
 |OTEL_LOG_LEVEL                                    | - | -    | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
 |OTEL_PROPAGATORS                                  | - | +    |   | +    | +  | +    | - | -  | - | -  | -   |
 |OTEL_BSP_*                                        | + | +    |   | +    | +  | +    | - | +  | - | -  | -   |
 |OTEL_EXPORTER_OTLP_*                              | + | +    |   | +    | +  | +    | - | +  | + | +  | -   |
-|OTEL_EXPORTER_JAEGER_*                            | + | +    |   |      |    | -    | - |    | - | +  | -   |
-|OTEL_EXPORTER_ZIPKIN_*                            | - | +    |   |      |    | -    | - | -  | - | +  | -   |
+|OTEL_EXPORTER_JAEGER_*                            | + | +    |   |      | +  | -    | - |    | - | +  | -   |
+|OTEL_EXPORTER_ZIPKIN_*                            | - | +    |   |      | +  | -    | - | -  | - | +  | -   |
 |OTEL_TRACES_EXPORTER                              | - | +    |   | +    | +  | +    | + | -  | - | -  |     |
 |OTEL_METRICS_EXPORTER                             | - | +    |   | +    | -  | -    |   | -  | - | -  | -   |
 |OTEL_LOGS_EXPORTER                                | - | +    |   |      |    |      |   |    |   | -  |     |
 |OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                   | + | +    |   | +    | +  | +    | + | +  | - | -  |     |
-|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT            | + | +    |   |      |    | +    | + |    |   | -  |     |
+|OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT            | + | +    |   |      | +  | +    | + |    |   | -  |     |
 |OTEL_SPAN_EVENT_COUNT_LIMIT                       | + | +    |   | +    | +  | +    | + | +  | - | -  |     |
 |OTEL_SPAN_LINK_COUNT_LIMIT                        | + | +    |   | +    | +  | +    | + | +  | - | -  |     |
-|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                  | + | -    |   |      |    | +    | + |    |   | -  |     |
-|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                   | + | -    |   |      |    | +    | + |    |   | -  |     |
+|OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                  | + | -    |   |      | +  | +    | + |    |   | -  |     |
+|OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                   | + | -    |   |      | +  | +    | + |    |   | -  |     |
 |OTEL_TRACES_SAMPLER                               | + | +    |   | +    | +  | +    |   | -  | - | -  |     |
 |OTEL_TRACES_SAMPLER_ARG                           | + | +    |   | +    | +  | +    |   | -  | - | -  |     |
-|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + | -    |   |      |    | -    |   |    |   | -  |     |
-|OTEL_ATTRIBUTE_COUNT_LIMIT                        | + | -    |   |      |    | -    |   |    |   | -  |     |
+|OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + | -    |   |      | +  | -    |   |    |   | -  |     |
+|OTEL_ATTRIBUTE_COUNT_LIMIT                        | + | -    |   |      | +  | -    |   |    |   | -  |     |
 |OTEL_METRICS_EXEMPLAR_FILTER                      | - | +    |   |      |    |      |   |    |   | -  |     |
 |OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | - | +    |   |      |    |      |   |    |   | -  |     |
 
@@ -295,7 +295,7 @@ Note: Support for environment variables is optional.
 
 | Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
-| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | +    |    | +           |      | +      | +   | +    | +   | +    |       |
+| [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | +    |    | +           | +    | +      | +   | +    | +   | +    |       |
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | +    |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
 | Standard output (logging)                                                      |          | +  | +    | +  | +           | +    | +      | -   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | +    | +  | +           | +    | +      | +   | -    | +   | +    | +     |
