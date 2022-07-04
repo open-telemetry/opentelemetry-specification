@@ -1,3 +1,7 @@
+<!---
+linkTitle: API
+--->
+
 # Metrics API
 
 **Status**: [Stable](../document-status.md)
