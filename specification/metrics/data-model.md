@@ -1,3 +1,7 @@
+<!---
+linkTitle: Data Model
+--->
+
 # Metrics Data Model
 
 **Status**: [Mixed](../document-status.md)
