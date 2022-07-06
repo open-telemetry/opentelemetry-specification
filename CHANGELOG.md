@@ -47,6 +47,8 @@ release.
 - Add `http.*.*.size` metric semantic conventions for tracking size of requests
   / responses for http servers / clients
   ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588)).
+- Add semantic conventions for JVM buffer pool usage
+  ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
 
 ### Compatibility
 
