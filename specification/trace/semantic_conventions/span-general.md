@@ -43,12 +43,11 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | Recommended |
 | `net.app.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
 | `net.app.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
-| `net.peer.ip` | string | Remote address of the logical peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Recommended |
 | `net.sock.peer.name` | string | Remote socket peer name. | `proxy.example.com` | Recommended: [2] |
 | `net.sock.peer.addr` | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
  [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | `net.sock.peer.port` | int | Remote socket peer port. | `16456` | Recommended: [3] |
-| `net.sock.family` | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `AF_INET`; `AF_BLUETOOTH` | Conditionally Required: [4] |
+| `net.sock.family` | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [4] |
 | `net.peer.name` | string | Logical remote hostname, see note below. [5] | `example.com` | Recommended |
 | `net.peer.port` | int | Logical remote port number | `80`; `8080`; `443` | Recommended |
 | `net.host.name` | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |

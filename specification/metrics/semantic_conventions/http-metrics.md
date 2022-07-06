@@ -101,6 +101,7 @@ path.
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
 * `http.scheme`, `net.peer.name`, `net.peer.port`, `http.target`
+* `http.scheme`, `net.sock.peer.addr`, `net.sock.peer.port`, `http.target`
 
 **[2]** For server metric attributes, `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. <https://github.com/open-telemetry/opentelemetry-python/pull/148>).
 It is thus preferred to supply the raw data that _is_ available.

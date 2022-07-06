@@ -222,17 +222,13 @@ groups:
       - ref: net.peer.port
         tag: connection-level
         requirement_level:
-          conditionally_required: If using a port other than the default port for this DBMS.
+          conditionally_required: If using a port other than the default port for this DBMS and if `net.peer.name` is set.
       - ref: net.sock.peer.addr
         tag: connection-level
       - ref: net.sock.peer.port
-        requirement_level:
-          recommended: If different than `net.peer.port` and if `net.sock.peer.addr` is set.
         tag: connection-level
       - ref: net.sock.family
         tag: connection-level
-        requirement_level:
-          conditionally_required: If and only if `net.sock.peer.addr` is set.
       - ref: net.sock.peer.name
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
