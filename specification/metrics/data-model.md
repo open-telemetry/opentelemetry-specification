@@ -732,8 +732,8 @@ func MapToIndexScale0(value float64) int32 {
     }
     ieeeExponent := int32(rawExponent - ExponentBias)
     if rawSignificand == 0 {
-   		// Special case for power-of-two boundary: subtract one.
-	    return ieeeExponent - 1
+        // Special case for power-of-two boundary: subtract one.
+        return ieeeExponent - 1
     }
     return ieeeExponent
 }
@@ -747,28 +747,31 @@ smallest normal value, which may permit the use of a built-in function:
 func MapToIndexScale0(value float64) int {
     // Note: Frexp() rounds submnormal values to the smallest normal
     // value and returns an exponent corresponding to fractions in the
-    // range [0.5, 1), whereas we want (1, 2], so subtract 1 from the
-    // exponent.
+    // range [0.5, 1), whereas an exponent for the range [1, 2), so 
+    // subtract 1 from the exponent immediately.
     frac, exp := math.Frexp(value)
-	if frac == 0.5 {
-   		// Special case for power-of-two boundary: subtract one.
-	    exp--
-	}
-    return exp - 1
+    exp--
+
+    if frac == 0.5 {
+        // Special case for powers of two: they fall into the bucket
+        // numbered one less.
+        exp--
+    }
+    return exp
 }
 ```
 
 ##### Negative Scale: Extract and Shift the Exponent
 
 For negative scales, the index of a value equals the normalized
-base-2 exponent (as by `GetExponent()` above) shifted to the right
+base-2 exponent (as by `MapToIndexScale0()` above) shifted to the right
 by `-scale`.  Note that because of sign extension, this shift performs
 correct rounding for the negative indices.  This may be written as:
 
 ```golang
-// MapToIndexNegativeScale computes a bucket index for scale 0.
+// MapToIndexNegativeScale computes a bucket index for scales <= 0.
 func MapToIndexNegativeScale(value float64) int {
-  return MapToIndexScale0(value) >> -scale
+    return MapToIndexScale0(value) >> -scale
 }
 ```
 
@@ -776,7 +779,7 @@ The reverse mapping function is:
 
 ```golang
 // LowerBoundaryNegativeScale computes the lower boundary for index
-// with scale < 0.
+// with scales <= 0.
 func LowerBoundaryNegativeScale(index int) {
     return math.Ldexp(1, index << -scale)
 }
@@ -791,10 +794,31 @@ boundary `0x1p-1024`.
 
 ##### All Scales: Use the Logarithm Function
 
-For any scale, the built-in natural logarithm function can be used to
-compute the bucket index.  A multiplicative factor equal to `2**scale
-/ ln(2)` proves useful (where `ln()` is the natural logarithm), for
-example:
+The mapping and reverse-mapping functions for scale zero and negative
+scales above are recommended because they are exact.  At these scales,
+`math.Log()` could be inaccurate and more expensive than directly
+calculating the bucket index.  The methods in this section MAY be used
+at all scales, although they are definitely useful for positive
+scales.
+
+The built-in natural logarithm function can be used to compute the
+bucket index by applying a scaling factor, derived as follows. 
+
+1. The exponential base is defined as `base = 2**(2**(-scale))`
+2. We want `index` where `base**index < value <= base**(index+1)`.
+3. Apply the logarithm corresponding with base, i.e.,
+   `log<subscript>base</subscript>(base**index) < log<subscript>base</subscript>(value) <= log<subscript>base</subscript>(base**(index+1))`
+4. Rewrite using `log<subscript>X<subscript>(X**Y) == Y`:
+5. Thus, `index < log<subscript>base</subscript>(value) <= index+1`
+6. Using the `Ceiling()` function to simplify the equation: `Ceiling(log<subscript>base</subscript>(value)) == index+1`
+7. Subtract one from each side: `index == Ceiling(log<subscript>base</subscript>(value)) - 1`
+8. Rewrite using `log<subscript>X<subscript>(Y) == log<subscript>N<subscript>(Y) / log<subscript>N<subscript>(X)` to use the natural logarithm
+9. Thus, `index == Ceiling(log(value)/log(base)) - 1`
+12. The scaling factor `1/log(base)` can be derived using the formulas in (1), (4), and (8).
+
+The scaling factor equals `2**scale / log(2)` can be written as
+`math.Ldexp(math.Log2E, scale)` since the constant `math.Log2E` is
+defined as `1/log(2)`.  Putting this together:
 
 ```golang
 // MapToIndex for any scale.
@@ -804,24 +828,27 @@ func MapToIndex(value float64) int {
 }
 ```
 
-The expression `math.Ceil(expr) - 1` rounds the calculated index up
-and subtracts 1 to ensure the correct boundary inclusivity.  Note thatl
-in the example Golang code above, the built-in `math.Log2E` is defined
-as the inverse of the natural logarithm of 2, i.e., `1 / ln(2)`.
+The use of `math.Log()` to calculate the bucket index is not
+guaranteed to be exactly correct near powers of two.  Values near a
+boundary could be mapped into the incorrect bucket due to inaccuracy.
+Defining an exact mapping function is out of scope for this document.
 
-The use of `math.Ceil(expr) - 1` is not guaranteed to be exact, even
-for power-of-two inputs.  Since it is relatively simple to check for
-exact powers of two, implementations SHOULD consider such a special
-case:
+However, when inputs are an exact power of two, it is possible to
+calculate the exactly corect bucket index.  Since it is relatively
+simple to check for exact powers of two, implementations SHOULD
+apply such a special case:
 
 ```
 // MapToIndex for any scale, exact for powers of two.
 func MapToIndex(value float64) int {
-	if getSignificand(value) == 0 {
-		return (MapToIndexScale0(value) << scale) - 1
-	}
+    // Special case for power-of-two values.
+    if frac, exp := math.Frexp(value); frac == 0.5 {
+        return ((exp-1) << scale) - 1
+    }
     scaleFactor := math.Ldexp(math.Log2E, scale)
-    return math.Ceil(math.Log(value) * scaleFactor) - 1
+    // Note: math.Floor(value) equals math.Ceil(value)-1 when value 
+    // is not a power of two, which is checked above.
+    return math.Floor(math.Log(value) * scaleFactor)
 }
 ```
 
@@ -845,7 +872,7 @@ reference implementation, for example, the above formula computes
 to subtract `1<<scale` from the index and multiply the result by `2`.
 
 ```golang
-func LowerBoundaryNegativeScale(index int) float64 {
+func LowerBoundary(index int) float64 {
     // Use this form in case the equation above computes +Inf
     // as the lower boundary of a valid bucket.
     inverseFactor := math.Ldexp(math.Ln2, -scale)
@@ -860,12 +887,6 @@ add `1<<scale` to the index and divide the result by `2`.
 
 *Note that floating-point to integer type conversions have been
 omitted from the code fragments above, to improve readability.*
-
-##### Positive Scale: Use a Lookup Table
-
-For positive scales, lookup table methods have been demonstrated
-that are able to exactly compute the index in constant time from a
-lookup table with `O(2**scale)` entries.
 
 #### ExponentialHistogram: Producer Recommendations
 
