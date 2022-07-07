@@ -804,14 +804,14 @@ bucket index by applying a scaling factor, derived as follows.
 1. The exponential base is defined as `base = 2**(2**(-scale))`
 2. We want `index` where `base**index < value <= base**(index+1)`.
 3. Apply the logarithm corresponding with base, i.e.,
-   `log<subscript>base</subscript>(base**index) < log<subscript>base</subscript>(value) <= log<subscript>base</subscript>(base**(index+1))`
-4. Rewrite using `log<subscript>X<subscript>(X**Y) == Y`:
-5. Thus, `index < log<subscript>base</subscript>(value) <= index+1`
-6. Using the `Ceiling()` function to simplify the equation: `Ceiling(log<subscript>base</subscript>(value)) == index+1`
-7. Subtract one from each side: `index == Ceiling(log<subscript>base</subscript>(value)) - 1`
-8. Rewrite using `log<subscript>X<subscript>(Y) == log<subscript>N<subscript>(Y) / log<subscript>N<subscript>(X)` to use the natural logarithm
+   `log<sub>base</sub>(base**index) < log<sub>base</sub>(value) <= log<sub>base</sub>(base**(index+1))`
+4. Rewrite using `log<sub>X<sub>(X**Y) == Y`:
+5. Thus, `index < log<sub>base</sub>(value) <= index+1`
+6. Using the `Ceiling()` function to simplify the equation: `Ceiling(log<sub>base</sub>(value)) == index+1`
+7. Subtract one from each side: `index == Ceiling(log<sub>base</sub>(value)) - 1`
+8. Rewrite using `log<sub>X<sub>(Y) == log<sub>N<sub>(Y) / log<sub>N<sub>(X)` to use the natural logarithm
 9. Thus, `index == Ceiling(log(value)/log(base)) - 1`
-12. The scaling factor `1/log(base)` can be derived using the formulas in (1), (4), and (8).
+10. The scaling factor `1/log(base)` can be derived using the formulas in (1), (4), and (8).
 
 The scaling factor equals `2**scale / log(2)` can be written as
 `math.Ldexp(math.Log2E, scale)` since the constant `math.Log2E` is
