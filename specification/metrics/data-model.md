@@ -660,11 +660,8 @@ case:
 1. Exact mapping functions are substantially more complex to implement.
 2. Boundaries cannot be exactly represented as floating point numbers for all scales.
 
-The statement that a histogram bucket includes values exactly equal to
-its upper boundary is for the benefit of table-lookup based
-implementations, where exactness is a desired outcome.  Generally,
-producers SHOULD use a mapping function with a difference of at most 1
-from the correct result for all inputs.
+Generally, producers SHOULD use a mapping function with an expected
+difference of at most 1 from the correct result for all inputs.
 
 The ExponentialHistogram design makes it possible to express values
 that are too large or small to be represented in the 64 bit "double"
