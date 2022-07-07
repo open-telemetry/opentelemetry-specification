@@ -654,7 +654,7 @@ that have been rounded to zero.
 
 #### Producer Expectations
 
-Producers MAY use an inexect mapping function because in the general
+Producers MAY use an inexact mapping function because in the general
 case:
 
 1. Exact mapping functions are substantially more complex to implement.
