@@ -139,7 +139,7 @@ Semantic conventions and instrumentations that populate both logical (`net.peer.
 
 #### `net.peer.name`
 
-For IP-based communication, the name should be a DNS host name.
+For IP-based communication, the name should be a DNS host name of the remote service.
 
 `net.peer.name` should be the name of logical remote destination, e.g., `"example.com"` if connecting to an URL `https://example.com/foo`. Usually, application pass it as configuration to client libraries in form of URL, connection string, host name, etc.
 
@@ -153,11 +153,15 @@ the name should explicitly be set to the empty string to distinguish it from the
 
 For Unix domain socket, `net.sock.peer.addr` attribute represents destination name and `net.peer.name` SHOULD NOT be set.
 
+`net.peer.name` and `net.peer.port` apply to client instrumentations only. Server instrumentations SHOULD NOT set these attributes.
+
 #### `net.host.name`
 
 `net.host.name` should be the host name of the local host, preferably the one that the peer used to connect for the current operation.
 If that is not known, a public hostname should be preferred over a private one. However, in that case it may be redundant with information already contained in resources and may be left out.
 It will usually not make sense to use reverse-lookup to obtain `net.host.name`, as that would result in static information that is better stored as resource information.
+
+`net.host.name` and `net.host.port` apply to server instrumentations only. Client instrumentations SHOULD NOT set these attributes.
 
 ### `net.sock.*` attributes
 
@@ -174,7 +178,6 @@ _Note: Specific structures and methods to obtain socket-level attributes are men
 `net.sock.peer.addr`, `net.sock.peer.port` identify remote peer - the address used to connect to the socket. For example, when connecting using `connect(2)`
 on [Linux](https://man7.org/linux/man-pages/man2/connect.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-connect)
 with `AF_INET` address family, represent `sin_addr` and `sin_port` fields of [`sockaddr_in`](https://man7.org/linux/man-pages/man7/ip.7.html) structure.
-Port SHOULD only be populated for families that have notion of port.
 
 Address and port can be obtained by calling `getpeername` method on [Linux](https://man7.org/linux/man-pages/man2/getpeername.2.html),
 [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getpeername).
