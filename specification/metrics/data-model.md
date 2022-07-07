@@ -799,12 +799,12 @@ at all scales, although they are definitely useful for positive
 scales.
 
 The built-in natural logarithm function can be used to compute the
-bucket index by applying a scaling factor, derived as follows. 
+bucket index by applying a scaling factor, derived as follows.
 
 1. The exponential base is defined as `base == 2**(2**(-scale))`
 2. We want `index` where `base**index < value <= base**(index+1)`.
-3. Apply the logarithm corresponding with base, i.e.,
-   `log_base(base**index) < log_base(value) <= log_base(base**(index+1))`
+3. Apply the base-`base` logarithm, i.e.,
+   `log_base(base**index) < log_base(value) <= log_base(base**(index+1))` (where `log_X(Y)` indicates the base-`X` logarithm of `Y`)
 4. Rewrite using `log_X(X**Y) == Y`:
 5. Thus, `index < log_base(value) <= index+1`
 6. Using the `Ceiling()` function to simplify the equation: `Ceiling(log_base(value)) == index+1`
