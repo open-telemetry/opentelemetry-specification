@@ -15,7 +15,7 @@ aliases: [/docs/reference/specification/common/common]
     + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
   * [Nested Attributes](#nested-attributes)
-    + [Nesting Attribute Support](#nested-attribute-support)
+    + [Nested Attribute Support](#nested-attribute-support)
 - [Attribute Collections](#attribute-collections)
 
 <!-- tocstop -->
