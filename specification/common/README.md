@@ -14,6 +14,8 @@ aliases: [/docs/reference/specification/common/common]
   * [Attribute Limits](#attribute-limits)
     + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
+  * [Nested Attributes](#nested-attributes)
+    + [Nesting Attribute Support](#nested-attribute-support)
 - [Attribute Collections](#attribute-collections)
 
 <!-- tocstop -->
@@ -33,7 +35,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
     i.e., it MUST NOT contain values of different types.
   - It MAY also contain another valid Attribute value resulting in `nested` Attributes
     and the referenced Attribute MUST not be recursive. i.e. The value of the
-    key-value pair will itself be a key-value pair.
+    key-value pair will itself be a key-value pair. See [Nested Attribute Support](#nested-attribute-support).
 
 For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
@@ -55,16 +57,11 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
-`nested` Attribute support MAY be protocol, signal, language, SDK or Exporter
-specific as not all SDKs, exporters or backends support the storing or sending
-of a hierarchy of Attributes. In those cases they SHOULD implement a strategy to
-handle how nested Attributes are stored or transmitted, like using a JSON-encoded
-string value as highlighted for protocols above. The depth of the any resulting
-hierarchy SHOULD be limited and MUST not include recursive references.
-
 `nested` Attributes are also how consumers MAY provide custom attributes that
 are domain specific and have no defined semantic conventions beyond the specific
 name used for the signal.
+
+See [Nested Attribute](#nested-attributes) for defined support
 
 See [Attribute Naming](attribute-naming.md) for naming guidelines.
 
@@ -95,13 +92,6 @@ If an SDK provides a way to:
 - set a limit of unique attribute keys such that:
   - for each unique attribute key, addition of which would result in exceeding
     the limit, SDK MUST discard that key/value pair.
-- set a limit on the supported depth of nested attributes:
-  - when this limit is exceeded it MAY provide a configurable strategy for handling
-    items beyond this limit which MAY include:
-    - Dropping the excessive depth,
-    - Replacing the value with a relevant token indicating values have been truncated,
-    - Converted to a string representation, which MUST also comply with the value
-      length limits;
 
 There MAY be a log emitted to indicate to the user that an attribute was
 truncated or discarded. To prevent excessive logging, the log MUST NOT be
@@ -122,7 +112,6 @@ followed by the global limit default value.
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
-* `AttributeNestedLengthLimit` (Default=10; if supported) - Maximum allowed number of nested attribute value;
 
 #### Exempt Entities
 
@@ -137,6 +126,36 @@ attribute limits for Resources.
 Attributes, which belong to Metrics, are exempt from the limits described above
 at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
+
+### Nested Attributes
+
+Only certain protocols, languages, SDKs or Exporter support the storing or sending
+of a hierarchy of Attributes. When not supported those cases they SHOULD implement
+a strategy to handle how nested Attributes are stored or transmitted, like using
+a JSON-encoded string value as highlighted for protocols above. The depth of the
+any resulting hierarchy SHOULD be limited and MUST not include recursive references.
+
+While the at the ProtoBuf protocol level the [`AnyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/common/v1/common.proto#L28-L67)
+supports `nested` attributes via the `KeyValueList` at the specification level
+this does not infer that `nested` attributes are or should be fully supported for
+every protocol, signal, language, SDK or Exporter due to different environment,
+runtime and storage concerns.
+
+#### Nested Attribute Support
+
+This section provides a single compliance lookup of current `nested` attribute
+support as defined by the specification using the same annotations as defined
+on the [Specification Compliance Matrix](../../spec-compliance-matrix.md).
+
+This should be used as a guide only, when a specific area is not listed
+it does not infer that `nested` attributes are or MUST be supported.
+
+| Area                 | Optional  |
+|----------------------|-----------|
+| Span                 | -         |
+| Metrics              | -         |
+| Logs                 |           |
+| ProtoBuf (AnyValue)  |           |
 
 ## Attribute Collections
 
