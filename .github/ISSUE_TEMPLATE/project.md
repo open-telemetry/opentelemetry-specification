@@ -12,7 +12,7 @@ Describe the goals, objectives, and requirements for the project. This include t
 
 Once approved by TC, a project should be managed using a GitHub project board. This project board should be pre-populated with issues that cover all known deliverables, organized by timeline milestones.
 
-A [Technical Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#technical-committee) (TC) member associated with the project can create the board, along with a new GitHub label to automatically associate issues and PRs with the project. The project lead and all other relevant project members should have edit access to the board.
+A [Technical Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#technical-committee) (TC) member associated with the project can create the board, along with a new project-specific GitHub label to automatically associate issues and PRs with the project. The project lead and all other relevant project members should have edit access to the board.
 
 Once created, please link to the project board here.
 
