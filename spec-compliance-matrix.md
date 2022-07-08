@@ -362,7 +362,6 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 [py1108]: https://github.com/open-telemetry/opentelemetry-python/issues/1108
 [py1109]: https://github.com/open-telemetry/opentelemetry-python/issues/1109
 [py1174]: https://github.com/open-telemetry/opentelemetry-python/issues/1174
-[py1437]: https://github.com/open-telemetry/opentelemetry-python/issues/1437
 [py1779]: https://github.com/open-telemetry/opentelemetry-python/issues/1779
 [php225]: https://github.com/open-telemetry/opentelemetry-php/issues/225
 [jaegerThriftUDP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
