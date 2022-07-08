@@ -250,7 +250,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.host.name`](span-general.md) | string | Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [3] | `localhost` | See below |
 | [`net.host.port`](span-general.md) | int | Port component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [4] | `8080` | See below |
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Recommended |
-| [`net.sock.host.port`](span-general.md) | int | Local socket peer port (if defined for the address family). | `35555` | Recommended |
+| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [5] |
 
 **[1]:** `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148). It is thus preferred to supply the raw data that is available.
 
@@ -269,6 +269,8 @@ the closest proxy.
 **[3]:** When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set `net.host.name` to the IP address provided in the host component. When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.host.name` SHOULD match URI host component, otherwise `Host` header host component SHOULD be used.
 
 **[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.host.port` SHOULD match URI port component, otherwise `Host` header port component SHOULD be used.
+
+**[5]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 

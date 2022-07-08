@@ -84,11 +84,7 @@ groups:
       - ref: net.host.name
       - ref: net.sock.host.addr
       - ref: net.sock.host.port
-        requirement_level:
-          recommended: If different than `net.host.port` and if `net.sock.host.addr` is set.
       - ref: net.sock.family
-        requirement_level:
-          conditionally_required: If and only if `net.sock.peer.addr` or `net.sock.host.addr` are set.
 
   - id: rpc.grpc
     prefix: rpc.grpc

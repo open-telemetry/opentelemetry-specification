@@ -103,7 +103,9 @@ groups:
         examples: '192.168.0.1'
       - id: sock.host.port
         type: int
-        brief: 'Local socket peer port (if defined for the address family).'
+        brief: 'Local socket port number.'
+        requirement_level:
+          recommended: If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
         examples: 35555
       - id: host.connection.type
         type:
