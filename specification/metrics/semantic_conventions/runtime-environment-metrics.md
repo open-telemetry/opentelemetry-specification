@@ -80,7 +80,7 @@ All JVM metric attributes are required unless otherwise indicated.
 | process.runtime.jvm.system.cpu.load_1m     | Average CPU load of the whole system for the last minute | 1       | 1                                         | Asynchronous Gauge                                | Double     |               |                       |
 | process.runtime.jvm.buffer.usage           | Measure of memory used by buffers                        | Bytes   | `By`                                      | UpDownCounter                                     | Int64      | pool          | Name of pool[3]       |
 | process.runtime.jvm.buffer.limit           | Measure of total memory capacity of buffers              | Bytes   | `By`                                      | UpDownCounter                                     | Int64      | pool          | Name of pool[3]       |
-| process.runtime.jvm.buffer.count           | Number of buffers in the pool                            | buffers | `{buffers}}`                              | UpDownCounter                                     | Int64      | pool          | Name of pool[3]       |
+| process.runtime.jvm.buffer.count           | Number of buffers in the pool                            | buffers | `{buffers}`                              | UpDownCounter                                     | Int64      | pool          | Name of pool[3]       |
 
 **[1]**: Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 Examples include `G1 Old Gen`, `G1 Eden space`, `G1 Survivor Space`, `Metaspace`, etc.
