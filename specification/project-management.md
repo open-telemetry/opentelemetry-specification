@@ -22,6 +22,7 @@ Describes the goals, objectives, and requirements for the project. This include 
 Projects should be managed using a github project board. The project board should be pre-populated with issues that cover all known deliverables, organized by timeline milestones. The project board should be linked to in the tracking issue.
 
 A TC member associated with the project can create the board, along with a new github label to automatically associate issues and PRs with the project. The project lead and all other relevant project members should have edit access to the board.
+The project lead is responsible for maintaining the board and keeping it up-to-date.
 
 ### Deliverables
 
