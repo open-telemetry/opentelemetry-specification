@@ -1,3 +1,14 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Specification
+no_list: true
+cascade:
+  body_class: otel-docs-spec
+  github_repo: &repo https://github.com/open-telemetry/opentelemetry-specification
+  github_subdir: specification
+  path_base_for_github_subdir: content/en/docs/reference/specification/
+  github_project_repo: *repo
+--->
+
 # OpenTelemetry Specification
 
 ## Contents
