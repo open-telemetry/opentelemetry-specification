@@ -21,7 +21,7 @@ linkTitle: SDK
     + [Default Aggregation](#default-aggregation)
     + [Sum Aggregation](#sum-aggregation)
     + [Last Value Aggregation](#last-value-aggregation)
-      - [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
+    + [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
     + [Exponential Bucket Histogram Aggregation](#exponential-bucket-histogram-aggregation)
       - [Exponential Bucket Histogram Aggregation: Handle all normal values](#exponential-bucket-histogram-aggregation-handle-all-normal-values)
@@ -410,7 +410,7 @@ This Aggregation informs the SDK to collect:
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
 
-##### Histogram Aggregation common behavior
+#### Histogram Aggregation common behavior
 
 All histogram Aggregations inform the SDK to collect:
 
