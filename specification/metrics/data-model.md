@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Data Model
+--->
+
 # Metrics Data Model
 
 **Status**: [Mixed](../document-status.md)
@@ -1337,7 +1341,7 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
   - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues].(#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
-Sum metric points MUST have `_total` added as a suffix to the metric name.
+Monotonic sum metric points MUST have `_total` added as a suffix to the metric name.
 
 #### Histograms
 

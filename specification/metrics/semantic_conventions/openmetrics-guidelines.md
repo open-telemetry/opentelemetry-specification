@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: OpenMetrics
+--->
+
 # Guidance for Interoperating with OpenMetrics
 
 **Status**: [Experimental](../../document-status.md)
