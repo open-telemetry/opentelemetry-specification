@@ -192,7 +192,8 @@ Additionally, the server MUST initialize the `partial_success` field
 `ExportMetricsPartialSuccess` message for metrics and
 `ExportLogsPartialSuccess` message for logs), and it MUST set the respective
 `accepted_spans`, `accepted_data_points` or `accepted_log_records` field with
-the number of spans/data points/log records it accepted.
+the number of spans/data points/log records it accepted. In case the server
+rejected everything, the `accepted_*` field MUST be set to `0`.
 
 The server MAY populate the `error_message` field with a human-readable
 error message in English. The message should explain why the
@@ -484,7 +485,8 @@ Additionally, the server MUST initialize the `partial_success` field
 `ExportMetricsPartialSuccess` message for metrics and
 `ExportLogsPartialSuccess` message for logs), and it MUST set the respective
 `accepted_spans`, `accepted_data_points` or `accepted_log_records` field with
-the number of spans/data points/log records it accepted.
+the number of spans/data points/log records it accepted. In case the server
+rejected everything, the `accepted_*` field MUST be set to `0`.
 
 The server MAY populate the `error_message` field with a human-readable
 error message in English. The message should explain why the
