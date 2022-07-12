@@ -12,6 +12,9 @@ requirements to the existing specifications.
 - [Guidelines for instrumentation library authors](#guidelines-for-instrumentation-library-authors)
   * [Instrument selection](#instrument-selection)
   * [Additive property](#additive-property)
+    + [Numeric type selection](#numeric-type-selection)
+      - [Integer](#integer)
+      - [Float](#float)
   * [Monotonicity property](#monotonicity-property)
   * [Semantic convention](#semantic-convention)
 - [Guidelines for SDK authors](#guidelines-for-sdk-authors)
@@ -79,9 +82,142 @@ Here is one way of choosing the correct instrument:
 
 ### Additive property
 
+In OpenTelemetry a [Measurement](./api.md#measurement) encapsulates a value and
+a set of [`Attributes`](../common/README.md#attribute). Depending on the nature
+of the measurements, they can be additive, non-additive or somewhere in the
+middle. Here are some examples:
+
+* The server temperature is non-additive. The temperatures in the table below
+  add up to `226.2`, but this value has no practical meaning.
+
+  | Host Name | Temperature (F) |
+  | --------- | --------------- |
+  | MachineA  | 58.8            |
+  | MachineB  | 86.1            |
+  | MachineC  | 81.3            |
+
+* The mass of planets is additive, the value `1.18e25` (`3.30e23 + 6.42e23 +
+  4.87e24 + 5.97e24`) means the combined mass of terrestrial planets in the
+  solar system.
+
+  | Planet Name | Mass (kg)       |
+  | ----------- | --------------- |
+  | Mercury     | 3.30e23         |
+  | Mars        | 6.42e23         |
+  | Venus       | 4.87e24         |
+  | Earth       | 5.97e24         |
+
+* The voltage of battery cells can be added up if the batteries are connected in
+  series. However, if the batteries are connected in parallel, it makes no sense
+  to add up the voltage values anymore.
+
+In OpenTelemetry, each [Instrument](./api.md#instrument) implies whether it is
+additive or not. For example, [Counter](./api.md#counter) and
+[UpDownCounter](./api.md#updowncounter) are additive while [Asynchronous
+Gauge](./api.md#asynchronous-gauge) is non-additive.
+
+#### Numeric type selection
+
+For Instruments which take increments and/or decrements as the input (e.g.
+[Counter](./api.md#counter) and [UpDownCounter](./api.md#updowncounter)), the
+underlying numeric types (e.g., signed integer, unsigned integer, double) have
+direct impact on the dynamic range, precision, and how the data is interpreted.
+Typically, integers are precise but have limited dynamic range, and might see
+overflow/underflow. [IEEE-754 double-precision floating-point
+format](https://wikipedia.org/wiki/Double-precision_floating-point_format) has a
+wide dynamic range of numeric values with the sacrifice on precision.
+
+##### Integer
+
+Let's take an example: a 16-bit signed integer is used to count the committed
+transactions in a database, reported as cumulative sum every 15 seconds:
+
+* During (T<sub>0</sub>, T<sub>1</sub>], we reported `70`.
+* During (T<sub>0</sub>, T<sub>2</sub>], we reported `115`.
+* During (T<sub>0</sub>, T<sub>3</sub>], we reported `116`.
+* During (T<sub>0</sub>, T<sub>4</sub>], we reported `128`.
+* During (T<sub>0</sub>, T<sub>5</sub>], we reported `128`.
+* During (T<sub>0</sub>, T<sub>6</sub>], we reported `173`.
+* ...
+* During (T<sub>0</sub>, T<sub>n+1</sub>], we reported `1,872`.
+* During (T<sub>n+2</sub>, T<sub>n+3</sub>], we reported `35`.
+* During (T<sub>n+2</sub>, T<sub>n+4</sub>], we reported `76`.
+
+In the above case, a backend system could tell that there was likely a system
+restart (because the start time has changed from T<sub>0</sub> to
+T<sub>n+2</sub>) during (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to
+adjust the data to:
+
+* (T<sub>0</sub>, T<sub>n+3</sub>] : `1,907` (1,872 + 35).
+* (T<sub>0</sub>, T<sub>n+4</sub>] : `1,948` (1,872 + 76).
+
+Imagine we keep the database running:
+
+* During (T<sub>0</sub>, T<sub>m+1</sub>], we reported `32,758`.
+* During (T<sub>0</sub>, T<sub>m+2</sub>], we reported `32,762`.
+* During (T<sub>0</sub>, T<sub>m+3</sub>], we reported `-32,738`.
+* During (T<sub>0</sub>, T<sub>m+4</sub>], we reported `-32,712`.
+
+In the above case, the backend system could tell that there was an integer
+overflow during (T<sub>m+2</sub>, T<sub>m+3</sub>] (because the start time
+remains the same as before, and the value becomes negative), so it has chance to
+adjust the data to:
+
+* (T<sub>0</sub>, T<sub>m+3</sub>] : `32,798` (32,762 + 36).
+* (T<sub>0</sub>, T<sub>m+4</sub>] : `32,824` (32,762 + 62).
+
+As we can see in this example, even with the limitation of 16-bit integer, we
+can count the database transactions with high fidelity, without having to
+worry about information loss caused by integer overflows.
+
+It is important to understand that we are handling counter reset and integer
+overflow/underflow based on the assumption that we've picked the proper dynamic
+range and reporting frequency. Imagine if we use the same 16-bit signed integer
+to count the transactions in a data center (which could have thousands if not
+millions of transactions per second), we wouldn't be able to tell if `-32,738`
+was a result of `32,762 + 36` or `32,762 + 65,572` or even `32,762 + 131,108` if
+we report the data every 15 seconds. In this situation, either using a larger
+number (e.g. 32-bit integer) or increasing the reporting frequency (e.g. every
+microsecond, if we can afford the cost) would help.
+
+##### Float
+
+Let's take an example: an [IEEE-754 double precision floating
+point](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) is
+used to count the number of positrons detected by an alpha magnetic
+spectrometer. Each time a positron is detected, the spectrometer will invoke
+`counter.Add(1)`, and the result is reported as cumulative sum every 1 second:
+
+* During (T<sub>0</sub>, T<sub>1</sub>], we reported `131,108`.
+* During (T<sub>0</sub>, T<sub>2</sub>], we reported `375,463`.
+* During (T<sub>0</sub>, T<sub>3</sub>], we reported `832,019`.
+* During (T<sub>0</sub>, T<sub>4</sub>], we reported `1,257,308`.
+* During (T<sub>0</sub>, T<sub>5</sub>], we reported `1,860,103`.
+* ...
+* During (T<sub>0</sub>, T<sub>n+1</sub>], we reported `9,007,199,254,325,789`.
+* During (T<sub>0</sub>, T<sub>n+2</sub>], we reported `9,007,199,254,740,992`.
+* During (T<sub>0</sub>, T<sub>n+3</sub>], we reported `9,007,199,254,740,992`.
+
+In the above case, the counter stopped increasing at some point between
+T<sub>n+1</sub> and T<sub>n+2</sub>, because the IEEE-754 double counter is
+"saturated", `9,007,199,254,740,992 + 1` will result in `9,007,199,254,740,992`
+so the number stopped growing.
+
+Note: in ECMAScript 6 the number `9,007,199,254,740,991` (`2 ^ 53 - 1`) is known
+as `Number.MAX_SAFE_INTEGER`, which is the maximum integer that can be exactly
+represented as an IEEE-754 double precision number, and whose IEEE-754
+representation cannot be the result of rounding any other integer to fit the
+IEEE-754 representation.
+
+In addition to the "saturation" issue, we should also understand that IEEE-754
+double supports [subnormal
+numbers](https://en.wikipedia.org/wiki/Subnormal_number). For example,
+`1.0E308 + 1.0E308` would result in `+Inf` (positive infinity). Certain metrics
+backend might have trouble handling subnormal numbers.
+
 ### Monotonicity property
 
-In the OpenTelemetry Metrics [Data Model](./datamodel.md) and [API](./api.md)
+In the OpenTelemetry Metrics [Data Model](./data-model.md) and [API](./api.md)
 specifications, the word `monotonic` has been used frequently.
 
 It is important to understand that different
@@ -123,6 +259,8 @@ the total number of bytes received in a cumulative sum data stream:
 
 The backend system could tell that there was integer overflow or system restart
 during (T<sub>n+1</sub>, T<sub>n+2</sub>], so it has chance to "fix" the data.
+Refer to [additive property](#additive-property) for more information about
+integer overflow.
 
 Let's take another example with a process using an [Asynchronous
 Counter](./api.md#asynchronous-counter) to report the total page faults of the
@@ -164,9 +302,9 @@ Conventions`, rather than inventing your own semantics.
 
 #### Synchronous example
 
-The OpenTelemetry Metrics [Data Model](./datamodel.md) and [SDK](./sdk.md) are
+The OpenTelemetry Metrics [Data Model](./data-model.md) and [SDK](./sdk.md) are
 designed to support both Cumulative and Delta
-[Temporality](./datamodel.md#temporality). It is important to understand that
+[Temporality](./data-model.md#temporality). It is important to understand that
 temporality will impact how the SDK could manage memory usage. Let's take the
 following HTTP requests example:
 
@@ -193,7 +331,7 @@ API with specified Delta aggregation temporality.
 
 ##### Synchronous example: Delta aggregation temporality
 
-Let's imagine we export the metrics as [Histogram](./datamodel.md#histogram),
+Let's imagine we export the metrics as [Histogram](./data-model.md#histogram),
 and to simplify the story we will only have one histogram bucket `(-Inf, +Inf)`:
 
 If we export the metrics using **Delta Temporality**:
@@ -273,7 +411,7 @@ So here are some suggestions that we encourage SDK implementers to consider:
   things that are no longer needed**.
 * You probably don't want to keep exporting the same thing over and over again,
   if there is no updates. You might want to consider [Resets and
-  Gaps](./datamodel.md#resets-and-gaps). For example, if a Cumulative metrics
+  Gaps](./data-model.md#resets-and-gaps). For example, if a Cumulative metrics
   stream hasn't received any updates for a long period of time, would it be okay
   to reset the start time?
 
@@ -335,7 +473,7 @@ and send them.
 
 The data model prescribes several valid behaviors at T<sub>5</sub> in
 this case, where one stream dies and another starts.  The [Resets and
-Gaps](./datamodel.md#resets-and-gaps) section describes how start
+Gaps](./data-model.md#resets-and-gaps) section describes how start
 timestamps and staleness markers can be used to increase the
 receiver's understanding of these events.
 
@@ -408,7 +546,7 @@ So here are some suggestions that we encourage SDK implementers to consider:
 
 * If you have to do Cumulative->Delta conversion, and you encountered min/max,
   rather than drop the data on the floor, you might want to convert them to
-  something useful - e.g. [Gauge](./datamodel.md#gauge).
+  something useful - e.g. [Gauge](./data-model.md#gauge).
 
 ##### Asynchronous example: attribute removal in a view
 
@@ -439,9 +577,9 @@ As discussed in the asynchronous cumulative temporality example above,
 there are various treatments available for detecting resets.  Even if
 the first course is taken, which means doing nothing, a receiver that
 follows the data model's rules for [unknown start
-time](datamodel.md#cumulative-streams-handling-unknown-start-time) and
+time](data-model.md#cumulative-streams-handling-unknown-start-time) and
 [inserting true start
-times](datamodel.md#cumulative-streams-inserting-true-reset-points)
+times](data-model.md#cumulative-streams-inserting-true-reset-points)
 will calculate a correct rate in this case.  The "58" received at
 T<sub>5</sub> resets the stream - the change from "107" to "58" will
 register as a gap and rate calculations will resume correctly at

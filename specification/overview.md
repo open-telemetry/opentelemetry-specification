@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+weight: 1
+--->
+
 # Overview
 
 <details>
@@ -73,7 +77,7 @@ The **Semantic Conventions** define the keys and values which describe commonly 
 * [Metrics Conventions](metrics/semantic_conventions/README.md)
 
 Both the collector and the client libraries SHOULD autogenerate semantic
-convention keys and enum values into constants (or language idomatic
+convention keys and enum values into constants (or language idiomatic
 equivalent). Generated values shouldn't be distributed in stable packages
 until semantic conventions are stable.
 The [YAML](../semantic_conventions/README.md) files MUST be used as the
@@ -153,8 +157,8 @@ the following state:
 
 - An operation name
 - A start and finish timestamp
-- [**Attributes**](./common/common.md#attributes): A list of key-value pairs.
-- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/common.md#attributes)). The name must be strings.
+- [**Attributes**](./common/README.md#attribute): A list of key-value pairs.
+- A set of zero or more **Events**, each of which is itself a tuple (timestamp, name, [**Attributes**](./common/README.md#attribute)). The name must be strings.
 - Parent's **Span** identifier.
 - [**Links**](#links-between-spans) to zero or more causally-related **Spans**
   (via the **SpanContext** of those related **Spans**).
@@ -213,7 +217,7 @@ scenarios.
 ## Metric Signal
 
 OpenTelemetry allows to record raw measurements or metrics with predefined
-aggregation and a [set of attributes](./common/common.md#attributes).
+aggregation and a [set of attributes](./common/README.md#attribute).
 
 Recording raw measurements using OpenTelemetry API allows to defer to end-user
 the decision on what aggregation algorithm should be applied for this metric as
@@ -270,7 +274,7 @@ supports both - push and pull model of setting the `Metric` value.
 
 ### Metrics data model and SDK
 
-Metrics data model is [specified here](metrics/datamodel.md) and is based on
+Metrics data model is [specified here](metrics/data-model.md) and is based on
 [metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
 This data model defines three semantics: An Event model used by the API, an
 in-flight data model used by the SDK and OTLP, and a TimeSeries model which
@@ -288,7 +292,7 @@ validation and sanitization of the Metrics data. Instead, pass the data to the
 backend, rely on the backend to perform validation, and pass back any errors
 from the backend.
 
-See [Metrics Data Model Specification](metrics/datamodel.md) for more
+See [Metrics Data Model Specification](metrics/data-model.md) for more
 information.
 
 ## Log Signal
@@ -342,7 +346,7 @@ All of OpenTelemetry cross-cutting concerns, such as traces and metrics,
 share an underlying `Context` mechanism for storing state and
 accessing data across the lifespan of a distributed transaction.
 
-See the [Context](context/context.md)
+See the [Context](context/README.md)
 
 ## Propagators
 

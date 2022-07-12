@@ -11,13 +11,42 @@ release.
 
 ### Traces
 
+- Clarify the return of `Export(batch)` in the Batch Span Processor and exporter
+  concurrency ([#2452](https://github.com/open-telemetry/opentelemetry-specification/pull/2452))
+- Clarify that Context should not be mutable when setting a span ([#2637](https://github.com/open-telemetry/opentelemetry-specification/pull/2637))
+
 ### Metrics
+
+- Add experimental `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable for
+  configuring default histogram aggregation of OTLP metric exporter
+  ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
 
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
+
+- Add `net.app.protocol.*` attributes
+  ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
+- Add network metrics to process semantic conventions
+  ([#2556](https://github.com/open-telemetry/opentelemetry-specification/pull/2556))
+- Adopt attribute requirement levels in semantic conventions
+  ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
+- Add semantic conventions for GraphQL
+  ([#2456](https://github.com/open-telemetry/opentelemetry-specification/pull/2456))
+- Change `cloudevents.event_spec_version` and `cloudevents.event_type` level from `required` to `recommended`
+  ([#2618](https://github.com/open-telemetry/opentelemetry-specification/pull/2618))
+- Change `faas.document.time` and `faas.time` level from `required` to `recommended`
+  ([#2627](https://github.com/open-telemetry/opentelemetry-specification/pull/2627))
+- Remove `direction` dimension, instead creating metrics with names reflecting those
+  dimensions.
+  ([#2617](https://github.com/open-telemetry/opentelemetry-specification/pull/2617))
+- Add `rpc.grpc.status_code` to RPC metric semantic conventions
+  ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604)).
+- Add `http.*.*.size` metric semantic conventions for tracking size of requests
+  / responses for http servers / clients
+  ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588)).
 
 ### Compatibility
 
@@ -28,6 +57,165 @@ release.
 ### Telemetry Schemas
 
 ### Common
+
+- Introduce Instrumentation Scope Attributes
+  ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
+
+## v1.12.0 (2022-06-10)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Clarify that API support for multi-instrument callbacks is permitted.
+  ([#2263](https://github.com/open-telemetry/opentelemetry-specification/pull/2263)).
+- Clarify SDK behavior when view conflicts are present
+  ([#2462](https://github.com/open-telemetry/opentelemetry-specification/pull/2462)).
+- Clarify MetricReader.Collect result
+  ([#2495](https://github.com/open-telemetry/opentelemetry-specification/pull/2495)).
+- Specify optional support for an Exponential Histogram Aggregation.
+  ([#2252](https://github.com/open-telemetry/opentelemetry-specification/pull/2252))
+- Update Prometheus Sums for handling delta counter case
+  ([#2570](https://github.com/open-telemetry/opentelemetry-specification/pull/2570)).
+- Supplementary guidance for metrics additive property
+  ([#2571](https://github.com/open-telemetry/opentelemetry-specification/pull/2571)).
+
+### Logs
+
+- OTLP Logs are now Stable
+  ([#2565](https://github.com/open-telemetry/opentelemetry-specification/pull/2565))
+
+### Resource
+
+- No changes.
+
+### Semantic Conventions
+
+- Add semantic conventions for JVM CPU metrics
+  ([#2292](https://github.com/open-telemetry/opentelemetry-specification/pull/2292))
+- Add details for FaaS conventions for Azure Functions and allow FaaS/Cloud
+  resources as span attributes on incoming FaaS spans
+  ([#2502](https://github.com/open-telemetry/opentelemetry-specification/pull/2502))
+- Define attribute requirement levels
+  ([#2522](https://github.com/open-telemetry/opentelemetry-specification/pull/2522))
+- Initial addition of Kafka metrics
+  ([#2485](https://github.com/open-telemetry/opentelemetry-specification/pull/2485)).
+- Add semantic conventions for Kafka consumer metrics
+  ([#2536](https://github.com/open-telemetry/opentelemetry-specification/pull/2536))
+- Add database connection pool metrics semantic conventions
+  ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
+- Specify how to obtain a Ruby thread's id
+  ([#2508](https://github.com/open-telemetry/opentelemetry-specification/pull/2508)).
+- Refactor jvm classes semantic conventions
+  ([#2550](https://github.com/open-telemetry/opentelemetry-specification/pull/2550)).
+- Add browser.* attributes
+  ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
+- Change JVM runtime metric `process.runtime.jvm.memory.max`
+  to `process.runtime.jvm.memory.limit`
+- ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).
+
+### Compatibility
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### SDK Configuration
+
+- No changes.
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- Move non-otlp.md to common directory
+  ([#2587](https://github.com/open-telemetry/opentelemetry-specification/pull/2587)).
+
+## v1.11.0 (2022-05-04)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Clarify that API support for multi-instrument callbacks is permitted.
+  ([#2263](https://github.com/open-telemetry/opentelemetry-specification/pull/2263)).
+- Drop histogram aggregation, default to explicit bucket histogram
+  ([#2429](https://github.com/open-telemetry/opentelemetry-specification/pull/2429))
+- Clarify SDK behavior when view conflicts are present
+  ([#2462](https://github.com/open-telemetry/opentelemetry-specification/pull/2462)).
+- Add support for exemplars on OpenMetrics counters
+  ([#2483](https://github.com/open-telemetry/opentelemetry-specification/pull/2483))
+- Clarify MetricReader.Collect result
+  ([#2495](https://github.com/open-telemetry/opentelemetry-specification/pull/2495)).
+- Add database connection pool metrics semantic conventions
+  ([#2273](https://github.com/open-telemetry/opentelemetry-specification/pull/2273)).
+
+### Logs
+
+- Update `com.google.*` to `gcp.*` in logs data model
+  ([#2514](https://github.com/open-telemetry/opentelemetry-specification/pull/2514)).
+
+### Resource
+
+- No changes.
+
+### Semantic Conventions
+
+- Note added that `net.peer.name` SHOULD NOT be set if capturing it would require an
+  extra reverse DNS lookup. And moved `net.peer.name` from common http attributes to
+  just client http attributes.
+  ([#2446](https://github.com/open-telemetry/opentelemetry-specification/pull/2446))
+- Add `net.host.name` and `net.host.ip` conventions for rpc server spans.
+  ([#2447](https://github.com/open-telemetry/opentelemetry-specification/pull/2447))
+- Allow all metric conventions to be either synchronous or asynchronous.
+  ([#2458](https://github.com/open-telemetry/opentelemetry-specification/pull/2458)
+- Update JVM metrics with JMX Gatherer values
+  ([#2478](https://github.com/open-telemetry/opentelemetry-specification/pull/2478))
+- Add HTTP/3
+  ([#2507](https://github.com/open-telemetry/opentelemetry-specification/pull/2507))
+- Map SunOS to solaris for os.type resource attribute
+  ([#2509](https://github.com/open-telemetry/opentelemetry-specification/pull/2509))
+
+### Compatibility
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- Clarify gRPC insecure option ([#2476](https://github.com/open-telemetry/opentelemetry-specification/pull/2476))
+- Specify that OTLP/gRPC clients should retry on `RESOURCE_EXHAUSTED` code only if the server signals backpressure to indicate a possible recovery.
+  ([#2480](https://github.com/open-telemetry/opentelemetry-specification/pull/2480))
+
+### SDK Configuration
+
+- No changes.
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- Define semantic conventions and instrumentation stability.
+  ([#2180](https://github.com/open-telemetry/opentelemetry-specification/pull/2180))
+- Loosen requirement for a major version bump
+  ([#2510](https://github.com/open-telemetry/opentelemetry-specification/pull/2510)).
 
 ## v1.10.0 (2022-04-01)
 
@@ -122,12 +310,6 @@ release.
   ([#2436](https://github.com/open-telemetry/opentelemetry-specification/pull/2436))
 - Add `rpc.system` value for Apache Dubbo.
   ([#2453](https://github.com/open-telemetry/opentelemetry-specification/pull/2453))
-- Note added that `net.peer.name` SHOULD NOT be set if capturing it would require an
-  extra reverse DNS lookup. And moved `net.peer.name` from common http attributes to
-  just client http attributes.
-  ([#2446](https://github.com/open-telemetry/opentelemetry-specification/pull/2446))
-- Add `net.host.name` and `net.host.ip` conventions for rpc server spans.
-  ([#2447](https://github.com/open-telemetry/opentelemetry-specification/pull/2447))
 
 ### Compatibility
 

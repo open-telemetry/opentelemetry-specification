@@ -6,7 +6,7 @@ groups:
     attributes:
       - id: name
         type: string
-        required: always
+        requirement_level: required
         brief: >
           The name of the web engine.
         examples: ['WildFly']

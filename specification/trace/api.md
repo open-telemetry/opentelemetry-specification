@@ -128,12 +128,16 @@ This API MUST accept the following parameters:
   has a version (e.g. a library version). Example value: `1.0.0`.
 - [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
+- [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
+  to associate with emitted telemetry.
 
-It is unspecified whether or under which conditions the same or different
-`Tracer` instances are returned from this functions.
+Implementations MUST return different `Tracer` instances when called repeatedly
+with different values of parameters. Note that always returning a new `Tracer` instance
+is a valid implementation. The only exception to this rule is the no-op `Tracer`:
+implementations MAY return the same instance regardless of parameter values.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
-with the same name+version+schema_url to pick up configuration changes.
+with the same name+version+schema_url+attributes to pick up configuration changes.
 This can be achieved either by allowing to work with an outdated configuration or
 by ensuring that new configuration applies also to previously returned `Tracer`s.
 
@@ -141,7 +145,7 @@ Note: This could, for example, be implemented by storing any mutable
 configuration in the `TracerProvider` and having `Tracer` implementation objects
 have a reference to the `TracerProvider` from which they were obtained. If
 configuration must be stored per-tracer (such as disabling a certain tracer),
-the tracer could, for example, do a look-up with its name+version+schema_url in
+the tracer could, for example, do a look-up with its name+version+schema_url+attributes in
 a map in the `TracerProvider`, or the `TracerProvider` could maintain a registry
 of all returned `Tracer`s and actively update their configuration if it changes.
 
@@ -153,23 +157,23 @@ association.
 ## Context Interaction
 
 This section defines all operations within the Tracing API that interact with the
-[`Context`](../context/context.md).
+[`Context`](../context/README.md).
 
 The API MUST provide the following functionality to interact with a `Context`
 instance:
 
 - Extract the `Span` from a `Context` instance
-- Insert the `Span` to a `Context` instance
+- Combine the `Span` with a `Context` instance, creating a new `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
-access to the [Context Key](../context/context.md#create-a-key) used by the Tracing API implementation.
+access to the [Context Key](../context/README.md#create-a-key) used by the Tracing API implementation.
 
 If the language has support for implicitly propagated `Context` (see
-[here](../context/context.md#optional-global-operations)), the API SHOULD also provide
+[here](../context/README.md#optional-global-operations)), the API SHOULD also provide
 the following functionality:
 
 - Get the currently active span from the implicit context. This is equivalent to getting the implicit context, then extracting the `Span` from the context.
-- Set the currently active span to the implicit context. This is equivalent to getting the implicit context, then inserting the `Span` to the context.
+- Set the currently active span into a new context, and make that the implicit context. This is equivalent to combining the current implicit context's values with the `Span` to create a new context, which is then made the current implicit context.
 
 All the above functionalities operate solely on the context API, and they MAY be
 exposed as either static methods on the trace module, or as static methods on a class
@@ -283,7 +287,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
-- [`Attributes`](../common/common.md#attributes)
+- [`Attributes`](../common/README.md#attribute)
 - A list of [`Link`s](#specifying-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
@@ -361,7 +365,7 @@ The API MUST accept the following parameters:
   The semantic parent of the Span MUST be determined according to the rules
   described in [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context).
 - [`SpanKind`](#spankind), default to `SpanKind.Internal` if not specified.
-- [`Attributes`](../common/common.md#attributes). Additionally,
+- [`Attributes`](../common/README.md#attribute). Additionally,
   these attributes may be used to make a sampling decision as noted in [sampling
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
@@ -415,7 +419,7 @@ Span creation.
 A `Link` is structurally defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
-- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+- Zero or more [`Attributes`](../common/README.md#attribute) further describing
   the link.
 
 The Span creation API MUST provide:
@@ -474,7 +478,7 @@ propagators.
 
 #### Set Attributes
 
-A `Span` MUST have the ability to set [`Attributes`](../common/common.md#attributes) associated with it.
+A `Span` MUST have the ability to set [`Attributes`](../common/README.md#attribute) associated with it.
 
 The Span interface MUST provide:
 
@@ -507,7 +511,7 @@ An `Event` is structurally defined by the following properties:
 - Name of the event.
 - A timestamp for the event. Either the time at which the event was
   added or a custom timestamp provided by the user.
-- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+- Zero or more [`Attributes`](../common/README.md#attribute) further describing
   the event.
 
 The Span interface MUST provide:
@@ -583,7 +587,7 @@ publish their own conventions, including possible values of `Description`
 and what they mean.
 
 Generally, Instrumentation Libraries SHOULD NOT set the status code to `Ok`,
-unless explicitly configured to do so. Instrumention libraries SHOULD leave the
+unless explicitly configured to do so. Instrumentation Libraries SHOULD leave the
 status code as `Unset` unless there is an error, as described above.
 
 Application developers and Operators may set the status code to `Ok`.

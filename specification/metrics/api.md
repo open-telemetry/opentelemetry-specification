@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: API
+--->
+
 # Metrics API
 
 **Status**: [Stable](../document-status.md)
@@ -45,6 +49,7 @@
     + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
 - [Measurement](#measurement)
+  * [Multiple-instrument callbacks](#multiple-instrument-callbacks)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
 
@@ -139,13 +144,22 @@ This API MUST accept the following parameters:
   has a version (e.g. a library version). Example value: `1.0.0`.
 * [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
   recorded in the emitted telemetry.
+* [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
+    to associate with emitted telemetry.
 
-Meters are identified by all of these fields.  When more than one
-Meter of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different
-`Meter` instances are returned.  The term *identical* applied to
-Meters describes instances where all identifying fields are equal.
-The term *distinct* applied to Meters describes instances where at
+Meters are identified by all of these parameters.
+
+Implementations MUST return different `Meter` instances when called repeatedly
+with different values of parameters. Note that always returning a new `Meter` instance
+is a valid implementation. The only exception to this rule is the no-op `Meter`:
+implementations MAY return the same instance regardless of parameter values.
+
+It is unspecified whether or under which conditions the same or different
+`Meter` instances are returned from this function when the same
+(name,version,schema_url,attributes) parameters are used.
+
+The term *identical* applied to Meters describes instances where all identifying fields
+are equal. The term *distinct* applied to Meters describes instances where at
 least one identifying field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Meter` with
@@ -212,7 +226,7 @@ implementation MUST create a valid Instrument in every case.  Here,
 "valid" means an instrument that is functional and can be expected to
 export data, despite potentially creating a [semantic error in the
 data
-model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations).
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
 
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of
@@ -224,11 +238,9 @@ where at least one field value is different.
 When more than one distinct Instrument is registered with the same
 `name` for identical Meters, the implementation SHOULD emit a warning
 to the user informing them of duplicate registration conflict(s).
-
-__Note the warning about duplicate Instrument registration conflicts
-is meant to help avoid the semantic error state described in the
+The warning helps to avoid the semantic error state described in the
 [OpenTelemetry Metrics data
-model](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
 when more than one `Metric` is written for a given instrument `name`
 and Meter identity by the same MeterProvider.
 
@@ -297,7 +309,7 @@ asynchronous:
   inline with application/business processing logic. For example, an HTTP client
   could use a Counter to record the number of bytes it has received.
   [Measurements](#measurement) recorded by synchronous instruments can be
-  associated with the [Context](../context/context.md).
+  associated with the [Context](../context/README.md).
 
 * Asynchronous instruments (e.g. [Asynchronous Gauge](#asynchronous-gauge)) give
   the user a way to register callback function, and the callback function will
@@ -305,7 +317,7 @@ asynchronous:
   could use an asynchronous gauge to collect the temperature from a sensor every
   15 seconds, which means the callback function will only be invoked every 15
   seconds. [Measurements](#measurement) recorded by asynchronous instruments
-  cannot be associated with the [Context](../context/context.md).
+  cannot be associated with the [Context](../context/README.md).
 
 Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
@@ -337,19 +349,26 @@ The API to construct asynchronous instruments MUST accept the following paramete
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
-* Zero or more `callback` functions.
+* Zero or more `callback` functions, responsible for reporting
+  [Measurement](#measurement) values of the created instrument.
 
 The API MUST support creation of asynchronous instruments by passing
-zero or more callback functions to be permanently registered to the
+zero or more `callback` functions to be permanently registered to the
 newly created instrument.
 
-The API SHOULD support registration of callback functions to
+A Callback is the conceptual entity created each time a `callback`
+function is registered through an OpenTelemetry API.
+
+The API SHOULD support registration of `callback` functions associated with
 asynchronous instruments after they are created.
 
-Where the API supports registration of callback functions after
-asynchronous instrumentation creation, it MUST return something (e.g.,
-a registration handle, receipt or token) to the user that supports
-undoing the effect of callback registation.
+Where the API supports registration of `callback` functions after
+asynchronous instrumentation creation, the user MUST be able to undo
+registration of the specific callback after its registration by some means.
+
+Every currently registered Callback associated with an instrument MUST
+be evaluated exactly once during collection prior to reading data for
+that instrument.
 
 Callback functions MUST be documented as follows for the end user:
 
@@ -366,11 +385,28 @@ RECOMMENDATIONS is explicitly not specified at the API level.
 [OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
 approach for capturing measurements from callback functions. Here are some examples:
 
-* Return a list (or tuple, generator, enumerator, etc.) of `Measurement`s.
-* Use an observable result argument to allow individual `Measurement`s to be
-  reported.
+* Return a list (or tuple, generator, enumerator, etc.) of individual
+  `Measurement` values.
+* Pass an *Observable Result* as a formal parameter of the callback,
+  where `result.Observe()` captures individual `Measurement` values.
 
-The API MUST treat observations from a single callback as logically
+Callbacks registered at the time of instrument creation MUST apply to
+the single instruments which is under construction.
+
+Callbacks registered after the time of instrument creation MAY be
+associated with multiple instruments.
+
+Idiomatic APIs for multiple-instrument Callbacks MUST distinguish the
+instrument associated with each observed `Measurement` value.
+
+Multiple-instrument Callbacks MUST be associated at the time of
+registration with a declared set of asynchronous instruments from the
+same `Meter` instance.  This requirement that Instruments be
+declaratively associated with Callbacks allows an SDK to execute only
+those Callbacks that are necessary to evaluate instruments that are in
+use by a configured [View](sdk.md#view).
+
+The API MUST treat observations from a single Callback as logically
 taking place at a single instant, such that when recorded,
 observations from a single callback MUST be reported with identical
 timestamps.
@@ -438,11 +474,11 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 Required parameters:
 
-* Optional [attributes](../common/common.md#attributes).
+* Optional [attributes](../common/README.md#attribute).
 * The increment amount, which MUST be a non-negative numeric value.
 
 The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
-[attributes](../common/common.md#attributes) to be passed in as arguments. If
+[attributes](../common/README.md#attribute) to be passed in as arguments. If
 the attribute names and types are provided during the [counter
 creation](#counter-creation), the [OpenTelemetry API](../overview.md#api)
 authors MAY allow attribute values to be passed in using a more efficient way
@@ -660,10 +696,10 @@ certain programming languages or systems, for example `null`, `undefined`).
 Parameters:
 
 * The amount of the `Measurement`, which MUST be a non-negative numeric value.
-* Optional [attributes](../common/common.md#attributes).
+* Optional [attributes](../common/README.md#attribute).
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
-[attributes](../common/common.md#attributes) to be passed in as individual
+[attributes](../common/README.md#attribute) to be passed in as individual
 arguments. [OpenTelemetry API](../overview.md#api) authors MAY allow attribute
 values to be passed in using a more efficient way (e.g. strong typed struct
 allocated on the callstack, tuple). Here are some examples that [OpenTelemetry
@@ -894,10 +930,10 @@ certain programming languages or systems, for example `null`, `undefined`).
 Parameters:
 
 * The amount to be added, can be positive, negative or zero.
-* Optional [attributes](../common/common.md#attributes).
+* Optional [attributes](../common/README.md#attribute).
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
-[attributes](../common/common.md#attributes) to be passed in as individual
+[attributes](../common/README.md#attribute) to be passed in as individual
 arguments. [OpenTelemetry API](../overview.md#api) authors MAY allow attribute
 values to be passed in using a more efficient way (e.g. strong typed struct
 allocated on the callstack, tuple). Here are some examples that [OpenTelemetry
@@ -1044,7 +1080,50 @@ for the interaction between the API and SDK.
 `Measurement`s encapsulate:
 
 * A value
-* [`Attributes`](../common/common.md#attributes)
+* [`Attributes`](../common/README.md#attribute)
+
+### Multiple-instrument callbacks
+
+[The Metrics API MAY support an interface allowing the use of multiple
+instruments from a single registered
+Callback](#asynchronous-instrument-api).  The API to register a new
+Callback SHOULD accept:
+
+- A `callback` function
+- A list (or tuple, etc.) of Instruments used in the `callback` function.
+
+It is RECOMMENDED that the API authors use one of the following forms
+for the `callback` function:
+
+* The list (or tuple, etc.) returned by the `callback` function
+  contains `(Instrument, Measurement)` pairs.
+* the Observable Result parameter receives an additional `(Instrument,
+  Measurement)` pairs
+
+This interface is typically a more performant way to report multiple
+measurements when they are obtained through an expensive process, such
+as reading `/proc` files or probing the garbage collection subsystem.
+
+For example,
+
+```Python
+# Python
+class Device:
+    """A device with two instruments"""
+
+    def __init__(self, meter, property):
+        self.property = property
+        self.usage = meter.create_observable_counter(name="usage", description="count of items used")
+        self.pressure = meter.create_observable_gauge(name="pressure", description="force per unit area")
+
+        # Note the two associated instruments are passed to the callback.
+        meter.register_callback([self.usage, self.pressure], self.observe)
+
+    def observe(self, result):
+        usage, pressure = expensive_system_call()
+        result.observe(self.usage, usage, {'property', self.property})
+        result.observe(self.pressure, pressure, {'property', self.property})
+```
 
 ## Compatibility requirements
 

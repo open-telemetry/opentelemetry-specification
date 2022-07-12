@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Stdout
+--->
+
 # OpenTelemetry Metrics Exporter - Standard output
 
 **Status**: [Stable](../../document-status.md)
@@ -11,7 +15,7 @@ name for their language. For example, ConsoleExporter, StdoutExporter,
 StreamExporter, etc.
 
 "Standard output" Metrics Exporter MUST support both Cumulative and Delta
-[Temporality](../datamodel.md#temporality).
+[Temporality](../data-model.md#temporality).
 
 If a language provides a mechanism to automatically configure a
 [MetricReader](../sdk.md#metricreader) to pair with the associated

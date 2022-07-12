@@ -8,7 +8,7 @@ MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
-SEMCONVGEN_VERSION=0.11.0
+SEMCONVGEN_VERSION=0.12.0
 
 # TODO: add `yamllint` step to `all` after making sure it works on Mac.
 .PHONY: all
@@ -85,7 +85,7 @@ table-check:
 
 .PHONY: schema-check
 schema-check:
-	cd tools && ./schema_check.sh
+	$(TOOLS_DIR)/schema_check.sh
 
 # Run all checks in order of speed / likely failure.
 .PHONY: check

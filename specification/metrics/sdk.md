@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: SDK
+--->
+
 # Metrics SDK
 
 **Status**: [Mixed](../document-status.md)
@@ -17,8 +21,13 @@
     + [Default Aggregation](#default-aggregation)
     + [Sum Aggregation](#sum-aggregation)
     + [Last Value Aggregation](#last-value-aggregation)
-    + [Histogram Aggregation](#histogram-aggregation)
+    + [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
     + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+    + [Exponential Bucket Histogram Aggregation](#exponential-bucket-histogram-aggregation)
+      - [Exponential Bucket Histogram Aggregation: Handle all normal values](#exponential-bucket-histogram-aggregation-handle-all-normal-values)
+      - [Exponential Bucket Histogram Aggregation: Support a minimum and maximum scale](#exponential-bucket-histogram-aggregation-support-a-minimum-and-maximum-scale)
+      - [Exponential Bucket Histogram Aggregation: Use the maximum scale for single measurements](#exponential-bucket-histogram-aggregation-use-the-maximum-scale-for-single-measurements)
+      - [Exponential Bucket Histogram Aggregation: Maintain the ideal scale](#exponential-bucket-histogram-aggregation-maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
@@ -168,15 +177,14 @@ are the inputs:
     _instrument name == "Foobar"_ and _instrument type is Histogram_, it will be
     treated as _(instrument name == "Foobar") AND (instrument type is
     Histogram)_.
-  * If _none_ the optional criteria is provided, the SDK SHOULD treat it as an
-    error. It is recommended that the SDK implementations fail fast. Please
-    refer to [Error handling in OpenTelemetry](../error-handling.md) for the
-    general guidance.
+  * If no criteria is provided, the SDK SHOULD treat it as an error. It is
+    recommended that the SDK implementations fail fast. Please refer to [Error
+    handling in OpenTelemetry](../error-handling.md) for the general guidance.
 * The `name` of the View (optional). If not provided, the Instrument `name`
   MUST be used by default. This will be used as the name of the [metrics
-  stream](./datamodel.md#events--data-stream--timeseries).
+  stream](./data-model.md#events--data-stream--timeseries).
 * The configuration for the resulting [metrics
-  stream](./datamodel.md#events--data-stream--timeseries):
+  stream](./data-model.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` MUST be
     used by default.
   * A list of `attribute keys` (optional). If provided, the attributes that are
@@ -196,8 +204,10 @@ In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
 mechanism described above, where selection is provided via configuration, the
 SDK SHOULD NOT allow Views with a specified name to be declared with instrument
-selectors that may select more than one instrument (e.g. wild card instrument name)
-in the same Meter.
+selectors that may select more than one instrument (e.g. wild card instrument
+name) in the same Meter. For this and other cases where registering a view will
+cause a conflict, SDKs MAY fail fast in accordance with
+initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
 The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
@@ -210,11 +220,14 @@ made with an Instrument:
 * If the `MeterProvider` has one or more `View`(s) registered:
   * For each View, if the Instrument could match the instrument selection
     criteria:
-    * Try to apply the View configuration. If there is an error or a conflict
-      (e.g. the View requires to export the metrics using a certain name, but
-      the name is already used by another View), provide a way to let the user
-      know (e.g. expose
-      [self-diagnostics logs](../error-handling.md#self-diagnostics)).
+    * Try to apply the View configuration. If applying the View results
+      in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+      the implementation SHOULD apply the View and emit a warning. If it is not
+      possible to apply the View without producing semantic errors (e.g. the
+      View sets an asynchronous instrument to use
+      the [Explicit bucket histogram aggregation](#explicit-bucket-histogram-aggregation))
+      the implementation SHOULD emit a warning and proceed as if the View did
+      not exist.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
@@ -279,7 +292,7 @@ meter_provider
 
 An `Aggregation`, as configured via the [View](./sdk.md#view),
 informs the SDK on the ways and means to compute
-[Aggregated Metrics](./datamodel.md#opentelemetry-protocol-data-model)
+[Aggregated Metrics](./data-model.md#opentelemetry-protocol-data-model)
 from incoming Instrument [Measurements](./api.md#measurement).
 
 Note: the term _aggregation_ is used instead of _aggregator_. It is recommended
@@ -326,15 +339,18 @@ we will explore how to allow configuring custom
 [ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
 The SDK MUST provide the following `Aggregation` to support the
-[Metric Points](./datamodel.md#metric-points) in the
-[Metrics Data Model](./datamodel.md).
+[Metric Points](./data-model.md#metric-points) in the
+[Metrics Data Model](./data-model.md).
 
 - [Drop](./sdk.md#drop-aggregation)
 - [Default](./sdk.md#default-aggregation)
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
-- [Histogram](./sdk.md#histogram-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
+
+The SDK MAY provide the following `Aggregation`:
+
+- [Exponential Bucket Histogram Aggregation](./sdk.md#exponential-bucket-histogram-aggregation)
 
 #### Drop Aggregation
 
@@ -349,21 +365,21 @@ The Default Aggregation informs the SDK to use the Instrument Kind
 (e.g. at View registration OR at first seen measurement)
 to select an aggregation and configuration parameters.
 
-| Instrument Kind | Selected Aggregation |
-| --- | --- |
-| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation) |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation) |
-| [Histogram](./api.md#histogram) | [Histogram Aggregation](./sdk.md#histogram-aggregation) |
+| Instrument Kind | Selected Aggregation                                                                    |
+| --- |-----------------------------------------------------------------------------------------|
+| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation)                               |
+| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation) |
 
 This Aggregation does not have any configuration parameters.
 
 #### Sum Aggregation
 
 The Sum Aggregation informs the SDK to collect data for the
-[Sum Metric Point](./datamodel.md#sums).
+[Sum Metric Point](./data-model.md#sums).
 
 The monotonicity of the aggregation is determined by the instrument type:
 
@@ -374,7 +390,7 @@ The monotonicity of the aggregation is determined by the instrument type:
 | [Histogram](./api.md#histogram) | Monotonic |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
 | [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
-| [Asynchrounous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
 This Aggregation does not have any configuration parameters.
 
@@ -385,7 +401,7 @@ This Aggregation informs the SDK to collect:
 #### Last Value Aggregation
 
 The Last Value Aggregation informs the SDK to collect data for the
-[Gauge Metric Point](./datamodel.md#gauge).
+[Gauge Metric Point](./data-model.md#gauge).
 
 This Aggregation does not have any configuration parameters.
 
@@ -394,18 +410,20 @@ This Aggregation informs the SDK to collect:
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
 
-#### Histogram Aggregation
+#### Histogram Aggregation common behavior
 
-The Histogram Aggregation informs the SDK to select the best Histogram
-Aggregation available. i.e. [Explicit Bucket Histogram
-Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
+All histogram Aggregations inform the SDK to collect:
 
-This Aggregation does not have any configuration parameters.
+- Count of `Measurement` values in population.
+- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
+instruments that record negative measurements (e.g. `UpDownCounter` or `ObservableGauge`).
+- Min (optional) `Measurement` value in population.
+- Max (optional) `Measurement` value in population.
 
 #### Explicit Bucket Histogram Aggregation
 
 The Explicit Bucket Histogram Aggregation informs the SDK to collect data for
-the [Histogram Metric Point](./datamodel.md#histogram) using a set of
+the [Histogram Metric Point](./data-model.md#histogram) using a set of
 explicit boundary values for histogram bucketing.
 
 This Aggregation honors the following configuration parameters:
@@ -415,13 +433,96 @@ This Aggregation honors the following configuration parameters:
 | Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
-This Aggregation informs the SDK to collect:
+Explicit buckets are stated in terms of their upper boundary.  Buckets
+are exclusive of their lower boundary and inclusive of their upper
+bound (except at positive infinity).  A measurement is defined to fall
+into the greatest-numbered bucket with boundary that is greater than
+or equal to the measurement.
 
-- Count of `Measurement` values falling within explicit bucket boundaries.
-- Arithmetic sum of `Measurement` values in population. This SHOULD NOT be collected when used with
-instruments that record negative measurements, e.g. `UpDownCounter` or `ObservableGauge`.
-- Min (optional) `Measurement` value in population.
-- Max (optional) `Measurement` value in population.
+#### Exponential Bucket Histogram Aggregation
+
+The Exponential Histogram Aggregation informs the SDK to collect data
+for the [Exponential Histogram Metric
+Point](./data-model.md#exponentialhistogram), which uses an exponential
+formula to determine bucket boundaries and an integer `scale`
+parameter to control resolution.
+
+Scale is not a configurable property of this Aggregation, the
+implementation will adjust it as necessary given the data.  This
+Aggregation honors the following configuration parameter:
+
+| Key     | Value   | Default Value | Description                                                                                                  |
+|---------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
+| MaxSize | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
+
+The default of 160 buckets is selected to establish default support
+for a high-resolution histogram able to cover a long-tail latency
+distribution from 1ms to 100s with less than 5% relative error.
+Because 160 can be factored into `10 * 2**K`, maximum contrast is
+relatively simple to derive for scale `K`:
+
+| Scale | Maximum data contrast at 10 * 2**K buckets |
+|-------|--------------------------------------------|
+| K+2   | 5.657 (2**(10/4))                          |
+| K+1   | 32 (2**(10/2))                             |
+| K     | 1024 (2**10)                               |
+| K-1   | 1048576 (2**20)                            |
+
+The following table shows how the ideal scale for 160 buckets is
+calculated as a function of the input range:
+
+| Input range | Contrast | Ideal Scale | Base     | Relative error |
+|-------------|----------|-------------|----------|----------------|
+| 1ms - 4ms   | 4        | 6           | 1.010889 | 0.542%         |
+| 1ms - 20ms  | 20       | 5           | 1.021897 | 1.083%         |
+| 1ms - 1s    | 10**3    | 4           | 1.044274 | 2.166%         |
+| 1ms - 100s  | 10**5    | 3           | 1.090508 | 4.329%         |
+| 1μs - 10s   | 10**7    | 2           | 1.189207 | 8.643%         |
+
+Note that relative error is calculated as half of the bucket width
+divided by the bucket midpoint, which is the same in every bucket.
+Using the bucket from [1, base), we have `(bucketWidth / 2) /
+bucketMidpoint = ((base - 1) / 2) / ((base + 1) / 2) = (base - 1) /
+(base + 1)`.
+
+This Aggregation uses the notion of "ideal" scale.  The ideal scale is
+either:
+
+1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
+2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
+
+##### Exponential Bucket Histogram Aggregation: Handle all normal values
+
+Implementations are REQUIRED to accept the entire normal range of IEEE
+floating point values (i.e., all values except for +Inf, -Inf and NaN
+values).
+
+Implementations SHOULD NOT incorporate non-normal values (i.e., +Inf,
+-Inf, and NaNs) into the `sum`, `min`, and `max` fields, because these
+values do not map into a valid bucket.
+
+Implementations MAY round subnormal values away from zero to the
+nearest normal value.
+
+##### Exponential Bucket Histogram Aggregation: Support a minimum and maximum scale
+
+The implementation MUST maintain reasonable minimum and maximum scale
+parameters that the automatic scale parameter will not exceed.
+
+##### Exponential Bucket Histogram Aggregation: Use the maximum scale for single measurements
+
+When the histogram contains not more than one value in either of the
+positive or negative ranges, the implementation SHOULD use the maximum
+scale.
+
+##### Exponential Bucket Histogram Aggregation: Maintain the ideal scale
+
+Implementations SHOULD adjust the histogram scale as necessary to
+maintain the best resolution possible, within the constraint of
+maximum size (max number of buckets). Best resolution (highest scale)
+is achieved when the number of positive or negative range buckets
+exceeds half the maximum size, such that increasing scale by one would
+not be possible given the size constraint.
 
 ### Observations inside asynchronous callbacks
 
@@ -447,7 +548,7 @@ specification](api.md#instrument-type-conflict-detection),
 implementations are REQUIRED to create valid instruments in case of
 duplicate instrument registration, and the [data model includes
 RECOMMENDATIONS on how to treat the consequent duplicate
-conflicting](datamodel.md#opentelemetry-protocol-data-model-producer-recommendations)
+conflicting](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
 `Metric` definitions.
 
 The implementation MUST aggregate data from identical Instruments
@@ -473,7 +574,7 @@ between two non-identical `Metric` instances having the same `name`:
 **Status**: [Stable](../document-status.md)
 
 Attributes which belong to Metrics are exempt from the
-[common rules of attribute limits](../common/common.md#attribute-limits) at this
+[common rules of attribute limits](../common/README.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
 
@@ -487,13 +588,13 @@ aggregated metric data and the original API calls where measurements are
 recorded. Exemplars work for trace-metric correlation across any metric, not
 just those that can also be derived from `Span`s.
 
-An [Exemplar](./datamodel.md#exemplars) is a recorded
+An [Exemplar](./data-model.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
 information:
 
 - The `value` of the `Measurement` that was recorded by the API call.
 - The `time` the API call was made to record a `Measurement`.
-- The set of [Attributes](../common/common.md#attributes) associated with the
+- The set of [Attributes](../common/README.md#attribute) associated with the
   `Measurement` not already included in a metric data point.
 - The associated [trace id and span
   id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
@@ -513,7 +614,7 @@ api.context.with(api.trace.setSpan(api.context.active(), span), () => {
 })
 ```
 
-Then an examplar output in OTLP would consist of:
+Then an exemplar output in OTLP would consist of:
 
 - The `value` of 1.
 - The `time` when the `add` method was called
@@ -548,7 +649,7 @@ This interface SHOULD have access to:
 
 - The `value` of the measurement.
 - The complete set of `Attributes` of the measurement.
-- The [Context](../context/context.md) of the measurement, which covers the
+- The [Context](../context/README.md) of the measurement, which covers the
   [Baggage](../baggage/api.md) and the current active
   [Span](../trace/api.md#span).
 - A `timestamp` that best represents when the measurement was taken.
@@ -565,7 +666,7 @@ The "offer" method SHOULD accept measurements, including:
 
 - The `value` of the measurement.
 - The complete set of `Attributes` of the measurement.
-- The [Context](../context/context.md) of the measurement, which covers the
+- The [Context](../context/README.md) of the measurement, which covers the
   [Baggage](../baggage/api.md) and the current active
   [Span](../trace/api.md#span).
 - A `timestamp` that best represents when the measurement was taken.
@@ -678,7 +779,7 @@ The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
 `MetricReader` instance SHOULD NOT introduce side-effects to other `MetricReader`
 instances. For example, if a `MetricReader` instance is receiving metric data
-points that have [delta temporality](./datamodel.md#temporality), it is expected
+points that have [delta temporality](./data-model.md#temporality), it is expected
 that SDK will update the time range - e.g. from (T<sub>n</sub>, T<sub>n+1</sub>]
 to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 `MetricReader` instance.
@@ -715,7 +816,9 @@ Instruments](./api.md#asynchronous-instrument-api) involved, their callback
 functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out.
+failed or timed out. When the `Collect` operation fails or times out on
+some of the instruments, the SDK MAY return successfully collected results
+and a failed reasons list to the caller.
 
 `Collect` does not have any required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
@@ -790,7 +893,7 @@ protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
 Metric Exporter has access to the [aggregated metrics
-data](./datamodel.md#timeseries-model).  Metric Exporters SHOULD
+data](./data-model.md#timeseries-model).  Metric Exporters SHOULD
 report an error condition for data output by the `MetricReader` with
 unsupported Aggregation or Aggregation Temporality, as this condition
 can be corrected by a change of `MetricReader` configuration.
@@ -839,7 +942,7 @@ A Push Metric Exporter MUST support the following functions:
 
 ##### Export(batch)
 
-Exports a batch of [Metric points](./datamodel.md#metric-points). Protocol
+Exports a batch of [Metric points](./data-model.md#metric-points). Protocol
 exporters that will implement this function are typically expected to serialize
 and transmit the data to the destination.
 
@@ -878,11 +981,11 @@ Batch: | Metric | | Metric | ... | Metric |
                                     +--> timestamps, attributes, value (or buckets), exemplars, ...
 ```
 
-Refer to the [Metric points](./datamodel.md#metric-points) section from the
+Refer to the [Metric points](./data-model.md#metric-points) section from the
 Metrics Data Model specification for more details.
 
 Note: it is highly recommended that implementors design the `Metric` data type
-_based on_ the [Data Model](./datamodel.md), rather than directly use the data
+_based on_ the [Data Model](./data-model.md), rather than directly use the data
 types generated from the [proto
 files](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto)
 (because the types generated from proto files are not guaranteed to be backward

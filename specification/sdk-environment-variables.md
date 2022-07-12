@@ -94,7 +94,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 SDKs SHOULD only offer environment variables for the types of attributes, for
 which that SDK implements truncation mechanism.
 
-See the SDK [Attribute Limits](common/common.md#attribute-limits) section for the definition of the limits.
+See the SDK [Attribute Limits](common/README.md#attribute-limits) section for the definition of the limits.
 
 | Name                              | Description                          | Default | Notes |
 | --------------------------------- | ------------------------------------ | ------- | ----- |

@@ -28,6 +28,7 @@ The following library-specific semantic conventions are defined:
 
 * [AWS Lambda](instrumentation/aws-lambda.md): For AWS Lambda spans.
 * [AWS SDK](instrumentation/aws-sdk.md): For AWS SDK spans.
+* [GraphQL](instrumentation/graphql.md): For GraphQL spans.
 
 Apart from semantic conventions for traces and [metrics](../../metrics/semantic_conventions/README.md),
 OpenTelemetry also defines the concept of overarching [Resources](../../resource/sdk.md) with their own

@@ -1,8 +1,10 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Semantic Conventions
+--->
+
 # Metrics Semantic Conventions
 
 **Status**: [Experimental](../../document-status.md)
-
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
 
@@ -10,15 +12,18 @@
   * [Name Reuse Prohibition](#name-reuse-prohibition)
   * [Units](#units)
   * [Pluralization](#pluralization)
+    + [Use `count` Instead of Pluralization](#use-count-instead-of-pluralization)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
   * [Instrument Units](#instrument-units)
+  * [Instrument Types](#instrument-types)
 
 <!-- tocstop -->
 
 The following semantic conventions surrounding metrics are defined:
 
 * [HTTP](http-metrics.md): For HTTP client and server metrics.
+* [Database](database-metrics.md): For SQL and NoSQL client metrics.
 * [System](system-metrics.md): For standard system metrics.
 * [Process](process-metrics.md): For standard process metrics.
 * [Runtime Environment](runtime-environment-metrics.md): For runtime environment metrics.
@@ -103,6 +108,17 @@ should not be pluralized, even if many data points are recorded.
 * `system.paging.faults`, `system.disk.operations`, and `system.network.packets`
 should be pluralized, even if only a single data point is recorded.
 
+#### Use `count` Instead of Pluralization
+
+If the value being recorded represents the count of concepts signified
+by the namespace then the metric should be named `count` (within its namespace).
+The pluralization rule does not apply in this case.
+
+For example if we have a namespace `system.processes` which contains all metrics related
+to the processes then to represent the count of the processes we can have a metric named
+`system.processes.count`. The suffix `count` here indicates that it is the count of
+`system.processes`.
+
 ## General Metric Semantic Conventions
 
 The following semantic conventions aim to keep naming consistent. They
@@ -165,3 +181,11 @@ total) are dimensionless and SHOULD use the default unit `1` (the unity).
 [annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
 give additional meaning *without* the leading default unit (`1`). For example,
 use `{packets}`, `{errors}`, `{faults}`, etc.
+
+### Instrument Types
+
+The semantic metric conventions specification is written to use the names of the synchronous instrument types,
+like `Counter` or `UpDownCounter`. However, compliant implementations MAY use the asynchronous equivalent instead,
+like `Asynchronous Counter` or `Asynchronous UpDownCounter`.
+Whether implementations choose the synchronous type or the asynchronous equivalent is considered to be an
+implementation detail. Both choices are compliant with this specification.

@@ -1,3 +1,8 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Logs
+aliases: [/docs/reference/specification/logs/overview]
+--->
+
 # OpenTelemetry Logging Overview
 
 **Status**: [Experimental](../document-status.md)

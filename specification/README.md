@@ -1,3 +1,14 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Specification
+no_list: true
+cascade:
+  body_class: otel-docs-spec
+  github_repo: &repo https://github.com/open-telemetry/opentelemetry-specification
+  github_subdir: specification
+  path_base_for_github_subdir: content/en/docs/reference/specification/
+  github_project_repo: *repo
+--->
+
 # OpenTelemetry Specification
 
 ## Contents
@@ -9,7 +20,7 @@
   - [Package/Library Layout](library-layout.md)
   - [General error handling guidelines](error-handling.md)
 - API Specification
-  - [Context](context/context.md)
+  - [Context](context/README.md)
     - [Propagators](context/api-propagators.md)
   - [Baggage](baggage/api.md)
   - [Tracing](trace/api.md)
@@ -22,7 +33,7 @@
 - Data Specification
   - [Semantic Conventions](overview.md#semantic-conventions)
   - [Protocol](protocol/README.md)
-    - [Metrics](metrics/datamodel.md)
+    - [Metrics](metrics/data-model.md)
     - [Logs](logs/data-model.md)
 
 ## Notation Conventions and Compliance

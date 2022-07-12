@@ -8,7 +8,7 @@ groups:
     attributes:
       - id: method
         type: string
-        required: always
+        requirement_level: required
         brief: 'HTTP request method.'
         sampling_relevant: true
         examples: ["GET", "POST", "HEAD"]
@@ -47,8 +47,8 @@ groups:
         examples: ["http", "https"]
       - id: status_code
         type: int
-        required:
-          conditional: If and only if one was received/sent.
+        requirement_level:
+          conditionally_required: If and only if one was received/sent.
         brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
         examples: [200]
       - id: flavor
@@ -59,13 +59,16 @@ groups:
           members:
             - id: http_1_0
               value: '1.0'
-              brief: 'HTTP 1.0'
+              brief: 'HTTP/1.0'
             - id: http_1_1
               value: '1.1'
-              brief: 'HTTP 1.1'
+              brief: 'HTTP/1.1'
             - id: http_2_0
               value: '2.0'
-              brief: 'HTTP 2'
+              brief: 'HTTP/2'
+            - id: http_3_0
+              value: '3.0'
+              brief: 'HTTP/3'
             - id: spdy
               value: 'SPDY'
               brief: 'SPDY protocol.'
@@ -108,8 +111,8 @@ groups:
         type: int
         brief: >
           The ordinal number of request re-sending attempt.
-        required:
-          conditional: If and only if a request was retried.
+        requirement_level:
+          recommended: If and only if a request was retried.
         examples: 3
       - ref: net.peer.ip
         sampling_relevant: true

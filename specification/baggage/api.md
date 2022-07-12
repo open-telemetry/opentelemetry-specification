@@ -101,7 +101,7 @@ REQUIRED parameters:
 ## Context Interaction
 
 This section defines all operations within the Baggage API that interact with
-the [`Context`](../context/context.md).
+the [`Context`](../context/README.md).
 
 If an implementation of this API does not operate directly on the `Context`, it
 MUST provide the following functionality to interact with a `Context` instance:
@@ -110,11 +110,11 @@ MUST provide the following functionality to interact with a `Context` instance:
 - Insert the `Baggage` to a `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
-access to the [Context Key](../context/context.md#create-a-key) used by the
+access to the [Context Key](../context/README.md#create-a-key) used by the
 Baggage API implementation.
 
 If the language has support for implicitly propagated `Context` (see
-[here](../context/context.md#optional-global-operations)), the API SHOULD also
+[here](../context/README.md#optional-global-operations)), the API SHOULD also
 provide the following functionality:
 
 - Get the currently active `Baggage` from the implicit context. This is

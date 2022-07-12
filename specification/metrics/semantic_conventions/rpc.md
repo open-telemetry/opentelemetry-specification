@@ -1,11 +1,16 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: RPC
+--->
+
 # General RPC conventions
 
 **Status**: [Experimental](../../document-status.md)
 
 The conventions described in this section are RPC specific. When RPC operations
-occur, metric events about those operations will be generated and reported to
-provide insight into those operations. By adding RPC properties as attributes
-on metric events it allows for finely tuned filtering.
+occur, measurements about those operations are recorded to instruments. The
+measurements are aggregated and exported as metrics, which provide insight into
+those operations. By including RPC properties as attributes on measurements, the
+metrics can be filtered for finer grain analysis.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
@@ -17,6 +22,7 @@ on metric events it allows for finely tuned filtering.
 - [Attributes](#attributes)
   * [Service name](#service-name)
 - [gRPC conventions](#grpc-conventions)
+  * [gRPC Attributes](#grpc-attributes)
 
 <!-- tocstop -->
 
@@ -31,7 +37,7 @@ MUST be of the specified type and units.
 
 Below is a table of RPC server metric instruments.
 
-| Name | Instrument | Unit | Unit ([UCUM](README.md#instrument-units)) | Description | Status | Streaming |
+| Name | Instrument Type ([*](README.md#instrument-types)) | Unit | Unit ([UCUM](README.md#instrument-units)) | Description | Status | Streaming |
 |------|------------|------|-------------------------------------------|-------------|--------|-----------|
 | `rpc.server.duration` | Histogram  | milliseconds | `ms` | measures duration of inbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
 | `rpc.server.request.size` | Histogram  | Bytes | `By` | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
@@ -44,7 +50,7 @@ Below is a table of RPC server metric instruments.
 Below is a table of RPC client metric instruments.  These apply to traditional
 RPC usage, not streaming RPCs.
 
-| Name | Instrument | Unit | Unit ([UCUM](README.md#instrument-units)) | Description | Status | Streaming |
+| Name | Instrument Type ([*](README.md#instrument-types)) | Unit | Unit ([UCUM](README.md#instrument-units)) | Description | Status | Streaming |
 |------|------------|------|-------------------------------------------|-------------|--------|-----------|
 | `rpc.client.duration` | Histogram | milliseconds | `ms` | measures duration of outbound RPC | Recommended | N/A.  While streaming RPCs may record this metric as start-of-batch to end-of-batch, it's hard to interpret in practice. |
 | `rpc.client.request.size` | Histogram | Bytes | `By` | measures size of RPC request messages (uncompressed) | Optional | Recorded per message in a streaming batch |
@@ -54,19 +60,19 @@ RPC usage, not streaming RPCs.
 
 ## Attributes
 
-Below is a table of attributes that SHOULD be included on metric events and whether
-or not they should be on the server, client or both.
+Below is a table of attributes that SHOULD be included on client and server RPC
+measurements.
 
 <!-- semconv rpc -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Yes |
-| [`rpc.service`](../../trace/semantic_conventions/rpc.md) | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | No, but recommended |
-| [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | No, but recommended |
+| [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Required |
+| [`rpc.service`](../../trace/semantic_conventions/rpc.md) | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | Recommended |
+| [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | Recommended |
 | [`net.peer.ip`](../../trace/semantic_conventions/span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below |
 | [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Remote hostname or similar, see note below. [3] | `example.com` | See below |
-| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Remote port number. | `80`; `8080`; `443` | See below |
-| [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | See below |
+| [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditionally Required: See below |
+| [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: See below |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
 
@@ -111,5 +117,37 @@ One process can expose multiple RPC endpoints and thus have multiple RPC service
 For remote procedure calls via [gRPC][], additional conventions are described in this section.
 
 `rpc.system` MUST be set to `"grpc"`.
+
+### gRPC Attributes
+
+Below is a table of attributes that SHOULD be included on client and server RPC measurements when `rpc.system` is `"grpc"`.
+
+<!-- semconv rpc.grpc -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| [`rpc.grpc.status_code`](../../trace/semantic_conventions/rpc.md) | int | The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0` | Required |
+
+`rpc.grpc.status_code` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `0` | OK |
+| `1` | CANCELLED |
+| `2` | UNKNOWN |
+| `3` | INVALID_ARGUMENT |
+| `4` | DEADLINE_EXCEEDED |
+| `5` | NOT_FOUND |
+| `6` | ALREADY_EXISTS |
+| `7` | PERMISSION_DENIED |
+| `8` | RESOURCE_EXHAUSTED |
+| `9` | FAILED_PRECONDITION |
+| `10` | ABORTED |
+| `11` | OUT_OF_RANGE |
+| `12` | UNIMPLEMENTED |
+| `13` | INTERNAL |
+| `14` | UNAVAILABLE |
+| `15` | DATA_LOSS |
+| `16` | UNAUTHENTICATED |
+<!-- endsemconv -->
 
 [gRPC]: https://grpc.io/

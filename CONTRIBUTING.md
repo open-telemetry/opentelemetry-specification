@@ -16,8 +16,22 @@ Agreement](https://identity.linuxfoundation.org/projects/cncf).
 Significant changes should go through the [OpenTelemetry Enhancement
 Proposal](https://github.com/open-telemetry/oteps) process.
 
-Small changes, such as clarifications, wording changes, spelling/grammar
-corrections, etc. can be made directly via pull requests.
+Smaller changes can follow a shorter process:
+
+- [Create an issue](https://github.com/open-telemetry/opentelemetry-specification/issues/new/choose)
+  in this repo and describe the proposed change.
+- Follow the [issue workflow](#issue-triaging) and make sure the issue is accepted with
+  a "Yes" response. If the response to the issue is not "Yes" then do not create a PR
+  that implements the change since it will be rejected.
+- If a Pull Request would be beneficial to illustrate the idea better and to show its effect on the specification, a
+  [Draft PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests#draft-pull-requests)
+  may be opened and linked to the issue even before the proposed idea is accepted there.
+- Once the issue is accepted the assignee can work on it and create a PR that implements
+  the change described in the issue.
+
+Trivial changes, such as clarifications, wording changes, spelling/grammar
+corrections, etc. can be made directly via pull requests and do not require an associated
+issue.
 
 ## Writing specs
 
@@ -145,7 +159,7 @@ make misspell-correction
 
 The following diagram shows the initial triaging of new issues.
 
-![Issue Triaging](img/issue-triage-workflow.png)
+![Issue Triaging](internal/img/issue-triage-workflow.png)
 
 - Newly created issues are automatically assigned to a spec approver
   (round-robin). The assignee has 3 business days for the first response.
@@ -156,13 +170,17 @@ The following diagram shows the initial triaging of new issues.
   the 3 responses:
   - Yes, this is a good issue and we want to work on it.
   - Maybe, this issue needs to be clarified and/or others have to be pulled in
-    before we can make a decision.
+    before we can make a decision. More information may be requested from the
+    issue author or others.
   - No, this issue should not be accepted. This can happen when the issue is a
     duplicate, was discussed and rejected in the past, is out of the project
     scope, etc. The assignee labels the issue "won't do", closes it and provides
     the reason for closing. The issue author has the choice to appeal the
     decision, in which case the issue is reopened and the assignee asks other
     spec approvers to help triage and facilitate the discussion.
+  - As a result of triaging one of the 3 labels must be applied to the issue:
+    `triaged-accepted`, `triaged-needmoreinfo`, `triaged-rejected`. Absence
+    of the label indicates that the issue still needs the first response.
 - If the first response is Yes, the assignee decides if they are the right
   person to work on the issue long-term. If not, they will look for another
   contributor who can work on the issue and re-assign to them, label the issue

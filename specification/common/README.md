@@ -1,3 +1,6 @@
+<!--- Hugo front matter used to generate the website version of this page:
+aliases: [/docs/reference/specification/common/common]
+--->
 # Common specification concepts
 
 **Status**: [Stable, Feature-freeze](../document-status.md)
@@ -50,6 +53,8 @@ both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
 See [Attribute Naming](attribute-naming.md) for naming guidelines.
+
+See [Requirement Level](attribute-requirement-level.md) for requirement levels guidelines.
 
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
@@ -114,7 +119,7 @@ at this time, as discussed in
 ## Attribute Collections
 
 [Resources](../resource/sdk.md), Metrics
-[data points](../metrics/datamodel.md#metric-points),
+[data points](../metrics/data-model.md#metric-points),
 [Spans](../trace/api.md#set-attributes), Span
 [Events](../trace/api.md#add-events), Span
 [Links](../trace/api.md#specifying-links) and

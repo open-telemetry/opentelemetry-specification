@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Metrics
+--->
+
 # OpenTelemetry Metrics
 
 <details>
@@ -27,7 +31,7 @@ important to understand the goals of OpenTelemetry’s metrics effort:
 
 * **Being able to connect metrics to other signals**. For example, metrics and
   traces can be correlated via exemplars, and metrics attributes can be enriched
-  via [Baggage](../baggage/api.md) and [Context](../context/context.md).
+  via [Baggage](../baggage/api.md) and [Context](../context/README.md).
   Additionally, [Resource](../resource/sdk.md) can be applied to
   [logs](../overview.md#log-signal)/[metrics](../overview.md#metric-signal)/[traces](../overview.md#tracing-signal)
   in a consistent way.
@@ -94,7 +98,7 @@ SDK](../overview.md#sdk) concept for more information.
 
 * [Metrics API](./api.md)
 * [Metrics SDK](./sdk.md)
-* [Metrics Data Model and Protocol](./datamodel.md)
+* [Metrics Data Model and Protocol](./data-model.md)
 * [Semantic Conventions](./semantic_conventions/README.md)
 
 ## References

@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Data Model
+--->
+
 # Metrics Data Model
 
 **Status**: [Mixed](../document-status.md)
@@ -22,6 +26,7 @@
   * [Sums](#sums)
   * [Gauge](#gauge)
   * [Histogram](#histogram)
+    + [Histogram: Bucket inclusivity](#histogram-bucket-inclusivity)
   * [ExponentialHistogram](#exponentialhistogram)
     + [Exponential Scale](#exponential-scale)
     + [Exponential Buckets](#exponential-buckets)
@@ -33,6 +38,7 @@
       - [Positive Scale: Use a Lookup Table](#positive-scale-use-a-lookup-table)
     + [ExponentialHistogram: Producer Recommendations](#exponentialhistogram-producer-recommendations)
     + [ExponentialHistogram: Consumer Recommendations](#exponentialhistogram-consumer-recommendations)
+    + [ExponentialHistogram: Bucket inclusivity](#exponentialhistogram-bucket-inclusivity)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
 - [Single-Writer](#single-writer)
@@ -375,10 +381,10 @@ same kind. <sup>[1](#footnotes)</sup>
 
 The basic point kinds are:
 
-1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L198)
-2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L192)
-3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/v0.10.x/opentelemetry/proto/metrics/v1/metrics.proto#L211)
-4. [Exponential Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/27a10cd70f63afdbddf460881969f9ad7ae4af5d/opentelemetry/proto/metrics/v1/metrics.proto#L239)
+1. [Sum](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L247)
+2. [Gauge](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L241)
+3. [Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L260)
+4. [Exponential Histogram](https://github.com/open-telemetry/opentelemetry-proto/blob/c5c8b28012583fda55b0cb16f73a820722171d49/opentelemetry/proto/metrics/v1/metrics.proto#L270)
 
 Comparing the OTLP Metric Data Stream and Timeseries data models, OTLP does
 not map 1:1 from its point types into timeseries points. In OTLP, a Sum point
@@ -521,6 +527,8 @@ be dropped, or captured in an alternative representation such as a gauge.
 Bucket counts are optional.  A Histogram without buckets conveys a
 population in terms of only the sum and count, and may be interpreted
 as a histogram with single bucket covering `(-Inf, +Inf)`.
+
+#### Histogram: Bucket inclusivity
 
 Bucket upper-bounds are inclusive (except for the case where the
 upper-bound is +Inf) while bucket lower-bounds are exclusive. That is,
@@ -716,6 +724,21 @@ func GetExponent(value float64) int32 {
 }
 ```
 
+Implementations are permitted to round subnormal values up to the
+smallest normal value, which may permit the use of a built-in function:
+
+```golang
+
+func GetExponent(value float64) int {
+    // Note: Frexp() rounds submnormal values to the smallest normal
+    // value and returns an exponent corresponding to fractions in the
+    // range [0.5, 1), whereas we want [1, 2), so subtract 1 from the
+    // exponent.
+    _, exp := math.Frexp(value)
+    return exp - 1
+}
+```
+
 ##### Negative Scale: Extract and Shift the Exponent
 
 For negative scales, the index of a value equals the normalized
@@ -727,19 +750,59 @@ correct rounding for the negative indices.  This may be written as:
   return GetExponent(value) >> -scale
 ```
 
-##### All Scales: Use the Logarithm Function
-
-For any scale, use of the built-in natural logarithm
-function.  A multiplicative factor equal to `2**scale / ln(2)`
-proves useful (where `ln()` is the natural logarithm), for example:
+The reverse mapping function is:
 
 ```golang
-    scaleFactor := math.Log2E * math.Exp2(scale)
-    return int64(math.Floor(math.Log(value) * scaleFactor))
+    return math.Ldexp(1, index << -scale)
+```
+
+Note that the reverse mapping function is expected to produce
+subnormal values even when the mapping function rounds them into
+normal values, since the lower boundary of the bucket containing the
+smallest normal value may be subnormal.  For example, at scale -4 the
+smallest normal value `0x1p-1022` falls into a bucket with lower
+boundary `0x1p-1024`.
+
+##### All Scales: Use the Logarithm Function
+
+For any scale, the built-in natural logarithm function can be used to
+compute the bucket index.  A multiplicative factor equal to `2**scale
+/ ln(2)` proves useful (where `ln()` is the natural logarithm), for
+example:
+
+```golang
+    scaleFactor := math.Ldexp(math.Log2E, scale)
+    return math.Floor(math.Log(value) * scaleFactor)
 ```
 
 Note that in the example Golang code above, the built-in `math.Log2E`
-is defined as `1 / ln(2)`.
+is defined as the inverse of the natural logarithm of 2, i.e., `1 / ln(2)`.
+
+The reverse mapping function is:
+
+```golang
+    inverseFactor := math.Ldexp(math.Ln2, -scale)
+    return math.Exp(index * inverseFactor), nil
+```
+
+Implementations are expected to verify that their mapping function and
+inverse mapping function are correct near the lowest and highest IEEE
+floating point values.  A mathematically correct formula may produce
+wrong result, because of accumulated floating point calculation error
+or underflow/overflow of intermediate results.  In the Golang
+reference implementation, for example, the above formula computes
+`+Inf` for the maximum-index bucket.  In this case, it is appropriate
+to subtract `1<<scale` from the index and multiply the result by `2`.
+
+```golang
+    // Use this form in case the equation above computes +Inf
+    // as the lower boundary of a valid bucket.
+    inverseFactor := math.Ldexp(math.Ln2, -scale)
+    return 2.0 * math.Exp((index - (1 << scale)) * inverseFactor), nil
+```
+
+*Note that floating-point to integer type conversions have been
+omitted from the code fragments above, to improve readability.*
 
 ##### Positive Scale: Use a Lookup Table
 
@@ -780,6 +843,12 @@ Consumers SHOULD reject ExponentialHistogram data with `scale` and
 bucket indices that overflow or underflow this representation.
 Consumers that reject such data SHOULD warn the user through error
 logging that out-of-range data was received.
+
+#### ExponentialHistogram: Bucket inclusivity
+
+The [specification on bucket inclusivity made for explicit-boundary
+Histogram data](#histogram-bucket-inclusivity) applies equally to
+ExponentialHistogram data.
 
 ### Summary (Legacy)
 
@@ -1084,7 +1153,7 @@ The algorithm is scheduled out as follows:
 When the next delta sum reported for a given metric stream does not align with
 where we expect it, one of several things could have occurred:
 
-- the process reporting metrics was rebooted, leading to a new reporting
+- The process reporting metrics was rebooted, leading to a new reporting
   interval for the metric.
 - A Single-Writer principle violation where multiple processes are reporting the
   same metric stream.
@@ -1096,7 +1165,10 @@ that some data was lost, and reset the counter.
 We detect alignment via two mechanisms:
 
 - If the incoming delta time interval has significant overlap with the previous
-  time interval, we assume a violation of the single-writer principle.
+  time interval, we assume a violation of the single-writer principle and can be handled with one of the following options:
+  - Simply report the inconsistencies in time intervals, as the error condition could be caused by a misconfiguration.
+  - Eliminate the overlap / deduplicate on the receiver side.
+  - Correct the inconsistent time intervals by differentiating the given `Resource` and `Attribute` set used from overlapping time.
 - If the incoming delta time interval has a significant gap from the last seen
   time, we assume some kind of reboot/restart and reset the cumulative counter.
 
@@ -1192,8 +1264,10 @@ Prometheus Cumulative metrics do not include the start time of the metric. When 
 #### Exemplars
 
 [OpenMetrics Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars)
-can be attached to Prometheus Histogram bucket metrics, which SHOULD be
-converted to exemplars on OpenTelemetry histograms. If present, the timestamp
+can be attached to Prometheus Histogram bucket metric points and counter metric
+points. Exemplars on histogram buckets SHOULD be converted to exemplars on
+OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
+converted to exemplars on OpenTelemetry sums. If present, the timestamp
 MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
 retrieved from the `trace_id` and `span_id` label keys, respectively.  All
 labels not used for the trace and span ids MUST be added to the OpenTelemetry
@@ -1262,10 +1336,12 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
-- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum
+- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum. The following behaviors are expected:
+  - The new data point type must be the same as the accumulated data point type.
+  - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues].(#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
-Sum metric points MUST have `_total` added as a suffix to the metric name.
+Monotonic sum metric points MUST have `_total` added as a suffix to the metric name.
 
 #### Histograms
 
@@ -1301,18 +1377,18 @@ The following OTLP data points MUST be dropped:
 
 #### Metric Attributes
 
-OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  String Attribute values are converted directly to Metric Attributes, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/common.md#attribute).  Prometheus metric label keys are required to match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics from OpenTelemetry with unsupported Attribute names MUST replace invalid characters with the `_` character. This may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same location.  In such unlikely cases, if multiple key-value pairs are converted to have the same Prometheus key, the values MUST be concatenated together, separated by `;`, and ordered by the lexicographical order of the original keys.
+OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  String Attribute values are converted directly to Metric Attributes, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute).  Prometheus metric label keys are required to match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics from OpenTelemetry with unsupported Attribute names MUST replace invalid characters with the `_` character. This may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same location.  In such unlikely cases, if multiple key-value pairs are converted to have the same Prometheus key, the values MUST be concatenated together, separated by `;`, and ordered by the lexicographical order of the original keys.
 
 #### Exemplars
 
-[Exemplars](#exemplars) on OpenTelemetry Histograms SHOULD be converted to
-OpenMetrics exemplars. Exemplars on other OpenTelemetry data points MUST be
-dropped. For Prometheus push exporters, multiple exemplars are able to be
-added to each bucket, so all exemplars SHOULD be converted. For Prometheus
-pull endpoints, only a single exemplar is able to be added to each bucket, so
-the largest exemplar from each bucket MUST be used, if attaching exemplars. If
-no exemplars exist on a bucket, the highest exemplar from a lower bucket MUST
-be used, even though it is a duplicate of another bucket's exemplar.
+[Exemplars](#exemplars) on OpenTelemetry Histograms and Monotonic Sums SHOULD
+be converted to OpenMetrics exemplars. Exemplars on other OpenTelemetry data
+points MUST be dropped. For Prometheus push exporters, multiple exemplars are
+able to be added to each bucket, so all exemplars SHOULD be converted. For
+Prometheus pull endpoints, only a single exemplar is able to be added to each
+bucket, so the largest exemplar from each bucket MUST be used, if attaching
+exemplars. If no exemplars exist on a bucket, the highest exemplar from a lower
+bucket MUST be used, even though it is a duplicate of another bucket's exemplar.
 OpenMetrics Exemplars MUST use the `trace_id` and `span_id` keys for the trace
 and span IDs, respectively. Timestamps MUST be added as timestamps on the
 OpenMetrics exemplar, and `filtered_attributes` MUST be added as labels on the
@@ -1349,7 +1425,7 @@ other labels other than `job` and `instance`.  There MUST be at most one
 
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named "target" info with a constant value of 1 MUST be used instead.
 
-To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/common.md#attribute).
+To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute).
 
 ## Footnotes
 

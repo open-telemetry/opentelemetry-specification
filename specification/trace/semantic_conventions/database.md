@@ -37,21 +37,21 @@ These attributes will usually be the same for all operations performed over the 
 Some database systems may allow a connection to switch to a different `db.user`, for example, and other database systems may not even have the concept of a connection at all.
 
 <!-- semconv db(tag=connection-level) -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.system` | string | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Yes |
-| `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | No |
-| `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | No |
-| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | See below. |
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | See below. |
-| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditional [2] |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditional [3] |
+| `db.system` | string | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Required |
+| `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | Recommended |
+| `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | Recommended |
+| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Conditionally Required: See alternative attributes below. |
+| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | Conditionally Required: See alternative attributes below. |
+| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditionally Required: [2] |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [3] |
 
 **[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[2]:** Required if using a port other than the default port for this DBMS.
+**[2]:** If using a port other than the default port for this DBMS.
 
-**[3]:** Recommended in general, required for in-process databases (`"inproc"`).
+**[3]:** If database type is in-process (`"inproc"`), recommended for other database types.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -132,10 +132,10 @@ When additional attributes are added that only apply to a specific DBMS, its ide
 ### Connection-level attributes for specific technologies
 
 <!-- semconv db.mssql(tag=connection-level-tech-specific,remove_constraints) -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.jdbc.driver_classname` | string | The fully-qualified class name of the [Java Database Connectivity (JDBC)](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/) driver used to connect. | `org.postgresql.Driver`; `com.microsoft.sqlserver.jdbc.SQLServerDriver` | No |
-| `db.mssql.instance_name` | string | The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15) connecting to. This name is used to determine the port of a named instance. [1] | `MSSQLSERVER` | No |
+| `db.jdbc.driver_classname` | string | The fully-qualified class name of the [Java Database Connectivity (JDBC)](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/) driver used to connect. | `org.postgresql.Driver`; `com.microsoft.sqlserver.jdbc.SQLServerDriver` | Recommended |
+| `db.mssql.instance_name` | string | The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15) connecting to. This name is used to determine the port of a named instance. [1] | `MSSQLSERVER` | Recommended |
 
 **[1]:** If setting a `db.mssql.instance_name`, `net.peer.port` is no longer required (but still recommended if non-standard).
 <!-- endsemconv -->
@@ -146,17 +146,17 @@ These attributes may be different for each operation performed, even if the same
 Usually only one `db.name` will be used per connection though.
 
 <!-- semconv db(tag=call-level,remove_constraints) -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.name` | string | This attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`; `main` | Required, if applicable. |
-| `db.statement` | string | The database statement being executed. [2] | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Conditional [3] |
-| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [4] | `findAndModify`; `HMSET`; `SELECT` | Required, if `db.statement` is not applicable. |
+| `db.name` | string | This attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`; `main` | Conditionally Required: If applicable. |
+| `db.statement` | string | The database statement being executed. [2] | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Conditionally Required: [3] |
+| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [4] | `findAndModify`; `HMSET`; `SELECT` | Conditionally Required: If `db.statement` is not applicable. |
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name". In case there are multiple layers that could be considered for database name (e.g. Oracle instance name and schema name), the database name to be used is the more specific layer (e.g. Oracle schema name).
 
 **[2]:** The value may be sanitized to exclude sensitive information.
 
-**[3]:** Required if applicable and not explicitly disabled via instrumentation configuration.
+**[3]:** If applicable and not explicitly disabled via instrumentation configuration.
 
 **[4]:** When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
 <!-- endsemconv -->
@@ -178,15 +178,13 @@ In **HBase**, `db.name` SHOULD be set to the HBase namespace.
 ### Call-level attributes for specific technologies
 
 <!-- semconv db.tech(tag=call-level-tech-specific) -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.redis.database_index` | int | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`; `1`; `15` | Conditional [1] |
-| `db.mongodb.collection` | string | The collection being accessed within the database stated in `db.name`. | `customers`; `products` | Yes |
-| `db.sql.table` | string | The name of the primary table that the operation is acting upon, including the database name (if applicable). [2] | `public.users`; `customers` | Recommended if available. |
+| `db.redis.database_index` | int | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`; `1`; `15` | Conditionally Required: If other than the default database (`0`). |
+| `db.mongodb.collection` | string | The collection being accessed within the database stated in `db.name`. | `customers`; `products` | Required |
+| `db.sql.table` | string | The name of the primary table that the operation is acting upon, including the database name (if applicable). [1] | `public.users`; `customers` | Recommended |
 
-**[1]:** Required, if other than the default database (`0`).
-
-**[2]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
+**[1]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
 
 #### Cassandra
@@ -194,15 +192,15 @@ In **HBase**, `db.name` SHOULD be set to the HBase namespace.
 Separated for clarity.
 
 <!-- semconv db.tech(tag=call-level-tech-specific-cassandra) -->
-| Attribute  | Type | Description  | Examples  | Required |
+| Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.cassandra.page_size` | int | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | No |
-| `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `all` | No |
-| `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the keyspace name (if applicable). [1] | `mytable` | Recommended if available. |
-| `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | No |
-| `db.cassandra.speculative_execution_count` | int | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | No |
-| `db.cassandra.coordinator.id` | string | The ID of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | No |
-| `db.cassandra.coordinator.dc` | string | The data center of the coordinating node for a query. | `us-west-2` | No |
+| `db.cassandra.page_size` | int | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | Recommended |
+| `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `all` | Recommended |
+| `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the keyspace name (if applicable). [1] | `mytable` | Recommended |
+| `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | Recommended |
+| `db.cassandra.speculative_execution_count` | int | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | Recommended |
+| `db.cassandra.coordinator.id` | string | The ID of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | Recommended |
+| `db.cassandra.coordinator.dc` | string | The data center of the coordinating node for a query. | `us-west-2` | Recommended |
 
 **[1]:** This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
