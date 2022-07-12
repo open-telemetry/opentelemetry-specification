@@ -191,7 +191,7 @@ Additionally, the server MUST initialize the `partial_success` field
 the number of spans/data points/log records it accepted. In case the server
 rejected everything, the `accepted_<signal>` field MUST be set to `0`.
 
-The server MAY populate the `error_message` field with a human-readable
+The server SHOULD populate the `error_message` field with a human-readable
 error message in English. The message should explain why the
 server rejected parts of the data, and might offer guidance on how users
 can address the issues.
