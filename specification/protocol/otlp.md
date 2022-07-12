@@ -166,7 +166,7 @@ If the server receives an empty request (a request that does not carry
 any telemetry data) the server SHOULD respond with success.
 
 On success, the server response MUST be a Protobuf-encoded
-[Export*ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
 message (`ExportTraceServiceResponse` for traces,
 `ExportMetricsServiceResponse` for metrics and
 `ExportLogsServiceResponse` for logs).
@@ -182,7 +182,7 @@ in case of a successful response.
 If the processing of the request is partially successful
 (i.e. when the server accepts only parts of the data and rejects the rest), the
 server response MUST be a Protobuf-encoded
-[Export*ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
 message (`ExportTraceServiceResponse` for traces,
 `ExportMetricsServiceResponse` for metrics and
 `ExportLogsServiceResponse` for logs).
@@ -459,7 +459,7 @@ If the server receives an empty request (a request that does not carry
 any telemetry data) the server SHOULD respond with success.
 
 On success, the server MUST respond with `HTTP 200 OK`. The response body MUST be
-a Protobuf-encoded [Export*ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
+a Protobuf-encoded [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
 message (`ExportTraceServiceResponse` for traces,
 `ExportMetricsServiceResponse` for metrics and
 `ExportLogsServiceResponse` for logs).
@@ -475,7 +475,7 @@ in case of a successful response.
 If the processing of the request is partially successful
 (i.e. when the server accepts only parts of the data and rejects the rest), the
 server MUST respond with `HTTP 200 OK`. The response body MUST be
-a Protobuf-encoded [Export*ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
+a Protobuf-encoded [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
 message (`ExportTraceServiceResponse` for traces,
 `ExportMetricsServiceResponse` for metrics and
 `ExportLogsServiceResponse` for logs).
