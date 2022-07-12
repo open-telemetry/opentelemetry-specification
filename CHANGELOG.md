@@ -20,6 +20,8 @@ release.
 - Add experimental `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable for
   configuring default histogram aggregation of OTLP metric exporter
   ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
+- Clarify async instrument callback identity.
+  ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
 
 ### Logs
 
