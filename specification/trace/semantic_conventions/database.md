@@ -45,8 +45,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | [`net.peer.name`](span-general.md) | string | Name of the database host. [1] | `example.com` | Conditionally Required: See alternative attributes below. |
 | [`net.peer.port`](span-general.md) | int | Logical remote port number | `80`; `8080`; `443` | Conditionally Required: [2] |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [3] |
-| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
- [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
+| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [4] |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [5] |
 

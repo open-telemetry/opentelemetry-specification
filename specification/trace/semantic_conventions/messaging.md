@@ -141,8 +141,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.message_payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended |
 | [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [3] | `example.com` | Conditionally Required: If available. |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [4] |
-| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
- [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
+| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [5] |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [6] |
 

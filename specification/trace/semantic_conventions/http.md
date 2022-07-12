@@ -75,8 +75,7 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `http.response_content_length_uncompressed` | int | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | Recommended |
 | `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | Recommended: If and only if a request was retried. |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [4] |
-| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address (IPv4 or IPv6 for internet protocols, path for local communication,
- [etc](https://man7.org/linux/man-pages/man7/address_families.7.html)). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
+| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [5] |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [6] |
 
