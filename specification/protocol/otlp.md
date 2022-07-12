@@ -155,12 +155,8 @@ the specific message to use in the [Success](#success),
 
 ##### Success
 
-The success response indicates telemetry data is successfully processed by the
+The success response indicates telemetry data is successfully accepted by the
 server.
-
-The success response may also be used when telemetry data processing is done
-at a later point. In such cases, the server may want to return
-immediately to ensure low-latency communication with clients.
 
 If the server receives an empty request (a request that does not carry
 any telemetry data) the server SHOULD respond with success.
@@ -179,7 +175,7 @@ in case of a successful response.
 
 ##### Partial Success
 
-If the processing of the request is partially successful
+If the request is only partially accepted
 (i.e. when the server accepts only parts of the data and rejects the rest), the
 server response MUST be a Protobuf-encoded
 [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
@@ -193,7 +189,7 @@ Additionally, the server MUST initialize the `partial_success` field
 `ExportLogsPartialSuccess` message for logs), and it MUST set the respective
 `accepted_spans`, `accepted_data_points` or `accepted_log_records` field with
 the number of spans/data points/log records it accepted. In case the server
-rejected everything, the `accepted_*` field MUST be set to `0`.
+rejected everything, the `accepted_<signal>` field MUST be set to `0`.
 
 The server MAY populate the `error_message` field with a human-readable
 error message in English. The message should explain why the
@@ -448,12 +444,8 @@ header.
 
 ##### Success
 
-The success response indicates telemetry data is successfully processed by the
+The success response indicates telemetry data is successfully accepted by the
 server.
-
-The success response may also be used when telemetry data processing is done
-at a later point. In such cases, the server may want to return
-immediately to ensure low-latency communication with clients.
 
 If the server receives an empty request (a request that does not carry
 any telemetry data) the server SHOULD respond with success.
@@ -472,7 +464,7 @@ in case of a successful response.
 
 ##### Partial Success
 
-If the processing of the request is partially successful
+If the request is only partially accepted
 (i.e. when the server accepts only parts of the data and rejects the rest), the
 server MUST respond with `HTTP 200 OK`. The response body MUST be
 a Protobuf-encoded [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
@@ -486,7 +478,7 @@ Additionally, the server MUST initialize the `partial_success` field
 `ExportLogsPartialSuccess` message for logs), and it MUST set the respective
 `accepted_spans`, `accepted_data_points` or `accepted_log_records` field with
 the number of spans/data points/log records it accepted. In case the server
-rejected everything, the `accepted_*` field MUST be set to `0`.
+rejected everything, the `accepted_<signal>` field MUST be set to `0`.
 
 The server MAY populate the `error_message` field with a human-readable
 error message in English. The message should explain why the
