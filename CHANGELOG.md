@@ -49,6 +49,10 @@ release.
 - Add `http.*.*.size` metric semantic conventions for tracking size of requests
   / responses for http servers / clients
   ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588)).
+- BREAKING: rename `net.peer.ip` to `net.sock.peer.addr`, `net.host.ip` to `net.sock.host.addr`,
+  `net.peer.name` to `net.sock.peer.name` for socket-level instrumentation.
+  Define socket-level attributes and clarify logical peer and host attributes meaning.
+  ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 
 ### Compatibility
 

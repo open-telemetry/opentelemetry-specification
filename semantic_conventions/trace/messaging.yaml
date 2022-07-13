@@ -72,10 +72,17 @@ groups:
           This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
         requirement_level:
           conditionally_required: If available.
-      - ref: net.peer.ip
+      - ref: net.sock.peer.addr
+        tag: connection-level
+      - ref: net.sock.peer.port
+        tag: connection-level
+      - ref: net.sock.family
+        tag: connection-level
+      - ref: net.sock.peer.name
         tag: connection-level
         requirement_level:
-          conditionally_required: If available.
+          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
     constraints:
       - include: network
 
