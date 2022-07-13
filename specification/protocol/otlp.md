@@ -167,9 +167,6 @@ message (`ExportTraceServiceResponse` for traces,
 `ExportMetricsServiceResponse` for metrics and
 `ExportLogsServiceResponse` for logs).
 
-The server SHOULD respond with success no sooner than after successfully
-decoding and validating the request.
-
 The server MUST leave the `partial_success` field unset
 in case of a successful response.
 
@@ -455,9 +452,6 @@ a Protobuf-encoded [Export<signal>ServiceResponse](https://github.com/open-telem
 message (`ExportTraceServiceResponse` for traces,
 `ExportMetricsServiceResponse` for metrics and
 `ExportLogsServiceResponse` for logs).
-
-The server SHOULD respond with success no sooner than after successfully
-decoding and validating the request.
 
 The server MUST leave the `partial_success` field unset
 in case of a successful response.
