@@ -6,18 +6,12 @@ groups:
     attributes:
       - id: transport
         type:
-          allow_custom_values: false
+          allow_custom_values: true
           members:
             - id: ip_tcp
               value: "ip_tcp"
             - id: ip_udp
               value: "ip_udp"
-            - id: ip
-              value: "ip"
-              brief: 'Another IP-based protocol'
-            - id: unix
-              value: "unix"
-              brief: 'Unix Domain socket. See below.'
             - id: pipe
               value: "pipe"
               brief: 'Named or anonymous pipe. See note below.'
@@ -45,34 +39,74 @@ groups:
           `net.app.protocol.version` refers to the version of the protocol used and might be
           different from the protocol client's version. If the HTTP client used has a version
           of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
-      - id: peer.ip
+      - id: sock.peer.name
+        type: string
+        brief: Remote socket peer name.
+        requirement_level:
+          recommended: If available and different than `net.peer.name` and if `net.sock.peer.addr` is set.
+        examples: proxy.example.com
+      - id: sock.peer.addr
         type: string
         brief: >
-          Remote address of the peer (dotted decimal for IPv4 or
-          [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6)
-        examples: '127.0.0.1'
-      - id: peer.port
+          Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication,
+          [etc](https://man7.org/linux/man-pages/man7/address_families.7.html).
+        examples: ['127.0.0.1', '/tmp/mysql.sock' ]
+      - id: sock.peer.port
         type: int
-        brief: 'Remote port number.'
-        examples: [80, 8080, 443]
+        brief: Remote socket peer port.
+        requirement_level:
+          recommended: If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
+        examples: 16456
+      - id: sock.family
+        type:
+          allow_custom_values: true
+          members:
+            - id: inet
+              value: 'inet'
+              brief: "IPv4 address"
+            - id: inet6
+              value: 'inet6'
+              brief: "IPv6 address"
+            - id: unix
+              value: 'unix'
+              brief: "Unix domain socket path"
+        requirement_level:
+          conditionally_required: >
+            If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set.
+            Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr`
+            without `net.sock.family` coming from instrumentations that follow previous versions
+            of this document.
+        brief: >
+          Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication.
+        examples: ['inet6', 'bluetooth']
       - id: peer.name
         type: string
-        brief: 'Remote hostname or similar, see note below.'
+        brief: 'Logical remote hostname, see note below.'
         examples: 'example.com'
         note: >
           `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
-      - id: host.ip
-        type: string
-        brief: 'Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.'
-        examples: '192.168.0.1'
-      - id: host.port
+      - id: peer.port
         type: int
-        brief: 'Like `net.peer.port` but for the host port.'
-        examples: 35555
+        brief: 'Logical remote port number'
+        examples: [80, 8080, 443]
       - id: host.name
         type: string
-        brief: 'Local hostname or similar, see note below.'
+        brief: 'Logical local hostname or similar, see note below.'
         examples: 'localhost'
+      - id: host.port
+        type: int
+        brief: 'Logical local port number, preferably the one that the peer used to connect'
+        examples: 8080
+      - id: sock.host.addr
+        type: string
+        brief: Local socket address. Useful in case of a multi-IP host.'
+        examples: '192.168.0.1'
+      - id: sock.host.port
+        type: int
+        brief: 'Local socket port number.'
+        requirement_level:
+          recommended: If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+        examples: 35555
       - id: host.connection.type
         type:
           allow_custom_values: true
