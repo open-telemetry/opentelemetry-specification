@@ -3,7 +3,7 @@
 The Events and Logs API consist of these main classes:
 
 * LoggerProvider is the entry point of the API. It provides access to Loggers.
-* Logger is the class responsible for creating events using Log records.
+* Logger is the class responsible for creating events and logs using Log records.
 
 LoggerProvider/Logger are analogous to TracerProvider/Tracer.
 
