@@ -139,14 +139,23 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended |
 | `messaging.message_payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended |
 | `messaging.message_payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended |
-| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Conditionally Required: If available. |
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [3] | `example.com` | Conditionally Required: If available. |
+| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [3] | `example.com` | Conditionally Required: If available. |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [4] |
+| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
+| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [5] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [6] |
 
 **[1]:** If the message destination is either a `queue` or `topic`.
 
 **[2]:** If value is `true`. When missing, the value is assumed to be `false`.
 
 **[3]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+
+**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr` without `net.sock.family` coming from instrumentations that follow previous versions of this document.
+
+**[5]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
+**[6]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
 `messaging.destination_kind` MUST be one of the following:
 
