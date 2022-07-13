@@ -53,6 +53,8 @@ release.
   `net.peer.name` to `net.sock.peer.name` for socket-level instrumentation.
   Define socket-level attributes and clarify logical peer and host attributes meaning.
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
+- Add semantic conventions for JVM buffer pool usage
+  ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
 
 ### Compatibility
 
