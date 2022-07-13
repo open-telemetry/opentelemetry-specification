@@ -1,5 +1,7 @@
 ## Events and Logs API Interface
 
+**Status**: [Experimental](../document-status.md)
+
 The Events and Logs API consist of these main classes:
 
 * LoggerProvider is the entry point of the API. It provides access to Loggers.
