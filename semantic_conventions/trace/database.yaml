@@ -217,14 +217,21 @@ groups:
         tag: connection-level
         requirement_level:
           conditionally_required: See alternative attributes below.
-      - ref: net.peer.ip
-        tag: connection-level
-        requirement_level:
-          conditionally_required: See alternative attributes below.
+        brief: >
+          Name of the database host.
       - ref: net.peer.port
         tag: connection-level
         requirement_level:
-          conditionally_required: If using a port other than the default port for this DBMS.
+          conditionally_required: If using a port other than the default port for this DBMS and if `net.peer.name` is set.
+      - ref: net.sock.peer.addr
+        tag: connection-level
+      - ref: net.sock.peer.port
+        tag: connection-level
+      - ref: net.sock.family
+        tag: connection-level
+      - ref: net.sock.peer.name
+        requirement_level:
+          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
       - ref: net.transport
         tag: connection-level
         requirement_level:
@@ -232,7 +239,7 @@ groups:
     constraints:
       - any_of:
           - 'net.peer.name'
-          - 'net.peer.ip'
+          - 'net.sock.peer.addr'
 
   - id: db.mssql
     prefix: db.mssql

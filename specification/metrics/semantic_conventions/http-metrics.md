@@ -52,7 +52,7 @@ and whether they should be on server, client, or both types of HTTP metric event
 | `http.flavor`      | `client` & `server` | Recommended                                                  | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`.                                                                                                                                          |
 | `net.peer.name`    | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
 | `net.peer.port`    | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
-| `net.peer.ip`      | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
+| `net.sock.peer.addr`      | `client`            | see [1] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
 | `http.server_name` | `server`            | see [2] in [attribute alternatives](#attribute-alternatives) | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). |
 | `net.host.name`    | `server`            | see [2] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
 | `net.host.port`    | `server`            | see [2] in [attribute alternatives](#attribute-alternatives) | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
@@ -101,7 +101,7 @@ path.
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
 * `http.scheme`, `net.peer.name`, `net.peer.port`, `http.target`
-* `http.scheme`, `net.peer.ip`, `net.peer.port`, `http.target`
+* `http.scheme`, `net.sock.peer.addr`, `net.sock.peer.port`, `http.target`
 
 **[2]** For server metric attributes, `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. <https://github.com/open-telemetry/opentelemetry-python/pull/148>).
 It is thus preferred to supply the raw data that _is_ available.
